@@ -109,7 +109,7 @@
 **R1. 백테스트 프레임워크 부재**
 - 레포에 backtesting, walk-forward analysis, out-of-sample validation에 대한 어떤 언급도 없다.
 - 퀀트 관점에서 검증되지 않은 시그널은 시그널이 아니라 **사후 합리화(narrative)**다.
-- 현재 카테고리 `quantitative-analysis`는 "factor, screening, backtesting, signal research"를 포괄한다고 README에서 약속하지만, 구현 0건.
+- 현재 카테고리 `quantitative-analysis`는 "factor, screening, backtesting, signal research"를 포괄한다고 README에서 약속하지만, 백테스트로 검증 정보가 부재
 
 **R2. 룩어헤드 바이어스(Look-ahead Bias)**
 - LLM 기반 분석의 근본 문제: 모델 학습 데이터에 미래 정보가 포함되어 있다. 예) "2024년 저점에서 NVDA를 매수했어야 한다"는 분석은 LLM에게는 매우 쉽지만, 2024년 시점 정보만으로 동일 결론을 내는지는 별개 문제.
@@ -198,7 +198,7 @@
 ## 5. 결론 및 권고
 
 ### 5.1 한 줄 요약
-> **컨셉과 구조는 합리적이지만 현재로선 빈 청사진에 가깝다. 진지한 퀀트 운용 관점에서는 "vibe investing"이라는 프레이밍 자체가 핵심 리스크이며, 검증·백테스트·신뢰도 보정 메커니즘 없이 이 패턴을 채택하면 강세장에서 잠시 즐겁고 약세장에서 크게 다친다.**
+> **컨셉과 구조는 합리적이지만 현재로선 벤치마크 결과가 없는 빈 청사진에 가깝다. 진지한 퀀트 운용 관점에서는 "vibe investing"이라는 프레이밍 자체가 핵심 리스크이며, 검증·백테스트·신뢰도 보정 메커니즘 없이 이 패턴을 채택하면 강세장에서 잠시 즐겁고 약세장에서 크게 다친다.**
 
 
 
