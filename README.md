@@ -2,7 +2,7 @@
 
 > **인공지능을 이용한 바이브 투자(Vibe Investing) 관련 의견과 자료를 나누는 레포**
 
- AI 투자(Vibe Investing) 큐레이션 어썸 시리즈 · 시장 분석 칼럼 6편 · AI 트레이딩 도구 2종 (Harness Quant v2 + Earnings Momentum Agent) 을 다룹니다. 리서치하는 마켓은 미국 나스닥, S&P500, 가상화폐, 유럽 명품 섹터입니다. 인공지능은 엑셀과 같은 도구입니다. 만능이 아니며, 모델을 읽는 통찰력이 가장 중요하다고 믿습니다.
+ AI 투자(Vibe Investing) 큐레이션 어썸 시리즈 · 시장 분석 칼럼 6편 · AI 트레이딩 도구 2종 (Harness Quant v2 + Earnings Momentum Agent) 을 다룹니다. 리서치하는 마켓은 미국 나스닥, S&P500, 가상화폐, 유럽 명품 섹터입니다. 인공지능은 엑셀과 같은 도구입니다. LLM은 만능이 아니며, 모델을 읽는 인간의 통찰력이 가장 중요하다고 믿습니다.
  
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
