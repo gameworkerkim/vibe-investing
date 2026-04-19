@@ -1,6 +1,9 @@
-# vibe-investing
+# vibe investing
 
 > **인공지능을 이용한 바이브 투자(Vibe Investing) 관련 의견과 자료를 나누는 레포**
+
+ AI 투자(Vibe Investing) 큐레이션 어썸 시리즈 시장 분석 칼럼, AI 트레이딩 도구 2종 (Harness Quant v2 + Earnings Momentum Agent) 를 다룹니다. 리서치하는 마켓은 미국 나스닥, S&P500, 가상화페입니다.
+ 
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Made with](https://img.shields.io/badge/Made%20with-Claude%20%2B%20Python-blue)]()
