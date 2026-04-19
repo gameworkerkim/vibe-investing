@@ -15,6 +15,9 @@
 
 ---
 
+> **🌏 English readers**: See [**README_EN.md**](https://github.com/gameworkerkim/vibe-investing/blob/main/Readme%20en.MD) for a 1-page summary of columns, tools, and datasets.
+
+
 ## Quick Links
 
 ### 📖 어썸 큐레이션 시리즈
