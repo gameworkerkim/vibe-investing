@@ -1,3 +1,5 @@
+![Vibe Investing](./vibe_investing_social_preview.png)
+
 # vibe investing
 
 > **인공지능을 이용한 바이브 투자(Vibe Investing) 관련 의견과 자료를 나누는 레포**
