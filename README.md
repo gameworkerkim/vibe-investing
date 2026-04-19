@@ -30,7 +30,7 @@
 |---|---|---|
 | 1 | [**LTCM의 사례로 배우는 모델을 읽는 힘**](https://github.com/gameworkerkim/vibe-investing/blob/main/Vibe%20Investing%20Risk%20Management.MD) | 1998년 LTCM 사태 분석 + 2026년 AI 바이브 투자의 리스크 |
 | 2 | [**Microsoft의 Fintool 인수 — Excel이 곧 Bloomberg가 되는 날**](https://github.com/gameworkerkim/vibe-investing/blob/main/Microsoft%20fintool%20acquisition%20column.MD) | Microsoft의 Fintool 인수 시너지 분석 |
-| 3 | [**보이지 않는 손인가, 좌표화된 전략인가**](https://github.com/gameworkerkim/vibe-investing/blob/main/Crypto%20perp%20manipulation%20column.MD) | 가상화폐 선물 시장의 비정상적 pump & dump 패턴 수학적 검토 |
+| 3 | [**보이지 않는 손인가, 계획딘 사기인가**](https://github.com/gameworkerkim/vibe-investing/blob/main/Crypto%20perp%20manipulation%20column.MD) | 가상화폐 선물 시장의 비정상적 pump & dump 패턴 수학적 검토 |
 | 4 | [**시장은 닫혔을 때 열리는가**](https://github.com/gameworkerkim/vibe-investing/blob/main/AfterMarketClose/After_Market_Close_Column.md) 🆕 | 미국 상장기업 91.2%가 AMC에 악재를 공시하는 이유 — 34건 실증 데이터 |
 | 5 | [**DAT 기업의 mNAV 아비트리지 전략**](https://github.com/gameworkerkim/vibe-investing/blob/main/mNAV(Market-to-Net-Asset-Value)%20arbitrage/Dat%20mnav%20arbitrage%20strategy.MD) 🆕 | MSTR·BMNR 등 디지털 자산 보유 기업의 크립토 가치-시총 격차 분석 |
 | 6 | [**명품은 언제 사야 하는가**](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Luxury%20investment%20strategy/Luxury%20investment%20strategy.md) 🆕 | LVMH · Hermès · Kering — 중국 경기 침체 시대의 명품 투자 3단계 전략 |
