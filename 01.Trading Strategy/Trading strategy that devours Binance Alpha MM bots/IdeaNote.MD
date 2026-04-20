@@ -26,11 +26,11 @@ V/MC 비율: MetaArena 35.3배 — 인간 거래로 불가능한 회전율
 핵심 발견: MM 봇은 BTC 유동성을 "광고료"로 활용 — BTC 상승 시 펌프, retail 진입 시 매도, BTC 계속 올라도 Alpha 붕괴
 
 3. MBP-5 모델 (섹션 4) — 본 논문의 핵심 프레임워크
-Phase 1: Accumulation (사전매집, -72h~0h) → 🟡 대기
+Phase 1: Accumulation (사전매집, -72h ~ 0h) → 🟡 대기
 Phase 2: Pump Signal (+10%, 15분) → 🔴 매수 금지
-Phase 3: Peak Formation (+40~200%) → ⭐ 숏 진입 시점
-Phase 4: Distribution (-30~-60%) → ⭐ 숏 홀딩
-Phase 5: Capitulation (-80~-99%) → ⭐ 마지막 청산
+Phase 3: Peak Formation (+40 ~ 200%) → ⭐ 숏 진입 시점
+Phase 4: Distribution (-30 ~ -60%) → ⭐ 숏 홀딩
+Phase 5: Capitulation (-80 ~ -99%) → ⭐ 마지막 청산
 4. STR-07 Hybrid 전략 (섹션 5) — 최고 성능
 
 
