@@ -35,6 +35,32 @@
 
 > **🌏 English readers**: See [**README_EN.md**](https://github.com/gameworkerkim/vibe-investing/blob/main/Readme%20en.MD) for a 1-page summary of columns, tools, and datasets.
 
+---
+
+## 🙏 Contributors / 기여자
+
+이 레포는 아래 분들의 귀한 기여로 성장하고 있습니다.  
+*This repo grows thanks to these wonderful contributors.*
+
+### 🎉 First Contributor / 첫 기여자
+
+**[@dragon1086](https://github.com/dragon1086)**
+- **기여 내용**: Prism.js 기반 코드 하이라이팅 통합 ([PR #1](https://github.com/gameworkerkim/vibe-investing/pull/1))
+- **Contribution**: Prism.js code highlighting integration ([PR #1](https://github.com/gameworkerkim/vibe-investing/pull/1))
+- **Date**: 2026-04-20
+
+---
+
+**Want to join? / 함께하고 싶으신가요?**
+
+- 🇰🇷 한국어: [기여하기](#기여하기-contributing) 섹션 참고
+- 🌏 English: Check [Good First Issues](https://github.com/gameworkerkim/vibe-investing/issues?q=is%3Aissue+is%3Aopen+label%3A%22good+first+issue%22) or start a [Discussion](https://github.com/gameworkerkim/vibe-investing/discussions)
+
+> *"From 1 contributor to 100 — let's build this together."*  
+> *"한 명의 기여자에서 백 명으로 — 함께 만들어 갑니다."*
+
+---
+
 
 ## Quick Links
 
