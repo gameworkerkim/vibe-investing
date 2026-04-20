@@ -1,6 +1,22 @@
 ![Vibe Investing](./vibe_investing_social_preview.png)
 
-# vibe investing
+<!-- START: STAR CTA BLOCK -->
+<div align="center">
+
+# Vibe Investing
+
+### If you find this useful, **[⭐ Star the repo](https://github.com/gameworkerkim/vibe-investing)** 
+### to support independent research.
+
+![GitHub stars](https://img.shields.io/github/stars/gameworkerkim/vibe-investing?style=social)
+![GitHub forks](https://img.shields.io/github/forks/gameworkerkim/vibe-investing?style=social)
+
+**713 clones in 3 days · 49 stars · 10 forks**
+
+---
+
+</div>
+<!-- END: STAR CTA BLOCK -->
 
 > **인공지능을 이용한 바이브 투자(Vibe Investing) 관련 의견과 자료를 나누는 레포**
 
