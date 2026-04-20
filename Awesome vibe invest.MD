@@ -1,5 +1,23 @@
 # Awesome Vibe Invest
 
+<!-- START: STAR CTA BLOCK -->
+<div align="center">
+
+# Awesome Vibe Investing
+
+### If you find this useful, **[⭐ Star the repo](https://github.com/gameworkerkim/vibe-investing)** 
+### to support independent research.
+
+![GitHub stars](https://img.shields.io/github/stars/gameworkerkim/vibe-investing?style=social)
+![GitHub forks](https://img.shields.io/github/forks/gameworkerkim/vibe-investing?style=social)
+
+**713 clones in 3 days · 48 stars · 10 forks**
+
+---
+
+</div>
+<!-- END: STAR CTA BLOCK -->
+
 > **AI/LLM을 활용한 투자·트레이딩 GitHub 레포지토리 큐레이션 (2026년 4월 기준)**
 > 단순 나열이 아니라 **객관적 평가 (강점/약점/적합 사용자)** 를 함께 제공합니다.
 
