@@ -362,7 +362,7 @@ Cyworld CEO · Betalabs CEO · Web3 Investor
 
 ---
 
-## 🔄 vibe-investing 4부작 자기 비평 일관성
+## 🔄 vibe-investing 4부작
 
 | # | 칼럼 | Self-Critique 문서 |
 |---|------|------------------|
@@ -371,7 +371,7 @@ Cyworld CEO · Betalabs CEO · Web3 Investor
 | 3 | Binance Alpha MM 봇 | 20개 샘플 한계 (별도 문서) |
 | **4** | **Token Unlock 72h (본편)** | **본 문서** |
 
-본 시리즈는 **"모든 논문에 자기 비평이 따른다"**는 학술적 정직성 원칙을 유지한다.
+본 시리즈는 **"모든 논문에 자기 비평이 따른다"**는 학술적 정직성 원칙을 유지
 
 ---
 
