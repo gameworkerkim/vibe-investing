@@ -120,6 +120,23 @@
   - 일부 모듈은 학술 데모 수준
 - **적합 사용자**: 아시아 시장 친화적 자료를 찾는 사용자, MCP server 패턴 학습자
 
+### [dragon1086/prism-insight](https://github.com/dragon1086/prism-insight) — 550 ⭐
+> 13+ 전문 에이전트(기술/수급/재무/산업/뉴스/시장/거시/전략가/매수·매도)가 협업해 **한국·미국 주식**의 급등주 포착 → 애널리스트급 PDF 리포트 → **KIS API 기반 실제 자동매매**까지 end-to-end. 텔레그램 다국어 브로드캐스트와 라이브 대시보드([analysis.stocksimulation.kr](https://analysis.stocksimulation.kr/))로 성과 공개.
+
+- **활성도**: 🟢 활발 (2026-04 업데이트) | **성숙도**: Production-ish | **학습곡선**: ⭐⭐ | **한국 시장**: ✅ 네이티브 (+ `prism-us/` 미국 mirror) | **라이선스**: AGPL-3.0 (+ 상용 dual)
+- **강점**:
+  - **한국+미국 양대 시장을 네이티브 지원** (KR `cores/` + US `prism-us/` 병렬 파이프라인)
+  - 한국투자증권 KIS API 연동 **실제 자동매매** — POC가 아닌 live trading (매수·매도 에이전트, stop-loss, multi-account fan-out)
+  - **ChatGPT Plus/Pro 구독을 Codex OAuth Proxy로 재활용 → LLM API 요금 $0** 모드 공식 지원
+  - Docker + cron 기반 매일 돌아가는 파이프라인, 라이브 대시보드로 과거 성과 공개 검증 가능
+- **약점**:
+  - AGPL-3.0 → 상용 제품 내장 시 소스 공개 의무 (dual 상용 라이선스 별도 문의 필요)
+  - KIS API 전제 → 한국투자증권 계좌 필수, 다른 브로커(키움 등)는 직접 작업
+  - 75k+ LOC 규모 → 처음 읽는 사람에게 진입장벽
+  - 백테스트 불가 구조 — LLM 에이전트 기반이라 결정론적 재현이 어려움 (공개 라이브 대시보드의 forward test 결과로만 검증 가능)
+- **적합 사용자**: 한국(+미국) 주식을 실제 자동매매하려는 개인/소규모 팀, 멀티에이전트 파이프라인의 프로덕션 참조 아키텍처가 필요한 개발자
+- **하지 말 것**: AGPL 고지 없이 SaaS 포크, 라이브 대시보드 성과 확인 없이 큰 금액 실계좌 투입
+
 ---
 
 ## 2. LLM 단일 에이전트 / 리서치 도구
@@ -403,6 +420,7 @@
 ### 한국어 메타 자원
 - 김프 차익 / 김치 프리미엄 도구들 (다수, 별도 큐레이션 필요)
 - DART (전자공시) API 활용 — `OpenDartReader` 등
+- **한국 주식 AI 멀티에이전트 자동매매**: [§1의 prism-insight](#dragon1086prism-insight--550-) 참조 — 한국+미국 동시 지원, KIS API 연동 live trading
 
 ---
 
