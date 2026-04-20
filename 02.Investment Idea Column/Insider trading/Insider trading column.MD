@@ -504,7 +504,7 @@ Harvard Corporate Governance 2026 연구에 따르면, Polymarket의 210,718개 
 3. **Text analysis**: Trump Truth Social 포스팅 이전 12~60분의 키워드·표현 패턴
 4. **실증 인과관계**: BETS OFF Act 통과 시 이상 거래 감소 여부 자연실험
 
-### 9-3. Korean 투자자에게 주는 시사점
+### 9-3. 한국 투자자에게 주는 시사점
 
 한국 투자자는 **예측시장 접근이 법적으로 애매**하다. 그러나 간접적 영향은 크다:
 
