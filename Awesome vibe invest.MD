@@ -1,5 +1,3 @@
-# Awesome Vibe Invest
-
 <!-- START: STAR CTA BLOCK -->
 <div align="center">
 
