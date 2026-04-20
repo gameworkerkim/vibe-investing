@@ -420,7 +420,6 @@
 ### 한국어 메타 자원
 - 김프 차익 / 김치 프리미엄 도구들 (다수, 별도 큐레이션 필요)
 - DART (전자공시) API 활용 — `OpenDartReader` 등
-- **한국 주식 AI 멀티에이전트 자동매매**: [§1의 prism-insight](#dragon1086prism-insight--550-) 참조 — 한국+미국 동시 지원, KIS API 연동 live trading
 
 ---
 
