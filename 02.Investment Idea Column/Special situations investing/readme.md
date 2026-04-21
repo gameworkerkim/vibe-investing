@@ -17,7 +17,7 @@
 
 | File | Language | Format | Purpose |
 |------|----------|--------|---------|
-| `Special_Situations_Investing_Column_KR.md` | Korean | Markdown | GitHub 업로드용 한글 버전 |
+| `Special situations investing column kr.MD` | Korean | Markdown | GitHub 업로드용 한글 버전 |
 | `Special_Situations_Investing_Column_KR.pdf` | Korean | PDF | 인쇄/공유용 한글 버전 |
 
 ## Column Structure
