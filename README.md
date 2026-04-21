@@ -13,6 +13,7 @@
 
 **🆕 최신 업데이트: 2026-04-21** — Model vs Reality + Special Situations Investing 칼럼 2편 동시 공개 (한/영/중 3개 언어) · 📊 **3종 트레이딩 전략 실증 연구 + 소스 코드** 공개 (Listing Day Crash · Token Unlock 72h Shock · Binance Alpha MM Bot)
 
+**📊 최근 4일: 2,761 views · 1,248 clones · 463 unique cloners**
 ---
 
 </div>
@@ -56,7 +57,7 @@
 | 2026-03-24 | [DAT 기업의 mNAV 아비트리지 전략](https://github.com/gameworkerkim/vibe-investing/blob/main/mNAV(Market-to-Net-Asset-Value)%20arbitrage/Dat%20mnav%20arbitrage%20strategy.MD) | 🇰🇷 KR |
 | 2026-03-17 | [시장은 닫혔을 때 열리는가](https://github.com/gameworkerkim/vibe-investing/blob/main/AfterMarketClose/After_Market_Close_Column.md) | 🇰🇷 KR |
 
-> 📢 **Upcoming**: 한국 자산운용업의 5가지 변화 · Anthropic finance agent 전략 · 영문 번역판 확대
+> 📢 **Upcoming**: 솔라나 밈코인 카지노인가? · Anthropic finance agent 전략 · 영문 번역판 확대
 
 ---
 
