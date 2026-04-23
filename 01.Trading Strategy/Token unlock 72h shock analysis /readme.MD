@@ -51,10 +51,12 @@ vibe-investing/01.Trading Strategy/Token unlock 72h shock analysis /
 ```
 
 ---
-## Idea
+
+Key Idea
 
 Since 2027, while working in the blockchain industry, I have spent considerable time thinking about what truly drives token prices. 
 I have come to the conclusion that token unlocks by foundations and large investors—and the resulting selling pressure—have a stronger correlation with price movements than governance factors. Since November 2025, I have been developing this idea further and have been writing a paper on it.
+
 ---
 
 ## 🎯 Key Findings
