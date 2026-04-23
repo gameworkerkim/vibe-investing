@@ -217,7 +217,7 @@ Pull requests welcome for:
 
 | Date | Version | Change |
 |------|---------|--------|
-| 2026-04-20 | v1.0 | Initial data release (CSVs 01-05) |
+| 2026-04-20 | v1.0 | Initial data release (CSVs 01-05), Started drafting the first version on November 4, 2025. |
 | 2026-04-23 | v2.0 | Paper draft with Bonferroni correction, MiCA/K-VAUPA references |
 | 2026-04-23 | v3.0 | Full reproducibility: 8 Python scripts, 10 CSV datasets, 4 MD docs |
 
