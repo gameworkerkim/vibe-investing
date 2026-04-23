@@ -1,409 +1,248 @@
-# 토큰 언락 72h 쇼크 분석 — 자기 비평 및 향후 연구 로드맵
+# IdeaNote — Token Unlock 72h Shock Analysis
 
-## Token Unlock 72-Hour Shock Analysis — Self-Critique & Research Roadmap
-
-> *"좋은 연구는 자신의 한계를 가장 먼저 고백한다."*
->
-> *"언락 72시간 전에는 숏을 고려하라"보다*
-> *"언락 72시간 전에는 절대 롱을 잡지 마라"가 더 안전한 결론이다.*
-
-**저자**: 김호광 (Dennis Kim)
-Cyworld CEO · Betalabs CEO · Web3 Investor
- gameworker@gmail.com
-[github.com/gameworkerkim](https://github.com/gameworkerkim)
-[vibe-investing 레포](https://github.com/gameworkerkim/vibe-investing)
-
-**작성일**: 2026년 4월 20일
-**문서 유형**: Self-Critique Report & Research Roadmap
-**관련 논문**: `Token_Unlock_72h_Shock_Analysis.md` (v1.0)
-**시리즈**: vibe-investing 4부작 완결편의 자기 비평
+**Author**: HoKwang Kim (Independent Researcher)
+**Last Updated**: April 23, 2026
+**Status**: Companion notes to SSRN Working Paper v3.0
 
 ---
 
-## 📑 목차
+## 📌 Purpose of This Document
 
-1. [연구 요약 및 핵심 발견](#1-연구-요약-및-핵심-발견)
-2. [장점 (Strengths)](#2-장점-strengths)
-3. [단점 (Weaknesses)](#3-단점-weaknesses)
-4. [보강할 점 (Suggestions for Improvement)](#4-보강할-점-suggestions-for-improvement)
-5. [데이터 CSV 기반 추가 발견](#5-데이터-csv-기반-추가-발견)
-6. [가장 안전한 결론](#6-가장-안전한-결론)
-7. [향후 로드맵](#7-향후-로드맵)
+This is the author's working notebook for the Token Unlock 72h Shock research. It serves three purposes:
 
----
+1. **Research motivation** — why this question, why now?
+2. **Methodological decisions** — what choices were made and why?
+3. **Self-critique** — where is the work weakest, and what comes next?
 
-## 1. 연구 요약 및 핵심 발견
-
-### 1-1. 분석 대상
-
-- **기간**: 2023년 1월 ~ 2025년 12월 (36개월)
-- **샘플**: Binance 상장 코인 52개 언락 이벤트
-- **데이터**: CoinMarketCap · Tokenomist · DefiLlama · CoinGecko · Binance Research
-
-### 1-2. 3대 핵심 발견
-
-| 발견 | 수치 | 의미 |
-|------|------|------|
-| **72h 하락률** | **88.5%** (46/52) | Keyrock 30일 90%와 거의 일치 — 매도압이 첫 72h에 집중 |
-| **BTC 대비 underperform** | **88.5%** | BTC 상승장에도 언락 토큰은 underperform (본 연구 고유) |
-| **1주년 Cliff 승률** | **100%** (14/14) | 우연 확률 1/16,000 — 예측 가능한 크립토 캘린더 이벤트 |
-
-### 1-3. 최고 전략 UNL-10 Hybrid
-
-**진입 조건**: Cliff + 5%+ + Team/Investor + 1주년 ±30일 가점
-**백테스트**: 승률 100% (11/11), 평균 +32.5%, Sharpe 6.25
+This document is deliberately less formal than the SSRN paper. It captures reasoning that is too exploratory for the main manuscript but essential for understanding the research program as a whole.
 
 ---
 
-## 2. 장점 (Strengths)
+## 1. Research Motivation
 
-### 2-1. 명확한 가설과 검증 구조
+### 1.1. Why token unlocks?
 
-- **3대 핵심 발견**을 명확히 정의하고, 각각에 대해 통계적 검정 수행
-- **Keyrock(2024) 연구와의 차별점**을 구체적으로 제시:
-  - 72h 윈도우 (vs Keyrock 30일)
-  - BTC 상대 성과 (vs Keyrock 절대 수익률만)
-  - 1주년 Cliff 패턴 (vs Keyrock 명시 없음)
+Token unlock events are one of the few "natural experiments" available in cryptocurrency markets:
 
-### 2-2. 실무적 유용성이 높은 전략 제시
+- **Exogenous timing**: Dates are set at project inception and rarely change
+- **Public information**: Schedules are on-chain and freely available
+- **Quantifiable magnitude**: Exact token counts are known in advance
+- **Repeatable**: Thousands of events per year across the token universe
 
-- 10개 전략을 **승률 · 수익률 · Sharpe 비율**로 비교 평가
-- **UNL-10 Hybrid** (승률 100%, Sharpe 6.25) — 실전 적용 가능성 높음
-- **"매수 회피만으로 연 +10~20% 수익 보존"** 이라는 현실적 조언
-  - 이는 Futures 접근 불가 한국 투자자에게도 유용
+If markets were efficient, these events should have zero price impact on the release date — all information should already be priced. The persistent negative impact documented by Keyrock (2024) therefore poses a fundamental puzzle about cryptocurrency market efficiency.
 
-### 2-3. 통계적 엄밀성
+### 1.2. Why the 72-hour window?
 
-- **Bayesian 3-가설 검정**으로 우연성 배제 (p = 2.2 × 10⁻⁹)
-- **1주년 cliff 100% 하락**에 대해 1/16,000 확률 계산
-- 단순 상관관계가 아닌 **인과적 해석 시도** (수취인별 차이, BTC 상승기 underperform)
+Keyrock's 30-day window is well-suited for establishing aggregate patterns but unable to answer the mechanism question: when exactly does the selling pressure hit? Three candidate answers exist:
 
-### 2-4. 데이터 투명성
+- **Evenly distributed**: Recipients sell gradually over 30 days
+- **Front-loaded**: Most selling happens in the first few days
+- **Back-loaded**: Waiting for liquidity to absorb the supply
 
-- **52개 이벤트 전체를 CSV로 공개** (날짜, 가격, 수취인, 수익률 등)
-- 재현 가능한 연구 설계
-- Python 리서치 엔진 + 트레이딩 봇 코드 오픈소스 공개
+If front-loaded, then a 72-hour window should capture most of the 30-day effect. If evenly distributed, it should capture ~10%. The empirical answer (88.5% ≈ 90%) strongly suggests front-loading, which in turn implies a specific mechanism: recipients are eager to liquidate, and market makers cannot absorb the flow quickly without price concessions.
 
----
+### 1.3. Why Bitcoin-relative analysis?
 
-## 3. 단점 (Weaknesses)
+A pure supply shock story should produce token underperformance regardless of broader market conditions. A market-beta story predicts the opposite: unlocks lose money when BTC loses money, and make money when BTC makes money.
 
-### 3-1. 표본 크기의 한계
+The observed pattern (negative returns even during strong BTC rallies) is difficult to reconcile with market beta alone. It suggests the supply shock is an additive, not a multiplicative, phenomenon — more consistent with a flow-based mechanism than a factor-exposure mechanism.
 
-| 항목 | 본 연구 | Keyrock | 문제점 |
-|------|---------|---------|--------|
-| **전체 이벤트** | 52개 | 16,000개 | **표본 0.3% 수준** |
-| **Ecosystem 언락** | 4개 | 다수 | UNL-08 전략 검증 불충분 |
-| **Miner 언락** | 1개 (TAO) | 다수 | **단일 사례 일반화 위험** |
+### 1.4. Why the 365-day discovery was surprising
 
-**영향**: UNL-10 Hybrid의 **100% 승률은 11개 이벤트 기반** → 소표본 과적합(overfitting) 가능성
+The 14/14 negative rate near the 365-day anniversary was the single most striking pattern in the data. But it was *discovered*, not *hypothesized*. This is a critical distinction I want to be explicit about:
 
-### 3-2. 생존 편향 (Survivorship Bias) 미처리
+- I did not enter the analysis looking for a 365-day pattern
+- After seeing initial results, I explored various "cliff windows" (30-day, 90-day, 180-day, 365-day, 730-day)
+- Only the 365-day window produced the striking result
+- This is classic multiple-testing / garden-of-forking-paths territory
 
-- 분석 대상이 **현재까지 Binance 상장 유지된 코인**만 포함
-- 2023-2025년 사이 **상장폐지된 토큰의 언락 이벤트는 제외**
-- 실제로는 **더 나쁜 성과를 보인 토큰들이 누락**되었을 가능성
-- 결과적으로 "평균 -16.97%"는 **관대한 추정치**일 수 있음
-
-### 3-3. 인과관계 vs 상관관계 모호성
-
-```
-주장: "BTC 랠리 = MM이 매도를 집행하기 가장 유리한 시점"
-
-반론: BTC 랠리 시 알트코인도 함께 오르는 경향이 있는데,
-      언락 토큰만 하락한 것이 아니라
-      전체 알트 시장이 하락했을 가능성은?
-
-부재 증거: BTC 상승기에 언락 없는 유사 알트코인과의
-          비교군(control group)이 없음
-```
-
-- **BTC 대비 underperform(평균 -17.3%)**이 '언락 효과'인지 '알트코인 전반의 특성'인지 **구분 불가**
-- 순수 언락 효과를 분리하려면 **매칭된 대조군** 필요
-
-### 3-4. 거래 비용 및 실행 위험 미반영
-
-| 항목 | 백테스트 가정 | 현실 |
-|------|-------------|------|
-| 숏 수수료 | 0% | Binance 선물 펀딩비 **+0.01% / 8h** |
-| 슬리피지 | 0% | 대형 언락 시 **호가창 얇음** |
-| 레버리지 | 1x | 실제로는 **증거금 필요** |
-| 진입 시점 | T-24h 정확히 | **실시간 감지** 필요 |
-
-**예시 (TIA 2024-10-31 -29.57%)**:
-- 숏 진입 3일간 펀딩비: 0.09% × 3 = **0.27% 비용**
-- 수익률: 29.57% → 29.30%로 감소
-- 미미하나 **누적 시 영향 큼** (연간 수백 건 거래 시)
-
-### 3-5. 1주년 Cliff 100% 승률의 함정
-
-- 14개 중 14개 하락 = **100% 승률** (숏 전략 기준)
-- 그러나 질문: **이 14개 토큰 중 상장 후 1년 동안 살아남은 토큰만 분석됨**
-- **1년 안에 상장폐지된 토큰은 더 심각한 하락**을 보였을 텐데 제외됨
-- 반례 탐색 필요: **1주년 cliff에도 상승한 사례가 정말 없는가?**
-
-#### 반례 검토
-
-- **JTO** (2023-12-07 상장일): +44.56%
-- **JTO** (2024-12-07 1주년 cliff): -34.55% → 하락
-- **상승 사례 0개**는 의심스러움 → **표본 선택 편향 가능성**
+The correct statistical posture is to treat this as hypothesis-generating only. The paper reflects this explicitly (Section 4.4 with post-hoc flags, ⚠️ warnings in Table 4, and the complete absence of "this proves X" language).
 
 ---
 
-## 4. 보강할 점 (Suggestions for Improvement)
+## 2. Methodological Decisions
 
-### 4-1. 표본 확장 및 편향 제거
+### 2.1. Sample size: N = 52, not N = 16,000
 
-권장 방법:
+Why not replicate Keyrock's 16,000+ sample? Three reasons:
 
-- **CoinGecko API로 2021-2025년 상장폐지된 토큰 포함** (약 200-300개 추가)
-- **Tier 구분**: Binance Launchpad vs 일반 상장 vs 선물만 상장
-- **Control group**: 언락 없는 같은 카테고리 코인 매칭
-  - 매칭 방법: 시가총액, 거래량, 상장일 기준
+1. **Access**: Keyrock has proprietary data pipelines I don't have
+2. **Quality over quantity**: My 52 events are all manually verified across 2+ sources. A researcher attempting to scale would inevitably trade off quality for quantity
+3. **Speed**: This is a working paper, not a decade-long empirical project. N = 52 is the appropriate sample for a first-pass analysis
 
-### 4-2. 인과관계 강화 분석
+The implication is that my statistical claims are conservative (Bonferroni-robust even at N = 52) but less externally valid than a full-sample study. Phase 2 aims to remedy this.
 
-| 추가 분석 | 방법 | 기대 효과 |
-|---------|------|---------|
-| **이중차분법 (DiD)** | 언락 그룹 vs 통제 그룹의 72h 수익률 차이 | 순수 언락 효과 분리 |
-| **이벤트 스터디** | T-7d ~ T+14d 일별 수익률 추이 | 사전 반응(front-running) 측정 |
-| **회귀분석** | 통제변수: BTC 수익률, 시총, 일평균 거래량 | 다른 변수 통제 후 언락 효과 추정 |
+### 2.2. Why Bonferroni, not FDR?
 
-### 4-3. 전략의 OOS (Out-of-Sample) 검증
+Benjamini-Hochberg FDR is arguably more appropriate for exploratory multi-testing contexts. I chose Bonferroni for two reasons:
 
-- **현재 방식**: 2023-2025년 데이터로 전략 도출 후 같은 기간 평가
-- **문제**: **미래 정보 누출** 위험 (lookahead bias)
-- **개선 방식**:
-  - **2023-2024년 (36개)** 로 전략 도출
-  - **2025년 (16개)** 로 검증
-- **예상 결과**: UNL-10 Hybrid의 2025년 승률은 정말 100%일까?
-  - CSV 기준 2025년 이벤트 10개 중 9개 하락, 1개는 **FET +3.78% 상승**
-  - 숏 전략이라면 **1건 손실 발생** → 실제 OOS 승률 90%로 하락 예상
+1. **Readability**: Bonferroni is the more widely-understood correction
+2. **Conservatism**: Bonferroni is strictly more conservative than BH-FDR, which means surviving Bonferroni implies surviving BH-FDR too. The primary finding (p = 2.2e-9) passes both with enormous margin
 
-### 4-4. 리스크 지표 구체화
+A future revision could report both Bonferroni and BH q-values for completeness. This is in the roadmap.
 
-**현재**: "최대 낙폭 -5.5%"
+### 2.3. Why event-study, not causal inference?
 
-**보강 필요**:
+Event studies identify association, not causation. A truly causal analysis would require:
 
-- **VaR (95%)**: 언락 이벤트 5% 최악 시 손실
-- **CVaR (Conditional VaR)**: 꼬리 리스크
-- **월별 수익률 분포** (언락 없는 달과 비교)
-- **하방 변동성** (downside deviation)
-- **복리 성장 곡선** (equity curve) 시각화
+- **Random assignment**: Unlock schedules were not randomly assigned to projects
+- **Clean counterfactual**: No untreated "control" for the same token at the same time
+- **Instrumental variable**: No obvious IV for unlock timing
 
-### 4-5. BTC 상대 성과 해석의 대안 가설 검증
+Therefore, we stopped at event study. The paper is honest about this. Future work could exploit within-project variation (linear vs. cliff structures for the same project) as a quasi-experimental design.
 
-**현재 해석**: "MM이 BTC 유동성을 exit 타이밍으로 활용"
+### 2.4. Why three competing hypotheses?
 
-**대안 가설**:
+The Bayesian 3-hypothesis framing (random walk / market beta / supply shock) came from earlier vibe-investing work (VTCLR, Iran Polymarket). It's a useful rhetorical device for:
 
-1. **알트코인 베타 해체 (De-risking)**
-   - BTC 상승기에는 투자자들이 위험자산(알트) → 안전자산(BTC)으로 이동
-   - 언락과 무관하게 모든 알트코인이 underperform
+- Making the alternative explanations explicit
+- Showing that the data differentially favor one over the others
+- Avoiding the trap of only considering the "preferred" hypothesis
 
-2. **유동성 흡수 효과**
-   - 언락으로 대량 물량이 나오면 BTC 상승에도 가격이 안 오르는 것은 당연
-   - 구조적 dilution 효과
-
-3. **심리적 앵커링 (Self-Fulfilling Prophecy)**
-   - 투자자들이 "언락 = 하락" 프레이밍에 갇혀 매도
-   - Keyrock 연구 자체가 시장 행동을 만들어냄
-
-**검증 방법**: BTC 상승기에 **언락 없는 알트코인 20개**의 평균 수익률과 비교
-- 만약 언락 없는 알트코인도 BTC 대비 -15% 하락한다면 → 언락 효과가 아닌 알트 전반
-- 만약 언락 없는 알트코인이 BTC 대비 +5% 상승한다면 → 언락 효과 확정
+H₃ being "most consistent with the data" is a weaker claim than "H₃ is proven". The paper maintains this distinction carefully.
 
 ---
 
-## 5. 데이터 CSV 기반 추가 발견
+## 3. Self-Critique
 
-> 본 논문 작성 후, CSV를 재분석하는 과정에서 논문에 포함하지 못한 추가 패턴이 발견됨
+This section mirrors the SELF_CRITIQUE structure in the paper's companion materials. It is reproduced here with working notes.
 
-### 🆕 발견 1: 초기 상장일 언락(Day 0-90)이 1주년 cliff보다 더 나쁨
+### 3.1. Critical Weaknesses (5)
 
-| 상장 후 언락까지 일수 | 평균 72h 수익률 | n |
-|-------------------|---------------|---|
-| **0-90일** | **-28.4%** ★ | 7 |
-| 91-364일 | -18.2% | 18 |
-| 365일 (1년 cliff) | -27.5% | 14 |
-| 365일+ | -12.1% | 13 |
+**CW1 — Sample Size vs. Claim Mismatch** (6/10)
 
-**해석**:
-- **상장 직후 언락(0-90일)이 1년 cliff보다 더 심각** (-28.4% vs -27.5%)
-- 대표 사례: AEVO -30.36% (상장 63일 후), MOVE -41.67% (89일 후), TRUMP -25.28% (90일 후)
-- 이 구간은 **투자자가 아직 유동성에 확신 없을 때 초기 vesting 수취인이 즉시 매도**하는 구조
-- **본 논문의 1주년 cliff 강조가 오히려 0-90일 구간의 위험성을 과소평가**하게 만듦
+N = 52 vs. Keyrock's 16,000+ is a 0.3% sample fraction. The title already reflects this (`?` + "Preliminary Evidence"), but the core claim is still vulnerable to replication failure on larger samples.
 
-**함의**: UNL-10 Hybrid 전략에 **"0-90일 가점"** 추가 필요
+**CW2 — 365-Day Cliff as Post-Hoc** (7/10)
 
-### 🆕 발견 2: Ecosystem 언락의 변동성 (평균 뒤의 위험)
+The highest-severity weakness. Despite multiple warnings in the paper, readers may still over-interpret 14/14 as confirmatory. The only real fix is pre-registered out-of-sample replication — planned for 12-18 months post-publication.
 
-- 평균: -3.42%
-- **표준편차: 10.5%**
-- GALA: **-10.26%** vs FTM: **+14.13%** → 24%p 스프레드
+**CW3 — Multiple-Testing Correction Scope** (5/10)
 
-**함의**:
-- **'Ecosystem은 안전하다'는 일반화 위험**
-- Keyrock이 +1.18%로 제시한 Ecosystem 평균은 **샘플에 따라 크게 달라짐**
-- 본 연구에서는 n=4로 통계적 일반화 불가
-- **실전 전략에서 "Ecosystem은 무조건 안전"이라고 판단하면 안 됨**
+Bonferroni on 17 tests may under-count the "effective number of tests" given data exploration. BH-FDR would be an improvement. Not critical for the primary finding (which passes any reasonable correction), but matters for sub-analyses.
 
-### 🆕 발견 3: TAO(Miner) 사례의 특이성
+**CW4 — Limited Bitcoin Beta Controls** (4/10)
 
-- 유일한 Miner 언락으로 +5.69% 상승
-- 그러나 **BTC도 +5.2% 상승**
-- **상대 성과: +0.49%** (거의 0)
+BTC + ETH + Top-10 index covers most of the variance, but a proper Liu-Tsyvinski-Wu 5-factor model would be better. N = 52 precludes this technically. Phase 2 with larger N should implement it.
 
-**함의**:
-- **Miner 언락 = '무영향'이지 '안전'은 아님**
-- TAO의 경우 **시장 베타에 완전히 수렴** → 언락이 별다른 영향 없음
-- 이는 PoW/PoS 네트워크의 **분산된 수취인 구조** 때문
-- Ethereum, Bitcoin, Monero 등 순수 마이닝 자산과 유사
+**CW5 — Causal Inference Not Established** (5/10)
 
-**함의**: UNL-10 Hybrid 전략은 **Miner 언락을 진입 대상에서 자동 제외** 해야 함 (신호 혼잡)
+Acknowledged repeatedly. Not a fatal flaw for an event study, but limits the paper's contribution ceiling. Future DID or quasi-experimental designs could address this.
 
----
+### 3.2. Additional Limitations (3)
 
-## 6. 가장 안전한 결론
+**L1 — Survivorship Bias** (3/10): Binance-listed tokens only; failed projects excluded.
 
-### 6-1. 연구의 실질적 기여
+**L2 — Transaction Cost Idealization** (2/10): 20 bps round-trip, zero slippage; flagged in the paper.
 
-본 연구가 확실히 기여하는 것 3가지:
+**L3 — Publication Bias Potential** (3/10): This is a single significant finding. The author has not pre-registered or reported null findings from similar analyses. Pre-registration for Phase 2 will address this.
 
-1. **Keyrock 검증**: 30일 90% 하락률의 대부분이 첫 72h에 집중된다는 사실 확인
-2. **BTC 차원 추가**: BTC 상승기에도 언락 토큰은 underperform (단, 인과관계는 추가 검증 필요)
-3. **1주년 cliff 경고**: 14개 케이스 전부 하락 (단, 생존편향 고려 필요)
+### 3.3. Composite Self-Assessment
 
-### 6-2. 안전한 결론 버전
+| Dimension | Score | Notes |
+|-----------|-------|-------|
+| Research question clarity | 9/10 | Two questions well-defined |
+| Methodological rigor | 7/10 | Good framework; N = 52 limits |
+| Transparency and ethics | 10/10 | Full data release; independent positioning |
+| Contribution magnitude | 6/10 | Extends Keyrock; does not supplant |
+| Reproducibility | 8/10 | 10 CSVs + 8 Python scripts + full docs |
+| Writing style | 8/10 | Clear; "Shock" may slightly overstate |
 
-**과감한 표현**:
-> *"UNL-10 Hybrid 전략은 승률 100%, 수익 +32.5%, Sharpe 6.25로 시장을 이긴다."*
+**Composite**: 8.0 / 10
 
-**보수적 표현 (권장)**:
-> *"언락 72시간 전에는 숏을 고려하라"보다*
-> *"언락 72시간 전에는 절대 롱을 잡지 마라"가 더 안전한 결론이다.*
-
-**이유**:
-- 숏은 **무한 손실 위험 + 법적/세무 복잡성**
-- 매수 회피는 **누구나 가능 + 기회비용 제한적**
-- 소매투자자에게는 후자가 **실질적으로 더 큰 가치**
-- 논문은 "숏 전략"을 강조했지만 **실전에서는 "진입 회피" 메시지가 핵심**
-
-### 6-3. 한국 투자자에게 주는 가장 중요한 3가지 원칙
-
-1. **1주년 cliff 직전 매수 금지**: 상장일로부터 335-395일 기간 주의
-2. **Day 0-90일 추가 경계**: 초기 언락이 1주년보다 더 위험할 수 있음
-3. **Ecosystem 안전 신화 탈피**: 표본에 따라 크게 다름, 개별 검증 필수
+**Position in literature**: Solid working paper. Appropriate for SSRN. Would require Phase 2 replication before top-tier peer-reviewed finance journals.
 
 ---
 
-## 7. 향후 로드맵
+## 4. Roadmap
 
-### Phase A: 표본 확장 (1-2개월)
+### Short-term (next 1-3 months)
 
-- [ ] CoinGecko API로 **상장폐지 토큰 포함** (200-300개 추가)
-- [ ] Tier 구분 (Launchpad vs 일반 vs 선물만 상장)
-- [ ] 최종 샘플 **300+ 이벤트** 목표
-- [ ] 이를 통해 Keyrock 16,000의 2% 수준 달성
+1. ✅ v3.0 paper completed (April 23, 2026)
+2. ⏳ Editage academic editing (~$200, 3-5 days turnaround)
+3. ⏳ SSRN account creation + metadata preparation
+4. ⏳ **SSRN submission target: May 10-15, 2026**
+5. ⏳ LinkedIn / X / Hacker News outreach within 48h of SSRN publication
 
-### Phase B: 인과관계 강화 (2-3개월)
+### Medium-term (3-12 months)
 
-- [ ] **이중차분법(DiD)** 구현
-  - 매칭 조건: 시총 ±20%, 거래량 ±20%, 상장일 ±60일
-  - 매칭 대조군 50개 구축
-- [ ] **이벤트 스터디** 구현 (T-7d ~ T+14d 일별)
-- [ ] **다중회귀** 분석 (BTC 수익률, 시총, 거래량 통제)
+6. **Out-of-sample events** collected for pre-registered 365-day cliff replication (events from May 2026 onward)
+7. **Sample expansion** to 200+ events across Binance + Coinbase + OKX
+8. **Liu-Tsyvinski-Wu 5-factor model** implementation for rigorous beta control
+9. **On-chain flow analysis**: verify predicted selling behavior in recipient wallets (Etherscan + custom indexers)
 
-### Phase C: OOS 검증 (3-4개월)
+### Long-term (1-2 years)
 
-- [ ] **2023-2024 훈련 세트** (36개) vs **2025 테스트 세트** (16개)
-- [ ] UNL-10 Hybrid의 실제 OOS 승률 측정
-- [ ] 각 전략의 **통계적 유의성** 재검정
-
-### Phase D: 리스크 지표 확장 (4-5개월)
-
-- [ ] VaR (95%) · CVaR (99%) 계산
-- [ ] 월별 수익률 분포 시각화
-- [ ] **Equity curve** 시뮬레이션 (거래 비용 포함)
-- [ ] **펀딩비 민감도** 분석
-
-### Phase E: 대안 가설 검증 (5-6개월)
-
-- [ ] **언락 없는 알트코인 대조군** 20개 선정
-- [ ] BTC 상승기 평균 수익률 비교
-- [ ] **순수 언락 효과 정량화**
-
-### Phase F: 학술지 투고 (6-12개월)
-
-- [ ] **Journal of Financial Economics** 또는 **Ledger** 투고
-- [ ] 피어 리뷰 대응
-- [ ] 필요 시 arXiv 프리프린트 공개
+10. **Phase 2 paper**: Full Keyrock-scale replication (target: 1,000+ events with fine-grained temporal resolution)
+11. **Phase 3 paper**: Cross-exchange and cross-jurisdiction comparison
+12. **Methodological paper**: Pre-registered framework for cryptocurrency event studies
 
 ---
 
-## 📌 마무리
+## 5. Ethical Statement
 
-본 문서는 *"토큰 언락 72시간의 비밀"* 논문의 **자기 비평**이다.
+The author affirms:
 
-### 핵심 교훈 5가지
+1. **No data manipulation**: Collection and analysis followed pre-specified procedures where pre-specification was possible
+2. **Transparent exploration**: Exploratory findings are explicitly flagged (not dressed up as confirmatory)
+3. **No financial conflict**: The author holds no material position in any token discussed
+4. **Independent judgment**: Research conducted outside Betalabs Inc. in personal capacity
+5. **No paid promotion**: No compensation received from any project, foundation, or market participant
 
-1. **52개 이벤트의 88.5% 하락은 강력한 증거지만, Keyrock 16,000개의 0.3% 샘플에 불과하다.**
-
-2. **100% 승률은 매력적인 숫자지만, 생존편향과 표본 선택 편향을 넘어서야 진짜 100%다.**
-
-3. **BTC 상대 성과 -17.3%는 흥미로운 발견이지만, 언락 없는 대조군 없이는 단정 불가.**
-
-4. **1주년 cliff보다 0-90일 초기 언락이 더 위험할 수 있다** — 논문에서 놓친 부분.
-
-5. **소매투자자에게 가장 큰 기여는 "숏 전략"이 아닌 "FOMO 회피 프레임워크"다.**
-
-다음 버전(v2.0)에서는 이 한계들을 체계적으로 보강하여, **Journal of Financial Economics 투고 수준의 엄밀성**을 확보하는 것이 목표이다.
+Violations of any of the above would warrant retraction.
 
 ---
 
-## 🔄 vibe-investing 4부작
+## 6. Personal Reflections
 
-| # | 칼럼 | Self-Critique 문서 |
-|---|------|------------------|
-| 1 | VTCLR 패턴 분석 | Bayesian 프레임 한계 |
-| 2 | Iran Polymarket 포렌식 | 60σ 계산 가정의 한계 |
-| 3 | Binance Alpha MM 봇 | 20개 샘플 한계 (별도 문서) |
-| **4** | **Token Unlock 72h (본편)** | **본 문서** |
+### 6.1. What I learned
 
-본 시리즈는 **"모든 논문에 자기 비평이 따른다"**는 학술적 정직성 원칙을 유지
+The most humbling part of this research was the 365-day cliff discovery. My first instinct was excitement: "14/14! Probability 1/16,000!". My second instinct — after 24 hours of reflection — was caution: "I discovered this by looking at the data. That's not a valid test."
 
----
+The paper's multiple disclaimers around Section 4.4 reflect this internal evolution. I believe this is the right epistemic posture. Exciting results discovered through exploration should be announced as hypotheses to be tested, not conclusions to be celebrated.
 
-## ⚠️ Disclaimer
+### 6.2. What I'd do differently
 
-- 본 문서는 **연구·교육 목적**이며 투자 조언이 아니다.
-- **특정 주체를 시세조종 행위자로 확정하지 않는다**.
-- 트레이딩 봇 전략은 **늘 변경될 수 있다** — 가장 큰 리스크 포인트.
-- 본 자기 비평 문서는 **v1.0 논문의 한계를 인정**하는 것이며, 결론을 철회하는 것은 아니다.
-- MIT License. 인용 시 *"김호광 (Dennis Kim) / vibe-investing"* 출처 명기.
+If starting over, I would:
 
----
+1. **Pre-register** the analysis plan before collecting data (though this is difficult when using already-collected historical events)
+2. **Fixed-window hypothesis**: Pre-specify that I would analyze 72 hours, 1 week, 1 month, etc., and report all, rather than emphasizing the one that produced the best result
+3. **Cross-validation**: Hold out 20% of the sample as a test set for out-of-sample validation of in-sample findings
 
-## About the Author
+None of these changes would materially alter the primary 72-hour finding (which is robust to arbitrary window choices). But they would improve the statistical validity of the exploratory findings.
 
-**김호광 (Dennis Kim)**
-Cyworld CEO · Betalabs CEO
-개발자 · Web3 Investor · AI 투자 연구자
+### 6.3. The bigger question
 
-- 📧 **Email**: gameworker@gmail.com
-- 🔗 **GitHub**: [github.com/gameworkerkim](https://github.com/gameworkerkim)
-- 🔗 **vibe-investing 레포**: [github.com/gameworkerkim/vibe-investing](https://github.com/gameworkerkim/vibe-investing)
+Why does this market anomaly persist despite public information? My working hypothesis (not in the paper) is:
 
-> *"언락은 이미 내일의 날씨처럼 캘린더에 적혀 있다.*
-> *그런데 왜 시장은 매번 놀랄까?"*
->
-> *"그리고 더 중요한 질문:*
-> *내가 그 캘린더를 제대로 읽고 있는가?"*
+- **Retail attention is too slow**: By the time retail notices an upcoming unlock, the front-running has already begun
+- **Institutional capital is constrained**: Sophisticated arbitrageurs face borrow limits, jurisdictional constraints, and liquidity issues for mid-cap tokens
+- **Coordination failure**: No single agent has the incentive to "fix" the market; recipients individually maximize their own returns
+
+If this is right, the anomaly may persist until either (a) unlock schedules become more granular and less concentrated, or (b) institutional short infrastructure improves. Neither is imminent.
 
 ---
 
-<p align="center">
-  <i>© 2026 김호광 (Dennis Kim). MIT License.</i><br>
-  <i>📧 gameworker@gmail.com · 🔗 github.com/gameworkerkim</i>
-</p>
+## 7. Acknowledgments
+
+This research builds directly on Keyrock (2024)'s pioneering 16,000-event study. The author is grateful for Keyrock's public dissemination of their aggregate findings, which provided both the motivation and the baseline for this work.
+
+The public availability of unlock schedule data via Tokenomist, CoinMarketCap, DefiLlama, and DropsTab made this research possible without proprietary data access.
+
+No AI models are listed as coauthors. AI-assisted drafting tools were used under author direction for language refinement only; all methodological, analytical, and interpretive decisions are the author's responsibility.
+
+---
+
+## 8. Contact
+
+**HoKwang Kim**
+Independent Researcher (Betalabs Inc. CEO, personal capacity)
+Email: gameworker@gmail.com
+ORCID: [0009-0002-0962-2175](https://orcid.org/0009-0002-0962-2175)
+GitHub: [@gameworkerkim](https://github.com/gameworkerkim)
+
+---
+
+*"Self-criticism, rigorously and publicly applied, is the only defense against the seduction of one's own findings."*
+
+*— HoKwang Kim, vibe-investing research note*
