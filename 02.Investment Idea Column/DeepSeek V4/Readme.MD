@@ -13,8 +13,8 @@ GitHub: [github.com/gameworkerkim/vibe-investing](https://github.com/gameworkerk
 
 | 언어 (Language) | Markdown | PDF | Word |
 |---|---|---|---|
-| 🇰🇷 **한국어** | [deepseek_column_ko.md](./deepseek_column_ko.md) | [deepseek_column_ko.pdf](./deepseek_column_ko.pdf) | [deepseek_column_ko.docx](./deepseek_column_ko.docx) |
-| 🇺🇸 **English** | [deepseek_column_en.md](./deepseek_column_en.md) | [deepseek_column_en.pdf](./deepseek_column_en.pdf) | [deepseek_column_en.docx](./deepseek_column_en.docx) |
+| 🇰🇷 **한국어** | [deepseek_column_ko.md](./deepseek_column_ko.md) | [deepseek_column_ko.pdf](./deepseek_column_ko.pdf) | 
+| 🇺🇸 **English** | [deepseek_column_en.md](./deepseek_column_en.md) | [deepseek_column_en.pdf](./deepseek_column_en.pdf) | 
 | 🇨🇳 **中文 (简体)** | [deepseek_column_zh.md](./deepseek_column_zh.md) | — | — |
 
 ---
