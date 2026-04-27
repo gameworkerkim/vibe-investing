@@ -11,8 +11,8 @@
 
 | 자료 | 링크 |
 |------|------|
-| ** 분석 보고서 (한국어 전체)** | [AI supply chain bayesian analysis kr.MD](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Awesome%20claude%20quant%20scripts/AI%20supply%20chain%20bayesian%20analysis/AI%20supply%20chain%20bayesian%20analysis%20kr.MD) |
-| ** 분석 프롬프트 (재사용 가능)** | [src/Bayesian long prompt.txt](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Awesome%20claude%20quant%20scripts/AI%20supply%20chain%20bayesian%20analysis/src/Bayesian%20long%20prompt.txt) |
+| **분석 보고서 (한국어 전체)** | [AI supply chain bayesian analysis kr.MD](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Awesome%20claude%20quant%20scripts/AI%20supply%20chain%20bayesian%20analysis/AI%20supply%20chain%20bayesian%20analysis%20kr.MD) |
+| **분석 프롬프트 (재사용 가능)** | [src/Bayesian long prompt.txt](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Awesome%20claude%20quant%20scripts/AI%20supply%20chain%20bayesian%20analysis/src/Bayesian%20long%20prompt.txt) |
 
 ---
 
