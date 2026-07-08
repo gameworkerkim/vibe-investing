@@ -1,0 +1,51 @@
+# AMQS-AI-Infra MCP Server
+
+> Research/educational MCP server implementing the Adaptive Momentum Quant Strategy (AMQS) for AI Infrastructure. Built on FastMCP (Python), stdio transport.
+
+## Docs
+
+- [Mcp server getting started.md](./Mcp%20server%20getting%20started.md): Full guide (Korean) covering MCP concepts (Part 1) and step-by-step server implementation (Part 2). Includes architecture diagrams, MCP vs API comparison, security considerations (CTI perspective), and deployment roadmap.
+- [server.py](./server.py): Production MCP server source. 4 tools, 1 resource, 1 prompt. Mock mode for offline demo (`AMQS_MOCK=1`).
+- [requirements.txt](./requirements.txt): Runtime dependencies.
+- [claude_desktop_config.example.json](./claude_desktop_config.example.json): Claude Desktop connection config.
+- [README.md](./README.md): Directory overview, quick start, and testing pipeline.
+
+## Key Concepts
+
+### What this server does
+The AMQS MCP server wraps a quant trading strategy (4-Factor momentum + macro regime filter + subtheme-capped Top-N selection + -12% stop-loss) as MCP primitives so an LLM (Claude Desktop, Cursor, etc.) can compose them dynamically in conversation.
+
+### Architecture
+- **Data layer**: `get_prices()` -- yfinance or synthetic data with cache
+- **Strategy layer**: `composite_scores()` -- pure functions, MCP-independent
+- **MCP layer**: `@mcp.tool()` decorators wrapping strategy functions as JSON-serializable tools
+
+### 3 Primitives exposed
+
+| Primitive | Endpoint | Purpose |
+|---|---|---|
+| Tools | `get_regime`, `get_momentum_score`, `get_top_signals`, `check_stop_loss` | Deterministic quant calculations, LLM-controlled |
+| Resources | `amqs://universe` | Read-only AI infra universe mapping, app-controlled |
+| Prompts | `cross_validate_ticker` | LLM fundamental cross-validation workflow, user-controlled |
+
+### Design principles
+- Risk rules (subtheme cap, stop-loss) are enforced in code, not prompts
+- All tool outputs are structured JSON (`ensure_ascii=False`)
+- Strategy logic is decoupled from MCP decorators for testability and reuse
+- Disclaimer is embedded at server instructions level and in each tool output
+- `AMQS_MOCK=1` enables reproducible offline demo with synthetic prices
+
+### Transport
+- **stdio**: Local use with Claude Desktop / Cursor (used in this server)
+- **Streamable HTTP**: Remote deployment with OAuth 2.1 (described in docs, not implemented here)
+
+## Testing
+- Unit: `import server; server.get_top_signals(10)`
+- Protocol: `mcp.ClientSession` stdio handshake test
+- Visual: `npx @modelcontextprotocol/inspector python server.py`
+
+## Optional Sections
+- [Full documentation (Mcp server getting started.md)](./Mcp%20server%20getting%20started.md)
+- [Server source code](./server.py)
+- [Original AMQS-AI-Infra strategy](https://github.com/gameworkerkim/vibe-investing/tree/main/01.Trading%20Strategy/Adaptive%20Momentum%20Quant%20Strategy%20(AMQS)%20for%20AI%20Infra)
+- [MCP Python SDK](https://github.com/modelcontextprotocol/python-sdk)
