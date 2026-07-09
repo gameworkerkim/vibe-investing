@@ -2,18 +2,19 @@
 
 > **vibe-investing / 02.Investment Idea Column / Elon Musk**
 >
-> 일론 머스크(Elon Musk) 생태계 — SpaceX 상장(SPCX), 우주(space) 기업 투자, 그리고 머스크라는 인물의 서사 — 를 다루는 칼럼·전략 모음입니다. SpaceX IPO 심층 분석(공모 조건 확정 전·후 2편), 순수 우주 테마 집중 포트폴리오(초고위험), 그리고 머스크의 행동양식을 읽는 인물 칼럼을 한 폴더에 묶었습니다.
+> 일론 머스크(Elon Musk) 생태계 — SpaceX 상장(SPCX), 우주(space) 기업 투자, xAI/Grok의 AI 모델 경쟁, 그리고 머스크라는 인물의 서사 — 를 다루는 칼럼·전략 모음입니다. SpaceX IPO 심층 분석(공모 조건 확정 전·후 2편), 순수 우주 테마 집중 포트폴리오(초고위험), Grok 4.5로 본 프론티어 AI '토큰 경제학' 경쟁 분석, 그리고 머스크의 행동양식을 읽는 인물 칼럼을 한 폴더에 묶었습니다.
 
-**키워드 / Keywords:** SpaceX · SPCX · SpaceX IPO · 스페이스X 상장 · 공모가 135달러 · $135 IPO · 1.77조 달러 · $1.77 trillion · Starlink · 스타링크 · xAI · Grok · 우주 투자 · 우주 기업 포트폴리오 · space stocks · Rocket Lab (RKLB) · AST SpaceMobile (ASTS) · Intuitive Machines (LUNR) · 차등 의결권 · dual-class shares · 궤도 데이터센터 · orbital data center · Tesla · 머스코노미 · Muskonomy · Elon Musk · 일론 머스크 · vibe investing · AI 투자
+**키워드 / Keywords:** SpaceX · SPCX · SpaceX IPO · 스페이스X 상장 · 공모가 135달러 · $135 IPO · 1.77조 달러 · $1.77 trillion · Starlink · 스타링크 · xAI · Grok · Grok 4.5 · 토큰 경제학 · token economics · cost per task · 프론티어 AI 경쟁 · Fable 5 · GPT 5.5 · Opus 4.8 · GLM 5.2 · DeepSeek V4 · NVIDIA GB300 · 우주 투자 · 우주 기업 포트폴리오 · space stocks · Rocket Lab (RKLB) · AST SpaceMobile (ASTS) · Intuitive Machines (LUNR) · 차등 의결권 · dual-class shares · 궤도 데이터센터 · orbital data center · Tesla · 머스코노미 · Muskonomy · Elon Musk · 일론 머스크 · vibe investing · AI 투자
 
 ---
 
 ## 폴더 구성 (Contents)
 
-이 폴더는 세 갈래로 읽힙니다 — **(A) IPO 분석**, **(B) 실행 포트폴리오**, **(C) 인물 서사**.
+이 폴더는 네 갈래로 읽힙니다 — **(A) IPO 분석**, **(B) 실행 포트폴리오**, **(C) 인물 서사**, **(D) AI 모델 경쟁**.
 
 | 파일 | 유형 | 한 줄 요약 |
 | --- | --- | --- |
+| [Grok45 ai model competition column.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/Grok45%20ai%20model%20competition%20column.md) | AI 모델 경쟁 칼럼 (최신) | Grok 4.5 출시로 본 프론티어 AI 경쟁의 축 이동 — '성능'에서 '토큰 경제학(작업당 실효 비용)'으로. 4강(Anthropic·OpenAI·xAI·중국) 구도 분석 |
 | [SpaceX IPO 0604 v2.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/SpaceX%20IPO%200604%20v2.md) | 분석 칼럼 (최신) | 공모 조건 확정($135·1.77조 달러·6/12 상장) 후 최종판 — 스타링크가 번 돈을 xAI가 태우는 구조, 3대 시나리오, 리스크 매트릭스 |
 | [SpaceX IPO 0604 v2 EN.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/SpaceX%20IPO%200604%20v2%20EN.md) | 분석 칼럼 (English) | English edition of the final pre-listing column — "What Exactly Are We Buying?" |
 | [SpaceX IPO.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/SpaceX%20IPO.md) | 분석 칼럼 (1편) | S-1 공개 직후(5/21) 작성 — 차등 의결권·우주 AI 데이터센터·테슬라 주주 우려, 세 갈래로 읽는 SPCX 상장 |
@@ -85,6 +86,23 @@ SpaceX 직접 노출(SPCX IPO 청약 + XOVR/DXYZ 우회)을 중심에 두고, �
 
 ---
 
+## D. AI 모델 경쟁 칼럼 (Grok 4.5) — [`Grok45 ai model competition column.md`](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/Grok45%20ai%20model%20competition%20column.md)
+
+> *2026년 7월 9일 작성 · Grok 4.5 출시(7/8)로 본 프론티어 AI 경쟁의 축 이동 — '성능'에서 '토큰 경제학'으로*
+
+xAI가 2026년 7월 8일 공개한 최상위 모델 **Grok 4.5**(수만 개 NVIDIA GB300 GPU 학습, Cursor와 함께 학습)를 렌즈로, 프론티어 AI 경쟁의 전선이 벤치마크 성능에서 **작업당 실효 비용(cost per task)** 으로 이동하고 있음을 분석한다. 머스크의 xAI라는 인물·기업 서사가 SpaceX/Tesla 수직 통합과 어떻게 연결되는지를 투자 관점에서 짚는 칼럼이다.
+
+1. **1위가 아니라 '2위 그룹의 가격 파괴자'** — xAI 자체 차트에서도 4개 코딩 벤치마크(DeepSWE 1.0/1.1·Terminal Bench 2.1·SWE Bench Pro) 전부 Anthropic Fable 5(max)가 1위. Grok 4.5는 Fable 5·GPT 5.5와 2위 그룹 경쟁. 그러나 파괴력은 성능이 아니라 단위 경제학에서 나온다.
+2. **토큰 경제학이 새 KPI** — Grok 4.5 $2/$6(1M 토큰), SWE Bench Pro 작업당 출력 15,954토큰으로 Opus 4.8(max) 67,020 대비 약 4.2배 절감 주장. '작업당 실효 비용 = 단가 × 출력 토큰 수 × 재시도 횟수'가 2026년 하반기의 경쟁 지표.
+3. **4강 구도** — Anthropic(성능 프리미엄·마진 방어), OpenAI(Sol~Luna 티어드 물량전), xAI(수직 통합·데이터 플라이휠), 중국 진영(Kimi K2.6·DeepSeek V4·GLM-5.2 오픈웨이트 3파전 + Huawei Ascend 하드웨어 독립).
+4. **투자 포인트 3** — ① NVIDIA GB300 수요는 실재하나 내러티브가 '서방 프론티어 랩 군비 경쟁'으로 분화 ② 토큰 경제학 = 마진 구조 = 밸류에이션 스토리 ③ 모델 단품이 아니라 수직계열화·유통(Cursor·Grok Build·Claude Code·Copilot)이 해자.
+
+**핵심 수치:** Grok 4.5 $2/$6 · 80 TPS · 작업당 출력 15,954토큰(약 4.2배 절감 주장) · 수만 개 GB300 · SWE Bench Pro 64.7%(Fable 5 80.4%가 1위) · GLM-5.2 62.1%(오픈웨이트 1위) · DeepSeek V4-Pro LiveCodeBench 93.5% · 벤더 자체 보고 수치(독립 검증 전)
+
+> 유보: 벤치마크는 대부분 벤더 자체 보고 값이며, Grok 4.5는 이제 막 공개돼 제3자(Artificial Analysis 등) 검증 전이다. 벤더 하니스 측정치와 독립 측정치가 크게 벌어진 전례가 많으므로 방향성 참고자료로 취급한다.
+
+---
+
 ## 이 폴더를 읽는 순서 (Reading Path)
 
 - **6월 12일 상장 전, 지금 SPCX를 살지 말지 결정해야 한다면** → `SpaceX IPO 0604 v2.md`(확정 조건·시나리오·리스크 매트릭스) → `portfolio.md`(어떻게·비중)
@@ -92,11 +110,13 @@ SpaceX 직접 노출(SPCX IPO 청약 + XOVR/DXYZ 우회)을 중심에 두고, �
 - **S-1 공개 직후의 구조적 쟁점(의결권·궤도 데이터센터)이 궁금하다면** → `SpaceX IPO.md` → `SpaceX IPO 0604 v2.md`로 수치 갱신 확인
 - **실행 비중·진입 타이밍만 빠르게** → `portfolio.md` 또는 `spacex_portfolio.pdf`
 - **머스크라는 인물·지배구조의 본질이 궁금하다면** → `SpaceX IPO.md` 1장(차등 의결권) → `musk_beijing_column.md`
+- **AI 모델을 어떤 기준으로 고를지, 프론티어 AI 경쟁의 판도가 궁금하다면** → `Grok45 ai model competition column.md`(토큰 경제학·4강 구도)
 
 ---
 
 ## 변경 이력 (Changelog)
 
+- **2026-07-09** — `Grok45 ai model competition column.md` 추가: Grok 4.5 출시(7/8)로 본 프론티어 AI 경쟁의 축 이동('성능'→'토큰 경제학'), 4강(Anthropic·OpenAI·xAI·중국) 구도 분석, 투자 포인트 3. readme·llms.txt에 D. AI 모델 경쟁 섹션 신설.
 - **2026-06-04** — `SpaceX IPO 0604 v2.md`(KR) 및 `SpaceX IPO 0604 v2 EN.md`(EN) 추가: 공모 조건 확정($135·5.556억 주·1.77조 달러·6/12 나스닥), 부문별 손익 분해, 3대 주가 시나리오, 리스크 매트릭스, RKLB 비교 역전, 뉴스 레퍼런스 13건. readme 재구성(A-1/A-2 분리).
 - **2026-05-21** — `SpaceX IPO.md` 최초 작성 (S-1 공개본 기준).
 
