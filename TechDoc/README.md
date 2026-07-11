@@ -6,6 +6,20 @@
 
 ---
 
+## LLM Wiki
+
+> **LLM Wiki**는 AI가 GitHub 코드베이스를 분석해 구조·아키텍처·API를 **위키 형태의 문서로 자동 생성**하고, 자연어 Q&A로 코드를 탐색하게 해주는 새로운 도구 카테고리입니다. 아래 3종을 비교/정리했습니다.
+
+| 문서 | 제공 주체 | 형태 | 한 줄 설명 |
+|---|---|---|---|
+| [DeepWiki 시작하기](DeepWiki/DeepWiki_Getting_Started.md) | Cognition Labs (Devin) | 호스팅 SaaS | `github.com` → `deepwiki.com` URL 치환만으로 위키 생성. 진입장벽 제로. 설치형 `deepwiki-open` 포함 |
+| [Google Code Wiki 시작하기](Google_Code_Wiki/Google%20code%20wiki%20getting%20started.md) | Google | 호스팅 SaaS | Gemini 기반. 코드 변경 시 문서·다이어그램 자동 재생성, 모든 설명이 소스 파일에 하이퍼링크 |
+| [OpenWiki 기술 문서](openwiki/README.md) | LangChain (오픈소스) | 로컬 CLI | AI 코딩 에이전트용 위키. `AGENTS.md`/`CLAUDE.md` 자동 관리, CI 자동 갱신, 프라이빗 저장소 지원 |
+
+> **요약** — 공개 저장소를 빠르게 훑으려면 **DeepWiki**·**Google Code Wiki**(무설치·무료), 사내 프라이빗 코드나 로컬 LLM·에이전트 연동이 필요하면 **OpenWiki**(로컬 실행)를 선택하세요.
+
+---
+
 ## NEW
 
 | 문서 | 설명 |
@@ -20,6 +34,7 @@
 
 ## 목차
 
+- [LLM Wiki](#llm-wiki)
 - [서버리스 & SaaS 무료 티어](#서버리스--saas-무료-티어)
 - [클라우드 비용 절감](#클라우드-비용-절감)
 - [AI / LLM](#ai--llm)
@@ -109,6 +124,9 @@ AI 에이전트가 탐색하고 이해하며 작업을 수행할 수 있는 웹�
 
 | 날짜 | 문서 | 내용 |
 |---|---|---|
+| 2026-07-11 | [DeepWiki 시작하기](DeepWiki/DeepWiki_Getting_Started.md) | LLM Wiki -- AI 코드 문서 자동화 (SaaS + 설치형) |
+| 2026-07-11 | [Google Code Wiki 시작하기](Google_Code_Wiki/Google%20code%20wiki%20getting%20started.md) | LLM Wiki -- Gemini 기반, 자동 재생성 문서 |
+| 2026-07-11 | [OpenWiki 기술 문서](openwiki/README.md) | LLM Wiki -- 에이전트용 로컬 위키 CLI |
 | 2026-06-19 | [iTransformer 시작 가이드](TimesFM/iTransformer_가이드.md) | 칭화대 다변량 시계열 모델 |
 | 2026-06-19 | [TimesFM 분석 가이드](TimesFM/TimesFM_분석_가이드.md) | Google 시계열 파운데이션 모델 |
 | 2026-06-16 | [AI 코딩 워크플로우 가이드](effective_LLM/AI%20coding%20workflow%20claude%20code%20cursor%20chatgpt.md) | AI 코딩 도구 실전 전략 |
