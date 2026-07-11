@@ -15,6 +15,9 @@
 | AIInvestor (증권당) | `AIInvestor/` | Python (Azure Functions) | `pip install -r requirements.txt` | `pytest` (211 tests) |
 | Vibe Invest Dashboard | `01.Trading Strategy/Vibe_Invest_Dashboard/` | TS (Cloudflare Pages+Workers) | `npm install && npm run dev` | `npm test` (vitest) |
 | ARDS-X 레짐 분류기 | `01.Trading Strategy/ARDS — Adaptive Recession-Defensive Strategy for AI_QQQ/quant/` | Python | `pip install -r requirements.txt && python run.py` | 없음 |
+| LAON VaultGuard | `LAON_VaultGuard/` | Node.js/TS (Express) | `npm install && npm run dev` (port 3101) | `npm test` (vitest) + `npm run backtest` |
+| CASSANDRA AI | `CASSANDRA AI/` | TS (Next.js 15 + Prisma) | `npm install && npm run dev` | 없음 |
+| toss-dashboard | `toss-dashboard/` | TS (Next.js 15 + Drizzle) | `npm install && npm run dev` | 없음 |
 
 **중요**: 각 프로젝트는 루트가 아닌 **자기 폴더에서** 실행. 루트에 통합 빌드/테스트 없음.
 
@@ -22,6 +25,9 @@
 - `AIInvestor/` → Python 3.11+ (CI는 3.11 사용). `AIInvestor/.venv` 또는 격리 venv.
 - `Vibe_Invest_Dashboard/` → `esbuild`로 번들, `vitest`로 테스트, `tsc --noEmit` 타입체크. Cloudflare 계정 없이 로컬 모드+mock 가능.
 - ARDS-X는 루트 `.venv`(pandas 등) 사용. FRED CSV + yfinance 데이터 (API 키 불필요).
+- `LAON_VaultGuard/` → Node ≥18, TS+Express. 멀티 LLM(Claude·DeepSeek·GPT·MiniMax·Ollama) 교차검증 시크릿 스캐너. npm 패키지 `laon-vaultguard` 배포. `npm test`(vitest)·`npm run backtest`(54 tests). Ollama 오프라인 모드 지원, `docker-compose up -d` 가능.
+- `CASSANDRA AI/` → Next.js 15 + Prisma(PostgreSQL/Neon) + Upstash Redis. DART OpenAPI 키·DeepSeek API 키·DB env 필요. Vercel 배포. 테스트 없음.
+- `toss-dashboard/` → Next.js 15 + Drizzle ORM + Neon + Upstash Redis. `Toss/`(Express)와 별개의 Next.js 버전. 테스트 없음.
 
 ## git workflow
 
