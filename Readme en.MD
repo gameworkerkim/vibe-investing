@@ -9,6 +9,7 @@ This repo treats AI like Excel — a tool — and publishes the work of separati
 [![Updates](https://img.shields.io/badge/Updates-Weekly-brightgreen)](https://github.com/gameworkerkim/vibe-investing/blob/main)
 [![Awesome Lists](https://img.shields.io/badge/Awesome--Lists%20%C3%97%205-orange)](https://github.com/gameworkerkim/vibe-investing/blob/main)
 [![ORCID](https://img.shields.io/badge/ORCID-0009--0002--0962--2175-A6CE39?logo=orcid&logoColor=white)](https://orcid.org/0009-0002-0962-2175)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/gameworkerkim/vibe-investing)
 
 [한국어 README](https://github.com/gameworkerkim/vibe-investing/blob/main/README.md)
 
