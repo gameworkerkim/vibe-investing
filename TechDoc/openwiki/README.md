@@ -3,7 +3,7 @@
 > 대상 저장소: [langchain-ai/openwiki](https://github.com/langchain-ai/openwiki)
 > 라이선스: MIT · 언어: TypeScript(84%) / JavaScript(16%)
 
-OpenWiki는 **코드베이스나 개인 지식(personal memory)에 대한 "에이전트용 위키(agent wiki)"를 자동으로 작성하고 유지·관리하는 CLI 도구**입니다. LangChain 팀이 만들었으며, 사람이 읽는 문서뿐 아니라 AI 코딩 에이전트가 컨텍스트를 찾을 때 참조하도록 설계된 것이 핵심 특징입니다.
+OpenWiki는 **코드베이스나 개인 지식(personal memory)에 대한 "에이전트용 위키(agent wiki)"를 자동으로 작성하고 유지·관리하는 CLI 도구**이다. LangChain 팀이 만들었으며, 사람이 읽는 문서뿐 아니라 AI 코딩 에이전트가 컨텍스트를 찾을 때 참조하도록 설계된 것이 핵심 특징이다.
 
 ## 목차
 - [핵심 개념](#핵심-개념)
@@ -20,16 +20,16 @@ OpenWiki는 **코드베이스나 개인 지식(personal memory)에 대한 "에�
 
 ## 핵심 개념
 
-OpenWiki는 두 가지 동작 모드를 제공합니다.
+OpenWiki는 두 가지 동작 모드를 제공하고 있다.
 
 | 모드 | 명령 | 설명 | 저장 위치 |
 |------|------|------|-----------|
 | **Personal 모드** | `openwiki personal --init` | Gmail, Notion, 로컬 저장소, 웹 검색, Hacker News, X/Twitter 등의 소스를 통합해 개인용 "브레인" 위키 생성 | `~/.openwiki/wiki` |
 | **Code 모드** | `openwiki code --init` | 현재 코드베이스에 대한 저장소 문서 생성 | `openwiki/` |
 
-- **커넥터(Connector) 기반 수집**: 내장 커넥터 또는 git 저장소를 통해 로컬 지식 소스를 수집(ingest)합니다.
-- **에이전트 우선 설계**: `code` 모드는 저장소 루트에 `AGENTS.md`와 `CLAUDE.md`를 생성/갱신하여, 코딩 에이전트가 컨텍스트를 찾을 때 위키를 참조하도록 프롬프트를 삽입합니다.
-- **자동 최신화**: GitHub Actions / GitLab CI 워크플로를 통해 문서 갱신 PR을 자동으로 생성할 수 있습니다.
+- **커넥터(Connector) 기반 수집**: 내장 커넥터 또는 git 저장소를 통해 로컬 지식 소스를 수집(ingest)한다.
+- **에이전트 우선 설계**: `code` 모드는 저장소 루트에 `AGENTS.md`와 `CLAUDE.md`를 생성/갱신하여, 코딩 에이전트가 컨텍스트를 찾을 때 위키를 참조하도록 프롬프트를 넣을 수 있다.
+- **자동 최신화**: GitHub Actions / GitLab CI 워크플로를 통해 문서 갱신 PR을 자동으로 생성할 수 있다.
 
 ---
 
@@ -60,7 +60,7 @@ OpenWiki는 두 가지 동작 모드를 제공합니다.
 
 ## 단점 / 한계
 
-- **LLM API 비용 발생**: 문서 생성/갱신에 LLM 호출이 필요하므로 토큰 비용이 든다(대형 저장소일수록 증가).
+- **LLM API 비용 발생**: 문서 생성/갱신에 LLM 호출이 필요하므로 토큰 비용이 소모된다(대형 저장소일수록 토큰이 불타는 것은 피할 수 없다).
 - **초기 프로젝트(0.1.x)**: 릴리스가 6개 수준으로 아직 초기 단계 — API/명령 변경 가능성 존재(예: 이제 bare `openwiki --init`은 미지원, 모드를 명시해야 함).
 - **Node.js 생태계 의존**: 전역 npm 설치 필요, 네이티브 의존성(`better-sqlite3`) 존재.
 - **Windows/Bun 설치 주의**: `bun install`은 `better-sqlite3` 네이티브 컴파일로 폴백될 수 있어 Visual Studio Build Tools(C++ 워크로드)가 필요.
@@ -103,7 +103,7 @@ npm install -g openwiki
 
 ### Windows
 
-Node.js 패키지 매니저 사용을 권장합니다.
+Node.js 패키지 매니저 사용을 권장
 
 ```bash
 npm install -g openwiki
@@ -113,7 +113,7 @@ pnpm add -g openwiki
 
 ### Bun 사용 시 (주의)
 
-`bun install -g openwiki`는 `better-sqlite3` 네이티브 의존성 컴파일로 폴백될 수 있습니다. 이 경로를 사용하기 전에:
+`bun install -g openwiki`는 `better-sqlite3` 네이티브 의존성 컴파일로 폴백될 수 있습니다. 이 경로를 사용하기 전에 의존성 있는 
 - **Visual Studio Build Tools** 설치 (Desktop development with C++ 워크로드 포함)
 - Bun은 기본적으로 설치 패키지의 lifecycle 스크립트를 실행하지 않으므로, 네이티브 빌드 시작 전 경고를 표시하지 못할 수 있음.
 
@@ -194,7 +194,7 @@ OPENWIKI_PROVIDER_RETRY_ATTEMPTS=3
 2. **API 비용**: 문서 생성/갱신 시 LLM을 호출하므로 토큰 사용료가 발생합니다. 대규모 저장소일수록 비용/시간 증가.
 3. **시크릿 관리**:
    - 모든 자격증명은 `~/.openwiki/.env`에 저장됩니다. 이 파일을 커밋하지 마세요.
-   - 커넥터 설정 파일에는 원시 시크릿 값을 넣지 말고 환경변수 이름으로 참조해야 합니다.
+   - 커넥터 설정 파일에는 원시 시크릿 값을 넣지 말고 환경변수 이름으로 참조해야 함.
    - ChatGPT 로그인 시 저장되는 **refresh token은 비밀번호처럼 취급**하세요.
 4. **커넥터 자격증명 사전 요구**:
    - Slack, Gmail은 앱 클라이언트 자격증명이 `~/.openwiki/.env`에 미리 설정되어 있어야 함.
@@ -211,7 +211,7 @@ OPENWIKI_PROVIDER_RETRY_ATTEMPTS=3
 
 ## 총평
 
-OpenWiki는 "문서 = 사람이 읽는 것"이라는 관점을 넘어, **AI 코딩 에이전트가 소비하는 컨텍스트 소스로서의 문서**라는 새로운 카테고리를 겨냥한 도구입니다. 결정론적 API 문서 생성기(Doxygen/TypeDoc)나 정적 사이트 생성기(Docusaurus/MkDocs)와 달리, LLM으로 코드/개인 지식을 서술형 위키로 합성하고 CI로 자동 유지한다는 점이 가장 큰 차별점입니다.
+OpenWiki는 "문서 = 사람이 읽는 것"이라는 관점을 넘어, **AI 코딩 에이전트가 소비하는 컨텍스트 소스로서의 문서**라는 새로운 카테고리를 겨냥한 도구입니다. 결정론적 API 문서 생성기(Doxygen/TypeDoc)나 정적 사이트 생성기(Docusaurus/MkDocs)와 달리, LLM으로 코드/개인 지식을 서술형 위키로 합성하고 CI로 자동 유지한다는 점이 가장 큰 차별점
 
 - **적합한 경우**: AI 에이전트(Claude, Cursor 등) 중심 워크플로, 살아있는(항상 최신) 저장소 위키가 필요한 팀, 개인 지식 통합이 필요한 개인.
 - **덜 적합한 경우**: LLM 비용을 피하고 싶거나, 결정론적 API 레퍼런스만 필요하거나, 완전한 오프라인/폐쇄망 환경.
