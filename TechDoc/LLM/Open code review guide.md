@@ -1,7 +1,8 @@
 # Open Code Review (OCR) — 완전 가이드
 
 > 알리바바 그룹이 2년간 내부 검증 후 오픈소스화한 하이브리드 AI 코드 리뷰 CLI  
-> Apache 2.0 | GitHub: [alibaba/open-code-review](https://github.com/alibaba/open-code-review)
+> Apache 2.0 | GitHub: [alibaba/open-code-review](https://github.com/alibaba/open-code-review)  
+> 번역 계획(한국어 우선): [`Open code review Korean translation plan.md`](./Open%20code%20review%20Korean%20translation%20plan.md)
 
 ---
 
