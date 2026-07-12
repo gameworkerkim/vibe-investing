@@ -20,6 +20,30 @@ AI를 엑셀과 같은 도구로 보고, 시장의 소음에서 신호를 가려
 
 ---
 
+## NEW · 텐센트 Hy3 시작하기 — 프론티어의 1/25 비용으로 돌리는 에이전트 모델
+
+> *"벤치마크 1등이 아니라 프로덕션 신뢰성으로 승부한다 — 야오슌위식 'AI 후반전'의 첫 실물."*
+
+텐센트가 2026년 7월 정식 출시한 **Hy3**(295B MoE / 활성 21B)는 최대 파라미터 경쟁을 포기하고 "실무 생산성 시나리오에서 신뢰할 수 있는 저비용 에이전트 모델"을 표방한다. Output 단가가 Claude Sonnet의 **1/25**, GPT-5.5의 **1/51** — 그러면서 SWE-Bench Verified에서 서로 다른 에이전트 스캐폴딩 간 정확도 편차 4% 이내라는 에이전트 안정성을 보인다. Apache 2.0 완전 오픈소스, 256K 컨텍스트, `no_think`/`high` 하이브리드 추론까지. Hy3 vs DeepSeek V4 vs Claude vs GPT-5.5 가격·성능 정면 비교, TokenHub API·vLLM·SGLang 셀프호스팅, Claude Code·Cline·OpenCode 등 코딩 도구 연동까지 담은 실전 시작 가이드.
+
+→ **[텐센트 Hy3 Getting Started 가이드 전문 열기](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Tencent_LLM/Tencent%20HY3%20Getting%20Started%20KR.md)**
+
+> *"Hy3의 전략은 정면 승부가 아니라, 일상적 기업 업무의 대부분을 프론티어의 극히 일부 비용으로 안정적으로 처리하는 것이다."*
+
+---
+
+## NEW · LLM Wiki 3종 비교 — DeepWiki · Google Code Wiki · OpenWiki
+
+> *"코드를 읽는 것이 소프트웨어 개발의 가장 큰 병목이다. 이제 AI가 코드를 읽고 위키를 쓴다."*
+
+**LLM Wiki**는 GitHub 저장소를 입력하면 LLM이 전체 코드를 스캔해 구조·아키텍처·API를 위키 문서와 다이어그램으로 자동 생성하고, 자연어 Q&A로 코드를 탐색하게 해주는 새로운 도구 카테고리다. Doxygen(결정론적 레퍼런스)·Docusaurus(렌더링)와 달리 **코드 자체를 읽고 서술형 위키를 합성·지속 갱신**한다. 대표 3종을 직접 써보고 비교했다 — 공개 저장소를 URL 치환 한 번으로 즉시 훑는 **DeepWiki**(Cognition/Devin), Gemini 기반으로 코드 변경 시 문서·다이어그램을 자동 재생성하는 **Google Code Wiki**, 사내 프라이빗 코드·로컬 LLM·에이전트 연동이 되는 오픈소스 CLI **OpenWiki**(LangChain).
+
+→ **[LLM Wiki 소개 · 3종 비교 전문 열기](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/README.md#llm-wiki)**
+
+> *"공개 저장소를 빠르게 훑으려면 DeepWiki·Google Code Wiki(무설치·무료), 사내 프라이빗 코드나 로컬 LLM 연동이 필요하면 OpenWiki(로컬 실행)."*
+
+---
+
 ## NEW · Claude Fable 5 전체 시스템 프롬프트 유출 — LLM 개발자를 위한 인사이트 모음
 
 > *"AI의 두뇌를 해부한다 — Claude Fable 5부터 Sonnet 3.5까지, 12개 버전의 시스템 프롬프트가 전부 유출되었다."*
@@ -141,6 +165,22 @@ Quivr는 38,000+ GitHub 스타의 오픈소스 RAG 플랫폼이다. PDF·PPT·Ex
 
 ---
 
+## 가장 반응이 좋았던 투자 칼럼 3선 (LinkedIn 90일 실측)
+
+> *"차트 뒤에는 언제나 사람의 서사가 있다. 그 서사를 읽어야 자본의 논리가 보인다."*
+
+이 레포의 칼럼은 거시 흐름·산업 변화·시장 구조를 실증 데이터로 분석합니다. 그중 LinkedIn 90일 애널리틱스에서 실제로 가장 많이 읽히고 공유된 3편을 골랐습니다.
+
+- **[미래에셋, 왜 스페이스X 배정 주식을 취소당했나](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/SpaceX_MiraeAsset.md)** — *노출 77,766, 이 레포 90일 전체 노출의 8.3%를 단독으로 차지한 최고 성과작.* 스페이스X 나스닥 상장 첫날 +19.34%의 흥행 뒤에서, 유일한 국내 인수단 미래에셋증권은 배정 예정 물량 231만주를 단 한 주도 받지 못했다. 골드만삭스가 쥔 배정 전권, 한국 개인의 '단타' 낙인, 물량 폭증 속 수수료 경쟁 — 글로벌 IB 네트워크에서 한국 자본이 서 있는 냉정한 좌표를 해부한다.
+
+- **[마약왕 박왕열의 스승 '김미영 팀장'은 왜 반드시 잡아야 하는가](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Voce%20Phishing/Kim-MiYoung.md)** — *노출 10,814, 참여율 0.28%. 전 국민이 아는 밈 + CTI 전문성의 결합.* "안녕하세요, 김미영 팀장입니다"라는 스팸 문자는 어떻게 검거까지 10년 걸린 국제 범죄 조직이 되었나. 사이버수사대 출신 전직 경찰이 사냥꾼에서 밀렵꾼으로 변신하는 과정과, 관할의 틈·시차를 무기로 쓴 범죄의 구조를 추적한다.
+
+- **[추락하는 '사이버 렉카' 왕국](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Cyber%20wrecker/Cyber%20wrecker.md)** — *참여율 0.60%, 서사형 콘텐츠의 안정적 반응.* 탈덕수용소·구제역·카라큘라 — '사이버 렉카'들이 허위정보로 수억 원을 벌던 시대가 저물고 있다. 유튜버는 '언론'이 아니라는 제도적 사각지대와, 이제야 움직이기 시작한 입법의 현주소를, 개인 처벌이 아닌 '구조 차단'의 관점에서 짚는다.
+
+→ 전체 칼럼과 독자 페르소나별 추천은 **[칼럼 인덱스](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Readme.MD)** 참조.
+
+---
+
 ## 이 레포가 향하는 곳 — 멀티-LLM 투자위원회
 
 Vibe Investing의 다음 단계는 단일 LLM 의존에서 벗어나, **서로 다른 개성을 가진 여러 LLM을 하나의 퀀트 헤지펀드 투자위원회처럼 운용하고 교차검증하는 것**입니다.
@@ -220,9 +260,9 @@ SSRN에 게재한 작업 논문 4편, 총 113페이지. 암호화폐 시장 미�
 
 ### 기술 문서 (TechDoc)
 
-레포 운영·재현에 필요한 기술 문서를 모았습니다.
+레포 운영·재현에 필요한 기술 문서를 모았습니다. 서버리스·무료 티어, 클라우드 비용 절감, AI/LLM(토큰 최적화·RAG·로컬 배포), 시계열 예측 모델, AI 코딩 어시스턴트를 다룹니다. 최근 **텐센트 Hy3 시작 가이드**와 **LLM Wiki 3종 비교**(DeepWiki·Google Code Wiki·OpenWiki)를 추가했습니다.
 
-→ [TechDoc 폴더](https://github.com/gameworkerkim/vibe-investing/tree/main/TechDoc)
+→ [TechDoc 폴더](https://github.com/gameworkerkim/vibe-investing/tree/main/TechDoc) · [텐센트 Hy3](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Tencent_LLM/Tencent%20HY3%20Getting%20Started%20KR.md) · [LLM Wiki](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/README.md#llm-wiki)
 
 ---
 
@@ -299,7 +339,11 @@ vibe-investing/
 ├── Harness quantv2/                   ← Earnings Momentum Agent
 ├── AfterMarketClose/                  ← AMC 공시 칼럼 + CSV
 ├── mNAV(Market-to-Net-Asset-Value) arbitrage/ ← DAT mNAV 칼럼 + CSV 3종
-├── TechDoc/                           ← 기술 문서
+├── TechDoc/                           ← 기술 문서 (서버리스·무료티어·AI/LLM·시계열·코딩도구)
+│   ├── Tencent_LLM/                   ← NEW · 텐센트 Hy3 시작 가이드 (가격·성능 비교 + 셀프호스팅)
+│   ├── DeepWiki/ · Google_Code_Wiki/ · openwiki/  ← NEW · LLM Wiki 3종 비교
+│   ├── LLM/ · TimesFM/ · CloudFlare/ 등             ← 토큰 최적화·RAG·시계열·무료 티어
+│   └── README.md                      ← TechDoc 통합 인덱스
 ├── TradingLog/                        ← 트레이딩 로그
 │
 ├── Awesome vibe invest.MD             ← 주식 도구 큐레이션
