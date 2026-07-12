@@ -4,26 +4,26 @@
 
 ---
 
-## 📋 현재 상태 요약 / Current Status Summary
+## 현재 상태 요약 / Current Status Summary
 
 **KO** — 언어별·영역별 번역 커버리지 현황입니다.
 **EN** — Translation coverage by area and language.
 
 | 영역 / Area | 일본어 / Japanese (ja) | 한국어 / Korean (ko) | 비고 / Notes |
 |------|-------------|-------------|------|
-| **README.\*.md** | ✅ 있음 / Present (EN과 구조 거의 동일 / structure nearly identical to EN) | ✅ 있음 / Present | 일부 섹션·제목 누락, 영문 잔존 / Some sections/titles missing, English remnants |
-| **CONTRIBUTING.\*.md** | ✅ 있음 / Present | ✅ 있음 / Present | 영문 혼용 많음 / Frequent English mixing |
-| **사이트 UI / Site UI** (`pages/src/i18n/*.ts`) | ✅ `ja.ts` (271키 / 271 keys, EN/ZH 완전 대응 / fully mapped) | ❌ 없음 / None | Language 타입도 `en\|zh\|ja`만 / Language type only has `en\|zh\|ja` |
-| **사이트 문서 / Site docs** (`pages/src/content/docs/`) | ✅ 17개 전부 / All 17 files | ❌ 없음 / None | → EN 폴백 / falls back to EN |
-| **사이트 블로그 / Site blog** | ✅ 1편 / 1 post | ❌ 없음 / None | |
-| **VS Code 확장 i18n / VS Code extension i18n** | ❌ (`en`, `zh-cn`만 / only) | ❌ | |
-| **plugins/.../CODEX.\*.md** | ❌ | ✅ `CODEX.ko-KR.md` | |
-| **examples/ README** | ❌ EN만 / EN only | ❌ EN만 / EN only | |
-| **SECURITY / GOVERNANCE / ROADMAP** | ❌ EN만 / EN only | ❌ EN만 / EN only | |
+| **README.\*.md** | O 있음 / Present (EN과 구조 거의 동일 / structure nearly identical to EN) | O 있음 / Present | 일부 섹션·제목 누락, 영문 잔존 / Some sections/titles missing, English remnants |
+| **CONTRIBUTING.\*.md** | O 있음 / Present | O 있음 / Present | 영문 혼용 많음 / Frequent English mixing |
+| **사이트 UI / Site UI** (`pages/src/i18n/*.ts`) | O `ja.ts` (271키 / 271 keys, EN/ZH 완전 대응 / fully mapped) | X 없음 / None | Language 타입도 `en\|zh\|ja`만 / Language type only has `en\|zh\|ja` |
+| **사이트 문서 / Site docs** (`pages/src/content/docs/`) | O 17개 전부 / All 17 files | X 없음 / None | → EN 폴백 / falls back to EN |
+| **사이트 블로그 / Site blog** | O 1편 / 1 post | X 없음 / None | |
+| **VS Code 확장 i18n / VS Code extension i18n** | X (`en`, `zh-cn`만 / only) | X | |
+| **plugins/.../CODEX.\*.md** | X | O `CODEX.ko-KR.md` | |
+| **examples/ README** | X EN만 / EN only | X EN만 / EN only | |
+| **SECURITY / GOVERNANCE / ROADMAP** | X EN만 / EN only | X EN만 / EN only | |
 
 ---
 
-## 🗺️ 번역 우선순위 (Phase별) / Translation Priority (by Phase)
+## 번역 우선순위 (Phase별) / Translation Priority (by Phase)
 
 ### Phase 0 — 공통 규칙 (사전 준비) / Common Rules (Prerequisites)
 
@@ -52,7 +52,7 @@
 
 ---
 
-### Phase 1 — 한국어 사이트 언어 인프라 (최우선) 🔥 / Korean Site Language Infrastructure (Top Priority)
+### Phase 1 — 한국어 사이트 언어 인프라 (최우선) / Korean Site Language Infrastructure (Top Priority)
 
 **KO — 이유**: 사용자 유입의 공식 사이트(`alibaba.github.io/open-code-review`)가 KO로 제공되어야 함.
 **EN — Rationale**: The official site (`alibaba.github.io/open-code-review`), the main user entry point, must be available in Korean.
@@ -181,7 +181,7 @@
 
 ---
 
-## 📊 언어별 "해야 할 일" 한눈에 / To-Do at a Glance by Language
+## 언어별 "해야 할 일" 한눈에 / To-Do at a Glance by Language
 
 ### 한국어 (KO) — 우선순위 순서 / Korean — priority order
 
@@ -205,7 +205,7 @@
 
 ---
 
-## 🔧 작업 분할 제안 (PR 단위) / Suggested Work Breakdown (by PR)
+## 작업 분할 제안 (PR 단위) / Suggested Work Breakdown (by PR)
 
 | PR | 내용 / Content | 언어 / Lang | 예상 파일 수 / Est. files |
 |----|------|------|-------------|
@@ -220,7 +220,7 @@
 
 ---
 
-## 📝 PR 제출 시 체크리스트 / PR Submission Checklist
+## PR 제출 시 체크리스트 / PR Submission Checklist
 
 - [ ] `npm run typecheck` 통과 / passes
 - [ ] `npm run build` 통과 / passes
@@ -232,7 +232,7 @@
 
 ---
 
-## 🔗 참고 자료 / References
+## 참고 자료 / References
 
 - 프로젝트 저장소 / Repository: https://github.com/alibaba/open-code-review
 - 공식 사이트 / Official site: https://alibaba.github.io/open-code-review

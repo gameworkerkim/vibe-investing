@@ -6,7 +6,7 @@
 
 ---
 
-## 📚 문서 목록 / Documents
+## 문서 목록 / Documents
 
 | 파일 / File | 설명 (KO) | Description (EN) |
 |-------------|-----------|------------------|
@@ -15,14 +15,14 @@
 
 ---
 
-## 🎯 목표 / Goals
+## 목표 / Goals
 
 - **KO** — 공식 사이트, 문서, README, VS Code 확장의 한국어 지원을 단계적으로 추가하고, 일관된 용어를 사용합니다.
 - **EN** — Incrementally add Korean support for the official site, docs, README, and VS Code extension, while using consistent terminology.
 
 ---
 
-## 🔗 참고 자료 / References
+## 참고 자료 / References
 
 - 프로젝트 저장소 / Repository: https://github.com/alibaba/open-code-review
 - 공식 사이트 / Official site: https://alibaba.github.io/open-code-review
