@@ -4,6 +4,12 @@
 >
 > **EN** — A collection of planning and glossary documents for contributing a Korean translation to the [Open Code Review](https://github.com/alibaba/open-code-review) project. All documents are written in both Korean and English.
 
+看过 Open Code 之后，我很少见到一个项目能如此真正地帮助开发者。
+
+让 LLM 不仅成为代码生成工具，更成为能够修正人类错误、保障安全开发的“安全护栏（Harness）”，这一理念令人印象深刻。
+
+在我看来，这样的创新意义，犹如蔡伦发明造纸术一样——它不仅是一项技术进步，更可能成为推动整个时代发展的基础设施。
+
 ---
 
 ## 문서 목록 / Documents
