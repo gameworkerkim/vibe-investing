@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Ackman Quant Engine — 설정</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #0f1115;
+    --panel: #171a21;
+    --border: #2a2f3a;
+    --text: #e6e8eb;
+    --muted: #9aa3b2;
+    --accent: #4f8cff;
+    --ok: #35c46a;
+    --bad: #e2574c;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Pretendard, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 2.5rem 1.25rem 4rem;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; }
+  .nav { margin-bottom: 1rem; font-size: 0.85rem; }
+  .nav a { color: var(--accent); text-decoration: none; }
+  .nav a:hover { text-decoration: underline; }
+  h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
+  .sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.75rem; }
+  .banner {
+    background: rgba(53, 196, 106, 0.12);
+    border: 1px solid var(--ok);
+    color: var(--ok);
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+  }
+  .status-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 0.6rem;
+    margin-bottom: 2rem;
+  }
+  .status-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.75rem 0.9rem;
+  }
+  .status-card .name { font-weight: 600; font-size: 0.88rem; display: flex; align-items: center; gap: 0.4rem; }
+  .status-card .detail { color: var(--muted); font-size: 0.78rem; margin-top: 0.2rem; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .dot.ok { background: var(--ok); }
+  .dot.bad { background: var(--bad); }
+
+  fieldset {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.25rem 1.25rem;
+    margin-bottom: 1.25rem;
+  }
+  legend { padding: 0 0.4rem; font-weight: 600; font-size: 0.95rem; color: var(--accent); }
+  .field { margin-bottom: 0.9rem; }
+  .field:last-child { margin-bottom: 0; }
+  label { display: block; font-size: 0.85rem; margin-bottom: 0.3rem; color: var(--text); }
+  .current { color: var(--muted); font-weight: 400; }
+  .input-row { position: relative; display: flex; }
+  input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 0.55rem 2.4rem 0.55rem 0.7rem;
+    background: #0d0f13;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.9rem;
+  }
+  input:focus { outline: none; border-color: var(--accent); }
+  .toggle {
+    position: absolute;
+    right: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--muted);
+    cursor: pointer;
+    font-size: 0.78rem;
+  }
+  button.submit {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+  }
+  button.submit:hover { opacity: 0.92; }
+  .hint { color: var(--muted); font-size: 0.78rem; margin-top: 1.5rem; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav"><a href="/admin/analyze/">→ 종목 분석 페이지로 이동</a></div>
+  <h1>Ackman Quant Engine — 자격증명 설정</h1>
+  <p class="sub">값을 비워두고 저장하면 기존 값이 유지됩니다. 빈 채로 처음 저장하면 해당 기능은 MOCK/제한 모드로 동작합니다.</p>
+
+  {% if saved %}
+  <div class="banner">저장 완료 — main.py 실행 시 자동으로 반영됩니다.</div>
+  {% endif %}
+
+  <div class="status-grid">
+    {% for s in status %}
+    <div class="status-card">
+      <div class="name"><span class="dot {{ 'ok' if s.ok else 'bad' }}"></span>{{ s.name }}</div>
+      <div class="detail">{{ s.detail }}</div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <form method="post" autocomplete="off">
+    {% for group_name, fields in groups.items() %}
+    <fieldset>
+      <legend>{{ group_name }}</legend>
+      {% for f in fields %}
+      <div class="field">
+        <label for="{{ f.key }}">
+          {{ f.label }}
+          <span class="current">[현재: {{ f.current_display }}]</span>
+        </label>
+        <div class="input-row">
+          {% if f.is_secret %}
+          <input type="password" id="{{ f.key }}" name="{{ f.key }}" placeholder="변경하려면 입력 (비우면 유지)" />
+          <button type="button" class="toggle" onclick="toggleVisibility('{{ f.key }}', this)">보기</button>
+          {% else %}
+          <input type="text" id="{{ f.key }}" name="{{ f.key }}" placeholder="{{ f.placeholder }}" />
+          {% endif %}
+        </div>
+      </div>
+      {% endfor %}
+    </fieldset>
+    {% endfor %}
+
+    <button type="submit" class="submit">저장</button>
+  </form>
+
+  <p class="hint">이 페이지는 127.0.0.1(로컬)에서만 접근 가능합니다. 대시보드 접속 키는 이 화면에서 변경할 수 없습니다 — scripts/setup_credentials.py 를 사용하세요.</p>
+</div>
+
+<script>
+function toggleVisibility(id, btn) {
+  const el = document.getElementById(id);
+  if (el.type === "password") {
+    el.type = "text";
+    btn.textContent = "숨기기";
+  } else {
+    el.type = "password";
+    btn.textContent = "보기";
+  }
+}
+</script>
+</body>
+</html>

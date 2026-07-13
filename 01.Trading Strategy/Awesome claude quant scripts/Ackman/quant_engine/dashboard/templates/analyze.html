@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Ackman Quant Engine — 종목 분석</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #0f1115;
+    --panel: #171a21;
+    --border: #2a2f3a;
+    --text: #e6e8eb;
+    --muted: #9aa3b2;
+    --accent: #4f8cff;
+    --ok: #35c46a;
+    --bad: #e2574c;
+    --warn: #e0b13f;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Pretendard, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 2.5rem 1.25rem 4rem;
+  }
+  .wrap { max-width: 780px; margin: 0 auto; }
+  .nav { margin-bottom: 1rem; font-size: 0.85rem; }
+  .nav a { color: var(--accent); text-decoration: none; }
+  .nav a:hover { text-decoration: underline; }
+  h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
+  .sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.5rem; }
+
+  form.search { display: flex; gap: 0.6rem; margin-bottom: 0.8rem; }
+  form.search input[type="text"] {
+    flex: 1;
+    padding: 0.7rem 0.9rem;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 1rem;
+  }
+  form.search input[type="text"]:focus { outline: none; border-color: var(--accent); }
+  form.search button {
+    background: var(--accent);
+    color: white;
+    border: none;
+    padding: 0 1.4rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .checkbox-row { display: flex; align-items: center; gap: 0.4rem; font-size: 0.82rem; color: var(--muted); margin-bottom: 2rem; }
+
+  .error {
+    background: rgba(226, 87, 76, 0.12);
+    border: 1px solid var(--bad);
+    color: var(--bad);
+    padding: 0.7rem 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    font-size: 0.88rem;
+  }
+
+  .candidates { list-style: none; padding: 0; margin: 0 0 2rem; }
+  .candidates li {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 0.6rem;
+  }
+  .candidates a {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.8rem 1.1rem; color: var(--text); text-decoration: none;
+  }
+  .candidates a:hover { border-color: var(--accent); }
+  .candidates .ticker { font-weight: 700; }
+  .candidates .name { color: var(--muted); font-size: 0.85rem; margin-left: 0.6rem; }
+  .candidates .market { font-size: 0.75rem; color: var(--accent); border: 1px solid var(--accent); border-radius: 6px; padding: 0.1rem 0.5rem; }
+
+  .result-header { display: flex; align-items: baseline; gap: 0.8rem; margin-bottom: 0.2rem; flex-wrap: wrap; }
+  .result-header h2 { font-size: 1.3rem; margin: 0; }
+  .result-meta { color: var(--muted); font-size: 0.82rem; margin-bottom: 1rem; }
+  .grade-badge {
+    display: inline-block; padding: 0.25rem 0.7rem; border-radius: 999px;
+    font-weight: 700; font-size: 0.82rem; border: 1px solid currentColor;
+  }
+  .grade-badge.strong-buy, .grade-badge.buy { color: var(--ok); }
+  .grade-badge.watch { color: var(--warn); }
+  .grade-badge.pass { color: var(--muted); }
+  .total-score { font-size: 2.2rem; font-weight: 800; margin: 0.3rem 0 1.2rem; }
+  .total-score span { font-size: 1rem; color: var(--muted); font-weight: 400; }
+
+  .score-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 1.5rem; }
+  .score-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.2rem; }
+  .score-card .label { font-weight: 700; color: var(--accent); margin-bottom: 0.5rem; font-size: 0.92rem; }
+  .score-card ul { margin: 0; padding-left: 1.1rem; font-size: 0.83rem; color: #cdd3dc; }
+  .score-card li { margin-bottom: 0.3rem; }
+
+  blockquote {
+    background: var(--panel); border-left: 4px solid var(--accent); border-radius: 8px;
+    padding: 1rem 1.3rem; margin: 0 0 1.5rem; font-size: 0.92rem; line-height: 1.6;
+  }
+
+  .download-row { display: flex; gap: 0.7rem; margin-bottom: 1rem; }
+  .download-row a {
+    flex: 1; text-align: center; padding: 0.6rem; border-radius: 8px;
+    border: 1px solid var(--border); color: var(--text); text-decoration: none; font-size: 0.85rem;
+  }
+  .download-row a:hover { border-color: var(--accent); color: var(--accent); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="nav"><a href="/admin/setup/{{ setup_secret }}">← 자격증명 설정으로 이동</a></div>
+  <h1>빌 애크먼 페르소나 — 종목 분석</h1>
+  <p class="sub">티커(예: MSFT, 005930) 또는 종목명(예: Microsoft, 삼성전자)을 입력하세요.</p>
+
+  <form class="search" method="get" action="/admin/analyze/">
+    <input type="text" name="q" value="{{ query }}" placeholder="티커 또는 종목명" autofocus>
+    <button type="submit">분석</button>
+  </form>
+  <label class="checkbox-row">
+    <input type="checkbox" name="special_display" disabled {% if is_special %}checked{% endif %}>
+    특수상황(비대칭 베팅) 종목 — 후보 목록에서 선택 시 URL의 special=1로 적용
+  </label>
+
+  {% if error %}
+  <div class="error">{{ error }}</div>
+  {% endif %}
+
+  {% if candidates %}
+  <ul class="candidates">
+    {% for c in candidates %}
+    <li>
+      <a href="/admin/analyze/?ticker={{ c.ticker }}&market={{ c.market }}">
+        <span><span class="ticker">{{ c.ticker }}</span><span class="name">{{ c.name }}</span></span>
+        <span class="market">{{ c.market }}</span>
+      </a>
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+
+  {% if result %}
+  {% set m = result.metrics %}
+  {% set s = result.score %}
+  <div class="result-header">
+    <h2>{{ result.company_name or m.ticker }} ({{ m.ticker }})</h2>
+    <span class="grade-badge {{ s.grade|lower|replace(' ', '-') }}">{{ s.grade }}</span>
+  </div>
+  <div class="result-meta">{{ m.market }}{% if m.is_special_situation %} · 특수상황{% endif %} · 분석일 {{ result.run_date }}</div>
+  <div class="total-score">{{ s.total_score }}<span>/100</span></div>
+
+  <div class="download-row">
+    <a href="/admin/analyze/download/{{ m.ticker }}.md">⬇ Markdown으로 저장</a>
+    <a href="/admin/analyze/download/{{ m.ticker }}.html">⬇ HTML로 저장</a>
+  </div>
+
+  <div class="score-grid">
+    <div class="score-card">
+      <div class="label">Quality {{ s.quality_score }}/25</div>
+      <ul>{% for n in s.quality_notes %}<li>{{ n }}</li>{% endfor %}</ul>
+    </div>
+    <div class="score-card">
+      <div class="label">Valuation {{ s.valuation_score }}/25</div>
+      <ul>{% for n in s.valuation_notes %}<li>{{ n }}</li>{% endfor %}</ul>
+    </div>
+    <div class="score-card">
+      <div class="label">Catalyst {{ s.catalyst_score }}/25</div>
+      <ul>{% for n in s.catalyst_notes %}<li>{{ n }}</li>{% endfor %}</ul>
+    </div>
+    <div class="score-card">
+      <div class="label">Risk(안전마진) {{ s.risk_score }}/25</div>
+      <ul>{% for n in s.risk_notes %}<li>{{ n }}</li>{% endfor %}</ul>
+    </div>
+  </div>
+
+  <blockquote>{{ result.commentary }}</blockquote>
+  <p class="sub">포지션 비중 제안:
+    {% if s.grade == "Pass" %}포지션 없음 — Pass 등급(매수 대상 아님)
+    {% else %}{{ s.position_weight_pct }}% (상한 20%){% endif %}
+  </p>
+  {% endif %}
+</div>
+</body>
+</html>

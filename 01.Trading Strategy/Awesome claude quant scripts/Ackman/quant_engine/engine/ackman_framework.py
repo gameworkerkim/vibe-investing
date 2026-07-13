@@ -14,8 +14,28 @@ FCF Yield 국채 대비 2배 / 내재가치 대비 50% 할인 기준을 적용�
 일반 우량주는 국채 수익률 이상 + 완화된 할인 기준을 적용한다 (md 1.2, 2단계 이원화).
 """
 
+import math
 from dataclasses import dataclass, field
 from typing import Dict, List, Optional
+
+_NUMERIC_FIELDS = (
+    "price", "pct_from_52w_high", "pct_from_52w_low", "rsi_14",
+    "revenue", "operating_income", "net_income", "fcf", "debt_ratio",
+    "per", "forward_per", "pbr", "psr", "ev_ebitda", "fcf_yield", "roe", "roic",
+    "revenue_growth_yoy", "net_income_growth_yoy",
+)
+
+
+def _safe_float(v) -> Optional[float]:
+    """외부 데이터 소스가 'Infinity'/'NaN' 같은 비수치 문자열을 섞어 줄 수 있어
+    (예: yfinance가 FNMA/FMCC류 극단적 재무구조 종목에 반환) 방어적으로 정제한다."""
+    if v is None:
+        return None
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return None
+    return f if math.isfinite(f) else None
 
 
 @dataclass
@@ -55,6 +75,10 @@ class AckmanMetrics:
     news_avg_sentiment: float = 0.0
     news_mentions: int = 0
     news_headlines: List[str] = field(default_factory=list)
+
+    def __post_init__(self):
+        for name in _NUMERIC_FIELDS:
+            setattr(self, name, _safe_float(getattr(self, name)))
 
 
 @dataclass

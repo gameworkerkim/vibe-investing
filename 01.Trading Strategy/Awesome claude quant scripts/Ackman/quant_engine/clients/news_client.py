@@ -6,9 +6,10 @@ NEWSAPI_KEY가 있으면 NewsAPI.org, 없으면 Google News RSS(키 불필요)�
 """
 
 import datetime as dt
+import email.utils
 import os
 import xml.etree.ElementTree as ET
-from typing import Dict, List
+from typing import Dict, List, Optional
 from urllib.parse import quote
 
 import requests
@@ -17,6 +18,27 @@ POSITIVE_WORDS = ["beat", "surge", "rally", "growth", "upgrade", "breakout", "so
                    "jump", "buyback", "raise", "record", "outperform"]
 NEGATIVE_WORDS = ["miss", "plunge", "crash", "downgrade", "drop", "disappoint",
                    "slump", "fall", "lawsuit", "probe", "cut", "recall"]
+
+
+def _parse_published_at(raw: str) -> Optional[dt.datetime]:
+    """RSS(RFC 822: 'Sun, 12 Jul 2026 14:01:04 GMT')와 NewsAPI(ISO 8601) 포맷을
+    모두 MySQL DATETIME에 바로 넣을 수 있는 naive datetime으로 정규화."""
+    if not raw:
+        return None
+    try:
+        parsed = email.utils.parsedate_to_datetime(raw)
+        if parsed.tzinfo is not None:
+            parsed = parsed.astimezone(dt.timezone.utc).replace(tzinfo=None)
+        return parsed
+    except (TypeError, ValueError):
+        pass
+    try:
+        parsed = dt.datetime.fromisoformat(raw.replace("Z", "+00:00"))
+        if parsed.tzinfo is not None:
+            parsed = parsed.astimezone(dt.timezone.utc).replace(tzinfo=None)
+        return parsed
+    except ValueError:
+        return None
 
 
 def _newsapi_key():
@@ -54,7 +76,7 @@ def _fetch_newsapi(query: str, days: int) -> List[Dict]:
             "title": title,
             "url": a.get("url"),
             "source": (a.get("source") or {}).get("name"),
-            "published_at": a.get("publishedAt"),
+            "published_at": _parse_published_at(a.get("publishedAt")),
             "sentiment_score": _score_headline(title),
         })
     return out
@@ -75,7 +97,7 @@ def _fetch_google_news_rss(query: str) -> List[Dict]:
                 "title": title,
                 "url": (item.findtext("link") or "").strip(),
                 "source": (item.findtext("source") or "Google News").strip(),
-                "published_at": (item.findtext("pubDate") or "").strip(),
+                "published_at": _parse_published_at((item.findtext("pubDate") or "").strip()),
                 "sentiment_score": _score_headline(title),
             })
         return out[:20]

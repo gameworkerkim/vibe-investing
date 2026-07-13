@@ -71,6 +71,32 @@ def get_corp_code_map(force_refresh: bool = False) -> Dict[str, Dict[str, str]]:
     return mapping
 
 
+def search_by_name(query: str, limit: int = 5) -> list:
+    """상장사명(부분일치, 대소문자 무관)으로 국내 종목 검색.
+    반환: [{stock_code, corp_name}, ...] (상장(6자리 코드 존재)된 종목만)"""
+    query = query.strip()
+    if not query:
+        return []
+    corp_map = get_corp_code_map()
+    if not corp_map:
+        return []
+
+    q_lower = query.lower()
+    exact, prefix, contains = [], [], []
+    for stock_code, info in corp_map.items():
+        name = info["corp_name"]
+        name_lower = name.lower()
+        row = {"stock_code": stock_code, "corp_name": name}
+        if name_lower == q_lower:
+            exact.append(row)
+        elif name_lower.startswith(q_lower):
+            prefix.append(row)
+        elif q_lower in name_lower:
+            contains.append(row)
+
+    return (exact + prefix + contains)[:limit]
+
+
 def _fetch_statement(api_key: str, corp_code: str, bsns_year: str, reprt_code: str,
                       fs_div: str = "CFS") -> Optional[list]:
     resp = requests.get(

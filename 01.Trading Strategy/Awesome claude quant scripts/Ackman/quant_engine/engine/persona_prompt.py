@@ -8,6 +8,7 @@ engine/persona_prompt.py — 빌 애크먼 페르소나 프롬프트 빌더 + De
 DeepSeek 키가 없으면 LLM 호출 없이 정량 점수만으로 리포트를 조립한다(폴백).
 """
 
+import html
 from typing import List
 
 from clients import deepseek_client
@@ -94,6 +95,114 @@ def fallback_commentary(m: AckmanMetrics, s: ScoreResult) -> str:
     )
 
 
+_GRADE_COLOR = {
+    "Strong Buy": "#35c46a",
+    "Buy": "#7fd858",
+    "Watch": "#e0b13f",
+    "Pass": "#9aa3b2",
+}
+
+
+def format_position_weight(s: ScoreResult) -> str:
+    """Pass 등급(총점 60 미만)은 비중이 항상 0%이므로, 무관한 '상한 20%' 문구 대신
+    등급 자체를 이유로 명시한다."""
+    if s.grade == "Pass":
+        return "포지션 없음 — Pass 등급(매수 대상 아님)"
+    return f"{s.position_weight_pct}% (상한 20%)"
+
+
+def render_report_html(m: AckmanMetrics, s: ScoreResult, commentary: str,
+                        company_name: str = "") -> str:
+    """다운로드용 독립 HTML 문서 (인라인 스타일, 외부 리소스 없음)."""
+    def fmt_pct(v):
+        return f"{v:.1%}" if v is not None else "N/A"
+
+    def fmt_num(v, suffix=""):
+        return f"{v:.2f}{suffix}" if v is not None else "N/A"
+
+    def notes_html(notes: List[str]) -> str:
+        return "\n".join(f"<li>{html.escape(n)}</li>" for n in notes)
+
+    grade_color = _GRADE_COLOR.get(s.grade, "#9aa3b2")
+    safe_company = html.escape(company_name) if company_name else ""
+    title = f"{safe_company} ({m.ticker})" if safe_company else m.ticker
+    safe_commentary = html.escape(commentary)
+
+    return f"""<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>{title} — 빌 애크먼 퀀트 리포트</title>
+<style>
+  :root {{ color-scheme: light dark; }}
+  body {{
+    margin: 0; padding: 2.5rem 1.25rem 4rem;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Pretendard, sans-serif;
+    background: #0f1115; color: #e6e8eb;
+  }}
+  .wrap {{ max-width: 720px; margin: 0 auto; }}
+  h1 {{ font-size: 1.5rem; margin-bottom: 0.1rem; }}
+  .ticker-market {{ color: #9aa3b2; font-size: 0.85rem; margin-bottom: 1.5rem; }}
+  .grade-badge {{
+    display: inline-block; padding: 0.3rem 0.8rem; border-radius: 999px;
+    background: {grade_color}22; color: {grade_color}; border: 1px solid {grade_color};
+    font-weight: 700; font-size: 0.95rem;
+  }}
+  .total-score {{ font-size: 2rem; font-weight: 800; margin: 0.6rem 0 0.1rem; }}
+  .weight {{ color: #9aa3b2; font-size: 0.85rem; margin-bottom: 2rem; }}
+  .score-grid {{ display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; margin-bottom: 2rem; }}
+  .score-card {{ background: #171a21; border: 1px solid #2a2f3a; border-radius: 12px; padding: 1rem 1.2rem; }}
+  .score-card .label {{ font-weight: 700; color: #4f8cff; margin-bottom: 0.5rem; }}
+  .score-card ul {{ margin: 0; padding-left: 1.1rem; font-size: 0.85rem; color: #cdd3dc; }}
+  .score-card li {{ margin-bottom: 0.3rem; }}
+  blockquote {{
+    background: #171a21; border-left: 4px solid #4f8cff; border-radius: 8px;
+    padding: 1rem 1.3rem; margin: 0; font-size: 0.95rem; line-height: 1.6; color: #e6e8eb;
+  }}
+  .footer {{ color: #676f7d; font-size: 0.75rem; margin-top: 2.5rem; text-align: center; }}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>{title}</h1>
+  <div class="ticker-market">{m.market}{' · 특수상황' if m.is_special_situation else ''} · 빌 애크먼 페르소나 퀀트 리포트</div>
+
+  <div class="total-score">{s.total_score}<span style="font-size:1rem;color:#9aa3b2;">/100</span></div>
+  <span class="grade-badge">{s.grade}</span>
+  <div class="weight">포지션 비중 제안: {format_position_weight(s)}</div>
+
+  <div class="score-grid">
+    <div class="score-card">
+      <div class="label">Quality {s.quality_score}/25</div>
+      <ul>{notes_html(s.quality_notes)}</ul>
+    </div>
+    <div class="score-card">
+      <div class="label">Valuation {s.valuation_score}/25</div>
+      <ul>{notes_html(s.valuation_notes)}</ul>
+    </div>
+    <div class="score-card">
+      <div class="label">Catalyst {s.catalyst_score}/25</div>
+      <ul>{notes_html(s.catalyst_notes)}</ul>
+    </div>
+    <div class="score-card">
+      <div class="label">Risk(안전마진) {s.risk_score}/25</div>
+      <ul>{notes_html(s.risk_notes)}</ul>
+    </div>
+  </div>
+
+  <blockquote>{safe_commentary}</blockquote>
+
+  <div class="footer">
+    현재가 {fmt_num(m.price)} · PER {fmt_num(m.per)} · PBR {fmt_num(m.pbr)} · FCF Yield {fmt_pct(m.fcf_yield)} ·
+    52주 고점 대비 {fmt_pct(m.pct_from_52w_high)}<br>
+    Ackman Quant Engine 자동 생성 리포트 — 투자 조언이 아닙니다.
+  </div>
+</div>
+</body>
+</html>
+"""
+
+
 def render_report_block(m: AckmanMetrics, s: ScoreResult, commentary: str) -> str:
     """Section 5 출력 형식에 맞춘 종목별 리포트 블록."""
     def fmt_pct(v):
@@ -120,7 +229,7 @@ Risk(안전마진) Score: {s.risk_score}/25
 
 Ackman 종합 점수: {s.total_score}/100
 등급: {s.grade}
-포지션 비중 제안: {s.position_weight_pct}% (상한 20%)
+포지션 비중 제안: {format_position_weight(s)}
 
 애크먼의 코멘트:
 {commentary}

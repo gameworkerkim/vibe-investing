@@ -6,9 +6,10 @@ API 키가 필요 없어 로컬 테스트의 기본 데이터 소스로 사용�
 """
 
 import math
-from typing import Dict, Optional
+from typing import Dict, List, Optional
 
 import numpy as np
+import requests
 
 try:
     import yfinance as yf
@@ -19,6 +20,38 @@ except ImportError:
 def _require_yf():
     if yf is None:
         raise RuntimeError("yfinance not installed. pip install yfinance")
+
+
+def search_symbol(query: str, limit: int = 5) -> List[Dict]:
+    """야후 파이낸스 검색 API로 티커/종목명을 심볼로 해석 (키 불필요, 비공식 엔드포인트).
+    반환: [{symbol, name, exchange}, ...] (주식만, ETF/지수 등은 제외)"""
+    query = query.strip()
+    if not query:
+        return []
+    try:
+        resp = requests.get(
+            "https://query1.finance.yahoo.com/v1/finance/search",
+            params={"q": query, "quotesCount": limit, "newsCount": 0},
+            headers={"User-Agent": "Mozilla/5.0"},
+            timeout=8,
+        )
+        if not resp.ok:
+            return []
+        quotes = resp.json().get("quotes", [])
+        out = []
+        for q in quotes:
+            symbol = q.get("symbol")
+            if not symbol or q.get("quoteType") not in ("EQUITY", None):
+                continue
+            out.append({
+                "symbol": symbol,
+                "name": q.get("shortname") or q.get("longname") or symbol,
+                "exchange": q.get("exchange", ""),
+            })
+        return out[:limit]
+    except Exception as e:
+        print(f"[yahoo:search] '{query}' 검색 실패: {e}")
+        return []
 
 
 def get_price_snapshot(ticker: str, period: str = "1y") -> Optional[Dict]:
@@ -64,6 +97,18 @@ def get_price_snapshot(ticker: str, period: str = "1y") -> Optional[Dict]:
         return None
 
 
+def _safe_float(v) -> Optional[float]:
+    """yfinance는 극단적 재무구조 종목(FNMA/FMCC 등)에서 'Infinity'/'NaN' 문자열을
+    섞어 반환하기도 한다. 숫자로 변환 불가능하거나 유한하지 않으면 None."""
+    if v is None:
+        return None
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return None
+    return f if math.isfinite(f) else None
+
+
 def get_fundamental_snapshot(ticker: str) -> Optional[Dict]:
     """
     밸류에이션/퀄리티 지표.
@@ -76,17 +121,19 @@ def get_fundamental_snapshot(ticker: str) -> Optional[Dict]:
         if not info or info.get("regularMarketPrice") is None and info.get("currentPrice") is None:
             return None
 
-        market_cap = info.get("marketCap")
-        free_cashflow = info.get("freeCashflow")
+        market_cap = _safe_float(info.get("marketCap"))
+        free_cashflow = _safe_float(info.get("freeCashflow"))
         fcf_yield = (free_cashflow / market_cap) if free_cashflow and market_cap else None
 
-        total_debt = info.get("totalDebt") or 0
-        total_cash = info.get("totalCash") or 0
-        equity = info.get("bookValue", 0) * (info.get("sharesOutstanding") or 0) if info.get("bookValue") else None
+        total_debt = _safe_float(info.get("totalDebt")) or 0
+        total_cash = _safe_float(info.get("totalCash")) or 0
+        book_value = _safe_float(info.get("bookValue"))
+        shares_outstanding = _safe_float(info.get("sharesOutstanding"))
+        equity = (book_value * shares_outstanding) if book_value and shares_outstanding else None
         invested_capital = None
         roic = None
-        operating_margin = info.get("operatingMargins")
-        total_revenue = info.get("totalRevenue")
+        operating_margin = _safe_float(info.get("operatingMargins"))
+        total_revenue = _safe_float(info.get("totalRevenue"))
         if equity is not None and total_revenue and operating_margin is not None:
             invested_capital = (equity or 0) + total_debt - total_cash
             ebit = total_revenue * operating_margin
@@ -94,28 +141,26 @@ def get_fundamental_snapshot(ticker: str) -> Optional[Dict]:
             if invested_capital and invested_capital > 0:
                 roic = nopat / invested_capital
 
-        debt_ratio = None
-        if info.get("debtToEquity") is not None:
-            debt_ratio = info["debtToEquity"]  # yfinance는 이미 %(=부채/자본*100) 근사값으로 제공
+        debt_ratio = _safe_float(info.get("debtToEquity"))  # yfinance는 이미 %(=부채/자본*100) 근사값으로 제공
 
         return {
             "ticker": ticker,
             "market_cap": market_cap,
             "revenue": total_revenue,
             "operating_income": (total_revenue * operating_margin) if total_revenue and operating_margin else None,
-            "net_income": info.get("netIncomeToCommon"),
+            "net_income": _safe_float(info.get("netIncomeToCommon")),
             "fcf": free_cashflow,
             "debt_ratio": debt_ratio,
-            "per": info.get("trailingPE"),
-            "forward_per": info.get("forwardPE"),
-            "pbr": info.get("priceToBook"),
-            "psr": info.get("priceToSalesTrailing12Months"),
-            "ev_ebitda": info.get("enterpriseToEbitda"),
+            "per": _safe_float(info.get("trailingPE")),
+            "forward_per": _safe_float(info.get("forwardPE")),
+            "pbr": _safe_float(info.get("priceToBook")),
+            "psr": _safe_float(info.get("priceToSalesTrailing12Months")),
+            "ev_ebitda": _safe_float(info.get("enterpriseToEbitda")),
             "fcf_yield": fcf_yield,
-            "roe": info.get("returnOnEquity"),
+            "roe": _safe_float(info.get("returnOnEquity")),
             "roic": roic,
-            "revenue_growth_yoy": info.get("revenueGrowth"),
-            "net_income_growth_yoy": info.get("earningsGrowth"),
+            "revenue_growth_yoy": _safe_float(info.get("revenueGrowth")),
+            "net_income_growth_yoy": _safe_float(info.get("earningsGrowth")),
             "sector": info.get("sector"),
             "long_name": info.get("longName") or info.get("shortName"),
         }

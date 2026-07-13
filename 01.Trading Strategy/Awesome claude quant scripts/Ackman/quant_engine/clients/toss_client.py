@@ -82,6 +82,14 @@ def fetch_prices(codes: List[str]) -> Dict[str, Dict]:
     if is_mock():
         return _mock_prices(codes)
 
+    try:
+        return _fetch_prices_live(codes)
+    except Exception as e:
+        print(f"[toss] 실시간 시세 조회 실패, MOCK으로 폴백: {e}")
+        return _mock_prices(codes)
+
+
+def _fetch_prices_live(codes: List[str]) -> Dict[str, Dict]:
     out: Dict[str, Dict] = {}
     for i in range(0, len(codes), 200):
         chunk = codes[i:i + 200]
@@ -102,6 +110,14 @@ def fetch_candles(code: str, days: int = 260) -> List[Dict]:
     if is_mock():
         return _mock_candles(code, days)
 
+    try:
+        return _fetch_candles_live(code, days)
+    except Exception as e:
+        print(f"[toss] {code} 일봉 조회 실패, MOCK으로 폴백: {e}")
+        return _mock_candles(code, days)
+
+
+def _fetch_candles_live(code: str, days: int) -> List[Dict]:
     collected: List[Dict] = []
     before = None
     while len(collected) < days:
