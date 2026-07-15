@@ -18,6 +18,7 @@ vibe-investing 레포의 트레이딩 전략 인덱스입니다. 미국 주식(�
 - **테마별로 묶어서 보고 싶다면**, 아래 "테마별 정리" 섹션에서 관심 분야(AI/반도체, 배당, 가상화폐, 매크로/레짐, 공매도)를 선택하십시오.
 - **데이터와 코드만 보고 싶다면**, 아래 "데이터·코드 중심 항목" 섹션에 백테스트 CSV와 재현 가능한 Python 스크립트가 포함된 전략만 모아두었습니다.
 - **전략을 빠르게 선택하고 싶다면**, 아래 "전략 선택 결정 트리"를 보십시오.
+- **LLM 프롬프트 라이브러리 레퍼런스를 찾고 있다면**, [Awesome LLM Prompts](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Awesome%20LLM%20Prompts.md)에서 금융·퀀트·크립토 투자용 공개 프롬프트 라이브러리 가이드를 확인하세요. prompts.chat, ternary-ai/prompts 등 주요 라이브러리 분석과 크립토 도메인 적용 가이드가 포함되어 있습니다.
 
 ---
 
@@ -145,6 +146,10 @@ vibe-investing 레포의 트레이딩 전략 인덱스입니다. 미국 주식(�
 - [명품 투자 전략](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Luxury%20investment%20strategy/Luxury%20investment%20strategy.md) (2026-04-19, 한국어). 입문용 칼럼형. 13개 기업·ETF, 225건 백테스트.
 - [Pharma Sector Long/Short](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Awesome%20claude%20quant%20scripts/Readme.MD) — 4-LLM 교차검증. Claude·DeepSeek 추천. Consensus 종목만 사용 권장.
 
+### LLM 프롬프트 / 리소스
+
+- [Awesome LLM Prompts](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Awesome%20LLM%20Prompts.md) (2026-07-15, 한국어) — 금융·퀀트·크립토 투자용 오픈소스 프롬프트 라이브러리 가이드. prompts.chat(143K+ 스타), ternary-ai/prompts(인지적 금융 에이전트), AgentDock 등 5개 주요 라이브러리 분석. TradFi 프롬프트의 크립토 도메인 변환 가이드, LLM 리스크 계층별 명세(환각·계산 신뢰성·군집·크립토 특유 리스크), 실무 활용 권고 포함. 실제 투자 판단이 아닌 분석 워크플로우 설계 참고자료.
+
 ---
 
 ## 투자 성과 관점의 종합 진단
@@ -206,6 +211,7 @@ vibe-investing 레포의 트레이딩 전략 인덱스입니다. 미국 주식(�
 | ChainWar | O | 업데이트 예정 | - |
 | 비트코인-나스닥 커플링 | O | 업데이트 예정 | - |
 | 나스닥 공매도 | O | 업데이트 예정 | - |
+| Awesome LLM Prompts | O | - | - |
 
 ---
 

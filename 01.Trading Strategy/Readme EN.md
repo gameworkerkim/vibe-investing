@@ -22,6 +22,8 @@ If you only want data and code, the "Data- and Code-Centric Items" section gathe
 
 If you want the newest ideas, start with AI Hedge Fund and ARDS in the "Latest Ideas" section.
 
+If you're looking for LLM prompt library references, see the [Awesome LLM Prompts](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Awesome%20LLM%20Prompts.md) guide covering open-source prompt libraries for financial, quant, and crypto investing (Korean).
+
 ---
 
 ## Latest Idea: Running AIs as a Hedge-Fund Committee
@@ -71,6 +73,10 @@ Most dividend-growth and capital-return strategies live as prompts and scripts i
 ### Macro / Regime Diagnostic (4-LLM Cross-Validation)
 
 [MRDS — Market Regime Diagnostic Quant Strategy](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Market%20Regime%20Diagnostic%20Quant%20Strategy/readme.md) (2026-05-19 v2.0, Korean, 4-LLM cross-validation). Differentiated item. A comparison report running the same regime-diagnostic prompt across four LLMs. Three of four converged on Cyclical Correction, but on a single identical metric (NVDA data-center revenue YoY) the models produced +44% / +73% / +115% — an LLM hallucination that empirically demonstrates the need to cross-check every quantitative figure against primary sources. The 5th-generation meta layer of the series.
+
+### LLM Prompts / Resources
+
+- [Awesome LLM Prompts](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Awesome%20LLM%20Prompts.md) (2026-07-15, Korean) — Guide to open-source LLM prompt libraries for financial, quant, and crypto investing. Covers 5 libraries including prompts.chat (143K+ stars), ternary-ai/prompts (cognitive financial agents), and AgentDock. Includes TradFi-to-crypto prompt domain adaptation guide, layered risk taxonomy (hallucination, computational reliability, crowding, crypto-specific risks), and usage recommendations. Not a strategy — a reference for designing analysis workflows.
 
 ---
 
@@ -123,6 +129,7 @@ If you want to verify directly with code and data, the following are a good fit.
 | ChainWar | Yes | update pending | - |
 | Bitcoin-Nasdaq Coupling | Yes | update pending | - |
 | Nasdaq Short-Selling | Yes | update pending | - |
+| Awesome LLM Prompts | Yes | - | - |
 
 Note: ARDS, MRDS, Binance Listing Day Crash, Binance Alpha MM Bot, and Luxury Investment Strategy are well-regarded Korean strategies that do not yet have English versions, hence marked "update pending."
 
