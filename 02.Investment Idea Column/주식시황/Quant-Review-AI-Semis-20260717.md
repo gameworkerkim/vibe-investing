@@ -120,9 +120,9 @@
 
 ---
 
-## 6. 섹터 로테이션: 자금 이동 매트릭스
+## 6. 섹터 로테이션 - 자금 이동 매트릭스
 
-Fairlead Strategies 및 Jefferies 분석 기준, AI 주식 이탈 자금의 유입처:
+Fairlead Strategies 및 Jefferies 분석 기준, AI 주식 이탈 자금의 유입처
 
 | 유입 섹터 | 팩터 근거 | 로테이션 지속성 판단 기준 |
 |---|---|---|
