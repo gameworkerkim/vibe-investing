@@ -1,0 +1,133 @@
+"""
+Copyright 2019 Goldman Sachs.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+"""
+# Portions modified for vi_quant: namespace renaming (gs_quant→vi_quant, Gs→Vi).
+
+import datetime as dt
+import re
+from enum import Enum
+
+from vi_quant.context_base import ContextBaseWithDefault
+from vi_quant.errors import MqTypeError, MqValueError
+
+
+def _now():
+    return dt.datetime.now(dt.timezone.utc)
+
+
+class DataFrequency(Enum):
+    """Data Frequency enumeration
+
+    Enumeration of different data frequencies for field subscription
+
+    """
+
+    #: Data subscription for series updating daily
+    DAILY = 'daily'
+
+    #: Data subscription for real-time or intraday series
+    REAL_TIME = 'realTime'
+
+    #: Data subscription for real-time or daily series
+    ANY = 'any'
+
+
+class DataAggregationOperator:
+    MIN = 'min'
+    MAX = 'max'
+    FIRST = 'first'
+    LAST = 'last'
+
+
+class IntervalFrequency(Enum):
+    DAILY = 'daily'
+    WEEKLY = 'weekly'
+    MONTHLY = 'monthly'
+    YEARLY = 'yearly'
+
+
+class DataContext(ContextBaseWithDefault):
+    def __init__(self, start=None, end=None, interval=None):
+        super().__init__()
+        self.__start = start
+        self.__end = end
+        if interval is None:
+            self.__interval = None
+            return
+
+        if not isinstance(interval, str):
+            raise MqTypeError('interval must be a str')
+        if not re.fullmatch('[1-9]\\d{0,2}[a-z]', interval):
+            raise MqValueError('interval must be a valid str e.g. 1m, 2h, 3d')
+        self.__interval = interval
+
+    @staticmethod
+    def _get_date(o, default):
+        if o is None:
+            return default
+        elif isinstance(o, dt.datetime):
+            # note that datetime objects are also instances of date
+            return o.date()
+        elif isinstance(o, dt.date):
+            return o
+        elif isinstance(o, str):
+            loc = o.find('T')
+            ds = o[:loc] if loc != -1 else o
+            return dt.datetime.strptime(ds, '%Y-%m-%d').date()
+        else:
+            raise ValueError(f'{o} is not a valid date')
+
+    @staticmethod
+    def _get_datetime(o, default):
+        if o is None:
+            return default
+        elif isinstance(o, dt.datetime):
+            return o
+        elif isinstance(o, dt.date):
+            return dt.datetime.combine(o, dt.time(tzinfo=dt.timezone.utc))
+        elif isinstance(o, str):
+            tmp = dt.datetime.strptime(o, '%Y-%m-%dT%H:%M:%SZ')
+            return tmp.replace(tzinfo=dt.timezone.utc)
+        else:
+            raise ValueError(f'{o} is not a valid date')
+
+    @property
+    def start_date(self):
+        return self._get_date(self.__start, dt.date.today() - dt.timedelta(days=30))
+
+    @property
+    def end_date(self):
+        return self._get_date(self.__end, dt.date.today())
+
+    @property
+    def start_time(self):
+        return self._get_datetime(self.__start, _now() - dt.timedelta(days=1))
+
+    @property
+    def end_time(self):
+        return self._get_datetime(self.__end, _now())
+
+    @property
+    def interval(self):
+        return self.__interval
+
+
+if __name__ == '__main__':
+    with DataContext(dt.date(2019, 1, 1), dt.datetime(2019, 2, 1, tzinfo=dt.timezone.utc)) as dc:
+        print(f'{dc.start_date}, {dc.end_date}')
+        print(f'{dc.start_time}, {dc.end_time}')
+    with DataContext(None, '2019-01-01T00:00:00Z') as dc2:
+        print(f'{dc2.start_date}, {dc2.end_date}')
+        print(f'{dc2.start_time}, {dc2.end_time}')

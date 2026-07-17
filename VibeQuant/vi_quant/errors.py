@@ -1,30 +1,90 @@
-"""VibeQuant error hierarchy. Mirrors gs_quant.errors (MqError family preserved)."""
+"""
+Copyright 2018 Goldman Sachs.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing,
+software distributed under the License is distributed on an
+"AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+KIND, either express or implied.  See the License for the
+specific language governing permissions and limitations
+under the License.
+"""
+# Portions modified for vi_quant: namespace renaming (gs_quant→vi_quant, Gs→Vi).
+
+import sys
 
 
 class MqError(Exception):
-    """Base error for vi_quant (name preserved from gs_quant for compatibility)."""
+    """Base class for errors in this module"""
+
+    pass
 
 
 class MqValueError(MqError, ValueError):
     pass
 
 
-class MqTypeError(MqError, TypeError):
+class MqTypeError(MqError):
+    pass
+
+
+class MqWrappedError(MqError):
     pass
 
 
 class MqRequestError(MqError):
     def __init__(self, status, message, context=None):
-        super().__init__(f"{status}: {message}")
         self.status = status
         self.message = message
         self.context = context
 
+    def __str__(self):
+        prepend = 'context: {}\n'.format(self.context) if self.context else ''
+        result = '{}status: {}, message: {}'.format(prepend, self.status, self.message)
+        if sys.version_info.major < 3:
+            result = result.encode('ascii', 'ignore')
+        return result
+
 
 class MqAuthenticationError(MqRequestError):
-    def __init__(self, message="Authentication failed", context=None):
-        super().__init__(401, message, context)
+    pass
+
+
+class MqAuthorizationError(MqRequestError):
+    pass
 
 
 class MqUninitialisedError(MqError):
     pass
+
+
+# Creating errors based on status code to be able to effectively use backoff decorator
+class MqRateLimitedError(MqRequestError):
+    pass
+
+
+class MqTimeoutError(MqRequestError):
+    pass
+
+
+class MqInternalServerError(MqRequestError):
+    pass
+
+
+def error_builder(status, message, context=None):
+    if status == 401:
+        return MqAuthenticationError(status, message, context)
+    elif status == 403:
+        return MqAuthorizationError(status, message, context)
+    elif status == 429:
+        return MqRateLimitedError(status, message, context)
+    elif status == 500:
+        return MqInternalServerError(status, message, context)
+    elif status == 504:
+        return MqTimeoutError(status, message, context)
+    else:
+        return MqRequestError(status, message, context)

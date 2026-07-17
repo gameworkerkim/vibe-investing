@@ -18,6 +18,7 @@
 | LAON VaultGuard | `LAON_VaultGuard/` | Node.js/TS (Express) | `npm install && npm run dev` (port 3101) | `npm test` (vitest) + `npm run backtest` |
 | CASSANDRA AI | `CASSANDRA AI/` | TS (Next.js 15 + Prisma) | `npm install && npm run dev` | 없음 |
 | toss-dashboard | `toss-dashboard/` | TS (Next.js 15 + Drizzle) | `npm install && npm run dev` | 없음 |
+| VibeQuant | `VibeQuant/` | Python (라이브러리) | `pip install -e .` | `PYTHONPATH=. python3 -m pytest tests/` (17 tests) |
 
 **중요**: 각 프로젝트는 루트가 아닌 **자기 폴더에서** 실행. 루트에 통합 빌드/테스트 없음.
 
@@ -28,6 +29,7 @@
 - `LAON_VaultGuard/` → Node ≥18, TS+Express. 멀티 LLM(Claude·DeepSeek·GPT·MiniMax·Ollama) 교차검증 시크릿 스캐너. npm 패키지 `laon-vaultguard` 배포. `npm test`(vitest)·`npm run backtest`(54 tests). Ollama 오프라인 모드 지원, `docker-compose up -d` 가능.
 - `CASSANDRA AI/` → Next.js 15 + Prisma(PostgreSQL/Neon) + Upstash Redis. DART OpenAPI 키·DeepSeek API 키·DB env 필요. Vercel 배포. 테스트 없음.
 - `toss-dashboard/` → Next.js 15 + Drizzle ORM + Neon + Upstash Redis. `Toss/`(Express)와 별개의 Next.js 버전. 테스트 없음.
+- `VibeQuant/` → GS Quant API 호환 오픈소스 퀀트 엔진 (`gs_quant`→`vi_quant`, `Gs*`→`Vi*`). Pre-Alpha. gs-quant에서 vendoring된 코드는 `scripts/vendor_rename.py`로 재생성 — 직접 수정 금지. **모든 문서는 영어**. 자세한 내용은 `VibeQuant/README.md`·`ROADMAP.md` 참조.
 
 ## git workflow
 

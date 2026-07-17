@@ -21,7 +21,15 @@ signatures, and workflows so that existing GS Quant code runs with a one-line ch
 | Data / models / compute | Goldman Sachs Marquee (closed, institutional only) | Open sources: yfinance, FRED, OpenFIGI, QuantLib, local engines |
 | Credentials | `client_id` / `client_secret` required | None (optional keys for some data providers) |
 | Execution | Remote (GS servers) | Local-first, self-hostable backend |
-| API surface | `gs_quant.*` / `Gs*` | `vi_quant.*` / `Vi*` — drop-in compatible |
+| API surface | `gs_quant.*` / `Gs*` | `vi_quant.*` / `Vi*` — signature-compatible (not numerically identical) |
+
+## Compatibility Notice
+
+VibeQuant targets **API-level compatibility** (same modules, class names modulo the
+`Gs` → `Vi` prefix, and method signatures). It does **not** promise numerically identical
+results: pricing and risk run on open-source engines (QuantLib and others), not on
+Goldman Sachs' proprietary models and data. Known numerical differences are documented
+per module as pricing features land (see [ROADMAP.md](ROADMAP.md)).
 
 ## Quick Start
 
@@ -29,17 +37,29 @@ signatures, and workflows so that existing GS Quant code runs with a one-line ch
 pip install -e .
 ```
 
-```python
-from vi_quant.session import ViSession
-from vi_quant.instrument import IRSwap
-from vi_quant.risk import Price
+Everything below works today:
 
-# No client id / secret needed — local backend by default
+```python
+import pandas as pd
+from vi_quant.session import ViSession
+from vi_quant.timeseries import returns, volatility, correlation, moving_average
+
+# No client id / secret needed — embedded local mode by default
 ViSession.use()
 
-swap = IRSwap('Pay', '10y', 'USD')
-price = swap.calc(Price())
-print(price)
+prices = pd.Series(...)          # any price series (e.g. from yfinance)
+r = returns(prices)
+vol = volatility(prices, 22)
+ma = moving_average(prices, 22)
+```
+
+Derivative pricing is **not implemented yet** (planned — Phase 2):
+
+```python
+# PLANNED (Phase 2) — shown for the target API shape only; does not run today
+from vi_quant.instrument import IRSwap
+from vi_quant.risk import Price
+IRSwap('Pay', '10y', 'USD').calc(Price())
 ```
 
 Migrating from GS Quant is a mechanical rename:
@@ -82,7 +102,19 @@ All documentation is in English.
 
 ## Status
 
-Early scaffolding. See [ROADMAP.md](ROADMAP.md).
+**Pre-Alpha scaffolding — not yet a runnable pricing engine.**
+
+| Module | Status |
+|---|---|
+| `vi_quant.session` (`ViSession`, embedded mode) | Implemented |
+| `vi_quant.errors` (`MqError` family) | Implemented (vendored from gs-quant) |
+| `vi_quant.timeseries` (algebra, statistics, econometrics, technicals, analysis, datetime) | Implemented (vendored from gs-quant, runs fully locally) |
+| `vi_quant.datetime` (calendars, relative dates, day counts) | Implemented (vendored; holiday datasets pending Phase 1) |
+| `vi_quant.data` (`Dataset` providers: yfinance/FRED/local) | Stub — Phase 1 |
+| `vi_quant.instrument` / `vi_quant.risk` (pricing) | Not started — Phase 2 |
+| `vi_quant.backtests`, `vi_quant.markets` (portfolio) | Not started — Phase 2+ |
+
+See [ROADMAP.md](ROADMAP.md) for the full plan.
 
 ## License
 

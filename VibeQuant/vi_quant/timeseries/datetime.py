@@ -1,0 +1,793 @@
+# Copyright 2018 Goldman Sachs.
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#   http://www.apache.org/licenses/LICENSE-2.0
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+#
+# Chart Service will attempt to make public functions (not prefixed with _) from this module available. Such functions
+# should be fully documented: docstrings should describe parameters and the return value, and provide a 1-line
+# description. Type annotations should be provided for parameters.
+import datetime as dt
+from enum import Enum
+from numbers import Real
+from typing import Any, Union, List
+
+import numpy as np
+import pandas as pd
+
+from .helper import (
+    _create_enum,
+    Interpolate,
+    plot_function,
+    requires_session,
+    FREQ_DAY,
+    FREQ_MONTH_END,
+    FREQ_QUARTER_END,
+    FREQ_YEAR_END,
+)
+from ..datetime import ViCalendar
+from ..datetime.date import DayCountConvention, PaymentFrequency, day_count_fraction
+from ..datetime.date import date_range as _date_range
+from ..errors import MqValueError, MqTypeError
+
+"""
+Date and time manipulation for timeseries, including date or time shifting, calendar operations, curve alignment and
+interpolation operations. Includes sampling operations based on daif dates[0]te or time manipulation
+"""
+# Portions modified for vi_quant: namespace renaming (gs_quant→vi_quant, Gs→Vi).
+
+AggregateFunction: Union[Union[type, Enum], Any] = _create_enum(
+    'AggregateFunction', ['max', 'min', 'mean', 'sum', 'first', 'last']
+)
+AggregatePeriod = _create_enum('AggregatePeriod', ['week', 'month', 'quarter', 'year'])
+
+
+def __interpolate_step(x: pd.Series, dates: pd.Series = None) -> pd.Series:
+    if x.empty:
+        raise MqValueError('Cannot perform step interpolation on an empty series')
+
+    first_date = pd.Timestamp(dates.index[0]) if isinstance(x.index[0], pd.Timestamp) else dates.index[0]
+
+    # locate previous valid date or take first value from series
+    prev = x.index[0] if first_date < x.index[0] else x.index[x.index.get_indexer([first_date], method='pad')]
+
+    current = x[prev]
+
+    curve = x.align(
+        dates,
+        'right',
+    )[0]  # only need values from dates
+
+    for knot in curve.items():
+        if np.isnan(knot[1]):
+            curve[knot[0]] = current
+        else:
+            current = knot[1]
+    return curve
+
+
+@plot_function
+def align(
+    x: Union[pd.Series, Real], y: Union[pd.Series, Real], method: Interpolate = Interpolate.INTERSECT
+) -> Union[List[pd.Series], List[Real]]:
+    """
+    Align dates of two series or scalars
+
+    :param x: first timeseries or scalar
+    :param y: second timeseries or scalar
+    :param method: interpolation method (default: intersect). Only used when both x and y are timeseries
+    :return: timeseries with specified dates or two scalars from the input
+
+    **Usage**
+
+    Align the dates of two series using the specified interpolation method. Returns two series with dates based on the
+    method of interpolation, for example, can be used to intersect the dates of two series, union dates with a defined
+    manner to compute missing values.
+
+    Interpolation methods:
+
+    =========   ========================================================================
+    Type        Behavior
+    =========   ========================================================================
+    intersect   Resultant series only have values on the intersection of dates /times.
+    nan         Resultant series have values on the union of dates /times. Values will
+                be NaN for dates or times only present in the other series
+    zero        Resultant series have values on the union of  dates / times. Values will
+                be zero for dates or times only present in the other series
+    step        Resultant series have values on the union of  dates / times. Each series
+                will use the value of the previous valid point if requested date does
+                not exist. Values prior to the first date will be equivalent to the
+                first available value
+    time        Resultant series have values on the union of dates / times. Missing
+                values surrounded by valid values will be interpolated given length of
+                interval. Input series must use DateTimeIndex.
+    =========   ========================================================================
+
+    **Examples**
+
+    Stepwize interpolation of series based on dates in second series:
+
+    >>> a = generate_series(100)
+    >>> b = generate_series(100)
+    >>> align(a, b)
+
+    **See also**
+
+    :func:`sub`
+    """
+    if isinstance(x, Real) and isinstance(y, Real):
+        return [x, y]
+    if isinstance(x, Real):
+        return [pd.Series(x, index=y.index), y]
+    if isinstance(y, Real):
+        return [x, pd.Series(y, index=x.index)]
+
+    if method == Interpolate.INTERSECT:
+        return x.align(y, 'inner')
+    if method == Interpolate.NAN:
+        return x.align(y, 'outer')
+    if method == Interpolate.ZERO:
+        return x.align(y, 'outer', fill_value=0)
+    if method == Interpolate.TIME:
+        new_x, new_y = x.align(y, 'outer')
+        new_x = new_x.interpolate('time', limit_area='inside')
+        new_y = new_y.interpolate('time', limit_area='inside')
+        return [new_x, new_y]
+    if method == Interpolate.STEP:
+        new_x, new_y = x.align(y, 'outer')
+        new_x = new_x.ffill().bfill()
+        new_y = new_y.ffill().bfill()
+        return [new_x, new_y]
+    else:
+        raise MqValueError('Unknown intersection type: ' + method)
+
+
+@plot_function
+def interpolate(
+    x: pd.Series,
+    dates: Union[List[dt.date], List[dt.time], pd.Series] = None,
+    method: Interpolate = Interpolate.INTERSECT,
+) -> pd.Series:
+    """
+    Interpolate over specified dates or times
+
+    :param x: timeseries to interpolate
+    :param dates: array of dates/times or another series to interpolate
+    :param method: interpolation method (default: intersect)
+    :return: timeseries with specified dates
+
+    **Usage**
+
+    Interpolate the series X over the dates specified by the dates parameter. This can be an array of dates or another
+    series, in which case the index of the series will be used to specify dates
+
+    Interpolation methods:
+
+    =========   ========================================================================
+    Type        Behavior
+    =========   ========================================================================
+    intersect   Resultant series only has values on the intersection of dates /times.
+                Will only contain intersection of valid dates / times in the series
+    nan         Resultant series only has values on the intersection of dates /times.
+                Value will be NaN for dates not present in the series
+    zero        Resultant series has values on all requested dates / times. The series
+                will have a value of zero where the requested date or time was not
+                present in the series
+    step        Resultant series has values on all requested dates / times. The series
+                will use the value of the previous valid point if requested date does
+                not exist. Values prior to the first date will be equivalent to the
+                first available value
+    =========   ========================================================================
+
+    **Examples**
+
+    Stepwize interpolation of series based on dates in second series:
+
+    >>> a = generate_series(100)
+    >>> b = generate_series(100)
+    >>> interpolate(a, b, Interpolate.INTERSECT)
+
+    **See also**
+
+    :func:`sub`
+    """
+    if dates is None:
+        dates = x
+
+    if isinstance(dates, pd.Series):
+        align_series = dates
+    else:
+        align_series = pd.Series(np.nan, dates)
+
+    if method == Interpolate.INTERSECT:
+        return x.align(align_series, 'inner')[0]
+    if method == Interpolate.NAN:
+        return x.align(align_series, 'right')[0]
+    if method == Interpolate.ZERO:
+        align_series = pd.Series(0.0, dates)
+        return x.align(align_series, 'right', fill_value=0)[0]
+    if method == Interpolate.STEP:
+        return __interpolate_step(x, align_series)
+    else:
+        raise MqValueError('Unknown intersection type: ' + method)
+
+
+@plot_function
+def value(x: pd.Series, date: Union[dt.date, dt.time], method: Interpolate = Interpolate.STEP) -> pd.Series:
+    """
+    Value at specified date or time
+
+    :param x: timeseries
+    :param date: requested date or time
+    :param method: interpolation method (default: step)
+    :return: value at specified date or time
+
+    **Usage**
+
+    Returns the value of series X at the specified date:
+
+    :math:`Y_t = X_{date}`
+
+    If the requested date or time is not present in the series, the value function will return the value from the
+    previous available date or time by default. Caller can specify other interpolation styles via the method param:
+
+    Interpolation methods:
+
+    =========   ========================================================================
+    Type        Behavior
+    =========   ========================================================================
+    intersect   Only returns a value for valid dates
+    nan         Value will be NaN for dates not present in the series
+    zero        Value will be zero for dates not present in the series
+    step        Value of the previous valid point if requested date does not exist.
+                Values prior to the first date will be equivalent to the first available
+                value
+    =========   ========================================================================
+
+    **Examples**
+
+    Value of series on 5Mar18:
+
+    >>> a = generate_series(100)
+    >>> value(a, date(2019, 1, 3)
+
+    **See also**
+
+    :func:`interpolate`
+    """
+
+    values = interpolate(x, [date], method)
+    return None if values.empty else values.iloc[0]
+
+
+@plot_function
+def day(x: pd.Series) -> pd.Series:
+    """
+    Day of each value in series
+
+    :param x: time series
+    :return: day of observations
+
+    **Usage**
+
+    Returns the day as a numeric value for each observation in the series:
+
+    :math:`Y_t = day(t)`
+
+    Day of the time or date is the integer day number within the month, e.g. 1-31
+
+    **Examples**
+
+    Day for observations in series:
+
+    >>> series = generate_series(100)
+    >>> days = day(series)
+
+    **See also**
+
+    :func:`month` :func:`year`
+
+    """
+    return pd.Series(pd.to_datetime(x.index.to_series()).dt.day, dtype=np.int64)
+
+
+@plot_function
+def month(x: pd.Series) -> pd.Series:
+    """
+    Month of each value in series
+
+    :param x: time series
+    :return: month of observations
+
+    **Usage**
+
+    Returns the month as a numeric value for each observation in the series:
+
+    :math:`Y_t = month(t)`
+
+    Month of the time or date is the integer month number, e.g. 1-12
+
+    **Examples**
+
+    Day for observations in series:
+
+    >>> series = generate_series(100)
+    >>> days = month(series)
+
+    **See also**
+
+    :func:`day` :func:`year`
+
+    """
+    return pd.Series(pd.to_datetime(x.index.to_series()).dt.month, dtype=np.int64)
+
+
+@plot_function
+def year(x: pd.Series) -> pd.Series:
+    """
+    Year of each value in series
+
+    :param x: time series
+    :return: year of observations
+
+    **Usage**
+
+    Returns the year as a numeric value for each observation in the series:
+
+    :math:`Y_t = year(t)`
+
+    Year of the time or date is the integer year number, e.g. 2019, 2020
+
+    **Examples**
+
+    Year for observations in series:
+
+    >>> series = generate_series(100)
+    >>> days = year(series)
+
+    **See also**
+
+    :func:`day` :func:`month`
+
+    """
+    return pd.Series(pd.to_datetime(x.index.to_series()).dt.year, dtype=np.int64)
+
+
+@plot_function
+def quarter(x: pd.Series) -> pd.Series:
+    """
+    Quarter of each value in series
+
+    :param x: time series
+    :return: quarter of observations
+
+    **Usage**
+
+    Returns the quarter as a numeric value for each observation in the series:
+
+    :math:`Y_t = quarter(t)`
+
+    Quarter of the time or date is the integer quarter number, e.g. 1, 2, 3, 4
+
+    **Examples**
+
+    Quarter for observations in series:
+
+    >>> series = generate_series(100)
+    >>> days = quarter(series)
+
+    **See also**
+
+    :func:`day` :func:`month`
+
+    """
+    return pd.Series(pd.to_datetime(x.index.to_series()).dt.quarter, dtype=np.int64)
+
+
+@plot_function
+def weekday(x: pd.Series) -> pd.Series:
+    """
+    Weekday of each value in series
+
+    :param x: time series
+    :return: weekday of observations
+
+    **Usage**
+
+    Returns the weekday as a numeric value for each observation in the series:
+
+    :math:`Y_t = weekday(t)`
+
+    Weekday of the time or date is the integer day of the week, e.g. 0-6, where 0 represents Monday
+
+    **Examples**
+
+    Weekday for observations in series:
+
+    >>> series = generate_series(100)
+    >>> days = weekday(series)
+
+    **See also**
+
+    :func:`day` :func:`month`
+
+    """
+    return pd.Series(pd.to_datetime(x.index.to_series()).dt.weekday, dtype=np.int64)
+
+
+@plot_function
+def day_count_fractions(
+    dates: Union[List[dt.date], pd.Series],
+    convention: DayCountConvention = DayCountConvention.ACTUAL_360,
+    frequency: PaymentFrequency = PaymentFrequency.MONTHLY,
+) -> pd.Series:
+    """
+    Day count fractions between dates in series
+
+    :param dates: time series or array of dates
+    :param convention: day count convention (default: Actual/360 ISDA)
+    :param frequency: payment frequency of instrument (optional)
+    :return: series of day count fractions
+
+    **Usage**
+
+    Returns the day count fraction between dates in the series
+
+    :math:`Y_t = DCF(t_{-1}, t)`
+
+    Default is Actual/360 per ISDA specification:
+
+    :math:`Y_t = \frac{Days(t_{-1}, t)}{360}`
+
+    For a full list of available conventions, see
+    `Day Count Conventions <https://developer.gs.com/docs/gsquant/guides/Dates/1-day-count-conventions>`_.
+    For more information on day count conventions, see the
+    `day count conventions <https://en.wikipedia.org/wiki/Day_count_convention>`_ page on Wikipedia
+
+    **Examples**
+
+    Weekday for observations in series:
+
+    >>> series = generate_series(100)
+    >>> days = day_count_fractions(series)
+
+    **See also**
+
+    :func:`day` :func:`month` :func:`year`
+
+    """
+    if isinstance(dates, pd.Series):
+        date_list = list(dates.index)
+    else:
+        date_list = dates
+
+    if len(date_list) < 2:
+        return pd.Series(dtype=float)
+
+    start_dates = date_list[0:-1]
+    end_dates = date_list[1 : len(date_list)]
+
+    dcfs = map(lambda a, b: day_count_fraction(a, b, convention, frequency), start_dates, end_dates)
+    return pd.Series(data=[np.nan] + list(dcfs), index=date_list[0 : len(date_list)])
+
+
+@plot_function
+def date_range(
+    x: pd.Series, start_date: Union[dt.date, int], end_date: Union[dt.date, int], weekdays_only: bool = False
+) -> pd.Series:
+    """
+    Create a time series from a (sub-)range of dates in an existing time series.
+
+    :param x: time series
+    :param start_date: start date for the sliced time series. If integer, number of observations after the first
+    :param end_date: end date for the sliced time series. If integer, number of observations before the last
+    :param weekdays_only: whether to include only weekdays in the sliced ranges
+    :return: sliced time series
+
+    **Usage**
+
+    Returns a restricted ("sliced") time series based on start and end dates:
+
+    :math:`Y_t = R_t |_{start < t < end}`
+
+    **Examples**
+
+    Slice the first and last week of a time series:
+
+    >>> series = generate_series(100)
+    >>> sliced_series = date_range(series,7,7)
+
+    create time series with the absolute date:
+
+    >>> date_range(series, dt.date(2021,1,1), dt.date(2021,12,30))
+
+    **See also**
+
+    :func:`day` :func: `lag`
+
+    """
+    if not isinstance(weekdays_only, bool):
+        raise MqTypeError('expected a boolean value for "weekdays_only"')
+    if not (isinstance(x.index, pd.DatetimeIndex) or all(map(lambda a: isinstance(a, dt.date), x.index.values))):
+        raise MqValueError('input is not a time series')
+
+    if isinstance(start_date, int):
+        start_date = x.index[start_date]
+    if isinstance(end_date, int):
+        end_date = x.index[-(1 + end_date)]
+
+    try:
+        start_date = start_date.date()
+        end_date = end_date.date()
+    except AttributeError:
+        pass
+
+    if weekdays_only:
+        week_mask = None
+        wd = start_date.weekday()
+        if wd > 4:
+            start_date += dt.timedelta(days=7 - wd)
+    else:
+        week_mask = tuple([True] * 7)
+
+    date_list = list(_date_range(start_date, end_date, week_mask=week_mask))
+    if isinstance(x.index, pd.DatetimeIndex):
+        date_list = [pd.Timestamp(d) for d in date_list]
+    return x.loc[x.index.isin(date_list)]
+
+
+@plot_function
+def append(series: List[pd.Series]) -> pd.Series:
+    """
+    Append data series
+
+    :param series: an array of timeseries
+    :return: concatenated timeseries
+
+    **Usage**
+
+    For input series [:math:`x_1`, :math:`x_2`, ... , :math:`x_n`], takes data from series :math:`x_i` until
+    that series runs out, then appends data from `x_{i+1}` until that series runs out.
+
+    **Examples**
+
+    Append two series:
+
+    >>> x = generate_series(100)
+    >>> y = generate_series(100)
+    >>> append([x, y])
+
+    **See also**
+
+    :func:`prepend`
+
+    """
+    if not len(series):
+        return pd.Series(dtype='float64')
+    res = series[0].copy()
+    for i in range(1, len(series)):
+        cur = series[i]
+        start = res.index[-1]
+        res = pd.concat([res, cur.loc[cur.index > start]])
+    return res
+
+
+@plot_function
+def prepend(x: List[pd.Series]) -> pd.Series:
+    """
+    Prepend data series
+
+    :param x: an array of timeseries
+    :return: concatenated timeseries
+
+    **Usage**
+
+    For input series [:math:`x_1`, :math:`x_2`, ... , :math:`X_n`], takes data from series :math:`X_i` until
+    the first date for which :math:`X_{i+1}` has data, useful when a higher quality series has a shorter history
+    than a lower quality series.
+
+    **Examples**
+
+    Prepend two series:
+
+    >>> x = generate_series(100)
+    >>> y = generate_series(100)
+    >>> prepend([x, y])
+
+    **See also**
+
+    :func:`union`
+
+    """
+    if not x:
+        return pd.Series(dtype='float64')
+    if len(x) == 1:
+        return x[0].copy()
+    parts = []
+    for i in range(len(x)):
+        this = x[i]
+        if i == len(x) - 1:
+            parts.append(this)
+        else:
+            end = x[i + 1].index[0]
+            parts.append(this.loc[this.index < end])
+    return pd.concat(parts)
+
+
+@plot_function
+def union(x: List[pd.Series]) -> pd.Series:
+    """
+    Fill in missing dates or times of one series with another
+
+    :param x: an array of timeseries
+    :return: combined series
+
+    **Usage**
+
+    Starting from :math:`i=1`, takes points from series :math:`x_i`. Where points are missing from :math:`x_i`,
+    returns points from :math:`x_{i+1}`.
+
+    **Examples**
+
+    Union of two series:
+
+    >>> x = generate_series(100)
+    >>> y = generate_series(100)
+    >>> union([x, y])
+
+    **See also**
+
+    :func:`prepend`
+
+    """
+    if len(x):
+        res = pd.Series(dtype='float64', index=x[0].index)
+        for series in x:
+            res = res.combine_first(series)
+    else:
+        res = pd.Series(dtype='float64')
+    return res
+
+
+@plot_function
+def bucketize(series: pd.Series, aggregate_function: AggregateFunction, period: AggregatePeriod) -> pd.Series:
+    """
+    Bucketize a series and apply aggregate function to each bucket
+
+    :param series: input series
+    :param aggregate_function: function to use for aggregating data in each bucket
+    :param period: size of each bucket
+    :return: output series
+
+    **Usage**
+
+    Bucketize a series and apply aggregate function to each bucket. The result will be indexed by the end date of each
+    bucket.
+
+    **Examples**
+
+    Monthly mean of a series:
+
+    >>> x = generate_series(100)
+    >>> bucketize(x, AggregateFunction.MEAN, AggregatePeriod.MONTH)
+
+    **See also**
+
+    :func:`moving_average`
+    """
+    series.index = pd.to_datetime(series.index)
+    period_char = period.value[0].upper()
+    frequency_map = {'W': 'W', 'M': FREQ_MONTH_END, 'Q': FREQ_QUARTER_END, 'Y': FREQ_YEAR_END}
+    frequency = frequency_map.get(period_char, period_char)
+    agg = aggregate_function.value
+    result = series.resample(frequency).apply(agg)
+
+    if result.empty:
+        return result
+    last_timestamp = min(series.index[-1], result.index[-1])
+    idx = result.index[:-1].insert(len(result) - 1, last_timestamp)
+    result.index = idx
+    return result
+
+
+@plot_function
+def day_count(first: dt.date, second: dt.date) -> int:
+    """
+    Counts the number of business days between two dates. Monday through Friday are considered to be business days.
+
+    :param first: first date
+    :param second: second date
+    :return: number of business days between first and second
+    """
+    if not (isinstance(first, dt.date) and isinstance(second, dt.date)):
+        raise MqValueError('inputs must be dates')
+    return np.busday_count(first, second)
+
+
+@plot_function
+def day_countdown(end_date: dt.date, start_date: dt.date = None, business_days: bool = False) -> pd.Series:
+    """Create a series counting down the number of days from each date to ``end_date``.
+
+    :param end_date: last date / countdown target
+    :param start_date: first date in the generated series (default: today)
+    :param business_days: whether to use business days (default False)
+    :return: timeseries of day counts
+
+    **Usage**
+
+    The returned series is indexed by dates from ``start_date`` to ``end_date`` (inclusive). Values are integers giving
+    the number of days between the index date and ``end_date``.
+
+    If ``business_days`` is True, the index will include only Monday through Friday as business days and the
+    counts will be business-day counts. If False (default), the index will include all
+    calendar days and the counts will be calendar-day counts.
+
+    **Examples**
+
+    Calendar-day countdown from 7May21 to 17May21:
+    >>> day_countdown(Date(2035, 5, 17), Date(2025, 5, 7))
+
+    Business-day countdown (Mon-Fri only):
+    >>> day_countdown(Date(2035, 5, 17), Date(2025, 5, 7), True)
+
+    Calendar-day countdown starting today:
+    >>> day_countdown(Date(2035, 5, 17))
+    """
+    if start_date is None:
+        start_date = dt.date.today()
+
+    if not isinstance(start_date, dt.date):
+        raise MqValueError('start_date must be a date')
+    if not isinstance(end_date, dt.date):
+        raise MqValueError('end_date must be a date')
+
+    if start_date > end_date:
+        return pd.Series(dtype=np.int64)
+
+    if business_days:
+        idx = pd.bdate_range(start=start_date, end=end_date)
+        if idx.empty:
+            return pd.Series(dtype=np.int64)
+        # busday_count is [start, end) so end_date itself is 0
+        start_days = idx.values.astype('datetime64[D]')
+        end_day = np.datetime64(end_date).astype('datetime64[D]')
+        values = np.busday_count(start_days, end_day).astype(np.int64)
+    else:
+        idx = pd.date_range(start=start_date, end=end_date, freq=FREQ_DAY)
+        start_days = idx.values.astype('datetime64[D]')
+        end_day = np.datetime64(end_date).astype('datetime64[D]')
+        values = (end_day - start_days).astype(np.int64)
+
+    return pd.Series(values, index=idx)
+
+
+@requires_session
+@plot_function
+def align_calendar(series: pd.Series, calendar: str) -> pd.Series:
+    """
+    Aligns a series to a given calendar removing values in the holiday calendar and the week mask (i.e. remove Saturday
+    and Sunday)
+
+    :param series: data series to align
+    :param calendar: calendar to align the series (i.e. NYC, NYSE, USD)
+
+    :return: timeseries of the data aligned to a calendar
+
+    **Examples**
+
+    >>> x = generate_series(100)
+    >>> align_calendar(x, 'NYC')
+    """
+    gs_calendar = ViCalendar.get(calendar)
+    cbd = pd.tseries.offsets.CustomBusinessDay(calendar=gs_calendar.business_day_calendar())
+    filtered_series = series[
+        series.index.isin(pd.date_range(start=series.first_valid_index(), end=series.last_valid_index(), freq=cbd))
+    ]
+    return filtered_series

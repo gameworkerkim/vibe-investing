@@ -6,6 +6,10 @@ open data sources and open-source pricing/risk engines.
 
 Tracking baseline: `goldmansachs/gs-quant` @ release 2.1.1.
 
+**Guiding principle — thin vertical slice first.** Rather than porting the entire gs-quant
+API surface breadth-first, each phase delivers one end-to-end path that actually runs
+(e.g. `ViSession → ViDataApi → Dataset.get_data() → timeseries`), then widens coverage.
+
 ## Phase 0 — Foundation (Scaffolding & Compatibility Layer)
 
 **Objective:** project skeleton, naming convention, and a working `ViSession`.
@@ -13,30 +17,32 @@ Tracking baseline: `goldmansachs/gs-quant` @ release 2.1.1.
 - [x] Repository layout under `vibe-investing/VibeQuant/`
 - [x] GS → VI API mapping table ([docs/API_MAPPING.md](docs/API_MAPPING.md))
 - [x] Official docs correspondence manual ([docs/OFFICIAL_DOCS_GUIDE.md](docs/OFFICIAL_DOCS_GUIDE.md))
-- [ ] `vi_quant` package skeleton with `ViSession` (embedded mode, no credentials)
-- [ ] Automated rename pipeline: script that vendors gs-quant source and applies
-      `gs_quant→vi_quant`, `Gs→Vi` transforms + license headers
-- [ ] Port pure-local modules that need no backend: `datetime`, `errors`, `common`,
-      `timeseries` (algebra/econometrics/technicals), `tracing`
-- [ ] CI: pytest + flake8, Python 3.9–3.12 matrix
+- [x] `vi_quant` package skeleton with `ViSession` (embedded mode, no credentials)
+- [x] Automated rename pipeline: script that vendors gs-quant source and applies
+      `gs_quant→vi_quant`, `Gs→Vi` transforms + license headers (`scripts/vendor_rename.py`)
+- [x] Port pure-local modules that need no backend: `errors`, `datetime`,
+      `timeseries` (algebra/statistics/econometrics/technicals/analysis)
+- [ ] CI: pytest + flake8, Python 3.9–3.12 matrix (local pytest exists; CI workflow pending)
+- [x] LICENSE (Apache-2.0) + NOTICE with gs-quant attribution
 - [ ] `CONTRIBUTING.md`, license policy (Apache-2.0-compatible deps only)
 
 **Exit criteria:** `pip install -e .` works; `import vi_quant`; timeseries functions pass
 tests ported from gs-quant.
 
-## Phase 1 — Data Layer
+## Phase 1 — Thin Data (end-to-end: session → data → analytics)
 
-**Objective:** `Dataset` / `DataContext` / `DataCoordinate` running on open data.
+**Objective:** `ViSession → ViDataApi → Dataset.get_data() → timeseries` runs on open data.
 
 - [ ] `ViDataApi` with pluggable providers: yfinance (equities/ETF/FX), FRED (macro),
-      local Parquet/DuckDB store
-- [ ] VI dataset catalog + GS dataset-ID alias table (e.g. `TREOD`-style IDs → VI datasets)
-- [ ] `ViAssetApi` + local security master; symbology mapping via OpenFIGI
-- [ ] `ViCalendar` with bundled exchange holiday calendars
-- [ ] Guides: data, assets & security master
+      local Parquet/DuckDB cache
+- [ ] VI dataset catalog + GS dataset-ID alias table
+- [ ] `ViAssetApi` stub + symbology mapping basics (OpenFIGI)
+- [ ] `ViCalendar` holiday coverage (bundled calendars; GS holiday dataset replaced with open source)
+- [ ] One GS data tutorial runs after mechanical rename (e.g. equity EOD → returns → volatility)
+- [ ] `DataContext` runs fully locally (no Marquee round-trips)
 
-**Exit criteria:** `Dataset('VI_EQUITY_EOD').get_data(...)` returns a DataFrame; GS Quant
-data tutorial code runs after mechanical rename.
+**Exit criteria:** `Dataset('VI_EQUITY_EOD').get_data(...)` returns a DataFrame;
+`returns(prices)` produces the same output shape as gs-quant.
 
 ## Phase 2 — Pricing, Risk & Backtesting Core
 
@@ -69,31 +75,30 @@ price; a gs-quant backtesting example runs end-to-end after rename.
 **Exit criteria:** factor risk report for an equity portfolio using open factor models;
 hedge optimization example runs.
 
-## Phase 4 — Platform Parity & Ecosystem
+## Phase 4 — Platform & Distribution
 
-**Objective:** long-tail APIs, docs site, distribution.
+**Objective:** packageable library, documentation, and ecosystem integration.
+The long-tail GS APIs (ESG, Carbon, Workspaces, Marketview) are explicitly
+**non-goals** for the core team; they are welcome as community contributions.
 
-- [ ] Remaining APIs: ESG, carbon, thematics, content, users/groups, monitors, DataGrid,
-      plots, workspaces, marketview dashboards
-- [ ] Optional self-hosted **VI Platform** service (FastAPI) exposing the same REST routes,
+- [ ] Self-hosted **VI Platform** service (FastAPI) exposing VI REST routes,
       so `ViSession` works in remote mode too
 - [ ] Sphinx docs site (reuse gs-quant `docs/` toolchain) = SDK Reference
 - [ ] PyPI release as `vi-quant`; semantic versioning tracking gs-quant releases
-- [ ] Example notebooks ported from gs-quant tutorials (rename + open data)
-- [ ] Compatibility test harness: run gs-quant's own test suite against `vi_quant`
-      via an import-alias shim
+- [ ] Example notebooks: GS Quant tutorials ported (rename + open data)
+- [ ] Compatibility test harness: import-check all public symbols via alias shim
 
-**Exit criteria:** `pip install vi-quant`; docs site published; ≥90% of gs-quant public
-API importable, with documented parity status.
+**Exit criteria:** `pip install vi-quant`; docs site published; public API symbols
+documented with parity status.
 
-## Continuous
-
-- Track `goldmansachs/gs-quant` releases; update mapping table and regenerate vendored code
-- Numerical parity notes per module (QuantLib vs GS engines will differ — document deltas)
-- All documentation in English
+**Won't-do (community contributions welcome):** individual API shims for
+`GsEsgApi→ViEsgApi`, `GsCarbonApi→ViCarbonApi`, `GsWorkspacesMarketsApi`,
+`GsMarketviewDashboardsApi`, `GsDataGridApi`, `GsPlotApi`, `GsContentApi`,
+`GsUsersApi`, `GsGroupsApi`, `GsMonitorsApi`, `GsParserApi`.
 
 ## Non-Goals
 
-- Reproducing Goldman Sachs proprietary data, models, or numerical results exactly
+- Reproducing Goldman Sachs proprietary data, models, or exact numerical results
 - Marquee UI features (PlotTool Pro, Marquee web links)
 - GS-internal auth (`KerberosSession`, SSO pass-through)
+- Long-tail ESG / Carbon / Thematics / Workspaces / Marketview / DataGrid API shims
