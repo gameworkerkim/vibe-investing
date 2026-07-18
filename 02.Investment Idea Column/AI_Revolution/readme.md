@@ -1,69 +1,93 @@
 # AI Revolution — Investment Idea Column Series
 
-A curated collection of data-driven investment columns tracking the structural shifts of the AI revolution — from the financialization of GPU compute, to the Korean memory supercycle, to the still-early monetization of AI itself. Part of the [Vibe Investing](https://github.com/gameworkerkim/vibe-investing/) repository.
+AI 혁명의 구조적 변화를 데이터로 추적하는 투자 칼럼 시리즈입니다. GPU 컴퓨트의 금융화, 한국 메모리 슈퍼사이클, AI 수익화, 미·중 AI 경쟁, 규제, 기술 한계까지 폭넓게 다룹니다. [Vibe Investing](https://github.com/gameworkerkim/vibe-investing/) 저장소의 일부입니다.
 
-> AI 혁명의 구조적 변화를 데이터로 추적하는 투자 칼럼 시리즈입니다. GPU 컴퓨트의 금융화, 한국 메모리 슈퍼사이클, 그리고 아직 초기 단계인 AI 수익화까지를 다룹니다. [Vibe Investing](https://github.com/gameworkerkim/vibe-investing/) 저장소의 일부입니다.
+> A curated collection of data-driven investment columns tracking the structural shifts of the AI revolution — from the financialization of GPU compute, to the Korean memory supercycle, to US-China AI competition, regulation, and beyond.
 
----
+## 목차 (Contents) — 최신순 / Newest First
 
-## Columns / 칼럼 목록
+| 날짜 | 주제 | 요약 | 태그 |
+| --- | --- | --- | --- |
+| 2026-07-17 | [KIMI_K3_260717.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/KIMI_K3_260717.md) | Kimi K3 — 미국 규제를 돌파한 중국 AI, 한국의 교훈 | `#KIMI-K3` `#MoonshotAI` `#ChinaAI` `#WAIC` `#오픈소스` |
+| 2026-07-10 | [GPT-5_6.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/GPT-5_6.md) | AI 3대 모델 2026년 7월 대전 — GPT-5.6 vs Claude vs DeepSeek | `#GPT` `#Claude` `#DeepSeek` `#모델경쟁` `#멀티모달` |
+| 2026-07-08 | [Morgan Stanley AI Investment Report Analysis.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Morgan%20Stanley%20AI%20Investment%20Report%20Analysis.md) | 모건스탠리의 AI 투자 10대 진실 분석 | `#MorganStanley` `#AI투자` `#리포트분석` `#기관관점` |
+| 2026-07-08 | [china_ai_anthropomorphism_column.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/china_ai_anthropomorphism_column.md) | 중국 AI 의인화 규제 — 두부·통이첸원 에이전트 중단 | `#중국규제` `#AI의인화` `#캐릭터챗` `#입법` |
+| 2026-07-05 | [LLM_AD.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/LLM_AD.md) | LLM 맞춤 광고를 위한 개인정보 분류 실태 | `#LLM` `#개인정보` `#광고` `#프라이버시` |
+| 2026-07-05 | [Tonen_Economy.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Tonen_Economy.md) | 토큰 과금 모델의 허상 — LLM 수익 모델 부재 분석 | `#토큰경제` `#LLM` `#과금모델` `#수익구조` |
+| 2026-07-04 | [Alibaba_Claude_ban.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Alibaba_Claude_ban.md) | 알리바바 Claude 차단 — 스테가노그래피 추적 코드가 드러낸 미중 AI 신뢰 균열 | `#스테가노그래피` `#Claude` `#Alibaba` `#미중갈등` `#AI보안` |
+| 2026-07-03 | [Meta_Vistara.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Meta_Vistara.md) | 메타 비스타라 — CXL의 파괴력, 폐기 예정 메모리가 AI 인프라 무기로 | `#CXL` `#Meta` `#메모리` `#Vistara` `#AI인프라` |
+| 2026-07-01 | [Google_Finance_AI.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Google_Finance_AI.md) | Google Finance AI vs DeepSeek / Claude / ChatGPT 기능 비교 | `#Google` `#FinanceAI` `#DeepSeek` `#ChatGPT` `#AI비교` |
+| 2026-06-30 | [quant-screen-2026-0630-verified.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/quant-screen-2026-0630-verified.md) | 보수적 퀀트 스크리닝 — 2026-06-30 검증 패스 | `#퀀트` `#스크리닝` `#백테스트` `#AI반도체` |
+| 2026-06-19 | [Fab10.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Fab10.md) | FAB10을 주목하라 — 월가가 2주 만에 신조어 네 개 찍어낸 이유 | `#FAB10` `#월가` `#내러티브` `#Magnificent7` |
+| 2026-06-19 | [SKHynix-NASDAQ-Listing.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/SKHynix-NASDAQ-Listing.md) | SK하이닉스 나스닥 ADR 상장 — 코리아 디스카운트 극복 여부 | `#SK하이닉스` `#나스닥` `#ADR` `#코리아디스카운트` |
+| 2026-06-18 | [Hyperscaler goldrush column.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Hyperscaler%20goldrush%20column.md) | 골드러시의 승자는 광부가 아니었다 — 하이퍼스케일러 Capex 크로스오버 | `#하이퍼스케일러` `#Capex` `#골드러시` `#AI인프라` `#NVDA` |
+| 2026-06-15 | [semiconductor_supercycle_column.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/semiconductor_supercycle_column.md) | 반도체 슈퍼 사이클 지속 여부 — AI반도체·메모리 구조적 수요 분석 | `#반도체` `#슈퍼사이클` `#HBM` `#DRAM` `#메모리` |
+| 2026-06-13 | [SovereignAI.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/SovereignAI.md) | AI 기술 종속은 국가 경쟁력을 위협한다 — 소버린 AI | `#소버린AI` `#기술종속` `#국가안보` `#수출통제` |
+| 2026-05-31 | [Nvidia_MS_MU.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Nvidia_MS_MU.md) | AI 반도체·PC 패러다임 전환과 메모리 슈퍼사이클 — NVDA·MS·MU 진단 | `#NVDA` `#MSFT` `#MU` `#AI반도체` `#메모리슈퍼사이클` |
+| 2026-05-27 | [ai_revolution_en.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/ai_revolution_en.md) / [ai_revolution_ko.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/ai_revolution_ko.md) | 인공지능 혁명은 이제 시작 — 유료 구독자 1% 미만, 진짜 기회는 결제가 시작될 때 | `#AI수익화` `#ChatGPT` `#유료전환` `#AI혁명` `#EBIT` |
+| 2026-05-22 | [Samsung SK Hynix AI Memory Investment Analysis.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Samsung%20SK%20Hynix%20AI%20Memory%20Investment%20Analysis.md) | 삼성·SK하이닉스: AI 혁명의 피할 수 없는 관문 — 구조적 메모리 부족, 에이전트 AI 집약도 | `#삼성전자` `#SK하이닉스` `#HBM` `#DRAM` `#AI메모리` `#Geopolitics` |
+| 2026-05-22 | [GPU_Compute_Is_Now_Traded_EN.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/GPU_Compute_Is_Now_Traded_EN.md) / [GPU_연산_능력은_거래된다_KO.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/GPU_%E1%84%8B%E1%85%A7%E1%86%AB%E1%84%89%E1%85%A1%E1%86%AB_%E1%84%82%E1%85%B3%E1%86%BC%E1%84%85%E1%85%A7%E1%86%A8%E1%84%8B%E1%85%B3%E1%86%AB_%E1%84%80%E1%85%A5%E1%84%85%E1%85%A2%E1%84%83%E1%85%AC%E1%86%AB%E1%84%83%E1%85%A1_KO.md) | GPU 연산은 이제 거래된다 — CME·ICE 컴퓨트 선물 시장 개설 | `#GPU` `#컴퓨트선물` `#CME` `#ICE` `#2차시장` |
 
-### 1. The AI Revolution Is Just Beginning / 인공지능 혁명, 이제 시작이다
+### 첨부 자산 (Assets)
 
-The headline numbers look saturated — 900M weekly ChatGPT users — but paying subscribers are still under 1% of humanity. With enterprise adoption at 65% yet 80% of organizations not yet capturing measurable EBIT impact, the column argues we stand at the *start* of the growth curve, not its peak. The real opportunity opens as free users convert to paid and agentic AI lifts the price point.
+| 파일 | 설명 |
+| --- | --- |
+| [bigtech_capex_chart.png](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/bigtech_capex_chart.png) | 빅테크 CapEx 차트 (하이퍼스케일러 칼럼 첨부) |
+| [datacenter_power_demand.png](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/datacenter_power_demand.png) | 데이터센터 전력 수요 차트 |
+| [hbm_dram_allocation.png](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/hbm_dram_allocation.png) | HBM / DRAM 할당량 차트 |
+| [llms.txt](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/llms.txt) | LLM/AI 에이전트용 색인 파일 |
 
-> 9억 주간 사용자라는 수치는 포화된 듯 보이지만, 유료 구독자는 여전히 인류의 1% 미만입니다. 기업 도입률은 65%에 달하나 80%는 아직 측정 가능한 영업이익(EBIT) 효과를 거두지 못했습니다. 우리는 성장 곡선의 정점이 아니라 *시작점*에 있으며, 무료 사용자의 유료 전환과 AI 에이전트의 단가 상승이 진짜 기회를 연다고 분석합니다.
+## 태그 색인 (Tag Index)
 
-- **English** — [ai_revolution_en.md](./ai_revolution_en.md)
-- **한국어** — [ai_revolution_ko.md](./ai_revolution_ko.md)
+### 반도체 / 메모리
+| 태그 | 등장 칼럼 |
+| --- | --- |
+| `#HBM` `#DRAM` `#메모리슈퍼사이클` | 삼성·SK하이닉스, Nvidia_MS_MU, semiconductor_supercycle |
+| `#SK하이닉스` `#삼성전자` | SKHynix-NASDAQ-Listing, Samsung SK Hynix, semiconductor_supercycle |
+| `#NVDA` `#AI반도체` | Nvidia_MS_MU, Hyperscaler goldrush, semiconductor_supercycle |
+| `#CXL` `#Vistara` | Meta_Vistara |
+| `#FAB10` | Fab10 |
 
-### 2. Samsung and SK Hynix: The Unavoidable Gatekeepers of the AI Revolution / 삼성·SK하이닉스: AI 혁명의 피할 수 없는 관문
+### AI 모델 / 경쟁
+| 태그 | 등장 칼럼 |
+| --- | --- |
+| `#KIMI-K3` `#MoonshotAI` `#ChinaAI` | KIMI_K3_260717, Alibaba_Claude_ban |
+| `#GPT` `#Claude` `#DeepSeek` | GPT-5_6, Google_Finance_AI, Alibaba_Claude_ban |
+| `#오픈소스` `#모델경쟁` | KIMI_K3_260717, GPT-5_6 |
 
-Three converging forces make Korean memory makers strategic gatekeepers: a structural memory shortage that has inverted buyer-supplier dynamics (DRAM contract prices +93–98% QoQ in Q1 2026), the memory-intensity surge of agentic AI, and Korea's geopolitical and onshoring advantage over Taiwan. Backed by Q1 2026 financials — SK Hynix at ~72% operating margin, Samsung memory at record revenue.
+### AI 인프라 / 투자
+| 태그 | 등장 칼럼 |
+| --- | --- |
+| `#AI인프라` `#하이퍼스케일러` | Hyperscaler goldrush, Meta_Vistara |
+| `#GPU` `#컴퓨트선물` `#2차시장` | GPU Compute Is Now Traded |
+| `#AI수익화` `#유료전환` | ai_revolution, Tonen_Economy |
+| `#MorganStanley` `#AI투자` | Morgan Stanley AI Investment Report Analysis |
 
-> 세 가지 힘이 한국 메모리 기업을 전략적 관문으로 만듭니다: 구매자-공급자 관계를 역전시킨 구조적 메모리 부족(2026년 1분기 DRAM 계약가 전분기 대비 +93~98%), 에이전트 AI의 메모리 집약도 급증, 대만 대비 한국의 지정학·온쇼어링 우위입니다. SK하이닉스 영업이익률 약 72%, 삼성 메모리 사상 최대 매출 등 2026년 1분기 실적으로 뒷받침합니다.
+### 규제 / 거버넌스
+| 태그 | 등장 칼럼 |
+| --- | --- |
+| `#중국규제` `#AI의인화` | china_ai_anthropomorphism_column |
+| `#소버린AI` `#기술종속` `#수출통제` | SovereignAI |
+| `#미중갈등` `#AI보안` `#스테가노그래피` | Alibaba_Claude_ban |
+| `#개인정보` `#프라이버시` | LLM_AD |
 
-- **English** — [Samsung SK Hynix AI Memory Investment Analysis.md](./Samsung%20SK%20Hynix%20AI%20Memory%20Investment%20Analysis.md)
+### 시장 분석 / 기타
+| 태그 | 등장 칼럼 |
+| --- | --- |
+| `#골드러시` `#Capex` | Hyperscaler goldrush |
+| `#퀀트` `#스크리닝` | quant-screen-2026-0630 |
+| `#토큰경제` `#과금모델` | Tonen_Economy |
+| `#코리아디스카운트` `#나스닥` `#ADR` | SKHynix-NASDAQ-Listing |
 
-### 3. GPU Compute Is Now Traded / GPU 연산, 이제 거래된다
+## 작성자 (Author)
 
-In May 2026, CME (with Silicon Data) and ICE (with Ornn, on the OCPI index) launched the world's first compute futures markets. The column's thesis: the center of gravity moves from GPU *makers* and *users* to the *secondary market* where compute is traded — and the exchanges and benchmark-index providers become the quietest, surest winners. A double-edged mechanism that can both tame volatility (hedging, collateralization) and inflate a bubble (three compute-futures ETFs filed before the underlying even trades).
-
-> 2026년 5월, CME(Silicon Data와 제휴)와 ICE(Ornn과 제휴, OCPI 지수 기반)가 세계 최초의 컴퓨트 선물 시장을 출범했습니다. 칼럼의 논지는 투자의 무게중심이 GPU *제조사*와 *사용자*에서 컴퓨트가 거래되는 *2차 시장*으로 이동하며, 거래소와 벤치마크 지수 제공자가 가장 조용하고 확실한 승자가 된다는 것입니다. 변동성을 다스리는 칼날(헤지·담보화)인 동시에 거품을 키우는 칼날(기초자산 거래도 전에 컴퓨트 선물 ETF 3건 신청)이라는 양날의 메커니즘을 짚습니다.
-
-- **English** — [GPU_Compute_Is_Now_Traded_EN.md](./GPU_Compute_Is_Now_Traded_EN.md)
-- **한국어** — [GPU 연산 능력 거래된다 KO](./GPU_%E1%84%8B%E1%85%A7%E1%86%AB%E1%84%89%E1%85%A1%E1%86%AB_%E1%84%82%E1%85%B3%E1%86%BC%E1%84%85%E1%85%A7%E1%86%A8%E1%84%8B%E1%85%B3%E1%86%AB_%E1%84%80%E1%85%A5%E1%84%85%E1%85%A2%E1%84%83%E1%85%AC%E1%86%AB%E1%84%83%E1%85%A1_KO.md)
-
----
-
-## Reading Order / 추천 읽기 순서
-
-A top-down path through the AI infrastructure stack:
-
-> AI 인프라 스택을 위에서 아래로 따라가는 경로입니다:
-
-1. **The AI Revolution Is Just Beginning** — the demand-side thesis: monetization has barely begun.
-   *수요 측 논지: 수익화는 이제 막 시작됐다.*
-2. **Samsung and SK Hynix** — the physical bottleneck: memory is the new scarce resource.
-   *물리적 병목: 메모리가 새로운 희소 자원이다.*
-3. **GPU Compute Is Now Traded** — the financialization layer: compute becomes a tradable asset.
-   *금융화 계층: 컴퓨트가 거래 가능한 자산이 된다.*
-
----
-
-## Disclaimer / 면책 조항
-
-These columns are for informational purposes only and do not constitute investment solicitation or advice. Figures combine company disclosures with third-party analysis and estimates; undisclosed items are noted as estimates. Forward-looking projections are extrapolations and may differ from actual results.
-
-> 본 칼럼들은 정보 제공을 목적으로 하며 투자 권유나 자문이 아닙니다. 수치는 기업 발표와 제3자 분석·추정을 혼합한 것으로, 비공개 항목은 추정치임을 명시합니다. 미래 전망은 외삽이며 실제 결과와 다를 수 있습니다.
-
-## Author / 저자
-
-**HoKwang Kim (김호광)** — quantitative analyst and AI researcher at the convergence of AI and global financial markets. Former CEO of Cyworld Z, Microsoft Azure MVP (2015–2023), and an active cyber threat intelligence researcher.
+**HoKwang Kim (김호광)** — Quantitative analyst and AI researcher. Former CEO of Cyworld Z, Microsoft Azure MVP (2015–2023), cyber threat intelligence researcher.
 
 - GitHub: [@gameworkerkim](https://github.com/gameworkerkim)
 - ORCID: [0009-0002-0962-2175](https://orcid.org/0009-0002-0962-2175)
+- Email: <gameworker@gmail.com>
+
 
 ---
 
-*© 2026 HoKwang Kim · Part of the [Vibe Investing](https://github.com/gameworkerkim/vibe-investing/) repository.*
+*Disclaimer: 본 칼럼은 정보 제공을 목적으로 하며 투자 권유나 자문이 아닙니다. 수치는 기업 발표와 제3자 분석·추정을 혼합한 것으로, 비공개 항목은 추정치임을 명시합니다. 투자 판단과 책임은 투자자 본인에게 있습니다.*
