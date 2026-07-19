@@ -233,13 +233,21 @@ CRITICAL — Pyodide runner constraints (violations break execution):
 - max_drawdown(closes) → single float (negative fraction), NOT a series.
 - volatility(closes, 22) → single float or None.
 - Allowed imports ONLY: from vi_browser import get_candles, returns, volatility, moving_average, momentum, correlation, max_drawdown, rsi, macd, bollinger_bands, backtest, ma_cross_signal, show_chart
+- NEVER format possibly-None with f"{x:.2f}". Always guard:
+  def fmt(x, nd=2):
+      return "n/a" if x is None else f"{x:.{nd}f}"
+  def last_num(xs):
+      for x in reversed(xs):
+          if x is not None: return x
+      return None
 - Example skeleton:
   from vi_browser import get_candles, rsi, max_drawdown, momentum, show_chart
   candles = await get_candles("NVDA", days=180, provider="yahoo")
   closes = [c["close"] for c in candles]
-  r = rsi(closes, 14)
-  last_rsi = next(x for x in reversed(r) if x is not None)
-- KR tickers: "005930"; US: "NVDA"; provider="yahoo"; days<=180.
+  last_rsi = last_num(rsi(closes, 14))
+  print(f"RSI={fmt(last_rsi,1)}")
+- KR equities on Yahoo need .KS suffix in many cases: "000660.KS", "005930.KS" (bare "000660" may yield short/empty series → None metrics).
+- US: "NVDA"; provider="yahoo"; days<=180.
 - Educational only — not investment advice. Label portfolios as hypothetical.
 - No secrets. No network except get_candles.`;
 
