@@ -94,6 +94,8 @@ All documentation is in English.
 | [docs/PROVIDER_API_MATCHING_KR.md](docs/PROVIDER_API_MATCHING_KR.md) | TOSS ↔ Yahoo Finance ↔ VibeQuant unified interface mapping (Korean) |
 | [docs/OFFICIAL_DOCS_GUIDE.md](docs/OFFICIAL_DOCS_GUIDE.md) | GS Quant official docs correspondence manual |
 | [docs/OFFICIAL_DOCS_GUIDE_KR.md](docs/OFFICIAL_DOCS_GUIDE_KR.md) | GS Quant official docs correspondence manual (Korean) |
+| [docs/TECH_REVIEW_DASHBOARD.md](docs/TECH_REVIEW_DASHBOARD.md) | Technical review: Streamlit/NiceGUI over Node.js backend |
+| [docs/TECH_REVIEW_DASHBOARD_KR.md](docs/TECH_REVIEW_DASHBOARD_KR.md) | 기술 검토: Streamlit/NiceGUI + Node.js 백엔드 연동 |
 | [ROADMAP.md](ROADMAP.md) | Development roadmap (English) |
 | [README_KR.md](README_KR.md) / [ROADMAP_KR.md](ROADMAP_KR.md) | Korean documentation |
 | [SECURITY.md](SECURITY.md) | LLM-readable security policy |

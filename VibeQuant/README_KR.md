@@ -96,6 +96,8 @@ GS Quant와 동일한 3계층 아키텍처. Marquee 원격 백엔드를 플러�
 | [docs/PROVIDER_API_MATCHING_KR.md](docs/PROVIDER_API_MATCHING_KR.md) | TOSS ↔ Yahoo Finance ↔ VibeQuant 통합 인터페이스 매핑 (한국어) |
 | [docs/OFFICIAL_DOCS_GUIDE.md](docs/OFFICIAL_DOCS_GUIDE.md) | 공식 GS Quant 문서 대응 매뉴얼 (영문) |
 | [docs/OFFICIAL_DOCS_GUIDE_KR.md](docs/OFFICIAL_DOCS_GUIDE_KR.md) | 공식 GS Quant 문서 대응 매뉴얼 (한국어) |
+| [docs/TECH_REVIEW_DASHBOARD.md](docs/TECH_REVIEW_DASHBOARD.md) | 기술 검토: Streamlit/NiceGUI + Node.js 백엔드 연동 (영문) |
+| [docs/TECH_REVIEW_DASHBOARD_KR.md](docs/TECH_REVIEW_DASHBOARD_KR.md) | 기술 검토: Streamlit/NiceGUI + Node.js 백엔드 연동 (한국어) |
 | [SECURITY.md](SECURITY.md) | 보안 정책 문서 (영문, LLM 판독 가능) |
 
 ## 현황
