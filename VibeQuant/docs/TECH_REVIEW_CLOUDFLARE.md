@@ -1,5 +1,12 @@
 # Technical Review: VibeQuant Backend on Cloudflare (Workers / Pages / D1 / R2 / KV)
 
+> **SUPERSEDED (2026-07-19):** Primary platform is now **Cloudflare Free + Pyodide
+> webview** (market data on CF, quant compute in browser WASM). See
+> [ARCHITECTURE_TARGET.md](ARCHITECTURE_TARGET.md), [LIMITATIONS.md](LIMITATIONS.md),
+> [../ROADMAP.md](../ROADMAP.md). Keep this file as historical analysis only.
+> Note: some CPU claims below treat `fetch` wait as CPU time; Workers generally do **not**
+> charge wall-clock I/O wait as CPU — Free **10 ms CPU** still constrains parsing/Cron.
+
 **Date:** 2026-07-19
 **Scope:** Migrate `VibeQuant/backend/` from Vercel+Neon+Upstash to Cloudflare Workers+Pages+D1+R2+KV
 **Status:** Partial feasibility — background jobs recommended, full migration blocked

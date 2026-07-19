@@ -5,6 +5,11 @@ This manual maps every section of the official GS Quant documentation
 VibeQuant equivalent. Use it to (a) navigate GS docs while working with VibeQuant, and
 (b) track VibeQuant documentation coverage.
 
+**Platform note (2026-07):** Hosted verification UI is **Pages + Pyodide**; market data is
+**Cloudflare Free**. Many GS docs pages map only to the **local** `vi_quant` track, not the
+dashboard WASM subset. See [ARCHITECTURE_TARGET.md](ARCHITECTURE_TARGET.md) and
+[LIMITATIONS.md](LIMITATIONS.md).
+
 **Legend** — Status of the VibeQuant counterpart:
 `Compatible` (works with rename) · `Adapted` (same API, different backend/behavior) ·
 `Planned` (see ROADMAP phase) · `N/A` (GS-platform-only, intentionally not ported)

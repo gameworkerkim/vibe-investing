@@ -6,29 +6,43 @@ mechanisms. It is written to be ingestion-friendly for RAG systems and coding ag
 
 ## 1. Trust Model
 
+**Normative (new development):** Cloudflare Free data plane + browser Pyodide compute.
+See [docs/ARCHITECTURE_TARGET.md](docs/ARCHITECTURE_TARGET.md) and
+[docs/LIMITATIONS.md](docs/LIMITATIONS.md).
+
 ```
-                                           TRUST BOUNDARY
- +-------------------------+               +-----------------+
- | vi_quant (Python client) |  local-only   | OS / filesystem |
- +-------------------------+               +-----------------+
-          |
-          | HTTPS (optional, self-hosted)
+  BROWSER (untrusted script relative to other tenants; runs on user device)
+ +---------------------------+
+ | Pages webview + Pyodide   |  -- user Python executes HERE only
+ | vi_browser (thin SDK)     |
+ +---------------------------+
+          | HTTPS fetch (no secrets in bundle)
           v
- +-------------------------+               +---------------------------+
- | backend/ (Express + TS) | ------------- | Upstash Redis (cache+rate)|
- +-------------------------+   HTTPS       +---------------------------+
-          |                               +---------------------------+
-          | HTTPS                          | Neon PostgreSQL (persist) |
-          v                               +---------------------------+
- +-------------------------+
- | Yahoo Finance / TOSS    |
- +-------------------------+
+ +---------------------------+     +------------------+
+ | Cloudflare Worker (API)   | --- | Cache API / CDN  |
+ +---------------------------+     +------------------+
+          |                        +------------------+
+          |                        | D1 (meta/index)  |
+          |                        +------------------+
+          |                        | R2 (candle body) |
+          v                        +------------------+
+ +---------------------------+
+ | Yahoo Finance / TOSS      |  (Worker outbound only; TOSS secrets in CF secrets)
+ +---------------------------+
+
+  OPTIONAL LOCAL RESEARCH (not dashboard path)
+ +---------------------------+
+ | vi_quant (pip)            |  may call providers directly — do not put secrets in Pages
+ +---------------------------+
 ```
 
-- `vi_quant` runs **locally** — no remote calls by default (embedded mode).
-- `backend/` is the only component that makes outbound network calls.
-- The backend never calls `*.gs.com` or any Goldman Sachs endpoint.
-- All third-party APIs (Yahoo Finance, TOSS) are accessed via HTTPS.
+- **User quant scripts never run on Workers.** No server-side `exec` / sandbox-on-edge.
+- **Market data secrets** (TOSS, optional `API_KEY`) live only in Cloudflare secrets / Worker env.
+- Legacy `backend/` (Express + Neon + Upstash) is **frozen**; do not expand its trust surface.
+- Historical note: older text claiming “only backend makes outbound calls” was **false** for
+  embedded `vi_quant/providers` (yfinance/TOSS). Dashboard path must not repeat that mistake.
+- Never call `*.gs.com` or any Goldman Sachs endpoint.
+- All third-party market APIs use HTTPS.
 
 ## 2. Secret Management
 
@@ -42,13 +56,22 @@ mechanisms. It is written to be ingestion-friendly for RAG systems and coding ag
 
 ### Environment Variable Inventory
 
+**Normative (Cloudflare path)** — collect via `cloudflare/scripts/setup-secrets.sh`:
+
+| Variable | Sensitivity | Scope |
+|---|---|---|
+| `TOSS_CLIENT_ID` | LOW | TOSS OAuth client id (Worker secret / `.dev.vars`) |
+| `TOSS_CLIENT_SECRET` | HIGH | TOSS OAuth secret (Worker secret / `.dev.vars`) |
+| `CLOUDFLARE_API_TOKEN` | HIGH | Deploy/auth on developer machine or CI — **not** a Worker runtime secret |
+| `CLOUDFLARE_ACCOUNT_ID` | LOW–MED | Account id for wrangler; written to `wrangler.toml` locally |
+
+**Legacy (Express `backend/` — frozen):**
+
 | Variable | Sensitivity | Scope |
 |---|---|---|
 | `DATABASE_URL` | HIGH — contains DB password | Neon PostgreSQL connection string |
 | `UPSTASH_REDIS_URL` | MEDIUM | Redis endpoint URL |
 | `UPSTASH_REDIS_TOKEN` | HIGH — bearer token | Redis authentication |
-| `TOSS_CLIENT_ID` | LOW | Non-secret OAuth client identifier |
-| `TOSS_CLIENT_SECRET` | HIGH — OAuth secret | TOSS API authentication |
 | `API_KEY` (optional) | HIGH — if set | Optional backend API key for clients |
 | `PORT`, `NODE_ENV`, `RATE_LIMIT_*`, `CACHE_TTL_SECONDS` | LOW | Operational configuration |
 

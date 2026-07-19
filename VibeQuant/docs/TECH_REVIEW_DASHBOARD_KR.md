@@ -1,5 +1,11 @@
 # 기술 검토: Python 대시보드 (Streamlit / NiceGUI) + Node.js 백엔드 연동
 
+> **폐기(대체) (2026-07-19):** 주 대시보드 경로는 **Pages + Pyodide 웹뷰**이며,
+> Cloudflare 위 Streamlit/NiceGUI가 아님. Streamlit/NiceGUI는 Worker API를 부르는
+> **로컬** 도구로만 가능하고, Free 티어 호스팅 UI가 아님.
+> 규범 문서: [ARCHITECTURE_TARGET_KR.md](ARCHITECTURE_TARGET_KR.md),
+> [LIMITATIONS_KR.md](LIMITATIONS_KR.md), [../ROADMAP_KR.md](../ROADMAP_KR.md).
+
 **날짜:** 2026-07-19
 **범위:** VibeQuant 모니터링 대시보드 — Express+TypeScript 백엔드 위에 NiceGUI/Streamlit 프론트엔드 연동 가능성
 **결론:** 승인 — 모든 항목 가능, 차단 요소 없음

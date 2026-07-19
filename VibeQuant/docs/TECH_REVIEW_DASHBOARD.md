@@ -1,5 +1,11 @@
 # Technical Review: Python Dashboard (Streamlit / NiceGUI) with Node.js Backend
 
+> **SUPERSEDED (2026-07-19):** Primary dashboard path is **Pages + Pyodide webview**, not
+> Streamlit/NiceGUI on Cloudflare. Streamlit/NiceGUI remain possible only as **local**
+> tools talking to the Worker API — they are not the hosted Free-tier UI.
+> Normative docs: [ARCHITECTURE_TARGET.md](ARCHITECTURE_TARGET.md),
+> [LIMITATIONS.md](LIMITATIONS.md), [../ROADMAP.md](../ROADMAP.md).
+
 **Date:** 2026-07-19
 **Scope:** VibeQuant monitoring dashboard — feasibility of NiceGUI/Streamlit frontend over an Express+TypeScript backend
 **Status:** Approved — full feasibility confirmed, no blockers

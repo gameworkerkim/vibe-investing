@@ -4,6 +4,12 @@
 모든 섹션을 VibeQuant 대응 항목으로 매핑합니다. VibeQuant로 작업하면서 GS 문서를
 참조하거나, VibeQuant 문서 커버리지를 추적하는 데 사용합니다.
 
+**플랫폼 노트 (2026-07):** 호스팅 검증 UI는 **Pages + Pyodide**, 시세는
+**Cloudflare Free**. 다수 GS 문서 페이지는 대시보드 WASM 서브셋이 아니라 **로컬**
+`vi_quant` 트랙에만 대응합니다. 참조:
+[ARCHITECTURE_TARGET_KR.md](ARCHITECTURE_TARGET_KR.md),
+[LIMITATIONS_KR.md](LIMITATIONS_KR.md).
+
 **범례** — VibeQuant 대응 항목의 상태:
 `Compatible` (rename만으로 동작) · `Adapted` (동일 API, 다른 백엔드/동작) ·
 `Planned` (로드맵 Phase 참조) · `N/A` (GS 플랫폼 전용, 의도적으로 포팅 안 함)

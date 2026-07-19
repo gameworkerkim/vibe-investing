@@ -1,8 +1,14 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-echo "VibeQuant Data Backend — Environment Setup"
-echo "=========================================="
+# DEPRECATED for new work. Prefer Cloudflare secrets:
+#   cd cloudflare && ./scripts/setup-secrets.sh --local
+#   cd cloudflare && ./scripts/setup-secrets.sh --remote
+# This script only covers the legacy Express + Neon + Upstash stack.
+
+echo "VibeQuant Data Backend — Environment Setup (LEGACY)"
+echo "===================================================="
+echo "For TOSS + Cloudflare keys use: cloudflare/scripts/setup-secrets.sh"
 echo ""
 
 ENV_FILE="$(dirname "$0")/../.env"

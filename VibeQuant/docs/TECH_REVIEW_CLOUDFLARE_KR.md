@@ -1,5 +1,13 @@
 # 기술 검토: VibeQuant 백엔드 Cloudflare 이전 (Workers / Pages / D1 / R2 / KV) (한국어)
 
+> **폐기(대체) (2026-07-19):** 주 플랫폼 결정은 **Cloudflare Free + Pyodide 웹뷰**
+> (시세=CF, 퀀트 계산=브라우저 WASM). 규범 문서는
+> [ARCHITECTURE_TARGET_KR.md](ARCHITECTURE_TARGET_KR.md),
+> [LIMITATIONS_KR.md](LIMITATIONS_KR.md), [../ROADMAP_KR.md](../ROADMAP_KR.md).
+> 이 파일은 과거 분석용으로만 유지.
+> 참고: 아래 일부 CPU 서술은 `fetch` 대기를 CPU로 취급한 오해가 있을 수 있음.
+> I/O 대기는 보통 CPU에 안 잡히지만, Free **CPU 10ms**는 파싱/Cron을 여전히 제약함.
+
 **날짜:** 2026-07-19
 **범위:** `VibeQuant/backend/`를 Vercel+Neon+Upstash에서 Cloudflare Workers+Pages+D1+R2+KV로 이전
 **결론:** 부분 가능 — 백그라운드 작업 권장, 전체 이전은 차단
