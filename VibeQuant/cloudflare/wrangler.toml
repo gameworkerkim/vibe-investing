@@ -1,24 +1,40 @@
+# VibeQuant API Worker — D1 + R2 (data) + R2 (static/CDN)
+# Run: ./scripts/bootstrap.sh  then  ./scripts/deploy.sh
+#
+# Pages uses wrangler.pages.toml (NOT this file).
+# Do not add pages_build_output_dir here — Worker and Pages stay separate.
 name = "vibequant-api"
 main = "src/index.ts"
 compatibility_date = "2026-07-01"
 compatibility_flags = ["nodejs_compat"]
 
-# Set by setup-secrets.sh / bootstrap (do not commit real account secrets here).
+# Filled by setup-secrets.sh / bootstrap.sh
 # account_id = "YOUR_CLOUDFLARE_ACCOUNT_ID"
 
 [vars]
 DEFAULT_PROVIDER = "yahoo"
+# Public CDN base shown in /api/health (override after custom domain)
+CDN_PUBLIC_BASE = "/cdn"
 
-# Uncomment after bootstrap creates resources:
-# [[d1_databases]]
-# binding = "DB"
-# database_name = "vibequant"
-# database_id = "<id>"
+# Bindings — database_id filled by bootstrap.sh
+[[d1_databases]]
+binding = "DB"
+database_name = "vibequant"
+database_id = "REPLACE_WITH_D1_DATABASE_ID"
 
-# [[r2_buckets]]
-# binding = "DATA"
-# bucket_name = "vibequant-data"
+# Candle / market object storage
+[[r2_buckets]]
+binding = "DATA"
+bucket_name = "vibequant-data"
 
-# Free-tier: keep Cron optional / tiny (10 ms CPU). Prefer lazy fill if needed.
+# Static tests, images, committee assets → served at /cdn/*
+[[r2_buckets]]
+binding = "STATIC"
+bucket_name = "vibequant-static"
+
+# Free-tier: optional tiny cron (prefer lazy fill)
 # [triggers]
 # crons = ["0 8 * * *"]
+
+[observability]
+enabled = false

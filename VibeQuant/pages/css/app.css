@@ -1,0 +1,343 @@
+:root {
+  --ink: #0e1a1f;
+  --ink-soft: #24363d;
+  --mist: #e8f0ef;
+  --paper: #f4faf8;
+  --line: rgba(14, 26, 31, 0.12);
+  --accent: #0f7a66;
+  --accent-deep: #0a5346;
+  --warn: #8a4b12;
+  --danger: #9b2c2c;
+  --mono: "IBM Plex Mono", ui-monospace, monospace;
+  --display: "Syne", sans-serif;
+  --radius: 4px;
+  --shadow: 0 18px 50px rgba(14, 26, 31, 0.08);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.55;
+  background: var(--paper);
+}
+
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(15, 122, 102, 0.18), transparent 55%),
+    radial-gradient(900px 500px at 100% 0%, rgba(36, 54, 61, 0.1), transparent 50%),
+    linear-gradient(180deg, #f7fcfa 0%, #eef5f3 45%, #e7f0ee 100%);
+}
+
+.atmosphere::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(14, 26, 31, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(14, 26, 31, 0.03) 1px, transparent 1px);
+  background-size: 48px 48px;
+  mask-image: linear-gradient(180deg, #000 0%, transparent 85%);
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: flex-start;
+  padding: 1.75rem clamp(1.25rem, 4vw, 3rem) 0.5rem;
+}
+
+.brand {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: clamp(2.4rem, 5vw, 3.6rem);
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+  color: var(--ink);
+}
+
+.tagline {
+  margin: 0.65rem 0 0;
+  max-width: 36rem;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.lang-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink-soft);
+}
+
+.lang-select {
+  appearance: none;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.7);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: var(--radius);
+}
+
+.shell {
+  padding: 0.5rem clamp(1.25rem, 4vw, 3rem) 2rem;
+}
+
+.intro {
+  max-width: 52rem;
+  margin-bottom: 1.5rem;
+}
+
+.headline {
+  margin: 0 0 0.75rem;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: clamp(1.35rem, 2.4vw, 1.85rem);
+  letter-spacing: -0.02em;
+  color: var(--accent-deep);
+}
+
+.lede {
+  margin: 0;
+  color: var(--ink-soft);
+  max-width: 48rem;
+}
+
+.workspace {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 1rem;
+  min-height: min(62vh, 640px);
+}
+
+@media (max-width: 900px) {
+  .top {
+    flex-direction: column;
+  }
+
+  .workspace {
+    grid-template-columns: 1fr;
+    min-height: unset;
+  }
+}
+
+.pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 420px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--line);
+  border-radius: calc(var(--radius) + 2px);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+.pane-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--line);
+  background: linear-gradient(180deg, rgba(15, 122, 102, 0.06), transparent);
+}
+
+.pane-head h2 {
+  margin: 0;
+  font-family: var(--display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.pane-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.btn {
+  font-family: var(--mono);
+  font-size: 0.8rem;
+  border-radius: var(--radius);
+  border: 1px solid transparent;
+  padding: 0.45rem 0.75rem;
+  cursor: pointer;
+  transition: transform 120ms ease, background 120ms ease, border-color 120ms ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.btn.primary {
+  background: var(--accent);
+  color: #f5fffc;
+  border-color: var(--accent-deep);
+}
+
+.btn.primary:hover:not(:disabled) {
+  background: var(--accent-deep);
+}
+
+.btn.ghost {
+  background: transparent;
+  color: var(--ink-soft);
+  border-color: var(--line);
+}
+
+.btn.ghost:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent-deep);
+}
+
+.code {
+  flex: 1;
+  width: 100%;
+  min-height: 280px;
+  margin: 0;
+  padding: 1rem;
+  border: 0;
+  resize: vertical;
+  background: #0e1a1f;
+  color: #d7ebe5;
+  font-family: var(--mono);
+  font-size: 0.84rem;
+  line-height: 1.5;
+  outline: none;
+}
+
+.hint {
+  margin: 0;
+  padding: 0.65rem 1rem;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  border-top: 1px solid var(--line);
+  background: rgba(244, 250, 248, 0.9);
+}
+
+.status {
+  font-size: 0.72rem;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+.status.ready {
+  color: var(--accent-deep);
+}
+
+.status.error {
+  color: var(--danger);
+}
+
+.status.running {
+  color: var(--warn);
+}
+
+.output {
+  flex: 1;
+  margin: 0;
+  padding: 1rem;
+  min-height: 280px;
+  overflow: auto;
+  white-space: pre-wrap;
+  word-break: break-word;
+  background: #fbfefd;
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 0.84rem;
+}
+
+.output.is-error {
+  color: var(--danger);
+}
+
+.foot {
+  display: grid;
+  grid-template-columns: 1.1fr 1fr;
+  gap: 1rem;
+  padding: 1.25rem clamp(1.25rem, 4vw, 3rem) 2.5rem;
+  border-top: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.45);
+}
+
+@media (max-width: 900px) {
+  .foot {
+    grid-template-columns: 1fr;
+  }
+}
+
+.repo-title {
+  margin: 0 0 0.35rem;
+  font-family: var(--display);
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+.repo-link {
+  color: var(--accent-deep);
+  font-weight: 500;
+  text-decoration: none;
+  border-bottom: 1px solid rgba(15, 122, 102, 0.35);
+}
+
+.repo-link:hover {
+  border-bottom-color: var(--accent);
+}
+
+.repo-sub {
+  margin: 0.55rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.8rem;
+}
+
+.repo-sub code {
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  background: rgba(15, 122, 102, 0.08);
+  padding: 0.05rem 0.25rem;
+  border-radius: 2px;
+}
+
+.disclaimer {
+  border-left: 3px solid var(--warn);
+  padding: 0.15rem 0 0.15rem 0.9rem;
+}
+
+.disclaimer p {
+  margin: 0;
+  color: var(--warn);
+  font-size: 0.8rem;
+  line-height: 1.6;
+}

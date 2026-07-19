@@ -75,6 +75,31 @@ multi-SaaS path.
 | QuantLib / full gs-quant surface in WASM | No | Native / size / stub gaps |
 | Streamlit / NiceGUI on Cloudflare | No | Long-lived Python servers ≠ Pages/Workers |
 
+## Dashboard (browser demo)
+
+```bash
+cd pages
+python3 -m http.server 8787
+# open http://127.0.0.1:8787/  — UI language follows the browser (ko / en / zh)
+```
+
+Python input → Pyodide run → result pane. Market data currently uses mock `vi_browser` (Worker API next).
+
+### Cloudflare Pages / D1 / R2 / CDN build & deploy
+
+```bash
+cd /path/to/VibeQuant/cloudflare   # not $HOME
+npm install
+./scripts/setup-secrets.sh --local
+./scripts/bootstrap.sh
+export VIBEQUANT_API_BASE="https://vibequant-api.<SUBDOMAIN>.workers.dev"
+./scripts/deploy.sh
+./scripts/upload-static.sh ./static/images/foo.png images/foo.png
+```
+
+Full guide & troubleshooting (R2 10042, Pages 8000002, `--remote`, `wrangler.pages.toml`):  
+[cloudflare/DEPLOY.md](cloudflare/DEPLOY.md) · [DEPLOY_KR.md](cloudflare/DEPLOY_KR.md)
+
 ## Quick start (local library — today)
 
 ```bash
@@ -144,8 +169,8 @@ dashboard are the active build target. Not a production pricing engine.
 | `vi_browser` (Pyodide SDK: data fetch + timeseries subset) | Implemented — ready for Pages webview integration |
 | `backend/` Express (Vercel stack) | Implemented — **legacy**, freeze feature work |
 | Cloudflare Worker + D1 + R2 | Planned — Phase 1 |
-| Pages + Pyodide webview | Planned — Phase 1 |
-| Thin `vi_browser` WASM SDK | Planned — Phase 1 |
+| Pages + Pyodide webview (`pages/`) | Scaffolded — local serve ready; CF deploy next |
+| Thin `vi_browser` WASM SDK | Browser stub (mock candles) — Worker wiring next |
 | `instrument` / `risk` / QuantLib | Not started — Phase 2+ (local/heavy; not free WASM) |
 
 ## License

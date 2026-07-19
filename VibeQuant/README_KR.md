@@ -72,6 +72,31 @@
 | WASM에서 QuantLib / 전체 gs-quant | 불가 | 네이티브·용량·stub |
 | Cloudflare에서 Streamlit/NiceGUI | 불가 | 장기 Python 서버 ≠ Pages/Workers |
 
+## 대시보드 (브라우저 데모)
+
+```bash
+cd pages
+python3 -m http.server 8787
+# http://127.0.0.1:8787/  — 한/영/중은 브라우저 언어로 자동 선택
+```
+
+파이썬 입력 → Pyodide 실행 → 결과창. 시세는 현재 mock `vi_browser` (Worker API 연동 예정).
+
+### Cloudflare Pages / D1 / R2 / CDN 빌드·배포
+
+```bash
+cd /Users/dennis/vibe-investing/VibeQuant/cloudflare   # 홈(~) 아님
+npm install
+./scripts/setup-secrets.sh --local
+./scripts/bootstrap.sh
+export VIBEQUANT_API_BASE="https://vibequant-api.<SUBDOMAIN>.workers.dev"
+./scripts/deploy.sh
+./scripts/upload-static.sh ./static/images/foo.png images/foo.png
+```
+
+전체 절차·트러블슈팅(R2 10042, Pages 8000002, `--remote`, `wrangler.pages.toml`):  
+[cloudflare/DEPLOY_KR.md](cloudflare/DEPLOY_KR.md) · [DEPLOY.md](cloudflare/DEPLOY.md)
+
 ## 빠른 시작 (로컬 라이브러리 — 현재)
 
 ```bash
@@ -136,8 +161,8 @@ Pyodide 대시보드. 프로덕션 가격 엔진 아님.
 | `vi_browser` (Pyodide SDK: 데이터 조회 + 시계열 서브셋) | 구현됨 — Pages 웹뷰 통합 준비 완료 |
 | `backend/` Express (Vercel 스택) | 구현됨 — **레거시**, 기능 확장 동결 |
 | Cloudflare Worker + D1 + R2 | 예정 — Phase 1 |
-| Pages + Pyodide 웹뷰 | 예정 — Phase 1 |
-| 얇은 `vi_browser` WASM SDK | 예정 — Phase 1 |
+| Pages + Pyodide 웹뷰 (`pages/`) | 스캐폴딩 — 로컬 서빙 가능, CF 배포 예정 |
+| 얇은 `vi_browser` WASM SDK | 브라우저 stub (mock 캔들) — Worker 연동 예정 |
 | `instrument` / `risk` / QuantLib | 미착수 — Phase 2+ (로컬/헤비; 무료 WASM 아님) |
 
 ## 라이선스

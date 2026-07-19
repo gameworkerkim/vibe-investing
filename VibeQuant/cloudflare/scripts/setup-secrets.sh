@@ -83,7 +83,8 @@ echo ""
 # ── Cloudflare ───────────────────────────────────────────
 echo "2) Cloudflare (API token + account id)"
 echo "   Create token: https://dash.cloudflare.com/profile/api-tokens"
-echo "   Suggested permissions: Account — Workers Scripts Edit, D1 Edit, R2 Edit,"
+echo "   Suggested permissions: Account — Workers Scripts Edit, D1 Edit,"
+echo "                          Workers R2 Storage Edit, Cloudflare Pages Edit,"
 echo "                          Account Settings Read"
 echo "   Account ID: dashboard → Workers & Pages → Overview (right sidebar)"
 echo ""
@@ -141,31 +142,33 @@ CLOUDFLARE_ACCOUNT_ID=${CF_ACCOUNT}
 EOF
   chmod 600 "$DEV_VARS"
 
-  # Inject account_id into wrangler.toml if placeholder / missing
-  if grep -qE '^\s*#?\s*account_id\s*=' "$WRANGLER_TOML"; then
-    # Replace commented or existing account_id line
-    tmp="$(mktemp)"
-    awk -v acc="$CF_ACCOUNT" '
-      BEGIN { done=0 }
-      /^[[:space:]]*#?[[:space:]]*account_id[[:space:]]*=/ && !done {
-        print "account_id = \"" acc "\""
-        done=1
-        next
-      }
-      { print }
-      END {
-        if (!done) print "account_id = \"" acc "\""
-      }
-    ' "$WRANGLER_TOML" > "$tmp"
-    mv "$tmp" "$WRANGLER_TOML"
-  else
-    printf '\naccount_id = "%s"\n' "$CF_ACCOUNT" >> "$WRANGLER_TOML"
-  fi
+  inject_account() {
+    local file="$1"
+    [[ -f "$file" ]] || return 0
+    if grep -qE '^\s*#?\s*account_id\s*=' "$file"; then
+      tmp="$(mktemp)"
+      awk -v acc="$CF_ACCOUNT" '
+        BEGIN { done=0 }
+        /^[[:space:]]*#?[[:space:]]*account_id[[:space:]]*=/ && !done {
+          print "account_id = \"" acc "\""
+          done=1
+          next
+        }
+        { print }
+        END { if (!done) print "account_id = \"" acc "\"" }
+      ' "$file" > "$tmp"
+      mv "$tmp" "$file"
+    else
+      printf '\naccount_id = "%s"\n' "$CF_ACCOUNT" >> "$file"
+    fi
+  }
+  inject_account "$WRANGLER_TOML"
+  inject_account "$ROOT/wrangler.pages.toml"
 
   echo "Done (local)."
   echo "  wrote: $DEV_VARS (mode 600)"
-  echo "  set account_id in wrangler.toml"
-  echo "  next: cd cloudflare && npx wrangler dev"
+  echo "  set account_id in wrangler.toml + wrangler.pages.toml"
+  echo "  next: ./scripts/bootstrap.sh && ./scripts/deploy.sh"
   exit 0
 fi
 
