@@ -29,20 +29,26 @@ API surface breadth-first, each phase delivers one end-to-end path that actually
 **Exit criteria:** `pip install -e .` works; `import vi_quant`; timeseries functions pass
 tests ported from gs-quant.
 
-## Phase 1 — Thin Data (end-to-end: session → data → analytics)
+## Phase 1 — Data Backend (REST API + Redis cache + Neon DB)
 
-**Objective:** `ViSession → ViDataApi → Dataset.get_data() → timeseries` runs on open data.
+**Objective:** a standalone data backend serving market data via REST API, consumed by
+both the `vi_quant` Python client and `VibeQuantClient` (TypeScript/Node.js).
 
-- [ ] `ViDataApi` with pluggable providers: yfinance (equities/ETF/FX), FRED (macro),
-      local Parquet/DuckDB cache
-- [ ] VI dataset catalog + GS dataset-ID alias table
-- [ ] `ViAssetApi` stub + symbology mapping basics (OpenFIGI)
-- [ ] `ViCalendar` holiday coverage (bundled calendars; GS holiday dataset replaced with open source)
-- [ ] One GS data tutorial runs after mechanical rename (e.g. equity EOD → returns → volatility)
-- [ ] `DataContext` runs fully locally (no Marquee round-trips)
+- [x] Backend project scaffold: TypeScript + Express, Vercel-ready (`backend/`)
+- [x] `src/routes/`: `/api/v1/candles`, `/api/v1/market-data`, `/api/v1/assets`, `/api/health`
+- [x] `src/providers/`: Yahoo Finance (`yahoo-finance2` v4, free, no key) + TOSS Open API (KR+US stocks, OAuth2)
+- [x] `src/db/`: Neon PostgreSQL schema (`market_assets`, `market_candles` with JSONB + BRIN indexes, `cache_metadata`)
+- [x] `src/db/redis.ts`: Upstash Redis cache layer + sliding-window rate limiter (10 req/s per route, 100 req/s global)
+- [x] Security middleware: Helmet, CORS, input validation (zod patterns), optional API key, OWASP-compliant headers
+- [x] `scripts/setup-env.sh`: interactive terminal script for credential input (no secrets in source)
+- [x] `scripts/pre-commit-hook.sh`: blocks commits containing API keys, DB URLs, or tokens
+- [x] Python + TypeScript client examples (`examples/vibequant_client.py`, `examples/vibequant-client.ts`)
+- [ ] Deploy to Vercel (free tier) with Neon + Upstash integrations
+- [ ] Wire `vi_quant/data/` to call the backend REST API (replace current stubs)
+- [ ] One end-to-end notebook: Python → backend → Yahoo Finance → timeseries
 
-**Exit criteria:** `Dataset('VI_EQUITY_EOD').get_data(...)` returns a DataFrame;
-`returns(prices)` produces the same output shape as gs-quant.
+**Exit criteria:** `VibeQuantClient.getPriceSeries("yahoo", "AAPL")` returns a DataFrame;
+`vi_quant.DataSet('VI_EQUITY_EOD').get_data(...)` works through the backend.
 
 ## Phase 2 — Pricing, Risk & Backtesting Core
 
