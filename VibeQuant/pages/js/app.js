@@ -1,11 +1,11 @@
-import { applyI18n, detectLang, t } from "./i18n.js?v=21";
-import { API_CATALOG, noteFor } from "./api-catalog.js?v=21";
-import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=21";
-import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=21";
-import { clearChart, renderChartFromWindow } from "./chart-view.js?v=21";
-import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=21";
-import { requestQuantPrompt } from "./llm-prompt.js?v=21";
-import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=21";
+import { applyI18n, detectLang, t } from "./i18n.js?v=22";
+import { API_CATALOG, noteFor } from "./api-catalog.js?v=22";
+import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=22";
+import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=22";
+import { clearChart, renderChartFromWindow } from "./chart-view.js?v=22";
+import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=22";
+import { requestQuantPrompt } from "./llm-prompt.js?v=22";
+import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=22";
 
 const codeEl = document.getElementById("code");
 const outputEl = document.getElementById("output");
@@ -404,7 +404,7 @@ llmBtn?.addEventListener("click", async () => {
   clearChart();
 
   try {
-    const model = llmModelEl?.value === "flash" ? "flash" : "pro";
+    const model = llmModelEl?.value === "pro" ? "pro" : "flash";
     const res = await requestQuantPrompt({ prompt, model });
     if (!res.ok) {
       setResult("");

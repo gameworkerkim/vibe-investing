@@ -120,8 +120,8 @@ Worker가 쓰는 모델:
 
 | UI 선택 | API 모델 | 역할 |
 |---|---|---|
-| V4 Flash | `deepseek-v4-flash` | 금융 게이트 + 빠른 프롬프트 |
-| V4 Pro | `deepseek-v4-pro` | 퀀트 답변 / 파이썬 생성 (기본) |
+| V4 Flash | `deepseek-v4-flash` | 기본 — 금융 게이트 + 퀀트 프롬프트 |
+| V4 Pro | `deepseek-v4-pro` | 무거운 퀀트 답변 / 파이썬 생성 |
 
 ---
 

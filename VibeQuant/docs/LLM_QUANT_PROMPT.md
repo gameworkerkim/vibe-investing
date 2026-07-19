@@ -35,15 +35,15 @@ Never put the key in Pages / browser JS.
 
 | Choice | API model | Use |
 |---|---|---|
-| V4 Flash | `deepseek-v4-flash` | Finance gate + fast prompts |
-| V4 Pro | `deepseek-v4-pro` | Default quant logic / code gen |
+| V4 Flash | `deepseek-v4-flash` | Default — finance gate + fast quant prompts |
+| V4 Pro | `deepseek-v4-pro` | Heavier quant logic / code gen |
 
 ## API
 
 `POST /api/v1/llm/quant-prompt`
 
 ```json
-{ "prompt": "NVDA 22-day momentum?", "model": "pro" }
+{ "prompt": "NVDA 22-day momentum?", "model": "flash" }
 ```
 
 ## Abuse rules

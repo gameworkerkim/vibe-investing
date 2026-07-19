@@ -385,7 +385,7 @@ export async function handleQuantPrompt(
     };
   }
 
-  const choice: LlmModelChoice = body.model === "flash" ? "flash" : "pro";
+  const choice: LlmModelChoice = body.model === "pro" ? "pro" : "flash";
   const model = choice === "flash" ? MODEL_FLASH : MODEL_PRO;
 
   try {

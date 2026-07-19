@@ -58,7 +58,7 @@ DeepSeek turns a finance-only prompt into an explanation and/or runnable `vi_bro
 
 ### Steps
 
-1. In **LLM prompt input**, pick **Model**: `V4 Pro` (better code) or `V4 Flash` (faster).
+1. In **LLM prompt input**, pick **Model**: `V4 Flash` (default, faster) or `V4 Pro` (heavier code).
 2. Type a finance question, or click a golden LLM chip (e.g. “Semi momentum”).
 3. Click **Run** (next to the copy icon). Rate limit: **1 request / 30 seconds**.
 4. Watch progress: DeepSeek call → optional generated Python run.

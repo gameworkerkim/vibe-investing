@@ -23,15 +23,15 @@ cd /Users/dennis/vibe-investing/VibeQuant/cloudflare
 
 | 선택 | API 모델 | 용도 |
 |---|---|---|
-| V4 Flash | `deepseek-v4-flash` | 금융 게이트 + 빠른 프롬프트 |
-| V4 Pro | `deepseek-v4-pro` | 기본 퀀트 로직 / 코드 생성 |
+| V4 Flash | `deepseek-v4-flash` | 기본 — 금융 게이트 + 빠른 퀀트 프롬프트 |
+| V4 Pro | `deepseek-v4-pro` | 무거운 퀀트 로직 / 코드 생성 |
 
 ## API
 
 `POST /api/v1/llm/quant-prompt`
 
 ```json
-{ "prompt": "NVDA 22일 모멘텀?", "model": "pro" }
+{ "prompt": "NVDA 22일 모멘텀?", "model": "flash" }
 ```
 
 ## 남용 방지

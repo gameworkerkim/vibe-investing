@@ -119,8 +119,8 @@ Models used by the Worker:
 
 | UI choice | API model | Role |
 |---|---|---|
-| V4 Flash | `deepseek-v4-flash` | Finance gate + fast prompts |
-| V4 Pro | `deepseek-v4-pro` | Quant answer / Python generation (default) |
+| V4 Flash | `deepseek-v4-flash` | Default — finance gate + quant prompts |
+| V4 Pro | `deepseek-v4-pro` | Heavier quant answer / Python generation |
 
 ---
 
