@@ -1,167 +1,150 @@
 # VibeQuant (한국어)
 
-**VibeQuant**는 [GS Quant](https://github.com/goldmansachs/gs-quant)(`gs_quant`)와
-Python API 레벨에서 호환되는 완전 오픈소스 퀀트 금융 엔진입니다.
+**VibeQuant**는 [GS Quant](https://github.com/goldmansachs/gs-quant)(`gs_quant`)를
+**Python API 레벨에서 대체**하고, 대시보드 웹뷰에 **퀀트 스크립트를 입력해 결과를 검증**하는
+오픈소스 퀀트 스택입니다.
 
-GS Quant는 세계 최고 수준의 퀀트 툴킷이지만, 실제 가치인 데이터·가격 모델·리스크 엔진은
-골드만삭스의 Marquee 플랫폼 안에 있고 기관용 `client_id` / `client_secret`이 필요합니다.
-VibeQuant는 그 폐쇄형 백엔드를 오픈 데이터 소스와 오픈소스 가격/리스크 엔진으로 대체하면서,
-동일한 클래스명·메서드 시그니처·워크플로우를 유지하여 기존 GS Quant 코드를 한 줄 변경으로
-마이그레이션할 수 있습니다.
+역할 분리 (규범):
 
-> **네이밍 규칙:** 모든 `Gs*` 심볼은 `Vi*`(Vibe Investing)로 변경됩니다.
-> `gs_quant` → `vi_quant`, `GsSession` → `ViSession`, `GsDataApi` → `ViDataApi` 등.
-> 전체 매핑은 [API 매핑 테이블](docs/API_MAPPING.md)을 참조하세요.
-
-## 왜 필요한가
-
-| | GS Quant | VibeQuant |
+| 관심사 | 실행 위치 | 이유 |
 |---|---|---|
-| 클라이언트 라이브러리 | 오픈소스 (Apache 2.0) | 오픈소스 (Apache 2.0) |
-| 데이터 / 모델 / 연산 | Goldman Sachs Marquee (폐쇄형, 기관 전용) | 오픈소스: yfinance, FRED, OpenFIGI, QuantLib, 로컬 엔진 |
-| 인증 | `client_id` / `client_secret` 필수 | 불필요 (일부 데이터 제공자는 옵션 키) |
-| 실행 방식 | 원격 (GS 서버) | 로컬 우선, 자체 호스팅 백엔드 |
-| API 표면 | `gs_quant.*` / `Gs*` | `vi_quant.*` / `Vi*` — 시그니처 호환 (수치 동일 아님) |
+| 시세 (호가·캔들·자산) | **Cloudflare** (Workers + Pages + D1 + R2 + CDN) | SaaS 분산 제거, 무료 티어 우선 |
+| 퀀트 계산 (스크립트·시계열·백테스트) | **브라우저 Python / Pyodide (WASM)** | Worker에서 풀 Python/`vi_quant` 불가, 서버 `exec` 금지 |
 
-## 호환성 안내
+> **네이밍:** 모든 `Gs*` → `Vi*` (Vibe Investing).
+> `gs_quant` → `vi_quant`, `GsSession` → `ViSession` 등.
+> 전체 매핑: [docs/API_MAPPING_KR.md](docs/API_MAPPING_KR.md).
 
-VibeQuant는 **API 레벨 호환성**(동일 모듈, `Gs`→`Vi` 접두어만 다른 클래스명, 동일 메서드
-시그니처)을 목표로 합니다. **수치적으로 동일한 결과를 보장하지 않습니다.**
-가격 결정과 리스크는 오픈소스 엔진(QuantLib 등)에서 실행되며, 골드만삭스의 독점 모델과
-데이터를 사용하지 않습니다. 알려진 수치 차이는 가격 기능이 추가될 때 모듈별로 문서화합니다
-([로드맵](ROADMAP_KR.md) 참조).
+## 명시적 목표
 
-## 빠른 시작
+1. **GS Quant 대체 (API 레벨):** 모듈/시그니처 호환(`Gs`→`Vi`), Marquee 대신 오픈 데이터·엔진.
+   골드만삭스 모델과 **수치 동일은 약속하지 않음**.
+2. **대시보드 스크립트 검증:** 웹뷰에 Python 퀀트 스크립트 입력 → 브라우저(Pyodide)가
+   Cloudflare 시세로 실행 → 차트/표/stdout으로 검증.
+3. **Cloudflare 무료 티어 우선:** Vercel / Neon / Upstash 없이 데이터+UI 배포.
+   무료·WASM에 안 맞는 기능은 **한계로 명시**하고 암묵적으로 약속하지 않음.
+
+영문: [README.md](README.md) · [ROADMAP.md](ROADMAP.md).
+
+## 호환성 안내 (냉정)
+
+| 주장 | 실제 |
+|---|---|
+| GS Quant API 호환 | **일부** 공개 API 목표. vendoring 심볼 중 stub/크래시 다수 존재 |
+| GS/Marquee와 동일 수치 | **절대 보장 안 함** |
+| 브라우저에서 전체 `vi_quant` | **불가.** WASM 안전 서브셋만 (`vi_browser` 등) |
+| 서버가 사용자 Python 실행 | **불가.** (보안 + Workers 한도) |
+| 무료 티어 = 무제한 ingest | **불가.** [한계 문서](docs/LIMITATIONS_KR.md) 참조 |
+
+## 목표 아키텍처
+
+```
+┌─────────────────────────── Cloudflare Free ───────────────────────────┐
+│  Pages (대시보드 웹뷰 + Pyodide)                                        │
+│       │ 시세 JSON fetch                                                │
+│       ▼                                                                │
+│  Worker (Hono) ── Cache API ── D1 (메타/인덱스) ── R2 (캔들 본체)        │
+│       │                                                                │
+│  Cron (하루 ≤1회) ── 소규모 watchlist Yahoo ingest → R2 + D1            │
+└────────────────────────────────────────────────────────────────────────┘
+        ▲
+        │ 선택: 로컬 pip vi_quant (연구용; 대시보드 경로 아님)
+```
+
+상세: [docs/ARCHITECTURE_TARGET_KR.md](docs/ARCHITECTURE_TARGET_KR.md) ·
+한계: [docs/LIMITATIONS_KR.md](docs/LIMITATIONS_KR.md).
+
+**레거시:** `backend/`(Express + Vercel/Neon/Upstash)와 로컬 `vi_quant/providers/`는
+전환용으로 유지. 신규 작업은 Cloudflare + Pyodide. 멀티 SaaS 경로는 확장하지 않음.
+
+## Cloudflare 무료 티어 — 가능 / 불가
+
+| 기능 | 무료 티어 | 비고 |
+|---|---|---|
+| Pages 정적 대시보드 + Pyodide UI | 가능 | 주 UI 경로 |
+| Worker REST (캔들/자산) | 가능(예산 내) | 일 10만 req, 호출당 **CPU 10ms** |
+| D1 메타 + R2 캔들 | 가능 | 캔들 본체는 **R2**, D1은 인덱스만 |
+| CDN / Cache API | 가능 | 핫 응답 |
+| Cron ingest | 제한적 | Cron도 **CPU 10ms** — 소규모·일 1회 또는 lazy |
+| DO 기반 무거운 레이트리밋 | 비권장 | Cache + 입력 검증 우선 |
+| Worker에서 Yahoo 대량 히스토리 | 불안정 | R2 캐시 + lazy, 파싱 최소화 |
+| Cron에서 TOSS 대량 페이지네이션 | 불가(무료) | 시크릿은 서버만; free cron에 부적합 |
+| WASM에서 QuantLib / 전체 gs-quant | 불가 | 네이티브·용량·stub |
+| Cloudflare에서 Streamlit/NiceGUI | 불가 | 장기 Python 서버 ≠ Pages/Workers |
+
+## 빠른 시작 (로컬 라이브러리 — 현재)
 
 ```bash
 pip install -e .
 ```
 
-아래 기능은 지금 바로 동작합니다:
-
 ```python
 import pandas as pd
 from vi_quant.session import ViSession
-from vi_quant.timeseries import returns, volatility, correlation, moving_average
+from vi_quant.timeseries import returns, volatility, moving_average
 
-# 인증 불필요 — 기본 embedded 로컬 모드
 ViSession.use()
-
-prices = pd.Series(...)          # 임의의 가격 시계열 (예: yfinance)
-r = returns(prices)
-vol = volatility(prices, 22)
-ma = moving_average(prices, 22)
+prices = pd.Series(...)   # 현재는 직접 시리즈 공급
+print(volatility(prices, 22))
 ```
 
-파생상품 가격 결정은 **아직 미구현**입니다 (Phase 2 예정):
+대시보드/Cloudflare 경로는 **진행 중** ([ROADMAP_KR.md](ROADMAP_KR.md)).
+웹뷰 목표 스크립트 형태:
 
 ```python
-# PLANNED (Phase 2) — 목표 API 형태만 표시, 현재 동작하지 않음
+# Pyodide에서 실행 — Worker에서 실행하지 않음
+from vi_browser import get_candles, returns, volatility
+
+df = get_candles("005930", days=365)   # → Cloudflare Worker API
+print(volatility(df["close"], 22))
+```
+
+파생상품 가격 결정은 **미구현** (Phase 2+; 무료 WASM 경로 아님):
+
+```python
+# PLANNED — 현재 동작하지 않음
 from vi_quant.instrument import IRSwap
 from vi_quant.risk import Price
 IRSwap('Pay', '10y', 'USD').calc(Price())
 ```
 
-GS Quant에서 마이그레이션은 기계적 rename입니다:
-
-```python
-# Before (GS Quant)                      # After (VibeQuant)
-from gs_quant.session import GsSession   from vi_quant.session import ViSession
-GsSession.use(client_id=..., ...)        ViSession.use()
-```
-
-## 아키텍처
-
-GS Quant와 동일한 3계층 아키텍처. Marquee 원격 백엔드를 플러그형 오픈 백엔드로 대체:
-
-| 계층 | 모듈 | GS Quant 백엔드 | VibeQuant 백엔드 |
-|---|---|---|---|
-| 데이터 | `vi_quant/providers/` | Marquee Data APIs | 통합 제공자: TOSS + Yahoo Finance + Mock (자동 감지) |
-| 데이터 | `backend/` | — | REST 데이터 서버 (Express+TS, Redis 캐시, Neon DB, Vercel) |
-| 모델 | `vi_quant/instrument/`, `vi_quant/risk/` | GS 가격·리스크 엔진 | QuantLib + 로컬 분석 |
-| 애플리케이션 | `vi_quant/markets/`, `vi_quant/backtests/` | Marquee 포트폴리오·백테스트 서비스 | 로컬 포트폴리오 저장소 + 로컬 백테스트 엔진 |
-
 ## 문서
 
-모든 기술 문서는 영어로 작성됩니다. 아래는 한국어 참조 문서입니다.
-
 | 문서 | 설명 |
-|---|---|
-| [README.md](README.md) | 영문 README (공식) |
-| [README_KR.md](README_KR.md) | 한국어 README (이 문서) |
-| [ROADMAP_KR.md](ROADMAP_KR.md) | 한국어 로드맵 |
-| [docs/API_MAPPING.md](docs/API_MAPPING.md) | GS → VI API 매핑표 (영문) |
-| [docs/API_MAPPING_KR.md](docs/API_MAPPING_KR.md) | GS → VI API 매핑표 (한국어) |
-| [docs/PROVIDER_API_MATCHING.md](docs/PROVIDER_API_MATCHING.md) | TOSS ↔ Yahoo Finance ↔ VibeQuant 통합 인터페이스 매핑 (영문) |
-| [docs/PROVIDER_API_MATCHING_KR.md](docs/PROVIDER_API_MATCHING_KR.md) | TOSS ↔ Yahoo Finance ↔ VibeQuant 통합 인터페이스 매핑 (한국어) |
-| [docs/OFFICIAL_DOCS_GUIDE.md](docs/OFFICIAL_DOCS_GUIDE.md) | 공식 GS Quant 문서 대응 매뉴얼 (영문) |
-| [docs/OFFICIAL_DOCS_GUIDE_KR.md](docs/OFFICIAL_DOCS_GUIDE_KR.md) | 공식 GS Quant 문서 대응 매뉴얼 (한국어) |
-| [docs/TECH_REVIEW_DASHBOARD.md](docs/TECH_REVIEW_DASHBOARD.md) | 기술 검토: Streamlit/NiceGUI + Node.js 백엔드 연동 (영문) |
-| [docs/TECH_REVIEW_DASHBOARD_KR.md](docs/TECH_REVIEW_DASHBOARD_KR.md) | 기술 검토: Streamlit/NiceGUI + Node.js 백엔드 연동 (한국어) |
-| [docs/TECH_REVIEW_CLOUDFLARE.md](docs/TECH_REVIEW_CLOUDFLARE.md) | 기술 검토: Cloudflare 이전 (Workers/D1/R2/KV) (영문) |
-| [docs/TECH_REVIEW_CLOUDFLARE_KR.md](docs/TECH_REVIEW_CLOUDFLARE_KR.md) | 기술 검토: Cloudflare 이전 (Workers/D1/R2/KV) (한국어) |
-| [SECURITY.md](SECURITY.md) | 보안 정책 문서 (영문, LLM 판독 가능) |
+|---|---|---|
+| [ROADMAP_KR.md](ROADMAP_KR.md) | 단계별 계획 (Cloudflare + Pyodide) |
+| [docs/ARCHITECTURE_TARGET_KR.md](docs/ARCHITECTURE_TARGET_KR.md) | 바인딩·스키마·Cron·비용 |
+| [docs/LIMITATIONS_KR.md](docs/LIMITATIONS_KR.md) | 지연·호환성·무료 티어 하드스톱 |
+| [docs/API_MAPPING_KR.md](docs/API_MAPPING_KR.md) | GS → VI API 매핑 |
+| [docs/PROVIDER_API_MATCHING_KR.md](docs/PROVIDER_API_MATCHING_KR.md) | 제공자 인터페이스 매핑 |
+| [docs/OFFICIAL_DOCS_GUIDE_KR.md](docs/OFFICIAL_DOCS_GUIDE_KR.md) | GS 공식 문서 대응 매뉴얼 |
+| [docs/TECH_REVIEW_DASHBOARD_KR.md](docs/TECH_REVIEW_DASHBOARD_KR.md) | 기술 검토: 대시보드 + Node.js |
+| [docs/TECH_REVIEW_CLOUDFLARE_KR.md](docs/TECH_REVIEW_CLOUDFLARE_KR.md) | 기술 검토: Cloudflare 이전 |
+| [SECURITY.md](SECURITY.md) | 신뢰 경계 (CF + WASM) |
+| [README.md](README.md) | 영문 README |
+| [ROADMAP.md](ROADMAP.md) | 영문 로드맵 |
 
 ## 현황
 
-**Pre-Alpha 스케폴딩 — 아직 동작하는 가격 엔진이 아닙니다.**
+**Pre-Alpha.** 로컬 timeseries·providers는 존재. 활성 빌드 목표는 Cloudflare 데이터면과
+Pyodide 대시보드. 프로덕션 가격 엔진 아님.
 
 | 모듈 | 상태 |
 |---|---|
-| `vi_quant.session` (`ViSession`, embedded 모드) | 구현 완료 |
-| `vi_quant.errors` (`MqError` 계열) | 구현 완료 (gs-quant에서 vendoring) |
-| `vi_quant.timeseries` (algebra, statistics, econometrics, technicals, analysis) | 구현 완료 (gs-quant에서 vendoring, 완전 로컬 동작) |
-| `vi_quant.datetime` (캘린더, 상대일자, 일수 계산) | 구현 완료 (vendored; 공휴일 데이터셋은 Phase 1 예정) |
-| `vi_quant.data` (`Dataset` 제공자: yfinance/FRED/로컬) | Stub — Phase 1 |
-| `vi_quant.providers` (UnifiedProvider: TOSS + Yahoo Finance + Mock) | 구현 완료 (자동 감지, 모든 백엔드에서 동일 시그니처) |
-| `backend/` (Express + TypeScript REST 데이터 서버) | 구현 완료 (Yahoo Finance + TOSS API, Upstash Redis, Neon DB, Vercel 배포 준비) |
-| `Dockerfile` + `docker-compose.yml` | 구현 완료 (로컬 백테스트, `docker compose up`) |
-| `vi_quant.instrument` / `vi_quant.risk` (가격 결정) | 미착수 — Phase 2 |
-| `vi_quant.backtests`, `vi_quant.markets` (포트폴리오) | 미착수 — Phase 2+ |
-
-전체 계획은 [ROADMAP_KR.md](ROADMAP_KR.md)를 참조하세요.
-
-## 데이터 제공자 — 함수명 변경 없이 백엔드 교체
-
-```python
-from vi_quant.providers import get_provider
-
-# 자동 감지: TOSS(키 있으면) → Yahoo(항상 가능) → Mock(폴백)
-p = get_provider()
-
-# 모든 백엔드에서 동일한 5개 함수:
-p.fetch_candles("AAPL", 260)           # → [{time, open, high, low, close, volume}]
-p.fetch_prices(["AAPL", "TSLA"])       # → {"AAPL": {price, change, changeRate}}
-p.fetch_asset("005930")                # → {symbol, name, exchange, currency}
-p.provider_name()                      # → "toss" | "yahoo" | "mock"
-p.is_available()                       # → True | False
-
-# 특정 제공자 강제:
-p = get_provider("yahoo")              # Yahoo Finance (글로벌, 키 불필요)
-p = get_provider("mock")               # 결정론적 PRNG (자격증명 불필요)
-```
-
-자세한 매핑은 [docs/PROVIDER_API_MATCHING.md](docs/PROVIDER_API_MATCHING.md) 참조.
-
-## Docker 빠른 시작
-
-```bash
-cd VibeQuant
-docker compose build          # 컨테이너 빌드
-docker compose run vibequant  # Mock 제공자로 대화형 Python
-docker compose up -d          # Jupyter 서버 :8888 포트
-
-# Yahoo Finance로 강제 (자격증명 불필요):
-VI_QUANT_PROVIDER=yahoo docker compose run vibequant
-```
+| `vi_quant.session` / `timeseries` (로컬) | 부분 — 서브셋 테스트됨 |
+| `vi_quant.providers` (Python 직접) | 구현됨 (로컬 연구 전용 — 대시보드 경로 아님) |
+| `vi_browser` (Pyodide SDK: 데이터 조회 + 시계열 서브셋) | 구현됨 — Pages 웹뷰 통합 준비 완료 |
+| `backend/` Express (Vercel 스택) | 구현됨 — **레거시**, 기능 확장 동결 |
+| Cloudflare Worker + D1 + R2 | 예정 — Phase 1 |
+| Pages + Pyodide 웹뷰 | 예정 — Phase 1 |
+| 얇은 `vi_browser` WASM SDK | 예정 — Phase 1 |
+| `instrument` / `risk` / QuantLib | 미착수 — Phase 2+ (로컬/헤비; 무료 WASM 아님) |
 
 ## 라이선스
 
-Apache 2.0. VibeQuant는 독립적인 오픈소스 프로젝트입니다. Goldman Sachs와 제휴,
-보증, 또는 지원 관계가 없습니다. "GS Quant"는 Apache 2.0 라이선스 하에 API 호환성
-목적으로만 참조됩니다.
+Apache 2.0. Goldman Sachs와 제휴·보증·지원 관계 없음.
+"GS Quant"는 Apache 2.0 하 API 호환 목적으로만 참조.
 
 ## 면책
 
-연구·교육 목적으로만 제공됩니다. 어떠한 내용도 투자 조언을 구성하지 않습니다.
-실제 자금 운용 전 모든 모델과 데이터를 검증하세요.
+연구·교육 목적. 투자 조언 아님. 실자금 사용 전 모델·데이터를 검증할 것.
