@@ -10,6 +10,7 @@ import { checkRateLimit } from "./ratelimit";
 import { getCandlesPayload } from "./candles";
 import { listWatchlist, watchlistCount, WATCHLIST_MAX } from "./watchlist";
 import { tossConfigured } from "./toss";
+import { deepseekConfigured, handleQuantPrompt } from "./llm-quant";
 
 export type { Env };
 
@@ -92,6 +93,7 @@ export default {
           version: "0.2.0",
           provider_default: env.DEFAULT_PROVIDER ?? "yahoo",
           toss: { configured: tossConfigured(env) },
+          deepseek: { configured: deepseekConfigured(env) },
           watchlist: { max: WATCHLIST_MAX, count: wlCount },
           bindings: {
             d1: !!env.DB,
@@ -104,6 +106,7 @@ export default {
             upload_hint: "cloudflare/scripts/upload-static.sh",
           },
           candles: "GET /api/v1/candles/:provider/:symbol?days=90",
+          llm_quant: "POST /api/v1/llm/quant-prompt",
         },
         200,
         origin
@@ -139,6 +142,37 @@ export default {
         origin,
         { "Cache-Control": "public, max-age=30" }
       );
+    }
+
+    if (pathname === "/api/v1/llm/quant-prompt") {
+      if (request.method !== "POST") {
+        return json({ error: "METHOD_NOT_ALLOWED" }, 405, origin);
+      }
+      if (origin && !isAllowedOrigin(origin)) {
+        return json({ error: "CORS_DENIED", message: "Origin not allowed" }, 403, origin);
+      }
+      let body: { prompt?: string; model?: string } = {};
+      try {
+        body = (await request.json()) as { prompt?: string; model?: string };
+      } catch {
+        return json({ error: "BAD_JSON", message: "Expected JSON body" }, 400, origin);
+      }
+      const result = await handleQuantPrompt(request, env, body);
+      if (!result.ok) {
+        const status =
+          result.error === "RATE_LIMITED" || result.error === "FINANCE_COOLDOWN"
+            ? 429
+            : result.error === "FINANCE_ONLY"
+              ? 403
+              : result.error === "DEEPSEEK_NOT_CONFIGURED"
+                ? 503
+                : 400;
+        const extra: Record<string, string> = {};
+        if (result.retryAfter) extra["Retry-After"] = String(result.retryAfter);
+        return json(result, status, origin, extra);
+      }
+      // Archive of successful prompt+output deferred (community eval later).
+      return json(result, 200, origin, { "Cache-Control": "no-store" });
     }
 
     const candleMatch = pathname.match(/^\/api\/v1\/candles\/([^/]+)\/([^/]+)\/?$/);

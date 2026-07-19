@@ -1,9 +1,10 @@
-import { applyI18n, detectLang, t } from "./i18n.js?v=15";
-import { API_CATALOG, noteFor } from "./api-catalog.js?v=15";
-import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=15";
-import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=15";
-import { clearChart, renderChartFromWindow } from "./chart-view.js?v=15";
-import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=15";
+import { applyI18n, detectLang, t } from "./i18n.js?v=16";
+import { API_CATALOG, noteFor } from "./api-catalog.js?v=16";
+import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=16";
+import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=16";
+import { clearChart, renderChartFromWindow } from "./chart-view.js?v=16";
+import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=16";
+import { requestQuantPrompt } from "./llm-prompt.js?v=16";
 
 const codeEl = document.getElementById("code");
 const outputEl = document.getElementById("output");
@@ -11,6 +12,9 @@ const statusEl = document.getElementById("runtime-status");
 const runBtn = document.getElementById("btn-run");
 const exampleBtn = document.getElementById("btn-example");
 const clearBtn = document.getElementById("btn-clear");
+const llmBtn = document.getElementById("btn-llm");
+const llmPromptEl = document.getElementById("llm-prompt");
+const llmModelEl = document.getElementById("llm-model");
 const langSelect = document.getElementById("lang-select");
 const apiTbody = document.getElementById("api-tbody");
 const sampleLabel = document.getElementById("sample-label");
@@ -204,6 +208,13 @@ clearBtn?.addEventListener("click", () => {
   codeEl.focus();
 });
 
+function setBusy(busy) {
+  runBtn && (runBtn.disabled = busy);
+  exampleBtn && (exampleBtn.disabled = busy);
+  clearBtn && (clearBtn.disabled = busy);
+  llmBtn && (llmBtn.disabled = busy);
+}
+
 runBtn?.addEventListener("click", async () => {
   const code = codeEl.value.trim();
   if (!code) {
@@ -213,9 +224,7 @@ runBtn?.addEventListener("click", async () => {
     return;
   }
 
-  runBtn.disabled = true;
-  exampleBtn.disabled = true;
-  if (clearBtn) clearBtn.disabled = true;
+  setBusy(true);
   setStatus("running");
   outputEl.classList.remove("is-error");
   outputEl.textContent = "";
@@ -233,9 +242,67 @@ runBtn?.addEventListener("click", async () => {
     clearChart();
     updateMockBanner("");
   } finally {
-    runBtn.disabled = false;
-    exampleBtn.disabled = false;
-    if (clearBtn) clearBtn.disabled = false;
+    setBusy(false);
+  }
+});
+
+llmBtn?.addEventListener("click", async () => {
+  const prompt = (llmPromptEl?.value || "").trim();
+  if (!prompt) {
+    outputEl.textContent = tx("llm_empty", "Enter an LLM Quant Prompt first.");
+    outputEl.classList.add("is-error");
+    clearChart();
+    return;
+  }
+
+  setBusy(true);
+  setStatus("running");
+  outputEl.classList.remove("is-error");
+  outputEl.textContent = tx("llm_running", "Calling DeepSeek…");
+  clearChart();
+
+  try {
+    const model = llmModelEl?.value === "flash" ? "flash" : "pro";
+    const res = await requestQuantPrompt({ prompt, model });
+    if (!res.ok) {
+      outputEl.textContent = `[${res.error}] ${res.message}${
+        res.retryAfter ? `\nretryAfter=${res.retryAfter}s` : ""
+      }`;
+      outputEl.classList.add("is-error");
+      setStatus("ready");
+      return;
+    }
+
+    const parts = [
+      `=== LLM Quant (${res.model}, mode=${res.mode}) ===`,
+      res.answer || "",
+    ];
+
+    if (res.python) {
+      codeEl.value = res.python.trim() + "\n";
+      if (sampleLabel) {
+        sampleLabel.textContent = `${tx("sample_loaded", "Sample")}: LLM → vi_browser`;
+      }
+      parts.push("", "=== Generated Python (editor updated) ===", res.python.trim(), "", "=== Pyodide run ===");
+      const { ok, text } = await runPython(res.python);
+      parts.push(text);
+      outputEl.textContent = parts.join("\n");
+      outputEl.classList.toggle("is-error", !ok);
+      updateMockBanner(text);
+      if (ok) await renderChartFromWindow();
+    } else {
+      outputEl.textContent = parts.join("\n");
+      outputEl.classList.remove("is-error");
+      updateMockBanner("");
+    }
+    setStatus("ready");
+  } catch (err) {
+    outputEl.textContent = String(err);
+    outputEl.classList.add("is-error");
+    clearChart();
+    setStatus("error");
+  } finally {
+    setBusy(false);
   }
 });
 

@@ -56,6 +56,16 @@ export const STRINGS = {
       "Notice: This Quant tool is not investment advice. Do not use it for investing. Advice from a qualified professional must come first.",
     empty_code: "Enter Python code first.",
     example_note: "# Golden committee sample — VI browser API\n",
+    llm_title: "LLM Quant Prompt",
+    llm_sub:
+      "Finance only (US/KR stocks, crypto). DeepSeek answers or builds vi_browser Python to run. 1 request / 30s.",
+    llm_model: "Model",
+    llm_run: "Run prompt",
+    llm_placeholder: "e.g. Compare 22-day momentum for NVDA, MU, SNDK, AVGO and rank them",
+    llm_hint:
+      "Non-finance prompts are rejected (1 min cooldown). API key stays on the Worker (setup-deepseek.sh) — never in the browser.",
+    llm_empty: "Enter an LLM Quant Prompt first.",
+    llm_running: "Calling DeepSeek…",
   },
   ko: {
     brand: "Vibe Quant",
@@ -112,6 +122,16 @@ export const STRINGS = {
       "주의: 본 Quant는 투자 의견이 아니며 투자에 사용해서는 안 됩니다. 투자 전문가의 조언이 선행되어야 합니다.",
     empty_code: "먼저 Python 코드를 입력하세요.",
     example_note: "# 위원회 골든 샘플 — VI browser API\n",
+    llm_title: "LLM Quant Prompt",
+    llm_sub:
+      "금융(미국·한국 주식·크립토)만. DeepSeek가 답하거나 vi_browser 파이썬을 생성해 실행합니다. 30초에 1회.",
+    llm_model: "모델",
+    llm_run: "프롬프트 실행",
+    llm_placeholder: "예: NVDA·MU·SNDK·AVGO 22일 모멘텀을 비교하고 랭킹을 알려줘",
+    llm_hint:
+      "비금융 질문은 거부되며 1분간 쿨다운. API 키는 Worker 시크릿(setup-deepseek.sh) — 브라우저에 없음.",
+    llm_empty: "먼저 LLM Quant Prompt를 입력하세요.",
+    llm_running: "DeepSeek 호출 중…",
   },
   zh: {
     brand: "Vibe Quant",
@@ -167,6 +187,16 @@ export const STRINGS = {
       "注意：本工具不构成投资意见，不得用于投资。须先听取合格专业人士建议。",
     empty_code: "请先输入 Python 代码。",
     example_note: "# 委员会黄金示例 — VI browser API\n",
+    llm_title: "LLM Quant Prompt",
+    llm_sub:
+      "仅限金融（美股/韩股/加密）。DeepSeek 直接回答或生成 vi_browser Python 并执行。每 30 秒 1 次。",
+    llm_model: "模型",
+    llm_run: "运行提示",
+    llm_placeholder: "例如：比较 NVDA、MU、SNDK、AVGO 的 22 日动量并排名",
+    llm_hint:
+      "非金融问题将被拒绝（冷却 1 分钟）。API 密钥仅在 Worker（setup-deepseek.sh），不在浏览器。",
+    llm_empty: "请先输入 LLM Quant Prompt。",
+    llm_running: "正在调用 DeepSeek…",
   },
 };
 
