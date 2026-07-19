@@ -79,7 +79,8 @@ multi-SaaS path.
 
 ## Dashboard (browser demo)
 
-**Live site:** [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)
+**Live site:** [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)  
+**Committee checklist:** [docs/COMMITTEE_CHECKLIST.md](docs/COMMITTEE_CHECKLIST.md)
 
 | Overview | Runner |
 |---|---|

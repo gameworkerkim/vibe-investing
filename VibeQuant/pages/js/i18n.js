@@ -3,7 +3,7 @@
 export const STRINGS = {
   en: {
     brand: "Vibe Quant",
-    tagline: "Open-source GS Quant–compatible harness for multi-LLM quant committees.",
+    tagline: "Vibe Quant — the quant committee of an AI quant hedge fund.",
     language: "Language",
     headline: "Web Vibe Quant Python Demo",
     lede:
@@ -25,17 +25,27 @@ export const STRINGS = {
     status_browser: "browser",
     status_local: "local",
     status_planned: "planned",
+    legend_browser: "browser = web run",
+    legend_local: "local = pip",
+    legend_planned: "planned = roadmap",
     python_input: "Python input",
     result: "Result",
     run: "Run",
+    clear: "Clear",
     load_example: "Golden sample",
     code_placeholder: "# Pick an API sample above, or write VI browser Python…",
     hint:
-      "Runs in-browser via Pyodide (WASM). Market calls use VibeQuant Worker / mock — never Goldman Sachs.",
+      "Runs in-browser via Pyodide (WASM). Market data: Worker (Yahoo) / mock — never Goldman Sachs. Charts: show_chart(...).",
     status_loading: "Loading Python runtime…",
     status_ready: "Runtime ready",
+    status_ready_ms: "Runtime ready ({sec}s)",
     status_running: "Running…",
     status_error: "Runtime failed",
+    runtime_limits: "First load can take several seconds. Browser RAM limits large scripts — keep series short.",
+    ios_banner:
+      "iOS note: Pyodide may fail here. Prefer desktop Chrome/Firefox for the runner.",
+    mock_source_warn:
+      "Warning: market data is mock. Worker Yahoo/TOSS may have failed or be unconfigured. Check source= in stdout.",
     repo_title: "Repository",
     repo_sub: "Source under VibeQuant/ — Pages demo + vi_quant / vi_browser.",
     disclaimer:
@@ -45,7 +55,7 @@ export const STRINGS = {
   },
   ko: {
     brand: "Vibe Quant",
-    tagline: "멀티 LLM 퀀트 위원회를 위한 GS Quant 호환 오픈소스 하네스.",
+    tagline: "Vibe Quant - 인공지능 퀀트 헤지펀드의 퀀트 위원회",
     language: "언어",
     headline: "웹버전 Vibe Quant Python Demo",
     lede:
@@ -67,17 +77,27 @@ export const STRINGS = {
     status_browser: "browser",
     status_local: "local",
     status_planned: "planned",
+    legend_browser: "browser = 웹 실행",
+    legend_local: "local = pip",
+    legend_planned: "planned = 예정",
     python_input: "파이썬 입력",
     result: "결과",
     run: "실행",
+    clear: "Clear",
     load_example: "골든 샘플",
     code_placeholder: "# 위 API 샘플을 고르거나 VI browser Python을 입력…",
     hint:
-      "Pyodide(WASM)로 브라우저에서 실행. 시세는 VibeQuant Worker/mock — Goldman Sachs 아님.",
+      "Pyodide(WASM)로 브라우저 실행. 시세는 Worker(Yahoo)/mock — Goldman Sachs 아님. 차트: show_chart(...).",
     status_loading: "Python 런타임 로드 중…",
     status_ready: "런타임 준비됨",
+    status_ready_ms: "런타임 준비됨 ({sec}초)",
     status_running: "실행 중…",
     status_error: "런타임 실패",
+    runtime_limits: "첫 로드는 수 초 걸릴 수 있습니다. 브라우저 RAM 한도로 긴 시리즈는 짧게 유지하세요.",
+    ios_banner:
+      "iOS 안내: 이 환경에서 Pyodide가 실패할 수 있습니다. 실행기는 데스크톱 Chrome/Firefox를 권장합니다.",
+    mock_source_warn:
+      "경고: 시세가 mock입니다. Worker Yahoo/TOSS가 실패했거나 미설정일 수 있습니다. stdout의 source= 를 확인하세요.",
     repo_title: "레포지토리",
     repo_sub: "소스: VibeQuant/ — Pages 데모 + vi_quant / vi_browser.",
     disclaimer:
@@ -87,7 +107,7 @@ export const STRINGS = {
   },
   zh: {
     brand: "Vibe Quant",
-    tagline: "面向多 LLM 量化委员会的 GS Quant 兼容开源工具。",
+    tagline: "Vibe Quant — AI 量化对冲基金的量化委员会",
     language: "语言",
     headline: "网页版 Vibe Quant Python Demo",
     lede:
@@ -109,17 +129,27 @@ export const STRINGS = {
     status_browser: "browser",
     status_local: "local",
     status_planned: "planned",
+    legend_browser: "browser = 网页运行",
+    legend_local: "local = pip",
+    legend_planned: "planned = 计划中",
     python_input: "Python 输入",
     result: "结果",
     run: "运行",
+    clear: "Clear",
     load_example: "黄金示例",
     code_placeholder: "# 选择上方 API 示例，或编写 VI browser Python…",
     hint:
-      "通过 Pyodide（WASM）在浏览器运行。行情走 VibeQuant Worker/mock — 非 Goldman Sachs。",
+      "通过 Pyodide（WASM）在浏览器运行。行情：Worker（Yahoo）/mock — 非 Goldman Sachs。图表：show_chart(...)。",
     status_loading: "正在加载 Python 运行时…",
     status_ready: "运行时就绪",
+    status_ready_ms: "运行时就绪（{sec}秒）",
     status_running: "运行中…",
     status_error: "运行时失败",
+    runtime_limits: "首次加载可能需要数秒。浏览器内存有限，请保持序列较短。",
+    ios_banner:
+      "iOS 提示：此环境可能无法加载 Pyodide。请优先使用桌面 Chrome/Firefox。",
+    mock_source_warn:
+      "警告：行情为 mock。Worker Yahoo/TOSS 可能失败或未配置。请检查 stdout 中的 source=。",
     repo_title: "代码仓库",
     repo_sub: "源码位于 VibeQuant/ — Pages 演示 + vi_quant / vi_browser。",
     disclaimer:

@@ -48,11 +48,13 @@ See [docs/ARCHITECTURE_TARGET.md](docs/ARCHITECTURE_TARGET.md) and
 
 | Principle | Enforcement |
 |---|---|
-| **No secrets in source** | `backend/.gitignore` blocks `.env`. `.env.example` contains only dummy placeholders. |
-| **Pre-commit guard** | `backend/scripts/pre-commit-hook.sh` scans staged files for `client_secret`, `DATABASE_URL=postgresql://`, `UPSTASH_REDIS_TOKEN`, `TOSS_CLIENT_SECRET`. Blocks commit if found. |
-| **Interactive setup** | `backend/scripts/setup-env.sh` prompts for credentials interactively and writes `.env` with `chmod 600`. |
-| **Runtime-only access** | All credentials read from `process.env` at call time (lazy evaluation). Never stored in global variables or module-level constants. |
-| **No defaults** | Missing credentials → graceful degradation (e.g., TOSS absent → routes return 502 with "not configured"). No hardcoded fallback keys. |
+| **No secrets in source** | `cloudflare/.dev.vars` and `.env` are gitignored. Examples use placeholders only. |
+| **Pre-commit guard** | `VibeQuant/scripts/pre-commit-hook.sh` (install: `bash VibeQuant/scripts/install-pre-commit.sh`) blocks `.dev.vars`, `TOSS_CLIENT_SECRET`, `CLOUDFLARE_API_TOKEN`, legacy Neon/Upstash patterns. |
+| **Interactive setup (normative)** | `cloudflare/scripts/setup-secrets.sh` → `.dev.vars` (local) and `wrangler secret put` (remote TOSS). |
+| **Runtime-only access** | Worker reads `env.TOSS_*` at request time. Never hardcode; never ship secrets to Pages. |
+| **No defaults** | Missing TOSS → candles fall back to mock with `source=mock_toss_*` (no fake keys). |
+
+**Verify TOSS locally (no secret print):** `cd cloudflare && ./scripts/verify-toss.sh`
 
 ### Environment Variable Inventory
 
@@ -75,7 +77,24 @@ See [docs/ARCHITECTURE_TARGET.md](docs/ARCHITECTURE_TARGET.md) and
 | `API_KEY` (optional) | HIGH — if set | Optional backend API key for clients |
 | `PORT`, `NODE_ENV`, `RATE_LIMIT_*`, `CACHE_TTL_SECONDS` | LOW | Operational configuration |
 
-## 3. API Security (backend/)
+## 3. API Security — Cloudflare Worker (normative)
+
+| Control | Implementation |
+|---|---|
+| CORS | Allowlist: `https://vibequant-web.pages.dev`, `*.vibequant-web.pages.dev` previews, localhost demo ports. Reflect only allowed `Origin`. |
+| Input validation | `symbol` `[A-Za-z0-9.%^=-]{1,32}`; `provider` ∈ `{yahoo,mock,toss}`; `days` clamped 1–3650 |
+| Rate limit | Best-effort ~30 req/IP/min per isolate (`CF-Connecting-IP`) → HTTP 429 |
+| Secrets | `TOSS_*` only via Wrangler secrets / `.dev.vars` — never in Pages |
+| User Python | **Never** on Worker — browser Pyodide only |
+| Candles path | Cache API → R2 → lazy Yahoo **or TOSS** (≤2 pages) → mock fallback |
+| Watchlist | D1 cap **50** symbols (`GET /api/v1/watchlist`); auto-upsert on successful fetch |
+| Errors | JSON `{ error, message }` — no stack traces |
+
+Pages headers (`pages/_headers`): `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy`.
+
+Setup: `cloudflare/scripts/setup-secrets.sh` · Deploy: `cloudflare/scripts/deploy.sh`.
+
+## 3L. API Security (legacy backend/ — frozen)
 
 ### 3.1 Rate Limiting
 

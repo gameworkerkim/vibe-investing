@@ -30,11 +30,27 @@ print("Browser path: from vi_browser import get_candles, …")
     note_zh: "通过 Worker API 或确定性 mock K 线。",
     sample: `from vi_browser import get_candles
 
-# GS-style idea: pull equity EOD series from a dataset
-# VI browser: await get_candles("005930", days=90)
-candles = await get_candles("005930", days=90)
+# Yahoo (default) or TOSS: await get_candles("005930", days=90, provider="toss")
+candles = await get_candles("005930", days=90, provider="yahoo")
 print("bars", len(candles))
 print("last", candles[-1])
+`,
+  },
+  {
+    id: "toss",
+    gs: "Dataset / GsDataApi (KR broker feed)",
+    vi: "vi_browser.get_candles(..., provider='toss')",
+    module: "data / toss",
+    status: "browser",
+    note_en: "TOSS Open API via Worker secrets (≤2 pages). Falls back to mock if unset.",
+    note_ko: "Worker 시크릿으로 TOSS Open API (최대 2페이지). 미설정 시 mock.",
+    note_zh: "通过 Worker secrets 调用 TOSS（最多 2 页）。未配置则 mock。",
+    sample: `from vi_browser import get_candles, show_chart
+
+candles = await get_candles("005930", days=60, provider="toss")
+show_chart(candles, title="005930 TOSS")
+print("bars", len(candles))
+print("last", candles[-1] if candles else None)
 `,
   },
   {
@@ -88,6 +104,60 @@ print("ma_22_last", round(ma[-1], 4))
 `,
   },
   {
+    id: "correlation",
+    gs: "gs_quant.timeseries.correlation",
+    vi: "vi_browser.correlation(a, b)",
+    module: "timeseries",
+    status: "browser",
+    note_en: "Pearson correlation of two close series.",
+    note_ko: "두 종가 시계열의 피어슨 상관.",
+    note_zh: "两条收盘价序列的皮尔逊相关。",
+    sample: `from vi_browser import get_candles, correlation
+
+a = await get_candles("005930", days=90)
+b = await get_candles("AAPL", days=90)
+print("corr_005930_AAPL", round(correlation(a, b), 6))
+`,
+  },
+  {
+    id: "mdd",
+    gs: "gs_quant.timeseries.max_drawdown",
+    vi: "vi_browser.max_drawdown(closes)",
+    module: "timeseries",
+    status: "browser",
+    note_en: "Max drawdown as a negative fraction.",
+    note_ko: "최대 낙폭(음수 비율).",
+    note_zh: "最大回撤（负比例）。",
+    sample: `from vi_browser import get_candles, max_drawdown, show_chart
+
+candles = await get_candles("005930", days=120)
+mdd = max_drawdown(candles)
+show_chart(candles, title="005930 close")
+print("max_drawdown", None if mdd is None else round(mdd, 6))
+`,
+  },
+  {
+    id: "chart",
+    gs: "charts / plot series (GS Marquee UI)",
+    vi: "vi_browser.show_chart(candles)",
+    module: "viz",
+    status: "browser",
+    note_en: "Line chart in the result pane (Chart.js).",
+    note_ko: "결과 패널 라인 차트 (Chart.js).",
+    note_zh: "结果区折线图（Chart.js）。",
+    sample: `from vi_browser import get_candles, moving_average, show_chart
+
+candles = await get_candles("005930", days=120)
+closes = [c["close"] for c in candles]
+ma = moving_average(closes, 22)
+
+show_chart(candles, title="005930 close", series_label="close")
+print("bars:", len(candles))
+print("last_close:", round(closes[-1], 4))
+print("ma_22_last:", None if ma[-1] is None else round(ma[-1], 4))
+`,
+  },
+  {
     id: "bundle",
     gs: "returns + volatility + MA workflow",
     vi: "vi_browser combo sample",
@@ -96,12 +166,13 @@ print("ma_22_last", round(ma[-1], 4))
     note_en: "Committee golden script — full small workflow.",
     note_ko: "위원회 골든 스크립트 — 작은 end-to-end 워크플로.",
     note_zh: "委员会黄金脚本 — 小型端到端流程。",
-    sample: `from vi_browser import get_candles, returns, volatility, moving_average
+    sample: `from vi_browser import get_candles, returns, volatility, moving_average, show_chart
 
 candles = await get_candles("005930", days=90)
 closes = [c["close"] for c in candles]
 vol = volatility(closes, 22)
 ma = moving_average(closes, 22)
+show_chart(candles, title="005930 close")
 
 print("bars:", len(candles))
 print("last_close:", round(closes[-1], 4))

@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./css/app.css?v=8" />
+  <link rel="stylesheet" href="./css/app.css?v=12" />
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -18,7 +18,7 @@
       <div>
         <p class="brand">Vibe Quant</p>
         <p class="tagline" data-i18n="tagline">
-          멀티 LLM 퀀트 위원회를 위한 GS Quant 호환 오픈소스 하네스.
+          Vibe Quant - 인공지능 퀀트 헤지펀드의 퀀트 위원회
         </p>
       </div>
       <div class="hero-meta">
@@ -54,9 +54,9 @@
         </p>
       </div>
       <div class="legend">
-        <span class="badge browser">browser = 웹 실행</span>
-        <span class="badge local">local = pip</span>
-        <span class="badge planned">planned = 예정</span>
+        <span class="badge browser" data-i18n="legend_browser">browser = 웹 실행</span>
+        <span class="badge local" data-i18n="legend_local">local = pip</span>
+        <span class="badge planned" data-i18n="legend_planned">planned = 예정</span>
       </div>
     </div>
 
@@ -126,14 +126,25 @@
     </p>
   </section>
 
+  <p id="ios-banner" class="ios-banner" hidden data-i18n="ios_banner">
+    iOS 안내: 이 환경에서 Pyodide가 실패할 수 있습니다. 실행기는 데스크톱 Chrome/Firefox를 권장합니다.
+  </p>
+  <p id="data-source-banner" class="data-source-banner" hidden data-i18n="mock_source_warn">
+    경고: 시세가 mock입니다. Worker Yahoo/TOSS가 실패했거나 미설정일 수 있습니다. stdout의 source= 를 확인하세요.
+  </p>
+
   <section id="workspace" class="workspace">
     <div class="pane input-pane">
       <div class="pane-head">
         <div>
           <h2 data-i18n="python_input">파이썬 입력</h2>
           <p id="sample-label" class="sample-label"></p>
+          <p id="runtime-limits" class="runtime-limits" data-i18n="runtime_limits">
+            첫 로드는 수 초 걸릴 수 있습니다. 브라우저 RAM 한도로 긴 시리즈는 짧게 유지하세요.
+          </p>
         </div>
         <div class="pane-actions">
+          <button type="button" id="btn-clear" class="btn ghost" data-i18n="clear">Clear</button>
           <button type="button" id="btn-example" class="btn ghost" data-i18n="load_example">골든 샘플</button>
           <button type="button" id="btn-run" class="btn primary" data-i18n="run">실행</button>
         </div>
@@ -141,13 +152,19 @@
       <textarea id="code" class="code" spellcheck="false" data-i18n-placeholder="code_placeholder" aria-label="Python code"
         placeholder="# 위 API 표에서 샘플 로드, 또는 VI browser Python 입력"></textarea>
       <p class="hint" data-i18n="hint">
-        Pyodide(WASM)로 브라우저 실행. 시세는 VibeQuant Worker/mock — Goldman Sachs 아님.
+        Pyodide(WASM)로 브라우저 실행. 시세는 VibeQuant Worker(Yahoo) / mock — Goldman Sachs 아님. 차트: show_chart(...)
       </p>
     </div>
     <div class="pane result-pane">
       <div class="pane-head">
         <h2 data-i18n="result">결과</h2>
         <span id="runtime-status" class="status">Python 런타임 로드 중…</span>
+      </div>
+      <div id="chart-wrap" class="chart-wrap" hidden>
+        <p id="chart-title" class="chart-title">Chart</p>
+        <div class="chart-canvas-box">
+          <canvas id="chart-canvas" aria-label="Chart"></canvas>
+        </div>
       </div>
       <pre id="output" class="output" aria-live="polite"></pre>
     </div>
@@ -167,7 +184,7 @@
     </aside>
   </footer>
 
-  <script src="./js/runtime-config.js?v=8"></script>
-  <script type="module" src="./js/app.js?v=8"></script>
+  <script src="./js/runtime-config.js?v=12"></script>
+  <script type="module" src="./js/app.js?v=12"></script>
 </body>
 </html>

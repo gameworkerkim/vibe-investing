@@ -1,0 +1,44 @@
+# 멀티 LLM 퀀트 위원회 — 검증 체크리스트
+
+Vibe Quant는 **인공지능 퀀트 헤지펀드의 퀀트 위원회**가 같은 API·같은 시세로
+산출물을 재현하는지 확인하는 하네스입니다.
+
+라이브 실행기: https://vibequant-web.pages.dev/#workspace
+
+## 골든 스크립트 (최소)
+
+```python
+from vi_browser import get_candles, returns, volatility, moving_average, max_drawdown, show_chart
+
+candles = await get_candles("005930", days=90)
+closes = [c["close"] for c in candles]
+show_chart(candles, title="005930 close")
+print("bars", len(candles))
+print("vol_22", volatility(closes, 22))
+print("ma_22", moving_average(closes, 22)[-1])
+print("mdd", max_drawdown(closes))
+print("last_rets", returns(closes)[-5:])
+```
+
+## 위원회 검증 항목
+
+| # | 확인 | 통과 기준 |
+|---|---|---|
+| 1 | 시세 소스 | stdout에 `source=yahoo` 또는 `r2`/`cache` (mock만이면 재시도) |
+| 2 | 바 수 | `days`와 비슷한 길이 (거래일 기준 다소 적을 수 있음) |
+| 3 | 변동성 | `vol_22`가 `None`이 아닌 유한 실수 |
+| 4 | 차트 | 결과 패널에 종가 라인 차트 표시 |
+| 5 | 재현 | 동일 스크립트를 두 LLM이 다시 실행해도 같은 숫자(같은 시세 스냅샷) |
+| 6 | 금지 | Worker/서버에서 사용자 Python 실행 없음 · Pages에 시크릿 없음 |
+
+## 브라우저 한계
+
+- iOS Safari: Pyodide 실패 가능 → 데스크톱 Chrome/Firefox 권장
+- 첫 로드: 수 초~수십 초, RAM 한도로 긴 시리즈 지양
+- QuantLib / `IRSwap.calc`: 브라우저 불가 (로컬 Phase 2)
+
+## 관련
+
+- [API_MAPPING_KR.md](API_MAPPING_KR.md)
+- [LIMITATIONS_KR.md](LIMITATIONS_KR.md)
+- [SECURITY.md](../SECURITY.md)

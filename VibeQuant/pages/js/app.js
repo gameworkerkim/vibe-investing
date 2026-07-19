@@ -1,18 +1,30 @@
-import { applyI18n, detectLang, t } from "./i18n.js?v=8";
-import { API_CATALOG, noteFor } from "./api-catalog.js?v=8";
-import { EXAMPLE_CODE, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=8";
+import { applyI18n, detectLang, t } from "./i18n.js?v=12";
+import { API_CATALOG, noteFor } from "./api-catalog.js?v=12";
+import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=12";
+import { clearChart, renderChartFromWindow } from "./chart-view.js?v=12";
+import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=12";
 
 const codeEl = document.getElementById("code");
 const outputEl = document.getElementById("output");
 const statusEl = document.getElementById("runtime-status");
 const runBtn = document.getElementById("btn-run");
 const exampleBtn = document.getElementById("btn-example");
+const clearBtn = document.getElementById("btn-clear");
 const langSelect = document.getElementById("lang-select");
 const apiTbody = document.getElementById("api-tbody");
 const sampleLabel = document.getElementById("sample-label");
+const iosBanner = document.getElementById("ios-banner");
+const dataSourceBanner = document.getElementById("data-source-banner");
 
 let lang = detectLang();
-let activeSampleId = "bundle";
+let activeSampleId = "chart";
+const support = detectRuntimeSupport();
+
+function updateMockBanner(text) {
+  if (!dataSourceBanner) return;
+  const mock = /source\s*=\s*mock/i.test(text || "");
+  dataSourceBanner.hidden = !mock;
+}
 
 function tx(key, fallback) {
   return t(lang, key) || fallback || key;
@@ -22,7 +34,13 @@ function setStatus(kind) {
   statusEl.classList.remove("ready", "error", "running");
   if (kind === "ready") {
     statusEl.classList.add("ready");
-    statusEl.textContent = tx("status_ready", "Runtime ready");
+    const ms = getLastLoadMs();
+    if (ms != null) {
+      const tpl = tx("status_ready_ms", "Runtime ready ({sec}s)");
+      statusEl.textContent = tpl.replace("{sec}", (ms / 1000).toFixed(1));
+    } else {
+      statusEl.textContent = tx("status_ready", "Runtime ready");
+    }
   } else if (kind === "error") {
     statusEl.classList.add("error");
     statusEl.textContent = tx("status_error", "Runtime failed");
@@ -97,10 +115,28 @@ function renderApiTable() {
 function refreshUi() {
   applyI18n(lang);
   renderApiTable();
+  if (iosBanner) {
+    iosBanner.hidden = !support.isIOS;
+  }
+  if (dataSourceBanner && !dataSourceBanner.hidden) {
+    const v = t(lang, "mock_source_warn");
+    if (v) dataSourceBanner.textContent = v;
+  }
   if (statusEl.classList.contains("ready")) setStatus("ready");
   else if (statusEl.classList.contains("error")) setStatus("error");
   else if (statusEl.classList.contains("running")) setStatus("running");
   else setStatus("loading");
+}
+
+function showRuntimeFailure(err) {
+  const parts = [String(err)];
+  if (support.isIOS || !support.hasWasm) {
+    parts.push("", iosAdvice(lang));
+  }
+  outputEl.textContent = parts.join("\n");
+  outputEl.classList.add("is-error");
+  setStatus("error");
+  if (runBtn) runBtn.disabled = true;
 }
 
 langSelect?.addEventListener("change", () => {
@@ -109,8 +145,20 @@ langSelect?.addEventListener("change", () => {
 });
 
 exampleBtn?.addEventListener("click", () => {
-  const golden = API_CATALOG.find((x) => x.id === "bundle") || API_CATALOG[0];
-  loadSample(golden, { scroll: true });
+  const golden = API_CATALOG.find((x) => x.id === "chart") || API_CATALOG.find((x) => x.id === "bundle");
+  if (golden) loadSample(golden, { scroll: true });
+});
+
+clearBtn?.addEventListener("click", () => {
+  codeEl.value = "";
+  if (sampleLabel) sampleLabel.textContent = "";
+  outputEl.textContent = "";
+  outputEl.classList.remove("is-error");
+  clearChart();
+  updateMockBanner("");
+  activeSampleId = "";
+  document.querySelectorAll(".api-table tbody tr").forEach((row) => row.classList.remove("is-active"));
+  codeEl.focus();
 });
 
 runBtn?.addEventListener("click", async () => {
@@ -118,27 +166,33 @@ runBtn?.addEventListener("click", async () => {
   if (!code) {
     outputEl.textContent = tx("empty_code", "Enter Python code first.");
     outputEl.classList.add("is-error");
+    clearChart();
     return;
   }
 
   runBtn.disabled = true;
   exampleBtn.disabled = true;
+  if (clearBtn) clearBtn.disabled = true;
   setStatus("running");
   outputEl.classList.remove("is-error");
   outputEl.textContent = "";
+  clearChart();
 
   try {
     const { ok, text } = await runPython(code);
     outputEl.textContent = text;
     outputEl.classList.toggle("is-error", !ok);
+    updateMockBanner(text);
+    if (ok) await renderChartFromWindow();
     setStatus("ready");
   } catch (err) {
-    outputEl.textContent = String(err);
-    outputEl.classList.add("is-error");
-    setStatus("error");
+    showRuntimeFailure(err);
+    clearChart();
+    updateMockBanner("");
   } finally {
     runBtn.disabled = false;
     exampleBtn.disabled = false;
+    if (clearBtn) clearBtn.disabled = false;
   }
 });
 
@@ -150,18 +204,20 @@ if (fromDocs) {
   const item = API_CATALOG.find((x) => x.id === fromDocs);
   if (item) loadSample(item, { scroll: true });
 } else {
-  const golden = API_CATALOG.find((x) => x.id === "bundle");
+  const golden = API_CATALOG.find((x) => x.id === "chart") || API_CATALOG.find((x) => x.id === "bundle");
   if (golden) loadSample(golden);
   else codeEl.value = EXAMPLE_CODE;
 }
 
-loadPyodideRuntime((s) => {
-  if (s === "ready") setStatus("ready");
-  else if (s === "error") setStatus("error");
-  else setStatus("loading");
-}).catch((err) => {
-  console.error(err);
-  setStatus("error");
-  outputEl.textContent = String(err);
-  outputEl.classList.add("is-error");
-});
+if (!support.hasWasm) {
+  showRuntimeFailure(new Error("WebAssembly is not available in this browser."));
+} else {
+  loadPyodideRuntime((s) => {
+    if (s === "ready") setStatus("ready");
+    else if (s === "error") setStatus("error");
+    else setStatus("loading");
+  }).catch((err) => {
+    console.error(err);
+    showRuntimeFailure(err);
+  });
+}

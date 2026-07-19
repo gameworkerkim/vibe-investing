@@ -76,7 +76,8 @@ GS Quant의 오픈소스 버전으로 Vibe Quant 웹사이트 데모입니다. �
 
 ## 대시보드 (브라우저 데모)
 
-**라이브 사이트:** [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)
+**라이브 사이트:** [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)  
+**위원회 검증 체크리스트:** [docs/COMMITTEE_CHECKLIST_KR.md](docs/COMMITTEE_CHECKLIST_KR.md)
 
 | 개요 | 실행기 |
 |---|---|
