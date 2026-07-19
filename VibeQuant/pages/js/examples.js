@@ -138,22 +138,65 @@ show_chart(pct_b, title="Bollinger %B — NVDA/MU/SNDK/AVGO", series_label="%B")
     sample: `from vi_browser import get_candles, momentum, show_chart
 
 ${HELPERS}
+def mom_grade(m):
+    if m is None:
+        return "N/A"
+    pct = m * 100
+    if pct >= 10:
+        return "Strong"
+    if pct >= 2:
+        return "Positive"
+    if pct > -2:
+        return "Flat"
+    if pct > -10:
+        return "Weak"
+    return "Bearish"
+
+def pct_str(m):
+    return "n/a" if m is None else f"{m * 100:+.2f}%"
+
 TICKERS = ["NVDA", "MU", "SNDK", "AVGO"]
 DAYS, WINDOW = 180, 22
 
 mom_map = {}
-print("=== Momentum = close/close[n] - 1 (22d) ===")
 rows = []
+print("=== 22-day Momentum ===")
+print(f"formula: Momentum_22 = close_today / close_{WINDOW}d_ago - 1")
+print("  >0 rising over window | <0 falling | =0 flat")
+print("")
+
 for sym in TICKERS:
     c = await get_candles(sym, days=DAYS, provider="yahoo")
+    bars = len(c)
     m = momentum(c, WINDOW)
     last = last_num(m)
     mom_map[sym] = m
-    rows.append((sym, last))
-    print(f"{sym}: bars={len(c)} mom22={fmt(last,4)}")
+    rows.append((sym, last, bars))
 
-rows.sort(key=lambda x: -1e9 if x[1] is None else -x[1])
-print("rank (strong → weak):", " > ".join(r[0] for r in rows))
+    print(sym)
+    print(f"  22-day Momentum   {pct_str(last)}")
+    if last is None:
+        need = WINDOW + 1
+        why = f"insufficient data (bars={bars}, need>{WINDOW})" if bars <= WINDOW else "missing prior close"
+        print(f"  grade             N/A ({why})")
+    else:
+        print(f"  grade             {mom_grade(last)}")
+    print("")
+
+# Rank only symbols with a computable momentum (exclude N/A)
+ranked = [(s, v) for s, v, _ in rows if v is not None]
+ranked.sort(key=lambda x: -x[1])  # strong → weak
+na_list = [s for s, v, _ in rows if v is None]
+
+print("rank (strong → weak):")
+if ranked:
+    for i, (s, v) in enumerate(ranked, 1):
+        print(f"  {i}. {s}  {pct_str(v)}  {mom_grade(v)}")
+else:
+    print("  (no symbols with enough data)")
+if na_list:
+    print("excluded (N/A):", ", ".join(na_list))
+
 show_chart(mom_map, title="22d momentum — NVDA/MU/SNDK/AVGO", series_label="mom")
 `,
   },
@@ -234,8 +277,9 @@ for sym in TICKERS:
         f"macd_h={fmt(hv,4)}  %B={fmt(pb,3)}"
     )
 
-scoreboard.sort(key=lambda x: (-x[1], -(x[3] or -1e9)))
-print("rank:", " > ".join(f"{s}({sc})" for s, sc, *_ in scoreboard))
+# Prefer higher score; break ties with momentum (N/A mom sorts last)
+scoreboard.sort(key=lambda x: (-x[1], -(x[3] if x[3] is not None else -1e9)))
+print("rank (by score):", " > ".join(f"{s}({sc})" for s, sc, *_ in scoreboard))
 show_chart(norm, title="Multi Factor basket — normalized close", series_label="norm")
 `,
   },
