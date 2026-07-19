@@ -41,13 +41,17 @@ gs-quant에서 포팅한 테스트 통과.
 - [x] `scripts/setup-env.sh`: 대화형 터미널 스크립트로 인증 정보 입력 (소스에 시크릿 없음)
 - [x] `scripts/pre-commit-hook.sh`: API 키·DB URL·토큰 포함된 커밋 차단
 - [x] Python + TypeScript 클라이언트 예제 (`examples/vibequant_client.py`, `examples/vibequant-client.ts`)
+- [x] Python 제공자 레이어: `vi_quant/providers/` — UnifiedProvider (TOSS + Yahoo Finance + Mock), 모든 5개 함수 백엔드 간 동일 시그니처
+- [x] `docs/PROVIDER_API_MATCHING.md` — TOSS ↔ Yahoo Finance ↔ VibeQuant 통합 인터페이스 매핑
+- [x] `Dockerfile` + `docker-compose.yml` — 로컬 백테스트 환경 (Jupyter + Mock 제공자)
+- [x] `notebooks/01_backtest_demo.py` — 결정론적 Mock 백테스트 데모 (자격증명 불필요)
 - [x] 보안 정책 문서 ([SECURITY.md](SECURITY.md) — LLM 판독 가능)
 - [ ] Vercel 배포 (무료 티어) + Neon·Upstash 연동
 - [ ] `vi_quant/data/`를 백엔드 REST API 호출로 연결 (현재 stub 교체)
 - [ ] End-to-end 노트북 1개: Python → 백엔드 → Yahoo Finance → timeseries
 
 **Exit 기준:** `VibeQuantClient.getPriceSeries("yahoo", "AAPL")`가 DataFrame 반환;
-`vi_quant.DataSet('VI_EQUITY_EOD').get_data(...)`가 백엔드를 통해 동작.
+`vi_quant.providers.get_provider().fetch_candles("005930")`가 백엔드를 통해 동작.
 
 ## Phase 2 — 가격 결정, 리스크 & 백테스트 코어
 

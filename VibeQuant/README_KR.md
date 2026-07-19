@@ -76,7 +76,8 @@ GS Quant와 동일한 3계층 아키텍처. Marquee 원격 백엔드를 플러�
 
 | 계층 | 모듈 | GS Quant 백엔드 | VibeQuant 백엔드 |
 |---|---|---|---|
-| 데이터 | `vi_quant/data/` | Marquee Data APIs | yfinance, FRED, 로컬 Parquet/DuckDB 저장소 |
+| 데이터 | `vi_quant/providers/` | Marquee Data APIs | 통합 제공자: TOSS + Yahoo Finance + Mock (자동 감지) |
+| 데이터 | `backend/` | — | REST 데이터 서버 (Express+TS, Redis 캐시, Neon DB, Vercel) |
 | 모델 | `vi_quant/instrument/`, `vi_quant/risk/` | GS 가격·리스크 엔진 | QuantLib + 로컬 분석 |
 | 애플리케이션 | `vi_quant/markets/`, `vi_quant/backtests/` | Marquee 포트폴리오·백테스트 서비스 | 로컬 포트폴리오 저장소 + 로컬 백테스트 엔진 |
 
@@ -90,6 +91,7 @@ GS Quant와 동일한 3계층 아키텍처. Marquee 원격 백엔드를 플러�
 | [README_KR.md](README_KR.md) | 한국어 README (이 문서) |
 | [ROADMAP_KR.md](ROADMAP_KR.md) | 한국어 로드맵 |
 | [docs/API_MAPPING.md](docs/API_MAPPING.md) | GS → VI API 매핑표 (영문) |
+| [docs/PROVIDER_API_MATCHING.md](docs/PROVIDER_API_MATCHING.md) | TOSS ↔ Yahoo Finance ↔ VibeQuant 통합 인터페이스 매핑 (영문) |
 | [docs/OFFICIAL_DOCS_GUIDE.md](docs/OFFICIAL_DOCS_GUIDE.md) | 공식 GS Quant 문서 대응 매뉴얼 (영문) |
 | [SECURITY.md](SECURITY.md) | 보안 정책 문서 (영문, LLM 판독 가능) |
 
@@ -104,11 +106,47 @@ GS Quant와 동일한 3계층 아키텍처. Marquee 원격 백엔드를 플러�
 | `vi_quant.timeseries` (algebra, statistics, econometrics, technicals, analysis) | 구현 완료 (gs-quant에서 vendoring, 완전 로컬 동작) |
 | `vi_quant.datetime` (캘린더, 상대일자, 일수 계산) | 구현 완료 (vendored; 공휴일 데이터셋은 Phase 1 예정) |
 | `vi_quant.data` (`Dataset` 제공자: yfinance/FRED/로컬) | Stub — Phase 1 |
+| `vi_quant.providers` (UnifiedProvider: TOSS + Yahoo Finance + Mock) | 구현 완료 (자동 감지, 모든 백엔드에서 동일 시그니처) |
 | `backend/` (Express + TypeScript REST 데이터 서버) | 구현 완료 (Yahoo Finance + TOSS API, Upstash Redis, Neon DB, Vercel 배포 준비) |
+| `Dockerfile` + `docker-compose.yml` | 구현 완료 (로컬 백테스트, `docker compose up`) |
 | `vi_quant.instrument` / `vi_quant.risk` (가격 결정) | 미착수 — Phase 2 |
 | `vi_quant.backtests`, `vi_quant.markets` (포트폴리오) | 미착수 — Phase 2+ |
 
 전체 계획은 [ROADMAP_KR.md](ROADMAP_KR.md)를 참조하세요.
+
+## 데이터 제공자 — 함수명 변경 없이 백엔드 교체
+
+```python
+from vi_quant.providers import get_provider
+
+# 자동 감지: TOSS(키 있으면) → Yahoo(항상 가능) → Mock(폴백)
+p = get_provider()
+
+# 모든 백엔드에서 동일한 5개 함수:
+p.fetch_candles("AAPL", 260)           # → [{time, open, high, low, close, volume}]
+p.fetch_prices(["AAPL", "TSLA"])       # → {"AAPL": {price, change, changeRate}}
+p.fetch_asset("005930")                # → {symbol, name, exchange, currency}
+p.provider_name()                      # → "toss" | "yahoo" | "mock"
+p.is_available()                       # → True | False
+
+# 특정 제공자 강제:
+p = get_provider("yahoo")              # Yahoo Finance (글로벌, 키 불필요)
+p = get_provider("mock")               # 결정론적 PRNG (자격증명 불필요)
+```
+
+자세한 매핑은 [docs/PROVIDER_API_MATCHING.md](docs/PROVIDER_API_MATCHING.md) 참조.
+
+## Docker 빠른 시작
+
+```bash
+cd VibeQuant
+docker compose build          # 컨테이너 빌드
+docker compose run vibequant  # Mock 제공자로 대화형 Python
+docker compose up -d          # Jupyter 서버 :8888 포트
+
+# Yahoo Finance로 강제 (자격증명 불필요):
+VI_QUANT_PROVIDER=yahoo docker compose run vibequant
+```
 
 ## 라이선스
 
