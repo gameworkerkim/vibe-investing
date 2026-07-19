@@ -1,9 +1,9 @@
-import { applyI18n, detectLang, t } from "./i18n.js?v=13";
-import { API_CATALOG, noteFor } from "./api-catalog.js?v=13";
-import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=13";
-import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=13";
-import { clearChart, renderChartFromWindow } from "./chart-view.js?v=13";
-import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=13";
+import { applyI18n, detectLang, t } from "./i18n.js?v=14";
+import { API_CATALOG, noteFor } from "./api-catalog.js?v=14";
+import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=14";
+import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=14";
+import { clearChart, renderChartFromWindow } from "./chart-view.js?v=14";
+import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=14";
 
 const codeEl = document.getElementById("code");
 const outputEl = document.getElementById("output");
