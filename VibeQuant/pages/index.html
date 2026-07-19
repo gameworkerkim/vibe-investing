@@ -8,7 +8,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./css/app.css?v=18" />
+  <link rel="stylesheet" href="./css/app.css?v=19" />
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -148,6 +148,51 @@
   </p>
 
   <section id="workspace" class="workspace">
+    <div class="pane llm-pane llm-prompt-block">
+      <div class="pane-head llm-prompt-head">
+        <div>
+          <h2 data-i18n="llm_title">LLM 프롬프트 입력</h2>
+          <p class="runtime-limits" data-i18n="llm_sub">
+            금융(미국·한국 주식·크립토)만. DeepSeek가 답하거나 vi_browser 파이썬을 생성해 실행합니다. 30초에 1회.
+          </p>
+          <p id="llm-status" class="llm-status" data-i18n="llm_status_checking">DeepSeek 상태 확인 중…</p>
+        </div>
+        <div class="pane-actions llm-actions">
+          <label class="llm-model-label" for="llm-model">
+            <span data-i18n="llm_model">모델</span>
+            <select id="llm-model" class="lang-select" aria-label="DeepSeek model">
+              <option value="pro" selected>V4 Pro</option>
+              <option value="flash">V4 Flash</option>
+            </select>
+          </label>
+          <button type="button" id="btn-copy-prompt" class="btn ghost btn-icon" data-i18n-aria-label="copy" data-i18n-title="copy" aria-label="복사" title="복사">
+            <svg class="icon-copy" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+          </button>
+          <button type="button" id="btn-llm" class="btn primary" aria-busy="false">
+            <span class="btn-spinner" aria-hidden="true"></span>
+            <span class="btn-label" data-i18n="llm_run">실행</span>
+          </button>
+        </div>
+      </div>
+      <div id="llm-progress" class="llm-progress" hidden aria-live="polite">
+        <div class="llm-progress-row">
+          <span class="llm-spinner" aria-hidden="true"></span>
+          <span id="llm-progress-label" class="llm-progress-label">DeepSeek 호출 중…</span>
+        </div>
+        <div class="llm-progress-track" aria-hidden="true">
+          <div class="llm-progress-bar"></div>
+        </div>
+      </div>
+      <div id="llm-prompt-chips" class="examples-chips llm-prompt-chips" role="list"></div>
+      <textarea id="llm-prompt" class="code llm-prompt" spellcheck="true" data-i18n-placeholder="llm_placeholder" aria-label="LLM Quant Prompt"
+        placeholder="예: NVDA·MU·SNDK·AVGO 22일 모멘텀을 비교하고 랭킹을 알려줘"></textarea>
+      <p class="hint" data-i18n="llm_hint">
+        비금융 질문은 거부되며 1분간 쿨다운. API 키는 Worker 시크릿(setup-deepseek.sh) — 브라우저에 없음. 아카이브·사람 평가는 후순위.
+      </p>
+    </div>
+
     <div class="pane input-pane">
       <div class="pane-head">
         <div>
@@ -158,6 +203,11 @@
           </p>
         </div>
         <div class="pane-actions">
+          <button type="button" id="btn-copy-code" class="btn ghost btn-icon" data-i18n-aria-label="copy" data-i18n-title="copy" aria-label="복사" title="복사">
+            <svg class="icon-copy" viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+              <path fill="currentColor" d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+          </button>
           <button type="button" id="btn-clear" class="btn ghost" data-i18n="clear">Clear</button>
           <button type="button" id="btn-example" class="btn ghost" data-i18n="load_example">골든 샘플</button>
           <button type="button" id="btn-run" class="btn primary" data-i18n="run">실행</button>
@@ -168,47 +218,8 @@
       <p class="hint" data-i18n="hint">
         Pyodide(WASM)로 브라우저 실행. 시세는 VibeQuant Worker(Yahoo) / mock — Goldman Sachs 아님. 차트: show_chart(...)
       </p>
-
-      <div class="llm-prompt-block">
-        <div class="pane-head llm-prompt-head">
-          <div>
-            <h2 data-i18n="llm_title">LLM Quant Prompt</h2>
-            <p class="runtime-limits" data-i18n="llm_sub">
-              금융(미국·한국 주식·크립토)만. DeepSeek가 답하거나 vi_browser 파이썬을 생성해 실행합니다. 30초에 1회.
-            </p>
-            <p id="llm-status" class="llm-status" data-i18n="llm_status_checking">DeepSeek 상태 확인 중…</p>
-          </div>
-          <div class="pane-actions llm-actions">
-            <label class="llm-model-label" for="llm-model">
-              <span data-i18n="llm_model">Model</span>
-              <select id="llm-model" class="lang-select" aria-label="DeepSeek model">
-                <option value="pro" selected>V4 Pro</option>
-                <option value="flash">V4 Flash</option>
-              </select>
-            </label>
-            <button type="button" id="btn-llm" class="btn primary" aria-busy="false">
-              <span class="btn-spinner" aria-hidden="true"></span>
-              <span class="btn-label" data-i18n="llm_run">프롬프트 실행</span>
-            </button>
-          </div>
-        </div>
-        <div id="llm-progress" class="llm-progress" hidden aria-live="polite">
-          <div class="llm-progress-row">
-            <span class="llm-spinner" aria-hidden="true"></span>
-            <span id="llm-progress-label" class="llm-progress-label">DeepSeek 호출 중…</span>
-          </div>
-          <div class="llm-progress-track" aria-hidden="true">
-            <div class="llm-progress-bar"></div>
-          </div>
-        </div>
-        <div id="llm-prompt-chips" class="examples-chips llm-prompt-chips" role="list"></div>
-        <textarea id="llm-prompt" class="code llm-prompt" spellcheck="true" data-i18n-placeholder="llm_placeholder" aria-label="LLM Quant Prompt"
-          placeholder="예: NVDA·MU·SNDK·AVGO 22일 모멘텀을 비교하고 랭킹을 알려줘"></textarea>
-        <p class="hint" data-i18n="llm_hint">
-          비금융 질문은 거부되며 1분간 쿨다운. API 키는 Worker 시크릿(setup-deepseek.sh) — 브라우저에 없음. 아카이브·사람 평가는 후순위.
-        </p>
-      </div>
     </div>
+
     <div class="pane result-pane">
       <div class="pane-head">
         <h2 data-i18n="result">결과</h2>
@@ -242,7 +253,7 @@
     </aside>
   </footer>
 
-  <script src="./js/runtime-config.js?v=18"></script>
-  <script type="module" src="./js/app.js?v=18"></script>
+  <script src="./js/runtime-config.js?v=19"></script>
+  <script type="module" src="./js/app.js?v=19"></script>
 </body>
 </html>

@@ -1,11 +1,11 @@
-import { applyI18n, detectLang, t } from "./i18n.js?v=18";
-import { API_CATALOG, noteFor } from "./api-catalog.js?v=18";
-import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=18";
-import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=18";
-import { clearChart, renderChartFromWindow } from "./chart-view.js?v=18";
-import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=18";
-import { requestQuantPrompt } from "./llm-prompt.js?v=18";
-import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=18";
+import { applyI18n, detectLang, t } from "./i18n.js?v=19";
+import { API_CATALOG, noteFor } from "./api-catalog.js?v=19";
+import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=19";
+import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=19";
+import { clearChart, renderChartFromWindow } from "./chart-view.js?v=19";
+import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=19";
+import { requestQuantPrompt } from "./llm-prompt.js?v=19";
+import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=19";
 
 const codeEl = document.getElementById("code");
 const outputEl = document.getElementById("output");
@@ -13,6 +13,8 @@ const statusEl = document.getElementById("runtime-status");
 const runBtn = document.getElementById("btn-run");
 const exampleBtn = document.getElementById("btn-example");
 const clearBtn = document.getElementById("btn-clear");
+const copyCodeBtn = document.getElementById("btn-copy-code");
+const copyPromptBtn = document.getElementById("btn-copy-prompt");
 const llmBtn = document.getElementById("btn-llm");
 const llmBtnLabel = llmBtn?.querySelector(".btn-label");
 const llmPromptEl = document.getElementById("llm-prompt");
@@ -30,6 +32,35 @@ const sampleLabel = document.getElementById("sample-label");
 const iosBanner = document.getElementById("ios-banner");
 const dataSourceBanner = document.getElementById("data-source-banner");
 const examplesChips = document.getElementById("examples-chips");
+
+async function copyText(text, btn) {
+  const value = String(text || "");
+  if (!value) return;
+  try {
+    await navigator.clipboard.writeText(value);
+  } catch {
+    const ta = document.createElement("textarea");
+    ta.value = value;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    document.body.removeChild(ta);
+  }
+  if (!btn) return;
+  const label = tx("copied", "Copied");
+  btn.classList.add("is-copied");
+  btn.setAttribute("title", label);
+  btn.setAttribute("aria-label", label);
+  window.setTimeout(() => {
+    btn.classList.remove("is-copied");
+    const restore = tx("copy", "Copy");
+    btn.setAttribute("title", restore);
+    btn.setAttribute("aria-label", restore);
+  }, 1200);
+}
 
 let lang = detectLang();
 let activeSampleId = "ex-multifactor";
@@ -267,10 +298,15 @@ clearBtn?.addEventListener("click", () => {
   codeEl.focus();
 });
 
+copyCodeBtn?.addEventListener("click", () => copyText(codeEl?.value || "", copyCodeBtn));
+copyPromptBtn?.addEventListener("click", () => copyText(llmPromptEl?.value || "", copyPromptBtn));
+
 function setBusy(busy) {
   runBtn && (runBtn.disabled = busy);
   exampleBtn && (exampleBtn.disabled = busy);
   clearBtn && (clearBtn.disabled = busy);
+  copyCodeBtn && (copyCodeBtn.disabled = busy);
+  copyPromptBtn && (copyPromptBtn.disabled = busy);
   llmBtn && (llmBtn.disabled = busy);
   if (llmModelEl) llmModelEl.disabled = busy;
   if (llmPromptEl) llmPromptEl.disabled = busy;

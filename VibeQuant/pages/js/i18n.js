@@ -36,6 +36,8 @@ export const STRINGS = {
     result: "Result",
     run: "Run",
     clear: "Clear",
+    copy: "Copy",
+    copied: "Copied",
     load_example: "Golden sample",
     code_placeholder: "# Pick an API sample above, or write VI browser Python…",
     hint:
@@ -56,11 +58,11 @@ export const STRINGS = {
       "Notice: This Quant tool is not investment advice. Do not use it for investing. Advice from a qualified professional must come first.",
     empty_code: "Enter Python code first.",
     example_note: "# Golden committee sample — VI browser API\n",
-    llm_title: "LLM Quant Prompt",
+    llm_title: "LLM prompt input",
     llm_sub:
       "Finance only (US/KR stocks, crypto). DeepSeek answers or builds vi_browser Python to run. 1 request / 30s.",
     llm_model: "Model",
-    llm_run: "Run prompt",
+    llm_run: "Run",
     llm_run_busy: "Running…",
     llm_placeholder: "e.g. Compare 22-day momentum for NVDA, MU, SNDK, AVGO and rank them",
     llm_hint:
@@ -110,6 +112,8 @@ export const STRINGS = {
     result: "결과",
     run: "실행",
     clear: "Clear",
+    copy: "복사",
+    copied: "복사됨",
     load_example: "골든 샘플",
     code_placeholder: "# 위 API 샘플을 고르거나 VI browser Python을 입력…",
     hint:
@@ -130,11 +134,11 @@ export const STRINGS = {
       "주의: 본 Quant는 투자 의견이 아니며 투자에 사용해서는 안 됩니다. 투자 전문가의 조언이 선행되어야 합니다.",
     empty_code: "먼저 Python 코드를 입력하세요.",
     example_note: "# 위원회 골든 샘플 — VI browser API\n",
-    llm_title: "LLM Quant Prompt",
+    llm_title: "LLM 프롬프트 입력",
     llm_sub:
       "금융(미국·한국 주식·크립토)만. DeepSeek가 답하거나 vi_browser 파이썬을 생성해 실행합니다. 30초에 1회.",
     llm_model: "모델",
-    llm_run: "프롬프트 실행",
+    llm_run: "실행",
     llm_run_busy: "실행 중…",
     llm_placeholder: "예: NVDA·MU·SNDK·AVGO 22일 모멘텀을 비교하고 랭킹을 알려줘",
     llm_hint:
@@ -183,6 +187,8 @@ export const STRINGS = {
     result: "结果",
     run: "运行",
     clear: "Clear",
+    copy: "复制",
+    copied: "已复制",
     load_example: "黄金示例",
     code_placeholder: "# 选择上方 API 示例，或编写 VI browser Python…",
     hint:
@@ -203,11 +209,11 @@ export const STRINGS = {
       "注意：本工具不构成投资意见，不得用于投资。须先听取合格专业人士建议。",
     empty_code: "请先输入 Python 代码。",
     example_note: "# 委员会黄金示例 — VI browser API\n",
-    llm_title: "LLM Quant Prompt",
+    llm_title: "LLM 提示输入",
     llm_sub:
       "仅限金融（美股/韩股/加密）。DeepSeek 直接回答或生成 vi_browser Python 并执行。每 30 秒 1 次。",
     llm_model: "模型",
-    llm_run: "运行提示",
+    llm_run: "运行",
     llm_run_busy: "运行中…",
     llm_placeholder: "例如：比较 NVDA、MU、SNDK、AVGO 的 22 日动量并排名",
     llm_hint:
@@ -255,6 +261,16 @@ export function applyI18n(lang) {
     const key = el.getAttribute("data-i18n-placeholder");
     const value = t(lang, key);
     if (value) el.setAttribute("placeholder", value);
+  });
+  document.querySelectorAll("[data-i18n-aria-label]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-aria-label");
+    const value = t(lang, key);
+    if (value) el.setAttribute("aria-label", value);
+  });
+  document.querySelectorAll("[data-i18n-title]").forEach((el) => {
+    const key = el.getAttribute("data-i18n-title");
+    const value = t(lang, key);
+    if (value) el.setAttribute("title", value);
   });
   const mapLink = document.getElementById("repo-mapping-link");
   if (mapLink) mapLink.href = MAPPING_DOC[lang] || MAPPING_DOC.en;

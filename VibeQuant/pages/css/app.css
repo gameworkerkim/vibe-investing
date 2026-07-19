@@ -498,26 +498,32 @@ body {
 
 .workspace {
   display: grid;
-  grid-template-columns: 1.05fr 0.95fr;
+  grid-template-columns: 1fr;
   gap: 0.85rem;
   padding-bottom: 2.5rem;
-}
-
-@media (max-width: 900px) {
-  .workspace {
-    grid-template-columns: 1fr;
-  }
 }
 
 .pane {
   display: flex;
   flex-direction: column;
-  min-height: 440px;
+  min-height: 0;
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: calc(var(--radius) + 2px);
   overflow: hidden;
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+}
+
+.llm-pane {
+  min-height: 0;
+}
+
+.input-pane .code {
+  min-height: 260px;
+}
+
+.result-pane {
+  min-height: 320px;
 }
 
 .pane-head {
@@ -546,6 +552,9 @@ body {
   display: flex;
   gap: 0.4rem;
   flex-shrink: 0;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
 }
 
 .btn {
@@ -593,6 +602,25 @@ body {
   padding: 0.4rem 0.7rem;
 }
 
+.btn.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.15rem;
+  height: 2.15rem;
+  padding: 0;
+  border-radius: 999px;
+}
+
+.btn.btn-icon .icon-copy {
+  display: block;
+}
+
+.btn.btn-icon.is-copied {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
 .code {
   flex: 1;
   width: 100%;
@@ -610,22 +638,20 @@ body {
 }
 
 .llm-prompt-block {
-  border-top: 1px solid var(--line);
-  padding: 0.85rem 1rem 1rem;
-  background: linear-gradient(180deg, rgba(126, 200, 255, 0.06), transparent 40%);
-}
-
-.llm-prompt-head {
-  margin-bottom: 0.55rem;
-}
-
-.llm-prompt {
-  min-height: 110px;
-  max-height: 220px;
+  background:
+    linear-gradient(180deg, rgba(126, 200, 255, 0.07), transparent 42%),
+    var(--panel);
 }
 
 .llm-prompt-chips {
-  margin: 0 0 0.65rem;
+  margin: 0;
+  padding: 0.65rem 1rem 0;
+}
+
+.llm-prompt {
+  min-height: 120px;
+  max-height: 240px;
+  flex: 0 1 auto;
 }
 
 .llm-status {
@@ -643,7 +669,7 @@ body {
 }
 
 .llm-progress {
-  margin: 0 0 0.75rem;
+  margin: 0.75rem 1rem 0;
   padding: 0.65rem 0.75rem;
   border: 1px solid rgba(182, 243, 77, 0.28);
   border-radius: var(--radius);
