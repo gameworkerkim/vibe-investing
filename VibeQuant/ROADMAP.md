@@ -1,25 +1,26 @@
 # VibeQuant Roadmap
 
+**Positioning:** **Not** a GS Quant replacement. A **multi-LLM quant committee basic stage**
+(educational sandbox OK) that borrows GS-style API names for familiarity.
+
 **Primary goals**
 
-1. **Replace GS Quant at the API level** (`gs_quant` → `vi_quant`, `Gs*` → `Vi*`), using open
-   data and open engines — not Marquee, not GS numbers.
-2. **Dashboard verification loop:** user types a Python quant script in a webview →
-   **Pyodide (WASM)** runs it → market data comes from **Cloudflare** → user verifies
-   tables/charts/stdout.
-3. **Cloudflare Free tier first.** Anything that needs Paid Workers, native QuantLib in-browser,
-   or server-side Python execution is deferred or marked unavailable.
+1. **Committee stage:** reproduce/verify LLM outputs on the same `vi_browser` APIs + Cloudflare data.
+2. **Dashboard verification loop:** webview Python → **Pyodide** → Worker candles → table/chart/stdout.
+3. **Cloudflare Free first.** What WASM/free cannot do is deferred and documented.
 
-Tracking baseline: `goldmansachs/gs-quant` @ release 2.1.1.
+**Sequence (normative)**
 
-**Guiding principle — thin vertical slice.** Ship one end-to-end path that actually runs:
+1. **Finish basic stage** (data, runner, charts, committee checklist) ← current
+2. **Backtesting** (edu/reproducible metrics: Sharpe / MDD / CAGR)
+3. **Community** — evaluate others’ quants on the same stage
+4. **LLM quant expansion** — committee workflows / agent bake-offs
 
-`Pages webview → Pyodide script → Worker `/api/v1/candles` → R2/D1 → timeseries result`
+**Thin vertical slice:**
 
-…then widen coverage. Do not expand the legacy Vercel/Neon/Upstash stack.
+`Pages → Pyodide → Worker /candles → R2/D1 → timeseries (+ later backtest)`
 
-Docs are written with cold free-tier/WASM constraints so multiple coding agents can implement
-against the same normative limits (not aspirational “eventually paid” features).
+Do not expand the legacy Vercel/Neon/Upstash stack.
 
 ## Phase 0 — Foundation (done / freeze)
 
@@ -65,35 +66,49 @@ against the same normative limits (not aspirational “eventually paid” featur
 3. Script uses Cloudflare-backed candles (not server-side Python).
 4. LIMITATIONS page lists every blocked GS/vi_quant feature for this path.
 
-## Phase 2 — Local/heavy parity (not free WASM)
+## Phase 2 — Educational backtest (on the committee stage)
 
-**Objective:** deepen GS API parity where WASM/free cannot go.
+**Objective:** reproducible mini-backtests in the sandbox — not a production research engine.
 
-- [ ] Repair stub boundaries (`Dataset`, calendars, `ViDataApi`) so failures are explicit
-- [ ] Local QuantLib pricing path (`Instrument.calc`) — **desktop/CI only**, not dashboard WASM
-- [ ] Optional: sync Cloudflare R2 → local research notebooks
-- [ ] Backtest engine locally; export summary artifacts to R2 if useful
+- [ ] Thin `vi_browser` backtest helper (signals → positions → equity curve)
+- [ ] Metrics: return, MDD, simple Sharpe, CAGR — stdout + chart
+- [ ] Golden backtest script + committee checklist items
+- [ ] Document day/memory caps (WASM)
 
-**Exit:** one rename-friendly pricing example runs **locally**; dashboard still WASM-subset only.
+**Exit:** same script + same candles ⇒ same backtest numbers twice in the webview.
 
-## Phase 3 — Portfolio analytics (open models)
+## Phase 3 — Community evaluation
 
-- [ ] Factor / scenario / hedge modules on open data (local first)
-- [ ] Dashboard may call precomputed R2 artifacts; not full in-browser optimization
+**Objective:** run and score **other people’s** quants on the same stage.
 
-## Phase 4 — Distribution
+- [ ] Share format (gist/repo link or R2 artifact)
+- [ ] Rubric: reproducibility, risk metrics, data source, disclosed limits
+- [ ] UI: load shared sample → run → compare metrics
+- [ ] Safety: browser-only execution; never server `exec`
 
-- [ ] PyPI `vi-quant` (local SDK)
-- [ ] Published docs site; parity status per symbol
-- [ ] Compatibility harness for public symbols
+**Exit:** one external script can be reproduced and scored on the stage.
 
-**Won't-do (core):** Marquee UI, GS auth, ESG/Carbon/Workspaces long-tail shims,
-server-side execution of arbitrary user Python, promising free-tier bulk global ingest.
+## Phase 4 — LLM quant expansion
+
+**Objective:** wire the stage to multi-LLM committee workflows.
+
+- [ ] Golden prompts + output schema (script / assumptions / risks)
+- [ ] Multi-LLM bake-off harness (shared market snapshot)
+- [ ] Optional local `vi_quant` heavy path (QuantLib desktop-only)
+
+## Phase 5 — Distribution
+
+- [ ] PyPI `vi-quant` (optional local SDK)
+- [ ] Docs site; public committee checklist
+- [ ] CI: pytest + lint · `CONTRIBUTING.md`
+
+**Won't-do (core):** claiming GS Quant replacement, Marquee/GS auth, server-side arbitrary Python,
+free-tier bulk global ingest, “production hedge-fund OMS”.
 
 ## Non-Goals
 
-- Numerically identical GS / Marquee results
-- Full `vi_quant` inside Pyodide
+- Numerically identical GS / Marquee results, or replacing GS Quant
+- Full `vi_quant` / QuantLib inside Pyodide
 - Replacing Cloudflare Free with multi-SaaS “for convenience”
 - Streamlit/NiceGUI as the primary hosted dashboard on Cloudflare
 

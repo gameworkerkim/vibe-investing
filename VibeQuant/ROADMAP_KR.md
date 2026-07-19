@@ -1,24 +1,26 @@
 # VibeQuant 로드맵 (한국어)
 
+**포지션:** GS Quant **대체가 아님.** API 스타일만 빌린 **멀티 LLM 퀀트 위원회 기본 스테이지**
+(+ 교육용 샌드박스 OK).
+
 **핵심 목표**
 
-1. **GS Quant를 API 레벨에서 대체** (`gs_quant` → `vi_quant`, `Gs*` → `Vi*`).
-   오픈 데이터·엔진 사용 — Marquee/GS 수치 동일 아님.
-2. **대시보드 검증 루프:** 웹뷰에 Python 퀀트 스크립트 입력 → **Pyodide (WASM)** 실행 →
-   시세는 **Cloudflare** → 표/차트/stdout으로 검증.
-3. **Cloudflare 무료 티어 우선.** Paid Workers, 브라우저 QuantLib, 서버측 Python 실행이
-   필요한 기능은 연기하거나 불가라고 표기.
+1. **위원회 스테이지:** 같은 `vi_browser` API·같은 Cloudflare 시세로 LLM 산출물을 재현·검증.
+2. **대시보드 검증 루프:** 웹뷰 Python → **Pyodide** → Worker 시세 → 표/차트/stdout.
+3. **Cloudflare Free 우선.** WASM/무료로 안 되는 것은 로컬·후속 Phase로 연기하고 문서에 명시.
 
-추적 기준: `goldmansachs/gs-quant` @ release 2.1.1.
+**진행 순서 (규범)**
 
-**원칙 — 얇은 수직 슬라이스.** 실제로 도는 경로 하나를 먼저 완성:
+1. **기본 스테이지 완성** (시세·실행·차트·위원회 체크리스트) ← 현재
+2. **백테스트** (교육용·재현 가능 지표: Sharpe / MDD / CAGR 등)
+3. **커뮤니티** — 타인이 올린 퀀트 스크립트·결과를 같은 스테이지에서 평가
+4. **LLM 퀀트 확장** — 위원회 워크플로·에이전트 산출물 자동화
 
-`Pages 웹뷰 → Pyodide 스크립트 → Worker `/api/v1/candles` → R2/D1 → timeseries 결과`
+**원칙 — 얇은 수직 슬라이스.**
 
-그다음 커버리지를 넓힘. 레거시 Vercel/Neon/Upstash 스택은 확장하지 않음.
+`Pages → Pyodide → Worker /candles → R2/D1 → timeseries (+ 이후 backtest)`
 
-문서는 무료 티어·WASM 한계를 규범으로 적어, 여러 코딩 에이전트가 동일한 제약 위에서
-구현·비교 검증할 수 있게 한다 (희망적 “나중에 유료” 기능으로 문서를 쓰지 않음).
+레거시 Vercel/Neon/Upstash는 확장하지 않음.
 
 ## Phase 0 — 기반 (완료 / 동결)
 
@@ -64,37 +66,51 @@
 3. 스크립트는 Cloudflare 시세를 사용 (서버 Python 실행 아님).
 4. LIMITATIONS에 이 경로에서 막히는 GS/`vi_quant` 기능이 모두 나열됨.
 
-## Phase 2 — 로컬/헤비 패리티 (무료 WASM 아님)
+## Phase 2 — 교육용 백테스트 (위원회 스테이지 위)
 
-**목표:** WASM/무료로 못 가는 GS API 패리티를 로컬에서 심화.
+**목표:** 샌드박스에서 **재현 가능한** 단순 백테스트. 프로덕션 연구 엔진이 아님.
 
-- [ ] stub 경계 수리 (`Dataset`, 캘린더, `ViDataApi`) — 실패를 명시적으로
-- [ ] 로컬 QuantLib 가격 경로 (`Instrument.calc`) — **데스크톱/CI만**, 대시보드 WASM 아님
-- [ ] 선택: Cloudflare R2 → 로컬 연구 노트북 동기화
-- [ ] 로컬 백테스트; 요약 아티팩트는 필요 시 R2로 export
+- [ ] `vi_browser` 백테스트 미니 API (예: 신호 시계열 → 포지션 → equity curve)
+- [ ] 성과 지표: 수익률, MDD, Sharpe(단순), CAGR — stdout + 차트
+- [ ] 골든 백테스트 스크립트 + 위원회 체크리스트 항목 추가
+- [ ] 메모리/일수 상한 문서화 (WASM)
 
-**Exit:** rename 친화적 가격 예제 1개가 **로컬**에서 동작; 대시보드는 여전히 WASM 서브셋만.
+**Exit:** 웹뷰에서 동일 스크립트·동일 시세로 백테스트 숫자가 두 번 일치.
 
-## Phase 3 — 포트폴리오 분석 (오픈 모델)
+## Phase 3 — 커뮤니티 평가
 
-- [ ] 팩터/시나리오/헤지 모듈 (로컬 우선)
-- [ ] 대시보드는 사전계산 R2 아티팩트 호출 가능; 브라우저 풀 최적화 아님
+**목표:** 타인이 만든 퀀트를 **같은 스테이지**에서 돌려보고 평가.
 
-## Phase 4 — 배포
+- [ ] 스크립트/결과 공유 포맷 (gist·레포 링크 또는 R2 아티팩트)
+- [ ] 평가 루브릭: 재현성, 리스크 지표, 데이터 소스, 한계 고지
+- [ ] UI: “공유 샘플 불러오기 → 실행 → 지표 비교”
+- [ ] 스팸/악성 코드: 브라우저 전용 실행 유지, 서버 `exec` 금지
 
-- [ ] PyPI `vi-quant` (로컬 SDK)
-- [ ] 문서 사이트; 심볼별 패리티 상태
-- [ ] 공개 심볼 호환성 하네스
+**Exit:** 외부 스크립트 1개를 위원회 스테이지에서 재현·평가 가능.
 
-**코어 Won't-do:** Marquee UI, GS 인증, ESG/Carbon 롱테일 shim,
-임의 사용자 Python의 서버 실행, 무료 티어 전 세계 대량 ingest 약속.
+## Phase 4 — LLM 퀀트 확장
+
+**목표:** 위원회 워크플로를 LLM 에이전트와 연결.
+
+- [ ] 골든 프롬프트 + 산출물 스키마 (스크립트 / 가정 / 리스크)
+- [ ] 멀티 LLM bake-off 하네스 (동일 시세 스냅샷)
+- [ ] (선택) 로컬 `vi_quant` 헤비 경로 — QuantLib 등은 데스크톱만
+
+## Phase 5 — 배포·배포물
+
+- [ ] PyPI `vi-quant` (로컬 SDK, 선택)
+- [ ] 문서 사이트; 위원회 체크리스트 공개
+- [ ] CI: pytest + lint · `CONTRIBUTING.md`
+
+**코어 Won't-do:** GS Quant 대체 주장, Marquee/GS 인증, 서버측 임의 Python,
+무료 티어 전 세계 대량 ingest, “프로덕션 헤지펀드 OMS” 약속.
 
 ## Non-Goals
 
-- GS / Marquee와 수치 동일
-- Pyodide 안 전체 `vi_quant`
+- GS / Marquee와 수치 동일 또는 GS Quant 대체
+- Pyodide 안 전체 `vi_quant` / QuantLib
 - 편의상 멀티 SaaS로 Cloudflare Free를 대체
-- Cloudflare 위 주 대시보드로 Streamlit/NiceGUI
+- Cloudflare 위 Streamlit/NiceGUI 주 대시보드
 
 ## 관련 문서
 

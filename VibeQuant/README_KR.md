@@ -4,7 +4,12 @@ GS Quant의 오픈소스 버전으로 Vibe Quant 웹사이트 데모입니다. �
 
 *LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.*
 
-신뢰는 예측 정확도가 아니라 **오픈소스 기여**와 **Python으로 재현·검증 가능한 퀀트 워크플로**에 둡니다. ([GS Quant](https://github.com/goldmansachs/gs-quant) API 대응: `gs_quant` → `vi_quant`, `Gs*` → `Vi*`.)
+신뢰는 예측 정확도가 아니라 **오픈소스 기여**와 **Python으로 재현·검증 가능한 퀀트 워크플로**에 둡니다.
+
+**포지션 (규범):** GS Quant **대체가 아닙니다.** API 스타일(`gs_quant` → `vi_quant`, `Gs*` → `Vi*`)만 빌려
+멀티 LLM 퀀트 위원회가 같은 스테이지에서 실행·검증하는 **기본 스테이지 / 교육용 샌드박스**입니다.
+기본 기능 완성 후 → 백테스트 → 타인이 만든 퀀트를 평가하는 커뮤니티 → LLM 퀀트 기능으로 확장합니다.
+전체 매핑: [docs/API_MAPPING_KR.md](docs/API_MAPPING_KR.md).
 
 역할 분리 (규범):
 
@@ -13,18 +18,11 @@ GS Quant의 오픈소스 버전으로 Vibe Quant 웹사이트 데모입니다. �
 | 시세 (호가·캔들·자산) | **Cloudflare** (Workers + Pages + D1 + R2 + CDN) | SaaS 분산 제거, 무료 티어 우선 |
 | 퀀트 계산 (스크립트·시계열·백테스트) | **브라우저 Python / Pyodide (WASM)** | Worker에서 풀 Python/`vi_quant` 불가, 서버 `exec` 금지 |
 
-> **네이밍:** 모든 `Gs*` → `Vi*` (Vibe Investing).
-> `gs_quant` → `vi_quant`, `GsSession` → `ViSession` 등.
-> 전체 매핑: [docs/API_MAPPING_KR.md](docs/API_MAPPING_KR.md).
-
 ## 명시적 목표
 
-1. **GS Quant 대체 (API 레벨):** 모듈/시그니처 호환(`Gs`→`Vi`), Marquee 대신 오픈 데이터·엔진.
-   골드만삭스 모델과 **수치 동일은 약속하지 않음**.
-2. **대시보드 스크립트 검증:** 웹뷰에 Python 퀀트 스크립트 입력 → 브라우저(Pyodide)가
-   Cloudflare 시세로 실행 → 차트/표/stdout으로 검증.
-3. **Cloudflare 무료 티어 우선:** Vercel / Neon / Upstash 없이 데이터+UI 배포.
-   무료·WASM에 안 맞는 기능은 **한계로 명시**하고 암묵적으로 약속하지 않음.
+1. **LLM 위원회 기본 스테이지:** 같은 API·같은 시세로 산출물을 재현·검증 (교육용 샌드박스 OK).
+2. **대시보드 스크립트 검증:** 웹뷰 Python → Pyodide → Cloudflare 시세 → 차트/표/stdout.
+3. **Cloudflare 무료 티어 우선:** 한계는 LIMITATIONS에 명시. GS/Marquee 수치 동일·전체 `vi_quant` WASM은 **비목표**.
 
 영문: [README.md](README.md) · [ROADMAP.md](ROADMAP.md).
 
@@ -40,18 +38,7 @@ GS Quant의 오픈소스 버전으로 Vibe Quant 웹사이트 데모입니다. �
 
 ## 목표 아키텍처
 
-```
-┌─────────────────────────── Cloudflare Free ───────────────────────────┐
-│  Pages (대시보드 웹뷰 + Pyodide)                                        │
-│       │ 시세 JSON fetch                                                │
-│       ▼                                                                │
-│  Worker (Hono) ── Cache API ── D1 (메타/인덱스) ── R2 (캔들 본체)        │
-│       │                                                                │
-│  Cron (하루 ≤1회) ── 소규모 watchlist Yahoo ingest → R2 + D1            │
-└────────────────────────────────────────────────────────────────────────┘
-        ▲
-        │ 선택: 로컬 pip vi_quant (연구용; 대시보드 경로 아님)
-```
+![Vibe Quant Cloudflare Free 아키텍처 — Pages+Pyodide, Worker, Cache/D1/R2, 선택적 로컬 vi_quant](images/Vibe_Quant_CloudFlare.png)
 
 상세: [docs/ARCHITECTURE_TARGET_KR.md](docs/ARCHITECTURE_TARGET_KR.md) ·
 한계: [docs/LIMITATIONS_KR.md](docs/LIMITATIONS_KR.md).

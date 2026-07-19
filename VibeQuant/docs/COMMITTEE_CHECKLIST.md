@@ -1,7 +1,8 @@
 # Multi-LLM Quant Committee — Verification Checklist
 
-Vibe Quant is the harness for the **quant committee of an AI quant hedge fund**:
-same APIs, same market data, reproducible outputs across LLMs.
+Vibe Quant is the **basic stage** for the **quant committee of an AI quant hedge fund**
+(educational sandbox OK): same APIs, same market data, reproducible outputs across LLMs.
+It is **not** a GS Quant replacement. After basics: backtests → community review → LLM quant features.
 
 Live runner: https://vibequant-web.pages.dev/#workspace
 

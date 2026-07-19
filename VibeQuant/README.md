@@ -4,7 +4,13 @@ An open-source take on [GS Quant](https://github.com/goldmansachs/gs-quant) — 
 
 *LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.*
 
-Trust here is not oracle-level forecast accuracy. It comes from **open-source contribution** and a **Python-verifiable quant workflow** you can reproduce yourself (`gs_quant` → `vi_quant`, `Gs*` → `Vi*`).
+Trust here is not oracle-level forecast accuracy. It comes from **open-source contribution** and a **Python-verifiable quant workflow** you can reproduce yourself.
+
+**Positioning (normative):** This is **not** a GS Quant replacement. We borrow the API style
+(`gs_quant` → `vi_quant`, `Gs*` → `Vi*`) as a familiar surface for a
+**multi-LLM quant committee stage / educational sandbox**. After the basic stage is solid:
+backtesting → community review of others’ quants → LLM-native quant features.
+Full map: [docs/API_MAPPING.md](docs/API_MAPPING.md).
 
 Product split (normative):
 
@@ -13,20 +19,11 @@ Product split (normative):
 | Market data (quotes, candles, assets) | **Cloudflare** (Workers + Pages + D1 + R2 + CDN) | Single platform, free-tier first |
 | Quant computation (scripts, timeseries, backtests) | **Browser Python via Pyodide (WASM)** | Workers cannot run full Python/`vi_quant`; no server-side `exec` |
 
-> **Naming:** every `Gs*` symbol becomes `Vi*` (Vibe Investing).
-> `gs_quant` → `vi_quant`, `GsSession` → `ViSession`, `GsDataApi` → `ViDataApi`.
-> Full map: [docs/API_MAPPING.md](docs/API_MAPPING.md).
-
 ## Explicit goals
 
-1. **GS Quant replacement (API-level):** same modules / signatures (`Gs`→`Vi`), open data and
-   open engines instead of Marquee. **Not** numerically identical to Goldman Sachs models.
-2. **Dashboard script verification:** user enters a Python quant script in a webview; the
-   browser (Pyodide) executes it against Cloudflare-served market data; charts/tables/stdout
-   are shown for verification.
-3. **Cloudflare Free tier first:** deploy data + UI without Vercel / Neon / Upstash.
-   Features that do not fit free-tier or WASM limits are **documented as unavailable**, not
-   silently promised.
+1. **LLM committee basic stage:** same APIs + same market data for reproducible verification (edu sandbox OK).
+2. **Dashboard script verification:** webview Python → Pyodide → Cloudflare candles → chart/table/stdout.
+3. **Cloudflare Free tier first:** limits live in LIMITATIONS. Not goals: GS/Marquee number parity, full `vi_quant` in WASM.
 
 Korean docs: [README_KR.md](README_KR.md) · [ROADMAP_KR.md](ROADMAP_KR.md).
 
@@ -42,18 +39,7 @@ Korean docs: [README_KR.md](README_KR.md) · [ROADMAP_KR.md](ROADMAP_KR.md).
 
 ## Target architecture
 
-```
-┌─────────────────────────── Cloudflare Free ───────────────────────────┐
-│  Pages (dashboard webview + Pyodide)                                   │
-│       │ fetch market JSON                                              │
-│       ▼                                                                │
-│  Worker (Hono) ── Cache API ── D1 (meta / index) ── R2 (candle body)   │
-│       │                                                                │
-│  Cron (≤1/day) ── Yahoo ingest for small watchlist → R2 + D1           │
-└────────────────────────────────────────────────────────────────────────┘
-        ▲
-        │ optional: local pip vi_quant for heavy research (not the dashboard path)
-```
+![Vibe Quant on Cloudflare Free — Pages + Pyodide, Worker, Cache/D1/R2, optional local vi_quant](images/Vibe_Quant_CloudFlare.png)
 
 Details: [docs/ARCHITECTURE_TARGET.md](docs/ARCHITECTURE_TARGET.md) ·
 honest constraints: [docs/LIMITATIONS.md](docs/LIMITATIONS.md).
