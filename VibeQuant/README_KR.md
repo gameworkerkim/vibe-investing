@@ -91,8 +91,11 @@ GS Quant와 동일한 3계층 아키텍처. Marquee 원격 백엔드를 플러�
 | [README_KR.md](README_KR.md) | 한국어 README (이 문서) |
 | [ROADMAP_KR.md](ROADMAP_KR.md) | 한국어 로드맵 |
 | [docs/API_MAPPING.md](docs/API_MAPPING.md) | GS → VI API 매핑표 (영문) |
+| [docs/API_MAPPING_KR.md](docs/API_MAPPING_KR.md) | GS → VI API 매핑표 (한국어) |
 | [docs/PROVIDER_API_MATCHING.md](docs/PROVIDER_API_MATCHING.md) | TOSS ↔ Yahoo Finance ↔ VibeQuant 통합 인터페이스 매핑 (영문) |
+| [docs/PROVIDER_API_MATCHING_KR.md](docs/PROVIDER_API_MATCHING_KR.md) | TOSS ↔ Yahoo Finance ↔ VibeQuant 통합 인터페이스 매핑 (한국어) |
 | [docs/OFFICIAL_DOCS_GUIDE.md](docs/OFFICIAL_DOCS_GUIDE.md) | 공식 GS Quant 문서 대응 매뉴얼 (영문) |
+| [docs/OFFICIAL_DOCS_GUIDE_KR.md](docs/OFFICIAL_DOCS_GUIDE_KR.md) | 공식 GS Quant 문서 대응 매뉴얼 (한국어) |
 | [SECURITY.md](SECURITY.md) | 보안 정책 문서 (영문, LLM 판독 가능) |
 
 ## 현황

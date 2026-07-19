@@ -89,8 +89,11 @@ All documentation is in English.
 | Document | Description |
 |---|---|---|
 | [docs/API_MAPPING.md](docs/API_MAPPING.md) | Complete GS → VI API mapping table |
+| [docs/API_MAPPING_KR.md](docs/API_MAPPING_KR.md) | GS → VI API mapping table (Korean) |
 | [docs/PROVIDER_API_MATCHING.md](docs/PROVIDER_API_MATCHING.md) | TOSS ↔ Yahoo Finance ↔ VibeQuant unified interface mapping |
+| [docs/PROVIDER_API_MATCHING_KR.md](docs/PROVIDER_API_MATCHING_KR.md) | TOSS ↔ Yahoo Finance ↔ VibeQuant unified interface mapping (Korean) |
 | [docs/OFFICIAL_DOCS_GUIDE.md](docs/OFFICIAL_DOCS_GUIDE.md) | GS Quant official docs correspondence manual |
+| [docs/OFFICIAL_DOCS_GUIDE_KR.md](docs/OFFICIAL_DOCS_GUIDE_KR.md) | GS Quant official docs correspondence manual (Korean) |
 | [ROADMAP.md](ROADMAP.md) | Development roadmap (English) |
 | [README_KR.md](README_KR.md) / [ROADMAP_KR.md](ROADMAP_KR.md) | Korean documentation |
 | [SECURITY.md](SECURITY.md) | LLM-readable security policy |
