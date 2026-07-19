@@ -9,20 +9,20 @@
 ## Table of Contents
 
 1. [LLM Wiki](#llm-wiki)
-2. [Quant Finance & Trading Platforms](#quant-finance--trading-platforms) 🔥 **NEW**
-3. [Claude Skills & Prompt Optimization](#claude-skills--prompt-optimization) 🔥 **NEW**
-4. [MCP & AI Agents](#mcp--ai-agents) 🔥 **NEW**
+2. [Quant Finance & Trading Platforms](#quant-finance--trading-platforms) **NEW**
+3. [Claude Skills & Prompt Optimization](#claude-skills--prompt-optimization) **NEW**
+4. [MCP & AI Agents](#mcp--ai-agents) **NEW**
 5. [Serverless & SaaS Free Tier](#serverless--saas-free-tier)
-6. [UI/Open Source Frameworks](#uiopen-source-frameworks) 🔥 **NEW**
-7. [Python SaaS & Deployment](#python-saas--deployment) 🔥 **NEW**
+6. [UI/Open Source Frameworks](#uiopen-source-frameworks) **NEW**
+7. [Python SaaS & Deployment](#python-saas--deployment) **NEW**
 8. [Cloud Cost Reduction](#cloud-cost-reduction)
 9. [AI / LLM](#ai--llm)
-10. [LLM Models & Local Deployment](#llm-models--local-deployment) 🔥 **NEW**
+10. [LLM Models & Local Deployment](#llm-models--local-deployment) **NEW**
 11. [Time Series Foundation Models (TSFM)](#time-series-foundation-models-tsfm)
 12. [AI Coding Assistants](#ai-coding-assistants)
 13. [AI Agents & Web Standards](#ai-agents--web-standards)
-14. [China/Tech Industry Analysis](#chinatech-industry-analysis) 🔥 **NEW**
-15. [OpenCode Korean Localization](#opencode-korean-localization) 🔥 **NEW**
+14. [China/Tech Industry Analysis](#chinatech-industry-analysis) **NEW**
+15. [OpenCode Korean Localization](#opencode-korean-localization) **NEW**
 16. [Developer Tools & Other](#developer-tools--other)
 
 ---
@@ -43,7 +43,7 @@ LLM Wiki is a new tool category where AI scans GitHub codebases to auto-generate
 
 ## Quant Finance & Trading Platforms
 
-🔥 **Top traffic · #1 real-usage intent** — The highest-traffic section by GitHub visitors. Practical platform guides for AI quant investors.
+**Top traffic · #1 real-usage intent** — The highest-traffic section by GitHub visitors. Practical platform guides for AI quant investors.
 
 | Document | Description | Last Updated |
 |----------|-------------|--------------|
@@ -57,7 +57,7 @@ LLM Wiki is a new tool category where AI scans GitHub codebases to auto-generate
 
 ## Claude Skills & Prompt Optimization
 
-🔥 **Claude Skill demand explosion** — Automating quant investing workflows with Claude Agent Skills, plus a 5-tool comparison of prompt optimizers.
+**Claude Skill demand explosion** — Automating quant investing workflows with Claude Agent Skills, plus a 5-tool comparison of prompt optimizers.
 
 | Document | Description | Last Updated |
 |----------|-------------|--------------|
@@ -106,7 +106,7 @@ Practical guides evaluating free-tier serverless platforms and SaaS services. Fo
 
 ## UI/Open Source Frameworks
 
-🔥 **#3 in views, top real-usage intent** — Python web UI, Meta's design system, browser-based Python execution.
+**#3 in views, top real-usage intent** — Python web UI, Meta's design system, browser-based Python execution.
 
 | Document | Description | Last Updated |
 |----------|-------------|--------------|
@@ -159,7 +159,7 @@ LLM-related documents — token optimization, local deployment, security, knowle
 
 ## LLM Models & Local Deployment
 
-🔥 Latest LLM model analysis and local execution guides.
+Latest LLM model analysis and local execution guides.
 
 | Document | Description | Last Updated |
 |----------|-------------|--------------|
