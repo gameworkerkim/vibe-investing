@@ -51,6 +51,22 @@ function rangeForDays(days: number): string {
   return "5y";
 }
 
+/** Enough bars to compute common windows (e.g. momentum 22) for the requested span. */
+function minBarsForDays(days: number): number {
+  const d = Math.max(1, Math.floor(days));
+  // ~trading-day density; never require more than requested days
+  return Math.min(d, Math.max(25, Math.floor(d * 0.5)));
+}
+
+function hasEnoughBars(candles: Candle[] | null | undefined, days: number): boolean {
+  return !!candles && candles.length >= minBarsForDays(days);
+}
+
+/** Persist a longer series in R2 so a one-off days=3 request cannot poison the cache. */
+function r2FetchDays(days: number): number {
+  return Math.max(days, 365);
+}
+
 async function fetchYahoo(symbol: string, days: number): Promise<Candle[] | null> {
   const ticker = encodeURIComponent(yahooTicker(symbol));
   const range = rangeForDays(days);
@@ -181,13 +197,19 @@ export async function getCandlesPayload(
     try {
       const body = (await hit.json()) as { candles: Candle[]; source?: string };
       // Never serve cached mock fallbacks — retry live providers
-      if (body.candles?.length && body.source && !String(body.source).startsWith("mock")) {
+      // Also skip short poisoned caches (e.g. 3 bars left from a days=3 write)
+      const cached = body.candles?.slice(-days);
+      if (
+        hasEnoughBars(cached, days) &&
+        body.source &&
+        !String(body.source).startsWith("mock")
+      ) {
         return {
           provider,
           symbol,
           days,
           source: body.source || "cache",
-          candles: body.candles.slice(-days),
+          candles: cached!,
         };
       }
     } catch {
@@ -196,8 +218,8 @@ export async function getCandlesPayload(
   }
 
   const fromR2 = await readR2(env, r2Key);
-  if (fromR2?.length) {
-    const sliced = fromR2.slice(-days);
+  if (hasEnoughBars(fromR2, days)) {
+    const sliced = fromR2!.slice(-days);
     const payload = { provider, symbol, days, source: "r2", candles: sliced };
     await cache.put(
       cacheKey,
@@ -250,13 +272,15 @@ export async function getCandlesPayload(
     }
   }
 
-  // yahoo
+  // yahoo — fetch a longer series for R2 so short requests cannot poison storage
   try {
-    const yahoo = await fetchYahoo(symbol, days);
-    if (yahoo?.length) {
-      await writeR2(env, r2Key, yahoo, { provider, symbol, interval: "1d" });
-      await touchD1(env, provider, symbol, r2Key, yahoo.length);
+    const storeDays = r2FetchDays(days);
+    const yahooFull = await fetchYahoo(symbol, storeDays);
+    if (yahooFull?.length) {
+      await writeR2(env, r2Key, yahooFull, { provider, symbol, interval: "1d" });
+      await touchD1(env, provider, symbol, r2Key, yahooFull.length);
       await tryAddWatchlist(env, symbol, "yahoo");
+      const yahoo = yahooFull.slice(-days);
       const payload = { provider, symbol, days, source: "yahoo", candles: yahoo };
       await cache.put(
         cacheKey,
