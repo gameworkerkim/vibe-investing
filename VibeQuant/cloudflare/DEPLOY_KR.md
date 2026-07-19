@@ -42,6 +42,14 @@ Pages 설정은 `../pages/wrangler.toml`에 두고, `cd ../pages && wrangler pag
 
 ## 2. 사전 준비
 
+**시크릿 (DeepSeek / Cloudflare / TOSS):**  
+[docs/SECRETS_SETUP_KR.md](../docs/SECRETS_SETUP_KR.md) · [docs/SECRETS_SETUP.md](../docs/SECRETS_SETUP.md)
+
+```bash
+./scripts/setup-secrets.sh --local          # Cloudflare (+ 선택 TOSS) → .dev.vars
+./scripts/setup-deepseek.sh --remote        # DEEPSEEK_API_KEY → Worker
+```
+
 ### 2.1 API 토큰 권한
 
 [API Tokens](https://dash.cloudflare.com/profile/api-tokens) — Account 권한:
@@ -91,6 +99,9 @@ npm install
 # 1) 시크릿 → .dev.vars (TOSS 선택 + Cloudflare 키)
 ./scripts/setup-secrets.sh --local
 
+# 1b) DeepSeek → Worker (LLM Quant Prompt)
+./scripts/setup-deepseek.sh --remote
+
 # 2) D1 / R2 / Pages + schema + CDN smoke (원격 R2)
 ./scripts/bootstrap.sh
 
@@ -113,6 +124,7 @@ npm install
 |---|---|
 | `setup-secrets.sh --local` | `.dev.vars` + `account_id` 기록 |
 | `setup-secrets.sh --remote` | TOSS → Worker secret |
+| `setup-deepseek.sh --local/--remote` | `DEEPSEEK_API_KEY` → `.dev.vars` / Worker |
 | `bootstrap.sh` | D1/R2/Pages 생성, schema, R2 smoke (`--remote`) |
 | `deploy.sh` | Worker deploy + Pages deploy (`wrangler.pages.toml`) |
 | `upload-static.sh` | 파일/폴더 → R2 static (`--remote`) |

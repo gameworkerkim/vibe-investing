@@ -2,6 +2,8 @@
 
 ## Setup
 
+Secrets overview (EN/KR): [../docs/SECRETS_SETUP.md](../docs/SECRETS_SETUP.md) · [../docs/SECRETS_SETUP_KR.md](../docs/SECRETS_SETUP_KR.md)
+
 1. `./scripts/setup-secrets.sh --local` — write `TOSS_CLIENT_ID` / `TOSS_CLIENT_SECRET` to `.dev.vars`
 2. `./scripts/verify-toss.sh` — OAuth + 1 page of candles (prints no secrets)
 3. `./scripts/setup-secrets.sh --remote` — upload TOSS secrets to Worker

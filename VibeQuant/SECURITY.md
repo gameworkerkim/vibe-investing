@@ -50,7 +50,7 @@ See [docs/ARCHITECTURE_TARGET.md](docs/ARCHITECTURE_TARGET.md) and
 |---|---|
 | **No secrets in source** | `cloudflare/.dev.vars` and `.env` are gitignored. Examples use placeholders only. |
 | **Pre-commit guard** | `VibeQuant/scripts/pre-commit-hook.sh` (install: `bash VibeQuant/scripts/install-pre-commit.sh`) blocks `.dev.vars`, `TOSS_CLIENT_SECRET`, `CLOUDFLARE_API_TOKEN`, legacy Neon/Upstash patterns. |
-| **Interactive setup (normative)** | `cloudflare/scripts/setup-secrets.sh` → `.dev.vars` (local) and `wrangler secret put` (remote TOSS). |
+| **Interactive setup (normative)** | `cloudflare/scripts/setup-secrets.sh` (Cloudflare + TOSS) and `cloudflare/scripts/setup-deepseek.sh` (DeepSeek). Manuals: [docs/SECRETS_SETUP.md](docs/SECRETS_SETUP.md) · [docs/SECRETS_SETUP_KR.md](docs/SECRETS_SETUP_KR.md). |
 | **Runtime-only access** | Worker reads `env.TOSS_*` at request time. Never hardcode; never ship secrets to Pages. |
 | **No defaults** | Missing TOSS → candles fall back to mock with `source=mock_toss_*` (no fake keys). |
 
@@ -58,10 +58,11 @@ See [docs/ARCHITECTURE_TARGET.md](docs/ARCHITECTURE_TARGET.md) and
 
 ### Environment Variable Inventory
 
-**Normative (Cloudflare path)** — collect via `cloudflare/scripts/setup-secrets.sh`:
+**Normative (Cloudflare path)** — see [docs/SECRETS_SETUP.md](docs/SECRETS_SETUP.md):
 
 | Variable | Sensitivity | Scope |
 |---|---|---|
+| `DEEPSEEK_API_KEY` | HIGH | LLM Quant Prompt (Worker secret / `.dev.vars`) — `setup-deepseek.sh` |
 | `TOSS_CLIENT_ID` | LOW | TOSS OAuth client id (Worker secret / `.dev.vars`) |
 | `TOSS_CLIENT_SECRET` | HIGH | TOSS OAuth secret (Worker secret / `.dev.vars`) |
 | `CLOUDFLARE_API_TOKEN` | HIGH | Deploy/auth on developer machine or CI — **not** a Worker runtime secret |
@@ -92,7 +93,8 @@ See [docs/ARCHITECTURE_TARGET.md](docs/ARCHITECTURE_TARGET.md) and
 
 Pages headers (`pages/_headers`): `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy`.
 
-Setup: `cloudflare/scripts/setup-secrets.sh` · Deploy: `cloudflare/scripts/deploy.sh`.
+Setup: `cloudflare/scripts/setup-secrets.sh` · `cloudflare/scripts/setup-deepseek.sh` · Deploy: `cloudflare/scripts/deploy.sh`.  
+Manuals: [docs/SECRETS_SETUP.md](docs/SECRETS_SETUP.md) · [docs/SECRETS_SETUP_KR.md](docs/SECRETS_SETUP_KR.md).
 
 ## 3L. API Security (legacy backend/ — frozen)
 

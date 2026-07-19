@@ -150,6 +150,9 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 | [docs/TECH_REVIEW_CLOUDFLARE.md](docs/TECH_REVIEW_CLOUDFLARE.md) | Tech review: Cloudflare vs Vercel |
 | [docs/TECH_REVIEW_CLOUDFLARE_KR.md](docs/TECH_REVIEW_CLOUDFLARE_KR.md) | Tech review: Cloudflare vs Vercel (Korean) |
 | [SECURITY.md](SECURITY.md) | Trust boundaries (CF + WASM) |
+| [docs/SECRETS_SETUP.md](docs/SECRETS_SETUP.md) | DeepSeek / Cloudflare / TOSS secrets |
+| [docs/SECRETS_SETUP_KR.md](docs/SECRETS_SETUP_KR.md) | Secrets manual (Korean) |
+| [docs/LLM_QUANT_PROMPT.md](docs/LLM_QUANT_PROMPT.md) | LLM Quant Prompt + DeepSeek |
 | [README_KR.md](README_KR.md) | Korean README |
 | [ROADMAP_KR.md](ROADMAP_KR.md) | Korean ROADMAP |
 

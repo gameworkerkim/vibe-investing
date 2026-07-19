@@ -42,6 +42,14 @@ Keep Pages config in `../pages/wrangler.toml` and deploy with
 
 ## 2. Prerequisites
 
+**Secrets (DeepSeek / Cloudflare / TOSS):**  
+[docs/SECRETS_SETUP.md](../docs/SECRETS_SETUP.md) · [docs/SECRETS_SETUP_KR.md](../docs/SECRETS_SETUP_KR.md)
+
+```bash
+./scripts/setup-secrets.sh --local          # Cloudflare (+ optional TOSS) → .dev.vars
+./scripts/setup-deepseek.sh --remote        # DEEPSEEK_API_KEY → Worker
+```
+
 ### 2.1 API token permissions
 
 [API Tokens](https://dash.cloudflare.com/profile/api-tokens) — Account:
@@ -106,6 +114,7 @@ npm install
 |---|---|
 | `setup-secrets.sh --local` | Write `.dev.vars` + `account_id` |
 | `setup-secrets.sh --remote` | TOSS → Worker secrets |
+| `setup-deepseek.sh --local/--remote` | `DEEPSEEK_API_KEY` → `.dev.vars` / Worker |
 | `bootstrap.sh` | D1/R2/Pages, schema, R2 smoke (`--remote`) |
 | `deploy.sh` | Worker + Pages (`wrangler.pages.toml`) |
 | `upload-static.sh` | Files → R2 static (`--remote`) |

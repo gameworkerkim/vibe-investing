@@ -149,6 +149,9 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 | [docs/TECH_REVIEW_DASHBOARD_KR.md](docs/TECH_REVIEW_DASHBOARD_KR.md) | 기술 검토: 대시보드 + Node.js |
 | [docs/TECH_REVIEW_CLOUDFLARE_KR.md](docs/TECH_REVIEW_CLOUDFLARE_KR.md) | 기술 검토: Cloudflare 이전 |
 | [SECURITY.md](SECURITY.md) | 신뢰 경계 (CF + WASM) |
+| [docs/SECRETS_SETUP_KR.md](docs/SECRETS_SETUP_KR.md) | DeepSeek / Cloudflare / TOSS 시크릿 |
+| [docs/SECRETS_SETUP.md](docs/SECRETS_SETUP.md) | Secrets manual (English) |
+| [docs/LLM_QUANT_PROMPT_KR.md](docs/LLM_QUANT_PROMPT_KR.md) | LLM Quant Prompt + DeepSeek |
 | [README.md](README.md) | 영문 README |
 | [ROADMAP.md](ROADMAP.md) | 영문 로드맵 |
 

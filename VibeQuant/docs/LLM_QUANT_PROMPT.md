@@ -2,7 +2,16 @@
 
 Educational sandbox: DeepSeek builds a finance answer and/or `vi_browser` Python that runs in the browser (Pyodide).
 
+| Doc | Language |
+|---|---|
+| This file | English |
+| [LLM_QUANT_PROMPT_KR.md](LLM_QUANT_PROMPT_KR.md) | 한국어 |
+| [SECRETS_SETUP.md](SECRETS_SETUP.md) / [SECRETS_SETUP_KR.md](SECRETS_SETUP_KR.md) | All secrets (DeepSeek, Cloudflare, TOSS) |
+
 ## Setup DeepSeek API key (terminal)
+
+Full walkthrough (hidden input, verify health, troubleshooting):  
+**[SECRETS_SETUP.md §3](SECRETS_SETUP.md#3-deepseek-api-key)** · **[SECRETS_SETUP_KR.md §3](SECRETS_SETUP_KR.md#3-deepseek-api-키)**
 
 ```bash
 cd /Users/dennis/vibe-investing/VibeQuant/cloudflare

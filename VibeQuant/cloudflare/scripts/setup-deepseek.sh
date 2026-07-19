@@ -37,6 +37,10 @@ Notes:
   - Value is never echoed.
   - Models used by the Worker: deepseek-v4-flash (gate + fast), deepseek-v4-pro (quant).
   - After --remote, redeploy is not required for secrets; next request picks them up.
+
+Full manuals:
+  ../docs/SECRETS_SETUP.md
+  ../docs/SECRETS_SETUP_KR.md
 EOF
 }
 
