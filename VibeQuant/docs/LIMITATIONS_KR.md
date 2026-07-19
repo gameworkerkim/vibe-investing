@@ -45,11 +45,16 @@
 | UI 단일 스레드 | 긴 스크립트는 청크하지 않으면 탭 블로킹 |
 | 수치 패리티 | 함수명 동일 ≠ CPython 로컬/`vi_quant` 또는 GS와 동일 float |
 
-**대시보드 내 (Phase 1 목표):** `get_candles`, `returns`, `volatility`,
-`moving_average`, `correlation`, `max_drawdown` (유사 순수 pandas 헬퍼).
+**대시보드 내 (데모 스테이지):** `get_candles`, `returns`, `volatility`,
+`moving_average`, `correlation`, `max_drawdown`, `zscores`, `beta`,
+`annualized_return`, `sharpe_ratio`, `rsi`, `macd`, `bollinger_bands`,
+`backtest`, `ma_cross_signal`, `show_chart`.
 
-**대시보드 밖:** `IRSwap.calc`, 리스크 측정, `ViDataApi`/벤치마크 의존 econometrics,
-원격 Dataset 기반 공휴일 캘린더.
+**교육용 백테스트 상한:** `days` ≤ 500 권장; 단일 종목; 다음 봉 규칙만.
+멀티에셋·분봉 엔진은 브라우저 범위 밖.
+
+**대시보드 밖:** `IRSwap.calc`, GS식 풀 백테스트 엔진, `ViDataApi`/벤치마크 의존 econometrics,
+원격 Dataset 기반 공휴일 캘린더, **TOSS 실시간** (Worker IP — 별도 ingest로 후순위).
 
 ## 4. 알려진 코드 고장 (현재 로컬 `vi_quant`)
 

@@ -145,7 +145,10 @@ langSelect?.addEventListener("change", () => {
 });
 
 exampleBtn?.addEventListener("click", () => {
-  const golden = API_CATALOG.find((x) => x.id === "chart") || API_CATALOG.find((x) => x.id === "bundle");
+  const golden =
+    API_CATALOG.find((x) => x.id === "backtest") ||
+    API_CATALOG.find((x) => x.id === "bundle") ||
+    API_CATALOG.find((x) => x.id === "chart");
   if (golden) loadSample(golden, { scroll: true });
 });
 
@@ -204,7 +207,10 @@ if (fromDocs) {
   const item = API_CATALOG.find((x) => x.id === fromDocs);
   if (item) loadSample(item, { scroll: true });
 } else {
-  const golden = API_CATALOG.find((x) => x.id === "chart") || API_CATALOG.find((x) => x.id === "bundle");
+  const golden =
+    API_CATALOG.find((x) => x.id === "backtest") ||
+    API_CATALOG.find((x) => x.id === "bundle") ||
+    API_CATALOG.find((x) => x.id === "chart");
   if (golden) loadSample(golden);
   else codeEl.value = EXAMPLE_CODE;
 }

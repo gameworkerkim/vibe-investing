@@ -1,6 +1,6 @@
 # VibeQuant (한국어)
 
-GS Quant의 오픈소스 버전으로 Vibe Quant 웹사이트 데모입니다. 이 프로젝트의 목적은 멀티 LLM 퀀트 위원회의 공통 실행·검증을 위한 프로젝트입니다. TOSS Open API와 야후 파이낸스에서 기초 데이터를 수집하고 있습니다. 
+GS Quant의 오픈소스 버전으로 Vibe Quant 웹사이트 데모입니다. 이 프로젝트의 목적은 멀티 LLM 퀀트 위원회의 공통 실행·검증을 위한 프로젝트입니다. 라이브 데모 시세는 Cloudflare Worker 경유 **Yahoo**입니다 (TOSS 실시간은 IP 제한으로 후순위). 
 
 *LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.*
 
@@ -57,7 +57,7 @@ GS Quant의 오픈소스 버전으로 Vibe Quant 웹사이트 데모입니다. �
 | Cron ingest | 제한적 | Cron도 **CPU 10ms** — 소규모·일 1회 또는 lazy |
 | DO 기반 무거운 레이트리밋 | 비권장 | Cache + 입력 검증 우선 |
 | Worker에서 Yahoo 대량 히스토리 | 불안정 | R2 캐시 + lazy, 파싱 최소화 |
-| Cron에서 TOSS 대량 페이지네이션 | 불가(무료) | 시크릿은 서버만; free cron에 부적합 |
+| Worker 경유 TOSS 실시간 | 후순위 | IP 화이트리스트로 Free egress 불가; 별도 ingest 예정 |
 | WASM에서 QuantLib / 전체 gs-quant | 불가 | 네이티브·용량·stub |
 | Cloudflare에서 Streamlit/NiceGUI | 불가 | 장기 Python 서버 ≠ Pages/Workers |
 
@@ -76,7 +76,7 @@ python3 -m http.server 8787
 # http://127.0.0.1:8787/  — 한/영/중은 브라우저 언어로 자동 선택
 ```
 
-파이썬 입력 → Pyodide 실행 → 결과창. 시세는 현재 mock `vi_browser` (Worker API 연동 예정).
+파이썬 입력 → Pyodide 실행 → 결과창. 시세는 Worker(`provider=yahoo`); mock 폴백 시 배너 표시. 골든 샘플에 교육용 `backtest()` 포함.
 
 ### Cloudflare Pages / D1 / R2 / CDN 빌드·배포
 
@@ -109,18 +109,19 @@ prices = pd.Series(...)   # 현재는 직접 시리즈 공급
 print(volatility(prices, 22))
 ```
 
-대시보드/Cloudflare 경로는 **진행 중** ([ROADMAP_KR.md](ROADMAP_KR.md)).
-웹뷰 목표 스크립트 형태:
+대시보드 경로는 라이브 ([ROADMAP_KR.md](ROADMAP_KR.md)). 웹뷰 형태:
 
 ```python
 # Pyodide에서 실행 — Worker에서 실행하지 않음
-from vi_browser import get_candles, returns, volatility
+from vi_browser import get_candles, ma_cross_signal, backtest, show_chart
 
-df = get_candles("005930", days=365)   # → Cloudflare Worker API
-print(volatility(df["close"], 22))
+candles = await get_candles("005930", days=180)   # → Cloudflare Worker API
+bt = backtest(candles, ma_cross_signal(candles, 10, 30), fee_bps=10)
+show_chart(bt["equity"], title="equity")
+print(bt["metrics"])
 ```
 
-파생상품 가격 결정은 **미구현** (Phase 2+; 무료 WASM 경로 아님):
+파생상품 가격 결정은 **미구현** (로컬/헤비; 무료 WASM 경로 아님):
 
 ```python
 # PLANNED — 현재 동작하지 않음
@@ -147,19 +148,18 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 
 ## 현황
 
-**Pre-Alpha.** 로컬 timeseries·providers는 존재. 활성 빌드 목표는 Cloudflare 데이터면과
-Pyodide 대시보드. 프로덕션 가격 엔진 아님.
+**Pre-Alpha.** 위원회 데모 스테이지 사용 가능; 교육용 백테스트는 `vi_browser`에 포함.
+프로덕션 가격·연구 엔진 아님.
 
 | 모듈 | 상태 |
 |---|---|
 | `vi_quant.session` / `timeseries` (로컬) | 부분 — 서브셋 테스트됨 |
 | `vi_quant.providers` (Python 직접) | 구현됨 (로컬 연구 전용 — 대시보드 경로 아님) |
-| `vi_browser` (Pyodide SDK: 데이터 조회 + 시계열 서브셋) | 구현됨 — Pages 웹뷰 통합 준비 완료 |
+| `vi_browser` (지표 + `backtest`) | 구현됨 — Pages Pyodide bootstrap과 동기화 |
 | `backend/` Express (Vercel 스택) | 구현됨 — **레거시**, 기능 확장 동결 |
-| Cloudflare Worker + D1 + R2 | 예정 — Phase 1 |
-| Pages + Pyodide 웹뷰 (`pages/`) | 스캐폴딩 — 로컬 서빙 가능, CF 배포 예정 |
-| 얇은 `vi_browser` WASM SDK | 브라우저 stub (mock 캔들) — Worker 연동 예정 |
-| `instrument` / `risk` / QuantLib | 미착수 — Phase 2+ (로컬/헤비; 무료 WASM 아님) |
+| Cloudflare Worker + D1 + R2 | 라이브 — Yahoo 캔들; TOSS 후순위 |
+| Pages + Pyodide 웹뷰 (`pages/`) | 라이브 — https://vibequant-web.pages.dev/ |
+| `instrument` / `risk` / QuantLib | 미착수 — 로컬/헤비 후속 |
 
 ## 라이선스
 

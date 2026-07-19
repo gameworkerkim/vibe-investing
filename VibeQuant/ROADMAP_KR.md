@@ -11,14 +11,14 @@
 
 **진행 순서 (규범)**
 
-1. **기본 스테이지 완성** (시세·실행·차트·위원회 체크리스트) ← 현재
-2. **백테스트** (교육용·재현 가능 지표: Sharpe / MDD / CAGR 등)
+1. **기본 스테이지 완성** (시세·실행·차트·위원회 체크리스트) ← 대체로 완료
+2. **백테스트** (교육용·재현 가능 지표: Sharpe / MDD / CAGR 등) ← 데모 준비됨
 3. **커뮤니티** — 타인이 올린 퀀트 스크립트·결과를 같은 스테이지에서 평가
 4. **LLM 퀀트 확장** — 위원회 워크플로·에이전트 산출물 자동화
 
 **원칙 — 얇은 수직 슬라이스.**
 
-`Pages → Pyodide → Worker /candles → R2/D1 → timeseries (+ 이후 backtest)`
+`Pages → Pyodide → Worker /candles → R2/D1 → timeseries + 교육용 backtest`
 
 레거시 Vercel/Neon/Upstash는 확장하지 않음.
 
@@ -33,49 +33,50 @@
 
 **Exit:** `pip install -e .`; timeseries 서브셋 테스트 통과. *(서브셋 기준 충족)*
 
-## Phase 1 — Cloudflare 데이터면 + Pyodide 대시보드 (활성)
+## Phase 1 — Cloudflare 데이터면 + Pyodide 대시보드 (활성 → Exit 근접)
 
 **목표:** 무료 티어 시세는 Cloudflare, 스크립트 검증은 웹뷰.
 
 ### 1A — Cloudflare (Free)
 
-- [ ] Hono Worker: `/api/health`, `/api/v1/candles/:provider/:symbol`,
-      `/api/v1/assets/:provider/:symbol`, `/api/v1/market-data/...`
-- [ ] 바인딩: D1 (메타/인덱스), R2 (캔들 본체), Cache API (핫 JSON)
-- [ ] 스키마: `assets`, `candle_objects`, `watchlist` (ARCHITECTURE_TARGET 참조)
-- [ ] Yahoo ingest: 일 1회 Cron **또는** 읽기 시 lazy fill (Cron CPU 10ms — 실패 시 lazy 우선)
-- [ ] 무료용 watchlist 상한 (예: 20–50 종목)
-- [ ] Express/`backend/` 멀티 SaaS 기능 확장 동결 (참고용만 유지)
-- [ ] TOSS: CF secrets로 Worker 옵션 경로 — Phase 1 Exit에 필수 아님;
-      free Cron에서 TOSS 대량 페이지네이션 금지 — **[x] TOSS IP 제한 문서화 (WORKER_TOSS_IP.md); Yahoo 주 제공자 확정**
+- [x] Hono Worker: `/api/health`, `/api/v1/candles/:provider/:symbol`
+- [ ] `/api/v1/assets/:provider/:symbol`, `/api/v1/market-data/...` (stub / 후속)
+- [x] 바인딩: D1 (메타/인덱스), R2 (캔들 본체), Cache API (핫 JSON)
+- [x] 스키마: `assets`, `candle_objects`, `watchlist` (ARCHITECTURE_TARGET 참조)
+- [x] Yahoo ingest: 읽기 시 lazy fill (+ Cache → R2)
+- [x] 무료용 watchlist 상한 (최대 50) + `GET /api/v1/watchlist`
+- [x] Express/`backend/` 멀티 SaaS 기능 확장 동결 (참고용만 유지)
+- [ ] **TOSS 실시간 — 후순위:** Worker→TOSS 직통은 IP 화이트리스트로 불가.
+      KR 실시간 시세는 **별도 ingest 경로**로 추후 연동 (Phase 1 Exit 필수 아님).
+      [docs/WORKER_TOSS_IP.md](docs/WORKER_TOSS_IP.md) 참조.
 
 ### 1B — Pages + Pyodide 웹뷰
 
-- [ ] 정적 대시보드: 코드 에디터 + 실행 + stdout/표/차트
-- [ ] Pyodide 로드; 얇은 `vi_browser`(또는 동등) wheel/CDN 패키지 — **[x] `vi_browser/` 패키지 (`data.py` + `timeseries.py`) 완료**
-- [ ] `get_candles` / `get_prices` → Worker API `fetch`만 (브라우저에 시크릿 없음)
-- [ ] WASM 안전 서브셋 포팅: `returns`, `volatility`, `moving_average`, `correlation`,
-      `max_drawdown` (순수 pandas/numpy) — **[x] `vi_browser` 모듈 생성; timeseries 서브셋 + 데이터 fetch 완료**
-- [ ] 골든 스크립트 데모: 삼성/AAPL 캔들 → vol/returns 플롯
-- [ ] UI에 패키지 로드 시간·메모리 한계 표시
+- [x] 정적 대시보드: 코드 에디터 + 실행 + stdout/차트 (+ Clear, i18n, mock 배너)
+- [x] Pyodide 로드; `vi_browser` 패키지와 동기화된 bootstrap
+      (`returns`, `volatility`, `moving_average`, `correlation`, `max_drawdown`,
+      `zscores`, `beta`, `annualized_return`, `sharpe_ratio`, `rsi`, `macd`, `bollinger_bands`)
+- [x] `get_candles` → Worker API `fetch`만 (브라우저에 시크릿 없음); 로컬 mock 폴백
+- [x] 골든 스크립트 데모: 삼성/AAPL → 차트·지표 (+ 교육용 백테스트 샘플)
+- [x] UI·LIMITATIONS에 로드 시간·메모리 한계 표시
 
 **Exit 기준**
 
-1. Cloudflare Free에 Pages + Worker + D1 + R2 배포.
-2. 웹뷰에 짧은 Python 스크립트를 붙여넣어 실행하고 검증 가능한 출력 확인.
-3. 스크립트는 Cloudflare 시세를 사용 (서버 Python 실행 아님).
-4. LIMITATIONS에 이 경로에서 막히는 GS/`vi_quant` 기능이 모두 나열됨.
+1. Cloudflare Free에 Pages + Worker + D1 + R2 배포. ✅
+2. 웹뷰에 짧은 Python 스크립트를 붙여넣어 실행하고 검증 가능한 출력 확인. ✅
+3. 스크립트는 Cloudflare 시세를 사용 (서버 Python 실행 아님). ✅ (Yahoo; 폴백 시 mock 배너)
+4. LIMITATIONS에 이 경로에서 막히는 GS/`vi_quant` 기능이 모두 나열됨. ✅
 
 ## Phase 2 — 교육용 백테스트 (위원회 스테이지 위)
 
 **목표:** 샌드박스에서 **재현 가능한** 단순 백테스트. 프로덕션 연구 엔진이 아님.
 
-- [ ] `vi_browser` 백테스트 미니 API (예: 신호 시계열 → 포지션 → equity curve)
-- [ ] 성과 지표: 수익률, MDD, Sharpe(단순), CAGR — stdout + 차트
-- [ ] 골든 백테스트 스크립트 + 위원회 체크리스트 항목 추가
-- [ ] 메모리/일수 상한 문서화 (WASM)
+- [x] `vi_browser.backtest` 미니 API (신호 → 포지션 → equity; 다음 봉 체결)
+- [x] 성과 지표: 수익률, MDD, Sharpe(단순), CAGR — stdout + 차트
+- [x] 골든 백테스트 스크립트 (`ma_cross_signal` + `backtest`) + 위원회 체크리스트
+- [x] 메모리/일수 상한 문서화 (WASM)
 
-**Exit:** 웹뷰에서 동일 스크립트·동일 시세로 백테스트 숫자가 두 번 일치.
+**Exit:** 웹뷰에서 동일 스크립트·동일 시세로 백테스트 숫자가 두 번 일치. ✅ (결정론 헬퍼)
 
 ## Phase 3 — 커뮤니티 평가
 

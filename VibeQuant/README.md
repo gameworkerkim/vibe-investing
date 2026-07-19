@@ -1,6 +1,6 @@
 # VibeQuant
 
-An open-source take on [GS Quant](https://github.com/goldmansachs/gs-quant) — the Vibe Quant website demo. Built for shared execution and verification across a multi-LLM quant committee. Base market data is collected from TOSS Open API and Yahoo Finance. 
+An open-source take on [GS Quant](https://github.com/goldmansachs/gs-quant) — the Vibe Quant website demo. Built for shared execution and verification across a multi-LLM quant committee. Live demo market data uses **Yahoo** via Cloudflare Worker (TOSS realtime deferred — IP allowlist). 
 
 *LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.*
 
@@ -59,7 +59,7 @@ multi-SaaS path.
 | Cron ingest | Limited | **10 ms CPU** per cron — small watchlist, daily, or lazy-on-read |
 | Durable Objects heavy rate-limit | Avoid | Prefer Cache + validation on free |
 | Full Yahoo bulk history in Worker | Unreliable | Prefer R2 cache + lazy fill; keep parsing tiny |
-| TOSS heavy pagination in Cron | No (free) | Secrets server-side only; not free-cron friendly |
+| TOSS realtime via Worker | Deferred | IP allowlist blocks Free egress; separate ingest later |
 | QuantLib / full gs-quant surface in WASM | No | Native / size / stub gaps |
 | Streamlit / NiceGUI on Cloudflare | No | Long-lived Python servers ≠ Pages/Workers |
 
@@ -78,7 +78,7 @@ python3 -m http.server 8787
 # open http://127.0.0.1:8787/  — UI language follows the browser (ko / en / zh)
 ```
 
-Python input → Pyodide run → result pane. Market data currently uses mock `vi_browser` (Worker API next).
+Python input → Pyodide run → result pane. Candles via Worker (`provider=yahoo`); mock fallback shows a banner. Educational `backtest()` is in the golden sample.
 
 ### Cloudflare Pages / D1 / R2 / CDN build & deploy
 
@@ -111,18 +111,19 @@ prices = pd.Series(...)   # supply your own series for now
 print(volatility(prices, 22))
 ```
 
-Dashboard / Cloudflare path is **in progress** (see [ROADMAP.md](ROADMAP.md)).
-Target script shape in the webview:
+Dashboard path is live (see [ROADMAP.md](ROADMAP.md)). Webview shape:
 
 ```python
 # Runs in Pyodide — not on the Worker
-from vi_browser import get_candles, returns, volatility
+from vi_browser import get_candles, ma_cross_signal, backtest, show_chart
 
-df = get_candles("005930", days=365)   # → Cloudflare Worker API
-print(volatility(df["close"], 22))
+candles = await get_candles("005930", days=180)   # → Cloudflare Worker API
+bt = backtest(candles, ma_cross_signal(candles, 10, 30), fee_bps=10)
+show_chart(bt["equity"], title="equity")
+print(bt["metrics"])
 ```
 
-Derivative pricing remains **unimplemented** (Phase 2+; not in WASM free path):
+Derivative pricing remains **unimplemented** (local/heavy; not in WASM free path):
 
 ```python
 # PLANNED — does not run today
@@ -154,19 +155,18 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 
 ## Status
 
-**Pre-Alpha.** Local timeseries + providers exist; Cloudflare data plane and Pyodide
-dashboard are the active build target. Not a production pricing engine.
+**Pre-Alpha.** Committee demo stage is usable; edu backtest is in `vi_browser`.
+Not a production pricing / research engine.
 
 | Module | Status |
 |---|---|
 | `vi_quant.session` / `timeseries` (local) | Partial — subset tested |
 | `vi_quant.providers` (Python direct) | Implemented (local research only — not the dashboard path) |
-| `vi_browser` (Pyodide SDK: data fetch + timeseries subset) | Implemented — ready for Pages webview integration |
+| `vi_browser` (indicators + `backtest`) | Implemented — synced into Pages Pyodide bootstrap |
 | `backend/` Express (Vercel stack) | Implemented — **legacy**, freeze feature work |
-| Cloudflare Worker + D1 + R2 | Planned — Phase 1 |
-| Pages + Pyodide webview (`pages/`) | Scaffolded — local serve ready; CF deploy next |
-| Thin `vi_browser` WASM SDK | Browser stub (mock candles) — Worker wiring next |
-| `instrument` / `risk` / QuantLib | Not started — Phase 2+ (local/heavy; not free WASM) |
+| Cloudflare Worker + D1 + R2 | Live — Yahoo candles; TOSS deferred |
+| Pages + Pyodide webview (`pages/`) | Live — https://vibequant-web.pages.dev/ |
+| `instrument` / `risk` / QuantLib | Not started — local/heavy later |
 
 ## License
 

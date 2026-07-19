@@ -45,11 +45,17 @@ as “done” in README/ROADMAP without removing the corresponding entry.
 | Single-threaded UI | Long scripts block the tab unless carefully chunked |
 | Numeric parity | Same function names ≠ same floats as CPython/`vi_quant` local or GS |
 
-**In-dashboard (Phase 1 target):** `get_candles`, `returns`, `volatility`,
-`moving_average`, `correlation`, `max_drawdown` (and similar pure pandas helpers).
+**In-dashboard (demo stage):** `get_candles`, `returns`, `volatility`,
+`moving_average`, `correlation`, `max_drawdown`, `zscores`, `beta`,
+`annualized_return`, `sharpe_ratio`, `rsi`, `macd`, `bollinger_bands`,
+`backtest`, `ma_cross_signal`, `show_chart`.
 
-**Not in-dashboard:** `IRSwap.calc`, risk measures, full econometrics needing
-`ViDataApi`/Marquee-style benchmarks, holiday calendars backed by remote Datasets.
+**Edu backtest caps:** prefer `days` ≤ 500; single-symbol; next-bar rules only.
+Large multi-asset / intraday engines are out of scope in the browser.
+
+**Not in-dashboard:** `IRSwap.calc`, full GS-style backtest engines, econometrics needing
+`ViDataApi`/Marquee-style benchmarks, holiday calendars backed by remote Datasets,
+**TOSS realtime** (Worker IP allowlist — deferred to a separate ingest path).
 
 ## 4. Known code breakages (local `vi_quant` today)
 

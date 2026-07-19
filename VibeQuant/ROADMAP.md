@@ -11,14 +11,14 @@
 
 **Sequence (normative)**
 
-1. **Finish basic stage** (data, runner, charts, committee checklist) ← current
-2. **Backtesting** (edu/reproducible metrics: Sharpe / MDD / CAGR)
+1. **Finish basic stage** (data, runner, charts, committee checklist) ← largely done
+2. **Backtesting** (edu/reproducible metrics: Sharpe / MDD / CAGR) ← in progress / demo-ready
 3. **Community** — evaluate others’ quants on the same stage
 4. **LLM quant expansion** — committee workflows / agent bake-offs
 
 **Thin vertical slice:**
 
-`Pages → Pyodide → Worker /candles → R2/D1 → timeseries (+ later backtest)`
+`Pages → Pyodide → Worker /candles → R2/D1 → timeseries + edu backtest`
 
 Do not expand the legacy Vercel/Neon/Upstash stack.
 
@@ -33,49 +33,50 @@ Do not expand the legacy Vercel/Neon/Upstash stack.
 
 **Exit:** `pip install -e .`; subset timeseries tests pass. *(Met for subset.)*
 
-## Phase 1 — Cloudflare data plane + Pyodide dashboard (ACTIVE)
+## Phase 1 — Cloudflare data plane + Pyodide dashboard (ACTIVE → near exit)
 
 **Objective:** free-tier market data on Cloudflare; script-in-webview verification.
 
 ### 1A — Cloudflare (Free)
 
-- [ ] Hono Worker: `/api/health`, `/api/v1/candles/:provider/:symbol`,
-      `/api/v1/assets/:provider/:symbol`, `/api/v1/market-data/...`
-- [ ] Bindings: D1 (meta/index), R2 (candle body), Cache API (hot JSON)
-- [ ] Schema: `assets`, `candle_objects`, `watchlist` (see ARCHITECTURE_TARGET)
-- [ ] Yahoo ingest: daily Cron **or** lazy-on-read fill (Cron CPU = 10 ms — prefer lazy if Cron fails)
-- [ ] Watchlist capped for free (e.g. 20–50 symbols)
-- [ ] Freeze feature work on Express/`backend/` multi-SaaS path; keep for reference only
-- [ ] TOSS: optional Worker path with secrets in CF secrets — **not** required for Phase 1 exit;
-      no heavy TOSS pagination on free Cron — **[x] TOSS IP limitation documented (WORKER_TOSS_IP.md); Yahoo confirmed as primary provider**
+- [x] Hono Worker: `/api/health`, `/api/v1/candles/:provider/:symbol`
+- [ ] `/api/v1/assets/:provider/:symbol`, `/api/v1/market-data/...` (stubs / later)
+- [x] Bindings: D1 (meta/index), R2 (candle body), Cache API (hot JSON)
+- [x] Schema: `assets`, `candle_objects`, `watchlist` (see ARCHITECTURE_TARGET)
+- [x] Yahoo ingest: lazy-on-read fill (+ Cache → R2)
+- [x] Watchlist capped for free (max 50) + `GET /api/v1/watchlist`
+- [x] Freeze feature work on Express/`backend/` multi-SaaS path; keep for reference only
+- [ ] **TOSS realtime — deferred (later work):** Worker→TOSS direct blocked by IP allowlist;
+      KR realtime will use a **separate ingest path** (not required for Phase 1 exit).
+      See [docs/WORKER_TOSS_IP.md](docs/WORKER_TOSS_IP.md).
 
 ### 1B — Pages + Pyodide webview
 
-- [ ] Static dashboard: code editor + run + stdout/table/chart panes
-- [ ] Load Pyodide; ship thin `vi_browser` (or equivalent) wheel/CDN package — **[x] `vi_browser/` package with `data.py` + `timeseries.py`**
-- [ ] `get_candles` / `get_prices` → `fetch` Worker API only (no secrets in browser)
-- [ ] Port WASM-safe subset: `returns`, `volatility`, `moving_average`, `correlation`,
-      `max_drawdown` (pure pandas/numpy) — **[x] `vi_browser` module created; timeseries subset + data fetch**
-- [ ] Golden script demo: Samsung/AAPL candles → vol/returns plot
-- [ ] Document package load time and memory limits in UI
+- [x] Static dashboard: code editor + run + stdout/chart panes (+ Clear, i18n, mock banner)
+- [x] Load Pyodide; thin `vi_browser` bootstrap aligned with package
+      (`returns`, `volatility`, `moving_average`, `correlation`, `max_drawdown`,
+      `zscores`, `beta`, `annualized_return`, `sharpe_ratio`, `rsi`, `macd`, `bollinger_bands`)
+- [x] `get_candles` → `fetch` Worker API only (no secrets in browser); local mock fallback
+- [x] Golden script demo: Samsung/AAPL → chart + metrics (+ edu backtest sample)
+- [x] Document package load time and memory limits in UI / LIMITATIONS
 
 **Exit criteria**
 
-1. Deploy on Cloudflare Free (Pages + Worker + D1 + R2).
-2. User pastes a short Python script in the webview, runs it, sees verified output.
-3. Script uses Cloudflare-backed candles (not server-side Python).
-4. LIMITATIONS page lists every blocked GS/vi_quant feature for this path.
+1. Deploy on Cloudflare Free (Pages + Worker + D1 + R2). ✅
+2. User pastes a short Python script in the webview, runs it, sees verified output. ✅
+3. Script uses Cloudflare-backed candles (not server-side Python). ✅ (Yahoo; mock banner if fallback)
+4. LIMITATIONS page lists every blocked GS/vi_quant feature for this path. ✅
 
 ## Phase 2 — Educational backtest (on the committee stage)
 
 **Objective:** reproducible mini-backtests in the sandbox — not a production research engine.
 
-- [ ] Thin `vi_browser` backtest helper (signals → positions → equity curve)
-- [ ] Metrics: return, MDD, simple Sharpe, CAGR — stdout + chart
-- [ ] Golden backtest script + committee checklist items
-- [ ] Document day/memory caps (WASM)
+- [x] Thin `vi_browser.backtest` helper (signals → positions → equity curve; next-bar)
+- [x] Metrics: return, MDD, simple Sharpe, CAGR — stdout + chart
+- [x] Golden backtest script (`ma_cross_signal` + `backtest`) + committee checklist items
+- [x] Document day/memory caps (WASM) in LIMITATIONS / checklist
 
-**Exit:** same script + same candles ⇒ same backtest numbers twice in the webview.
+**Exit:** same script + same candles ⇒ same backtest numbers twice in the webview. ✅ (deterministic helper)
 
 ## Phase 3 — Community evaluation
 

@@ -1,6 +1,7 @@
 /**
  * Load Pyodide and run user Python in the browser.
  * Injects thin vi_browser (Worker candles + mock + chart bridge).
+ * Keep in sync with vi_browser/timeseries.py + backtest.py (list-based subset).
  */
 
 const PYODIDE_INDEX = "https://cdn.jsdelivr.net/pyodide/v0.27.5/full/";
@@ -101,6 +102,12 @@ async def get_candles(symbol="AAPL", days=60, provider="yahoo"):
     print("[candles] source=local_mock")
     return out
 
+def _closes(closes):
+    xs = list(closes)
+    if xs and isinstance(xs[0], dict):
+        xs = [r["close"] for r in xs]
+    return [float(x) for x in xs if x is not None]
+
 def returns(closes):
     xs = list(closes)
     if xs and isinstance(xs[0], dict):
@@ -135,10 +142,7 @@ def moving_average(closes, window=22):
     return out
 
 def _series(closes):
-    xs = list(closes)
-    if xs and isinstance(xs[0], dict):
-        xs = [r["close"] for r in xs]
-    return [float(x) for x in xs if x is not None]
+    return _closes(closes)
 
 def correlation(a, b):
     """Pearson correlation of two price/return series (aligned length)."""
@@ -172,12 +176,209 @@ def max_drawdown(closes):
                 mdd = dd
     return mdd
 
+def zscores(closes, window=252):
+    xs = _closes(closes)
+    w = int(window)
+    out = []
+    for i in range(len(xs)):
+        if i + 1 < w:
+            out.append(None)
+        else:
+            chunk = xs[i + 1 - w : i + 1]
+            mean = sum(chunk) / w
+            var = sum((x - mean) ** 2 for x in chunk) / max(1, w - 1)
+            std = math.sqrt(var)
+            out.append(None if std == 0 else (xs[i] - mean) / std)
+    return out
+
+def beta(asset, benchmark, window=252):
+    ra = [r for r in returns(asset)]
+    rb = [r for r in returns(benchmark)]
+    n = min(len(ra), len(rb))
+    w = int(window)
+    out = [None] * n
+    for i in range(n):
+        if i + 1 < w + 1:
+            continue
+        aa = [x for x in ra[i + 1 - w : i + 1] if x is not None]
+        bb = [x for x in rb[i + 1 - w : i + 1] if x is not None]
+        m = min(len(aa), len(bb))
+        if m < 3:
+            continue
+        aa, bb = aa[-m:], bb[-m:]
+        ma, mb = sum(aa) / m, sum(bb) / m
+        cov = sum((aa[j] - ma) * (bb[j] - mb) for j in range(m)) / (m - 1)
+        var = sum((bb[j] - mb) ** 2 for j in range(m)) / (m - 1)
+        out[i] = None if var == 0 else cov / var
+    return out
+
+def annualized_return(closes, trading_days=252):
+    xs = _closes(closes)
+    if len(xs) < 2 or xs[0] == 0:
+        return 0.0
+    total = xs[-1] / xs[0] - 1.0
+    years = len(xs) / float(trading_days)
+    if years <= 0:
+        return 0.0
+    return float((1 + total) ** (1 / years) - 1)
+
+def sharpe_ratio(closes, risk_free_rate=0.0, trading_days=252):
+    rets = [r for r in returns(closes) if r is not None]
+    if len(rets) < 2:
+        return 0.0
+    mean = sum(rets) / len(rets)
+    var = sum((x - mean) ** 2 for x in rets) / (len(rets) - 1)
+    std = math.sqrt(var)
+    if std == 0:
+        return 0.0
+    excess = mean - (risk_free_rate / trading_days)
+    return float(math.sqrt(trading_days) * excess / std)
+
+def rsi(closes, period=14):
+    xs = _closes(closes)
+    p = int(period)
+    out = [None] * len(xs)
+    if len(xs) < p + 1:
+        return out
+    gains, losses = [], []
+    for i in range(1, len(xs)):
+        d = xs[i] - xs[i - 1]
+        gains.append(max(d, 0.0))
+        losses.append(max(-d, 0.0))
+    avg_g = sum(gains[:p]) / p
+    avg_l = sum(losses[:p]) / p
+    rs = None if avg_l == 0 else avg_g / avg_l
+    out[p] = 100.0 if rs is None else 100.0 - (100.0 / (1.0 + rs))
+    alpha = 1.0 / p
+    for i in range(p, len(gains)):
+        avg_g = (1 - alpha) * avg_g + alpha * gains[i]
+        avg_l = (1 - alpha) * avg_l + alpha * losses[i]
+        rs = None if avg_l == 0 else avg_g / avg_l
+        out[i + 1] = 100.0 if rs is None else 100.0 - (100.0 / (1.0 + rs))
+    return out
+
+def macd(closes, fast=12, slow=26, signal=9):
+    xs = _closes(closes)
+    def ema(series, span):
+        if not series:
+            return []
+        a = 2.0 / (span + 1)
+        out = [series[0]]
+        for i in range(1, len(series)):
+            out.append(a * series[i] + (1 - a) * out[-1])
+        return out
+    ef, es = ema(xs, fast), ema(xs, slow)
+    line = [ef[i] - es[i] for i in range(len(xs))]
+    sig = ema(line, signal)
+    hist = [line[i] - sig[i] for i in range(len(xs))]
+    return line, sig, hist
+
+def bollinger_bands(closes, period=20, stddev=2):
+    xs = _closes(closes)
+    p, k = int(period), float(stddev)
+    upper, middle, lower = [], [], []
+    for i in range(len(xs)):
+        if i + 1 < p:
+            upper.append(None); middle.append(None); lower.append(None)
+        else:
+            chunk = xs[i + 1 - p : i + 1]
+            m = sum(chunk) / p
+            var = sum((x - m) ** 2 for x in chunk) / max(1, p - 1)
+            s = math.sqrt(var)
+            middle.append(m)
+            upper.append(m + k * s)
+            lower.append(m - k * s)
+    return upper, middle, lower
+
+def ma_cross_signal(closes, fast=10, slow=30):
+    xs = _closes(closes)
+    n = len(xs)
+    out = [0] * n
+    if n < slow or fast < 1 or slow <= fast:
+        return out
+    for i in range(slow - 1, n):
+        f = sum(xs[i + 1 - fast : i + 1]) / fast
+        s = sum(xs[i + 1 - slow : i + 1]) / slow
+        out[i] = 1 if f > s else 0
+    return out
+
+def backtest(candles, signal, fee_bps=10, trading_days=252):
+    """Next-bar educational backtest. Same rules as vi_browser.backtest."""
+    closes = _closes(candles)
+    n = len(closes)
+    if n < 2:
+        return {
+            "equity": [1.0] * max(n, 1),
+            "rets": [0.0] * n,
+            "positions": [0.0] * n,
+            "metrics": {
+                "total_return": 0.0, "mdd": 0.0, "sharpe": 0.0, "cagr": 0.0,
+                "bars": n, "fee_bps": float(fee_bps),
+            },
+        }
+    sig = [float(x) if x is not None else 0.0 for x in signal]
+    if len(sig) < n:
+        sig = sig + [0.0] * (n - len(sig))
+    elif len(sig) > n:
+        sig = sig[:n]
+    positions = [0.0] * n
+    rets = [0.0] * n
+    equity = [1.0] * n
+    fee = float(fee_bps) / 10000.0
+    for i in range(1, n):
+        positions[i] = sig[i - 1]
+        prev_c, cur_c = closes[i - 1], closes[i]
+        raw = positions[i] * (cur_c / prev_c - 1.0) if prev_c else 0.0
+        rets[i] = raw - abs(positions[i] - positions[i - 1]) * fee
+        equity[i] = equity[i - 1] * (1.0 + rets[i])
+    total_return = equity[-1] / equity[0] - 1.0
+    peak, mdd = equity[0], 0.0
+    for e in equity:
+        if e > peak:
+            peak = e
+        if peak > 0:
+            dd = e / peak - 1.0
+            if dd < mdd:
+                mdd = dd
+    active = rets[1:]
+    if len(active) >= 2:
+        mean = sum(active) / len(active)
+        var = sum((x - mean) ** 2 for x in active) / (len(active) - 1)
+        std = math.sqrt(var) if var > 0 else 0.0
+        sharpe = (mean / std) * math.sqrt(trading_days) if std > 0 else 0.0
+    else:
+        sharpe = 0.0
+    years = (n - 1) / float(trading_days)
+    cagr = float(equity[-1] ** (1.0 / years) - 1.0) if years > 0 and equity[-1] > 0 else 0.0
+    return {
+        "equity": equity,
+        "rets": rets,
+        "positions": positions,
+        "metrics": {
+            "total_return": float(total_return),
+            "mdd": float(mdd),
+            "sharpe": float(sharpe),
+            "cagr": float(cagr),
+            "bars": n,
+            "fee_bps": float(fee_bps),
+        },
+    }
+
 vi_browser.get_candles = get_candles
 vi_browser.returns = returns
 vi_browser.volatility = volatility
 vi_browser.moving_average = moving_average
 vi_browser.correlation = correlation
 vi_browser.max_drawdown = max_drawdown
+vi_browser.zscores = zscores
+vi_browser.beta = beta
+vi_browser.annualized_return = annualized_return
+vi_browser.sharpe_ratio = sharpe_ratio
+vi_browser.rsi = rsi
+vi_browser.macd = macd
+vi_browser.bollinger_bands = bollinger_bands
+vi_browser.backtest = backtest
+vi_browser.ma_cross_signal = ma_cross_signal
 vi_browser.show_chart = show_chart
 sys.modules["vi_browser"] = vi_browser
 `;
@@ -243,7 +444,9 @@ from io import StringIO
 async def __vq_entry():
     from vi_browser import (
         get_candles, returns, volatility, moving_average,
-        correlation, max_drawdown, show_chart,
+        correlation, max_drawdown, zscores, beta,
+        annualized_return, sharpe_ratio, rsi, macd, bollinger_bands,
+        backtest, ma_cross_signal, show_chart,
     )
 ${body}
 
@@ -269,16 +472,16 @@ finally:
   };
 }
 
-export const EXAMPLE_CODE = `from vi_browser import get_candles, returns, volatility, moving_average, show_chart
+export const EXAMPLE_CODE = `from vi_browser import get_candles, ma_cross_signal, backtest, show_chart
 
-candles = await get_candles("005930", days=90)
-closes = [c["close"] for c in candles]
-vol = volatility(closes, 22)
-ma = moving_average(closes, 22)
-show_chart(candles, title="005930 close", series_label="close")
-
-print("bars:", len(candles))
-print("last_close:", round(closes[-1], 4))
-print("volatility_22:", None if vol is None else round(vol, 6))
-print("ma_22_last:", None if ma[-1] is None else round(ma[-1], 4))
+candles = await get_candles("005930", days=180)
+sig = ma_cross_signal(candles, fast=10, slow=30)
+bt = backtest(candles, sig, fee_bps=10)
+show_chart(bt["equity"], title="equity (MA cross)", series_label="equity")
+m = bt["metrics"]
+print("source_ok:", True)
+print("total_return:", round(m["total_return"], 6))
+print("mdd:", round(m["mdd"], 6))
+print("sharpe:", round(m["sharpe"], 4))
+print("cagr:", round(m["cagr"], 6))
 `;

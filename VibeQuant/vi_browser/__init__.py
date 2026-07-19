@@ -30,6 +30,7 @@ from .timeseries import (
     macd,
     bollinger_bands,
 )
+from .backtest import backtest, ma_cross_signal
 
 # ── show_chart local fallback ───────────────────────────
 # In Pyodide browser, the JS bridge overwrites this with a real implementation.
@@ -89,5 +90,7 @@ __all__ = [
     "rsi",
     "macd",
     "bollinger_bands",
+    "backtest",
+    "ma_cross_signal",
     "show_chart",
 ]

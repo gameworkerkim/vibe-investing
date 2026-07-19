@@ -30,7 +30,7 @@ print("Browser path: from vi_browser import get_candles, …")
     note_zh: "通过 Worker API 或确定性 mock K 线。",
     sample: `from vi_browser import get_candles
 
-# Yahoo (default) or TOSS: await get_candles("005930", days=90, provider="toss")
+# Yahoo is the primary live provider for the demo stage.
 candles = await get_candles("005930", days=90, provider="yahoo")
 print("bars", len(candles))
 print("last", candles[-1])
@@ -41,16 +41,14 @@ print("last", candles[-1])
     gs: "Dataset / GsDataApi (KR broker feed)",
     vi: "vi_browser.get_candles(..., provider='toss')",
     module: "data / toss",
-    status: "browser",
-    note_en: "TOSS Open API via Worker secrets (≤2 pages). Falls back to mock if unset.",
-    note_ko: "Worker 시크릿으로 TOSS Open API (최대 2페이지). 미설정 시 mock.",
-    note_zh: "通过 Worker secrets 调用 TOSS（最多 2 页）。未配置则 mock。",
-    sample: `from vi_browser import get_candles, show_chart
-
-candles = await get_candles("005930", days=60, provider="toss")
-show_chart(candles, title="005930 TOSS")
-print("bars", len(candles))
-print("last", candles[-1] if candles else None)
+    status: "planned",
+    note_en: "Deferred: TOSS IP allowlist blocks Worker egress. Realtime KR feed will use another path later.",
+    note_ko: "후순위: TOSS IP 화이트리스트로 Worker 직통 불가. 실시간 시세는 다른 경로로 추후 연동.",
+    note_zh: "延后：TOSS IP 白名单阻断 Worker。实时行情将另路径接入。",
+    sample: `print("=== deferred: TOSS provider ===")
+print("TOSS Open API needs a fixed egress IP; Cloudflare Workers Free has none.")
+print("Use provider='yahoo' for the committee stage today.")
+print("Realtime KR feed is planned via a separate ingest path (not Worker→TOSS direct).")
 `,
   },
   {
@@ -137,6 +135,54 @@ print("max_drawdown", None if mdd is None else round(mdd, 6))
 `,
   },
   {
+    id: "rsi",
+    gs: "gs_quant.timeseries / technical RSI",
+    vi: "vi_browser.rsi(closes, period)",
+    module: "timeseries",
+    status: "browser",
+    note_en: "Wilder-style RSI (list-based in browser).",
+    note_ko: "Wilder 방식 RSI (브라우저 리스트 구현).",
+    note_zh: "Wilder 风格 RSI（浏览器列表实现）。",
+    sample: `from vi_browser import get_candles, rsi
+
+candles = await get_candles("005930", days=120)
+r = rsi(candles, 14)
+print("rsi_14_last", None if r[-1] is None else round(r[-1], 4))
+`,
+  },
+  {
+    id: "macd",
+    gs: "technical MACD",
+    vi: "vi_browser.macd(closes)",
+    module: "timeseries",
+    status: "browser",
+    note_en: "Returns (macd_line, signal_line, histogram).",
+    note_ko: "(macd, signal, hist) 튜플 반환.",
+    note_zh: "返回 (macd, signal, hist)。",
+    sample: `from vi_browser import get_candles, macd
+
+candles = await get_candles("AAPL", days=120)
+line, sig, hist = macd(candles)
+print("macd_last", round(line[-1], 6), "signal", round(sig[-1], 6))
+`,
+  },
+  {
+    id: "bb",
+    gs: "technical Bollinger Bands",
+    vi: "vi_browser.bollinger_bands(closes)",
+    module: "timeseries",
+    status: "browser",
+    note_en: "Returns (upper, middle, lower).",
+    note_ko: "(upper, middle, lower) 반환.",
+    note_zh: "返回 (upper, middle, lower)。",
+    sample: `from vi_browser import get_candles, bollinger_bands
+
+candles = await get_candles("005930", days=90)
+u, m, l = bollinger_bands(candles, 20, 2)
+print("bb_last", round(u[-1], 4), round(m[-1], 4), round(l[-1], 4))
+`,
+  },
+  {
     id: "chart",
     gs: "charts / plot series (GS Marquee UI)",
     vi: "vi_browser.show_chart(candles)",
@@ -158,27 +204,55 @@ print("ma_22_last:", None if ma[-1] is None else round(ma[-1], 4))
 `,
   },
   {
+    id: "backtest",
+    gs: "gs_quant.backtests (simplified edu)",
+    vi: "vi_browser.backtest(candles, signal)",
+    module: "backtest",
+    status: "browser",
+    note_en: "Next-bar edu backtest: equity + total_return / MDD / Sharpe / CAGR.",
+    note_ko: "다음 봉 교육용 백테스트: equity + 수익률/MDD/Sharpe/CAGR.",
+    note_zh: "下一根K线教学回测：equity + 收益/MDD/Sharpe/CAGR。",
+    sample: `from vi_browser import get_candles, ma_cross_signal, backtest, show_chart
+
+candles = await get_candles("005930", days=180)
+sig = ma_cross_signal(candles, fast=10, slow=30)
+bt = backtest(candles, sig, fee_bps=10)
+show_chart(bt["equity"], title="equity (MA cross)", series_label="equity")
+m = bt["metrics"]
+print("total_return:", round(m["total_return"], 6))
+print("mdd:", round(m["mdd"], 6))
+print("sharpe:", round(m["sharpe"], 4))
+print("cagr:", round(m["cagr"], 6))
+`,
+  },
+  {
     id: "bundle",
-    gs: "returns + volatility + MA workflow",
+    gs: "returns + volatility + MA + backtest workflow",
     vi: "vi_browser combo sample",
     module: "timeseries",
     status: "browser",
-    note_en: "Committee golden script — full small workflow.",
-    note_ko: "위원회 골든 스크립트 — 작은 end-to-end 워크플로.",
-    note_zh: "委员会黄金脚本 — 小型端到端流程。",
-    sample: `from vi_browser import get_candles, returns, volatility, moving_average, show_chart
+    note_en: "Committee golden script — indicators + educational backtest.",
+    note_ko: "위원회 골든 스크립트 — 지표 + 교육용 백테스트.",
+    note_zh: "委员会黄金脚本 — 指标 + 教学回测。",
+    sample: `from vi_browser import (
+    get_candles, returns, volatility, moving_average, rsi,
+    ma_cross_signal, backtest, show_chart,
+)
 
-candles = await get_candles("005930", days=90)
+candles = await get_candles("005930", days=180)
 closes = [c["close"] for c in candles]
 vol = volatility(closes, 22)
 ma = moving_average(closes, 22)
-show_chart(candles, title="005930 close")
+r = rsi(closes, 14)
+sig = ma_cross_signal(candles, 10, 30)
+bt = backtest(candles, sig, fee_bps=10)
+show_chart(bt["equity"], title="equity (MA cross)")
 
 print("bars:", len(candles))
-print("last_close:", round(closes[-1], 4))
 print("volatility_22:", None if vol is None else round(vol, 6))
 print("ma_22_last:", None if ma[-1] is None else round(ma[-1], 4))
-print("last_5_returns:", [None if r is None else round(r, 6) for r in returns(closes)[-5:]])
+print("rsi_14_last:", None if r[-1] is None else round(r[-1], 4))
+print("metrics:", {k: round(v, 6) if isinstance(v, float) else v for k, v in bt["metrics"].items()})
 `,
   },
   {

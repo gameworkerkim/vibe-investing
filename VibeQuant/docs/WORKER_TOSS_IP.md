@@ -82,8 +82,10 @@ Worker then routes TOSS calls to `https://<vps-ip>:3000/toss/...` instead of `ht
 
 ## 5. Decision (2026-07-19)
 
-**Phase 1 uses Yahoo only.** TOSS is configured but dormant on the Worker.
-When TOSS data becomes necessary, Option C is the pragmatic path.
+**Phase 1 / committee stage uses Yahoo only.** TOSS Worker path is **deferred later work**
+(IP allowlist). Realtime KR feed will arrive via a **separate ingest path**, not
+Worker→TOSS direct on Cloudflare Free. Option C remains the pragmatic path if a
+fixed-IP proxy is chosen later.
 
 ## 6. Related
 - [LIMITATIONS.md](LIMITATIONS.md) — hard stops table
