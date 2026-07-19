@@ -46,7 +46,7 @@ against the same normative limits (not aspirational “eventually paid” featur
 - [ ] Watchlist capped for free (e.g. 20–50 symbols)
 - [ ] Freeze feature work on Express/`backend/` multi-SaaS path; keep for reference only
 - [ ] TOSS: optional Worker path with secrets in CF secrets — **not** required for Phase 1 exit;
-      no heavy TOSS pagination on free Cron
+      no heavy TOSS pagination on free Cron — **[x] TOSS IP limitation documented (WORKER_TOSS_IP.md); Yahoo confirmed as primary provider**
 
 ### 1B — Pages + Pyodide webview
 

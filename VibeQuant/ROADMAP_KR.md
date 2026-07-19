@@ -45,7 +45,7 @@
 - [ ] 무료용 watchlist 상한 (예: 20–50 종목)
 - [ ] Express/`backend/` 멀티 SaaS 기능 확장 동결 (참고용만 유지)
 - [ ] TOSS: CF secrets로 Worker 옵션 경로 — Phase 1 Exit에 필수 아님;
-      free Cron에서 TOSS 대량 페이지네이션 금지
+      free Cron에서 TOSS 대량 페이지네이션 금지 — **[x] TOSS IP 제한 문서화 (WORKER_TOSS_IP.md); Yahoo 주 제공자 확정**
 
 ### 1B — Pages + Pyodide 웹뷰
 

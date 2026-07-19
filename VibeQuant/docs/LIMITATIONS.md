@@ -25,6 +25,7 @@ as “done” in README/ROADMAP without removing the corresponding entry.
 | D1 writes / day | **100,000** | Do not store every bar in D1 |
 | KV writes / day | **~1,000** | Avoid KV as primary cache on Free; use Cache API |
 | Cron triggers / account | **5** | One simple schedule for Phase 1 |
+| **TOSS API — no fixed Worker IP** | **Blocked on Free** | Cloudflare Free Workers share an egress IP pool; TOSS requires IP whitelist → direct Worker calls fail. See [WORKER_TOSS_IP.md](WORKER_TOSS_IP.md).
 
 **Latency expectations (honest):**
 

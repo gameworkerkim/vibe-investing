@@ -25,6 +25,7 @@
 | D1 쓰기 / 일 | **100,000** | 모든 봉을 D1에 저장 금지 |
 | KV 쓰기 / 일 | **~1,000** | Free에서 KV를 주 캐시로 쓰지 말 것 — Cache API |
 | 계정 Cron 수 | **5** | Phase 1은 단순 스케줄 하나 |
+| **TOSS API — Worker에 고정 IP 없음** | **Free에서 차단** | Cloudflare Free Workers는 공유 IP 풀; TOSS는 IP 화이트리스트 요구 → Worker 직통 불가. [WORKER_TOSS_IP.md](WORKER_TOSS_IP.md) 참조. |
 
 **지연 기대치 (정직):**
 
