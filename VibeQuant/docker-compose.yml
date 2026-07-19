@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  vibequant:
+    build: .
+    image: vibequant:latest
+    container_name: vibequant
+    environment:
+      - PYTHONPATH=/app
+      - VI_QUANT_PROVIDER=${VI_QUANT_PROVIDER:-mock}
+      - TOSS_CLIENT_ID=${TOSS_CLIENT_ID:-}
+      - TOSS_CLIENT_SECRET=${TOSS_CLIENT_SECRET:-}
+    volumes:
+      - ./data:/app/data
+      - ./notebooks:/app/notebooks
+    stdin_open: true
+    tty: true
+
+  vibequant-jupyter:
+    build: .
+    image: vibequant:latest
+    container_name: vibequant-jupyter
+    environment:
+      - PYTHONPATH=/app
+      - VI_QUANT_PROVIDER=${VI_QUANT_PROVIDER:-mock}
+      - TOSS_CLIENT_ID=${TOSS_CLIENT_ID:-}
+      - TOSS_CLIENT_SECRET=${TOSS_CLIENT_SECRET:-}
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./data:/app/data
+      - ./notebooks:/app/notebooks
+    command: >
+      jupyter notebook
+      --ip=0.0.0.0
+      --port=8888
+      --no-browser
+      --allow-root
+      --NotebookApp.token=''
+      --NotebookApp.password=''
+      --notebook-dir=/app/notebooks

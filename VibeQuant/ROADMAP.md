@@ -43,6 +43,10 @@ both the `vi_quant` Python client and `VibeQuantClient` (TypeScript/Node.js).
 - [x] `scripts/setup-env.sh`: interactive terminal script for credential input (no secrets in source)
 - [x] `scripts/pre-commit-hook.sh`: blocks commits containing API keys, DB URLs, or tokens
 - [x] Python + TypeScript client examples (`examples/vibequant_client.py`, `examples/vibequant-client.ts`)
+- [x] Python provider layer: `vi_quant/providers/` — UnifiedProvider (TOSS + Yahoo Finance + Mock), all 5 functions identical across backends
+- [x] `docs/PROVIDER_API_MATCHING.md` — TOSS ↔ Yahoo Finance ↔ VibeQuant unified interface mapping
+- [x] `Dockerfile` + `docker-compose.yml` — local backtesting environment (Jupyter + mock provider)
+- [x] `notebooks/01_backtest_demo.py` — deterministic mock backtest demo (no credentials needed)
 - [ ] Deploy to Vercel (free tier) with Neon + Upstash integrations
 - [ ] Wire `vi_quant/data/` to call the backend REST API (replace current stubs)
 - [ ] One end-to-end notebook: Python → backend → Yahoo Finance → timeseries

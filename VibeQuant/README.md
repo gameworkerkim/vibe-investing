@@ -77,7 +77,8 @@ pluggable open backends:
 
 | Layer | Module | GS Quant backend | VibeQuant backend |
 |---|---|---|---|
-| Data | `vi_quant/data/` | Marquee Data APIs | yfinance, FRED, local Parquet/DuckDB store |
+| Data | `vi_quant/providers/` | Marquee Data APIs | Unified provider: TOSS + Yahoo Finance + Mock (auto-detect) |
+| Data | `backend/` | — | REST data server (Express+TS, Redis cache, Neon DB, Vercel) |
 | Model | `vi_quant/instrument/`, `vi_quant/risk/` | GS pricing & risk engines | QuantLib + local analytics |
 | Application | `vi_quant/markets/`, `vi_quant/backtests/` | Marquee portfolio/backtest services | Local portfolio store + local backtest engine |
 
@@ -86,10 +87,47 @@ pluggable open backends:
 All documentation is in English.
 
 | Document | Description |
-|---|---|
-| [docs/API_MAPPING.md](docs/API_MAPPING.md) | Complete GS → VI API mapping table (packages, classes, endpoints, env vars) |
-| [docs/OFFICIAL_DOCS_GUIDE.md](docs/OFFICIAL_DOCS_GUIDE.md) | Correspondence manual for the official GS Quant docs ([developer.gs.com/docs/gsquant/](https://developer.gs.com/docs/gsquant/)) |
-| [ROADMAP.md](ROADMAP.md) | Development roadmap and phase plan |
+|---|---|---|
+| [docs/API_MAPPING.md](docs/API_MAPPING.md) | Complete GS → VI API mapping table |
+| [docs/PROVIDER_API_MATCHING.md](docs/PROVIDER_API_MATCHING.md) | TOSS ↔ Yahoo Finance ↔ VibeQuant unified interface mapping |
+| [docs/OFFICIAL_DOCS_GUIDE.md](docs/OFFICIAL_DOCS_GUIDE.md) | GS Quant official docs correspondence manual |
+| [ROADMAP.md](ROADMAP.md) | Development roadmap (English) |
+| [README_KR.md](README_KR.md) / [ROADMAP_KR.md](ROADMAP_KR.md) | Korean documentation |
+| [SECURITY.md](SECURITY.md) | LLM-readable security policy |
+
+## Data Providers — Swap Backends Without Changing Code
+
+```python
+from vi_quant.providers import get_provider
+
+# Auto-detect: TOSS (if keys set) → Yahoo (always available) → Mock (fallback)
+p = get_provider()
+
+# Same 5 functions on every backend:
+p.fetch_candles("AAPL", 260)           # → [{time, open, high, low, close, volume}]
+p.fetch_prices(["AAPL", "TSLA"])       # → {"AAPL": {price, change, changeRate}}
+p.fetch_asset("005930")                # → {symbol, name, exchange, currency}
+p.provider_name()                      # → "toss" | "yahoo" | "mock"
+p.is_available()                       # → True | False
+
+# Force specific provider:
+p = get_provider("yahoo")              # Yahoo Finance (global, no key needed)
+p = get_provider("mock")               # Deterministic PRNG (no credentials)
+```
+
+See [docs/PROVIDER_API_MATCHING.md](docs/PROVIDER_API_MATCHING.md) for the full TOSS ↔ Yahoo interface map.
+
+## Docker Quick Start
+
+```bash
+cd VibeQuant
+docker compose build          # build the container
+docker compose run vibequant  # interactive Python with mock provider
+docker compose up -d          # start Jupyter on :8888
+
+# Force Yahoo Finance (no credentials needed):
+VI_QUANT_PROVIDER=yahoo docker compose run vibequant
+```
 
 ## Compatibility Policy
 
@@ -102,15 +140,16 @@ All documentation is in English.
 
 ## Status
 
-**Pre-Alpha scaffolding — not yet a runnable pricing engine.**
+**Pre-Alpha — local backtesting works (mock + Yahoo Finance), pricing not implemented yet.**
 
 | Module | Status |
 |---|---|
 | `vi_quant.session` (`ViSession`, embedded mode) | Implemented |
 | `vi_quant.errors` (`MqError` family) | Implemented (vendored from gs-quant) |
-| `vi_quant.timeseries` (algebra, statistics, econometrics, technicals, analysis, datetime) | Implemented (vendored from gs-quant, runs fully locally) |
-| `vi_quant.datetime` (calendars, relative dates, day counts) | Implemented (vendored; holiday datasets pending Phase 1) |
-| `vi_quant.data` (`Dataset` providers: yfinance/FRED/local) | Stub — Phase 1 |
+| `vi_quant.timeseries` (algebra, statistics, econometrics, technicals, analysis) | Implemented (vendored, runs fully locally) |
+| `vi_quant.providers` (UnifiedProvider: TOSS + Yahoo Finance + Mock) | Implemented (auto-detect, identical signatures across backends) |
+| `backend/` (Express + TS REST data server, Upstash Redis + Neon DB) | Implemented (Vercel-ready) |
+| `Dockerfile` + `docker-compose.yml` | Implemented (local backtesting, `docker compose up`) |
 | `vi_quant.instrument` / `vi_quant.risk` (pricing) | Not started — Phase 2 |
 | `vi_quant.backtests`, `vi_quant.markets` (portfolio) | Not started — Phase 2+ |
 
