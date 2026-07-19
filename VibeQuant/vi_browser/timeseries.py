@@ -106,3 +106,52 @@ def sharpe_ratio(
         return 0.0
     excess = r.mean() - (risk_free_rate / trading_days)
     return float(np.sqrt(trading_days) * excess / r.std())
+
+
+def rsi(prices: pd.Series, period: int = 14) -> pd.Series:
+    """Relative Strength Index (Wilder's smoothing).
+
+    >>> s = pd.Series([44, 44.5, 45, 44, 43.5, 44, 45, 46, 47, 48, 47, 46, 45, 44, 43, 44])
+    >>> rsi(s, 14).iloc[-1]  # doctest: +SKIP
+    """
+    delta = prices.diff()
+    gain = delta.clip(lower=0)
+    loss = (-delta).clip(lower=0)
+    avg_gain = gain.ewm(alpha=1 / period, adjust=False).mean()
+    avg_loss = loss.ewm(alpha=1 / period, adjust=False).mean()
+    rs = avg_gain / avg_loss.replace(0, np.nan)
+    return 100.0 - (100.0 / (1.0 + rs))
+
+
+def macd(
+    prices: pd.Series,
+    fast: int = 12,
+    slow: int = 26,
+    signal: int = 9,
+):
+    """MACD (Moving Average Convergence Divergence).
+
+    Returns (macd_line, signal_line, histogram) as pd.Series.
+    """
+    ema_fast = prices.ewm(span=fast, adjust=False).mean()
+    ema_slow = prices.ewm(span=slow, adjust=False).mean()
+    macd_line = ema_fast - ema_slow
+    signal_line = macd_line.ewm(span=signal, adjust=False).mean()
+    histogram = macd_line - signal_line
+    return macd_line, signal_line, histogram
+
+
+def bollinger_bands(
+    prices: pd.Series,
+    period: int = 20,
+    stddev: int = 2,
+):
+    """Bollinger Bands.
+
+    Returns (upper, middle, lower) as pd.Series.
+    """
+    middle = prices.rolling(period).mean()
+    std = prices.rolling(period).std()
+    upper = middle + stddev * std
+    lower = middle - stddev * std
+    return upper, middle, lower
