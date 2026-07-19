@@ -1,8 +1,8 @@
 # VibeQuant (한국어)
 
-**VibeQuant**는 [GS Quant](https://github.com/goldmansachs/gs-quant)(`gs_quant`)를
-**Python API 레벨에서 대체**하고, 대시보드 웹뷰에 **퀀트 스크립트를 입력해 결과를 검증**하는
-오픈소스 퀀트 스택입니다.
+GS Quant의 오픈소스 버전으로 Vibe Quant 웹사이트 데모입니다. 이 프로젝트의 목적은 멀티 LLM 퀀트 위원회의 공통 실행·검증을 위한 프로젝트입니다. TOSS Open API와 야후 파이낸스에서 기초 데이터를 수집하고 있습니다. LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.
+
+신뢰는 예측 정확도가 아니라 **오픈소스 기여**와 **Python으로 재현·검증 가능한 퀀트 워크플로**에 둡니다. ([GS Quant](https://github.com/goldmansachs/gs-quant) API 대응: `gs_quant` → `vi_quant`, `Gs*` → `Vi*`.)
 
 역할 분리 (규범):
 

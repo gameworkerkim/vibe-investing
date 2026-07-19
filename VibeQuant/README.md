@@ -1,8 +1,8 @@
 # VibeQuant
 
-**VibeQuant** is an open-source quantitative finance stack that aims to **replace GS Quant
-([gs-quant](https://github.com/goldmansachs/gs-quant)) at the Python API level**, and to let
-users **type quant scripts in a dashboard webview and verify results**.
+An open-source take on [GS Quant](https://github.com/goldmansachs/gs-quant) — the Vibe Quant website demo. Built for shared execution and verification across a multi-LLM quant committee. Base market data is collected from TOSS Open API and Yahoo Finance. LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.
+
+Trust here is not oracle-level forecast accuracy. It comes from **open-source contribution** and a **Python-verifiable quant workflow** you can reproduce yourself (`gs_quant` → `vi_quant`, `Gs*` → `Vi*`).
 
 Product split (normative):
 
