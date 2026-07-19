@@ -1,102 +1,173 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Vibe Quant — open GS Quant–compatible browser harness for multi-LLM quant committees" />
-  <title>Vibe Quant</title>
+  <meta name="description" content="웹버전 Vibe Quant Python Demo — GS Quant 오픈소스 웹 데모" />
+  <title>Vibe Quant — Web Python Demo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./css/app.css" />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/app.css?v=8" />
 </head>
 <body>
-  <div class="atmosphere" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
 
-  <header class="top">
-    <div class="brand-block">
-      <p class="brand" data-i18n="brand">Vibe Quant</p>
-      <p class="tagline" data-i18n="tagline">
-        Open-source GS Quant–compatible API demo for multi-LLM quant committees.
-      </p>
+  <header class="hero">
+    <div class="hero-top">
+      <div>
+        <p class="brand">Vibe Quant</p>
+        <p class="tagline" data-i18n="tagline">
+          멀티 LLM 퀀트 위원회를 위한 GS Quant 호환 오픈소스 하네스.
+        </p>
+      </div>
+      <div class="hero-meta">
+        <label class="lang-label" for="lang-select" data-i18n="language">언어</label>
+        <select id="lang-select" class="lang-select" aria-label="Language">
+          <option value="ko" selected>한국어</option>
+          <option value="en">English</option>
+          <option value="zh">中文</option>
+        </select>
+      </div>
     </div>
-    <div class="top-actions">
-      <label class="lang-label" for="lang-select" data-i18n="language">Language</label>
-      <select id="lang-select" class="lang-select" aria-label="Language">
-        <option value="ko">한국어</option>
-        <option value="en">English</option>
-        <option value="zh">中文</option>
-      </select>
+    <h1 class="headline" data-i18n="headline">웹버전 Vibe Quant Python Demo</h1>
+    <p class="lede" data-i18n="lede">
+      GS Quant의 오픈소스 버전으로 Vibe Quant 웹사이트 데모입니다. 이 프로젝트의 목적은 멀티 LLM 퀀트 위원회의 공통 실행·검증을 위한 프로젝트입니다. TOSS Open API와 야후 파이낸스에서 기초 데이터를 수집하고 있습니다. LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.
+    </p>
+    <div class="hero-links">
+      <a class="pill" href="#api-map" data-i18n="cta_apis">GS → VI API 설명</a>
+      <a class="pill ghost" href="./apis.html" data-i18n="cta_docs">API 문서</a>
+      <a class="pill ghost" href="#workspace" data-i18n="cta_run">실행기</a>
+      <a class="pill ghost" href="https://github.com/gameworkerkim/vibe-investing/tree/main/VibeQuant" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
   </header>
 
-  <main class="shell">
-    <section class="intro">
-      <h1 class="headline" data-i18n="headline">
-        Browser GS / VI API demo site
-      </h1>
-      <p class="lede" data-i18n="lede">
-        An open-source counterpart to GS Quant: the shared execution and verification harness
-        for a multi-LLM quant committee. Competition is not the platform — it is reproducible
-        committee outputs and insights for LLM-extended quant trading.
-      </p>
-    </section>
-
-    <section class="workspace" aria-label="Python workspace">
-      <div class="pane input-pane">
-        <div class="pane-head">
-          <h2 data-i18n="python_input">Python input</h2>
-          <div class="pane-actions">
-            <button type="button" id="btn-example" class="btn ghost" data-i18n="load_example">Load example</button>
-            <button type="button" id="btn-run" class="btn primary" data-i18n="run">Run</button>
-          </div>
-        </div>
-        <textarea
-          id="code"
-          class="code"
-          spellcheck="false"
-          autocomplete="off"
-          autocapitalize="off"
-          data-i18n-placeholder="code_placeholder"
-          aria-label="Python code"
-        ></textarea>
-        <p class="hint" data-i18n="hint">
-          Runs in your browser via Pyodide (WASM). Market data calls go to the VibeQuant API — not to Goldman Sachs.
+  <!-- Static API docs: visible without JavaScript -->
+  <section id="api-map" class="api-section">
+    <div class="section-head">
+      <div>
+        <h2 data-i18n="api_title">GS Quant ↔ VI Quant API 설명</h2>
+        <p class="section-sub" data-i18n="api_sub">
+          규칙: <code>gs_quant → vi_quant</code>, <code>Gs* → Vi*</code>.
+          <span class="badge browser">browser</span> 는 이 페이지에서 바로 실행됩니다.
+          행의 <strong>샘플 로드</strong>를 누르면 아래 에디터에 코드가 들어갑니다.
         </p>
       </div>
-
-      <div class="pane result-pane">
-        <div class="pane-head">
-          <h2 data-i18n="result">Result</h2>
-          <span id="runtime-status" class="status" data-i18n="status_loading">Loading Python runtime…</span>
-        </div>
-        <pre id="output" class="output" aria-live="polite"></pre>
+      <div class="legend">
+        <span class="badge browser">browser = 웹 실행</span>
+        <span class="badge local">local = pip</span>
+        <span class="badge planned">planned = 예정</span>
       </div>
-    </section>
-  </main>
+    </div>
+
+    <div class="api-table-wrap">
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th data-i18n="col_gs">GS Quant</th>
+            <th data-i18n="col_vi">VI Quant</th>
+            <th data-i18n="col_status">상태</th>
+            <th data-i18n="col_desc">설명</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="api-tbody">
+          <!-- Static fallback (always visible); app.js replaces with full catalog -->
+          <tr data-id="candles">
+            <td><code>Dataset / GsDataApi</code></td>
+            <td><code>vi_browser.get_candles</code></td>
+            <td><span class="badge browser">browser</span></td>
+            <td>시세 캔들 — Worker 또는 mock. 샘플 로드로 실행기 채움.</td>
+            <td></td>
+          </tr>
+          <tr data-id="returns">
+            <td><code>gs_quant.timeseries.returns</code></td>
+            <td><code>vi_browser.returns</code></td>
+            <td><span class="badge browser">browser</span></td>
+            <td>가격 수익률 시계열.</td>
+            <td></td>
+          </tr>
+          <tr data-id="volatility">
+            <td><code>gs_quant.timeseries.volatility</code></td>
+            <td><code>vi_browser.volatility</code></td>
+            <td><span class="badge browser">browser</span></td>
+            <td>윈도우 변동성(연율화 데모).</td>
+            <td></td>
+          </tr>
+          <tr data-id="ma">
+            <td><code>gs_quant.timeseries.moving_average</code></td>
+            <td><code>vi_browser.moving_average</code></td>
+            <td><span class="badge browser">browser</span></td>
+            <td>종가 단순 이동평균.</td>
+            <td></td>
+          </tr>
+          <tr data-id="session">
+            <td><code>GsSession.use(…)</code></td>
+            <td><code>ViSession.use()</code></td>
+            <td><span class="badge local">local</span></td>
+            <td>Marquee OAuth 불필요. 브라우저는 vi_browser.</td>
+            <td></td>
+          </tr>
+          <tr data-id="swap">
+            <td><code>IRSwap.calc(Price)</code></td>
+            <td><code>IRSwap.calc(Price)</code></td>
+            <td><span class="badge planned">planned</span></td>
+            <td>QuantLib 로컬 Phase 2 — WASM 불가.</td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="doc-link">
+      <a href="./apis.html" data-i18n="more_apis">전체 API 설명 페이지 열기 →</a>
+      ·
+      <a id="repo-mapping-link" href="https://github.com/gameworkerkim/vibe-investing/blob/main/VibeQuant/docs/API_MAPPING_KR.md" target="_blank" rel="noopener noreferrer" data-i18n="repo_mapping">레포 매핑표</a>
+    </p>
+  </section>
+
+  <section id="workspace" class="workspace">
+    <div class="pane input-pane">
+      <div class="pane-head">
+        <div>
+          <h2 data-i18n="python_input">파이썬 입력</h2>
+          <p id="sample-label" class="sample-label"></p>
+        </div>
+        <div class="pane-actions">
+          <button type="button" id="btn-example" class="btn ghost" data-i18n="load_example">골든 샘플</button>
+          <button type="button" id="btn-run" class="btn primary" data-i18n="run">실행</button>
+        </div>
+      </div>
+      <textarea id="code" class="code" spellcheck="false" data-i18n-placeholder="code_placeholder" aria-label="Python code"
+        placeholder="# 위 API 표에서 샘플 로드, 또는 VI browser Python 입력"></textarea>
+      <p class="hint" data-i18n="hint">
+        Pyodide(WASM)로 브라우저 실행. 시세는 VibeQuant Worker/mock — Goldman Sachs 아님.
+      </p>
+    </div>
+    <div class="pane result-pane">
+      <div class="pane-head">
+        <h2 data-i18n="result">결과</h2>
+        <span id="runtime-status" class="status">Python 런타임 로드 중…</span>
+      </div>
+      <pre id="output" class="output" aria-live="polite"></pre>
+    </div>
+  </section>
 
   <footer class="foot">
     <div class="repo">
-      <p class="repo-title" data-i18n="repo_title">Repository</p>
-      <a
-        class="repo-link"
-        href="https://github.com/gameworkerkim/vibe-investing"
-        target="_blank"
-        rel="noopener noreferrer"
-      >github.com/gameworkerkim/vibe-investing</a>
-      <p class="repo-sub" data-i18n="repo_sub">
-        VibeQuant lives under <code>VibeQuant/</code> — Cloudflare Pages demo + <code>vi_quant</code> / <code>vi_browser</code>.
-      </p>
+      <p class="repo-title" data-i18n="repo_title">레포지토리</p>
+      <a class="repo-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer"
+        >github.com/gameworkerkim/vibe-investing</a>
+      <p class="repo-sub" data-i18n="repo_sub">소스: VibeQuant/ — Pages 데모 + vi_quant / vi_browser.</p>
     </div>
     <aside class="disclaimer" role="note">
       <p data-i18n="disclaimer">
-        Notice: This Quant tool is not investment advice. It must not be used for investing.
-        Advice from a qualified investment professional must come first.
+        주의: 본 Quant는 투자 의견이 아니며 투자에 사용해서는 안 됩니다. 투자 전문가의 조언이 선행되어야 합니다.
       </p>
     </aside>
   </footer>
 
-  <script src="./js/runtime-config.js"></script>
-  <script type="module" src="./js/app.js"></script>
+  <script src="./js/runtime-config.js?v=8"></script>
+  <script type="module" src="./js/app.js?v=8"></script>
 </body>
 </html>

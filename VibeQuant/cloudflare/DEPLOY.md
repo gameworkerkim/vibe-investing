@@ -34,7 +34,9 @@ Avoid pasting comments that contain special arrows (`→`) into zsh — run **on
 | CDN | Worker `/cdn/*` + Pages `_headers` | — | Edge cache |
 
 **Do not mix Worker and Pages configs.**  
-Pages deploy must use `--config wrangler.pages.toml` (or `./scripts/deploy.sh`).
+Pages does **not** support `--config` / custom wrangler paths.  
+Keep Pages config in `../pages/wrangler.toml` and deploy with  
+`cd ../pages && wrangler pages deploy .` (or `./scripts/deploy.sh`).
 
 ---
 
@@ -90,7 +92,9 @@ npm install
 ./scripts/bootstrap.sh
 ./scripts/setup-secrets.sh --remote   # optional TOSS → Worker
 
-export VIBEQUANT_API_BASE="https://vibequant-api.<YOUR_SUBDOMAIN>.workers.dev"
+# deploy.sh auto-detects the workers.dev URL from the Worker deploy log
+# optional override:
+# export VIBEQUANT_API_BASE="https://vibequant-api.gameworker-4bb.workers.dev"
 ./scripts/deploy.sh
 
 ./scripts/upload-static.sh ./static/images/logo.png images/logo.png
@@ -118,22 +122,18 @@ npx wrangler r2 object put vibequant-static/tests/hello.txt \
   --remote
 ```
 
-### Pages config warning
+### Pages `--config` error
 
 ```
-missing the "pages_build_output_dir" field … Ignoring configuration file
+Pages does not support custom paths for the Wrangler configuration file
 ```
 
-→ Pages picked up the Worker `wrangler.toml`. Use:
+→ Remove `--config` / `-c`. Correct flow:
 
 ```bash
-npx wrangler pages deploy ../pages \
-  --config wrangler.pages.toml \
-  --project-name=vibequant-web \
-  --commit-dirty=true
+cd /Users/dennis/vibe-investing/VibeQuant/pages
+npx wrangler pages deploy . --project-name=vibequant-web --commit-dirty=true
 ```
-
-(`./scripts/deploy.sh` already does this.)
 
 ---
 
@@ -181,7 +181,8 @@ cd ../pages && python3 -m http.server 8787
 | File | Role |
 |---|---|
 | `wrangler.toml` | Worker only |
-| `wrangler.pages.toml` | Pages only |
+| `../pages/wrangler.toml` | Pages only |
+| `wrangler.pages.toml` | Deprecated pointer — do not pass via `--config` |
 | `.dev.vars` | Local secrets (**do not commit**) |
 | `.dev.vars.example` | Placeholders |
 | `schema.sql` | D1 schema |
@@ -200,5 +201,6 @@ After clone, run bootstrap so `database_id` is filled (repo may ship `REPLACE_WI
 | R2 `10042` | Enable R2 in Dashboard |
 | Pages `8000002` | Already exists → deploy |
 | R2 `local` | Use `--remote` |
-| Pages `pages_build_output_dir` warning | `--config wrangler.pages.toml` |
+| Pages `--config` error | `cd pages && wrangler pages deploy .` |
+| runtime-config still has YOUR_SUBDOMAIN | Re-run `deploy.sh` (auto-detect) or export the real workers.dev URL |
 | D1 placeholder | `./scripts/bootstrap.sh` |

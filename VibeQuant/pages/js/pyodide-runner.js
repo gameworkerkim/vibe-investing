@@ -10,23 +10,35 @@ import math, sys, types
 
 vi_browser = types.ModuleType("vi_browser")
 
+def _js_to_py(raw):
+    """Convert JsProxy JSON to Python without pyodide.ffi.to_py (broken on some builds)."""
+    import json
+    from js import JSON
+    return json.loads(str(JSON.stringify(raw)))
+
 async def get_candles(symbol="AAPL", days=60, provider="mock"):
     days = int(days)
     api = ""
     try:
         from js import window
-        api = getattr(window, "VIBEQUANT_API_BASE", "") or ""
+        cfg = getattr(window, "RUNTIME_CONFIG", None)
+        if cfg is not None:
+            api = str(getattr(cfg, "VIBEQUANT_API_BASE", "") or "") or api
+        if not api:
+            api = str(getattr(window, "VIBEQUANT_API_BASE", "") or "")
     except Exception:
         pass
     if api:
-        from js import fetch
-        from pyodide.ffi import to_py
-        url = f"{api.rstrip('/')}/api/v1/candles/{provider}/{symbol}?days={days}"
         try:
+            from js import fetch
+            url = f"{api.rstrip('/')}/api/v1/candles/{provider}/{symbol}?days={days}"
             res = await fetch(url)
             if res.ok:
-                data = to_py(await res.json())
-                rows = data.get("candles") or data.get("data") or data
+                data = _js_to_py(await res.json())
+                if isinstance(data, dict):
+                    rows = data.get("candles") or data.get("data") or data
+                else:
+                    rows = data
                 if isinstance(rows, list) and rows:
                     return rows
         except Exception:
@@ -131,11 +143,13 @@ function indentBlock(code) {
 export async function runPython(code) {
   const pyodide = await loadPyodideRuntime();
   const body = indentBlock(code.trim() ? code : "pass");
+  // Inject vi_browser into the entry scope so snippets without import still run
   const script = `
 import sys, traceback
 from io import StringIO
 
 async def __vq_entry():
+    from vi_browser import get_candles, returns, volatility, moving_average
 ${body}
 
 _buf = StringIO()

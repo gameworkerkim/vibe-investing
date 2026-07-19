@@ -77,6 +77,12 @@ multi-SaaS path.
 
 ## Dashboard (browser demo)
 
+**Live site:** [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)
+
+| Overview | Runner |
+|---|---|
+| ![Vibe Quant dashboard overview (EN)](images/VibeQuant_Dashboard01_EN.png) | ![Vibe Quant Python runner (EN)](images/VibeQuant_Dashboard02_EN.png) |
+
 ```bash
 cd pages
 python3 -m http.server 8787

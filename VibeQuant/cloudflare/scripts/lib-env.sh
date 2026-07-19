@@ -74,6 +74,37 @@ set_d1_database_id() {
   mv "$tmp" "$WRANGLER_TOML"
 }
 
+# If wrangler.toml still has REPLACE_WITH_D1_DATABASE_ID, resolve from remote list.
+ensure_d1_database_id() {
+  local name="${1:-vibequant}"
+  if ! grep -q 'REPLACE_WITH_D1_DATABASE_ID' "$WRANGLER_TOML"; then
+    return 0
+  fi
+  echo "D1 database_id is placeholder — looking up remote '$name' …"
+  local list id
+  list="$(wrangler d1 list --json 2>/dev/null || echo "[]")"
+  id="$(echo "$list" | python3 -c "
+import json,sys
+name='$name'
+try:
+    rows=json.load(sys.stdin)
+except Exception:
+    rows=[]
+if isinstance(rows, dict):
+    rows=rows.get('result') or rows.get('databases') or []
+for r in rows:
+    if r.get('name')==name:
+        print(r.get('uuid') or r.get('id') or '')
+        break
+" 2>/dev/null || true)"
+  if [[ -z "$id" ]]; then
+    echo "error: D1 '$name' not found. Run: ./scripts/bootstrap.sh" >&2
+    return 1
+  fi
+  set_d1_database_id "$id"
+  echo "   wrote database_id=$id → wrangler.toml"
+}
+
 wrangler() {
   npx --yes wrangler "$@"
 }

@@ -35,7 +35,8 @@ cd /Users/dennis/vibe-investing/VibeQuant/cloudflare
 | CDN | Worker `/cdn/*` + Pages `_headers` | — | 엣지 캐시 |
 
 **Worker와 Pages 설정을 섞지 마세요.**  
-Pages 배포는 반드시 `--config wrangler.pages.toml` (또는 `./scripts/deploy.sh`).
+Pages는 **`--config` / 커스텀 wrangler 경로를 지원하지 않습니다.**  
+Pages 설정은 `../pages/wrangler.toml`에 두고, `cd ../pages && wrangler pages deploy .` 로 배포하세요 (`./scripts/deploy.sh`가 동일하게 동작).
 
 ---
 
@@ -97,8 +98,9 @@ npm install
 ./scripts/setup-secrets.sh --remote
 
 # 4) Worker + Pages 배포
-#    deploy 출력의 *.workers.dev 주소를 그대로 사용
-export VIBEQUANT_API_BASE="https://vibequant-api.<YOUR_SUBDOMAIN>.workers.dev"
+#    deploy.sh가 Worker URL을 로그에서 자동 추출합니다.
+#    수동 지정 예:
+#    export VIBEQUANT_API_BASE="https://vibequant-api.gameworker-4bb.workers.dev"
 ./scripts/deploy.sh
 
 # 5) 정적/이미지 → 원격 R2 → /cdn/*
@@ -127,21 +129,20 @@ npx wrangler r2 object put vibequant-static/tests/hello.txt \
   --remote
 ```
 
-### Pages 설정 파일 경고
+### Pages `--config` 오류
 
 ```
-missing the "pages_build_output_dir" field … Ignoring configuration file
+Pages does not support custom paths for the Wrangler configuration file
 ```
 
-→ Worker용 `wrangler.toml`을 Pages가 읽은 경우.  
-`./scripts/deploy.sh`는 `wrangler.pages.toml`을 쓰도록 되어 있습니다. 수동 시:
+→ `--config` / `-c` 를 제거하세요. 올바른 방법:
 
 ```bash
-npx wrangler pages deploy ../pages \
-  --config wrangler.pages.toml \
-  --project-name=vibequant-web \
-  --commit-dirty=true
+cd /Users/dennis/vibe-investing/VibeQuant/pages
+npx wrangler pages deploy . --project-name=vibequant-web --commit-dirty=true
 ```
+
+`pages/wrangler.toml`에 `pages_build_output_dir = "."` 가 있습니다.
 
 ---
 
@@ -195,7 +196,8 @@ cd ../pages && python3 -m http.server 8787
 | 파일 | 용도 |
 |---|---|
 | `wrangler.toml` | Worker only (D1, R2 DATA/STATIC) |
-| `wrangler.pages.toml` | Pages only (`pages_build_output_dir = "../pages"`) |
+| `../pages/wrangler.toml` | Pages only (`pages_build_output_dir = "."`) |
+| `wrangler.pages.toml` | 폐기 예정 포인터 (deploy에 `--config`로 쓰지 말 것) |
 | `.dev.vars` | 로컬 시크릿 (**커밋 금지**) |
 | `.dev.vars.example` | 플레이스홀더 |
 | `schema.sql` | D1 스키마 |
@@ -215,5 +217,6 @@ cd ../pages && python3 -m http.server 8787
 | R2 `10042` | Dashboard에서 R2 Enable |
 | Pages `8000002` | 이미 있음 → deploy 진행 |
 | R2 `local` | `--remote` 또는 `upload-static.sh` 사용 |
-| Pages `pages_build_output_dir` 경고 | `--config wrangler.pages.toml` |
+| Pages `--config` 오류 | `cd pages && wrangler pages deploy .` |
+| runtime-config에 YOUR_SUBDOMAIN | `deploy.sh` 재실행 (URL 자동 추출) 또는 `export VIBEQUANT_API_BASE=https://vibequant-api.gameworker-4bb.workers.dev` |
 | D1 placeholder | `./scripts/bootstrap.sh` |

@@ -74,6 +74,12 @@
 
 ## 대시보드 (브라우저 데모)
 
+**라이브 사이트:** [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)
+
+| 개요 | 실행기 |
+|---|---|
+| ![Vibe Quant 대시보드 개요 (KR)](images/VibeQuant_Dashboard01_KR.png) | ![Vibe Quant 파이썬 실행기 (KR)](images/VibeQuant_Dashboard02_KR.png) |
+
 ```bash
 cd pages
 python3 -m http.server 8787

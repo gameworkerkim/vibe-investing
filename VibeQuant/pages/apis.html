@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vibe Quant — GS / VI API 설명</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/app.css?v=8" />
+</head>
+<body class="docs-page">
+  <div class="grain" aria-hidden="true"></div>
+
+  <header class="hero hero-compact">
+    <div class="hero-top">
+      <div>
+        <p class="brand brand-sm"><a href="./">Vibe Quant</a></p>
+        <p class="tagline">GS Quant → VI Quant API 설명 (브라우저 데모 서브셋 + 로드맵)</p>
+      </div>
+      <a class="pill" href="./#workspace">실행기로 돌아가기</a>
+    </div>
+    <h1 class="headline">API 대응표</h1>
+    <p class="lede">
+      기계적 규칙: <code>gs_quant → vi_quant</code>, 접두어 <code>Gs → Vi</code>.
+      수치 동일은 보장하지 않습니다. 브라우저에서 도는 것은 <strong>vi_browser</strong> 서브셋입니다.
+    </p>
+  </header>
+
+  <main class="api-section">
+    <h2 class="docs-h2">1. 브라우저에서 실행 가능 (이 사이트)</h2>
+    <div class="api-table-wrap">
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>GS Quant</th>
+            <th>VI Quant (browser)</th>
+            <th>설명</th>
+            <th>샘플</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Dataset / GsDataApi</code> 시세</td>
+            <td><code>vi_browser.get_candles(symbol, days)</code></td>
+            <td>OHLCV 캔들. Worker API 또는 결정론적 mock.</td>
+            <td><a class="btn tiny ghost" href="./#workspace" data-sample="candles">실행기에서 열기</a></td>
+          </tr>
+          <tr>
+            <td><code>gs_quant.timeseries.returns</code></td>
+            <td><code>vi_browser.returns(closes)</code></td>
+            <td>단순 수익률 시계열.</td>
+            <td><a class="btn tiny ghost" href="./#workspace" data-sample="returns">실행기에서 열기</a></td>
+          </tr>
+          <tr>
+            <td><code>gs_quant.timeseries.volatility</code></td>
+            <td><code>vi_browser.volatility(closes, window)</code></td>
+            <td>윈도우 변동성(연율화 stdev 데모).</td>
+            <td><a class="btn tiny ghost" href="./#workspace" data-sample="volatility">실행기에서 열기</a></td>
+          </tr>
+          <tr>
+            <td><code>gs_quant.timeseries.moving_average</code></td>
+            <td><code>vi_browser.moving_average(closes, window)</code></td>
+            <td>단순 이동평균.</td>
+            <td><a class="btn tiny ghost" href="./#workspace" data-sample="ma">실행기에서 열기</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="docs-h2">2. 로컬 <code>vi_quant</code> (pip) — 브라우저 외</h2>
+    <div class="api-table-wrap">
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>GS Quant</th>
+            <th>VI Quant</th>
+            <th>상태</th>
+            <th>설명</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>GsSession.use(client_id, secret)</code></td>
+            <td><code>ViSession.use()</code></td>
+            <td><span class="badge local">local</span></td>
+            <td>자격증명 선택적. Marquee 호출 없음.</td>
+          </tr>
+          <tr>
+            <td><code>gs_quant.timeseries.*</code></td>
+            <td><code>vi_quant.timeseries.*</code></td>
+            <td><span class="badge local">local</span></td>
+            <td>vendoring 서브셋. 일부 stub/미완 있음 (LIMITATIONS 참조).</td>
+          </tr>
+          <tr>
+            <td><code>gs_quant.providers</code> (없음)</td>
+            <td><code>vi_quant.providers</code></td>
+            <td><span class="badge local">local</span></td>
+            <td>TOSS / Yahoo / Mock 통합 제공자.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2 class="docs-h2">3. 예정 (브라우저 WASM 아님)</h2>
+    <div class="api-table-wrap">
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th>GS Quant</th>
+            <th>VI Quant</th>
+            <th>Phase</th>
+            <th>설명</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>GsDataApi.get_market_data</code></td>
+            <td><code>ViDataApi.get_market_data</code></td>
+            <td><span class="badge planned">P1</span></td>
+            <td>현재 stub. 브라우저는 get_candles 사용.</td>
+          </tr>
+          <tr>
+            <td><code>IRSwap(...).calc(Price())</code></td>
+            <td>동일 시그니처 + QuantLib</td>
+            <td><span class="badge planned">P2</span></td>
+            <td>로컬만. Pyodide/WASM 불가.</td>
+          </tr>
+          <tr>
+            <td><code>GsRiskApi</code> / 리스크 측정</td>
+            <td><code>ViRiskApi</code></td>
+            <td><span class="badge planned">P2</span></td>
+            <td>로컬 리스크 엔진.</td>
+          </tr>
+          <tr>
+            <td><code>GsBacktestApi</code></td>
+            <td><code>ViBacktestApi</code></td>
+            <td><span class="badge planned">P2+</span></td>
+            <td>로컬 백테스트.</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="docs-callout">
+      <h3>샘플 워크플로 (위원회 골든 스크립트)</h3>
+      <pre class="docs-pre">from vi_browser import get_candles, returns, volatility, moving_average
+
+candles = await get_candles("005930", days=90)
+closes = [c["close"] for c in candles]
+print(volatility(closes, 22))
+print(moving_average(closes, 22)[-1])</pre>
+      <p><a class="pill" href="./#workspace">메인에서 실행 →</a></p>
+    </div>
+
+    <p class="section-sub">
+      전체 매핑 원문:
+      <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/VibeQuant/docs/API_MAPPING_KR.md" target="_blank" rel="noopener noreferrer">API_MAPPING_KR.md</a>
+      ·
+      <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/VibeQuant/docs/LIMITATIONS_KR.md" target="_blank" rel="noopener noreferrer">LIMITATIONS_KR.md</a>
+    </p>
+  </main>
+
+  <footer class="foot">
+    <div class="repo">
+      <a class="repo-link" href="./">← 데모 홈</a>
+    </div>
+    <aside class="disclaimer" role="note">
+      <p>주의: 본 Quant는 투자 의견이 아니며 투자에 사용해서는 안 됩니다.</p>
+    </aside>
+  </footer>
+
+  <script type="module">
+    // Deep-link sample ids into the main runner via sessionStorage
+    document.querySelectorAll("[data-sample]").forEach((a) => {
+      a.addEventListener("click", () => {
+        sessionStorage.setItem("vq_sample", a.getAttribute("data-sample"));
+      });
+    });
+  </script>
+</body>
+</html>
