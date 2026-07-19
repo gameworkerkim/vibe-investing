@@ -1,10 +1,11 @@
-import { applyI18n, detectLang, t } from "./i18n.js?v=16";
-import { API_CATALOG, noteFor } from "./api-catalog.js?v=16";
-import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=16";
-import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=16";
-import { clearChart, renderChartFromWindow } from "./chart-view.js?v=16";
-import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=16";
-import { requestQuantPrompt } from "./llm-prompt.js?v=16";
+import { applyI18n, detectLang, t } from "./i18n.js?v=17";
+import { API_CATALOG, noteFor } from "./api-catalog.js?v=17";
+import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=17";
+import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=17";
+import { clearChart, renderChartFromWindow } from "./chart-view.js?v=17";
+import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=17";
+import { requestQuantPrompt } from "./llm-prompt.js?v=17";
+import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=17";
 
 const codeEl = document.getElementById("code");
 const outputEl = document.getElementById("output");
@@ -15,6 +16,8 @@ const clearBtn = document.getElementById("btn-clear");
 const llmBtn = document.getElementById("btn-llm");
 const llmPromptEl = document.getElementById("llm-prompt");
 const llmModelEl = document.getElementById("llm-model");
+const llmStatusEl = document.getElementById("llm-status");
+const llmPromptChips = document.getElementById("llm-prompt-chips");
 const langSelect = document.getElementById("lang-select");
 const apiTbody = document.getElementById("api-tbody");
 const sampleLabel = document.getElementById("sample-label");
@@ -112,6 +115,54 @@ function renderExamples() {
   }
 }
 
+function renderLlmPromptChips() {
+  if (!llmPromptChips) return;
+  llmPromptChips.innerHTML = "";
+  for (const item of GOLDEN_LLM_PROMPTS) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "example-chip";
+    btn.dataset.id = item.id;
+    btn.setAttribute("role", "listitem");
+    btn.innerHTML = `<span class="check" aria-hidden="true">✓</span>${llmPromptTitle(item, lang)}`;
+    btn.addEventListener("click", () => {
+      if (llmPromptEl) llmPromptEl.value = item.prompt.trim() + "\n";
+      llmPromptChips.querySelectorAll(".example-chip").forEach((b) => {
+        b.classList.toggle("is-active", b.dataset.id === item.id);
+      });
+      llmPromptEl?.focus();
+    });
+    llmPromptChips.append(btn);
+  }
+}
+
+async function refreshLlmStatus() {
+  if (!llmStatusEl) return;
+  const base = String(
+    globalThis.RUNTIME_CONFIG?.VIBEQUANT_API_BASE || globalThis.VIBEQUANT_API_BASE || ""
+  ).replace(/\/$/, "");
+  if (!base) {
+    llmStatusEl.textContent = tx("llm_status_no_api", "API base missing");
+    llmStatusEl.classList.add("is-bad");
+    llmStatusEl.classList.remove("is-ok");
+    return;
+  }
+  try {
+    const res = await fetch(`${base}/api/health`);
+    const data = await res.json();
+    const ok = !!data?.deepseek?.configured;
+    llmStatusEl.textContent = ok
+      ? tx("llm_status_ok", "DeepSeek: configured")
+      : tx("llm_status_missing", "DeepSeek: not configured — run setup-deepseek.sh --remote");
+    llmStatusEl.classList.toggle("is-ok", ok);
+    llmStatusEl.classList.toggle("is-bad", !ok);
+  } catch {
+    llmStatusEl.textContent = tx("llm_status_error", "DeepSeek: health check failed");
+    llmStatusEl.classList.add("is-bad");
+    llmStatusEl.classList.remove("is-ok");
+  }
+}
+
 function renderApiTable() {
   if (!apiTbody) return;
   apiTbody.innerHTML = "";
@@ -160,7 +211,9 @@ function renderApiTable() {
 function refreshUi() {
   applyI18n(lang);
   renderExamples();
+  renderLlmPromptChips();
   renderApiTable();
+  refreshLlmStatus();
   if (iosBanner) {
     iosBanner.hidden = !support.isIOS;
   }

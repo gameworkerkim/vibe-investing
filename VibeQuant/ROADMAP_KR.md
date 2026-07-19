@@ -93,7 +93,10 @@
 
 **목표:** 위원회 워크플로를 LLM 에이전트와 연결.
 
-- [ ] 골든 프롬프트 + 산출물 스키마 (스크립트 / 가정 / 리스크)
+- [x] LLM Quant Prompt UI + Worker (`POST /api/v1/llm/quant-prompt`)
+- [x] DeepSeek V4 Pro / Flash; 금융 게이트; 30초 쿨다운; 거부 1분 캐시
+- [x] 골든 프롬프트 + 산출물 스키마 (스크립트 / 가정 / 리스크)
+- [ ] 성공 프롬프트·stdout 아카이브 + 사람 평가 (후순위)
 - [ ] 멀티 LLM bake-off 하네스 (동일 시세 스냅샷)
 - [ ] (선택) 로컬 `vi_quant` 헤비 경로 — QuantLib 등은 데스크톱만
 

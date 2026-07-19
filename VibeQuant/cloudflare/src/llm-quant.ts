@@ -213,7 +213,8 @@ Return ONLY a single JSON object (no markdown fences) with keys:
   "mode": "answer" | "python" | "hybrid",
   "answer": "string — prose answer in the user's language",
   "python": "string|null — runnable browser Python for Pyodide, or null",
-  "notes": "string — short assumptions / limits"
+  "notes": "string — short assumptions / limits",
+  "risks": "string — optional short risk / not investment advice note"
 }
 
 Rules:
@@ -227,11 +228,29 @@ Rules:
 - Not investment advice. No secrets. No network except get_candles.
 - If the question is not finance, still never answer it here (server already gates).`;
 
+const PYTHON_DENY =
+  /\b(import\s+os|import\s+sys|import\s+subprocess|from\s+os\b|eval\s*\(|exec\s*\(|__import__|open\s*\(|requests\.|urllib\.|socket\.|pathlib\.|asyncio\.create_subprocess)/i;
+
+function sanitizePython(code: string | null): string | null {
+  if (!code) return null;
+  if (PYTHON_DENY.test(code)) {
+    throw new Error("Generated Python rejected: disallowed imports/calls");
+  }
+  if (!/vi_browser|get_candles|show_chart|backtest|momentum|rsi|macd/.test(code)) {
+    // Allow pure prints only if short; otherwise require vi_browser surface
+    if (code.length > 80 && !/from\s+vi_browser\s+import/.test(code)) {
+      throw new Error("Generated Python must import from vi_browser");
+    }
+  }
+  return code;
+}
+
 function parseQuantJson(raw: string): {
   mode: "answer" | "python" | "hybrid";
   answer: string;
   python: string | null;
   notes: string;
+  risks: string;
 } {
   let text = raw.trim();
   const fence = text.match(/```(?:json)?\s*([\s\S]*?)```/);
@@ -245,13 +264,18 @@ function parseQuantJson(raw: string): {
     modeRaw === "python" || modeRaw === "hybrid" || modeRaw === "answer"
       ? modeRaw
       : "answer";
-  const python =
+  let python =
     typeof obj.python === "string" && obj.python.trim() ? obj.python.trim() : null;
+  python = sanitizePython(python);
+  if (mode === "python" && !python) {
+    throw new Error("mode=python but python field empty");
+  }
   return {
     mode: python && mode === "answer" ? "hybrid" : mode,
     answer: String(obj.answer || "").trim() || "(no answer)",
     python,
     notes: String(obj.notes || "").trim(),
+    risks: String(obj.risks || "").trim(),
   };
 }
 
@@ -330,10 +354,11 @@ export async function handleQuantPrompt(
   try {
     const raw = await deepseekChat(apiKey, model, QUANT_SYSTEM, prompt, 3500);
     const parsed = parseQuantJson(raw);
+    const extras = [parsed.notes, parsed.risks].filter(Boolean);
     return {
       ok: true,
       mode: parsed.mode,
-      answer: parsed.notes ? `${parsed.answer}\n\n— ${parsed.notes}` : parsed.answer,
+      answer: extras.length ? `${parsed.answer}\n\n— ${extras.join(" | ")}` : parsed.answer,
       python: parsed.python,
       model,
       finance: true,

@@ -66,6 +66,11 @@ export const STRINGS = {
       "Non-finance prompts are rejected (1 min cooldown). API key stays on the Worker (setup-deepseek.sh) — never in the browser.",
     llm_empty: "Enter an LLM Quant Prompt first.",
     llm_running: "Calling DeepSeek…",
+    llm_status_checking: "Checking DeepSeek…",
+    llm_status_ok: "DeepSeek: configured",
+    llm_status_missing: "DeepSeek: not configured — run setup-deepseek.sh --remote",
+    llm_status_no_api: "API base missing",
+    llm_status_error: "DeepSeek: health check failed",
   },
   ko: {
     brand: "Vibe Quant",
@@ -132,6 +137,11 @@ export const STRINGS = {
       "비금융 질문은 거부되며 1분간 쿨다운. API 키는 Worker 시크릿(setup-deepseek.sh) — 브라우저에 없음.",
     llm_empty: "먼저 LLM Quant Prompt를 입력하세요.",
     llm_running: "DeepSeek 호출 중…",
+    llm_status_checking: "DeepSeek 상태 확인 중…",
+    llm_status_ok: "DeepSeek: 설정됨",
+    llm_status_missing: "DeepSeek: 미설정 — setup-deepseek.sh --remote 실행",
+    llm_status_no_api: "API base 없음",
+    llm_status_error: "DeepSeek: health 확인 실패",
   },
   zh: {
     brand: "Vibe Quant",
@@ -197,6 +207,11 @@ export const STRINGS = {
       "非金融问题将被拒绝（冷却 1 分钟）。API 密钥仅在 Worker（setup-deepseek.sh），不在浏览器。",
     llm_empty: "请先输入 LLM Quant Prompt。",
     llm_running: "正在调用 DeepSeek…",
+    llm_status_checking: "正在检查 DeepSeek…",
+    llm_status_ok: "DeepSeek：已配置",
+    llm_status_missing: "DeepSeek：未配置 — 运行 setup-deepseek.sh --remote",
+    llm_status_no_api: "缺少 API base",
+    llm_status_error: "DeepSeek：健康检查失败",
   },
 };
 

@@ -93,7 +93,10 @@ Do not expand the legacy Vercel/Neon/Upstash stack.
 
 **Objective:** wire the stage to multi-LLM committee workflows.
 
-- [ ] Golden prompts + output schema (script / assumptions / risks)
+- [x] LLM Quant Prompt UI + Worker (`POST /api/v1/llm/quant-prompt`)
+- [x] DeepSeek V4 Pro / Flash; finance gate; 30s cooldown; 1m reject cache
+- [x] Golden prompts + output schema (script / assumptions / risks)
+- [ ] Archive successful prompt+stdout for human eval (deferred)
 - [ ] Multi-LLM bake-off harness (shared market snapshot)
 - [ ] Optional local `vi_quant` heavy path (QuantLib desktop-only)
 
