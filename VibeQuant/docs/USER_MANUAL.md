@@ -1,6 +1,12 @@
 # Vibe Quant — User Manual (English)
 
-Educational sandbox for a multi-LLM quant committee. Not investment advice.
+Vibe Quant is an **educational sandbox** for learning hedge-fund style quant workflows. It is **not investment advice.**
+
+The core idea mirrors GS Quant–style APIs plus a separate market-data path so you can reproduce classic quant steps. If you are comfortable with Python, use `vi_browser` / `vi_quant` directly. With the **LLM Quant Prompt**, you can describe a task in natural language, generate runnable Python, and **see results immediately**.
+
+One thing to remember:
+
+*LLMs are spreadsheets for reasoning, not oracles of prediction.*
 
 | Language | Manual |
 |---|---|
@@ -12,95 +18,148 @@ Educational sandbox for a multi-LLM quant committee. Not investment advice.
 
 ---
 
-## 1. Workspace layout
+## 1. Workspace — LLM + Python
+
+The runner (`#workspace`) splits **LLM prompt** (left) and **Python input** (right). Below: **Result / Error log / Chart**.
+
+![LLM prompt input and Python input panels](../images/Prompt_Python.png)
 
 | Area | Role |
 |---|---|
-| **LLM prompt input** (top-left) | Natural-language quant request → DeepSeek → optional Python |
-| **Python input** (top-right) | Edit / run `vi_browser` code in the browser (Pyodide) |
-| **Result** (bottom-left) | Successful stdout / LLM answer |
-| **Error log** (bottom-left) | Failures, tracebacks, rejected prompts |
-| **Chart** (bottom-right) | Output of `show_chart(...)` |
+| **LLM prompt input** (left) | Natural-language quant tasks. Toolbar: **Model → Clear → Copy → Run** |
+| **Python input** (right) | Edit/run `vi_browser` code. Toolbar: **Copy → Clear → Golden sample → Run** |
+| **Result** | LLM prose + Pyodide stdout |
+| **Error log** | Non-finance rejects, cooldown, Python exceptions |
+| **Chart** | Output of `show_chart(...)` (empty if never called) |
 
-Toolbar language: use the language selector in the page header (`en` / `ko` / `zh`).
+Language: header selector `en` / `ko` / `zh`.
+
+### What LLM Run actually does
+
+1. Call DeepSeek (finance gate)  
+2. If Python is returned → **auto-fill Python input**  
+3. **Run immediately in Pyodide** → prints → **Result**, `show_chart` → **Chart**, errors → **Error log**
+
+After you edit the script, use the Python pane **Run** (no need to call the LLM again).
 
 ---
 
-## 2. Using Examples (sample demos)
+## 2. Examples · API samples — GS Quant ↔ VI Quant
 
-Examples load ready-made semiconductor-basket scripts (**NVDA · MU · SNDK · AVGO**) into the Python editor.
+Use the **Examples** chips and the **GS Quant ↔ VI Quant API** table to load browser-ready snippets.
 
-### Steps
+![GS Quant ↔ VI Quant API table and Load sample](../images/Quant_Sample.png)
 
-1. Open the site and scroll to **Examples** (chip bar above the API table), or jump to `#workspace`.
-2. Click a chip, e.g. **Momentum**, **RSI**, **Moving Average**, or the golden **multifactor** sample.
-3. The code appears in **Python input**. Review it, then click **Run**.
-4. Check **Result** for prints, **Chart** for series, **Error log** if something failed.
+- Naming: `gs_quant` → `vi_quant`, `Gs*` → `Vi*`  
+- **BROWSER** (green): runs on this page (Pyodide)  
+- **LOCAL** (blue): `pip` library  
+- **PLANNED** (purple): roadmap (e.g. TOSS live)  
+- **Load sample** → fills the Python editor → **Run**
 
-### Also useful
+### Examples chips
+
+1. Pick Momentum / RSI / MA / multifactor, …  
+2. Review code in **Python input** → **Run**  
+3. Check **Result**, **Chart**, or **Error log**
 
 | Control | Action |
 |---|---|
-| **Golden sample** | Loads the multifactor committee demo |
-| **Clear** | Clears the Python editor (and you can clear outputs by running again / Clear) |
-| **Copy** (icon) | Copies Python or LLM prompt text |
-| API table **Load sample** | Loads a smaller API-focused snippet for that row |
+| **Golden sample** | Multifactor committee demo |
+| **Clear** | Clear LLM or Python editor |
+| **Copy** | Copy prompt or code |
+| API **Load sample** | Short API snippet |
 
-### Tip
-
-Keep `days` modest (≤ 180). Long series stress browser RAM. Prefer desktop Chrome/Firefox; iOS Pyodide may fail.
+Tip: keep `days` ≤ 180; prefer desktop Chrome/Firefox.
 
 ---
 
 ## 3. Building a quant with the LLM
 
-DeepSeek turns a finance-only prompt into an explanation and/or runnable `vi_browser` Python. Keys stay on the Worker — never in the browser. Setup: [SECRETS_SETUP.md](SECRETS_SETUP.md) · feature notes: [LLM_QUANT_PROMPT.md](LLM_QUANT_PROMPT.md).
+DeepSeek turns finance-only prompts into explanations and/or runnable `vi_browser` Python.  
+Keys stay on the Worker — [SECRETS_SETUP.md](SECRETS_SETUP.md) · [LLM_QUANT_PROMPT.md](LLM_QUANT_PROMPT.md).
 
 ### Steps
 
-1. In **LLM prompt input**, pick **Model**: `V4 Flash` (default, faster) or `V4 Pro` (heavier code).
-2. Type a finance question, or click a golden LLM chip (e.g. “Semi momentum”).
-3. Click **Run** (next to the copy icon). Rate limit: **1 request / 30 seconds**.
-4. Watch progress: DeepSeek call → optional generated Python run.
-5. Outcomes:
-   - **Result**: answer text and/or run summary  
-   - **Python input**: auto-filled when the model returns code  
-   - **Chart**: if the script called `show_chart`  
-   - **Error log**: non-finance reject, cooldown, or runtime errors  
+1. **Model**: `V4 Flash` (default) / `V4 Pro`  
+2. Click a golden chip or type a prompt  
+3. **Run** (1 request / 30s)  
+4. Read LLM text + `=== Pyodide run ===` in **Result**  
+5. Charts appear only if the script calls `show_chart`
 
-### Good prompt patterns
+### Quant basics (as used here)
 
-```text
-Compare 22-day momentum for NVDA, MU, SNDK, AVGO and rank them.
-Use vi_browser only; exclude N/A; print a ranking.
+| Concept | Meaning | API |
+|---|---|---|
+| Momentum N | \(P_t/P_{t-N}-1\) | `momentum(closes, window=N)` |
+| Moving average | Mean of last N closes | `moving_average(closes, N)` |
+| MA cross | Long (1) when fast > slow | `ma_cross_signal(candles, fast, slow)` |
+| RSI(14) | ≥70 overbought / ≤30 oversold | `rsi(closes, 14)` |
+| Volatility | Return σ × √252 | `volatility(closes, 22)` |
+| MDD | Worst peak-to-trough (negative fraction) | `max_drawdown(closes)` |
+| Backtest | Educational equity + metrics | `backtest(candles, signal, fee_bps=…)` |
+
+```python
+candles = await get_candles("NVDA", days=180, provider="yahoo")
+closes = [c["close"] for c in candles]   # no pandas / iloc
 ```
 
-```text
-Run an educational MA(10/30) cross backtest on 005930 with fee_bps=10.
-Print total_return, mdd, sharpe, cagr and chart equity.
-```
+Korean Yahoo tickers usually need **`.KS`** (e.g. `005930.KS`).
+
+### Scenarios
+
+#### A. Cross-sectional momentum
 
 ```text
-Explain Momentum = close/close[22]-1 in Korean. Answer only, no code.
+Compare 22-day momentum for NVDA, MU, SNDK, AVGO.
+Rank only computable names; exclude N/A.
+Build vi_browser Python and chart series with show_chart.
 ```
 
-### Rules the model must follow
+#### B. MA-cross educational backtest
 
-- Finance only (US/KR equities, crypto, quant metrics). Other topics are rejected (cooldown).
-- Browser API is **list-based**, not pandas:
-  - `candles = await get_candles("NVDA", days=180, provider="yahoo")`
-  - `closes = [c["close"] for c in candles]`
-- Top-level `await` only — no `asyncio.run`.
-- Never format possible `None` with `:.2f` — use a small `fmt` helper.
-- KR tickers often need `.KS` (e.g. `000660.KS`).
+```text
+Educational MA(10/30) cross backtest on 005930.KS.
+fee_bps=10; print metrics; show_chart equity.
+```
 
-Schema details: [LLM_OUTPUT_SCHEMA.md](LLM_OUTPUT_SCHEMA.md).
+```python
+signals = ma_cross_signal(candles, fast=10, slow=30)
+result = backtest(candles, signals, fee_bps=10)
+print(result["metrics"])
+show_chart(result["equity"], title="Equity", series_label="equity")
+```
+
+#### C. RSI zones
+
+```text
+Compare RSI(14) for AAPL and TSLA; label overbought/oversold/mid.
+Chart RSI with show_chart if possible.
+```
+
+#### D. Vol + MDD (crypto)
+
+```text
+Compare annualized volatility(22) and max_drawdown for BTC-USD and ETH-USD
+using vi_browser; include the numbers.
+```
+
+#### E. Explain only
+
+```text
+Briefly explain Momentum = close/close[22]-1. Answer mode only — no code.
+```
+
+#### F. Non-finance → reject
+
+Non-finance prompts are rejected in **Error log** with a short cooldown.
+
+Schema: [LLM_OUTPUT_SCHEMA.md](LLM_OUTPUT_SCHEMA.md).
 
 ---
 
-## 4. Building a quant in Python (manual)
+## 4. Building a quant in Python
 
-Write or paste `vi_browser` code in **Python input**, then **Run**. Execution is 100% in-browser via Pyodide; market data is fetched from the Worker (`provider="yahoo"`).
+Write or refine code in **Python input**, then **Run**. Compute in-browser (Pyodide); candles via Worker (`provider="yahoo"`).
 
 ### Minimal template
 
@@ -118,9 +177,8 @@ def last_num(xs):
 
 TICKERS = ["NVDA", "MU", "AVGO"]
 WINDOW = 22
+rows, series = [], {}
 
-rows = []
-series = {}
 for sym in TICKERS:
     candles = await get_candles(sym, days=180, provider="yahoo")
     closes = [c["close"] for c in candles]
@@ -131,38 +189,19 @@ for sym in TICKERS:
     print(f"{sym}: mom{WINDOW}={fmt(None if last is None else last * 100)}%")
 
 ranked = sorted([(s, v) for s, v in rows if v is not None], key=lambda x: -x[1])
-print("rank:", ", ".join(f"{s}={fmt(v*100)}%" for s, v in ranked))
+print("rank:", ", ".join(f"{s}={fmt(v * 100)}%" for s, v in ranked))
 show_chart(series, title="22d momentum", series_label="mom")
 ```
 
-### Common `vi_browser` APIs
-
-| API | Purpose |
-|---|---|
-| `get_candles(symbol, days=..., provider="yahoo")` | OHLCV list of dicts |
-| `returns` / `volatility` / `moving_average` | Basics |
-| `momentum(closes, window=22)` | Price momentum |
-| `rsi` / `macd` / `bollinger_bands` | Indicators |
-| `max_drawdown(closes)` | Scalar MDD |
-| `backtest` / `ma_cross_signal` | Educational backtest helpers |
-| `show_chart(...)` | Chart pane |
-
-GS → VI naming map: [API_MAPPING.md](API_MAPPING.md). Full API page: [apis.html](../pages/apis.html) on the site.
-
-### Workflow tips
-
-1. Start from an **Example** chip, then edit tickers / windows.
-2. Or ask the **LLM** to draft code, then tighten it by hand and re-**Run**.
-3. Read **Error log** for `TypeError` on `None` — add `fmt` / length checks.
-4. If candles look short or empty, retry later; Worker refetches Yahoo when R2 cache is too short.
+Full map: [API_MAPPING.md](API_MAPPING.md).
 
 ---
 
 ## 5. Limits & disclaimer
 
-- Free-tier Cloudflare + browser RAM — not a Marquee / GS Quant replacement.
-- Numbers are for **education / reproducibility**, not trading signals.
-- DeepSeek must be configured on the Worker for LLM features (`deepseek.configured: true` on `/api/health`).
-- See [LIMITATIONS.md](LIMITATIONS.md) and the site footer disclaimer.
+- Free-tier Cloudflare + browser RAM — not a Marquee / GS Quant replacement.  
+- Numbers are for **education / reproducibility**, not trading signals.  
+- LLM needs DeepSeek on the Worker (`deepseek.configured: true`).  
+- See [LIMITATIONS.md](LIMITATIONS.md) and the site footer.
 
 *LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.*

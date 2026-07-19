@@ -140,7 +140,10 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 ## 문서
 
 | 문서 | 설명 |
-|---|---|---|
+|---|---|
+| [docs/USER_MANUAL_KR.md](docs/USER_MANUAL_KR.md) | 사용 매뉴얼 — Examples / LLM / 파이썬 |
+| [docs/USER_MANUAL.md](docs/USER_MANUAL.md) | User manual (English) |
+| [docs/USER_MANUAL_ZH.md](docs/USER_MANUAL_ZH.md) | 使用手册（中文） |
 | [ROADMAP_KR.md](ROADMAP_KR.md) | 단계별 계획 (Cloudflare + Pyodide) |
 | [docs/ARCHITECTURE_TARGET_KR.md](docs/ARCHITECTURE_TARGET_KR.md) | 바인딩·스키마·Cron·비용 |
 | [docs/LIMITATIONS_KR.md](docs/LIMITATIONS_KR.md) | 지연·호환성·무료 티어 하드스톱 |

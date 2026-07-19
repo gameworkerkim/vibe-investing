@@ -1,11 +1,11 @@
-import { applyI18n, detectLang, t } from "./i18n.js?v=22";
-import { API_CATALOG, noteFor } from "./api-catalog.js?v=22";
-import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=22";
-import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=22";
-import { clearChart, renderChartFromWindow } from "./chart-view.js?v=22";
-import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=22";
-import { requestQuantPrompt } from "./llm-prompt.js?v=22";
-import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=22";
+import { applyI18n, detectLang, t } from "./i18n.js?v=25";
+import { API_CATALOG, noteFor } from "./api-catalog.js?v=25";
+import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=25";
+import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=25";
+import { clearChart, renderChartFromWindow } from "./chart-view.js?v=25";
+import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=25";
+import { requestQuantPrompt } from "./llm-prompt.js?v=25";
+import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=25";
 
 const codeEl = document.getElementById("code");
 const outputEl = document.getElementById("output");
@@ -15,6 +15,7 @@ const runBtn = document.getElementById("btn-run");
 const exampleBtn = document.getElementById("btn-example");
 const clearBtn = document.getElementById("btn-clear");
 const copyCodeBtn = document.getElementById("btn-copy-code");
+const clearPromptBtn = document.getElementById("btn-clear-prompt");
 const copyPromptBtn = document.getElementById("btn-copy-prompt");
 const llmBtn = document.getElementById("btn-llm");
 const llmBtnLabel = llmBtn?.querySelector(".btn-label");
@@ -314,10 +315,18 @@ clearBtn?.addEventListener("click", () => {
 copyCodeBtn?.addEventListener("click", () => copyText(codeEl?.value || "", copyCodeBtn));
 copyPromptBtn?.addEventListener("click", () => copyText(llmPromptEl?.value || "", copyPromptBtn));
 
+clearPromptBtn?.addEventListener("click", () => {
+  if (llmPromptEl) llmPromptEl.value = "";
+  llmPromptChips?.querySelectorAll(".example-chip").forEach((btn) => btn.classList.remove("is-active"));
+  setLlmProgress("idle");
+  llmPromptEl?.focus();
+});
+
 function setBusy(busy) {
   runBtn && (runBtn.disabled = busy);
   exampleBtn && (exampleBtn.disabled = busy);
   clearBtn && (clearBtn.disabled = busy);
+  clearPromptBtn && (clearPromptBtn.disabled = busy);
   copyCodeBtn && (copyCodeBtn.disabled = busy);
   copyPromptBtn && (copyPromptBtn.disabled = busy);
   llmBtn && (llmBtn.disabled = busy);

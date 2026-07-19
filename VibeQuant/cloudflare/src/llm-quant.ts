@@ -246,7 +246,12 @@ CRITICAL — Pyodide runner constraints (violations break execution):
 - rsi(closes, period=14) → list with None warmup; use last non-None value.
 - momentum(closes, window=20) → list (arg name is window, NOT period).
 - max_drawdown(closes) → single float (negative fraction), NOT a series.
-- volatility(closes, 22) → single float or None.
+- volatility(closes, 22) → single float or None (annualized from price/return series).
+- ma_cross_signal(closes, fast=10, slow=30) → 0/1 list. Prefer this form (NOT two MA series).
+- backtest(candles, signal, fee_bps=10) → dict with equity (starts at 1.0), rets, positions, metrics{total_return,mdd,sharpe,cagr}.
+  Optional initial_capital= scales equity for display only. Prefer metrics from result["metrics"].
+- show_chart(data, title="...", series_label="...") — no ylabel kw required (ylabel accepted as alias).
+  Call show_chart(equity) or show_chart({"eq": equity}) to draw. Without show_chart, the chart pane stays empty.
 - Allowed imports ONLY: from vi_browser import get_candles, returns, volatility, moving_average, momentum, correlation, max_drawdown, rsi, macd, bollinger_bands, backtest, ma_cross_signal, show_chart
 - NEVER format possibly-None with f"{x:.2f}". Always guard:
   def fmt(x, nd=2):

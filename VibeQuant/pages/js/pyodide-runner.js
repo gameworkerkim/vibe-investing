@@ -20,8 +20,11 @@ def _set_chart(payload):
     from js import window, JSON as JSJSON
     window.__VQ_CHART__ = JSJSON.parse(json.dumps(payload))
 
-def show_chart(data, title="Chart", series_label="close"):
-    """Push a line chart. data = candles, numeric list, or dict of {name: series}."""
+def show_chart(data, title="Chart", series_label="close", ylabel=None, **kwargs):
+    """Push a line chart. data = candles, numeric list, or dict of {name: series}.
+    ylabel is accepted as an alias for series_label (LLM-friendly)."""
+    if ylabel is not None and (not series_label or series_label == "close"):
+        series_label = str(ylabel)
     # Multi-series: {"NVDA": [...], "MU": [...]}
     if isinstance(data, dict) and data:
         sample = next(iter(data.values()))
@@ -328,25 +331,62 @@ def bollinger_bands(closes, period=20, stddev=2):
             lower.append(m - k * s)
     return upper, middle, lower
 
+def _is_series(x):
+    """True for list/tuple/array-like (not str/bytes/dict/number)."""
+    if isinstance(x, (list, tuple)):
+        return True
+    if isinstance(x, (str, bytes, dict, int, float, bool)) or x is None:
+        return False
+    return hasattr(x, "__len__") and hasattr(x, "__getitem__")
+
 def ma_cross_signal(closes, fast=10, slow=30):
+    """Long when fast MA > slow MA.
+    Accepts either:
+      ma_cross_signal(closes, fast=10, slow=30)
+      ma_cross_signal(ma10, ma30)  # two precomputed MA series
+    """
+    # Two MA series: ma_cross_signal(ma10, ma30) → fast is a series
+    if _is_series(fast):
+        a, b = list(closes), list(fast)
+        n = min(len(a), len(b))
+        out = [0] * n
+        for i in range(n):
+            fa, fb = a[i], b[i]
+            if fa is None or fb is None:
+                out[i] = 0
+                continue
+            try:
+                out[i] = 1 if float(fa) > float(fb) else 0
+            except (TypeError, ValueError):
+                out[i] = 0
+        return out
+
     xs = _closes(closes)
     n = len(xs)
     out = [0] * n
-    if n < slow or fast < 1 or slow <= fast:
+    try:
+        fwin, swin = int(fast), int(slow)
+    except (TypeError, ValueError):
         return out
-    for i in range(slow - 1, n):
-        f = sum(xs[i + 1 - fast : i + 1]) / fast
-        s = sum(xs[i + 1 - slow : i + 1]) / slow
+    if n < swin or fwin < 1 or swin <= fwin:
+        return out
+    for i in range(swin - 1, n):
+        f = sum(xs[i + 1 - fwin : i + 1]) / fwin
+        s = sum(xs[i + 1 - swin : i + 1]) / swin
         out[i] = 1 if f > s else 0
     return out
 
-def backtest(candles, signal, fee_bps=10, trading_days=252):
-    """Next-bar educational backtest. Same rules as vi_browser.backtest."""
+def backtest(candles, signal, fee_bps=10, trading_days=252, initial_capital=None, **kwargs):
+    """Next-bar educational backtest. Same rules as vi_browser.backtest.
+    equity is normalized to 1.0; optional initial_capital scales the series for display."""
     closes = _closes(candles)
     n = len(closes)
     if n < 2:
+        eq0 = [1.0] * max(n, 1)
+        if initial_capital is not None and float(initial_capital) > 0:
+            eq0 = [e * float(initial_capital) for e in eq0]
         return {
-            "equity": [1.0] * max(n, 1),
+            "equity": eq0,
             "rets": [0.0] * n,
             "positions": [0.0] * n,
             "metrics": {
@@ -388,6 +428,9 @@ def backtest(candles, signal, fee_bps=10, trading_days=252):
         sharpe = 0.0
     years = (n - 1) / float(trading_days)
     cagr = float(equity[-1] ** (1.0 / years) - 1.0) if years > 0 and equity[-1] > 0 else 0.0
+    if initial_capital is not None and float(initial_capital) > 0:
+        scale = float(initial_capital)
+        equity = [e * scale for e in equity]
     return {
         "equity": equity,
         "rets": rets,

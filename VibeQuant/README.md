@@ -136,7 +136,10 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 ## Documentation
 
 | Document | Description |
-|---|---|---|
+|---|---|
+| [docs/USER_MANUAL.md](docs/USER_MANUAL.md) | User manual — Examples / LLM / Python |
+| [docs/USER_MANUAL_KR.md](docs/USER_MANUAL_KR.md) | User manual (Korean) |
+| [docs/USER_MANUAL_ZH.md](docs/USER_MANUAL_ZH.md) | User manual (Chinese) |
 | [ROADMAP.md](ROADMAP.md) | Phased plan (Cloudflare + Pyodide) |
 | [docs/ARCHITECTURE_TARGET.md](docs/ARCHITECTURE_TARGET.md) | Bindings, schema, cron, cost |
 | [docs/LIMITATIONS.md](docs/LIMITATIONS.md) | Latency, compatibility, free-tier hard stops |
@@ -154,6 +157,7 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 | [docs/SECRETS_SETUP.md](docs/SECRETS_SETUP.md) | DeepSeek / Cloudflare / TOSS secrets |
 | [docs/SECRETS_SETUP_KR.md](docs/SECRETS_SETUP_KR.md) | Secrets manual (Korean) |
 | [docs/LLM_QUANT_PROMPT.md](docs/LLM_QUANT_PROMPT.md) | LLM Quant Prompt + DeepSeek |
+| [docs/LLM_QUANT_PROMPT_KR.md](docs/LLM_QUANT_PROMPT_KR.md) | LLM Quant Prompt (Korean) |
 | [README_KR.md](README_KR.md) | Korean README |
 | [ROADMAP_KR.md](ROADMAP_KR.md) | Korean ROADMAP |
 
