@@ -1,11 +1,11 @@
-import { applyI18n, detectLang, t } from "./i18n.js?v=17";
-import { API_CATALOG, noteFor } from "./api-catalog.js?v=17";
-import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=17";
-import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=17";
-import { clearChart, renderChartFromWindow } from "./chart-view.js?v=17";
-import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=17";
-import { requestQuantPrompt } from "./llm-prompt.js?v=17";
-import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=17";
+import { applyI18n, detectLang, t } from "./i18n.js?v=18";
+import { API_CATALOG, noteFor } from "./api-catalog.js?v=18";
+import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=18";
+import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=18";
+import { clearChart, renderChartFromWindow } from "./chart-view.js?v=18";
+import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=18";
+import { requestQuantPrompt } from "./llm-prompt.js?v=18";
+import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=18";
 
 const codeEl = document.getElementById("code");
 const outputEl = document.getElementById("output");
@@ -14,10 +14,16 @@ const runBtn = document.getElementById("btn-run");
 const exampleBtn = document.getElementById("btn-example");
 const clearBtn = document.getElementById("btn-clear");
 const llmBtn = document.getElementById("btn-llm");
+const llmBtnLabel = llmBtn?.querySelector(".btn-label");
 const llmPromptEl = document.getElementById("llm-prompt");
 const llmModelEl = document.getElementById("llm-model");
 const llmStatusEl = document.getElementById("llm-status");
 const llmPromptChips = document.getElementById("llm-prompt-chips");
+const llmProgressEl = document.getElementById("llm-progress");
+const llmProgressLabel = document.getElementById("llm-progress-label");
+const llmPromptBlock = document.querySelector(".llm-prompt-block");
+const resultBusyEl = document.getElementById("result-busy");
+const resultBusyLabel = document.getElementById("result-busy-label");
 const langSelect = document.getElementById("lang-select");
 const apiTbody = document.getElementById("api-tbody");
 const sampleLabel = document.getElementById("sample-label");
@@ -266,6 +272,33 @@ function setBusy(busy) {
   exampleBtn && (exampleBtn.disabled = busy);
   clearBtn && (clearBtn.disabled = busy);
   llmBtn && (llmBtn.disabled = busy);
+  if (llmModelEl) llmModelEl.disabled = busy;
+  if (llmPromptEl) llmPromptEl.disabled = busy;
+}
+
+/** @param {"idle"|"llm"|"python"|"done"|null} phase */
+function setLlmProgress(phase) {
+  const running = phase === "llm" || phase === "python";
+  if (llmProgressEl) llmProgressEl.hidden = !running;
+  llmPromptBlock?.classList.toggle("is-running", running);
+  if (llmBtn) {
+    llmBtn.classList.toggle("is-loading", running);
+    llmBtn.setAttribute("aria-busy", running ? "true" : "false");
+  }
+  if (resultBusyEl) resultBusyEl.hidden = !running;
+
+  let label = "";
+  if (phase === "llm") label = tx("llm_running", "Calling DeepSeek…");
+  else if (phase === "python") label = tx("llm_running_python", "Running generated Python…");
+  else if (phase === "done") label = tx("llm_done", "Done");
+
+  if (llmProgressLabel && label) llmProgressLabel.textContent = label;
+  if (resultBusyLabel && label) resultBusyLabel.textContent = label;
+  if (llmBtnLabel) {
+    llmBtnLabel.textContent = running
+      ? tx("llm_run_busy", "Running…")
+      : tx("llm_run", "Run prompt");
+  }
 }
 
 runBtn?.addEventListener("click", async () => {
@@ -309,6 +342,7 @@ llmBtn?.addEventListener("click", async () => {
   }
 
   setBusy(true);
+  setLlmProgress("llm");
   setStatus("running");
   outputEl.classList.remove("is-error");
   outputEl.textContent = tx("llm_running", "Calling DeepSeek…");
@@ -332,11 +366,13 @@ llmBtn?.addEventListener("click", async () => {
     ];
 
     if (res.python) {
+      setLlmProgress("python");
       codeEl.value = res.python.trim() + "\n";
       if (sampleLabel) {
         sampleLabel.textContent = `${tx("sample_loaded", "Sample")}: LLM → vi_browser`;
       }
       parts.push("", "=== Generated Python (editor updated) ===", res.python.trim(), "", "=== Pyodide run ===");
+      outputEl.textContent = parts.join("\n") + `\n${tx("llm_running_python", "Running generated Python…")}`;
       const { ok, text } = await runPython(res.python);
       parts.push(text);
       outputEl.textContent = parts.join("\n");
@@ -355,6 +391,7 @@ llmBtn?.addEventListener("click", async () => {
     clearChart();
     setStatus("error");
   } finally {
+    setLlmProgress("idle");
     setBusy(false);
   }
 });
