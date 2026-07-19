@@ -1,9 +1,19 @@
 /**
  * Render vi_browser.show_chart() payloads with Chart.js.
+ * Supports single series (values) or multi series (datasets).
  */
 
 let chartInstance = null;
 let chartJsPromise = null;
+
+const PALETTE = [
+  "#b6f34d",
+  "#7ec8ff",
+  "#f0c27a",
+  "#c4a0ff",
+  "#ff7b72",
+  "#9ae6b4",
+];
 
 function loadChartJs() {
   if (globalThis.Chart) return Promise.resolve(globalThis.Chart);
@@ -37,6 +47,39 @@ export function clearChart() {
   }
 }
 
+function buildDatasets(payload) {
+  if (Array.isArray(payload.datasets) && payload.datasets.length) {
+    return payload.datasets.map((ds, i) => {
+      const color = PALETTE[i % PALETTE.length];
+      return {
+        label: ds.label || `s${i}`,
+        data: (ds.values || []).map((v) => (v == null ? null : Number(v))),
+        borderColor: color,
+        backgroundColor: "transparent",
+        borderWidth: 2,
+        pointRadius: 0,
+        tension: 0.15,
+        fill: false,
+        spanGaps: true,
+      };
+    });
+  }
+  const values = Array.isArray(payload.values) ? payload.values.map((v) => (v == null ? null : Number(v))) : [];
+  return [
+    {
+      label: payload.series_label || payload.title || "series",
+      data: values,
+      borderColor: PALETTE[0],
+      backgroundColor: "rgba(182, 243, 77, 0.12)",
+      borderWidth: 2,
+      pointRadius: 0,
+      tension: 0.15,
+      fill: true,
+      spanGaps: true,
+    },
+  ];
+}
+
 export async function renderChartFromWindow() {
   const payload = globalThis.__VQ_CHART__;
   const wrap = document.getElementById("chart-wrap");
@@ -48,8 +91,9 @@ export async function renderChartFromWindow() {
   }
 
   const labels = Array.isArray(payload.labels) ? payload.labels : [];
-  const values = Array.isArray(payload.values) ? payload.values.map(Number) : [];
-  if (!labels.length || !values.length || labels.length !== values.length) {
+  const datasets = buildDatasets(payload);
+  const hasPoints = datasets.some((d) => d.data.some((v) => v != null));
+  if (!labels.length || !datasets.length || !hasPoints) {
     clearChart();
     return false;
   }
@@ -60,29 +104,18 @@ export async function renderChartFromWindow() {
   wrap.hidden = false;
   if (titleEl) titleEl.textContent = payload.title || "Chart";
 
-  const accent = "#b6f34d";
+  const multi = datasets.length > 1;
   chartInstance = new globalThis.Chart(canvas, {
     type: "line",
-    data: {
-      labels,
-      datasets: [
-        {
-          label: payload.series_label || payload.title || "series",
-          data: values,
-          borderColor: accent,
-          backgroundColor: "rgba(182, 243, 77, 0.12)",
-          borderWidth: 2,
-          pointRadius: 0,
-          tension: 0.15,
-          fill: true,
-        },
-      ],
-    },
+    data: { labels, datasets },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       plugins: {
-        legend: { display: false },
+        legend: {
+          display: multi,
+          labels: { color: "#8aa99c", boxWidth: 12, font: { size: 11 } },
+        },
       },
       scales: {
         x: {

@@ -21,7 +21,31 @@ def _set_chart(payload):
     window.__VQ_CHART__ = JSJSON.parse(json.dumps(payload))
 
 def show_chart(data, title="Chart", series_label="close"):
-    """Push a line chart to the dashboard. data = candles dicts or numeric series."""
+    """Push a line chart. data = candles, numeric list, or dict of {name: series}."""
+    # Multi-series: {"NVDA": [...], "MU": [...]}
+    if isinstance(data, dict) and data:
+        sample = next(iter(data.values()))
+        if isinstance(sample, (list, tuple)) and (not sample or not isinstance(sample[0], dict)):
+            n = max(len(v) for v in data.values())
+            labels = [str(i) for i in range(n)]
+            datasets = []
+            for name, series in data.items():
+                vals = []
+                for i in range(n):
+                    if i < len(series) and series[i] is not None:
+                        vals.append(float(series[i]))
+                    else:
+                        vals.append(None)
+                datasets.append({"label": str(name), "values": vals})
+            _set_chart({
+                "title": str(title),
+                "series_label": str(series_label),
+                "labels": labels,
+                "datasets": datasets,
+            })
+            print(f"[chart] {title}: {len(datasets)} series x {n} points")
+            return n
+
     labels = []
     values = []
     xs = list(data) if data is not None else []
@@ -39,9 +63,11 @@ def show_chart(data, title="Chart", series_label="close"):
     else:
         for i, v in enumerate(xs):
             if v is None:
-                continue
-            labels.append(str(i))
-            values.append(float(v))
+                labels.append(str(i))
+                values.append(None)
+            else:
+                labels.append(str(i))
+                values.append(float(v))
     _set_chart({
         "title": str(title),
         "series_label": str(series_label),
@@ -139,6 +165,18 @@ def moving_average(closes, window=22):
         else:
             chunk = xs[i + 1 - w : i + 1]
             out.append(sum(chunk) / w)
+    return out
+
+def momentum(closes, window=22):
+    """Price momentum: close / close[n] - 1."""
+    xs = _closes(closes)
+    w = int(window)
+    out = []
+    for i in range(len(xs)):
+        if i < w or xs[i - w] == 0:
+            out.append(None)
+        else:
+            out.append(xs[i] / xs[i - w] - 1.0)
     return out
 
 def _series(closes):
@@ -368,6 +406,7 @@ vi_browser.get_candles = get_candles
 vi_browser.returns = returns
 vi_browser.volatility = volatility
 vi_browser.moving_average = moving_average
+vi_browser.momentum = momentum
 vi_browser.correlation = correlation
 vi_browser.max_drawdown = max_drawdown
 vi_browser.zscores = zscores
@@ -443,7 +482,7 @@ from io import StringIO
 
 async def __vq_entry():
     from vi_browser import (
-        get_candles, returns, volatility, moving_average,
+        get_candles, returns, volatility, moving_average, momentum,
         correlation, max_drawdown, zscores, beta,
         annualized_return, sharpe_ratio, rsi, macd, bollinger_bands,
         backtest, ma_cross_signal, show_chart,
@@ -472,16 +511,15 @@ finally:
   };
 }
 
-export const EXAMPLE_CODE = `from vi_browser import get_candles, ma_cross_signal, backtest, show_chart
+export const EXAMPLE_CODE = `from vi_browser import get_candles, momentum, volatility, show_chart
 
-candles = await get_candles("005930", days=180)
-sig = ma_cross_signal(candles, fast=10, slow=30)
-bt = backtest(candles, sig, fee_bps=10)
-show_chart(bt["equity"], title="equity (MA cross)", series_label="equity")
-m = bt["metrics"]
-print("source_ok:", True)
-print("total_return:", round(m["total_return"], 6))
-print("mdd:", round(m["mdd"], 6))
-print("sharpe:", round(m["sharpe"], 4))
-print("cagr:", round(m["cagr"], 6))
+TICKERS = ["NVDA", "MU", "SNDK", "AVGO"]
+norm = {}
+for sym in TICKERS:
+    c = await get_candles(sym, days=180, provider="yahoo")
+    closes = [x["close"] for x in c]
+    base = closes[0] or 1.0
+    norm[sym] = [x / base for x in closes]
+    print(sym, "vol22", round(volatility(closes, 22) or 0, 4), "mom22", round(momentum(closes, 22)[-1] or 0, 4))
+show_chart(norm, title="Semi basket normalized", series_label="norm")
 `;

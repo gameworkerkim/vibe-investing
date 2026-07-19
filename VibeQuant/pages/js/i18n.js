@@ -8,9 +8,13 @@ export const STRINGS = {
     headline: "Web Vibe Quant Python Demo",
     lede:
       "An open-source take on GS Quant — the Vibe Quant website demo. Built for shared execution and verification across a multi-LLM quant committee. Base market data is collected from TOSS Open API and Yahoo Finance. LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.",
+    cta_examples: "Examples",
     cta_apis: "GS → VI API map",
     cta_run: "Runner",
     cta_docs: "API docs page",
+    examples_title: "Examples",
+    examples_sub:
+      "Compare NVIDIA · Micron · Sandisk · Broadcom. Click a chip to load runnable Python into the editor.",
     api_title: "GS Quant ↔ VI Quant API guide",
     api_sub:
       "Rule: gs_quant → vi_quant, Gs* → Vi*. browser = runs here. Click Load sample to fill the editor.",
@@ -60,9 +64,13 @@ export const STRINGS = {
     headline: "웹버전 Vibe Quant Python Demo",
     lede:
       "GS Quant의 오픈소스 버전으로 Vibe Quant 웹사이트 데모입니다. 이 프로젝트의 목적은 멀티 LLM 퀀트 위원회의 공통 실행·검증을 위한 프로젝트입니다. TOSS Open API와 야후 파이낸스에서 기초 데이터를 수집하고 있습니다. LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.",
+    cta_examples: "Examples",
     cta_apis: "GS → VI API 설명",
     cta_run: "실행기",
     cta_docs: "API 문서 페이지",
+    examples_title: "Examples",
+    examples_sub:
+      "NVIDIA · Micron · Sandisk · Broadcom 비교 데모. 클릭하면 실행기에 코드가 로드됩니다.",
     api_title: "GS Quant ↔ VI Quant API 설명",
     api_sub:
       "규칙: gs_quant → vi_quant, Gs* → Vi*. browser는 이 페이지에서 실행. 샘플 로드로 에디터에 코드를 넣습니다.",
@@ -112,9 +120,12 @@ export const STRINGS = {
     headline: "网页版 Vibe Quant Python Demo",
     lede:
       "GS Quant 的开源版本，即 Vibe Quant 网站演示。目标是为多 LLM 量化委员会提供共同执行与验证。基础数据来自 TOSS Open API 与 Yahoo Finance。LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.",
+    cta_examples: "Examples",
     cta_apis: "GS → VI API 说明",
     cta_run: "运行器",
     cta_docs: "API 文档页",
+    examples_title: "Examples",
+    examples_sub: "比较 NVIDIA · Micron · Sandisk · Broadcom。点击加载可运行的 Python 示例。",
     api_title: "GS Quant ↔ VI Quant API 说明",
     api_sub:
       "规则：gs_quant → vi_quant，Gs* → Vi*。browser 可在本页运行。点击加载示例填入编辑器。",

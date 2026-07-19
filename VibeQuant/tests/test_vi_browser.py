@@ -7,6 +7,7 @@ from vi_browser.timeseries import (
     returns,
     volatility,
     moving_average,
+    momentum,
     correlation,
     zscores,
     max_drawdown,
@@ -40,6 +41,11 @@ class TestViBrowser:
         common = ma.index.intersection(expected.index)
         assert len(common) > 100
         np.testing.assert_allclose(ma[common].values, expected[common].values)
+
+    def test_momentum_matches_shift_ratio(self, prices):
+        m = momentum(prices, 22)
+        expected = prices / prices.shift(22) - 1.0
+        pd.testing.assert_series_equal(m.dropna(), expected.dropna(), check_names=False)
 
     def test_self_correlation_is_one(self, prices):
         c = correlation(prices, prices, 22)

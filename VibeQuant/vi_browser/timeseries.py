@@ -43,6 +43,11 @@ def moving_average(prices: pd.Series, window: int = 22) -> pd.Series:
     return prices.rolling(window).mean()
 
 
+def momentum(prices: pd.Series, window: int = 22) -> pd.Series:
+    """Price momentum: close / close.shift(window) - 1."""
+    return prices / prices.shift(window) - 1.0
+
+
 def correlation(
     a: pd.Series,
     b: pd.Series,

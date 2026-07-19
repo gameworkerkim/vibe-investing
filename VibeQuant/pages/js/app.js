@@ -1,8 +1,9 @@
-import { applyI18n, detectLang, t } from "./i18n.js?v=12";
-import { API_CATALOG, noteFor } from "./api-catalog.js?v=12";
-import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=12";
-import { clearChart, renderChartFromWindow } from "./chart-view.js?v=12";
-import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=12";
+import { applyI18n, detectLang, t } from "./i18n.js?v=13";
+import { API_CATALOG, noteFor } from "./api-catalog.js?v=13";
+import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=13";
+import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=13";
+import { clearChart, renderChartFromWindow } from "./chart-view.js?v=13";
+import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=13";
 
 const codeEl = document.getElementById("code");
 const outputEl = document.getElementById("output");
@@ -15,9 +16,11 @@ const apiTbody = document.getElementById("api-tbody");
 const sampleLabel = document.getElementById("sample-label");
 const iosBanner = document.getElementById("ios-banner");
 const dataSourceBanner = document.getElementById("data-source-banner");
+const examplesChips = document.getElementById("examples-chips");
 
 let lang = detectLang();
-let activeSampleId = "chart";
+let activeSampleId = "ex-multifactor";
+let activeExampleId = "ex-multifactor";
 const support = detectRuntimeSupport();
 
 function updateMockBanner(text) {
@@ -52,8 +55,30 @@ function setStatus(kind) {
   }
 }
 
+function setActiveExampleChip(id) {
+  activeExampleId = id || "";
+  examplesChips?.querySelectorAll(".example-chip").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.id === activeExampleId);
+  });
+}
+
+function loadDemoExample(ex, { scroll = false } = {}) {
+  activeSampleId = ex.id;
+  setActiveExampleChip(ex.id);
+  codeEl.value = ex.sample.trim() + "\n";
+  if (sampleLabel) {
+    sampleLabel.textContent = `${tx("sample_loaded", "Sample")}: ${exampleTitle(ex, lang)}`;
+  }
+  document.querySelectorAll(".api-table tbody tr").forEach((row) => row.classList.remove("is-active"));
+  if (scroll) {
+    document.getElementById("workspace")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  codeEl.focus();
+}
+
 function loadSample(item, { scroll = false } = {}) {
   activeSampleId = item.id;
+  setActiveExampleChip("");
   codeEl.value = item.sample.trim() + "\n";
   if (sampleLabel) {
     sampleLabel.textContent = `${tx("sample_loaded", "Sample")}: ${item.vi}`;
@@ -65,6 +90,22 @@ function loadSample(item, { scroll = false } = {}) {
     document.getElementById("workspace")?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
   codeEl.focus();
+}
+
+function renderExamples() {
+  if (!examplesChips) return;
+  examplesChips.innerHTML = "";
+  for (const ex of DEMO_EXAMPLES) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "example-chip";
+    btn.dataset.id = ex.id;
+    btn.setAttribute("role", "listitem");
+    if (ex.id === activeExampleId) btn.classList.add("is-active");
+    btn.innerHTML = `<span class="check" aria-hidden="true">✓</span>${exampleTitle(ex, lang)}`;
+    btn.addEventListener("click", () => loadDemoExample(ex, { scroll: true }));
+    examplesChips.append(btn);
+  }
 }
 
 function renderApiTable() {
@@ -114,6 +155,7 @@ function renderApiTable() {
 
 function refreshUi() {
   applyI18n(lang);
+  renderExamples();
   renderApiTable();
   if (iosBanner) {
     iosBanner.hidden = !support.isIOS;
@@ -145,11 +187,8 @@ langSelect?.addEventListener("change", () => {
 });
 
 exampleBtn?.addEventListener("click", () => {
-  const golden =
-    API_CATALOG.find((x) => x.id === "backtest") ||
-    API_CATALOG.find((x) => x.id === "bundle") ||
-    API_CATALOG.find((x) => x.id === "chart");
-  if (golden) loadSample(golden, { scroll: true });
+  const golden = DEMO_EXAMPLES.find((x) => x.id === "ex-multifactor") || DEMO_EXAMPLES[0];
+  if (golden) loadDemoExample(golden, { scroll: true });
 });
 
 clearBtn?.addEventListener("click", () => {
@@ -160,6 +199,7 @@ clearBtn?.addEventListener("click", () => {
   clearChart();
   updateMockBanner("");
   activeSampleId = "";
+  setActiveExampleChip("");
   document.querySelectorAll(".api-table tbody tr").forEach((row) => row.classList.remove("is-active"));
   codeEl.focus();
 });
@@ -204,14 +244,13 @@ refreshUi();
 const fromDocs = sessionStorage.getItem("vq_sample");
 if (fromDocs) {
   sessionStorage.removeItem("vq_sample");
+  const demo = DEMO_EXAMPLES.find((x) => x.id === fromDocs || x.id === `ex-${fromDocs}`);
   const item = API_CATALOG.find((x) => x.id === fromDocs);
-  if (item) loadSample(item, { scroll: true });
+  if (demo) loadDemoExample(demo, { scroll: true });
+  else if (item) loadSample(item, { scroll: true });
 } else {
-  const golden =
-    API_CATALOG.find((x) => x.id === "backtest") ||
-    API_CATALOG.find((x) => x.id === "bundle") ||
-    API_CATALOG.find((x) => x.id === "chart");
-  if (golden) loadSample(golden);
+  const golden = DEMO_EXAMPLES.find((x) => x.id === "ex-multifactor") || DEMO_EXAMPLES[0];
+  if (golden) loadDemoExample(golden);
   else codeEl.value = EXAMPLE_CODE;
 }
 
