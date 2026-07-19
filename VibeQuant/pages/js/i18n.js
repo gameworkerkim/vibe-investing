@@ -34,6 +34,8 @@ export const STRINGS = {
     legend_planned: "planned = roadmap",
     python_input: "Python input",
     result: "Result",
+    error_log: "Error log",
+    chart_empty: "show_chart(...) output appears here.",
     run: "Run",
     clear: "Clear",
     copy: "Copy",
@@ -67,6 +69,10 @@ export const STRINGS = {
     llm_placeholder: "e.g. Compare 22-day momentum for NVDA, MU, SNDK, AVGO and rank them",
     llm_hint:
       "Non-finance prompts are rejected (1 min cooldown). API key stays on the Worker (setup-deepseek.sh) — never in the browser.",
+    llm_finance_only:
+      "This LLM is used for financial Quant. Please use another service for other questions.",
+    llm_finance_cooldown:
+      "This LLM is used for financial Quant. Please use another service for other questions.\n(Blocked for 1 minute after a non-finance reject.)",
     llm_empty: "Enter an LLM Quant Prompt first.",
     llm_running: "Calling DeepSeek…",
     llm_running_python: "Running generated Python…",
@@ -110,6 +116,8 @@ export const STRINGS = {
     legend_planned: "planned = 예정",
     python_input: "파이썬 입력",
     result: "결과",
+    error_log: "Error log",
+    chart_empty: "show_chart(...) 결과가 여기에 표시됩니다.",
     run: "실행",
     clear: "Clear",
     copy: "복사",
@@ -143,6 +151,10 @@ export const STRINGS = {
     llm_placeholder: "예: NVDA·MU·SNDK·AVGO 22일 모멘텀을 비교하고 랭킹을 알려줘",
     llm_hint:
       "비금융 질문은 거부되며 1분간 쿨다운. API 키는 Worker 시크릿(setup-deepseek.sh) — 브라우저에 없음.",
+    llm_finance_only:
+      "본 LLM은 금융 Quant를 위해서 사용됩니다. 다른 질문은 다른 서비스를 이용하세요.",
+    llm_finance_cooldown:
+      "본 LLM은 금융 Quant를 위해서 사용됩니다. 다른 질문은 다른 서비스를 이용하세요.\n(비금융 질문 거부 후 1분간 차단됩니다.)",
     llm_empty: "먼저 LLM Quant Prompt를 입력하세요.",
     llm_running: "DeepSeek 호출 중…",
     llm_running_python: "생성 파이썬 실행 중…",
@@ -185,6 +197,8 @@ export const STRINGS = {
     legend_planned: "planned = 计划中",
     python_input: "Python 输入",
     result: "结果",
+    error_log: "Error log",
+    chart_empty: "show_chart(...) 结果会显示在这里。",
     run: "运行",
     clear: "Clear",
     copy: "复制",
@@ -218,6 +232,9 @@ export const STRINGS = {
     llm_placeholder: "例如：比较 NVDA、MU、SNDK、AVGO 的 22 日动量并排名",
     llm_hint:
       "非金融问题将被拒绝（冷却 1 分钟）。API 密钥仅在 Worker（setup-deepseek.sh），不在浏览器。",
+    llm_finance_only: "本 LLM 仅用于金融 Quant。其他问题请使用其他服务。",
+    llm_finance_cooldown:
+      "本 LLM 仅用于金融 Quant。其他问题请使用其他服务。\n（非金融问题被拒绝后冷却 1 分钟。）",
     llm_empty: "请先输入 LLM Quant Prompt。",
     llm_running: "正在调用 DeepSeek…",
     llm_running_python: "正在运行生成的 Python…",

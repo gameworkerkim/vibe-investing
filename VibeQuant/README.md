@@ -66,6 +66,7 @@ multi-SaaS path.
 ## Dashboard (browser demo)
 
 **Live site:** [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)  
+**User manual (Examples / LLM / Python):** [docs/USER_MANUAL.md](docs/USER_MANUAL.md) · [KR](docs/USER_MANUAL_KR.md) · [ZH](docs/USER_MANUAL_ZH.md)  
 **Committee checklist:** [docs/COMMITTEE_CHECKLIST.md](docs/COMMITTEE_CHECKLIST.md)
 
 | Overview | Runner |

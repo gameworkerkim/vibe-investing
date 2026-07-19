@@ -14,6 +14,21 @@ const LLM_COOLDOWN_MS = 30_000;
 /** After non-finance reject: block IP for 60s (Cache API) */
 const REJECT_TTL_SECONDS = 60;
 
+/** Shown when prompt is outside finance/quant scope (KO / EN / ZH). */
+const MSG_FINANCE_ONLY = [
+  "본 LLM은 금융 Quant를 위해서 사용됩니다. 다른 질문은 다른 서비스를 이용하세요.",
+  "This LLM is used for financial Quant. Please use another service for other questions.",
+  "本 LLM 仅用于金融 Quant。其他问题请使用其他服务。",
+].join("\n");
+
+const MSG_FINANCE_COOLDOWN = [
+  MSG_FINANCE_ONLY,
+  "",
+  "비금융 질문 거부 후 1분간 차단됩니다.",
+  "Blocked for 1 minute after a non-finance reject.",
+  "非金融问题被拒绝后冷却 1 分钟。",
+].join("\n");
+
 const llmHits = new Map<string, number>();
 
 export type LlmModelChoice = "flash" | "pro";
@@ -331,7 +346,7 @@ export async function handleQuantPrompt(
     return {
       ok: false,
       error: "FINANCE_COOLDOWN",
-      message: "Non-finance prompts are blocked for 1 minute after a reject.",
+      message: MSG_FINANCE_COOLDOWN,
       retryAfter: REJECT_TTL_SECONDS,
       finance: false,
     };
@@ -364,8 +379,7 @@ export async function handleQuantPrompt(
     return {
       ok: false,
       error: "FINANCE_ONLY",
-      message:
-        "Only US stocks, Korean stocks, crypto, and finance/quant questions are allowed. Retry after 1 minute.",
+      message: MSG_FINANCE_ONLY,
       retryAfter: REJECT_TTL_SECONDS,
       finance: false,
     };

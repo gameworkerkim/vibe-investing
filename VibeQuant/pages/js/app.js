@@ -1,14 +1,15 @@
-import { applyI18n, detectLang, t } from "./i18n.js?v=19";
-import { API_CATALOG, noteFor } from "./api-catalog.js?v=19";
-import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=19";
-import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=19";
-import { clearChart, renderChartFromWindow } from "./chart-view.js?v=19";
-import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=19";
-import { requestQuantPrompt } from "./llm-prompt.js?v=19";
-import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=19";
+import { applyI18n, detectLang, t } from "./i18n.js?v=21";
+import { API_CATALOG, noteFor } from "./api-catalog.js?v=21";
+import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=21";
+import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=21";
+import { clearChart, renderChartFromWindow } from "./chart-view.js?v=21";
+import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=21";
+import { requestQuantPrompt } from "./llm-prompt.js?v=21";
+import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=21";
 
 const codeEl = document.getElementById("code");
 const outputEl = document.getElementById("output");
+const errorLogEl = document.getElementById("error-log");
 const statusEl = document.getElementById("runtime-status");
 const runBtn = document.getElementById("btn-run");
 const exampleBtn = document.getElementById("btn-example");
@@ -32,6 +33,19 @@ const sampleLabel = document.getElementById("sample-label");
 const iosBanner = document.getElementById("ios-banner");
 const dataSourceBanner = document.getElementById("data-source-banner");
 const examplesChips = document.getElementById("examples-chips");
+
+function setResult(text) {
+  if (outputEl) outputEl.textContent = text || "";
+}
+
+function setErrorLog(text) {
+  if (errorLogEl) errorLogEl.textContent = text || "";
+}
+
+function clearOutputs() {
+  setResult("");
+  setErrorLog("");
+}
 
 async function copyText(text, btn) {
   const value = String(text || "");
@@ -269,8 +283,8 @@ function showRuntimeFailure(err) {
   if (support.isIOS || !support.hasWasm) {
     parts.push("", iosAdvice(lang));
   }
-  outputEl.textContent = parts.join("\n");
-  outputEl.classList.add("is-error");
+  setResult("");
+  setErrorLog(parts.join("\n"));
   setStatus("error");
   if (runBtn) runBtn.disabled = true;
 }
@@ -288,8 +302,7 @@ exampleBtn?.addEventListener("click", () => {
 clearBtn?.addEventListener("click", () => {
   codeEl.value = "";
   if (sampleLabel) sampleLabel.textContent = "";
-  outputEl.textContent = "";
-  outputEl.classList.remove("is-error");
+  clearOutputs();
   clearChart();
   updateMockBanner("");
   activeSampleId = "";
@@ -340,24 +353,30 @@ function setLlmProgress(phase) {
 runBtn?.addEventListener("click", async () => {
   const code = codeEl.value.trim();
   if (!code) {
-    outputEl.textContent = tx("empty_code", "Enter Python code first.");
-    outputEl.classList.add("is-error");
+    setResult("");
+    setErrorLog(tx("empty_code", "Enter Python code first."));
     clearChart();
     return;
   }
 
   setBusy(true);
   setStatus("running");
-  outputEl.classList.remove("is-error");
-  outputEl.textContent = "";
+  clearOutputs();
   clearChart();
 
   try {
     const { ok, text } = await runPython(code);
-    outputEl.textContent = text;
-    outputEl.classList.toggle("is-error", !ok);
-    updateMockBanner(text);
-    if (ok) await renderChartFromWindow();
+    if (ok) {
+      setResult(text);
+      setErrorLog("");
+      updateMockBanner(text);
+      await renderChartFromWindow();
+    } else {
+      setResult("");
+      setErrorLog(text);
+      updateMockBanner(text);
+      clearChart();
+    }
     setStatus("ready");
   } catch (err) {
     showRuntimeFailure(err);
@@ -371,8 +390,8 @@ runBtn?.addEventListener("click", async () => {
 llmBtn?.addEventListener("click", async () => {
   const prompt = (llmPromptEl?.value || "").trim();
   if (!prompt) {
-    outputEl.textContent = tx("llm_empty", "Enter an LLM Quant Prompt first.");
-    outputEl.classList.add("is-error");
+    setResult("");
+    setErrorLog(tx("llm_empty", "Enter an LLM Quant Prompt first."));
     clearChart();
     return;
   }
@@ -380,18 +399,24 @@ llmBtn?.addEventListener("click", async () => {
   setBusy(true);
   setLlmProgress("llm");
   setStatus("running");
-  outputEl.classList.remove("is-error");
-  outputEl.textContent = tx("llm_running", "Calling DeepSeek…");
+  clearOutputs();
+  setResult(tx("llm_running", "Calling DeepSeek…"));
   clearChart();
 
   try {
     const model = llmModelEl?.value === "flash" ? "flash" : "pro";
     const res = await requestQuantPrompt({ prompt, model });
     if (!res.ok) {
-      outputEl.textContent = `[${res.error}] ${res.message}${
-        res.retryAfter ? `\nretryAfter=${res.retryAfter}s` : ""
-      }`;
-      outputEl.classList.add("is-error");
+      setResult("");
+      if (res.error === "FINANCE_ONLY") {
+        setErrorLog(tx("llm_finance_only", res.message || ""));
+      } else if (res.error === "FINANCE_COOLDOWN") {
+        setErrorLog(tx("llm_finance_cooldown", res.message || ""));
+      } else {
+        setErrorLog(
+          `[${res.error}] ${res.message}${res.retryAfter ? `\nretryAfter=${res.retryAfter}s` : ""}`
+        );
+      }
       setStatus("ready");
       return;
     }
@@ -407,23 +432,30 @@ llmBtn?.addEventListener("click", async () => {
       if (sampleLabel) {
         sampleLabel.textContent = `${tx("sample_loaded", "Sample")}: LLM → vi_browser`;
       }
-      parts.push("", "=== Generated Python (editor updated) ===", res.python.trim(), "", "=== Pyodide run ===");
-      outputEl.textContent = parts.join("\n") + `\n${tx("llm_running_python", "Running generated Python…")}`;
+      parts.push("", "=== Generated Python (editor updated) ===", res.python.trim());
+      setResult(parts.join("\n") + `\n\n=== Pyodide run ===\n${tx("llm_running_python", "Running generated Python…")}`);
+      setErrorLog("");
       const { ok, text } = await runPython(res.python);
-      parts.push(text);
-      outputEl.textContent = parts.join("\n");
-      outputEl.classList.toggle("is-error", !ok);
-      updateMockBanner(text);
-      if (ok) await renderChartFromWindow();
+      if (ok) {
+        setResult(parts.join("\n") + "\n\n=== Pyodide run ===\n" + text);
+        setErrorLog("");
+        updateMockBanner(text);
+        await renderChartFromWindow();
+      } else {
+        setResult(parts.join("\n"));
+        setErrorLog(text);
+        updateMockBanner(text);
+        clearChart();
+      }
     } else {
-      outputEl.textContent = parts.join("\n");
-      outputEl.classList.remove("is-error");
+      setResult(parts.join("\n"));
+      setErrorLog("");
       updateMockBanner("");
     }
     setStatus("ready");
   } catch (err) {
-    outputEl.textContent = String(err);
-    outputEl.classList.add("is-error");
+    setResult("");
+    setErrorLog(String(err));
     clearChart();
     setStatus("error");
   } finally {

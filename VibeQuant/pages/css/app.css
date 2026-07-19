@@ -498,9 +498,18 @@ body {
 
 .workspace {
   display: grid;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: minmax(320px, auto) minmax(420px, 1fr);
   gap: 0.85rem;
   padding-bottom: 2.5rem;
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .workspace {
+    grid-template-columns: 1fr;
+    grid-template-rows: none;
+  }
 }
 
 .pane {
@@ -514,16 +523,41 @@ body {
   box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
 }
 
-.llm-pane {
+.llm-pane,
+.input-pane {
+  min-height: 320px;
+}
+
+.input-pane .code,
+.llm-pane .llm-prompt {
+  min-height: 180px;
+  flex: 1;
+}
+
+.workspace-out-left {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  gap: 0.85rem;
+  min-height: 420px;
+}
+
+.result-pane,
+.error-pane,
+.chart-pane {
   min-height: 0;
 }
 
-.input-pane .code {
-  min-height: 260px;
+.result-pane .output,
+.error-pane .output {
+  min-height: 120px;
 }
 
-.result-pane {
-  min-height: 320px;
+.chart-pane {
+  background: #06110e;
+}
+
+.error-log {
+  color: var(--danger);
 }
 
 .pane-head {
@@ -649,9 +683,7 @@ body {
 }
 
 .llm-prompt {
-  min-height: 120px;
-  max-height: 240px;
-  flex: 0 1 auto;
+  max-height: none;
 }
 
 .llm-status {
@@ -813,6 +845,44 @@ body {
   padding: 0.75rem 1rem 0.25rem;
   border-bottom: 1px solid var(--line);
   background: #06110e;
+}
+
+.chart-wrap-fill {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  border-bottom: 0;
+  padding: 1rem;
+  min-height: 100%;
+  position: relative;
+}
+
+.chart-wrap-fill .chart-canvas-box {
+  flex: 1;
+  height: auto;
+  min-height: 240px;
+}
+
+.chart-wrap.is-empty .chart-canvas-box {
+  opacity: 0.25;
+}
+
+.chart-empty {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  padding: 1.5rem;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.82rem;
+  pointer-events: none;
+}
+
+.chart-wrap.is-empty .chart-empty {
+  display: flex;
 }
 
 .chart-title {

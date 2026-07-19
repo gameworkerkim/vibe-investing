@@ -28,18 +28,27 @@ function loadChartJs() {
   return chartJsPromise;
 }
 
+function setChartEmpty(empty) {
+  const wrap = document.getElementById("chart-wrap");
+  const titleEl = document.getElementById("chart-title");
+  if (wrap) {
+    wrap.hidden = false;
+    wrap.classList.toggle("is-empty", !!empty);
+  }
+  if (titleEl) titleEl.hidden = !!empty;
+}
+
 export function clearChart() {
   if (chartInstance) {
     chartInstance.destroy();
     chartInstance = null;
   }
-  const wrap = document.getElementById("chart-wrap");
   const canvas = document.getElementById("chart-canvas");
-  if (wrap) wrap.hidden = true;
   if (canvas) {
     const ctx = canvas.getContext("2d");
     if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
   }
+  setChartEmpty(true);
   try {
     delete globalThis.__VQ_CHART__;
   } catch {
@@ -101,8 +110,11 @@ export async function renderChartFromWindow() {
   await loadChartJs();
   if (chartInstance) chartInstance.destroy();
 
-  wrap.hidden = false;
-  if (titleEl) titleEl.textContent = payload.title || "Chart";
+  setChartEmpty(false);
+  if (titleEl) {
+    titleEl.hidden = false;
+    titleEl.textContent = payload.title || "Chart";
+  }
 
   const multi = datasets.length > 1;
   chartInstance = new globalThis.Chart(canvas, {

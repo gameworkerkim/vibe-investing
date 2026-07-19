@@ -70,6 +70,7 @@
 ## 대시보드 (브라우저 데모)
 
 **라이브 사이트:** [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)  
+**사용 매뉴얼 (Examples / LLM / 파이썬):** [docs/USER_MANUAL_KR.md](docs/USER_MANUAL_KR.md) · [EN](docs/USER_MANUAL.md) · [ZH](docs/USER_MANUAL_ZH.md)  
 **위원회 검증 체크리스트:** [docs/COMMITTEE_CHECKLIST_KR.md](docs/COMMITTEE_CHECKLIST_KR.md)
 
 | 개요 | 실행기 |
