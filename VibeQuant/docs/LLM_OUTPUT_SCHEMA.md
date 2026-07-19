@@ -47,7 +47,11 @@ from vi_browser import (
 )
 ```
 
-- `get_candles` is **async**
+- Host already runs code inside `async def` → use top-level `await` only
+- **Never** `import asyncio` / `asyncio.run(...)`
+- `get_candles` returns a **list of dicts**, not pandas — no `.iloc`, no `candles["close"]`
+- `closes = [c["close"] for c in candles]`
+- `momentum(closes, window=20)` (not `period=`); `max_drawdown` → scalar float
 - `days` ≤ 180 preferred
 - No `os`, `subprocess`, `eval`, `exec`, `open`, `requests`, arbitrary network
 

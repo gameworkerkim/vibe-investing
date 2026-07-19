@@ -45,6 +45,16 @@ fee_bps=10, metrics(total_return, mdd, sharpe, cagr)를 출력하고 equity를 s
     prompt: `퀀트에서 22일 모멘텀 Momentum = close/close[22]-1 공식을 한국어로 짧게 설명해줘.
 코드 실행 없이 answer 모드로만 답해.`,
   },
+  {
+    id: "llm-semi-rsi",
+    title_en: "NVDA/INTC/MU RSI",
+    title_ko: "NVDA·INTC·MU RSI",
+    title_zh: "NVDA/INTC/MU RSI",
+    prompt: `엔비디아(NVDA), 인텔(INTC), 마이크론(MU)의 RSI 구간과 MDD를 비교하고,
+모멘텀 관점의 가상 포트폴리오 비중과 최근 가격을 알려줘.
+반드시 vi_browser 리스트 API만 사용 (asyncio.run 금지, pandas/iloc 금지).
+closes = [c["close"] for c in candles], rsi(..., period=14), momentum(..., window=20), max_drawdown은 스칼라.`,
+  },
 ];
 
 export function llmPromptTitle(item, lang) {

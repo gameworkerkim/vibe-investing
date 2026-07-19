@@ -37,8 +37,15 @@ DeepSeek ↔ Pyodide 실행기 사이의 위원회 스테이지 계약입니다.
 
 ## 허용 파이썬 표면
 
-`vi_browser` import만. `get_candles`는 async. `days` ≤ 180 권장.  
-`os` / `subprocess` / `eval` / `exec` / `open` / `requests` 금지.
+`vi_browser` import만.
+
+- 호스트가 이미 `async` 안에서 실행 → 최상위 `await`만 사용
+- **`import asyncio` / `asyncio.run(...)` 금지**
+- `get_candles`는 **dict 리스트** (pandas 아님) — `.iloc`, `candles["close"]` 금지
+- `closes = [c["close"] for c in candles]`
+- `momentum(closes, window=20)` (`period` 아님); `max_drawdown`은 **스칼라**
+- `days` ≤ 180 권장
+- `os` / `subprocess` / `eval` / `exec` / `open` / `requests` 금지
 
 ## 골든 프롬프트
 

@@ -221,15 +221,30 @@ Rules:
 - mode=answer: explanation only, python=null.
 - mode=python: must run vi_browser code to compute (candles, indicators, backtest).
 - mode=hybrid: short answer PLUS python that verifies with data.
-- Python MUST use only: from vi_browser import get_candles, returns, volatility, moving_average, momentum, correlation, max_drawdown, rsi, macd, bollinger_bands, backtest, ma_cross_signal, show_chart
-- get_candles is async: candles = await get_candles("NVDA", days=180, provider="yahoo")
-- KR tickers: bare codes like "005930"; US: "NVDA"; prefer provider="yahoo".
-- Prefer days<=180. Print metrics clearly. Use show_chart for series.
-- Not investment advice. No secrets. No network except get_candles.
-- If the question is not finance, still never answer it here (server already gates).`;
+
+CRITICAL — Pyodide runner constraints (violations break execution):
+- The host ALREADY awaits user code inside an async function. Use top-level "await" only.
+- NEVER import asyncio. NEVER call asyncio.run(...). NEVER define async def main() + asyncio.run.
+- get_candles returns a LIST of dicts: [{"time","open","high","low","close","volume"}, ...]
+- NOT a pandas DataFrame. Do NOT use .iloc, .min() on Series, candles["close"].
+- Extract closes: closes = [c["close"] for c in candles]
+- rsi(closes, period=14) → list with None warmup; use last non-None value.
+- momentum(closes, window=20) → list (arg name is window, NOT period).
+- max_drawdown(closes) → single float (negative fraction), NOT a series.
+- volatility(closes, 22) → single float or None.
+- Allowed imports ONLY: from vi_browser import get_candles, returns, volatility, moving_average, momentum, correlation, max_drawdown, rsi, macd, bollinger_bands, backtest, ma_cross_signal, show_chart
+- Example skeleton:
+  from vi_browser import get_candles, rsi, max_drawdown, momentum, show_chart
+  candles = await get_candles("NVDA", days=180, provider="yahoo")
+  closes = [c["close"] for c in candles]
+  r = rsi(closes, 14)
+  last_rsi = next(x for x in reversed(r) if x is not None)
+- KR tickers: "005930"; US: "NVDA"; provider="yahoo"; days<=180.
+- Educational only — not investment advice. Label portfolios as hypothetical.
+- No secrets. No network except get_candles.`;
 
 const PYTHON_DENY =
-  /\b(import\s+os|import\s+sys|import\s+subprocess|from\s+os\b|eval\s*\(|exec\s*\(|__import__|open\s*\(|requests\.|urllib\.|socket\.|pathlib\.|asyncio\.create_subprocess)/i;
+  /\b(import\s+os|import\s+sys|import\s+subprocess|import\s+asyncio|from\s+os\b|from\s+asyncio\b|asyncio\.run\s*\(|eval\s*\(|exec\s*\(|__import__|open\s*\(|requests\.|urllib\.|socket\.|pathlib\.|\.iloc\b|pandas|DataFrame)/i;
 
 function sanitizePython(code: string | null): string | null {
   if (!code) return null;
