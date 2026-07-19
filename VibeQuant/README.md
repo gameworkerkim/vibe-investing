@@ -96,6 +96,8 @@ All documentation is in English.
 | [docs/OFFICIAL_DOCS_GUIDE_KR.md](docs/OFFICIAL_DOCS_GUIDE_KR.md) | GS Quant official docs correspondence manual (Korean) |
 | [docs/TECH_REVIEW_DASHBOARD.md](docs/TECH_REVIEW_DASHBOARD.md) | Technical review: Streamlit/NiceGUI over Node.js backend |
 | [docs/TECH_REVIEW_DASHBOARD_KR.md](docs/TECH_REVIEW_DASHBOARD_KR.md) | 기술 검토: Streamlit/NiceGUI + Node.js 백엔드 연동 |
+| [docs/TECH_REVIEW_CLOUDFLARE.md](docs/TECH_REVIEW_CLOUDFLARE.md) | Technical review: Cloudflare Workers/D1/R2 vs Vercel/Neon |
+| [docs/TECH_REVIEW_CLOUDFLARE_KR.md](docs/TECH_REVIEW_CLOUDFLARE_KR.md) | 기술 검토: Cloudflare 이전 (Workers/D1/R2/KV) |
 | [ROADMAP.md](ROADMAP.md) | Development roadmap (English) |
 | [README_KR.md](README_KR.md) / [ROADMAP_KR.md](ROADMAP_KR.md) | Korean documentation |
 | [SECURITY.md](SECURITY.md) | LLM-readable security policy |
