@@ -13,6 +13,7 @@
 | `bitcoin-weakness-column-en.md` | 영어 / English | Markdown | [열기 / Open](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BitCoin/bitcoin-weakness-column-en.md) |
 | `bitcoin-weakness-column.pdf` | 한국어 / Korean | PDF | [열기 / Open](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BitCoin/bitcoin-weakness-column.pdf) |
 | `BTC-20260720-Decline-Analysis.md` | 한국어 / Korean | Markdown | [열기 / Open](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BitCoin/BTC-20260720-Decline-Analysis.md) |
+| `BTC-20260720-Decline-Analysis-EN.md` | 영어 / English | Markdown | [열기 / Open](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BitCoin/BTC-20260720-Decline-Analysis-EN.md) |
 
 ---
 
