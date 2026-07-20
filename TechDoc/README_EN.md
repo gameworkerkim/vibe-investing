@@ -39,6 +39,29 @@ These documents have English translations. Listed by read engagement (highest fi
 | [MiniMax Coding Guide (EN)](MiniMax%20Coding%20Guide/minimax-coding-guide.en.md) | Practical MiniMax coding assistant — VS Code, agent workflows, price/performance comparison. |
 | [Visual Studio C# LLM Guide (EN)](MiniMax%20Coding%20Guide/visual-studio-csharp-llm-guide.en.md) | C# AI assistant recommendations for Visual Studio + LLM connections. |
 
+### LLM Wiki
+
+| Document | Description |
+|----------|-------------|
+| [DeepWiki Getting Started (EN)](DeepWiki/DeepWiki_Getting_Started_EN.md) | AI code documentation tool — just change `github.com` to `deepwiki.com`. Includes self-hosted `deepwiki-open` guide. |
+| [Google Code Wiki Getting Started (EN)](Google_Code_Wiki/Google%20code%20wiki%20getting%20started%20EN.md) | Gemini-powered living documentation — auto-regenerates docs + diagrams on code changes. |
+| [OpenWiki Technical Docs (EN)](openwiki/README_EN.md) | LangChain's agent wiki CLI — AI coding agent context infrastructure. |
+
+### Serverless & SaaS Free Tier
+
+| Document | Description |
+|----------|-------------|
+| [Cloudflare Free Tier Guide (EN)](CloudFlare/Cloudflare%20free%20tier%20guide%20EN.md) | Workers, Pages, R2, KV — Azure-to-Cloudflare migration perspective. |
+| [Oracle Cloud Free Tier Guide (EN)](OracleCloud/Oracle%20Cloud%20Free%20Tier%20Guide%20EN.md) | Always Free ARM 4-core 24GB — sign-up, ARM capacity workarounds, pitfalls. |
+| [Neon Review (EN)](Neon/Neon_review_EN.md) | Serverless PostgreSQL — scale-to-zero, branching, cold start analysis. |
+| [Turso Guide (EN)](SQLite_%20Turso/Turso_guide_EN.md) | Edge-native SQLite — many-database architecture, Cloudflare D1 comparison. |
+| [Upstash Guide (EN)](Serverless_Redis/upstash_guide_EN.md) | Serverless Redis/Kafka — Aiven, Redis Cloud comparison. |
+| [Vercel Analysis (EN)](vercel/vercel_analysis_EN.md) | Platform pros/cons — cost unpredictability, vendor lock-in risks. |
+| [Global Free CDN Guide (EN)](github_cdn/Global%20free%20cdn%20guide%20EN.md) | 5 ways: jsDelivr, Cloudflare Pages, Vercel, Google Drive, SNS. |
+| [GitHub CDN Guide (EN)](github_cdn/github_cdn_EN.md) | GitHub + jsDelivr JSON hosting deep-dive. |
+| [Free Email Sending Solutions (EN)](FreeEmail/FreeEmail_guide_EN.md) | 8 services compared — Resend, Brevo, Mailgun, SES, etc. |
+| [Supabase Complete Guide (EN)](OpenSource_Firebase/SuperBase_guide_EN.md) | Open-source Firebase alternative — PostgreSQL, Auth, RLS, Vercel integration. |
+
 ### AI Agents & Web Standards
 
 | Document | Description |
@@ -73,11 +96,11 @@ These documents have English translations. Listed by read engagement (highest fi
 
 LLM Wiki is a new tool category where AI scans GitHub codebases to auto-generate wiki-style documentation, enabling code exploration via natural language Q&A.
 
-| Document | Provider | Type | One-Liner |
-|----------|----------|------|-----------|
-| [DeepWiki Getting Started](DeepWiki/DeepWiki_Getting_Started.md) | Cognition Labs (Devin) | Hosted SaaS | Replace `github.com` with `deepwiki.com` in any URL. Includes self-hosted `deepwiki-open`. |
-| [Google Code Wiki Getting Started](Google_Code_Wiki/Google%20code%20wiki%20getting%20started.md) | Google | Hosted SaaS | Gemini-powered. Auto-regenerates docs + diagrams on code changes. |
-| [OpenWiki Technical Docs](openwiki/README.md) | LangChain (Open Source) | Local CLI | Wiki for coding agents. AGENTS.md/CLAUDE.md auto-management, private repo support. |
+| Document | Lang | Provider | Type | One-Liner |
+|----------|------|----------|------|-----------|
+| [DeepWiki Getting Started](DeepWiki/DeepWiki_Getting_Started.md) · [EN](DeepWiki/DeepWiki_Getting_Started_EN.md) | KO·EN | Cognition Labs (Devin) | Hosted SaaS | Replace `github.com` with `deepwiki.com` in any URL. |
+| [Google Code Wiki Getting Started](Google_Code_Wiki/Google%20code%20wiki%20getting%20started.md) · [EN](Google_Code_Wiki/Google%20code%20wiki%20getting%20started%20EN.md) | KO·EN | Google | Hosted SaaS | Gemini-powered. Auto-regenerates docs + diagrams on code changes. |
+| [OpenWiki Technical Docs](openwiki/README.md) · [EN](openwiki/README_EN.md) | KO·EN | LangChain (Open Source) | Local CLI | Wiki for coding agents. AGENTS.md/CLAUDE.md auto-management.
 
 ---
 
@@ -125,16 +148,16 @@ Free-tier serverless platforms and SaaS services for developers and startups.
 
 | Document | Lang | Description | Last Updated |
 |----------|------|-------------|--------------|
-| [Cloudflare Free Tier Guide](CloudFlare/Cloudflare%20free%20tier%20guide.md) | KO | Cloudflare Workers, Pages, D1, R2, KV, security services. | 2026-05-12 |
-| [Oracle Cloud Free Tier Guide](OracleCloud/02.%20Oracle%20Cloud%20Free%20Tier%20Guide.md) | KO | Oracle Cloud always-free tier — ARM VM, Compute, databases, networking. | 2026-05-09 |
-| [Neon Review](Neon/Neon_review.md) | KO | Neon.tech — serverless PostgreSQL, branching, free tier, pricing, performance. | 2026-06-09 |
-| [Turso Guide](SQLite_%20Turso/Turso_guide.md) | KO | Edge-distributed SQLite Turso — setup, replication, use cases, free tier. | 2026-06-09 |
-| [Upstash Guide](Serverless_Redis/upstash_guide.md) | KO | Serverless Redis/Kafka Upstash — request-based billing, free tier analysis. | 2026-06-09 |
-| [Vercel Analysis](vercel/vercel_analysis.md) | KO | Vercel platform — pricing, edge functions, limitations, cost-efficiency. | 2026-06-09 |
-| [Global Free CDN Guide](github_cdn/Global%20free%20cdn%20guide.md) | KO | Static asset delivery via jsDelivr, GitHub raw CDN, and global free CDNs. | 2026-06-12 |
-| [GitHub CDN](github_cdn/github_cdn.md) | KO | GitHub repos with jsDelivr as a free CDN — technical deep-dive. | 2026-06-10 |
-| [Free Email Sending Solutions](FreeEmail/FreeEmail_guide.md) | KO | 8 services compared (Resend, Brevo, Mailgun, SES, etc.) with Vercel + Next.js recommendations. | 2026-06-14 |
-| [Supabase Complete Guide](OpenSource_Firebase/SuperBase_guide.md) | KO | Open-source Firebase alternative — PostgreSQL, Auth, Storage, Realtime, Edge Functions. | 2026-06-14 |
+| [Cloudflare Free Tier Guide](CloudFlare/Cloudflare%20free%20tier%20guide.md) · [EN](CloudFlare/Cloudflare%20free%20tier%20guide%20EN.md) | KO·EN | Cloudflare Workers, Pages, D1, R2, KV, security services. | 2026-05-12 |
+| [Oracle Cloud Free Tier Guide](OracleCloud/02.%20Oracle%20Cloud%20Free%20Tier%20Guide.md) · [EN](OracleCloud/Oracle%20Cloud%20Free%20Tier%20Guide%20EN.md) | KO·EN | Oracle Cloud always-free tier — ARM VM, Compute, databases, networking. | 2026-05-09 |
+| [Neon Review](Neon/Neon_review.md) · [EN](Neon/Neon_review_EN.md) | KO·EN | Neon.tech — serverless PostgreSQL, branching, free tier, pricing, performance. | 2026-06-09 |
+| [Turso Guide](SQLite_%20Turso/Turso_guide.md) · [EN](SQLite_%20Turso/Turso_guide_EN.md) | KO·EN | Edge-distributed SQLite Turso — setup, replication, use cases, free tier. | 2026-06-09 |
+| [Upstash Guide](Serverless_Redis/upstash_guide.md) · [EN](Serverless_Redis/upstash_guide_EN.md) | KO·EN | Serverless Redis/Kafka Upstash — request-based billing, free tier analysis. | 2026-06-09 |
+| [Vercel Analysis](vercel/vercel_analysis.md) · [EN](vercel/vercel_analysis_EN.md) | KO·EN | Vercel platform — pricing, edge functions, limitations, cost-efficiency. | 2026-06-09 |
+| [Global Free CDN Guide](github_cdn/Global%20free%20cdn%20guide.md) · [EN](github_cdn/Global%20free%20cdn%20guide%20EN.md) | KO·EN | Static asset delivery via jsDelivr, GitHub raw CDN, and global free CDNs. | 2026-06-12 |
+| [GitHub CDN](github_cdn/github_cdn.md) · [EN](github_cdn/github_cdn_EN.md) | KO·EN | GitHub repos with jsDelivr as a free CDN — technical deep-dive. | 2026-06-10 |
+| [Free Email Sending Solutions](FreeEmail/FreeEmail_guide.md) · [EN](FreeEmail/FreeEmail_guide_EN.md) | KO·EN | 8 services compared (Resend, Brevo, Mailgun, SES, etc.) with Vercel + Next.js recommendations. | 2026-06-14 |
+| [Supabase Complete Guide](OpenSource_Firebase/SuperBase_guide.md) · [EN](OpenSource_Firebase/SuperBase_guide_EN.md) | KO·EN | Open-source Firebase alternative — PostgreSQL, Auth, Storage, Realtime, Edge Functions. | 2026-06-14 |
 
 ---
 
