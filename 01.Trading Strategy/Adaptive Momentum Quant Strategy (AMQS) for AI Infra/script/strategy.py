@@ -277,8 +277,8 @@ class TickerMetrics:
 
 
 def measure(prices: pd.DataFrame, market: Optional[pd.Series] = None) -> List[TickerMetrics]:
-    rets = prices.pct_change()
-    market_rets = market.pct_change() if market is not None else None
+    rets = prices.pct_change(fill_method=None)
+    market_rets = market.pct_change(fill_method=None) if market is not None else None
 
     out: List[TickerMetrics] = []
     for t in prices.columns:
