@@ -2,6 +2,8 @@
 
 > [vibe-investing/AMQS](https://github.com/gameworkerkim/vibe-investing/tree/main/01.Trading%20Strategy/Adaptive%20Momentum%20Quant%20Strategy%20(AMQS)) 와 [AMQS-M7](https://github.com/gameworkerkim/vibe-investing/tree/main/01.Trading%20Strategy/Adaptive%20Momentum%20Quant%20Strategy%20(AMQS)%20for%20M7) 의 **AI 인프라 특화 확장판**. 원본의 *4-Factor Momentum Composite*, *단기 하락 매수 모멘텀(Pullback-in-Uptrend)*, *거시 레짐 필터*, *-12% 손절*, *주간 리밸런싱* 을 계승하고, M7 에서 빠졌던 **Top-N 선별을 복원**하되 **서브테마 분산 캡**으로 GPU 과집중을 막는다.
 
+> **[2026.07.20 정식 퀀트 리포트](data/AMQS_AI_Infra_Quant_Report_20260720.md) 발행.** AI 인프라 18종 중 4종만 선별. 5종 EXIT, 5종 EXCLUDED. 전체 점수표 및 Dimension Breakdown 수록.
+
 ### 투자 철학 / 컨셉
 
 이 전략은 **파괴적 혁신과 그 모멘텀에 투자**한다. 투자는 과감하되 한 바구니에 몰지 않아야 하고
@@ -62,17 +64,35 @@ AI 인프라는 GPU(NVDA/AMD)·메모리(MU)·서버(DELL/SMCI) 등 *상관 높�
 AMQS_AI_Infra/
 ├── readme.md
 ├── requirements.txt
+├── AMQS_AI_Infra_Idea_Note.md    # 전략 개념 쉬운 설명
+├── AMQS_AI_Infra_Idea_Note.pdf
 ├── script/
-│   ├── strategy.py        # 4-Factor + 5차원 채점 + Top-N 선별 + 서브테마 캡 + 레짐 + 사전필터
-│   ├── amqs_ai_infra.py   # CLI 트래커 + 알림 + 손절 추적
-│   ├── backtest.py        # 백테스트 (vs QQQ/SMH/SOXX/AI-Infra 동가중)
-│   └── broker.py          # Phase 1 CLI / Phase 2 KIS API 자리표시
+│   ├── strategy.py               # 4-Factor + 5차원 채점 + Top-N 선별 + 서브테마 캡 + 레짐 + 사전필터
+│   ├── amqs_ai_infra.py          # CLI 트래커 + 알림 + 손절 추적
+│   ├── backtest.py               # 백테스트 (vs QQQ/SMH/SOXX/AI-Infra 동가중)
+│   └── broker.py                 # Phase 1 CLI / Phase 2 KIS API 자리표시
 ├── prompts/
-│   ├── AMQS_AI_Infra_kr.MD  # 한국어 LLM 프롬프트
-│   └── AMQS_AI_Infra_EN.MD  # English (토큰 ~30% 절감)
-├── Signal_Bot/              # 매수 시그널 봇 + 웹뷰 대시보드 (아래 §매수 시그널 봇)
-└── data/                    # 백테스트/런타임 CSV 출력 (동봉)
+│   ├── AMQS_AI_Infra_kr.MD       # 한국어 LLM 프롬프트 (2026.07.20 재구성판)
+│   └── AMQS_AI_Infra_EN.MD       # English (토큰 ~30% 절감)
+├── Signal_Bot/                   # 매수 시그널 봇 + 웹뷰 대시보드
+└── data/
+    ├── amqs_ai_infra_log.csv     # 라이브 트래커 스냅샷 로그
+    ├── amqs_ai_infra_state.json  # 포트폴리오 상태 (진입가 추적)
+    ├── AMQS_AI_Infra_20260720_Signals.md        # 7월 20일 실시간 시그널 분석
+    ├── AMQS_AI_Infra_Quant_Report_20260720.md   # 7월 20일 정식 퀀트 리포트
+    ├── backtest_summary.csv       # 전략별 요약 통계
+    ├── backtest_equity.csv        # 일별 equity curve
+    ├── backtest_positions.csv     # 주별 비중 + 레짐
+    ├── backtest_trades.csv        # 진입/청산/손절 로그
+    └── backtest_regimes.csv       # 레짐 전환 이력
 ```
+
+### 최신 리포트
+
+| 파일 | 설명 |
+|------|------|
+| [`AMQS_AI_Infra_Quant_Report_20260720.md`](data/AMQS_AI_Infra_Quant_Report_20260720.md) | 7월 20일 정식 퀀트 리포트. Executive Summary + 18종 Full Scorecard + Dimension Breakdown + Risk Alerts |
+| [`AMQS_AI_Infra_20260720_Signals.md`](data/AMQS_AI_Infra_20260720_Signals.md) | 7월 20일 실시간 시그널 분석. 매수/매도/중립 요약 + 6월 대비 변화 |
 
 ---
 
@@ -138,12 +158,15 @@ LLM 프롬프트는 `prompts/` 의 한/영문판을 복사해 Claude/GPT 등에 
 
 | 파일 | 내용 |
 |---|---|
+| `amqs_ai_infra_log.csv` | 라이브 트래커 스냅샷 (실행 시마다 append) |
+| `amqs_ai_infra_state.json` | 포트폴리오 진입가 상태 (손절 추적용) |
+| `AMQS_AI_Infra_Quant_Report_20260720.md` | 2026.07.20 정식 퀀트 리포트 |
+| `AMQS_AI_Infra_20260720_Signals.md` | 2026.07.20 실시간 시그널 분석 |
 | `backtest_summary.csv` | 전략별 총수익·CAGR·변동성·Sharpe·MDD·최종자산 |
 | `backtest_equity.csv` | 일별 equity curve (AMQS vs QQQ/SMH/SOXX/AI동가중) |
 | `backtest_positions.csv` | 주별 목표 비중 + 레짐 |
 | `backtest_trades.csv` | 진입/청산/손절 로그 |
 | `backtest_regimes.csv` | 레짐 전환 이력 |
-| `amqs_ai_infra_log.csv` | 라이브 트래커 스냅샷 |
 
 ---
 
@@ -192,6 +215,8 @@ MIT. 출처 표기 권장: "Built on AMQS by Dennis Kim, vibe-investing reposito
 
 ## 링크
 
+- 최신 퀀트 리포트: [AMQS_AI_Infra_Quant_Report_20260720.md](data/AMQS_AI_Infra_Quant_Report_20260720.md)
+- 실시간 시그널 분석: [AMQS_AI_Infra_20260720_Signals.md](data/AMQS_AI_Infra_20260720_Signals.md)
 - 쉽게 읽는 설명(아이디어 노트): [AMQS_AI_Infra_Idea_Note.md](AMQS_AI_Infra_Idea_Note.md) · [PDF](AMQS_AI_Infra_Idea_Note.pdf)
 - 레포지토리: [vibe-investing](https://github.com/gameworkerkim/vibe-investing)
 - 원본 AMQS: [Adaptive Momentum Quant Strategy (AMQS)](https://github.com/gameworkerkim/vibe-investing/tree/main/01.Trading%20Strategy/Adaptive%20Momentum%20Quant%20Strategy%20(AMQS))
