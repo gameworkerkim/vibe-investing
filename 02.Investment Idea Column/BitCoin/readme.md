@@ -12,6 +12,7 @@
 | `Fail_DAT.md` | 한국어 / Korean | Markdown | [열기 / Open](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BitCoin/Fail_DAT.md) |
 | `bitcoin-weakness-column-en.md` | 영어 / English | Markdown | [열기 / Open](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BitCoin/bitcoin-weakness-column-en.md) |
 | `bitcoin-weakness-column.pdf` | 한국어 / Korean | PDF | [열기 / Open](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BitCoin/bitcoin-weakness-column.pdf) |
+| `BTC-20260720-Decline-Analysis.md` | 한국어 / Korean | Markdown | [열기 / Open](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BitCoin/BTC-20260720-Decline-Analysis.md) |
 
 ---
 
@@ -42,6 +43,30 @@ This column focuses not on the $2.5M sale itself but on the **structure** it rev
 - **A shifting marginal price setter**: The real weakness signal is not the chart price but ETF outflows and DAT financing conditions (mNAV premiums, dividend coverage, reserve balances).
 
 From the view that "just as an LLM is a spreadsheet, not an oracle, a treasury company's bitcoin is not an article of faith but a mark-to-market line item," the column argues that in a downturn a DAT is not a price support but a seller that amplifies the weakness.
+
+---
+
+## 2026년 7월 20일 — 비트코인 하락 분석
+
+> 7월 20일 BTC/USD $64,200 기준, 호르무즈 긴장·Kimi K3발 반도체 급락·ETF 유출에 따른 수급 붕괴를 정리한 후속 분석.
+
+[`BTC-20260720-Decline-Analysis.md`](BTC-20260720-Decline-Analysis.md) 는 6월 DAT 칼럼의 연장선에서, 현재 비트코인 시장의 3중 압박을 분석한다:
+
+- **지정학**: 호르무즈 해협 유조선 폭발 → 유가 급등 → 인플레이션 재점화 → 위험자산 외면
+- **증시 동조화**: Kimi K3(2.8T 파라미터 오픈웨이트) 공개로 반도체 지수 주간 -12.5% → 비트코인 동반 하락
+- **수급**: 현물 ETF 순유출 지속, 얇은 유동성, DAT 기업의 구조적 매도 압력
+
+고점 $126,198 대비 50% 이상 하락한 상태에서 크립토 윈터 장기화 시나리오를 수급·레버리지·매크로 3개 축으로 검토한다.
+
+### July 20, 2026 — Bitcoin Decline Analysis
+
+A follow-up to the June DAT column, analyzing the triple pressure on bitcoin as of July 20 (BTC/USD ~$64,200):
+
+- **Geopolitics**: Hormuz Strait tanker explosions → oil surge → inflation rekindling → risk-off
+- **Equity correlation**: Kimi K3 (2.8T param, open-weight) triggers semiconductor index -12.5% weekly → bitcoin dragged down
+- **Supply/demand**: Persistent spot ETF outflows, thin liquidity, structural DAT selling pressure
+
+Examines the prolonged crypto winter scenario across three axes: supply dynamics, leverage exhaustion, and macro headwinds. Down 50%+ from the $126,198 ATH.
 
 ---
 
