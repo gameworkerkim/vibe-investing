@@ -82,16 +82,7 @@ def show_chart(data, title="Chart", series_label="close", ylabel=None, **kwargs)
 
 async def get_candles(symbol="AAPL", days=60, provider="yahoo"):
     days = int(days)
-    api = ""
-    try:
-        from js import window
-        cfg = getattr(window, "RUNTIME_CONFIG", None)
-        if cfg is not None:
-            api = str(getattr(cfg, "VIBEQUANT_API_BASE", "") or "") or api
-        if not api:
-            api = str(getattr(window, "VIBEQUANT_API_BASE", "") or "")
-    except Exception:
-        pass
+    api = _api_base()
     if api:
         try:
             from js import fetch
@@ -131,6 +122,155 @@ async def get_candles(symbol="AAPL", days=60, provider="yahoo"):
     print("[candles] source=local_mock")
     return out
 
+def _api_base():
+    api = ""
+    try:
+        from js import window
+        cfg = getattr(window, "RUNTIME_CONFIG", None)
+        if cfg is not None:
+            api = str(getattr(cfg, "VIBEQUANT_API_BASE", "") or "") or api
+        if not api:
+            api = str(getattr(window, "VIBEQUANT_API_BASE", "") or "")
+    except Exception:
+        pass
+    return api
+
+def _asset_heuristics(symbol, provider="yahoo"):
+    sym = str(symbol).strip().upper()
+    is_kr = sym.endswith(".KS") or sym.endswith(".KQ") or (sym.isdigit() and len(sym) in (5, 6))
+    return {
+        "symbol": sym,
+        "provider": provider,
+        "name": sym,
+        "exchange": "KRX" if is_kr else "Unknown",
+        "currency": "KRW" if is_kr else "USD",
+        "assetType": "EQUITY",
+        "source": "heuristics",
+    }
+
+async def get_asset(symbol="AAPL", provider="yahoo"):
+    sym = str(symbol).strip().upper()
+    api = _api_base()
+    if api:
+        try:
+            from js import fetch
+            url = f"{api.rstrip('/')}/api/v1/assets/{provider or 'yahoo'}/{sym}"
+            res = await fetch(url)
+            if res.ok:
+                data = _js_to_py(await res.json())
+                if isinstance(data, dict) and data.get("symbol"):
+                    return data
+        except Exception as e:
+            print(f"[asset] worker fallback: {e}")
+    out = _asset_heuristics(sym, provider or "yahoo")
+    if not api:
+        out["name"] = f"Mock Asset {sym}"
+        out["exchange"] = "Mock"
+        out["source"] = "local_mock"
+    return out
+
+async def get_prices(symbols, provider="yahoo"):
+    if isinstance(symbols, str):
+        symbols = [symbols]
+    symbols = [str(s).strip().upper() for s in symbols if str(s).strip()]
+    result = {}
+    api = _api_base()
+    if api and symbols:
+        try:
+            from js import fetch
+            qs = ",".join(symbols)
+            url = f"{api.rstrip('/')}/api/v1/prices/{provider or 'yahoo'}?symbols={qs}"
+            res = await fetch(url)
+            if res.ok:
+                data = _js_to_py(await res.json())
+                items = data.get("prices") or {}
+                if isinstance(items, dict):
+                    for k, v in items.items():
+                        result[str(k).upper()] = v
+                if result:
+                    return result
+        except Exception as e:
+            print(f"[prices] worker fallback: {e}")
+        for sym in symbols:
+            try:
+                rows = await get_candles(sym, days=5, provider=provider)
+                if len(rows) >= 2:
+                    last, prev = rows[-1], rows[-2]
+                    result[sym] = {
+                        "symbol": sym,
+                        "price": last["close"],
+                        "change": round(float(last["close"]) - float(prev["close"]), 4),
+                        "changeRate": round((float(last["close"]) / max(float(prev["close"]), 1e-12) - 1) * 100, 4),
+                        "date": last.get("time"),
+                        "source": "candles",
+                    }
+                elif len(rows) == 1:
+                    last = rows[0]
+                    result[sym] = {
+                        "symbol": sym,
+                        "price": last["close"],
+                        "change": 0.0,
+                        "changeRate": 0.0,
+                        "date": last.get("time"),
+                        "source": "candles",
+                    }
+            except Exception:
+                continue
+        if result:
+            return result
+    for sym in symbols:
+        rows = await get_candles(sym, days=5, provider="mock")
+        if len(rows) >= 2:
+            last, prev = rows[-1], rows[-2]
+            result[sym] = {
+                "symbol": sym,
+                "price": last["close"],
+                "change": round(float(last["close"]) - float(prev["close"]), 4),
+                "changeRate": round((float(last["close"]) / max(float(prev["close"]), 1e-12) - 1) * 100, 4),
+                "date": last.get("time"),
+                "source": "local_mock",
+            }
+    return result
+
+async def get_last_price(symbol="AAPL", provider="yahoo"):
+    prices = await get_prices([symbol], provider=provider)
+    row = prices.get(str(symbol).strip().upper())
+    if not row:
+        return None
+    return {
+        "date": row.get("date"),
+        "close": row.get("price"),
+        "volume": row.get("volume"),
+        "symbol": row.get("symbol", symbol),
+        "source": row.get("source"),
+    }
+
+class ViDataApi:
+    """Thin GsDataApi-style router for committee scripts."""
+    @staticmethod
+    def build_market_data_query(mkt_assets, mkt_type=None):
+        return {"assets": mkt_assets, "type": mkt_type}
+
+    @staticmethod
+    async def get_market_data(query=None, symbols=None, provider="yahoo", days=90):
+        syms = symbols
+        if syms is None and isinstance(query, dict):
+            syms = query.get("assets") or query.get("symbols")
+        if syms is None and isinstance(query, (list, tuple)):
+            syms = list(query)
+        if isinstance(syms, str):
+            syms = [syms]
+        if not syms:
+            raise ValueError("ViDataApi.get_market_data requires symbols")
+        out = {}
+        for sym in syms:
+            out[str(sym).strip().upper()] = await get_candles(str(sym), days=days, provider=provider)
+        return out
+
+    @staticmethod
+    async def get_prices(symbols, provider="yahoo"):
+        return await get_prices(symbols, provider=provider)
+
 def _closes(closes):
     xs = list(closes)
     if xs and isinstance(xs[0], dict):
@@ -168,6 +308,51 @@ def moving_average(closes, window=22):
         else:
             chunk = xs[i + 1 - w : i + 1]
             out.append(sum(chunk) / w)
+    return out
+
+sma = moving_average
+
+def ema(closes, span=22):
+    xs = _closes(closes)
+    if not xs:
+        return []
+    a = 2.0 / (int(span) + 1)
+    out = [xs[0]]
+    for i in range(1, len(xs)):
+        out.append(a * xs[i] + (1 - a) * out[-1])
+    return out
+
+exponential_moving_average = ema
+
+def change(closes):
+    xs = _closes(closes)
+    if not xs:
+        return []
+    x0 = xs[0]
+    return [x - x0 for x in xs]
+
+def index(closes, initial=1):
+    xs = _closes(closes)
+    if not xs or xs[0] == 0:
+        return [None] * len(xs)
+    x0 = xs[0]
+    return [float(initial) * x / x0 for x in xs]
+
+def percentiles(closes, window=None):
+    xs = _closes(closes)
+    n = len(xs)
+    w = int(window) if window is not None else n
+    out = []
+    for i in range(n):
+        start = 0 if window is None else max(0, i + 1 - w)
+        sample = xs[start : i + 1]
+        if not sample:
+            out.append(None)
+            continue
+        v = xs[i]
+        below = sum(1 for s in sample if s < v)
+        equal = sum(1 for s in sample if s == v)
+        out.append(100.0 * (below + 0.5 * equal) / len(sample))
     return out
 
 def momentum(closes, window=22):
@@ -446,9 +631,19 @@ def backtest(candles, signal, fee_bps=10, trading_days=252, initial_capital=None
     }
 
 vi_browser.get_candles = get_candles
+vi_browser.get_prices = get_prices
+vi_browser.get_last_price = get_last_price
+vi_browser.get_asset = get_asset
+vi_browser.ViDataApi = ViDataApi
 vi_browser.returns = returns
 vi_browser.volatility = volatility
 vi_browser.moving_average = moving_average
+vi_browser.sma = sma
+vi_browser.ema = ema
+vi_browser.exponential_moving_average = exponential_moving_average
+vi_browser.change = change
+vi_browser.index = index
+vi_browser.percentiles = percentiles
 vi_browser.momentum = momentum
 vi_browser.correlation = correlation
 vi_browser.max_drawdown = max_drawdown
@@ -525,7 +720,9 @@ from io import StringIO
 
 async def __vq_entry():
     from vi_browser import (
-        get_candles, returns, volatility, moving_average, momentum,
+        get_candles, get_prices, get_last_price, get_asset, ViDataApi,
+        returns, volatility, moving_average, sma, ema, exponential_moving_average,
+        change, index, percentiles, momentum,
         correlation, max_drawdown, zscores, beta,
         annualized_return, sharpe_ratio, rsi, macd, bollinger_bands,
         backtest, ma_cross_signal, show_chart,

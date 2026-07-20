@@ -9,12 +9,11 @@ No API keys or secrets live in this module.
 from __future__ import annotations
 
 import datetime as dt
-import json as _json
 import math
-from typing import Optional, Dict, List
+from typing import Optional, Dict, List, Any
 
 try:
-    import pyodide_http
+    import pyodide_http  # noqa: F401
     _HAS_PYODIDE = True
 except ImportError:
     _HAS_PYODIDE = False
@@ -80,6 +79,19 @@ def _mock_candles(symbol: str, days: int) -> List[dict]:
     return out
 
 
+def _asset_heuristics(symbol: str, provider: str = "yahoo") -> dict:
+    sym = str(symbol).strip().upper()
+    is_kr = sym.endswith(".KS") or sym.endswith(".KQ") or (sym.isdigit() and len(sym) in (5, 6))
+    return {
+        "symbol": sym,
+        "provider": provider,
+        "name": sym,
+        "exchange": "KRX" if is_kr else "Unknown",
+        "currency": "KRW" if is_kr else "USD",
+        "assetType": "EQUITY",
+    }
+
+
 # ── HTTP helper ──────────────────────────────────────────
 
 def _fetch(path: str) -> dict:
@@ -93,6 +105,15 @@ def _fetch(path: str) -> dict:
         import json as _j, urllib.request
         with urllib.request.urlopen(url, timeout=30) as r:
             return _j.loads(r.read())
+
+
+def _df_from_rows(rows: List[dict]):
+    if _HAS_PANDAS:
+        df = pd.DataFrame(rows)
+        if "time" in df.columns:
+            df["time"] = pd.to_datetime(df["time"])
+        return df
+    return rows
 
 
 # ── Public API ───────────────────────────────────────────
@@ -112,52 +133,151 @@ def get_candles(
         except Exception:
             rows = None
         if rows:
-            if _HAS_PANDAS:
-                df = pd.DataFrame(rows)
-                if "time" in df.columns:
-                    df["time"] = pd.to_datetime(df["time"])
-                return df
-            return rows
+            return _df_from_rows(rows)
 
-    # Mock fallback
-    rows = _mock_candles(symbol, days)
-    if _HAS_PANDAS:
-        df = pd.DataFrame(rows)
-        if "time" in df.columns:
-            df["time"] = pd.to_datetime(df["time"])
-        return df
-    return rows
+    return _df_from_rows(_mock_candles(symbol, days))
 
 
 def get_prices(symbols: List[str], provider: str = "yahoo") -> Dict[str, dict]:
-    result = {}
+    """Last prices for symbols via Worker `/prices` or derived from candles/mock."""
+    symbols = [str(s).strip().upper() for s in symbols if str(s).strip()]
+    result: Dict[str, dict] = {}
+
+    if _API_URL and symbols:
+        try:
+            qs = ",".join(symbols)
+            data = _fetch(f"/api/v1/prices/{provider}?symbols={qs}")
+            items = data.get("prices") or data.get("items") or {}
+            if isinstance(items, list):
+                for row in items:
+                    sym = str(row.get("symbol", "")).upper()
+                    if sym:
+                        result[sym] = row
+            elif isinstance(items, dict):
+                for sym, row in items.items():
+                    result[str(sym).upper()] = row
+            if result:
+                return result
+        except Exception:
+            pass
+
+        # Per-symbol candle fallback
+        for sym in symbols:
+            try:
+                data = _fetch(f"/api/v1/candles/{provider}/{sym}?days=5")
+                rows = data.get("candles") or data.get("data") or []
+                if len(rows) >= 2:
+                    last, prev = rows[-1], rows[-2]
+                    result[sym] = {
+                        "symbol": sym,
+                        "price": last["close"],
+                        "change": round(float(last["close"]) - float(prev["close"]), 4),
+                        "changeRate": round((float(last["close"]) / max(float(prev["close"]), 1e-12) - 1) * 100, 4),
+                        "date": last.get("time"),
+                        "source": data.get("source", "candles"),
+                    }
+                elif len(rows) == 1:
+                    last = rows[0]
+                    result[sym] = {
+                        "symbol": sym,
+                        "price": last["close"],
+                        "change": 0.0,
+                        "changeRate": 0.0,
+                        "date": last.get("time"),
+                        "source": data.get("source", "candles"),
+                    }
+            except Exception:
+                continue
+        if result:
+            return result
+
     for sym in symbols:
-        candles = _mock_candles(sym, 5) if not _API_URL else []
-        if candles:
-            last = candles[-1]
-            prev = candles[-2]
-            result[sym] = {
-                "price": last["close"],
-                "change": round(last["close"] - prev["close"], 2),
-                "changeRate": round((last["close"] / max(prev["close"], 1) - 1) * 100, 2),
-            }
+        candles = _mock_candles(sym, 5)
+        last, prev = candles[-1], candles[-2]
+        result[sym] = {
+            "symbol": sym,
+            "price": last["close"],
+            "change": round(last["close"] - prev["close"], 2),
+            "changeRate": round((last["close"] / max(prev["close"], 1) - 1) * 100, 2),
+            "date": last["time"],
+            "source": "local_mock",
+        }
     return result
 
 
 def get_last_price(symbol: str, provider: str = "yahoo") -> Optional[dict]:
-    candles = _mock_candles(symbol, 5) if not _API_URL else []
-    if candles:
-        last = candles[-1]
-        return {"date": last["time"], "close": last["close"], "volume": last["volume"]}
-    return None
+    prices = get_prices([symbol], provider=provider)
+    row = prices.get(str(symbol).strip().upper())
+    if not row:
+        return None
+    return {
+        "date": row.get("date"),
+        "close": row.get("price"),
+        "volume": row.get("volume"),
+        "symbol": row.get("symbol", symbol),
+        "source": row.get("source"),
+    }
 
 
 def get_asset(symbol: str, provider: str = "yahoo") -> dict:
+    """Asset metadata via Worker `/assets` or local heuristics."""
     symbol = str(symbol).strip().upper()
-    return {
-        "symbol": symbol,
-        "name": f"Mock Asset {symbol}" if not _API_URL else symbol,
-        "exchange": "Mock" if not _API_URL else "Unknown",
-        "currency": "KRW" if symbol.isdigit() else "USD",
-        "assetType": "EQUITY",
-    }
+    if _API_URL:
+        try:
+            data = _fetch(f"/api/v1/assets/{provider}/{symbol}")
+            if isinstance(data, dict) and data.get("symbol"):
+                return data
+        except Exception:
+            pass
+        try:
+            data = _fetch(f"/api/v1/market-data/{provider}/{symbol}")
+            if isinstance(data, dict) and (data.get("symbol") or data.get("asset")):
+                return data.get("asset") or data
+        except Exception:
+            pass
+    out = _asset_heuristics(symbol, provider)
+    if not _API_URL:
+        out["name"] = f"Mock Asset {symbol}"
+        out["exchange"] = "Mock"
+        out["source"] = "local_mock"
+    else:
+        out["source"] = "heuristics"
+    return out
+
+
+class ViDataApi:
+    """Thin browser/local router mimicking GsDataApi entry points.
+
+    Prefer ``get_candles`` / ``get_prices`` in committee scripts. This class
+    exists so LLM output that imports ``ViDataApi`` still resolves.
+    """
+
+    @staticmethod
+    def build_market_data_query(mkt_assets, mkt_type=None):
+        return {"assets": mkt_assets, "type": mkt_type}
+
+    @staticmethod
+    def get_market_data(query: Any = None, *, symbols=None, provider: str = "yahoo", days: int = 90):
+        """Return a dict of symbol → candle rows (or DataFrame if pandas).
+
+        Accepts either a query dict from ``build_market_data_query`` or
+        explicit ``symbols=``.
+        """
+        syms = symbols
+        if syms is None and isinstance(query, dict):
+            syms = query.get("assets") or query.get("symbols")
+        if syms is None and isinstance(query, (list, tuple)):
+            syms = list(query)
+        if isinstance(syms, str):
+            syms = [syms]
+        if not syms:
+            raise ValueError("ViDataApi.get_market_data requires symbols or query['assets']")
+
+        out = {}
+        for sym in syms:
+            out[str(sym).strip().upper()] = get_candles(str(sym), days=days, provider=provider)
+        return out
+
+    @staticmethod
+    def get_prices(symbols: List[str], provider: str = "yahoo") -> Dict[str, dict]:
+        return get_prices(symbols, provider=provider)

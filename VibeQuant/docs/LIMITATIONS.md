@@ -81,6 +81,11 @@ These exist in the repo **now** and must not be advertised as working:
 | Business-day utilities “just work” | Without a real holiday feed they are wrong or crash |
 | One-line migrate any gs-quant notebook | False for pricing, risk, portfolio, screens |
 | Dashboard = full research workstation | Dashboard = **verification sandbox** for a small API subset |
+| `ViDataApi` / `get_prices` = Marquee depth | Thin **data router** over Worker candles/assets — see [API_COMPAT_MATRIX.md](API_COMPAT_MATRIX.md) |
+| Browser `ema` = local `exponential_moving_average(beta=…)` | Browser uses **span** EMA; local VI uses beta decay — not interchangeable params |
+| `percentiles` / `Window` / DateOffset | Browser: simplified rolling rank only |
+
+Pass/fail table: [API_COMPAT_MATRIX.md](API_COMPAT_MATRIX.md).
 
 ## 6. Security constraints (dashboard)
 
@@ -88,14 +93,15 @@ These exist in the repo **now** and must not be advertised as working:
 - Still treat scripts as untrusted relative to the user’s own machine (XSS if UI is sloppy).
 - Worker must never reflect upstream secret material in error bodies.
 - Rate limits on Free are coarse; expect quota exhaustion under scraping.
+- `GET /api/v1/prices` caps at **20 symbols** per request (committee abuse guard).
 
 ## 7. When to leave Free / WASM (explicit future fork)
 
-Only after Phase 1 exit, and only if documented as a new phase:
+Only after the committee stage is stable, and only if documented as a new phase:
 
 - Workers Paid for heavier ingest CPU
 - Separate Python sandbox host for server-side notebooks (not Cloudflare Pages)
-- Local QuantLib parity track (already Phase 2 in ROADMAP)
+- Local QuantLib parity track (ROADMAP Phase 4 optional / desktop)
 
 Until then, agents and contributors must implement the Free + Pyodide design, not a
 hidden paid architecture.

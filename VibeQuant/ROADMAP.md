@@ -8,86 +8,97 @@
 1. **Committee stage:** reproduce/verify LLM outputs on the same `vi_browser` APIs + Cloudflare data.
 2. **Dashboard verification loop:** webview Python → **Pyodide** → Worker candles → table/chart/stdout.
 3. **Cloudflare Free first.** What WASM/free cannot do is deferred and documented.
+4. **API continuity:** audit major Vi/GS surfaces; where full ports are impossible, ship **shims / routers / façades** so committee scripts still run.
 
-**Sequence (normative)**
+**Normative sequence (active)**
 
-1. **Finish basic stage** (data, runner, charts, committee checklist) ← largely done
-2. **Backtesting** (edu/reproducible metrics: Sharpe / MDD / CAGR) ← in progress / demo-ready
-3. **Community** — evaluate others’ quants on the same stage
-4. **LLM quant expansion** — committee workflows / agent bake-offs
+| Phase | Focus | Status |
+|-------|--------|--------|
+| **0** | API compatibility matrix | ✅ done |
+| **1** | Browser timeseries shims + aliases | ✅ done |
+| **2** | Data router (`get_prices` / `get_asset` / thin `ViDataApi`) | ✅ done |
+| **3** | Community evaluation (+ optional `vi_compat` façade) | planned |
+| **4** | LLM archive / multi-LLM bake-off | partial |
 
 **Thin vertical slice:**
 
-`Pages → Pyodide → Worker /candles → R2/D1 → timeseries + edu backtest`
+`Pages → Pyodide → Worker /candles|/assets|/prices → R2/D1 → timeseries shims + edu backtest`
 
 Do not expand the legacy Vercel/Neon/Upstash stack.
 
-## Phase 0 — Foundation (done / freeze)
+---
 
-- [x] Repo layout, Apache-2.0 + NOTICE
-- [x] GS → VI mapping docs, vendor rename script
+## Completed foundation (prerequisite — frozen)
+
+Historical Phase 0–2 work that the committee stage already depends on:
+
+- [x] Repo layout, Apache-2.0 + NOTICE, GS → VI mapping docs
 - [x] Local `ViSession` + vendored `timeseries` / `errors` / `datetime` (partial; see LIMITATIONS)
-- [x] Legacy Express `backend/` + Python `providers/` (transitional)
-- [ ] CI: pytest + flake8 matrix
-- [ ] `CONTRIBUTING.md`
+- [x] Cloudflare Worker: `/api/health`, `/api/v1/candles/:provider/:symbol`, Cache → R2 → Yahoo
+- [x] D1 meta + R2 candle bodies + watchlist (max 50)
+- [x] Pages + Pyodide dashboard (editors, chart, error log, i18n, Clear)
+- [x] `vi_browser` core: candles, indicators, edu `backtest` / `ma_cross_signal`, `show_chart`
+- [x] LLM Quant Prompt UI + Worker (`POST /api/v1/llm/quant-prompt`)
+- [ ] **TOSS realtime — deferred:** Worker→TOSS blocked by IP allowlist ([docs/WORKER_TOSS_IP.md](docs/WORKER_TOSS_IP.md))
+- [ ] CI: pytest + flake8 · `CONTRIBUTING.md`
 
-**Exit:** `pip install -e .`; subset timeseries tests pass. *(Met for subset.)*
+---
 
-## Phase 1 — Cloudflare data plane + Pyodide dashboard (ACTIVE → near exit)
+## Phase 0 — API compatibility matrix
 
-**Objective:** free-tier market data on Cloudflare; script-in-webview verification.
+**Objective:** one authoritative table of what works where, so LLM scripts and humans know pass/fail before run.
 
-### 1A — Cloudflare (Free)
+- [x] [docs/API_COMPAT_MATRIX.md](docs/API_COMPAT_MATRIX.md) (+ KR) — layers: **browser** / **local** / **stub** / **planned**
+- [x] Pass/fail notes for major `vi_quant` / GS-named APIs vs `vi_browser`
+- [x] Link from README / LIMITATIONS / `api-catalog.js`
 
-- [x] Hono Worker: `/api/health`, `/api/v1/candles/:provider/:symbol`
-- [ ] `/api/v1/assets/:provider/:symbol`, `/api/v1/market-data/...` (stubs / later)
-- [x] Bindings: D1 (meta/index), R2 (candle body), Cache API (hot JSON)
-- [x] Schema: `assets`, `candle_objects`, `watchlist` (see ARCHITECTURE_TARGET)
-- [x] Yahoo ingest: lazy-on-read fill (+ Cache → R2)
-- [x] Watchlist capped for free (max 50) + `GET /api/v1/watchlist`
-- [x] Freeze feature work on Express/`backend/` multi-SaaS path; keep for reference only
-- [ ] **TOSS realtime — deferred (later work):** Worker→TOSS direct blocked by IP allowlist;
-      KR realtime will use a **separate ingest path** (not required for Phase 1 exit).
-      See [docs/WORKER_TOSS_IP.md](docs/WORKER_TOSS_IP.md).
+**Exit:** matrix covers data + timeseries + session + risk/instruments; every “browser” row has a runnable sample or explicit fail reason. ✅
 
-### 1B — Pages + Pyodide webview
+---
 
-- [x] Static dashboard: code editor + run + stdout/chart panes (+ Clear, i18n, mock banner)
-- [x] Load Pyodide; thin `vi_browser` bootstrap aligned with package
-      (`returns`, `volatility`, `moving_average`, `correlation`, `max_drawdown`,
-      `zscores`, `beta`, `annualized_return`, `sharpe_ratio`, `rsi`, `macd`, `bollinger_bands`)
-- [x] `get_candles` → `fetch` Worker API only (no secrets in browser); local mock fallback
-- [x] Golden script demo: Samsung/AAPL → chart + metrics (+ edu backtest sample)
-- [x] Document package load time and memory limits in UI / LIMITATIONS
+## Phase 1 — Browser timeseries shims
 
-**Exit criteria**
+**Objective:** close common GS/VI timeseries gaps in Pyodide without pulling full `vi_quant`.
 
-1. Deploy on Cloudflare Free (Pages + Worker + D1 + R2). ✅
-2. User pastes a short Python script in the webview, runs it, sees verified output. ✅
-3. Script uses Cloudflare-backed candles (not server-side Python). ✅ (Yahoo; mock banner if fallback)
-4. LIMITATIONS page lists every blocked GS/vi_quant feature for this path. ✅
+- [x] `ema` / `exponential_moving_average` (span-based)
+- [x] `change`, `index` (series normalization)
+- [x] `percentiles` (simplified rolling percentile rank)
+- [x] Friendly aliases (`sma` → `moving_average`) where useful
+- [x] Keep `pages/js/pyodide-runner.js` ↔ `vi_browser/` in sync
+- [x] Update `api-catalog.js` samples
 
-## Phase 2 — Educational backtest (on the committee stage)
+**Exit:** golden script using EMA + change/index + percentiles runs twice with identical stdout on the same candles. ✅ (deterministic helpers)
 
-**Objective:** reproducible mini-backtests in the sandbox — not a production research engine.
+**Non-goals:** full QuantLib/risk in WASM; parity with every GS Window edge case.
 
-- [x] Thin `vi_browser.backtest` helper (signals → positions → equity curve; next-bar)
-- [x] Metrics: return, MDD, simple Sharpe, CAGR — stdout + chart
-- [x] Golden backtest script (`ma_cross_signal` + `backtest`) + committee checklist items
-- [x] Document day/memory caps (WASM) in LIMITATIONS / checklist
+---
 
-**Exit:** same script + same candles ⇒ same backtest numbers twice in the webview. ✅ (deterministic helper)
+## Phase 2 — Data router
 
-## Phase 3 — Community evaluation
+**Objective:** route familiar data entry points to Worker candles (or documented stubs) so scripts don’t die on missing APIs.
 
-**Objective:** run and score **other people’s** quants on the same stage.
+- [x] Wire `get_prices` / `get_last_price` → Worker candles (last bars), not mock-only
+- [x] Wire `get_asset` → `GET /api/v1/assets/:provider/:symbol` (D1 + heuristics)
+- [x] Thin browser `ViDataApi` / price helpers that call the same router
+- [x] Document or implement `/api/v1/market-data/...` (thin alias OK)
+- [x] Reject / document insufficient paths in LIMITATIONS
+
+**Exit:** `get_prices(["AAPL","005930.KS"])` and `get_asset("AAPL")` return live-backed fields in the webview when Worker is up. ✅ (routes + client wiring; deploy to verify live)
+---
+
+## Phase 3 — Community evaluation (+ façade)
+
+**Objective:** run and score **other people’s** quants on the same stage; optional GS-name façade package.
 
 - [ ] Share format (gist/repo link or R2 artifact)
 - [ ] Rubric: reproducibility, risk metrics, data source, disclosed limits
 - [ ] UI: load shared sample → run → compare metrics
 - [ ] Safety: browser-only execution; never server `exec`
+- [ ] (Optional) `vi_compat` façade: common `gs_quant.*` / `Gs*` import aliases → `vi_browser` / router
 
 **Exit:** one external script can be reproduced and scored on the stage.
+
+---
 
 ## Phase 4 — LLM quant expansion
 
@@ -96,9 +107,13 @@ Do not expand the legacy Vercel/Neon/Upstash stack.
 - [x] LLM Quant Prompt UI + Worker (`POST /api/v1/llm/quant-prompt`)
 - [x] DeepSeek V4 Pro / Flash; finance gate; 30s cooldown; 1m reject cache
 - [x] Golden prompts + output schema (script / assumptions / risks)
-- [ ] Archive successful prompt+stdout for human eval (deferred)
+- [ ] Archive successful prompt+stdout for human eval
 - [ ] Multi-LLM bake-off harness (shared market snapshot)
 - [ ] Optional local `vi_quant` heavy path (QuantLib desktop-only)
+
+**Exit:** two models produce scripts that both run on the same candle snapshot with archived outputs.
+
+---
 
 ## Phase 5 — Distribution
 
@@ -107,7 +122,7 @@ Do not expand the legacy Vercel/Neon/Upstash stack.
 - [ ] CI: pytest + lint · `CONTRIBUTING.md`
 
 **Won't-do (core):** claiming GS Quant replacement, Marquee/GS auth, server-side arbitrary Python,
-free-tier bulk global ingest, “production hedge-fund OMS”.
+free-tier bulk global ingest, “production hedge-fund OMS”, full QuantLib-in-browser.
 
 ## Non-Goals
 
@@ -118,6 +133,8 @@ free-tier bulk global ingest, “production hedge-fund OMS”.
 
 ## Related docs
 
+- [docs/API_COMPAT_MATRIX.md](docs/API_COMPAT_MATRIX.md)
 - [docs/ARCHITECTURE_TARGET.md](docs/ARCHITECTURE_TARGET.md)
 - [docs/LIMITATIONS.md](docs/LIMITATIONS.md)
+- [docs/API_MAPPING.md](docs/API_MAPPING.md)
 - [README.md](README.md)

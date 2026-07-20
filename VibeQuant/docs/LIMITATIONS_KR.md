@@ -80,6 +80,11 @@
 | 영업일 유틸이 “그냥 동작” | 실제 공휴일 피드 없으면 틀리거나 크래시 |
 | 아무 gs-quant 노트북이나 한 줄 마이그레이션 | 가격·리스크·포트폴리오·스크린에는 거짓 |
 | 대시보드 = 풀 리서치 워크스테이션 | 대시보드 = **작은 API 서브셋 검증 샌드박스** |
+| `ViDataApi` / `get_prices` = Marquee 깊이 | Worker 캔들/자산 위 **thin 데이터 라우터** — [API_COMPAT_MATRIX_KR.md](API_COMPAT_MATRIX_KR.md) |
+| 브라우저 `ema` = 로컬 `exponential_moving_average(beta=…)` | 브라우저는 **span** EMA; 로컬은 beta — 파라미터 비호환 |
+| `percentiles` / `Window` / DateOffset | 브라우저: 단순 rolling rank만 |
+
+Pass/fail 표: [API_COMPAT_MATRIX_KR.md](API_COMPAT_MATRIX_KR.md).
 
 ## 6. 보안 제약 (대시보드)
 
@@ -87,14 +92,15 @@
 - 그래도 사용자 기기 기준으로는 스크립트를 불신 (UI XSS 주의).
 - Worker는 업스트림 시크릿을 에러 본문에 반사하지 말 것.
 - Free 레이트리밋은 거칠다; 스크래핑 시 쿼터 소진을 예상할 것.
+- `GET /api/v1/prices`는 요청당 **심볼 20개** 상한 (남용 방지).
 
 ## 7. Free / WASM을 떠나는 시점 (명시적 분기)
 
-Phase 1 Exit 이후, 그리고 새 Phase로 문서화할 때만:
+위원회 스테이지가 안정된 뒤, 새 Phase로 문서화할 때만:
 
 - 더 무거운 ingest CPU를 위한 Workers Paid
 - 서버측 노트북용 별도 Python 샌드박스 호스트 (Cloudflare Pages 아님)
-- 로컬 QuantLib 패리티 트랙 (ROADMAP Phase 2)
+- 로컬 QuantLib 패리티 트랙 (ROADMAP Phase 4 선택 / 데스크톱)
 
 그 전까지 에이전트·기여자는 Free + Pyodide 설계를 구현하며, 숨겨진 유료 아키텍처를
 가정하지 말 것.

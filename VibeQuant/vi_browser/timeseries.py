@@ -43,6 +43,70 @@ def moving_average(prices: pd.Series, window: int = 22) -> pd.Series:
     return prices.rolling(window).mean()
 
 
+# Friendly GS-style alias
+sma = moving_average
+
+
+def ema(prices: pd.Series, span: int = 22) -> pd.Series:
+    """Exponential moving average (span-based, adjust=False).
+
+    Note: local ``vi_quant.timeseries.exponential_moving_average`` uses a
+    beta decay parameter; the browser shim uses the common pandas ``span`` API
+    so LLM scripts stay readable.
+    """
+    return prices.ewm(span=int(span), adjust=False).mean()
+
+
+exponential_moving_average = ema
+
+
+def change(prices: pd.Series) -> pd.Series:
+    """Arithmetic normalization: ``X_t - X_0`` (first non-NaN)."""
+    s = prices.dropna()
+    if s.empty:
+        return prices * float("nan")
+    x0 = float(s.iloc[0])
+    return prices - x0
+
+
+def index(prices: pd.Series, initial: float = 1.0) -> pd.Series:
+    """Geometric normalization: ``initial * X_t / X_0``."""
+    s = prices.dropna()
+    if s.empty:
+        return prices * float("nan")
+    x0 = float(s.iloc[0])
+    if x0 == 0:
+        return prices * float("nan")
+    return initial * prices / x0
+
+
+def percentiles(prices: pd.Series, window: int | None = None) -> pd.Series:
+    """Rolling percentile rank of each point in its own window (0–100).
+
+    Simplified vs GS ``percentiles(x, y, Window)``: no second series / DateOffset.
+    If ``window`` is None, uses an expanding window from the start.
+    """
+    xs = prices.astype(float)
+    n = len(xs)
+    w = int(window) if window is not None else n
+    out = []
+    values = xs.tolist()
+    for i in range(n):
+        if values[i] is None or (isinstance(values[i], float) and np.isnan(values[i])):
+            out.append(np.nan)
+            continue
+        start = 0 if window is None else max(0, i + 1 - w)
+        sample = [v for v in values[start : i + 1] if v is not None and not (isinstance(v, float) and np.isnan(v))]
+        if len(sample) < 1:
+            out.append(np.nan)
+            continue
+        v = float(values[i])
+        below = sum(1 for s in sample if s < v)
+        equal = sum(1 for s in sample if s == v)
+        out.append(100.0 * (below + 0.5 * equal) / len(sample))
+    return pd.Series(out, index=prices.index, dtype=float)
+
+
 def momentum(prices: pd.Series, window: int = 22) -> pd.Series:
     """Price momentum: close / close.shift(window) - 1."""
     return prices / prices.shift(window) - 1.0

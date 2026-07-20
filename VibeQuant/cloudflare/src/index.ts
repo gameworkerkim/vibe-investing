@@ -8,6 +8,7 @@ import { corsHeaders, isAllowedOrigin } from "./cors";
 import { parseCandleParams } from "./validate";
 import { checkRateLimit } from "./ratelimit";
 import { getCandlesPayload } from "./candles";
+import { getAssetInfo, getPriceQuotes } from "./assets";
 import { listWatchlist, watchlistCount, WATCHLIST_MAX } from "./watchlist";
 import { tossConfigured } from "./toss";
 import { deepseekConfigured, handleQuantPrompt } from "./llm-quant";
@@ -90,7 +91,7 @@ export default {
         {
           status: "ok",
           service: "vibequant-api",
-          version: "0.2.0",
+          version: "0.3.0",
           provider_default: env.DEFAULT_PROVIDER ?? "yahoo",
           toss: { configured: tossConfigured(env) },
           deepseek: { configured: deepseekConfigured(env) },
@@ -106,6 +107,9 @@ export default {
             upload_hint: "cloudflare/scripts/upload-static.sh",
           },
           candles: "GET /api/v1/candles/:provider/:symbol?days=90",
+          assets: "GET /api/v1/assets/:provider/:symbol",
+          prices: "GET /api/v1/prices/:provider?symbols=AAPL,MSFT",
+          market_data: "GET /api/v1/market-data/:provider/:symbol",
           llm_quant: "POST /api/v1/llm/quant-prompt",
         },
         200,
@@ -221,11 +225,108 @@ export default {
       }
     }
 
+    const assetMatch = pathname.match(/^\/api\/v1\/assets\/([^/]+)\/([^/]+)\/?$/);
+    if (assetMatch) {
+      if (request.method !== "GET") {
+        return json({ error: "METHOD_NOT_ALLOWED" }, 405, origin);
+      }
+      if (origin && !isAllowedOrigin(origin)) {
+        return json({ error: "CORS_DENIED", message: "Origin not allowed" }, 403, origin);
+      }
+      const parsed = parseCandleParams(assetMatch[1], assetMatch[2], "1");
+      if (!parsed.ok) {
+        return json({ error: parsed.error, message: parsed.message }, parsed.status, origin);
+      }
+      const asset = await getAssetInfo(env, parsed.value.provider, parsed.value.symbol);
+      return json(asset, 200, origin, {
+        "Cache-Control": "public, max-age=300, stale-while-revalidate=3600",
+      });
+    }
+
+    const marketMatch = pathname.match(/^\/api\/v1\/market-data\/([^/]+)\/([^/]+)\/?$/);
+    if (marketMatch) {
+      if (request.method !== "GET") {
+        return json({ error: "METHOD_NOT_ALLOWED" }, 405, origin);
+      }
+      if (origin && !isAllowedOrigin(origin)) {
+        return json({ error: "CORS_DENIED", message: "Origin not allowed" }, 403, origin);
+      }
+      const rl = checkRateLimit(request);
+      if (!rl.ok) {
+        return json(
+          { error: "RATE_LIMITED", message: "Too many requests", retryAfter: rl.retryAfter },
+          429,
+          origin,
+          { "Retry-After": String(rl.retryAfter) }
+        );
+      }
+      const parsed = parseCandleParams(marketMatch[1], marketMatch[2], "5");
+      if (!parsed.ok) {
+        return json({ error: parsed.error, message: parsed.message }, parsed.status, origin);
+      }
+      const asset = await getAssetInfo(env, parsed.value.provider, parsed.value.symbol);
+      const quotes = await getPriceQuotes(env, parsed.value.provider, [parsed.value.symbol]);
+      const quote = quotes[parsed.value.symbol] || null;
+      return json(
+        { asset, quote, symbol: parsed.value.symbol, provider: parsed.value.provider },
+        200,
+        origin,
+        { "Cache-Control": "public, max-age=60, stale-while-revalidate=300" }
+      );
+    }
+
+    const pricesMatch = pathname.match(/^\/api\/v1\/prices\/([^/]+)\/?$/);
+    if (pricesMatch) {
+      if (request.method !== "GET") {
+        return json({ error: "METHOD_NOT_ALLOWED" }, 405, origin);
+      }
+      if (origin && !isAllowedOrigin(origin)) {
+        return json({ error: "CORS_DENIED", message: "Origin not allowed" }, 403, origin);
+      }
+      const rl = checkRateLimit(request);
+      if (!rl.ok) {
+        return json(
+          { error: "RATE_LIMITED", message: "Too many requests", retryAfter: rl.retryAfter },
+          429,
+          origin,
+          { "Retry-After": String(rl.retryAfter) }
+        );
+      }
+      const provider = decodeURIComponent(pricesMatch[1] || "").toLowerCase();
+      if (!["yahoo", "mock", "toss"].includes(provider)) {
+        return json(
+          { error: "INVALID_PROVIDER", message: "provider must be yahoo, mock, or toss" },
+          400,
+          origin
+        );
+      }
+      const raw = url.searchParams.get("symbols") || url.searchParams.get("symbol") || "";
+      const symbols = raw
+        .split(/[,+\s]+/)
+        .map((s) => s.trim())
+        .filter(Boolean);
+      if (!symbols.length) {
+        return json(
+          { error: "MISSING_SYMBOLS", message: "Pass ?symbols=AAPL,MSFT" },
+          400,
+          origin
+        );
+      }
+      const prices = await getPriceQuotes(env, provider, symbols);
+      return json(
+        { provider, count: Object.keys(prices).length, prices },
+        200,
+        origin,
+        { "Cache-Control": "public, max-age=60, stale-while-revalidate=300" }
+      );
+    }
+
     if (pathname.startsWith("/api/v1/")) {
       return json(
         {
           error: "NOT_IMPLEMENTED",
-          message: "Use GET /api/v1/candles/:provider/:symbol?days=90",
+          message:
+            "Use GET /api/v1/candles|assets|market-data/:provider/:symbol or /api/v1/prices/:provider?symbols=",
           path: pathname,
         },
         501,

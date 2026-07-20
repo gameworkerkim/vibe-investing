@@ -23,7 +23,10 @@ class QueryType(Enum):
 
 
 class ViDataApi:
-    """Stub ViDataApi — takes data from local providers (not implemented yet)."""
+    """Local stub — browser committee path uses ``vi_browser.ViDataApi`` (thin router).
+
+    Prefer ``vi_browser.get_candles`` / ``get_prices`` in webview scripts.
+    """
 
     @staticmethod
     def build_market_data_query(mkt_assets, mkt_type):
@@ -31,4 +34,8 @@ class ViDataApi:
 
     @staticmethod
     def get_market_data(query):
-        raise NotImplementedError("ViDataApi.get_market_data needs a data provider (Phase 1)")
+        raise NotImplementedError(
+            "ViDataApi.get_market_data is not wired for local CPython yet. "
+            "In the browser: from vi_browser import ViDataApi, get_candles. "
+            "See docs/API_COMPAT_MATRIX.md Phase 2."
+        )

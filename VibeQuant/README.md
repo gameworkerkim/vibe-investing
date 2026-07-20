@@ -140,7 +140,9 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 | [docs/USER_MANUAL.md](docs/USER_MANUAL.md) | User manual — Examples / LLM / Python |
 | [docs/USER_MANUAL_KR.md](docs/USER_MANUAL_KR.md) | User manual (Korean) |
 | [docs/USER_MANUAL_ZH.md](docs/USER_MANUAL_ZH.md) | User manual (Chinese) |
-| [ROADMAP.md](ROADMAP.md) | Phased plan (Cloudflare + Pyodide) |
+| [ROADMAP.md](ROADMAP.md) | Phased plan (API compat 0–4 + Cloudflare stage) |
+| [docs/API_COMPAT_MATRIX.md](docs/API_COMPAT_MATRIX.md) | Browser / local / stub / planned pass-fail |
+| [docs/API_COMPAT_MATRIX_KR.md](docs/API_COMPAT_MATRIX_KR.md) | API compat matrix (Korean) |
 | [docs/ARCHITECTURE_TARGET.md](docs/ARCHITECTURE_TARGET.md) | Bindings, schema, cron, cost |
 | [docs/LIMITATIONS.md](docs/LIMITATIONS.md) | Latency, compatibility, free-tier hard stops |
 | [docs/API_MAPPING.md](docs/API_MAPPING.md) | GS → VI API map |

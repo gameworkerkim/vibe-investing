@@ -144,8 +144,10 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 | [docs/USER_MANUAL_KR.md](docs/USER_MANUAL_KR.md) | 사용 매뉴얼 — Examples / LLM / 파이썬 |
 | [docs/USER_MANUAL.md](docs/USER_MANUAL.md) | User manual (English) |
 | [docs/USER_MANUAL_ZH.md](docs/USER_MANUAL_ZH.md) | 使用手册（中文） |
-| [ROADMAP_KR.md](ROADMAP_KR.md) | 단계별 계획 (Cloudflare + Pyodide) |
-| [docs/ARCHITECTURE_TARGET_KR.md](docs/ARCHITECTURE_TARGET_KR.md) | 바인딩·스키마·Cron·비용 |
+| [ROADMAP_KR.md](ROADMAP_KR.md) | 단계별 계획 (API 호환 0–4 + Cloudflare 스테이지) |
+| [docs/API_COMPAT_MATRIX_KR.md](docs/API_COMPAT_MATRIX_KR.md) | browser / local / stub / planned pass-fail |
+| [docs/API_COMPAT_MATRIX.md](docs/API_COMPAT_MATRIX.md) | API 호환 매트릭스 (영문) |
+| [docs/ARCHITECTURE_TARGET_KR.md](docs/ARCHITECTURE_TARGET_KR.md) | 바인딩·스키마·cron·비용 |
 | [docs/LIMITATIONS_KR.md](docs/LIMITATIONS_KR.md) | 지연·호환성·무료 티어 하드스톱 |
 | [docs/API_MAPPING_KR.md](docs/API_MAPPING_KR.md) | GS → VI API 매핑 |
 | [docs/PROVIDER_API_MATCHING_KR.md](docs/PROVIDER_API_MATCHING_KR.md) | 제공자 인터페이스 매핑 |

@@ -15,11 +15,17 @@ Usage (in Pyodide webview):
 
 __version__ = "0.0.1"
 
-from .data import get_candles, get_prices, get_asset, get_last_price, set_api_url
+from .data import get_candles, get_prices, get_asset, get_last_price, set_api_url, ViDataApi
 from .timeseries import (
     returns,
     volatility,
     moving_average,
+    sma,
+    ema,
+    exponential_moving_average,
+    change,
+    index,
+    percentiles,
     momentum,
     correlation,
     zscores,
@@ -79,9 +85,16 @@ __all__ = [
     "get_asset",
     "get_last_price",
     "set_api_url",
+    "ViDataApi",
     "returns",
     "volatility",
     "moving_average",
+    "sma",
+    "ema",
+    "exponential_moving_average",
+    "change",
+    "index",
+    "percentiles",
     "momentum",
     "correlation",
     "zscores",

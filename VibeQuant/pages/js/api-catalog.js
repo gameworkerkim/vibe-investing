@@ -256,19 +256,59 @@ print("metrics:", {k: round(v, 6) if isinstance(v, float) else v for k, v in bt[
 `,
   },
   {
+    id: "ema",
+    gs: "gs_quant.timeseries.exponential_moving_average",
+    vi: "vi_browser.ema / exponential_moving_average",
+    module: "timeseries",
+    status: "browser",
+    note_en: "Span-based EMA (browser). Local VI uses beta decay — different param.",
+    note_ko: "span 기반 EMA (브라우저). 로컬 VI는 beta — 파라미터 다름.",
+    note_zh: "基于 span 的 EMA（浏览器）。本地 VI 使用 beta 参数。",
+    sample: `from vi_browser import get_candles, ema, change, index, percentiles, show_chart
+
+candles = await get_candles("AAPL", days=120)
+closes = [c["close"] for c in candles]
+e = ema(closes, 22)
+print("ema22_last", round(e[-1], 4))
+print("change_last", round(change(closes)[-1], 4))
+print("index_last", round(index(closes, 100)[-1], 4))
+print("pct_rank_last", round(percentiles(closes, 60)[-1], 2))
+show_chart({"close": closes, "ema22": e}, title="AAPL EMA")
+`,
+  },
+  {
+    id: "prices",
+    gs: "GsDataApi last prices",
+    vi: "vi_browser.get_prices / get_asset",
+    module: "data",
+    status: "browser",
+    note_en: "Data router: Worker /prices + /assets (or candles fallback).",
+    note_ko: "데이터 라우터: Worker /prices + /assets (또는 캔들 폴백).",
+    note_zh: "数据路由：Worker /prices + /assets（或 K 线回退）。",
+    sample: `from vi_browser import get_prices, get_asset
+
+asset = await get_asset("005930.KS")
+print("asset", asset)
+px = await get_prices(["AAPL", "005930.KS"])
+for sym, row in px.items():
+    print(sym, row.get("price"), row.get("changeRate"), row.get("source"))
+`,
+  },
+  {
     id: "dataapi",
     gs: "GsDataApi.get_market_data",
-    vi: "ViDataApi.get_market_data",
-    module: "api.vi.data",
-    status: "planned",
-    note_en: "Stub today — use get_candles in the browser.",
-    note_ko: "현재 stub — 브라우저에서는 get_candles 사용.",
-    note_zh: "目前为 stub — 浏览器请用 get_candles。",
-    sample: `print("=== planned: ViDataApi (not in browser) ===")
-print("GS:  GsDataApi.get_market_data(...)")
-print("VI:  ViDataApi.get_market_data(...)  # Phase 1 local/stub")
-print("Browser today: from vi_browser import get_candles")
-print("This sample is informational only — no ImportError expected.")
+    vi: "ViDataApi.get_market_data (thin → get_candles)",
+    module: "api.vi.data / vi_browser",
+    status: "browser",
+    note_en: "Thin router in browser; prefer get_candles for clarity.",
+    note_ko: "브라우저 thin 라우터; 명확히 get_candles 권장.",
+    note_zh: "浏览器薄路由；建议直接用 get_candles。",
+    sample: `from vi_browser import ViDataApi
+
+q = ViDataApi.build_market_data_query(["AAPL", "MSFT"])
+data = await ViDataApi.get_market_data(q, days=30)
+for sym, rows in data.items():
+    print(sym, "bars", len(rows), "last", rows[-1]["close"])
 `,
   },
   {
