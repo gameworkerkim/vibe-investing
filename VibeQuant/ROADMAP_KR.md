@@ -17,7 +17,7 @@
 | **0** | API 호환 매트릭스 | ✅ 완료 |
 | **1** | 브라우저 시계열 시머·별칭 | ✅ 완료 |
 | **2** | 데이터 라우터 (`get_prices` / `get_asset` / thin `ViDataApi`) | ✅ 완료 |
-| **3** | 커뮤니티 평가 (+ 선택 `vi_compat` 파사드) | 예정 |
+| **3** | 커뮤니티 평가 (+ 선택 `vi_compat` 파사드) | ✅ 완료 |
 | **4** | LLM 아카이브 / 멀티 LLM bake-off | 부분 완료 |
 
 **얇은 수직 슬라이스**
@@ -91,13 +91,13 @@
 
 **목표:** 타인이 만든 퀀트를 **같은 스테이지**에서 평가. 선택적 GS 이름 파사드.
 
-- [ ] 스크립트/결과 공유 포맷 (gist·레포 링크 또는 R2 아티팩트)
-- [ ] 평가 루브릭: 재현성, 리스크 지표, 데이터 소스, 한계 고지
-- [ ] UI: “공유 샘플 불러오기 → 실행 → 지표 비교”
-- [ ] 스팸/악성 코드: 브라우저 전용 실행 유지, 서버 `exec` 금지
-- [ ] (선택) `vi_compat`: 흔한 `gs_quant.*` / `Gs*` import 별칭 → `vi_browser` / 라우터
+- [x] 스크립트/결과 공유 포맷 — [docs/SHARE_FORMAT_KR.md](docs/SHARE_FORMAT_KR.md); 번들 `community-samples.js`
+- [x] 평가 루브릭 — [docs/COMMUNITY_RUBRIC_KR.md](docs/COMMUNITY_RUBRIC_KR.md)
+- [x] UI: “공유 샘플 불러오기 → 실행 → 지표 비교” (`#community` + 실행·채점)
+- [x] 스팸/악성 코드: 브라우저 전용 실행 유지, 서버 `exec` 금지
+- [x] (선택) `vi_compat`: 흔한 `gs_quant.*` / `GsSession` → `vi_browser`
 
-**Exit:** 외부 스크립트 1개를 위원회 스테이지에서 재현·평가 가능.
+**Exit:** 외부 스크립트 1개를 위원회 스테이지에서 재현·평가 가능. ✅ (`share-ma-cross-005930`)
 
 ---
 
@@ -135,6 +135,9 @@
 ## 관련 문서
 
 - [docs/API_COMPAT_MATRIX_KR.md](docs/API_COMPAT_MATRIX_KR.md)
+- [docs/SHARE_FORMAT_KR.md](docs/SHARE_FORMAT_KR.md)
+- [docs/COMMUNITY_RUBRIC_KR.md](docs/COMMUNITY_RUBRIC_KR.md)
+- [docs/DEPLOY_HISTORY_KR.md](docs/DEPLOY_HISTORY_KR.md)
 - [docs/ARCHITECTURE_TARGET_KR.md](docs/ARCHITECTURE_TARGET_KR.md)
 - [docs/LIMITATIONS_KR.md](docs/LIMITATIONS_KR.md)
 - [docs/API_MAPPING_KR.md](docs/API_MAPPING_KR.md)

@@ -9,12 +9,24 @@ export const STRINGS = {
     lede:
       "An open-source take on GS Quant — the Vibe Quant website demo. Built for shared execution and verification across a multi-LLM quant committee. Base market data is collected from TOSS Open API and Yahoo Finance. LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.",
     cta_examples: "Examples",
+    cta_community: "Community",
     cta_apis: "GS → VI API map",
     cta_run: "Runner",
     cta_docs: "API docs page",
     examples_title: "Examples",
     examples_sub:
       "Compare NVIDIA · Micron · Sandisk · Broadcom. Click a chip to load runnable Python into the editor.",
+    community_title: "Community",
+    community_sub:
+      "Load a shared sample on the same stage, run it, and score the rubric. Browser-only — never server exec.",
+    community_run_score: "Run & score",
+    community_score_summary: "Score {passed}/{total}",
+    community_loaded: "Community sample",
+    community_need_sample: "Load a community sample first.",
+    community_check_reproducibility: "Reproducibility",
+    community_check_risk_metrics: "Risk metrics",
+    community_check_data_source: "Data source",
+    community_check_disclosures: "Disclosures",
     api_title: "GS Quant ↔ VI Quant API guide",
     api_sub:
       "Rule: gs_quant → vi_quant, Gs* → Vi*. browser = runs here. Click Load sample to fill the editor.",
@@ -91,12 +103,24 @@ export const STRINGS = {
     lede:
       "GS Quant의 오픈소스 버전으로 Vibe Quant 웹사이트 데모입니다. 이 프로젝트의 목적은 멀티 LLM 퀀트 위원회의 공통 실행·검증을 위한 프로젝트입니다. TOSS Open API와 야후 파이낸스에서 기초 데이터를 수집하고 있습니다. LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.",
     cta_examples: "Examples",
+    cta_community: "Community",
     cta_apis: "GS → VI API 설명",
     cta_run: "실행기",
     cta_docs: "API 문서 페이지",
     examples_title: "Examples",
     examples_sub:
       "NVIDIA · Micron · Sandisk · Broadcom 비교 데모. 클릭하면 실행기에 코드가 로드됩니다.",
+    community_title: "Community",
+    community_sub:
+      "공유 샘플을 같은 스테이지에서 불러와 실행·채점합니다. 브라우저만 실행 (서버 exec 없음).",
+    community_run_score: "실행·채점",
+    community_score_summary: "점수 {passed}/{total}",
+    community_loaded: "커뮤니티 샘플",
+    community_need_sample: "먼저 커뮤니티 샘플을 불러오세요.",
+    community_check_reproducibility: "재현성",
+    community_check_risk_metrics: "리스크 지표",
+    community_check_data_source: "데이터 소스",
+    community_check_disclosures: "한계 고지",
     api_title: "GS Quant ↔ VI Quant API 설명",
     api_sub:
       "규칙: gs_quant → vi_quant, Gs* → Vi*. browser는 이 페이지에서 실행. 샘플 로드로 에디터에 코드를 넣습니다.",
@@ -173,11 +197,23 @@ export const STRINGS = {
     lede:
       "GS Quant 的开源版本，即 Vibe Quant 网站演示。目标是为多 LLM 量化委员会提供共同执行与验证。基础数据来自 TOSS Open API 与 Yahoo Finance。LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.",
     cta_examples: "Examples",
+    cta_community: "Community",
     cta_apis: "GS → VI API 说明",
     cta_run: "运行器",
     cta_docs: "API 文档页",
     examples_title: "Examples",
     examples_sub: "比较 NVIDIA · Micron · Sandisk · Broadcom。点击加载可运行的 Python 示例。",
+    community_title: "Community",
+    community_sub:
+      "在同一舞台加载共享样本、运行并按量规打分。仅浏览器执行 — 从不服务器 exec。",
+    community_run_score: "运行并评分",
+    community_score_summary: "得分 {passed}/{total}",
+    community_loaded: "社区样本",
+    community_need_sample: "请先加载社区样本。",
+    community_check_reproducibility: "可复现性",
+    community_check_risk_metrics: "风险指标",
+    community_check_data_source: "数据来源",
+    community_check_disclosures: "披露",
     api_title: "GS Quant ↔ VI Quant API 说明",
     api_sub:
       "规则：gs_quant → vi_quant，Gs* → Vi*。browser 可在本页运行。点击加载示例填入编辑器。",

@@ -177,6 +177,8 @@ curl -sS "$VIBEQUANT_API_BASE/cdn/tests/hello.txt"
 # Pages: https://vibequant-web.pages.dev/
 ```
 
+**Deploy / commit log:** [docs/DEPLOY_HISTORY.md](../docs/DEPLOY_HISTORY.md) · [DEPLOY_HISTORY_KR.md](../docs/DEPLOY_HISTORY_KR.md)
+
 Local dashboard only:
 
 ```bash

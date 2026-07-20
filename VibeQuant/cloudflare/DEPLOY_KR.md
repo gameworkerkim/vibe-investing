@@ -194,6 +194,8 @@ curl -sS "$VIBEQUANT_API_BASE/cdn/tests/hello.txt"
 # Pages: https://vibequant-web.pages.dev/
 ```
 
+**배포·커밋 이력:** [docs/DEPLOY_HISTORY_KR.md](../docs/DEPLOY_HISTORY_KR.md) · [DEPLOY_HISTORY.md](../docs/DEPLOY_HISTORY.md)
+
 로컬 대시보드만:
 
 ```bash

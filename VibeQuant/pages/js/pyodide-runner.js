@@ -658,6 +658,40 @@ vi_browser.backtest = backtest
 vi_browser.ma_cross_signal = ma_cross_signal
 vi_browser.show_chart = show_chart
 sys.modules["vi_browser"] = vi_browser
+
+# ── Phase 3 thin GS-name façade (vi_compat) ──────────────
+# Maps common gs_quant.timeseries / GsSession names onto vi_browser.
+# Not a GS Quant port — committee scripts that import GS names keep running.
+_gs_names = (
+    "get_candles", "get_prices", "get_last_price", "get_asset", "ViDataApi",
+    "returns", "volatility", "moving_average", "sma", "ema", "exponential_moving_average",
+    "change", "index", "percentiles", "momentum", "correlation", "max_drawdown",
+    "zscores", "beta", "annualized_return", "sharpe_ratio", "rsi", "macd",
+    "bollinger_bands", "backtest", "ma_cross_signal", "show_chart",
+)
+vi_compat = types.ModuleType("vi_compat")
+gs_quant = types.ModuleType("gs_quant")
+gs_ts = types.ModuleType("gs_quant.timeseries")
+for _n in _gs_names:
+    if hasattr(vi_browser, _n):
+        setattr(gs_ts, _n, getattr(vi_browser, _n))
+        setattr(vi_compat, _n, getattr(vi_browser, _n))
+gs_quant.timeseries = gs_ts
+
+class GsSession:
+    @staticmethod
+    def use(*args, **kwargs):
+        print("[vi_compat] GsSession.use → no-op (browser stage uses vi_browser)")
+        return None
+
+gs_session = types.ModuleType("gs_quant.session")
+gs_session.GsSession = GsSession
+gs_quant.session = gs_session
+vi_compat.GsSession = GsSession
+sys.modules["vi_compat"] = vi_compat
+sys.modules["gs_quant"] = gs_quant
+sys.modules["gs_quant.timeseries"] = gs_ts
+sys.modules["gs_quant.session"] = gs_session
 `;
 
 let pyodidePromise = null;

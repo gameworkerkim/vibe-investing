@@ -17,7 +17,7 @@
 | **0** | API compatibility matrix | ✅ done |
 | **1** | Browser timeseries shims + aliases | ✅ done |
 | **2** | Data router (`get_prices` / `get_asset` / thin `ViDataApi`) | ✅ done |
-| **3** | Community evaluation (+ optional `vi_compat` façade) | planned |
+| **3** | Community evaluation (+ optional `vi_compat` façade) | ✅ done |
 | **4** | LLM archive / multi-LLM bake-off | partial |
 
 **Thin vertical slice:**
@@ -90,13 +90,13 @@ Historical Phase 0–2 work that the committee stage already depends on:
 
 **Objective:** run and score **other people’s** quants on the same stage; optional GS-name façade package.
 
-- [ ] Share format (gist/repo link or R2 artifact)
-- [ ] Rubric: reproducibility, risk metrics, data source, disclosed limits
-- [ ] UI: load shared sample → run → compare metrics
-- [ ] Safety: browser-only execution; never server `exec`
-- [ ] (Optional) `vi_compat` façade: common `gs_quant.*` / `Gs*` import aliases → `vi_browser` / router
+- [x] Share format (gist/repo link or R2 artifact) — [docs/SHARE_FORMAT.md](docs/SHARE_FORMAT.md); bundled `community-samples.js`
+- [x] Rubric: reproducibility, risk metrics, data source, disclosed limits — [docs/COMMUNITY_RUBRIC.md](docs/COMMUNITY_RUBRIC.md)
+- [x] UI: load shared sample → run → compare metrics (`#community` + Run & score)
+- [x] Safety: browser-only execution; never server `exec`
+- [x] (Optional) `vi_compat` façade: common `gs_quant.*` / `GsSession` aliases → `vi_browser`
 
-**Exit:** one external script can be reproduced and scored on the stage.
+**Exit:** one external script can be reproduced and scored on the stage. ✅ (`share-ma-cross-005930`)
 
 ---
 
@@ -134,6 +134,9 @@ free-tier bulk global ingest, “production hedge-fund OMS”, full QuantLib-in-
 ## Related docs
 
 - [docs/API_COMPAT_MATRIX.md](docs/API_COMPAT_MATRIX.md)
+- [docs/SHARE_FORMAT.md](docs/SHARE_FORMAT.md)
+- [docs/COMMUNITY_RUBRIC.md](docs/COMMUNITY_RUBRIC.md)
+- [docs/DEPLOY_HISTORY.md](docs/DEPLOY_HISTORY.md)
 - [docs/ARCHITECTURE_TARGET.md](docs/ARCHITECTURE_TARGET.md)
 - [docs/LIMITATIONS.md](docs/LIMITATIONS.md)
 - [docs/API_MAPPING.md](docs/API_MAPPING.md)

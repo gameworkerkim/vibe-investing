@@ -147,6 +147,10 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 | [ROADMAP_KR.md](ROADMAP_KR.md) | 단계별 계획 (API 호환 0–4 + Cloudflare 스테이지) |
 | [docs/API_COMPAT_MATRIX_KR.md](docs/API_COMPAT_MATRIX_KR.md) | browser / local / stub / planned pass-fail |
 | [docs/API_COMPAT_MATRIX.md](docs/API_COMPAT_MATRIX.md) | API 호환 매트릭스 (영문) |
+| [docs/DEPLOY_HISTORY_KR.md](docs/DEPLOY_HISTORY_KR.md) | 프로덕션 배포 로그 + 최근 커밋 |
+| [docs/DEPLOY_HISTORY.md](docs/DEPLOY_HISTORY.md) | Deploy / commit history (English) |
+| [docs/SHARE_FORMAT_KR.md](docs/SHARE_FORMAT_KR.md) | 커뮤니티 공유 JSON 스키마 (Phase 3) |
+| [docs/COMMUNITY_RUBRIC_KR.md](docs/COMMUNITY_RUBRIC_KR.md) | 커뮤니티 평가 루브릭 |
 | [docs/ARCHITECTURE_TARGET_KR.md](docs/ARCHITECTURE_TARGET_KR.md) | 바인딩·스키마·cron·비용 |
 | [docs/LIMITATIONS_KR.md](docs/LIMITATIONS_KR.md) | 지연·호환성·무료 티어 하드스톱 |
 | [docs/API_MAPPING_KR.md](docs/API_MAPPING_KR.md) | GS → VI API 매핑 |

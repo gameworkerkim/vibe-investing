@@ -1,11 +1,13 @@
-import { applyI18n, detectLang, t } from "./i18n.js?v=25";
-import { API_CATALOG, noteFor } from "./api-catalog.js?v=25";
-import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=25";
-import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=25";
-import { clearChart, renderChartFromWindow } from "./chart-view.js?v=25";
-import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=25";
-import { requestQuantPrompt } from "./llm-prompt.js?v=25";
-import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=25";
+import { applyI18n, detectLang, t } from "./i18n.js?v=26";
+import { API_CATALOG, noteFor } from "./api-catalog.js?v=26";
+import { DEMO_EXAMPLES, exampleTitle } from "./examples.js?v=26";
+import { EXAMPLE_CODE, getLastLoadMs, loadPyodideRuntime, runPython } from "./pyodide-runner.js?v=26";
+import { clearChart, renderChartFromWindow } from "./chart-view.js?v=26";
+import { detectRuntimeSupport, iosAdvice } from "./runtime-support.js?v=26";
+import { requestQuantPrompt } from "./llm-prompt.js?v=26";
+import { GOLDEN_LLM_PROMPTS, llmPromptTitle } from "./llm-prompts.js?v=26";
+import { COMMUNITY_SAMPLES, communityTitle } from "./community-samples.js?v=26";
+import { scoreCommunityRun } from "./community-rubric.js?v=26";
 
 const codeEl = document.getElementById("code");
 const outputEl = document.getElementById("output");
@@ -18,6 +20,12 @@ const copyCodeBtn = document.getElementById("btn-copy-code");
 const clearPromptBtn = document.getElementById("btn-clear-prompt");
 const copyPromptBtn = document.getElementById("btn-copy-prompt");
 const llmBtn = document.getElementById("btn-llm");
+const communityChips = document.getElementById("community-chips");
+const communityScoreEl = document.getElementById("community-score");
+const communityScoreSummary = document.getElementById("community-score-summary");
+const communityScoreList = document.getElementById("community-score-list");
+const communityScoreMeta = document.getElementById("community-score-meta");
+const communityScoreBtn = document.getElementById("btn-community-score");
 const llmBtnLabel = llmBtn?.querySelector(".btn-label");
 const llmPromptEl = document.getElementById("llm-prompt");
 const llmModelEl = document.getElementById("llm-model");
@@ -80,6 +88,7 @@ async function copyText(text, btn) {
 let lang = detectLang();
 let activeSampleId = "ex-multifactor";
 let activeExampleId = "ex-multifactor";
+let activeCommunityId = "";
 const support = detectRuntimeSupport();
 
 function updateMockBanner(text) {
@@ -121,9 +130,88 @@ function setActiveExampleChip(id) {
   });
 }
 
+function setActiveCommunityChip(id) {
+  activeCommunityId = id || "";
+  communityChips?.querySelectorAll(".example-chip").forEach((btn) => {
+    btn.classList.toggle("is-active", btn.dataset.id === activeCommunityId);
+  });
+}
+
+function renderCommunityScore(result, artifact) {
+  if (!communityScoreEl) return;
+  communityScoreEl.hidden = false;
+  const tpl = tx("community_score_summary", "Score {passed}/{total}");
+  if (communityScoreSummary) {
+    communityScoreSummary.textContent = tpl
+      .replace("{passed}", String(result.passed))
+      .replace("{total}", String(result.total));
+  }
+  if (communityScoreList) {
+    communityScoreList.innerHTML = "";
+    for (const c of result.checks) {
+      const li = document.createElement("li");
+      li.className = c.pass ? "pass" : "fail";
+      const label = tx(`community_check_${c.id}`, c.id);
+      li.textContent = `${c.pass ? "PASS" : "FAIL"} — ${label}: ${c.detail}`;
+      communityScoreList.append(li);
+    }
+  }
+  if (communityScoreMeta) {
+    const lines = [
+      `id: ${artifact?.id || ""}`,
+      `author: ${artifact?.author || ""}`,
+      artifact?.source_url ? `source_url: ${artifact.source_url}` : "",
+      Object.keys(result.metrics || {}).length
+        ? `VQ_METRICS: ${JSON.stringify(result.metrics)}`
+        : "VQ_METRICS: (none)",
+      "",
+      "disclosures:",
+      ...(result.disclosures || []).map((d) => `  - ${d}`),
+      "",
+      "limits:",
+      ...(result.limits || []).map((d) => `  - ${d}`),
+    ].filter(Boolean);
+    communityScoreMeta.textContent = lines.join("\n");
+  }
+}
+
+function loadCommunitySample(sample, { scroll = false } = {}) {
+  activeSampleId = sample.id;
+  activeCommunityId = sample.id;
+  setActiveExampleChip("");
+  setActiveCommunityChip(sample.id);
+  codeEl.value = sample.python.trim() + "\n";
+  if (sampleLabel) {
+    sampleLabel.textContent = `${tx("community_loaded", "Community sample")}: ${communityTitle(sample, lang)}`;
+  }
+  document.querySelectorAll(".api-table tbody tr").forEach((row) => row.classList.remove("is-active"));
+  if (communityScoreEl) communityScoreEl.hidden = true;
+  if (scroll) {
+    document.getElementById("workspace")?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  codeEl.focus();
+}
+
+function renderCommunity() {
+  if (!communityChips) return;
+  communityChips.innerHTML = "";
+  for (const sample of COMMUNITY_SAMPLES) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "example-chip";
+    btn.dataset.id = sample.id;
+    btn.setAttribute("role", "listitem");
+    if (sample.id === activeCommunityId) btn.classList.add("is-active");
+    btn.innerHTML = `<span class="check" aria-hidden="true">✓</span>${communityTitle(sample, lang)}`;
+    btn.addEventListener("click", () => loadCommunitySample(sample, { scroll: true }));
+    communityChips.append(btn);
+  }
+}
+
 function loadDemoExample(ex, { scroll = false } = {}) {
   activeSampleId = ex.id;
   setActiveExampleChip(ex.id);
+  setActiveCommunityChip("");
   codeEl.value = ex.sample.trim() + "\n";
   if (sampleLabel) {
     sampleLabel.textContent = `${tx("sample_loaded", "Sample")}: ${exampleTitle(ex, lang)}`;
@@ -138,6 +226,7 @@ function loadDemoExample(ex, { scroll = false } = {}) {
 function loadSample(item, { scroll = false } = {}) {
   activeSampleId = item.id;
   setActiveExampleChip("");
+  setActiveCommunityChip("");
   codeEl.value = item.sample.trim() + "\n";
   if (sampleLabel) {
     sampleLabel.textContent = `${tx("sample_loaded", "Sample")}: ${item.vi}`;
@@ -263,6 +352,7 @@ function renderApiTable() {
 function refreshUi() {
   applyI18n(lang);
   renderExamples();
+  renderCommunity();
   renderLlmPromptChips();
   renderApiTable();
   refreshLlmStatus();
@@ -396,6 +486,46 @@ runBtn?.addEventListener("click", async () => {
   }
 });
 
+communityScoreBtn?.addEventListener("click", async () => {
+  const sample =
+    COMMUNITY_SAMPLES.find((s) => s.id === activeCommunityId) ||
+    COMMUNITY_SAMPLES.find((s) => s.id === activeSampleId);
+  if (!sample) {
+    setErrorLog(tx("community_need_sample", "Load a community sample first."));
+    document.getElementById("community")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    return;
+  }
+  loadCommunitySample(sample, { scroll: true });
+  const code = codeEl.value.trim();
+  setBusy(true);
+  setStatus("running");
+  clearOutputs();
+  clearChart();
+  try {
+    const { ok, text } = await runPython(code);
+    if (ok) {
+      setResult(text);
+      setErrorLog("");
+      updateMockBanner(text);
+      await renderChartFromWindow();
+    } else {
+      setResult("");
+      setErrorLog(text);
+      updateMockBanner(text);
+      clearChart();
+    }
+    const scored = scoreCommunityRun(ok ? text : text, sample, { ok });
+    renderCommunityScore(scored, sample);
+    setStatus("ready");
+  } catch (err) {
+    showRuntimeFailure(err);
+    clearChart();
+    updateMockBanner("");
+  } finally {
+    setBusy(false);
+  }
+});
+
 llmBtn?.addEventListener("click", async () => {
   const prompt = (llmPromptEl?.value || "").trim();
   if (!prompt) {
@@ -478,9 +608,11 @@ refreshUi();
 const fromDocs = sessionStorage.getItem("vq_sample");
 if (fromDocs) {
   sessionStorage.removeItem("vq_sample");
+  const community = COMMUNITY_SAMPLES.find((x) => x.id === fromDocs);
   const demo = DEMO_EXAMPLES.find((x) => x.id === fromDocs || x.id === `ex-${fromDocs}`);
   const item = API_CATALOG.find((x) => x.id === fromDocs);
-  if (demo) loadDemoExample(demo, { scroll: true });
+  if (community) loadCommunitySample(community, { scroll: true });
+  else if (demo) loadDemoExample(demo, { scroll: true });
   else if (item) loadSample(item, { scroll: true });
 } else {
   const golden = DEMO_EXAMPLES.find((x) => x.id === "ex-multifactor") || DEMO_EXAMPLES[0];
