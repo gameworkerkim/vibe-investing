@@ -1,4 +1,4 @@
-# GhidraGPT 레포 분석
+# GhidraGPT Getting Start
 
 **GhidraGPT**는 NSA의 오픈소스 리버싱 프레임워크인 Ghidra에 LLM을 통합하는 플러그인입니다.
 기드라(Ghidra)는 미국 국가안보국(NSA)이 개발하고 오픈 소스로 공개한 강력한 소프트웨어 리버스 엔지니어링(역공학) 도구입니다. 
