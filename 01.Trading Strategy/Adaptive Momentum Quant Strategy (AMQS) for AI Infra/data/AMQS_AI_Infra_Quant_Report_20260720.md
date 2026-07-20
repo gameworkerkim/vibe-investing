@@ -3,8 +3,40 @@
 **Strategy**: Adaptive Momentum Quant Strategy for AI Infrastructure (AMQS-AI-Infra v1)
 **Data Source**: yfinance (real-time)
 **Execution Time**: 2026-07-20 17:43 KST
-**Regime**: RISK_ON
-**Invested Fraction**: 100%
+
+---
+
+## Executive Summary
+
+**Macro Regime**: RISK_ON (QQQ above 200MA, VIX 18.5, QQQ 5D -4.2% — correction underway but above -8% defensive threshold). 100% invested.
+
+### Signal Classification (18 Tickers)
+
+| Signal | Count | Tickers |
+|--------|-------|---------|
+| **BUY** | 4 | HPE (29.8%), AMD (28.7%), CSCO (21.0%), ANET (20.5%) |
+| **EXIT** | 5 | STX, WDC, SNOW, ORCL, PLTR — all triggered by 12M MDD < -30% |
+| **EXCLUDED** | 5 | DELL, MU, INTC, MRVL, SMCI — all triggered by 60-day volatility > 100% |
+| **REDUCE** | 4 | TSM, VRT, NVDA, AVGO — total score below 50 |
+
+### Key Findings
+
+- **4 of 18 tickers survive** the combined pre-filter, EXIT, and Top-10 selection pipeline. The investable universe has contracted 60% from the June 1 snapshot (10 to 4).
+- **Memory/Storage and Data/Software subthemes are fully eliminated** — zero investable tickers. Networking is the only subtheme at full strength (2 of 2 selected).
+- **AMD 12M MDD at -27.8%** approaches the -30% automatic EXIT threshold. A further 3% decline triggers liquidation.
+- **No CENTER-tier tickers** (score >= 80). Highest score is HPE at 73.5 (SATELLITE). The absence of CENTER signals reflects broad sector weakness.
+- **Portfolio concentration is extreme**: individual positions at 20-30% versus the typical 4-18% AMQS range. Diversification benefit is minimal.
+
+### Subtheme Health
+
+| Subtheme | Status | Tickers |
+|----------|--------|---------|
+| Systems/Server | WEAK | HPE (BUY), DELL (EXCLUDED), SMCI (EXCLUDED) |
+| Compute/GPU | WEAK | AMD (BUY), INTC/MRVL (EXCLUDED), TSM/NVDA/AVGO (REDUCE) |
+| Networking | STABLE | CSCO (BUY), ANET (BUY) |
+| Memory/Storage | CRITICAL | MU (EXCLUDED), STX/WDC (EXIT) |
+| Data/Software | CRITICAL | SNOW/ORCL/PLTR (EXIT) |
+| Power/Cooling | WEAK | VRT (REDUCE) |
 
 ---
 
