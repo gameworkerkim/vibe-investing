@@ -1,4 +1,4 @@
-# Kiwoom Securities REST API SDK
+# Kiwoom Securities REST API SDK (개발중 미완성)
 
 Multi-language SDK + AI Trading Skill for Kiwoom Securities REST API. Supports domestic (KRX) and overseas (NASDAQ/NYSE/AMEX) stock trading.
 
