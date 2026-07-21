@@ -145,6 +145,8 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 | [docs/API_COMPAT_MATRIX_KR.md](docs/API_COMPAT_MATRIX_KR.md) | API compat matrix (Korean) |
 | [docs/DEPLOY_HISTORY.md](docs/DEPLOY_HISTORY.md) | Production deploy log + recent commits |
 | [docs/DEPLOY_HISTORY_KR.md](docs/DEPLOY_HISTORY_KR.md) | Deploy / commit history (Korean) |
+| [docs/CONTENT_SITE_PLAN_KR.md](docs/CONTENT_SITE_PLAN_KR.md) | Columns · TechDoc · SEO site plan (Korean) |
+| [docs/CONTENT_SITE_PLAN.md](docs/CONTENT_SITE_PLAN.md) | Content site plan (English) |
 | [docs/SHARE_FORMAT.md](docs/SHARE_FORMAT.md) | Community share JSON schema (Phase 3) |
 | [docs/COMMUNITY_RUBRIC.md](docs/COMMUNITY_RUBRIC.md) | Community evaluation rubric |
 | [docs/ARCHITECTURE_TARGET.md](docs/ARCHITECTURE_TARGET.md) | Bindings, schema, cron, cost |

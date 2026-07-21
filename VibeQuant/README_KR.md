@@ -149,6 +149,8 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 | [docs/API_COMPAT_MATRIX.md](docs/API_COMPAT_MATRIX.md) | API 호환 매트릭스 (영문) |
 | [docs/DEPLOY_HISTORY_KR.md](docs/DEPLOY_HISTORY_KR.md) | 프로덕션 배포 로그 + 최근 커밋 |
 | [docs/DEPLOY_HISTORY.md](docs/DEPLOY_HISTORY.md) | Deploy / commit history (English) |
+| [docs/CONTENT_SITE_PLAN_KR.md](docs/CONTENT_SITE_PLAN_KR.md) | 칼럼 · TechDoc · SEO 사이트 계획 |
+| [docs/CONTENT_SITE_PLAN.md](docs/CONTENT_SITE_PLAN.md) | Content site plan (English) |
 | [docs/SHARE_FORMAT_KR.md](docs/SHARE_FORMAT_KR.md) | 커뮤니티 공유 JSON 스키마 (Phase 3) |
 | [docs/COMMUNITY_RUBRIC_KR.md](docs/COMMUNITY_RUBRIC_KR.md) | 커뮤니티 평가 루브릭 |
 | [docs/ARCHITECTURE_TARGET_KR.md](docs/ARCHITECTURE_TARGET_KR.md) | 바인딩·스키마·cron·비용 |
