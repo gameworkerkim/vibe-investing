@@ -1,4 +1,4 @@
-# Kiwoom Securities REST API SDK (한국어)
+# Kiwoom Securities REST API SDK (한국어) (개발중 미완성)
 
 키움증권 REST API를 위한 멀티 언어 SDK + AI 트레이딩 스킬.
 
