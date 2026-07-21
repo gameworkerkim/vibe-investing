@@ -1,4 +1,4 @@
-# 키움증권 REST API
+# 키움증권 REST API (개발중. 미완성)
 
 키움증권 [공식 REST API](https://github.com/Kiwoom-Securities/Kiwoom-REST-API)를 확장하여 다음 프로젝트를 진행한다.
 
