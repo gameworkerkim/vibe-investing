@@ -7,6 +7,26 @@
 
 ---
 
+## 목차 (Table of Contents)
+
+| # | 섹션 | 바로가기 |
+| --- | --- | --- |
+| 1 | 독자 페르소나별 추천 | [이동](#독자-페르소나별-추천-where-to-start) |
+| 2 | 가장 반응이 좋았던 글 | [이동](#지금까지-가장-반응이-좋았던-글-proven-hits--linkedin-90일-실측) |
+| 3 | 최근 업데이트 | [이동](#최근-업데이트-recent-updates) |
+| 4 | 빠른 검색 (Quick Find) | [이동](#빠른-검색-quick-find) |
+| 5 | 등급 안내 (Tier & Form) | [이동](#등급-안내-tier--form) |
+| 6 | 칼럼 목록 (72편, 폴더 기준) | [이동](#칼럼-목록-폴더-기준) |
+| 7 | 칼럼별 요약 | [이동](#칼럼별-요약) |
+| 8 | 주제별 분류 | [이동](#주제별-분류) |
+| 9 | 권장 읽기 순서 | [이동](#권장-읽기-순서) |
+| 10 | 데이터 / 출처 | [이동](#데이터--출처) |
+| 11 | 칼럼 작성 원칙 | [이동](#칼럼-작성-원칙) |
+| 12 | Disclaimer | [이동](#disclaimer) |
+
+---
+
+
 ## 독자 페르소나별 추천 (Where to Start)
 
 처음 오셨다면, 본인에게 맞는 진입점부터 읽어보세요. (적합도는 해당 독자층 기준이며,
@@ -45,6 +65,24 @@
 
 | 날짜 | 문서 | 칼럼 |
 | --- | --- | --- |
+| 2026-07-22 | [빅테크의 금융화 — 애플 리스에서 GE 캐피탈까지](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BigTech/Tech-Financialization-GE-Capital-Leasing.md) | BigTech |
+| 2026-07-21 | [로빈후드 AI 에이전트 트레이딩 정책 분석](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Robinhood/Robinhood-Agentic-Trading-Policy-Report.md) | Robinhood |
+| 2026-07-20 | [허깅페이스 AI 에이전트 침해사고 분석](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Huggingface-AI-Agent-Breach-Column.md) | AI_Hacking |
+| 2026-07-20 | [BTC $64K 하락 — 수급·거래량 분석](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BitCoin/BTC-20260720-Decline-Analysis.md) | BitCoin |
+| 2026-07-19 | [크립토 HFT 인프라의 3대 구조적 한계](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/CrytoHFT/HFT_Infra.md) | CrytoHFT |
+| 2026-07-17 | [Kimi K3 — 미국 규제를 돌파한 중국 AI](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/KIMI_K3_260717.md) | AI_Revolution |
+| 2026-07-17 | [AI 반도체 조정 국면 퀀트 리포트](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/%EC%A3%BC%EC%8B%9D%EC%8B%9C%ED%99%A9/Quant-Review-AI-Semis-20260717.md) | 주식시황 |
+| 2026-07-16 | [우버의 딜리버리 히어로 148억 달러 인수](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Uber/Uber%20delivery%20hero%20column.md) | Uber |
+| 2026-07-14 | [K팝 중소돌의 기적 — 리센느](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/KPOP/Miracle_of_KOPP.md) | KPOP |
+| 2026-07-12 | [오라클 BBB- 신용등급 강등 분석](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Oracle/Oracle%20BBB%20minus%20revised.md) | Oracle |
+| 2026-07-11 | [메타 Muse Image AI 이미지 생성 모델 출시](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Meta/Meta%20muse%20image%20launch.md) | Meta |
+| 2026-07-10 | [GPT-5.6·Claude Fable5·DeepSeek V4 3대 모델 대전](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/GPT-5_6.md) | AI_Revolution |
+| 2026-07-09 | [Grok 4.5 — AI 경쟁의 전선이 토큰 경제학으로 이동](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/Grok45%20ai%20model%20competition%20column.md) | Elon Musk |
+| 2026-07-08 | [중국, AI 의인화 서비스에 칼을 대다](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/china_ai_anthropomorphism_column.md) | AI_Revolution |
+| 2026-07-08 | [모건스탠리 AI 투자 보고서 분석](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Morgan%20Stanley%20AI%20Investment%20Report%20Analysis.md) | AI_Revolution |
+| 2026-07-08 | [DeepSeek, 자체 AI 추론칩 개발 착수](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/DeepSeek%20V4/deepseek_chip_column.md) | DeepSeek V4 |
+| 2026-07-07 | [SpaceX, 나스닥100 상장 15일 만에 편입](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/SpaceX_Nastaq100.md) | Elon Musk |
+| 2026-07-07 | [메타 Q1 2026 어닝 서프라이즈 분석](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Meta/Meta%20q1%202026%20earnings%20analysis.md) | Meta |
 | 2026-07-06 | [비트코인 DAT, 플라이휠이 아닌 '죽음의 무도'](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Strategy/Strategy_danse_macabre_column.md) | Strategy |
 | 2026-07-06 | [버블의 제왕, 새롬기술 — 그리고 솔본](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Bouble/Saerom_story.md) | Bouble |
 | 2026-07-05 | [공정보다 공격이 먼저인 사회 (똘레랑스)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/518/tolerance.md) | 518 |
@@ -111,6 +149,16 @@
 | **DEX 러그풀 / 밈코인 사기** | [Dex Memecoin Rugpool(CATFI·ESPORTS)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Dex%20Memecoin%20Rugpool%20Incident%20Analysis.md) |
 | **오픈소스 LLM / DeepSeek 기술** | [DeepSeek v4 (preview report)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/DeepSeek%20v4/DeepSeek%20V4%20preview%20report.md), [DeepSeek V4](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/DeepSeek%20V4/deepseek_column_ko.md) |
 
+
+| **AI 해킹 / 보안 위협** | [AI_Hacking(허깅페이스 침해)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Huggingface-AI-Agent-Breach-Column.md) |
+| **빅테크 금융화** | [BigTech(애플·GE캐피탈)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BigTech/Tech-Financialization-GE-Capital-Leasing.md) |
+| **AI 트레이딩 규제 / 로빈후드** | [Robinhood(Agentic Trading)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Robinhood/Robinhood-Agentic-Trading-Policy-Report.md), [AI_Trading](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Trading/AI_Trading.md) |
+| **M&A / 배달 플랫폼** | [Uber(딜리버리 히어로 인수)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Uber/Uber%20delivery%20hero%20column.md) |
+| **K팝 산업 / 엔터** | [KPOP(리센느·중소돌)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/KPOP/Miracle_of_KOPP.md) |
+| **메타 / AI 이미지** | [Meta(Q1 어닝·Muse Image)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Meta/Meta%20q1%202026%20earnings%20analysis.md) |
+| **기업 신용 리스크** | [Oracle(BBB- 강등)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Oracle/Oracle%20BBB%20minus%20revised.md) |
+| **크립토 HFT / 청산 구조** | [CrytoHFT(Hawkes·서킷브레이커)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/CrytoHFT/HFT_Infra.md) |
+
 > **검색 팁:** GitHub 우측 상단 돋보기에서 `repo:gameworkerkim/vibe-investing 키워드` 로 전체 검색하거나, 이 페이지에서 `Ctrl/Cmd + F` 로 종목 티커(NVDA, MSFT, INTC, MRVL, MSTR, LVMH 등)나 키워드를 직접 찾으세요.
 
 ---
@@ -119,9 +167,9 @@
 
 각 칼럼에는 **티어**(엄밀성)와 **형식**(장르) 마커가 붙어 있습니다. 티어는 품질 서열이 아니라 **독자 기대치 정렬용**입니다 — T3도 완성도 높은 글이며, 목적이 다를 뿐입니다.
 
-- **`T1 · 실증 리포트`** (21편) — 1차 출처(SEC·공시·온체인) + 정량 데이터 + 재현 가능/반대 시나리오. 퀀트·기관 리서처 대상.
-- **`T2 · 분석 칼럼`** (34편) — 공개 데이터·출처 기반이나 해석·의견 비중이 큼. 일반 투자자 대상.
-- **`T3 · 논평·에세이`** (9편) — 시사·문화·사회 논평 또는 비투자 에세이. 정성적.
+- **`T1 · 실증 리포트`** (23편) — 1차 출처(SEC·공시·온체인) + 정량 데이터 + 재현 가능/반대 시나리오. 퀀트·기관 리서처 대상.
+- **`T2 · 분석 칼럼`** (39편) — 공개 데이터·출처 기반이나 해석·의견 비중이 큼. 일반 투자자 대상.
+- **`T3 · 논평·에세이`** (10편) — 시사·문화·사회 논평 또는 비투자 에세이. 정성적.
 
 **형식** — 연구(논문) · 리포트 · 포트폴리오 · 칼럼 · 에세이 (부가: PDF · EN/KO · 다국어)
 
@@ -131,7 +179,7 @@
 
 ## 칼럼 목록 (폴더 기준)
 
-이 폴더(`02.Investment Idea Column/`) 하위 칼럼 **총 64편**을 가나다·알파벳 순으로 정리했습니다. 각 항목의 폴더로 바로 이동할 수 있습니다.
+이 폴더(`02.Investment Idea Column/`) 하위 칼럼 **총 72편**을 가나다·알파벳 순으로 정리했습니다. 각 항목의 폴더로 바로 이동할 수 있습니다.
 
 | # | 티어 | 칼럼 | 한 줄 요약 | 핵심 키워드 | 형식 |
 | --- | --- | --- | --- | --- | --- |
@@ -199,6 +247,14 @@
 | 62 | T2 | [**골드만삭스**](#골드만삭스) | 골드만삭스 "Up Crash" 신호 + 미중·미이란 시나리오 매트릭스 | UpCrash, 시나리오, 지정학 | 요약 |
 | 63 | T3 | [**기레기**](#기레기) | 기사를 지우는 가장 확실한 방법 — '손해배상'이라는 현실과 그 양날 | 사이버렉카, 손해배상, 언론중재, 씨그널 | 칼럼 |
 | 64 | T2 | [**주식시황**](#주식시황) | 원달러 1530원 쇼크 + 2026 거시·섹터 정량분석 + 환율·서학개미 리포트 | 환율, 원달러, 1530, 섹터로테이션, 서학개미 | 시황+PDF |
+| 65 | T2 | [**AI_Hacking**](#ai_hacking) | 허깅페이스 AI 에이전트 침해사고 — 방어의 비대칭과 오픈웨이트 포렌식 | AI해킹, 허깅페이스, MCP, GLM5.2, 방어비대칭 | 칼럼 |
+| 66 | T2 | [**BigTech**](#bigtech) | 빅테크 금융화 — 애플 리스에서 GE 캐피탈까지 | GE캐피탈, 캡티브파이낸스, BNPL, 지불분리 | 칼럼 |
+| 67 | T2 | [**CrytoHFT**](#crytohft) | 크립토 HFT 인프라의 3대 구조적 한계 — Hawkes 과정·오토스케일링·오라클 | 청산연쇄, Hawkes, 오토스케일링, 서킷브레이커 | 리포트(EN/KO) |
+| 68 | T3 | [**KPOP**](#kpop) | 리센느 — 중소돌의 기적과 K팝 산업의 계층 이동 사다리 | K팝, 리센느, 중소돌, 계층이동, 연습생 | 칼럼 |
+| 69 | T2 | [**Meta**](#meta) | 메타 Q1 2026 어닝 서프라이즈(매출 +33%) + Muse Image AI 출시 | 메타실적, DAP, CAPEX, 뮤즈이미지, 인스타그램 | 분석 |
+| 70 | T2 | [**Oracle**](#oracle) | 오라클 신용등급 BBB- 강등 — S&P 분석·부채 1,670억·FCF 적자 | 오라클, 신용등급, 정크본드, OCI, 오픈AI | 리포트 |
+| 71 | T2 | [**Robinhood**](#robinhood) | 로빈후드 Agentic Trading — MCP 기반 AI 옵션 거래의 이해상충과 규제 공백 | 로빈후드, 에이전틱트레이딩, MCP, PFOF, 옵션 | 정책리포트 |
+| 72 | T2 | [**Uber**](#uber) | 우버의 딜리버리 히어로 148억 달러 인수 — 배민의 생존 전략 | 우버, 딜리버리히어로, 배민, M&A, 슈퍼앱 | 칼럼 |
 ---
 
 ## 칼럼별 요약
@@ -227,9 +283,11 @@
 
 **`T1 · 실증 리포트`** · 형식 `칼럼(EN/KO)` · 키워드 `GPU` `HBM` `메모리` `N1X` `마이크론` · `[실측: 노출 10,933 · 참여율 0.24%]`
 
-> *GPU 컴퓨팅의 거래소화 + 삼성·SK하이닉스 AI 메모리 + 엔비디아·MS·마이크론*
+> *GPU 컴퓨팅 거래소화 + AI 모델 대전 + 중국 AI 규제 + 모건스탠리 분석 등 19편 종합*
 
-세 갈래입니다. (1) **GPU Compute Is Now Traded (EN/KO)** — 다음 승자는 칩 제조사도 사용자도 아닌 컴퓨팅 '거래소'라는 관점, 컴퓨팅 가격이 AI 경제의 체온계가 되는 구조. (2) **삼성·SK하이닉스 분석 (EN)** — AI 메모리 슈퍼사이클에서 구매자가 공급자에게 매달리는 역전, 에이전틱 AI 시대 메모리의 전략적 가치. (3) **[엔비디아·MS·마이크론 진단 (Nvidia_MS_MU)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Nvidia_MS_MU.md)** — 엔비디아의 'N1X' 윈도우 PC 진입(온디바이스 AI), 마이크론의 HBM4 전량 매진·1개월 +88% 메모리 랠리, 그리고 그 결과 소수 AI 종목으로 극단 쏠린 S&P 500의 '낮은 상관·높은 집중' 양면성을 진단합니다. (2026-05-31 작성)
+**2026년 7월 주요 추가**: **(4)** [GPT-5.6·Claude·DeepSeek V4 3대 모델 대전](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/GPT-5_6.md) — GPT-5.6 시리즈(Sol·Terra·Luna) 출시와 Microsoft Foundry의 엔터프라이즈 전략. **(5)** [Kimi K3 — 미국 규제를 돌파한 중국 AI](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/KIMI_K3_260717.md) — 2.8조 파라미터 오픈웨이트 모델이 Claude·GPT-5.6 턱밑 추격, 규제 역설. **(6)** [중국 AI 의인화 규제](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/china_ai_anthropomorphism_column.md) — 두부·통이첸원 에이전트 동시 하선. **(7)** [모건스탠리 AI 투자 보고서 분석](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Morgan%20Stanley%20AI%20Investment%20Report%20Analysis.md) — 병목 이동과 CAPEX 사이클. (기존 3편 포함 19편 종합 인덱스. 2026-05-31 기준 원문)" 
+
+**2026년 7월 신규 추가 4편을 포함한 19편 종합입니다.** 기존 3갈래: (1) **GPU Compute Is Now Traded (EN/KO)** — 다음 승자는 칩 제조사도 사용자도 아닌 컴퓨팅 '거래소'라는 관점, 컴퓨팅 가격이 AI 경제의 체온계가 되는 구조. (2) **삼성·SK하이닉스 분석 (EN)** — AI 메모리 슈퍼사이클에서 구매자가 공급자에게 매달리는 역전, 에이전틱 AI 시대 메모리의 전략적 가치. (3) **[엔비디아·MS·마이크론 진단 (Nvidia_MS_MU)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/Nvidia_MS_MU.md)** — 엔비디아의 'N1X' 윈도우 PC 진입(온디바이스 AI), 마이크론의 HBM4 전량 매진·1개월 +88% 메모리 랠리, 그리고 그 결과 소수 AI 종목으로 극단 쏠린 S&P 500의 '낮은 상관·높은 집중' 양면성을 진단합니다. (2026-05-31 작성)
 
 **형제 칼럼** · [Storage War](#storage-war) · [Semiconductor ai etf strategy](#semiconductor-ai-etf-strategy) · [Intel AI New Normal](#intel-ai-new-normal)
 
@@ -271,6 +329,8 @@
 
 2026년 6월 1일 스트래티지(MSTR)가 4년 만에 처음으로 비트코인 32개를 순매도했고, SEC 8-K가 밝힌 사유는 "우선주 배당 재원" 한 줄이었습니다. 칼럼은 250만 달러라는 매도 규모가 아니라 그것이 드러낸 **구조**에 주목합니다 — DAT(디지털 자산 트레저리) 모델의 **플라이휠 역회전**(mNAV 프리미엄→주식 발행→비트코인 매입의 순환이 약세장에서 역방향으로 작동), 연 약 15억 달러 우선주 배당이 매도 압력으로 전이되는 메커니즘, 두 차례(2022·2026) 모두 바닥 부근에서 일어난 '설계된 약세 매도', 그리고 진짜 약세 신호가 차트 가격이 아니라 ETF 순유출·DAT 자금조달 여건에 있다는 분석. 약세장의 DAT는 가격의 버팀목이 아니라 약세를 증폭하는 매도자가 될 수 있습니다.
 
+2026년 7월 추가: **(B) [7월 20일 BTC 하락 분석 (EN/KO)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BitCoin/BTC-20260720-Decline-Analysis.md)** — BTC $64K 하락의 수급·거래량 분석. 호르무즈 지정학 리스크·Kimi K3 쇼크·ETF 순유출·얇은 유동성의 복합 충격을 해부합니다. 고점 $126K 대비 50%+ 하락, 최근 12개월 중 11개월 하락 마감의 크립토 윈터 진단.
+
 **형제 칼럼** · [Strategy](#strategy) · [Ethereum](#ethereum)
 
 ### [BNBChain](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BNBChain/readme.md)
@@ -310,6 +370,8 @@
 > *뇌과학·게임이론으로 읽는 자기설계 에세이 (비투자 보너스)*
 
 "돈을 굴리기 전에 그 돈을 굴리는 뇌를 정비하자"는 에세이 모음 — 35세 자기교정(침묵의 카르텔), 실행력 설계(로터스 방법), 위기 대응 5단계, 불안 관리, 스타일(신호이론), '길을 잃었을 때 5가지' 등. 투자 심리 함정과 직결됩니다.
+
+**형제 칼럼** · [518](#518) · [기레기](#기레기)
 
 ### [China EV Industry Restructuring](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/China%20EV_Industry_Restructuring_Analysis/readme.md)
 
@@ -377,7 +439,9 @@ KelpDAO 해킹 사건을 시스템 스트레스 테스트로 보고, 무엇이 �
 
 DeepSeek-V4의 핵심 아키텍처 혁신과 학습 파이프라인을 분석하고, DeepEP 핵심 수치를 통해 NVIDIA 락인을 푸는 생태계 신호를 읽습니다. 한·영·중 다운로드 패키지 형태.
 
-**형제 칼럼** · [DeepSeek v4 (preview report)](#deepseek-v4-preview-report) · [DeepSeek_Alpha](#deepseek_alpha)
+2026년 7월 추가: **[DeepSeek 자체 추론칩 개발](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/DeepSeek%20V4/deepseek_chip_column.md)** — Inference 전용 자체 칩 개발 착수(로이터 2026.7.7 보도). HFT 하우스 DNA가 추상화 계층 끝까지 내려간 문화적 필연이며, 자사 MoE·MLA 아키텍처 특화 co-design이 강점. RISC-V·파운드리 제약 현실적 한계 존재.
+
+**형제 칼럼** · [DeepSeek v4 (preview report)](#deepseek-v4-preview-report) · [DeepSeek_Alpha](#deepseek_alpha) · [Semiconductor ai etf strategy](#semiconductor-ai-etf-strategy)
 
 ### [DeepSeek v4 (preview report)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/DeepSeek%20v4/DeepSeek%20V4%20preview%20report.md)
 
@@ -437,7 +501,9 @@ DeepSeek-V4 프리뷰 두 모델(Flash 284B/활성 13B, Pro 1.6T/활성 49B, 모
 
 머스크/우주 투자 패키지로, 세 갈래로 읽힙니다. **(A) [SpaceX IPO 최종판 (0604 v2, EN/KO)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/SpaceX%20IPO%200604%20v2.md)** — 공모 조건 확정(공모가 $135 고정·기업가치 1.77조 달러·6월 12일 나스닥 SPCX·리테일 배정 30%) 후의 최종 분석. **스타링크(매출 113.9억·영업이익 +44.2억)가 번 돈을 xAI(영업손실 -63.6억)와 스타십 R&D가 동시에 태우는 '3사 합체' 구조**, ARPU 18 ~ 23% 하락이라는 균열, 차등의결권으로 머스크가 쥔 82.4% 의결권, 강세 $180 ~ 220 / 기본 $110 ~ 150 / 약세 $70 ~ 95의 3대 시나리오와 8개 항목 리스크 매트릭스. (1편 [SpaceX IPO.md](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/SpaceX%20IPO.md)는 S-1 공개 직후 5/21 버전.) **(B) [우주 포트폴리오](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/portfolio.md)** — 순수 우주 테마 집중(초고위험·고변동, RKLB·ASTS·LUNR 등) 전략 + PDF·차트. **(C) [인물 칼럼](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/musk_beijing_column.md)** — 베이징 국빈만찬에서 드러난 머스크의 '하이퍼 리치' 행동 문법.
 
-**형제 칼럼** · [Defense portfolio](#defense-portfolio)
+이 칼럼에는 2026년 7월 주요 추가 사항으로 **(D)** [SpaceX 나스닥100 편입](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/SpaceX_Nastaq100.md) — 상장 15거래일 만의 사상 최단 기간 편입, 최대 270억 달러 패시브 매수 수요와 지수 규칙 개정의 선례, **(E)** [Grok 4.5 모델 경쟁](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/Grok45%20ai%20model%20competition%20column.md) — 토큰 효율 4.2배 개선과 경쟁적 가격의 '2위 그룹 가격 파괴자' 포지션이 있습니다.
+
+**형제 칼럼** · [Defense portfolio](#defense-portfolio) · [AI_Revolution](#ai_revolution)
 
 ### [Ethereum](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Ethereum/Ethereum%20foundation%20restructuring.md)
 
@@ -564,6 +630,8 @@ OpenAI·Anthropic이 비상장이라는 제약에서 출발해, 이들에 대규
 > *AI 사업계획서 샘플*
 
 AI 헬스케어 관련 투자/사업계획 문서 샘플. 투자 문서 양식 참고용.
+
+**형제 칼럼** · [stock_option](#stock_option)
 
 ### [Model vs reality column](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Model%20vs%20reality%20column/Model%20vs%20reality%20column.MD)
 
@@ -713,6 +781,8 @@ AI 붐의 다음 단계인 데이터 폭증과 스토리지 수요를 배경으�
 
 상장 전 기업(토스/비바리퍼블리카)에 대한 2X 레버리지 ETF 등장의 의미, 토스 미국 IPO 가능성, 그리고 레버리지 ETF의 일일 리밸런싱·변동성 끌림 위험을 정확히 짚습니다.
 
+**형제 칼럼** · [Momentum](#momentum) · [Semiconductor ai etf strategy](#semiconductor-ai-etf-strategy)
+
 ### [trump](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/trump/Trade_War.md)
 
 **`T2 · 분석 칼럼`** · 형식 `칼럼+분석` · 키워드 `USMCA` `관세` `301조` `미이란종전` `유가`
@@ -779,6 +849,8 @@ K-콘텐츠는 글로벌에서 사랑받는데 그 산업에 베팅한 자본의
 
 스타 애널리스트 홍춘욱이 이끄는 프리즘투자자문의 2026년 1분기 공시 영업보고서를 분석합니다. 고객 수(+284)·자문계약(+571)·계약자산(+14%, 5,444억)이 모두 늘었는데 **자문수수료 수입은 39.3% 급감** — '더 많은 고객, 더 많은 자산, 더 적은 수입'이라는 한 줄이 자문업의 **가격결정력 붕괴**를 보여줍니다. 1분기 5.75억을 벌어 7.8억을 쓴 영업손실(−2.05억) 구조를 통해 투자자문업의 구조적 곤경을 짚습니다.
 
+**형제 칼럼** · [Korea Discount](#korea-discount) · [MBK](#mbk)
+
 ### [starbucks korea](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/starbucks%20korea/%E1%84%89%E1%85%B3%E1%84%90%E1%85%A1%E1%84%87%E1%85%A5%E1%86%A8%E1%84%89%E1%85%B3_5.18_%E1%84%90%E1%85%A2%E1%86%BC%E1%84%8F%E1%85%B3%E1%84%83%E1%85%A6%E1%84%8B%E1%85%B5_%E1%84%8F%E1%85%A1%E1%86%AF%E1%84%85%E1%85%A5%E1%86%B7.md)
 
 **`T3 · 논평·에세이`** · 형식 `칼럼` · 키워드 `조직침묵` `위계` `F&B마케팅` · `[실측: 노출 11,777 · 참여율 0.27%]`
@@ -819,6 +891,87 @@ K-콘텐츠는 글로벌에서 사랑받는데 그 산업에 베팅한 자본의
 
 **형제 칼럼** · [Cyber wrecker](#cyber-wrecker) · [Voce Phishing](#voce-phishing)
 
+### [주식시황]
+### [AI_Hacking](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Huggingface-AI-Agent-Breach-Column.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `AI해킹` `허깅페이스` `MCP` `GLM5.2` `방어비대칭`
+
+> *허깅페이스 AI 에이전트 침해사고 — '방어의 비대칭'이 드러낸 IR 무기력*
+
+2026년 7월, 세계 최대 AI 모델 허브 허깅페이스가 악성 데이터셋을 업로드한 자율 AI 에이전트에게 침해당해 17,000건 이상의 행동으로 내부 클러스터가 횡이동된 사건을 분석합니다. 진짜 문제는 공격 자체보다, 사고 조사에 투입된 상용 프런티어 모델(Claude·GPT 등)이 가드레일 때문에 포렌식 분석을 거부해 결국 오픈웨이트 모델 GLM 5.2로 자체 호스팅 분석을 할 수밖에 없었던 '방어의 비대칭'에 있습니다. AI 에이전트 공격이 더 이상 가설이 아니며, 사고대응을 위한 자체 서빙 오픈웨이트 모델이 필수 인프라임을 논증합니다.
+
+**형제 칼럼** · [AWS_Blockchain](#aws_blockchain) · [LLM supply chain portfolio](#llm-supply-chain-portfolio)
+
+### [BigTech](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BigTech/Tech-Financialization-GE-Capital-Leasing.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `GE캐피탈` `캡티브파이낸스` `BNPL` `지불분리` `락인`
+
+> *빅테크 금융화 — 애플 리스에서 GE 캐피탈까지, 21세기 버전의 금융공학 성장 전략*
+
+애플의 리스 프로그램과 삼성의 갤럭시 카드는 하드웨어 성장이 정체된 빅테크가 '금융'을 성장 대체재로 선택한 사건이며, 이는 20세기 GE가 GE 캐피탈로 산업 성장 한계를 우회했던 모델의 디지털 버전입니다. 결정적 차이는 애플이 클라나(BNPL)를 통해 신용·연체 위험을 자기 대차대조표에 싣지 않는 '자본 경량 금융 오케스트레이션'을 구사한다는 점입니다. 금융화 프리미엄은 신용 사이클과 규제 앞에서 언제든 할인으로 반전될 수 있음을 경고합니다.
+
+**형제 칼럼** · [Oracle](#oracle) · [Uber](#uber) · [Korea Discount](#korea-discount)
+
+### [CrytoHFT](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/CrytoHFT/HFT_Infra.md)
+
+**`T2 · 분석 칼럼`** · 형식 `리포트(EN/KO)` · 키워드 `청산연쇄` `Hawkes` `오토스케일링` `서킷브레이커` `오라클`
+
+> *크립토 HFT 인프라의 3대 구조적 한계 — 대기행렬 이론과 Hawkes 과정으로 본 연쇄 청산*
+
+2025년 10월 사상 최대 191.3억 달러 청산 사태를 출발점으로, CEX 인프라의 세 가지 구조적 한계를 수학적으로 논증합니다. (1) 레버리지 청산은 Hawkes 과정의 자기여기(self-exciting) 구조로 초 단위에 발산하지만 클라우드 오토스케일링은 분 단위로 반응하는 시간 상수 불일치, (2) 소수 인프라 제공자 집중이 독립적 위험 축을 형성, (3) 청산의 블랙박스가 외부 검증 불가능성이라는 거버넌스 문제를 야기. BitMEX 2020년 사례가 역설적으로 서킷브레이커의 필요성을 시사합니다.
+
+**형제 칼럼** · [BNB_ETH Relationship](#bnb_eth-relationship) · [Dex Memecoin Rugpool](#dex-memecoin-rugpool)
+
+### [KPOP](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/KPOP/Miracle_of_KOPP.md)
+
+**`T3 · 논평·에세이`** · 형식 `칼럼` · 키워드 `K팝` `리센느` `중소돌` `계층이동` `연습생`
+
+> *리센느의 기적 — 중소돌이 목격한 K팝 산업의 구조적 불평등*
+
+중소 기획사 걸그룹 '리센느(RESCENE)'가 338일 만에 멜론 톱100 5위에 오른 '중소돌의 기적' 이면에, 대형 기획사와 중소 기획사 간 제작비·자본 격차, 연습생 1,671명 중 연간 데뷔 팀 35팀의 극단적 생존 경쟁, 그리고 계층 이동 사다리가 무너진 한국 사회 구조를 경제학·사회학·뇌과학으로 분석합니다. 기적을 제도로 만들기 위한 정책 지원과 데뷔 실패자를 위한 사회적 안전망을 촉구합니다.
+
+**형제 칼럼** · [Kidult industry](#kidult-industry) · [webtoon](#webtoon) · [Korea Discount](#korea-discount)
+
+### [Meta](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Meta/Meta%20q1%202026%20earnings%20analysis.md)
+
+**`T2 · 분석 칼럼`** · 형식 `분석` · 키워드 `메타실적` `DAP` `CAPEX` `뮤즈이미지` `인스타그램`
+
+> *메타 Q1 2026 어닝 서프라이즈 + Muse Image AI 출시*
+
+두 개의 주요 파일로 구성됩니다. (1) **[Q1 2026 어닝 분석](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Meta/Meta%20q1%202026%20earnings%20analysis.md)** — 매출 +33%·순이익 +61%의 서프라이즈에도 DAP 2,000만 감소(지표 도입 이래 첫 분기 감소)와 CAPEX 1,250~1,450억 달러의 그림자. 틱톡의 사용자 잠식과 리얼리티 랩스 누적 손실 900억 달러 속에서, 잉여 컴퓨팅 파워의 외부 판매(Muse Spark)가 메타의 향방을 가를 분수령입니다. (2) **[Muse Image 출시 분석](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Meta/Meta%20muse%20image%20launch.md)** — 인스타그램 소셜 그래프를 시각적 참조로 활용하는 에이전트형 이미지 생성 AI의 전략적 의미.
+
+**형제 칼럼** · [AI Bouble](#ai-bouble) · [AI_Revolution](#ai_revolution) · [Netflex](#netflex)
+
+### [Oracle](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Oracle/Oracle%20BBB%20minus%20revised.md)
+
+**`T2 · 분석 칼럼`** · 형식 `리포트` · 키워드 `오라클` `신용등급` `정크본드` `OCI` `오픈AI`
+
+> *오라클 BBB- 강등 — 클라우드·AI 추격의 대가*
+
+S&P가 오라클의 신용등급을 BBB-(투자적격 최하단)로 강등한 사건을 팩트체크합니다. FY2026 CAPEX 557억 달러(매출의 80% 초과), FCF -237억 달러, 총부채 1,670억 달러, 부채비율 500%로 재무 건전성이 심각하게 훼손됐으나, 오픈AI 단일 고객이 RPO 6,380억 달러의 절반을 차지하는 집중 리스크도 존재합니다. 금융권 레거시 락인이 당장의 붕괴를 막고 있으나 AWS·Azure로의 멀티클라우드 이전과 비용 불만으로 그 힘이 점점 약화되고 있습니다.
+
+**형제 칼럼** · [AI Bouble](#ai-bouble) · [BigTech](#bigtech)
+
+### [Robinhood](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Robinhood/Robinhood-Agentic-Trading-Policy-Report.md)
+
+**`T2 · 분석 칼럼`** · 형식 `정책리포트` · 키워드 `로빈후드` `에이전틱트레이딩` `MCP` `PFOF` `옵션`
+
+> *로빈후드 Agentic Trading — AI가 주문을 실행할 때의 이해상충과 규제 공백*
+
+로빈후드가 2026년 7월 AI 에이전트가 실제 주문을 실행하는 'Agentic Trading'의 옵션 거래를 미국 전 고객에 개방한 사건을 분석합니다. MCP 프로토콜이 금융 거래의 공식 레일이 되면서 진입 장벽이 붕괴했고, 거래소의 변동성 기반 수익 구조가 AI의 과잉 거래와 정렬(align)되는 이해상충이 내재합니다. 기관 퀀트의 실행 인프라는 민주화됐지만 리스크 데스크·서킷브레이커·컴플라이언스 같은 방어 계층은 이식되지 않아 규제 설계가 시급합니다.
+
+**형제 칼럼** · [AI_Trading](#ai_trading) · [Toss 2x long etf](#toss-2x-long-etf)
+
+### [Uber](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Uber/Uber%20delivery%20hero%20column.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `우버` `딜리버리히어로` `배민` `M&A` `슈퍼앱`
+
+> *우버의 딜리버리 히어로 148억 달러 인수 — 퀀트와 MBA의 교차 분석*
+
+우버가 2026년 7월 독일 딜리버리 히어로를 인수하며 배민을 포함한 50개 시장을 확보하고, 사업이 겹치는 유럽 14개 시장은 SSW 파트너스에 별도 매각한 치밀한 자산 재배치를 퀀트(밀도 경제학·평균 취득 단가 최적화)와 MBA(방어적 M&A·슈퍼앱 전략) 관점에서 교차 분석합니다. 배민의 한국 자영업자들에게는 우버의 글로벌 수익화 엔진 이식이 예상되어, 집단 교섭·채널 다각화·데이터 자립 등 전략적 생존 매뉴얼을 제시합니다.
+
+**형제 칼럼** · [BigTech](#bigtech) · [Special situations investing](#special-situations-investing)
+
 ### [주식시황](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/%EC%A3%BC%EC%8B%9D%EC%8B%9C%ED%99%A9/README.md)
 
 **`T2 · 분석 칼럼`** · 형식 `시황+PDF` · 키워드 `환율` `원달러` `1530` `섹터로테이션` `서학개미` · `[실측: 노출 9,243 · 참여율 0.34%]`
@@ -829,12 +982,26 @@ K-콘텐츠는 글로벌에서 사랑받는데 그 산업에 베팅한 자본의
 
 **형제 칼럼** · [Dollar Hegemony War](#dollar-hegemony-war) · [US Treasury bonds](#us-treasury-bonds)
 
+2026년 7월 추가: **(4) [AI 반도체 조정 국면 퀀트 리포트](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/%EC%A3%BC%EC%8B%9D%EC%8B%9C%ED%99%A9/Quant-Review-AI-Semis-20260717.md)** — SOX·NVDA·HBM 모멘텀 조정과 평균회귀 분석. *(7월 17일 작성)*
+
 ---
 
 ## 주제별 분류
 
 ### AI / 반도체 / 인프라
 [AI Bouble](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI%20Bouble/AI%20%EC%8B%9C%EC%9E%A5%EC%9D%98%20%EC%98%A8%EB%8F%84%EC%B0%A8%20-%20%EB%A7%88%EC%9D%B4%ED%81%B4%EB%B2%84%EB%A6%AC%20vs%20%EB%8C%84%EC%95%84%EC%9D%B4%EB%B8%8C%EC%8A%A4.MD) · [AI_Revolution](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/ai_revolution_ko.md) · [Marvell Momentum](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Marvell%20Momentum/Marvel%2C%20should%20I%20chase%20the%20price%3F.md) · [Intel AI New Normal](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Intel%20AI%20New%20Normal/Intel%20intc%20ai%20newnormal%20column%20kr.MD) · [DeepSeek V4](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/DeepSeek%20V4/deepseek_column_ko.md) · [Storage War](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Storage%20War/Storage%20wars%20ai%20infrastructure%20column.md) · [Claude code column](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Claude%20code%20column/Claude%20code%20column%20ko.MD) · [LLM supply chain portfolio](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/LLM_supply_chain_portfolio/readme.md) · [AWS_Blockchain](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AWS_Blockchain/Blockchain%20aws%20centralization%20column.md) · [AI_Trading](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Trading/AI_Trading.md) · [DeepSeek_Alpha](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/DeepSeek_Alpha/readme.md) · [Semiconductor ai etf strategy](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Semiconductor%20ai%20etf%20strategy/readme.md) · [DeepSeek v4 (preview report)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/DeepSeek%20v4/DeepSeek%20V4%20preview%20report.md)
+
+### AI 모델 경쟁 / 규제
+[AI_Revolution(GPT-5.6)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/GPT-5_6.md) · [AI_Revolution(Kimi K3)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/KIMI_K3_260717.md) · [AI_Revolution(중국 AI 규제)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/china_ai_anthropomorphism_column.md) · [AI_Hacking](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Huggingface-AI-Agent-Breach-Column.md) · [Elon Musk(Grok 4.5)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Elon%20Musk/Grok45%20ai%20model%20competition%20column.md) · [DeepSeek V4(추론칩)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/DeepSeek%20V4/deepseek_chip_column.md)
+
+### 빅테크 / 플랫폼 / M&A
+[BigTech](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BigTech/Tech-Financialization-GE-Capital-Leasing.md) · [Meta](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Meta/Meta%20q1%202026%20earnings%20analysis.md) · [Oracle](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Oracle/Oracle%20BBB%20minus%20revised.md) · [Uber](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Uber/Uber%20delivery%20hero%20column.md) · [Robinhood](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Robinhood/Robinhood-Agentic-Trading-Policy-Report.md)
+
+### 크립토 인프라 / HFT
+[CrytoHFT](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/CrytoHFT/HFT_Infra.md) · [BNBChain](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BNBChain/readme.md) · [Dex Memecoin Rugpool](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Dex%20Memecoin%20Rugpool%20Incident%20Analysis.md)
+
+### 엔터 / K팝
+[KPOP](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/KPOP/Miracle_of_KOPP.md) · [webtoon](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/webtoon/webtoon.md) · [Kidult industry](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Kidult%20industry/Pok%C3%A9mon-card.md) · [Netflex](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Netflex/Netflix%20ad%20tier%20column.MD)
 
 ### 방산 / 국방 / 드론 / 지정학
 [Defense portfolio](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Defense%20portfolio/defense_etf_portfolio_ko.md) · [drone](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/drone/Us%20drone%20defense%20stocks%20etf%20by%20war.md) · [Pax Americana](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Pax%20Americana/%ED%8C%8D%EC%8A%A4%20%EC%95%84%EB%A9%94%EB%A6%AC%EC%B9%B4%EB%82%98%20%ED%88%AC%ED%82%A4%EB%94%94%EB%8D%B0%EC%8A%A4%EC%9D%98%20%ED%95%A8%EC%A0%95.md)
@@ -880,13 +1047,15 @@ K-콘텐츠는 글로벌에서 사랑받는데 그 산업에 베팅한 자본의
 
 1. **AI 거품 논쟁부터**  AI Bouble  Intel AI New Normal
 2. **AI 인프라 밸류체인**  AI_Revolution(엔비디아·MS·마이크론 포함)  Storage War  DeepSeek V4  LLM supply chain(애크먼 vs 게이츠)  Marvell Momentum
-3. **소비·트렌드 사이클**  China Wine Shock  Mokrak of luxury  Netflex  webtoon
-4. **자동차·부동산·신용 사이클**  Ford  REITs  China EV Industry Restructuring
-5. **한국 시장 구조**  Korea Discount  MBK  주식시황(원달러 1530)
-6. **시장 구조·포렌식**  Insider trading  Special situations  Toss 2x ETF
-7. **거시·지정학**  Pax Americana  Model vs reality  Dollar Hegemony War  US Treasury bonds  Defense portfolio  drone  골드만삭스
-8. **우주·인물**  Elon Musk(SpaceX IPO)  Jane Street
-9. **투자 심리 정비**  Brain(자기설계 에세이)
+3. **AI 모델 경쟁 & 규제**  AI_Revolution(GPT-5.6·Kimi K3)  DeepSeek V4(추론칩)  AI_Hacking(허깅페이스 침해)  Elon Musk(Grok 4.5)
+4. **소비·트렌드 사이클**  China Wine Shock  Mokrak of luxury  Netflex  webtoon  KPOP
+5. **자동차·부동산·신용 사이클**  Ford  REITs  China EV Industry Restructuring
+6. **빅테크·플랫폼 전략**  BigTech(금융화)  Meta  Oracle  Uber  Robinhood
+7. **한국 시장 구조**  Korea Discount  MBK  주식시황(원달러 1530)
+8. **시장 구조·포렌식**  Insider trading  Special situations  Toss 2x ETF  CrytoHFT
+9. **거시·지정학**  Pax Americana  Model vs reality  Dollar Hegemony War  US Treasury bonds  Defense portfolio  drone  골드만삭스
+10. **우주·인물**  Elon Musk(SpaceX IPO·나스닥100)  Jane Street
+11. **투자 심리 정비**  Brain(자기설계 에세이)
 
 각 자료는 약 4,000–30,000자 분량이며, 대체로 *핵심 발견  다루는 내용  데이터/출처  알려진 한계* 순으로 구성됩니다.
 
@@ -922,6 +1091,17 @@ K-콘텐츠는 글로벌에서 사랑받는데 그 산업에 베팅한 자본의
 | World_Bank | 세계은행 CPF·이사회 안건, 미 재무부 성명, 대중 대출 규모 추이 |
 | trump | USTR/USMCA 협정문·관세 조치, 하원 법사위 보고서, 미·이란 종전 합의·유가·시장 지표 |
 
+전체 데이터셋 인덱스는
+| trump | USTR/USMCA 협정문·관세 조치, 하원 법사위 보고서, 미·이란 종전 합의·유가·시장 지표 |
+| AI_Hacking | 허깅페이스 공식 포스트모템, GLM 5.2 오픈웨이트 벤치마크, MCP 프로토콜 명세 |
+| BigTech | 애플·삼성 IR, GE Capital 연차보고서, 코스 내구재 이론, BNPL·클라나 거래 데이터 |
+| CrytoHFT | Hawkes 과정 모수 추정, BitMEX·바이낸스 청산 로그, Cloudflare·AWS 공개 장애 보고서 |
+| KPOP | 문화체육관광부 대중문화예술산업 실태조사, 멜론·써클차트 데이터, 연습생·데뷔 통계 |
+| Meta | Meta FY2026 Q1 10-Q, SEC EDGAR, Arena.ai 이미지 벤치마크, SensorTower |
+| Oracle | S&P 글로벌 신용등급 보고서, Oracle FY2026 10-K·IR, 오픈AI 계약 규모 |
+| Robinhood | 로빈후드 공식 블로그·API 문서, MCP 프로토콜, SEC PFOF 규제 자료, OCC 옵션 거래량 |
+| Uber | 우버 IR 발표·합병 계약서, 딜리버리 히어로 FY2025 연차보고서, SSW 파트너스 발표 |
+
 전체 데이터셋 인덱스는 [메인 README의 데이터셋 섹션](https://github.com/gameworkerkim/vibe-investing/blob/main/README.md#%EB%8D%B0%EC%9D%B4%ED%84%B0%EC%85%8B)을 참조하세요.
 
 ---
@@ -945,4 +1125,4 @@ K-콘텐츠는 글로벌에서 사랑받는데 그 산업에 베팅한 자본의
 
 ---
 
-*Maintained by Dennis Kim ([@gameworkerkim](https://github.com/gameworkerkim)) · Last updated: 2026-07-07*
+*Maintained by Dennis Kim ([@gameworkerkim](https://github.com/gameworkerkim)) · Last updated: 2026-07-22*
