@@ -1,14 +1,15 @@
 # Kiwoom Securities REST API SDK
 
-Multi-language SDK for Kiwoom Securities REST API. Supports domestic (KRX) and overseas (NASDAQ/NYSE/AMEX) stock trading.
+Multi-language SDK + AI Trading Skill for Kiwoom Securities REST API. Supports domestic (KRX) and overseas (NASDAQ/NYSE/AMEX) stock trading.
 
-## Supported Languages
+## Components
 
-| Language | Directory | Dependencies |
-|----------|-----------|--------------|
-| Python | `python/` | `requests` + `pydantic` |
-| Java | `java/` | `okhttp` + `jackson` |
-| TypeScript | `typescript/` | Zero dependencies (native fetch) |
+| Component | Directory | Description |
+|-----------|-----------|-------------|
+| Python SDK | `python/` | `requests` + `pydantic` |
+| Java SDK | `java/` | `okhttp` + `jackson` |
+| TypeScript SDK | `typescript/` | Zero deps (native fetch) |
+| **kiwoom-trader Skill** | `skill/` | LLM-based natural language trading |
 
 ## Common Features
 
@@ -19,6 +20,25 @@ Multi-language SDK for Kiwoom Securities REST API. Supports domestic (KRX) and o
 - Typed error handling with error code classification
 - Demo/real environment switching
 - Auto-retry on auth failure
+
+## kiwoom-trader Skill
+
+LLM-based AI trading assistant. Translates natural language to Kiwoom API calls.
+
+```
+User: "삼성전자 10주 시장가 매수"
+  -> Intent: place_order
+  -> Stock: 005930, Qty: 10, Type: market
+  -> Safety check: market hours, size limit
+  -> Confirmation: "주문 요약: 삼성전자(005930) 10주 매수. 실행할까요?"
+  -> Execute: domestic_order.buy("005930", 10, order_type="3")
+```
+
+**Supported Intents**: account_query, stock_search, place_order, check_order, cancel_order, realtime_subscribe
+
+**Safety Rules**: mandatory confirmation, market hours check, size limit warning, demo-first
+
+See [skill/README.md](skill/README.md) for integration guide.
 
 ## Quick Start
 
@@ -55,6 +75,18 @@ const result = await client.domesticOrder.buy("005930", 1);
 client.close();
 ```
 
+### Skill (Python)
+
+```python
+from kiwoom_sdk import KiwoomClient
+from kiwoom_sdk.skill import parse_command, Intent
+
+cmd = parse_command("삼성전자 10주 시장가 매수")
+client = KiwoomClient("KEY", "SECRET", market="demo")
+if cmd.intent == Intent.PLACE_ORDER and not cmd.warnings:
+    result = client.domestic_order.buy(cmd.stock_code, cmd.quantity, cmd.price, cmd.order_type)
+```
+
 ## API Coverage
 
 | Service | API IDs | Description |
@@ -69,26 +101,32 @@ client.close();
 ```
 kiwoom_sdk/
 ├── README.md                 # This file
+├── readme_kr.md              # Korean feature specification
+├── skill/                    # kiwoom-trader Skill
+│   ├── README.md
+│   ├── kiwoom_trader_skill.md
+│   └── __init__.py           # Intent classifier, safety guard, prompts
 ├── python/
 │   ├── README.md
 │   ├── pyproject.toml
-│   └── kiwoom_sdk/           # Python package source
+│   └── kiwoom_sdk/
 ├── java/
 │   ├── README.md
 │   ├── pom.xml
-│   └── src/main/java/com/kiwoom/sdk/  # Java source
+│   └── src/main/java/com/kiwoom/sdk/
 └── typescript/
     ├── README.md
     ├── package.json
     ├── tsconfig.json
-    └── src/                  # TypeScript source
+    └── src/
 ```
 
 ## Manual
 
-See [kiwoom_sdk_manual.md](../TechDoc/Kiwoom_OpenAPI/kiwoom_sdk_manual.md) for comprehensive API reference.
+See [manual.md](manual.md) for comprehensive multi-language API reference.
 
 ## Reference
 
 - [Kiwoom official REST API](https://github.com/Kiwoom-Securities/Kiwoom-REST-API)
 - [Kiwoom OpenAPI portal](https://openapi.kiwoom.com)
+- [Development roadmap](../TechDoc/Kiwoom_OpenAPI/readme.md)

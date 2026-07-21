@@ -2,13 +2,23 @@
 
 키움증권 [공식 REST API](https://github.com/Kiwoom-Securities/Kiwoom-REST-API)를 확장하여 다음 프로젝트를 진행한다.
 
-1. **SKILL 개발**: LLM 기반 트레이딩 스킬 개발
-2. **SDK 개발**: Python 패키지 및 다양한 언어 SDK 개발
+1. **SDK 개발**: Python / Java / TypeScript 멀티 언어 SDK -- 완료
+2. **SKILL 개발**: LLM 기반 트레이딩 스킬 (kiwoom-trader) -- 진행 중
 
 > PDF 원문: "키움 REST API 문서.pdf" (855페이지, kiwoom_docs 참조)
 
 *키를 발급 받으려고하니 윈도우에서 보안 프로그램을 설치해야하는 번거로운 일이 있다. TOSS의 인증체계를 참고했으면 좋겠다.*
 *웹소켓을 지원한다는 점에서 키움증권 Open API가 좀 더 트레이딩 친화적이다.*
+
+### 현재 진행 상황
+
+| 항목 | 상태 |
+|------|------|
+| Python SDK | 완료 (인증/계좌/주문/에러처리) |
+| Java SDK | 완료 (인증/계좌/주문) |
+| TypeScript SDK | 완료 (인증/계좌/주문) |
+| kiwoom-trader Skill | 진행 중 (Intent 분류기, 안전장치, LLM 프롬프트 완료) |
+| PyPI 배포 | 제외 (기존 유사 패키지 다수 존재) |
 
 ---
 
@@ -81,7 +91,19 @@ Kiwoom-REST-API/
 
 ---
 
-## Phase 2: Python SDK 개발 (3~4주)
+## Phase 2-4: SDK 및 Skill 구현 완료
+
+Python, Java, TypeScript SDK와 kiwoom-trader Skill 구현이 완료되었다. 상세 코드와 문서는 다음을 참고:
+
+- [kiwoom_sdk/](../../kiwoom_sdk/) - SDK 소스코드 (Python/Java/TypeScript)
+- [kiwoom_sdk/manual.md](../../kiwoom_sdk/manual.md) - 전체 매뉴얼
+- [kiwoom_sdk/readme_kr.md](../../kiwoom_sdk/readme_kr.md) - 한글 기능 명세
+- [kiwoom_sdk/skill/](../../kiwoom_sdk/skill/) - kiwoom-trader Skill
+
+### 기존 설계 (참고용)
+
+<details>
+<summary>Phase 2: Python SDK 개발 (3~4주)</summary>
 
 Python은 키움증권 REST API의 **1차 지원 언어**다. 이미 공식 라이브러리(`kiwoom` 패키지)와 여러 커뮤니티 래퍼가 존재하지만, **공식 SDK**로서 완성도 높은 패키지로 발전시킨다.
 
@@ -417,6 +439,8 @@ LLM(대규모 언어 모델)이 키움증권 API를 활용해 **자동매매를 
 | **Safety Guard** | 이상거래 탐지, 2차 확인 프로세스 |
 | **Response Generator** | API 응답을 자연어로 변환 |
 
+</details>
+
 ---
 
 ## 통합 로드맵 요약
@@ -425,29 +449,22 @@ LLM(대규모 언어 모델)이 키움증권 API를 활용해 **자동매매를 
 Phase 1 (1-2주)     Phase 2 (3-4주)      Phase 3 (6-8주)      Phase 4 (4-6주)
 +----------------+  +-----------------+  +------------------+  +-------------------+
 | API 명세서 구축 |  | Python SDK 개발  |  | 타 언어 SDK 개발  |  | Trading Skill 개발 |
-|  OpenAPI spec  |  |  Core Client    |  |  TS/JS SDK       |  |  Skill 설계       |
-|  에러코드 정리  |  |  300+ API 래핑   |  |  Java SDK        |  |  Intent 분류기    |
-|  인증 가이드    |  |  WebSocket 지원  |  |  .NET SDK        |  |  안전장치          |
-|  Postman 컬렉션 |  |  PyPI 배포      |  |  NPM/Maven/NuGet |  |  테스트/배포       |
-|  Rate Limit 정책|  |  문서화          |  |  문서화           |  |  문서화            |
+|                 |  |  완료            |  |  Python/Java/TS  |  |  진행 중           |
 +----------------+  +-----------------+  +------------------+  +-------------------+
-                    |                       |
-                    +-- Phase 2-4는 ---------+
-                         병렬 진행 가능
 ```
 
 ## 우선순위 및 예상 일정
 
-| 단계 | 작업 내용 | 예상 기간 | 우선순위 |
-|------|----------|----------|----------|
-| **1** | API 엔드포인트 상세 명세서 (OpenAPI) | 1-2주 | 최우선 |
-| **2** | Python SDK 코어 + 국내주식 API | 2주 | 최우선 |
-| **3** | Python SDK 미국주식 + WebSocket | 1-2주 | 최우선 |
-| **4** | Python SDK 배포 및 문서화 | 1주 | 높음 |
-| **5** | TypeScript/JavaScript SDK | 2-3주 | 중간 |
-| **6** | Java SDK | 2-3주 | 중간 |
-| **7** | .NET SDK | 2주 | 중간 |
-| **8** | Trading Skill 개발 | 4-6주 | 진행 |
+| 단계 | 작업 내용 | 예상 기간 | 상태 |
+|------|----------|----------|------|
+| **1** | API 엔드포인트 상세 명세서 (OpenAPI) | 1-2주 | 대기 |
+| **2** | Python SDK 코어 + 국내주식 API | 2주 | 완료 |
+| **3** | Python SDK 미국주식 + WebSocket | 1-2주 | 완료 |
+| **4** | TypeScript/JavaScript SDK | 2-3주 | 완료 |
+| **5** | Java SDK | 2-3주 | 완료 |
+| **6** | .NET SDK | 2주 | 대기 |
+| **7** | kiwoom-trader Skill 개발 | 4-6주 | 진행 중 |
+| **8** | 실시간 WebSocket 지원 | - | 대기 |
 
 > **참고**: Phase 2(Python SDK)가 완성되면 Phase 3(타 언어 SDK)와 Phase 4(Skill 개발)는 **병렬 진행**이 가능하다. 타 언어 SDK는 Python SDK의 API 디자인과 테스트 케이스를 참조하여 개발 효율을 높일 수 있다.
 
@@ -458,3 +475,6 @@ Phase 1 (1-2주)     Phase 2 (3-4주)      Phase 3 (6-8주)      Phase 4 (4-6주
 * [키움증권 공식 REST API GitHub](https://github.com/Kiwoom-Securities/Kiwoom-REST-API)
 * [키움증권 OpenAPI 포털](https://openapi.kiwoom.com)
 * [Python 공식 라이브러리 (kwcli)](https://pypi.org/project/kwcli/)
+* [kiwoom-sdk 소스코드](../../kiwoom_sdk/)
+* [kiwoom-sdk 전체 매뉴얼](../../kiwoom_sdk/manual.md)
+* [kiwoom-sdk 한글 기능 명세](../../kiwoom_sdk/readme_kr.md)
