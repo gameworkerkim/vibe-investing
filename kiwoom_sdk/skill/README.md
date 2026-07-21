@@ -91,6 +91,8 @@ response = openai.ChatCompletion.create(
 - `__init__.py` - Intent classifier, entity extractor, parameter validator, safety guard, system prompts
 - `kiwoom_trader_skill.md` - Full skill definition for LLM context
 - `README.md` - This file
+- `INSTALL.md` - Installation guide (English)
+- `INSTALL_KR.md` - Installation guide (Korean)
 
 ## Safety Rules
 
