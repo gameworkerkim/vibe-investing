@@ -1,120 +1,94 @@
-# Kiwoom Securities REST API Python SDK
+# Kiwoom Securities REST API SDK
 
-## Installation
+Multi-language SDK for Kiwoom Securities REST API. Supports domestic (KRX) and overseas (NASDAQ/NYSE/AMEX) stock trading.
 
-```bash
-pip install kiwoom-sdk
-# or from local
-pip install -e .
-```
+## Supported Languages
+
+| Language | Directory | Dependencies |
+|----------|-----------|--------------|
+| Python | `python/` | `requests` + `pydantic` |
+| Java | `java/` | `okhttp` + `jackson` |
+| TypeScript | `typescript/` | Zero dependencies (native fetch) |
+
+## Common Features
+
+- OAuth2 client_credentials token management (auto-issue/refresh/cache)
+- Domestic account inquiry (list, balance, holdings)
+- Domestic trading (buy/sell/modify/cancel, 16 order types)
+- Overseas account + trading (US stocks)
+- Typed error handling with error code classification
+- Demo/real environment switching
+- Auto-retry on auth failure
 
 ## Quick Start
+
+### Python
 
 ```python
 from kiwoom_sdk import KiwoomClient
 from kiwoom_sdk.models import OrderType
 
-client = KiwoomClient(
-    app_key="YOUR_APP_KEY",
-    app_secret="YOUR_APP_SECRET",
-    market="demo",  # "real" for live trading
-)
-
-# 1. Issue access token
+client = KiwoomClient("KEY", "SECRET", market="demo")
 token = client.auth()
-print(f"Token issued: {token[:20]}...")
-
-# 2. List accounts
 accounts = client.domestic_account.list_accounts()
-for acct in accounts:
-    print(f"Account: {acct.account_number} - {acct.account_name}")
-
-# 3. Check balance
-if accounts:
-    balance = client.domestic_account.get_balance(accounts[0].account_number)
-    print(f"Balance: {balance.deposit:,} KRW")
-
-# 4. View holdings
-if accounts:
-    holdings = client.domestic_account.list_holdings(accounts[0].account_number)
-    for h in holdings:
-        print(f"  {h.stock_name}({h.stock_code}): {h.quantity} shares")
-
-# 5. Place a buy order (demo only)
-result = client.domestic_order.buy(
-    stock_code="005930",
-    quantity=1,
-    price=70000,
-    order_type=OrderType.NORMAL,
-)
-print(f"Order placed: {result.order_number}")
-
-# 6. Check order status
-status = client.domestic_order.get_order_status(result.order_number)
-print(f"Status: {status.status}, Filled: {status.filled_quantity}/{status.order_quantity}")
-
-# 7. Cancel an order
-cancel = client.domestic_order.cancel(
-    order_number=result.order_number,
-    stock_code="005930",
-)
-print(f"Cancelled: {cancel.return_msg}")
-
-# 8. Clean up
+result = client.domestic_order.buy("005930", 1, order_type=OrderType.MARKET)
 client.close()
 ```
 
-## Using as Context Manager
+### Java
 
-```python
-with KiwoomClient(app_key="KEY", app_secret="SECRET") as client:
-    accounts = client.domestic_account.list_accounts()
-    # ... do things
-# token revoked and session closed automatically
+```java
+var client = new KiwoomClient("KEY", "SECRET", "demo");
+client.auth();
+var accounts = client.domesticAccount().listAccounts();
+var result = client.domesticOrder().buy("005930", 1);
+client.close();
 ```
 
-## Overseas (US) Trading
+### TypeScript
 
-```python
-client = KiwoomClient(app_key="KEY", app_secret="SECRET")
-
-# US account list
-us_accounts = client.overseas_account.list_accounts()
-
-# Buy US stock (market order)
-result = client.overseas_order.buy(
-    stock_code="NVDA",
-    quantity=1,
-    order_type=OrderType.MARKET,
-    exchange="ND",  # ND=NASDAQ, NY=NYSE, AM=AMEX
-)
-
-# Sell US stock
-result = client.overseas_order.sell(
-    stock_code="TSLA",
-    quantity=10,
-    price=250.0,
-    order_type=OrderType.NORMAL,
-)
+```typescript
+const client = new KiwoomClient("KEY", "SECRET", "demo");
+await client.authenticate();
+const accounts = await client.domesticAccount.listAccounts();
+const result = await client.domesticOrder.buy("005930", 1);
+client.close();
 ```
 
-## Package Structure
+## API Coverage
+
+| Service | API IDs | Description |
+|---------|---------|-------------|
+| Domestic Account | ka00001, ka01690, ka10072 | List accounts, balance, holdings |
+| Domestic Order | kt10000-kt10003 | Buy, sell, modify, cancel |
+| Overseas Account | ust21050, ust21070, ust21661 | US account/balance/holdings |
+| Overseas Order | ust20000-ust20003 | US buy, sell, modify, cancel |
+
+## Project Structure
 
 ```
 kiwoom_sdk/
-├── __init__.py           # KiwoomClient export
-├── client.py             # KiwoomClient, KiwoomHttpClient
-├── auth.py               # KiwoomAuth (token management)
-├── config.py             # Config, Market enum
-├── errors.py             # Custom exceptions
-├── models/
-│   ├── __init__.py       # Enums (OrderType, TradeType, Exchange, etc.)
-│   └── account.py        # Pydantic models (AccountInfo, Holding, OrderResult)
-└── services/
-    ├── domestic/
-    │   ├── account.py    # Domestic account/balance/holdings
-    │   └── order.py      # Domestic buy/sell/modify/cancel
-    └── overseas/
-        ├── account.py    # US account/balance/holdings
-        └── order.py      # US buy/sell/modify/cancel
+├── README.md                 # This file
+├── python/
+│   ├── README.md
+│   ├── pyproject.toml
+│   └── kiwoom_sdk/           # Python package source
+├── java/
+│   ├── README.md
+│   ├── pom.xml
+│   └── src/main/java/com/kiwoom/sdk/  # Java source
+└── typescript/
+    ├── README.md
+    ├── package.json
+    ├── tsconfig.json
+    └── src/                  # TypeScript source
 ```
+
+## Manual
+
+See [kiwoom_sdk_manual.md](../TechDoc/Kiwoom_OpenAPI/kiwoom_sdk_manual.md) for comprehensive API reference.
+
+## Reference
+
+- [Kiwoom official REST API](https://github.com/Kiwoom-Securities/Kiwoom-REST-API)
+- [Kiwoom OpenAPI portal](https://openapi.kiwoom.com)
