@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI 트레이딩과 드로우다운 — VibeQuant</title>
+  <meta name="description" content="알파 아레나 — 하락장 급진매매의 구조" />
+  <link rel="canonical" href="https://vibequant-web.pages.dev/columns/ai-trading-drawdown/" />
+  <meta property="og:title" content="AI 트레이딩과 드로우다운" />
+  <meta property="og:description" content="알파 아레나 — 하락장 급진매매의 구조" />
+  <meta property="og:url" content="https://vibequant-web.pages.dev/columns/ai-trading-drawdown/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=1" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"AI 트레이딩과 드로우다운","description":"알파 아레나 — 하락장 급진매매의 구조","dateModified":"2026-07-21","author":{"@type":"Person","name":"Dennis Kim (김호광)","url":"https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md"},"mainEntityOfPage":"https://vibequant-web.pages.dev/columns/ai-trading-drawdown/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Trading/AI_Trading.md","keywords":"AI Trading, LLM, Risk"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Demo</a>
+        <a class="site-nav-link is-active" href="../../columns/">Columns</a>
+        <a class="site-nav-link" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../columns/">Columns</a> · AI · LLM · 빅테크</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">AI · LLM · 빅테크</p>
+        <h1>AI 트레이딩과 드로우다운</h1>
+        <p class="lede">알파 아레나 — 하락장 급진매매의 구조</p>
+        <div class="tag-row"><span class="tag">AI Trading</span> <span class="tag">LLM</span> <span class="tag">Risk</span></div>
+      </header>
+      <div class="article-body prose">
+        <h1>인공지능은 왜 하락장에서 급진적인 트레이딩을 할까?</h1>
+<p><strong>— DeepSeek, ChatGPT, Qwen 실전 트레이딩 실험이 보여준 AI의 구조적 약점과 수학적 증명, 그리고 세 가지 안전장치</strong></p>
+<hr>
+<h2>1. 1,000만 원을 들고 링에 오른 여섯 개의 AI</h2>
+<p>2025년 10월 18일부터 11월 3일까지, 미국 AI 리서치 기업 Nof1.ai는 흥미로운 실험을 진행했다. 이름하여 &#39;알파 아레나(Alpha Arena)&#39;. GPT-5(OpenAI), DeepSeek Chat V3.1, Qwen3 Max(알리바바), Gemini 2.5 Pro(구글), Claude Sonnet 4.5(앤트로픽), Grok 4(xAI) — 여섯 개의 최첨단 대형언어모델(LLM)에게 각각 1만 달러의 실제 자본을 쥐여주고, 탈중앙화 거래소 하이퍼리퀴드(Hyperliquid)에서 BTC, ETH, SOL 등 암호화폐 무기한 선물(perpetual futures)을 인간의 개입 없이 자율적으로 트레이딩하게 한 것이다. 모든 포지션과 AI의 내부 의사결정 로그(&quot;ModelChat&quot;)까지 실시간 공개되는, 세계 최초의 대규모 AI 라이브 트레이딩 벤치마크였다.</p>
+<p>결과는 잔인할 정도로 극명했다.</p>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>최종 성적(근사)</th>
+<th>평균 레버리지</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Qwen3 Max</strong></td>
+<td><strong>약 +22% (1위)</strong></td>
+<td>15~17배</td>
+<td>저빈도·고확신 매매, 엄격한 손절</td>
+</tr>
+<tr>
+<td><strong>DeepSeek V3.1</strong></td>
+<td>약 +4~5% (2위)</td>
+<td>10~13배</td>
+<td>최고 샤프비율, 중간에 +125% 찍고 급락</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.5</td>
+<td>약 -12%</td>
+<td>10~12배</td>
+<td>소극적 참여, 낮은 리스크 노출</td>
+</tr>
+<tr>
+<td>Grok 4</td>
+<td>약 -39%</td>
+<td>13~18배</td>
+<td>늦은 청산, 반전 대응 실패</td>
+</tr>
+<tr>
+<td>Gemini 2.5 Pro</td>
+<td>약 -60~67%</td>
+<td>14배</td>
+<td>과잉매매, 수수료만 1,284달러</td>
+</tr>
+<tr>
+<td><strong>GPT-5</strong></td>
+<td><strong>약 -60~75% (꼴찌)</strong></td>
+<td><strong>17배</strong></td>
+<td>최대 손실이 최대 이익의 2.3배</td>
+</tr>
+</tbody></table>
+<p>주목할 점은 세 가지다.</p>
+<p>첫째, <strong>승자와 패자를 가른 것은 예측력이 아니라 리스크 관리였다.</strong> 우승한 Qwen3 Max의 승률은 고작 31.8%였다. 열 번 중 일곱 번을 틀리고도 1위를 했다. 반면 GPT-5는 최대 손실 규모가 최대 이익의 2.3배에 달했다. 손익비의 비대칭이 승패를 갈랐다.</p>
+<p>둘째, <strong>드로다운(하락 구간)에서 AI들의 행동이 급변했다.</strong> 10월 초 이른바 &#39;10·11 폭락&#39; 이후의 변동성 장세에서, 손실을 본 모델들은 하나같이 레버리지를 높이고 매매 빈도를 늘렸다. Gemini는 초반 전 종목 숏 포지션이 무너지자 돌연 전량 롱으로 뒤집었고, GPT-5도 뒤따랐다. 인간 트레이더가 &#39;물타기&#39;와 &#39;복구 매매&#39;에 빠지는 패턴과 소름 끼치게 닮아 있었다.</p>
+<p>셋째, <strong>한때 +125% 수익을 기록했던 DeepSeek조차 급격한 드로다운을 겪고 +4~5%로 마감했다.</strong> 상승장에서 벌어들인 수익이 변동성 구간에서 순식간에 증발한 것이다.</p>
+<p>왜 이런 일이 벌어질까. 나는 이것이 우연도, 특정 모델의 결함도 아닌 <strong>구조적 필연</strong>이라고 본다. 그리고 그 필연은 수학적으로 증명 가능하다.</p>
+<hr>
+<h2>2. 왜 AI는 하락장에서 급진적으로 변하는가?</h2>
+<h3>2-1. 하락장은 &#39;데이터&#39;가 아니라 &#39;광기&#39;다</h3>
+<p>LLM 기반 트레이딩 에이전트는 가격, 거래량, 기술적 지표라는 정형 데이터를 입력받아 확률적으로 그럴듯한 다음 행동을 생성한다. 상승장이나 횡보장에서 이 방식은 그럭저럭 작동한다. 시장이 통계적 규칙성 안에서 움직이기 때문이다.</p>
+<p>그러나 하락장은 다르다. 하락장의 본질은 <strong>인간의 비이성적 공포이며, 그 공포가 집단으로 응집된 광기</strong>다. 마진콜 연쇄 청산, 패닉셀, 유동성 증발, 스테이블코인 디페깅 루머 같은 사건들은 정규분포 세계의 바깥 — 통계학자들이 &#39;팻테일(fat tail)&#39;이라 부르는 영역 — 에서 발생한다. LLM의 학습 데이터에서 이런 극단 국면은 표본 자체가 희소하고, 매번 다른 얼굴로 나타난다. 2020년 3월의 코로나 폭락, 2022년 5월의 테라-루나, 2022년 11월의 FTX, 2025년 10월의 10·11 폭락은 모두 다른 메커니즘으로 터졌다.</p>
+<p>즉 AI는 <strong>가장 판단력이 필요한 순간에 가장 판단 근거가 빈약한 상태</strong>에 놓인다. 인간 군중심리의 광기는 백테스트에 존재하지 않는다.</p>
+<h3>2-2. &#39;수익 극대화&#39; 프롬프트의 함정: 손실 국면의 위험 추구</h3>
+<p>더 근본적인 문제는 목적함수에 있다. 알파 아레나의 지시는 단순했다. &quot;위험조정수익률을 극대화하라. 기한은 2주일.&quot;</p>
+<p>여기서 행동경제학의 전망이론(Prospect Theory, Kahneman &amp; Tversky, 1979)이 예측하는 것과 정확히 같은 현상이 발생한다. <strong>이익 구간에서는 위험 회피적이던 에이전트가, 손실 구간에 들어서면 위험 추구적으로 변한다.</strong> 인간은 진화적 편향 때문에 그렇게 행동하지만, AI는 놀랍게도 &#39;합리적 계산&#39;의 결과로 같은 결론에 도달한다.</p>
+<p>논리는 이렇다. 잔고가 -40%인 상태에서 남은 기한은 5일. 낮은 레버리지로는 산술적으로 원금 복구가 불가능하다. &#39;기한 내 수익 극대화&#39;라는 목적함수 아래에서 유일한 해는 <strong>레버리지 증폭</strong>뿐이다. 단타 기반 트레이딩에서 손실이 누적될수록 회전율과 레버리지를 함께 끌어올리는 것 — GPT-5와 Gemini가 보여준 바로 그 행동 — 은 잘못 설계된 목적함수에 대한 &#39;최적 대응&#39;이었던 셈이다.</p>
+<p>문제는 이 &#39;최적 대응&#39;이 수학적으로 파산을 향한 지름길이라는 점이다. 이제 증명하자.</p>
+<hr>
+<h2>3. 수학적 증명 - 하락장 레버리지는 왜 필연적으로 무너지는가?</h2>
+<h3>증명 1. 변동성 드래그(Volatility Drag) — 레버리지의 제곱 페널티</h3>
+<p>자산의 로그수익률이 평균 μ, 변동성 σ를 따를 때, 레버리지 L배 포지션의 <strong>장기 기하평균 성장률</strong> g(L)은 다음과 같다.</p>
+<p>$$g(L) = L\mu - \frac{1}{2}L^2\sigma^2$$</p>
+<p>핵심은 수익은 L에 <strong>비례</strong>하지만, 변동성 페널티는 L의 <strong>제곱</strong>으로 커진다는 점이다. 직관적 예시로, 자산이 +10% 오른 뒤 -10% 내리면:</p>
+<p>$$(1+0.1)(1-0.1) = 0.99 \quad (-1%)$$</p>
+<p>같은 움직임을 10배 레버리지로 타면 다음 결과가 나온다.</p>
+<p>$$(1+1.0)(1-1.0) = 0 \quad (\textbf{전액 소멸})$$</p>
+<p>일반화하면 등락폭 ±r을 레버리지 L로 왕복할 때마다 자본은 $1 - L^2r^2$ 배가 된다. 하락장은 방향(μ&lt;0)도 불리하지만, 무엇보다 <strong>σ가 급등하는 구간</strong>이다. σ가 2배가 되면 드래그는 4배가 된다. 상승장에서 이익을 내던 레버리지 전략이 하락장에서 &#39;같은 전략을 유지만 해도&#39; 무너지는 이유다.</p>
+<h3>증명 2. 켈리 기준(Kelly Criterion) — 하락장의 최적 레버리지는 0 이하</h3>
+<p>위 g(L)을 L에 대해 미분하여 0으로 놓으면 최적 레버리지가 나온다.</p>
+<p>$$L^* = \frac{\mu}{\sigma^2}$$</p>
+<p>수치를 넣어보자. 강세장에서 연 기대수익 μ = 40%, 변동성 σ = 60%라면 L* = 0.40/0.36 ≈ <strong>1.1배</strong>. 최상의 국면에서도 켈리 최적해는 고작 1배 남짓이다.</p>
+<p>하락장에서는 μ &lt; 0이고 σ는 확대된다. μ = -30%, σ = 90%라면 L* = -0.30/0.81 ≈ <strong>-0.37</strong>. 즉 최적해는 &#39;작은 숏 또는 현금&#39;이다. 롱 방향으로 양의 레버리지를 쓰는 순간 g(L) &lt; 0, 자본의 기하평균 성장률은 확정적으로 음수가 된다. 그런데 알파 아레나의 AI들은 이 국면에서 <strong>10~17배</strong>를 사용했다. 켈리 최적해의 수십 배를 초과하는 &#39;오버베팅(over-betting)&#39; 영역에서는 기대 로그성장률이 깊은 음수로 떨어지며, 시간이 지날수록 파산 확률이 1로 수렴한다.</p>
+<h3>증명 3. 청산 확률 — 17배 레버리지는 망하는 길 - &#39;하루살이&#39;다</h3>
+<p>무기한 선물에서 레버리지 L배 포지션은 가격이 반대 방향으로 약 <strong>1/L</strong> 움직이면 청산된다.</p>
+<p>$$\Delta_{liq} \approx \frac{1}{L} \implies L = 17 \text{일 때 } \Delta_{liq} \approx 5.9%$$</p>
+<p>하락장 암호화폐의 일중 변동성은 σ_daily = 5~8%에 달한다. 일일 수익률을 근사적으로 정규분포로 보고 σ_daily = 6%, 약세 드리프트 μ_daily = -0.5%를 가정하면, 17배 롱 포지션이 <strong>하루 안에</strong> 청산선에 닿을 확률은:</p>
+<p>$$P = \Phi\left(\frac{-0.059 - (-0.005)}{0.06}\right) = \Phi(-0.9) \approx 18.4%$$</p>
+<p>하루 생존 확률 81.6%. 이 포지션을 5일 유지하면 생존 확률은 0.816⁵ ≈ <strong>36%</strong>, 10일이면 **13%**로 떨어진다. 게다가 실제 하락장 분포는 정규분포보다 꼬리가 두꺼워(첨도 초과) 실제 청산 확률은 이보다 높다. GPT-5의 -75%는 불운이 아니라 기댓값이었다.</p>
+<h3>증명 4. 손실 복구의 비대칭성 — 왜 &#39;복구 매매&#39;는 청산의 가속 페달인가?</h3>
+<p>손실률 d를 복구하는 데 필요한 수익률은 다음과 같다.</p>
+<p>$$r_{recover} = \frac{d}{1-d}$$</p>
+<p>-20%는 +25%로 복구되지만, -50%는 +100%, -75%는 **+300%**가 필요하다. 손실이 깊어질수록 &#39;기한 내 복구&#39;에 필요한 수익률이 비선형적으로 폭증하고, 이를 달성할 유일한 수단은 더 높은 레버리지뿐이다. 그러나 증명 3에서 보았듯 레버리지가 오르면 생존 확률이 지수적으로 붕괴한다. 손실 → 레버리지 증가 → 청산 확률 급등 → 더 큰 손실의 **양의 되먹임 루프(positive feedback loop)**가 완성된다.</p>
+<p>이는 고전적 마틴게일(배팅 2배 불리기) 전략과 수학적으로 동형이다. 자본이 유한한 한, 마틴게일의 파산 확률은 시간이 지남에 따라 1로 수렴한다는 것은 도박사의 파산 문제(Gambler&#39;s Ruin)로 이미 19세기에 증명된 결과다. <strong>하락장의 AI는, 잘못 설계된 목적함수 아래에서 마틴게일 도박사로 &#39;합리적으로&#39; 변신한다.</strong> 이것이 알파 아레나가 보여준 현상의 수학적 실체다.</p>
+<hr>
+<h2>4. AI 트레이딩이 하락장에서 살아남는 법 — 세 가지 안전장치</h2>
+<p>그렇다면 방법은 없는가? 있다. 다만 그 방법은 &#39;더 똑똑한 AI&#39;가 아니라 **&#39;AI의 행동 공간 자체를 제약하는 시스템 설계&#39;**에서 나온다. LLM은 엑셀이지 오라클이 아니다. 계산은 시키되, 신탁을 구해서는 안 된다.</p>
+<h3>첫째. 하락장 전용 스톱로스 프롬프트 구성 — &quot;손절 규칙을 협상 불가능하게 만들어라&quot;</h3>
+<p>LLM에게 &quot;리스크를 관리하라&quot;는 추상적 지시는 무의미하다. 드로다운 상황에서 LLM은 &quot;이번 하락은 과매도이므로 홀딩이 합리적&quot;이라는 그럴듯한 서사를 스스로 생성해 손절을 회피한다(자기합리화 환각). 해법은 손절을 <strong>판단의 대상이 아닌 실행의 전제조건</strong>으로 프롬프트에 하드코딩하는 것이다. 예시:</p>
+<pre><code>[시스템 프롬프트 — 리스크 규칙 (협상 불가, 최우선 적용)]
+
+1. 시장 국면 판정: BTC 20일 실현변동성 &gt; 60%(연율) 또는
+   가격 &lt; 200일 이동평균이면 &quot;약세 국면&quot;으로 분류한다.
+2. 약세 국면에서 최대 레버리지는 2배를 초과할 수 없다.
+   이 한도를 넘는 어떤 논리적 근거도 무효다.
+3. 모든 신규 포지션은 진입과 동시에 진입가 대비 -3%에
+   손절 주문을 함께 제출해야 한다. 손절 없는 진입은 금지한다.
+4. 단일 포지션 손실이 계좌의 2%에 도달하면 즉시 청산한다.
+   &quot;곧 반등할 것&quot;이라는 예측은 청산 사유를 기각할 수 없다.
+5. 위 규칙과 너의 시장 분석이 충돌하면, 항상 규칙이 이긴다.
+   규칙을 우회하는 논리를 생성하는 것 자체를 금지한다.
+</code></pre>
+<p>핵심은 마지막 조항이다. LLM의 최대 약점은 규칙을 &#39;재해석&#39;하는 능력이므로, <strong>재해석 자체를 금지하는 메타 규칙</strong>을 명시해야 한다. 실제 알파 아레나 우승자 Qwen3 Max의 행동 패턴 — 신호 발생 → 진입 → 목표가 또는 손절가 도달 → 기계적 청산 — 은 이 원칙의 유효성을 실증한다.</p>
+<h3>둘째. 자체 서킷 브레이커 — &quot;일정 시간 강제로 트레이딩을 멈추게 하라&quot;</h3>
+<p>한국거래소가 코스피 급락 시 매매를 정지시키듯, AI 에이전트에도 <strong>자기 자신에 대한 서킷 브레이커</strong>가 필요하다. 이는 프롬프트가 아니라 LLM 바깥의 실행 계층(execution layer) 코드로 구현해야 한다. LLM이 아무리 매매 신호를 생성해도 물리적으로 주문이 나가지 않게 만드는 것이다.</p>
+<pre><code class="language-python"># 서킷 브레이커 의사코드 — LLM 외부 실행 계층에 구현
+RULES = {
+    &quot;daily_loss_halt&quot;:   {&quot;threshold&quot;: -0.05, &quot;cooldown_h&quot;: 24},  # 일 -5% → 24시간 정지
+    &quot;weekly_loss_halt&quot;:  {&quot;threshold&quot;: -0.10, &quot;cooldown_h&quot;: 72},  # 주 -10% → 72시간 정지
+    &quot;trade_freq_halt&quot;:   {&quot;max_trades_per_day&quot;: 10, &quot;cooldown_h&quot;: 12},  # 과잉매매 차단
+    &quot;leverage_escalation&quot;: {&quot;max_increase_after_loss&quot;: 0}  # 손실 직후 레버리지 증액 금지
+}
+
+def pre_trade_check(order, account):
+    if account.daily_pnl &lt;= RULES[&quot;daily_loss_halt&quot;][&quot;threshold&quot;]:
+        return halt(hours=24, notify_human=True)
+    if order.leverage &gt; account.last_leverage and account.last_trade_pnl &lt; 0:
+        return reject(&quot;손실 후 레버리지 증액 시도 차단&quot;)  # 마틴게일 루프 절단
+    return approve(order)
+</code></pre>
+<p>특히 중요한 것은 마지막 규칙, **&#39;직전 거래가 손실이면 레버리지 증액 금지&#39;**다. 이 한 줄이 3장에서 증명한 양의 되먹임 루프를 물리적으로 절단한다. 강제 냉각 시간(cooldown)은 인간 트레이더의 &quot;매매 후 산책&quot;과 같은 역할을 한다. 시장의 광기가 지나가고 변동성이 정상 범위로 회귀할 시간을 버는 것이다. 수학적으로는, 증명 3의 청산 확률이 σ에 민감하므로 σ가 높은 구간의 노출 시간 자체를 0으로 만드는 전략이다.</p>
+<h3>셋째. 인간에게 알리기 — &quot;AI가 판단하기 어려운 순간을 AI가 자백하게 하라&quot;</h3>
+<p>완전 자율은 환상이다. 하락장에서 필요한 것은 자율성의 극대화가 아니라 <strong>적시의 권한 반납</strong>이다. 다음 조건에서 AI는 매매를 중단하고 인간에게 통제권을 넘기도록 설계해야 한다.</p>
+<ul>
+<li><strong>계좌 드로다운 15% 도달</strong>: 텔레그램/이메일 즉시 알림 + 신규 진입 잠금, 인간 승인 시에만 재개</li>
+<li><strong>시장 이상 신호</strong>: 일중 변동성 3σ 초과, 주요 거래소 유동성 급감, 펀딩비 극단값 — &quot;지금은 학습 분포 밖(out-of-distribution) 상황&quot;임을 명시적으로 보고</li>
+<li><strong>자기 확신도 급변</strong>: 의사결정 로그상 확신도(confidence)가 급등하는데 성과는 악화되는 경우 — 이는 자기합리화 환각의 전형적 시그니처다</li>
+<li><strong>일일 브리핑 강제</strong>: 포지션, 레버리지, 미실현 손익, 그리고 &quot;오늘 내가 규칙을 우회하고 싶었던 순간&quot;을 요약 보고</li>
+</ul>
+<p>세 번째 항목이 특히 중요하다. 알파 아레나 데이터에서 패배한 모델들은 손실이 커질수록 오히려 확신에 찬 어조로 포지션을 정당화했다. <strong>확신도와 성과의 괴리 확대</strong>는 인간 개입이 필요하다는 가장 신뢰할 수 있는 조기 경보다.</p>
+<hr>
+<h2>5. 추가 안전장치 - 세 가지를 넘어서</h2>
+<p>위 세 가지가 골격이라면, 다음은 실전에서 검증할 가치가 있는 보강재들이다.</p>
+<p><strong>① 변동성 타겟팅(Volatility Targeting).</strong> 레버리지를 고정하지 말고 목표 변동성을 고정하라. $L_t = \sigma_{target} / \sigma_{realized}$로 설정하면 하락장에서 σ가 급등할 때 레버리지가 <strong>자동으로</strong> 축소된다. 판단이 아니라 산수로 리스크가 줄어드는 구조다.</p>
+<p><strong>② 분수 켈리(Fractional Kelly).</strong> 증명 2의 L<em>조차 μ, σ 추정 오차에 취약하다. 실무에서는 L</em>의 1/4~1/2만 사용하는 것이 표준이다. 하프 켈리는 최대 성장률의 75%를 유지하면서 드로다운 분산을 절반으로 줄인다.</p>
+<p><strong>③ 멀티 LLM 교차검증 투표.</strong> 단일 모델의 환각과 편향을 상쇄하기 위해, 동일 페르소나·동일 데이터로 복수의 LLM(예: Claude, GPT, DeepSeek, Gemini)에 같은 질문을 던지고 <strong>만장일치 또는 3분의 2 이상 합의 시에만 진입을 허용</strong>하는 방식이다. 알파 아레나에서 모델별 &#39;트레이딩 성격&#39;이 극명하게 갈렸다는 사실은, 역설적으로 모델 간 불일치가 훌륭한 리스크 필터가 될 수 있음을 시사한다. 하락장처럼 불확실성이 높은 국면일수록 모델 간 합의율은 자연히 떨어지고, 시스템은 자동으로 현금 비중을 높이게 된다.</p>
+<p><strong>④ 수수료·펀딩비 인식.</strong> Gemini는 수수료로만 1,284달러 — 원금의 12.8% — 를 태웠다. 프롬프트와 목적함수에 거래비용을 명시적으로 차감한 순손익을 넣지 않으면, AI는 회전율의 비용을 인지하지 못한다.</p>
+<p><strong>⑤ 킬 스위치와 자본 격리.</strong> 어떤 안전장치도 뚫릴 수 있다. 총자본의 일정 비율만 AI 계좌에 배정하고, 인간이 원터치로 전 포지션을 청산할 수 있는 물리적 킬 스위치를 항상 유지하라.</p>
+<p><strong>⑥ 하락장 시나리오 레드팀 테스트.</strong> 배포 전, 2020년 3월·2022년 5월·2022년 11월·2025년 10월의 실제 폭락 데이터를 리플레이하며 AI가 레버리지를 올리는지, 손절을 회피하는 서사를 생성하는지 관찰하라. 상승장 백테스트 수익률은 아무것도 증명하지 못한다.</p>
+<hr>
+<h2>6. 맺으며, 인간의 광기는 데이터가 아니다</h2>
+<p>알파 아레나가 남긴 교훈은 &quot;AI가 트레이딩을 못한다&quot;가 아니다. 승률 31.8%로 우승한 Qwen과, 최고의 샤프비율을 기록한 DeepSeek은 규율이 예측을 이긴다는 오래된 진리를 실리콘 위에서 재현했다.</p>
+<p>진짜 교훈은 이것이다. <strong>하락장은 인간 공포의 총합이 만드는 광기이고, 광기는 학습 데이터에 없다.</strong> 그 공백 앞에서 &#39;수익 극대화&#39;만을 지시받은 AI는, 전망이론이 예측하는 손실 국면의 위험 추구자로 — 수학적으로는 파산 확률 1의 마틴게일 도박사로 — 합리적으로 타락한다. 변동성 드래그의 제곱 페널티, 켈리 기준의 음수 최적해, 레버리지 청산 확률의 지수적 붕괴, 손실 복구의 비선형 비대칭. 네 개의 수식이 그 타락의 경로를 정확히 그려낸다.</p>
+<p>해법은 AI를 더 똑똑하게 만드는 것이 아니라, AI가 어리석어질 수 있는 공간을 시스템으로 봉쇄하는 것이다. 협상 불가능한 손절 프롬프트, 코드 레벨의 서킷 브레이커, 그리고 판단이 어려운 순간 인간에게 권한을 반납하는 겸손함. 이 세 겹의 안전장치는 AI 트레이딩만의 이야기가 아니다. 자율 에이전트 시대에 인간이 기계에게 무엇을 위임하고 무엇을 위임하지 말아야 하는가에 대한, 가장 값비싼 실전 수업이다.</p>
+<p>LLM은 엑셀이지 오라클이 아니다. 엑셀에게 신탁을 구한 자의 계좌가 어떻게 되는지, 알파 아레나의 GPT-5가 1만 달러 중 7,500달러를 태우며 증명해 주었다.</p>
+<hr>
+<p><em>참고: Nof1.ai Alpha Arena Season 1 (2025.10.18–11.03) 공개 데이터. 본문의 수치는 공개 리더보드 및 언론 보도 기준 근사치이며, 수학적 논증의 파라미터는 예시용 가정값이다. 본 칼럼은 투자 자문이 아니다.</em></p>
+
+      </div>
+      <aside class="author-box">
+        <h2>작성자</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — CTI · AI 퀀트 · Web3. 前 싸이월드 대표 · Azure MVP.
+        <em>LLM은 엑셀이지 오라클이 아니다.</em></p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">프로필 README</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Trading/AI_Trading.md">이 글 GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Demo</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
