@@ -54,20 +54,19 @@ User (natural language)
 
 ```python
 from kiwoom_sdk import KiwoomClient
-from kiwoom_sdk.skill import parse_command, Intent
+from kiwoom_sdk.skill import KiwoomTrader, parse_command, Intent
 
-# Parse user command
+# Method 1: Use KiwoomTrader (full flow with confirmation)
+trader = KiwoomTrader("KEY", "SECRET", market="demo")
+print(trader.handle("내 잔고 알려줘"))  # shows accounts
+print(trader.handle("005930 10주 매수"))  # asks for confirmation
+print(trader.handle("예"))  # executes
+
+# Method 2: Parse only, execute yourself
 cmd = parse_command("005930 10주 시장가 매수")
-print(cmd)
-# ParsedCommand(intent='place_order', stock_code='005930', quantity=10, ...)
-
-# Execute via SDK
 client = KiwoomClient("KEY", "SECRET", market="demo")
 if cmd.intent == Intent.PLACE_ORDER and not cmd.warnings:
-    if cmd.is_us:
-        result = client.overseas_order.buy(cmd.stock_code, cmd.quantity, cmd.price, cmd.order_type, cmd.exchange)
-    else:
-        result = client.domestic_order.buy(cmd.stock_code, cmd.quantity, cmd.price, cmd.order_type, cmd.exchange)
+    result = client.domestic_order.buy(cmd.stock_code, cmd.quantity, cmd.price, cmd.order_type, cmd.exchange)
 ```
 
 ### With LLM

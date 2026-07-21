@@ -9,7 +9,7 @@
 | Python SDK | `python/` | `requests` + `pydantic` 기반 |
 | Java SDK | `java/` | `okhttp` + `jackson` 기반 |
 | TypeScript SDK | `typescript/` | 의존성 없음 (native fetch) |
-| **kiwoom-trader Skill** | `skill/` | LLM 기반 자연어 트레이딩 |
+| **kiwoom-trader Skill** | `python/kiwoom_sdk/skill/` | LLM 기반 자연어 트레이딩 |
 
 ## kiwoom-trader Skill
 
@@ -194,12 +194,8 @@ client.close();
 kiwoom_sdk/
 ├── README.md                 # 영문 종합 가이드
 ├── readme_kr.md              # 한글 기능 명세 (이 파일)
-├── skill/                    # kiwoom-trader AI 스킬
-│   ├── README.md
-│   ├── kiwoom_trader_skill.md  # LLM용 스킬 정의
-│   └── __init__.py           # 의도 분류기, 파라미터 검증, 안전장치
-├── python/
-│   ├── kiwoom_sdk/           # Python 패키지 소스
+│   ├── kiwoom_sdk/
+│   │   └── skill/         # kiwoom-trader AI 스킬
 │   └── pyproject.toml
 ├── java/
 │   ├── pom.xml

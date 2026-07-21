@@ -9,7 +9,8 @@ Multi-language SDK + AI Trading Skill for Kiwoom Securities REST API. Supports d
 | Python SDK | `python/` | `requests` + `pydantic` |
 | Java SDK | `java/` | `okhttp` + `jackson` |
 | TypeScript SDK | `typescript/` | Zero deps (native fetch) |
-| **kiwoom-trader Skill** | `skill/` | LLM-based natural language trading |
+| **kiwoom-trader Skill** | `python/kiwoom_sdk/skill/` | LLM-based natural language trading |
+| Installation | `skill/INSTALL.md` (EN) / `skill/INSTALL_KR.md` (KR) | Step-by-step setup |
 
 ## Common Features
 
@@ -102,14 +103,8 @@ if cmd.intent == Intent.PLACE_ORDER and not cmd.warnings:
 kiwoom_sdk/
 ├── README.md                 # This file
 ├── readme_kr.md              # Korean feature specification
-├── skill/                    # kiwoom-trader Skill
-│   ├── README.md
-│   ├── kiwoom_trader_skill.md
-│   └── __init__.py           # Intent classifier, safety guard, prompts
-├── python/
-│   ├── README.md
-│   ├── pyproject.toml
-│   └── kiwoom_sdk/
+│   ├── kiwoom_sdk/
+│   │   └── skill/            # kiwoom-trader Skill (intent, safety, prompts)
 ├── java/
 │   ├── README.md
 │   ├── pom.xml

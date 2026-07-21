@@ -3,7 +3,9 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Any
+from typing import Any, Callable
+
+from kiwoom_sdk import KiwoomClient
 
 INTENT_KEYWORDS: dict[str, list[str]] = {
     "account_query": [
@@ -38,7 +40,7 @@ INTENT_KEYWORDS: dict[str, list[str]] = {
 STOCK_CODE_PATTERN = re.compile(r"\b([0-9]{6})\b")
 US_STOCK_PATTERN = re.compile(r"\b([A-Z]{1,5})\b")
 QUANTITY_PATTERN = re.compile(r"(\d+)\s*(?:주|shares?)")
-PRICE_PATTERN = re.compile(r"(?:가격|단가|price\s*[:=]?\s*)?(\d[\d,]*)\s*(?:원|won)?")
+PRICE_PATTERN = re.compile(r"(\d[\d,]*)\s*(?:원|won)\b")
 ORDER_TYPE_MAP: dict[str, str] = {
     "지정가": "0", "limit": "0", "지정": "0",
     "시장가": "3", "market": "3", "시장": "3",
@@ -92,6 +94,12 @@ def classify_intent(text: str) -> Intent:
 
     if top_score == 0:
         return Intent.UNKNOWN
+
+    if scores.get(Intent.CANCEL_ORDER, 0) > 0 and top_intent == Intent.PLACE_ORDER:
+        return Intent.CANCEL_ORDER
+    if scores.get(Intent.CHECK_ORDER, 0) > 0 and top_intent == Intent.PLACE_ORDER:
+        return Intent.CHECK_ORDER
+
     return top_intent
 
 
@@ -101,9 +109,15 @@ def extract_entities(text: str, intent: Intent) -> ParsedCommand:
     # Extract stock code
     domestic_match = STOCK_CODE_PATTERN.search(text)
     us_match = US_STOCK_PATTERN.search(text)
-    if domestic_match and domestic_match.group(1) != us_match.group(1) if us_match else True:
-        cmd.stock_code = domestic_match.group(1)
-        cmd.is_us = False
+
+    if domestic_match:
+        domestic_code = domestic_match.group(1)
+        if us_match and us_match.group(1) == domestic_code:
+            cmd.stock_code = domestic_code
+            cmd.is_us = False
+        else:
+            cmd.stock_code = domestic_code
+            cmd.is_us = False
     elif us_match:
         cmd.stock_code = us_match.group(1)
         cmd.is_us = True
@@ -293,3 +307,184 @@ Response Format:
 - Order request: summary + "Shall I execute?"
 - Error: cause + resolution
 """
+
+
+class KiwoomTrader:
+    def __init__(
+        self,
+        app_key: str,
+        app_secret: str,
+        *,
+        market: str = "demo",
+        timeout: int = 30,
+        on_confirm: Callable[[ParsedCommand], bool] | None = None,
+    ):
+        self.client = KiwoomClient(app_key, app_secret, market=market, timeout=timeout)
+        self.on_confirm = on_confirm or self._default_confirm
+        self.pending_confirmation: ParsedCommand | None = None
+
+    def handle(self, text: str) -> str:
+        cmd = parse_command(text)
+
+        if cmd.warnings:
+            return "\n".join(cmd.warnings)
+
+        if self.pending_confirmation and self._is_confirm(text):
+            return self._execute_pending()
+
+        if cmd.intent == Intent.ACCOUNT_QUERY:
+            return self._handle_account_query(cmd)
+        if cmd.intent == Intent.STOCK_SEARCH:
+            return self._handle_stock_search(cmd)
+        if cmd.intent == Intent.PLACE_ORDER:
+            return self._handle_place_order(cmd)
+        if cmd.intent == Intent.CHECK_ORDER:
+            return self._handle_check_order(cmd)
+        if cmd.intent == Intent.CANCEL_ORDER:
+            return self._handle_cancel_order(cmd)
+        if cmd.intent == Intent.HELP:
+            return self._handle_help()
+
+        return f"명령을 이해하지 못했습니다: {text}\n'도움말'을 입력해 주세요."
+
+    def execute(self, text: str) -> ParsedCommand:
+        cmd = parse_command(text)
+        if cmd.warnings:
+            return cmd
+        if cmd.intent == Intent.PLACE_ORDER:
+            self.pending_confirmation = cmd
+            summary = format_response(cmd)
+            cmd.warnings.append(f"주문 요약: {summary}")
+            cmd.warnings.append("실행하려면 'yes' 또는 '확인'을 입력하세요.")
+        return cmd
+
+    def close(self):
+        self.client.close()
+
+    def _handle_account_query(self, cmd: ParsedCommand) -> str:
+        try:
+            accounts = self.client.domestic_account.list_accounts()
+            if not accounts:
+                return "등록된 국내 계좌가 없습니다."
+
+            lines = []
+            for acct in accounts:
+                bal = self.client.domestic_account.get_balance(acct.account_number)
+                lines.append(f"계좌 {acct.account_number}")
+                lines.append(f"  예수금: {bal.deposit:,.0f}원")
+                lines.append(f"  총평가: {bal.total_value:,.0f}원")
+                if bal.profit_loss_ratio:
+                    lines.append(f"  수익률: {bal.profit_loss_ratio:+.2f}%")
+
+                holdings = self.client.domestic_account.list_holdings(acct.account_number)
+                if holdings:
+                    lines.append("  보유종목:")
+                    for h in holdings:
+                        lines.append(f"    {h.stock_name}({h.stock_code}): {h.quantity}주 @ {h.current_price:,.0f}원 ({h.profit_loss_ratio:+.2f}%)")
+                lines.append("")
+            return "\n".join(lines).strip()
+
+        except Exception as e:
+            return f"계좌 조회 실패: {e}"
+
+    def _handle_stock_search(self, cmd: ParsedCommand) -> str:
+        if not cmd.stock_code:
+            return "종목코드를 입력해 주세요. 예: 005930, NVDA"
+        return f"'{cmd.stock_code}' 종목 정보를 조회합니다.\n(WebSocket 또는 차트 API 연동 필요)"
+
+    def _handle_place_order(self, cmd: ParsedCommand) -> str:
+        if not cmd.stock_code or not cmd.quantity or not cmd.action:
+            return "주문 정보가 부족합니다. 예: 005930 10주 매수"
+
+        if not self._check_market_hours(cmd):
+            return "현재 거래 시간이 아닙니다."
+
+        self.pending_confirmation = cmd
+        summary = format_response(cmd)
+        lines = [
+            f"주문 요약: {summary}",
+            "",
+            "정말 실행할까요? (yes / 아니오)",
+        ]
+        return "\n".join(lines)
+
+    def _handle_check_order(self, cmd: ParsedCommand) -> str:
+        return "주문 상태 조회 기능을 사용하려면 계좌번호가 필요합니다. '계좌번호'를 포함해 주세요."
+
+    def _handle_cancel_order(self, cmd: ParsedCommand) -> str:
+        if not cmd.stock_code:
+            return "취소할 종목코드를 입력해 주세요. 예: 005930 취소"
+
+        return f"'{cmd.stock_code}' 주문 취소 기능은 구현 중입니다."
+
+    def _handle_help(self) -> str:
+        return """지원 명령:
+- "내 잔고 알려줘" - 계좌/보유종목 조회
+- "005930 현재가" - 시세 조회
+- "005930 10주 매수" - 주식 매수
+- "005930 5주 매도" - 주식 매도
+- "취소" - 진행 중인 주문 취소
+- "도움말" - 이 메시지"""
+
+    def _execute_pending(self) -> str:
+        if not self.pending_confirmation:
+            return "실행 대기 중인 주문이 없습니다."
+
+        cmd = self.pending_confirmation
+        self.pending_confirmation = None
+
+        try:
+            if cmd.intent == Intent.PLACE_ORDER:
+                if cmd.is_us:
+                    result = self.client.overseas_order.buy(
+                        cmd.stock_code, cmd.quantity, cmd.price,
+                        cmd.order_type, cmd.exchange,
+                    ) if cmd.action == "buy" else self.client.overseas_order.sell(
+                        cmd.stock_code, cmd.quantity, cmd.price,
+                        cmd.order_type, cmd.exchange,
+                    )
+                else:
+                    if cmd.action == "buy":
+                        result = self.client.domestic_order.buy(
+                            cmd.stock_code, cmd.quantity, cmd.price,
+                            cmd.order_type, cmd.exchange,
+                        )
+                    else:
+                        result = self.client.domestic_order.sell(
+                            cmd.stock_code, cmd.quantity, cmd.price,
+                            cmd.order_type, cmd.exchange,
+                        )
+
+                if result.return_code == 0:
+                    return f"주문 완료!\n주문번호: {result.order_number}\n{result.return_msg}"
+                return f"주문 실패 [{result.return_code}]: {result.return_msg}"
+
+        except Exception as e:
+            return f"주문 실행 중 오류: {e}"
+
+    @staticmethod
+    def _check_market_hours(cmd: ParsedCommand) -> bool:
+        import datetime as _dt
+        now = _dt.datetime.now()
+        if now.weekday() >= 5:
+            return False
+        hour = now.hour
+        return 8 <= hour <= 18
+
+    @staticmethod
+    def _is_confirm(text: str) -> bool:
+        confirm_words = {"yes", "y", "ok", "okay", "confirm", "execute", "run",
+                         "예", "네", "넵", "응", "어", "확인", "진행", "실행", "ㄱㄱ", "고고", "ㄱ"}
+        return text.lower().strip() in confirm_words
+
+    @staticmethod
+    def _default_confirm(cmd: ParsedCommand) -> bool:
+        return len(cmd.warnings) == 0
+
+
+def execute_command(client: KiwoomClient, text: str) -> str:
+    trader = KiwoomTrader.__new__(KiwoomTrader)
+    trader.client = client
+    trader.pending_confirmation = None
+    trader.on_confirm = trader._default_confirm
+    return trader.handle(text)
