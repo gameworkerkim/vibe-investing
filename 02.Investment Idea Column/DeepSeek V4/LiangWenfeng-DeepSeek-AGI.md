@@ -2,7 +2,7 @@
 ---
 title: "량원펑의 AI 전략: 4시간·52개 발언으로 읽는 DeepSeek의 AGI 여정"
 title_en: "Liang Wenfeng's AI Strategy: Reading DeepSeek's Road to AGI Through 52 Statements"
-subtitle: "절제(less is more)를 배로 삼아 AGI로 — 개발 철학과 투자 철학은 어떻게 하나가 되는가"
+subtitle: "절제(less is more)를 나침판으로 삼아 AGI로 — 개발 철학과 투자 철학은 어떻게 하나가 되는가"
 description: "량원펑이 4시간 IR에서 남긴 52개 발언을 축으로 DeepSeek의 AGI 로드맵, 오픈소스·저가의 경제학, '돈은 받되 방향은 안 바꾸는' 조달 원칙을 정리한다."
 abstract: |
   DeepSeek 량원펑의 4시간 투자자 회의는 로드쇼가 아니라 전략 선언이었다. 그가 남긴 52개 발언의 핵심 키워드는 모델·비용·AGI·시간·오픈소스, 그리고 '절제' 하나로 수렴한다.
@@ -41,7 +41,7 @@ robots: index,follow
 
 # 량원펑의 AI 전략 살펴보기 - 4시간, 52개 발언으로 읽는 DeepSeek의 AGI 여정
 
-## 절제(less is more)를 배로 삼아 AGI로 — 개발 철학과 투자 철학은 어떻게 하나가 되는가?
+## 절제(less is more)를 나침판으로 삼아 AGI로 — 개발 철학과 투자 철학은 어떻게 하나가 되는가?
 
 2026.07.23 김호광 / Dennis Kim / Cyworld CEO
 
