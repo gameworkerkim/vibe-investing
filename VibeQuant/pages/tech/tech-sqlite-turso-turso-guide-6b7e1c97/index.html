@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Turso: 에지 네이티브 SQLite 데이터베이스 플랫폼 — VibeQuant</title>
+  <meta name="description" content="Turso는 SQLite를 에지 네트워크에 분산 배포하는 클라우드 데이터베이스 플랫폼이다. 러스트(Rust)로 재작성된 libSQL을 기반으로 하며, SQLite와 완전히 호환되면서도 글로벌 규모의 애플리케이션에 적합한 기능들을 제공한다." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/tech-sqlite-turso-turso-guide-6b7e1c97/" />
+  <meta property="og:title" content="Turso: 에지 네이티브 SQLite 데이터베이스 플랫폼" />
+  <meta property="og:description" content="Turso는 SQLite를 에지 네트워크에 분산 배포하는 클라우드 데이터베이스 플랫폼이다. 러스트(Rust)로 재작성된 libSQL을 기반으로 하며, SQLite와 완전히 호환되면서도 글로벌 규모의 애플리케이션에 적합한 기능들을 제공한다." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/tech-sqlite-turso-turso-guide-6b7e1c97/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Turso: 에지 네이티브 SQLite 데이터베이스 플랫폼","description":"Turso는 SQLite를 에지 네트워크에 분산 배포하는 클라우드 데이터베이스 플랫폼이다. 러스트(Rust)로 재작성된 libSQL을 기반으로 하며, SQLite와 완전히 호환되면서도 글로벌 규모의 애플리케이션에 적합한 기능들을 제공한다.","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/tech-sqlite-turso-turso-guide-6b7e1c97/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/SQLite_%20Turso/Turso_guide.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link" href="../../columns/">Columns</a>
+        <a class="site-nav-link is-active" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 클라우드 · Free tier</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · Free tier</p>
+        <h1>Turso: 에지 네이티브 SQLite 데이터베이스 플랫폼</h1>
+        <p class="lede">개요</p>
+        
+      </header>
+      <div class="article-body prose"><p>Turso는 SQLite를 에지 네트워크에 분산 배포하는 클라우드 데이터베이스 플랫폼이다. 러스트(Rust)로 재작성된 libSQL을 기반으로 하며, SQLite와 완전히 호환되면서도 글로벌 규모의 애플리케이션에 적합한 기능들을 제공한다.</p>
+<p>에지 네트워크에 분산 배포되는 SQLite 호환 데이터베이스라는 점은 속도 측면에서 핵심적인 강점이다. 사용자와 가장 가까운 에지 로케이션에서 데이터를 읽고 쓸 수 있어 글로벌 서비스의 응답 속도를 획기적으로 개선할 수 있다. 이러한 특성은 특히 작은 스타트업이 제한된 인프라 투자로도 글로벌 서비스를 효과적으로 운영할 수 있게 해준다.</p>
+<hr>
+<h2>가격 정책</h2>
+<p>Turso는 모든 자체 서비스 요금제에서 데이터베이스 수에 제한이 없으며, 스토리지 용량과 읽기/쓰기 사용량에 따라 과금되는 구조를 채택하고 있다.</p>
+<h3>요금제 구성</h3>
+<p><strong>무료(Free)</strong></p>
+<ul>
+<li>데이터베이스: 100개</li>
+<li>스토리지: 5GB</li>
+<li>월간 읽기 행: 5억 건</li>
+<li>월간 쓰기 행: 1천만 건</li>
+<li>월간 동기화: 3GB</li>
+<li>시점 복구(PITR): 1일 보관</li>
+<li>감사 로그: 포함</li>
+<li>지원: 커뮤니티</li>
+<li>신용카드 등록 불필요</li>
+</ul>
+<p><strong>개발자(Developer)</strong></p>
+<ul>
+<li>데이터베이스: 무제한</li>
+<li>스토리지: 9GB + 추가 GB당 $0.75</li>
+<li>월간 읽기 행: 25억 건 + 추가 10억 건당 $1.00</li>
+<li>월간 쓰기 행: 2,500만 건 + 추가 100만 건당 $1.00</li>
+<li>월간 동기화: 10GB + 추가 GB당 $0.35</li>
+<li>시점 복구: 10일 보관</li>
+<li>팀 협업: 지원</li>
+</ul>
+<p><strong>스케일러(Scaler)</strong></p>
+<ul>
+<li>데이터베이스: 무제한</li>
+<li>스토리지: 24GB + 추가 GB당 $0.50</li>
+<li>월간 읽기 행: 1,000억 건 + 추가 10억 건당 $0.80</li>
+<li>월간 쓰기 행: 1억 건 + 추가 100만 건당 $0.80</li>
+<li>월간 동기화: 24GB + 추가 GB당 $0.25</li>
+<li>시점 복구: 30일 보관</li>
+<li>팀 협업: 지원</li>
+</ul>
+<p><strong>프로(Pro)</strong></p>
+<ul>
+<li>데이터베이스: 무제한</li>
+<li>스토리지: 50GB + 추가 GB당 $0.45</li>
+<li>월간 읽기 행: 2,500억 건 + 추가 10억 건당 $0.75</li>
+<li>월간 쓰기 행: 2.5억 건 + 추가 100만 건당 $0.75</li>
+<li>월간 동기화: 100GB + 추가 GB당 $0.15</li>
+<li>시점 복구: 90일 보관</li>
+<li>SSO, BYOK 암호화, HIPAA, SOC2 준수</li>
+<li>지원: 우선 이메일 및 Slack</li>
+</ul>
+<p><strong>엔터프라이즈(Enterprise)</strong>
+전용 클라우드 및 BYOC(Bring Your Own Cloud) 배포, 맞춤형 SLA, 프리미엄 24×7 지원, 무제한 사용량, Pro 플랜의 모든 기능을 포함한다.</p>
+<hr>
+<h2>스타트업 프로그램</h2>
+<p>Turso는 벤처 캐피탈 투자를 받은 초기 단계 스타트업을 위한 스타트업 프로그램을 운영하고 있다. 이 프로그램은 AI 에이전트가 세션을 동적으로 생성하고 데이터베이스를 만들고 분기하고 삭제하는 &quot;many-database architecture&quot;에 적합하다.</p>
+<h3>프로그램 구성</h3>
+<p><strong>제공 혜택</strong>-<strong>Turso 크레딧</strong>: 데이터베이스 비용 부담 없이 개발에 집중할 수 있도록 충분한 크레딧을 제공한다.</p>
+<ul>
+<li><strong>기술 지원</strong>: 엔지니어링 팀의 우선적인 액세스를 통해 아키텍처 리뷰, 온보딩 및 지속적인 지원을 받을 수 있다.</li>
+<li><strong>얼리 액세스</strong>: 일반 공개 이전에 새로운 기능을 먼저 사용해볼 수 있는 기회를 제공한다.</li>
+<li><strong>공동 마케팅</strong>: 블로그, 사례 연구, 소셜 채널에 소개될 기회를 제공한다.</li>
+</ul>
+<h3>지원 자격</h3>
+<p>벤처 투자를 받은 스타트업으로 many-database 아키텍처를 탐구하거나 구축 중인 팀이 지원 대상이다. Adaptive.ai와 같은 기업들은 이미 Turso에서 수백만 개의 데이터베이스를 운영하며 각 AI 에이전트에 독립된 데이터베이스를 제공하고 있다.</p>
+<hr>
+<h2>성능상의 장점</h2>
+<h3>글로벌 에지 배포를 통한 초저지연</h3>
+<p>Turso의 가장 큰 강점은 전 세계 에지 네트워크에 데이터베이스를 분산 배포하여 사용자와 가장 가까운 위치에서 데이터를 처리할 수 있다는 점이다. 기존의 중앙 집중형 PostgreSQL 대비 읽기 지연 시간을 30-80ms에서 10ms 미만으로 단축할 수 있으며, 완전한 로컬 복제본을 사용할 경우 마이크로초 단위의 지연 시간을 달성할 수 있다.</p>
+<p>구체적인 벤치마크 결과에 따르면:</p>
+<ul>
+<li>전통적인 데이터베이스: 150-300ms</li>
+<li>Turso 에지 노드: 5-20ms</li>
+<li>읽기 성능 향상: 최대 90%</li>
+</ul>
+<h3>빠른 연결 및 쿼리 성능</h3>
+<p>Turso는 데이터베이스 연결 설정 속도에서도 뛰어난 성능을 보여준다. 기존 방식 대비 최대 575배 빠른 연결 속도를 제공하며, 데이터베이스에 10개, 5,000개 또는 10,000개의 테이블이 있더라도 관계없이 새로운 연결을 여는 데 단 40마이크로초만 소요된다.</p>
+<p>SQLx 대비 단일 행 SQLite 조회 벤치마크에서 약 34% 더 빠른 성능을 보였으며, 멀티스레드 병렬 SELECT 벤치마크에서는 약 30% 더 빠른 성능을 기록했다.</p>
+<h3>동시 쓰기 성능</h3>
+<p>Turso의 MVCC(Multi-Version Concurrency Control) 구현은 동시 쓰기 성능에서도 뚜렷한 개선을 보여준다. 1ms의 컴퓨팅 시간이 소요되는 워크로드에서 8개 스레드를 사용할 경우, Turso의 쓰기 트랜잭션은 SQLite 대비 4배 더 빠른 성능을 제공한다.</p>
+<p>또한 P90 레이턴시는 모든 프로세스 및 클라이언트 수에서 최대 93%까지 감소했으며, P99 레이턴시는 모든 멀티 프로세스 서버에서 최대 95%까지 감소했다.</p>
+<h3>읽기 성능과 쓰기 성능의 트레이드오프</h3>
+<p>Turso는 읽기 성능에서 탁월한 결과를 보여주지만, HTTP 기반 프로토콜의 특성상 쓰기 성능은 상대적으로 느릴 수 있다. 실제 벤치마크에 따르면 Neon PostgreSQL 대비 Turso의 읽기는 국제 지역에서 3<del>6배 더 빠른 반면, 쓰기는 PostgreSQL의 네이티브 와이어 프로토콜 대비 2</del>3배 더 느린 것으로 나타났다. 따라서 읽기 중심의 워크로드에 가장 적합한 선택지다.</p>
+<hr>
+<h2>many-database 아키텍처</h2>
+<p>Turso는 &quot;many-database architecture&quot;라는 독특한 아키텍처를 지원한다. 이는 단일 모놀리식 데이터베이스를 모든 사용자가 공유하는 대신, 각 사용자, 에이전트, 세션마다 독립된 데이터베이스를 할당하는 방식이다.</p>
+<h3>주요 특징</h3>
+<ul>
+<li><strong>API 기반 데이터베이스 생성</strong>: 밀리초 단위로 완료되는 API 호출을 통해 새로운 데이터베이스를 즉시 생성할 수 있다.</li>
+<li><strong>멀티-DB 스키마</strong>: 부모 데이터베이스의 스키마 변경 사항을 모든 자식 데이터베이스에 자동으로 전파하여 일관된 스키마 관리를 지원한다.</li>
+<li><strong>완전한 격리</strong>: 각 테넌트 또는 사용자가 자신만의 완전히 격리된 데이터베이스를 가지므로, 보안과 성능 격리가 자연스럽게 보장된다.</li>
+</ul>
+<p>이 아키텍처는 특히 AI 에이전트 애플리케이션, 멀티테넌트 SaaS, 글로벌 모바일 앱 등에서 강점을 발휘한다. 각 에이전트 세션이 독립된 데이터베이스를 가질 수 있어 상태 관리가 단순해지고, 잘못된 변경 사항이 발생하더라도 다른 사용자에게 영향을 미치지 않는다.</p>
+<hr>
+<h2>작은 스타트업을 위한 효과적인 선택</h2>
+<p>Turso가 작은 스타트업이 글로벌 서비스를 만들 때 효과적인 이유는 다음과 같다.</p>
+<h3>인프라 투자 최소화</h3>
+<p>전 세계 에지 네트워크에 분산 배포되는 SQLite 호환 데이터베이스라는 특성 덕분에, 스타트업은 별도의 글로벌 인프라를 구축하지 않고도 전 세계 사용자에게 일관된 저지연 서비스를 제공할 수 있다. 단일 리전의 전통적인 데이터베이스 대비 지연 시간이 최대 92%까지 감소할 수 있다.</p>
+<h3>확장성 있는 가격 구조</h3>
+<p>무료 티어에서 100개의 데이터베이스와 5GB 스토리지를 제공하며, 모든 자체 서비스 요금제에서 데이터베이스 수에 제한이 없다. 초기 단계에서는 무료로 시작하여 사용량에 비례하여 비용을 지불하는 구조이므로, 트래픽이 적은 초기 단계의 스타트업에게 매우 경제적이다.</p>
+<h3>단순한 개발 경험</h3>
+<p>SQLite와 완전히 호환되므로 기존 SQL 지식과 도구를 그대로 활용할 수 있다. 모든 AI 모델이 이미 SQLite 쿼리를 작성하는 방법을 알고 있으므로, AI 기능 통합도 용이하다.</p>
+<h3>테넌트당 독립 데이터베이스</h3>
+<p>멀티테넌트 서비스를 구축할 때 각 고객에게 독립된 데이터베이스를 제공함으로써 데이터 격리와 성능 보장을 동시에 달성할 수 있다. 스타트업이 엔터프라이즈급 데이터 격리 요구사항을 복잡한 로직 없이 충족할 수 있게 해준다.</p>
+<hr>
+<h2>Cloudflare 유사 제품 비교</h2>
+<p>Turso와 가장 유사한 Cloudflare 제품은 Cloudflare D1이다. 가장 큰 차이점은 글로벌 데이터 복제 방식에 있다.</p>
+<p>Turso가 데이터베이스 복제본 위치를 직접 설정할 수 있는 반면, D1은 Cloudflare Workers와 깊게 통합된 대신 복제본 위치를 세밀하게 제어할 수 있는 인터페이스를 제공하지 않는다.</p>
+<h3>Turso와 Cloudflare D1 비교</h3>
+<table>
+<thead>
+<tr>
+<th align="left">특징</th>
+<th align="left">Turso (libSQL)</th>
+<th align="left">Cloudflare D1 (SQLite)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>핵심 기술</strong></td>
+<td align="left">러스트(Rust) 기반 libSQL</td>
+<td align="left">Cloudflare Workers 기반 SQLite</td>
+</tr>
+<tr>
+<td align="left"><strong>데이터 복제</strong></td>
+<td align="left">에지 로케이션에 읽기 복제본 배포</td>
+<td align="left">Workers에 읽기 복제 (제어 인터페이스 미제공)</td>
+</tr>
+<tr>
+<td align="left"><strong>에코시스템</strong></td>
+<td align="left">SQLite 호환 도구 사용 가능</td>
+<td align="left">Cloudflare Workers 및 생태계와 긴밀하게 통합됨</td>
+</tr>
+<tr>
+<td align="left"><strong>트랜잭션</strong></td>
+<td align="left">트랜잭션 지원</td>
+<td align="left">제한적 지원 (일괄 처리 Batch API 사용)</td>
+</tr>
+<tr>
+<td align="left"><strong>데이터베이스 크기</strong></td>
+<td align="left">5GB (무료) / 9GB (개발자)</td>
+<td align="left">500MB (무료) / 10GB (유료)</td>
+</tr>
+<tr>
+<td align="left"><strong>계정 당 DB 수</strong></td>
+<td align="left">100개 (무료) / 무제한 (유료)</td>
+<td align="left">5GB (무료) / 50,000개 (유료)</td>
+</tr>
+<tr>
+<td align="left"><strong>무료 요금제</strong></td>
+<td align="left">DB 100개, 5억 행 읽기</td>
+<td align="left">500만 행 읽기/일, 10만 행 쓰기/일</td>
+</tr>
+<tr>
+<td align="left"><strong>유료 요금제</strong></td>
+<td align="left">사용량 기준 과금 (저장소 및 읽기/쓰기)</td>
+<td align="left">사용량 기준 과금 (저장소 및 읽기/쓰기 유닛)</td>
+</tr>
+</tbody></table>
+<h3>Cloudflare의 Turso 유사 제품군</h3>
+<p>Cloudflare는 Turso와 유사한 목적을 가진 다양한 제품을 제공한다.</p>
+<p><strong>Cloudflare D1</strong>: Turso와 가장 유사한 제품이다. 완전관리형 분산 SQLite 데이터베이스로, Workers 환경과 완벽하게 통합된다. 글로벌 데이터 지속성이 필요하고 동일한 생태계 내에서 간편하게 사용하고자 하는 경우에 적합하다.</p>
+<p><strong>Cloudflare Hyperdrive</strong>: Workers에서 기존 지역 관계형 데이터베이스(PostgreSQL, MySQL)에 접근할 때 성능을 가속화하는 서비스이다. 기존 데이터베이스 인프라를 유지하면서 Workers에서 접근 성능을 향상시키고 싶을 때 적합하다.</p>
+<p><strong>Cloudflare Durable Objects</strong>: Workers의 상태 저장(stateful) 기능이다. 각 Object가 데이터를 직접 관리하며 강한 일관성을 보장한다. 강력한 일관성을 갖춘 사용자별 실시간 협업 앱이나 게임 서버를 구축할 때 주로 선택한다.</p>
+<p><strong>Cloudflare Workers KV</strong>: Workers를 위한 글로벌 분산 키-값 저장소이다. 읽기 성능이 매우 중요하고, 사용자 구성 데이터나 정적 콘텐츠를 캐싱하는 데 적합하다.</p>
+<p>이 Cloudflare 제품들은 모두 Workers 생태계와 완벽히 통합되어 있고, 서버리스 환경에서 편리하게 사용할 수 있다는 공통점이 있다. 데이터 모델(관계형, 키-값, 객체), 데이터 일관성 수준, 그리고 요구되는 기능(예: 트랜잭션, 복잡한 쿼리)에 따라 최적의 도구를 선택할 수 있다.</p>
+<hr>
+<h2>고려사항</h2>
+<p>Turso는 글로벌 에지 배포와 many-database 아키텍처라는 독특한 강점을 가지고 있지만, 다음과 같은 사항들을 고려해야 한다.</p>
+<ol>
+<li><strong>아직 베타 단계</strong>: 일부 SQLite 기능이 누락되어 있을 수 있으며, 프로덕션 환경 적용 전 충분한 테스트가 필요하다.</li>
+<li><strong>쓰기 성능 제한</strong>: HTTP 기반 프로토콜 특성상 많은 양의 쓰기가 필요한 워크로드에는 PostgreSQL 기반 솔루션이 더 적합할 수 있다.</li>
+<li><strong>에코시스템 성숙도</strong>: SQLite 대비 분리된 에코시스템으로 인해 일부 기존 도구들과의 호환성 문제가 있을 수 있다.</li>
+<li><strong>복잡한 쿼리 부적합</strong>: 복잡한 조인이나 대규모 집계 쿼리가 필요한 빅데이터 워크로드에는 적합하지 않을 수 있다.</li>
+</ol>
+<p>다만, CDN 캐싱 + Turso(읽기) + Neon(쓰기)의 하이브리드 엣지 스토리지 구조를 테스트할 때 효과적일 것으로 생각된다. 하지만, 웬만한 서비스에서 Turso 하나만으로도 글로벌에서 최적의 읽기 쓰기 속도를 제공할 수 있다. </p>
+<hr>
+<h2>참고 자료</h2>
+<ul>
+<li>Turso 공식 홈페이지: <a href="https://turso.tech">https://turso.tech</a></li>
+<li>가격 정책 상세: <a href="https://turso.tech/pricing">https://turso.tech/pricing</a></li>
+<li>스타트업 프로그램: <a href="https://turso.tech/blog/turso-for-startups-the-many-database-architecture">https://turso.tech/blog/turso-for-startups-the-many-database-architecture</a></li>
+<li>공식 문서: <a href="https://docs.turso.tech">https://docs.turso.tech</a></li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/SQLite_%20Turso/Turso_guide.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

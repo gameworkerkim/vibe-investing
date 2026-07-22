@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Robinhood MCP Getting Started 가이드 — VibeQuant</title>
+  <meta name="description" content="Robinhood MCP(Model Context Protocol) 생태계는 크게 두 계층 으로 나뉜다. 원문은 커뮤니티 레포지토리만 다루었으나, 2026년 5월 27일 Robinhood가 공식 MCP 서버를 출시하면서 판도가 바뀌었다." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/tech-robinhood-robinhood-mcp-getting-sta-9a0df573/" />
+  <meta property="og:title" content="Robinhood MCP Getting Started 가이드" />
+  <meta property="og:description" content="Robinhood MCP(Model Context Protocol) 생태계는 크게 두 계층 으로 나뉜다. 원문은 커뮤니티 레포지토리만 다루었으나, 2026년 5월 27일 Robinhood가 공식 MCP 서버를 출시하면서 판도가 바뀌었다." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/tech-robinhood-robinhood-mcp-getting-sta-9a0df573/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Robinhood MCP Getting Started 가이드","description":"Robinhood MCP(Model Context Protocol) 생태계는 크게 두 계층 으로 나뉜다. 원문은 커뮤니티 레포지토리만 다루었으나, 2026년 5월 27일 Robinhood가 공식 MCP 서버를 출시하면서 판도가 바뀌었다.","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/tech-robinhood-robinhood-mcp-getting-sta-9a0df573/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Robinhood/Robinhood-MCP-Getting-Started.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link" href="../../columns/">Columns</a>
+        <a class="site-nav-link is-active" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Robinhood MCP Getting Started 가이드</h1>
+        <p class="lede">Robinhood MCP(Model Context Protocol) 생태계는 크게 두 계층 으로 나뉜다. 원문은 커뮤니티 레포지토리만 다루었으나, 2026년 5월 27일 Robinhood가 공식 MCP 서버를 출시하면서 판도가 바뀌었다.</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. 개요</h2>
+<p>Robinhood MCP(Model Context Protocol) 생태계는 크게 <strong>두 계층</strong>으로 나뉜다. 원문은 커뮤니티 레포지토리만 다루었으나, 2026년 5월 27일 Robinhood가 공식 MCP 서버를 출시하면서 판도가 바뀌었다.</p>
+<table>
+<thead>
+<tr>
+<th>계층</th>
+<th>성격</th>
+<th>인증</th>
+<th>리스크</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>공식 Agentic Trading MCP</td>
+<td>Robinhood 직접 제공, 베타</td>
+<td>OAuth (전용 에이전틱 계좌)</td>
+<td>전용 계좌로 격리, 본 포트폴리오 접근 불가</td>
+</tr>
+<tr>
+<td>커뮤니티 MCP 서버</td>
+<td>서드파티 (robin_stocks 등 비공식 API 또는 공식 Crypto API 래핑)</td>
+<td>계정 비밀번호 / API 키 / 원격 OAuth</td>
+<td>계정 제재 가능성, 자격증명 관리 책임 전가</td>
+</tr>
+</tbody></table>
+<p><strong>정정 사항</strong>: 원문의 &quot;대부분의 레포지토리는 비공식 API를 사용합니다&quot;는 절반만 맞다. <code>robin_stocks</code> 기반(verygoodplugins, open-stocks-mcp 등)은 비공식이 맞지만, Robinhood <strong>Crypto API는 공식 API</strong>(API 키 + Ed25519 개인키 방식)이며, 무엇보다 이제 <strong>공식 주식 거래 MCP</strong>가 존재한다.</p>
+<hr>
+<h2>2. 공식: Robinhood Agentic Trading MCP</h2>
+<blockquote>
+<p>엔드포인트: <code>https://agent.robinhood.com/mcp/trading</code>
+안내: <a href="https://robinhood.com/us/en/agentic-trading/">https://robinhood.com/us/en/agentic-trading/</a></p>
+</blockquote>
+<p>2026년 5월 27일 출시된 Robinhood의 공식 에이전트 거래 인프라. 커뮤니티 레포지토리들이 우회하던 문제(비공식 API 차단 리스크, 자격증명 노출)를 구조적으로 해결한다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>출시</td>
+<td>2026-05-27, 베타 (이메일 초대 순차 롤아웃)</td>
+</tr>
+<tr>
+<td>지원 자산</td>
+<td>주식(equities). 옵션은 순차 롤아웃 중. 크립토·선물·이벤트 계약은 로드맵</td>
+</tr>
+<tr>
+<td>계좌 구조</td>
+<td>본 계좌와 완전 분리된 전용 에이전틱 계좌. 에이전트는 해당 계좌 입금액만 접근 가능</td>
+</tr>
+<tr>
+<td>안전장치</td>
+<td>거래별 푸시 알림, 실시간 활동 피드, 거래 사전 프리뷰 승인 옵션, 원탭 연결 해제, 사기 탐지</td>
+</tr>
+<tr>
+<td>지원 에이전트</td>
+<td>Claude, Claude Code, Claude Desktop, ChatGPT, Codex, Cursor, Grok 등 MCP 호환 전반</td>
+</tr>
+<tr>
+<td>전제 조건</td>
+<td>미국 Robinhood 개인 계좌(정상 상태), 초기 설정은 데스크톱에서만 가능</td>
+</tr>
+</tbody></table>
+<h3>연결 방법</h3>
+<p><strong>Claude Code (터미널)</strong>:</p>
+<pre><code class="language-bash">claude mcp add robinhood-trading --transport http https://agent.robinhood.com/mcp/trading
+</code></pre>
+<p><strong>Claude Desktop / Claude.ai</strong>:</p>
+<ol>
+<li>Settings → Connectors → Add custom connector</li>
+<li>URL: <code>https://agent.robinhood.com/mcp/trading</code></li>
+<li>OAuth 인증 후 Robinhood 모바일 앱에서 검증 단계 완료</li>
+</ol>
+<p><strong>Codex CLI</strong>:</p>
+<pre><code class="language-bash">codex mcp add robinhood-trading --url https://agent.robinhood.com/mcp/trading
+</code></pre>
+<h3>유의점</h3>
+<ul>
+<li>베타 단계이므로 모든 사용자가 즉시 접근 가능한 것은 아니다 (자격 시 이메일 통보)</li>
+<li>에이전트가 생성한 손실은 전적으로 사용자 책임 — Robinhood는 보상하지 않음을 약관에 명시</li>
+<li>미국 계좌 전용. 한국 등 비거주자는 커뮤니티 서버 또는 별도 브로커 대안 검토 필요</li>
+</ul>
+<hr>
+<h2>3. 커뮤니티 레포지토리 분석</h2>
+<h3>3.1 verygoodplugins/robinhood-mcp — 읽기 전용 리서치</h3>
+<blockquote>
+<p><a href="https://github.com/verygoodplugins/robinhood-mcp">https://github.com/verygoodplugins/robinhood-mcp</a></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>목적</td>
+<td>읽기 전용 포트폴리오 리서치 (거래 기능 미노출)</td>
+</tr>
+<tr>
+<td>스택</td>
+<td>Python, robin_stocks(비공식 API) 래핑</td>
+</tr>
+<tr>
+<td>설치</td>
+<td><code>pip install robinhood-mcp</code> 또는 <code>uvx robinhood-mcp</code></td>
+</tr>
+<tr>
+<td>규모</td>
+<td>GitHub 스타 약 18개 (소규모 프로젝트)</td>
+</tr>
+</tbody></table>
+<p><strong>기능</strong>: 포트폴리오 가치·섹터 집중도·손익, 종목 기초분석·뉴스·애널리스트 평점, 배당 분석, 실적 캘린더, 옵션 포지션, 체결 단위 주문 내역.</p>
+<p><strong>원문 보강 — 인증 동작 방식</strong> (원문에 누락된 실무상 중요 정보):</p>
+<ul>
+<li>TOTP 시크릿이 없으면 서버가 Robinhood 앱 <strong>푸시 승인 대기</strong> 상태가 됨. <code>ROBINHOOD_APPROVAL_TIMEOUT</code>(기본 60초) 내에 앱에서 승인해야 함</li>
+<li>승인 후 세션이 <code>~/.tokens/robinhood.pickle</code>에 캐시되어 이후 호출은 재로그인 불필요</li>
+<li>로그인 실패 시 오류가 약 5분간 캐시됨 — 즉시 재시도하려면 Claude Desktop 재시작 필요</li>
+</ul>
+<p><strong>Claude Desktop 설정</strong>:</p>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;robinhood&quot;: {
+      &quot;command&quot;: &quot;uvx&quot;,
+      &quot;args&quot;: [&quot;robinhood-mcp&quot;],
+      &quot;env&quot;: {
+        &quot;ROBINHOOD_USERNAME&quot;: &quot;your_email&quot;,
+        &quot;ROBINHOOD_PASSWORD&quot;: &quot;your_password&quot;,
+        &quot;ROBINHOOD_TOTP_SECRET&quot;: &quot;your_2fa_secret&quot;
+      }
+    }
+  }
+}
+</code></pre>
+<hr>
+<h3>3.2 trayders/trayd-mcp — 원격 풀 트레이딩</h3>
+<blockquote>
+<p><a href="https://github.com/trayders/trayd-mcp">https://github.com/trayders/trayd-mcp</a> | 서버: <code>https://mcp.trayd.ai/mcp</code></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>목적</td>
+<td>Claude(웹/CLI)에서 Robinhood 실계좌 거래</td>
+</tr>
+<tr>
+<td>구조</td>
+<td>원격 서버(AWS ECS) + Clerk Google 인증. 로컬 설치 불필요</td>
+</tr>
+<tr>
+<td>자격증명</td>
+<td>Robinhood 토큰은 메모리에만 보관(디스크 미저장), 재시작 시 소멸, 로그아웃 시 즉시 삭제</td>
+</tr>
+<tr>
+<td>특기사항</td>
+<td>claude.ai 웹앱에서 동작하는 유일한 계열의 트레이딩 MCP</td>
+</tr>
+</tbody></table>
+<p><strong>원문 보강</strong>:</p>
+<ul>
+<li>지정가 주문은 기본적으로 24시간 연장거래로 접수됨</li>
+<li>시세는 24/7 제공 — 장중에는 Robinhood 실시간, 장외에는 파트너 데이터 소스로 자동 폴백</li>
+<li>멀티 계좌 지원(복수 Robinhood 계좌를 하나의 연결로 관리)</li>
+<li>영구 메모리: 마크다운 노트 기반 개인 지식베이스를 Claude가 읽고 씀 (세션 간 유지)</li>
+<li>Claude Code <code>/loop</code>와 조합하면 스케줄 기반 자동매매 에이전트 구성 가능 (&quot;5분마다 포지션 점검, 3% 하락 시 매도&quot; 류)</li>
+</ul>
+<p><strong>설정 (Claude.ai 웹)</strong>:</p>
+<ol>
+<li>Settings → Connectors → Add custom connector</li>
+<li>Name: <code>trayd</code> / URL: <code>https://mcp.trayd.ai/mcp</code></li>
+<li>Connect → Google 로그인 → 채팅에서 &quot;Link my Robinhood account&quot; 입력 → 휴대폰 2FA 승인</li>
+</ol>
+<p><strong>설정 (Claude Code)</strong>:</p>
+<pre><code class="language-bash">claude mcp add --transport http trayd https://mcp.trayd.ai/mcp --scope user
+</code></pre>
+<p><strong>리스크 평가</strong>: 원격 서버에 자격증명이 통과(pass-through)되는 구조. 코드는 공개돼 있으나 실제 운영 서버가 공개 코드와 동일하다는 보장은 사용자가 검증할 수 없다. 공식 Agentic Trading 접근이 가능하다면 공식 경로가 신뢰 모델상 우위.</p>
+<hr>
+<h3>3.3 kevin1chun/robinhood-for-agents — 멀티 에이전트 툴킷</h3>
+<blockquote>
+<p><a href="https://github.com/kevin1chun/robinhood-for-agents">https://github.com/kevin1chun/robinhood-for-agents</a></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>목적</td>
+<td>주식·옵션·크립토 거래를 위한 AI 에이전트 통합 (듀얼 모드: MCP 도구 또는 TypeScript 클라이언트 직접 호출)</td>
+</tr>
+<tr>
+<td>스택</td>
+<td>TypeScript, Bun v1.3+, Chrome(브라우저 자동 로그인으로 OAuth 토큰 캡처)</td>
+</tr>
+<tr>
+<td>호환</td>
+<td>Claude Code, Codex, OpenClaw 등. 대화형 온보딩이 에이전트 자동 감지</td>
+</tr>
+<tr>
+<td>라이선스</td>
+<td>MIT-0</td>
+</tr>
+</tbody></table>
+<p><strong>원문 정정</strong>:</p>
+<ul>
+<li>원문의 &quot;49개 MCP 도구&quot;는 특정 시점 수치로, 버전에 따라 변동. 현재 문서는 도구 개수 대신 &quot;MCP tools 또는 TypeScript client 듀얼 모드&quot;로 설명함</li>
+<li>Claude Code 수동 등록 명령이 변경됨. 원문의 <code>bunx robinhood-for-agents</code>가 아니라 현재 README 기준:</li>
+</ul>
+<pre><code class="language-bash">claude mcp add -s user robinhood-for-agents -- bun run /path/to/bin/robinhood-for-agents.ts
+</code></pre>
+<p><strong>설치 (권장 — 대화형 온보딩)</strong>:</p>
+<pre><code class="language-bash">npx robinhood-for-agents onboard
+# 또는 에이전트 지정
+npx robinhood-for-agents onboard --agent claude-code
+</code></pre>
+<p>로컬 실행과 Docker/원격 호스트 배포를 모두 지원하며, 온보딩 과정에서 선택한다.</p>
+<p><strong>보안 유의</strong>: Chrome 자동화로 로그인 세션의 OAuth 토큰을 캡처하는 방식이다. 동작 원리상 정당하지만 민감한 패턴이므로 사용 전 코드 검토 권장.</p>
+<hr>
+<h3>3.4 Open-Agent-Tools/open-stocks-mcp — 멀티 브로커</h3>
+<blockquote>
+<p><a href="https://github.com/Open-Agent-Tools/open-stocks-mcp">https://github.com/Open-Agent-Tools/open-stocks-mcp</a></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>목적</td>
+<td>Robinhood + Charles Schwab 멀티 브로커 MCP 서버</td>
+</tr>
+<tr>
+<td>스택</td>
+<td>Python, HTTP/STDIO transport, Docker 지원</td>
+</tr>
+<tr>
+<td>거래</td>
+<td>주식·옵션 주문 실거래 검증 완료 (Robinhood)</td>
+</tr>
+<tr>
+<td>설치</td>
+<td><code>pip install open-stocks-mcp</code> (소스 개발 시 <code>uv sync</code>)</td>
+</tr>
+</tbody></table>
+<p><strong>설정</strong> (<code>.env</code>):</p>
+<pre><code class="language-env">ROBINHOOD_USERNAME=your_email@example.com
+ROBINHOOD_PASSWORD=your_password
+# Schwab 병행 시
+SCHWAB_API_KEY=your_api_key
+SCHWAB_APP_SECRET=your_app_secret
+SCHWAB_CALLBACK_URL=https://127.0.0.1:8182/
+ENABLED_BROKERS=robinhood,schwab
+</code></pre>
+<p><strong>실행 및 확인</strong>:</p>
+<pre><code class="language-bash">open-stocks-mcp-server --transport http --port 3001
+curl http://localhost:3001/health
+curl http://localhost:3001/metrics   # Prometheus 메트릭
+</code></pre>
+<p>Schwab 측은 공식 OAuth를 사용하지만 Robinhood 측은 robin_stocks 비공식 API 의존.</p>
+<hr>
+<h3>3.5 robinhood-mcp (npm) — Crypto API 전용</h3>
+<blockquote>
+<p><a href="https://www.npmjs.com/package/robinhood-mcp">https://www.npmjs.com/package/robinhood-mcp</a></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>목적</td>
+<td>Robinhood <strong>공식 Crypto API</strong> 실행 툴킷</td>
+</tr>
+<tr>
+<td>스택</td>
+<td>TypeScript/Node.js</td>
+</tr>
+<tr>
+<td>인증</td>
+<td>API 키 + Base64 인코딩 개인키 (계정 비밀번호 불필요 — 이 점에서 robin_stocks 계열보다 안전)</td>
+</tr>
+</tbody></table>
+<p><strong>정정</strong>: 원문은 이 패키지를 &quot;비공식&quot; 범주에 묶었으나, Robinhood Crypto API는 공식 제공 API다. 다만 <strong>샌드박스가 없어 모든 주문이 실제 현금으로 실행</strong>된다는 원문 경고는 정확하며 그대로 유효하다.</p>
+<p><strong>안전장치</strong> (원문 유지, 검증됨):</p>
+<table>
+<thead>
+<tr>
+<th>가드</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>별도 바이너리</td>
+<td>데이터 전용 서버에는 거래 도구 미등록</td>
+</tr>
+<tr>
+<td>명시적 옵트인</td>
+<td><code>ROBINHOOD_CRYPTO_ENABLE_TRADING=1</code> 필수</td>
+</tr>
+<tr>
+<td>주문당 USD 상한</td>
+<td>기본 $100 초과 시 거부</td>
+</tr>
+<tr>
+<td>일일 누적 상한</td>
+<td>일일 총 거래액 제한</td>
+</tr>
+<tr>
+<td>심볼 허용목록</td>
+<td>지정 페어만 거래</td>
+</tr>
+<tr>
+<td>매수 전용 모드</td>
+<td><code>ROBINHOOD_CRYPTO_BUY_ONLY=1</code> 시 매도 거부</td>
+</tr>
+<tr>
+<td>가드 모드</td>
+<td>기본값: 확인 없이 주문 미실행</td>
+</tr>
+<tr>
+<td>킬 스위치</td>
+<td><code>risk_kill_switch_engage</code>로 전체 실행 중단</td>
+</tr>
+</tbody></table>
+<pre><code class="language-bash">npm install -g robinhood-mcp
+export ROBINHOOD_CRYPTO_API_KEY=&quot;your_api_key&quot;
+export ROBINHOOD_CRYPTO_PRIVATE_KEY=&quot;your_base64_private_key&quot;
+export ROBINHOOD_CRYPTO_ENABLE_TRADING=1   # 거래 시에만
+robinhood-mcp
+</code></pre>
+<hr>
+<h3>3.6 rohitsingh-iitd/robinhood-mcp-server — Crypto REST/WebSocket</h3>
+<blockquote>
+<p><a href="https://github.com/rohitsingh-iitd/robinhood-mcp-server">https://github.com/rohitsingh-iitd/robinhood-mcp-server</a></p>
+</blockquote>
+<p>원문 내용 대체로 유효. Python 3.8+, FastAPI 기반으로 공식 Crypto API를 REST(<code>:8000</code>) + WebSocket(<code>:8001</code>)으로 노출한다. 단, 유지보수 활동이 활발하지 않은 개인 프로젝트이므로 프로덕션 용도라면 3.5의 npm 패키지 쪽이 안전장치 면에서 우위.</p>
+<hr>
+<h2>4. 선택 가이드 (정정판)</h2>
+<table>
+<thead>
+<tr>
+<th>사용 목적</th>
+<th>1순위</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>미국 계좌 보유 + 주식 자동거래</td>
+<td><strong>공식 Agentic Trading MCP</strong></td>
+<td>유일한 공식 경로. 전용 계좌 격리</td>
+</tr>
+<tr>
+<td>포트폴리오 조회·리서치만</td>
+<td>verygoodplugins/robinhood-mcp</td>
+<td>거래 미노출로 오발주 원천 차단</td>
+</tr>
+<tr>
+<td>claude.ai 웹앱에서 즉시 거래</td>
+<td>trayd-mcp</td>
+<td>설치 0, 단 원격 서버 신뢰 필요</td>
+</tr>
+<tr>
+<td>크립토 거래 (안전장치 중시)</td>
+<td>npm robinhood-mcp</td>
+<td>공식 Crypto API, USD 상한·킬 스위치</td>
+</tr>
+<tr>
+<td>Robinhood + Schwab 병행</td>
+<td>open-stocks-mcp</td>
+<td>멀티 브로커 유일</td>
+</tr>
+<tr>
+<td>Claude 외 다양한 에이전트</td>
+<td>robinhood-for-agents</td>
+<td>Codex, OpenClaw 등 지원</td>
+</tr>
+</tbody></table>
+<p><strong>의사결정 원칙</strong>: 공식 Agentic Trading 자격이 있으면 공식을 쓴다. 커뮤니티 서버의 존재 이유는 (1) 베타 미초대, (2) 크립토 등 미지원 자산, (3) 조회 전용 리서치, (4) 멀티 브로커 — 이 네 가지 갭뿐이다.</p>
+<hr>
+<h2>5. 빠른 시작: 3가지 경로</h2>
+<h3>경로 A — 공식 (주식 거래, 권장)</h3>
+<pre><code class="language-bash"># 1. Robinhood 앱/웹에서 Agentic 계좌 개설 및 입금 (데스크톱 필수)
+# 2. Claude Code에 등록
+claude mcp add robinhood-trading --transport http https://agent.robinhood.com/mcp/trading
+# 3. Claude Code 재시작 → /mcp → robinhood-trading 선택 → OAuth 인증
+# 4. 모바일 앱에서 검증 단계 승인
+</code></pre>
+<h3>경로 B — 설치 제로 (trayd)</h3>
+<pre><code class="language-bash">claude mcp add --transport http trayd https://mcp.trayd.ai/mcp --scope user
+# /mcp → trayd → Authorize → Google 로그인 → &quot;Link my Robinhood account&quot;
+</code></pre>
+<h3>경로 C — 로컬 읽기 전용 (리서치)</h3>
+<pre><code class="language-bash">pip install robinhood-mcp
+export ROBINHOOD_USERNAME=&quot;your_email@example.com&quot;
+export ROBINHOOD_PASSWORD=&quot;your_password&quot;
+export ROBINHOOD_TOTP_SECRET=&quot;your_totp_secret&quot;   # 없으면 앱 푸시 승인 60초 대기
+uvx robinhood-mcp
+</code></pre>
+<hr>
+<h2>6. 주의사항 (정정판)</h2>
+<ol>
+<li><strong>API 지위 구분</strong>: 공식 Agentic Trading MCP(주식)와 Crypto API는 공식이다. robin_stocks 기반 서버(verygoodplugins, open-stocks-mcp의 Robinhood 측)만 비공식이며, 예고 없이 차단될 수 있고 계정 제재 가능성이 있다.</li>
+<li><strong>샌드박스 부재</strong>: Crypto API는 테스트 환경이 없다. 커뮤니티 서버의 지정가 테스트 기법(체결 불가능한 낮은 가격의 지정가 주문 후 취소)으로 연결만 검증하는 방식을 권한다.</li>
+<li><strong>자격증명 관리</strong>: 계정 비밀번호를 환경변수로 넘기는 방식(robin_stocks 계열)이 가장 취약하다. 우선순위: 공식 OAuth &gt; Crypto API 키 &gt; 원격 pass-through &gt; 비밀번호 환경변수.</li>
+<li><strong>관할권</strong>: 공식 Agentic Trading은 미국 개인 계좌 전용이며 베타 초대제다. 비미국 거주자는 이 문서의 공식 경로를 사용할 수 없다.</li>
+<li><strong>책임 소재</strong>: 에이전트가 낸 손실은 전 경로 공통으로 사용자 부담이다. Robinhood는 공식 경로에서도 에이전트 손실을 보상하지 않는다고 명시한다.</li>
+<li><strong>규제 동향</strong>: SEC·CFTC가 AI 에이전트의 주문 집행에 기존 규제를 어떻게 적용할지 검토 중이다. 자동화 전략 운용 시 규제 변화를 추적할 것.</li>
+</ol>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Robinhood/Robinhood-MCP-Getting-Started.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

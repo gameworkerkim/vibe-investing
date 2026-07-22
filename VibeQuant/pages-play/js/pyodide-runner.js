@@ -1,0 +1,799 @@
+/**
+ * Load Pyodide and run user Python in the browser.
+ * Injects thin vi_browser (Worker candles + mock + chart bridge).
+ * Keep in sync with vi_browser/timeseries.py + backtest.py (list-based subset).
+ */
+
+const PYODIDE_INDEX = "https://cdn.jsdelivr.net/pyodide/v0.27.5/full/";
+
+const BOOTSTRAP = `
+import math, sys, types, json
+
+vi_browser = types.ModuleType("vi_browser")
+
+def _js_to_py(raw):
+    """Convert JsProxy JSON to Python without pyodide.ffi.to_py (broken on some builds)."""
+    from js import JSON
+    return json.loads(str(JSON.stringify(raw)))
+
+def _set_chart(payload):
+    from js import window, JSON as JSJSON
+    window.__VQ_CHART__ = JSJSON.parse(json.dumps(payload))
+
+def show_chart(data, title="Chart", series_label="close", ylabel=None, **kwargs):
+    """Push a line chart. data = candles, numeric list, or dict of {name: series}.
+    ylabel is accepted as an alias for series_label (LLM-friendly)."""
+    if ylabel is not None and (not series_label or series_label == "close"):
+        series_label = str(ylabel)
+    # Multi-series: {"NVDA": [...], "MU": [...]}
+    if isinstance(data, dict) and data:
+        sample = next(iter(data.values()))
+        if isinstance(sample, (list, tuple)) and (not sample or not isinstance(sample[0], dict)):
+            n = max(len(v) for v in data.values())
+            labels = [str(i) for i in range(n)]
+            datasets = []
+            for name, series in data.items():
+                vals = []
+                for i in range(n):
+                    if i < len(series) and series[i] is not None:
+                        vals.append(float(series[i]))
+                    else:
+                        vals.append(None)
+                datasets.append({"label": str(name), "values": vals})
+            _set_chart({
+                "title": str(title),
+                "series_label": str(series_label),
+                "labels": labels,
+                "datasets": datasets,
+            })
+            print(f"[chart] {title}: {len(datasets)} series x {n} points")
+            return n
+
+    labels = []
+    values = []
+    xs = list(data) if data is not None else []
+    if not xs:
+        return None
+    if isinstance(xs[0], dict):
+        for i, row in enumerate(xs):
+            labels.append(str(row.get("time") or row.get("date") or i))
+            if "close" in row:
+                values.append(float(row["close"]))
+            elif series_label in row:
+                values.append(float(row[series_label]))
+            else:
+                values.append(float(next(v for k, v in row.items() if isinstance(v, (int, float)))))
+    else:
+        for i, v in enumerate(xs):
+            if v is None:
+                labels.append(str(i))
+                values.append(None)
+            else:
+                labels.append(str(i))
+                values.append(float(v))
+    _set_chart({
+        "title": str(title),
+        "series_label": str(series_label),
+        "labels": labels,
+        "values": values,
+    })
+    print(f"[chart] {title}: {len(values)} points")
+    return len(values)
+
+async def get_candles(symbol="AAPL", days=60, provider="yahoo"):
+    days = int(days)
+    api = _api_base()
+    if api:
+        try:
+            from js import fetch
+            prov = provider or "yahoo"
+            url = f"{api.rstrip('/')}/api/v1/candles/{prov}/{symbol}?days={days}"
+            res = await fetch(url)
+            if res.ok:
+                data = _js_to_py(await res.json())
+                if isinstance(data, dict):
+                    rows = data.get("candles") or data.get("data") or data
+                    src = data.get("source")
+                    if src:
+                        print(f"[candles] source={src} provider={data.get('provider')}")
+                else:
+                    rows = data
+                if isinstance(rows, list) and rows:
+                    return rows
+        except Exception as e:
+            print(f"[candles] worker fallback: {e}")
+    out = []
+    price = 100.0 + (sum(ord(c) for c in str(symbol)) % 50)
+    for i in range(days):
+        shock = math.sin(i / 7.0) * 1.4 + ((i * 17) % 10 - 5) * 0.08
+        open_ = price
+        close = max(1.0, price + shock)
+        high = max(open_, close) + 0.4
+        low = min(open_, close) - 0.4
+        out.append({
+            "time": f"t{i:04d}",
+            "open": round(open_, 4),
+            "high": round(high, 4),
+            "low": round(low, 4),
+            "close": round(close, 4),
+            "volume": 1000 + i * 3,
+        })
+        price = close
+    print("[candles] source=local_mock")
+    return out
+
+def _api_base():
+    api = ""
+    try:
+        from js import window
+        cfg = getattr(window, "RUNTIME_CONFIG", None)
+        if cfg is not None:
+            api = str(getattr(cfg, "VIBEQUANT_API_BASE", "") or "") or api
+        if not api:
+            api = str(getattr(window, "VIBEQUANT_API_BASE", "") or "")
+    except Exception:
+        pass
+    return api
+
+def _asset_heuristics(symbol, provider="yahoo"):
+    sym = str(symbol).strip().upper()
+    is_kr = sym.endswith(".KS") or sym.endswith(".KQ") or (sym.isdigit() and len(sym) in (5, 6))
+    return {
+        "symbol": sym,
+        "provider": provider,
+        "name": sym,
+        "exchange": "KRX" if is_kr else "Unknown",
+        "currency": "KRW" if is_kr else "USD",
+        "assetType": "EQUITY",
+        "source": "heuristics",
+    }
+
+async def get_asset(symbol="AAPL", provider="yahoo"):
+    sym = str(symbol).strip().upper()
+    api = _api_base()
+    if api:
+        try:
+            from js import fetch
+            url = f"{api.rstrip('/')}/api/v1/assets/{provider or 'yahoo'}/{sym}"
+            res = await fetch(url)
+            if res.ok:
+                data = _js_to_py(await res.json())
+                if isinstance(data, dict) and data.get("symbol"):
+                    return data
+        except Exception as e:
+            print(f"[asset] worker fallback: {e}")
+    out = _asset_heuristics(sym, provider or "yahoo")
+    if not api:
+        out["name"] = f"Mock Asset {sym}"
+        out["exchange"] = "Mock"
+        out["source"] = "local_mock"
+    return out
+
+async def get_prices(symbols, provider="yahoo"):
+    if isinstance(symbols, str):
+        symbols = [symbols]
+    symbols = [str(s).strip().upper() for s in symbols if str(s).strip()]
+    result = {}
+    api = _api_base()
+    if api and symbols:
+        try:
+            from js import fetch
+            qs = ",".join(symbols)
+            url = f"{api.rstrip('/')}/api/v1/prices/{provider or 'yahoo'}?symbols={qs}"
+            res = await fetch(url)
+            if res.ok:
+                data = _js_to_py(await res.json())
+                items = data.get("prices") or {}
+                if isinstance(items, dict):
+                    for k, v in items.items():
+                        result[str(k).upper()] = v
+                if result:
+                    return result
+        except Exception as e:
+            print(f"[prices] worker fallback: {e}")
+        for sym in symbols:
+            try:
+                rows = await get_candles(sym, days=5, provider=provider)
+                if len(rows) >= 2:
+                    last, prev = rows[-1], rows[-2]
+                    result[sym] = {
+                        "symbol": sym,
+                        "price": last["close"],
+                        "change": round(float(last["close"]) - float(prev["close"]), 4),
+                        "changeRate": round((float(last["close"]) / max(float(prev["close"]), 1e-12) - 1) * 100, 4),
+                        "date": last.get("time"),
+                        "source": "candles",
+                    }
+                elif len(rows) == 1:
+                    last = rows[0]
+                    result[sym] = {
+                        "symbol": sym,
+                        "price": last["close"],
+                        "change": 0.0,
+                        "changeRate": 0.0,
+                        "date": last.get("time"),
+                        "source": "candles",
+                    }
+            except Exception:
+                continue
+        if result:
+            return result
+    for sym in symbols:
+        rows = await get_candles(sym, days=5, provider="mock")
+        if len(rows) >= 2:
+            last, prev = rows[-1], rows[-2]
+            result[sym] = {
+                "symbol": sym,
+                "price": last["close"],
+                "change": round(float(last["close"]) - float(prev["close"]), 4),
+                "changeRate": round((float(last["close"]) / max(float(prev["close"]), 1e-12) - 1) * 100, 4),
+                "date": last.get("time"),
+                "source": "local_mock",
+            }
+    return result
+
+async def get_last_price(symbol="AAPL", provider="yahoo"):
+    prices = await get_prices([symbol], provider=provider)
+    row = prices.get(str(symbol).strip().upper())
+    if not row:
+        return None
+    return {
+        "date": row.get("date"),
+        "close": row.get("price"),
+        "volume": row.get("volume"),
+        "symbol": row.get("symbol", symbol),
+        "source": row.get("source"),
+    }
+
+class ViDataApi:
+    """Thin GsDataApi-style router for committee scripts."""
+    @staticmethod
+    def build_market_data_query(mkt_assets, mkt_type=None):
+        return {"assets": mkt_assets, "type": mkt_type}
+
+    @staticmethod
+    async def get_market_data(query=None, symbols=None, provider="yahoo", days=90):
+        syms = symbols
+        if syms is None and isinstance(query, dict):
+            syms = query.get("assets") or query.get("symbols")
+        if syms is None and isinstance(query, (list, tuple)):
+            syms = list(query)
+        if isinstance(syms, str):
+            syms = [syms]
+        if not syms:
+            raise ValueError("ViDataApi.get_market_data requires symbols")
+        out = {}
+        for sym in syms:
+            out[str(sym).strip().upper()] = await get_candles(str(sym), days=days, provider=provider)
+        return out
+
+    @staticmethod
+    async def get_prices(symbols, provider="yahoo"):
+        return await get_prices(symbols, provider=provider)
+
+def _closes(closes):
+    xs = list(closes)
+    if xs and isinstance(xs[0], dict):
+        xs = [r["close"] for r in xs]
+    return [float(x) for x in xs if x is not None]
+
+def returns(closes):
+    xs = list(closes)
+    if xs and isinstance(xs[0], dict):
+        xs = [r["close"] for r in xs]
+    out = [None]
+    for i in range(1, len(xs)):
+        prev = xs[i - 1]
+        out.append(None if not prev else (xs[i] / prev - 1.0))
+    return out
+
+def volatility(closes, window=22):
+    rets = [r for r in returns(closes) if r is not None]
+    if len(rets) < 2:
+        return None
+    w = rets[-int(window):] if len(rets) >= int(window) else rets
+    mean = sum(w) / len(w)
+    var = sum((x - mean) ** 2 for x in w) / max(1, len(w) - 1)
+    return math.sqrt(var) * math.sqrt(252)
+
+def moving_average(closes, window=22):
+    xs = list(closes)
+    if xs and isinstance(xs[0], dict):
+        xs = [r["close"] for r in xs]
+    w = int(window)
+    out = []
+    for i in range(len(xs)):
+        if i + 1 < w:
+            out.append(None)
+        else:
+            chunk = xs[i + 1 - w : i + 1]
+            out.append(sum(chunk) / w)
+    return out
+
+sma = moving_average
+
+def ema(closes, span=22):
+    xs = _closes(closes)
+    if not xs:
+        return []
+    a = 2.0 / (int(span) + 1)
+    out = [xs[0]]
+    for i in range(1, len(xs)):
+        out.append(a * xs[i] + (1 - a) * out[-1])
+    return out
+
+exponential_moving_average = ema
+
+def change(closes):
+    xs = _closes(closes)
+    if not xs:
+        return []
+    x0 = xs[0]
+    return [x - x0 for x in xs]
+
+def index(closes, initial=1):
+    xs = _closes(closes)
+    if not xs or xs[0] == 0:
+        return [None] * len(xs)
+    x0 = xs[0]
+    return [float(initial) * x / x0 for x in xs]
+
+def percentiles(closes, window=None):
+    xs = _closes(closes)
+    n = len(xs)
+    w = int(window) if window is not None else n
+    out = []
+    for i in range(n):
+        start = 0 if window is None else max(0, i + 1 - w)
+        sample = xs[start : i + 1]
+        if not sample:
+            out.append(None)
+            continue
+        v = xs[i]
+        below = sum(1 for s in sample if s < v)
+        equal = sum(1 for s in sample if s == v)
+        out.append(100.0 * (below + 0.5 * equal) / len(sample))
+    return out
+
+def momentum(closes, window=22):
+    """Price momentum: close / close[n] - 1."""
+    xs = _closes(closes)
+    w = int(window)
+    out = []
+    for i in range(len(xs)):
+        if i < w or xs[i - w] == 0:
+            out.append(None)
+        else:
+            out.append(xs[i] / xs[i - w] - 1.0)
+    return out
+
+def _series(closes):
+    return _closes(closes)
+
+def correlation(a, b):
+    """Pearson correlation of two price/return series (aligned length)."""
+    xa, xb = _series(a), _series(b)
+    n = min(len(xa), len(xb))
+    if n < 3:
+        return None
+    xa, xb = xa[-n:], xb[-n:]
+    ma = sum(xa) / n
+    mb = sum(xb) / n
+    num = sum((xa[i] - ma) * (xb[i] - mb) for i in range(n))
+    da = math.sqrt(sum((x - ma) ** 2 for x in xa))
+    db = math.sqrt(sum((x - mb) ** 2 for x in xb))
+    if da == 0 or db == 0:
+        return None
+    return num / (da * db)
+
+def max_drawdown(closes):
+    """Max drawdown as a negative fraction (e.g. -0.12 = -12%)."""
+    xs = _series(closes)
+    if len(xs) < 2:
+        return None
+    peak = xs[0]
+    mdd = 0.0
+    for x in xs:
+        if x > peak:
+            peak = x
+        if peak > 0:
+            dd = x / peak - 1.0
+            if dd < mdd:
+                mdd = dd
+    return mdd
+
+def zscores(closes, window=252):
+    xs = _closes(closes)
+    w = int(window)
+    out = []
+    for i in range(len(xs)):
+        if i + 1 < w:
+            out.append(None)
+        else:
+            chunk = xs[i + 1 - w : i + 1]
+            mean = sum(chunk) / w
+            var = sum((x - mean) ** 2 for x in chunk) / max(1, w - 1)
+            std = math.sqrt(var)
+            out.append(None if std == 0 else (xs[i] - mean) / std)
+    return out
+
+def beta(asset, benchmark, window=252):
+    ra = [r for r in returns(asset)]
+    rb = [r for r in returns(benchmark)]
+    n = min(len(ra), len(rb))
+    w = int(window)
+    out = [None] * n
+    for i in range(n):
+        if i + 1 < w + 1:
+            continue
+        aa = [x for x in ra[i + 1 - w : i + 1] if x is not None]
+        bb = [x for x in rb[i + 1 - w : i + 1] if x is not None]
+        m = min(len(aa), len(bb))
+        if m < 3:
+            continue
+        aa, bb = aa[-m:], bb[-m:]
+        ma, mb = sum(aa) / m, sum(bb) / m
+        cov = sum((aa[j] - ma) * (bb[j] - mb) for j in range(m)) / (m - 1)
+        var = sum((bb[j] - mb) ** 2 for j in range(m)) / (m - 1)
+        out[i] = None if var == 0 else cov / var
+    return out
+
+def annualized_return(closes, trading_days=252):
+    xs = _closes(closes)
+    if len(xs) < 2 or xs[0] == 0:
+        return 0.0
+    total = xs[-1] / xs[0] - 1.0
+    years = len(xs) / float(trading_days)
+    if years <= 0:
+        return 0.0
+    return float((1 + total) ** (1 / years) - 1)
+
+def sharpe_ratio(closes, risk_free_rate=0.0, trading_days=252):
+    rets = [r for r in returns(closes) if r is not None]
+    if len(rets) < 2:
+        return 0.0
+    mean = sum(rets) / len(rets)
+    var = sum((x - mean) ** 2 for x in rets) / (len(rets) - 1)
+    std = math.sqrt(var)
+    if std == 0:
+        return 0.0
+    excess = mean - (risk_free_rate / trading_days)
+    return float(math.sqrt(trading_days) * excess / std)
+
+def rsi(closes, period=14):
+    xs = _closes(closes)
+    p = int(period)
+    out = [None] * len(xs)
+    if len(xs) < p + 1:
+        return out
+    gains, losses = [], []
+    for i in range(1, len(xs)):
+        d = xs[i] - xs[i - 1]
+        gains.append(max(d, 0.0))
+        losses.append(max(-d, 0.0))
+    avg_g = sum(gains[:p]) / p
+    avg_l = sum(losses[:p]) / p
+    rs = None if avg_l == 0 else avg_g / avg_l
+    out[p] = 100.0 if rs is None else 100.0 - (100.0 / (1.0 + rs))
+    alpha = 1.0 / p
+    for i in range(p, len(gains)):
+        avg_g = (1 - alpha) * avg_g + alpha * gains[i]
+        avg_l = (1 - alpha) * avg_l + alpha * losses[i]
+        rs = None if avg_l == 0 else avg_g / avg_l
+        out[i + 1] = 100.0 if rs is None else 100.0 - (100.0 / (1.0 + rs))
+    return out
+
+def macd(closes, fast=12, slow=26, signal=9):
+    xs = _closes(closes)
+    def ema(series, span):
+        if not series:
+            return []
+        a = 2.0 / (span + 1)
+        out = [series[0]]
+        for i in range(1, len(series)):
+            out.append(a * series[i] + (1 - a) * out[-1])
+        return out
+    ef, es = ema(xs, fast), ema(xs, slow)
+    line = [ef[i] - es[i] for i in range(len(xs))]
+    sig = ema(line, signal)
+    hist = [line[i] - sig[i] for i in range(len(xs))]
+    return line, sig, hist
+
+def bollinger_bands(closes, period=20, stddev=2):
+    xs = _closes(closes)
+    p, k = int(period), float(stddev)
+    upper, middle, lower = [], [], []
+    for i in range(len(xs)):
+        if i + 1 < p:
+            upper.append(None); middle.append(None); lower.append(None)
+        else:
+            chunk = xs[i + 1 - p : i + 1]
+            m = sum(chunk) / p
+            var = sum((x - m) ** 2 for x in chunk) / max(1, p - 1)
+            s = math.sqrt(var)
+            middle.append(m)
+            upper.append(m + k * s)
+            lower.append(m - k * s)
+    return upper, middle, lower
+
+def _is_series(x):
+    """True for list/tuple/array-like (not str/bytes/dict/number)."""
+    if isinstance(x, (list, tuple)):
+        return True
+    if isinstance(x, (str, bytes, dict, int, float, bool)) or x is None:
+        return False
+    return hasattr(x, "__len__") and hasattr(x, "__getitem__")
+
+def ma_cross_signal(closes, fast=10, slow=30):
+    """Long when fast MA > slow MA.
+    Accepts either:
+      ma_cross_signal(closes, fast=10, slow=30)
+      ma_cross_signal(ma10, ma30)  # two precomputed MA series
+    """
+    # Two MA series: ma_cross_signal(ma10, ma30) → fast is a series
+    if _is_series(fast):
+        a, b = list(closes), list(fast)
+        n = min(len(a), len(b))
+        out = [0] * n
+        for i in range(n):
+            fa, fb = a[i], b[i]
+            if fa is None or fb is None:
+                out[i] = 0
+                continue
+            try:
+                out[i] = 1 if float(fa) > float(fb) else 0
+            except (TypeError, ValueError):
+                out[i] = 0
+        return out
+
+    xs = _closes(closes)
+    n = len(xs)
+    out = [0] * n
+    try:
+        fwin, swin = int(fast), int(slow)
+    except (TypeError, ValueError):
+        return out
+    if n < swin or fwin < 1 or swin <= fwin:
+        return out
+    for i in range(swin - 1, n):
+        f = sum(xs[i + 1 - fwin : i + 1]) / fwin
+        s = sum(xs[i + 1 - swin : i + 1]) / swin
+        out[i] = 1 if f > s else 0
+    return out
+
+def backtest(candles, signal, fee_bps=10, trading_days=252, initial_capital=None, **kwargs):
+    """Next-bar educational backtest. Same rules as vi_browser.backtest.
+    equity is normalized to 1.0; optional initial_capital scales the series for display."""
+    closes = _closes(candles)
+    n = len(closes)
+    if n < 2:
+        eq0 = [1.0] * max(n, 1)
+        if initial_capital is not None and float(initial_capital) > 0:
+            eq0 = [e * float(initial_capital) for e in eq0]
+        return {
+            "equity": eq0,
+            "rets": [0.0] * n,
+            "positions": [0.0] * n,
+            "metrics": {
+                "total_return": 0.0, "mdd": 0.0, "sharpe": 0.0, "cagr": 0.0,
+                "bars": n, "fee_bps": float(fee_bps),
+            },
+        }
+    sig = [float(x) if x is not None else 0.0 for x in signal]
+    if len(sig) < n:
+        sig = sig + [0.0] * (n - len(sig))
+    elif len(sig) > n:
+        sig = sig[:n]
+    positions = [0.0] * n
+    rets = [0.0] * n
+    equity = [1.0] * n
+    fee = float(fee_bps) / 10000.0
+    for i in range(1, n):
+        positions[i] = sig[i - 1]
+        prev_c, cur_c = closes[i - 1], closes[i]
+        raw = positions[i] * (cur_c / prev_c - 1.0) if prev_c else 0.0
+        rets[i] = raw - abs(positions[i] - positions[i - 1]) * fee
+        equity[i] = equity[i - 1] * (1.0 + rets[i])
+    total_return = equity[-1] / equity[0] - 1.0
+    peak, mdd = equity[0], 0.0
+    for e in equity:
+        if e > peak:
+            peak = e
+        if peak > 0:
+            dd = e / peak - 1.0
+            if dd < mdd:
+                mdd = dd
+    active = rets[1:]
+    if len(active) >= 2:
+        mean = sum(active) / len(active)
+        var = sum((x - mean) ** 2 for x in active) / (len(active) - 1)
+        std = math.sqrt(var) if var > 0 else 0.0
+        sharpe = (mean / std) * math.sqrt(trading_days) if std > 0 else 0.0
+    else:
+        sharpe = 0.0
+    years = (n - 1) / float(trading_days)
+    cagr = float(equity[-1] ** (1.0 / years) - 1.0) if years > 0 and equity[-1] > 0 else 0.0
+    if initial_capital is not None and float(initial_capital) > 0:
+        scale = float(initial_capital)
+        equity = [e * scale for e in equity]
+    return {
+        "equity": equity,
+        "rets": rets,
+        "positions": positions,
+        "metrics": {
+            "total_return": float(total_return),
+            "mdd": float(mdd),
+            "sharpe": float(sharpe),
+            "cagr": float(cagr),
+            "bars": n,
+            "fee_bps": float(fee_bps),
+        },
+    }
+
+vi_browser.get_candles = get_candles
+vi_browser.get_prices = get_prices
+vi_browser.get_last_price = get_last_price
+vi_browser.get_asset = get_asset
+vi_browser.ViDataApi = ViDataApi
+vi_browser.returns = returns
+vi_browser.volatility = volatility
+vi_browser.moving_average = moving_average
+vi_browser.sma = sma
+vi_browser.ema = ema
+vi_browser.exponential_moving_average = exponential_moving_average
+vi_browser.change = change
+vi_browser.index = index
+vi_browser.percentiles = percentiles
+vi_browser.momentum = momentum
+vi_browser.correlation = correlation
+vi_browser.max_drawdown = max_drawdown
+vi_browser.zscores = zscores
+vi_browser.beta = beta
+vi_browser.annualized_return = annualized_return
+vi_browser.sharpe_ratio = sharpe_ratio
+vi_browser.rsi = rsi
+vi_browser.macd = macd
+vi_browser.bollinger_bands = bollinger_bands
+vi_browser.backtest = backtest
+vi_browser.ma_cross_signal = ma_cross_signal
+vi_browser.show_chart = show_chart
+sys.modules["vi_browser"] = vi_browser
+
+# ── Phase 3 thin GS-name façade (vi_compat) ──────────────
+# Maps common gs_quant.timeseries / GsSession names onto vi_browser.
+# Not a GS Quant port — committee scripts that import GS names keep running.
+_gs_names = (
+    "get_candles", "get_prices", "get_last_price", "get_asset", "ViDataApi",
+    "returns", "volatility", "moving_average", "sma", "ema", "exponential_moving_average",
+    "change", "index", "percentiles", "momentum", "correlation", "max_drawdown",
+    "zscores", "beta", "annualized_return", "sharpe_ratio", "rsi", "macd",
+    "bollinger_bands", "backtest", "ma_cross_signal", "show_chart",
+)
+vi_compat = types.ModuleType("vi_compat")
+gs_quant = types.ModuleType("gs_quant")
+gs_ts = types.ModuleType("gs_quant.timeseries")
+for _n in _gs_names:
+    if hasattr(vi_browser, _n):
+        setattr(gs_ts, _n, getattr(vi_browser, _n))
+        setattr(vi_compat, _n, getattr(vi_browser, _n))
+gs_quant.timeseries = gs_ts
+
+class GsSession:
+    @staticmethod
+    def use(*args, **kwargs):
+        print("[vi_compat] GsSession.use → no-op (browser stage uses vi_browser)")
+        return None
+
+gs_session = types.ModuleType("gs_quant.session")
+gs_session.GsSession = GsSession
+gs_quant.session = gs_session
+vi_compat.GsSession = GsSession
+sys.modules["vi_compat"] = vi_compat
+sys.modules["gs_quant"] = gs_quant
+sys.modules["gs_quant.timeseries"] = gs_ts
+sys.modules["gs_quant.session"] = gs_session
+`;
+
+let pyodidePromise = null;
+let lastLoadMs = null;
+
+export function getLastLoadMs() {
+  return lastLoadMs;
+}
+
+export function loadPyodideRuntime(onStatus) {
+  if (pyodidePromise) return pyodidePromise;
+
+  pyodidePromise = (async () => {
+    onStatus?.("loading");
+    const t0 = performance.now();
+    if (!globalThis.loadPyodide) {
+      await new Promise((resolve, reject) => {
+        const s = document.createElement("script");
+        s.src = `${PYODIDE_INDEX}pyodide.js`;
+        s.onload = resolve;
+        s.onerror = () => reject(new Error("Failed to load pyodide.js"));
+        document.head.appendChild(s);
+      });
+    }
+
+    const pyodide = await globalThis.loadPyodide({ indexURL: PYODIDE_INDEX });
+    await pyodide.runPythonAsync(BOOTSTRAP);
+    lastLoadMs = Math.round(performance.now() - t0);
+    onStatus?.("ready");
+    return pyodide;
+  })().catch((err) => {
+    onStatus?.("error");
+    pyodidePromise = null;
+    lastLoadMs = null;
+    throw err;
+  });
+
+  return pyodidePromise;
+}
+
+function indentBlock(code) {
+  return code
+    .replace(/\r\n/g, "\n")
+    .split("\n")
+    .map((ln) => "    " + ln)
+    .join("\n");
+}
+
+export async function runPython(code) {
+  const pyodide = await loadPyodideRuntime();
+  try {
+    delete globalThis.__VQ_CHART__;
+  } catch {
+    globalThis.__VQ_CHART__ = null;
+  }
+  const body = indentBlock(code.trim() ? code : "pass");
+  const script = `
+import sys, traceback
+from io import StringIO
+
+async def __vq_entry():
+    from vi_browser import (
+        get_candles, get_prices, get_last_price, get_asset, ViDataApi,
+        returns, volatility, moving_average, sma, ema, exponential_moving_average,
+        change, index, percentiles, momentum,
+        correlation, max_drawdown, zscores, beta,
+        annualized_return, sharpe_ratio, rsi, macd, bollinger_bands,
+        backtest, ma_cross_signal, show_chart,
+    )
+${body}
+
+_buf = StringIO()
+_stdout, _stderr = sys.stdout, sys.stderr
+sys.stdout = _buf
+sys.stderr = _buf
+_err = None
+try:
+    await __vq_entry()
+except Exception:
+    _err = traceback.format_exc()
+finally:
+    sys.stdout = _stdout
+    sys.stderr = _stderr
+(_err or "") + _buf.getvalue()
+`;
+  const text = String((await pyodide.runPythonAsync(script)) ?? "");
+  return {
+    ok: !text.includes("Traceback (most recent call last)"),
+    text: text || "(no output)\n",
+    chart: globalThis.__VQ_CHART__ || null,
+  };
+}
+
+export const EXAMPLE_CODE = `from vi_browser import get_candles, momentum, volatility, show_chart
+
+TICKERS = ["NVDA", "MU", "SNDK", "AVGO"]
+norm = {}
+for sym in TICKERS:
+    c = await get_candles(sym, days=180, provider="yahoo")
+    closes = [x["close"] for x in c]
+    base = closes[0] or 1.0
+    norm[sym] = [x / base for x in closes]
+    print(sym, "vol22", round(volatility(closes, 22) or 0, 4), "mom22", round(momentum(closes, 22)[-1] or 0, 4))
+show_chart(norm, title="Semi basket normalized", series_label="norm")
+`;

@@ -14,7 +14,9 @@
     "upload-static": "bash scripts/upload-static.sh",
     "dev": "wrangler dev",
     "deploy:worker": "wrangler deploy",
-    "deploy:pages": "bash -c 'npm run build:content && cd ../pages && npx wrangler pages deploy . --project-name=vibequant-web --commit-dirty=true'",
+    "deploy:pages": "bash -c 'npm run build:content && npm run sync:play && cd ../pages && npx wrangler pages deploy . --project-name=vibequant-web --commit-dirty=true'",
+    "sync:play": "bash -c 'rsync -a --delete --exclude wrangler.toml --exclude .wrangler ../pages-play/ ../pages/play/'",
+    "deploy:play": "bash -c 'npm run sync:play && cd ../pages && npx wrangler pages deploy . --project-name=vibequant-web --commit-dirty=true'",
     "build:content": "npm --prefix ../content run build",
     "typecheck": "tsc --noEmit"
   },

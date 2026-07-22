@@ -75,6 +75,12 @@ print(f"   VIBEQUANT_CDN_BASE={cdn!r}")
 PY
 echo ""
 
+if [[ -n "${SITE_URL:-}" ]]; then
+  echo "   SITE_URL=$SITE_URL"
+  SITE_URL="$SITE_URL" node "$ROOT/../content/build.mjs"
+  echo ""
+fi
+
 echo "3) Pages: $PAGES_PROJECT ← $PAGES_DIR"
 echo "   (deploy from pages/ — no --config; Pages forbids custom wrangler paths)"
 WRANGLER_BIN="$ROOT/node_modules/.bin/wrangler"

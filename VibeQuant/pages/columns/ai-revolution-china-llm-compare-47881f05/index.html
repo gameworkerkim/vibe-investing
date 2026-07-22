@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>중국 LLM, 기반 핵심 기술이 뭘까? — VibeQuant</title>
+  <meta name="description" content="중국 LLM을 설명하는 글에서 아직도 반복되는 구도가 있다. &quot;DeepSeek은 순수 강화학습(RL)으로 추론을 잡았고, GLM은 도구 호출과 정렬에 강하며, Kimi는 초장문 읽기에 특화됐다&quot;는 구석기 시대 이야기이다." />
+  <link rel="canonical" href="https://docs.vibequant.cc/columns/ai-revolution-china-llm-compare-47881f05/" />
+  <meta property="og:title" content="중국 LLM, 기반 핵심 기술이 뭘까?" />
+  <meta property="og:description" content="중국 LLM을 설명하는 글에서 아직도 반복되는 구도가 있다. &quot;DeepSeek은 순수 강화학습(RL)으로 추론을 잡았고, GLM은 도구 호출과 정렬에 강하며, Kimi는 초장문 읽기에 특화됐다&quot;는 구석기 시대 이야기이다." />
+  <meta property="og:url" content="https://docs.vibequant.cc/columns/ai-revolution-china-llm-compare-47881f05/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"중국 LLM, 기반 핵심 기술이 뭘까?","description":"중국 LLM을 설명하는 글에서 아직도 반복되는 구도가 있다. \"DeepSeek은 순수 강화학습(RL)으로 추론을 잡았고, GLM은 도구 호출과 정렬에 강하며, Kimi는 초장문 읽기에 특화됐다\"는 구석기 시대 이야기이다.","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://docs.vibequant.cc/columns/ai-revolution-china-llm-compare-47881f05/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/China_LLM_Compare.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link is-active" href="../../columns/">Columns</a>
+        <a class="site-nav-link" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../columns/">Columns</a> · AI · LLM · 빅테크</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">AI · LLM · 빅테크</p>
+        <h1>중국 LLM, 기반 핵심 기술이 뭘까?</h1>
+        <p class="lede">Kimi K3가 드러낸 2026년 중국 모델의 진짜 경쟁 포인트</p>
+        <p class="article-byline">2026년 7월 22일 기준</p>
+      </header>
+      <div class="article-body prose"><h2>들어가며, 먼저 낡은 지도를 버려야 한다</h2>
+<p>중국 LLM을 설명하는 글에서 아직도 반복되는 구도가 있다. &quot;DeepSeek은 순수 강화학습(RL)으로 추론을 잡았고, GLM은 도구 호출과 정렬에 강하며, Kimi는 초장문 읽기에 특화됐다&quot;는 구석기 시대 이야기이다.</p>
+<p>이 구도는 2025년 상반기까지는 대체로 맞았다. 2026년 7월 현재로는 거의 전부 틀렸다.</p>
+<p>2026년 7월 16일 Moonshot AI가 공개한 <strong>Kimi K3</strong>는 이 지도가 왜 폐기돼야 하는지를 가장 선명하게 보여주는 사례다. 2.8조 파라미터, 100만 토큰 컨텍스트, 네이티브 멀티모달, 상시 추론 모드를 갖춘 이 모델은 &quot;장문 읽기 특화 모델&quot;이라는 기존 Kimi의 이미지와 아무 관계가 없다. 오히려 GPU 커널을 스스로 최적화하고, Triton 유사 컴파일러를 처음부터 구현하고, 48시간 자율 실행으로 자기 아키텍처를 돌릴 칩을 설계한 사례가 공개 자료의 절반 이상을 차지하고 있다.</p>
+<p>이 칼럼은 두 가지를 이야기할 것이다. </p>
+<p>첫째, 널리 유통되는 오해를 조목조목 정정한다. </p>
+<p>둘째, Kimi K3를 기준점 삼아 2026년 중국 LLM들이 실제로 경쟁하고 있는 기술의 핵심과 방향이 무엇인지 짚는다. </p>
+<p>결론부터 말하면, <strong>경쟁하는 LLM 기술 분야는 강화학습 알고리즘이 아니라 어텐션의 비용 구조</strong>다.</p>
+<hr>
+<h2>1. 널리 퍼진 오해 정정</h2>
+<table>
+<thead>
+<tr>
+<th align="left">흔한 서술</th>
+<th align="left">실제</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Kimi는 전통적 Dense(밀집) 구조</td>
+<td align="left"><strong>틀림.</strong> K2(1T)부터 대규모 MoE. K3는 2.8조 파라미터에 896개 전문가 중 16개만 활성화하는 극희소 MoE</td>
+</tr>
+<tr>
+<td align="left">Kimi 최신 모델은 k1.5</td>
+<td align="left"><strong>틀림.</strong> k1.5(2025.1) → K2 → K2 Thinking → K2.5 → K2.6 → K3(2026.7.16). 1년 반 사이 여섯 세대</td>
+</tr>
+<tr>
+<td align="left">Kimi 컨텍스트는 100만~1000만 토큰</td>
+<td align="left"><strong>부정확.</strong> 1000만 토큰은 근거 없음. K3는 100만 토큰이며, 이는 중국 주요 랩의 공통 표준이 됐다(DeepSeek V4, GLM-5.2, MiniMax M3 모두 1M)</td>
+</tr>
+<tr>
+<td align="left">Kimi의 RL은 보완 기술일 뿐</td>
+<td align="left"><strong>틀림.</strong>k1.5는 DeepSeek-R1과<strong>같은 날(2025년 1월 20일)</strong> 공개된 RL 추론 논문이었다. Kimi는 RL 후발주자가 아니라 동시 출발자다</td>
+</tr>
+<tr>
+<td align="left">&quot;순수 RL 기반&quot;이라 하면 100% DeepSeek</td>
+<td align="left"><strong>과장.</strong> R1-Zero에 한정된 표현이다. 정식 R1조차 콜드스타트 SFT를 거쳤고, 2026년 현재 RL 기반 추론 훈련은 중국 주요 랩 전부의 기본값이다</td>
+</tr>
+<tr>
+<td align="left">GLM은 표준 PPO + 도구 호출 특화</td>
+<td align="left"><strong>낡음.</strong>GLM-5.2는 744B MoE(활성 약 40B), MIT 라이선스, 1M 컨텍스트의<strong>코딩 우선(coding-first)</strong> 모델이다. Zhipu는 Z.ai로 리브랜딩했고 홍콩 증시에 상장했다</td>
+</tr>
+<tr>
+<td align="left">GLM은 GLM 자체 구조에서 디코더 전용으로 전환</td>
+<td align="left"><strong>부분적으로 맞으나 무의미.</strong> 2026년 시점에서 세 모델 전부 디코더 전용 MoE다. 변별점이 아니다</td>
+</tr>
+<tr>
+<td align="left">DeepSeek은 &quot;추론(Inference) 단계에 RL 적용&quot;</td>
+<td align="left"><strong>번역 오류.</strong> 여기서 추론은 reasoning이지 inference가 아니다. RL은 학습 단계에 적용되며, 추론 시점에 적용되는 게 아니다</td>
+</tr>
+<tr>
+<td align="left">Kimi는 한국어 웹 검색에 최적화</td>
+<td align="left"><strong>근거 없음.</strong> 공식 자료 어디에도 한국어 특화 주장은 없다. 한국 LLM 증류를 했다고 추정</td>
+</tr>
+</tbody></table>
+<p>한 가지 더. GRPO(Group Relative Policy Optimization)를 &quot;가치망 없이 학습해 GPU 메모리를 절약한다&quot;고 설명한 것은 정확하다. 다만 GRPO는 2024년 DeepSeekMath 논문에서 나온 기법이고, 2026년 현재는 사실상 업계 공용 자산이다. 이걸 DeepSeek의 현재 차별점으로 제시하는 건 2년 전의 기술 로드맵을 보는 것과 같다. 진짜 LLM 분야는 하루가 다르게 발전하고 있다.</p>
+<hr>
+<h2>2. Kimi K3: 무엇이 새로운가?</h2>
+<h3>2.1 스펙 개요</h3>
+<table>
+<thead>
+<tr>
+<th align="left">항목</th>
+<th align="left">내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">공개일</td>
+<td align="left">2026년 7월 16일 (가중치는 7월 27일까지 공개 예정)</td>
+</tr>
+<tr>
+<td align="left">총 파라미터</td>
+<td align="left">2.8조 — 공개 가중치 모델 중 세계 최대</td>
+</tr>
+<tr>
+<td align="left">MoE 희소성</td>
+<td align="left">896개 전문가 중 16개 활성화</td>
+</tr>
+<tr>
+<td align="left">컨텍스트</td>
+<td align="left">100만 토큰</td>
+</tr>
+<tr>
+<td align="left">멀티모달</td>
+<td align="left">네이티브 비전 (텍스트·이미지·영상 단일 모델 처리)</td>
+</tr>
+<tr>
+<td align="left">추론 모드</td>
+<td align="left">출시 시점 max effort 상시 적용, low/high는 추후</td>
+</tr>
+<tr>
+<td align="left">라이선스</td>
+<td align="left">Modified MIT</td>
+</tr>
+<tr>
+<td align="left">가격</td>
+<td align="left">입력 $3.00 / 출력 $15.00 (캐시 히트 입력 $0.30)</td>
+</tr>
+</tbody></table>
+<h3>2.2 핵심 기술 ① Kimi Delta Attention (KDA)</h3>
+<p>K3 아키텍처의 핵심은 <strong>시퀀스 축</strong>을 다루는 KDA다.</p>
+<p>Gated DeltaNet과 Mamba2 계열의 게이트 델타 규칙을 정교화한 하이브리드 선형 어텐션으로, 핵심 개선점은 <strong>채널 단위 게이팅</strong>이다. 기존 방식이 망각 게이트 α를 하나의 전역 손잡이로 조절했다면, KDA는 채널별로 메모리를 감쇠시킨다.</p>
+<p>다만 고정 크기 상태(finite-state RNN memory)만으로는 정확한 장거리 검색을 놓친다. 그래서 KDA는 단독으로 쓰이지 않고 <strong>전체 어텐션 레이어와 3:1 비율로 교차 배치</strong>된다. KDA 3개 층마다 풀 어텐션 1개 층을 끼우는 구조다. 이 하이브리드가 전역 검색 능력을 복원하면서 KV 캐시 메모리 절감을 이뤘다.</p>
+<ul>
+<li>KV 캐시 메모리 최대 약 75% 절감</li>
+<li>100만 토큰 컨텍스트에서 디코딩 최대 <strong>6.3배 가속</strong></li>
+</ul>
+<p>이 설계는 하루아침에 나온 게 아니다. Moonshot은 2025년 10월 <code>Kimi Linear</code> 기술 보고서에서 KDA와 3:1 하이브리드 비율을 이미 공개했고, 1.4조 토큰 규모 학습으로 &quot;선형 어텐션 하이브리드가 공정 비교에서 풀 어텐션을 능가한다&quot;는 결과를 제시했다. K3는 그 연구를 3T 규모로 밀어붙인 결과물이다.</p>
+<h3>2.3 핵심 기술 ②: Attention Residuals (AttnRes)</h3>
+<p>KDA가 시퀀스 축이라면 AttnRes는 <strong>깊이(depth) 축</strong>을 다룬다.</p>
+<p>표준 트랜스포머는 각 층의 출력을 항등 스킵 연결로 더한다(x + f(x)). AttnRes는 이를 대체해, 층을 거치며 표현을 균일하게 누적하는 대신 <strong>선택적으로 검색</strong>한다. 성능 수치는 다음과 같다.</p>
+<ul>
+<li>학습 효율 약 <strong>25% 향상</strong>- 추가 연산 오버헤드<strong>2% 미만</strong>여기서 흥미로운 지점이 있다. DeepSeek-V4 역시 표준 잔차 연결을<strong>mHC(Manifold-Constrained Hyper-Connections)</strong>로 교체했다. 서로 다른 두 랩이 같은 시기에, 같은 결론에 도달했다. 즉 2026년 스케일링의 병목은 어텐션만이 아니라 <strong>깊은 네트워크의 신호 전파 안정성</strong>에도 있다는 뜻이다. 이건 우연의 일치가 아니라 업계 공통 진단으로 봐야 한다.</li>
+</ul>
+<h3>2.4 핵심 기술 ③: Stable LatentMoE와 학습 인프라</h3>
+<p>896개 중 16개 활성화는 극단적 희소성이다. 이 수준에서는 라우팅과 최적화 자체가 1차 문제가 된다. K3의 대응은 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th align="left">기법</th>
+<th align="left">역할</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Quantile Balancing</td>
+<td align="left">라우터 점수 분위수에서 전문가 할당을 직접 도출. 휴리스틱 업데이트와 민감한 밸런싱 하이퍼파라미터를 제거</td>
+</tr>
+<tr>
+<td align="left">Per-Head Muon</td>
+<td align="left">Muon 옵티마이저를 확장해 어텐션 헤드를 개별 최적화</td>
+</tr>
+<tr>
+<td align="left">SiTU (Sigmoid Tanh Unit)</td>
+<td align="left">활성화 제어 개선</td>
+</tr>
+<tr>
+<td align="left">Gated MLA</td>
+<td align="left">어텐션 선택성 개선</td>
+</tr>
+<tr>
+<td align="left">MXFP4/MXFP8 QAT</td>
+<td align="left">SFT 단계부터 양자화 인식 학습. 가중치 MXFP4 + 활성값 MXFP8</td>
+</tr>
+<tr>
+<td align="left">완전 균형 EP 학습</td>
+<td align="left">정적 shape, 크리티컬 패스에서 호스트 동기화 제거</td>
+</tr>
+</tbody></table>
+<p>이 구조적 변화들의 종합 효과를 Moonshot은 <strong>K2 대비 스케일링 효율 약 2.5배</strong>로 제시한다. 같은 연산량으로 효율적으로 더 좋은 결과를 산출한다는 뜻이다.</p>
+<p>배포 측면에서는 <strong>가속기 64개 이상의 슈퍼노드 구성</strong>을 권장하며, KDA가 기존 prefix caching과 충돌하는 문제를 해결한 구현을 vLLM 커뮤니티에 기여했다. 2.8조 파라미터 모델을 출력 $15/MTok에 서빙할 수 있는 이유가 여기 있다. 코딩 워크로드에서 캐시 히트율 90% 이상을 확보한다는 것이 회사 주장이다.</p>
+<h3>2.5 사례로 본 성격 - &quot;장문 독해&quot;가 아니라 &quot;장기 실행&quot;</h3>
+<p>K3의 공개 사례는 모델의 성격을 명확히 보여주고 있다.</p>
+<ul>
+<li><p><strong>커널 최적화</strong>: 동일 샌드박스에서 최대 24시간, H200과 타사 GPGPU 환경의 4개 과제. Opus 4.8, GPT-5.6 Sol, GPT-5.5를 크게 앞섰고 Fable 5와 경쟁적이었다는 자체 평가. 개발 후반부에는 초기 버전 K3가 팀의 커널 최적화 작업 대부분을 처리했다고 한다. 레이싱 자동차의 경우 운전을 위한 것 외에는 다 제거하는 것처럼 OS 커널의 병목과 불필요한 것을 다 삭제하고 불필요한 데몬을 비롯해 커널 스케쥴러까지 최적화한 것이다.</p>
+</li>
+<li><p><strong>GPU 컴파일러</strong>: MLIR 위에 자체 타일 수준 IR을 얹은 Triton 유사 컴파일러 MiniTriton을 구현. 일부 워크로드에서 Triton을 상회했고, nanoGPT 학습을 안정적으로 완주했다.</p>
+</li>
+<li><p><strong>칩 설계</strong>: 48시간 자율 실행으로 Nangate 45nm 라이브러리 기반 칩 설계·최적화·검증. 4mm² 내 100MHz 타이밍 클로징, 시뮬레이션 기준 8,700 토큰/초 디코딩.</p>
+</li>
+<li><p><strong>연구 코딩</strong>: 계산 천체물리학의 I-Love-Q 보편 관계 재현. 논문 20편 이상 교차 검증, 300개 이상 상태방정식 평가, 3,000줄 이상 파이썬 코드 생성을 약 2시간에 완료.</p>
+</li>
+</ul>
+<p>핵심은 &quot;긴 문서를 읽는다&quot;가 아니라 &quot;긴 시간 스스로 학습하고 추론해서 일한다&quot;다. Kimi의 정체성은 <strong>long-context에서 long-horizon으로</strong> 이동했다.</p>
+<hr>
+<h2>3. 경쟁 모델의 기술 노선</h2>
+<h3>3.1 DeepSeek-V4 - 압축으로 100만 토큰을 경제적으로 만들기</h3>
+<p>2026년 4월 24일 프리뷰 공개. V 계열(범용)과 R 계열(추론)을 하나로 통합했다.</p>
+<table>
+<thead>
+<tr>
+<th align="left">항목</th>
+<th align="left">V4-Pro</th>
+<th align="left">V4-Flash</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">총 파라미터</td>
+<td align="left">1.6조 (활성 49B)</td>
+<td align="left">284B (활성 13B)</td>
+</tr>
+<tr>
+<td align="left">사전학습 토큰</td>
+<td align="left">33조</td>
+<td align="left">32조</td>
+</tr>
+<tr>
+<td align="left">컨텍스트</td>
+<td align="left">100만</td>
+<td align="left">100만</td>
+</tr>
+</tbody></table>
+<p>아키텍처 핵심은 <strong>하이브리드 어텐션</strong>이다.</p>
+<ul>
+<li><strong>CSA(Compressed Sparse Attention)</strong>: KV 캐시의 m개 토큰마다 하나의 엔트리로 통합한 뒤, 그 엔트리들에 대해 희소 top-k 선택을 적용</li>
+<li><strong>HCA(Heavily Compressed Attention)</strong>: 훨씬 큰 압축률 m&#39;(≫m)을 쓰되, 결과 엔트리에 대해서는 조밀 어텐션을 유지. 희소 선택 단계가 불필요하다</li>
+</ul>
+<p>두 방식을 교차 배치한 결과, 100만 토큰 설정에서 V3.2 대비 <strong>토큰당 추론 FLOPs 27%, KV 캐시 10%</strong>만 사용한다. 100만 토큰이 시연용이 아니라 재무적으로 감당 가능한 기본값이 된 이유다.</p>
+<p>여기에 앞서 언급한 mHC로 잔차 연결을 강화하고, <strong>Muon 옵티마이저</strong>를 채택했다. MoE는 DeepSeekMoE 구조를 유지하되 소폭 조정, MTP(Multi-Token Prediction)는 V3와 동일하다.</p>
+<p>주목할 대목은 Muon이다. Muon을 대규모에서 실증한 것은 Moonshot(Moonlight)이었고, DeepSeek이 이를 채택했다. 중국 랩 사이의 기술 이전이 논문 단위로 빠르게 일어나고 있다는 신호다.</p>
+<p>Claude Code, OpenClaw, OpenCode 등 주요 에이전트 하네스에 맞춘 미세조정도 함께 진행됐다. 출력 $0.87/MTok로 가격 경쟁력은 여전히 압도적이다.</p>
+<h3>3.2 GLM-5.2 - 인덱스 재사용과 라이선스 전략</h3>
+<p>2026년 6월 13일 공개. 744B MoE(활성 약 40B), 100만 토큰, <strong>MIT 라이선스에 지역 제한 없음</strong>.</p>
+<p>아키텍처 변경점은 <strong>IndexShare</strong>다. MLA와 DSA를 계승하되, 희소 어텐션의 top-k 인덱서를 <strong>4개 층마다 재사용</strong>한다. 층마다 인덱스를 새로 계산하지 않는 것만으로 100만 토큰 컨텍스트에서 토큰당 연산을 약 2.9배 절감한다는 것이 회사 설명이다.</p>
+<p>독립 평가에서 Terminal-Bench 2.1 81.0, SWE-bench Pro 62.1, Artificial Analysis Intelligence Index 51점으로 오픈 가중치 모델 중 최상위권을 기록했다. GLM-5.1의 약 20만 토큰에서 100만으로 5배 확장된 것도 이번 세대의 변화다.</p>
+<p>전략적 맥락도 짚어둘 필요가 있다. GLM-5.2의 MIT 오픈소스 발표는 미국 상무부가 Anthropic에 Fable 5·Mythos 5의 해외 접근 차단을 지시한 지 이틀 뒤에 나왔다. 수출 통제에 대한 직접적 대응이라는 성격이 분명하다. 기술 선택과 라이선스 선택이 지정학과 분리되지 않는다는 점을 보여주는 사례다. </p>
+<p>Z.ai는 2026년 초 홍콩 증시에 상장하며 &quot;세계 첫 대형모델 상장사&quot;가 됐다. 그리고 Z.ai 주식은 불과 3주만에 반토막 이상 하락했다. MiniMax 주가는 더 심하다. 올해 3월 고점 대비 5분의 1이하로 급락했다. </p>
+<p>이같은 주가 폭락의 문제는 기술 우위가 너무 짧다는 것이다. LLM 기업이 최상위 모델을 개발하는 게 매우 어렵고 이를 위해선 막대한 자금이 필요한 것이 문제이다. 이런 반도체 전쟁과 같은 치킨 게임에서 Z.ai는 지난1월 IPO(기업상장)로 5억6000만달러를 조달했지만 불과 6개월만에 40억달러 증자에 너섰다. 이는 매출의 38배에 달하는 막대한 자금이다.</p>
+<p>MiniMax도 지난 2026년 1월 6억2000만달러를 조달했지만 7월에는 신주와 전환사채를 통해 20억달러를 추가로 마련했다. GLM과 MiniMax의 사용량이 늘어도 개발사들의 매출 및 이익으로 이어지지 않은 수도 있다는 점이 투자자들의 우려를 고조시켰고 이번 중국계 LLM 기업의 주가를 주저 앉혔다. </p>
+<h3>3.3 빠뜨리면 안 되는 두 이름 - 알리바바와 미니맥스</h3>
+<p><strong>Qwen (Alibaba)</strong>. 2026년 4월 기준 누적 다운로드 10억 회에 근접하며 전 세계 오픈소스 모델 다운로드의 절반 이상을 차지한다. 컨슈머 앱 MAU는 2억 300만으로 ChatGPT, DouBao에 이어 세계 3위다. 다만 최근 흐름은 역설적이다. 플래그십 3.7 시리즈(Max/Plus)는 API 전용으로 닫혔다. 7월 19일 상하이 WAIC에서 공개한 <strong>Qwen3.8-Max-Preview</strong>는 2.4조 파라미터 멀티모달로 &quot;Fable 5 다음&quot;을 주장했으나, 벤치마크 표도 모델 카드도 라이선스도 활성 파라미터 수도 공개되지 않았다. Kimi K3 공개 이틀 뒤라는 타이밍이 모델 내용보다 더 많은 것을 말해준다.</p>
+<p><strong>MiniMax M3</strong>. 2026년 6월 1일 공개. 저비용 100만 토큰과 네이티브 멀티모달을 하나의 오픈 가중치 모델에 담았고, 오픈 가중치 SWE-Bench Pro에서 59.0%를 기록했다.</p>
+<hr>
+<h2>4. 종합 비교</h2>
+<table>
+<thead>
+<tr>
+<th align="left">구분</th>
+<th align="left">Kimi K3</th>
+<th align="left">DeepSeek-V4-Pro</th>
+<th align="left">GLM-5.2</th>
+<th align="left">Qwen3.8-Max</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">공개일</td>
+<td align="left">2026-07-16</td>
+<td align="left">2026-04-24</td>
+<td align="left">2026-06-13</td>
+<td align="left">2026-07-19 (프리뷰)</td>
+</tr>
+<tr>
+<td align="left">총/활성 파라미터</td>
+<td align="left">2.8조 / 16of896 전문가</td>
+<td align="left">1.6조 / 49B</td>
+<td align="left">744B / 약 40B</td>
+<td align="left">2.4조 / 미공개</td>
+</tr>
+<tr>
+<td align="left">컨텍스트</td>
+<td align="left">100만</td>
+<td align="left">100만</td>
+<td align="left">100만</td>
+<td align="left">미공개</td>
+</tr>
+<tr>
+<td align="left">어텐션 핵심</td>
+<td align="left">KDA 하이브리드 선형 (3:1)</td>
+<td align="left">CSA + HCA 하이브리드</td>
+<td align="left">MLA/DSA + IndexShare</td>
+<td align="left">미공개</td>
+</tr>
+<tr>
+<td align="left">잔차 연결</td>
+<td align="left">AttnRes</td>
+<td align="left">mHC</td>
+<td align="left">표준</td>
+<td align="left">미공개</td>
+</tr>
+<tr>
+<td align="left">옵티마이저</td>
+<td align="left">Per-Head Muon</td>
+<td align="left">Muon</td>
+<td align="left">미공개</td>
+<td align="left">미공개</td>
+</tr>
+<tr>
+<td align="left">양자화</td>
+<td align="left">MXFP4/MXFP8 QAT</td>
+<td align="left">—</td>
+<td align="left">—</td>
+<td align="left">—</td>
+</tr>
+<tr>
+<td align="left">멀티모달</td>
+<td align="left">네이티브 비전</td>
+<td align="left">텍스트 중심</td>
+<td align="left">멀티모달</td>
+<td align="left">멀티모달</td>
+</tr>
+<tr>
+<td align="left">라이선스</td>
+<td align="left">Modified MIT</td>
+<td align="left">오픈 가중치</td>
+<td align="left">MIT, 지역 제한 없음</td>
+<td align="left">&quot;곧 공개&quot;</td>
+</tr>
+<tr>
+<td align="left">출력 가격/MTok</td>
+<td align="left">$15.00</td>
+<td align="left">$0.87</td>
+<td align="left">$4.40</td>
+<td align="left">미공개</td>
+</tr>
+<tr>
+<td align="left">대표 강점</td>
+<td align="left">장기 실행 에이전트, 시각-코딩 결합</td>
+<td align="left">100만 토큰 경제성, 압도적 가성비</td>
+<td align="left">저장소 규모 코딩, 라이선스 자유도</td>
+<td align="left">규모, 생태계</td>
+</tr>
+</tbody></table>
+<p>(참고: 미국 프런티어 모델과의 가격 비교로, Claude Fable 5의 출력 단가는 $50/MTok 수준이다.)</p>
+<hr>
+<h2>5. 그래서 진짜 경쟁하는 필드는 무엇인가?</h2>
+<p>세 모델의 기술 문서를 나란히 놓으면 하나의 패턴이 보인다.</p>
+<p><strong>첫째, 강화학습은 더 이상 변별점이 아니다.</strong>RL 기반 추론 훈련은 2025년 초 DeepSeek-R1과 Kimi k1.5가 같은 날 공개하며 시작됐고, 1년 반 만에 전 랩의 기본 공정이 됐다. GRPO는 공용 자산이다. &quot;누가 RL을 쓰느냐&quot;는 이제 질문이 아니다.<strong>둘째, 진짜 전장은 100만 토큰의 비용 구조다.</strong> 중국의 LLM 대표 기업들이 각기 다른 해법을 내놨다.</p>
+<table>
+<thead>
+<tr>
+<th align="left">랩</th>
+<th align="left">접근</th>
+<th align="left">축</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Moonshot</td>
+<td align="left">선형 어텐션 하이브리드 (KDA 3:1)</td>
+<td align="left">어텐션 메커니즘 자체를 교체</td>
+</tr>
+<tr>
+<td align="left">DeepSeek</td>
+<td align="left">압축 + 희소 선택 (CSA/HCA)</td>
+<td align="left">KV 캐시를 압축</td>
+</tr>
+<tr>
+<td align="left">Z.ai</td>
+<td align="left">인덱서 재사용 (IndexShare)</td>
+<td align="left">희소 선택의 중복 계산을 제거</td>
+</tr>
+</tbody></table>
+<p>같은 문제(100만 토큰을 어떻게 감당 가능한 가격에 서빙할 것인가)에 대한 세 가지 답이다. 이것이 2026년 중국 LLM의 실질적 차별화 지점이다.</p>
+<p><strong>셋째, 기술의 깊이와 집중 포인트에서도 동시 수렴이 일어났다.</strong>Kimi의 AttnRes와 DeepSeek의 mHC는 둘 다 표준 잔차 연결을 대체한다. 서로 다른 팀이 독립적으로 같은 병목을 지목했다는 것은, 이 문제가 실재한다는 강한 증거라고 할 수 있다.<strong>넷째, 포지셔닝은 사실상 하나로 수렴했다.</strong> 세 모델 모두 &quot;장기 실행 에이전틱 코딩&quot;을 1순위 용도로 내세운다. &quot;DeepSeek은 수학, GLM은 도구, Kimi는 문서&quot;라는 분업은 존재하지 않는다. 수렴 진화처럼 각각 개성 있는 LLM 기업들이 전부 같은 시장과 포지셔닝을 하고 있다.</p>
+<hr>
+<h2>6. 냉정하게 볼 지점</h2>
+<p>기술 문서를 읽을 때 마케팅 문구보다 <strong>한계 섹션</strong>이 더 많은 것을 알려준다. Moonshot이 직접 밝힌 K3의 한계 세 가지는 특히 정직하다.</p>
+<ol>
+<li><strong>사고 이력에 민감하다.</strong> K3는 사고 이력 보존 모드로 학습됐다. 에이전트 하네스가 과거 사고 내용을 전부 되돌려주지 못하거나, 다른 모델로 진행하던 세션을 K3로 전환하면 생성 품질이 크게 불안정해진다. 세션 중간 모델 교체는 피해야 한다.</li>
+<li><strong>과도한 능동성.</strong> 장기·고난도 과제 중심 학습의 부작용으로, 사소한 문제나 모호한 의도를 만나면 사용자를 대신해 예상치 못한 결정을 내린다. 경계 안에서만 동작해야 하는 애플리케이션이라면 시스템 프롬프트나 AGENTS.md에 명시적 제약을 걸어야 한다.</li>
+<li><strong>사용자 경험 격차.</strong> 회사 스스로 Fable 5, GPT-5.6 Sol 대비 UX에서 눈에 띄는 격차가 있다고 인정한다.</li>
+</ol>
+<p>여기에 외부 관찰 사항을 더하면 그림이 더 정확해진다.</p>
+<ul>
+<li>공개된 모든 벤치마크는 <strong>API 접근 기준</strong>이며, 가중치가 나오는 7월 27일 전까지 독립 검증이 불가능하다.</li>
+<li>프런티어 모델 대비 <strong>응답 속도가 상당히 느리다</strong>는 보고가 다수 있다.</li>
+<li>2.8조 파라미터를 실제 운용하려면 슈퍼노드급 인프라가 필요하다. &quot;오픈 가중치&quot;와 &quot;실제로 돌릴 수 있음&quot; 사이에는 큰 간극이 있다.</li>
+<li>Qwen3.8 프리뷰처럼, 벤치마크·라이선스·활성 파라미터 없이 파라미터 수만 발표하는 사례가 늘고 있다. 총 파라미터 수는 서빙 비용에 대해 거의 아무것도 말해주지 않는다. <strong>활성 파라미터가 공개되지 않은 발표는 일단 판단을 유보하는 게 맞다.</strong></li>
+</ul>
+<hr>
+<h2>7. 실무 선택 가이드</h2>
+<table>
+<thead>
+<tr>
+<th align="left">상황</th>
+<th align="left">선택</th>
+<th align="left">이유</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">24시간 이상 자율 실행되는 엔지니어링 에이전트</td>
+<td align="left">Kimi K3</td>
+<td align="left">장기 실행 학습 집중, 시각-코드 루프</td>
+</tr>
+<tr>
+<td align="left">스크린샷·CAD·프런트엔드 등 시각 피드백 루프</td>
+<td align="left">Kimi K3</td>
+<td align="left">네이티브 멀티모달</td>
+</tr>
+<tr>
+<td align="left">대량 처리, 비용이 1순위</td>
+<td align="left">DeepSeek-V4</td>
+<td align="left">출력 $0.87, 1M 컨텍스트 표준</td>
+</tr>
+<tr>
+<td align="left">자체 인프라 배포 + 라이선스 제약 최소화</td>
+<td align="left">GLM-5.2</td>
+<td align="left">MIT, 지역 제한 없음, 744B로 상대적 경량</td>
+</tr>
+<tr>
+<td align="left">저장소 규모 리팩터링</td>
+<td align="left">GLM-5.2 / Kimi K3</td>
+<td align="left">Terminal-Bench, SWE 계열 상위</td>
+</tr>
+<tr>
+<td align="left">단일 GPU 로컬 배포</td>
+<td align="left">Qwen 3.6 계열 / MiniMax M3</td>
+<td align="left">소형 MoE 라인업</td>
+</tr>
+<tr>
+<td align="left">경계가 명확해야 하는 프로덕션 워크플로</td>
+<td align="left">K3는 신중히</td>
+<td align="left">과도한 능동성 이슈</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>맺으며</h2>
+<p>2026년 중국 LLM을 이해하는 가장 짧은 요약은 이렇다. <strong>모델 크기 경쟁처럼 보이지만 실제로는 어텐션 비용 구조 경쟁이고, 알고리즘 경쟁처럼 보이지만 실제로는 서빙 경제성 경쟁이다.</strong> </p>
+<p>Kimi K3의 2.8조 파라미터는 헤드라인이지만 본질이 아니다. 본질은 그 크기를 출력 $15/MTok에 서빙 가능하게 만든 KDA와 프리픽스 캐싱이고, 학습을 성립시킨 AttnRes와 Quantile Balancing이다. DeepSeek이 100만 토큰을 V3.2 대비 27% FLOPs로 처리하는 것도, GLM이 인덱서 하나 재사용해 2.9배를 아끼는 것도 같은 종류의 성취다.</p>
+<p>이 기술 전쟁의 지형은 6개월 단위로 바뀐다. Z.ai의 GLM-5.5가 8월로 예상되고, Qwen3.8 정식판과 Kimi K3 가중치·기술보고서가 7월 말로 예고돼 있다. </p>
+<p>지금 쓴 이 글도 반년 뒤면 서두에서 정정한 그 낡은 로드맵과 같은 처지가 될 것이다. 그때를 대비하는 유일한 방법은 모델 이름을 외우는 게 아니라, <strong>어떤 병목을 어떤 방식으로 푸는가?</strong>라는 질문을 계속 붙드는 것이다.</p>
+<hr>
+<h2>참고 자료</h2>
+<ul>
+<li>Moonshot AI, &quot;Kimi K3: Open Frontier Intelligence&quot; — <a href="https://www.kimi.com/blog/kimi-k3">https://www.kimi.com/blog/kimi-k3</a></li>
+<li>Kimi API Platform, Kimi K3 Quickstart — <a href="https://platform.kimi.ai/docs/guide/kimi-k3-quickstart">https://platform.kimi.ai/docs/guide/kimi-k3-quickstart</a></li>
+<li>Kimi Team, &quot;Kimi Linear: An Expressive, Efficient Attention Architecture&quot; — arXiv:2510.26692</li>
+<li>DeepSeek-AI, &quot;DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence&quot; — <a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro">https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro</a></li>
+<li>DeepSeek API Docs, V4 Preview Release — <a href="https://api-docs.deepseek.com/news/news260424/">https://api-docs.deepseek.com/news/news260424/</a></li>
+<li>Z.ai, GLM-5.2 릴리스 블로그 — <a href="https://z.ai/blog/glm-5.2">https://z.ai/blog/glm-5.2</a></li>
+<li>MarkTechPost, DeepSeek-V4 / Kimi K3 / Qwen3.8-Max 분석 기사 (2026.04–07)</li>
+<li>Fortune, &quot;Moonshot&#39;s Kimi K3 pushes Chinese AI into Fable-level territory&quot; (2026.07.16)</li>
+<li>VentureBeat, &quot;China&#39;s Moonshot AI releases Kimi K3...&quot; (2026.07.16)</li>
+<li>Pandaily, &quot;Zhipu AI Open-Sources GLM-5.2 With 1 Million Token Context&quot; (2026.06.14)</li>
+<li>The Decoder, &quot;Alibaba&#39;s Qwen takes on Kimi K3 with open-weight Qwen 3.8&quot; (2026.07.20)</li>
+</ul>
+<p><em>본 칼럼의 수치는 2026년 7월 22일 기준 공개 자료에 근거하며, Kimi K3 벤치마크는 가중치 공개(7월 27일 예정) 전까지 독립 검증되지 않았음을 밝혀둔다.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Revolution/China_LLM_Compare.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

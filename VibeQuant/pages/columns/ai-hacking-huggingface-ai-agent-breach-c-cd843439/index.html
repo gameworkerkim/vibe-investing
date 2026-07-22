@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>방어의 비대칭이 열렸다 — 허깅페이스 AI 에이전트 침해 사건 정밀 분석 — VibeQuant</title>
+  <meta name="description" content="인공지능 업계는 새로운 업계였기 때문에 크게 공격을 당한 일이 적었다. 그로 인해 보안이 허술한 면이 있다. MCP 오염도 최근에 기승을 부렸고, 보안의 책임이 애매한 보안 가이드라인이 있었기에 발생한 것이다. 결국 26년 7월 말, MCP의 보안이 강화되기 시작했다. LLM…" />
+  <link rel="canonical" href="https://docs.vibequant.cc/columns/ai-hacking-huggingface-ai-agent-breach-c-cd843439/" />
+  <meta property="og:title" content="방어의 비대칭이 열렸다 — 허깅페이스 AI 에이전트 침해 사건 정밀 분석" />
+  <meta property="og:description" content="인공지능 업계는 새로운 업계였기 때문에 크게 공격을 당한 일이 적었다. 그로 인해 보안이 허술한 면이 있다. MCP 오염도 최근에 기승을 부렸고, 보안의 책임이 애매한 보안 가이드라인이 있었기에 발생한 것이다. 결국 26년 7월 말, MCP의 보안이 강화되기 시작했다. LLM…" />
+  <meta property="og:url" content="https://docs.vibequant.cc/columns/ai-hacking-huggingface-ai-agent-breach-c-cd843439/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"방어의 비대칭이 열렸다 — 허깅페이스 AI 에이전트 침해 사건 정밀 분석","description":"인공지능 업계는 새로운 업계였기 때문에 크게 공격을 당한 일이 적었다. 그로 인해 보안이 허술한 면이 있다. MCP 오염도 최근에 기승을 부렸고, 보안의 책임이 애매한 보안 가이드라인이 있었기에 발생한 것이다. 결국 26년 7월 말, MCP의 보안이 강화되기 시작했다. LLM…","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://docs.vibequant.cc/columns/ai-hacking-huggingface-ai-agent-breach-c-cd843439/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Huggingface-AI-Agent-Breach-Column.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link is-active" href="../../columns/">Columns</a>
+        <a class="site-nav-link" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../columns/">Columns</a> · AI · LLM · 빅테크</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">AI · LLM · 빅테크</p>
+        <h1>방어의 비대칭이 열렸다 — 허깅페이스 AI 에이전트 침해 사건 정밀 분석</h1>
+        <p class="lede">인공지능 업계는 새로운 업계였기 때문에 크게 공격을 당한 일이 적었다. 그로 인해 보안이 허술한 면이 있다. MCP 오염도 최근에 기승을 부렸고, 보안의 책임이 애매한 보안 가이드라인이 있었기에 발생한 것이다. 결국 26년 7월 말, MCP의 보안이 강화되기 시작했다. LLM…</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>한 줄 요약</strong>: 세계 최대 AI 모델 허브가 &quot;악성 데이터셋&quot;을 지렛대로 삼은 자율 AI 에이전트에게 뚫렸다. 그러나 이 사건의 진짜 뉴스는 침해 자체가 아니라, <em>방어자</em>가 상용 프런티어 모델의 가드레일 때문에 자기 사고를 분석하지 못했다는 데 있다.</p>
+</blockquote>
+<p><strong>인공지능 업계는 새로운 업계였기 때문에 크게 공격을 당한 일이 적었다. 그로 인해 보안이 허술한 면이 있다. MCP 오염도 최근에 기승을 부렸고, 보안의 책임이 애매한 보안 가이드라인이 있었기에 발생한 것이다. 결국 26년 7월 말, MCP의 보안이 강화되기 시작했다. LLM 업계는 경쟁과 성장에 중심을 두다가 기본은 놓친 것이다. 지금 그 댓가를 처음 제대로 치뤘고 앞으로 이와 유사한 사건이 연속될 것이다.</strong></p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>분류</td>
+<td>AI 인프라 침해 / 에이전틱 공격 / IR 방법론</td>
+</tr>
+<tr>
+<td>1차 출처</td>
+<td>Hugging Face 공식 disclosure (2026-07-16)</td>
+</tr>
+<tr>
+<td>사건 발생</td>
+<td>2026년 7월 둘째 주말 (추정)</td>
+</tr>
+<tr>
+<td>공개</td>
+<td>2026-07-16 (목)</td>
+</tr>
+<tr>
+<td>신뢰도(Admiralty)</td>
+<td>A2 — 신뢰 가능한 1차 당사자 발표, 외부 포렌식 검증 진행 중</td>
+</tr>
+<tr>
+<td>TLP</td>
+<td>CLEAR (공개 disclosure 기반)</td>
+</tr>
+<tr>
+<td>작성 목적</td>
+<td>SNS 유통 요약본의 팩트체크 + 데이터 오염 담론 정리</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. 무슨 일이 있었나?</h2>
+<p>허깅페이스는 자사 프로덕션 인프라 일부가 침해됐고, 그 침해가 &quot;처음부터 끝까지 자율 AI 에이전트 시스템에 의해 구동&quot;됐다고 발표했다. 공격 사슬은 다음과 같다.</p>
+<ol>
+<li><strong>초기 접근</strong>: 공격자가 악성 데이터셋을 업로드. 데이터셋 처리 과정의 두 가지 코드 실행 경로 — (a) 원격 코드 데이터셋 로더, (b) 데이터셋 설정 파일의 템플릿 인젝션 — 을 악용해 처리 워커에서 임의 코드를 실행.</li>
+<li><strong>권한 상승·자격증명 탈취</strong>: 노드 수준 권한으로 상승, 클라우드·클러스터 자격증명 수집.</li>
+<li><strong>횡이동</strong>: 주말 동안 여러 내부 클러스터로 확산.</li>
+<li><strong>규모·자동화</strong>: 17,000건 이상의 개별 행동을, 짧게 생성·소멸하는 샌드박스 무리에서 실행. 공개 서비스에 얹은 자가 이전형(self-migrating) C2 사용.</li>
+</ol>
+<p>허깅페이스는 공개 모델·데이터셋·Spaces 및 소프트웨어 공급망(컨테이너 이미지·배포 패키지)에서는 변조 증거를 찾지 못했다고 밝혔다. 영향은 일부 내부 데이터셋과 서비스 자격증명에 국한된 것으로 현재까지 평가된다(외부 포렌식·법 집행기관 조사 진행 중).</p>
+<hr>
+<h2>2. 팩트체크 — SNS 요약본 대 1차 출처</h2>
+<p>시중에 도는 요약본은 골격이 대체적으로 정확하다. 다만 두 곳에서 원문에 없는 해석이 사실처럼 굳어져 유통되고 있다. 이 구분이 이 칼럼의 핵심이다.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>유통되는 주장</th>
+<th>1차 출처 대조</th>
+<th>판정</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>허깅페이스가 AI 에이전트에게 공격당함</td>
+<td>원문: &quot;end to end, 자율 AI 에이전트 시스템에 의해 구동&quot;</td>
+<td><strong>사실</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>악성 데이터셋 1개 + 처리 과정 취약점 2개로 코드 실행</td>
+<td>원문과 정확히 일치 (원격코드 로더 + 템플릿 인젝션)</td>
+<td><strong>사실</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td>수천~수만 건 행동이 연속 실행되어 에이전트로 판단</td>
+<td>원문: 17,000건 이상, 단명 샌드박스 무리</td>
+<td><strong>사실</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>사고 조사도 AI 에이전트로, GLM 5.2 사용</td>
+<td>원문: 자체 인프라에서 오픈웨이트 GLM 5.2로 포렌식 수행</td>
+<td><strong>사실</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>&quot;Claude와 GPT&quot;가 보안을 이유로 분석 거부</strong></td>
+<td>원문은 벤더 무명 — &quot;상용 API 뒤 프런티어 모델&quot;로만 표기, &quot;해당 제공업체들과 피드백 공유 중&quot;이라며 이름을 뺌</td>
+<td><strong>과장/미확인 귀속</strong> — 합리적 추론이나 원문 근거 없음</td>
+</tr>
+<tr>
+<td>6</td>
+<td>공격 명령·익스플로잇·C2 아티팩트 입력이 필요해 차단됨</td>
+<td>원문과 일치 — 가드레일이 사고대응자와 공격자를 구별 못 함</td>
+<td><strong>사실</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td>로그·자격증명이 외부 API로 안 나가는 게 장점</td>
+<td>원문과 일치 — &quot;공격자 데이터도 자격증명도 환경 밖으로 나가지 않았다&quot;</td>
+<td><strong>사실</strong></td>
+</tr>
+<tr>
+<td>8</td>
+<td><strong>가드레일이 없어 민감한 부분까지 다룰 수 있다(장점)</strong></td>
+<td>원문은 &quot;이것은 상용 모델의 안전장치에 대한 반대 논거가 아니다&quot;라고 명시적 단서를 달았음</td>
+<td><strong>부분사실 — 뉘앙스 소실</strong></td>
+</tr>
+<tr>
+<td>9</td>
+<td><strong>LLM보다 Harness가 성능·대응을 좌우한다</strong></td>
+<td>허깅페이스의 결론이 아님. 원문은 공격자 측이 &quot;보안연구 하네스 위에 구축된 것으로 보이며 LLM은 미상&quot;이라고만 함</td>
+<td><strong>작성자 해석</strong>— 타당하나 원문 결론 아님</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>&quot;가드레일 없음 = 장점&quot;은 원문의 논지가 아니다.</strong> 허깅페이스의 논지는 &quot;안전장치를 없애자&quot;가 아니라 &quot;<em>사고 상황</em>에서는 자체 인프라에서 돌릴 수 있는, 사전 검증된 모델이 필요하다&quot;였다. 안전 정렬 자체를 부정하는 문장으로 재유통되면 원저자 의도를 왜곡한다.</li>
+</ul>
+<hr>
+<h2>3. 이것은 &quot;데이터 오염&quot;인가?</h2>
+<p>이 사건을 &quot;데이터 오염(data poisoning)&quot;으로 부르는 요약이 많다. 이는 부정확하다. 사고대응 관점에서 세 개념을 분리해야 한다.</p>
+<table>
+<thead>
+<tr>
+<th>개념</th>
+<th>정의</th>
+<th>이번 사건 해당 여부</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>학습 데이터 포이즈닝</strong></td>
+<td>학습 코퍼스에 악성 샘플을 섞어 모델의 출력·백도어를 조작</td>
+<td>아님. 모델 학습이 아니라 데이터셋 <em>적재 파이프라인</em>이 표적</td>
+</tr>
+<tr>
+<td><strong>데이터셋 = 코드 실행 벡터</strong></td>
+<td>데이터셋 로딩 스크립트/설정을 악용해 처리 서버에서 RCE 유발</td>
+<td><strong>이번 사건의 실체</strong> — 공급망성 파이프라인 침해</td>
+</tr>
+<tr>
+<td><strong>모델 아티팩트 오염</strong></td>
+<td>배포된 모델 가중치·직렬화 파일(pickle 등)에 악성 코드 주입</td>
+<td>아님 (허깅페이스: 공개 아티팩트 변조 증거 없음)</td>
+</tr>
+</tbody></table>
+<p>즉 이번 건은 &quot;데이터가 오염됐다&quot;가 아니라 &quot;<strong>데이터셋이 실행 가능한 코드를 실어 나르는 통로가 됐다</strong>&quot;가 정확하다. 학계에서는 모델 허브의 데이터셋 로딩 스크립트 자동 실행(load_dataset 호출 시 동명 스크립트 실행)을 오래전부터 코드 포이즈닝 공격면으로 지적해 왔다. 이번 사건은 그 이론적 경고가 자율 에이전트와 결합해 대규모로 현실화된 첫 문서화 사례로 볼 수 있다.</p>
+<p>담론 <strong>AI 시대의 &quot;데이터 오염&quot;은 콘텐츠의 오염이 아니라 파이프라인의 오염이다.</strong> 신뢰 경계가 &quot;데이터는 수동적 입력&quot;이라는 오래된 가정 위에 서 있는 한, 데이터는 언제든 LLM, 인공지능을 오염시키는 실행체가 될 수 있다.</p>
+<hr>
+<h2>4. 이 사건의 진짜 교훈 - 방어의 비대칭</h2>
+<p>허깅페이스가 관찰한 구조적 문제를 그대로 옮기면 이렇다.</p>
+<ul>
+<li>공격자의 에이전트는 <strong>어떤 이용약관에도 구속되지 않았다.</strong> (탈옥된 호스티드 모델이든, 무제한 오픈웨이트든. 원문은 어느 쪽인지 모른다고 명시)</li>
+<li>반면 방어자가 처음 시도한 호스티드 프런티어 모델은 <strong>가드레일에 막혔다.</strong> 포렌식에는 실제 공격 명령·페이로드·C2 흔적을 대량 투입해야 하는데, 가드레일은 사고대응자와 공격자를 구별하지 못한다.</li>
+</ul>
+<p>이 비대칭은 안전 정렬의 실패가 아니라 <strong>운영상의 사각지대</strong>다. 상용 모델의 안전장치는 오용을 막기 위한 것이지만, 정당한 IR 업무에서는 동일 장치가 방어자를 잠근다. 여기에 두 번째 이득이 겹친다. 자체 인프라 실행 시 <strong>공격자 데이터와 자격증명이 회사 밖으로 유출되지 않는다.</strong>규제 산업·기밀 취급 조직에서 이 데이터 주권은 부가 기능이 아니라 필수 요건이다.<strong>Harness 논점에 대하여</strong>: &quot;LLM보다 하네스(에이전트 프레임워크·실행환경)가 중요하다&quot;는 명제는 허깅페이스가 선언한 결론이 아니라 업계의 해석이다. 다만 방향성은 지지할 만하다. 원문이 &quot;공격자의 LLM은 미상이나 하네스는 식별됐다&quot;고 한 것 자체가, 위협의 정체성이 모델이 아니라 그것을 감싼 자동화 골격에 있음을 시사한다. 나의 오래된 명제<strong>LLM은 계산하는 엑셀이지 정답을 찾는 오라클이 아니다</strong> 가 방어 쪽에도 그대로 적용된다. 도구는 스프레드시트일 뿐이고, 승패를 가르는 것은 그 위에 짠 수식(하네스·플레이북·데이터 파이프라인)이다.</p>
+<hr>
+<h2>5. 타임라인 - 사건을 둘러싼 지정학적 배경까지</h2>
+<table>
+<thead>
+<tr>
+<th>시점</th>
+<th>사건</th>
+<th>시사점</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2026-06-11경</td>
+<td>미국, Anthropic에 Fable 5 / Mythos 5 해외 접근 차단 명령(수출통제)</td>
+<td>프런티어 접근성이 정책 리스크에 노출됨</td>
+</tr>
+<tr>
+<td>2026-06-13</td>
+<td>Zhipu AI, <strong>GLM 5.2</strong> 오픈웨이트 공개(MIT, ~753B MoE, 1M 컨텍스트)</td>
+<td>자체 서빙 가능한 프런티어급 옵션 등장</td>
+</tr>
+<tr>
+<td>2026-07 둘째 주말(추정)</td>
+<td>허깅페이스 침해 — 악성 데이터셋 → RCE → 횡이동, 17,000+ 행동</td>
+<td>에이전틱 공격 시나리오의 실현</td>
+</tr>
+<tr>
+<td>2026-07 다음 주 초</td>
+<td>LLM 기반 이상탐지·트리아지가 침해 상관관계 포착</td>
+<td>탐지도 이미 AI 의존</td>
+</tr>
+<tr>
+<td>(조사 단계)</td>
+<td>상용 API 포렌식 시도 → 가드레일 차단 → GLM 5.2 자체 서빙으로 전환</td>
+<td>방어 비대칭 노출</td>
+</tr>
+<tr>
+<td>2026-07-16</td>
+<td>공식 disclosure, 외부 포렌식·법 집행기관 신고</td>
+<td>투명 공개 기조</td>
+</tr>
+</tbody></table>
+<p>타임라인에서 놓치기 쉬운 대목: <strong>오픈웨이트 프런티어 모델의 등장(6/13)과 프런티어 API 접근의 정책 불안정(6월 중순)이 겹친 직후, 방어자가 오픈웨이트로 갈아탈 수밖에 없는 사건이 터졌다.</strong> 이 사건은 우발적 타이밍이지만, &quot;자체 서빙 역량은 선택이 아니라 대비&quot;라는 결론을 우연히 예시한다.</p>
+<hr>
+<h2>6. 방어 대책 — IR 플레이북 관점</h2>
+<p>이 사건을 자사에 대입할 때의 실행 항목. 우선순위 순.</p>
+<table>
+<thead>
+<tr>
+<th>영역</th>
+<th>조치</th>
+<th>근거</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>IR 모델 사전 준비</strong></td>
+<td>사고 <em>이전에</em> 자체 인프라에서 돌릴 수 있는, 검증된 오픈웨이트 모델을 확보·튜닝·리허설</td>
+<td>사고 중에는 가드레일 잠금·데이터 유출 위험 이중고</td>
+</tr>
+<tr>
+<td><strong>데이터 주권</strong></td>
+<td>공격 로그·자격증명·아티팩트가 외부 API로 나가지 않도록 IR 파이프라인 격리</td>
+<td>기밀 사고 데이터의 역외 이전 차단</td>
+</tr>
+<tr>
+<td><strong>데이터셋 파이프라인 하드닝</strong></td>
+<td>원격 코드 데이터셋 로더 비활성화, 설정 파일 템플릿 렌더링 샌드박싱, 신뢰 경계 재정의</td>
+<td>초기 접근 벡터 원천 차단</td>
+</tr>
+<tr>
+<td><strong>최소권한·격리</strong></td>
+<td>데이터 처리 노드에 불필요한 도구 제거, SELinux/seccomp/AppArmor/RBAC로 횡이동 억제</td>
+<td>노드→클러스터 확산이 &quot;강한 인프라 보안이면 기대되지 않는&quot; 결과였다는 지적</td>
+</tr>
+<tr>
+<td><strong>에이전트 속도에 맞춘 탐지</strong></td>
+<td>고심각도 신호가 수 분 내 담당자를 호출하는 상시(주말 포함) 알림</td>
+<td>공격이 주말·기계속도로 진행</td>
+</tr>
+<tr>
+<td><strong>MCP·연동 감사</strong></td>
+<td>MCP 커넥터의 2차 인증 핸드셰이크 검증, 쓰기 권한 최소화</td>
+<td>에이전트 실행환경의 새로운 공격면</td>
+</tr>
+<tr>
+<td>GLM 5.2급(700B대) 모델은 4비트 양자화에도 ~400GB 수준의 메모리가 필요하다. 모든 조직이 자체 호스팅할 수는 없다. 현실적 선택지는 다음과 같다.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<p>(a) 더 작은 오픈웨이트 모델로 IR 특화 파인튜닝, 
+(b) 커뮤니티/컨소시엄 공동 데이터센터, 
+(c) 사고 시 단기 임대 가능한 격리형 프라이빗 인스턴스 사전 계약</p>
+<p>각 조직 규모에 맞는 조합을 선택해야 한다.</p>
+<hr>
+<h2>7. 시사점</h2>
+<ol>
+<li><strong>에이전틱 공격은 더는 가설이 아니다.</strong> 광범위·인내형·다단계 캠페인의 비용이 급락했고, 기계 속도로 작동한다. 데이터·모델 표면을 일급 공격면으로 다뤄야 한다.</li>
+<li><strong>&quot;데이터 오염&quot;을 정확히 부르자.</strong> 이번 건은 학습 포이즈닝이 아니라 데이터셋을 통한 코드 실행이다. 용어를 흐리면 대책도 흐려진다.</li>
+<li><strong>안전 정렬과 IR 실효성은 상충할 수 있다.</strong> 이 갈등을 부정하지 말고, 사전 검증된 자체 실행 모델을 IR 툴킷의 상수로 편입해 해소해야 한다. 이는 안전장치 무용론이 아니라 운영 설계의 문제다.</li>
+<li><strong>모델을 신탁으로 보지 말라.</strong> 공격도 방어도, 승패를 가르는 것은 모델이 아니라 그것을 감싼 하네스·플레이북·파이프라인이다. LLM은 여전히 엑셀이지 오라클이 아니다.</li>
+</ol>
+<hr>
+<h3>참고 출처</h3>
+<ul>
+<li>Hugging Face, &quot;Security incident disclosure — July 2026&quot; (1차 출처): <a href="https://huggingface.co/blog/security-incident-july-2026">https://huggingface.co/blog/security-incident-july-2026</a></li>
+<li>The Hacker News, &quot;World&#39;s Largest AI Model Repository Hugging Face Breached by Autonomous AI Agent&quot;</li>
+<li>Help Net Security, &quot;Hugging Face breached by autonomous AI agent&quot; (2026-07-20)</li>
+<li>BleepingComputer, &quot;Hugging Face discloses breach linked to autonomous AI agent&quot;</li>
+<li>Semgrep, &quot;We have Mythos at Home: GLM 5.2 beats Claude in our Cyber Benchmarks&quot;</li>
+<li>DataNorth / eigent.ai / felloai, GLM-5.2 사양 및 릴리스(2026-06-13, Zhipu AI/Z.ai)</li>
+</ul>
+<p><em>본 칼럼은 공개 disclosure와 2차 보도를 근거로 작성되었으며, 외부 포렌식 조사가 진행 중이므로 세부 사항은 확정이 아닌 현재까지의 평가임. TLP:CLEAR.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Huggingface-AI-Agent-Breach-Column.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

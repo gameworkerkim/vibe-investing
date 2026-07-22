@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claude Skill Guide (English) — VibeQuant</title>
+  <meta name="description" content="A Skill is a folder containing instructions, scripts, and resources that teaches Claude to perform specific tasks better in a repeatable way . Claude…" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/tech-claude-skill-claude-skill-guide-en-55eb92fd/" />
+  <meta property="og:title" content="Claude Skill Guide (English)" />
+  <meta property="og:description" content="A Skill is a folder containing instructions, scripts, and resources that teaches Claude to perform specific tasks better in a repeatable way . Claude…" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/tech-claude-skill-claude-skill-guide-en-55eb92fd/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Claude Skill Guide (English)","description":"A Skill is a folder containing instructions, scripts, and resources that teaches Claude to perform specific tasks better in a repeatable way . Claude…","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/tech-claude-skill-claude-skill-guide-en-55eb92fd/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/claude_skill/Claude_skill_guide_EN.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link" href="../../columns/">Columns</a>
+        <a class="site-nav-link is-active" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Claude Skill Guide (English)</h1>
+        <p class="lede">A Skill is a folder containing instructions, scripts, and resources that teaches Claude to perform specific tasks better in a repeatable way . Claude…</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>How to Build Repeatable Workflows Using Anthropic Agent Skills
+Reference: <a href="https://github.com/anthropics/skills">anthropics/skills repository</a> · <a href="http://agentskills.io">Agent Skills Standard</a></p>
+</blockquote>
+<hr>
+<h2>1. What Is a Skill?</h2>
+<p>A Skill is a <strong>folder containing instructions, scripts, and resources</strong>that teaches Claude to perform specific tasks better in a<strong>repeatable way</strong>. Claude dynamically loads Skills based on the task context.</p>
+<p>The core idea is simple:</p>
+<ul>
+<li><strong>Stop rewriting prompts.</strong> Package a refined workflow into a single folder, and Claude follows those instructions every time it encounters the relevant task.</li>
+<li><strong>Progressive Disclosure.</strong> Only the Skill&#39;s name and description stay in context at all times; the body and bundled resources load on demand. This saves context while enabling deep expertise.</li>
+<li><strong>LLM is Excel, not an Oracle.</strong> Skills are the practical implementation of this principle — instead of expecting the model to &quot;figure it out,&quot; you explicitly inject verified procedures and checklists.</li>
+</ul>
+<hr>
+<h2>2. Repository Structure</h2>
+<p><a href="https://github.com/anthropics/skills">anthropics/skills</a> repository layout:</p>
+<table>
+<thead>
+<tr>
+<th>Directory</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>./skills</code></td>
+<td>Actual Skill examples (Creative &amp; Design, Development &amp; Technical, Enterprise &amp; Communication, Document Skills)</td>
+</tr>
+<tr>
+<td><code>./spec</code></td>
+<td>Agent Skills standard specification</td>
+</tr>
+<tr>
+<td><code>./template</code></td>
+<td>Template for creating new Skills</td>
+</tr>
+</tbody></table>
+<p>Notably, <code>skills/docx</code>, <code>skills/pdf</code>, <code>skills/pptx</code>, <code>skills/xlsx</code> are production Skills that power Claude&#39;s actual document generation — excellent reference material for designing complex Skills (source-visible, not open-source).</p>
+<hr>
+<h2>3. Anatomy of a Skill</h2>
+<pre><code>skill-name/
+├── SKILL.md            (required)
+│   ├── YAML frontmatter  (name, description required)
+│   └── Markdown instructions
+└── Bundled resources     (optional)
+    ├── scripts/        - Executable code for deterministic/repetitive tasks
+    ├── references/     - Docs loaded into context only when needed
+    └── assets/         - Files used in output (templates, icons, fonts)
+</code></pre>
+<h3>Required Frontmatter Fields</h3>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>name</code></td>
+<td>Unique identifier (lowercase, hyphens for spaces)</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><strong>Core of the trigger mechanism.</strong> Must include both <em>what it does</em> AND <em>when to use it</em></td>
+</tr>
+</tbody></table>
+<h3>Design Principles</h3>
+<ol>
+<li><strong>Description should be slightly &quot;aggressive&quot;</strong> — Claude tends to undertrigger Skills, so list trigger conditions concretely: &quot;When the user mentions X, Y, or Z, use this Skill even without explicit request.&quot;</li>
+<li><strong>Keep SKILL.md body under 500 lines</strong> — If exceeding, offload to <code>references/</code> and clearly state when to read them.</li>
+<li><strong>Deterministic tasks go in scripts</strong> — Lock calculations, parsing, and API calls in <code>scripts/</code> code rather than leaving them to LLM free generation.</li>
+<li><strong>Split by domain variants</strong> — E.g., <code>references/krx.md</code>, <code>references/us-market.md</code> — separate market-specific reference files so Claude reads only what&#39;s needed.</li>
+</ol>
+<hr>
+<h2>4. How to Use</h2>
+<h3>Claude Code</h3>
+<pre><code class="language-bash">/plugin marketplace add anthropics/skills
+/plugin install example-skills@anthropic-agent-skills
+</code></pre>
+<p>After installation, just mention in natural language:</p>
+<blockquote>
+<p>&quot;Summarize today&#39;s market using the quant market brief skill&quot;</p>
+</blockquote>
+<p>Personal Skills go in <code>~/.claude/skills/</code> as folders.</p>
+<h3>Claude.ai (Web/App)</h3>
+<p>Paid plan: Settings → Capabilities → upload <code>.skill</code> package or a zip containing SKILL.md. (<a href="https://support.claude.com/en/articles/12512180-using-skills-in-claude">Official Guide</a>)</p>
+<h3>Claude API</h3>
+<p>Pre-built Skills or custom Skill uploads supported. (<a href="https://docs.claude.com/en/api/skills-guide#creating-a-skill">Skills API Quickstart</a>)</p>
+<hr>
+<h2>5. Example 1: Quant Daily Market Brief Skill</h2>
+<p>Every morning, a single &quot;summarize today&#39;s market&quot; command produces a <strong>factor-based, supply/demand, and volatility-perspective structured briefing</strong> — not a news roundup.</p>
+<h3>Folder Structure</h3>
+<pre><code>quant-market-brief/
+├── SKILL.md
+└── references/
+    ├── factor-checklist.md    # Factors to check and interpretation criteria
+    └── output-template.md     # Briefing output template
+</code></pre>
+<h3>SKILL.md</h3>
+<pre><code class="language-markdown">---
+name: quant-market-brief
+description: &gt;
+  Summarizes today&#39;s equity market from a quant perspective. When the user mentions
+  &quot;market&quot;, &quot;today&#39;s session&quot;, &quot;market briefing&quot;, &quot;session summary&quot;, &quot;how&#39;s KOSPI/NASDAQ
+  today&quot;, etc., use this Skill even without the word &quot;quant&quot;. Produces structured
+  briefings framed by factors, volatility, and fund flows — not plain news summaries.
+---
+
+# Quant Market Brief
+
+## Purpose
+Read market structure (regime), not individual news. Answer &quot;where is the market
+in factor/volatility/flow terms and what changed?&quot; — not &quot;what happened.&quot;
+
+## Workflow
+
+### Step 1: Data Collection (Web Search Required)
+Confirm the following via web search (do not rely on training data memory):
+- Major index closes/changes: KOSPI, KOSDAQ, S&amp;P 500, NASDAQ, Philadelphia Semiconductor
+- Volatility: VIX level and day-over-day change, VKOSPI
+- Rates/FX: US 10Y, KRW/USD, DXY
+- Fund flows: Foreign/institutional net buys (KRX), major sector ETF flows
+- Crypto (optional): BTC, Kimchi Premium — used only as risk appetite proxy
+
+### Step 2: Apply Factor Lens
+Read references/factor-checklist.md and assess:
+- Momentum vs Reversal: Are leading stocks continuing or breaking?
+- Growth vs Value: Rate direction and style rotation alignment
+- Large vs Small: Risk appetite dispersion
+- Quality/Low Vol: Defensive factor rotation
+
+### Step 3: Regime Classification
+Explicitly classify into one of the following with one-line reasoning:
+Risk-On / Risk-Off / Rotation / Chop (no directionality)
+
+### Step 4: Output
+Follow the references/output-template.md template. Must include:
+1. One-line regime classification (at the top)
+2. Data table (index/volatility/rates/FX/flows)
+3. Factor scorecard (each factor: Bullish/Neutral/Bearish + 1-line rationale)
+4. &quot;What Changed from Yesterday&quot; section — focus on delta
+5. Falsification condition — what would be observed if today&#39;s assessment is wrong
+
+## Guidelines
+- Don&#39;t predict. Follow: observed facts → factor interpretation → conditional scenarios.
+- Cite source and timestamp for all figures.
+- Mark confidence level: High/Medium/Low. If data conflicts, write &quot;mixed signals.&quot;
+- No investment advice language (&quot;buy/sell&quot;). Provide decision material only.
+</code></pre>
+<h3>references/factor-checklist.md (excerpt)</h3>
+<pre><code class="language-markdown"># Factor Check Checklist
+
+## Momentum
+- Signal: Did last month&#39;s top-performing sector show relative strength today?
+- Bullish: Leading sector relative return &gt; market &amp;&amp; trading value sustained
+- Breakdown signal: Leading stocks plunge + volume surge (distribution selling)
+
+## Volatility Regime
+- VIX &lt; 15: Low vol (carry/momentum favorable)
+- VIX 15–25: Neutral
+- VIX &gt; 25: High vol (low vol/quality, consider position reduction)
+- Note: VIX &#39;change rate&#39; is more effective than &#39;level&#39; for short-term signals
+</code></pre>
+<hr>
+<h2>6. Example 2: Portfolio Daily Monitoring &amp; Review Skill</h2>
+<p>Register your portfolio and get a <strong>once-daily</strong> assessment combining quant analysis, market news, and social sentiment whenever changes occur — in a form you can apply to investment decisions.</p>
+<p>Key design points:</p>
+<ul>
+<li><strong>Portfolio stored as state in <code>assets/portfolio.json</code></strong> — no re-entering each time</li>
+<li><strong>Change trigger rules fixed as code/spec</strong> — don&#39;t leave &quot;what constitutes a change&quot; to LLM discretion</li>
+<li><strong>3 information sources (quant/news/social) collected independently then cross-validated</strong> — no single source dominates the conclusion (multi-source committee approach)</li>
+</ul>
+<h3>Folder Structure</h3>
+<pre><code>portfolio-daily-review/
+├── SKILL.md
+├── assets/
+│   └── portfolio.json         # Holdings, quantities, cost basis, risk limits
+├── references/
+│   ├── trigger-rules.md       # Quantitative definitions of &quot;change&quot;
+│   ├── sentiment-guide.md     # SNS sentiment interpretation guardrails
+│   └── action-framework.md    # Evaluation → action candidate mapping criteria
+└── scripts/
+    └── check_triggers.py      # Price change/limit violation detection script (optional)
+</code></pre>
+<h3>assets/portfolio.json</h3>
+<pre><code class="language-json">{
+  &quot;base_currency&quot;: &quot;KRW&quot;,
+  &quot;last_review&quot;: &quot;2026-07-04&quot;,
+  &quot;risk_limits&quot;: {
+    &quot;single_position_max_pct&quot;: 20,
+    &quot;daily_drawdown_alert_pct&quot;: -3.0,
+    &quot;portfolio_drawdown_alert_pct&quot;: -5.0
+  },
+  &quot;positions&quot;: [
+    { &quot;ticker&quot;: &quot;005930.KS&quot;, &quot;name&quot;: &quot;Samsung Electronics&quot;, &quot;qty&quot;: 100, &quot;avg_price&quot;: 72000, &quot;thesis&quot;: &quot;HBM cycle&quot; },
+    { &quot;ticker&quot;: &quot;NVDA&quot;,      &quot;name&quot;: &quot;NVIDIA&quot;, &quot;qty&quot;: 10,  &quot;avg_price&quot;: 118.5, &quot;thesis&quot;: &quot;AI infra capex&quot; },
+    { &quot;ticker&quot;: &quot;BTC&quot;,       &quot;name&quot;: &quot;Bitcoin&quot;, &quot;qty&quot;: 0.5, &quot;avg_price&quot;: 61000000, &quot;thesis&quot;: &quot;Macro hedge&quot; }
+  ]
+}
+</code></pre>
+<h3>SKILL.md</h3>
+<pre><code class="language-markdown">---
+name: portfolio-daily-review
+description: &gt;
+  Reviews the user&#39;s investment portfolio once daily. When pre-defined change triggers
+  fire, synthesizes quant analysis, market news, and social sentiment into investment
+  decision material. Use when the user mentions &quot;portfolio review&quot;, &quot;my account&quot;,
+  &quot;today&#39;s review&quot;, &quot;how are my holdings&quot;, &quot;rebalancing&quot;, or requests a daily check.
+  Portfolio state is read from assets/portfolio.json.
+---
+
+# Portfolio Daily Review
+
+## Purpose
+Review the portfolio by rules, not emotions. If no triggers fire, end with &quot;no issues&quot;
+in one line. When triggers fire, perform the full 3-source composite assessment.
+
+## Workflow
+
+### Step 0: Load State
+Read assets/portfolio.json. If last_review is today, alert &quot;Today&#39;s review already
+completed&quot; and confirm re-execution (once-daily principle).
+
+### Step 1: Price Update &amp; Trigger Check
+Check current prices via web search for each position. Assess using
+references/trigger-rules.md rules. Summary:
+- Single position daily change ±3%+
+- Portfolio total value daily change ±2%+
+- risk_limits violation (single position overweight, loss limit reached)
+- Material news on held stocks (earnings, regulation, hack/security incident, delisting)
+
+<strong>If no triggers</strong>: Current price table + &quot;No triggers, no action needed.&quot; End.
+Do not generate unnecessary analysis.
+
+### Step 2: 3-Source Collection (Triggered Positions Only)
+Collect each source independently; do not mix:
+
+[A] Quant Perspective
+- Factor status for the stock: momentum (1M/3M), sector relative strength, vol change
+- Market regime alignment (reuse quant-market-brief results if available)
+
+[B] Market News
+- Web search to identify trigger cause. Prioritize primary sources (filings, earnings
+  releases, regulatory announcements). Distinguish speculative articles from facts.
+
+[C] Social Sentiment
+- Gauge direction and intensity of X (Twitter), Reddit, Korean community reactions via
+  web search. Must read references/sentiment-guide.md first. Key point:
+  SNS can be a contrarian indicator. Extreme clustering (fear/euphoria) is itself
+  a signal — don&#39;t use it raw as a directional signal.
+
+### Step 3: Cross-Validation &amp; Composite Assessment
+Matrix whether the three sources agree:
+
+| Source | Direction | Strength | Key Evidence |
+|---|---|---|---|
+| Quant | Negative | Medium | Momentum breaking + sector relative weakness |
+| News | Negative | Strong | Guidance downgrade (primary source) |
+| SNS  | Extreme Fear | Strong | Note contrarian potential |
+
+- 3 agree → High confidence
+- 2:1 split → Include minority rationale explicitly in body
+- News (facts) vs Quant (price action) conflict → highlight the conflict itself
+
+### Step 4: Action Candidates
+Following references/action-framework.md criteria, use this format:
+- Action candidates: Hold / Reduce / Add / Consider Stop-Loss / Watch More — pick 1-2
+- Provide rationale AND counter-arguments for each
+- Falsification condition: &quot;If X is observed, this assessment is invalid.&quot; Must include.
+- State clearly: final decision rests with the user. No buy/sell directives.
+
+### Step 5: Update State
+Update portfolio.json&#39;s last_review to today, log review summary (used in next
+review&#39;s &quot;delta from yesterday&quot; calculation).
+
+## Guidelines
+- Silence if no triggers. Daily walls of analysis are noise.
+- Don&#39;t arbitrarily weight the three sources. Report disagreements as disagreements.
+- When citing SNS, address aggregate direction/intensity only — no individual accounts.
+- Timestamp all figures.
+</code></pre>
+<h3>references/trigger-rules.md (excerpt)</h3>
+<pre><code class="language-markdown"># Change Trigger Definitions
+
+&quot;A change has occurred&quot; means at least one of these quantitative conditions is met.
+Do not use subjective LLM judgment (&quot;seems like it dropped a lot&quot;) as a trigger.
+
+| Trigger | Condition | Priority |
+|---------|-----------|----------|
+| T1 Single Sharp Move | Position daily change |±3%| or more | Medium |
+| T2 Portfolio Move | Total value daily change |±2%| or more | High |
+| T3 Risk Limit | Any risk_limits item violated | Highest |
+| T4 Event | Earnings/regulation/security incident/delisting primary source news | High |
+| T5 Volatility Jump | Position implied/historical vol +50% vs prior day | Medium |
+
+Multiple triggers firing simultaneously → report highest priority first.
+</code></pre>
+<h3>Execution Example (Claude Code)</h3>
+<pre><code>&gt; Review my portfolio today
+
+[portfolio-daily-review skill triggered]
+1. Load portfolio.json → 3 positions
+2. Price search → NVDA -4.2% (T1 fired), others no trigger
+3. 3-source collection for NVDA (quant/news/social)
+4. Cross-validation matrix + action candidates + falsification conditions
+5. last_review updated
+</code></pre>
+<hr>
+<h2>7. Linking the Two Skills</h2>
+<p>Both Skills work independently, but installing both creates synergy:</p>
+<pre><code>Morning Routine:
+1. quant-market-brief  → Market regime classification (Risk-On / Off / Rotation / Chop)
+2. portfolio-daily-review → Evaluate individual positions using that regime as context
+   (SKILL.md Step 2 [A] explicitly states &quot;reuse quant-market-brief results&quot;)
+</code></pre>
+<p>This cross-skill referencing is the production pattern for the Skills system — each Skill is small and single-responsibility, but they compose at the workflow level.</p>
+<hr>
+<h2>8. Common Mistakes When Building Skills</h2>
+<table>
+<thead>
+<tr>
+<th>Mistake</th>
+<th>Fix</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Description lists features but no trigger conditions</td>
+<td>Explicitly state &quot;Use when user mentions X, Y&quot; (prevents undertrigger)</td>
+</tr>
+<tr>
+<td>Leaving judgment criteria to LLM discretion</td>
+<td>Lock quantitative rules in references/ (e.g., trigger definitions)</td>
+</tr>
+<tr>
+<td>Re-entering the portfolio through conversation every time</td>
+<td>Store as state file in assets/</td>
+</tr>
+<tr>
+<td>Cramming everything into a single SKILL.md</td>
+<td>Split to references/ when exceeding 500 lines; state when to read</td>
+</tr>
+<tr>
+<td>Outputting predictions or buy/sell directives</td>
+<td>Enforce: observation → interpretation → conditional scenarios + falsification</td>
+</tr>
+<tr>
+<td>Deploying without testing</td>
+<td>Validate trigger behavior and output quality with 3-5 real prompts</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. Related Links</h2>
+<ul>
+<li><a href="https://github.com/anthropics/skills">anthropics/skills Repository</a></li>
+<li><a href="https://support.claude.com/en/articles/12512176-what-are-skills">What are skills?</a></li>
+<li><a href="https://support.claude.com/en/articles/12512180-using-skills-in-claude">Using skills in Claude</a></li>
+<li><a href="https://support.claude.com/en/articles/12512198-creating-custom-skills">Creating custom skills</a></li>
+<li><a href="https://anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills">Equipping agents for the real world with Agent Skills (Engineering Blog)</a></li>
+<li><a href="https://docs.claude.com/en/api/skills-guide#creating-a-skill">Skills API Quickstart</a></li>
+<li><a href="http://agentskills.io">Agent Skills Standard</a></li>
+</ul>
+<blockquote>
+<p><strong>Note</strong>: Repository Skills are demo/educational. Actual Claude behavior may differ — always test in your own environment before production use. The investment-related skills in this guide are tools to structure decision material, not investment advice.</p>
+</blockquote>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/claude_skill/Claude_skill_guide_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

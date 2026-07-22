@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>LLM Assistants for C Development in Visual Studio — Verified Edition + DeepSeek &amp; Multi-LLM Guide — VibeQuant</title>
+  <meta name="description" content="As of : 2026 06 04 Verification sources : official marketplace, vendor docs, public material (cross checked) Status labels : Verified / Corrected /…" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/tech-minimax-coding-guide-visual-studio--3a128c83/" />
+  <meta property="og:title" content="LLM Assistants for C Development in Visual Studio — Verified Edition + DeepSeek &amp; Multi-LLM Guide" />
+  <meta property="og:description" content="As of : 2026 06 04 Verification sources : official marketplace, vendor docs, public material (cross checked) Status labels : Verified / Corrected /…" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/tech-minimax-coding-guide-visual-studio--3a128c83/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"LLM Assistants for C Development in Visual Studio — Verified Edition + DeepSeek & Multi-LLM Guide","description":"As of : 2026 06 04 Verification sources : official marketplace, vendor docs, public material (cross checked) Status labels : Verified / Corrected /…","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/tech-minimax-coding-guide-visual-studio--3a128c83/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MiniMax%20Coding%20Guide/visual-studio-csharp-llm-guide.en.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link" href="../../columns/">Columns</a>
+        <a class="site-nav-link is-active" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>LLM Assistants for C Development in Visual Studio — Verified Edition + DeepSeek &amp; Multi-LLM Guide</h1>
+        <p class="lede">As of : 2026 06 04 Verification sources : official marketplace, vendor docs, public material (cross checked) Status labels : Verified / Corrected /…</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>Recommendations for C# coding AI assistants in Visual Studio, plus concrete ways to connect DeepSeek and other LLMs. Key items were verified against public sources (marketplace, vendor docs).
+Companion doc: <a href="minimax-coding-guide.en.md">MiniMax Coding Guide</a> (VS Code–centric)</p>
+</blockquote>
+<ul>
+<li><strong>As of</strong>: 2026-06-04</li>
+<li><strong>Verification sources</strong>: official marketplace, vendor docs, public material (cross-checked)</li>
+<li><strong>Status labels</strong>: Verified / Corrected / Unverified</li>
+</ul>
+<hr>
+<h2>0. Fact-Check Results</h2>
+<p>The result of cross-checking key items related to Visual Studio C# AI assistants against public sources. Items whose existence/maintenance could not be confirmed from public sources are simply labeled <strong>Unverified</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Status</th>
+<th>Basis / Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GitHub Copilot agent mode</td>
+<td>Verified</td>
+<td>Agent Mode is GA with MCP support. Supported on VS 2022 17.14+ / VS 2026. Multi-file edits, iterative error fixing, tool calls</td>
+</tr>
+<tr>
+<td>MCP + Roslyn semantic understanding</td>
+<td>Corrected</td>
+<td>Copilot offers language-aware symbol navigation via the <code>find_symbol</code> tool. &quot;Direct Roslyn comms&quot; holds via a separate MCP server extension (e.g., MCP AI Server)</td>
+</tr>
+<tr>
+<td>MCP AI Server</td>
+<td>Verified</td>
+<td><code>LadislavSopko/mcp-ai-server-visual-studio</code>. Roslyn-based 20 tools, for MCP clients</td>
+</tr>
+<tr>
+<td>OpenCode AI Assistant</td>
+<td>Verified</td>
+<td>Real on marketplace (<code>NatanaelNunez.opencode-ai-assistant-vs</code>). Multi-provider</td>
+</tr>
+<tr>
+<td>Visual chatGPT Studio</td>
+<td>Verified</td>
+<td>Free, needs OpenAI API key. Provides refactor/bug-find/test-gen commands</td>
+</tr>
+<tr>
+<td>Tongyi Lingma</td>
+<td>Corrected</td>
+<td>Rebranded to &quot;Qoder (formerly Lingma)&quot;. 3.5M+ cumulative downloads across channels. Free trial / limited-time free</td>
+</tr>
+<tr>
+<td>MS C# ext usage in Cursor</td>
+<td>Verified</td>
+<td>MS restricts C#/C++/C# Dev Kit to MS-family editors. Anysphere ships its own netcoredbg-based C# extension (<code>@id:anysphere.csharp</code>)</td>
+</tr>
+<tr>
+<td>ReSharper for VS Code</td>
+<td>Verified</td>
+<td>Released 2026-03-05 (supports VS Code &amp; Cursor). AI Assistant is paid (free for non-commercial/learning)</td>
+</tr>
+<tr>
+<td>DeepSeek integration</td>
+<td>Verified</td>
+<td>DeepSeek is OpenAI-compatible (<code>https://api.deepseek.com</code>). Connectable from any extension that accepts an OpenAI-compatible base_url</td>
+</tr>
+<tr>
+<td>IntelliCode</td>
+<td>Verified</td>
+<td>Built into MS. Completion based on learned code patterns</td>
+</tr>
+<tr>
+<td>A3sist</td>
+<td>Unverified</td>
+<td>Could not confirm existence/maintenance from public sources. Verify on marketplace/GitHub before adopting</td>
+</tr>
+<tr>
+<td>L.AI</td>
+<td>Unverified</td>
+<td>Could not confirm from public sources. Verify directly</td>
+</tr>
+<tr>
+<td>Fitten Code / CodeAnalyzerAI</td>
+<td>Unverified</td>
+<td>Details/current maintenance need direct verification</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Bottom line</strong>: The big picture (Copilot agent mode, MCP+Roslyn, Cursor&#39;s C# limitation, ReSharper for VS Code, the free extensions) is largely accurate. However, some minor extensions (A3sist, L.AI, etc.) cannot be confirmed for existence/maintenance from public sources and need direct verification before adoption.</p>
+</blockquote>
+<hr>
+<h2>1. Built-in AI in Visual Studio (check first)</h2>
+<ul>
+<li><strong>GitHub Copilot</strong> (Verified) — Real-time completion + agent mode (VS 2022 17.14+ / VS 2026). Agent mode supports multi-file edits, iterative error fixing, tool calls, and MCP server connections. Custom agents can be defined via <code>.agent.md</code>.</li>
+<li><strong>IntelliCode</strong> (Verified) — Context-aware completion based on learned code patterns (no model setup needed).</li>
+</ul>
+<blockquote>
+<p>To start with no extra keys/config, Copilot + IntelliCode is the baseline. Note Copilot&#39;s default models are OpenAI/Anthropic, and direct wiring to arbitrary external OpenAI-compatible endpoints (e.g., DeepSeek) is limited (route via the third-party extensions in Sections 2–3).</p>
+</blockquote>
+<hr>
+<h2>2. Recommended AI Extensions for C# Developers (Visual Studio)</h2>
+<blockquote>
+<p>Install counts and prices change over time — read on the premise that you&#39;ll reconfirm current figures on the marketplace.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Extension</th>
+<th>Core value</th>
+<th>Multi-LLM connection</th>
+<th>Price/License</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Visual chatGPT Studio</strong></td>
+<td>Refactor/bug-find/test-gen commands, in-editor chat</td>
+<td>OpenAI-compatible key + Base URL override → DeepSeek/MiniMax/local</td>
+<td>Free (key needed)</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><strong>OpenCode AI Assistant</strong></td>
+<td>Large-solution focus, Roslyn symbol indexing</td>
+<td>OpenAI/Anthropic/Ollama multi-provider</td>
+<td>Free (MIT, key needed)</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><strong>MCP AI Server</strong></td>
+<td>Exposes 20 Roslyn tools via MCP (AI understands by meaning)</td>
+<td>Model-agnostic (MCP client picks model)</td>
+<td>Key/client separate</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td><strong>Qoder (formerly Tongyi Lingma)</strong></td>
+<td>NL→code, multi-line generation</td>
+<td>Alibaba&#39;s own models</td>
+<td>Free trial / limited-time free</td>
+<td>Corrected (rebranded)</td>
+</tr>
+<tr>
+<td><strong>ReSharper + AI Assistant</strong></td>
+<td>Best static analysis/refactoring + AI chat/completion</td>
+<td>JetBrains AI Service (model choice)</td>
+<td>Paid (free non-commercial)</td>
+<td>Verified</td>
+</tr>
+<tr>
+<td>A3sist / L.AI</td>
+<td>Claims local (Ollama) privacy focus</td>
+<td>verify</td>
+<td>verify</td>
+<td>Unverified</td>
+</tr>
+</tbody></table>
+<p><strong>Recommendations by situation</strong>-<strong>Official, latest, safe</strong>: GitHub Copilot (agent mode) + IntelliCode</p>
+<ul>
+<li><strong>Flexible across many LLMs</strong>: OpenCode AI Assistant or Visual chatGPT Studio (Base URL override)</li>
+<li><strong>AI that understands code semantically (accurate nav/refactor)</strong>: MCP AI Server (+ Copilot agent mode or another MCP client)</li>
+<li><strong>Top refactoring quality</strong>: ReSharper + AI Assistant (paid)</li>
+<li><strong>Local/privacy</strong>: prefer Ollama + an OpenAI-compatible extension first (see 3.4). Adopt A3sist/L.AI only after confirming existence/maintenance</li>
+</ul>
+<hr>
+<h2>3. How to Connect DeepSeek and Various LLMs (the core)</h2>
+<p>The principle is singular. Most commercial LLMs expose an OpenAI-compatible (<code>/v1/chat/completions</code>) endpoint, so you can use many models from the same extension just by changing &quot;Base URL + API Key + model name.&quot;</p>
+<h3>3.1 OpenAI-Compatible Endpoints</h3>
+<table>
+<thead>
+<tr>
+<th>Provider</th>
+<th>Base URL</th>
+<th>Example model</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>DeepSeek</strong></td>
+<td><code>https://api.deepseek.com</code> (<code>/v1</code> ok)</td>
+<td><code>deepseek-chat</code>, <code>deepseek-reasoner</code></td>
+<td>OpenAI-compatible. Confirm current model IDs in console</td>
+</tr>
+<tr>
+<td><strong>MiniMax</strong></td>
+<td><code>https://api.minimax.io/v1</code></td>
+<td><code>MiniMax-M3</code>, <code>MiniMax-M2.5</code></td>
+<td>Both OpenAI &amp; Anthropic compatible (<a href="minimax-coding-guide.en.md">guide</a>)</td>
+</tr>
+<tr>
+<td><strong>OpenAI</strong></td>
+<td><code>https://api.openai.com/v1</code></td>
+<td><code>gpt-5.5</code>, <code>gpt-5.4-mini</code></td>
+<td>Reference impl</td>
+</tr>
+<tr>
+<td><strong>OpenRouter</strong></td>
+<td><code>https://openrouter.ai/api/v1</code></td>
+<td><code>deepseek/deepseek-chat</code>, etc.</td>
+<td>Route many models with one key</td>
+</tr>
+<tr>
+<td><strong>Local Ollama</strong></td>
+<td><code>http://localhost:11434/v1</code></td>
+<td><code>qwen2.5-coder</code>, <code>deepseek-coder-v2</code></td>
+<td>Fully offline/private</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Get a DeepSeek API key: <code>https://platform.deepseek.com</code> → API Keys. Model identifiers (deepseek-chat/-reasoner, etc.) change over time — confirm the current names in the console before entering.</p>
+</blockquote>
+<h3>3.2 Wiring DeepSeek via Visual chatGPT Studio (easiest)</h3>
+<ol>
+<li>Install Visual chatGPT Studio from the marketplace</li>
+<li>Open <code>Tools → Options → Visual chatGPT Studio</code></li>
+<li><strong>API Key</strong>: enter your DeepSeek key</li>
+<li><strong>Base URL / Base API URL</strong> (the OpenAI endpoint override field): <code>https://api.deepseek.com</code></li>
+<li><strong>Model</strong>: <code>deepseek-chat</code> (or the current model name from the console)</li>
+<li>Select code → right-click or use commands to run refactor/bug-find/test-gen</li>
+</ol>
+<blockquote>
+<p>The same way, just change the Base URL to <code>https://api.minimax.io/v1</code> (MiniMax), <code>https://openrouter.ai/api/v1</code> (OpenRouter), or <code>http://localhost:11434/v1</code> (Ollama) to swap models in the same UI.</p>
+</blockquote>
+<h3>3.3 Multi-Provider via OpenCode AI Assistant</h3>
+<ul>
+<li>After install, choose a Provider (OpenAI / Anthropic / Ollama / custom OpenAI-compatible)</li>
+<li>Pick custom OpenAI-compatible and set Base URL + Key + model name to DeepSeek/MiniMax/local</li>
+<li>On large solutions, Roslyn symbol indexing gives whole-project type awareness → accurate context</li>
+</ul>
+<h3>3.4 Local (offline) — Ollama + any extension</h3>
+<ol>
+<li>Install Ollama and pull a model: <code>ollama pull qwen2.5-coder</code> (or <code>deepseek-coder-v2</code>)</li>
+<li>Ollama serves OpenAI-compatible at <code>http://localhost:11434/v1</code></li>
+<li>In Visual chatGPT Studio / OpenCode, set Base URL to the address above and any value as the key (<code>ollama</code>)</li>
+<li>Suitable for air-gapped environments / sensitive code (fully local)</li>
+</ol>
+<h3>3.5 Make &quot;AI understand code semantically&quot; via MCP</h3>
+<ul>
+<li>Install MCP AI Server (20 Roslyn tools) so an MCP client (e.g., Copilot agent mode) can call compiler-level tools like <code>FindSymbols</code> and operate on symbols rather than plain text.</li>
+<li>The model itself can be anything (commercial/DeepSeek/local), chosen in the client — a separation where the MCP server handles &quot;accurate code understanding&quot; and the model handles &quot;reasoning.&quot;</li>
+</ul>
+<hr>
+<h2>4. Hybrid Routing (optimize cost &amp; quality together)</h2>
+<p>Splitting models by task difficulty cuts cost substantially (detailed pricing/rationale in <a href="minimax-coding-guide.en.md">MiniMax guide, Sections 4 &amp; 6</a>).</p>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Recommended</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Autocomplete / simple queries</td>
+<td>Local (Ollama) or a low-cost DeepSeek model</td>
+</tr>
+<tr>
+<td>Function-level generation</td>
+<td>DeepSeek / MiniMax M2.5</td>
+</tr>
+<tr>
+<td>Multi-file refactoring</td>
+<td>MiniMax M3 / a 1M-context model</td>
+</tr>
+<tr>
+<td>High-precision code review</td>
+<td>Claude Opus / top GPT (failover only when needed)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Key: default to cheap/local, fail over to a top model only when precision is needed. Switch manually by changing the Base URL in Visual chatGPT Studio/OpenCode, or delegate routing to one key via OpenRouter.</p>
+</blockquote>
+<hr>
+<h2>5. Selection Guide (summary)</h2>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Recommended setup</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Safe &amp; official</td>
+<td>GitHub Copilot (agent mode) + IntelliCode</td>
+</tr>
+<tr>
+<td>Free with DeepSeek/multi-LLM</td>
+<td>Visual chatGPT Studio or OpenCode AI Assistant (Base URL override)</td>
+</tr>
+<tr>
+<td>Local/privacy</td>
+<td>Ollama + an OpenAI-compatible extension</td>
+</tr>
+<tr>
+<td>Semantic accuracy (nav/refactor)</td>
+<td>MCP AI Server + agent mode</td>
+</tr>
+<tr>
+<td>Best refactoring (paid)</td>
+<td>ReSharper + AI Assistant</td>
+</tr>
+<tr>
+<td>Prefer VS Code&#39;s lightness</td>
+<td>ReSharper for VS Code (C#/Razor/Blazor)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>References (verified 2026-06-04)</h2>
+<ul>
+<li>Visual Studio Agent Mode + MCP: <a href="https://learn.microsoft.com/en-us/visualstudio/ide/copilot-agent-mode">https://learn.microsoft.com/en-us/visualstudio/ide/copilot-agent-mode</a> · <a href="https://learn.microsoft.com/en-us/visualstudio/ide/mcp-servers">https://learn.microsoft.com/en-us/visualstudio/ide/mcp-servers</a></li>
+<li>MCP AI Server (Roslyn): <a href="https://github.com/LadislavSopko/mcp-ai-server-visual-studio">https://github.com/LadislavSopko/mcp-ai-server-visual-studio</a></li>
+<li>OpenCode AI Assistant: <a href="https://marketplace.visualstudio.com/items?itemName=NatanaelNunez.opencode-ai-assistant-vs">https://marketplace.visualstudio.com/items?itemName=NatanaelNunez.opencode-ai-assistant-vs</a></li>
+<li>Visual chatGPT Studio: <a href="https://marketplace.visualstudio.com/items?itemName=jefferson-pires.VisualChatGPTStudio">https://marketplace.visualstudio.com/items?itemName=jefferson-pires.VisualChatGPTStudio</a> · <a href="https://github.com/jeffdapaz/VisualChatGPTStudio">https://github.com/jeffdapaz/VisualChatGPTStudio</a></li>
+<li>Qoder (formerly Tongyi Lingma): <a href="https://marketplace.visualstudio.com/items?itemName=Alibaba-Cloud.tongyi-lingma">https://marketplace.visualstudio.com/items?itemName=Alibaba-Cloud.tongyi-lingma</a></li>
+<li>ReSharper for VS Code (release): <a href="https://blog.jetbrains.com/dotnet/2026/03/05/resharper-for-visual-studio-code-cursor-and-compatible-editors-is-out/">https://blog.jetbrains.com/dotnet/2026/03/05/resharper-for-visual-studio-code-cursor-and-compatible-editors-is-out/</a></li>
+<li>Cursor C# license/netcoredbg: <a href="https://devclass.com/2025/04/08/vs-code-extension-marketplace-wars-cursor-users-hit-roadblocks/">https://devclass.com/2025/04/08/vs-code-extension-marketplace-wars-cursor-users-hit-roadblocks/</a></li>
+<li>DeepSeek API (OpenAI-compatible): <a href="https://api-docs.deepseek.com/">https://api-docs.deepseek.com/</a></li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>Disclaimer</strong>: This document is a reference that verifies/organizes public information as of 2026-06-04. Extension install counts, prices, model names, and maintenance status change rapidly — reconfirm via official sources before adopting. For tools labeled Unverified (A3sist, L.AI, etc.), verify existence/reliability directly before use. Manage API keys via environment variables / the IDE&#39;s secure storage and never commit them to a repository.</p>
+</blockquote>
+<p><em>— End of document —</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MiniMax%20Coding%20Guide/visual-studio-csharp-llm-guide.en.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

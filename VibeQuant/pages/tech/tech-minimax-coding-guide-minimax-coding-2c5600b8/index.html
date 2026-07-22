@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Coding Assistant Guide — Coding with MiniMax — VibeQuant</title>
+  <meta name="description" content="1. Introduction to MiniMax 2. Visual Studio Code Integration Guide 3. Designing Agent Workflows 4. Price Comparison — MiniMax vs DeepSeek vs Anthropic vs…" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/tech-minimax-coding-guide-minimax-coding-2c5600b8/" />
+  <meta property="og:title" content="AI Coding Assistant Guide — Coding with MiniMax" />
+  <meta property="og:description" content="1. Introduction to MiniMax 2. Visual Studio Code Integration Guide 3. Designing Agent Workflows 4. Price Comparison — MiniMax vs DeepSeek vs Anthropic vs…" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/tech-minimax-coding-guide-minimax-coding-2c5600b8/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"AI Coding Assistant Guide — Coding with MiniMax","description":"1. Introduction to MiniMax 2. Visual Studio Code Integration Guide 3. Designing Agent Workflows 4. Price Comparison — MiniMax vs DeepSeek vs Anthropic vs…","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/tech-minimax-coding-guide-minimax-coding-2c5600b8/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MiniMax%20Coding%20Guide/minimax-coding-guide.en.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link" href="../../columns/">Columns</a>
+        <a class="site-nav-link is-active" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>AI Coding Assistant Guide — Coding with MiniMax</h1>
+        <p class="lede">1. Introduction to MiniMax 2. Visual Studio Code Integration Guide 3. Designing Agent Workflows 4. Price Comparison — MiniMax vs DeepSeek vs Anthropic vs…</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>Visual Studio Code integration · Agent workflows · Price &amp; performance comparison
+DeepSeek · Anthropic Claude · OpenAI ChatGPT — Coding Plan · API · Self-host · Open-Weight analysis</p>
+</blockquote>
+<ul>
+<li><strong>Date</strong>: June 2, 2026</li>
+<li><strong>Audience</strong>: Python/JS/TS developers, DevOps engineers, AI/ML engineers</li>
+<li><strong>Version</strong>: 1.1 · Sources: official API docs and public benchmarks (as of 2026-06-02)</li>
+</ul>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#1-introduction-to-minimax">Introduction to MiniMax</a></li>
+<li><a href="#2-visual-studio-code-integration-guide">Visual Studio Code Integration Guide</a></li>
+<li><a href="#3-designing-agent-workflows">Designing Agent Workflows</a></li>
+<li><a href="#4-price-comparison--minimax-vs-deepseek-vs-anthropic-vs-openai">Price Comparison — MiniMax vs DeepSeek vs Anthropic vs OpenAI</a></li>
+<li><a href="#5-coding-performance-comparison">Coding Performance Comparison</a></li>
+<li><a href="#6-decision-guide--which-model-when">Decision Guide — Which Model, When?</a></li>
+<li><a href="#7-conclusion--references">Conclusion &amp; References</a></li>
+</ol>
+<hr>
+<h2>1. Introduction to MiniMax</h2>
+<h3>1.1 The Company and Model Lineup</h3>
+<p>MiniMax (legal name: Shanghai Xiyu Jizhi Technology Co., Ltd.) is a Chinese AI startup founded in Shanghai in late 2021, developing in-house full-modality foundation models across text, video, voice, music, and images. It listed on the Hong Kong Stock Exchange (0100.HK) in January 2026, and serves over 200 million cumulative users across 200+ countries.</p>
+<p><strong>Flagship Model Lineup</strong></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Type</th>
+<th>Context</th>
+<th>Key Features</th>
+<th>Availability</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M2.1</td>
+<td>Text (coding-focused)</td>
+<td>197K</td>
+<td>Multilingual (13+) · low cost</td>
+<td>Open-weight</td>
+</tr>
+<tr>
+<td>M2.5</td>
+<td>Text (agent)</td>
+<td>197K</td>
+<td>SWE-bench 80.2% · MoE 230B/10B</td>
+<td>Open-weight</td>
+</tr>
+<tr>
+<td>M2.7</td>
+<td>Text (agent)</td>
+<td>205K</td>
+<td>M2.5 successor · recursive self-improve</td>
+<td>Open-weight</td>
+</tr>
+<tr>
+<td>M3 (released 2026-06-01)</td>
+<td>Text + multimodal</td>
+<td>1M</td>
+<td>MSA · native multimodal · Agent Coding SOTA</td>
+<td>Open-weight (planned)</td>
+</tr>
+<tr>
+<td>Hailuo 2.3</td>
+<td>Video generation</td>
+<td>—</td>
+<td>1080p · up to 10s</td>
+<td>API only</td>
+</tr>
+<tr>
+<td>Speech 2.6 / Music 2.6</td>
+<td>Voice/music</td>
+<td>—</td>
+<td>40 languages · 250ms latency</td>
+<td>API only</td>
+</tr>
+</tbody></table>
+<h3>1.2 Why MiniMax — Core Strengths</h3>
+<ul>
+<li><strong>Outstanding price/performance</strong>: M2.5 scores 80.2% on SWE-bench Verified — only 1.8 pp behind Claude Opus 4.7 (82.0%) — at roughly 1/17 the price (see Section 4).</li>
+<li><strong>Both OpenAI and Anthropic API compatible</strong>: Supports both the OpenAI (<code>/v1/chat/completions</code>) and Anthropic (<code>/anthropic</code>) protocols simultaneously — migrate existing code with a one-line change.</li>
+<li><strong>Coding Plan subscription</strong>: A developer-only usage-based plan, 10–20× cheaper than OpenAI/Anthropic.</li>
+<li><strong>Open weights</strong>: M2 / M2.5 / M2.7 weights are published on Hugging Face — enabling self-hosting, fine-tuning, and private-cluster deployment.</li>
+<li><strong>M3 (released 2026-06-01)</strong>: 1M-token context + native multimodality. At 59.0% on SWE-Bench Pro, it slightly edges out GPT-5.5 (58.6%).</li>
+<li><strong>Rich ecosystem</strong>: Set up in under a minute across major coding tools — VS Code (Cline / Claude Code / Continue / Kilo Code), JetBrains, OpenClaw, Cursor, Zed, and more.</li>
+</ul>
+<hr>
+<h2>2. Visual Studio Code Integration Guide</h2>
+<h3>2.1 Prerequisites: API Keys and Endpoints</h3>
+<p>Before connecting MiniMax to VS Code, prepare two things: (1) issue an API Key on the MiniMax developer platform, and (2) choose your tool. Because the MiniMax API exposes both OpenAI-compatible (<code>/v1</code>) and Anthropic-compatible (<code>/anthropic</code>) endpoints simultaneously, you have full freedom of tool choice.</p>
+<p><strong>① Global Endpoints (international users)</strong></p>
+<ul>
+<li>OpenAI-compatible: <code>https://api.minimax.io/v1</code></li>
+<li>Anthropic-compatible: <code>https://api.minimax.io/anthropic</code></li>
+<li>Issue API Key at: <code>https://platform.minimax.io</code> → API Keys menu</li>
+</ul>
+<p><strong>② China Endpoints (mainland China)</strong></p>
+<ul>
+<li>OpenAI-compatible: <code>https://api.minimaxi.com/v1</code></li>
+<li>Anthropic-compatible: <code>https://api.minimaxi.com/anthropic</code></li>
+<li>Issue API Key at: <code>https://platform.minimaxi.com</code></li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>Note</strong>: The Subscription Key from <code>chat.minimax.io</code> is chat-only and does not work in coding tools. Always use the Pay-as-You-Go key from the &#39;API Keys&#39; menu.</p>
+</blockquote>
+<p><strong>Recommended Tool Mapping</strong></p>
+<table>
+<thead>
+<tr>
+<th>VS Code Tool</th>
+<th>Protocol</th>
+<th>Base URL</th>
+<th>API Key Location</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cline</td>
+<td>Anthropic</td>
+<td><code>https://api.minimax.io/anthropic</code></td>
+<td>Provider → MiniMax → Entrypoint</td>
+</tr>
+<tr>
+<td>Claude Code (extension)</td>
+<td>Anthropic</td>
+<td><code>https://api.minimax.io/anthropic</code></td>
+<td>Env vars <code>ANTHROPIC_BASE_URL</code> + <code>API_KEY</code></td>
+</tr>
+<tr>
+<td>Continue</td>
+<td>OpenAI</td>
+<td><code>https://api.minimax.io/v1</code></td>
+<td><code>config.json</code> providers block</td>
+</tr>
+<tr>
+<td>Kilo Code (formerly Roo Code)</td>
+<td>Anthropic</td>
+<td><code>https://api.minimax.io/anthropic</code></td>
+<td>Provider → MiniMax</td>
+</tr>
+<tr>
+<td>Cursor (Pro+)</td>
+<td>Anthropic</td>
+<td><code>https://api.minimax.io/anthropic</code></td>
+<td>Settings → Override OpenAI Base URL</td>
+</tr>
+<tr>
+<td>Zed / OpenCode</td>
+<td>OpenAI</td>
+<td><code>https://api.minimax.io/v1</code></td>
+<td>Provider settings → API Key</td>
+</tr>
+</tbody></table>
+<h3>2.2 Installing &amp; Configuring Cline (most common)</h3>
+<p>Cline (formerly Claude Dev) is the most widely used open-source AI coding agent in VS Code. Apache 2.0 license, 5M+ installs, 61k+ GitHub stars. It&#39;s a full-fledged agent supporting file read/write, terminal execution, and browser automation.</p>
+<p><strong>Installation Steps</strong></p>
+<ol>
+<li>In the VS Code Extensions tab (<code>Ctrl+Shift+X</code>), search for &#39;Cline&#39; → Install</li>
+<li>Click the Cline icon in the sidebar → select &#39;Use your own API Key&#39;</li>
+<li>In the API Provider dropdown, select &#39;MiniMax&#39;</li>
+<li>Choose your Entrypoint (international: <code>api.minimax.io</code>, China: <code>api.minimaxi.com</code>)</li>
+<li>Enter your API Key → click &#39;Done&#39; (top right)</li>
+<li>Select model: MiniMax-M3 (or M2.5 / M2.7) → enable &#39;Auto-approve: Edit&#39; and start</li>
+</ol>
+<p><strong>Tips for Cline-Specific Features</strong>-<strong>Plan / Act mode separation</strong>: Plan only proposes a multi-file change plan; Act performs the actual edits. Review big refactors in Plan first.</p>
+<ul>
+<li><strong>MCP Marketplace</strong>: Add built-in tools (browser, GitHub, DB clients, etc.) in one click.</li>
+<li><strong>@ mentions</strong>: Type <code>@filepath</code> in chat to auto-inject that file as context.</li>
+<li><strong>Checkpoints</strong>: Step-by-step snapshots are saved, enabling one-click rollback on mistakes.</li>
+</ul>
+<h3>2.3 Claude Code Extension (official VS Code)</h3>
+<p>Claude Code is a CLI tool built by Anthropic, but since 2026 it has shipped as an official VS Code extension. Combining the power of a terminal agent with the VS Code UI, it competes directly with OpenAI&#39;s Codex CLI.</p>
+<p><strong>Installation Steps</strong></p>
+<ol>
+<li>Search &#39;Claude Code&#39; in VS Code Extensions (confirm the official Anthropic publisher) → Install</li>
+<li>Click the Claude icon in the left sidebar</li>
+<li>The default is the Claude API, so to route through the MiniMax API, set environment variables:</li>
+</ol>
+<pre><code class="language-bash"># Add to ~/.zshrc or ~/.bashrc
+export ANTHROPIC_BASE_URL=&quot;https://api.minimax.io/anthropic&quot;
+export ANTHROPIC_API_KEY=&quot;YOUR_MINIMAX_API_KEY&quot;
+
+# Specify the model to use inside VS Code
+claude --model MiniMax-M3
+</code></pre>
+<ol start="4">
+<li>After restarting VS Code, switch models in the Claude panel with <code>/model</code> (M3 / M2.7 / M2.5)</li>
+<li>Slash commands like <code>/agents</code>, <code>/compact</code>, <code>/clear</code> all work normally on MiniMax M3 (Anthropic-SDK compatible)</li>
+</ol>
+<p><strong>Claude Code Strengths</strong></p>
+<ul>
+<li>Strong at parallel workloads — simultaneous analysis across multiple files.</li>
+<li>Establish a large-refactor strategy first in Plan mode, then execute.</li>
+<li>VS Code terminal integration lets you control git / CI-CD pipelines on one screen.</li>
+</ul>
+<h3>2.4 Continue (tab completion + chat)</h3>
+<p>Continue excels at &quot;daily driving.&quot; It bundles fast tab autocomplete, <code>@codebase</code> Q&amp;A, and simple chat in one, with broad support from local models (Ollama / LM Studio) to OpenAI-compatible APIs.</p>
+<p><strong>Installation Steps</strong></p>
+<ol>
+<li>Search &#39;Continue&#39; in Extensions → Install</li>
+<li>Open the chat panel with <code>Ctrl+L</code> → <code>config.json</code> is auto-generated</li>
+<li>Edit <code>config.json</code> as follows:</li>
+</ol>
+<pre><code class="language-json">{
+  &quot;models&quot;: [
+    {
+      &quot;title&quot;: &quot;MiniMax M2.5&quot;,
+      &quot;provider&quot;: &quot;openai&quot;,
+      &quot;model&quot;: &quot;MiniMax-M2.5&quot;,
+      &quot;apiBase&quot;: &quot;https://api.minimax.io/v1&quot;,
+      &quot;apiKey&quot;: &quot;YOUR_MINIMAX_API_KEY&quot;
+    }
+  ],
+  &quot;tabAutocompleteModel&quot;: {
+    &quot;title&quot;: &quot;MiniMax M2.5 Lightning&quot;,
+    &quot;provider&quot;: &quot;openai&quot;,
+    &quot;model&quot;: &quot;MiniMax-M2.5-highspeed&quot;,
+    &quot;apiBase&quot;: &quot;https://api.minimax.io/v1&quot;,
+    &quot;apiKey&quot;: &quot;YOUR_MINIMAX_API_KEY&quot;
+  }
+}
+</code></pre>
+<p>It applies immediately on save. For large repos, RAG search works after indexing with <code>@codebase</code>.</p>
+<h3>2.5 Kilo Code (formerly Roo Code)</h3>
+<p>Kilo Code is the spiritual successor to Roo Code. Roo Code was officially discontinued (repository archived) on May 15, 2026, but existing installs keep working while they remain in the marketplace. New users should install Kilo Code.</p>
+<p><strong>Installation Steps</strong></p>
+<ol>
+<li>Search &#39;Kilo Code&#39; in Extensions → Install (former Roo Code users can copy <code>~/.roo/</code> settings to <code>~/.kilocode/</code> and they&#39;ll work as-is)</li>
+<li>Kilo Code sidebar → API Provider: select MiniMax</li>
+<li>Entrypoint: <code>api.minimax.io</code> or <code>api.minimaxi.com</code></li>
+<li>Enter API Key → Model: select MiniMax-M3 → Done</li>
+</ol>
+<p><strong>Kilo Code&#39;s Unique Strengths</strong>-<strong>Orchestrator mode</strong>: Multi-step orchestration that decomposes complex tasks into subtasks and auto-delegates them to specialist modes (Architect, Code, Debug, etc.). A strong alternative to Cline&#39;s single Plan-Act loop when autonomously handling large features or PR-scale work in one pass.</p>
+<ul>
+<li><strong>Custom mode marketplace</strong>: Role-based presets like Architect, Ask, Code, Debug.</li>
+<li><strong>Side-by-side diff view</strong>: More refined change previews than Cline.</li>
+<li><strong>Step-by-step terminal permission control</strong>: Safety-first workflows.</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Practical tip</strong>: In a VS Code workflow, it helps to split tools by &quot;task scale.&quot; Use Cline&#39;s Plan-Act for single-feature edits and debugging, and delegate large multi-module feature builds to Kilo Code&#39;s Orchestrator mode.</p>
+</blockquote>
+<h3>2.6 Recommended Workflows in VS Code</h3>
+<p>If you must pick a single combination, we recommend:</p>
+<ul>
+<li><strong>Daily coding</strong>: Continue (tab completion) + Cline or Kilo Code (agent sidebar)</li>
+<li><strong>Large refactors / PR automation</strong>: Claude Code extension + Cline MCP integration, or Kilo Code Orchestrator</li>
+<li><strong>Cursor paid users</strong>: Cursor Pro ($20/mo) + Anthropic Base URL Override to use M3</li>
+<li><strong>Freelancers / cost-sensitive</strong>: MiniMax Coding Plan + Continue (open-source autocomplete) + Cline (agent)</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Field tip</strong>: Running two tools at once can conflict, so keep only one active at a time. Use only Cline&#39;s Plan mode during code review, and only Continue autocomplete during fast typing.</p>
+</blockquote>
+<hr>
+<h2>3. Designing Agent Workflows</h2>
+<h3>3.1 Understanding the Plan-Act Loop</h3>
+<p>In 2026, AI coding agents aren&#39;t simple Q&amp;A — they autonomously repeat a &quot;read → think → write → verify&quot; loop. This is the <strong>Plan-Act-Verify loop</strong>, and VS Code tools implement it in various forms.</p>
+<p><strong>The Four Stages of the Loop</strong>1.<strong>Read</strong>: Actively explore the working directory, files, and docs (grep, find, sed, ls, etc.).
+2. <strong>Think</strong>: Decompose the task, infer intent, decide which tools/APIs to call. MiniMax M3 includes a thinking block in its responses.
+3. <strong>Act</strong>: Create/modify files, run commands, call functions. All changes apply after user approval (human-in-the-loop).
+4. <strong>Verify</strong>: Run tests, type-check, confirm the build. On failure, return to stages 1–2 to self-correct.</p>
+<p><strong>Example: real flow of an &quot;add JWT auth middleware&quot; task</strong></p>
+<pre><code class="language-javascript">// Steps Cline / Kilo Code performs
+// 1. Read:   src/middleware/auth.ts, src/routes/api.ts, AGENTS.md
+// 2. Think:  &quot;Add JWT middleware; apply access 15min / refresh 7day policy&quot;
+// 3. Act:
+//    - create new src/middleware/jwt.ts
+//    - register middleware in src/routes/api.ts
+//    - add jsonwebtoken, bcrypt deps to package.json
+// 4. Verify:
+//    - npm run build  (TypeScript compile)
+//    - npm test       (existing + new middleware tests)
+//    - auto-fix import errors, etc. on failure
+</code></pre>
+<h3>3.2 MCP (Model Context Protocol) Integration</h3>
+<p>MCP is an open protocol proposed by Anthropic in 2024 that lets AI agents access external tools/data sources in a standardized way. Cline, Kilo Code, and Claude Code all support it natively.</p>
+<p><strong>What MCP Enables</strong></p>
+<ul>
+<li>Direct query/modify of Postgres / MySQL / MongoDB databases</li>
+<li>Control GitHub Issues / PR / Action workflows</li>
+<li>Search/author Notion / Confluence / Slack documents</li>
+<li>Puppeteer / Playwright browser automation (Computer Use)</li>
+<li>Call internal API endpoints</li>
+</ul>
+<blockquote>
+<p>💡 <strong>Practical value</strong>: MCP integration pays off most at automation points. Automated PR review via a GitHub server (issue → patch → PR creation → review comments) and schema-aware query writing via a DB server, when combined with MiniMax&#39;s low-cost models, cut both the cost and time of repetitive work simultaneously.</p>
+</blockquote>
+<p><strong>MCP Config Example (Cline <code>.mcp.json</code>)</strong></p>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;github&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-github&quot;],
+      &quot;env&quot;: { &quot;GITHUB_TOKEN&quot;: &quot;ghp_...&quot; }
+    },
+    &quot;postgres&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-postgres&quot;],
+      &quot;env&quot;: { &quot;DATABASE_URL&quot;: &quot;postgresql://...&quot; }
+    }
+  }
+}
+</code></pre>
+<h3>3.3 Checkpoints and the Git Safety Net</h3>
+<p>It&#39;s natural to worry that an AI agent might accidentally break files. 2026&#39;s tools solve this with two layers of safety.</p>
+<p><strong>① Cline / Kilo Code Checkpoints (agent level)</strong></p>
+<ul>
+<li>Auto-save a working-directory snapshot at each step.</li>
+<li>If it heads in the wrong direction, one click on &#39;Restore Checkpoint&#39; reverts.</li>
+<li>Uses incremental snapshots (only changed files) for storage efficiency.</li>
+</ul>
+<p><strong>② Git Branches (codebase level)</strong></p>
+<ul>
+<li>Before an important agent session: <code>git checkout -b feature/agent-task</code></li>
+<li>After the agent&#39;s work: review <code>git diff</code> → commit if satisfactory</li>
+<li>On a mistake: discard the branch with <code>git reset --hard</code></li>
+</ul>
+<p>The two nets are complementary: Checkpoints for &quot;back two steps,&quot; Git for &quot;discard everything.&quot;</p>
+<h3>3.4 Multi-Agent / Routing Patterns (hybrid strategy)</h3>
+<p>Rather than relying on a single model, routing models by task characteristics is the 2026 standard. The core is the cost-accuracy trade-off. The most cost-efficient setup in practice routes complex, precision-critical tasks to an expensive accurate model (Opus 4.7), and repetitive, mechanical tasks to a cheap small model (MiniMax M2.5 / DeepSeek V4-Flash). MiniMax has an especially wide price range ($0.14–$1.20/M), making routing particularly effective.</p>
+<table>
+<thead>
+<tr>
+<th>Task Type</th>
+<th>Recommended Model</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tab completion / simple queries</td>
+<td>M2.5-highspeed · DeepSeek V4-Flash</td>
+<td>Optimizes speed and cost together (lowest-cost tier)</td>
+</tr>
+<tr>
+<td>Function-level code generation</td>
+<td>M2.5 or Sonnet 4.6</td>
+<td>On par at SWE-bench ~80%</td>
+</tr>
+<tr>
+<td>Multi-file refactoring</td>
+<td>M3 / Opus 4.7</td>
+<td>1M context for whole-codebase awareness</td>
+</tr>
+<tr>
+<td>Agent loops (CI automation)</td>
+<td>M2.7 or Sonnet 4.6</td>
+<td>Proven tool-use stability</td>
+</tr>
+<tr>
+<td>Math / algorithm solving</td>
+<td>GPT-5.5 Thinking · DeepSeek V4-Pro</td>
+<td>Top on FrontierMath / LiveCodeBench</td>
+</tr>
+<tr>
+<td>High-precision code review</td>
+<td>Opus 4.7 / Sonnet 4.6</td>
+<td>#1 on SWE-Bench Pro at 64.0%</td>
+</tr>
+<tr>
+<td>Bulk batch processing</td>
+<td>DeepSeek V4-Flash / V3.2</td>
+<td>Minimize per-token cost with Batch + Context Cache</td>
+</tr>
+</tbody></table>
+<p><strong>Routing Example (OpenClaw)</strong></p>
+<pre><code class="language-json">// ~/.openclaw/openclaw.json
+{
+  &quot;models&quot;: {
+    &quot;providers&quot;: {
+      &quot;minimax&quot;:   { &quot;baseUrl&quot;: &quot;https://api.minimax.io/anthropic&quot;, &quot;apiKey&quot;: &quot;$MINIMAX_API_KEY&quot;,   &quot;api&quot;: &quot;anthropic-messages&quot; },
+      &quot;anthropic&quot;: { &quot;baseUrl&quot;: &quot;https://api.anthropic.com&quot;,         &quot;apiKey&quot;: &quot;$ANTHROPIC_API_KEY&quot;, &quot;api&quot;: &quot;anthropic-messages&quot; },
+      &quot;openai&quot;:    { &quot;baseUrl&quot;: &quot;https://api.openai.com/v1&quot;,         &quot;apiKey&quot;: &quot;$OPENAI_API_KEY&quot;,    &quot;api&quot;: &quot;openai-completions&quot; }
+    }
+  },
+  &quot;agents&quot;: {
+    &quot;defaults&quot;: {
+      &quot;model&quot;: {
+        &quot;primary&quot;: &quot;minimax/MiniMax-M3&quot;,
+        &quot;fallbacks&quot;: [&quot;anthropic/claude-opus-4-7&quot;, &quot;openai/gpt-5.5&quot;]
+      }
+    }
+  }
+}
+</code></pre>
+<p>With this setup, MiniMax M3 is called first, and on rate limits or transient failures it auto-fails over to Opus 4.7 → GPT-5.5. Over 90% of cost lands on M3, while the higher-tier models act as a safety net only at the edge of quality limits.</p>
+<hr>
+<h2>4. Price Comparison — MiniMax vs DeepSeek vs Anthropic vs OpenAI</h2>
+<h3>4.1 Per-Model Pricing</h3>
+<p>As of June 2026, price per million tokens (MTok). All are official prices (USD); batch/caching discounts are separate.</p>
+<table>
+<thead>
+<tr>
+<th>Vendor</th>
+<th>Model</th>
+<th>Input ($/M)</th>
+<th>Output ($/M)</th>
+<th>Context</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MiniMax</td>
+<td>M2.5 (open)</td>
+<td>0.30</td>
+<td>1.20</td>
+<td>197K</td>
+<td>SWE 80.2%</td>
+</tr>
+<tr>
+<td>MiniMax</td>
+<td>M2.5-highspeed</td>
+<td>0.30</td>
+<td>2.40</td>
+<td>197K</td>
+<td>2× faster</td>
+</tr>
+<tr>
+<td>MiniMax</td>
+<td>M2.7</td>
+<td>0.26</td>
+<td>1.20</td>
+<td>205K</td>
+<td>recursive self-improve</td>
+</tr>
+<tr>
+<td>MiniMax</td>
+<td>M3 (new)</td>
+<td>0.30</td>
+<td>1.20</td>
+<td>1M</td>
+<td>1M context, multimodal</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>V3.2</td>
+<td>0.28</td>
+<td>0.42</td>
+<td>128K</td>
+<td>cheapest closed-tier</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>V3.2 Speciale</td>
+<td>0.27</td>
+<td>0.40</td>
+<td>164K</td>
+<td>SWE 89.6% (experimental)</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>V4-Flash</td>
+<td>0.14</td>
+<td>0.28</td>
+<td>1M</td>
+<td>lowest cost · $0.028 on cache hit</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>V4-Pro</td>
+<td>1.74</td>
+<td>3.48</td>
+<td>1M</td>
+<td>strong at math/algorithms</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Haiku 4.5</td>
+<td>1.00</td>
+<td>5.00</td>
+<td>200K</td>
+<td>for light tasks</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Sonnet 4.6</td>
+<td>3.00</td>
+<td>15.00</td>
+<td>1M</td>
+<td>default production tier</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Opus 4.7 / 4.8</td>
+<td>5.00</td>
+<td>25.00</td>
+<td>1M</td>
+<td>#1 on SWE-Bench Pro 64.0%</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT-5.4</td>
+<td>2.50</td>
+<td>15.00</td>
+<td>1M</td>
+<td>native Computer Use</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT-5.4-mini</td>
+<td>0.40</td>
+<td>1.60</td>
+<td>272K</td>
+<td>low-cost, 94% performance</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT-5.5</td>
+<td>5.00</td>
+<td>30.00</td>
+<td>1M</td>
+<td>#1 on Terminal-Bench 82.7%</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT-5.5 Pro</td>
+<td>30.00</td>
+<td>180.00</td>
+<td>1M</td>
+<td>research/advanced analysis</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Caching note</strong>: On a cache hit, MiniMax input drops to ~$0.03/M and DeepSeek V4-Flash to $0.028/M. Conversely, Claude Opus&#39;s 2026 tokenizer change increased the token count for the same text, raising effective cost — so comparing on nominal list price alone may understate Opus&#39;s real cost.</p>
+</blockquote>
+<h3>4.2 Monthly Cost by Scenario</h3>
+<p>Monthly cost converted from a real dev workload. All assume 50 requests/day × 22 days, 50K input / 10K output tokens.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Price ($/M in/out)</th>
+<th>Monthly cost (USD)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek V4-Flash</td>
+<td>0.14 / 0.28</td>
+<td>$5.39</td>
+<td>lowest cost, 1M context</td>
+</tr>
+<tr>
+<td>DeepSeek V3.2</td>
+<td>0.28 / 0.42</td>
+<td>$7.92</td>
+<td>low-cost multilingual</td>
+</tr>
+<tr>
+<td>MiniMax M2.5</td>
+<td>0.30 / 1.20</td>
+<td>$17.16</td>
+<td>SWE 80.2% + open-weight</td>
+</tr>
+<tr>
+<td>MiniMax M3</td>
+<td>0.30 / 1.20</td>
+<td>$17.16</td>
+<td>1M context, multimodal</td>
+</tr>
+<tr>
+<td>DeepSeek V4-Pro</td>
+<td>1.74 / 3.48</td>
+<td>$53.20</td>
+<td>math/algorithms</td>
+</tr>
+<tr>
+<td>GPT-5.4</td>
+<td>2.50 / 15.00</td>
+<td>$192.50</td>
+<td>native Computer Use</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td>3.00 / 15.00</td>
+<td>$215.50</td>
+<td>Claude quality · 1M</td>
+</tr>
+<tr>
+<td>Claude Opus 4.7</td>
+<td>5.00 / 25.00</td>
+<td>$330.00</td>
+<td>#1 SWE Pro, premium</td>
+</tr>
+<tr>
+<td>GPT-5.5</td>
+<td>5.00 / 30.00</td>
+<td>$385.00</td>
+<td>#1 Terminal-Bench</td>
+</tr>
+</tbody></table>
+<p><strong>Observations</strong></p>
+<ul>
+<li>MiniMax M2.5 delivers ~98% of Opus 4.7&#39;s SWE-bench score at roughly 1/19 the cost.</li>
+<li>DeepSeek V4-Flash has the lowest nominal price (~1/2 of M2.5) and, with a 1M context, is optimal for bulk batches.</li>
+<li>Sonnet 4.6 and GPT-5.4 sit in a similar price band, but Sonnet has a 1M context as standard while GPT-5.4&#39;s differentiator is Computer Use.</li>
+<li>For premium models (Opus 4.7, GPT-5.5), the key to cost optimization is routing to them &quot;only when truly needed.&quot;</li>
+</ul>
+<h3>4.3 Cost-Optimization Levers</h3>
+<p>Four discount mechanisms commonly offered by all vendors.</p>
+<table>
+<thead>
+<tr>
+<th>Mechanism</th>
+<th>Savings</th>
+<th>How it works</th>
+<th>Caveat</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Prompt Caching</td>
+<td>~90%</td>
+<td>Read repeated context from cache</td>
+<td>First write billed at 1.25× (Anthropic)</td>
+</tr>
+<tr>
+<td>Batch API</td>
+<td>~50%</td>
+<td>Async batch processing</td>
+<td>Must tolerate multi-hour latency</td>
+</tr>
+<tr>
+<td>Tier routing</td>
+<td>30–60%</td>
+<td>Easy tasks to mini/flash</td>
+<td>Implement routing logic yourself</td>
+</tr>
+<tr>
+<td>Context Caching</td>
+<td>90%+</td>
+<td>DeepSeek V4 auto-cache</td>
+<td>Needs repeated prefix patterns</td>
+</tr>
+</tbody></table>
+<p>On a cache hit, MiniMax input drops to $0.03/M (~10% of normal), and a full 1M-context window is included at standard pricing with no surcharge (in contrast to Sonnet&#39;s &gt;200K surcharge). Even when token prices look identical, real cost varies by tokenizer efficiency, so we recommend comparing measured token counts on the same code sample before deciding.</p>
+<hr>
+<h2>5. Coding Performance Comparison</h2>
+<p>A coding LLM&#39;s performance can&#39;t be judged by a single benchmark. The 2026 standard is cross-checking these four benchmarks:</p>
+<ul>
+<li><strong>SWE-bench Verified</strong> (500 GitHub issues, Python-centric) — the most authoritative composite metric</li>
+<li><strong>SWE-Bench Pro</strong> (1,865 multilingual tasks, Python/Go/TS/JS) — multilingual agentic coding</li>
+<li><strong>Terminal-Bench 2.0</strong> (autonomous work in a CLI environment) — an agent&#39;s terminal proficiency</li>
+<li><strong>LiveCodeBench</strong> (competitive programming) — pure algorithmic problem solving</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>Important</strong>: Benchmark scores vary widely by agent scaffold, tool environment, and prompt setup. The figures below summarize public leaderboards from the same window (2026-05-28 to 06-02); reading &quot;which benchmark is it strong on&quot; is more useful in practice than the absolute ranking.</p>
+</blockquote>
+<h3>5.1 SWE-bench Verified Scores</h3>
+<p>As of June 2026. 500-task human-verified set, standard mini-SWE-agent + bash tool environment.</p>
+<table>
+<thead>
+<tr>
+<th>Rank</th>
+<th>Model</th>
+<th>Vendor</th>
+<th>SWE-bench Verified</th>
+<th>Input Price</th>
+<th>Cost per 100K tokens*</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>GPT-5.5</td>
+<td>OpenAI</td>
+<td>82.60%</td>
+<td>$5.00/M</td>
+<td>$0.50</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Claude Opus 4.7</td>
+<td>Anthropic</td>
+<td>82.00%</td>
+<td>$5.00/M</td>
+<td>$0.50</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Claude Opus 4.6</td>
+<td>Anthropic</td>
+<td>80.80%</td>
+<td>$5.00/M</td>
+<td>$0.50</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Gemini 3.1 Pro</td>
+<td>Google</td>
+<td>80.60%</td>
+<td>$2.00/M</td>
+<td>$0.20</td>
+</tr>
+<tr>
+<td>5</td>
+<td>DeepSeek V4-Pro</td>
+<td>DeepSeek</td>
+<td>80.60%</td>
+<td>$1.74/M</td>
+<td>$0.17</td>
+</tr>
+<tr>
+<td>6</td>
+<td>MiniMax M2.5</td>
+<td>MiniMax</td>
+<td>80.20%</td>
+<td>$0.30/M</td>
+<td>$0.03</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Claude Sonnet 4.6</td>
+<td>Anthropic</td>
+<td>79.60%</td>
+<td>$3.00/M</td>
+<td>$0.30</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Kimi K2.5</td>
+<td>Moonshot</td>
+<td>76.80%</td>
+<td>open-source</td>
+<td>self-host</td>
+</tr>
+<tr>
+<td>9</td>
+<td>DeepSeek V3.2</td>
+<td>DeepSeek</td>
+<td>72–74%</td>
+<td>$0.28/M</td>
+<td>$0.03</td>
+</tr>
+<tr>
+<td>10</td>
+<td>GPT-5.4</td>
+<td>OpenAI</td>
+<td>~80%</td>
+<td>$2.50/M</td>
+<td>$0.25</td>
+</tr>
+</tbody></table>
+<p>* Cost per 100K tokens = based on input price (rises with each model&#39;s price when adding 10K output tokens).</p>
+<p><strong>Key Insights</strong></p>
+<ul>
+<li>The top 6 models cluster within 1.3 pp, so score alone shows little difference. The real winner emerges only when combined with price.</li>
+<li>MiniMax M2.5 trails Opus 4.6 by 0.6 pp but costs 1/17 — best cost efficiency.</li>
+<li>DeepSeek V4-Pro offers Opus-4.6-class scores with a full 1M window at 1/21 the price — strong for price-sensitive teams.</li>
+<li>GPT-5.5 is #1 on SWE-bench, but only 0.6 pp ahead of #2. It&#39;s overkill for simple coding.</li>
+</ul>
+<h3>5.2 SWE-Bench Pro / Terminal-Bench</h3>
+<p>SWE-Bench Pro is a hardened metric measured in multilingual/agentic environments; Terminal-Bench measures autonomous CLI work.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>SWE-Bench Pro</th>
+<th>Terminal-Bench 2.0</th>
+<th>LiveCodeBench</th>
+<th>Specialty</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claude Opus 4.7</td>
+<td>64.0% (#1)</td>
+<td>69.40%</td>
+<td>88.80</td>
+<td>#1 at solving GitHub issues</td>
+</tr>
+<tr>
+<td>MiniMax M3</td>
+<td>59.0%</td>
+<td>—</td>
+<td>—</td>
+<td>Open-weight Agent Coding SOTA</td>
+</tr>
+<tr>
+<td>GPT-5.5</td>
+<td>58.6%</td>
+<td>82.70% (#1)</td>
+<td>—</td>
+<td>Best at long autonomous work</td>
+</tr>
+<tr>
+<td>GPT-5.4</td>
+<td>57.70%</td>
+<td>75.10%</td>
+<td>—</td>
+<td>Native Computer Use</td>
+</tr>
+<tr>
+<td>Gemini 3.1 Pro</td>
+<td>54.20%</td>
+<td>68.50%</td>
+<td>2887 Elo (#1)</td>
+<td>Best at competitive programming</td>
+</tr>
+<tr>
+<td>MiniMax M2.5</td>
+<td>51.30%</td>
+<td>—</td>
+<td>82.6 Elo</td>
+<td>Open-weight · #1 on Multi-SWE</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td>~50%</td>
+<td>—</td>
+<td>—</td>
+<td>Value Claude</td>
+</tr>
+<tr>
+<td>DeepSeek V3.2</td>
+<td>—</td>
+<td>—</td>
+<td>83.3 Pass@1</td>
+<td>Low-cost multilingual coding</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Benchmark reversal</strong>: The same model&#39;s rank flips across benchmarks. On the DeepSWE benchmark, for instance, GPT-5.5 is #1 at 70% while Opus 4.7 drops to #3 at 54% — the opposite of SWE-Bench Pro. This signals that each model has its own specialty, and you should choose based on the benchmark most similar to your own task distribution. Also, MiniMax M3 edging out GPT-5.5 (58.6%) at 59.0% on SWE-Bench Pro signals that open-weight models have begun to rival the commercial top tier in agentic coding.</p>
+</blockquote>
+<h3>5.3 Direct Comparison of Core Models (figure-based)</h3>
+<p>The 5 models most often shortlisted in practice, organized by official figures. Items with no official disclosure are marked &quot;N/A,&quot; and benchmarks should be read on the premise that figures vary by environment.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>MiniMax M3 (recommended)</th>
+<th>MiniMax M2.5</th>
+<th>DeepSeek V4-Pro</th>
+<th>DeepSeek V4-Flash</th>
+<th>Claude Opus 4.7</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Input / Output ($/M)</td>
+<td>0.30 / 1.20</td>
+<td>0.30 / 1.20</td>
+<td>1.74 / 3.48</td>
+<td>0.14 / 0.28</td>
+<td>5.00 / 25.00</td>
+</tr>
+<tr>
+<td>Prompt Cache ($/M)</td>
+<td>~0.03</td>
+<td>~0.03</td>
+<td>0.145</td>
+<td>0.028</td>
+<td>write cost separate</td>
+</tr>
+<tr>
+<td>SWE-bench Verified</td>
+<td>N/A</td>
+<td>80.2%</td>
+<td>80.6%</td>
+<td>undisclosed</td>
+<td>82.0%</td>
+</tr>
+<tr>
+<td>LiveCodeBench</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>93.5 (V4-Pro-Max)</td>
+<td>undisclosed</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>SWE-Bench Pro</td>
+<td>59.0%</td>
+<td>51.3%</td>
+<td>undisclosed</td>
+<td>undisclosed</td>
+<td>64.0%</td>
+</tr>
+<tr>
+<td>Context Window</td>
+<td>1M</td>
+<td>197K</td>
+<td>1M</td>
+<td>1M</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>Strength</td>
+<td>Agent Coding SOTA · cheap 1M context</td>
+<td>Efficient MoE (229B / 10B active)</td>
+<td>Strong complex math/algorithms</td>
+<td>Lowest cost · 1/2 of M2.5</td>
+<td>Precise code review · enterprise favorite</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Reading the table</strong>: For M3 vs M2.5, the key is identical pricing ($0.30/$1.20) with 1M vs 197K context; V4-Flash is the lowest-cost 1M option, V4-Pro specializes in math/algorithms, and Opus 4.7 is #1 in SWE-Bench Pro precision. Even with the same &quot;recommended&quot; tag, the optimum changes by task type, so decide by weighing all three axes — price, context, and benchmark — together.</p>
+</blockquote>
+<h3>5.4 Overall Evaluation Matrix</h3>
+<p>A composite evaluation across the 6 dimensions actually considered in real use, not a single benchmark.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Code Quality</th>
+<th>Agent Loop</th>
+<th>Context Length</th>
+<th>Speed</th>
+<th>Price Efficiency</th>
+<th>Open Source</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MiniMax M2.5</td>
+<td>★★★★★</td>
+<td>★★★★★</td>
+<td>★★ (197K)</td>
+<td>★★★</td>
+<td>★★★★★</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>MiniMax M3</td>
+<td>★★★★★</td>
+<td>★★★★★</td>
+<td>★★★★★ (1M)</td>
+<td>★★★★</td>
+<td>★★★★</td>
+<td>planned</td>
+</tr>
+<tr>
+<td>DeepSeek V4-Pro</td>
+<td>★★★★★</td>
+<td>★★★★</td>
+<td>★★★★★ (1M)</td>
+<td>★★★</td>
+<td>★★★★★</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>DeepSeek V4-Flash</td>
+<td>★★★★</td>
+<td>★★★★</td>
+<td>★★★★★ (1M)</td>
+<td>★★★★★</td>
+<td>★★★★★</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Claude Opus 4.7</td>
+<td>★★★★★</td>
+<td>★★★★★</td>
+<td>★★★★★ (1M)</td>
+<td>★★</td>
+<td>★★</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td>★★★★</td>
+<td>★★★★★</td>
+<td>★★★★★ (1M)</td>
+<td>★★★★</td>
+<td>★★★</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>GPT-5.5</td>
+<td>★★★★★</td>
+<td>★★★★★</td>
+<td>★★★★★ (1M)</td>
+<td>★★★</td>
+<td>★</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>GPT-5.4</td>
+<td>★★★★</td>
+<td>★★★★</td>
+<td>★★★★★ (1M)</td>
+<td>★★★★</td>
+<td>★★★</td>
+<td>✗</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Decision Guide — Which Model, When?</h2>
+<p>Don&#39;t try to solve every situation with one model. The decision tree below lets you choose in 30 seconds.</p>
+<p><strong>① If budget is your biggest constraint</strong>→ MiniMax M2.5 or DeepSeek V4-Flash. You get SWE-bench in the 70–80% range at around $0.03 per 100K tokens. M2.5 has a clear upgrade path to M3, and after M3&#39;s release you can use up to a 1M context as-is.<strong>② If code quality (catching subtle intent) is the top priority</strong>→ Claude Opus 4.7. At 64.0% on SWE-Bench Pro, it&#39;s #1 at solving real GitHub issues. If your team keeps getting &quot;almost right but slightly off&quot; results, we recommend a failover setup that routes to Opus.<strong>③ If you have many long autonomous tasks (8h+ continuous)</strong>→ GPT-5.5. At 82.7% on Terminal-Bench 2.0, it&#39;s #1 and the strongest for long autonomous work. But its price ($5/$30) is 2×, so route to it only for genuinely long tasks.<strong>④ If you need 1M-token full-codebase analysis</strong>→ MiniMax M3, Gemini 3.1 Pro, DeepSeek V4-Pro / V4-Flash, Claude Opus 4.7/4.8 (all support 1M). Among these, V4-Flash ($0.14/$0.28) and M3 ($0.30/$1.20) lead on price efficiency. Sonnet 4.6 also supports 1M.<strong>⑤ If you need data sovereignty / on-premises</strong>→ MiniMax M2.5/M2.7 (open-weight) or DeepSeek V3.2/V4. Pull the weights from Hugging Face and serve them on an internal cluster with vLLM/SGLang. MiniMax is MIT-style; DeepSeek is MIT + Model License (commercial use allowed).<strong>⑥ If you need Computer Use (browser/OS automation)</strong>→ GPT-5.4 (native, OSWorld 75%) or Claude Opus 4.7 (API). MiniMax M3 is natively multimodal, but Computer Use requires separate implementation via tool calls.<strong>⑦ Recommended hybrid routing config (OpenClaw example)</strong></p>
+<pre><code class="language-json">{
+  &quot;agents&quot;: {
+    &quot;defaults&quot;: {
+      &quot;model&quot;: { &quot;primary&quot;: &quot;minimax/MiniMax-M3&quot;, &quot;fallbacks&quot;: [&quot;anthropic/claude-opus-4-7&quot;] }
+    },
+    &quot;overrides&quot;: {
+      &quot;complex_reasoning&quot;: { &quot;primary&quot;: &quot;anthropic/claude-opus-4-7&quot;, &quot;fallbacks&quot;: [&quot;minimax/MiniMax-M3&quot;] },
+      &quot;math_algorithm&quot;:    { &quot;primary&quot;: &quot;openai/gpt-5.5&quot;,            &quot;fallbacks&quot;: [&quot;deepseek/deepseek-v4-pro&quot;] },
+      &quot;autocomplete&quot;:      { &quot;primary&quot;: &quot;minimax/MiniMax-M2.5-highspeed&quot; },
+      &quot;bulk_batch&quot;:        { &quot;primary&quot;: &quot;deepseek/deepseek-v4-flash&quot; }
+    }
+  }
+}
+</code></pre>
+<hr>
+<h2>7. Conclusion &amp; References</h2>
+<h3>7.1 One-Line Takeaway</h3>
+<blockquote>
+<p>MiniMax M2.5/M3 — with SWE-bench Verified in the 80s, SWE-Bench Pro in the 59s, 197K–1M context, both OpenAI and Anthropic API compatibility, open weights, and low pricing ($0.30/$1.20) — is the most balanced coding LLM of 2026.</p>
+</blockquote>
+<p>It integrates with VS Code&#39;s Cline · Claude Code · Continue · Kilo Code in under a minute, and is easy to set as primary in multi-vendor routers like OpenClaw/OpenCode.</p>
+<h3>7.2 Recommended Decision Summary</h3>
+<ul>
+<li><strong>Start right now</strong>: Sign up on the MiniMax platform → issue an API Key → install Cline → first agent session in 5 minutes.</li>
+<li><strong>Existing OpenAI/Anthropic users</strong>: Migrate with a one-line change by swapping <code>base_url</code>. The Coding Plan is the fastest onboarding.</li>
+<li><strong>Enterprise / data-sensitive</strong>: Pull M2.5/M2.7 weights from Hugging Face and serve on an internal vLLM cluster.</li>
+<li><strong>When you hit performance limits</strong>: Add failover routing in the order MiniMax M3 → Opus 4.7 → GPT-5.5.</li>
+</ul>
+<h3>7.3 References (as of 2026-06-02)</h3>
+<p><strong>Official Docs &amp; Pricing</strong></p>
+<ul>
+<li>MiniMax API docs: <a href="https://platform.minimax.io/docs/guides/models-intro">https://platform.minimax.io/docs/guides/models-intro</a></li>
+<li>MiniMax OpenAI SDK guide: <a href="https://platform.minimax.io/docs/api-reference/text-openai-api">https://platform.minimax.io/docs/api-reference/text-openai-api</a></li>
+<li>Anthropic Pricing: <a href="https://platform.claude.com/docs/en/about-claude/pricing">https://platform.claude.com/docs/en/about-claude/pricing</a></li>
+<li>OpenAI API Pricing: <a href="https://openai.com/api/pricing/">https://openai.com/api/pricing/</a></li>
+<li>DeepSeek API Updates: <a href="https://api-docs.deepseek.com/updates">https://api-docs.deepseek.com/updates</a></li>
+</ul>
+<p><strong>Benchmarks</strong></p>
+<ul>
+<li>SWE-bench official leaderboard: <a href="https://www.swebench.com/">https://www.swebench.com/</a></li>
+<li>Vals AI SWE-bench Verified: <a href="https://www.vals.ai/benchmarks/swebench">https://www.vals.ai/benchmarks/swebench</a></li>
+<li>Morph model comparison: <a href="https://www.morphllm.com/best-ai-model-for-coding">https://www.morphllm.com/best-ai-model-for-coding</a></li>
+<li>Price Per Token: <a href="https://pricepertoken.com/">https://pricepertoken.com/</a></li>
+</ul>
+<p><strong>VS Code Tools</strong></p>
+<ul>
+<li>Cline: <a href="https://github.com/cline/cline">https://github.com/cline/cline</a></li>
+<li>Kilo Code: <a href="https://github.com/Kilo-Org/kilocode">https://github.com/Kilo-Org/kilocode</a></li>
+<li>Continue: <a href="https://continue.dev/">https://continue.dev/</a></li>
+<li>Claude Code: <a href="https://code.claude.com/docs/">https://code.claude.com/docs/</a></li>
+<li>OpenClaw: <a href="https://docs.openclaw.ai/providers/MiniMax">https://docs.openclaw.ai/providers/MiniMax</a></li>
+</ul>
+<p><strong>Open-Weight Weights</strong></p>
+<ul>
+<li>HuggingFace MiniMaxAI: <a href="https://huggingface.co/MiniMaxAI">https://huggingface.co/MiniMaxAI</a></li>
+<li>HuggingFace DeepSeek: <a href="https://huggingface.co/deepseek-ai">https://huggingface.co/deepseek-ai</a></li>
+</ul>
+<hr>
+<blockquote>
+<p>⚠️ <strong>Disclaimer</strong>: The pricing, benchmark, and model information in this document is current as of 2026-06-02 and changes rapidly. Reconfirm the latest figures in each vendor&#39;s official docs before adopting. Manage sensitive data such as API keys and tokens via environment variables, and never commit them to code/repositories.</p>
+</blockquote>
+<p><em>─ End of document ─</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MiniMax%20Coding%20Guide/minimax-coding-guide.en.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

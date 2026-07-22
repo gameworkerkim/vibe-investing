@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Blockchain Dreams of a Decentralized Future — But Does It Deliver? — VibeQuant</title>
+  <meta name="description" content="June 2026 · An analysis of infrastructure concentration" />
+  <link rel="canonical" href="https://docs.vibequant.cc/columns/aws-blockchain-blockchain-aws-centraliza-9ae8d799/" />
+  <meta property="og:title" content="Blockchain Dreams of a Decentralized Future — But Does It Deliver?" />
+  <meta property="og:description" content="June 2026 · An analysis of infrastructure concentration" />
+  <meta property="og:url" content="https://docs.vibequant.cc/columns/aws-blockchain-blockchain-aws-centraliza-9ae8d799/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Blockchain Dreams of a Decentralized Future — But Does It Deliver?","description":"June 2026 · An analysis of infrastructure concentration","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://docs.vibequant.cc/columns/aws-blockchain-blockchain-aws-centraliza-9ae8d799/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AWS_Blockchain/blockchain-aws-centralization-column-en.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link is-active" href="../../columns/">Columns</a>
+        <a class="site-nav-link" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../columns/">Columns</a> · 크립토 · Web3</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">크립토 · Web3</p>
+        <h1>Blockchain Dreams of a Decentralized Future — But Does It Deliver?</h1>
+        <p class="lede">June 2026 · An analysis of infrastructure concentration</p>
+        
+      </header>
+      <div class="article-body prose"><h3>The Pain Point Exposed by the AWS Outages</h3>
+<p><em>June 2026 · An analysis of infrastructure concentration</em></p>
+<hr>
+<h2>When a Few Cooling Units Failed, an Exchange Went Dark</h2>
+<p>On the night of May 7, 2026 (around 7:48 PM US Eastern Time), nearly all trading on Coinbase stopped. The cause was neither the market nor a hack. In a single availability zone (use1-az4) of AWS us-east-1, multiple chillers failed simultaneously, overheating one data-center hall; a thermal-safety shutdown then cut power to entire racks, taking down their EC2 instances and EBS volumes at once. It was a physical event. Restoring cooling to pre-incident levels took roughly 20 hours.<sup>[1][2]</sup></p>
+<p>Coinbase&#39;s recently published postmortem records the timeline dryly. The trading disruption lasted about 8 hours; full recovery took about 12. Quorum was restored just after midnight (12:06 AM), but markets did not reopen until 3:49 AM. The gap in between is the heart of this incident.<sup>[1][3]</sup></p>
+<h2>Where &quot;We&#39;re Multi-AZ, So We&#39;re Fine&quot; Fell Apart</h2>
+<p>On the surface, Coinbase was built by the book. Even if an entire availability zone dies, service continues from the remaining zones — this is the architectural principle most AWS customers rely on, the failure mode a hyperscaler is designed to absorb at the zone boundary. This time, that principle did not hold. For two reasons.<sup>[2]</sup></p>
+<p>First, the component most sensitive to latency — the trade matching engine — was running, by design, in a single zone. A configuration deliberately pinned to one zone for millisecond-level speed became a single point of failure the moment that zone went down.<sup>[4]</sup></p>
+<p>Second, and more painful, the automatic recovery failed silently. Coinbase had placed much of its event streaming on AWS&#39;s managed Kafka service (MSK). The promise of a managed service is clear.</p>
+<p>When some brokers die, partition leaders are automatically re-elected so that traffic keeps flowing through the surviving brokers. The loss of one zone should be &quot;reduced capacity,&quot; not &quot;loss of availability.&quot; But a defect in the MSK control plane blocked the automatic partition-leader re-election. Two MSK clusters were stuck in a &quot;healing&quot; state, producers could not write, and the fallout blocked the fee service, which in turn blocked quoting. The &quot;broken trades and quotes&quot; users experienced were produced this way. On top of that, one Kafka cluster was in a 2-AZ configuration, which widened the blast radius.<sup>[1][4][5]</sup></p>
+<p>In a system with redundancy designed in, the redundancy itself did not work, and engineers had to run disaster recovery procedures by hand. CEO Brian Armstrong described the situation as never acceptable. Coinbase committed to strengthening region-level redundancy, expanding the Kafka configuration from 2-AZ to 3-AZ, and increasing resilience testing.<sup>[3][1]</sup></p>
+<p>The lesson here is clear. <strong>We are multi-AZ&quot; is not the same statement as &quot;we survive the loss of a zone.</strong> Redundancy that is not continuously validated under real zone-loss conditions is not redundancy but the theater of redundancy. And the abstraction of a managed service hides, inside itself, failure modes you cannot reach.</p>
+<h2>The Same Lesson, Taught Three Times in Seven Months</h2>
+<p>If this incident were a one-off stroke of bad luck, it would not be worth a column. The problem is its recurrence.</p>
+<ul>
+<li><strong>October 20, 2025.</strong> A race condition in the internal DNS automation of DynamoDB in AWS us-east-1 cascaded across more than 70 services (about 15 hours). Coinbase stopped, the L2 network Base went down, and as Consensys&#39;s Infura RPC died, MetaMask — blockchain&#39;s core wallet service — was severed. The front ends and relays of Polygon, Optimism, Arbitrum, Linea, and Scroll were affected one after another.<sup>[6][7][8][9]</sup></li>
+<li><strong>November 18, 2025.</strong> A Cloudflare Bot Management feature file doubled in size due to a database permissions change and propagated to edge nodes worldwide; a company handling a fifth of internet traffic spewed 5xx errors for about three hours. BitMEX, DeFiLlama, Arbiscan — and once again Coinbase and Ledger — threw service errors and lost face.<sup>[12][13][14]</sup></li>
+<li><strong>May 7, 2026.</strong> The cooling failure described above.<sup>[1]</sup></li>
+</ul>
+<p>A DNS bug, a config file, a cooling unit. The cause differs each time, but the result is the same. And in all three, what stopped was not the blockchain&#39;s consensus layer.</p>
+<h2>What Stopped, and What Survived?</h2>
+<p>We must draw the distinction precisely. In the October outage, the consensus layers of Ethereum and Solana showed no protocol-level anomaly. Blocks kept being produced, and on-chain assets were safe. In the May Coinbase incident as well, user funds were intact on chain.<sup>[10]</sup></p>
+<p>So why could users do nothing? Today, when a single user uses a &quot;decentralized app,&quot; that request passes through roughly the following layers.</p>
+<ol>
+<li><strong>Edge/CDN layer</strong> — providers like Cloudflare handle front-end domains, DDoS protection, and caching.</li>
+<li><strong>Hosting layer</strong> — dApp front ends, nodes, and even an exchange&#39;s matching engine run atop AWS, Google Cloud, and Alibaba Cloud.</li>
+<li><strong>RPC/relay layer</strong> — a handful of gateways like Infura and Alchemy mediate between wallets and chains.</li>
+<li><strong>Consensus layer</strong> — only here do distributed nodes validate blocks.</li>
+</ol>
+<p>True decentralization exists only in layer 4. Layers 1–3 — the &quot;operational surface&quot; users actually touch — are tied to a tiny number of cloud providers. Whether a cooling failure or a DNS bug, once it breaks layers 1–3, no matter how healthy layer 4 is, it is indistinguishable to the user from the entire network being dead.</p>
+<h2>What the Numbers Say About Concentration</h2>
+<p>This is not an emotional critique but a measurable fact. Per Ethernodes, at the time of the October outage about 36% of Ethereum execution-layer nodes (roughly 2,368) were on AWS. About 70% of nodes depend on cloud hosting in some form, and geographically nearly half of all nodes are clustered in the United States.<sup>[16][17][18]</sup></p>
+<p>The problem is not single-provider dependence alone. us-east-1 is a special region even within AWS. Global services such as IAM authentication, CloudFront, Route 53, and DynamoDB Global Tables depend on us-east-1 endpoints even for resources deployed in other regions. This means that even a configuration believed to be &quot;distributed across multiple regions&quot; may be tied to a single region&#39;s control plane. And the May incident went one step lower, showing that even &quot;multi-AZ&quot; is no guarantee in the face of a control-plane defect. Beneath each appearance of distribution, a single point of failure is hidden, one layer at a time.<sup>[6][19]</sup></p>
+<p>Alibaba Cloud and Cloudflare create the same risk along different axes. Alibaba Cloud is where the nodes and infrastructure of Asian — especially Chinese — projects concentrate, and Cloudflare is the edge gateway through which almost every Web3 front end passes, regardless of where hosting lives. Even a project with no nodes on AWS would have fallen into the same outage on November 18 if it had placed Cloudflare in front of its domain.<sup>[15]</sup></p>
+<h2>Why Did It Come to This? — Economics, Not Anomaly</h2>
+<p>This concentration is not the product of laziness or a betrayal of decentralization. It is the cumulative result of rational choices. Running your own full node demands substantial storage, bandwidth, and staff, while the cloud provides all of that in minutes, at a predictable cost. Because users will not tolerate even 200ms of latency, projects pick the fastest edge, and exchanges pin the matching engine to a single zone to cut latency. For an individual project, these choices are almost always rational.</p>
+<p>The problem arises when everyone makes the same rational choice. The sum of individually optimal decisions becomes a system-level vulnerability. Because each party chose the most robust provider and the fastest configuration, the entire ecosystem ended up putting its eggs in the same few baskets. And when those baskets shake, risk that was supposed to be distributed reveals itself as perfectly correlated risk.</p>
+<h2>The Uncomfortable Diagnosis of &quot;Pseudo-Decentralization&quot;</h2>
+<p>We need to be honest. Blockchain&#39;s decentralization is real at the level of consensus mechanisms and asset ownership. The fact that no one&#39;s coins disappeared across the three outages is the proof. But <strong>decentralization in the dimension users actually experience — accessibility, availability, censorship resistance — is largely closer to narrative.</strong></p>
+<p><strong>There is a wide gap between the decentralization Satoshi spoke of — decentralization as hypothesis — and decentralization as measured.</strong></p>
+<p>This should be treated not as a moral indictment but as engineering debt. We poured enormous intellectual resources into decentralizing the consensus layer, yet entrusted the operational surface built on top of it wholesale to the most convenient centralized infrastructure. Consensus was distributed, but the infrastructure riding on the existing internet and the cloud remained bound to Web 2.0.</p>
+<h2>So What Should Be Done? — Without Overstatement</h2>
+<p>A common trap in discussing solutions is selling the utopia of &quot;fully decentralized infrastructure.&quot; That is not honest. Realistic mitigations are incremental, each carrying a clear trade-off.</p>
+<ul>
+<li><strong>Redundancy must be validated redundancy.</strong> The real lesson of the Coinbase case is not &quot;there was no redundancy&quot; but &quot;redundancy was not validated under real failure conditions.&quot; A fallback diagram drawn without chaos engineering and regular zone-loss drills guarantees no availability.</li>
+<li><strong>Trust the managed-service abstraction, but know your dependencies.</strong> That MSK promises automatic failover does not mean the promise is kept across every failure mode. Design on the premise that failures you cannot reach — like a control-plane defect — exist.</li>
+<li><strong>Infrastructure diversification starts with cloud and region diversification.</strong> Simply distributing RPC across multiple providers and regions and keeping fallback paths reduces single points of failure. Cost and complexity rise. That is the price of availability.</li>
+<li><strong>Decentralized RPC and infrastructure networks (DIN) are promising but unfinished.</strong> Efforts to resolve node provisioning through distributed incentive structures are underway, but they have yet to catch up to centralized gateways on latency and consistency. Guard against both overestimating and underestimating them.</li>
+<li><strong>The most honest first step is a dependency inventory.</strong> Mapping out which provider, which region, and which single control plane your stack is actually tied to. Most projects do not even realize they are far more centralized than they think.</li>
+</ul>
+<h2>In Closing</h2>
+<p>Blockchain is a tool, not an oracle. It elegantly tries to solve the particular problems of consensus and ownership. But the physical foundation on which that tool runs is the reality called the Web. Servers, DNS, the edge, and now cooling units still stand atop the cloud oligopoly of 2026. October 2025&#39;s DNS, November&#39;s config file, May 2026&#39;s cooling unit. In less than seven months, the same lesson was taught three times.</p>
+<p>If you seriously dream of a decentralized future, you must confront the fact that what halted that dream was not a hostile state or a sophisticated attack, but a cooling failure, a single line in a config file, a single DNS bug. The real pain point is right there: that the system we believe to be the most distributed was the most fragile in the face of the most ordinary operational accident. And that even the redundancy we believed to be robustly designed may fail to work at the very moment it is needed.</p>
+<p><strong>Decentralization is a matter not of declaration but of measurement. And when you measure it, there is still a long way to go.</strong></p>
+<hr>
+<h2>References</h2>
+<p><em>The sources below are primary postmortems, news reports, and node-distribution statistics from October 2025 to May 2026. Statistical figures are as of publication and may change over time.</em></p>
+<h3>May 7, 2026 — AWS us-east-1 Cooling Failure / Coinbase</h3>
+<ul>
+<li><strong>[1]</strong> Coinbase May 7 outage postmortem summary (FX News Group) — <a href="https://fxnewsgroup.com/forex-news/cryptocurrency/coinbase-issues-statement-on-may-7-2026-outage/">https://fxnewsgroup.com/forex-news/cryptocurrency/coinbase-issues-statement-on-may-7-2026-outage/</a></li>
+<li><strong>[2]</strong> AWS May 2026 cooling failure &amp; cross-region DR technical analysis (SingleStore) — <a href="https://www.singlestore.com/blog/aws-outage-may-2026-cross-region-disaster-recovery/">https://www.singlestore.com/blog/aws-outage-may-2026-cross-region-disaster-recovery/</a></li>
+<li><strong>[3]</strong> Coinbase 7-hour disruption &amp; Brian Armstrong&#39;s remarks (Crowdfund Insider) — <a href="https://www.crowdfundinsider.com/2026/05/278141-coinbase-impacted-by-7-hr-outage-after-aws-data-center-cooling-failure/">https://www.crowdfundinsider.com/2026/05/278141-coinbase-impacted-by-7-hr-outage-after-aws-data-center-cooling-failure/</a></li>
+<li><strong>[4]</strong> Matching engine &amp; Kafka infrastructure impact analysis (Yahoo Finance / Benzinga) — <a href="https://finance.yahoo.com/markets/crypto/articles/coinbase-says-aws-cooling-failure-013036066.html">https://finance.yahoo.com/markets/crypto/articles/coinbase-says-aws-cooling-failure-013036066.html</a></li>
+<li><strong>[5]</strong> Thermal-event cascading systems-failure analysis (Machine News) — <a href="https://www.machine.news/coinbase-hit-by-cascading-systems-failure-after-thermal-event-in-aws-data-centre/">https://www.machine.news/coinbase-hit-by-cascading-systems-failure-after-thermal-event-in-aws-data-centre/</a></li>
+</ul>
+<h3>October 20, 2025 — AWS us-east-1 DynamoDB DNS Outage</h3>
+<ul>
+<li><strong>[6]</strong> AWS us-east-1 outage &amp; global dependencies (Network World) — <a href="https://www.networkworld.com/article/4168878/aws-hit-by-us-east-1-outage-after-data-center-thermal-event.html">https://www.networkworld.com/article/4168878/aws-hit-by-us-east-1-outage-after-data-center-thermal-event.html</a></li>
+<li><strong>[7]</strong> October 2025 AWS outage root-cause analysis — DynamoDB DNS race condition (Medium, L. Kumili) — <a href="https://medium.com/@leela.kumili/aws-outage-root-cause-analysis-bd88ffcab160">https://medium.com/@leela.kumili/aws-outage-root-cause-analysis-bd88ffcab160</a></li>
+<li><strong>[8]</strong> Crypto impact of the AWS outage — Coinbase, Base, L2s (CryptoSlate) — <a href="https://cryptoslate.com/aws-failure-exposes-cryptos-centralized-weak-point/">https://cryptoslate.com/aws-failure-exposes-cryptos-centralized-weak-point/</a></li>
+<li><strong>[9]</strong> Infura, MetaMask, and other web3 infrastructure impact (Coingape) — <a href="https://coingape.com/block-of-fame/pulse/after-aws-outage-attack-consensys-and-eigen-launch-decentralized-solution-for-web3/">https://coingape.com/block-of-fame/pulse/after-aws-outage-attack-consensys-and-eigen-launch-decentralized-solution-for-web3/</a></li>
+<li><strong>[10]</strong> Consensus layer unaffected / on-chain performance postmortem (Metrika) — <a href="https://www.metrika.co/blog/post-mortem-aws-outage-10-2025">https://www.metrika.co/blog/post-mortem-aws-outage-10-2025</a></li>
+<li><strong>[11]</strong> 2025 AWS outage reliability &amp; statistics overview (IncidentHub) — <a href="https://blog.incidenthub.cloud/definitive-aws-outage-report-2025-reliability">https://blog.incidenthub.cloud/definitive-aws-outage-report-2025-reliability</a></li>
+</ul>
+<h3>November 18, 2025 — Cloudflare Global Outage</h3>
+<ul>
+<li><strong>[12]</strong> Cloudflare November 18, 2025 outage official postmortem (Cloudflare Blog) — <a href="https://blog.cloudflare.com/18-november-2025-outage/">https://blog.cloudflare.com/18-november-2025-outage/</a></li>
+<li><strong>[13]</strong> Cloudflare outage — 20% of the internet &amp; crypto trading disrupted (Brave New Coin) — <a href="https://bravenewcoin.com/insights/database-error-takes-down-20-of-internet-cloudflare-outage-disrupts-global-crypto-trading">https://bravenewcoin.com/insights/database-error-takes-down-20-of-internet-cloudflare-outage-disrupts-global-crypto-trading</a></li>
+<li><strong>[14]</strong> BitMEX, DeFiLlama, Arbiscan, and other front ends down (CoinDesk) — <a href="https://www.coindesk.com/business/2025/11/18/cloudflare-global-outage-spreads-to-crypto-multiple-front-ends-down">https://www.coindesk.com/business/2025/11/18/cloudflare-global-outage-spreads-to-crypto-multiple-front-ends-down</a></li>
+<li><strong>[15]</strong> The pseudo-decentralization of crypto exposed by the Cloudflare outage (Bitget News) — <a href="https://www.bitget.com/news/detail/12560605075954">https://www.bitget.com/news/detail/12560605075954</a></li>
+</ul>
+<h3>Node &amp; Infrastructure Concentration Statistics</h3>
+<ul>
+<li><strong>[16]</strong> <del>36% of Ethereum nodes (</del>2,368) on AWS — citing Ethernodes (BitKE) — <a href="https://bitcoinke.io/2025/10/over-a-third-of-ethereum-nodes-on-centralized-servers/">https://bitcoinke.io/2025/10/over-a-third-of-ethereum-nodes-on-centralized-servers/</a></li>
+<li><strong>[17]</strong> ~50% of validators on AWS, ~70% of nodes on cloud (Foundry, Medium) — <a href="https://medium.com/foundry-digital/the-evolution-of-ethereum-decentralization-cf55ccfcee4f">https://medium.com/foundry-digital/the-evolution-of-ethereum-decentralization-cf55ccfcee4f</a></li>
+<li><strong>[18]</strong> Three cloud providers account for 69% of nodes; geographic concentration — Messari/Ethernodes (Cointelegraph) — <a href="https://cointelegraph.com/news/3-cloud-providers-accounting-for-over-two-thirds-of-ethereum-nodes-data">https://cointelegraph.com/news/3-cloud-providers-accounting-for-over-two-thirds-of-ethereum-nodes-data</a></li>
+<li><strong>[19]</strong> Ethereum validator network correlation &amp; cloud concentration study (arXiv) — <a href="https://arxiv.org/html/2404.02164v1">https://arxiv.org/html/2404.02164v1</a></li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AWS_Blockchain/blockchain-aws-centralization-column-en.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

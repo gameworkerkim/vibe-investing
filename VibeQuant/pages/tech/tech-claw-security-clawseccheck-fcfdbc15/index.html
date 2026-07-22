@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ClawSecCheck 프로젝트 분석과 Getting Start — VibeQuant</title>
+  <meta name="description" content="OpenClaw의 경우 최근 해커들의 공격 대상이 되고 있다. OpenClaw의 취약점을 비롯하여 다양한 LLM 친화적인 공격이 난무하고 있다. 이런 문제를 해결하고자 ClawSecCheck가 개발되었다." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/tech-claw-security-clawseccheck-fcfdbc15/" />
+  <meta property="og:title" content="ClawSecCheck 프로젝트 분석과 Getting Start" />
+  <meta property="og:description" content="OpenClaw의 경우 최근 해커들의 공격 대상이 되고 있다. OpenClaw의 취약점을 비롯하여 다양한 LLM 친화적인 공격이 난무하고 있다. 이런 문제를 해결하고자 ClawSecCheck가 개발되었다." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/tech-claw-security-clawseccheck-fcfdbc15/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"ClawSecCheck 프로젝트 분석과 Getting Start","description":"OpenClaw의 경우 최근 해커들의 공격 대상이 되고 있다. OpenClaw의 취약점을 비롯하여 다양한 LLM 친화적인 공격이 난무하고 있다. 이런 문제를 해결하고자 ClawSecCheck가 개발되었다.","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/tech-claw-security-clawseccheck-fcfdbc15/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Claw_Security/ClawSecCheck.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link" href="../../columns/">Columns</a>
+        <a class="site-nav-link is-active" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 보안</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">보안</p>
+        <h1>ClawSecCheck 프로젝트 분석과 Getting Start</h1>
+        <p class="lede">OpenClaw의 경우 최근 해커들의 공격 대상이 되고 있다. OpenClaw의 취약점을 비롯하여 다양한 LLM 친화적인 공격이 난무하고 있다. 이런 문제를 해결하고자 ClawSecCheck가 개발되었다.</p>
+        
+      </header>
+      <div class="article-body prose"><h2>컨셉</h2>
+<p>OpenClaw의 경우 최근 해커들의 공격 대상이 되고 있다. OpenClaw의 취약점을 비롯하여 다양한 LLM 친화적인 공격이 난무하고 있다. 이런 문제를 해결하고자 ClawSecCheck가 개발되었다.</p>
+<p><strong>ClawSecCheck</strong>는 OpenClaw AI 에이전트를 위한 <strong>로컬·읽기 전용·오프라인 보안 자가 감사(self-audit) 도구</strong>다. OpenClaw 스킬로 설치해 대화형으로 쓰거나, 표준 CLI로 실행할 수 있다.</p>
+<blockquote>
+<p>&quot;당신의 <em>자기 자신의</em> 에이전트에 대한 원커맨드 보안 자가 감사.&quot;</p>
+</blockquote>
+<p>핵심 설계는 &quot;남의 에이전트를 스캔한다&quot;가 아니라 <strong>내 에이전트를 내가 감사한다</strong>는 점이다. 그래서 소유권 증명이나 법적 회색지대 문제가 없다. 도구는 설정을 A–F로 채점하고, 가장 시급한 구멍을 평이한 언어로 드러내며, 복사-붙여넣기 가능한 수정 제안과 <strong>공유용 등급 배지</strong>를 함께 준다.</p>
+<p>OpenClaw 에이전트는 사용자 메시지를 읽고 대화를 기억하며 키를 보유하고 사용자를 대신해 행동한다. 이 권한들은 정확히 공격자가 노리는 표면이며, 감염된 메시지 하나나 악성 스킬 하나가 조용히 에이전트를 적으로 돌려놓을 수 있다. ClawSecCheck는 그 위험을 사전에 감지하기 위해 설정을 검사하고 등급을 부여한다.</p>
+<h3>작동 원칙</h3>
+<ul>
+<li><strong>대화 기반 감사</strong>: OpenClaw 안에서 실행하면 에이전트가 플래그를 몰라도 전 과정을 대화형으로 안내한다(가이드 모드).</li>
+<li><strong>읽기 전용</strong>: 설정·스킬을 절대 변경하지 않는다. <code>--fix</code> 같은 기능은 존재하지 않는다.</li>
+<li><strong>오프라인·무전송</strong>: 네트워크 호출·API 키·텔레메트리가 전혀 없다. 읽는 대상은 <code>~/.openclaw/openclaw.json</code>과 워크스페이스 부트스트랩 마크다운 파일뿐이다.</li>
+<li><strong>정직성 우선</strong>: 판단 불가 항목은 <code>UNKNOWN</code>으로 표기하고 점수에서 제외한다. <code>UNKNOWN</code>은 절대 <code>PASS</code>가 아니다.</li>
+</ul>
+<p>내부적으로 딱 하나, 사용자 자신의 플랫폼 감사만 읽기 전용으로 호출해 결과를 병합한다. 셸 없음, <code>--fix</code> 없음, 타임아웃 존재, <code>--no-native</code>로 건너뛰기 가능하다.</p>
+<pre><code>openclaw security audit --json
+</code></pre>
+<hr>
+<h2>무엇을 검사하는가?</h2>
+<h3>Lethal Trifecta — 대표 프레임</h3>
+<p>ClawSecCheck가 리포트 최상단에 노출하는 핵심 지표다. <strong>신뢰할 수 없는 입력 × 민감 데이터 접근 × 외부(송신·실행) 행동</strong>세 가지가 동시에 성립하면 침해가 치명적이거나 자명해진다. 도구는 이 셋 중<strong>2개 이하 유지</strong>를 권고하며, 상단에 Score · Grade · Trifecta 비율을 함께 표시한다(공유 배지에는 등급만 노출).</p>
+<h3>검사군 (체크 ID 기준)</h3>
+<p>검사는 아래 체크 ID 체계로 구현된다. 크게 노출·권한·시크릿(B1–B12), 공급망(B13–B15), 대비 상태(B16–B17), 에이전트 행동(B18–B24), 인젝션·심층 노출(B26 이후), 능력·호스트 확장(B43·B50대), 그리고 네이티브 감사 병합(A1)과 위험 엔진(RISK)으로 나뉜다.</p>
+<table>
+<thead>
+<tr>
+<th>체크군</th>
+<th>대표 항목</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>B1–B12</strong></td>
+<td>게이트웨이 노출·채널 인증, 평문 시크릿, 최소 권한, 실행 샌드박스, TLS, 로컬 모델 위생</td>
+</tr>
+<tr>
+<td><strong>B6</strong></td>
+<td>부트스트랩 파일(<code>SOUL.md</code>, <code>AGENTS.md</code>, <code>TOOLS.md</code>)의 프롬프트 인젝션 유발 지시문 검사</td>
+</tr>
+<tr>
+<td><strong>B13</strong></td>
+<td>설치된 서드파티 스킬 콘텐츠 정적 검사. ClawHavoc류 악성코드와 base64 은닉 페이로드 탐지. v0.21부터 Python AST 파싱으로 <code>exec(base64.b64decode(...))</code> 등 난독화를 잡고, v0.23부터 자격증명 파일이 네트워크 싱크로 흐르는 테인트를 추적</td>
+</tr>
+<tr>
+<td><strong>B14 / B15</strong></td>
+<td>이그레스 표면 / MCP 서버 신뢰 경계</td>
+</tr>
+<tr>
+<td><strong>B16 / B17</strong></td>
+<td>위협 모니터링 유무 / 자율성·heartbeat</td>
+</tr>
+<tr>
+<td><strong>B18–B24</strong></td>
+<td>서브에이전트 위임, 데이터 at-rest 노출, 정체성·메모리 파일 쓰기 보호, 도구 출력 신뢰 경계, 자기 수정, 승인 우회, 심층 MCP 하드닝</td>
+</tr>
+<tr>
+<td><strong>B26</strong></td>
+<td>신뢰 불가 컨텍스트 노출(<code>contextVisibility=&quot;all&quot;</code> 기본값)</td>
+</tr>
+<tr>
+<td><strong>B30 / B31 / B32</strong></td>
+<td>발신자 정체성 강도 / <code>tools.deny:[&quot;write&quot;]</code>가 <code>apply_patch</code>·<code>exec</code>를 막지 못하는 footgun / 컨트롤플레인 변경 도달성</td>
+</tr>
+<tr>
+<td><strong>B33</strong></td>
+<td>알려진 취약 버전 게이트(<code>meta.lastTouchedVersion</code> 대조)</td>
+</tr>
+<tr>
+<td><strong>B38 / B39 / B41 / B42</strong></td>
+<td>브라우저 SSRF(169.254.169.254 등) / 세션 가시성·교차사용자 유출 / 자격증명 blast-radius / 설치시점 공급망(preinstall 훅, world-writable 스킬 디렉터리)</td>
+</tr>
+<tr>
+<td><strong>B43 / B44 (증언 계층)</strong></td>
+<td>정적 스캔이 못 보는 실제 도구/verb 인벤토리를 에이전트 자가 보고로 보강. <code>EXEC/DESTRUCTIVE/EGRESS/MAILBOX_CONFIG/REVERSIBLE</code>로 분류하고 config 대비 드리프트 점검(신뢰도 <code>ATTESTED</code>, 실험적)</td>
+</tr>
+<tr>
+<td><strong>B50–B54 (Host Watch)</strong></td>
+<td>에이전트가 도는 호스트 자체가 감시되는가: 네트워크 IDS, 호스트 감사, 파일무결성, EDR, 호스트 방화벽. LOW 심각도로, 절대 FAIL로 이어지지 않음</td>
+</tr>
+<tr>
+<td><strong>A1</strong></td>
+<td>플랫폼 자체 <code>openclaw security audit</code>를 대신 실행해 같은 리포트에 병합(점수에는 미반영)</td>
+</tr>
+</tbody></table>
+<p>더티 입력 새니타이저·액션 게이트·테인트 라벨링(B26–B28)은 아직 로드맵 단계로, 가장 큰 잔여 커버리지 갭이다. <code>UNKNOWN</code>으로 표기되는 판단 불가 항목이 존재하는 이유이기도 하다.</p>
+<h3>위험 엔진 — RISK-01 ~ RISK-10</h3>
+<p>개별 체크를 넘어, 두 개 이상의 속성이 동시에 성립할 때 침해가 치명적이 되는 <strong>조합(capability chain)</strong> 열 가지를 별도로 탐지한다.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>심각도</th>
+<th>체인</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RISK-01</td>
+<td>CRITICAL</td>
+<td>신뢰 불가 발신자 → exec/write/상승 도구 → 호스트/파일시스템</td>
+</tr>
+<tr>
+<td>RISK-02</td>
+<td>HIGH</td>
+<td>신뢰 불가 입력 → 민감 데이터 도달 → 송신/실행 (Lethal Trifecta)</td>
+</tr>
+<tr>
+<td>RISK-03</td>
+<td>HIGH</td>
+<td>신뢰 불가 인그레스 + 샌드박스 없음 → 호스트에서 직접 exec/write</td>
+</tr>
+<tr>
+<td>RISK-04</td>
+<td>HIGH</td>
+<td>가변 정체성(name-matching) → 상승/exec 도구 → 권한 상승</td>
+</tr>
+<tr>
+<td>RISK-05</td>
+<td>HIGH</td>
+<td>브라우저 SSRF(사설망) → 시크릿/자격증명 → 유출</td>
+</tr>
+<tr>
+<td>RISK-06</td>
+<td>CRITICAL</td>
+<td>개방/신뢰 불가 표면 → 컨트롤플레인 엔드포인트 → 완전 장악</td>
+</tr>
+<tr>
+<td>RISK-07</td>
+<td>HIGH</td>
+<td>승인 게이트 없는 exec/write → 쓰기 가능한 부트스트랩/정체성 파일 → 지속적 침해</td>
+</tr>
+<tr>
+<td>RISK-08</td>
+<td>MEDIUM</td>
+<td>다중 사용자 채널 → 공유 세션(<code>dmScope=&quot;main&quot;</code>) → 교차 사용자 유출</td>
+</tr>
+<tr>
+<td>RISK-09</td>
+<td>CRITICAL</td>
+<td>악성 설치 스킬(B13 fail) → 도달 가능 시크릿 → 이그레스 → 유출</td>
+</tr>
+<tr>
+<td>RISK-10</td>
+<td>MEDIUM</td>
+<td>신뢰 불가 입력 → 호스트 exec/write → 호스트 탐지 부재 → 침해가 보이지 않음</td>
+</tr>
+</tbody></table>
+<p>각 체인은 모든 링크에 양성 증거가 있을 때만 발화(evidence-gated)하므로 오탐이 낮다. 위험 엔진은 결정론적 A–F 점수를 바꾸지 않고 별도로 노출되어, 점수 인플레이션 없이 최악 경로를 한눈에 보여준다.</p>
+<hr>
+<h2>채점 방식</h2>
+<p>가중 통과율로 채점한다(CRITICAL=10, HIGH=6, MEDIUM=3, LOW=1). 여기에 <strong>정직성 하드캡</strong>이 걸린다. 미해결 CRITICAL이 하나라도 있으면 점수 상한이 <strong>49</strong>, 미해결 HIGH가 있으면 상한이 <strong>79</strong>로 묶여, 치명적 구멍을 안은 채 A를 받을 수 없다.</p>
+<table>
+<thead>
+<tr>
+<th>등급</th>
+<th>점수</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>90+</td>
+</tr>
+<tr>
+<td>B</td>
+<td>80–89</td>
+</tr>
+<tr>
+<td>C</td>
+<td>70–79</td>
+</tr>
+<tr>
+<td>D</td>
+<td>50–69</td>
+</tr>
+<tr>
+<td>F</td>
+<td>&lt;50</td>
+</tr>
+</tbody></table>
+<p><code>UNKNOWN</code>은 채점되지 않고, 자문(advisory) 체크는 등급을 움직이지 않는다. 공유 카드는 등급·점수·Trifecta 비율만 노출하며 발견 사항은 비공개로 둔다 — 공유가 공격자에게 지도를 넘겨선 안 되기 때문이다.</p>
+<hr>
+<h2>장점</h2>
+<ul>
+<li><strong>프라이버시 우선·완전 로컬</strong>: 계정·API 키·텔레메트리·네트워크 요청이 전혀 없다. 기본 저장물은 소유자 전용 로컬 점수 이력(<code>~/.clawseccheck/history.jsonl</code>) 한 줄뿐이며 <code>--no-history</code>로 opt-out 할 수 있다.</li>
+<li><strong>네이티브 감사가 놓치는 부분 검사</strong>: 플랫폼 자체 감사가 검사하지 않는 부트스트랩 파일(<code>SOUL.md</code>·<code>AGENTS.md</code>·<code>TOOLS.md</code>)을 프롬프트 인젝션 관점(B6)에서 점검한다.</li>
+<li><strong>설치 전 위험 평가</strong>: <code>--vet &lt;스킬&gt;</code>로 스킬을, <code>--vet-mcp</code>로 연결된 MCP 서버를 설치·신뢰 전에 검증한다(SAFE/SUSPICIOUS/DANGEROUS). 대부분의 도구가 스킬만 보고 MCP 서버는 놓치는 공급망 갭을 겨냥한다. ClawHavoc 사태 이후 특히 중요한 기능이다.</li>
+<li><strong>능동 인젝션 테스트</strong>: <code>--canary</code>(수동 인젝션 자가 테스트), <code>--redteam</code>(도구 포이즈닝·MCP 응답 인젝션·메모리 포이즈닝·다중 에이전트·승인 우회·더티→유출 시나리오), <code>--dryrun</code>(가짜 시크릿·가짜 도구로 하는 런타임 행위 테스트)을 제공한다.</li>
+<li><strong>정직한 설계</strong>: <code>UNKNOWN ≠ PASS</code>이며 한계를 녹색 점수 뒤에 숨기지 않는다. 위험 체인은 증거가 있을 때만 발화한다.</li>
+<li><strong>완전 무료·오픈소스·의존성 제로</strong>: MIT 라이선스, 순수 Python 표준 라이브러리.</li>
+<li><strong>다양한 출력과 CI 게이트</strong>: 사람용 리포트, <code>--json</code>, <code>--sarif</code>(SARIF 2.1.0), <code>--html</code>, <code>--badge</code>(SVG), <code>--card</code>. CI에서는 <code>--fail-under 70</code>, <code>--exit-code</code>로 게이팅한다.</li>
+</ul>
+<hr>
+<h2>단점과 한계</h2>
+<ul>
+<li><strong>OpenClaw 생태계 전용</strong>: 다른 에이전트 플랫폼에는 적용할 수 없다.</li>
+<li><strong>대화 노출 인지 필요</strong>: OpenClaw 채팅으로 사용하면 리포트 텍스트가 대화의 일부가 되어 이미 쓰고 있는 모델 제공자가 처리한다. 스캐너 자체가 새 채널을 만들지는 않지만 이 점은 인지해야 한다.</li>
+<li><strong>CLI 사용 시 Python 환경 필요</strong>: pipx 설치가 권장된다(<code>pip install .</code>도 가능). Windows에서는 POSIX 권한 검사가 생략되고 유니코드 미지원 콘솔은 ASCII로 폴백한다.</li>
+<li><strong>정적·휴리스틱 감사</strong>: 런타임 검증이나 형식 증명이 아니며 오탐·미탐이 있을 수 있다. 실행 중 에이전트에 대한 적대적 테스트를 대체하지 못한다. 읽는 범위도 설정 파일·부트스트랩 마크다운·설치 스킬 텍스트로 한정된다.</li>
+<li><strong>매우 신규·소규모 프로젝트</strong>: 아직 pre-1.0(0.x)이며 단일 저자가 운영한다. 플래그·스키마·체크 ID는 마이너 릴리스에서도 바뀔 수 있고 1.0에 가서야 계약이 고정된다. 성숙도와 검증 이력 측면에서는 ClawSec·ClawSecure 같은 대형 프로젝트에 비해 열세다. 공개 리포트나 컬럼에서 인용할 때는 이 점을 명시하는 편이 안전하다.</li>
+</ul>
+<hr>
+<h2>유사 프로젝트 비교</h2>
+<table>
+<thead>
+<tr>
+<th>프로젝트</th>
+<th>형태</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ClawSec</strong> (prompt-security)</td>
+<td>스킬 스위트</td>
+<td>OpenClaw·Hermes·PicoClaw·NanoClaw 대상. 드리프트 탐지, 스킬 무결성 검증, NVD 기반 보안 자문 피드</td>
+</tr>
+<tr>
+<td><strong>ClawSecure</strong></td>
+<td>클라우드 감사 플랫폼</td>
+<td>3,000+ 스킬 감사, OWASP ASI 10/10 커버리지, 3-Layer Audit Protocol, 지속 모니터링</td>
+</tr>
+<tr>
+<td><strong>ClawScan</strong></td>
+<td>CLI(<code>npx clawscan</code>)</td>
+<td>스킬 설치 전 악성코드·리버스셸·프롬프트 인젝션·유니코드 공격 탐지, MIT</td>
+</tr>
+<tr>
+<td><strong>ClawVitals</strong></td>
+<td>스킬+플러그인</td>
+<td>로컬 실행 헬스체크, 설정 변조 탐지·드리프트 알림, 점수화</td>
+</tr>
+<tr>
+<td><strong>openclaw-security-scan</strong>(legendaryabhi)</td>
+<td>순수 Bash CLI</td>
+<td>Python 불필요, 크리티컬 이슈 자동 수정(auto-fix), CI용 JSON 출력</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>시작하기</h2>
+<h3>OpenClaw 채팅에서 (터미널 불필요)</h3>
+<pre><code>openclaw skills install clawseccheck            # ClawHub에서 (슬러그 고유)
+openclaw skills install git:gl0di/clawseccheck  # 또는 GitHub에서 직접
+</code></pre>
+<p>설치 후 <strong>audit my OpenClaw setup with clawseccheck</strong> 라고 요청하면 등급과 가장 긴급한 문제가 채팅에 표시된다.
+ClawHub 스킬 페이지: <strong><a href="https://clawhub.ai/gl0di/clawseccheck">https://clawhub.ai/gl0di/clawseccheck</a></strong></p>
+<h3>표준 CLI</h3>
+<pre><code>pipx install git+https://github.com/gl0di/clawseccheck   # 또는 pip install .
+clawseccheck --home ~/.openclaw                          # 이후 그냥 clawseccheck
+python -m clawseccheck                                    # 동일하게 동작
+</code></pre>
+<h3>번들 스크립트 직접 실행</h3>
+<pre><code>python3 audit.py                 # 사람용 리포트 + 공유 카드
+python3 audit.py --json          # 기계 판독용
+python3 audit.py --card          # 배지만
+python3 audit.py --sarif results.sarif   # GitHub Code Scanning 업로드용(로컬 기록)
+python3 audit.py --html report.html      # 단독 HTML 리포트(소유자 전용)
+python3 audit.py --fail-under 70         # 점수 70 미만이면 exit 1 (CI)
+python3 audit.py --ascii         # 유니코드 미지원 콘솔용 폴백
+</code></pre>
+<h3>무결성 확인</h3>
+<pre><code>python3 audit.py --verify-self    # ClawSecCheck 자체 소스의 SHA-256 (변조 방지)
+</code></pre>
+<p>릴리스는 태그되어 공개되므로, 보안에 민감한 경우 blind auto-update보다 <strong>업데이트 전 태그를 리뷰·핀 고정</strong>하는 편이 안전하다.</p>
+<h3>대화 명령어와 내부 동작</h3>
+<table>
+<thead>
+<tr>
+<th>사용자 요청</th>
+<th>내부 동작</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&quot;Audit my OpenClaw setup&quot;</td>
+<td>기본 감사: A–F 등급 + 우선순위 수정 목록 + Trifecta</td>
+</tr>
+<tr>
+<td>&quot;Is this skill safe to install?&quot;</td>
+<td><code>--vet &lt;스킬&gt;</code> (SAFE/SUSPICIOUS/DANGEROUS)</td>
+</tr>
+<tr>
+<td>&quot;Are my MCP servers safe?&quot;</td>
+<td><code>--vet-mcp</code></td>
+</tr>
+<tr>
+<td>&quot;Am I vulnerable to prompt injection?&quot;</td>
+<td><code>--canary</code> / <code>--redteam</code></td>
+</tr>
+<tr>
+<td>&quot;Watch my setup for changes&quot;</td>
+<td><code>--monitor</code> (드리프트·점수 하락·신규 스킬/MCP/채널 알림)</td>
+</tr>
+<tr>
+<td>&quot;What should I fix first?&quot;</td>
+<td><code>--next</code> (발견 사항 기반 우선순위)</td>
+</tr>
+<tr>
+<td>&quot;Give me fix prompts&quot;</td>
+<td><code>--prompts</code> (발견별 복사-붙여넣기 수정 프롬프트)</td>
+</tr>
+<tr>
+<td>&quot;Share my grade&quot;</td>
+<td><code>--badge</code> / <code>--card</code> (등급만 공개)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>참고 문서</h2>
+<ul>
+<li>저장소: <a href="https://github.com/gl0di/clawseccheck">https://github.com/gl0di/clawseccheck</a></li>
+<li>보안 모델: <a href="https://github.com/gl0di/clawseccheck/blob/main/SECURITY_MODEL.md">https://github.com/gl0di/clawseccheck/blob/main/SECURITY_MODEL.md</a></li>
+<li>스킬 정의: <a href="https://github.com/gl0di/clawseccheck/blob/main/SKILL.md">https://github.com/gl0di/clawseccheck/blob/main/SKILL.md</a></li>
+<li>ClawHub 스킬 페이지: <a href="https://clawhub.ai/gl0di/clawseccheck">https://clawhub.ai/gl0di/clawseccheck</a></li>
+</ul>
+<hr>
+<p><em>본 문서는 README v0.30.1 시점 기준이다. pre-1.0 프로젝트 특성상 플래그·스키마·체크 ID는 이후 릴리스에서 변경될 수 있다.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Claw_Security/ClawSecCheck.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Supabase Complete Guide (English) — VibeQuant</title>
+  <meta name="description" content="Version: June 2026 Target: Vercel + Next.js full stack developers" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/tech-opensource-firebase-superbase-guide-a177701a/" />
+  <meta property="og:title" content="Supabase Complete Guide (English)" />
+  <meta property="og:description" content="Version: June 2026 Target: Vercel + Next.js full stack developers" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/tech-opensource-firebase-superbase-guide-a177701a/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Supabase Complete Guide (English)","description":"Version: June 2026 Target: Vercel + Next.js full stack developers","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/tech-opensource-firebase-superbase-guide-a177701a/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/OpenSource_Firebase/SuperBase_guide_EN.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link" href="../../columns/">Columns</a>
+        <a class="site-nav-link is-active" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · BaaS · DB</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">BaaS · DB</p>
+        <h1>Supabase Complete Guide (English)</h1>
+        <p class="lede">Version: June 2026 Target: Vercel + Next.js full stack developers</p>
+        
+      </header>
+      <div class="article-body prose"><p><strong>Version:</strong>June 2026<strong>Target:</strong> Vercel + Next.js full-stack developers</p>
+<hr>
+<h2>1. What Is Supabase?</h2>
+<p>Supabase is an <strong>open-source Firebase alternative</strong>. Centered on a PostgreSQL database, it provides an integrated Backend-as-a-Service (BaaS) including Authentication, Realtime, Storage, and Edge Functions.</p>
+<ul>
+<li><strong>Open source</strong>: All code is public on GitHub; self-hosting is possible.</li>
+<li><strong>PostgreSQL-based</strong>: Full relational database power (JOIN, transactions, RLS, etc.).</li>
+<li><strong>Developer experience</strong>: SDKs (JavaScript, Flutter, Swift, Python, etc.) + CLI for rapid prototyping.</li>
+</ul>
+<hr>
+<h2>2. Core Features</h2>
+<h3>2.1 Database (PostgreSQL)</h3>
+<p>Fully managed PostgreSQL 15.x with automated configuration and patching. Web table editor, SQL editor with history, daily auto-backups (PITR on Pro+), and schema migration via <code>supabase migration</code> CLI.</p>
+<h3>2.2 Authentication (Auth)</h3>
+<p>Email/password (Magic Link), social OAuth (Google, Apple, GitHub, GitLab, Facebook, Discord, Slack), phone SMS (Twilio required), enterprise SSO (SAML, Azure AD — Enterprise). JWT-based sessions with auto-refresh tokens. Row Level Security (RLS) integration using <code>auth.uid()</code> directly in database policies.</p>
+<h3>2.3 Storage</h3>
+<p>S3-compatible object storage for images, video, files. Bucket policies and RLS for access control. Dynamic image resizing via <code>?width=200&amp;height=200</code> parameters. Public/private buckets with signed URL temporary access.</p>
+<h3>2.4 Realtime</h3>
+<p>WebSocket-based real-time subscriptions for table changes (INSERT, UPDATE, DELETE). Broadcast for inter-client messaging. Presence for connected user list management. PostgreSQL Change Data Capture (CDC).</p>
+<h3>2.5 Edge Functions</h3>
+<p>Deno-based serverless functions executed on global edge nodes. Low latency for JWT auth, payment webhooks, AI API proxies. TypeScript/JavaScript (Deno runtime). Limited to 10-second execution (free), 150MB memory.</p>
+<h3>2.6 Vector (pgvector)</h3>
+<p>Built-in PostgreSQL pgvector extension for embedding vector storage and similarity search (cosine, Euclidean). Used for RAG (Retrieval-Augmented Generation) and recommendation systems.</p>
+<h3>2.7 GraphQL (via pg_graphql)</h3>
+<p>Auto-generated GraphQL API based on PostgreSQL schema. Supports filtering, sorting, and pagination.</p>
+<hr>
+<h2>3. Architecture</h2>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Technology</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Database</td>
+<td>PostgreSQL</td>
+<td>Data storage &amp; queries</td>
+</tr>
+<tr>
+<td>API</td>
+<td>PostgREST</td>
+<td>Auto-generated RESTful API</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>GoTrue</td>
+<td>JWT-based authentication</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>Supabase Storage (S3-based)</td>
+<td>File upload/download</td>
+</tr>
+<tr>
+<td>Realtime</td>
+<td>Realtime server (Elixir)</td>
+<td>WebSocket broadcast</td>
+</tr>
+<tr>
+<td>Edge Functions</td>
+<td>Supabase Edge Runtime (Deno)</td>
+<td>Edge function execution</td>
+</tr>
+<tr>
+<td>Dashboard</td>
+<td>Next.js-based web UI</td>
+<td>Admin console</td>
+</tr>
+</tbody></table>
+<p>All services are <strong>open-source</strong>and independently scalable. Clients access all services through<strong>a single API URL</strong> (e.g., <code>https://&lt;ref&gt;.supabase.co</code>).</p>
+<hr>
+<h2>4. Pros</h2>
+<p><strong>Firebase advantages</strong>: Relational database with complex queries, JOINs, transactions. Predictable pricing (compute + storage + bandwidth, not per-user). Open source — no vendor lock-in, self-hosting possible.</p>
+<p><strong>Developer productivity</strong>: Auth + DB setup in 15 minutes via UI. Automatic API generation — REST/GraphQL endpoints instantly available on table creation. TypeScript support with <code>supabase gen types</code> for auto-generated DB-to-TypeScript types.</p>
+<p><strong>Security (RLS)</strong>: Database-level permissions with SQL-declared RLS policies (&quot;users can only see their own rows&quot;). All APIs require authentication by default.</p>
+<p><strong>Scalability</strong>: Full PostgreSQL ecosystem — indexes, views, functions, triggers, pg_cron, pgvector.</p>
+<p><strong>Vercel synergy</strong>: Vercel Marketplace 1-click integration with auto env var injection. Official <code>@supabase/ssr</code> package for Next.js App Router cookie-based session management.</p>
+<p><strong>Free tier</strong>: 50,000 MAU, no time limit (no 12-month cliff), 500MB DB, 1GB storage, 2GB bandwidth. Sufficient for MVPs and side projects.</p>
+<hr>
+<h2>5. Cons</h2>
+<ul>
+<li><strong>Bandwidth bottleneck (free)</strong>: Effective ~2GB limit before throttling. Image/video-heavy apps can exceed this in a day.</li>
+<li><strong>Shared CPU (free)</strong>: Query latency of 200-500ms during peak hours. Max 50 concurrent connections (200 on Pro).</li>
+<li><strong>Korean social login gaps</strong>: Naver, Kakao, Line not natively supported (possible via OIDC but complex setup). No WeChat/QQ.</li>
+<li><strong>Custom domain</strong>: Pro plan ($25/month) required.</li>
+<li><strong>Audit logs</strong>: Enterprise only ($2,500/month).</li>
+<li><strong>Some vendor lock-in</strong>: RLS policies heavily dependent on <code>auth.uid()</code>; storage URL format tied to Supabase domain.</li>
+<li><strong>Edge Functions limits</strong>: 10-second execution, restricted external network access on free plan.</li>
+</ul>
+<hr>
+<h2>6. Pricing (June 2026)</h2>
+<table>
+<thead>
+<tr>
+<th>Plan</th>
+<th>Price</th>
+<th>MAU</th>
+<th>DB Storage</th>
+<th>Bandwidth</th>
+<th>Edge Functions</th>
+<th>Realtime</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Free</td>
+<td>$0</td>
+<td>50,000</td>
+<td>500MB</td>
+<td>2GB</td>
+<td>500K calls/mo</td>
+<td>200</td>
+</tr>
+<tr>
+<td>Pro</td>
+<td>$25</td>
+<td>100,000</td>
+<td>8GB</td>
+<td>100GB</td>
+<td>2M calls/mo</td>
+<td>5,000</td>
+</tr>
+<tr>
+<td>Team</td>
+<td>$599</td>
+<td>500,000</td>
+<td>40GB</td>
+<td>400GB</td>
+<td>5M calls/mo</td>
+<td>20,000</td>
+</tr>
+<tr>
+<td>Enterprise</td>
+<td>Custom</td>
+<td>Unlimited</td>
+<td>Unlimited</td>
+<td>Unlimited</td>
+<td>Unlimited</td>
+<td>Unlimited</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. When to Choose Supabase</h2>
+<p><strong>Good fit</strong>: MVPs, early-stage startups (fast dev speed, generous free MAU), Vercel + Next.js full-stack, relational data-centric apps (orders, bookings, inventory), services needing RLS data security (healthcare, finance, PII), real-time apps (chat, collaboration, dashboards), AI/vector search apps (built-in pgvector for RAG without separate vector DB).</p>
+<p><strong>Poor fit</strong>: Media-bandwidth-heavy apps (use Vercel Blob or Cloudflare R2 instead), Korean social login essential (use Auth.js or Passport.js), enterprise audit logs/SSO needed (use Auth0, WorkOS, Clerk), long-running serverless functions (&gt;10 seconds).</p>
+<hr>
+<h2>8. Supabase vs Competitors</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Supabase</th>
+<th>Firebase</th>
+<th>Auth0</th>
+<th>Clerk</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Database</td>
+<td>PostgreSQL</td>
+<td>Firestore (NoSQL)</td>
+<td>None</td>
+<td>None</td>
+</tr>
+<tr>
+<td>Auth free MAU</td>
+<td>50K</td>
+<td>50K (user-based)</td>
+<td>7,500</td>
+<td>10K</td>
+</tr>
+<tr>
+<td>Realtime</td>
+<td>Yes (WebSocket)</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>Yes (S3-compatible)</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Open source</td>
+<td>Fully public</td>
+<td>Proprietary</td>
+<td>Proprietary</td>
+<td>Proprietary</td>
+</tr>
+<tr>
+<td>Self-hosting</td>
+<td>Yes (Docker)</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Vector search</td>
+<td>Built-in</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. Conclusion</h2>
+<p>Supabase brilliantly combines open-source freedom with managed service convenience. The synergy with Vercel, PostgreSQL&#39;s power, and a generous free tier make it widely beloved from individual developers to startups. However, bandwidth limits and lack of Korean social login support are clear drawbacks. Weigh your project&#39;s requirements carefully when deciding.</p>
+<p><em>&quot;Supabase is going beyond being a simple Firebase alternative to becoming the new standard in the open-source ecosystem.&quot;</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/OpenSource_Firebase/SuperBase_guide_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

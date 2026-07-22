@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiniCPM5-1B-Claude-Opus-Fable5-Thinking (GGUF) — Getting Started — VibeQuant</title>
+  <meta name="description" content="이 모델은 CPU 단독 또는 저사양 GPU 환경에서도 구동 가능한 초경량 모델로, llama.cpp, Ollama, LM Studio, jan, KoboldCpp 등 GGUF 호환 런타임 전반에서 사용할 수 있습니다. 'Thinking' 모드(Chain of Thought…" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/tech-llm-minicpm5-minicpm5-1b-fable5-thi-d1e38470/" />
+  <meta property="og:title" content="MiniCPM5-1B-Claude-Opus-Fable5-Thinking (GGUF) — Getting Started" />
+  <meta property="og:description" content="이 모델은 CPU 단독 또는 저사양 GPU 환경에서도 구동 가능한 초경량 모델로, llama.cpp, Ollama, LM Studio, jan, KoboldCpp 등 GGUF 호환 런타임 전반에서 사용할 수 있습니다. 'Thinking' 모드(Chain of Thought…" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/tech-llm-minicpm5-minicpm5-1b-fable5-thi-d1e38470/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MiniCPM5-1B-Claude-Opus-Fable5-Thinking (GGUF) — Getting Started","description":"이 모델은 CPU 단독 또는 저사양 GPU 환경에서도 구동 가능한 초경량 모델로, llama.cpp, Ollama, LM Studio, jan, KoboldCpp 등 GGUF 호환 런타임 전반에서 사용할 수 있습니다. 'Thinking' 모드(Chain of Thought…","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/tech-llm-minicpm5-minicpm5-1b-fable5-thi-d1e38470/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_%20Minicpm5/Minicpm5%201b%20fable5%20thinking%20getting%20started.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link" href="../../columns/">Columns</a>
+        <a class="site-nav-link is-active" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>MiniCPM5-1B-Claude-Opus-Fable5-Thinking (GGUF) — Getting Started</h1>
+        <p class="lede">이 모델은 CPU 단독 또는 저사양 GPU 환경에서도 구동 가능한 초경량 모델로, llama.cpp, Ollama, LM Studio, jan, KoboldCpp 등 GGUF 호환 런타임 전반에서 사용할 수 있습니다. 'Thinking' 모드(Chain of Thought…</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>초경량 1B 파라미터 로컬 LLM 시작 가이드
+모델 페이지: <a href="https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF">https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF</a>
+라이선스: Apache-2.0 (베이스 모델 MiniCPM5-1B로부터 상속)</p>
+</blockquote>
+<hr>
+<h2>1. 모델 개요</h2>
+<table>
+<thead>
+<tr>
+<th align="left">항목</th>
+<th align="left">내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">파라미터 규모</td>
+<td align="left">1B (10억)</td>
+</tr>
+<tr>
+<td align="left">베이스 모델</td>
+<td align="left"><code>openbmb/MiniCPM5-1B</code></td>
+</tr>
+<tr>
+<td align="left">미세 조정 데이터</td>
+<td align="left">Fable 5 데이터 (post-training)</td>
+</tr>
+<tr>
+<td align="left">배포 포맷</td>
+<td align="left">GGUF (llama.cpp 계열 런타임용 양자화 빌드)</td>
+</tr>
+<tr>
+<td align="left">최대 컨텍스트</td>
+<td align="left">128K 토큰 (131,072 / upstream <code>config.json</code> 기준)</td>
+</tr>
+<tr>
+<td align="left">아키텍처</td>
+<td align="left">llama</td>
+</tr>
+<tr>
+<td align="left">채팅 템플릿</td>
+<td align="left">MiniCPM5 네이티브 템플릿이 GGUF 메타데이터에 내장</td>
+</tr>
+<tr>
+<td align="left">지원 언어</td>
+<td align="left">영어, 중국어</td>
+</tr>
+<tr>
+<td align="left">특화 영역</td>
+<td align="left">코드 생성/디버깅, 명령어 수행(Instruction Following), 도구 호출(Tool Calling)</td>
+</tr>
+</tbody></table>
+<p>이 모델은 CPU 단독 또는 저사양 GPU 환경에서도 구동 가능한 초경량 모델로, llama.cpp, Ollama, LM Studio, jan, KoboldCpp 등 GGUF 호환 런타임 전반에서 사용할 수 있습니다. &#39;Thinking&#39; 모드(Chain-of-Thought 추론)와 &#39;No Think&#39; 모드(빠른 응답)를 전환할 수 있는 하이브리드 추론 구조가 특징입니다.</p>
+<p>참고: 이름에 포함된 &#39;Fable 5&#39;는 학습 데이터 출처를 가리키는 표기이며, Anthropic의 상용 폐쇄형 모델 &#39;Claude Fable 5&#39;와는 별개의 오픈소스 커뮤니티 모델입니다.</p>
+<hr>
+<h2>2. 제공 파일 (양자화 버전 선택)</h2>
+<table>
+<thead>
+<tr>
+<th align="left">파일</th>
+<th align="left">양자화</th>
+<th align="left">크기</th>
+<th align="left">비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>...-Q4_K_M.gguf</code></td>
+<td align="left">Q4_K_M</td>
+<td align="left">약 657 MB</td>
+<td align="left">최소 용량, 저메모리 환경용</td>
+</tr>
+<tr>
+<td align="left"><code>...-Q5_K_M.gguf</code></td>
+<td align="left">Q5_K_M</td>
+<td align="left">약 751 MB</td>
+<td align="left">품질/용량 균형</td>
+</tr>
+<tr>
+<td align="left"><code>...-Q8_0.gguf</code></td>
+<td align="left">Q8_0</td>
+<td align="left">약 1.1 GB</td>
+<td align="left"><strong>권장 기본값</strong></td>
+</tr>
+<tr>
+<td align="left"><code>...-F16.gguf</code></td>
+<td align="left">F16</td>
+<td align="left">약 2.1 GB</td>
+<td align="left">풀 프리시전 변환 원본</td>
+</tr>
+</tbody></table>
+<p><strong>선택 가이드</strong>: 1B 모델은 양자화 손실에 상대적으로 민감하므로, 메모리 여유가 있다면 <strong>Q8_0</strong>을 기본으로 사용하는 것을 권장합니다. 램 2GB 미만의 극단적 제약 환경에서만 Q4_K_M을 고려하십시오.</p>
+<hr>
+<h2>3. 설치 및 실행 방법</h2>
+<h3>3.1 llama.cpp (CLI)</h3>
+<p>macOS / Linux 설치:</p>
+<pre><code class="language-bash">curl -LsSf https://llama.app/install.sh | sh
+</code></pre>
+<p>Windows (WinGet):</p>
+<pre><code class="language-bash">winget install llama.cpp
+</code></pre>
+<p>터미널에서 직접 추론:</p>
+<pre><code class="language-bash">llama cli -hf GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF:Q4_K_M
+</code></pre>
+<p>로컬 파일로 직접 실행 (Q8_0 기준):</p>
+<pre><code class="language-bash">llama-cli \
+  -m MiniCPM5-1B-Claude-Opus-Fable5-Thinking-Q8_0.gguf \
+  -p &quot;Write a Python function to merge two sorted lists.&quot; \
+  -n 512 \
+  --temp 0.9 --top-p 0.95 \
+  -c 8192
+</code></pre>
+<p>컨텍스트 길이(<code>-c</code>)는 최대 131,072까지 지원하지만, 실제 사용 가능한 길이는 VRAM/RAM에 따라 조정해야 합니다.</p>
+<h3>3.2 llama.cpp 서버 (OpenAI 호환 API)</h3>
+<pre><code class="language-bash">llama-server \
+  -m MiniCPM5-1B-Claude-Opus-Fable5-Thinking-Q8_0.gguf \
+  -c 8192 --port 8080
+</code></pre>
+<p>서버 기동 후 <code>http://localhost:8080</code>에서 웹 UI 및 OpenAI 호환 <code>/v1/chat/completions</code> 엔드포인트를 사용할 수 있습니다. 기존 OpenAI SDK 기반 코드에서 <code>base_url</code>만 변경하면 그대로 연동됩니다.</p>
+<h3>3.3 Ollama</h3>
+<pre><code class="language-bash">ollama run hf.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF:Q4_K_M
+</code></pre>
+<p>HuggingFace 저장소에서 직접 pull하여 실행하는 방식으로, 별도의 Modelfile 작성이 필요 없습니다.</p>
+<h3>3.4 LM Studio / jan / KoboldCpp</h3>
+<p>저장소의 <code>.gguf</code> 파일을 다운로드하여 로드하기만 하면 됩니다. MiniCPM5 채팅 템플릿이 GGUF 메타데이터에 내장되어 있으므로 템플릿을 수동 설정할 필요가 없습니다.</p>
+<ul>
+<li>LM Studio: 검색창에 <code>GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF</code> 입력 후 원하는 양자화 버전 다운로드</li>
+</ul>
+<h3>3.5 llama-cpp-python (Python 연동)</h3>
+<pre><code class="language-bash">pip install llama-cpp-python
+</code></pre>
+<pre><code class="language-python">from llama_cpp import Llama
+
+llm = Llama.from_pretrained(
+    repo_id=&quot;GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF&quot;,
+    filename=&quot;MiniCPM5-1B-Claude-Opus-Fable5-Thinking-Q8_0.gguf&quot;,
+)
+
+response = llm.create_chat_completion(
+    messages=[
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;두 정렬 리스트를 병합하는 파이썬 함수를 작성해줘.&quot;}
+    ]
+)
+print(response[&quot;choices&quot;][0][&quot;message&quot;][&quot;content&quot;])
+</code></pre>
+<h3>3.6 vLLM</h3>
+<pre><code class="language-bash">pip install vllm
+vllm serve &quot;GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF&quot;
+</code></pre>
+<p>OpenAI 호환 API 호출:</p>
+<pre><code class="language-bash">curl -X POST &quot;http://localhost:8000/v1/chat/completions&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  --data &#39;{
+    &quot;model&quot;: &quot;GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF&quot;,
+    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is the capital of France?&quot;}]
+  }&#39;
+</code></pre>
+<h3>3.7 Docker Model Runner</h3>
+<pre><code class="language-bash">docker model run hf.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF:Q4_K_M
+</code></pre>
+<h3>3.8 코딩 에이전트 연동 (Pi / Hermes / OpenClaw)</h3>
+<p>llama.cpp 서버를 백엔드로 띄운 뒤, OpenAI 호환 엔드포인트(<code>http://localhost:8080/v1</code>)를 각 에이전트의 커스텀 프로바이더로 등록하는 방식입니다. 로컬 코딩 에이전트 실험용으로 유용합니다.</p>
+<hr>
+<h2>4. 샘플링 파라미터 권장값</h2>
+<p>베이스 모델(MiniCPM5-1B)의 생성 기본값을 상속합니다.</p>
+<table>
+<thead>
+<tr>
+<th align="left">모드</th>
+<th align="left">파라미터</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Think</strong> (기본값)</td>
+<td align="left"><code>temperature=0.9</code>, <code>top_p=0.95</code></td>
+</tr>
+<tr>
+<td align="left"><strong>No Think</strong></td>
+<td align="left"><code>temperature=0.7</code>, <code>top_p=0.95</code>, <code>enable_thinking=False</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Think 모드</strong>: 최종 답변 전에 내부 추론(reasoning) 블록을 출력합니다. 복잡한 코딩/추론 작업에 적합하지만, 파이프라인에 연동할 때는 추론 블록을 파싱·제거하는 후처리 로직이 필요합니다.</li>
+<li><strong>No Think 모드</strong>: 추론 과정 없이 즉답합니다. 지연 시간이 중요한 챗봇/분류 작업에 적합합니다.</li>
+</ul>
+<hr>
+<h2>5. 성능 벤치마크</h2>
+<p>V2 버전에서 도구 호출(Tool Calling) 성능이 크게 개선되었습니다. (모델 제작자 공개 수치 기준)</p>
+<table>
+<thead>
+<tr>
+<th align="left">모델</th>
+<th align="left">BFCL (non_live)</th>
+<th align="left">BFCL (live)</th>
+<th align="left">API-Bank</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">MiniCPM5-1B (Base)</td>
+<td align="left">41.51%</td>
+<td align="left">60.24%</td>
+<td align="left">7.30%</td>
+</tr>
+<tr>
+<td align="left"><strong>V2 Thinking 모델</strong></td>
+<td align="left"><strong>43.06%</strong></td>
+<td align="left"><strong>63.33%</strong></td>
+<td align="left"><strong>22.10%</strong></td>
+</tr>
+</tbody></table>
+<p>특히 API-Bank 점수가 7.30% → 22.10%로 3배가량 상승한 점이 도구 호출 특화 학습의 효과를 보여줍니다. 도구 사용에 더 특화된 파생 모델로 <code>MiniCPM5-Claude-Toolusage</code>도 별도 제공됩니다.</p>
+<hr>
+<h2>6. 장점</h2>
+<ul>
+<li><strong>초경량 로컬 구동</strong>: 최소 657MB(Q4_K_M)로 CPU 단독, 라즈베리파이급 SBC, 구형 노트북에서도 실행 가능</li>
+<li><strong>128K 장문 컨텍스트</strong>: 1B급 모델로는 이례적인 긴 컨텍스트 지원. 대규모 코드베이스·장문 문서 분석에 활용 가능</li>
+<li><strong>하이브리드 추론</strong>: Think/No Think 모드 전환으로 품질과 속도를 작업별로 선택</li>
+<li><strong>도구 호출 강화</strong>: 동급 1B 오픈소스 모델 대비 Tool Calling 성능에서 SOTA를 목표로 설계</li>
+<li><strong>넓은 런타임 호환성</strong>: llama.cpp, Ollama, LM Studio, vLLM, Docker 등 사실상 모든 GGUF 생태계 지원</li>
+<li><strong>Apache-2.0 라이선스</strong>: 상업적 이용 및 재배포에 제약이 적음</li>
+<li><strong>템플릿 내장</strong>: 채팅 템플릿이 GGUF에 포함되어 있어 별도 설정 없이 즉시 사용 가능</li>
+</ul>
+<hr>
+<h2>7. 단점 및 한계</h2>
+<ul>
+<li><strong>1B 규모의 근본적 한계</strong>: 복잡한 일반 추론, 다단계 논리, 폭넓은 세계 지식에서 프론티어급 모델(GPT-4, Claude 등)과 격차가 큼. 범용 어시스턴트보다는 특정 태스크(코딩 보조, 도구 호출 라우팅, 분류)에 한정해 사용하는 것이 현실적</li>
+<li><strong>Thinking 모드의 부가 출력</strong>: 추론 블록이 최종 답변에 앞서 출력되므로, 애플리케이션 연동 시 파싱 로직이 추가로 필요. 추론 블록만큼 토큰 소비와 지연 시간도 증가</li>
+<li><strong>실효 컨텍스트 제약</strong>: 128K는 이론상 최대치이며, 실제 사용 가능한 길이는 런타임과 하드웨어(RAM/VRAM)에 좌우됨. 저사양 환경에서는 8K 내외 설정이 현실적</li>
+<li><strong>양자화 민감도</strong>: 소형 모델 특성상 Q4 이하 양자화에서 품질 저하가 상대적으로 두드러질 수 있음 (Q8_0 권장 사유)</li>
+<li><strong>언어 커버리지</strong>: 공식 지원 언어는 영어·중국어 중심. 한국어 성능은 별도 검증 필요</li>
+<li><strong>인퍼런스 프로바이더 미지원</strong>: 현재 HuggingFace Inference Providers에 배포되어 있지 않아 클라우드 API 형태로는 사용 불가 (로컬 구동 전용)</li>
+</ul>
+<hr>
+<h2>8. 활용 시나리오 제안</h2>
+<table>
+<thead>
+<tr>
+<th align="left">시나리오</th>
+<th align="left">권장 설정</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">로컬 코딩 어시스턴트 (오프라인)</td>
+<td align="left">Q8_0 + Think 모드, llama-server + 에디터 연동</td>
+</tr>
+<tr>
+<td align="left">온디바이스 도구 호출 라우터</td>
+<td align="left">Q8_0 + Think 모드 (BFCL/API-Bank 강점 활용)</td>
+</tr>
+<tr>
+<td align="left">저지연 챗봇 / 분류기</td>
+<td align="left">Q5_K_M + No Think 모드</td>
+</tr>
+<tr>
+<td align="left">대규모 문서/코드베이스 요약</td>
+<td align="left">F16 또는 Q8_0 + 긴 <code>-c</code> 설정 (RAM 확보 필수)</td>
+</tr>
+<tr>
+<td align="left">엣지 디바이스 실험</td>
+<td align="left">Q4_K_M + 컨텍스트 4K 이하</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. 참고 링크</h2>
+<ul>
+<li>GGUF 저장소: <a href="https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF">https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF</a></li>
+<li>Transformers 체크포인트: <a href="https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking">https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking</a></li>
+<li>베이스 모델: <a href="https://huggingface.co/openbmb/MiniCPM5-1B">https://huggingface.co/openbmb/MiniCPM5-1B</a></li>
+<li>llama.cpp: <a href="https://github.com/ggml-org/llama.cpp">https://github.com/ggml-org/llama.cpp</a></li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_%20Minicpm5/Minicpm5%201b%20fable5%20thinking%20getting%20started.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

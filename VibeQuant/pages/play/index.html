@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="VibeQuant Python Playground — 브라우저에서 바로 Python 퀀트 코드를 실행하세요. Pyodide + DeepSeek 기반." />
+  <title>VibeQuant Playground — Browser Python Quant</title>
+  <meta name="keywords" content="Python Playground, Browser Python, Run Code, Chart, Notebook, Quant" />
+  <link rel="canonical" href="https://play.vibequant.cc/" />
+  <meta property="og:title" content="VibeQuant Playground — Python in Browser" />
+  <meta property="og:description" content="브라우저에서 Python 퀀트 코드를 실행하세요. Pyodide + DeepSeek." />
+  <meta property="og:url" content="https://play.vibequant.cc/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="VibeQuant Playground" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/app.css?v=26" />
+  <style>
+    .play-topnav { display: flex; align-items: center; gap: 16px; padding: 12px 24px; border-bottom: 1px solid var(--c-border, #333); }
+    .play-topnav .brand { font-family: 'Syne', sans-serif; font-size: 1.1rem; font-weight: 700; color: var(--c-text, #f0f0f0); text-decoration: none; }
+    .play-topnav a { color: var(--c-muted, #888); text-decoration: none; font-size: 0.85rem; }
+    .play-topnav a:hover { color: var(--c-accent, #6c5ce7); }
+    .play-topnav .sep { flex: 1; }
+    .hero-play { padding: 32px 24px 0; }
+  </style>
+</head>
+<body>
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="play-topnav">
+    <a class="brand" href="https://vibequant.cc">VibeQuant</a>
+    <a href="https://docs.vibequant.cc/columns/">Columns</a>
+    <a href="https://tech.vibequant.cc/tech/">Tech</a>
+    <a href="https://cti.vibequant.cc">CTI</a>
+    <span class="sep"></span>
+    <a href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </nav>
+
+  <header class="hero hero-play">
+    <div class="hero-top">
+      <div>
+        <p class="brand">VibeQuant Playground</p>
+        <p class="tagline" data-i18n="tagline">
+          Vibe Quant - 인공지능 퀀트 헤지펀드의 퀀트 위원회
+        </p>
+      </div>
+      <div class="hero-meta">
+        <label class="lang-label" for="lang-select" data-i18n="language">언어</label>
+        <select id="lang-select" class="lang-select" aria-label="Language">
+          <option value="ko" selected>한국어</option>
+          <option value="en">English</option>
+          <option value="zh">中文</option>
+        </select>
+      </div>
+    </div>
+    <h1 class="headline" data-i18n="headline">웹버전 Vibe Quant Python Demo</h1>
+    <p class="lede" data-i18n="lede">
+      GS Quant의 오픈소스 버전으로 Vibe Quant 웹사이트 데모입니다. 이 프로젝트의 목적은 멀티 LLM 퀀트 위원회의 공통 실행·검증을 위한 프로젝트입니다. TOSS Open API와 야후 파이낸스에서 기초 데이터를 수집하고 있습니다. LLMs are spreadsheets for reasoning, not oracles of prediction. The market owes certainty to no one.
+    </p>
+    <div class="hero-links">
+      <a class="pill" href="#examples" data-i18n="cta_examples">Examples</a>
+      <a class="pill ghost" href="https://vibequant.cc/columns/" data-i18n="cta_columns">Columns</a>
+      <a class="pill ghost" href="https://tech.vibequant.cc" data-i18n="cta_tech">Tech</a>
+      <a class="pill ghost" href="https://vibequant.cc/about/" data-i18n="cta_about">About</a>
+      <a class="pill ghost" href="#community" data-i18n="cta_community">Community</a>
+      <a class="pill ghost" href="#api-map" data-i18n="cta_apis">GS → VI API 설명</a>
+      <a class="pill ghost" href="https://vibequant.cc/apis.html" data-i18n="cta_docs">API 문서</a>
+      <a class="pill ghost" href="#workspace" data-i18n="cta_run">실행기</a>
+      <a class="pill ghost" href="https://github.com/gameworkerkim/vibe-investing/tree/main/VibeQuant" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+  </header>
+
+  <section id="examples" class="examples-section">
+    <div class="section-head">
+      <div>
+        <h2 data-i18n="examples_title">Examples</h2>
+        <p class="section-sub" data-i18n="examples_sub">
+          NVIDIA · Micron · Sandisk · Broadcom 비교 데모. 클릭하면 실행기에 코드가 로드됩니다.
+        </p>
+      </div>
+      <p class="examples-tickers" aria-label="Tickers">NVDA · MU · SNDK · AVGO</p>
+    </div>
+    <div id="examples-chips" class="examples-chips" role="list"></div>
+  </section>
+
+  <section id="community" class="community-section">
+    <div class="section-head">
+      <div>
+        <h2 data-i18n="community_title">Community</h2>
+        <p class="section-sub" data-i18n="community_sub">
+          공유 샘플을 같은 스테이지에서 불러와 실행·채점합니다. 브라우저만 실행 (서버 exec 없음).
+        </p>
+      </div>
+      <button type="button" class="btn ghost tiny" id="btn-community-score" data-i18n="community_run_score">
+        Run &amp; score
+      </button>
+    </div>
+    <div id="community-chips" class="examples-chips" role="list"></div>
+    <div id="community-score" class="community-score" hidden>
+      <p class="community-score-head" id="community-score-summary"></p>
+      <ul id="community-score-list" class="community-score-list"></ul>
+      <pre id="community-score-meta" class="community-score-meta"></pre>
+    </div>
+  </section>
+
+  <section id="api-map" class="api-section">
+    <div class="section-head">
+      <div>
+        <h2 data-i18n="api_title">GS Quant ↔ VI Quant API 설명</h2>
+        <p class="section-sub" data-i18n="api_sub">
+          규칙: <code>gs_quant → vi_quant</code>, <code>Gs* → Vi*</code>.
+          <span class="badge browser">browser</span> 는 이 페이지에서 바로 실행됩니다.
+        </p>
+      </div>
+      <div class="legend">
+        <span class="badge browser" data-i18n="legend_browser">browser = 웹 실행</span>
+        <span class="badge local" data-i18n="legend_local">local = pip</span>
+        <span class="badge planned" data-i18n="legend_planned">planned = 예정</span>
+      </div>
+    </div>
+    <div class="api-table-wrap">
+      <table class="api-table">
+        <thead>
+          <tr>
+            <th data-i18n="col_gs">GS Quant</th>
+            <th data-i18n="col_vi">VI Quant</th>
+            <th data-i18n="col_status">상태</th>
+            <th data-i18n="col_desc">설명</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="api-tbody">
+          <tr data-id="candles"><td><code>Dataset / GsDataApi</code></td><td><code>vi_browser.get_candles</code></td><td><span class="badge browser">browser</span></td><td>시세 캔들</td><td></td></tr>
+          <tr data-id="returns"><td><code>gs_quant.timeseries.returns</code></td><td><code>vi_browser.returns</code></td><td><span class="badge browser">browser</span></td><td>가격 수익률</td><td></td></tr>
+          <tr data-id="volatility"><td><code>gs_quant.timeseries.volatility</code></td><td><code>vi_browser.volatility</code></td><td><span class="badge browser">browser</span></td><td>변동성</td><td></td></tr>
+          <tr data-id="ma"><td><code>gs_quant.timeseries.moving_average</code></td><td><code>vi_browser.moving_average</code></td><td><span class="badge browser">browser</span></td><td>이동평균</td><td></td></tr>
+          <tr data-id="session"><td><code>GsSession.use(…)</code></td><td><code>ViSession.use()</code></td><td><span class="badge local">local</span></td><td>세션</td><td></td></tr>
+          <tr data-id="swap"><td><code>IRSwap.calc(Price)</code></td><td><code>IRSwap.calc(Price)</code></td><td><span class="badge planned">planned</span></td><td>스왑</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="doc-link">
+      <a href="https://vibequant.cc/apis.html" data-i18n="more_apis">전체 API 설명 페이지 열기 →</a>
+    </p>
+  </section>
+
+  <p id="ios-banner" class="ios-banner" hidden data-i18n="ios_banner">
+    iOS 안내: 실행기는 데스크톱 Chrome/Firefox를 권장합니다.
+  </p>
+  <p id="data-source-banner" class="data-source-banner" hidden data-i18n="mock_source_warn">
+    경고: 시세가 mock입니다.
+  </p>
+
+  <section id="workspace" class="workspace">
+    <div class="pane llm-pane llm-prompt-block">
+      <div class="pane-head llm-prompt-head">
+        <div>
+          <h2 data-i18n="llm_title">LLM 프롬프트 입력</h2>
+          <p class="runtime-limits" data-i18n="llm_sub">금융(미국·한국 주식·크립토)만. DeepSeek가 답하거나 vi_browser 파이썬을 생성해 실행합니다.</p>
+          <p id="llm-status" class="llm-status" data-i18n="llm_status_checking">DeepSeek 상태 확인 중…</p>
+        </div>
+        <div class="pane-actions llm-actions">
+          <label class="llm-model-label" for="llm-model">
+            <span data-i18n="llm_model">모델</span>
+            <select id="llm-model" class="lang-select" aria-label="DeepSeek model">
+              <option value="flash" selected>V4 Flash</option>
+              <option value="pro">V4 Pro</option>
+            </select>
+          </label>
+          <button type="button" id="btn-clear-prompt" class="btn ghost" data-i18n="clear">Clear</button>
+          <button type="button" id="btn-llm" class="btn primary" aria-busy="false">
+            <span class="btn-spinner" aria-hidden="true"></span>
+            <span class="btn-label" data-i18n="llm_run">실행</span>
+          </button>
+        </div>
+      </div>
+      <div id="llm-progress" class="llm-progress" hidden aria-live="polite">
+        <div class="llm-progress-row"><span class="llm-spinner" aria-hidden="true"></span><span id="llm-progress-label">DeepSeek 호출 중…</span></div>
+        <div class="llm-progress-track" aria-hidden="true"><div class="llm-progress-bar"></div></div>
+      </div>
+      <div id="llm-prompt-chips" class="examples-chips llm-prompt-chips" role="list"></div>
+      <textarea id="llm-prompt" class="code llm-prompt" spellcheck="true" data-i18n-placeholder="llm_placeholder" aria-label="LLM Quant Prompt" placeholder="예: NVDA·MU·SNDK·AVGO 22일 모멘텀을 비교하고 랭킹을 알려줘"></textarea>
+      <p class="hint" data-i18n="llm_hint">비금융 질문은 거부되며 1분간 쿨다운.</p>
+    </div>
+
+    <div class="pane input-pane">
+      <div class="pane-head">
+        <div>
+          <h2 data-i18n="python_input">파이썬 입력</h2>
+          <p id="sample-label" class="sample-label"></p>
+          <p id="runtime-limits" class="runtime-limits" data-i18n="runtime_limits">첫 로드는 수 초 걸릴 수 있습니다.</p>
+        </div>
+        <div class="pane-actions">
+          <button type="button" id="btn-clear" class="btn ghost" data-i18n="clear">Clear</button>
+          <button type="button" id="btn-example" class="btn ghost" data-i18n="load_example">골든 샘플</button>
+          <button type="button" id="btn-run" class="btn primary" data-i18n="run">실행</button>
+        </div>
+      </div>
+      <textarea id="code" class="code" spellcheck="false" data-i18n-placeholder="code_placeholder" aria-label="Python code" placeholder="# 위 API 표에서 샘플 로드, 또는 VI browser Python 입력"></textarea>
+      <p class="hint" data-i18n="hint">Pyodide(WASM)로 브라우저 실행. 차트: show_chart(...)</p>
+    </div>
+
+    <div class="workspace-out-left">
+      <div class="pane result-pane">
+        <div class="pane-head"><h2 data-i18n="result">결과</h2><span id="runtime-status" class="status">Python 런타임 로드 중…</span></div>
+        <pre id="output" class="output" aria-live="polite"></pre>
+      </div>
+      <div class="pane error-pane">
+        <div class="pane-head"><h2 data-i18n="error_log">Error log</h2></div>
+        <pre id="error-log" class="output error-log" aria-live="polite"></pre>
+      </div>
+    </div>
+
+    <div class="pane chart-pane" aria-label="Chart">
+      <div id="chart-wrap" class="chart-wrap chart-wrap-fill is-empty">
+        <p id="chart-title" class="chart-title" hidden></p>
+        <div class="chart-canvas-box"><canvas id="chart-canvas" aria-label="Chart"></canvas></div>
+        <p id="chart-empty" class="chart-empty" data-i18n="chart_empty">show_chart(...) 결과가 여기에 표시됩니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot">
+    <div class="repo">
+      <p class="repo-title" data-i18n="repo_title">레포지토리</p>
+      <a class="repo-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">github.com/gameworkerkim/vibe-investing</a>
+    </div>
+    <aside class="disclaimer" role="note">
+      <p data-i18n="disclaimer">주의: 본 Quant는 투자 의견이 아니며 투자에 사용해서는 안 됩니다.</p>
+    </aside>
+  </footer>
+
+  <script src="./js/runtime-config.js?v=25"></script>
+  <script type="module" src="./js/app.js?v=26"></script>
+</body>
+</html>

@@ -1,0 +1,1014 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>エージェント・フレンドリーなWebサイト構築のための実践技術ガイド — VibeQuant</title>
+  <meta name="description" content="📌 タグ — #AIエージェント #WebMCP #llms txt #セマンティックHTML #アクセシビリティ #Schema.org #GEO #CoreWebVitals #MCP" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/tech-agent-friendly-website-guide-agent--019bf478/" />
+  <meta property="og:title" content="エージェント・フレンドリーなWebサイト構築のための実践技術ガイド" />
+  <meta property="og:description" content="📌 タグ — #AIエージェント #WebMCP #llms txt #セマンティックHTML #アクセシビリティ #Schema.org #GEO #CoreWebVitals #MCP" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/tech-agent-friendly-website-guide-agent--019bf478/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"エージェント・フレンドリーなWebサイト構築のための実践技術ガイド","description":"📌 タグ — #AIエージェント #WebMCP #llms txt #セマンティックHTML #アクセシビリティ #Schema.org #GEO #CoreWebVitals #MCP","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/tech-agent-friendly-website-guide-agent--019bf478/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/agent-friendly-website-guide/agent-friendly-website-guide.ja.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link" href="../../columns/">Columns</a>
+        <a class="site-nav-link is-active" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>エージェント・フレンドリーなWebサイト構築のための実践技術ガイド</h1>
+        <p class="lede">📌 タグ — #AIエージェント #WebMCP #llms txt #セマンティックHTML #アクセシビリティ #Schema.org #GEO #CoreWebVitals #MCP</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>AIエージェントがユーザーに代わってWebサイトを巡回・要約・決済する時代が到来しました。本ガイドは、Google web.dev (2026-04-01)、Chrome WebMCP EPP (2026-02-10)、Jeremy Howardのllms.txt標準を統合し、エージェントが自社サイトを正確に理解しタスクを完遂できるようにするための、全11章+付録の実務マニュアルです。</p>
+</blockquote>
+<p>🌐 <strong>他の言語</strong> — <a href="./agent-friendly-website-guide.ko.md">한국어</a> · <a href="./agent-friendly-website-guide.en.md">English</a></p>
+<p>📌 <strong>タグ</strong> — <code>#AIエージェント</code> <code>#WebMCP</code> <code>#llms-txt</code> <code>#セマンティックHTML</code> <code>#アクセシビリティ</code> <code>#Schema.org</code> <code>#GEO</code> <code>#CoreWebVitals</code> <code>#MCP</code></p>
+<hr>
+<h2>ひと目で分かる要点 (TL;DR)</h2>
+<ul>
+<li><strong>対象読者</strong>: フロントエンドエンジニア、テクニカルライター、DevRel、PM、SEO/GEO担当者、CTO</li>
+<li><strong>得られるもの</strong>: エージェントがサイトを認識する3つの方法、Googleの7原則、セマンティックHTML・ARIA・Schema.orgのコード例、llms.txtの標準構造、WebMCP導入戦略、4段階の導入ロードマップ</li>
+<li><strong>なぜ今</strong>: Pew Research (2024) によると、Google検索でAI要約を見たユーザーは検索結果リンクのクリック率が約半分に低下。トラフィックの半分以上が「エージェントが自社サイトを理解できるか」に依存する時代になりました</li>
+<li><strong>読了時間</strong>: 約35分・実装着手は1〜2週間で可能</li>
+</ul>
+<hr>
+<h2>目次</h2>
+<ol>
+<li><a href="#1-%E6%96%B0%E3%81%97%E3%81%84%E8%A8%AA%E5%95%8F%E8%80%85-ai%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%81%AE%E5%8F%B0%E9%A0%AD">新しい訪問者: AIエージェントの台頭</a></li>
+<li><a href="#2-%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%81%AFweb%E3%82%B5%E3%82%A4%E3%83%88%E3%82%92%E3%81%A9%E3%81%86%E8%A6%8B%E3%82%8B%E3%81%8B">エージェントはWebサイトをどう見るか</a></li>
+<li><a href="#3-google%E3%81%AE7%E3%81%A4%E3%81%AE%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%83%95%E3%83%AC%E3%83%B3%E3%83%89%E3%83%AA%E3%83%BC%E5%8E%9F%E5%89%87">Googleの7つのエージェント・フレンドリー原則</a></li>
+<li><a href="#4-%E3%82%BB%E3%83%9E%E3%83%B3%E3%83%86%E3%82%A3%E3%83%83%E3%82%AFhtml%E3%81%A8%E3%82%A2%E3%82%AF%E3%82%BB%E3%82%B7%E3%83%93%E3%83%AA%E3%83%86%E3%82%A3%E3%83%84%E3%83%AA%E3%83%BC%E3%81%AE%E5%AE%9F%E8%B7%B5%E3%82%AC%E3%82%A4%E3%83%89">セマンティックHTMLとアクセシビリティツリーの実践ガイド</a></li>
+<li><a href="#5-%E3%83%AC%E3%82%A4%E3%82%A2%E3%82%A6%E3%83%88%E3%81%AE%E5%AE%89%E5%AE%9A%E6%80%A7%E3%81%A8%E8%A6%96%E8%A6%9A%E7%9A%84%E3%82%B7%E3%82%B0%E3%83%8A%E3%83%AB">レイアウトの安定性と視覚的シグナル</a></li>
+<li><a href="#6-%E6%A7%8B%E9%80%A0%E5%8C%96%E3%83%87%E3%83%BC%E3%82%BF-schemaorg%E3%81%A8json-ld">構造化データ: Schema.orgとJSON-LD</a></li>
+<li><a href="#7-ai%E3%81%AE%E5%85%A5%E5%8F%A3%E6%A8%99%E6%BA%96--llmstxt">AIの入口標準 — llms.txt</a></li>
+<li><a href="#8-webmcp--%E6%AC%A1%E4%B8%96%E4%BB%A3%E3%81%AE%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%82%A4%E3%83%B3%E3%82%BF%E3%83%BC%E3%83%95%E3%82%A7%E3%83%BC%E3%82%B9">WebMCP — 次世代のエージェント・インターフェース</a></li>
+<li><a href="#9-%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%83%95%E3%83%AC%E3%83%B3%E3%83%89%E3%83%AA%E3%83%BC%E3%81%AA%E5%AE%9F%E8%A3%85%E4%BA%8B%E4%BE%8B">エージェント・フレンドリーな実装事例</a></li>
+<li><a href="#10-%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%83%95%E3%83%AC%E3%83%B3%E3%83%89%E3%83%AA%E3%83%BC%E5%BA%A6%E7%9B%A3%E6%9F%BB%E3%83%81%E3%82%A7%E3%83%83%E3%82%AF%E3%83%AA%E3%82%B9%E3%83%88">エージェント・フレンドリー度監査チェックリスト</a></li>
+<li><a href="#11-%E6%AE%B5%E9%9A%8E%E7%9A%84%E5%B0%8E%E5%85%A5%E3%83%AD%E3%83%BC%E3%83%89%E3%83%9E%E3%83%83%E3%83%97">段階的導入ロードマップ</a></li>
+</ol>
+<ul>
+<li><a href="#%E4%BB%98%E9%8C%B2a-%E7%94%A8%E8%AA%9E%E9%9B%86">付録A. 用語集</a></li>
+<li><a href="#%E4%BB%98%E9%8C%B2b-%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE%E3%81%A8%E5%87%BA%E5%85%B8">付録B. 参考文献と出典</a></li>
+</ul>
+<hr>
+<h2>1. 新しい訪問者: AIエージェントの台頭</h2>
+<h3>1.1 「エージェント」とは何か</h3>
+<p>Google web.devの定義によれば、エージェントとは「入力を受信・解釈し、ユーザー(人間または他のエージェント)に代わって計画を立て、タスクを実行するシステム」です。エージェントは単一のLLMではなく、<strong>モデル・ルール・メモリ・ツール</strong>が結合された統合ユニットです。</p>
+<h4>エージェントを定義する4つの特性</h4>
+<ul>
+<li><strong>自律的 (Autonomous)</strong>: 人間の直接介入なしに動作可能</li>
+<li><strong>対話的 (Interactive)</strong>: 他のエージェントや人間と会話できる</li>
+<li><strong>反応的 (Reactive)</strong>: 環境変化を認識し応答する</li>
+<li><strong>能動的 (Proactive)</strong>: 目標達成のために自ら行動する</li>
+</ul>
+<h4>エージェントの4段階タスクプロセス</h4>
+<ol>
+<li><strong>クエリ受信</strong> — ユーザーの自然言語要求、または他エージェントからの要求を受け取る</li>
+<li><strong>計画立案</strong> — 要求を解決する手順をLLMで生成する</li>
+<li><strong>計画実行</strong> — ツール(API、ブラウザ、MCPサーバーなど)を呼び出して実行する</li>
+<li><strong>学習保存</strong> — 結果とコンテキストを短期・長期メモリに記録する</li>
+</ol>
+<h3>1.2 人間・クローラー・エージェントの違い</h3>
+<p>同じWebサイトを訪問しても、3種類の訪問者はまったく異なる方法で動作します。</p>
+<table>
+<thead>
+<tr>
+<th>訪問者タイプ</th>
+<th>行動パターン</th>
+<th>意図</th>
+<th>最適化ポイント</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>人間ユーザー</td>
+<td>視覚・感情・文脈ベースの探索</td>
+<td>購入・情報・娯楽</td>
+<td>デザイン、コピー、性能、アクセシビリティ</td>
+</tr>
+<tr>
+<td>検索クローラー</td>
+<td>リンクグラフ収集</td>
+<td>インデックス・ランキング</td>
+<td>robots.txt、sitemap.xml、メタデータ</td>
+</tr>
+<tr>
+<td>学習クローラー (Common Crawl等)</td>
+<td>大規模テキスト収集</td>
+<td>LLM学習データ</td>
+<td>robots.txt、AI学習拒否ポリシー</td>
+</tr>
+<tr>
+<td><strong>AIエージェント (代理人)</strong></td>
+<td><strong>目標指向のアクション実行</strong></td>
+<td><strong>ユーザータスクの完遂(購入、予約、フォーム入力)</strong></td>
+<td><strong>セマンティックHTML、アクセシビリティツリー、WebMCP、llms.txt</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>💡 <strong>重要な違い</strong>: クローラーは「読む」だけですが、エージェントは「読む + クリック + 入力 + 決済」まで実行します。そのためエージェントは、セキュリティ・同意・視覚的安定性の面で、はるかに厳しい要件を持ちます。</p>
+</blockquote>
+<h3>1.3 データ所有関係から見たエージェントの3タイプ</h3>
+<ul>
+<li><strong>ゼロパーティ・エージェント (Zero-party)</strong> — ブラウザ内のローカルデータのみで動作 (例: Chrome内蔵のGemini Nano)。プライバシー保護の観点で最も安全。</li>
+<li><strong>ファーストパーティ・エージェント (First-party)</strong> — サービス運営主体が自社データで構築したエージェント (例: GoogleがGoogleマップ上で提供する旅行プランナー)。信頼性と制御性が最大。</li>
+<li><strong>サードパーティ・エージェント (Third-party)</strong>— 外部開発者が作ったエージェントが自社サイトをデータソースとして使用 (例: ユーザーのChatGPTが自社ECで注文する)。この場合、自社サイトは<strong>「エージェントのサードパーティ情報提供者」</strong>になります。</li>
+</ul>
+<blockquote>
+<p>📌 <strong>実務上の示唆</strong>: 日本のEC・旅行・フィンテックサイトの多くは「サードパーティ・エージェントの情報提供者」の立場に置かれます。決済・認証・利用規約同意のフローについて、エージェントが処理できるよう明示的な確認ステップ (Human-in-the-loop) を設計してください。</p>
+</blockquote>
+<hr>
+<h2>2. エージェントはWebサイトをどう見るか</h2>
+<p>エージェントはモニターでWebサイトを「見ません」。サイトの<strong>機械可読表現 (machine-readable representation)</strong> 上で動作します。この表現の品質がエージェントの性能を決定し、Googleは3つの基本モダリティを定義しています。</p>
+<h3>2.1 モダリティ1: スクリーンショット (視覚分析)</h3>
+<p>エージェントがレンダリングされたページをキャプチャし、ビジョンモデルで分析する方式です。右上の虫眼鏡アイコンは検索ボックス、ページ中央の大きなボックスは入力フォーム、といった具合に視覚信号を解釈します。<strong>色・サイズ・近接性が重要度を決定</strong>し、大きな「削除」ボタンは小さな「ヘルプ」リンクより慎重に扱われます。</p>
+<ul>
+<li><strong>長所</strong>: CSS・JSで完全にレンダリングされた最終画面を見るため、視覚デザインの信号をそのまま活用可能</li>
+<li><strong>短所</strong>: トークンコストが非常に高く遅い。通常はDOM・アクセシビリティツリーが乱れた際のバックアップ手段</li>
+</ul>
+<h3>2.2 モダリティ2: HTML / DOM</h3>
+<p>エージェントがDOMツリーを直接パースし、要素間の関係と階層構造を読み取る方式です。「今すぐ購入」ボタンがある商品コンテナ<em>内部</em>にあれば、エージェントはそのボタンが<em>その商品</em>に属すると推論します。<strong>DOMのネスト構造とクラス・ID命名が意味を持つ</strong>必要があります。</p>
+<h3>2.3 モダリティ3: アクセシビリティツリー (Accessibility Tree)</h3>
+<p>アクセシビリティツリーは、ブラウザが標準提供するAPIで、DOMから最も重要な<strong>「対話的要素のロール (role)・名前 (name)・状態 (state)」</strong>だけを抽出したセマンティックな要約です。本来はスクリーンリーダーなど支援技術のために設計されましたが、AIエージェントにとってはCSSの視覚的ノイズを全て取り除いた<strong>「高品質な地図」</strong>として機能します。</p>
+<blockquote>
+<p>🔍 <strong>確認方法</strong>: Chrome DevTools → Elements → 右側「Accessibility」パネル → 「Full-page accessibility tree」を有効化。ここで「button」「link」「textbox」などのロールラベルが欠落している場所が、エージェントが失敗するポイントです。</p>
+</blockquote>
+<h3>2.4 複合モダリティ (Combined Modalities)</h3>
+<p>最新のエージェント (ChatGPT Agent、Claude for Chrome、Gemini in Chromeなど) は単一の入力に依存しません。DOM・アクセシビリティツリーで対話的要素の構造化リストを取得し、スクリーンショットで視覚的位置とグルーピングをクロスチェックします。</p>
+<blockquote>
+<p>🎯 <strong>開発者の役割</strong>: スクリーンショット・DOM・アクセシビリティツリー — この3つのチャネルすべてでクリーンな信号を一貫して提供すること。いずれか1つだけでは不十分で、3つが相互補強したときエージェントは最も安定して動作します。</p>
+</blockquote>
+<hr>
+<h2>3. Googleの7つのエージェント・フレンドリー原則</h2>
+<p>Google web.devが提示するエージェント・フレンドリーなサイト構築の7つの推奨事項を、コード例とともに詳しく解説します。<strong>これらすべての原則は同時に人間ユーザーのアクセシビリティ・UXも改善します。</strong></p>
+<h3>原則1. 必須アクションはすべてUIに明示する</h3>
+<p>キーボードショートカットや右クリックメニューからのみアクセス可能な機能は、エージェントが発見できません。</p>
+<ul>
+<li>❌ <strong>悪い例</strong>: <code>Ctrl+Shift+D</code>を押さないとダウンロードメニューが出ないSaaSダッシュボード</li>
+<li>✅ <strong>良い例</strong>: ツールバーに明示的な[ダウンロード]ボタンがあり、ショートカットは補助手段</li>
+</ul>
+<h3>原則2. レイアウトの安定性を保証する</h3>
+<p>「カートに追加」ボタンがカテゴリーごとに異なる位置にあれば、エージェントはカテゴリーごとに学習し直さなければなりません。</p>
+<p><strong>実務上の推奨</strong>:</p>
+<ul>
+<li>テンプレートレベルで「主要CTAの位置」を標準化</li>
+<li>CLS (Cumulative Layout Shift) を0.1以下に維持 (Core Web Vitals)</li>
+<li>スケルトンUIで読み込み中も最終レイアウトの形を保つ</li>
+<li>動的に位置を変える「跳ねる」広告バナーを避ける</li>
+</ul>
+<h3>原則3. 「ゴースト要素」と透明オーバーレイを避ける</h3>
+<p>透明なdivが本物のボタンを覆っている場合、エージェントの視覚分析は「覆われたノード」を無視する可能性があります。</p>
+<pre><code class="language-css">/* ❌ 悪い例: 見えないdivがボタンを覆う */
+.overlay-trap {
+  position: absolute;
+  inset: 0;
+  background: transparent;
+  z-index: 9999;
+}
+
+/* ✅ 良い例: pointer-eventsの明示 + 適切なz-index */
+.overlay-decoration {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;  /* クリックは下に通る */
+  z-index: 1;
+}
+</code></pre>
+<h3>原則4. セマンティックHTMLで実行可能要素を設計する</h3>
+<p>divやspanをボタン風に装飾せず、<code>&lt;button&gt;</code>と<code>&lt;a&gt;</code>タグを直接使用してください。エージェントはこの2つのタグを無条件に対話的と認識します。デザインはCSSでいくらでも変更できます。</p>
+<pre><code class="language-html">&lt;!-- ❌ 悪い例: divボタン --&gt;
+&lt;div class=&quot;btn-primary&quot; onclick=&quot;submit()&quot;&gt;注文する&lt;/div&gt;
+
+&lt;!-- ⚠️ 次善策: セマンティックが不可能な場合はARIAで補強 --&gt;
+&lt;div role=&quot;button&quot; tabindex=&quot;0&quot;
+     aria-label=&quot;注文する&quot;
+     onclick=&quot;submit()&quot;
+     onkeydown=&quot;if(event.key===&#39;Enter&#39;)submit()&quot;&gt;
+  注文する
+&lt;/div&gt;
+
+&lt;!-- ✅ 良い例: 本物のbutton --&gt;
+&lt;button type=&quot;submit&quot; class=&quot;btn-primary&quot;&gt;注文する&lt;/button&gt;
+</code></pre>
+<h3>原則5. CSSに<code>cursor: pointer</code>を設定する</h3>
+<p>マウスカーソルが指型に変わることは、エージェントのビジョンモデルにとっても「ここはクリック可能」という強力な信号です。</p>
+<pre><code class="language-css">.product-card { cursor: pointer; }
+.disabled-button { cursor: not-allowed; }
+</code></pre>
+<h3>原則6. <code>&lt;label&gt;</code>の<code>for</code>属性で入力フィールドを連結する</h3>
+<p><code>placeholder</code>だけでは不十分です — placeholderは入力開始時に消え、アクセシビリティツリーにも含まれません。</p>
+<pre><code class="language-html">&lt;!-- ❌ 悪い例: placeholderのみ --&gt;
+&lt;input type=&quot;email&quot; placeholder=&quot;メールアドレスを入力&quot; /&gt;
+
+&lt;!-- ✅ 良い例: labelとfor/id連結 --&gt;
+&lt;label for=&quot;user-email&quot;&gt;メールアドレス&lt;/label&gt;
+&lt;input type=&quot;email&quot;
+       id=&quot;user-email&quot;
+       name=&quot;email&quot;
+       autocomplete=&quot;email&quot;
+       required
+       placeholder=&quot;name@example.com&quot; /&gt;
+
+&lt;!-- ✅ さらに良い例: 視覚的にラベルを隠しつつA11yツリーに残す --&gt;
+&lt;label for=&quot;search&quot; class=&quot;sr-only&quot;&gt;サイト検索&lt;/label&gt;
+&lt;input type=&quot;search&quot; id=&quot;search&quot; name=&quot;q&quot; /&gt;
+</code></pre>
+<h3>原則7. 対話的要素は8平方ピクセルより大きくする</h3>
+<p>8ピクセル×8ピクセル (=64平方ピクセル) 未満の要素は、エージェントの視覚分析が「ノイズ」としてフィルタリングする可能性があります。</p>
+<ul>
+<li>主要CTAボタン: 最低44×44px (Apple HIG準拠)</li>
+<li>フォームフィールド高さ: 最低40px</li>
+<li>アイコンボタン: 視覚的には24pxでも、paddingでヒットエリアを44px以上確保</li>
+<li>閉じる (X) ボタン: 見た目は小さくても、クリック領域は十分に</li>
+</ul>
+<hr>
+<h2>4. セマンティックHTMLとアクセシビリティツリーの実践ガイド</h2>
+<h3>4.1 「divスープ」から「セマンティック・ランドマーク」へ</h3>
+<p>多くのReact/Vueプロジェクトは依然として、コンポーネントをすべてdivで囲む「divスープ」状態です。この状態ではアクセシビリティツリーがほぼフラットになり、エージェントはページの「地図」を描けません。</p>
+<table>
+<thead>
+<tr>
+<th>セマンティックタグ</th>
+<th>A11yツリー上のロール</th>
+<th>エージェントの活用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>&lt;header&gt;</code></td>
+<td>banner</td>
+<td>サイト識別、ロゴ・ナビ認識</td>
+</tr>
+<tr>
+<td><code>&lt;nav&gt;</code></td>
+<td>navigation</td>
+<td>主要メニューの自動発見</td>
+</tr>
+<tr>
+<td><code>&lt;main&gt;</code></td>
+<td>main</td>
+<td>本文コンテンツ領域の把握</td>
+</tr>
+<tr>
+<td><code>&lt;article&gt;</code></td>
+<td>article</td>
+<td>独立コンテンツ単位(ブログ記事等)の認識</td>
+</tr>
+<tr>
+<td><code>&lt;aside&gt;</code></td>
+<td>complementary</td>
+<td>補助情報領域の区別</td>
+</tr>
+<tr>
+<td><code>&lt;footer&gt;</code></td>
+<td>contentinfo</td>
+<td>サイト情報・規約位置の把握</td>
+</tr>
+<tr>
+<td><code>&lt;section&gt;</code></td>
+<td>region (aria-label必要)</td>
+<td>トピック別グルーピング</td>
+</tr>
+<tr>
+<td><code>&lt;button&gt;</code></td>
+<td>button</td>
+<td>クリック可能アクションの即時認識</td>
+</tr>
+<tr>
+<td><code>&lt;a href&gt;</code></td>
+<td>link</td>
+<td>ナビゲーション対象の認識</td>
+</tr>
+<tr>
+<td><code>&lt;input&gt;</code></td>
+<td>textbox / checkbox / radio等</td>
+<td>フォームフィールドの自動マッピング</td>
+</tr>
+</tbody></table>
+<h3>4.2 ページ骨格の模範例</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ja&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;title&gt;製品詳細 - Acme&lt;/title&gt;
+  &lt;link rel=&quot;alternate&quot; type=&quot;text/markdown&quot;
+        href=&quot;/products/widget-pro.md&quot; /&gt;  &lt;!-- llms.txt互換 --&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;header&gt;
+    &lt;a href=&quot;/&quot; aria-label=&quot;ホーム&quot;&gt;
+      &lt;img src=&quot;/logo.svg&quot; alt=&quot;Acme&quot; /&gt;
+    &lt;/a&gt;
+    &lt;nav aria-label=&quot;主要メニュー&quot;&gt;
+      &lt;ul&gt;
+        &lt;li&gt;&lt;a href=&quot;/products&quot;&gt;製品&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/pricing&quot;&gt;料金&lt;/a&gt;&lt;/li&gt;
+        &lt;li&gt;&lt;a href=&quot;/docs&quot;&gt;ドキュメント&lt;/a&gt;&lt;/li&gt;
+      &lt;/ul&gt;
+    &lt;/nav&gt;
+  &lt;/header&gt;
+
+  &lt;main&gt;
+    &lt;article&gt;
+      &lt;h1&gt;Widget Pro&lt;/h1&gt;
+      &lt;section aria-labelledby=&quot;specs&quot;&gt;
+        &lt;h2 id=&quot;specs&quot;&gt;仕様&lt;/h2&gt;
+        &lt;!-- ... --&gt;
+      &lt;/section&gt;
+      &lt;button type=&quot;button&quot; data-action=&quot;add-to-cart&quot;&gt;
+        カートに追加
+      &lt;/button&gt;
+    &lt;/article&gt;
+  &lt;/main&gt;
+
+  &lt;footer&gt;
+    &lt;p&gt;© 2026 Acme&lt;/p&gt;
+  &lt;/footer&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3>4.3 ARIA: セマンティックを補強する4つの核心属性</h3>
+<h4><code>aria-label</code> / <code>aria-labelledby</code></h4>
+<p>要素に「名前」を与えます。アイコンボタンのようにテキストがない場合は必須です。</p>
+<pre><code class="language-html">&lt;!-- アイコンのみの閉じるボタン --&gt;
+&lt;button aria-label=&quot;ウィンドウを閉じる&quot;&gt;
+  &lt;svg&gt;&lt;!-- X icon --&gt;&lt;/svg&gt;
+&lt;/button&gt;
+
+&lt;!-- 他要素のテキストをラベルに --&gt;
+&lt;section aria-labelledby=&quot;pricing-title&quot;&gt;
+  &lt;h2 id=&quot;pricing-title&quot;&gt;料金プラン&lt;/h2&gt;
+&lt;/section&gt;
+</code></pre>
+<h4><code>aria-describedby</code></h4>
+<p>追加の説明を関連付けます。フォームフィールドのヘルプテキストやエラーメッセージでよく使います。</p>
+<pre><code class="language-html">&lt;label for=&quot;pwd&quot;&gt;パスワード&lt;/label&gt;
+&lt;input id=&quot;pwd&quot; type=&quot;password&quot;
+       aria-describedby=&quot;pwd-help pwd-error&quot; /&gt;
+&lt;p id=&quot;pwd-help&quot;&gt;8文字以上、英数字・記号を含む&lt;/p&gt;
+&lt;p id=&quot;pwd-error&quot; role=&quot;alert&quot;&gt;パスワードが短すぎます&lt;/p&gt;
+</code></pre>
+<h4><code>aria-expanded</code>, <code>aria-controls</code></h4>
+<p>ドロップダウン・アコーディオン・モーダルの状態と制御関係を表現します。エージェントが「今開いているか/閉じているか」を知ることができます。</p>
+<pre><code class="language-html">&lt;button aria-expanded=&quot;false&quot; aria-controls=&quot;faq-1&quot;&gt;
+  配送にはどれくらいかかりますか?
+&lt;/button&gt;
+&lt;div id=&quot;faq-1&quot; hidden&gt;
+  営業日ベースで2〜3日です。
+&lt;/div&gt;
+</code></pre>
+<h4><code>role</code></h4>
+<p>セマンティックタグが使えない場合に役割を明示。<code>tabindex=&quot;0&quot;</code>とキーボードイベントハンドラを併せて提供し、完全な「ボタン」を作ります。</p>
+<pre><code class="language-html">&lt;div role=&quot;button&quot; tabindex=&quot;0&quot;
+     aria-label=&quot;テーマ切り替え&quot;
+     onclick=&quot;toggleTheme()&quot;
+     onkeydown=&quot;if([&#39;Enter&#39;,&#39; &#39;].includes(event.key))toggleTheme()&quot;&gt;
+  🌙
+&lt;/div&gt;
+</code></pre>
+<blockquote>
+<p>📐 <strong>ARIAの第1法則</strong>: 「可能ならARIAを使わずセマンティックHTMLを使え」。ARIAはセマンティックHTMLで表現不可能なパターン(タブ、ツリービュー、コンボボックスなど)でのみ使用します。誤用されたARIAは、何もないより悪い結果を生みます。</p>
+</blockquote>
+<hr>
+<h2>5. レイアウトの安定性と視覚的シグナル</h2>
+<h3>5.1 Core Web Vitalsとエージェント</h3>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>意味</th>
+<th>エージェント観点での影響</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>LCP</strong></td>
+<td>Largest Contentful Paint (&lt; 2.5秒)</td>
+<td>エージェントがページ「準備完了」と判断する時点</td>
+</tr>
+<tr>
+<td><strong>INP</strong></td>
+<td>Interaction to Next Paint (&lt; 200ms)</td>
+<td>クリック後の応答性 — タイムアウト回避</td>
+</tr>
+<tr>
+<td><strong>CLS</strong></td>
+<td>Cumulative Layout Shift (&lt; 0.1)</td>
+<td>スクリーンショット・座標ベースのクリック精度を左右</td>
+</tr>
+</tbody></table>
+<h3>5.2 エージェントのクリックを潰す「透明オーバーレイの罠」4パターン</h3>
+<p>UX QAチェックリストに必ず含めてください。</p>
+<ol>
+<li><strong>クッキー同意バナー</strong> — ページ読み込み直後に画面全体を覆い、エージェントが本文に到達できない</li>
+<li><strong>ニュースレターモーダル</strong> — 3秒後に自動表示。閉じるボタンが小さすぎる、ESCで閉じない</li>
+<li><strong>フローティング・チャットボット</strong> — 右下のCTAボタンを隠し、「購入」クリックを失敗させる</li>
+<li><strong>z-indexが誤ったヘッダー</strong> — スクロール時にコンテンツを覆い、座標ベースのクリックが外れる</li>
+</ol>
+<blockquote>
+<p>✅ <strong>推奨対応</strong>: クッキー同意はセマンティック<code>&lt;dialog&gt;</code>に<code>role=&quot;dialog&quot;</code>, <code>aria-modal=&quot;true&quot;</code>を明示し、初期フォーカスを「同意」または「拒否」ボタンに置きます。エージェントがモーダルの存在を正しく認識し、適切に応答できます。</p>
+</blockquote>
+<h3>5.3 視覚的シグナル・チェックリスト</h3>
+<ul>
+<li><input disabled="" type="checkbox"> ホバー時に<code>cursor: pointer</code>を明示</li>
+<li><input disabled="" type="checkbox"> フォーカスリングを絶対に削除しない (<code>outline: none</code>は禁止)</li>
+<li><input disabled="" type="checkbox"> 主要CTAは色・サイズ・余白で視覚的階層を確保</li>
+<li><input disabled="" type="checkbox"> 非活性状態は<code>cursor: not-allowed</code> + <code>opacity: 0.5</code></li>
+<li><input disabled="" type="checkbox"> ホバー状態で位置・サイズが変わらないよう、<code>transform: scale</code>より色変化を優先</li>
+</ul>
+<hr>
+<h2>6. 構造化データ: Schema.orgとJSON-LD</h2>
+<p>セマンティックHTMLが「この要素は何か」を伝えるなら、構造化データ (Structured Data) は「このページ全体が何についてのものか」を伝えます。エージェントはSchema.org語彙でマーキングされたJSON-LDを<strong>信頼性の高い事実情報 (ground truth)</strong> として扱います。</p>
+<h3>6.1 なぜJSON-LDか</h3>
+<ul>
+<li><strong>Microdata/RDFaに比べて分離度が高い</strong>: HTMLマークアップを汚さず<code>&lt;script&gt;</code>タグに隔離</li>
+<li><strong>Google・Bing・LLMがすべて推奨</strong>: Anthropic、OpenAI、Perplexityがいずれも優先的にパース</li>
+<li><strong>管理が容易</strong>: CMS・静的サイトジェネレーターでテンプレート化しやすい</li>
+</ul>
+<h3>6.2 押さえるべき6つのスキーマ</h3>
+<h4>Organization — すべてのサイトの基本</h4>
+<pre><code class="language-json">{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;Organization&quot;,
+  &quot;name&quot;: &quot;Betalabs Inc.&quot;,
+  &quot;url&quot;: &quot;https://betalabs.io&quot;,
+  &quot;logo&quot;: &quot;https://betalabs.io/logo.svg&quot;,
+  &quot;sameAs&quot;: [
+    &quot;https://github.com/betalabs&quot;,
+    &quot;https://www.linkedin.com/company/betalabs&quot;
+  ],
+  &quot;contactPoint&quot;: {
+    &quot;@type&quot;: &quot;ContactPoint&quot;,
+    &quot;contactType&quot;: &quot;customer support&quot;,
+    &quot;email&quot;: &quot;support@betalabs.io&quot;,
+    &quot;availableLanguage&quot;: [&quot;ko&quot;, &quot;en&quot;, &quot;ja&quot;]
+  }
+}
+</code></pre>
+<h4>Product — EC</h4>
+<pre><code class="language-json">{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;Product&quot;,
+  &quot;name&quot;: &quot;Widget Pro&quot;,
+  &quot;sku&quot;: &quot;WP-2026-001&quot;,
+  &quot;brand&quot;: { &quot;@type&quot;: &quot;Brand&quot;, &quot;name&quot;: &quot;Acme&quot; },
+  &quot;description&quot;: &quot;高性能ウィジェット、日本語対応&quot;,
+  &quot;image&quot;: &quot;https://acme.com/widget.jpg&quot;,
+  &quot;offers&quot;: {
+    &quot;@type&quot;: &quot;Offer&quot;,
+    &quot;price&quot;: &quot;4980&quot;,
+    &quot;priceCurrency&quot;: &quot;JPY&quot;,
+    &quot;availability&quot;: &quot;https://schema.org/InStock&quot;,
+    &quot;url&quot;: &quot;https://acme.com/products/widget-pro&quot;
+  },
+  &quot;aggregateRating&quot;: {
+    &quot;@type&quot;: &quot;AggregateRating&quot;,
+    &quot;ratingValue&quot;: &quot;4.7&quot;,
+    &quot;reviewCount&quot;: &quot;342&quot;
+  }
+}
+</code></pre>
+<h4>FAQPage — カスタマーサポート</h4>
+<pre><code class="language-json">{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;FAQPage&quot;,
+  &quot;mainEntity&quot;: [{
+    &quot;@type&quot;: &quot;Question&quot;,
+    &quot;name&quot;: &quot;返品ポリシーはどうなっていますか?&quot;,
+    &quot;acceptedAnswer&quot;: {
+      &quot;@type&quot;: &quot;Answer&quot;,
+      &quot;text&quot;: &quot;ご購入後14日以内、未使用の状態であれば全額返金いたします。&quot;
+    }
+  }]
+}
+</code></pre>
+<h4>BreadcrumbList — サイト階層</h4>
+<pre><code class="language-json">{
+  &quot;@context&quot;: &quot;https://schema.org&quot;,
+  &quot;@type&quot;: &quot;BreadcrumbList&quot;,
+  &quot;itemListElement&quot;: [
+    { &quot;@type&quot;: &quot;ListItem&quot;, &quot;position&quot;: 1,
+      &quot;name&quot;: &quot;ホーム&quot;, &quot;item&quot;: &quot;https://acme.com/&quot; },
+    { &quot;@type&quot;: &quot;ListItem&quot;, &quot;position&quot;: 2,
+      &quot;name&quot;: &quot;製品&quot;, &quot;item&quot;: &quot;https://acme.com/products&quot; },
+    { &quot;@type&quot;: &quot;ListItem&quot;, &quot;position&quot;: 3,
+      &quot;name&quot;: &quot;Widget Pro&quot; }
+  ]
+}
+</code></pre>
+<h4>Article — ブログ・ニュース / Event — イベント・ウェビナー</h4>
+<p>両スキーマとも<code>datePublished</code>、<code>author</code>、<code>location</code>などのフィールドが核心です。詳細は<a href="https://schema.org">schema.org</a>公式ドキュメントを参照してください。</p>
+<blockquote>
+<p>🛠 <strong>検証ツール</strong>: <a href="https://search.google.com/test/rich-results">Google Rich Results Test</a>と<a href="https://validator.schema.org">Schema Markup Validator</a>でJSON-LDを検証できます。リリース前のゲートに必ず通してください。</p>
+</blockquote>
+<hr>
+<h2>7. AIの入口標準 — llms.txt</h2>
+<p>robots.txtがクローラー向けの規約なら、<strong>llms.txtは「推論時点 (inference time) のLLMエージェント」のための入口ファイル</strong>です。2024年9月、Jeremy Howard (Answer.AI共同創業者) が提案し、2026年現在、<strong>Anthropic、Cloudflare、Vercel、Stripe、Perplexity、Maryland.gov</strong>などが採用しています。WordPress (Yoastプラグイン)、Webflow、Mintlifyはネイティブサポートを提供します。</p>
+<h3>7.1 なぜ必要か</h3>
+<p>LLMはコンテキストウィンドウが限られており、一般的なHTMLサイト全体を一度に読めません。広告・ナビゲーション・JavaScriptレンダリングを経るとトークンの半分以上が「ノイズ」に消費されます。llms.txtはサイトの核心コンテンツをマークダウンでキュレートされた「チートシート」として提供し、<strong>トークン使用量を50〜70%削減</strong>します。</p>
+<h3>7.2 2つのファイル</h3>
+<table>
+<thead>
+<tr>
+<th>ファイル</th>
+<th>役割</th>
+<th>大まかなサイズ</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/llms.txt</code></td>
+<td>サイトの地図 (目次 + リンク)</td>
+<td>1,000〜3,000トークン</td>
+</tr>
+<tr>
+<td><code>/llms-full.txt</code></td>
+<td>全コンテンツを平坦化した単一マークダウン</td>
+<td>数万〜数十万トークン</td>
+</tr>
+</tbody></table>
+<p>Profoundの計測によれば、AIエージェントは<code>/llms-full.txt</code>を<code>/llms.txt</code>の<strong>約2倍の頻度で訪問</strong>しています。最初は<code>llms.txt</code>から始め、運用基盤が整ってから<code>llms-full.txt</code>を追加するのが一般的です。</p>
+<h3>7.3 llms.txt標準構造</h3>
+<pre><code class="language-markdown"># Acme Web3 Platform
+
+&gt; AcmeはアジアおよびAPAC市場向けにブロックチェーンインフラを
+&gt; 運営しています。ステーブルコイン発行、K-POPチケッティング、
+&gt; NFTマーケットプレイスを提供します。
+
+主要コンセプト:
+- すべてのAPIはREST + WebSocketで提供
+- 認証: API Key または OAuth 2.0
+- 韓国語・英語・日本語・中国語の4言語対応
+
+## 核心ドキュメント
+
+- [スタートガイド](https://acme.io/docs/getting-started.md):
+  5分で最初のトランザクションを実行するチュートリアル
+- [APIリファレンス](https://acme.io/docs/api.md):
+  すべてのエンドポイント、パラメータ、レスポンス形式
+- [SDK](https://acme.io/docs/sdk.md):
+  JavaScript、Python、Go、Java SDK
+
+## ソリューション
+
+- [ステーブルコイン (STABLE1)](https://acme.io/products/stable1.md)
+- [チケッティングNFT](https://acme.io/products/ticketing.md)
+
+## Optional
+
+- [会社概要](https://acme.io/about.md)
+- [ブログ (最新30件)](https://acme.io/blog/feed.md)
+</code></pre>
+<h4>構造ルール</h4>
+<ol>
+<li>1行目に<code># H1</code> (サイト名) — <strong>必須</strong>2. <code>&gt;</code> 引用ブロックで1〜3文の要約 —<strong>強く推奨</strong>。LLMの「サイトのメンタルモデル」になる</li>
+<li>一般的なマークダウン段落で核心コンテキスト — 推奨</li>
+<li><code>## H2</code>セクションでページをグルーピング (核心ドキュメント、ソリューション、ポリシー等)</li>
+<li>各項目は<code>[タイトル](URL.md): 1文の説明</code>形式</li>
+<li><code>## Optional</code>セクションは「あってもなくてもよい」資料 — LLMが優先度を下げる</li>
+</ol>
+<h3>7.4 ページ別.md変換</h3>
+<p>llms.txtが「地図」なら、ページ別.mdファイルは「領土」です。同じURLを.md拡張子で要求したとき、クリーンなマークダウンで応答するようサーバーを設定してください。</p>
+<pre><code class="language-http"># パターン1: 拡張子分岐
+GET /products/widget-pro      → HTML (人間向け)
+GET /products/widget-pro.md   → Markdown (LLM向け)
+
+# パターン2: Content-Type ネゴシエーション
+GET /products/widget-pro
+Accept: text/markdown          → Markdownを返す
+Accept: text/html              → HTMLを返す
+</code></pre>
+<p>各ページのHTMLの<code>&lt;head&gt;</code>には、次のようにマークダウン代替を明示するとよいです。</p>
+<pre><code class="language-html">&lt;link rel=&quot;alternate&quot;
+      type=&quot;text/markdown&quot;
+      href=&quot;https://acme.io/products/widget-pro.md&quot; /&gt;
+</code></pre>
+<h3>7.5 運用上の注意</h3>
+<blockquote>
+<p>⚠️ <strong>最も多い失敗パターン</strong>: llms.txtを一度作って更新しないこと。<strong>古いインデックスは無いより悪い</strong> — エージェントに誤った情報を積極的に提供してしまうからです。サイトマップ・ビルドパイプラインにllms.txt再生成を統合し、主要リリース時に即時反映されるよう自動化してください。</p>
+</blockquote>
+<h3>7.6 robots.txtとの関係</h3>
+<p>robots.txtは「ここには来るな」と言い、llms.txtは「これが重要だ」と言います。<strong>互いに補完関係であり、衝突しません</strong>。AI学習拒否ポリシーはrobots.txtとは別に、<code>ai.txt</code>またはIETF AI Preferences Working Groupが整備中の標準に従ってください。</p>
+<hr>
+<h2>8. WebMCP — 次世代のエージェント・インターフェース</h2>
+<p><strong>WebMCPはChromeチームが2026年2月にEarly Preview Program (EPP) として公開した提案標準</strong>です。現在の「DOMをスクリーンショット・アクセシビリティツリーで推論する方式」は堅牢ですが遅いです。WebMCPはWebサイトがエージェントに直接「構造化ツール (Tool)」を公開するチャネルを提供し、曖昧さを排除して作業速度と信頼性を大幅に高めます。</p>
+<h3>8.1 2種類のAPI</h3>
+<h4>宣言的API — HTMLフォームから直接</h4>
+<p>標準化されたアクションはHTMLだけで宣言できます。</p>
+<pre><code class="language-html">&lt;!-- 概念的な例 (正確な構文はEPPドキュメント参照) --&gt;
+&lt;form data-mcp-tool=&quot;searchProducts&quot;
+      data-mcp-description=&quot;カタログから製品を検索&quot;&gt;
+  &lt;label for=&quot;q&quot;&gt;検索ワード&lt;/label&gt;
+  &lt;input id=&quot;q&quot; name=&quot;query&quot;
+         data-mcp-param=&quot;query&quot;
+         data-mcp-type=&quot;string&quot;
+         required /&gt;
+  &lt;label for=&quot;price&quot;&gt;最大価格(円)&lt;/label&gt;
+  &lt;input id=&quot;price&quot; name=&quot;max_price&quot;
+         data-mcp-param=&quot;max_price&quot;
+         data-mcp-type=&quot;number&quot; /&gt;
+  &lt;button type=&quot;submit&quot;&gt;検索&lt;/button&gt;
+&lt;/form&gt;
+</code></pre>
+<h4>命令的API — JavaScriptで動的にツール登録</h4>
+<p>複雑なフロー(多段階決済、リアルタイム見積など)はJavaScriptでツールを登録します。</p>
+<pre><code class="language-javascript">// 概念的な擬似コード
+navigator.mcp?.registerTool({
+  name: &#39;createSupportTicket&#39;,
+  description: &#39;技術サポートチケットを作成します&#39;,
+  parameters: {
+    title: { type: &#39;string&#39;, required: true },
+    severity: { type: &#39;enum&#39;,
+                values: [&#39;low&#39;, &#39;normal&#39;, &#39;high&#39;, &#39;critical&#39;] },
+    description: { type: &#39;string&#39; }
+  },
+  handler: async ({ title, severity, description }) =&gt; {
+    const res = await fetch(&#39;/api/tickets&#39;, {
+      method: &#39;POST&#39;,
+      body: JSON.stringify({ title, severity, description })
+    });
+    return await res.json();
+  }
+});
+</code></pre>
+<h3>8.2 主要なユースケース</h3>
+<ul>
+<li><strong>カスタマーサポート</strong>: エージェントがユーザーのシステム環境 (OS・ブラウザ・アプリバージョン) を自動入力し、正確なサポートチケットを作成</li>
+<li><strong>EC</strong>: エージェントが商品検索・オプション選択・決済フローを正確にナビゲート</li>
+<li><strong>旅行</strong>: 構造化された検索・フィルタ・予約。航空券予約のような多段階タスクに強い</li>
+<li><strong>フィンテック/Web3</strong>: ウォレット接続、トランザクション署名のようなセキュリティ重要タスクの意図を明示的に表現</li>
+</ul>
+<h3>8.3 Early Preview Program (EPP) への参加</h3>
+<p>Chrome WebMCP EPPは<a href="https://developer.chrome.com/docs/ai/join-epp">developer.chrome.com/docs/ai/join-epp</a>から参加可能です。</p>
+<blockquote>
+<p>🚀 <strong>導入戦略</strong>: すべてのページに即WebMCPを適用する必要はありません。最も価値の高い「エージェントに任せたい核心タスク3〜5個」をまず特定してください(例: 商品検索、決済、サポートチケット作成)。これらでPoCを進め、標準が安定してから全社展開します。</p>
+</blockquote>
+<hr>
+<h2>9. エージェント・フレンドリーな実装事例</h2>
+<h3>9.1 Anthropic Docs</h3>
+<ul>
+<li><strong>URL</strong>: <a href="https://docs.anthropic.com">docs.anthropic.com</a> · <strong>llms.txt</strong>: <a href="https://docs.anthropic.com/llms.txt">docs.anthropic.com/llms.txt</a></li>
+<li>Mintlifyでホスティングされ、全ドキュメントに.md変換が自動提供</li>
+<li>llms.txtとllms-full.txtの両方を提供</li>
+<li>コードブロックに明確な言語タグとコピーボタン</li>
+<li>左側ツリーナビゲーションがセマンティック<code>&lt;nav&gt;</code>でマークアップ</li>
+<li>MCPサーバー (mcpdoc) で同じコンテンツをIDEに公開</li>
+</ul>
+<h3>9.2 Vercel</h3>
+<ul>
+<li><strong>URL</strong>: <a href="https://vercel.com">vercel.com</a> · <strong>llms.txt</strong>: <a href="https://vercel.com/docs/llms.txt">vercel.com/docs/llms.txt</a></li>
+<li>APIエンドポイントごとに文脈説明が豊富 — エージェントのツール選択精度↑</li>
+<li>ドキュメントURLに.mdをつけるとマークダウンで返る</li>
+<li>CTAボタンが全ページで同じ位置 — レイアウトの安定性</li>
+</ul>
+<h3>9.3 Cloudflare Developers</h3>
+<ul>
+<li><strong>URL</strong>: <a href="https://developers.cloudflare.com">developers.cloudflare.com</a> · <strong>llms.txt</strong>: <a href="https://developers.cloudflare.com/llms.txt">developers.cloudflare.com/llms.txt</a></li>
+<li>llms.txt + llms-full.txtの両方</li>
+<li>製品別グルーピングが<code>## H2</code>セクションで明確に分離</li>
+<li>WorkersコードサンプルはPlayground URLを同梱</li>
+</ul>
+<h3>9.4 Stripe Docs</h3>
+<ul>
+<li><strong>URL</strong>: <a href="https://docs.stripe.com">docs.stripe.com</a></li>
+<li>Stripe WorkbenchでLLMが実際のAPI呼び出しをシミュレート可能</li>
+<li>ページごとに「APIオブジェクト・スキーマ」がJSON-LDでマーキング</li>
+<li>Idempotency Key、エラーコードなど「エージェントの信頼性に決定的な情報」をヘッダーレベルで露出</li>
+</ul>
+<h3>9.5 Maryland.gov — 公共部門の事例</h3>
+<ul>
+<li><strong>URL</strong>: <a href="https://www.maryland.gov">maryland.gov</a> · <strong>llms.txt</strong>: <a href="https://www.maryland.gov/llms.txt">maryland.gov/llms.txt</a></li>
+<li>「法的・政策的・資格判定には使用しないこと」という利用ポリシーをllms.txtに明示</li>
+<li>アクセシビリティポリシー、連絡先、更新頻度を明示</li>
+<li>公共サイトがllms.txtで「AI向け利用ガイド」を提供した初の模範事例</li>
+</ul>
+<h3>9.6 Mintlifyホスティング・サイト群</h3>
+<p><a href="https://mintlify.com">Mintlify</a>はホスティングするすべてのドキュメントサイトに自動でllms.txt + MCPサーバーを提供します。Cursor、Bolt.new、Resend、Octokitなど数千のドキュメントサイトがこの標準の直接的な受益者です。社内ドキュメントサイトに迅速に適用したい場合、Mintlifyまたはその代替 (Docusaurus + docusaurus-plugin-llms、Astro Starlight) を検討してください。</p>
+<h3>9.7 自社サイトに適用する7つの教訓</h3>
+<ol>
+<li>ドキュメント・核心ページに.md代替URLを提供する</li>
+<li>/llms.txtをドメインルートに置く</li>
+<li>核心CTAの位置を全ページで同じに保つ</li>
+<li>APIオブジェクト・製品・組織情報はJSON-LDでマーキング</li>
+<li>コード例は常に実行可能な環境(Playground/Replit)にリンク</li>
+<li>ポリシー・免責事項をllms.txtに明示</li>
+<li>主要ワークフロー3〜5個をWebMCP候補として特定</li>
+</ol>
+<hr>
+<h2>10. エージェント・フレンドリー度監査チェックリスト</h2>
+<p>以下のチェックリストで自社サイトの「エージェント・フレンドリー度」を直接点検できます。各項目の横にページ別スコア (✅/⚠️/❌) を付け、四半期トラッキング用シートにしてください。</p>
+<h3>10.1 HTML構造 (重み30%)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <code>&lt;html lang=&quot;...&quot;&gt;</code>に正確な言語コードが明示されている</li>
+<li><input disabled="" type="checkbox"> <code>header</code> / <code>nav</code> / <code>main</code> / <code>footer</code>セマンティックタグを使用</li>
+<li><input disabled="" type="checkbox"> すべてのページに<code>&lt;h1&gt;</code>が1つだけ</li>
+<li><input disabled="" type="checkbox"> 見出しがh1 → h2 → h3順でスキップなしに使われる</li>
+<li><input disabled="" type="checkbox"> クリック可能な全要素が<code>&lt;button&gt;</code>または<code>&lt;a href&gt;</code></li>
+<li><input disabled="" type="checkbox"> フォーム入力に<code>&lt;label for&gt;</code>が連結されている</li>
+<li><input disabled="" type="checkbox"> 画像に意味のあるalt属性</li>
+</ul>
+<h3>10.2 アクセシビリティツリー (重み20%)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Chrome DevToolsアクセシビリティツリーがフラットでない</li>
+<li><input disabled="" type="checkbox"> すべてのボタン・リンクに「名前 (name)」が存在</li>
+<li><input disabled="" type="checkbox"> アイコンボタンに<code>aria-label</code></li>
+<li><input disabled="" type="checkbox"> モーダル・ドロップダウンに<code>aria-expanded</code> / <code>aria-controls</code></li>
+<li><input disabled="" type="checkbox"> Lighthouseアクセシビリティスコア ≥ 95</li>
+</ul>
+<h3>10.3 視覚・レイアウト (重み15%)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> CLS &lt; 0.1</li>
+<li><input disabled="" type="checkbox"> LCP &lt; 2.5s</li>
+<li><input disabled="" type="checkbox"> 主要CTAが全ページで同じ位置</li>
+<li><input disabled="" type="checkbox"> クリック可能要素 ≥ 44×44px</li>
+<li><input disabled="" type="checkbox"> <code>cursor: pointer</code>を設定</li>
+<li><input disabled="" type="checkbox"> 透明オーバーレイによるクリック妨害がない</li>
+</ul>
+<h3>10.4 構造化データ (重み15%)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> サイト全体に<code>Organization</code> JSON-LD</li>
+<li><input disabled="" type="checkbox"> ページタイプ別の適切なスキーマ(<code>Product</code> / <code>Article</code> / <code>FAQPage</code>等)</li>
+<li><input disabled="" type="checkbox"> Schema Markup Validatorに合格</li>
+<li><input disabled="" type="checkbox"> <code>BreadcrumbList</code>で階層を表現</li>
+</ul>
+<h3>10.5 AI入口 (重み15%)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> /llms.txtが存在し、過去30日以内に更新されている</li>
+<li><input disabled="" type="checkbox"> /llms-full.txtが存在 (オプション)</li>
+<li><input disabled="" type="checkbox"> 核心ページの.md代替URLを提供</li>
+<li><input disabled="" type="checkbox"> HTMLの<code>&lt;head&gt;</code>に<code>rel=&quot;alternate&quot; type=&quot;text/markdown&quot;</code></li>
+<li><input disabled="" type="checkbox"> robots.txtにllms.txtの位置を明示</li>
+</ul>
+<h3>10.6 次世代 (重み5%)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 核心アクション3〜5個についてWebMCP候補を特定</li>
+<li><input disabled="" type="checkbox"> Chrome EPP加入およびPoC進行中</li>
+</ul>
+<h3>10.7 自動化ツール</h3>
+<table>
+<thead>
+<tr>
+<th>ツール</th>
+<th>用途</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Lighthouse</td>
+<td>アクセシビリティ・性能・SEO自動スコア</td>
+<td>Chrome DevTools内蔵</td>
+</tr>
+<tr>
+<td>Pa11y</td>
+<td>CLIベースのアクセシビリティ自動化</td>
+<td><a href="https://pa11y.org">pa11y.org</a></td>
+</tr>
+<tr>
+<td>axe DevTools</td>
+<td>詳細なアクセシビリティ検査</td>
+<td><a href="https://www.deque.com/axe">deque.com/axe</a></td>
+</tr>
+<tr>
+<td>Schema Validator</td>
+<td>JSON-LD検証</td>
+<td><a href="https://validator.schema.org">validator.schema.org</a></td>
+</tr>
+<tr>
+<td>Rich Results Test</td>
+<td>Googleフレンドリー度</td>
+<td><a href="https://search.google.com/test/rich-results">search.google.com/test/rich-results</a></td>
+</tr>
+<tr>
+<td>llms-txt.io検証ツール</td>
+<td>llms.txt規格検証</td>
+<td><a href="https://llms-txt.io">llms-txt.io</a></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>11. 段階的導入ロードマップ</h2>
+<p>一度にすべてを適用することはできません。4段階に分けて四半期ごとに実行することを推奨します。</p>
+<h3>Phase 1 (1〜2週間): すぐに取れる勝ち</h3>
+<ol>
+<li>Chrome DevToolsアクセシビリティツリーでメインページ・決済ページを監査</li>
+<li>divボタン → <code>&lt;button&gt;</code>に一括置換</li>
+<li>placeholderだけの入力フィールドに<code>&lt;label for&gt;</code>追加</li>
+<li><code>cursor: pointer</code>をグローバル・デザイントークンに追加</li>
+<li>Schema.org Organization JSON-LDを1つサイト全体に追加</li>
+</ol>
+<h3>Phase 2 (3〜6週間): 構造の補強</h3>
+<ol>
+<li>セマンティック・ランドマーク(header/nav/main/footer)を一貫適用</li>
+<li>すべてのモーダル・ドロップダウンにARIA状態属性</li>
+<li>核心ページタイプ別JSON-LD (Product, Article, FAQPage)</li>
+<li>CLS / LCP / INPの目標達成</li>
+<li>Lighthouseアクセシビリティ95+達成</li>
+</ol>
+<h3>Phase 3 (7〜10週間): AI入口標準</h3>
+<ol>
+<li>/llms.txt初版を作成・配信</li>
+<li>核心ドキュメントページに.md代替URLを提供</li>
+<li>CMS・SSGにllms.txt自動更新パイプラインを統合</li>
+<li>/llms-full.txtを検討して導入</li>
+<li>AI学習/推論利用ポリシーを明示</li>
+</ol>
+<h3>Phase 4 (11週以降): 次世代インターフェース</h3>
+<ol>
+<li>Chrome WebMCP EPP加入</li>
+<li>「エージェントに任せたい」核心アクション3〜5個を選定</li>
+<li>宣言的API適用PoC</li>
+<li>命令的API適用PoC (複雑ワークフロー)</li>
+<li>WebMCP標準の安定化に合わせて段階的に全社展開</li>
+</ol>
+<h3>11.1 KPI設定</h3>
+<table>
+<thead>
+<tr>
+<th>測定項目</th>
+<th>Phase 1後</th>
+<th>Phase 2後</th>
+<th>Phase 3後</th>
+<th>Phase 4後</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Lighthouseアクセシビリティ</td>
+<td>85+</td>
+<td>95+</td>
+<td>95+</td>
+<td>95+</td>
+</tr>
+<tr>
+<td>CLS</td>
+<td>&lt; 0.25</td>
+<td>&lt; 0.1</td>
+<td>&lt; 0.1</td>
+<td>&lt; 0.1</td>
+</tr>
+<tr>
+<td>JSON-LDカバレッジ</td>
+<td>30%</td>
+<td>70%</td>
+<td>90%</td>
+<td>95%</td>
+</tr>
+<tr>
+<td>llms.txt</td>
+<td>—</td>
+<td>—</td>
+<td>v1配信</td>
+<td>週次更新</td>
+</tr>
+<tr>
+<td>エージェント・トラフィック比率</td>
+<td>ベースライン</td>
+<td>+30%</td>
+<td>+80%</td>
+<td>+150%</td>
+</tr>
+<tr>
+<td>AI引用/言及頻度</td>
+<td>ベースライン</td>
+<td>+20%</td>
+<td>+60%</td>
+<td>+120%</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>付録A. 用語集</h2>
+<ul>
+<li><strong>アクセシビリティツリー (Accessibility Tree)</strong> — ブラウザがDOMから支援技術向けに抽出したセマンティックツリー。AIエージェントの核心入力。</li>
+<li><strong>セマンティックHTML</strong> — 要素の意味をそのまま表すHTMLの使い方。divの代わりにbutton、navなど。</li>
+<li><strong>JSON-LD</strong> — JSON形式のLinked Data。Schema.org語彙を表現する標準方式。</li>
+<li><strong>Schema.org</strong> — Google・Microsoft・Yahoo・Yandexが共同運営する構造化データ語彙標準。</li>
+<li><strong>llms.txt</strong> — Jeremy Howardが2024年9月に提案したLLM向けサイト入口マークダウン・ファイル。</li>
+<li><strong>llms-full.txt</strong> — サイト全体のコンテンツを平坦化した単一マークダウン。Mintlify・Anthropicが共同開発。</li>
+<li><strong>WebMCP</strong> — Chromeチームが提案したWebサイト→AIエージェント構造化ツール・インターフェース標準 (2026 EPP)。</li>
+<li><strong>MCP (Model Context Protocol)</strong> — Anthropicが2024年11月に公開したLLM ↔ 外部ツール通信プロトコル。</li>
+<li><strong>エージェント (Agent)</strong> — 入力を受け、計画・実行・学習を行う自律システム。モデル・ルール・メモリ・ツールで構成。</li>
+<li><strong>ゼロパーティ・エージェント</strong> — ブラウザ内のローカルデータのみを使用するエージェント。</li>
+<li><strong>ファーストパーティ・エージェント</strong> — サービス運営者が自社データで提供するエージェント。</li>
+<li><strong>サードパーティ・エージェント</strong> — 外部開発者が作ったエージェントが自社サイトをデータ・ツールとして使用。</li>
+<li><strong>Human-in-the-loop (HITL)</strong> — AIが重要な決定時点で人間の確認を受けるよう設計したパターン。</li>
+<li><strong>Core Web Vitals</strong> — Googleが定義したWeb性能の3大指標: LCP、INP、CLS。</li>
+<li><strong>GEO (Generative Engine Optimization)</strong> — 生成AI検索で露出されるようにサイトを最適化する活動。SEOの後継概念。</li>
+</ul>
+<hr>
+<h2>付録B. 参考文献と出典</h2>
+<h3>一次文献</h3>
+<ul>
+<li>Kulikowski, K. &amp; More, O. (2026-04-01). <strong>Building Agent-Friendly Websites</strong>. <a href="https://web.dev/articles/ai-agent-site-ux">web.dev/articles/ai-agent-site-ux</a>. Google web.dev.</li>
+<li>Klepper, A., Kulikowski, K., &amp; Nabors, R. L. (2025-02-25). <strong>Introduction to Agents</strong>. <a href="https://web.dev/articles/ai-agents">web.dev/articles/ai-agents</a>. Google web.dev.</li>
+<li>Bandarra, A. C. (2026-02-10). <strong>WebMCP is available in Early Preview</strong>. <a href="https://developer.chrome.com/blog/webmcp-epp">developer.chrome.com/blog/webmcp-epp</a>. Chrome for Developers.</li>
+<li>Howard, J. (2024-09). <strong>The /llms.txt file</strong>. <a href="https://llmstxt.org">llmstxt.org</a>. Answer.AI.</li>
+</ul>
+<h3>関連標準・ツール</h3>
+<ul>
+<li><strong>Schema.org</strong>: <a href="https://schema.org">schema.org</a></li>
+<li><strong>Web Accessibility Initiative (WAI-ARIA)</strong>: <a href="https://www.w3.org/WAI/ARIA/apg/">w3.org/WAI/ARIA/apg/</a></li>
+<li><strong>Core Web Vitals</strong>: <a href="https://web.dev/vitals">web.dev/vitals</a></li>
+<li><strong>Mintlify (llms.txt + MCP自動生成)</strong>: <a href="https://mintlify.com">mintlify.com</a></li>
+<li><strong>docusaurus-plugin-llms</strong>: <a href="https://github.com/rachfop/docusaurus-plugin-llms">github.com/rachfop/docusaurus-plugin-llms</a></li>
+<li><strong>MCP公式</strong>: <a href="https://modelcontextprotocol.io">modelcontextprotocol.io</a></li>
+<li><strong>Chrome AI EPP加入</strong>: <a href="https://developer.chrome.com/docs/ai/join-epp">developer.chrome.com/docs/ai/join-epp</a></li>
+</ul>
+<h3>ライセンス表記</h3>
+<p>本ドキュメントはGoogle web.devおよびChrome for Developersのコンテンツを引用・翻訳・再構成した部分を含みます。当該コンテンツは<a href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0ライセンス (CC BY 4.0)</a>および<a href="https://www.apache.org/licenses/LICENSE-2.0">Apache 2.0ライセンス</a>のもとで提供されています。詳細は<a href="https://developers.google.com/site-policies">Google Developers サイトポリシー</a>を参照してください。</p>
+<p>本ガイドそのものは<strong>CC BY 4.0</strong>ライセンスで配布され、出典を表示すれば自由に活用・翻訳・引用が可能です。</p>
+<hr>
+<h2>著者情報</h2>
+<p><strong>Dennis Kim (キム・ホグァン / 김호광 / HoKwang Kim)</strong></p>
+<ul>
+<li>Betalabs Inc. CEO</li>
+<li>Cyworld Z 前CEO</li>
+<li>Microsoft Azure MVP (長年認定)</li>
+<li>Web3Paper パブリッシャー</li>
+<li>GitHub: <a href="https://github.com/gameworkerkim">@gameworkerkim</a></li>
+</ul>
+<hr>
+<!-- Schema.org TechArticle metadata for AI agents -->
+<!--
+{
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "エージェント・フレンドリーなWebサイト構築のための実践技術ガイド",
+  "alternateName": "Agent-Friendly Website Construction: A Practical Technical Guide",
+  "description": "AIエージェント時代のWeb UX・アクセシビリティ・構造化標準を統合した実践ガイド",
+  "inLanguage": "ja",
+  "author": {
+    "@type": "Person",
+    "name": "Dennis Kim",
+    "alternateName": "HoKwang Kim / 김호광 / キム・ホグァン",
+    "jobTitle": "CEO of Betalabs Inc.",
+    "url": "https://github.com/gameworkerkim"
+  },
+  "datePublished": "2026-05-19",
+  "dateModified": "2026-05-19",
+  "version": "1.0",
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "keywords": "AIエージェント, エージェント・フレンドリー, llms.txt, WebMCP, セマンティックHTML, アクセシビリティツリー, Schema.org, GEO",
+  "about": [
+    { "@type": "Thing", "name": "AI Agents" },
+    { "@type": "Thing", "name": "Web Accessibility" },
+    { "@type": "Thing", "name": "llms.txt standard" },
+    { "@type": "Thing", "name": "WebMCP" },
+    { "@type": "Thing", "name": "Schema.org Structured Data" }
+  ],
+  "isBasedOn": [
+    {
+      "@type": "CreativeWork",
+      "url": "https://web.dev/articles/ai-agent-site-ux",
+      "author": ["Kasper Kulikowski", "Omkar More"],
+      "publisher": "Google web.dev",
+      "datePublished": "2026-04-01"
+    },
+    {
+      "@type": "CreativeWork",
+      "url": "https://developer.chrome.com/blog/webmcp-epp",
+      "author": "André Cipriani Bandarra",
+      "publisher": "Chrome for Developers",
+      "datePublished": "2026-02-10"
+    },
+    {
+      "@type": "CreativeWork",
+      "url": "https://llmstxt.org",
+      "author": "Jeremy Howard",
+      "publisher": "Answer.AI",
+      "datePublished": "2024-09-03"
+    }
+  ]
+}
+-->
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/agent-friendly-website-guide/agent-friendly-website-guide.ja.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

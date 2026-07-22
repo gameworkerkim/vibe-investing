@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloudflare 무료 티어 가입 가이드 — VibeQuant</title>
+  <meta name="description" content="1. https://dash.cloudflare.com/sign up 접속 2. 이메일 + 비밀번호 입력 (또는 GitHub 계정 SSO 가능) 3. 이메일 인증 (스팸함도 확인)" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/tech-cloudflare-cloudflare-free-tier-gui-0e0aea7a/" />
+  <meta property="og:title" content="Cloudflare 무료 티어 가입 가이드" />
+  <meta property="og:description" content="1. https://dash.cloudflare.com/sign up 접속 2. 이메일 + 비밀번호 입력 (또는 GitHub 계정 SSO 가능) 3. 이메일 인증 (스팸함도 확인)" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/tech-cloudflare-cloudflare-free-tier-gui-0e0aea7a/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=3" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Cloudflare 무료 티어 가입 가이드","description":"1. https://dash.cloudflare.com/sign up 접속 2. 이메일 + 비밀번호 입력 (또는 GitHub 계정 SSO 가능) 3. 이메일 인증 (스팸함도 확인)","author":{"@type":"Person","name":"Dennis Kim (김호광)"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/tech-cloudflare-cloudflare-free-tier-gui-0e0aea7a/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudFlare/Cloudflare%20free%20tier%20guide.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="../../index.html">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../../index.html">Home</a>
+        <a class="site-nav-link" href="../../columns/">Columns</a>
+        <a class="site-nav-link is-active" href="../../tech/">Tech</a>
+        <a class="site-nav-link" href="../../play/">Play</a>
+        <a class="site-nav-link" href="../../about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 클라우드 · Free tier</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · Free tier</p>
+        <h1>Cloudflare 무료 티어 가입 가이드</h1>
+        <p class="lede">1. https://dash.cloudflare.com/sign up 접속 2. 이메일 + 비밀번호 입력 (또는 GitHub 계정 SSO 가능) 3. 이메일 인증 (스팸함도 확인)</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>Azure -&gt; CloudFlare 용도 관점에서 작성. Azure Functions + Blob Storage 의 기존 architecture 마이그레이션 검토용.</p>
+</blockquote>
+<hr>
+<h2>1. 가입 단계 — 3분 소요</h2>
+<h3>Step 1. 계정 생성</h3>
+<ol>
+<li><a href="https://dash.cloudflare.com/sign-up">https://dash.cloudflare.com/sign-up</a> 접속</li>
+<li>이메일 + 비밀번호 입력 (또는 GitHub 계정 SSO 가능)</li>
+<li>이메일 인증 (스팸함도 확인)</li>
+</ol>
+<p>신용카드 입력 없음. Workers / Pages / R2 / KV 무료 티어 모두 신용카드 없이 즉시 사용 가능.</p>
+<h3>Step 2. 도메인 추가 (선택)</h3>
+<p>기존 도메인이 있다면:</p>
+<ol>
+<li>Dashboard → Add a Site</li>
+<li>도메인 입력 → Free plan 선택</li>
+<li>Nameserver 변경 (도메인 등록업체에서 Cloudflare 의 ns1/ns2 로)</li>
+</ol>
+<p>기존 도메인 없으면 건너뛰어도 됩니다. <code>*.workers.dev</code> 또는 <code>*.pages.dev</code> subdomain 사용 가능.</p>
+<h3>Step 3. 2FA 활성화 (필수 권장)</h3>
+<ol>
+<li>My Profile → Authentication</li>
+<li>Two-factor Authentication → Enable</li>
+<li>Google Authenticator 또는 Authy 등록</li>
+</ol>
+<p>Cloudflare 계정 hijack 시 모든 서비스 영향. 2FA 는 옵션 아닌 필수.</p>
+<hr>
+<h2>2. 무료 한도 — 증권당 용도 관점</h2>
+<h3>Workers (서버리스 함수)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>무료 한도</th>
+<th>증권당 추정 사용량</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Requests</td>
+<td>100,000/day</td>
+<td>DAU 1,000 × 100 req = 100K (한계 근접)</td>
+</tr>
+<tr>
+<td>CPU time per request</td>
+<td>10ms</td>
+<td>LLM call 은 wait 시간 (CPU 시간 아님), 안전</td>
+</tr>
+<tr>
+<td>Subrequests</td>
+<td>50/invocation</td>
+<td>충분</td>
+</tr>
+<tr>
+<td>Script size</td>
+<td>1 MB</td>
+<td>충분</td>
+</tr>
+</tbody></table>
+<p>DAU 1,000 까지는 무료 가능. DAU 5,000+ 시 Workers Paid ($5/mo) 전환 필요.</p>
+<h3>Workers KV (key-value cache)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>무료 한도</th>
+<th>증권당 사용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reads</td>
+<td>100,000/day</td>
+<td>cache hit 80% × DAU 1,000 × 100 req = 80K (안전)</td>
+</tr>
+<tr>
+<td>Writes</td>
+<td>1,000/day</td>
+<td>LLM 응답 새로 caching 시 사용</td>
+</tr>
+<tr>
+<td>Deletes</td>
+<td>1,000/day</td>
+<td>충분</td>
+</tr>
+<tr>
+<td>List</td>
+<td>1,000/day</td>
+<td>거의 사용 안 함</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>1 GB</td>
+<td>text-only cache 라면 충분</td>
+</tr>
+<tr>
+<td>Value size limit</td>
+<td>25 MB/key</td>
+<td>LLM 응답 1개당 수 KB, 충분</td>
+</tr>
+</tbody></table>
+<p>80% cache hit rate 운영 시 완전히 무료 한도 안에 들어옴.</p>
+<h3>R2 (object storage, Azure Blob 대체)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>무료 한도</th>
+<th>증권당 사용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Storage</td>
+<td>10 GB</td>
+<td>Azure Blob 현재 사용량 추정 1 GB 미만</td>
+</tr>
+<tr>
+<td>Class A operations (writes)</td>
+<td>1,000,000/month</td>
+<td>충분</td>
+</tr>
+<tr>
+<td>Class B operations (reads)</td>
+<td>10,000,000/month</td>
+<td>매우 충분</td>
+</tr>
+<tr>
+<td>Egress (bandwidth)</td>
+<td>무제한 무료</td>
+<td>결정적 차별점</td>
+</tr>
+</tbody></table>
+<p>egress 무료가 R2 의 가장 큰 장점. Azure Blob 의 egress 요금 부담 사라짐.</p>
+<h3>Pages (정적 사이트)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>무료 한도</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Bandwidth</td>
+<td>무제한</td>
+</tr>
+<tr>
+<td>Builds</td>
+<td>500/month</td>
+</tr>
+<tr>
+<td>Concurrent builds</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Custom domains</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Sites</td>
+<td>unlimited</td>
+</tr>
+</tbody></table>
+<p>증권당 frontend 호스팅에 완전히 충분. Azure Static Web Apps 와 동등.</p>
+<h3>Workers AI (선택 사용)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>무료 한도</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Neurons</td>
+<td>10,000/day (≈ 5,000-10,000 requests)</td>
+</tr>
+<tr>
+<td>Models</td>
+<td>Llama 3.x, DeepSeek 등</td>
+</tr>
+</tbody></table>
+<p>본인이 DeepSeek V3.1 직접 API 사용 중이면 Workers AI 불필요. 다만 대체 LLM 으로 백업 가능.</p>
+<h3>Reset 시점</h3>
+<p>모든 무료 한도 reset: 매일 UTC 00:00 (한국시간 09:00)</p>
+<hr>
+<h2>3. 증권당 용도별 권장 setup</h2>
+<h3>단계 1. 정적 자산만 마이그레이션 (low-risk, 2-3시간)</h3>
+<pre><code>Azure Static Web Apps → Cloudflare Pages
+- Frontend (HTML/CSS/JS) Pages 에 배포
+- LLM 호출은 Azure Functions 그대로 유지
+- 변경: API endpoint URL 만 frontend 에서 업데이트
+</code></pre>
+<ul>
+<li>위험: 매우 낮음 (frontend 만 이동)</li>
+<li>효과: 한국 사용자 첫 페이지 load 50-100ms 단축</li>
+</ul>
+<h3>단계 2. R2 로 Blob 마이그레이션 (런칭 후 권장)</h3>
+<pre><code>Azure Blob Storage → Cloudflare R2
+- Super Slurper 또는 Sippy 로 자동 마이그레이션
+- S3 호환 API 이므로 코드 변경 최소
+- egress 비용 절감 효과 큼
+</code></pre>
+<ul>
+<li>위험: 중간 (URL 구조 변경)</li>
+<li>효과: egress 무료화 + edge cache 강화</li>
+</ul>
+<h3>단계 3. Workers 로 함수 이동 (런칭 14일 후 검토)</h3>
+<pre><code>Azure Functions (Python) → Cloudflare Workers (JS/TS or Python WASM)
+- DeepSeek API call 을 fetch() 로 재작성
+- 4-tier cache 를 Workers KV + Cache API 로 재설계
+</code></pre>
+<ul>
+<li>위험: 높음 (runtime 환경 다름)</li>
+<li>효과: cold start 사라짐, edge latency 추가 단축</li>
+<li>권장 시점: 5/28 이후 (런칭 + 14일 burn-in 데이터 기반)</li>
+</ul>
+<hr>
+<h2>4. 가입 후 첫 설정 — 5분</h2>
+<h3>Wrangler CLI 설치 (Workers/Pages 배포 도구)</h3>
+<pre><code class="language-bash"># Node.js 18+ 필요
+npm install -g wrangler
+
+# 로그인 (브라우저 인증)
+wrangler login
+
+# 확인
+wrangler whoami
+</code></pre>
+<h3>Pages 첫 배포 (정적 사이트 테스트)</h3>
+<pre><code class="language-bash"># Git 연동
+# Dashboard → Pages → Connect to Git
+# GitHub 레포 연결 → main branch 자동 빌드
+
+# 또는 직접 배포
+wrangler pages deploy ./build --project-name=jeunggwon-test
+</code></pre>
+<p>배포 후 URL: <code>https://jeunggwon-test.pages.dev</code></p>
+<h3>R2 버킷 첫 생성</h3>
+<pre><code class="language-bash"># 무료 한도 안에서 버킷 생성
+wrangler r2 bucket create jeunggwon-blob
+
+# 파일 업로드 테스트
+wrangler r2 object put jeunggwon-blob/test.txt --file ./test.txt
+</code></pre>
+<hr>
+<h2>5. 주의사항 4가지</h2>
+<h3>주의 1. Workers 의 Python 지원 제한적</h3>
+<pre><code>지원: Pyodide 기반 WASM (제한된 stdlib)
+미지원: native C 의존 패키지 (numpy 일부, asyncio)
+</code></pre>
+<p>본인 증권당 코드가 어떤 Python 패키지 의존하는지 확인 필요. 순수 Python + fetch 라면 이식 가능, 복잡한 의존성 이면 JavaScript/TypeScript 재작성 필요.</p>
+<h3>주의 2. KV consistency 는 eventual</h3>
+<pre><code>KV 쓰기 → 다른 edge location 에서 최대 60초 후 읽기 가능
+즉시 일관성 필요한 데이터 (예: 사용자 세션) 에는 부적합
+</code></pre>
+<p>사용자 세션 같은 strong consistency 필요한 데이터는 Durable Objects 사용 (Workers Paid $5/mo 필요).</p>
+<h3>주의 3. Free 한도 daily reset 의 risk</h3>
+<pre><code>Workers requests 100K/day = 시간당 평균 4,166 req
+peak hour (예: 미장 마감 직후 22:30 KST) 에 시간당 10K req 발생 시
+→ 100K 한도 오후에 소진
+→ 다음 UTC 00:00 (한국시간 09:00) 까지 서비스 중단
+</code></pre>
+<p>peak hour 모니터링 필수. 증권당 미장 마감 직후 traffic spike 가 한도 초과 위험. 사용자 1,000 명 시점에 Workers Paid ($5/mo) 전환 권장.</p>
+<h3>주의 4. DeepSeek API call latency 가 bottleneck</h3>
+<pre><code>Cloudflare edge: 10-50ms
+DeepSeek API: 2,000-8,000ms (LLM inference)
+사용자 체감 latency: 95% 이상이 LLM call
+</code></pre>
+<p>Cloudflare 마이그레이션의 체감 효과는 first-page-load 에 집중. LLM 응답 시간 자체는 변화 없음. 마이그레이션 ROI 계산 시 정직하게 반영 필요.</p>
+<hr>
+<h2>5. 참고 자료</h2>
+<ul>
+<li>가입: <a href="https://dash.cloudflare.com/sign-up">https://dash.cloudflare.com/sign-up</a></li>
+<li>Workers 무료 한도: <a href="https://developers.cloudflare.com/workers/platform/pricing/">https://developers.cloudflare.com/workers/platform/pricing/</a></li>
+<li>R2 무료 한도: <a href="https://developers.cloudflare.com/r2/pricing/">https://developers.cloudflare.com/r2/pricing/</a></li>
+<li>KV 무료 한도: <a href="https://developers.cloudflare.com/kv/platform/pricing/">https://developers.cloudflare.com/kv/platform/pricing/</a></li>
+<li>Pages 무료 한도: <a href="https://www.cloudflare.com/plans/developer-platform/">https://www.cloudflare.com/plans/developer-platform/</a></li>
+<li>Wrangler CLI: <a href="https://developers.cloudflare.com/workers/wrangler/">https://developers.cloudflare.com/workers/wrangler/</a></li>
+<li>Super Slurper (S3 → R2 마이그레이션): <a href="https://developers.cloudflare.com/r2/data-migration/super-slurper/">https://developers.cloudflare.com/r2/data-migration/super-slurper/</a></li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        <p class="author-links">
+          <a href="../../about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudFlare/Cloudflare%20free%20tier%20guide.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="../../index.html">Home</a> · <a href="../../columns/">Columns</a> · <a href="../../tech/">Tech</a> · <a href="../../play/">Play</a> · <a href="../../about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
