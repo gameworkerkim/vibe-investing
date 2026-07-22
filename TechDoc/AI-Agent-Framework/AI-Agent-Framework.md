@@ -1,3 +1,4 @@
+<!--
 ---
 title: "AI 에이전트 프레임워크 지도: Microsoft Agent Framework for Go와 LangChain·LangGraph"
 title_en: "Mapping AI Agent Frameworks: Microsoft Agent Framework for Go vs LangChain / LangGraph"
@@ -40,6 +41,7 @@ draft: false
 og_image: ""
 robots: index,follow
 ---
+-->
 
 # AI 에이전트 프레임워크 지도: Microsoft Agent Framework for Go와 LangChain·LangGraph
 
