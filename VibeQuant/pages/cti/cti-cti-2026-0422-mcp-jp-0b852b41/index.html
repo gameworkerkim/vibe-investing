@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MCP を狙う高度攻撃・潜伏型攻撃 —— 構造的問題なのか — VibeQuant</title>
+  <meta name="description" content="設計に内在する RCE、潜伏型バックドア、そして Web3 ウォレットに及ぶサプライチェーンの脅威" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-cti-2026-0422-mcp-jp-0b852b41/" />
+  <meta property="og:title" content="MCP を狙う高度攻撃・潜伏型攻撃 —— 構造的問題なのか" />
+  <meta property="og:description" content="設計に内在する RCE、潜伏型バックドア、そして Web3 ウォレットに及ぶサプライチェーンの脅威" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-cti-2026-0422-mcp-jp-0b852b41/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=6" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-cti-2026-0422-mcp-kr-68367cc5/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-cti-2026-0422-mcp-en-34dcb0fc/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-cti-2026-0422-mcp-jp-0b852b41/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-cti-2026-0422-mcp-cn-869f3a4d/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-cti-2026-0422-mcp-kr-68367cc5/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MCP を狙う高度攻撃・潜伏型攻撃 —— 構造的問題なのか","description":"設計に内在する RCE、潜伏型バックドア、そして Web3 ウォレットに及ぶサプライチェーンの脅威","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-cti-2026-0422-mcp-jp-0b852b41/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0422-MCP_JP.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-04-22","dateModified":"2026-07-11","inLanguage":"ja"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://vibequant.cc/">Home</a>
+        <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · AI · LLM 공급망</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">AI · LLM 공급망</p>
+        <h1>MCP を狙う高度攻撃・潜伏型攻撃 —— 構造的問題なのか</h1>
+        <p class="article-dates"><time datetime="2026-04-22">발행 2026.04.22</time> · <time datetime="2026-07-11">수정 2026.07.11</time></p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-cti-2026-0422-mcp-kr-68367cc5/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/cti-cti-2026-0422-mcp-en-34dcb0fc/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../cti/cti-cti-2026-0422-mcp-jp-0b852b41/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../cti/cti-cti-2026-0422-mcp-cn-869f3a4d/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">設計に内在する RCE、潜伏型バックドア、そして Web3 ウォレットに及ぶサプライチェーンの脅威</p>
+        
+      </header>
+      <div class="article-body prose"><p><em>設計に内在する RCE、潜伏型バックドア、そして Web3 ウォレットに及ぶサプライチェーンの脅威</em></p>
+<hr>
+<h2>目次</h2>
+<ol>
+<li><a href="#%E3%82%A8%E3%82%B0%E3%82%BC%E3%82%AF%E3%83%86%E3%82%A3%E3%83%96%E3%82%B5%E3%83%9E%E3%83%AA%E3%83%BC-tldr">エグゼクティブサマリー (TL;DR)</a></li>
+<li><a href="#1-%E3%81%AF%E3%81%98%E3%82%81%E3%81%AB--%E6%AD%A3%E5%B8%B8%E5%8B%95%E4%BD%9C%E3%81%93%E3%81%9D%E3%81%8C%E6%9C%80%E3%82%82%E5%8D%B1%E9%99%BA%E3%81%AA%E7%9E%AC%E9%96%93">はじめに —— 「正常動作」こそが最も危険な瞬間</a></li>
+<li><a href="#2-mcp-%E3%81%AE%E6%A7%8B%E9%80%A0%E7%9A%84%E6%AC%A0%E9%99%A5--%E8%A8%AD%E8%A8%88%E6%84%8F%E5%9B%B3%E3%81%8C%E3%81%9D%E3%81%AE%E3%81%BE%E3%81%BE%E8%84%86%E5%BC%B1%E6%80%A7">MCP の構造的欠陥 —— 設計意図がそのまま脆弱性</a></li>
+<li><a href="#3-sleeper-mcp--%E6%99%82%E9%96%93%E3%82%B7%E3%82%B0%E3%83%8A%E3%83%AB%E8%B5%B7%E5%8B%95%E5%9E%8B%E3%81%AE%E3%83%89%E3%82%A5%E3%83%BC%E3%83%A0%E3%82%BA%E3%83%87%E3%82%A4%E6%94%BB%E6%92%83">Sleeper MCP —— 時間・シグナル起動型の「ドゥームズデイ攻撃」</a></li>
+<li><a href="#4-web3-%E6%A5%AD%E7%95%8C%E3%81%AE%E7%89%B9%E6%AE%8A%E3%83%AA%E3%82%B9%E3%82%AF--%E3%82%A6%E3%82%A9%E3%83%AC%E3%83%83%E3%83%88%E3%81%A8%E5%8D%98%E4%B8%80%E3%83%9E%E3%82%B7%E3%83%B3%E6%A7%8B%E9%80%A0">Web3 業界の特殊リスク —— ウォレットと単一マシン構造</a></li>
+<li><a href="#5-mcp-%E7%B6%99%E7%B6%9A%E7%9A%84%E7%9B%A3%E6%9F%BB%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0">MCP 継続的監査プログラム</a></li>
+<li><a href="#6-%E3%82%88%E3%82%8A%E9%9D%99%E3%81%8B%E3%81%AA%E6%94%BB%E6%92%83--%E3%83%90%E3%82%A4%E3%82%A2%E3%82%B9%E6%B3%A8%E5%85%A5%E3%81%A8%E8%A1%8C%E5%8B%95%E5%A4%89%E5%8C%96">より静かな攻撃 —— バイアス注入と行動変化</a></li>
+<li><a href="#7-%E7%B5%90%E8%AB%96%E3%81%A8%E6%8F%90%E8%A8%80">結論と提言</a></li>
+<li><a href="#%E5%8F%82%E8%80%83%E6%96%87%E7%8C%AE-references">参考文献</a></li>
+</ol>
+<hr>
+<h2>エグゼクティブサマリー (TL;DR)</h2>
+<p>Anthropic が 2024 年 11 月に公開した MCP(Model Context Protocol)は、現在事実上 AI エージェントと外部ツールを接続する業界標準となっている。しかし 2026 年 4 月、OX Security の研究チームは MCP の STDIO 転送インターフェースに内在する<strong>設計レベルの欠陥</strong>により、公式 SDK を用いたすべての実装で<strong>リモートコマンド実行(RCE)</strong>が可能であることを公表した。Anthropic はこれを*「意図された動作(expected behavior)」*とし、根本的なパッチ適用を拒否している。</p>
+<p>本レポートはこの事案を単一の脆弱性ではなく、三層構造の<strong>構造的問題</strong>として再定義する。</p>
+<ol>
+<li>MCP は、普段は正常に動作しつつ特定のトリガーで悪性動作に切り替わる<strong>潜伏型(sleeper)攻撃ベクター</strong>になりやすい。</li>
+<li>Web3 業界で広く用いられるブラウザウォレット・ホットウォレット環境と組み合わさることで、<strong>単一マシン・単一管理者</strong>という既存の弱点をそのまま増幅する。</li>
+<li>さらに、MCP を介して LLM が繰り返し偏った検索・推薦結果を提示することで、中長期的には<strong>人間の意思決定そのもの</strong>を歪めうる。</li>
+</ol>
+<p>要点は単純である。MCP は便利な標準であるが、現状のアーキテクチャ上では*「信頼できる MCP サーバー」*という概念そのものが幻想に近い。企業は MCP に直接接続されない外部エスクロー方式の資産保護構造を備え、導入済みの MCP については SBOM、ランタイム監査、潜伏型トリガー検出を定期的に実施する必要がある。</p>
+<h3>主要判断 (Key Judgments)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>判断</th>
+<th>信頼度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KJ-1</td>
+<td>MCP の STDIO コマンドインジェクション欠陥は実装ミスではなく<strong>アーキテクチャレベルの設計判断</strong>であり、Anthropic が根本パッチを拒否している以上、<strong>長期的なサプライチェーンリスク</strong>として生態系に残存する。</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>KJ-2</td>
+<td>「外観は正常、トリガーで悪性化」する<strong>Sleeper MCP</strong>が今後最も深刻な攻撃モデルになる。発見と修正ではなく、発見と<strong>起動</strong>の競争である。</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>KJ-3</td>
+<td>2026-03-31 の <strong>Axios NPM 侵害</strong>(北朝鮮関連 UNC1069 / Sapphire Sleet)は、Sleeper MCP に必要な全技術 ── レジストリ乗っ取り、post-install フック、マルチプラットフォーム配布 ── が北朝鮮行為者によってすでに実戦化されていることを示す。</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>KJ-4</td>
+<td>多くの Web3 マルチシグ運用は、署名鍵を<strong>同一ホスト OS</strong>に集中させている。そのホスト上の MCP 一つが汚染されれば、マルチシグは単一障害点に退化する。</td>
+<td><strong>中高</strong></td>
+</tr>
+<tr>
+<td>KJ-5</td>
+<td>MCP を媒介としたバイアス注入は、数ヶ月から数年にわたって個人および組織の意思決定を<strong>不可逆的に</strong>移動させうる ── RCE アラートが一度も鳴らないままで。</td>
+<td><strong>中</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. はじめに —— 「正常動作」こそが最も危険な瞬間</h2>
+<p>従来のセキュリティ脆弱性の多くは*「書き間違えたコード」*に起因してきた。バッファオーバーフロー、SQL インジェクション、認証バイパスは本質的に実装ミス(implementation flaw)であり、パッチと教育を通じて徐々に減らせるものである。</p>
+<p>しかし MCP で露見した問題は性質が異なる。OX Security が 2026 年 4 月に公開したレポート <em>“The Mother of All AI Supply Chains”</em> は、Anthropic の公式 MCP SDK(Python、TypeScript、Java、Rust など全言語)にわたり、STDIO(標準入出力)インターフェース経由のコマンド注入が<strong>アーキテクチャレベルで</strong>可能であると指摘する。この設計は現在、7,000 を超える公開 MCP サーバー、200,000 に及ぶ脆弱インスタンス、1 億 5,000 万回を超えるダウンロードを擁する生態系全体に内在する問題である <a href="#ref-2">[2]</a><a href="#ref-4">[4]</a>。</p>
+<p>さらに深刻なのは Anthropic の姿勢である。OX Security が繰り返しプロトコルレベルの修正を提案したにもかかわらず、Anthropic は*「当該動作は設計意図どおりであり、ユーザーはファイル変更を明示的に承認または拒否できるため、有効な脆弱性とは見做さない」*と回答した <a href="#ref-6">[6]</a>。結果としてセキュリティ責任は多数の下流開発者に転嫁され、これがサプライチェーン全体の構造的リスクへと拡大する。</p>
+<p>本稿はこの事案を単一 CVE の次元ではなく、三層の構造的問題として分析する。第一にプロトコル自体の設計欠陥、第二に潜伏型(sleeper)攻撃との組み合わせ可能性、第三に Web3 ウォレット・AI 検索・意思決定バイアスに至る二次・三次の波及効果である。</p>
+<hr>
+<h2>2. MCP の構造的欠陥 —— 設計意図がそのまま脆弱性</h2>
+<h3>2.1 STDIO 設定とコマンド実行のあいだのギャップ</h3>
+<p>MCP は AI モデルを外部システムと対話させる汎用アダプターである。ローカルで MCP サーバーを起動する際、クライアントは STDIO 転送方式を通じて OS コマンド文字列を渡し、そのプロセスをサブプロセスとして実行する <a href="#ref-7">[7]</a>。</p>
+<p>OX Security の核心的な指摘は次のとおりである。MCP ランタイムは渡されたコマンドが正常に MCP ハンドシェイクを完了するかを確認するが、<strong>ハンドシェイク成否に関わらず OS コマンド自体はすでに実行されている</strong>。ユーザーには「MCP サーバーの起動に失敗した」というエラーが返されるが、その時点で攻撃者の任意コマンドは既にホスト上で実行済みである。既定ではサンドボックスも、入力値のサニタイズも、コマンド許可リスト(allowlist)も存在しない <a href="#ref-5">[5]</a>。</p>
+<blockquote>
+<p><em>「悪性コマンドを渡すとエラーが返されるが、それでもコマンドは実行される。サニタイズ警告もなく、開発者ツールチェーンに赤信号もない。何もない。」</em> —— OX Security, 2026 <a href="#ref-2">[2]</a></p>
+</blockquote>
+<h3>2.2 四つの攻撃ファミリ</h3>
+<p>OX Security はこの根本原因から派生する四つの攻撃ファミリを整理している <a href="#ref-2">[2]</a><a href="#ref-8">[8]</a>。</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>攻撃ファミリ</th>
+<th>影響対象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>①</td>
+<td><strong>認証・非認証コマンドインジェクション</strong></td>
+<td>公開 UI を持つ AI フレームワーク(IBM LangFlow、GPT Researcher など)</td>
+</tr>
+<tr>
+<td>②</td>
+<td><strong>ハードニングバイパス</strong></td>
+<td>Flowise、Upsonic など追加防御を施した環境でも STDIO 経路で回避可</td>
+</tr>
+<tr>
+<td>③</td>
+<td><strong>ゼロクリック プロンプトインジェクション</strong></td>
+<td>Cursor、VS Code、Windsurf、Claude Code、Gemini-CLI など AI IDE(<code>CVE-2026-30615</code>)</td>
+</tr>
+<tr>
+<td>④</td>
+<td><strong>マーケットプレイス汚染</strong></td>
+<td>11 の MCP マーケットのうち 9 つが審査なしに悪性 PoC を公開(LobeHub、Cursor Directory ほか)</td>
+</tr>
+</tbody></table>
+<h3>2.3 規模と関連 CVE</h3>
+<p>OX Security は実顧客を抱える 6 つの商用サービスでコマンド実行を実証し、30 件を超える責任ある公開(responsible disclosure)と、10 件超の Critical/High CVE 修正を牽引した <a href="#ref-3">[3]</a>。同一の根本原因に由来する CVE は以下のとおり。</p>
+<table>
+<thead>
+<tr>
+<th>CVE</th>
+<th>対象</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CVE-2025-49596</td>
+<td>MCP Inspector</td>
+<td></td>
+</tr>
+<tr>
+<td>CVE-2025-54136</td>
+<td>Cursor</td>
+<td></td>
+</tr>
+<tr>
+<td>CVE-2025-54994</td>
+<td><code>@akoskm/create-mcp-server-stdio</code></td>
+<td></td>
+</tr>
+<tr>
+<td>CVE-2026-22252</td>
+<td>LibreChat</td>
+<td></td>
+</tr>
+<tr>
+<td>CVE-2026-22688</td>
+<td>WeKnora</td>
+<td></td>
+</tr>
+<tr>
+<td>CVE-2026-30615</td>
+<td>Windsurf</td>
+<td>ゼロクリック</td>
+</tr>
+</tbody></table>
+<p>影響を受けたサーバー系プロジェクトには <strong>LiteLLM、LangChain、LangFlow、Flowise、LettaAI、LangBot</strong> が含まれる。韓国 Daum / 保安ニュースの報道も同一の問題を扱い、*「Anthropic の静観のもとで脅威が指数関数的に拡散している」*と指摘した <a href="#ref-1">[1]</a>。</p>
+<hr>
+<h2>3. Sleeper MCP —— 時間・シグナル起動型の「ドゥームズデイ攻撃」</h2>
+<h3>3.1 理論的背景 —— Anthropic 自身の研究</h3>
+<p>皮肉なことに、*「見た目は正常だが、特定条件下でのみ悪性動作するモデル」*という脅威モデルを体系的に最初に記述したのは <strong>Anthropic 自身</strong>である。2024 年 1 月に公開された <em>“Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training”</em>(arXiv:2401.05566)は、特定トリガー(例:年号 “2024”)が入力されたときだけ脆弱なコードを生成するよう訓練されたモデルが、教師あり学習・強化学習・敵対的学習といった標準的安全性訓練を経てもバックドア挙動を保持することを実証した。むしろ敵対的訓練は、モデルに<strong>トリガーを隠す技術を身につけさせる</strong>方向に作用しうる <a href="#ref-9">[9]</a>。</p>
+<p>2026 年 2 月、Microsoft 研究チームは <em>“The Trigger in the Haystack”</em> において、汚染モデル内部のアテンションパターン(例:「Double Triangle」構造)および出力分布の崩壊といった特徴的シグネチャを識別する手法を提案した <a href="#ref-10">[10]</a>。同年に公開された Sentence-BERT 埋め込みとカナリープロンプトに基づく意味ドリフト(Semantic Drift)検出は、既知の Sleeper モデルに対してリアルタイムで 92.5% の精度・100% の適合度(ゼロ偽陽性)を達成したと報告している <a href="#ref-11">[11]</a>。</p>
+<h3>3.2 Sleeper MCP シナリオ</h3>
+<p>この二つの流れを重ねると、今後最も現実化しやすい攻撃は <strong>「潜伏型 MCP サーバー(sleeper MCP)」</strong> となる。典型的なシナリオは次のとおり。</p>
+<ol>
+<li>合法的に見える MCP サーバー(スケジューリングアシスタント、翻訳ツール、オンチェーンデータ照会など)をマーケットプレイスに登録する。コードはオープンソースであり、最初の数ヶ月は完全に正常に動作する。</li>
+<li>信頼を蓄積した後、公開者は一つの依存パッケージを微調整で更新する。このアップデートは、特定のトリガー ── 例:日付が 2026 Q4 以降、環境変数に特定文字列、最近の会話に <code>transfer</code>・<code>withdraw</code>・<code>approve</code> のようなキーワード ── を満たしたときのみ悪性経路へ分岐する。</li>
+<li>トリガーが満たされると MCP は STDIO 注入欠陥を利用してホスト上で任意コマンドを実行するか、LLM プロンプトを操作して最終署名段階で受取アドレスと許可量(allowance)をすり替える。</li>
+<li>被害者の体験は「一度エラーが出ただけ」であり、事後ログ分析でも通常動作と区別しにくい。</li>
+</ol>
+<p>この攻撃モデルの本質は <strong>「いつ起爆するか分からない」時間軸の非決定性</strong>である。従来型脆弱性が「発見対パッチ」の競争だとすれば、Sleeper MCP は「発見対トリガー」の競争である。数百万インスタンスのうち、どれか一つでもトリガーが引かれた瞬間、サプライチェーンの単一起点の失敗が生態系全体に波及する ── これは国家間総力戦を前提とした <em>「ドゥームズデイ攻撃」</em> そのものである。</p>
+<h3>3.3 北朝鮮のサプライチェーン汚染と Sleeper MCP シナリオ</h3>
+<p>Sleeper MCP の脅威モデルにおいて、大韓民国が最も直面する問題は、まさに<strong>北朝鮮が社会混乱を狙って作成する Sleeper MCP</strong> である。北朝鮮はすでに ChatGPT を含む各種 LLM を作戦ツールとして活用しており、中国人を装ってシリコンバレーの大手 IT 企業や AI スタートアップにリモート勤務として紛れ込む事例も多数報告され、依然として彼らの攻撃面を拡大し続けている。</p>
+<p>北朝鮮の近年の攻撃動向は、暗号資産の窃取とソフトウェアサプライチェーン攻撃の二軸に集約される。とりわけ <strong>2026 年 3 月 31 日に発生した Axios NPM パッケージ汚染事件</strong>は、後者の典型例である。Google Threat Intelligence Group(GTIG)と Microsoft Threat Intelligence はこの事件を北朝鮮関連の <strong>UNC1069</strong>(Microsoft 呼称 <strong>Sapphire Sleet</strong>)に帰属させた。攻撃者は週間ダウンロード数 1 億回超の axios に <code>plain-crypto-js</code> という悪性依存を注入し、Windows・macOS・Linux 全プラットフォームに クロスプラットフォーム RAT <strong>WAVESHAPER.V2</strong> を配布した <a href="#ref-21">[21]</a><a href="#ref-22">[22]</a>。悪性バージョンがレジストリに存在した時間はわずか約 3 時間だったが、この短い時間で axios 利用者の約 3% が暴露対象となった <a href="#ref-23">[23]</a><a href="#ref-24">[24]</a>。</p>
+<p>この事件が MCP 脅威モデルに示唆するものは明白である。北朝鮮の行為者は、Sleeper MCP に必要な以下の技術一式を既に実戦レベルで習得している。</p>
+<ol>
+<li>正規レジストリ(NPM、PyPI)の信頼連鎖の奪取。</li>
+<li><code>postinstall</code> フックなどパッケージマネージャーの自動実行経路の悪用。</li>
+<li>Windows / macOS / Linux を横断するマルチプラットフォーム ペイロード振り分け。</li>
+<li>インストール後の<strong>自己消去(self-destruction)</strong>によるフォレンジック回避 <a href="#ref-23">[23]</a>。</li>
+</ol>
+<p>MCP サーバーは本質的に npm / pip パッケージまたは GitHub リポジトリの形態で配布され、STDIO 欠陥・postinstall フック・設定ファイルの自動編集といった <strong>同一のサプライチェーン面</strong>を共有する。したがって短期的には、北朝鮮関連アクターが大韓民国を含む重点国の MCP サーバーおよび関連パッケージに対する精密な汚染実験を反復すると見られる。中長期的には、単発的な資金窃取にとどまらず、<strong>社会構成員の認識操作、世論・政策誘導、さらには §3.2 に記した「ドゥームズデイ攻撃」水準のシナリオ</strong>を前提とした設計へ進化する可能性が高い。これこそ、MCP 潜伏リスクを単なるセキュリティ欠陥ではなく <strong>国家安全保障事案</strong>として扱うべき理由である。</p>
+<hr>
+<h2>4. Web3 業界の特殊リスク —— ウォレットと単一マシン構造</h2>
+<h3>4.1 「マルチシグだから大丈夫」という誤解</h3>
+<p>ほとんどの Web3 プロジェクトは、対外的にはマルチシグ(Gnosis Safe など)で資産を保護していると説明する。しかし実態は、マルチシグ署名者 2〜3 名が<strong>同一マシン</strong>上で、同じブラウザ(Chrome、Arc)に接続した MetaMask・Phantom・Rabby などの同じウォレット拡張を使い、同じ macOS / Windows アカウントでログインしているケースが極めて多い。</p>
+<p>ここに開発者向け IDE(Cursor、VS Code、Windsurf、Claude Code)と MCP が加わると、結果として <em>「マルチシグ署名権限を持つ実質的なすべての鍵」</em> が単一のホスト OS 上に存在する構造になる。このホストに導入された MCP が RCE 欠陥か潜伏型のいずれかであった場合、<strong>マルチシグは単一障害点(single point of failure)に退化する</strong>。</p>
+<h3>4.2 現在の MCP–ウォレット統合の危険パターン</h3>
+<p>Google Cloud の 2025 年 12 月の分析によれば、現在流通する暗号資産 MCP サーバーの大多数は*「エージェントに秘密鍵を直接与える」<em>自ホスト(self-hosted)モデルを前提としている <a href="#ref-14">[14]</a>。実際に <code>wallet-agent</code> MCP の公式リポジトリでさえ、</em>「本ソフトウェアは監査されておらず、資産損失を招く可能性がある。テストネット・ローカル開発環境でのみ使用すること」*と警告しているが、実利用者は容易にこれを無視する。</p>
+<p>2026 年初頭に Web3 業界を揺さぶった <strong>OpenClaw / ClawJacked</strong> 系事件 ── AI エージェントが悪性サイト訪問一回で乗っ取られ、攻撃者にファイル・認証情報・ウォレットと同等の権限水準を許した事例 ── は、この危険パターンが理論ではないことを示す。セキュリティ各社の分析は概ね次の点に収束する。<em>「現状多くの暗号資産 MCP 実装は、エージェントに秘密鍵を渡す危険なアプローチをそのまま踏襲しており、ClawHavoc 型攻撃者が狙っているのはまさにこの構造である。」</em> <a href="#ref-15">[15]</a></p>
+<h3>4.3 推奨セキュリティ構造 —— 外部エスクロー + MCP 分離</h3>
+<p>この構造的リスクへの最低限の設計原則を示す。Web3 企業のみならず、一般スタートアップにも同様に適用可能である。</p>
+<ol>
+<li><strong>大量資産の保管は MCP が到達できない外部エスクロー</strong>(受託機関口座、コールドウォレット、HSM 多者署名)に分離する。運用ホットウォレットには一日分を超える残高を置かない。</li>
+<li><strong>署名権限は専用署名デバイス</strong>(エアギャップ、または最低限のソフトウェアのみ導入した Mac mini / Ledger Stax など)でのみ行使する。当該デバイスには MCP・AI 拡張・開発ツールを<strong>導入しない</strong>。</li>
+<li>開発・分析用マシンの MCP は、必ず <code>127.0.0.1</code>(ローカルループバック)バインディング、サンドボックス(Docker、Firecracker、別 OS ユーザー)内での実行、外部 MCP 設定入力を信頼しないポリシーを既定とする <a href="#ref-13">[13]</a><a href="#ref-16">[16]</a>。</li>
+<li>ブラウザウォレット(MetaMask など)は署名デバイス以外にはインストールしないか、少なくとも<strong>独立したブラウザプロファイル</strong>に隔離する。同一プロファイル内に AI エージェント・MCP ブリッジ・調査用ブックマークを共存させてはならない。</li>
+<li>マルチシグ署名者は<strong>物理的に異なるネットワーク・ハードウェア</strong>を使用しなければならない。「同じ事務所で 3 人が別々のノート PC を使う」は分散ではない。</li>
+</ol>
+<hr>
+<h2>5. MCP 継続的監査プログラム</h2>
+<h3>5.1 最低限のチェック項目</h3>
+<p>MCP は「一度入れたら忘れてよい」コンポーネントではない。組織単位で以下を定期的(推奨:四半期に一度、重要度の高い環境では月次)に実施すべきである。</p>
+<ul>
+<li><strong>SBOM 管理</strong> ── 使用中の MCP サーバー全一覧と、それぞれのバージョン・ハッシュ・入手元(マーケットプレイス URL、GitHub コミット)を内部レジストリに記録する。</li>
+<li><strong>来歴検証</strong> ── GitHub 以外のマーケットプレイス(LobeHub、Cursor Directory 等)から入手した MCP は独立した審査ゲートを通す。OX の実験では、11 マーケットのうち 9 つが悪性ペイロードを無審査で通したことが判明している <a href="#ref-7">[7]</a>。</li>
+<li><strong>STDIO 設定レビュー</strong> ── MCP サーバー設定に任意 OS コマンド文字列を受け入れる入力点があるか、ネットワーク経由で書き換え可能かを確認する(LangFlow、Flowise 系 UI の確認)。</li>
+<li><strong>ランタイム監視</strong> ── MCP ツール呼び出しログを SIEM に集約し、新規ツール登録・権限拡張・外部ドメインへのアクセスに対してアラートを設定する。</li>
+<li><strong>最新パッチ</strong> ── MCP 関連 CVE(CVE-2025-49596、CVE-2025-54136、CVE-2025-54994、CVE-2026-22252、CVE-2026-22688、CVE-2026-30615 など)への対応状況を月次スキャンの対象に含める。</li>
+</ul>
+<h3>5.2 潜伏型トリガーの事前検出</h3>
+<p>Sleeper MCP のシナリオは、従来型の脆弱性スキャナでは捉えられない。現実的に適用可能な緩和策は以下のとおりである。</p>
+<ol>
+<li><strong>意味ドリフト(Semantic Drift)の計測</strong> ── Sentence-BERT ベースの埋め込みで、同じツール呼び出しパターンが時間とともにどう変化するかを監視する。事前設定したカナリー質問(canary question)への回答の一貫性が逸脱すれば、強い警告シグナルとなる <a href="#ref-11">[11]</a>。</li>
+<li><strong>スキーマ適合性監査</strong> ── MCP ツールの出力を、当該ツールが宣言するスキーマと照合する。たとえば翻訳 MCP が突然 URL やアドレスを返し始めるなら、機能からの逸脱とみなす。</li>
+<li><strong>差分サンドボックス</strong> ── 同一の MCP を異なるリージョン・タイムゾーン・プロンプト文脈で並行稼働させ、分岐を比較する。</li>
+<li><strong>サプライチェーン署名検証</strong> ── モデル重み・MCP バンドル・依存パッケージに対して、可能な限り暗号署名と再現可能ビルド(reproducible build)を要求する。</li>
+</ol>
+<hr>
+<h2>6. より静かな攻撃 —— バイアス注入と行動変化</h2>
+<h3>6.1 「RCE なき攻撃」の実体</h3>
+<p>MCP はコード実行にまで到達しなくても危険である。<strong>自動化された MCP が人間の検索・意思決定フローに介在しているという事実そのものが、新たな攻撃面を形成する</strong>。MCP は LLM のコンテキスト源 ── ファイル、Web ページ、DB、社内文書 ── を決定するからである。</p>
+<p>LLM が認知バイアス(cognitive bias)に対して脆弱であることは、すでに多数の学術研究が確認している。Knipper ら(2025)は主要 LLM の認知バイアス感受性が平均 17.8〜57.3% に達すると報告している <a href="#ref-17">[17]</a>。PNAS 2025 年の論文は、LLM が道徳的意思決定において人間のバイアスを再現するだけでなく<strong>増幅(amplify)</strong>しうることを示した <a href="#ref-18">[18]</a>。他の研究は、製品推薦の文脈で認知バイアスを「敵対的攻撃」として活用可能であることを実証している <a href="#ref-19">[19]</a>。</p>
+<h3>6.2 社会現象学習バイアス注入シナリオ</h3>
+<p>Sleeper MCP のより静かな変種は、ホストマシンを掌握せずとも次のような介入を可能にする。</p>
+<ul>
+<li>特定の<strong>社会現象・政策・企業・人物</strong>に関する検索結果を体系的に一方向へ傾斜させる。LLM はそれを要約・強化してユーザーに提示する。</li>
+<li>ユーザーの質問パターンに応じ、*「自分はすでに正しい」*と感じさせる証拠を優先提示する(<strong>確証バイアス</strong>の利用)。これは Chen ら(2024)が論じた “LLM Effect” の直接的悪用である <a href="#ref-20">[20]</a>。</li>
+<li>特定のトークン・株式・不動産の意思決定文脈で、<strong>アンカー(anchor)となる価格や時点</strong>を繰り返し露出させ、中長期的な判断の基準線を移動させる。</li>
+<li>微細なフレーミング(framing)調整を繰り返し、ユーザーの言語習慣・語彙選択を徐々にずらす。これにより他者に伝わる段階で二次的なバイアスを発生させる。</li>
+</ul>
+<h3>6.3 中長期の被害 —— 個人と組織の「意思決定ドリフト」</h3>
+<p>こうしたバイアス注入は一度の事故ではなく、数ヶ月から数年にわたる <strong>意思決定ドリフト(decision drift)</strong> として現れる。被害者は自分の判断がなぜ変わったのかを特定の時点に遡って示しづらく、組織は戦略文書・議事録の微妙な表現変化の中に、バイアスが積み重なっていたことに後から気づく。</p>
+<p><em>「攻撃を検知したときには既に原状回復不能」</em> という点で、この攻撃クラスは RCE 型よりむしろ悪性度が高い場合がある。したがって MCP 監査はセキュリティログだけでなく、<strong>「どの情報源から、どのような観点の情報を、どれだけ取り込んでいるか」</strong>を示す情報多様性指標(information diversity metric)も含めなければならない。</p>
+<hr>
+<h2>7. 結論と提言</h2>
+<p>MCP の問題は特定ベンダー一社のミスではなく、AI エージェント生態系が速度を優先して引き受けた<strong>構造的トレードオフの最初の精算</strong>である。Anthropic が根本パッチを「設計意図」として拒否している以上、生態系参加者は以下の前提で MCP を扱わなければならない。</p>
+<ol>
+<li>すべての MCP サーバーは既定で<strong>非信頼(untrusted)</strong>である。署名・サンドボックス・許可リストなしには本番環境へ投入しない。</li>
+<li><strong>資産は MCP と同じ OS に置かない。</strong>大量資産は外部エスクロー・コールドウォレット・HSM ベースの多者署名で隔離し、実際の署名デバイスには MCP を導入しない。</li>
+<li><strong>マルチシグはマシン・ネットワーク・物理位置の基準で分散</strong>されねばならない。同一ホスト上のマルチシグはマルチシグではない。</li>
+<li>MCP は <strong>四半期に一度以上の正式監査対象</strong>として指定する。SBOM、CVE、意味ドリフト、カナリー応答、情報多様性を並行して点検する。</li>
+<li>企業は、MCP を通じて侵入するバイアスを監視するための独立プロセス(内部文書のトーン変化監査、決定根拠の出典多様性レビュー)を用意する。</li>
+</ol>
+<p>セキュリティは速度の反対概念ではなく、<strong>速度を長く維持するための設計</strong>である。MCP 生態系は現在「爆発的採用期」の只中にあり、この区間で構造的欠陥を放置すれば、その後の損害は複利で膨らむ。今問うべきは*「MCP を使うか使わないか」*ではなく、<strong>「MCP と共にどの分離・検証・監査層を必ず共設するか」</strong>である。</p>
+<hr>
+<h2>参考文献 (References)</h2>
+<p><a id="ref-1"></a>[1] ウォン・ビョンチョル(원병철)、「Anthropic の静観の中、指数関数的に拡大する &#39;MCP&#39; サプライチェーンセキュリティ脅威」、保安ニュース / Daum、2026-04-21。<a href="https://v.daum.net/v/20260421171629362">https://v.daum.net/v/20260421171629362</a></p>
+<p><a id="ref-2"></a>[2] M. Siman Tov Bustan ほか、&quot;The Mother of All AI Supply Chains: Critical, Systemic Vulnerability at the Core of Anthropic&#39;s MCP&quot;、OX Security、2026-04-15。<a href="https://www.ox.security/blog/the-mother-of-all-ai-supply-chains-critical-systemic-vulnerability-at-the-core-of-the-mcp/">https://www.ox.security/blog/the-mother-of-all-ai-supply-chains-critical-systemic-vulnerability-at-the-core-of-the-mcp/</a></p>
+<p><a id="ref-3"></a>[3] R. Lakshmanan、&quot;Anthropic MCP Design Vulnerability Enables RCE, Threatening AI Supply Chain&quot;、The Hacker News、2026-04。<a href="https://thehackernews.com/2026/04/anthropic-mcp-design-vulnerability.html">https://thehackernews.com/2026/04/anthropic-mcp-design-vulnerability.html</a></p>
+<p><a id="ref-4"></a>[4] K. Townsend、&quot;&#39;By Design&#39; Flaw in MCP Could Enable Widespread AI Supply Chain Attacks&quot;、SecurityWeek、2026-04。<a href="https://www.securityweek.com/by-design-flaw-in-mcp-could-enable-widespread-ai-supply-chain-attacks/">https://www.securityweek.com/by-design-flaw-in-mcp-could-enable-widespread-ai-supply-chain-attacks/</a></p>
+<p><a id="ref-5"></a>[5] Infosecurity Magazine、&quot;Systemic Flaw in MCP Protocol Could Expose 150 Million Downloads&quot;、2026-04。<a href="https://www.infosecurity-magazine.com/news/systemic-flaw-mcp-expose-150/">https://www.infosecurity-magazine.com/news/systemic-flaw-mcp-expose-150/</a></p>
+<p><a id="ref-6"></a>[6] IT Pro、&quot;AI agents using Anthropic MCP could be a vector for supply chain attacks, claim researchers&quot;、2026-04。<a href="https://www.itpro.com/security/ai-agents-using-anthropic-mcp-supply-chain-attacks-claim-researchers">https://www.itpro.com/security/ai-agents-using-anthropic-mcp-supply-chain-attacks-claim-researchers</a></p>
+<p><a id="ref-7"></a>[7] BD Tech Talks、&quot;Anthropic&#39;s MCP vulnerability: When &#39;expected behavior&#39; becomes a supply chain nightmare&quot;、2026-04-20。<a href="https://bdtechtalks.com/2026/04/20/anthropic-mcp-vulnerability/">https://bdtechtalks.com/2026/04/20/anthropic-mcp-vulnerability/</a></p>
+<p><a id="ref-8"></a>[8] Computing UK、&quot;Flaw in Anthropic&#39;s MCP putting 200k servers at risk, researchers claim&quot;、2026-04。<a href="https://www.computing.co.uk/news/2026/security/flaw-in-anthropic-s-mcp-putting-200k-servers-at-risk">https://www.computing.co.uk/news/2026/security/flaw-in-anthropic-s-mcp-putting-200k-servers-at-risk</a></p>
+<p><a id="ref-9"></a>[9] E. Hubinger ほか、&quot;Sleeper Agents: Training Deceptive LLMs that Persist Through Safety Training&quot;、Anthropic、arXiv:2401.05566、2024。<a href="https://arxiv.org/abs/2401.05566">https://arxiv.org/abs/2401.05566</a></p>
+<p><a id="ref-10"></a>[10] Microsoft Research、&quot;The Trigger in the Haystack: Extracting and Reconstructing LLM Backdoor Triggers&quot;、2026-02。</p>
+<p><a id="ref-11"></a>[11] &quot;Detecting Sleeper Agents in Large Language Models via Semantic Drift Analysis&quot;、arXiv:2511.15992、2025。<a href="https://arxiv.org/pdf/2511.15992">https://arxiv.org/pdf/2511.15992</a></p>
+<p><a id="ref-12"></a>[12] Pivot Point Security、&quot;What is the Model Context Protocol (MCP) in AI and Why Does It Scare Cybersecurity Pros&quot;、2026-03。<a href="https://www.pivotpointsecurity.com/what-is-the-model-context-protocol-mcp-in-ai-and-why-does-it-scare-cybersecurity-pros/">https://www.pivotpointsecurity.com/what-is-the-model-context-protocol-mcp-in-ai-and-why-does-it-scare-cybersecurity-pros/</a></p>
+<p><a id="ref-13"></a>[13] Practical DevSecOps、&quot;MCP Security Vulnerabilities: How to Prevent Prompt Injection and Tool Poisoning Attacks in 2026&quot;、2026-01。<a href="https://www.practical-devsecops.com/mcp-security-vulnerabilities/">https://www.practical-devsecops.com/mcp-security-vulnerabilities/</a></p>
+<p><a id="ref-14"></a>[14] Google Cloud Blog、&quot;Using MCP with Web3: How to secure blockchain-interacting agents&quot;、2025-12。<a href="https://cloud.google.com/blog/products/identity-security/using-mcp-with-web3-how-to-secure-blockchain-interacting-agents">https://cloud.google.com/blog/products/identity-security/using-mcp-with-web3-how-to-secure-blockchain-interacting-agents</a></p>
+<p><a id="ref-15"></a>[15] BlockEden.xyz、&quot;OpenClaw&#39;s &#39;Lobster Fever&#39; Became Web3&#39;s Biggest Security Wake-Up Call of 2026&quot;、2026-03-12。<a href="https://blockeden.xyz/blog/2026/03/12/openclaw-lobster-ai-gateway-web3-security-crisis/">https://blockeden.xyz/blog/2026/03/12/openclaw-lobster-ai-gateway-web3-security-crisis/</a></p>
+<p><a id="ref-16"></a>[16] Red Hat Blog、&quot;Model Context Protocol (MCP): Understanding security risks and controls&quot;、2025-11。<a href="https://www.redhat.com/en/blog/model-context-protocol-mcp-understanding-security-risks-and-controls">https://www.redhat.com/en/blog/model-context-protocol-mcp-understanding-security-risks-and-controls</a></p>
+<p><a id="ref-17"></a>[17] R. A. Knipper ほか、&quot;The Bias is in the Details: An Assessment of Cognitive Bias in LLMs&quot;、arXiv:2509.22856、2025。<a href="https://arxiv.org/pdf/2509.22856">https://arxiv.org/pdf/2509.22856</a></p>
+<p><a id="ref-18"></a>[18] &quot;Large language models show amplified cognitive biases in moral decision-making&quot;、PNAS、2025-06。<a href="https://www.pnas.org/doi/10.1073/pnas.2412015122">https://www.pnas.org/doi/10.1073/pnas.2412015122</a></p>
+<p><a id="ref-19"></a>[19] &quot;Bias Beware: The Impact of Cognitive Biases on LLM-Driven Product Recommendations&quot;、arXiv:2502.01349、2025。<a href="https://arxiv.org/html/2502.01349v4">https://arxiv.org/html/2502.01349v4</a></p>
+<p><a id="ref-20"></a>[20] N. Chen ほか、&quot;AI Can Be Cognitively Biased: An Exploratory Study on Threshold Priming in LLM-Based Batch Relevance Assessment&quot;、SIGIR-AP 2024。arXiv:2409.16022。</p>
+<p><a id="ref-21"></a>[21] Google Threat Intelligence Group、&quot;North Korea-Nexus Threat Actor Compromises Widely Used Axios NPM Package in Supply Chain Attack&quot;、Google Cloud、2026-04。<a href="https://cloud.google.com/blog/topics/threat-intelligence/north-korea-threat-actor-targets-axios-npm-package">https://cloud.google.com/blog/topics/threat-intelligence/north-korea-threat-actor-targets-axios-npm-package</a></p>
+<p><a id="ref-22"></a>[22] Microsoft Threat Intelligence、&quot;Mitigating the Axios npm supply chain compromise&quot;、Microsoft Security Blog、2026-04-01。<a href="https://www.microsoft.com/en-us/security/blog/2026/04/01/mitigating-the-axios-npm-supply-chain-compromise/">https://www.microsoft.com/en-us/security/blog/2026/04/01/mitigating-the-axios-npm-supply-chain-compromise/</a></p>
+<p><a id="ref-23"></a>[23] Ionut Arghire、&quot;Axios NPM Package Breached in North Korean Supply Chain Attack&quot;、SecurityWeek、2026-04。<a href="https://www.securityweek.com/axios-npm-package-breached-in-north-korean-supply-chain-attack/">https://www.securityweek.com/axios-npm-package-breached-in-north-korean-supply-chain-attack/</a></p>
+<p><a id="ref-24"></a>[24] Tenable Research Special Operations、&quot;FAQ about the Axios NPM Supply Chain Attack by North Korea-Nexus Threat Actor UNC1069&quot;、2026-04。<a href="https://www.tenable.com/blog/faq-about-the-axios-npm-supply-chain-attack-by-north-korea-nexus-threat-actor-unc1069">https://www.tenable.com/blog/faq-about-the-axios-npm-supply-chain-attack-by-north-korea-nexus-threat-actor-unc1069</a></p>
+<hr>
+<p>© 2026 Dennis Kim (金浩光・김호광) · 本文書は独立 CTI アーカイブ(TLP:GREEN)の公開を目的として作成されている。
+問合せ: <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · GitHub: <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0422-MCP_JP.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

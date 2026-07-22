@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTI 리포트 — 발코딩이 만든 쌍둥이 사건 — VibeQuant</title>
+  <meta name="description" content="코딩을 못하는 보안 전문가도 읽기 쉽도록 되도록 쉬운 단어로 작성하였으며, 하지만 git의 특성상 커밋 후 푸시가 되어 프라이빗 키가 유출되면 키를 폐기해야 한다는 정도의 이해도는 있어야 한다." />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-cti-2026-0628-github-key-leak-kr-b29145d5/" />
+  <meta property="og:title" content="CTI 리포트 — 발코딩이 만든 쌍둥이 사건" />
+  <meta property="og:description" content="코딩을 못하는 보안 전문가도 읽기 쉽도록 되도록 쉬운 단어로 작성하였으며, 하지만 git의 특성상 커밋 후 푸시가 되어 프라이빗 키가 유출되면 키를 폐기해야 한다는 정도의 이해도는 있어야 한다." />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-cti-2026-0628-github-key-leak-kr-b29145d5/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=6" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-cti-2026-0628-github-key-leak-kr-b29145d5/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-cti-2026-0628-github-key-leak-en-9cfcf3f7/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-cti-2026-0628-github-key-leak-kr-b29145d5/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"CTI 리포트 — 발코딩이 만든 쌍둥이 사건","description":"코딩을 못하는 보안 전문가도 읽기 쉽도록 되도록 쉬운 단어로 작성하였으며, 하지만 git의 특성상 커밋 후 푸시가 되어 프라이빗 키가 유출되면 키를 폐기해야 한다는 정도의 이해도는 있어야 한다.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-cti-2026-0628-github-key-leak-kr-b29145d5/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0628-GITHUB-KEY-LEAK_KR.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-28","dateModified":"2026-06-28","inLanguage":"ko"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://vibequant.cc/">Home</a>
+        <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 클라우드 · SaaS</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · SaaS</p>
+        <h1>CTI 리포트 — 발코딩이 만든 쌍둥이 사건</h1>
+        <p class="article-dates"><time datetime="2026-06-28">발행 2026.06.28</time></p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn is-active" href="../../cti/cti-cti-2026-0628-github-key-leak-kr-b29145d5/" data-lang="KR" aria-current="true">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/cti-cti-2026-0628-github-key-leak-en-9cfcf3f7/" data-lang="EN">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">코딩을 못하는 보안 전문가도 읽기 쉽도록 되도록 쉬운 단어로 작성하였으며, 하지만 git의 특성상 커밋 후 푸시가 되어 프라이빗 키가 유출되면 키를 폐기해야 한다는 정도의 이해도는 있어야 한다.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>커밋 한 줄이 만든 침해</strong> — Taiko 브릿지 해킹과 티빙, 데자뷔</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>분류</strong></td>
+<td>Cyber Threat Intelligence / Secret Management Failure</td>
+</tr>
+<tr>
+<td><strong>작성일</strong></td>
+<td>2026-06-28</td>
+</tr>
+<tr>
+<td><strong>TLP</strong></td>
+<td>CLEAR (공개 가능)</td>
+</tr>
+<tr>
+<td><strong>대상 사건</strong></td>
+<td>① Taiko 브릿지 해킹 (2026-06-22) · ② TVING 개인정보 유출 (2026-06)</td>
+</tr>
+<tr>
+<td><strong>핵심 키워드</strong></td>
+<td>Hardcoded Secret · Git History · Pre-commit Hygiene · SGX/MrSigner · AWS Access Key</td>
+</tr>
+</tbody></table>
+<p>코딩을 못하는 보안 전문가도 읽기 쉽도록 되도록 쉬운 단어로 작성하였으며, 하지만 git의 특성상 커밋 후 푸시가 되어 프라이빗 키가 유출되면 키를 폐기해야 한다는 정도의 이해도는 있어야 한다.</p>
+<hr>
+<h2>목차</h2>
+<ol>
+<li>핵심 요약 (Executive Summary)</li>
+<li>사건 ① — Taiko 브릿지 해킹 (2026-06-22)<ul>
+<li>2.1 개요 / 2.2 공격 분석 / 2.3 사후 대응</li>
+</ul>
+</li>
+<li>사건 ② — TVING(티빙) 개인정보 유출 (2026-06)<ul>
+<li>3.1 개요 / 3.2 공격 분석 / 3.3 대응 및 논란</li>
+</ul>
+</li>
+<li>비교 분석 — 다른 사건, 같은 실패<ul>
+<li>4.1 공통점 / 4.2 차이점</li>
+</ul>
+</li>
+<li>왜 &#39;프리커밋(Pre-commit) 단계&#39;가 핵심인가?</li>
+<li>권고사항 (Defensive Recommendations)</li>
+<li>맺으며 — LLM이 있더라도 안일함은 어쩔 수 없다</li>
+</ol>
+<ul>
+<li>부록 — 동일 발코딩 선례</li>
+<li>출처</li>
+</ul>
+<hr>
+<h2>1. 핵심 요약 (Executive Summary)</h2>
+<p>2026년 6월, 성격이 전혀 다른 두 사건이 거의 같은 시기에 발생했다. 하나는 영지식(ZK) 롤업 기반 이더리움 L2 <strong>Taiko</strong>의 브릿지에서 약 <strong>170만 달러(원화 약 24억 원 상당)</strong>가 인출된 Web3 해킹이고, 다른 하나는 국내 대형 OTT <strong>티빙(TVING)</strong>에서 약 <strong>1,900만 명</strong> 규모의 개인정보가 유출된 사고다.</p>
+<p>기술 스택도, 피해 형태도, 산업도 다르지만 <strong>근본 원인은 동일하다.</strong>&gt;*<strong>코드 저장소(GitHub)에 들어가서는 안 될 비밀키·자격증명이 커밋되었고, 공격자는 그것을 그대로 주워 썼다.</strong>*즉 두 사건 모두 정교한 익스플로잇 체인이나 제로데이가 아니라,<strong>커밋(commit) 단계에서 걸러졌어야 할 시크릿 관리 실패</strong>가 출발점이었다. 가장 정교한 신뢰 모델(Taiko의 SGX 하드웨어 신뢰, 티빙의 ISMS 인증·DB 암호화)도 &#39;단 하나의 노출된 키&#39; 앞에서 통째로 무력화됐다는 점에서 인간은 참 쉬운 보안 규칙을 어기는 존재라는 점이다.</p>
+<hr>
+<h2>2. 사건 ① — Taiko 브릿지 해킹 (2026-06-22)</h2>
+<h3>2.1 개요</h3>
+<ul>
+<li><strong>대상:</strong> 이더리움 L2 Taiko (Type-1 ZK-EVM 롤업, 2024년 5월 메인넷 가동)</li>
+<li><strong>피해:</strong> 브릿지 및 ERC20Vault 컨트랙트에서 약 $1.7M 인출 (ETH 및 ERC-20 자산 중심)</li>
+<li><strong>탐지·대응:</strong> Blockaid 실시간 탐지, BlockSec(Phalcon)·PeckShield·Quill Audits 원인 분석. 사고 발생 수 시간 내 동결</li>
+<li><strong>시장 영향:</strong> TAIKO 토큰 약 10~20% 하락, 공격자는 약 200만 TAIKO(약 $170K)를 MEXC로 이동</li>
+</ul>
+<h3>2.2 공격 분석</h3>
+<p>뭔 말인지 이해하기 쉽지 않다는 말에 따라 되도록 쉽게 작성하도록 했다. Taiko는 단일 시퀀서를 두지 않고 다중 증명(multi-prover) 구조를 채택했다. 증명 생성 스택 <strong>Raiko</strong>는 Intel SGX 어테스테이션과 ZK 백엔드(SP1, RISC0)를 결합해, 서로 독립적인 증명 시스템을 동시에 무너뜨려야만 위조가 가능하도록 설계되었다. 그러나 이 다중 구조는 <strong>단 하나의 운영 실수로 해킹에 속하지 않은 쉬운 인증이 우회되었다.</strong>-<strong>키 노출:</strong> SGX 엔클레이브 서명용 RSA-3072 개인키가 enclave-key.pem 파일로 공개 저장소 taikoxyz/raiko에 커밋되어 누구나 내려받을 수 있는 상태였다. 본래 하드웨어(엔클레이브) 밖으로 절대 나가서는 안 되는 값이다.</p>
+<ul>
+<li><strong>악성 프로버 등록:</strong> L1 컨트랙트는 저장된 MrSigner 값과 일치하는 엔클레이브를 신뢰하도록 설계돼 있었다. 공격자는 탈취한 키로 SgxVerifier.registerInstance를 호출해 자신이 통제하는 프로버를 &#39;정상&#39;으로 등록했다.</li>
+<li><strong>위조 증명 생성:</strong> 신뢰받는 프로버가 가짜 L2 상태 어테스테이션과 출금 증명에 서명했다.</li>
+<li><strong>자산 인출:</strong> Taiko L2의 입금(MessageSent 이벤트) 없이 이더리움 L1에서 출금 요청을 제출했다. 검증을 통과한 증명을 컨트랙트가 거부할 방법이 없어 자산이 그대로 빠져나갔다.</li>
+</ul>
+<p>개발자 마스터 개인 키를 Github에 올렸고 그걸 다운 받은 공격자가 L2에 있는 코인 자산 출금에 서명했다.</p>
+<blockquote>
+<p><em><strong>하드웨어 기반 신뢰 모델 자체는 &#39;정상 작동&#39;했다. 다만 잘못된 운영자(공격자)를 신뢰했을 뿐이다.</strong></em></p>
+</blockquote>
+<p>2017년 블록체인 업계에서 메인넷과 L2라고 주장하는 상당한 프로젝트는 관리가 부실했다. 대부분 민스크에서 만들어지거나 광저우에서 클론이 만들어졌기 때문에 pem이 외주자가 보관하는 경우도 많았다.</p>
+<p>비트코인 계열에서 포크한 프로젝트 5개, ERC20 계열의 월렛의 지갑 8종의 유저 PIN은 난독화가 거의 안되어 있는 경우도 많았고 5.x대 PHP 버전을 사용하는 phpadmin을 관리툴로 확장해서 쓰는 중국계 거래소는 지금도 있다.</p>
+<p>Geth를 포크 뜨고 롤업 부분을 Rust로 바꾼 것이 무슨 기술적 성취와 포인트를 가지고 있는지에 대해서 잘 이해가 되지 않는다.</p>
+<h3>2.3 사후 대응</h3>
+<p>Taiko 팀은 Security Council 멀티시그를 가동해 브릿지·ERC20Vault를 일시 정지하고 블록 생성을 중단했으며, 모든 사용자에게 <strong>즉시 브릿지에서 자금을 인출</strong>하도록 긴급 공지했다. 동시에 CEX에 TAIKO 입금 중단을 요청했다. 피해가 비교적 작게 끝난 결정적 이유는 <strong>수 시간 내 탐지, 동결</strong>이었다.</p>
+<hr>
+<h2>3. 사건 ② — TVING(티빙) 개인정보 유출 (2026-06)</h2>
+<h3>3.1 개요</h3>
+<ul>
+<li><strong>대상:</strong> 국내 대형 OTT 티빙 (MAU 770만+)</li>
+<li><strong>피해:</strong> 약 1,953만 명 규모. 아이디·이름·생년월일·성별·전화번호·이메일과 함께 CI/DI 유출(전화번호·이메일·환불계좌·비밀번호는 암호화 상태). CI 유출로 2·3차 피싱 우려가 핵심 쟁점</li>
+<li><strong>연쇄:</strong> CJ ONE 통합 로그인 연동 계정으로 위험 확산, 동시기 데이원컴퍼니(패스트캠퍼스)에서도 GitHub 마스터 계정 키 탈취 사고 발생</li>
+</ul>
+<h3>3.2 공격 분석</h3>
+<p>KISA 침해사고 신고서 기반 보도를 종합하면 공격 경로는 다음과 같다.</p>
+<ul>
+<li><strong>키 노출:</strong> 개발 편의를 위해 AWS 액세스 키를 소스코드에 하드코딩했고, 이 코드가 GitHub에 올라가 자격증명이 노출됐다.</li>
+<li><strong>DB 직접 접근:</strong> 공격자는 그 키로 클라우드 자원, 특히 DB 서버에 직접 접속했다.</li>
+<li><strong>쿼리 실행:</strong> 조회·수정·삭제가 가능한 상태에서 대량 회원 정보를 추출했다. 신고서 사고 제목은 &#39;비인가 접근에 의한 침해사고&#39;였다.</li>
+</ul>
+<h3>3.3 대응 및 논란</h3>
+<ul>
+<li><strong>탐지 지연:</strong> 방어 체계가 공격을 탐지한 것이 아니라, 대량 추출로 DB CPU 사용률이 100%까지 치솟은 뒤에야 이상을 인지했다. 이상 징후 발생부터 인지까지 약 21시간이 걸렸다.</li>
+<li><strong>인증의 한계:</strong> ISMS 인증을 보유했음에도 클라우드 관리자 접속 키가 코드에 그대로 노출돼, 인증 보유와 실질 보안 수준 간 괴리가 드러났다.</li>
+<li><strong>신고 시점 논란:</strong> 사고 인지 후 법정 신고 시한(24시간)에 임박해 신고한 점이 &#39;축소 의혹&#39;으로 비판받았다.</li>
+<li><strong>사후 조치:</strong> AWS 액세스 키 폐기, GitHub 하드코딩 자격증명 제거·교체, 공격자 IP 차단, 클라우드 접근 통제 정책 변경.</li>
+</ul>
+<hr>
+<h2>4. 비교 분석 — 다른 사건, 같은 실패</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>Taiko 브릿지 해킹</th>
+<th>TVING 개인정보 유출</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>산업</strong></td>
+<td>Web3 / DeFi (L2 브릿지)</td>
+<td>OTT / 개인정보 처리</td>
+</tr>
+<tr>
+<td><strong>노출된 시크릿</strong></td>
+<td>SGX 엔클레이브 RSA-3072 서명키 (enclave-key.pem)</td>
+<td>AWS 액세스 키 (하드코딩)</td>
+</tr>
+<tr>
+<td><strong>노출 경로</strong></td>
+<td>공개 GitHub 저장소에 커밋</td>
+<td>GitHub 저장소에 하드코딩·노출</td>
+</tr>
+<tr>
+<td><strong>무력화된 방어선</strong></td>
+<td>SGX 다중 프로버 하드웨어 신뢰 모델</td>
+<td>ISMS 인증 · DB 암호화</td>
+</tr>
+<tr>
+<td><strong>침투 핵심 행위</strong></td>
+<td>악성 프로버 등록 → 위조 증명 생성</td>
+<td>탈취 키로 DB 직접 접속 → 쿼리 실행</td>
+</tr>
+<tr>
+<td><strong>피해 형태</strong></td>
+<td>브릿지 자산 인출 (~$1.7M)</td>
+<td>개인정보 대량 유출 (~1,953만 명)</td>
+</tr>
+<tr>
+<td><strong>탐지 방식</strong></td>
+<td>외부 보안업체 실시간 탐지</td>
+<td>DB 과부하(CPU 100%) 사후 인지</td>
+</tr>
+<tr>
+<td><strong>대응 속도</strong></td>
+<td>수 시간 내 동결 (피해 최소화)</td>
+<td>약 21시간 후 인지 (피해 확대)</td>
+</tr>
+</tbody></table>
+<p>Taiko 브릿지는 거액의 자산이 유출될 때 슬랙이나 텔레그램에 알람을 띄우는 등의 기본적인 것도 없이 외부 보안 업체가 발견한 것이다.</p>
+<p>Tving은 모니터링을 담당하는 업체가 무얼 모니터링했는지가 궁금하다.</p>
+<h3>4.1 공통점 — github에 안일하게 키를 올렸다</h3>
+<p>두 사건의 가장 정교한 보안 장치(하드웨어 엔클레이브, 인증 체계·암호화)는 모두 <strong>이 키를 가진 자는 신뢰한다</strong>는 전제 위에 서 있었다. 그 키가 저장소에 커밋되는 순간, 신뢰 모델 전체가 공격자에게 그대로 양도됐다. 보안 통제의 강도와 무관하게, <strong>신뢰의 근이 되는 시크릿이 노출되면 모든 상위 통제가 무의미해진다.</strong></p>
+<h3>4.2 차이점 — 결과를 가른 것은 &#39;탐지·대응 속도&#39;</h3>
+<p>근본 원인은 같았지만 결과는 갈렸다. Taiko는 외부 모니터링으로 수 시간 내 동결해 피해를 $1.7M 수준에서 멈췄다. 직접적으로 돈이 달린 일인지라 한번 털리고 서버를 내렸다. 티빙은 자체 탐지에 실패해 21시간 동안 1,900만 건 규모의 추출을 허용했다. <strong>재난 대응 계획(IR Plan)의 실효성과 탐지 텔레메트리의 차이가 피해 규모를 결정</strong>했다.</p>
+<p>거액의 코인 자산이 유출되는 상황에서 모른다면 그건 메인넷을 운영해서는 안된다. 이 사고의 시사점은 github에 올라간 모든 Web3 프로젝트가 소스 관리 레벨에서 프리커밋을 운영하는 것을 제대로 보지 못했다는 것이다.</p>
+<hr>
+<h2>5. 왜 &#39;프리커밋(Pre-commit) 단계&#39;가 핵심인가?</h2>
+<p><strong>핵심은 단순하다. 시크릿은 커밋된 뒤에 지워도 사라지지 않는다.</strong></p>
+<ul>
+<li>GitHub에는 모든 커밋 이력이 남는다. 현재 코드에서 키를 삭제해도 과거 커밋 히스토리에 그대로 잔존한다. 따라서 노출된 키는 &#39;삭제&#39;가 아니라 반드시 폐기 후 신규 키로 교체(rotation)해야 한다. (티빙 신고서에 &#39;AWS 키 폐기 + 자격증명 교체&#39;가 함께 적힌 이유다.)</li>
+<li>공개 저장소는 전 세계에서 검색 가능하며, 자격증명을 자동 스캔하는 봇이 상시 가동된다. 노출된 키의 악용까지 걸리는 시간은 분 단위인 경우가 많다.</li>
+<li>따라서 방어의 무게중심은 &#39;노출된 뒤 대응&#39;이 아니라 &#39;커밋되기 전 차단&#39;, 즉 프리커밋 단계로 이동해야 한다.</li>
+</ul>
+<p>이 관점에서 두 사건은 모두 <strong>커밋 직전에 한 번만 걸러졌으면 발생하지 않았을 사고</strong>다.</p>
+<p>기본적인 프리커밋 보안 솔루션은 오픈 소스로 차고 넘친다.</p>
+<hr>
+<h2>6. 권고사항 (Defensive Recommendations)</h2>
+<h3>6.1 프리커밋(노출 방지) — 1차 보안</h3>
+<ul>
+<li><strong>Pre-commit 훅 도입:</strong> gitleaks, git-secrets, truffleHog, detect-secrets 등을 커밋 훅으로 강제해 시크릿이 포함된 커밋 자체를 차단.</li>
+<li><strong>저장소 측 시크릿 스캐닝:</strong> GitHub Push Protection / Secret Scanning, CI 파이프라인 내 스캔을 의무화(개발자 PC 우회 방지).</li>
+<li><strong>.gitignore 정비:</strong> <code>*.pem</code>, <code>*.key</code>, <code>.env</code>, 자격증명 파일 패턴을 기본 차단. 단, .gitignore는 보조수단일 뿐 스캐닝을 대체하지 못함.</li>
+</ul>
+<h3>6.2 시크릿 보관 구조 — 근본 개선</h3>
+<ul>
+<li><strong>하드코딩 전면 금지:</strong> 키·자격증명을 코드에 두지 않고 AWS Secrets Manager / HashiCorp Vault / KMS에서 런타임 주입.</li>
+<li><strong>하드웨어 키 불출(不出) 원칙:</strong> SGX 등 TEE 서명키가 엔클레이브 밖으로 추출되는 경로(빌드 산출물, 테스트 픽스처, 백업)를 설계 차원에서 제거.</li>
+<li><strong>단기 자격증명·최소 권한:</strong> 장기 액세스 키 대신 STS/단기 토큰, IAM 최소 권한, 키별 사용 범위 분리.</li>
+</ul>
+<h3>6.3 사후 통제·탐지 — 피해 최소화</h3>
+<ul>
+<li><strong>자동 키 로테이션 + 즉시 폐기 절차:</strong> 노출 의심 시 &#39;삭제&#39;가 아닌 &#39;폐기+교체&#39;를 표준 플레이북에 명시.</li>
+<li><strong>이상행위 탐지(텔레메트리):</strong> DB 대량 조회·온체인 비정상 출금에 대한 실시간 알림.</li>
+<li><strong>사고 대응 계획(IR Plan) 상시화:</strong> 동결·공지·거래소 협조·신고까지의 절차를 사전 정의하고 훈련.</li>
+<li><strong>과거 히스토리 정화:</strong> 이미 노출된 키는 git history 재작성(BFG, filter-repo)으로 제거하되, 반드시 키 교체를 선행해야 한다.</li>
+</ul>
+<hr>
+<h2>7. 맺으며 — LLM이 있더라도 안일함은 어쩔 수 없다</h2>
+<p>Taiko와 티빙은 표면적으로 무관해 보이지만, 보안 관점에서는 <strong>동일한 교과서적 실패의 두 사례</strong>다. 첨단 영지식 증명도, 국가 공인 인증 체계도, 결국 <strong>개발자가 커밋한 키 하나</strong> 앞에서 무너졌다.</p>
+<blockquote>
+<p><em><strong>정교한 공격을 막는 것보다, 스스로 문을 열어주지 않는 것이 먼저다.</strong></em></p>
+</blockquote>
+<p>해커가 가장 먼저 뒤지는 곳은 공개된 코드 속 키다. 따라서 보안 투자의 우선순위는 화려한 방어 솔루션 이전에</p>
+<ul>
+<li><strong>(1) 프리커밋 단계의 시크릿 차단</strong>-<strong>(2) 전용 시크릿 저장소로의 구조 전환</strong>-<strong>(3) 정기적인 보안 모니터링</strong>-<strong>(4) 노출 시 즉시 폐기·교체 플레이북</strong></li>
+</ul>
+<p>세 가지에 두어야 한다.</p>
+<p>두 사건이 같은 달에 동시에 보여준 교훈은 인간은 늘 실수하고 최악의 상황을 가정하여 시스템을 구성하고 운영해야 한다는 것이다.</p>
+<hr>
+<h2>부록 — 동일 발코딩 선례</h2>
+<ul>
+<li><strong>Uber (2016):</strong> 비공개 GitHub 저장소에서 확보한 로그인 정보로 AWS 내 이용자 DB 접근, 약 5,700만 명 정보 노출.</li>
+<li><strong>Toyota T-Connect (2017–2022):</strong> 협력사가 소스코드를 공개 저장소에 올리며 DB 접근키 하드코딩, 약 5년간 노출(29만여 명 영향 가능).</li>
+<li><strong>데이원컴퍼니(패스트캠퍼스, 2026):</strong> GitHub 마스터 계정 키값 탈취를 통한 침입 — 티빙과 동시기 발생한 동일 계열 사고.</li>
+</ul>
+<h2>출처</h2>
+<ul>
+<li>CoinDesk, &quot;Taiko halts its Ethereum layer-2 network after a bridge exploit&quot; (2026-06-22)</li>
+<li>The Defiant, &quot;Taiko Bridge Drained $1.7M After SGX Signing Key Left Exposed on GitHub&quot;</li>
+<li>Decrypt, &quot;Ethereum Layer-2 Taiko Warns Users to Withdraw Bridge Funds After Security Breach&quot;</li>
+<li>thirdweb / Crypto Times / Quill Audits — Taiko 기술 분석</li>
+<li>뉴스1, &quot;해커 표적 된 &#39;깃허브 키&#39;…정보유출보다 DB접근 공격 &#39;심각&#39;&quot; (2026-06-12)</li>
+<li>이데일리, &quot;티빙 해킹, 단순 정보유출 넘어 클라우드 계정 관리 논란으로 확산&quot;</li>
+<li>보안뉴스 &#39;TVING 개인정보 유출 사건&#39;</li>
+</ul>
+<hr>
+<p><em>본 리포트는 공개된 1차 보도 및 보안업체 분석을 종합한 것으로, 일부 기술 세부(자산 구성 등)는 Taiko의 공식 사후 보고서 발표 시 보정될 수 있다.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0628-GITHUB-KEY-LEAK_KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

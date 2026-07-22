@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ScarCruft Compromises a Yanbian Gaming Platform — A Wholesale Supply-Chain Takeover — VibeQuant</title>
+  <meta name="description" content="1. Summary 2. Incident Overview 3. Incident Timeline 4. Attack Chain Technical Analysis 5. ScarCruft / APT37 Threat Actor Profile 6. BirdCall — Analysis…" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-cti-2026-0507-scarcruft-en-7405fbfb/" />
+  <meta property="og:title" content="ScarCruft Compromises a Yanbian Gaming Platform — A Wholesale Supply-Chain Takeover" />
+  <meta property="og:description" content="1. Summary 2. Incident Overview 3. Incident Timeline 4. Attack Chain Technical Analysis 5. ScarCruft / APT37 Threat Actor Profile 6. BirdCall — Analysis…" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-cti-2026-0507-scarcruft-en-7405fbfb/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=6" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-cti-2026-0507-scarcruft-kr-e4c2ccdf/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-cti-2026-0507-scarcruft-en-7405fbfb/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-cti-2026-0507-scarcruft-jp-64fa36df/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-cti-2026-0507-scarcruft-kr-e4c2ccdf/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"ScarCruft Compromises a Yanbian Gaming Platform — A Wholesale Supply-Chain Takeover","description":"1. Summary 2. Incident Overview 3. Incident Timeline 4. Attack Chain Technical Analysis 5. ScarCruft / APT37 Threat Actor Profile 6. BirdCall — Analysis…","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-cti-2026-0507-scarcruft-en-7405fbfb/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0507-SCARCRUFT_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-05-07","dateModified":"2026-05-07","inLanguage":"en"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://vibequant.cc/">Home</a>
+        <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 북한 · Lazarus · Kimsuky</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">북한 · Lazarus · Kimsuky</p>
+        <h1>ScarCruft Compromises a Yanbian Gaming Platform — A Wholesale Supply-Chain Takeover</h1>
+        <p class="article-dates"><time datetime="2026-05-07">발행 2026.05.07</time></p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-cti-2026-0507-scarcruft-kr-e4c2ccdf/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../cti/cti-cti-2026-0507-scarcruft-en-7405fbfb/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../cti/cti-cti-2026-0507-scarcruft-jp-64fa36df/" data-lang="JP">日本語</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">1. Summary 2. Incident Overview 3. Incident Timeline 4. Attack Chain Technical Analysis 5. ScarCruft / APT37 Threat Actor Profile 6. BirdCall — Analysis…</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>APT37&#39;s sqgame[.]net intrusion — Cross-platform Windows·Android trojanization, espionage operation against ethnic Koreans and North Korean defectors in Yanbian</strong>
+<em>New BirdCall(zhuagou) Android variant · Zoho WorkDrive C&amp;C · Simultaneous targeting of Korean digital certificates (.p12) and Hancom documents (.hwp) · China→DPRK tool genealogy</em></p>
+</blockquote>
+<hr>
+<h2>Document Information</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Report ID</strong></td>
+<td><code>CTI-2026-0507-SCARCRUFT</code></td>
+</tr>
+<tr>
+<td><strong>Classification</strong></td>
+<td><code>TLP:GREEN</code> — Public sharing permitted</td>
+</tr>
+<tr>
+<td><strong>Type</strong></td>
+<td>Threat Actor &amp; Supply-Chain Incident Report</td>
+</tr>
+<tr>
+<td><strong>Severity</strong></td>
+<td>🔴<strong>HIGH</strong> — National security espionage operation; potential physical harm to human targets</td>
+</tr>
+<tr>
+<td><strong>Target Sector</strong></td>
+<td>Gaming platforms · Mobile applications · Korean diaspora communities</td>
+</tr>
+<tr>
+<td><strong>Target Region</strong></td>
+<td>Yanbian (延边) Korean Autonomous Prefecture, China · DPRK–China border zone</td>
+</tr>
+<tr>
+<td><strong>Threat Actor</strong></td>
+<td><strong>ScarCruft / APT37 / Reaper</strong> (DPRK-aligned espionage group, active since 2012)</td>
+</tr>
+<tr>
+<td><strong>Malware</strong></td>
+<td>BirdCall (Windows + new Android port) · RokRAT (first-stage loader)</td>
+</tr>
+<tr>
+<td><strong>Internal Codename</strong></td>
+<td>zhuagou (抓狗) — Chinese hacker-community jargon</td>
+</tr>
+<tr>
+<td><strong>Activity Window</strong></td>
+<td>November 2024 ~ ongoing (public disclosure: 2026-05-05 by ESET)</td>
+</tr>
+<tr>
+<td><strong>Primary Source</strong></td>
+<td>ESET Research, <em>&quot;A rigged game: ScarCruft compromises gaming platform in a supply-chain attack&quot;</em> (Filip Jurčacko, 2026-05-05)</td>
+</tr>
+<tr>
+<td><strong>Publication Date</strong></td>
+<td>7 May 2026</td>
+</tr>
+<tr>
+<td><strong>Publisher</strong></td>
+<td>Dennis Kim — <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">CYBER-THREAT-INTELLIGENCE-REPORT</a></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#1-summary">Summary</a></li>
+<li><a href="#2-incident-overview">Incident Overview</a></li>
+<li><a href="#3-incident-timeline">Incident Timeline</a></li>
+<li><a href="#4-attack-chain-technical-analysis">Attack-Chain Technical Analysis</a></li>
+<li><a href="#5-scarcruft--apt37-threat-actor-profile">ScarCruft / APT37 Threat-Actor Profile</a></li>
+<li><a href="#6-birdcall--analysis-of-the-new-android-variant">BirdCall — Analysis of the New Android Variant</a></li>
+<li><a href="#7-korea-specific-threat--simultaneous-p12-and-hwp-targeting">Korea-Specific Threat — Simultaneous <code>.p12</code> and <code>.hwp</code> Targeting</a></li>
+<li><a href="#8-indicators-of-compromise-iocs">Indicators of Compromise (IoCs)</a></li>
+<li><a href="#9-mitre-attck-mapping">MITRE ATT&amp;CK Mapping</a></li>
+<li><a href="#10-response-recommendations">Response Recommendations</a></li>
+<li><a href="#11-strategic-implications">Strategic Implications</a></li>
+<li><a href="#12-references">References</a></li>
+<li><a href="#appendix-a-glossary">Appendix A. Glossary</a></li>
+</ol>
+<hr>
+<h2>1. Summary</h2>
+<p>On 5 May 2026, the Slovak security vendor ESET disclosed a multi-platform supply-chain attack by the DPRK-aligned APT group <strong>ScarCruft (APT37)</strong>. The target was <strong>sqgame[.]net</strong>, a gaming platform serving the Yanbian (延边) Korean Autonomous Prefecture community in China; both the Windows desktop client update package and the Android game APKs distributed via this platform were trojanized.</p>
+<p>The campaign has been active since at least late 2024 — over 18 months — and ESET confirms that some malicious APKs remain published on the official sqgame website at the time of writing. ESET notified sqgame in December 2025 but has not received a response.</p>
+<p><strong>Three issues make this incident decisive.</strong></p>
+<p><strong>First</strong>, ScarCruft has weaponized a new Android port (zhuagou) of the BirdCall backdoor, which it had previously confined to Windows. ESET identified seven distinct versions, from v1.0 (compiled around October 2024) through v2.0 (around June 2025) — evidence not of a one-off tool but of an <strong>actively developed and operated mobile espionage platform</strong>.</p>
+<p><strong>Second</strong>, the file-extension targeting list explicitly includes Korean public/financial certificate format <strong><code>.p12</code></strong>and Hancom Office document format<strong><code>.hwp</code></strong>. This goes beyond intelligence collection: it implies a precision operation aimed at <strong>direct access to victims&#39; Korean financial accounts and government services</strong>.</p>
+<p><strong>Third</strong>, the backdoor&#39;s internal codename <strong>zhuagou (抓狗)</strong>is not the literal Chinese phrase (&quot;catching dogs&quot;) but rather<strong>established jargon in Chinese hacker, cracking, and game-cheat communities</strong>, used since around 2012 as a standard label for information-collection, credential-theft, and user-tracking modules. This strongly suggests the tool&#39;s lineage <strong>originated in Chinese hacker communities and was acquired and upgraded by the DPRK&#39;s ScarCruft</strong> (detail in §6.1).</p>
+<blockquote>
+<p>⚠ <strong>A grim implication</strong>: Yanbian is the principal first transit region for North Korean defectors. This operation can effectively serve to <strong>identify the names, locations, and contact networks of defectors, their facilitators, and human-rights activists</strong>— a threat that should be classified not merely as cybersecurity but as<strong>physical-safety</strong> risk.</p>
+</blockquote>
+<h3>Key Judgments</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Judgment</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>KJ-1</strong></td>
+<td>The operation aligns with ScarCruft&#39;s established TTPs and is assessed as a DPRK Reconnaissance General Bureau (RGB) espionage campaign.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td><strong>KJ-2</strong></td>
+<td>Primary targets are Yanbian-based ethnic Koreans, with North Korean defectors, defector facilitators, and human-rights activists most likely.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td><strong>KJ-3</strong></td>
+<td>The simultaneous <code>.p12</code> and <code>.hwp</code> targeting establishes Korean financial and government-service access as an explicit operational objective.</td>
+<td><strong>Medium</strong></td>
+</tr>
+<tr>
+<td><strong>KJ-4</strong></td>
+<td>The Android BirdCall port is not a one-off implant but ScarCruft&#39;s actively maintained mobile espionage platform — seven versions discovered between v1.0 (2024-10) and v2.0 (2025-06).</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td><strong>KJ-5</strong></td>
+<td>sqgame&#39;s silence and the persistence of malicious APKs indicate the<strong>attack surface remains active</strong>at present.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td><strong>KJ-6</strong></td>
+<td>Korea-resident ethnic Koreans, defectors, and personnel of associated NGOs and religious organizations are likely targets of the same or related campaigns.</td>
+<td><strong>Medium</strong></td>
+</tr>
+<tr>
+<td><strong>KJ-7</strong></td>
+<td>Synthesizing the hacker-community semantics of the codename zhuagou (抓狗), the tool&#39;s direct lineage is assessed to originate from a Chinese hacker-community information-collection module that ScarCruft subsequently acquired and upgraded.</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Incident Overview</h2>
+<h3>2.1 Targeted Platform Profile</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Platform</strong></td>
+<td>sqgame (primary domain: <code>sqgame[.]net</code>; download domain: <code>sqgame.com[.]cn</code>)</td>
+</tr>
+<tr>
+<td><strong>Service</strong></td>
+<td>Traditional card and board games for the Yanbian region (flagships: 延边红十 / Yanbian Red Ten, 新画图 / New Drawing)</td>
+</tr>
+<tr>
+<td><strong>Supported platforms</strong></td>
+<td>Windows · Android · iOS (no iOS trojanization observed)</td>
+</tr>
+<tr>
+<td><strong>Hosting IP</strong></td>
+<td><code>39.106.249[.]68</code> — Hangzhou Alibaba Advertising Co., Ltd.</td>
+</tr>
+<tr>
+<td><strong>Hosting migration</strong></td>
+<td>2024-06-01 (to current IP)</td>
+</tr>
+<tr>
+<td><strong>User base</strong></td>
+<td>Residents of the Yanbian Korean Autonomous Prefecture; primarily Go-Stop and local card games</td>
+</tr>
+</tbody></table>
+<h3>2.2 Attack-Chain Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Platform</th>
+<th>Compromise Vector</th>
+<th>Delivered Payload</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Windows</strong></td>
+<td>Tampering of the sqgame desktop-client<strong>update package</strong>(<code>xiazai.sqgame.com[.]cn/dating/20240429.zip</code>)</td>
+<td>Trojanized <code>mono.dll</code> → downloader →<strong>RokRAT</strong>→<strong>BirdCall</strong></td>
+</tr>
+<tr>
+<td><strong>Android</strong></td>
+<td><strong>Repackaging and re-signing</strong>of two game APKs from the sqgame download page (<code>ybht.apk</code>, <code>sqybhs.apk</code>)</td>
+<td><strong>Android BirdCall (zhuagou)</strong> loaded directly</td>
+</tr>
+<tr>
+<td><strong>iOS</strong></td>
+<td>No trojanization observed. ScarCruft likely avoided the cost of bypassing Apple&#39;s review process; iPhone usage among defectors is also rare.</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h3>2.3 Victimology</h3>
+<p>ESET&#39;s analysis prioritizes targets as follows:</p>
+<ol>
+<li><strong>Yanbian-resident ethnic Koreans</strong> — sqgame is a platform tailored to traditional Yanbian games, making this primary target group self-evident.</li>
+<li><strong>North Korean defectors and facilitators</strong> (brokers, NGO staff, religious activists) — Yanbian is the main first-transit zone for defectors and a top tracking priority for the DPRK regime.</li>
+<li><strong>Korea-resident ethnic-Korean families</strong> — identified as secondary targets via contacts, SMS, and call records collected on victim devices.</li>
+<li><strong>Holders of Korean government and financial assets</strong> — a separate target group implied by the <code>.p12</code> and <code>.hwp</code> targeting.</li>
+</ol>
+<hr>
+<h2>3. Incident Timeline</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Event</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>2012 ~</strong></td>
+<td>ScarCruft begins operations (registered as MITRE G0067)</td>
+</tr>
+<tr>
+<td><strong>2021</strong></td>
+<td>BirdCall (Windows) first identified. ESET attributes it to ScarCruft via private intelligence. South Korean vendors (S2W, AhnLab) publicly report it as a &quot;Matryoshka variant of RokRAT&quot; in the same period.</td>
+</tr>
+<tr>
+<td><strong>2024-06-01</strong></td>
+<td>sqgame migrates to its current IP (<code>39.106.249[.]68</code>, Alibaba) — estimated establishment of campaign infrastructure</td>
+</tr>
+<tr>
+<td><strong>~ October 2024</strong></td>
+<td>Android BirdCall<strong>v1.0</strong> compiled (per ESET analysis)</td>
+</tr>
+<tr>
+<td><strong>~ November 2024</strong></td>
+<td>The trojanized <code>mono.dll</code> in the sqgame Windows-client update package is first observed in ESET telemetry</td>
+</tr>
+<tr>
+<td><strong>2024-11-04</strong></td>
+<td>Compromised Korean site <code>www.lawwell.co[.]kr</code> (SK Broadband) begins hosting shellcode</td>
+</tr>
+<tr>
+<td><strong>March – July 2025</strong></td>
+<td>Additional Korean sites (<code>1980food.co[.]kr</code>, <code>inodea[.]com</code>, <code>colorncopy.co[.]kr</code>, <code>sejonghaeun[.]com</code>, <code>cndsoft.co[.]kr</code>) are sequentially recruited to host shellcode, configurations, and a clean mono library</td>
+</tr>
+<tr>
+<td><strong>~ June 2025</strong></td>
+<td>Android BirdCall<strong>v2.0</strong> compiled (with strengthened obfuscation)</td>
+</tr>
+<tr>
+<td><strong>2025-10</strong></td>
+<td>ESET directly verifies two trojanized Android APKs on the sqgame website</td>
+</tr>
+<tr>
+<td><strong>2025-12</strong></td>
+<td>ESET notifies sqgame of the compromise.<strong>No response received.</strong></td>
+</tr>
+<tr>
+<td><strong>2026-05-05</strong></td>
+<td>ESET publicly discloses the analysis on WeLiveSecurity (Filip Jurčacko)</td>
+</tr>
+<tr>
+<td><strong>As of 2026-05-05</strong></td>
+<td>ESET confirms that some malicious APKs<strong>remain published</strong> on the official sqgame website</td>
+</tr>
+<tr>
+<td><strong>2026-05-07</strong></td>
+<td>This CTI analysis published</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>📌 <strong>What the June 2024 → October–November 2024 gap implies</strong>: a roughly four-to-five-month preparation window separates infrastructure migration from the start of trojanization. ScarCruft did not weaponize sqgame immediately upon compromise; rather, it conducted <strong>substantial reconnaissance and tool adaptation (notably the new Android port) — characteristic of a precision operation</strong>.</p>
+</blockquote>
+<hr>
+<h2>4. Attack-Chain Technical Analysis</h2>
+<h3>4.1 Windows Chain — Four-Stage Multi-Loader</h3>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Component</th>
+<th>Behavior</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>① Update tampering</strong></td>
+<td><code>xiazai.sqgame.com[.]cn/dating/20240429.zip</code></td>
+<td>The legitimate sqgame client auto-downloads via its standard update channel</td>
+</tr>
+<tr>
+<td><strong>② Trojanized mono.dll</strong></td>
+<td><code>95BDB94F6767A3CCE6D92363BBF5BC84B786BDB0</code></td>
+<td>A clean mono library is patched with additional code/data, including a downloader</td>
+</tr>
+<tr>
+<td><strong>③ Downloader behavior</strong></td>
+<td>(in-memory)</td>
+<td>(a) Checks for analysis tools and VM environments — aborts if found; (b) locates the sqgame client process; (c) downloads and executes shellcode from a compromised Korean site; (d) terminates the client process; (e)<strong>automatically replaces the trojanized mono.dll with a clean version</strong> — removing forensic traces</td>
+</tr>
+<tr>
+<td><strong>④ RokRAT → BirdCall</strong></td>
+<td>Shellcode payload</td>
+<td>RokRAT loads first; RokRAT then downloads and installs the more sophisticated BirdCall</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>🔑 <strong>TTP of note — self-cleanup</strong>: After completing its work, the downloader automatically replaces the trojanized <code>mono.dll</code> with a clean copy, <strong>completely erasing infection traces from post-compromise static analysis</strong>. This is an OPSEC pattern engineered for ScarCruft&#39;s long-dwell operations.</p>
+</blockquote>
+<h3>4.2 Android Chain — Repackaging Model</h3>
+<p>ScarCruft is assessed not to have obtained sqgame&#39;s source code. Instead, it used <strong>decompilation, repackaging, and re-signing</strong> of already-built legitimate APKs.</p>
+<table>
+<thead>
+<tr>
+<th>Modification</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>AndroidManifest.xml change</strong></td>
+<td>Entry-point activity changed to malicious code (<code>com.example.zhuagou.SplashScreen</code> or <code>com.mob.util.MobSs</code>)</td>
+</tr>
+<tr>
+<td><strong>Backdoor activity/service additions</strong></td>
+<td>New components registered to execute the malicious code</td>
+</tr>
+<tr>
+<td><strong>Permission additions</strong></td>
+<td>Broad permissions requested: contacts, SMS, call logs, external storage, audio recording, location</td>
+</tr>
+<tr>
+<td><strong>Original game preserved</strong></td>
+<td>The backdoor invokes the original game activity after launch — preventing user suspicion</td>
+</tr>
+</tbody></table>
+<h3>4.3 C&amp;C Infrastructure — Abuse of Legitimate Cloud Services</h3>
+<p>ScarCruft&#39;s signature TTP — <strong>C&amp;C built on legitimate cloud services</strong> — persists in this campaign. Android BirdCall supports three cloud providers in code, but operationally uses only Zoho WorkDrive.</p>
+<table>
+<thead>
+<tr>
+<th>Cloud</th>
+<th>Operational Status</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Zoho WorkDrive</strong></td>
+<td>✅ Active (12 accounts identified)</td>
+<td>Command polling and data exfiltration</td>
+</tr>
+<tr>
+<td><strong>pCloud</strong></td>
+<td>Supported in code, not used</td>
+<td>Backup channel</td>
+</tr>
+<tr>
+<td><strong>Yandex Disk</strong></td>
+<td>Supported in code, not used</td>
+<td>Backup channel</td>
+</tr>
+</tbody></table>
+<p>The 12 identified Zoho accounts all use English-name disguise patterns (<code>tomasalfred37@</code>, <code>kalimaxim279@</code>, <code>smithbentley0617@</code>, etc.), assessed as a tactic to avoid the immediate suspicion that Korean or Chinese names would draw from analysts.</p>
+<h3>4.4 Compromised Korean Web Infrastructure</h3>
+<p>ScarCruft compromised the following Korean infrastructure to host shellcode, BirdCall configuration images (encoded in JPG overlays), and a clean mono library:</p>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>IP</th>
+<th>Hosting Provider</th>
+<th>Use</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>1980food.co[.]kr</code></td>
+<td><code>211.239.117[.]117</code></td>
+<td>Hostway IDC</td>
+<td>Android BirdCall configuration image</td>
+</tr>
+<tr>
+<td><code>inodea[.]com</code></td>
+<td><code>114.108.128[.]157</code></td>
+<td>LG DACOM</td>
+<td>Android BirdCall configuration image</td>
+</tr>
+<tr>
+<td><code>www.lawwell.co[.]kr</code></td>
+<td><code>221.143.43[.]214</code></td>
+<td>SK Broadband</td>
+<td>Shellcode + clean mono library</td>
+</tr>
+<tr>
+<td><code>colorncopy.co[.]kr</code> / <code>swr.co[.]kr</code></td>
+<td><code>222.231.2[.]20</code></td>
+<td>LG DACOM</td>
+<td>Shellcode</td>
+</tr>
+<tr>
+<td><code>sejonghaeun[.]com</code></td>
+<td><code>222.231.2[.]23</code></td>
+<td>(IP Manager)</td>
+<td>Clean mono library</td>
+</tr>
+<tr>
+<td><code>cndsoft.co[.]kr</code></td>
+<td><code>222.231.2[.]41</code></td>
+<td>(IP Manager)</td>
+<td>Shellcode</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>📍 <strong>Domestic implication for Korea</strong>: Six Korean domains being recruited as hosting resources in a single campaign confirms that <strong>the security hygiene of Korean SMB web-hosting environments has become a preferred operational asset for DPRK APTs</strong>. KISA and the Ministry of Science and ICT should reassess the effectiveness of their SMB-security inspection programs.</p>
+</blockquote>
+<hr>
+<h2>5. ScarCruft / APT37 Threat-Actor Profile</h2>
+<h3>5.1 Group Overview</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Aliases</strong></td>
+<td>ScarCruft · APT37 · Reaper · Group123 · Ricochet Chollima · Inky Squid</td>
+</tr>
+<tr>
+<td><strong>Active since</strong></td>
+<td>2012 ~ present</td>
+</tr>
+<tr>
+<td><strong>Suspected attribution</strong></td>
+<td>DPRK Reconnaissance General Bureau (RGB) espionage unit (MITRE G0067)</td>
+</tr>
+<tr>
+<td><strong>Primary targets</strong></td>
+<td>South Korean government, defense, media, defectors; selected targets in Japan, the Middle East, and Southeast Asia</td>
+</tr>
+<tr>
+<td><strong>Primary motivation</strong></td>
+<td>Espionage — limited financial motivation (distinguishing it from Lazarus)</td>
+</tr>
+<tr>
+<td><strong>Distinguishing TTPs</strong></td>
+<td>Legitimate-cloud C&amp;C, Hancom Office (.hwp) exploits, history of Flash zero-day use, Korean-language decoys</td>
+</tr>
+</tbody></table>
+<h3>5.2 BirdCall — ScarCruft&#39;s Signature Backdoor</h3>
+<p>BirdCall is a Windows C++ backdoor that ESET attributed to ScarCruft via private intelligence reporting in 2021. South Korean vendors S2W and AhnLab publicly described it in the same period as a <strong>Matryoshka variant of RokRAT</strong>. BirdCall thus represents an <strong>upper tier of sophistication</strong> within ScarCruft&#39;s core RokRAT-family backdoor lineage.</p>
+<h3>5.3 Distinction from Lazarus</h3>
+<p>ScarCruft is often confused with Lazarus, but the differences are clear:</p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>ScarCruft (APT37)</th>
+<th>Lazarus</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Parent organization</strong></td>
+<td>RGB espionage unit</td>
+<td>RGB + Workers&#39; Party Office 41, etc.</td>
+</tr>
+<tr>
+<td><strong>Primary motivation</strong></td>
+<td>Pure espionage</td>
+<td>Espionage +<strong>foreign-currency acquisition (financial crime)</strong></td>
+</tr>
+<tr>
+<td><strong>Targeted assets</strong></td>
+<td>Government documents, human intelligence, communications</td>
+<td>Government +<strong>financial institutions, crypto exchanges, DeFi</strong></td>
+</tr>
+<tr>
+<td><strong>Supply-chain pattern</strong></td>
+<td>Targeted SaaS compromise (e.g., sqgame)</td>
+<td>Broad NPM/3CX-style compromises of global developer tooling</td>
+</tr>
+</tbody></table>
+<p>The sqgame operation aligns precisely with the ScarCruft pattern.</p>
+<hr>
+<h2>6. BirdCall — Analysis of the New Android Variant</h2>
+<h3>6.1 Internal Codename zhuagou (抓狗) — Not Mere Naming, but a Lineage Clue</h3>
+<p>The internal codename of the Android BirdCall, as identified in the ESET report, is the Chinese <strong>zhuagou (抓狗)</strong>. ESET&#39;s text glosses this literally as &quot;catching dogs.&quot; This analysis argues that the term goes beyond literal Chinese: it is <strong>established jargon in the Chinese hacker community</strong>.</p>
+<h4>6.1.1 What zhuagou (抓狗) Means in the Chinese Hacker Community</h4>
+<p>In Chinese cracking, malware, and game-cheat communities, &quot;抓狗&quot; has been used since approximately 2012 as a standard module-name designation for:</p>
+<ul>
+<li><strong>Account/credential harvesting</strong> — usernames, passwords, session tokens, certificate files</li>
+<li><strong>User tracking</strong> — location, behavior, login times, contact-graph mapping</li>
+<li><strong>Log harvesting</strong> — keystrokes, messages, call logs, etc.</li>
+<li><strong>Detection and hooking</strong> — hooking target processes for data extraction</li>
+<li><strong>Target acquisition</strong> — identifying, isolating, and gaining control of victims</li>
+</ul>
+<p>In short, &quot;抓狗&quot; is not the literal &quot;catching dogs&quot; a casual Chinese speaker would parse, but <strong>a standard naming convention for information-collection / tracking / credential-theft modules used in the Chinese hacker scene for nearly 14 years</strong>. It is a long-established jargon term widely seen across game cheats, trojans, and banking malware.</p>
+<h4>6.1.2 What It Means That This Tool Is Named zhuagou</h4>
+<p>ScarCruft&#39;s choice of zhuagou for its Android backdoor is not a matter of naming taste. It encodes three concurrent layers of meaning:</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Interpretation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Literal</strong></td>
+<td>Operators conceive of targets metaphorically as &quot;dogs&quot; — Yanbian ethnic Koreans and defectors are objectified as quarry to be tracked and captured.</td>
+</tr>
+<tr>
+<td><strong>Functional</strong></td>
+<td>The backdoor&#39;s actual capabilities (information collection, credential theft, tracking) align exactly with the standard feature set of the Chinese-hacker zhuagou module class.</td>
+</tr>
+<tr>
+<td><strong>Genealogical</strong></td>
+<td>The tool&#39;s direct ancestor is plausibly a member of the Chinese-hacker zhuagou module lineage. ScarCruft did not create the tool ex nihilo; it more likely<strong>acquired, ported, and enhanced the code, ideas, and techniques of an existing Chinese information-collection module</strong>.</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>📍 <strong>Original contribution of this analysis</strong>: ESET&#39;s report treats zhuagou as a literal translation (&quot;catching dogs&quot;). From the perspective of this archive, which has tracked Korean and Chinese hacker-scene activity, <strong>the naming is a decisive lineage clue</strong>. We assess that ScarCruft incorporated an existing Chinese-scene zhuagou-class module, upgraded it, and folded it into its own operations.</p>
+</blockquote>
+<h4>6.1.3 Circumstantial Evidence for China → DPRK Tool Acquisition</h4>
+<p>Circumstantial evidence supporting hypothesis KJ-7:</p>
+<ul>
+<li>A publicly available Windows BirdCall dump (SHA-1: <code>B06110E0FEB7592872E380B7E3B8F77D80DD1108</code>) was <strong>uploaded to VirusTotal from China on 15 July 2024</strong>. This sample closely resembles the BirdCall in this campaign, suggesting collection by a Chinese security researcher or analyst.</li>
+<li>The Android port&#39;s package name retains <code>com.example.zhuagou.SplashScreen</code>, which violates standard package-naming conventions (reverse-DNS domains). <strong><code>com.example</code> is the default sample namespace from Android development tutorials</strong>and reads as a marker of<strong>a quickly repackaged existing codebase</strong>.</li>
+<li>ScarCruft&#39;s history of tool acquisition: the group has previously absorbed and reworked external tools, notably RokRAT (first analyzed by Cisco Talos in 2017). The acquisition of the zhuagou lineage continues this pattern.</li>
+<li>A broader China → DPRK cyber-tool transfer pattern: multiple security vendors have reported flows of Chinese-scene game-cheat and banking-trojan tools into DPRK, Iranian, and Russian APT operations. The zhuagou case is interpretable as one instance of this flow.</li>
+</ul>
+<blockquote>
+<p>⚠ <strong>Confidence caveat</strong>: This analysis is <strong>lexical and circumstantial inference</strong> rather than a definitive attribution backed by primary technical evidence such as code-equivalence comparisons. Confidence is rated &quot;Medium-High&quot; (KJ-7). A stronger claim would require comparison between the decompiled output of zhuagou-class Chinese-scene tools and the BirdCall Android implementation.</p>
+</blockquote>
+<h3>6.2 Version History</h3>
+<table>
+<thead>
+<tr>
+<th>Version</th>
+<th>Estimated Compile Date</th>
+<th>Notable Changes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>v1.0</strong></td>
+<td>~ October 2024</td>
+<td>Initial deployment</td>
+</tr>
+<tr>
+<td><strong>v1.3 / v1.5</strong></td>
+<td>Early-to-mid 2025</td>
+<td>Command additions and stabilization</td>
+</tr>
+<tr>
+<td><strong>v2.0</strong></td>
+<td>~ June 2025</td>
+<td><strong>Strengthened obfuscation</strong> (MITRE T1406)</td>
+</tr>
+</tbody></table>
+<p>Seven versions were deployed over roughly eight months — an average refresh interval of 5–6 weeks. This indicates not a one-off tool but an <strong>active operational platform</strong>showing<strong>patterns of evasion aligned with the OS-update cycle and antivirus detection/update cycles</strong>. The cadence is notably similar to Android&#39;s security-patch cycle, suggesting <strong>continuous updates targeted at evading Android security improvements</strong>.</p>
+<h3>6.3 Core Capabilities</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Personal data collection</strong></td>
+<td>Contacts, SMS messages, call logs</td>
+</tr>
+<tr>
+<td><strong>File collection</strong></td>
+<td>Full directory enumeration of external storage → staging files of targeted extensions</td>
+</tr>
+<tr>
+<td><strong>Targeted extensions</strong></td>
+<td><code>.jpg .doc .docx .xls .xlsx .ppt .pptx .txt .hwp .pdf .m4a .p12</code></td>
+</tr>
+<tr>
+<td><strong>Screen capture</strong></td>
+<td>Periodic screenshots when the <code>scr</code> flag is enabled</td>
+</tr>
+<tr>
+<td><strong>Audio recording</strong></td>
+<td>Microphone-area recording when <code>rec</code> is enabled —<strong>restricted to local time 19:00–22:00</strong></td>
+</tr>
+<tr>
+<td><strong>Remote update</strong></td>
+<td>Auto-loads new APK versions via the <code>MP_SEND_FILE</code> command</td>
+</tr>
+<tr>
+<td><strong>C&amp;C communication</strong></td>
+<td>HTTPS via okhttp3, Zoho WorkDrive API</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>🔍 <strong>Operational meaning of the 19:00–22:00 audio window</strong>: Restricting audio collection to the evening hours — when targets are most likely to be with family or in private gatherings — is not mere automation but <strong>a HUMINT-augmenting design intended to map the target&#39;s family and associates</strong>. This reaffirms the operation&#39;s espionage character.</p>
+</blockquote>
+<h3>6.4 Background Persistence — The Silent-MP3 Trick</h3>
+<p>A noteworthy technique observed in some versions: <strong>looping playback of a silent MP3 file in the background</strong> to evade the OS&#39;s background-process termination policies. This design ensures stable audio capture when recording is enabled and represents a relatively new TTP for sustaining background espionage in mobile environments.</p>
+<h3>6.5 Commands — A Subset of the Windows Set</h3>
+<p>Android BirdCall implements a <strong>subset of the Windows command set</strong>. Commands not implemented on Android include shell execution (<code>MP_ACTION_SHELL</code>), HTTP port scanning (<code>MP_ACTION_WEBSCAN</code>), word-processor macro enablement (<code>MP_ACTIONS_MORE</code>), and browser credential theft. <strong>However, all core espionage capabilities are ported.</strong></p>
+<hr>
+<h2>7. Korea-Specific Threat — Simultaneous <code>.p12</code> and <code>.hwp</code> Targeting</h2>
+<h3>7.1 <code>.p12</code> — Korean Public/Financial Certificates</h3>
+<p>The PKCS#12 container format <code>.p12</code> is a global standard, but <strong>carries a particularly distinctive meaning in Korea</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Korean assets stored in <code>.p12</code> files</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Public Certificate (구 공인인증서, now Joint Certificate)</strong> — required for Government24, Hometax, Internet banking, and securities trading</td>
+</tr>
+<tr>
+<td><strong>Financial Certificate</strong> — co-issued by banks; combined password + certificate authentication</td>
+</tr>
+<tr>
+<td><strong>Code-signing certificates</strong> — for software signing</td>
+</tr>
+<tr>
+<td><strong>S/MIME email certificates</strong> — for government and enterprise secure mail</td>
+</tr>
+</tbody></table>
+<p>If a victim&#39;s <code>.p12</code> is exfiltrated and the corresponding password is captured via keylogging, screen capture, or SMS one-time-code interception, the attacker reaches a state of <strong>direct authenticated login to the victim&#39;s Korean bank, brokerage, and government-service accounts</strong>. Given that many Yanbian ethnic Koreans hold Korean certificates for cross-border travel, remittances, and pension reception, this is a decisive asset.</p>
+<h3>7.2 <code>.hwp</code> — Hancom Office Documents</h3>
+<p><code>.hwp</code> is the standard format of Hancom Office and the <strong>de facto standard document format of the Korean government, public agencies, and many Korean enterprises</strong>. ScarCruft has a documented history of <code>.hwp</code> exploitation (e.g., EPS-handling flaws).</p>
+<table>
+<thead>
+<tr>
+<th>Information types implied by <code>.hwp</code> targeting</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Official documents from government and public agencies (immigration, tax, welfare, etc.)</td>
+</tr>
+<tr>
+<td>Documents from Korean NGOs and religious organizations (defector-support NGOs heavily use <code>.hwp</code>)</td>
+</tr>
+<tr>
+<td>Legal materials from law firms and attorneys</td>
+</tr>
+<tr>
+<td>Community publications: school and church bulletins, etc.</td>
+</tr>
+</tbody></table>
+<h3>7.3 The Combined Significance of Targeting Both Extensions</h3>
+<p>The simultaneous appearance of <code>.p12</code> and <code>.hwp</code> <strong>on the same backdoor&#39;s targeted-extension list is not coincidence</strong>. The pairing addresses two operational axes at once:</p>
+<table>
+<thead>
+<tr>
+<th>Axis</th>
+<th><code>.hwp</code></th>
+<th><code>.p12</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Purpose</strong></td>
+<td>Map the target&#39;s Korean social activity (with whom, what is exchanged)</td>
+<td>Direct access to the target&#39;s Korean assets</td>
+</tr>
+<tr>
+<td><strong>Value</strong></td>
+<td>Intelligence value (intel)</td>
+<td>Operational value</td>
+</tr>
+<tr>
+<td><strong>Combined effect</strong></td>
+<td><strong>Identification of the target&#39;s Korean network → direct authenticated penetration via certificate</strong></td>
+<td></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>📍 <strong>Original judgment of this report</strong>: ESET&#39;s text simply lists the targeted extensions. From the Korean security community&#39;s perspective, the combination of these two extensions should be reinterpreted not as an incidental side-effect of espionage but as <strong>a core pillar of the operation&#39;s design</strong>. This report flags this interpretation as the most important Korea-side implication of the incident.</p>
+</blockquote>
+<h3>7.4 <code>.m4a</code> — Additional Significance of Voice Recordings</h3>
+<p>The inclusion of <code>.m4a</code> deserves attention. It is not merely a generic music format but <strong>the default format produced by the native voice-recording apps on iPhone and some Android devices</strong>. By targeting voice files the victim has already recorded — meeting notes, phone-call recordings, voice memos — the attacker complements the backdoor&#39;s own time-restricted (19:00–22:00) microphone capture by harvesting <strong>pre-existing audio assets the victim themselves created</strong>.</p>
+<hr>
+<h2>8. Indicators of Compromise (IoCs)</h2>
+<h3>8.1 File Hashes (SHA-1)</h3>
+<table>
+<thead>
+<tr>
+<th>SHA-1</th>
+<th>Filename</th>
+<th>Detection</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>01A33066FBC6253304C92760916329ABD50C3191</code></td>
+<td>sqybhs.apk</td>
+<td>Android/Spy.Agent.EXM</td>
+<td>Trojanized game with Android BirdCall <strong>v2.0</strong></td>
+</tr>
+<tr>
+<td><code>03E3ECE9F48CF4104AAFC535790CA2FB3C6B26CF</code></td>
+<td>ybht.apk</td>
+<td>Android/Spy.Agent.EGE</td>
+<td>Android BirdCall <strong>v1.3</strong></td>
+</tr>
+<tr>
+<td><code>2B81F78EC4C3F8D6CF8F677D141C5D13C35333AF</code></td>
+<td>sqybhs.apk</td>
+<td>Android/Spy.Agent.EGE</td>
+<td>Android BirdCall <strong>v1.5</strong></td>
+</tr>
+<tr>
+<td><code>59A9B9D47AE36411B277544F25AD2CC955D8DD2C</code></td>
+<td>ybht.apk</td>
+<td>Android/Spy.Agent.EGE</td>
+<td>Android BirdCall <strong>v1.0</strong></td>
+</tr>
+<tr>
+<td><code>7356D7868C81499FB4E720F7C9530E5763B4C1D0</code></td>
+<td>sqybhs.apk</td>
+<td>Android/Spy.Agent.EGE</td>
+<td>Android BirdCall <strong>v1.0</strong></td>
+</tr>
+<tr>
+<td><code>FC0C691DB7E2D2BD3B0B4C1E24D18DF72168B7D9</code></td>
+<td>sqybhs.apk</td>
+<td>Android/Spy.Agent.EGE</td>
+<td>Android BirdCall <strong>v1.5</strong></td>
+</tr>
+<tr>
+<td><code>95BDB94F6767A3CCE6D92363BBF5BC84B786BDB0</code></td>
+<td>mono.dll</td>
+<td>Win32/TrojanDownloader.Agent.ILQ</td>
+<td>Trojanized mono library</td>
+</tr>
+<tr>
+<td><code>409C5ACAED587F62F7E23DA47F72C4D9EC3144D9</code></td>
+<td>(downloader)</td>
+<td>Win32/TrojanDownloader.Agent.ILQ</td>
+<td>RokRAT-loading downloader</td>
+</tr>
+<tr>
+<td><code>B06110E0FEB7592872E380B7E3B8F77D80DD1108</code></td>
+<td>(BirdCall dump)</td>
+<td>Win64/Agent.EGN</td>
+<td>Uploaded from China to VT on 2024-07-15 — closely resembles this campaign</td>
+</tr>
+</tbody></table>
+<h3>8.2 Network IoCs</h3>
+<p><strong>Primary compromise infrastructure (sqgame)</strong></p>
+<ul>
+<li><code>sqgame.com[.]cn</code> / <code>xiazai.sqgame.com[.]cn</code> — <code>39.106.249[.]68</code> (Alibaba Hangzhou)</li>
+<li><code>sqgame[.]net</code> — compromised primary domain</li>
+</ul>
+<p><strong>Compromised Korean hosting (payload/configuration staging)</strong></p>
+<ul>
+<li><code>1980food.co[.]kr</code> — <code>211.239.117[.]117</code> — Android BirdCall configuration image</li>
+<li><code>inodea[.]com</code> — <code>114.108.128[.]157</code> — Android BirdCall configuration image</li>
+<li><code>www.lawwell.co[.]kr</code> — <code>221.143.43[.]214</code> — shellcode + clean mono library</li>
+<li><code>colorncopy.co[.]kr</code> / <code>swr.co[.]kr</code> — <code>222.231.2[.]20</code> — shellcode</li>
+<li><code>sejonghaeun[.]com</code> — <code>222.231.2[.]23</code> — clean mono library</li>
+<li><code>cndsoft.co[.]kr</code> — <code>222.231.2[.]41</code> — shellcode</li>
+</ul>
+<p><strong>Zoho WorkDrive accounts (12 identified — Android BirdCall C&amp;C)</strong></p>
+<ul>
+<li><code>tomasalfred37@zohomail[.]com</code></li>
+<li><code>kalimaxim279@zohomail[.]com</code></li>
+<li><code>smithbentley0617@zohomail[.]com</code></li>
+<li><code>michaellarrow19@zohomail[.]com</code></li>
+<li><code>amandakurth94@zohomail[.]com</code></li>
+<li><code>rexmedina89@zohomail[.]com</code></li>
+<li><code>alishaross751@zohomail[.]com</code></li>
+<li><code>jamesdeeds385@zohomail[.]com</code></li>
+<li><code>joyceluke505@zohomail[.]com</code></li>
+<li><code>marjoriemiller280@zohomail[.]com</code></li>
+<li><code>teresadaniels200@zohomail[.]com</code></li>
+<li><code>michaelgiesen62@zohomail[.]com</code></li>
+</ul>
+<p><strong>Other</strong></p>
+<ul>
+<li><code>ipinfo[.]io/json</code> — location lookup (legitimate service; blocking impacts normal use)</li>
+</ul>
+<h3>8.3 Behavioral-Detection Hints</h3>
+<ul>
+<li>Regular calls from Korean IPs to the Zoho WorkDrive API within a single time window (typically 19:00–22:00)</li>
+<li>Presence of <code>com.example.zhuagou.*</code> or <code>com.mob.util.MobSs</code> package trees on Android devices</li>
+<li>Application behavior that simultaneously searches external storage for <code>.p12</code> and <code>.hwp</code> files</li>
+<li>Traces of <code>mono.dll</code> being modified and then restored to its clean version within minutes</li>
+</ul>
+<hr>
+<h2>9. MITRE ATT&amp;CK Mapping</h2>
+<h3>9.1 Enterprise (Windows Chain)</h3>
+<table>
+<thead>
+<tr>
+<th>Tactic</th>
+<th>Technique</th>
+<th>Application</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Resource Development</td>
+<td>T1584.004 (Compromise Infrastructure: Server)</td>
+<td>Six Korean sites + sqgame compromise</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>T1585.003 (Establish Accounts: Cloud Accounts)</td>
+<td>12 Zoho WorkDrive accounts</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>T1587.001 (Develop Capabilities: Malware)</td>
+<td>New Android BirdCall development</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>T1608.001 (Stage Capabilities: Upload Malware)</td>
+<td>Trojanized APKs uploaded to sqgame</td>
+</tr>
+<tr>
+<td><strong>Initial Access</strong></td>
+<td><strong>T1195.002 (Supply Chain Compromise: Software)</strong></td>
+<td>sqgame update-server tampering</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>T1059.003 (Windows Command Shell)</td>
+<td>BirdCall shell commands</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1027.013 / T1140 (encryption/decoding)</td>
+<td>Patched-mono.dll shellcode</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1070.004 (Indicator Removal: File Deletion)</td>
+<td><strong>Self-cleanup — replacing with clean mono</strong></td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1480.001 (Environmental Keying)</td>
+<td>Loading chain encrypted with computer-specific keys</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1497 (Sandbox Evasion)</td>
+<td>VM/analysis-tool checks</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>T1555 (Credentials from Password Stores)</td>
+<td>Browser credentials</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>T1046 / T1082 / T1083</td>
+<td>Network/system/file enumeration</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>T1005 / T1056.001 / T1113 / T1115 / T1119 / T1125 / T1560</td>
+<td>Keylogging/screenshots/clipboard/automated collection/webcam/archive</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>T1071.001 / T1090 / T1102.002</td>
+<td>HTTP/proxy/bidirectional cloud</td>
+</tr>
+<tr>
+<td>Exfiltration</td>
+<td>T1020 / T1041 / T1567.002</td>
+<td>Automated/C2/cloud exfil</td>
+</tr>
+</tbody></table>
+<h3>9.2 Mobile (Android Chain)</h3>
+<table>
+<thead>
+<tr>
+<th>Tactic</th>
+<th>Technique</th>
+<th>Application</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Initial Access</strong></td>
+<td><strong>T1474.003 (Compromise Software Supply Chain)</strong></td>
+<td>sqgame APK trojanization</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1406 (Obfuscated Files)</td>
+<td>v2.0 obfuscation</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1407 (Download New Code at Runtime)</td>
+<td>Self-update mechanism</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1541 (Foreground Persistence)</td>
+<td>Silent MP3 + startForeground</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>T1420 / T1422 / T1426</td>
+<td>File/network/system enumeration</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>T1429 (Audio Capture)</td>
+<td><strong>Microphone recording (19:00–22:00)</strong></td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>T1430 (Location Tracking)</td>
+<td>Use of ipinfo.io</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>T1513 (Screen Capture)</td>
+<td>Screenshots</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>T1532 (Archive Collected Data)</td>
+<td>Compression/encryption</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>T1533 (Data from Local System)</td>
+<td><strong>Targeted extensions including <code>.p12</code> and <code>.hwp</code></strong></td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>T1636.002 / .003 / .004</td>
+<td>Call logs/contacts/SMS</td>
+</tr>
+<tr>
+<td>C2</td>
+<td>T1437.001 / T1481.002</td>
+<td>HTTPS / Zoho WorkDrive bidirectional</td>
+</tr>
+<tr>
+<td>Exfiltration</td>
+<td>T1646 (Exfiltration Over C2 Channel)</td>
+<td>Exfiltration to C2</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>10. Response Recommendations</h2>
+<h3>10.1 P0 — Immediate (within 24 hours)</h3>
+<table>
+<thead>
+<tr>
+<th>Audience</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>sqgame users (Yanbian and Korea)</strong></td>
+<td>Isolate device immediately. Run full scans with ESET, V3, or Malwarebytes. Strongly recommend wipe and reset. Assume screen, call, and message records may have been exfiltrated.</td>
+</tr>
+<tr>
+<td><strong>Korean financial/government certificate holders who are sqgame users</strong></td>
+<td><strong>Revoke and reissue <code>.p12</code> files immediately.</strong> Change all certificate passwords. Audit the past 30 days of internet-banking, Government24, and Hometax access.</td>
+</tr>
+<tr>
+<td><strong>Domestic ISPs and CDNs</strong></td>
+<td>Block the §8.2 IoC domains and IPs. Notify operators of compromised Korean sites.</td>
+</tr>
+<tr>
+<td><strong>KISA / Financial Security Institute</strong></td>
+<td>Issue uniform notifications and remediation-inspection guidance to operators of compromised Korean hosting sites.</td>
+</tr>
+</tbody></table>
+<h3>10.2 P1 — Short-term (within 7 days)</h3>
+<table>
+<thead>
+<tr>
+<th>Audience</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Defector-support NGOs</strong></td>
+<td>Conduct organization-wide device inspections. On Android, where possible, disable installation from unknown sources and enforce Google Play Protect.</td>
+</tr>
+<tr>
+<td><strong>Government and public agencies using Hancom Office</strong></td>
+<td>Strengthen sender verification for external <code>.hwp</code> attachments. Audit macro-disabling settings.</td>
+</tr>
+<tr>
+<td><strong>NIS / DCC (Defense Counterintelligence Command)</strong></td>
+<td>Reflect this incident in ScarCruft activity assessments. Evaluate the likelihood of expansion to Korea-resident ethnic Koreans and defectors using identical TTPs.</td>
+</tr>
+<tr>
+<td><strong>Mobile security vendors</strong></td>
+<td>Apply Android/Spy.Agent.EGE / EXM signatures. Add behavioral rules detecting simultaneous targeted-extension searches.</td>
+</tr>
+</tbody></table>
+<h3>10.3 P2 — Structural (within 30 days)</h3>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Supply-chain integrity</strong></td>
+<td>Consider mandating code-signing verification on update channels for gaming and social applications. Maintain a separate monitoring track for diaspora-community-targeted apps.</td>
+</tr>
+<tr>
+<td><strong>Cloud C&amp;C detection</strong></td>
+<td>Establish behavior-analysis-based detection rules for legitimate-cloud API calls (Zoho WorkDrive, pCloud, Yandex Disk). Pure blocking has high user impact.</td>
+</tr>
+<tr>
+<td><strong>Human safety</strong></td>
+<td>Standardize digital-hygiene training programs for defectors and human-rights activists (in coordination with the Ministry of Unification and NGOs). Apply principles of device separation (work/personal), messenger isolation, and no on-device storage of <code>.p12</code>.</td>
+</tr>
+<tr>
+<td><strong>CTI information sharing</strong></td>
+<td>Strengthen the Korean-language analysis and redistribution of primary sources such as this ESET report. Reduce the lag inherent in current dependence on English primary sources.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>11. Strategic Implications</h2>
+<h3>11.1 What Distinguishes This Operation from Prior ScarCruft Campaigns</h3>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>Earlier ScarCruft Operations</th>
+<th>sqgame Operation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Target population</strong></td>
+<td>South Korean government, defense, media</td>
+<td><strong>Civilian diaspora community</strong></td>
+</tr>
+<tr>
+<td><strong>Platform</strong></td>
+<td>Windows-centric</td>
+<td><strong>Windows + Android multi-platform</strong></td>
+</tr>
+<tr>
+<td><strong>Supply-chain shape</strong></td>
+<td>Spear-phishing dominant</td>
+<td><strong>Wholesale takeover of a legitimate gaming platform</strong></td>
+</tr>
+<tr>
+<td><strong>Tool genealogy</strong></td>
+<td>Self-developed RokRAT family</td>
+<td><strong>Acquired/upgraded Chinese zhuagou module (assessed)</strong></td>
+</tr>
+<tr>
+<td><strong>Humanitarian risk</strong></td>
+<td>Information theft</td>
+<td><strong>Identity/location exposure → potential physical harm</strong></td>
+</tr>
+</tbody></table>
+<h3>11.2 Humanitarian Perspective</h3>
+<p>The most concerning aspect of this operation is not data theft. The contacts, SMS, call logs, location, and audio recordings collected from Yanbian-resident ethnic Koreans&#39; and defectors&#39; devices are <strong>directly usable by the DPRK regime to identify the target&#39;s family, associates, and concealment routes</strong>.</p>
+<p>Historical patterns show that DPRK defector tracking proceeds <strong>digital reconnaissance → in-country tracking via human assets → family hostage-taking and forced repatriation</strong>. Material collected by this BirdCall campaign is sufficient to seed the first stage of that chain.</p>
+<h3>11.3 National-Security Implications</h3>
+<p>This incident implies the following:</p>
+<ol>
+<li><p><strong>&quot;Koreans outside Korea&quot; must fall within the responsibility scope of South Korean cybersecurity.</strong> The Korean diaspora across Yanbian, Central Asia, and Japan are direct DPRK-APT targets, and cybersecurity support for them should be elevated to a digital-dimension agenda within foreign and unification policy.</p>
+</li>
+<li><p><strong>The era of mobile-espionage platforms has fully arrived.</strong> Android BirdCall is ScarCruft&#39;s first dedicated mobile backdoor. Comparable patterns are likely to spread to other DPRK groups such as Lazarus and Kimsuky.</p>
+</li>
+<li><p><strong>Legitimate-cloud C&amp;C is now standard practice.</strong>The use of Zoho WorkDrive, pCloud, Yandex Disk, and similar legitimate SaaS for C&amp;C is no longer novel — it is a<strong>standard operational pattern</strong>. Block-only responses have clear limits; the shift toward behavior-based detection is overdue.</p>
+</li>
+<li><p><strong>SMB-hosting security in Korea.</strong> Six Korean domains were drafted as compromised hosts in this single campaign. The effectiveness and reach of KISA&#39;s SMB-security inspection programs warrants reassessment.</p>
+</li>
+<li><p><strong>The importance of tracking tool acquisition and lineage.</strong>As the zhuagou case suggests, DPRK APTs do not create tools ex nihilo; they repeatedly<strong>acquire and rework existing Chinese- and Russian-scene hacker tools</strong>. Korean CTI analysis must develop the capacity to track <strong>tool genealogy</strong> beyond the IoCs of any single campaign — a multilayered analytical practice combining lexical analysis, source-code comparison, and operator-OPSEC patterns.</p>
+</li>
+</ol>
+<blockquote>
+<p>📍 <strong>Final assessment</strong>: The ScarCruft / sqgame operation is <strong>a paradigmatic case of a state-aligned APT taking wholesale possession of a diaspora community&#39;s infrastructure and converting it into a HUMINT asset</strong>. South Korean cybersecurity policy should preemptively prepare for the possibility that this pattern will not remain confined to Yanbian, but extend to the digital infrastructure (community apps, current-affairs media, religious/NGO self-hosting) of Korea-resident ethnic Koreans, Central Asian Koryo-saram, Korean Japanese, and Korean Americans.</p>
+</blockquote>
+<hr>
+<h2>12. References</h2>
+<h3>12.1 Primary Sources</h3>
+<ol>
+<li>ESET Research / Filip Jurčacko, <em>&quot;A rigged game: ScarCruft compromises gaming platform in a supply-chain attack&quot;</em>, WeLiveSecurity, 2026-05-05. <a href="https://www.welivesecurity.com/en/eset-research/rigged-game-scarcruft-compromises-gaming-platform-supply-chain-attack/">https://www.welivesecurity.com/en/eset-research/rigged-game-scarcruft-compromises-gaming-platform-supply-chain-attack/</a></li>
+<li>ESET GitHub IoC repository — <code>eset/malware-ioc/tree/master/scarcruft</code>. <a href="https://github.com/eset/malware-ioc/tree/master/scarcruft">https://github.com/eset/malware-ioc/tree/master/scarcruft</a></li>
+<li>MITRE ATT&amp;CK G0067 — APT37 (ScarCruft). <a href="https://attack.mitre.org/groups/G0067/">https://attack.mitre.org/groups/G0067/</a></li>
+</ol>
+<h3>12.2 ScarCruft Background</h3>
+<ol start="4">
+<li>ESET, <em>&quot;Who&#39;s swimming in South Korean waters? Meet ScarCruft&#39;s Dolphin&quot;</em>, 2022-11-30. <a href="https://www.welivesecurity.com/2022/11/30/whos-swimming-south-korean-waters-meet-scarcrufts-dolphin/">https://www.welivesecurity.com/2022/11/30/whos-swimming-south-korean-waters-meet-scarcrufts-dolphin/</a></li>
+<li>S2W, <em>&quot;Matryoshka — Variant of RokRAT (APT37/ScarCruft)&quot;</em>, 2021. <a href="https://medium.com/s2wblog/matryoshka-variant-of-rokrat-apt37-scarcruft-69774ea7bf48">https://medium.com/s2wblog/matryoshka-variant-of-rokrat-apt37-scarcruft-69774ea7bf48</a></li>
+<li>AhnLab Security Emergency Response Center (ASEC), <em>RokRAT analysis report</em>, 2021. <a href="https://www.ahnlab.com/ko/contents/content-center/30164">https://www.ahnlab.com/ko/contents/content-center/30164</a></li>
+</ol>
+<h3>12.3 Comparable Supply-Chain Attacks</h3>
+<ol start="7">
+<li>ESET, <em>&quot;Operation NightScout: Supply-chain attack targets online gaming in Asia&quot;</em>, 2021-02-01. <a href="https://www.welivesecurity.com/2021/02/01/operation-nightscout-supply-chain-attack-online-gaming-asia/">https://www.welivesecurity.com/2021/02/01/operation-nightscout-supply-chain-attack-online-gaming-asia/</a></li>
+<li>ESET, <em>&quot;Linux malware strengthens links between Lazarus and the 3CX supply-chain attack&quot;</em>, 2023-04-20. <a href="https://www.welivesecurity.com/2023/04/20/linux-malware-strengthens-links-lazarus-3cx-supply-chain-attack/">https://www.welivesecurity.com/2023/04/20/linux-malware-strengthens-links-lazarus-3cx-supply-chain-attack/</a></li>
+</ol>
+<h3>12.4 Related Reports in This CTI Archive</h3>
+<ol start="9">
+<li><a href="./Cti%202026%200422%20mcp%20en.MD"><code>CTI-2026-0422-MCP</code></a> — UNC1069 / Sapphire Sleet and DPRK supply-chain poisoning scenarios</li>
+<li><a href="./CTI-2026-0420-VERCEL_EN.md"><code>CTI-2026-0420-VERCEL</code></a> — comparative supply-chain pattern (ShinyHunters)</li>
+<li><code>CTI-2026-0320-CORUNA</code> — mobile and zero-day threat ecosystem</li>
+</ol>
+<hr>
+<h2>Appendix A. Glossary</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ScarCruft (APT37)</strong></td>
+<td>DPRK-aligned espionage APT group active since 2012. Multiple aliases including Reaper, Group123, and Inky Squid.</td>
+</tr>
+<tr>
+<td><strong>BirdCall</strong></td>
+<td>ScarCruft&#39;s signature backdoor family. Discovered by ESET in 2021. An evolution of RokRAT. Android port added in 2024.</td>
+</tr>
+<tr>
+<td><strong>RokRAT</strong></td>
+<td>ScarCruft&#39;s first-stage RAT, frequently used as a loader for BirdCall.</td>
+</tr>
+<tr>
+<td><strong>zhuagou (抓狗)</strong></td>
+<td>Internal codename of Android BirdCall. Literally &quot;catching dogs&quot; in plain Chinese, but established within the Chinese hacker scene since around 2012 as standard jargon for information-collection / credential-theft / user-tracking modules — suggesting the tool&#39;s lineage may originate from the Chinese hacker community.</td>
+</tr>
+<tr>
+<td><strong>Yanbian (延边)</strong></td>
+<td>Korean Autonomous Prefecture in eastern Jilin Province, China. Borders the DPRK. The principal first-transit zone for North Korean defectors.</td>
+</tr>
+<tr>
+<td><strong>Supply-chain attack</strong></td>
+<td>An attack that compromises a trusted third party (vendor or platform) to gain indirect access to the actual end target.</td>
+</tr>
+<tr>
+<td><strong>Trojanization</strong></td>
+<td>Insertion of malicious code into a legitimate program such that the original functionality is preserved while backdoor behavior is added.</td>
+</tr>
+<tr>
+<td><strong><code>.p12</code> (PKCS#12)</strong></td>
+<td>Standard container format for certificates and private keys. In Korea, widely used as the Joint Certificate / Financial Certificate format.</td>
+</tr>
+<tr>
+<td><strong><code>.hwp</code></strong></td>
+<td>Standard document format of Hancom Office. The de facto standard format of the South Korean government and public agencies.</td>
+</tr>
+<tr>
+<td><strong>Foreground Persistence</strong></td>
+<td>Technique used on Android to evade background-process termination policies, e.g., via the startForeground API or by playing silent media.</td>
+</tr>
+<tr>
+<td><strong>Tool genealogy</strong></td>
+<td>An analytical dimension within CTI that traces how the code, ideas, and techniques of a malicious tool originate within one group and propagate to or are acquired by another.</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>— End of Report —</em></p>
+<p><strong>© 2026 Dennis Kim · Cyber Threat Intelligence Division</strong>
+<a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+<p><em>This report is an independent English-language analysis based primarily on public material from ESET Research. It does not represent the official position of ESET, sqgame, or any related organization.</em></p>
+<p><code>TLP:GREEN</code> · <code>CTI-2026-0507-SCARCRUFT</code> · Published: 2026-05-07</p>
+<blockquote>
+<p><em>&quot;The backdoor&#39;s codename was zhuagou. That was not merely a naming choice — it exposed at once the operators&#39; conception of who the targets are and a clue to where the tool itself came from.&quot; — CTI-2026-0507</em></p>
+</blockquote>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0507-SCARCRUFT_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTI-2026-0611 | RoguePlanet &amp; MiniPlasma — Microsoft Windows 제로데이 익스플로잇 공개 — VibeQuant</title>
+  <meta name="description" content="완전히 패치된 최신 Windows 10/11 시스템에서도 로컬 권한 상승(LPE)을 허용하는 두 건의 제로데이 취약점 그룹, RoguePlanet 과 MiniPlasma 가 보안 커뮤니티에 연이어 공개되어 즉각적인 위협을 야기하고 있다." />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-cti-2026-0611-rogueplanet-miniplasma-239bf85e/" />
+  <meta property="og:title" content="CTI-2026-0611 | RoguePlanet &amp; MiniPlasma — Microsoft Windows 제로데이 익스플로잇 공개" />
+  <meta property="og:description" content="완전히 패치된 최신 Windows 10/11 시스템에서도 로컬 권한 상승(LPE)을 허용하는 두 건의 제로데이 취약점 그룹, RoguePlanet 과 MiniPlasma 가 보안 커뮤니티에 연이어 공개되어 즉각적인 위협을 야기하고 있다." />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-cti-2026-0611-rogueplanet-miniplasma-239bf85e/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=6" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"CTI-2026-0611 | RoguePlanet & MiniPlasma — Microsoft Windows 제로데이 익스플로잇 공개","description":"완전히 패치된 최신 Windows 10/11 시스템에서도 로컬 권한 상승(LPE)을 허용하는 두 건의 제로데이 취약점 그룹, RoguePlanet 과 MiniPlasma 가 보안 커뮤니티에 연이어 공개되어 즉각적인 위협을 야기하고 있다.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-cti-2026-0611-rogueplanet-miniplasma-239bf85e/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0611-ROGUEPLANET_MINIPLASMA_KR.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-11","dateModified":"2026-06-11","inLanguage":"ko"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://vibequant.cc/">Home</a>
+        <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 기타 CTI</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 CTI</p>
+        <h1>CTI-2026-0611 | RoguePlanet &amp; MiniPlasma — Microsoft Windows 제로데이 익스플로잇 공개</h1>
+        <p class="article-dates"><time datetime="2026-06-11">발행 2026.06.11</time></p>
+        
+        <p class="lede">완전히 패치된 최신 Windows 10/11 시스템에서도 로컬 권한 상승(LPE)을 허용하는 두 건의 제로데이 취약점 그룹, RoguePlanet 과 MiniPlasma 가 보안 커뮤니티에 연이어 공개되어 즉각적인 위협을 야기하고 있다.</p>
+        
+      </header>
+      <div class="article-body prose"><h2>요약 (Executive Summary)</h2>
+<p>완전히 패치된 최신 Windows 10/11 시스템에서도 로컬 권한 상승(LPE)을 허용하는 두 건의 제로데이 취약점 그룹, <strong>RoguePlanet</strong>과 <strong>MiniPlasma</strong>가 보안 커뮤니티에 연이어 공개되어 즉각적인 위협을 야기하고 있다.</p>
+<ul>
+<li><strong>RoguePlanet (CVE-2026-45586):</strong> 레이스 컨디션 기반 LPE로, 완전한 SYSTEM 권한 획득 PoC 코드가 공개됨</li>
+<li><strong>MiniPlasma (CVE-2026-50507 + CVE-2026-49160):</strong>CTFMON 권한 상승 결함과 &#39;HTTP/2 Bomb&#39; DoS 취약점으로 구성;<strong>이미 실제 공격에 활발히 악용 중</strong></li>
+</ul>
+<p>6월 패치 화요일(KB5094126 등)이 적용되지 않은 모든 Windows 시스템은 즉각적인 패치 적용이 필요하다.</p>
+<hr>
+<h2>목차</h2>
+<ol>
+<li><a href="#1-%EC%82%AC%EA%B1%B4-%EA%B0%9C%EC%9A%94">사건 개요</a></li>
+<li><a href="#2-%EC%B7%A8%EC%95%BD%EC%A0%90-%EC%83%81%EC%84%B8-%EB%B6%84%EC%84%9D">취약점 상세 분석</a></li>
+<li><a href="#3-mitre-attck-%EB%A7%A4%ED%95%91">MITRE ATT&amp;CK 매핑</a></li>
+<li><a href="#4-%EC%B9%A8%ED%95%B4%EC%A7%80%ED%91%9C-ioc">침해지표 (IoC)</a></li>
+<li><a href="#5-%EC%98%81%ED%96%A5-%EB%B2%94%EC%9C%84">영향 범위</a></li>
+<li><a href="#6-%EB%8C%80%EC%9D%91-%EA%B6%8C%EA%B3%A0-recommendations">대응 권고 (Recommendations)</a></li>
+<li><a href="#7-%EB%B6%84%EC%84%9D%EA%B0%80-%ED%8F%89%EA%B0%80-%EB%B0%8F-%ED%95%9C%EA%B3%84">분석가 평가 및 한계</a></li>
+<li><a href="#8-%EC%B0%B8%EA%B3%A0-%EC%9E%90%EB%A3%8C">참고 자료</a></li>
+</ol>
+<hr>
+<h2>1. 사건 개요</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>사고 그룹 A</strong></td>
+<td>RoguePlanet (CVE-2026-45586)</td>
+</tr>
+<tr>
+<td><strong>사고 그룹 B</strong></td>
+<td>MiniPlasma (CVE-2026-50507, CVE-2026-49160)</td>
+</tr>
+<tr>
+<td><strong>공개 시점</strong></td>
+<td>2026년 6월 (패치 화요일 전후)</td>
+</tr>
+<tr>
+<td><strong>영향 대상</strong></td>
+<td>완전 패치 상태의 Windows 10 / Windows 11</td>
+</tr>
+<tr>
+<td><strong>취약점 유형</strong></td>
+<td>로컬 권한 상승(LPE), 서비스 거부(DoS)</td>
+</tr>
+<tr>
+<td><strong>악용 상태</strong></td>
+<td>MiniPlasma —<strong>활발히 악용 중 (Actively Exploited)</strong></td>
+</tr>
+<tr>
+<td><strong>PoC 공개</strong></td>
+<td>RoguePlanet —<strong>완전한 PoC 코드 공개</strong></td>
+</tr>
+<tr>
+<td><strong>패치 여부</strong></td>
+<td>2026년 6월 패치 화요일(KB5094126 등) 포함</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. 취약점 상세 분석</h2>
+<h3>2.1 RoguePlanet — CVE-2026-45586</h3>
+<h4>개요</h4>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>CVE</strong></td>
+<td>CVE-2026-45586</td>
+</tr>
+<tr>
+<td><strong>유형</strong></td>
+<td>로컬 권한 상승 (Local Privilege Escalation, LPE)</td>
+</tr>
+<tr>
+<td><strong>원인</strong></td>
+<td>레이스 컨디션 (Race Condition)</td>
+</tr>
+<tr>
+<td><strong>최대 권한</strong></td>
+<td>NT AUTHORITY\SYSTEM (전체 시스템 권한)</td>
+</tr>
+<tr>
+<td><strong>PoC 공개</strong></td>
+<td>예 (완전한 개념 증명 코드 공개)</td>
+</tr>
+<tr>
+<td><strong>CVSS</strong></td>
+<td>TBD (공식 점수 확인 필요)</td>
+</tr>
+</tbody></table>
+<h4>기술 분석</h4>
+<p>RoguePlanet은 Windows 커널 또는 시스템 서비스 내의 <strong>레이스 컨디션(경쟁 조건) 취약점</strong>을 악용한다. 공격자는 낮은 권한의 로컬 사용자 계정으로 접근한 뒤, 레이스 컨디션을 트리거하여 <strong>NT AUTHORITY\SYSTEM</strong>수준의 전체 시스템 권한을 획득할 수 있다.<strong>주요 특성:</strong></p>
+<ul>
+<li>완전히 업데이트된 Windows 10/11 시스템에서도 동작 (패치 적용 전)</li>
+<li>완전한 PoC 코드가 공개되어 스킬 임계값이 낮아짐</li>
+<li>일부 보안 전문가는 PoC의 <strong>안정성(reliability)</strong> 에 의문을 제기</li>
+<li>그러나 커뮤니티 내 신속한 분석과 변형이 이루어질 가능성이 매우 높음</li>
+</ul>
+<p><strong>공격 시나리오:</strong></p>
+<ol>
+<li>공격자가 낮은 권한으로 시스템에 로컬 접근 확보 (피싱, 초기 침투 등)</li>
+<li>RoguePlanet PoC 또는 변형 코드 실행</li>
+<li>레이스 컨디션 성공 시 SYSTEM 권한 획득</li>
+<li>이후 자격 증명 덤프, 지속성 유지, 횡적 이동 가능</li>
+</ol>
+<hr>
+<h3>2.2 MiniPlasma — CVE-2026-50507 + CVE-2026-49160</h3>
+<h4>개요</h4>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>CVE (권한 상승)</strong></td>
+<td>CVE-2026-50507</td>
+</tr>
+<tr>
+<td><strong>CVE (DoS)</strong></td>
+<td>CVE-2026-49160</td>
+</tr>
+<tr>
+<td><strong>유형 1</strong></td>
+<td>권한 상승 (Privilege Escalation) — CTFMON 프레임워크</td>
+</tr>
+<tr>
+<td><strong>유형 2</strong></td>
+<td>서비스 거부 (DoS) — &#39;HTTP/2 Bomb&#39;</td>
+</tr>
+<tr>
+<td><strong>악용 상태</strong></td>
+<td><strong>활발히 악용 중 (Actively Exploited in the Wild)</strong></td>
+</tr>
+<tr>
+<td><strong>영향 서비스</strong></td>
+<td>Collaborative Translation Framework (CTFMON), HTTP/2 서비스</td>
+</tr>
+</tbody></table>
+<h4>CVE-2026-50507: CTFMON 권한 상승</h4>
+<p><strong>CTFMON(Collaborative Translation Framework Monitor)</strong>은 Windows 텍스트 서비스와 언어 입력 처리를 담당하는 시스템 구성 요소다. CVE-2026-50507은 이 프레임워크의<strong>접근 제어 결함</strong>으로, 낮은 권한의 프로세스가 CTFMON의 특권 컨텍스트를 악용하여 권한을 상승시킬 수 있다.</p>
+<p><strong>공격 특성:</strong></p>
+<ul>
+<li>Windows 텍스트 서비스가 활성화된 모든 Windows 10/11 환경에 영향</li>
+<li>이미 실제 위협 행위자에 의해 적극 악용 중</li>
+<li>원격 코드 실행(RCE)으로의 체이닝 가능성 존재</li>
+</ul>
+<h4>CVE-2026-49160: HTTP/2 Bomb (서비스 거부)</h4>
+<p><strong>HTTP/2 Bomb</strong>은 HTTP/2 프로토콜의 헤더 압축 메커니즘(HPACK)을 악용하여 소량의 악성 패킷으로 서버 또는 서비스에<strong>치명적인 리소스 소진</strong>을 유발하는 서비스 거부 공격이다.</p>
+<p><strong>공격 특성:</strong></p>
+<ul>
+<li>Windows의 HTTP/2 스택을 처리하는 서비스 전반에 영향</li>
+<li>소량의 악성 요청으로 대규모 메모리·CPU 소진 유발</li>
+<li>IIS, .NET 기반 웹 서비스, Azure Functions 등 Windows HTTP/2 스택 사용 환경에 위험</li>
+</ul>
+<hr>
+<h2>3. MITRE ATT&amp;CK 매핑</h2>
+<table>
+<thead>
+<tr>
+<th>Tactic</th>
+<th>Technique ID</th>
+<th>Technique Name</th>
+<th>관련 취약점</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Privilege Escalation</td>
+<td>T1068</td>
+<td>Exploitation for Privilege Escalation</td>
+<td>CVE-2026-45586 (RoguePlanet), CVE-2026-50507 (CTFMON)</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>T1203</td>
+<td>Exploitation for Client Execution</td>
+<td>CVE-2026-45586 PoC 실행</td>
+</tr>
+<tr>
+<td>Impact</td>
+<td>T1499.004</td>
+<td>Endpoint Denial of Service: Application or System Exploitation</td>
+<td>CVE-2026-49160 (HTTP/2 Bomb)</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1055</td>
+<td>Process Injection</td>
+<td>SYSTEM 권한 획득 후 프로세스 인젝션 가능</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>T1003</td>
+<td>OS Credential Dumping</td>
+<td>SYSTEM 권한 획득 후 자격 증명 덤프 가능</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 침해지표 (IoC)</h2>
+<blockquote>
+<p>⚠️ 현재 공개된 PoC 기반 행위 지표입니다. 추가 IoC는 공식 분석 결과 발표 후 업데이트 예정.</p>
+</blockquote>
+<h3>4.1 CVE-2026-45586 (RoguePlanet) 행위 기반 IoC</h3>
+<table>
+<thead>
+<tr>
+<th>유형</th>
+<th>패턴/값</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>프로세스</td>
+<td>낮은 권한 프로세스 → SYSTEM 컨텍스트 이상 전환</td>
+<td>비정상 권한 상승 탐지</td>
+</tr>
+<tr>
+<td>이벤트 로그</td>
+<td>Windows Security Log: Event ID 4672 (특수 권한 할당) 연속 발생</td>
+<td>레이스 컨디션 트리거 흔적</td>
+</tr>
+<tr>
+<td>이벤트 로그</td>
+<td>Event ID 4688 (새 프로세스 생성) — 부모 프로세스 권한 불일치</td>
+<td>비정상 프로세스 생성</td>
+</tr>
+</tbody></table>
+<h3>4.2 CVE-2026-50507 (CTFMON LPE) 행위 기반 IoC</h3>
+<table>
+<thead>
+<tr>
+<th>유형</th>
+<th>패턴/값</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>프로세스</td>
+<td><code>ctfmon.exe</code> 비정상 자식 프로세스 생성</td>
+<td>CTFMON 악용 탐지</td>
+</tr>
+<tr>
+<td>이벤트 로그</td>
+<td>Event ID 4673 (권한 있는 서비스 호출) — CTFMON 관련</td>
+<td>이상 호출 패턴</td>
+</tr>
+<tr>
+<td>레지스트리</td>
+<td><code>HKLM\SOFTWARE\Microsoft\CTF</code> 비정상 접근</td>
+<td>CTFMON 프레임워크 조작</td>
+</tr>
+</tbody></table>
+<h3>4.3 CVE-2026-49160 (HTTP/2 Bomb) 네트워크 IoC</h3>
+<table>
+<thead>
+<tr>
+<th>유형</th>
+<th>패턴/값</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>네트워크</td>
+<td>소량 HTTP/2 요청 → 비정상적 서버 리소스 급증</td>
+<td>Bomb 패턴 탐지</td>
+</tr>
+<tr>
+<td>성능</td>
+<td>CPU/메모리 급격한 소진 (HTTP/2 처리 중)</td>
+<td>DoS 영향 징후</td>
+</tr>
+<tr>
+<td>로그</td>
+<td>IIS/W3SVC 오류 로그: HTTP/2 스트림 처리 실패 급증</td>
+<td>서비스 장애</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. 영향 범위</h2>
+<h3>5.1 영향 받는 시스템</h3>
+<table>
+<thead>
+<tr>
+<th>시스템</th>
+<th>CVE-2026-45586</th>
+<th>CVE-2026-50507</th>
+<th>CVE-2026-49160</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows 10 (모든 버전, 패치 미적용)</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Windows 11 (모든 버전, 패치 미적용)</td>
+<td>✅</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>Windows Server (HTTP/2 사용 환경)</td>
+<td>해당 없음</td>
+<td>조사 중</td>
+<td>✅</td>
+</tr>
+</tbody></table>
+<h3>5.2 고위험 환경</h3>
+<ul>
+<li><strong>VDI/원격 데스크톱 환경</strong>: 다수 사용자가 동일 시스템 접근 → LPE 공격 위험 극대화</li>
+<li><strong>HTTP/2 기반 웹 서비스</strong>: IIS, .NET Core, Azure Functions 호스팅 환경</li>
+<li><strong>보안 솔루션 미배포 엔드포인트</strong>: PoC 공개로 낮아진 공격 임계값</li>
+</ul>
+<hr>
+<h2>6. 대응 권고 (Recommendations)</h2>
+<h3>🔴 즉각 조치 (24시간 이내)</h3>
+<ol>
+<li><p><strong>6월 패치 화요일 업데이트 즉시 적용</strong>-<strong>KB5094126</strong> 및 관련 보안 업데이트 즉시 설치</p>
+<ul>
+<li>Windows Update 설정 확인: 자동 업데이트 활성화 권고</li>
+<li>WSUS/SCCM 환경: 긴급 패치 배포 태스크 즉시 실행</li>
+</ul>
+</li>
+<li><p><strong>MiniPlasma 우선 패치</strong> (이미 악용 중)</p>
+<ul>
+<li>CVE-2026-50507, CVE-2026-49160은 현재 실제 공격에 사용 중</li>
+<li>패치 적용 전까지 HTTP/2 서비스 비활성화 또는 접근 제한 검토</li>
+</ul>
+</li>
+<li><p><strong>행위 기반 탐지 룰 즉시 업데이트</strong></p>
+<ul>
+<li>EDR/AV 솔루션의 시그니처 및 행위 탐지 정책 최신화</li>
+<li>CTFMON 관련 이상 행위 모니터링 룰 추가</li>
+</ul>
+</li>
+</ol>
+<h3>🟡 단기 조치 (7일 이내)</h3>
+<ol start="4">
+<li><p><strong>패치 미적용 시스템 접근 최소화</strong></p>
+<ul>
+<li>패치 불가 레거시 시스템: 네트워크 격리 또는 접근 제어 강화</li>
+<li>원격 데스크톱 / VDI 환경: 세션 모니터링 강화</li>
+</ul>
+</li>
+<li><p><strong>HTTP/2 서비스 점검</strong></p>
+<ul>
+<li>IIS 및 .NET 기반 서비스에서 HTTP/2 사용 여부 확인</li>
+<li>WAF 룰에 HTTP/2 헤더 압축 어뷰징 탐지 로직 추가</li>
+</ul>
+</li>
+<li><p><strong>이벤트 로그 모니터링 강화</strong></p>
+<ul>
+<li>Windows Security Log: Event ID 4672, 4673, 4688 집중 모니터링</li>
+<li>SIEM 알림 임계값 하향 조정</li>
+</ul>
+</li>
+</ol>
+<h3>🟢 중장기 조치 (30일 이내)</h3>
+<ol start="7">
+<li><p><strong>취약점 관리 프로세스 개선</strong></p>
+<ul>
+<li>PoC 공개 취약점에 대한 긴급 패치 SLA 단축 (72시간 이내)</li>
+<li>패치 화요일 후 72시간 내 전체 시스템 업데이트 완료 목표 수립</li>
+</ul>
+</li>
+<li><p><strong>최소 권한 원칙(PoLP) 강화</strong></p>
+<ul>
+<li>사용자 계정 권한 최소화 (LPE 공격의 선행 조건 제거)</li>
+<li>UAC(사용자 계정 컨트롤) 정책 강화</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>7. 분석가 평가 및 한계</h2>
+<h3>평가</h3>
+<p>두 취약점 그룹은 서로 다른 위험 특성을 지닌다:</p>
+<p><strong>RoguePlanet (CVE-2026-45586):</strong>PoC 코드 공개 자체가 위협의 실질적 확산을 의미한다. 레이스 컨디션 익스플로잇은 안정성이 낮을 수 있으나, 오픈소스 커뮤니티와 위협 행위자 모두 이를 빠르게 개선·변형할 능력이 있다.<strong>패치 적용이 완료된 시스템에서의 위협은 즉각 소멸하나, 패치 공백 기간이 가장 위험한 시점이다.</strong></p>
+<p><strong>MiniPlasma (CVE-2026-50507 + CVE-2026-49160):</strong>이미 실제 공격에 악용되고 있다는 점에서 RoguePlanet보다<strong>현재 위협 수준이 더 높다</strong>. 특히 CTFMON은 Windows 텍스트 서비스의 핵심 구성 요소로, 넓은 공격 면(attack surface)을 가진다. HTTP/2 Bomb는 인터넷 노출 서비스 운영 조직에 직접적인 가용성 위협을 제기한다.</p>
+<p>두 취약점 모두 공격 체인에서 <strong>초기 침투 이후 단계</strong>에 활용되는 LPE 성격이 강하므로, 초기 침투 방어(이메일 보안, 웹 필터링 등)와 병행하여 대응해야 한다.</p>
+<h3>⚠️ 분석 한계</h3>
+<ul>
+<li>취약점의 정확한 CVSS 점수는 공식 NVD 등록 완료 후 확인 필요</li>
+<li>RoguePlanet PoC의 실제 신뢰성/안정성은 독립 분석 후 재평가 예정</li>
+<li>MiniPlasma의 실제 악용 주체(위협 행위자 귀속)는 현재 미상</li>
+</ul>
+<hr>
+<h2>8. 참고 자료</h2>
+<ul>
+<li>Microsoft Security Response Center (MSRC) — June 2026 Patch Tuesday: <a href="https://msrc.microsoft.com/update-guide/">https://msrc.microsoft.com/update-guide/</a></li>
+<li>NVD CVE-2026-45586: <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-45586">https://nvd.nist.gov/vuln/detail/CVE-2026-45586</a></li>
+<li>NVD CVE-2026-50507: <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-50507">https://nvd.nist.gov/vuln/detail/CVE-2026-50507</a></li>
+<li>NVD CVE-2026-49160: <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-49160">https://nvd.nist.gov/vuln/detail/CVE-2026-49160</a></li>
+<li>CISA Known Exploited Vulnerabilities Catalog: <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog">https://www.cisa.gov/known-exploited-vulnerabilities-catalog</a></li>
+<li>MITRE ATT&amp;CK T1068: <a href="https://attack.mitre.org/techniques/T1068/">https://attack.mitre.org/techniques/T1068/</a></li>
+</ul>
+<hr>
+<p><sub>© 2026 HoKwang Kim (Dennis Kim) · Betalabs Inc. · This report is released under independent research and is provided for informational purposes. All findings are based on publicly available information at the time of writing.</sub></p>
+<p><sub>📌 리포트 파일명: <code>CTI-2026-0611-ROGUEPLANET_MINIPLASMA_KR.md</code> | 시리즈: CYBER-THREAT-INTELLIGENCE-REPORT</sub></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0611-ROGUEPLANET_MINIPLASMA_KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

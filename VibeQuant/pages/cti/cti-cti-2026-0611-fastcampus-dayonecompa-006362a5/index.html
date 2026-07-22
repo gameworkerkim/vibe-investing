@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTI-2026-0611 | FastCampus (Day1Company) Personal-Data Breach — Analysis of a Long-Dwell Intrusion via GitHub Master-Account Key Theft — VibeQuant</title>
+  <meta name="description" content="One line summary: Detection of GitHub credential theft was slow, and because sensitive information of corporate training students and instructors at…" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-cti-2026-0611-fastcampus-dayonecompa-006362a5/" />
+  <meta property="og:title" content="CTI-2026-0611 | FastCampus (Day1Company) Personal-Data Breach — Analysis of a Long-Dwell Intrusion via GitHub Master-Account Key Theft" />
+  <meta property="og:description" content="One line summary: Detection of GitHub credential theft was slow, and because sensitive information of corporate training students and instructors at…" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-cti-2026-0611-fastcampus-dayonecompa-006362a5/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=6" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-cti-2026-0611-fastcampus-dayonecompa-42d3b3f1/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-cti-2026-0611-fastcampus-dayonecompa-006362a5/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-cti-2026-0611-fastcampus-dayonecompa-42d3b3f1/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"CTI-2026-0611 | FastCampus (Day1Company) Personal-Data Breach — Analysis of a Long-Dwell Intrusion via GitHub Master-Account Key Theft","description":"One line summary: Detection of GitHub credential theft was slow, and because sensitive information of corporate training students and instructors at…","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-cti-2026-0611-fastcampus-dayonecompa-006362a5/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0611-FASTCAMPUS_DAYONECOMPANY_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-11","dateModified":"2026-06-19","inLanguage":"en"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://vibequant.cc/">Home</a>
+        <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 한국 침해 · 국내</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">한국 침해 · 국내</p>
+        <h1>CTI-2026-0611 | FastCampus (Day1Company) Personal-Data Breach — Analysis of a Long-Dwell Intrusion via GitHub Master-Account Key Theft</h1>
+        <p class="article-dates"><time datetime="2026-06-11">발행 2026.06.11</time> · <time datetime="2026-06-19">수정 2026.06.19</time></p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-cti-2026-0611-fastcampus-dayonecompa-42d3b3f1/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../cti/cti-cti-2026-0611-fastcampus-dayonecompa-006362a5/" data-lang="EN" aria-current="true">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">One line summary: Detection of GitHub credential theft was slow, and because sensitive information of corporate training students and instructors at…</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>⚠️ Alert Level: HIGH</strong>&gt;<strong>First Published: 2026-06-11</strong>|<strong>Last Updated: 2026-06-19</strong>|<strong>Version: v1.1</strong>|<strong>Language: English</strong>&gt;<strong>Author: HoKwang Kim (Dennis Kim)</strong> · Betalabs Inc. · <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a>
+<strong>ORCID:</strong><a href="https://orcid.org/0009-0002-0962-2175">0009-0002-0962-2175</a> ·<strong>GitHub:</strong> <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a>
+<strong>lang:</strong> en</p>
+</blockquote>
+<blockquote>
+<p><strong>📌 v1.1 Change Log (2026-06-19):</strong>This update preserves the v1.0 body (Chapters 1–12) unchanged and adds<strong>Appendix A — v1.1 Update (8-day post-incident tracking)</strong>at the end. Key updates: ① confirmation that this incident is part of a<strong>simultaneous &#39;GitHub credential theft&#39; incident cluster</strong>, not a standalone case; ② harm expansion to <strong>large-enterprise B2B corporate-training students and instructors (including Samsung Electronics)</strong>; ③ <strong>government (KISA / Broadcasting and Media Communications Commission) recommendations prohibiting credential storage on developer platforms</strong>; ④ <strong>concretization of regulatory and class-action risk</strong> (TVING class-action precedent; Logos / SKT fine precedents).</p>
+</blockquote>
+<p>One-line summary: Detection of GitHub credential theft was slow, and because sensitive information of corporate-training students and instructors at important Korean IT enterprises was also compromised, victims may become targets of social-engineering hacking and smartphone/telecom-infrastructure attacks. More critical than TVING.</p>
+<hr>
+<h2>Executive Summary</h2>
+<p>A large-scale personal-data breach occurred at <strong>Day1Company Co., Ltd.</strong>, which operates leading Korean online education platforms including <strong>FastCampus, Coloso, Myright, ZeroBase, Newsspresso, Lispick, Shiny English, and Wannerspeak</strong>.</p>
+<p>The attacker stole the <strong>GitHub service master-account key</strong>used by Day1Company and first entered the service on<strong>May 9, 2026</strong>. The company recognized the possibility of an incident on <strong>June 8</strong>—about <strong>30 days after initial intrusion</strong>. Leaked information includes names, email addresses, phone numbers, and encrypted passwords; for some customers, addresses, job/title information, and parcel-order memos are also assessed to have been included.</p>
+<p>Another problem this report highlights is <strong>notification delay</strong>. Although the company reported to authorities on June 9—the day after recognition (June 8)—the public notice to affected customers was posted only around <strong>16:00 on June 11</strong>. A notification gap of effectively <strong>about 72 hours or more</strong> from recognition raises serious issues under Personal Information Protection Act notification duties and victim protection.</p>
+<p>Given the nature of a lecture business with many outsourced and short-term workers cycling in and out, information-security monitoring may have been absent. It is highly possible that an internal employee account with some privileges was compromised and cascading access followed.</p>
+<blockquote>
+<p><strong>(v1.1 reinforcement)</strong>Post-incident tracking shows this case shares the<strong>same intrusion pattern as the concurrent TVING (recognized 6/3) incident (developer-platform credential theft → cloud/DB access)</strong>and is reassessed as part of the<strong>June cluster of domestic service personal-data breaches</strong>. See <strong>Appendix A</strong>.</p>
+</blockquote>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#1-incident-timeline">Incident Timeline</a></li>
+<li><a href="#2-attack-technique-analysis">Attack Technique Analysis</a></li>
+<li><a href="#3-scope-of-leaked-information">Scope of Leaked Information</a></li>
+<li><a href="#4-notification-delay--critical-analysis">Notification Delay — Critical Analysis</a></li>
+<li><a href="#5-mitre-attck-mapping">MITRE ATT&amp;CK Mapping</a></li>
+<li><a href="#6-indicators-of-compromise-ioc">Indicators of Compromise (IoC)</a></li>
+<li><a href="#7-impact-scope-and-secondary-harm-potential">Impact Scope and Secondary-Harm Potential</a></li>
+<li><a href="#8-recommendations--for-affected-customers">Recommendations — For Affected Customers</a></li>
+<li><a href="#9-github--google-account--gcp-protection-guide">GitHub · Google Account · GCP Protection Guide</a></li>
+<li><a href="#10-recommendations-for-enterprise-security-administrators">Recommendations for Enterprise Security Administrators</a></li>
+<li><a href="#11-analyst-assessment-and-limitations">Analyst Assessment and Limitations</a></li>
+<li><a href="#12-references">References</a></li>
+</ol>
+<ul>
+<li><strong><a href="#appendix-a-v11-update-2026-06-19--8-day-post-incident-tracking">Appendix A. v1.1 Update (2026-06-19)</a></strong></li>
+</ul>
+<hr>
+<h2>1. Incident Timeline</h2>
+<pre><code>[Unknown time]        GitHub master-account key (Secret/Token) stolen
+       │
+       ▼
+2026-05-09          First confirmed service intrusion
+       │             (~30 days of failed intrusion detection)
+       │
+       ▼
+2026-06-08          Day1Company recognizes possible incident
+                    → Threat blocking and remediation begun
+       │
+       ▼
+2026-06-09          Reported to relevant authorities (KISA, etc.)
+       │
+       ▼
+2026-06-10          First media reporting of the incident
+                    (no formal customer notice yet)
+       │
+       ▼
+2026-06-11 ~16:00   FastCampus notice posted
+                    &quot;Personal Information Leakage Notice [Day1Company]&quot;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Date/Time</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Estimated first intrusion</strong></td>
+<td>May 9, 2026</td>
+</tr>
+<tr>
+<td><strong>Incident recognition</strong></td>
+<td>June 8, 2026</td>
+</tr>
+<tr>
+<td><strong>Detection-failure period</strong></td>
+<td><strong>~30 days</strong></td>
+</tr>
+<tr>
+<td><strong>Authority report</strong></td>
+<td>June 9, 2026</td>
+</tr>
+<tr>
+<td><strong>Affected-customer notice</strong></td>
+<td>~16:00 June 11, 2026</td>
+</tr>
+<tr>
+<td><strong>Recognition → notice elapsed</strong></td>
+<td><strong>~72–80 hours</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Attack Technique Analysis</h2>
+<h3>2.1 Initial Access Vector: GitHub Master-Account Key Theft</h3>
+<p>Synthesizing the official notice and media reporting, the attacker achieved initial access by stealing the <strong>GitHub service master-account key (API Token / Secret)</strong> used by Day1Company.</p>
+<p>Common paths for GitHub master-account key theft include:</p>
+<pre><code>Possible theft paths (not officially confirmed; based on common patterns):
+
+① Hardcoded secret exposure in the code repository
+   (token stored in plaintext in source or config files)
+
+② CI/CD pipeline environment-variable theft
+   (exposed in GitHub Actions workflow config)
+
+③ Developer local-environment compromise
+   (malware on developer PC; theft of .gitconfig or ~/.git-credentials)
+
+④ GitHub OAuth token theft via phishing
+   (lure to fake login page)
+
+⑤ OAuth permission abuse by third-party apps/services
+   (token leakage from linked services)
+</code></pre>
+<h3>2.2 Long Dwell: ~30 Days of Detection Evasion</h3>
+<p>The most serious technical problem is that <strong>the intrusion went undetected for about 30 days from first entry (May 9) to recognition (June 8)</strong>. This suggests:</p>
+<ul>
+<li>Absence of continuous monitoring of GitHub access logs</li>
+<li>SIEM/DLP alerts for anomalous data-access patterns unset or nonfunctional</li>
+<li>Principle of least privilege (PoLP) not applied to master-account keys</li>
+<li>Audit logs of API token/secret usage not reviewed</li>
+</ul>
+<h3>2.3 Data-Exfiltration Method</h3>
+<p>The attacker is assessed to have used the GitHub master-account key to access Day1Company&#39;s <strong>service infrastructure</strong>and exfiltrate personal data from customer databases or related storage. Beyond simple code-repository access, the GitHub master-account key may have provided broad privileges via<strong>OIDC/OAuth connections to linked cloud infrastructure (including GCP)</strong>.</p>
+<hr>
+<h2>3. Scope of Leaked Information</h2>
+<h3>3.1 Officially Confirmed Leaked Fields</h3>
+<table>
+<thead>
+<tr>
+<th>Leaked Field</th>
+<th>Scope</th>
+<th>Sensitivity</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Name</td>
+<td>All affected customers</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Email address</td>
+<td>All affected customers</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Phone number</td>
+<td>All affected customers</td>
+<td><strong>Very high</strong></td>
+</tr>
+<tr>
+<td>Encrypted password</td>
+<td>All affected customers</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>Address</td>
+<td>Customers who entered it</td>
+<td><strong>Very high</strong></td>
+</tr>
+<tr>
+<td>Job / title</td>
+<td>Customers who entered it</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Parcel-order memo</td>
+<td>Assessed for relevant customers</td>
+<td>Medium</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ Payment information (card numbers, etc.) was not held on the platform and is stated by the company not to have been leaked</p>
+</blockquote>
+<h3>3.2 Affected Services</h3>
+<p>All Day1Company brands are expected to be in the potential impact zone.</p>
+<ul>
+<li><strong>FastCampus</strong> — Korea&#39;s largest IT/job-skills education platform</li>
+<li><strong>Coloso</strong> — Creative education platform (700,000+ cumulative members)</li>
+<li><strong>Myright</strong>-<strong>ZeroBase</strong>-<strong>Newsspresso</strong>-<strong>Lispick</strong>-<strong>Shiny English</strong>-<strong>Wannerspeak</strong></li>
+</ul>
+<h3>3.3 Practical Risk of &quot;Encrypted Passwords&quot;</h3>
+<p>The company announced passwords were leaked &quot;encrypted,&quot; but that does not guarantee safety.</p>
+<ul>
+<li>If the hash algorithm is weak (MD5, SHA-1) or applied without salt, restoration via rainbow tables or GPU cracking is possible</li>
+<li>Leaked email+password combinations can be used immediately for <strong>credential-stuffing attacks</strong>- Reuse of the same email/password on other services (Naver, Kakao, finance) can cause<strong>cascading harm</strong></li>
+</ul>
+<hr>
+<h2>4. Notification Delay — Critical Analysis</h2>
+<h3>4.1 Timeline Reconstruction</h3>
+<blockquote>
+<p><strong>Recognition: June 8 → Authority report: June 9 → Media: June 10 → Customer notice: ~16:00 June 11</strong>Day1Company recognized the incident on June 8 and reported to authorities on June 9. However,<strong>public notice to the affected customers themselves was not issued until ~16:00 on June 11</strong>—a notification gap of about <strong>72–80 hours</strong> from recognition.</p>
+</blockquote>
+<p>More serious is that <strong>media reported first (June 10)</strong>. Victims likely first learned their information had leaked from news articles rather than the company&#39;s official notice.</p>
+<h3>4.2 Possible Personal Information Protection Act Violation</h3>
+<p>Article 34 of the Personal Information Protection Act (notification and reporting of personal-data leakage, etc.) provides:</p>
+<blockquote>
+<p><strong>When a personal information controller becomes aware that personal information has been leaked, it shall without delay notify the relevant data subject.</strong>The key phrase is<strong>without delay.</strong>Legal and case-law interpretation generally tends to treat this as<strong>within 72 hours</strong>; the EU GDPR also specifies the same standard. Day1Company, despite being a listed company, was slow.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Duty</th>
+<th>Standard</th>
+<th>Day1Company Response</th>
+<th>Assessment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Authority report</td>
+<td>Without delay after recognition</td>
+<td>Next day after recognition (June 9)</td>
+<td>Prompt</td>
+</tr>
+<tr>
+<td>Victim notification</td>
+<td>Without delay after recognition</td>
+<td>~72–80 hours after recognition (afternoon June 11)</td>
+<td>Delayed</td>
+</tr>
+<tr>
+<td>Adequacy of notice content</td>
+<td>Circumstances, fields, harm-minimization methods</td>
+<td>Circumstances partly vague; scale &quot;under confirmation&quot;</td>
+<td>Insufficient</td>
+</tr>
+</tbody></table>
+<h3>4.3 Problems in the Notice Content</h3>
+<p>Analysis of the official notice (fastcampus.co.kr/info/notices/1960) shows the following problems.</p>
+<p><strong>① &quot;Stolen at an unknown time&quot; — opaque description of circumstances</strong></p>
+<blockquote>
+<p><em>&quot;The GitHub service master-account key value was stolen at an unknown time and&quot;</em></p>
+</blockquote>
+<p>The notice was posted without knowing when or how the key was stolen. It appears the notice was issued under criticism that hacking-incident notices were delayed. This means <strong>the notice was published before root-cause analysis was complete</strong>, making it hard for victims to understand and respond accurately.</p>
+<p><strong>② Leakage scale &quot;under assessment&quot;</strong>At notice time, even the exact number of victims had not been identified. Victims received a notice while unclear whether they themselves were affected.<strong>③ Absence of practical compensation measures</strong>The notice states compensation plans will be prepared after the leakage scale is confirmed. For affected customers, no practical measures—<strong>credit-monitoring services, compensation criteria, dedicated support channels</strong>—were offered to relieve immediate anxiety.</p>
+<p><strong>④ Intrusion duration (~30 days) not emphasized</strong>The fact that the attacker remained inside for<strong>about 30 days from May 9 to June 8</strong> is not stated in the notice. The scope of information leaked during that period may be far broader than listed fields; victims have a right to know. This will be clarified later through forensics and KISA reports.</p>
+<h3>4.4 Comparison: Gap Versus Domestic and International Response Cases</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Strong practice (reference)</th>
+<th>Day1Company</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Customer notification speed</td>
+<td>Within 24–48 hours of recognition</td>
+<td>After ~72–80 hours</td>
+</tr>
+<tr>
+<td>Scale identification</td>
+<td>Stated at notification</td>
+<td>&quot;Under confirmation&quot;</td>
+</tr>
+<tr>
+<td>Compensation</td>
+<td>Presented with notification</td>
+<td>Undetermined</td>
+</tr>
+<tr>
+<td>Cause transparency</td>
+<td>Detailed intrusion-path description</td>
+<td>&quot;Unknown time&quot;</td>
+</tr>
+<tr>
+<td>Victim support</td>
+<td>Dedicated report portal, free credit monitoring</td>
+<td>Phone/email inquiry guidance only</td>
+</tr>
+</tbody></table>
+<p><strong>In conclusion, Day1Company&#39;s response may fall short of even the minimum legal-duty threshold, and was a passive response far from victim-centered crisis communication.</strong></p>
+<hr>
+<h2>5. MITRE ATT&amp;CK Mapping</h2>
+<table>
+<thead>
+<tr>
+<th>Tactic</th>
+<th>Technique ID</th>
+<th>Technique Name</th>
+<th>Related Behavior</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Initial Access</td>
+<td>T1552.001</td>
+<td>Unsecured Credentials: Credentials In Files</td>
+<td>GitHub master-account key theft</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>T1078</td>
+<td>Valid Accounts</td>
+<td>Service access with stolen account key</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>T1098</td>
+<td>Account Manipulation</td>
+<td>Continued use of master-account key</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>T1087</td>
+<td>Account Discovery</td>
+<td>Access to accounts and DBs in the service</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>T1213</td>
+<td>Data from Information Repositories</td>
+<td>Collection from customer personal-data databases</td>
+</tr>
+<tr>
+<td>Exfiltration</td>
+<td>T1041</td>
+<td>Exfiltration Over C2 Channel</td>
+<td>External exfiltration of personal data</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1078.004</td>
+<td>Valid Accounts: Cloud Accounts</td>
+<td>Detection evasion via legitimate account-key use</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Indicators of Compromise (IoC)</h2>
+<blockquote>
+<p>⚠️ Publicly available information is extremely limited; the IoCs below require update after official investigation results are published.</p>
+</blockquote>
+<h3>6.1 Basic Incident Information</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Victim organization</td>
+<td>Day1Company Co., Ltd.</td>
+</tr>
+<tr>
+<td>Business registration number</td>
+<td>810-86-00658</td>
+</tr>
+<tr>
+<td>Affected services</td>
+<td>FastCampus, Coloso, Myright, ZeroBase, and others</td>
+</tr>
+<tr>
+<td>First confirmed intrusion date</td>
+<td>2026-05-09</td>
+</tr>
+<tr>
+<td>Incident recognition date</td>
+<td>2026-06-08</td>
+</tr>
+</tbody></table>
+<h3>6.2 How Victims Can Confirm</h3>
+<ul>
+<li>Day1Company customer center: ☎ 02-501-9396</li>
+<li>Email: <a href="mailto:customer-service@day1company.co.kr">customer-service@day1company.co.kr</a></li>
+<li>FastCampus notice: <a href="https://fastcampus.co.kr/info/notices/1960">https://fastcampus.co.kr/info/notices/1960</a></li>
+</ul>
+<hr>
+<h2>7. Impact Scope and Secondary-Harm Potential</h2>
+<h3>7.1 Primary Harm</h3>
+<ul>
+<li>Leakage of names, emails, phone numbers, encrypted passwords, addresses (partial), jobs (partial)</li>
+<li>Payment information confirmed not leaked (per company statement)</li>
+</ul>
+<h3>7.2 Secondary-Harm Scenarios</h3>
+<p><strong>① Credential Stuffing</strong>Login attempts on other services (Naver, Kakao, Coupang, Toss, banking apps) using leaked email + password combinations. Same-password reuse risks<strong>cascading multi-account takeover</strong>.</p>
+<p><strong>② Spear Phishing</strong>Name + email + phone combinations enable highly customized phishing emails/texts. Beware of messages impersonating &quot;FastCampus security alerts.&quot;<strong>③ Smishing</strong>Phone-number leakage enables malicious-URL texts impersonating &quot;personal-data leak notices.&quot;<strong>④ Voice-Phishing Linkage</strong>Name + phone + job combinations can be abused for social-engineering attacks (voice phishing, agency impersonation).<strong>⑤ Address-Information Abuse</strong></p>
+<p>For customers who entered addresses, potential use as a basis for physical threats (illegal visits, etc.) or further social engineering.</p>
+<hr>
+<h2>8. Recommendations — For Affected Customers</h2>
+<h3>Immediate Actions (Today)</h3>
+<p><strong>1. Immediately change FastCampus (Day1Company) account password</strong></p>
+<p><strong>2. Replace passwords on all services using the same password</strong></p>
+<p>Immediately change passwords on every service (email, finance, shopping, SNS) using the same or similar password.</p>
+<blockquote>
+<p><strong>Password principle:</strong>Different password per service + 12+ characters + mix of upper/lower/number/special characters<strong>3. Immediately enable 2FA on major services</strong>Enable OTP- or authenticator-app-based 2FA on Naver, Kakao, Google, finance apps, FastCampus, and all major services.<strong>4. Immediately ignore suspicious contact</strong></p>
+</blockquote>
+<ul>
+<li>Beware of emails/texts/calls impersonating &quot;FastCampus / Day1Company&quot;</li>
+<li>Do not click URLs; immediately refuse any re-request for personal data</li>
+</ul>
+<h3>Short-Term Actions (Within 3 Days)</h3>
+<p><strong>5. Email-account security check</strong></p>
+<ul>
+<li>Check access history of the leaked email account (overseas IP access)</li>
+<li>Check for anomalous email auto-forwarding rules</li>
+</ul>
+<p><strong>6. Strengthen financial-transaction monitoring</strong></p>
+<ul>
+<li>Check internet-banking login history</li>
+<li>Check card statements for anomalous transactions</li>
+<li>If needed, register with the Korea Federation of Banks personal-data exposure accident-prevention system: <a href="https://pd.kfb.or.kr/">https://pd.kfb.or.kr/</a></li>
+</ul>
+<p><strong>7. File harm reports</strong></p>
+<ul>
+<li>KISA: ☎ 118</li>
+<li>Personal Information Infringement Report Center: <a href="https://privacy.kisa.or.kr">https://privacy.kisa.or.kr</a></li>
+<li>National Police Agency Cyber Investigation Bureau: ☎ 182</li>
+</ul>
+<hr>
+<h2>9. GitHub · Google Account · GCP Protection Guide</h2>
+<p>This section provides a practical guide to protect Google/GCP environments linked to <strong>GitHub master-account key theft</strong>, the core intrusion path. Day1Company&#39;s infrastructure is GCP-based (storage.googleapis.com domain confirmed in business information).</p>
+<hr>
+<h3>9-A. GitHub Account and Organization Protection</h3>
+<h4>Authentication Hardening</h4>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Method</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Mandate 2FA</strong></td>
+<td>GitHub Settings → Password and authentication → Enable 2FA (TOTP or hardware key)</td>
+<td>Required</td>
+</tr>
+<tr>
+<td><strong>Register Passkey</strong></td>
+<td>Settings → Passkeys → Add passkey</td>
+<td>Strongly recommended</td>
+</tr>
+<tr>
+<td><strong>Re-review SSH keys</strong></td>
+<td>Settings → SSH and GPG keys → immediately delete unused keys</td>
+<td>Required</td>
+</tr>
+<tr>
+<td><strong>Audit OAuth app access</strong></td>
+<td>Settings → Applications → Authorized OAuth Apps</td>
+<td>Recommended</td>
+</tr>
+<tr>
+<td><strong>Least-privilege Personal Access Tokens</strong></td>
+<td>Settings → Developer settings → Personal access tokens → minimize Scopes, set expiry</td>
+<td>Required</td>
+</tr>
+</tbody></table>
+<h4>Secret Management</h4>
+<pre><code># Detect hardcoded secrets in the repository (gitleaks)
+brew install gitleaks        # macOS
+gitleaks detect --source .   # scan current repository
+
+# Full scan including history with truffleHog
+pip install truffleHog
+trufflehog git file://. --only-verified
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Secret-Management Principle</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Never hardcode</strong></td>
+<td>Do not put tokens/keys directly in <code>.env</code>, <code>config.yaml</code>, <code>settings.py</code>, etc.</td>
+</tr>
+<tr>
+<td><strong>Use GitHub Secrets</strong></td>
+<td>Register CI/CD secrets under Settings → Secrets and variables → Actions</td>
+</tr>
+<tr>
+<td><strong>Enable Secret Scanning</strong></td>
+<td>Settings → Code security → enable Secret scanning (including Push protection)</td>
+</tr>
+<tr>
+<td><strong>Check <code>.gitignore</code></strong></td>
+<td>Add <code>.env</code>, <code>*.pem</code>, <code>*_key.json</code>, <code>credentials*</code> patterns</td>
+</tr>
+<tr>
+<td><strong>Least-privilege tokens + expiry</strong></td>
+<td>Personal Access Token: allow only needed scopes; set expiry ≤ 90 days</td>
+</tr>
+</tbody></table>
+<h4>Organization Security Settings</h4>
+<pre><code>Organization Settings → Member privileges:
+  Require 2FA for all members
+  Require SAML SSO (Enterprise plan)
+  Base permissions: Read (least privilege)
+
+Organization Settings → Code security:
+  Dependabot alerts
+  Secret scanning
+  Push protection (block pushes containing secrets)
+
+Organization Settings → Audit log:
+  Enable Audit log streaming → SIEM integration
+</code></pre>
+<h4>Immediate Response on Compromise</h4>
+<pre><code># List all Personal Access Tokens via GitHub CLI
+gh auth token                           # confirm current token
+# → On the web: Settings &gt; Developer settings &gt; PATs &gt; Revoke all
+
+# Bulk-check organization OAuth app permissions
+# Settings → Third-party access → Restrict access
+</code></pre>
+<hr>
+<h3>9-B. Google Account Protection</h3>
+<h4>Account Security Hardening</h4>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Location</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Enable 2-Step Verification</strong></td>
+<td>myaccount.google.com → Security → 2-Step Verification</td>
+<td>Required</td>
+</tr>
+<tr>
+<td><strong>Register Google Passkey</strong></td>
+<td>myaccount.google.com → Security → Passkey</td>
+<td>Strongly recommended</td>
+</tr>
+<tr>
+<td><strong>Register security key (hardware)</strong></td>
+<td>Register FIDO2 keys such as YubiKey</td>
+<td>Required for high-risk accounts</td>
+</tr>
+<tr>
+<td><strong>Advanced Protection Program</strong></td>
+<td>g.co/advancedprotection</td>
+<td>Recommended for org admins</td>
+</tr>
+<tr>
+<td><strong>Review app passwords</strong></td>
+<td>Check legacy app-password list; delete unused</td>
+<td>Required</td>
+</tr>
+</tbody></table>
+<h4>Access Auditing</h4>
+<pre><code>Google account security checklist
+
+myaccount.google.com → Security:
+  Check recent security activity for anomalies
+  Connected devices → immediately sign out unrecognized devices
+  Review third-party app access (remove unnecessary apps)
+  Check email auto-forwarding rules (Gmail → Settings → Forwarding and POP/IMAP)
+  Keep recovery email/phone up to date
+</code></pre>
+<h4>Google Workspace (Administrators)</h4>
+<pre><code>admin.google.com:
+  Security → 2-Step Verification → force organization-wide
+  Security → Advanced settings → limit session duration
+  Reports → Audit → detect anomalous login activity
+  Users → minimize Super Admin accounts
+  Apps → Google Workspace → Drive → review external sharing settings
+</code></pre>
+<hr>
+<h3>9-C. Google Cloud Platform (GCP) Protection</h3>
+<p>GCP is accessible via GitHub Actions OIDC federation; GitHub master-account key theft can cascade.</p>
+<h4>IAM and Access Control</h4>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Method</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Minimize service-account keys</strong></td>
+<td>Prefer prohibiting service-account JSON key issuance → use OIDC/Workload Identity</td>
+<td>Required</td>
+</tr>
+<tr>
+<td><strong>Least privilege (PoLP)</strong></td>
+<td>IAM roles: ban Primitive roles (Owner, Editor) → use Predefined roles</td>
+<td>Required</td>
+</tr>
+<tr>
+<td><strong>Audit service-account keys</strong></td>
+<td>Immediately delete unused keys</td>
+<td>Required</td>
+</tr>
+<tr>
+<td><strong>Organization policy</strong></td>
+<td>Apply <code>constraints/iam.disableServiceAccountKeyCreation</code></td>
+<td>Strongly recommended</td>
+</tr>
+</tbody></table>
+<pre><code># List GCP service-account keys
+gcloud iam service-accounts list --project=[PROJECT_ID]
+gcloud iam service-accounts keys list \
+  --iam-account=[SA_EMAIL] \
+  --project=[PROJECT_ID]
+
+# Delete keys unused for 90+ days
+gcloud iam service-accounts keys delete [KEY_ID] \
+  --iam-account=[SA_EMAIL] \
+  --project=[PROJECT_ID]
+
+# Query anomalous IAM policy-change history (Cloud Audit Logs)
+gcloud logging read \
+  &#39;logName=&quot;projects/[PROJECT_ID]/logs/cloudaudit.googleapis.com%2Factivity&quot; \
+   AND protoPayload.methodName=&quot;SetIamPolicy&quot;&#39; \
+  --limit=50 --format=json
+</code></pre>
+<h4>Monitoring and Detection</h4>
+<pre><code># Enable Security Command Center
+gcloud services enable securitycenter.googleapis.com
+
+# Confirm Cloud Audit Logs fully enabled
+gcloud projects get-iam-policy [PROJECT_ID] \
+  --format=json | grep auditLogConfigs
+
+# Configure VPC Service Controls (sensitive-data protection)
+gcloud services enable accesscontextmanager.googleapis.com
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Monitoring Item</th>
+<th>GCP Service</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Full API-call audit</strong></td>
+<td>Cloud Audit Logs</td>
+<td>Record all data-access history</td>
+</tr>
+<tr>
+<td><strong>Anomalous-behavior detection</strong></td>
+<td>Security Command Center</td>
+<td>Automatic alerts on anomalous access</td>
+</tr>
+<tr>
+<td><strong>Service-account abuse detection</strong></td>
+<td>IAM Recommender</td>
+<td>Auto-identify excessive privileges</td>
+</tr>
+<tr>
+<td><strong>Data-leak prevention</strong></td>
+<td>Cloud DLP</td>
+<td>Detect exfiltration of data containing personal information</td>
+</tr>
+<tr>
+<td><strong>Network anomalies</strong></td>
+<td>VPC Flow Logs + Cloud Armor</td>
+<td>Detect anomalous traffic</td>
+</tr>
+</tbody></table>
+<h4>Immediate GCP Response on Suspected Compromise</h4>
+<pre><code># 1. Immediately disable all service-account keys
+gcloud iam service-accounts disable [SA_EMAIL] --project=[PROJECT_ID]
+
+# 2. Immediately revoke OAuth tokens (project-wide)
+gcloud projects remove-iam-policy-binding [PROJECT_ID] \
+  --member=&quot;serviceAccount:[SA_EMAIL]&quot; \
+  --role=&quot;[ROLE]&quot;
+
+# 3. Block anomalous source IPs (Cloud Armor)
+gcloud compute security-policies rules create 1000 \
+  --security-policy=[POLICY_NAME] \
+  --src-ip-ranges=[SUSPICIOUS_IP] \
+  --action=deny-403
+
+# 4. Contact Cloud Incident support
+# https://cloud.google.com/support/docs/incident-response
+</code></pre>
+<h4>Workload Identity Federation — GitHub CI/CD Without Service-Account Keys</h4>
+<p>Recommended architecture that fully removes service-account keys and replaces them with GitHub OIDC:</p>
+<pre><code># .github/workflows/deploy.yml
+jobs:
+  deploy:
+    permissions:
+      id-token: write   # required for OIDC token issuance
+      contents: read
+    steps:
+      - uses: google-github-actions/auth@v2
+        with:
+          workload_identity_provider: &#39;projects/[NUM]/locations/global/workloadIdentityPools/[POOL]/providers/[PROVIDER]&#39;
+          service_account: &#39;[SA_EMAIL]&#39;
+          # No JSON key file needed → key-theft risk eliminated at source
+</code></pre>
+<pre><code># Create Workload Identity Pool
+gcloud iam workload-identity-pools create &quot;github-pool&quot; \
+  --project=[PROJECT_ID] \
+  --location=&quot;global&quot; \
+  --display-name=&quot;GitHub Actions Pool&quot;
+
+# Register GitHub OIDC Provider
+gcloud iam workload-identity-pools providers create-oidc &quot;github-provider&quot; \
+  --project=[PROJECT_ID] \
+  --location=&quot;global&quot; \
+  --workload-identity-pool=&quot;github-pool&quot; \
+  --display-name=&quot;GitHub Provider&quot; \
+  --attribute-mapping=&quot;google.subject=assertion.sub,attribute.repository=assertion.repository&quot; \
+  --issuer-uri=&quot;https://token.actions.githubusercontent.com&quot;
+</code></pre>
+<hr>
+<h2>10. Recommendations for Enterprise Security Administrators</h2>
+<h3>Immediate Actions (Within 24 Hours)</h3>
+<ol>
+<li><strong>Immediately rotate GitHub master-account keys and all Personal Access Tokens</strong>2.<strong>Full audit of GCP service-account keys; delete unused keys</strong>3.<strong>Full review of 90 days of GitHub Audit Log</strong> — analyze anomalous access IPs and time windows</li>
+<li><strong>Rotate all secrets across CI/CD pipelines</strong>5.<strong>Review database access logs</strong> — check for anomalous bulk-query (SELECT *) patterns</li>
+</ol>
+<h3>Short-Term Actions (Within 7 Days)</h3>
+<ol start="6">
+<li><strong>Force 2FA for all GitHub Organization members</strong>7.<strong>Enable Secret Scanning + Push Protection</strong>8.<strong>Migrate to Workload Identity Federation</strong> (remove service-account keys)</li>
+<li><strong>Stream GitHub Audit Log into SIEM</strong>10.<strong>Re-review least privilege for personal-data access</strong> — improve architectures that allow master accounts direct customer-DB access</li>
+</ol>
+<h3>Medium-/Long-Term Actions (Within 30 Days)</h3>
+<ol start="11">
+<li><strong>Establish an IR playbook</strong> — include recognition → customer notification within 24 hours</li>
+<li><strong>Introduce regular security-audit systems</strong> — quarterly full checks of GitHub tokens and GCP service-account keys</li>
+<li><strong>Real-time monitoring of personal-data access logs</strong> — adopt DLP solutions</li>
+<li><strong>Consider Zero Trust architecture migration</strong></li>
+</ol>
+<hr>
+<h2>11. Analyst Assessment and Limitations</h2>
+<h3>Assessment</h3>
+<p>This incident is a compound case overlapping a <strong>technical failure of GitHub master-account key management</strong>, an <strong>operational failure of ~30 days of missed detection</strong>, and a <strong>legal/ethical failure of 72+ hours of notification delay</strong>.</p>
+<p>In particular, that <strong>a key stolen at an unknown time was used for a month</strong> suggests even minimal monitoring of GitHub access events was absent. GitHub provides Audit Log and token-access records by default; SIEM integration could have detected anomalous behavior much earlier.</p>
+<p>Notification delay is more serious. If victims first learned of the leak from media rather than the company&#39;s official notice, that can be interpreted as <strong>prioritizing corporate image management over victim protection</strong>. The Personal Information Protection Commission should investigate possible Personal Information Protection Act violations, and practical compensation measures should be prepared promptly.</p>
+<h3>Analysis Limitations</h3>
+<ul>
+<li>Attacker attribution, exact theft method, and actual victim count unconfirmed pending official investigation</li>
+<li>Hash algorithm type and salt application for leaked passwords not publicly confirmed</li>
+<li>Additional leaked fields (parcel memos, etc.) need official confirmation</li>
+<li>GCP-linked harm cannot be confirmed from currently public information</li>
+</ul>
+<hr>
+<h2>12. References</h2>
+<ul>
+<li>Day1Company official notice: <a href="https://fastcampus.co.kr/info/notices/1960">https://fastcampus.co.kr/info/notices/1960</a></li>
+<li>ZDNet Korea reporting (2026-06-11): <a href="https://zdnet.co.kr/view/?no=20260611163532">https://zdnet.co.kr/view/?no=20260611163532</a></li>
+<li>Nate News exclusive (2026-06-10): <a href="https://news.nate.com/view/20260610n32287">https://news.nate.com/view/20260610n32287</a></li>
+<li>Personal Information Protection Commission — personal-data infringement report: <a href="https://privacy.kisa.or.kr">https://privacy.kisa.or.kr</a></li>
+<li>KISA Personal Information Infringement Report Center: ☎ 118</li>
+<li>GitHub security docs — Secret Scanning: <a href="https://docs.github.com/en/code-security/secret-scanning">https://docs.github.com/en/code-security/secret-scanning</a></li>
+<li>GitHub Audit Log docs: <a href="https://docs.github.com/en/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/reviewing-the-audit-log-for-your-organization">https://docs.github.com/en/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/reviewing-the-audit-log-for-your-organization</a></li>
+<li>GCP Workload Identity Federation: <a href="https://cloud.google.com/iam/docs/workload-identity-federation">https://cloud.google.com/iam/docs/workload-identity-federation</a></li>
+<li>GCP security recommendations: <a href="https://cloud.google.com/security/best-practices">https://cloud.google.com/security/best-practices</a></li>
+<li>MITRE ATT&amp;CK T1552.001: <a href="https://attack.mitre.org/techniques/T1552/001/">https://attack.mitre.org/techniques/T1552/001/</a></li>
+<li>Personal Information Protection Act Article 34 (personal-data leak notification/reporting): <a href="https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EA%B0%9C%EC%9D%B8%EC%A0%95%EB%B3%B4%EB%B3%B4%ED%98%B8%EB%B2%95">https://www.law.go.kr/법령/개인정보보호법</a></li>
+</ul>
+<hr>
+<hr>
+<h1>Appendix A. v1.1 Update (2026-06-19) — 8-Day Post-Incident Tracking</h1>
+<blockquote>
+<p><strong>Update scope:</strong>This appendix reflects facts additionally confirmed between 6/12 and 6/19 after v1.0 publication (6/11). The v1.0 body was preserved unmodified; verification/revision of hypotheses in the body is separately summarized in<strong>A.6</strong>.</p>
+</blockquote>
+<h2>A.1 Update Summary (TL;DR)</h2>
+<table>
+<thead>
+<tr>
+<th>Update Item</th>
+<th>v1.0 (6/11)</th>
+<th>v1.1 (6/19) Update</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Incident character</strong></td>
+<td>Day1Company standalone incident</td>
+<td>Part of a<strong>simultaneous &#39;GitHub credential theft&#39; incident cluster</strong></td>
+</tr>
+<tr>
+<td><strong>Same-pattern incidents</strong></td>
+<td>(Unrecognized)</td>
+<td>TVING (recognized 6/3), ST Unitas, BGF Networks (CU POST), etc. — June cluster</td>
+</tr>
+<tr>
+<td><strong>Affected population</strong></td>
+<td>General members + instructors assessed</td>
+<td><strong>Large-enterprise B2B corporate-training students (incl. Samsung Electronics) notified</strong>; <strong>instructor harm officially confirmed</strong></td>
+</tr>
+<tr>
+<td><strong>Authority trends</strong></td>
+<td>Recognition/reporting only covered</td>
+<td><strong>KISA / Broadcasting and Media Communications Commission recommend prohibiting credential storage on developer platforms</strong> / CI·resident-number segregated-storage timeline shortened by 4 months</td>
+</tr>
+<tr>
+<td><strong>Legal risk</strong></td>
+<td>Notification-delay criticism level</td>
+<td><strong>Class action (TVING 1,051-person precedent) · fines (Logos KRW 500M · SKT record fine precedents)</strong> risk concretized</td>
+</tr>
+<tr>
+<td><strong>Leakage scale</strong></td>
+<td>&quot;Under confirmation&quot;</td>
+<td>Day1 scale still unpublished. Peer TVING observed at<strong>up to 13 million</strong> (industry estimate)</td>
+</tr>
+</tbody></table>
+<h2>A.2 Additional Timeline (Incident-Cluster View)</h2>
+<pre><code>2026-06-03   TVING breach recognized — AWS access-key revocation + GitHub credential replacement reported
+2026-06-04   BGF Networks (CU POST) unauthorized-access indicators confirmed (parcel operations)
+2026-06-08   Day1Company recognizes incident
+2026-06-09   Day1Company reports to authorities
+2026-06-11   Day1Company customer notice (v1.0 published)
+2026-06-12   &#39;GitHub key theft&#39; industrial-pattern analysis coverage expands / Day1 B2B·instructor harm reported
+             Broadcasting and Media Communications Commission advances CI·resident-number segregated-storage timeline by 4 months
+~2026-06-14  TVING users (1,051) file class (damages) suit (KRW 300,000 per person claimed)
+2026-06-16   Authorities&#39; recommendation prohibiting credential storage on developer platforms reported
+2026-06-19   v1.1 update (this appendix)
+</code></pre>
+<blockquote>
+<p>Day1Company&#39;s own <strong>leakage scale, compensation plan, and authority disposition</strong> remain officially unpublished as of 6/19. That means the &quot;scale unspecified · compensation undetermined&quot; state flagged in v1.0 has not been resolved after eight days.</p>
+</blockquote>
+<h2>A.3 &#39;GitHub Credential Theft&#39; Incident Cluster — Lateral Analysis</h2>
+<p>In June, security-industry analysis argued that the <strong>common intrusion clue in domestic online-service personal-data breaches is converging on &#39;credential-management failure in developer repositories (GitHub).&#39;</strong> The core is not mere personal-data leakage but attacks targeting development/operations access privileges that then reach DBs.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Day1Company</th>
+<th>TVING</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Recognition</strong></td>
+<td>2026-06-08</td>
+<td>2026-06-03</td>
+</tr>
+<tr>
+<td><strong>Core intrusion clue</strong></td>
+<td>GitHub master-account key theft</td>
+<td>GitHub credential replacement + AWS access-key revocation reported</td>
+</tr>
+<tr>
+<td><strong>Cloud</strong></td>
+<td>GCP assessed</td>
+<td>AWS</td>
+</tr>
+<tr>
+<td><strong>Leakage scale</strong></td>
+<td>Unpublished (&quot;under confirmation&quot;)</td>
+<td>Up to 13 million observed (industry estimate)</td>
+</tr>
+<tr>
+<td><strong>Additional concern</strong></td>
+<td>30-day long dwell</td>
+<td>Indicators of<strong>unauthorized query execution</strong> by hackers → concern of prior system takeover</td>
+</tr>
+<tr>
+<td><strong>Legal development</strong></td>
+<td>Unpublished</td>
+<td>1,051-user class action (KRW 300,000 per person claimed)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>In cloud-based services, the core security question has moved from &quot;where is the server&quot; to <strong>who can enter, with what privileges.</strong> This incident cluster is empirical evidence of that proposition.</p>
+</blockquote>
+<h2>A.4 B2B Cascading Exposure — Supply-Chain View</h2>
+<p>The most important newly confirmed fact in v1.1 is that <strong>harm expanded beyond general B2C members into the B2B corporate-training domain</strong>.</p>
+<ul>
+<li><strong>Large-enterprise corporate-training student notices:</strong>Day1Company has operated in-house training programs for specific enterprises; leakage notices were also sent to employees of large Korean firms including Samsung Electronics. This indicates Day1Company was in a<strong>processor (entrusted processing) position for client-employee information</strong>, raising issues of responsibility allocation between entruster and processor and clients&#39; secondary-notification duties.</li>
+<li><strong>Instructor (outsourced workforce) harm officially confirmed:</strong>Instructors are confirmed among affected parties. This directly touches the v1.0 summary hypothesis of<strong>many outsourced/short-term workers, absent security monitoring</strong>(verification results in A.6).<strong>Supply-Chain Risk Assessment</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>Exposure Path</th>
+<th>Affected Population</th>
+<th>Additional Risk</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>B2C members</td>
+<td>General students</td>
+<td>Credential stuffing · smishing (body §7.2)</td>
+</tr>
+<tr>
+<td>B2B entrustment</td>
+<td>Large-enterprise employees</td>
+<td>Combined with job/affiliation → <strong>targeted spearphishing</strong>; social-engineering entry to client internal networks</td>
+</tr>
+<tr>
+<td>Instructors · partners</td>
+<td>Outsourced workforce</td>
+<td>Combined with settlement/contract info → <strong>BEC (business email compromise)</strong> risk</td>
+</tr>
+</tbody></table>
+<h2>A.5 Regulatory and Legal Risk Reassessment</h2>
+<p>Synthesizing concurrent incidents and recent Personal Information Protection Commission (PIPC) disposition precedents, regulatory and litigation risk facing Day1Company is more concrete than at the v1.0 assessment point.</p>
+<table>
+<thead>
+<tr>
+<th>Comparative Precedent</th>
+<th>Key Facts</th>
+<th>Implications for Day1Company</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Law firm Logos</strong>(PIPC fine KRW 500M)</td>
+<td>Admin-account theft leaked ~180,000 litigation documents;<strong>notification delayed 1+ year after recognition</strong>; unencrypted storage · inadequate access control</td>
+<td>Notification delay and safety-measure duty violations as <strong>core fine grounds</strong> mean Day1&#39;s 72–80 hour delay and 30-day missed detection may be assessed as aggravating factors</td>
+</tr>
+<tr>
+<td><strong>SKT USIM leak</strong>(record fine; CEO charged · police investigation)</td>
+<td>Administrative suit against fine; expanded to criminal investigation</td>
+<td>Large incidents can unfold as<strong>administrative disposition → criminal liability → civil litigation</strong> in three stages</td>
+</tr>
+<tr>
+<td><strong>TVING class action</strong>(1,051 users, KRW 300,000 each)</td>
+<td>Contests not only &quot;safety-measure duty violation&quot; but also<strong>minimum-collection principle violation at collection/processing stage</strong></td>
+<td>Day1 may also face broad challenges on<strong>lawfulness of collection and entrustment management</strong>of member, instructor, and B2B information</td>
+</tr>
+<tr>
+<td>2. <strong>Safety-measure duty (Article 29)</strong> — Master-key hardcoding, 30-day missed detection, and inadequate access control are core.</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>3. <strong>Collection minimization · entrustment (Articles 3 · 26)</strong> — New front opened by TVING class action. Adequacy of processor management/supervision in B2B entrustment structures may be contested.</td>
+<td></td>
+<td></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠️ This item is a risk assessment based on public information; actual unlawfulness and disposition severity will be determined by PIPC investigation and judicial judgment. This is not legal advice.</p>
+</blockquote>
+<h2>A.6 Verification / Revision of v1.0 Analysis</h2>
+<p>For transparent tracking, post-hoc verification results of major v1.0 judgments are stated.</p>
+<table>
+<thead>
+<tr>
+<th>v1.0 Judgment</th>
+<th>v1.1 Verification Result</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&quot;Many outsourced/short-term workers; possible absent security monitoring&quot;</td>
+<td>Instructors confirmed among affected. Consistent with workforce-structure hypothesis</td>
+<td><strong>Partially verified</strong> (cannot conclude intrusion cause was a workforce account)</td>
+</tr>
+<tr>
+<td>&quot;Encryption ≠ safety; decryption · credential-stuffing risk&quot;</td>
+<td>Peer incident (TVING) raised industry consensus concern that source exposure can neutralize encryption</td>
+<td><strong>Reinforced</strong></td>
+</tr>
+<tr>
+<td>&quot;Possible broad GCP-linked privileges&quot;</td>
+<td>No newly confirmed direct evidence (TVING is an AWS case)</td>
+<td><strong>Remains unconfirmed</strong></td>
+</tr>
+<tr>
+<td>&quot;Standalone enterprise security failure&quot;</td>
+<td>Revealed as an <strong>industrial pattern</strong>via June cluster (TVING · BGF · ST Unitas, etc.)</td>
+<td><strong>Revised/expanded</strong></td>
+</tr>
+<tr>
+<td>&quot;Notification delay · absent compensation plan&quot;</td>
+<td>Scale and compensation still unpublished after 8 days</td>
+<td><strong>Continued deterioration</strong></td>
+</tr>
+</tbody></table>
+<h2>A.7 Updated Recommendations (Additions)</h2>
+<h3>For Affected Customers (B2B Students Added)</h3>
+<ul>
+<li><strong>Employees who took FastCampus/Day1 courses via company email</strong>may have company email, employee ID, and job combined and exposed; recommend<strong>notifying the corporate security team and requesting targeted-phishing caution</strong>.</li>
+<li>Instructors and partners should watch for <strong>BEC</strong> attempts impersonating settlement/contract channels.</li>
+</ul>
+<h3>For Enterprise Security Administrators (Cluster Lessons)</h3>
+<ol>
+<li><strong>Rotate GitHub + cloud credentials together</strong>— As in the TVING case, revoke and replace GitHub credentials and AWS/GCP keys<strong>as a set</strong> (replacing only one allows bypass).</li>
+<li><strong>Prepare for source encryption-logic exposure</strong>— Separate key management (KMS/Secret Manager) from code; under an exposure assumption,<strong>immediately rotate the encryption keys themselves</strong>.</li>
+<li><strong>Isolate entrustment (B2B) data</strong>— Separate client-employee information with distinct tenants/access controls; pre-define<strong>processor → entruster notification SLAs</strong> for incidents.</li>
+<li><strong>Segregated storage of combining identifiers such as CI and resident numbers</strong> — Apply preemptively as authorities advance segregated-storage duty timelines.</li>
+<li><strong>Codify developer-platform credential-storage prohibition</strong> — Enforce authority recommendations as internal policy and code-review gates (Push Protection + pre-commit blocking).</li>
+</ol>
+<h2>A.8 v1.1 Additional References</h2>
+<ul>
+<li>News1 (2026-06-12) — Severity of GitHub key theft and DB-access attacks: <a href="https://www.news1.kr/it-science/security-hacking/6190664">https://www.news1.kr/it-science/security-hacking/6190664</a></li>
+<li>IT Daily (2026-06-16) — GitHub as hacking path; caution on credentials in source: <a href="http://www.itdaily.kr/news/articleView.html?idxno=239883">http://www.itdaily.kr/news/articleView.html?idxno=239883</a></li>
+<li>iNews24 (2026-06-12) — Day1 leak; concern for large-enterprise corporate-training students: <a href="https://www.inews24.com/view/1975944">https://www.inews24.com/view/1975944</a></li>
+<li>Digital Daily (2026-06-11) — Day1Company leak; instructor harm confirmed: <a href="https://m.ddaily.co.kr/page/view/2026061115551484107">https://m.ddaily.co.kr/page/view/2026061115551484107</a></li>
+<li>Boan News — Why TVING focuses on GitHub more than DB leakage: <a href="https://m.boannews.com/html/detail.html?idx=144054">https://m.boannews.com/html/detail.html?idx=144054</a></li>
+<li>RightKnow News (~2026-06-14) — TVING users (1,051) damages suit: <a href="https://www.rightknow.co.kr/news/articleView.html?idxno=34269">https://www.rightknow.co.kr/news/articleView.html?idxno=34269</a></li>
+<li>Namuwiki — 2026 personal-data breach incidents (cluster list): <a href="https://namu.wiki/w/%EA%B0%9C%EC%9D%B8%20%EC%A0%95%EB%B3%B4%20%EC%9C%A0%EC%B6%9C%20%EC%82%AC%ED%83%9C">https://namu.wiki/w/개인%20정보%20유출%20사태</a></li>
+</ul>
+<h2>A.9 Analysis Limitations (v1.1 Update)</h2>
+<ul>
+<li>Day1Company&#39;s <strong>exact leakage scale, compensation plan, and authority disposition</strong> remain unpublished as of 6/19; scale and legal assessments in this appendix are estimates based on peer precedents.</li>
+<li><strong>Common intrusion patterns</strong> with peer incidents such as TVING are based on security-industry analysis and report circumstances; Day1&#39;s final intrusion path cannot be asserted as identical (official forensics incomplete).</li>
+<li>Scale figures such as &quot;13 million&quot; (TVING) are <strong>industry observations/estimates</strong>, not confirmed announcements.</li>
+<li>B2B harm scope (which clients) exists only in partial reporting; full confirmation pending.</li>
+</ul>
+<hr>
+<p>© 2026 HoKwang Kim (Dennis Kim) · Betalabs Inc. · This report is independent research based on public information and is not the official position of Day1Company or related agencies. Prepared for informational purposes.</p>
+<p>📌 Report filename: <code>CTI-2026-0611-FASTCAMPUS_DAYONECOMPANY_EN.md</code> | Series: CYBER-THREAT-INTELLIGENCE-REPORT | <strong>Version v1.1 (updated 2026-06-19)</strong></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0611-FASTCAMPUS_DAYONECOMPANY_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

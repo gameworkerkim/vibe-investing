@@ -1,6 +1,6 @@
 /**
  * Host-based routing for vibequant.cc (free tier, single Pages project).
- * docs → /columns · tech → /tech · play → /play · www → apex
+ * docs → /columns · tech → /tech · cti → /cti · play → /play · www → apex
  */
 export async function onRequest(context) {
   const url = new URL(context.request.url);
@@ -24,6 +24,12 @@ export async function onRequest(context) {
     }
   }
 
+  if (host === "cti.vibequant.cc") {
+    if (path === "/" || path === "") {
+      return Response.redirect(`${url.origin}/cti/`, 302);
+    }
+  }
+
   if (host === "play.vibequant.cc") {
     if (path === "/" || path === "") {
       return Response.redirect(`${url.origin}/play/`, 302);
@@ -37,6 +43,10 @@ export async function onRequest(context) {
     }
     if (path === "/tech" || path.startsWith("/tech/")) {
       url.hostname = "tech.vibequant.cc";
+      return Response.redirect(url.toString(), 301);
+    }
+    if (path === "/cti" || path.startsWith("/cti/")) {
+      url.hostname = "cti.vibequant.cc";
       return Response.redirect(url.toString(), 301);
     }
     if (path === "/play" || path.startsWith("/play/")) {

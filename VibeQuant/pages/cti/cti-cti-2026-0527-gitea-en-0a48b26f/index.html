@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unauthenticated Exposure of Gitea Container Registry — The Illusion of &quot;Private&quot; Left Unaddressed for Four Years — VibeQuant</title>
+  <meta name="description" content="CVE 2026 27771: Private container images of 30,000 self hosted instances leaked without authentication" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-cti-2026-0527-gitea-en-0a48b26f/" />
+  <meta property="og:title" content="Unauthenticated Exposure of Gitea Container Registry — The Illusion of &quot;Private&quot; Left Unaddressed for Four Years" />
+  <meta property="og:description" content="CVE 2026 27771: Private container images of 30,000 self hosted instances leaked without authentication" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-cti-2026-0527-gitea-en-0a48b26f/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=6" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-cti-2026-0527-gitea-kr-7e931b5e/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-cti-2026-0527-gitea-en-0a48b26f/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-cti-2026-0527-gitea-ja-2bd2e05d/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-cti-2026-0527-gitea-zh-7d19a6fe/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-cti-2026-0527-gitea-kr-7e931b5e/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Unauthenticated Exposure of Gitea Container Registry — The Illusion of \"Private\" Left Unaddressed for Four Years","description":"CVE 2026 27771: Private container images of 30,000 self hosted instances leaked without authentication","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-cti-2026-0527-gitea-en-0a48b26f/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0527-GITEA_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-05-27","dateModified":"2026-05-28","inLanguage":"en"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://vibequant.cc/">Home</a>
+        <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 취약점 · 패치</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">취약점 · 패치</p>
+        <h1>Unauthenticated Exposure of Gitea Container Registry — The Illusion of &quot;Private&quot; Left Unaddressed for Four Years</h1>
+        <p class="article-dates"><time datetime="2026-05-27">발행 2026.05.27</time> · <time datetime="2026-05-28">수정 2026.05.28</time></p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-cti-2026-0527-gitea-kr-7e931b5e/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../cti/cti-cti-2026-0527-gitea-en-0a48b26f/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../cti/cti-cti-2026-0527-gitea-ja-2bd2e05d/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../cti/cti-cti-2026-0527-gitea-zh-7d19a6fe/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">CVE-2026-27771: Private container images of 30,000 self-hosted instances leaked without authentication</p>
+        <p class="article-byline">Dennis Kim (김호광 / HoKwang Kim) · 2026-05-27</p>
+      </header>
+      <div class="article-body prose"><p><em>CVE-2026-27771: Private container images of 30,000 self-hosted instances leaked without authentication</em></p>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li>Executive Summary (TL;DR)</li>
+<li>Vulnerability Overview</li>
+<li>Scope and the Fork Ecosystem</li>
+<li>Impact on Korea</li>
+<li>Impact on the Web3 / Crypto Ecosystem</li>
+<li>Mitigations</li>
+<li>Conclusion and Recommendations</li>
+<li>References</li>
+</ol>
+<hr>
+<h2>Executive Summary (TL;DR)</h2>
+<p>On May 27, 2026, security researchers (UK-based Noscope) disclosed a vulnerability in <strong>Gitea</strong>, the open-source self-hosted version control platform, that allows unauthenticated remote attackers to pull private container images without an account, password, or prior access. Tracked as <code>CVE-2026-27771</code>, it affects <strong>all versions prior to 1.26.2</strong>, which addresses the issue.</p>
+<p>According to Noscope, the flaw likely impacts more than 30,000 deployments across over 30 countries and went undetected for nearly four years. The vast majority of exposures are concentrated in China, the U.S., Germany, France, and the U.K., with affected organizations spanning healthcare providers, aerospace manufacturers, retail infrastructure, and ISPs.</p>
+<p>The essence of the problem is clear: a container repository an operator designated as &quot;private&quot; did not actually deliver that protection. Anyone on the internet could pull private container images as if they were public, with no account, password, or prior access. This is not a simple bug but a <strong>collapse of trust in the access control model itself.</strong></p>
+<h3>Key Judgments</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Judgment</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KJ-1</td>
+<td>The core risk of this flaw is not RCE but <strong>secret leakage</strong>. Container images frequently contain API keys, DB credentials, and internal source, so the leak of a single image becomes a stepping stone for follow-on compromise.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-2</td>
+<td>Given roughly four years undetected, <strong>the possibility that some instances&#39; images were quietly harvested</strong>cannot be excluded. The patch only prevents future exposure; it does not recover past leaks. Exposed secrets must be treated as compromised.</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+<tr>
+<td>KJ-3</td>
+<td>Gitea forks (notably <strong>Forgejo, confirmed affected</strong>) must be treated as impacted until independently verified. Self-hosted Git platforms are prone to delayed patching because of the perception &quot;I control it, so it&#39;s safe.&quot;</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-4</td>
+<td>Self-hosted Gitea is favored by individual developers, small teams, and blockchain startups for cost savings, so damage may concentrate on <strong>organizations with fewer assets but weaker security operations capacity.</strong></td>
+<td><strong>Medium</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Vulnerability Overview</h2>
+<p><code>CVE-2026-27771</code> is an authentication bypass flaw in Gitea&#39;s container registry. Under normal operation, a repository marked private should be pullable only by authenticated, authorized holders. In affected versions, however, the private designation failed to deliver the protection operators reasonably expected.</p>
+<p>According to Noscope, Gitea&#39;s container registry allowed anyone on the internet — with no account, password, or prior access — to pull container images that appear private at first glance from affected instances as if they were public.</p>
+<p>No additional technical details are currently available (typical for a responsible-disclosure process), and the CVSS score has not yet been assigned (N/A). However, the conditions — unauthenticated, remote, no prior privilege required — indicate a high practical risk.</p>
+<h2>3. Scope and the Fork Ecosystem</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Affected versions</td>
+<td>All Gitea versions <strong>prior to</strong> 1.26.2</td>
+</tr>
+<tr>
+<td>Fixed version</td>
+<td>Gitea 1.26.2</td>
+</tr>
+<tr>
+<td>Est. exposure</td>
+<td>30,000+ deployments across 30+ countries</td>
+</tr>
+<tr>
+<td>Top exposed</td>
+<td>China, U.S., Germany, France, U.K.</td>
+</tr>
+<tr>
+<td>Affected sectors</td>
+<td>Healthcare, aerospace manufacturing, retail infrastructure, ISPs</td>
+</tr>
+<tr>
+<td>Undetected period</td>
+<td>~4 years</td>
+</tr>
+<tr>
+<td>Fork impact</td>
+<td>All Gitea forks should be treated as potentially impacted until verified. <strong>Forgejo confirmed affected.</strong></td>
+</tr>
+</tbody></table>
+<p>Noscope emphasized that any fork of Gitea should be treated as potentially impacted until independently verified by its respective maintainers. In its own testing, Forgejo was confirmed to be impacted. This again exposes a structural weakness of the fork ecosystem — an upstream flaw silently propagating to numerous downstream projects.</p>
+<h2>4. Impact on Korea</h2>
+<p>This vulnerability was barely reported by Korean media, yet it directly affects domestic self-hosted environments.</p>
+<p>First, <strong>many domestic startups and blockchain teams self-host Gitea/Forgejo to cut GitHub Enterprise costs.</strong> They often deploy Gitea on OCI, AWS, or their own servers and use the container registry feature. Because of the perception &quot;internal network or a server I control,&quot; many operate the container registry exposed to the internet.</p>
+<p>Second, <strong>Korea&#39;s delayed-patching culture</strong> compounds the risk. Self-hosted tools tend to be &quot;install and forget,&quot; so a flaw undetected for four years was likely left unaddressed domestically as well.</p>
+<p>Third, container images typically contain <code>.env</code> files, API keys, DB connection info, and internal source code. If images of domestic fintech/blockchain firms were leaked, this translates directly into <strong>leakage of production infrastructure credentials.</strong></p>
+<h2>5. Impact on the Web3 / Crypto Ecosystem</h2>
+<p>For Web3 organizations, this vulnerability can be even more fatal than for general enterprises.</p>
+<p>First, <strong>blockchain projects&#39; container images frequently contain node operation keys, RPC endpoint credentials, and deployment scripts.</strong> Image leakage equals infrastructure key leakage and directly threatens mainnet node, indexer, and oracle operations.</p>
+<p>Second, many DeFi/NFT startups use self-hosted Gitea to cut GitHub costs. From this analyst&#39;s observations across numerous Web3 advisory engagements, it is not rare to see smart contract deployment private keys or multisig operation scripts hardcoded as environment variables inside container images.</p>
+<p>Third, the risk is amplified when <strong>combined with the developer-credential theft flow</strong> noted in this analyst&#39;s <code>CTI-2026-0527-GLASSWORM</code> report. If GlassWorm-class malware steals developer tokens and the Gitea exposure leaks additional secrets inside container images, an attacker can readily hijack the entire deployment pipeline.</p>
+<h2>6. Mitigations</h2>
+<h3>6.1 Immediate Actions</h3>
+<ol>
+<li><strong>Upgrade to Gitea 1.26.2 immediately.</strong> This is the fundamental fix.</li>
+<li>If patching is not immediately possible, <strong>apply the temporary workaround <code>[service].REQUIRE_SIGNIN_VIEW=true</code> in the configuration.</strong> Note this may be unsuitable in environments where some containers are intentionally meant to be public.</li>
+<li><strong>For forks such as Forgejo,</strong> check the maintainer&#39;s patch notice and, if unconfirmed, treat as affected and apply the same workaround.</li>
+</ol>
+<h3>6.2 Assume-Breach Post-Incident Response</h3>
+<ol>
+<li><strong>Treat all secrets in exposed container images as compromised</strong> and rotate them — API keys, DB credentials, RPC credentials, deployment keys, everything.</li>
+<li><strong>Analyze access logs</strong> — retroactively check container registry pull logs for abnormal access from unauthenticated/external IPs. (Note that four years of logs are unlikely to be retained.)</li>
+<li><strong>Image hygiene review</strong> — going forward, remove hardcoded secrets from all container images and switch to build-time secret injection (e.g., BuildKit secret mount).</li>
+</ol>
+<h3>6.3 Structural Measures</h3>
+<ol>
+<li><strong>Do not expose self-hosted Git platforms directly to the internet.</strong> Place them behind a VPN, reverse-proxy authentication, or IP allowlist.</li>
+<li><strong>Never include secrets in the container registry.</strong> Inject secrets at runtime via a dedicated secrets manager such as Vault or KMS.</li>
+<li><strong>Formally enroll self-hosted tools in patch management.</strong> End &quot;install and forget&quot; — review versions and CVEs at least quarterly.</li>
+</ol>
+<h2>7. Conclusion and Recommendations</h2>
+<p>The lesson of <code>CVE-2026-27771</code> is that <em>&quot;a &#39;private&#39; label is not security.&quot;</em> Access control must be enforced by actual verification logic, not a label, and self-hosted environments are especially prone to being skipped in reviews because of the psychological safety of &quot;I control it.&quot;</p>
+<p>Key recommendations:</p>
+<ol>
+<li><strong>Upgrade to Gitea 1.26.2 immediately,</strong> or apply the <code>REQUIRE_SIGNIN_VIEW</code> workaround.</li>
+<li><strong>Do not use container images as secret stores.</strong> Assume every credential placed in an image is potentially public.</li>
+<li><strong>Formalize self-hosted infrastructure as a patch/exposure management target.</strong></li>
+<li>Web3 organizations should fully separate node keys and deployment keys from images and migrate them to an external secrets manager.</li>
+</ol>
+<hr>
+<h2>References</h2>
+<p>[1] Ravie Lakshmanan, &quot;Gitea Vulnerability Exposes Private Container Images without Authentication&quot;, The Hacker News, 2026-05-27. <a href="https://thehackernews.com/2026/05/gitea-vulnerability-exposes-private.html">https://thehackernews.com/2026/05/gitea-vulnerability-exposes-private.html</a></p>
+<p>[2] Noscope, &quot;Gitea Instances Exposing Private Container Images&quot;. <a href="https://www.noscope.com/blog/gitea-instances-exposing-private-container">https://www.noscope.com/blog/gitea-instances-exposing-private-container</a></p>
+<p>[3] Gitea, &quot;Release of 1.26.2&quot;. <a href="https://blog.gitea.com/release-of-1.26.2/">https://blog.gitea.com/release-of-1.26.2/</a></p>
+<p>[4] Dennis Kim, &quot;Simultaneous Takedown of GlassWorm C2 Infrastructure&quot;, CTI-2026-0527-GLASSWORM, 2026-05-27. <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+<hr>
+<p>© 2026 Dennis Kim (김호광) · This document is published as part of an independent CTI archive (TLP:GREEN).
+Contact: <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · GitHub: <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0527-GITEA_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
