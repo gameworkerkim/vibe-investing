@@ -1,3 +1,4 @@
+<!--
 ---
 title: "량원펑의 AI 전략: 4시간·52개 발언으로 읽는 DeepSeek의 AGI 여정"
 title_en: "Liang Wenfeng's AI Strategy: Reading DeepSeek's Road to AGI Through 52 Statements"
@@ -36,6 +37,7 @@ draft: false
 og_image: ""
 robots: index,follow
 ---
+-->
 
 # 량원펑의 AI 전략 살펴보기 - 4시간, 52개 발언으로 읽는 DeepSeek의 AGI 여정
 
