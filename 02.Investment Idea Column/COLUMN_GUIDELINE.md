@@ -127,6 +127,47 @@
 
 ---
 
+## 4-1. HEAD · JSON-LD 는 “주석 참조”로만 (직접 쓰지 말 것)
+
+`<title>`·meta description·`robots`·JSON-LD(BlogPosting) 는 **빌드가 frontmatter를 읽어 `<head>`에 자동 주입**합니다. 원천은 오직 위 YAML frontmatter입니다. 따라서 이 값들은 MD에 **live로 넣지 말고, HTML 주석 참조 블록**으로만 둡니다.
+
+**왜 주석인가**
+
+- **frontmatter를 주석으로 감싸면 안 됨:** 빌드(`stripFrontmatter`)는 파일이 `---`로 **시작**해야 메타를 읽습니다. `<!-- -->`로 감싸는 순간 title·description·date가 통째로 무시됩니다.
+- **본문에 live `<script type="application/ld+json">` 넣지 말 것:** sanitize로 제거되거나, 빌드 자동 JSON-LD와 **중복**됩니다.
+- **주석 참조 블록의 목적:** ①빌드가 `<head>`에 무엇을 넣는지 눈으로 확인, ②GitHub 원문(raw) 뷰를 깔끔하게 유지, ③값 수정 위치를 frontmatter 한 곳으로 고정.
+
+**규칙**
+
+1. `title` → `robots` 범위의 head 메타와 JSON-LD 스크립트는 **HTML 주석(`<!-- -->`) 안에** 참조로만 둔다.
+2. **주석을 풀어 live로 만들지 않는다.** 값 변경은 오직 frontmatter에서.
+3. JSON-LD의 `headline`·`author`·`datePublished`·`keywords`는 frontmatter의 `title`·`author`·`date`·`keywords`와 **일치**시킨다(빌드 자동 생성 결과와 동일해야 혼선이 없음).
+4. `schema_type`가 `TechArticle`인 섹션(TechDoc/CTI)은 JSON-LD `@type`도 그에 맞춘다.
+
+**주석 참조 블록 예시** (템플릿 frontmatter 바로 아래에 위치):
+
+```html
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 값 원천은 frontmatter)
+  <title>여기에 제목 · VibeQuant</title>
+  <meta name="description" content="80–120자 한줄 요약">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "여기에 제목",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-07-23",
+    "keywords": ["검색용 키워드1", "검색용 키워드2"]
+  }
+  </script>
+-->
+```
+
+---
+
 ## 5. 추천(featured) 운영
 
 ```yaml
@@ -155,6 +196,7 @@ draft: true   # 사이트·sitemap·llms 목록에서 제외
 - [ ] frontmatter 필수 4개 (`title`, `description`, `date`, `draft`)
 - [ ] `description` 120자 내, 문장 완결
 - [ ] H1 = `title`, 본문이 메타 라벨로 시작하지 않음
+- [ ] HEAD·JSON-LD는 **주석 참조만** (live `<script>`·주석 처리된 frontmatter 없음)
 - [ ] 추천 시 `featured` + `featured_rank`
 - [ ] 투자 칼럼이면 면책 한 줄
 - [ ] (선택) `abstract` / `summary_for_ai` / `og_image`
@@ -195,11 +237,30 @@ og_image: ""
 robots: index,follow
 ---
 
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  값 원천은 위 frontmatter. 아래는 빌드가 <head>에 넣는 결과 확인용.
+  <title>여기에 제목 · VibeQuant</title>
+  <meta name="description" content="80–120자 한줄 요약">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "여기에 제목",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-07-23",
+    "keywords": ["검색용 키워드1", "검색용 키워드2"]
+  }
+  </script>
+-->
+
 # 여기에 제목
 
 ## 부제 한 줄 (없으면 이 줄 삭제)
 
-2026.07.22 김호광 / Dennis Kim
+2026.07.23 김호광 / Dennis Kim
 
 ---
 
@@ -234,4 +295,4 @@ robots: index,follow
 
 ---
 
-*문서 버전: 2026-07-22 — 추천 · SEO · LLM/GEO 메타를 MD frontmatter 원천으로 정리.*
+*문서 버전: 2026-07-23 — HEAD·JSON-LD를 “주석 참조” 규칙으로 추가(§4-1). frontmatter가 유일한 원천, 빌드가 head·JSON-LD 자동 주입.*

@@ -8,8 +8,8 @@ abstract: |
   llms·인용·본문 상단 요약에 사용.
 summary_for_ai: |
   (선택) 에이전트용. 전제·데이터 기준일·한계·투자 비권유를 명시해도 됨.
-date: 2026-07-22
-updated: 2026-07-22
+date: 2026-07-23
+updated: 2026-07-23
 author: "김호광 (Dennis Kim)"
 lang: ko
 tags:
@@ -27,11 +27,45 @@ og_image: ""
 robots: index,follow
 ---
 
+<!--
+============================================================
+  HEAD 참조 블록 (렌더링 안 됨 · 빌드가 자동 주입 · 손대지 말 것)
+------------------------------------------------------------
+  아래 title~robots 와 JSON-LD 는 "빌드가 <head> 에 무엇을
+  넣는지" 확인용 참조입니다. 실제 값의 원천은 위 YAML
+  frontmatter 이며, 빌드(VibeQuant/content/build.mjs)가
+  frontmatter 를 읽어 <title>·meta·robots·JSON-LD 를
+  자동 생성합니다.
+
+  ▸ 이 블록은 절대 주석을 풀지 마세요(live 로 만들지 말 것).
+    - frontmatter 를 이 주석 안으로 옮기면 stripFrontmatter 가
+      메타를 못 읽습니다(파일이 `---` 로 시작해야 함).
+    - 본문에 live <script type="application/ld+json"> 를 넣으면
+      sanitize 되거나 빌드 자동 JSON-LD 와 중복됩니다.
+  ▸ 값 수정은 오직 위 frontmatter 에서 하세요.
+
+  <title>여기에 제목 · VibeQuant</title>
+  <meta name="description" content="80–120자 한줄 요약">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "여기에 제목",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-07-23",
+    "keywords": ["검색용 키워드1", "검색용 키워드2"]
+  }
+  </script>
+============================================================
+-->
+
 # 여기에 제목
 
 ## 부제 한 줄 (없으면 이 줄 삭제)
 
-2026.07.22 김호광 / Dennis Kim
+2026.07.23 김호광 / Dennis Kim
 
 ---
 
