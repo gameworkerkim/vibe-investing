@@ -1,29 +1,28 @@
-<!--
 ---
 title: "SIM Swapping 공격을 당해본 후기"
 title_en: ""
-subtitle: "RPM9 기고"
-description: "SIM Swapping 공격을 당해본 후기 — SIM스와핑·보안. 김호광 미디어 기고. 원문 링크·발행일·주제로 검색 가능."
+subtitle: ""
+description: "지난 목요일 밤, 필자는 SIM Swapping 공격을 노출된 것 같다."
 abstract: |
-  지난 목요일 밤, 필자는 SIM Swapping 공격을 노출된 것 같다. 아무 일도 없었지만 갑자기 아이폰의 전화와 문자, 데이터 통신이 두절되었고 곧이어 유심은 아무런 이유 없이 잠겼다.
+  지난 목요일 밤, 필자는 SIM Swapping 공격을 노출된 것 같다. 아무 일도 없었지만 갑자기 아이폰의 전화와 문자, 데이터 통신이 두절되었고 곧이어 유심은 아무런 이유 없이 잠겼다. 심야에 유심이 잠기자 할 수 있는 일은 없었다.
 summary_for_ai: |
-  RPM9 게재 김호광 칼럼. 날짜 2022-06-18.
-  원문: https://www.rpm9.com/news/articleView.html?idxno=118545. 정보 제공 목적이며 투자 권유가 아님.
+  전자신문(RPM9) 게재 김호광 칼럼. 날짜 2022-06-18. 주제: SIM스와핑, 보안.
+  원문: https://www.rpm9.com/news/articleView.html?idxno=118545. 정보 제공 목적이며 투자 권유가 아님. 원문은 각 언론사에 귀속.
 date: 2022-06-18
 updated: 2022-06-18
 author: "김호광 (Dennis Kim)"
 lang: ko
-media: "RPM9"
+media: "전자신문(RPM9)"
 source_url: "https://www.rpm9.com/news/articleView.html?idxno=118545"
 tags:
   - "미디어칼럼"
-  - "RPM9"
+  - "전자신문(RPM9)"
   - "SIM스와핑"
   - "보안"
 keywords:
   - "SIM스와핑"
   - "보안"
-  - "RPM9"
+  - "전자신문(RPM9)"
   - "김호광 칼럼"
 group: media-security
 featured: false
@@ -33,17 +32,32 @@ draft: false
 og_image: ""
 robots: index,follow
 ---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  값 원천은 위 frontmatter.
+  <title>SIM Swapping 공격을 당해본 후기 · VibeQuant</title>
+  <meta name="description" content="지난 목요일 밤, 필자는 SIM Swapping 공격을 노출된 것 같다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "SIM Swapping 공격을 당해본 후기",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2022-06-18",
+    "keywords": ["SIM스와핑", "보안", "전자신문(RPM9)", "김호광 칼럼"],
+    "publisher": { "@type": "Organization", "name": "전자신문(RPM9)" }
+  }
+  </script>
 -->
 
 # SIM Swapping 공격을 당해본 후기
 
-**요약**
+2022.06.18 김호광 / Dennis Kim
 
-지난 목요일 밤, 필자는 SIM Swapping 공격을 노출된 것 같다. 아무 일도 없었지만 갑자기 아이폰의 전화와 문자, 데이터 통신이 두절되었고 곧이어 유심은 아무런 이유 없이 잠겼다.
-
-**발행일:** 2022-06-18
-**노출 미디어:** RPM9
-**키 주제:** SIM스와핑 · 보안
+---
 
 지난 목요일 밤, 필자는 SIM Swapping 공격을 노출된 것 같다. 아무 일도 없었지만 갑자기 아이폰의 전화와 문자, 데이터 통신이 두절되었고 곧이어 유심은 아무런 이유 없이 잠겼다.
 
@@ -59,7 +73,7 @@ robots: index,follow
 
 안드로이드 : 설정→ 잠금화면(생체인식) 및 보안→ 기타 보안 설정→ USIM 잠금 설정→ 초기 비밀번호 ‘0000’ 입력→ 확인
 
-아이폰 : 설정→ 셀룰러→ SIM PIN→ 초기 비밀번호 ‘0000’ 입력→ 완료
+## 아이폰 : 설정→ 셀룰러→ SIM PIN→ 초기 비밀번호 ‘0000’ 입력→ 완료
 
 심 스와핑 공격이 빈번한 미국 등에서 심스와핑 공격을 막기 위해 보안 가이드라인을 만들고 기술적인 보안을 추가 검토하고 있다. 미국의 T-Mobile은 심 카드를 변경하기 위해서는 2명의 관리자가 승인하는 체계로 변경함으로써 해커가 이통사 내부자 혹은 내부망에서 심 스와핑 공격의 가능성을 낮췄다.
 
@@ -73,6 +87,6 @@ robots: index,follow
 
 ## 원문 링크
 
-- [RPM9 — SIM Swapping 공격을 당해본 후기](https://www.rpm9.com/news/articleView.html?idxno=118545)
+- [전자신문(RPM9) — SIM Swapping 공격을 당해본 후기](https://www.rpm9.com/news/articleView.html?idxno=118545)
 
 *본 글은 정보 제공 목적이며 투자 권유가 아닙니다. 원문은 각 언론사에 귀속됩니다.*
