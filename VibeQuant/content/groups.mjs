@@ -22,6 +22,7 @@ export const COLUMN_GROUP_RULES = [
 
 /** Recommended media columns (relative to 03. Media-Column/) */
 export const FEATURED_MEDIA_COLUMN_PATHS = [
+  "Security/2026-07-23-",
   "AI/2026-02-23-",
   "AI/2026-02-09-",
   "AI/2026-02-02-",
