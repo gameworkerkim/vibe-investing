@@ -275,6 +275,34 @@ function fixLiteralBoldHtml(html) {
   return String(html ?? "").replace(/\*\*([^*<\n]+?)\*\*/g, "<strong>$1</strong>");
 }
 
+/**
+ * GitHub CTI MD uses relative sibling links like CTI-…_EN.md for language switchers.
+ * On the published site those must become /cti/<slug>/ (or GitHub blob as fallback).
+ */
+function rewriteCtiRelativeMdLinks(html, item, hrefPrefix) {
+  const langs = item.langs || {};
+  return String(html ?? "").replace(
+    /\bhref=(["'])([^"']+\.md(?:#[^"']*)?)\1/gi,
+    (full, quote, href) => {
+      if (/^(?:https?:|mailto:|\/\/)/i.test(href)) return full;
+      const [filePart, hash = ""] = href.split("#");
+      const base = path.basename(String(filePart).replace(/^\.\//, ""));
+      const langM = base.match(/_(KR|EN|JP|CN|ZH|JA)\.md$/i);
+      if (langM) {
+        const lang = normalizeCtiLang(langM[1]);
+        const slug = langs[lang];
+        if (slug) {
+          const frag = hash ? `#${hash}` : "";
+          return `href=${quote}${hrefPrefix}${slug}/${frag}${quote}`;
+        }
+      }
+      // Same-repo relative MD → GitHub blob so links never 404 on Pages
+      const blob = githubUrl(CTI_BLOB, base);
+      return `href=${quote}${blob}${quote}`;
+    }
+  );
+}
+
 function isPipeMetaRow(line) {
   const t = String(line ?? "").trim();
   return t.startsWith("|") && t.includes("|");
@@ -1136,6 +1164,9 @@ function buildArticle(item, section) {
   htmlBody = fixLiteralBoldHtml(htmlBody);
   htmlBody = htmlBody.replace(/^\s*<h1\b[^>]*>[\s\S]*?<\/h1>\s*/i, "");
   const prefix = "../../";
+  if (section === "cti") {
+    htmlBody = rewriteCtiRelativeMdLinks(htmlBody, item, `${prefix}cti/`);
+  }
   const base = siteForSection(section);
   const canonical = `${base}/${section}/${item.slug}/`;
   const schemaType = section === "tech" || section === "cti" ? "TechArticle" : "BlogPosting";
