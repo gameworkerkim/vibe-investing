@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trump feed — Research · VibeQuant</title>
+  <meta name="description" content="트럼프·정책 관련 뉴스 RSS 필터 피드. 30분 캐시, 로그인 없음." />
+  <link rel="canonical" href="https://vibequant.cc/research/trump/" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/research.css" />
+</head>
+<body class="rq-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../">Research</a>
+      <a class="site-nav-link" href="../quant/">Quant</a>
+      <a class="site-nav-link" href="../spacex/">Space</a>
+      <a class="site-nav-link is-active" href="./">Trump</a>
+    </nav>
+  </header>
+
+  <main class="rq-wrap">
+    <h1>Trump feed</h1>
+    <p class="rq-lede">Politico · NPR · The Hill 등 RSS에서 트럼프/정책 키워드 필터. LLM 번역 없이 원문 요약. 30분 캐시.</p>
+    <div class="rq-meta">
+      <span id="meta">로딩…</span>
+      <button type="button" class="rq-btn" id="refresh">새로고침</button>
+    </div>
+    <p class="err" id="err" hidden></p>
+    <div class="feed-list" id="feed"></div>
+  </main>
+
+  <footer class="site-foot">
+    <p>뉴스 원문 링크 제공 · 투자/정치 조언 아님 · <a href="../">Research</a></p>
+  </footer>
+
+  <script>
+    const API = (() => {
+      const h = location.hostname;
+      if (h === "vibequant.cc" || h.endsWith(".vibequant-web.pages.dev") || h === "localhost")
+        return "/api/research/trump";
+      return "https://vibequant.cc/api/research/trump";
+    })();
+
+    async function load(force) {
+      const btn = document.getElementById("refresh");
+      const err = document.getElementById("err");
+      const feed = document.getElementById("feed");
+      btn.disabled = true;
+      err.hidden = true;
+      try {
+        const url = force ? API + "?refresh=1" : API;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const d = await res.json();
+        if (d.error && !d.items) throw new Error(d.error);
+
+        const items = d.items || [];
+        if (!items.length) {
+          feed.innerHTML = `<p class="rq-lede">필터에 걸린 기사가 없습니다. 잠시 후 다시 시도하세요.</p>`;
+        } else {
+          feed.innerHTML = items.map((it) => {
+            const title = it.url
+              ? `<a href="${it.url}" target="_blank" rel="noopener noreferrer">${escapeHtml(it.title)}</a>`
+              : `<strong>${escapeHtml(it.title)}</strong>`;
+            const when = it.publishedAt
+              ? new Date(it.publishedAt).toLocaleString("ko-KR")
+              : "";
+            return `<article class="feed-item">
+              ${title}
+              ${it.summary ? `<p class="sum">${escapeHtml(it.summary)}</p>` : ""}
+              <p class="meta">${escapeHtml(it.source || "")}${when ? " · " + when : ""}</p>
+            </article>`;
+          }).join("");
+        }
+
+        const when = d.generatedAt ? new Date(d.generatedAt).toLocaleString("ko-KR") : "—";
+        let cache = d.fromCache
+          ? `캐시 · ${Math.floor((d.cachedSecondsAgo || 0) / 60)}분 전`
+          : "실시간 갱신";
+        if (d.stale) cache += " (stale)";
+        document.getElementById("meta").textContent = `${when} · ${cache} · ${items.length}건`;
+      } catch (e) {
+        err.hidden = false;
+        err.textContent = "로드 실패: " + (e.message || e);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function escapeHtml(s) {
+      return String(s || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    document.getElementById("refresh").addEventListener("click", () => load(true));
+    load(false);
+    setInterval(() => load(false), 30 * 60 * 1000);
+  </script>
+</body>
+</html>

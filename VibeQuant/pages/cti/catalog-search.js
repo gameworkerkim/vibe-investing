@@ -1,13 +1,21 @@
 (() => {
   const q = document.getElementById("col-search");
   const g = document.getElementById("col-group");
+  const sortEl = document.getElementById("col-sort");
   const root = document.getElementById("col-root");
   const count = document.getElementById("col-count");
+  const flatSec = document.getElementById("sort-flat-section");
+  const flatGrid = document.getElementById("sort-flat");
+  const flatLabel = document.getElementById("sort-flat-label");
   if (!q || !root) return;
-  const cards = [...root.querySelectorAll(".col-card")];
   const sections = [...root.querySelectorAll("[data-group-section]")];
+  const mainCards = [...root.querySelectorAll("[data-group-section] .col-card")];
+  const feat = document.getElementById("featured-section");
+  const featCards = feat ? [...feat.querySelectorAll(".col-card")] : [];
+  const allFilterCards = [...mainCards, ...featCards];
   const langBtns = [...document.querySelectorAll("[data-lang-btn]")];
   const LANG_KEY = "vq-cti-lang";
+  const SORT_KEY = "vq-catalog-sort:" + location.pathname;
   const hasLangFilter = langBtns.length > 0;
 
   function browserLang() {
@@ -26,6 +34,11 @@
   let lang = hasLangFilter ? (localStorage.getItem(LANG_KEY) || browserLang()) : "";
   if (hasLangFilter && !["KR", "EN", "JP", "CN"].includes(lang)) lang = browserLang();
 
+  function sortMode() {
+    const v = (sortEl && sortEl.value) || "group";
+    return v === "date" || v === "featured" ? v : "group";
+  }
+
   function matchCard(card, termTokens, group, langFilter) {
     const okG = !group || card.dataset.group === group;
     if (!okG) return false;
@@ -43,55 +56,93 @@
     }
   }
 
+  function compareCards(a, b, mode) {
+    if (mode === "featured") {
+      const fa = a.dataset.featured === "1" ? 0 : 1;
+      const fb = b.dataset.featured === "1" ? 0 : 1;
+      if (fa !== fb) return fa - fb;
+      const ra = Number(a.dataset.featuredRank || 999);
+      const rb = Number(b.dataset.featuredRank || 999);
+      if (ra !== rb) return ra - rb;
+    }
+    const da = a.dataset.date || "";
+    const db = b.dataset.date || "";
+    if (da && db && da !== db) return db.localeCompare(da);
+    if (da && !db) return -1;
+    if (!da && db) return 1;
+    const ta = (a.querySelector(".col-title") && a.querySelector(".col-title").textContent) || "";
+    const tb = (b.querySelector(".col-title") && b.querySelector(".col-title").textContent) || "";
+    return ta.localeCompare(tb, "ko");
+  }
+
+  function setSectionVisible(el, show) {
+    if (!el) return;
+    el.classList.toggle("is-hidden", !show);
+    el.hidden = !show;
+    el.style.display = show ? "" : "none";
+  }
+
   function apply() {
     const termTokens = tokens(q.value);
     const group = (g && g.value) || "";
     const langFilter = hasLangFilter ? lang : "";
-    const mainCards = cards.filter((c) => !c.closest("#featured-section"));
+    const mode = sortMode();
     const pool = langFilter
       ? mainCards.filter((c) => !c.dataset.lang || c.dataset.lang === langFilter)
       : mainCards;
-    let n = 0;
-    for (const c of cards) {
+
+    for (const c of allFilterCards) {
       const show = matchCard(c, termTokens, group, langFilter);
       c.classList.toggle("is-hidden", !show);
       c.hidden = !show;
       c.style.display = show ? "" : "none";
-      if (show && !c.closest("#featured-section")) n++;
     }
-    for (const sec of sections) {
-      const gid = sec.dataset.groupSection;
-      const visibleInSec = cards.filter(
-        (c) =>
-          !c.closest("#featured-section") &&
-          c.dataset.group === gid &&
-          !c.classList.contains("is-hidden")
-      );
-      const any = visibleInSec.length > 0;
-      sec.classList.toggle("is-hidden", !any);
-      sec.hidden = !any;
-      sec.style.display = any ? "" : "none";
-      const cnt = sec.querySelector(".section-count");
-      if (cnt) cnt.textContent = "(" + visibleInSec.length + ")";
-    }
-    const feat = document.getElementById("featured-section");
-    if (feat) {
-      const featCards = [...feat.querySelectorAll(".col-card")];
-      const anyFeat = featCards.some((c) => !c.classList.contains("is-hidden"));
-      const filtering = termTokens.length || group || (hasLangFilter && lang !== "KR");
-      if (filtering) {
-        feat.classList.toggle("is-hidden", !anyFeat);
-        feat.hidden = !anyFeat;
-        feat.style.display = anyFeat ? "" : "none";
-      } else {
-        feat.classList.toggle("is-hidden", !anyFeat);
-        feat.hidden = !anyFeat;
-        feat.style.display = anyFeat ? "" : "none";
+
+    let n = 0;
+    if (mode === "group") {
+      setSectionVisible(flatSec, false);
+      if (flatGrid) flatGrid.innerHTML = "";
+      for (const sec of sections) {
+        const gid = sec.dataset.groupSection;
+        const visibleInSec = mainCards.filter(
+          (c) => c.dataset.group === gid && !c.classList.contains("is-hidden")
+        );
+        setSectionVisible(sec, visibleInSec.length > 0);
+        const cnt = sec.querySelector(".section-count");
+        if (cnt) cnt.textContent = "(" + visibleInSec.length + ")";
+        n += visibleInSec.length;
+      }
+      if (feat) {
+        const anyFeat = featCards.some((c) => !c.classList.contains("is-hidden"));
+        setSectionVisible(feat, anyFeat);
+      }
+    } else {
+      setSectionVisible(feat, false);
+      for (const sec of sections) setSectionVisible(sec, false);
+      const visible = mainCards.filter((c) => !c.classList.contains("is-hidden"));
+      const sorted = visible.slice().sort((a, b) => compareCards(a, b, mode));
+      n = sorted.length;
+      if (flatSec && flatGrid) {
+        setSectionVisible(flatSec, n > 0);
+        if (flatLabel) {
+          flatLabel.textContent = mode === "featured" ? "추천순" : "날짜순 (최신)";
+        }
+        flatGrid.innerHTML = "";
+        for (const c of sorted) flatGrid.appendChild(c.cloneNode(true));
       }
     }
+
     if (count) count.textContent = n + " / " + pool.length + " shown";
   }
 
+  if (sortEl) {
+    const saved = localStorage.getItem(SORT_KEY);
+    if (saved === "date" || saved === "featured" || saved === "group") sortEl.value = saved;
+    sortEl.addEventListener("change", () => {
+      localStorage.setItem(SORT_KEY, sortMode());
+      apply();
+    });
+  }
   q.addEventListener("input", apply);
   q.addEventListener("search", apply);
   g?.addEventListener("change", apply);

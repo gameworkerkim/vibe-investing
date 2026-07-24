@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>[보안 리포트] IITP 개인정보접속기록관리 시스템 침해 사고 분석 — VibeQuant</title>
+  <meta name="description" content="7개월 만의 재침해 — 방화벽 '차단→허용' 설정 오류로 Elasticsearch 서버 인터넷 노출, 9일간 탐지 공백" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-cti-2026-0720-iitp-kr-beb0bb9e/" />
+  <meta property="og:title" content="[보안 리포트] IITP 개인정보접속기록관리 시스템 침해 사고 분석" />
+  <meta property="og:description" content="7개월 만의 재침해 — 방화벽 '차단→허용' 설정 오류로 Elasticsearch 서버 인터넷 노출, 9일간 탐지 공백" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-cti-2026-0720-iitp-kr-beb0bb9e/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"[보안 리포트] IITP 개인정보접속기록관리 시스템 침해 사고 분석","description":"7개월 만의 재침해 — 방화벽 '차단→허용' 설정 오류로 Elasticsearch 서버 인터넷 노출, 9일간 탐지 공백","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-cti-2026-0720-iitp-kr-beb0bb9e/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0720-IITP_KR.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-20","dateModified":"2026-07-20","inLanguage":"ko","keywords":"한국 침해 · 국내, KR, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 한국 침해 · 국내</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">한국 침해 · 국내</p>
+        <h1>[보안 리포트] IITP 개인정보접속기록관리 시스템 침해 사고 분석</h1>
+        <p class="article-dates"><time datetime="2026-07-20">발행 2026.07.20</time> · 주제 한국 침해 · 국내 · KR · CTI</p>
+        
+        <p class="lede">7개월 만의 재침해 — 방화벽 '차단→허용' 설정 오류로 Elasticsearch 서버 인터넷 노출, 9일간 탐지 공백</p>
+        
+      </header>
+      <div class="article-body prose"><ul>
+<li>7개월 만의 재침해 — 방화벽 &#39;차단→허용&#39; 설정 오류로 Elasticsearch 서버 인터넷 노출, 9일간 탐지 공백</li>
+</ul>
+<p>한 줄 요약: 무능한 관리와 보안 체계.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>리포트 ID</td>
+<td>CTI-2026-0720-IITP</td>
+</tr>
+<tr>
+<td>발행일</td>
+<td>2026-07-20</td>
+</tr>
+<tr>
+<td>분류</td>
+<td>TLP:CLEAR (WHITE, 공개)</td>
+</tr>
+<tr>
+<td>심각도</td>
+<td>HIGH — 국가 R&amp;D 관리기관 핵심 감사 시스템 침해·유출 범위 미확정</td>
+</tr>
+<tr>
+<td>신뢰도</td>
+<td>MEDIUM-HIGH (언론 보도·IITP 관계자 발언 교차 검증, 기관 공식 상세 발표 부재)</td>
+</tr>
+<tr>
+<td>위협 행위자</td>
+<td>미확인 (인터넷 노출 포트 스캐닝 기반 기회주의적 침투 추정)</td>
+</tr>
+<tr>
+<td>관련 ATT&amp;CK 기법</td>
+<td>T1595 (Active Scanning), T1190 (Exploit Public-Facing Application), T1133 (External Remote Services), T1070.001 (로그 삭제·변조 — 리스크)</td>
+</tr>
+<tr>
+<td>참고 자료</td>
+<td>머니투데이, 조선비즈, 경향신문(한국연구재단 사고), IITP 공개 자료</td>
+</tr>
+<tr>
+<td>작성자</td>
+<td>CTI 분석팀</td>
+</tr>
+</tbody></table>
+<h2>Key Judgments — 핵심 판단</h2>
+<ul>
+<li>(HIGH) 2026년 7월 6일, 과학기술정보통신부 산하 정보통신기획평가원(IITP)의 <strong>개인정보접속기록관리 시스템(Elasticsearch 서버)이 외부 해킹</strong>을 당했다. 이는 2025년 12월 APT 공격으로 직원 개인정보가 유출된 지 <strong>불과 7개월 만의 재침해</strong>다.</li>
+<li>(HIGH) 침해의 루트 원인은 정교한 공격 기술이 아니라, <strong>과기정통부(MSIT) 보안 점검 이후 시스템 유지·보수 과정에서 용역 업체 직원이 방화벽 정책을 &#39;차단(Deny)&#39;이 아닌 &#39;허용(Allow)&#39;으로 잘못 입력</strong>한 설정 오류다. 이로 인해 Elasticsearch 서버 포트가 인터넷에 any(모든 IP)로 노출됐고, 외부 공격자가 포트 스캐닝으로 무단 침투했다.</li>
+<li>(HIGH) 해킹 발생일(7/6)부터 대외 확인일(7/15)까지 <strong>약 9일의 탐지·공표 공백</strong>이 발생했다. 침해 대상이 &#39;접속 기록 관리 시스템&#39; 자체인 만큼, <strong>감사 증적(Audit Trail)의 위·변조 가능성을 배제할 수 없으며</strong>, 최초 조사에서 접속 로그 분석만으로는 유출 항목을 특정하지 못해 로그 시스템 개발사 분석에 의존한 것으로 알려졌다.</li>
+<li>(MEDIUM) IITP는 2026년 약 <strong>1조 8,996억 원 규모의 국가 ICT R&amp;D 예산</strong>을 관리하며 대학·기업·출연연 연구자의 인적 정보와 연구과제 정보를 보유한다. 접속 기록(성명, 소속, 접속 IP, 접근 과제명 등) 유출 시 <strong>연구자 대상 스피어 피싱 및 국가 전략 기술(반도체·AI·양자) 연구 동향 역추적</strong>으로 이어질 수 있다.</li>
+<li>(HIGH) 이번 사고는 IITP 단독 사건이 아니다. 상위 기관인 <strong>한국연구재단도 2025년 6월 논문투고 시스템(JAMS) 해킹으로 연구자 12만여 명의 정보 유출을 뒤늦게 시인</strong>한 바 있어, 한국 R&amp;D 관리 생태계 전반의 보안 거버넌스 부실이 구조적으로 반복되고 있다.</li>
+</ul>
+<p>현재까지 공개된 정보 기준으로 다음 사항이 확인되지 않았다.</p>
+<ul>
+<li>공격 행위자 (조직·국가 배후 여부)</li>
+<li>실제 유출된 데이터 항목 및 규모</li>
+<li>감사 로그 위·변조 여부</li>
+<li>IOC (Indicators of Compromise)</li>
+<li>2025년 12월 APT 공격과의 연관성</li>
+</ul>
+<hr>
+<h2>1. 사건 개요 — 7개월 만에 반복된 국가 R&amp;D 관리기관 침해</h2>
+<p>2026년 7월 15일, 과학기술정보통신부(MSIT) 산하 정보통신기획평가원(IITP)의 개인정보접속기록관리 시스템이 외부 해킹을 당한 사실이 언론 보도를 통해 알려졌다. 실제 침해 확인일은 7월 6일로, IITP는 확인 직후 개인정보보호위원회에 신고를 완료했으며(7월 9일), 현재 포렌식과 접속 로그 분석을 통해 연구자 개인정보 및 데이터베이스(DB) 유출 여부와 범위를 조사 중이다.</p>
+<p>IITP는 한국연구재단 부설 기관으로, 2026년 총 1조 8,996억 원 규모의 국가 ICT R&amp;D 예산을 집행·관리한다. 반도체, AI, 양자 등 국가 전략 기술의 연구 생태계를 관장하는 중추 기관이며, 보유 핵심 자산은 다음과 같다.</p>
+<ul>
+<li>대학·기업·출연연 소속 연구자 및 연구과제 참여자의 인적 정보</li>
+<li>국가 R&amp;D 과제의 연구 주제 및 성과 데이터</li>
+<li>연구 데이터 접근 이력 및 감사(Audit) 로그</li>
+</ul>
+<p>2025년 12월 APT(지능형 지속 공격)로 직원 개인정보 일부가 유출된 데 이어 7개월 만에 재발한 사고로, 국가 ICT R&amp;D 관리기관임에도 보안 관리 체계가 부실하다는 지적이 업계에서 제기되고 있다.</p>
+<h3>사건 타임라인</h3>
+<table>
+<thead>
+<tr>
+<th>일자</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2025-12</td>
+<td>APT 공격으로 직원 개인정보 유출 (직전 사고)</td>
+</tr>
+<tr>
+<td>2026-06~07</td>
+<td>MSIT, IITP 대상 보안 점검 실시</td>
+</tr>
+<tr>
+<td>점검 직후</td>
+<td>유지·보수 과정에서 용역 직원이 방화벽 설정을 차단→허용으로 오입력</td>
+</tr>
+<tr>
+<td>2026-07-06</td>
+<td>개인정보접속기록관리 시스템 외부 공격 확인</td>
+</tr>
+<tr>
+<td>2026-07-09</td>
+<td>개인정보보호위원회 신고 (법정 72시간 기한 내)</td>
+</tr>
+<tr>
+<td>2026-07-15</td>
+<td>언론 보도를 통한 대외 확인, 포렌식·로그 분석 진행 중</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. 침해 사고 기술적 상세 분석</h2>
+<h3>① 공격 경로 (루트 원인) — 방화벽 설정 오류를 통한 Elasticsearch 노출</h3>
+<p>이번 침해는 외부의 정교한 공격 기술보다 가장 기본적인 보안 원칙의 결여에서 비롯됐다. 그냥 방화벽 설정을 잘못 풀고 난 뒤 단순한 포트 스캔에 당했다는 말이다.</p>
+<ol>
+<li>MSIT가 IITP에 대해 보안 점검을 실시했다.</li>
+<li>점검 이후 시스템 유지·보수 과정에서, IITP 용역 업체 직원이 방화벽 설정을 변경하면서 &#39;차단(Deny)&#39;을 &#39;허용(Allow)&#39;으로 잘못 입력했다고 한다. </li>
+<li>이 설정 오류로 Elasticsearch 서버의 포트가 인터넷에 any(모든 IP)로 무방비 노출됐다.</li>
+<li>외부 공격자가 해당 포트를 스캐닝하여 시스템에 무단 침투했다.</li>
+</ol>
+<p>인증 없이 노출된 Elasticsearch는 오랫동안 대량 데이터 유출의 대표적 공격 지점이 되었다. Shodan·Censys 등 인터넷 스캐닝 인프라를 통해 노출 후 수 시간 내 자동화 봇의 탐지가 이뤄지는 것이 일반적이며, 이번 사고 역시 노출과 침투 사이 간격이 매우 짧았을 가능성이 높다.</p>
+<h3>② 공격 성격 및 탐지 실패</h3>
+<p>2025년 12월 사고가 내부 직원을 대상으로 한 표적형 APT 공격이었다면, 이번 사고는 외부에 문을 열어둔 인터넷망을 통한 봇을 이용한 침투 공격이다.</p>
+<p>가장 심각한 문제는 탐지 역량이다. 자체 이상징후 탐지 체계가 침해를 실시간으로 포착하지 못했고, 최초 조사에서도 접속 로그 분석만으로 유출 항목을 특정하지 못해 별도의 로그 시스템 개발사 분석에 의존해야 했다. 접속 기록을 관리하는 시스템 자체가 침해된 상황에서 해당 시스템의 로그를 근거로 유출 범위를 판단해야 하는 순환 구조는, 감사 증적의 신뢰성 자체를 의심하게 만든다.</p>
+<h3>2-1. Attack Path</h3>
+<p>공격자는 별도의 취약점 익스플로잇 없이도 노출된 서비스에 대한 스캐닝만으로 시스템 접근이 가능했던 것으로 추정된다.</p>
+<p>예상 공격 흐름은 다음과 같다.</p>
+<p>Firewall Misconfiguration (Deny→Allow) -&gt; Elasticsearch Port Exposed to Any -&gt; Internet-wide Scanning Detection -&gt; Unauthorized Access -&gt; Data Access / Potential Log Tampering (T1070.001 Risk)</p>
+<hr>
+<h2>3. 반복 사고가 드러낸 &#39;관리 부실&#39;의 구조적 문제</h2>
+<p>이번 사고는 단순히 &#39;한 번 더 터진 해킹&#39;이 아니다. 7개월 전 사고 이후 IITP가 내세웠던 보안 강화 조치가 형해화됐음을 입증한 사건이다.</p>
+<h3>① 운영적 실패 (Operational Failure)</h3>
+<p>방화벽 정책 변경 시 요구되는 이중 검토(Dual Review) 및 변경 전후 보안성 검증 절차가 작동하지 않았다. 단 한 명의 용역 직원의 단순 오입력이 국가 기관의 보안을 무력화시킨 것으로, 설정 관리(Configuration Management) 프로세스의 부재를 의미한다.</p>
+<h3>② 제도적 실패 (Institutional Failure)</h3>
+<p>2025년 12월 사고 후 IITP는 유사 침해 방지를 위한 시스템 점검을 약속했으나, 7개월 만의 재침해는 당시 대책이 핵심 시스템(접속기록관리 시스템)에는 적용되지 않았음을 방증한다. 특히 감독 기관인 MSIT의 보안 점검 직후 발생한 휴먼 에러라는 점은, 점검 과정에서의 변경 관리 리스크가 전혀 통제되지 않았음을 보여준다.</p>
+<h3>③ 문화적 실패 (Cultural Failure)</h3>
+<p>IITP 홍진배 원장은 올해 4월 &quot;연구자가 혁신에 집중할 수 있는 환경을 만들겠다&quot;고 밝혔다. 그러나 연구자의 핵심 데이터를 지켜야 할 기관이 기본 방화벽 설정조차 검증하지 못했다면, 이는 보안이 기관의 핵심 가치로 내재화되지 못하고 예산 집행 실적이 우선시되어 온 조직 문화의 방증이다.</p>
+<h3>④ 구조적 맥락 (Structural Context) — R&amp;D 관리 생태계 전반의 취약성</h3>
+<p>IITP의 사고는 고립된 사건이 아니다. 상위 기관인 한국연구재단은 2025년 6월 논문투고 시스템(JAMS) 해킹 당시 &quot;개인정보 유출은 없다&quot;고 연구자들에게 안내했다가, 이후 연구자 12만여 명의 정보 유출을 뒤늦게 시인했다. 한국 R&amp;D 관리 기관들에서 (1) 초기 축소 발표, (2) 자체 탐지 실패, (3) 사후적 유출 확인이라는 동일한 패턴이 반복되고 있으며, 이는 개별 기관의 문제가 아닌 공공 R&amp;D 보안 거버넌스의 구조적 결함이다.</p>
+<p>법정 신고 기한(72시간) 내 신고(7/9)라는 형식적 준수에도 불구하고, 자체 탐지 실패와 로그 신뢰성 문제는 침해 탐지·대응 시간(MTTD/MTTR)이 실효성 있게 관리되지 않고 있음을 의미한다.</p>
+<hr>
+<h2>4. 영향 평가 (Impact Assessment)</h2>
+<h3>① 1차적 영향 (직접 피해)</h3>
+<ul>
+<li><p><strong>감사 증적(Audit Trail)의 신뢰성 상실</strong>: 해킹 대상이 접속 기록 관리 시스템인 점을 고려할 때 로그 위·변조 가능성을 배제할 수 없다. 향후 해당 로그를 기반으로 한 연구비 정산 감사나 법적 분쟁 시 증거 능력이 훼손됐을 수 있다.</p>
+</li>
+<li><p><strong>연구자 개인정보 및 2차 피해</strong>: 연구자 접속 기록(성명, 소속, 접속 IP, 접근 연구과제명 등) 유출 시 신원 도용 및 연구과제 표적 스피어 피싱으로 이어질 수 있다. 특히 국내 연구자를 겨냥한 북한 연계 조직(Kimsuky, APT37 등)의 표적형 공격이 상시 진행 중인 환경에서, 유출된 접속 기록은 정밀 타기팅 자료로 활용될 수 있다.</p>
+</li>
+</ul>
+<p>연구자의 개인정보를 이용해서 타겟팅한 스미싱 및 연구결과를 해킹하는 등의 2차 피해가 발생할 수 있다.</p>
+<h3>② 2차적 영향 (국가·사회적 영향)</h3>
+<ul>
+<li><p><strong>국가 R&amp;D 보안 위기</strong>: 타국 정보기관 또는 사이버 범죄 조직이 연구자들의 접근 패턴을 분석할 경우, 국가 전략 기술(반도체, AI, 양자)의 연구 동향과 취약점을 역추적할 단서를 제공하게 된다.</p>
+</li>
+<li><p><strong>공공 보안 정책 신뢰 훼손</strong>: 국가 디지털 정책 총괄 부처(MSIT) 산하기관이 7개월 만에 동일한 관리 부실로 재침해된 사실은, 정부 공공 보안 정책 전반에 대한 국민과 연구계의 신뢰를 근본적으로 흔들었다.</p>
+</li>
+</ul>
+<hr>
+<h2>5. 권고 조치 (Recommendations)</h2>
+<h3>① IITP 긴급 조치 (30일 이내)</h3>
+<ol>
+<li><strong>제3자 독립 보안 감사</strong>: 자체 조사가 아닌 독립 기관을 통한 전수 보안 감사에 즉시 착수하고 결과를 투명하게 공개할 것.</li>
+<li><strong>방화벽 설정 변경 프로세스 전면 재설계</strong>: Infrastructure as Code(IaC) 도입 및 변경 관리 위원회(CAB) 승인 의무화. 단일 인원의 수기 설정 변경 자체를 기술적으로 차단하는 구조로 전환할 것.</li>
+<li><strong>DBMS·로그 저장소의 인터넷 노출 전면 차단</strong>: Elasticsearch를 포함한 모든 데이터베이스 및 로그 저장소를 내부 폐쇄망으로 이전하고, VPN 또는 전용 접근 채널만 허용할 것. 외부 노출 여부는 Shodan·Censys 등 외부 스캐닝 관점에서 주기적으로 검증할 것.</li>
+<li><strong>침해 탐지·대응 체계 구축</strong>: 네트워크 트래픽 이상 탐지 및 24/7 SOC 연동 체계를 강화하고, 접속기록 시스템의 로그는 WORM(Write Once Read Many) 저장소 등 위·변조 방지 구조로 이중화할 것.</li>
+</ol>
+<h3>② MSIT 및 정부 차원의 후속 조치</h3>
+<ol>
+<li><p><strong>전 유관기관 긴급 점검</strong>: 과기정통부 산하 전 기관과 출연연을 대상으로 개인정보접속기록시스템 및 핵심 DB의 인터넷 노출 여부를 일제 조사할 것. 한국연구재단(2025.6)—IITP(2025.12, 2026.7)로 이어지는 반복 패턴을 고려하면 전수 조사가 시급하다.</p>
+</li>
+<li><p><strong>용역업체 보안 관리 강화</strong>: 이번 사고의 직접 원인은 외부 용역 직원의 설정 오류다. 용역 종사자 보안 교육 의무화와 주요 설정 변경 시 정보보안 자격자 입회·검증을 의무화할 것.</p>
+</li>
+<li><p><strong>침해 대응 SLA 법제화</strong>: 침해 발생부터 탐지까지의 허용 시간을 법적으로 규제하고, 위반 시 기관장 책임(직무 정지·해임 등)을 명확히 할 것. 신고 기한(72시간)만 준수하고 탐지 공백은 방치되는 현행 구조로는 재발을 막을 수 없다.</p>
+</li>
+</ol>
+<hr>
+<h2>6. 종합 결론</h2>
+<p>IITP의 이번 사고는 &quot;APT가 무서운 것이 아니라, 방화벽 설정 하나를 제대로 검증하지 못하는 조직 문화가 무서운 것&quot;임을 단적으로 보여준다.</p>
+<p>2025년 12월의 APT 공격이 &#39;외부의 적&#39;에 의한 사고였다면, 이번 사고는 &#39;내부의 관리 부실&#39;이 자초한 침해다. IITP는 7개월간 직원 교육, 시스템 점검, 보안 패치 등 개선 과제 이행을 발표했으나, 방화벽 설정값 하나를 두 명이 교차 검증하는 기본기조차 기관의 프로세스로 정착시키지 못했다.</p>
+<p>국가 R&amp;D 예산 1.9조 원을 관장하는 기관이 관리 대상 연구자들의 데이터를 지키기 위한 최소한의 변경 관리조차 작동하지 않는다면, 이는 더 이상 보안 기술의 문제가 아니라 조직의 존립 근간을 위협하는 경영 결함이다. 추가적인 &#39;보안 강화 선언&#39;이 아니라, 보안 조직의 독립성 확보와 변경 관리 체계의 전면 재구축을 포함한 구조적 쇄신 없이는 국가 R&amp;D 관리기관으로서의 신뢰 회복이 어려울 것이다.</p>
+<hr>
+<h2>참고 자료 (References)</h2>
+<ul>
+<li>머니투데이, &quot;IITP, 개인정보접속기록관리 시스템 해킹…7개월 만에 또 보안 사고&quot; (2026-07-15) — <a href="https://www.mt.co.kr/tech/2026/07/15/2026071519300161690">https://www.mt.co.kr/tech/2026/07/15/2026071519300161690</a></li>
+<li>조선비즈, &quot;정보통신기획평가원도 해커에 뚫렸다… 수년간 쌓인 연구자 정보 유출 우려&quot; (2026-07-15) — <a href="https://n.news.naver.com/article/366/0001179418">https://n.news.naver.com/article/366/0001179418</a></li>
+<li>경향신문, &quot;&#39;개인정보 유출 없다&#39;던 한국연구재단, 연구자 12만여명 정보 유출 뒤늦게 시인&quot; (2025-06-12) — <a href="https://www.khan.co.kr/article/202506121725011">https://www.khan.co.kr/article/202506121725011</a></li>
+</ul>
+<hr>
+<p><em>본 리포트는 공개 출처 정보(OSINT)를 기반으로 작성되었으며, TLP:CLEAR 등급에 따라 자유롭게 공유 가능합니다. 유출 규모·항목 등은 조사 진행에 따라 갱신될 수 있습니다.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0720-IITP_KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

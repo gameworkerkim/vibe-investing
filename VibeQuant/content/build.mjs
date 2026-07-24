@@ -6,6 +6,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import crypto from "node:crypto";
+import { execFileSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { marked } from "marked";
 import {
@@ -14,6 +15,11 @@ import {
   TECH_GROUP_RULES,
   TECH_GROUP_FALLBACK,
   FEATURED_COLUMN_PATHS,
+  FEATURED_MEDIA_COLUMN_PATHS,
+  FEATURED_TECH_PATHS,
+  FEATURED_ESSAY_PATHS,
+  ESSAY_GROUP_RULES,
+  ESSAY_GROUP_FALLBACK,
   resolveGroup,
   groupsFromRules,
 } from "./groups.mjs";
@@ -36,18 +42,29 @@ const ROOT = path.resolve(__dirname, "../..");
 const VQ = path.resolve(__dirname, "..");
 const PAGES = path.join(VQ, "pages");
 const COL_SRC = path.join(ROOT, "02.Investment Idea Column");
+const MEDIA_COL_SRC = path.join(ROOT, "03. Media-Column");
 const TECH_SRC = path.join(ROOT, "TechDoc");
 const CTI_SRC =
   process.env.CTI_SRC ||
   path.resolve(ROOT, "../CYBER-THREAT-INTELLIGENCE-REPORT");
+const ESSAY_SRC =
+  process.env.ESSAY_SRC ||
+  path.join(__dirname, "_external/essays");
 const SITE = process.env.SITE_URL || "https://vibequant.cc";
 const SITE_DOCS = process.env.SITE_DOCS_URL || "https://docs.vibequant.cc";
 const SITE_TECH = process.env.SITE_TECH_URL || "https://tech.vibequant.cc";
 const SITE_CTI = process.env.SITE_CTI_URL || "https://cti.vibequant.cc";
 const SITE_PLAY = process.env.SITE_PLAY_URL || "https://play.vibequant.cc";
+const SITE_ESSAY = process.env.SITE_ESSAY_URL || "https://vibequant.cc";
+const SITE_LAB = process.env.SITE_LAB_URL || "https://vibequant.cc/lab/";
+const SITE_RESEARCH = process.env.SITE_RESEARCH_URL || "https://vibequant.cc/research/";
 const COL_BLOB = "https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column";
+const MEDIA_COL_BLOB =
+  "https://github.com/gameworkerkim/vibe-investing/blob/main/03.%20Media-Column";
 const TECH_BLOB = "https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc";
 const CTI_BLOB = "https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main";
+const ESSAY_BLOB = "https://github.com/gameworkerkim/essays/blob/main";
+const GITHUB_HOME = "https://github.com/gameworkerkim/vibe-investing";
 
 const AUTHOR_BIO = {
   default:
@@ -59,6 +76,7 @@ function siteForSection(section) {
   if (section === "columns") return SITE_DOCS;
   if (section === "tech") return SITE_TECH;
   if (section === "cti") return SITE_CTI;
+  if (section === "essays") return SITE_ESSAY;
   return SITE;
 }
 
@@ -77,10 +95,97 @@ function esc(s) {
 }
 
 function stripFrontmatter(md) {
-  if (!md.startsWith("---")) return md;
-  const end = md.indexOf("\n---", 3);
-  if (end === -1) return md;
-  return md.slice(end + 4).replace(/^\s+/, "");
+  let s = String(md ?? "").replace(/^\uFEFF/, "");
+  // Leading HTML comments often wrap YAML / JSON-LD; also strip HEAD refs after live YAML
+  for (let pass = 0; pass < 4; pass++) {
+    const m = s.match(/^\s*<!--[\s\S]*?-->\s*/);
+    if (m) {
+      s = s.slice(m[0].length);
+      continue;
+    }
+    if (s.startsWith("---")) {
+      const end = s.indexOf("\n---", 3);
+      if (end !== -1) {
+        s = s.slice(end + 4);
+        continue;
+      }
+    }
+    break;
+  }
+  return s.replace(/^\s+/, "");
+}
+
+/** Parse YAML-ish key values from leading `---` or `<!-- --- ... --- -->` blocks. */
+function parseColumnMeta(md) {
+  const text = String(md ?? "").replace(/^\uFEFF/, "");
+  let fm = "";
+  if (text.startsWith("---")) {
+    const end = text.indexOf("\n---", 3);
+    if (end !== -1) fm = text.slice(3, end);
+  }
+  if (!fm) {
+    const comments = text.match(/<!--[\s\S]*?-->/g) || [];
+    for (const block of comments.slice(0, 3)) {
+      const inner = block.replace(/^<!--\s*/, "").replace(/\s*-->$/, "");
+      if (/^\s*---/.test(inner) || /\n(?:title|date|media|source_url|group)\s*:/i.test(inner)) {
+        fm = inner.replace(/^\s*---\s*/, "").replace(/\s*---\s*$/, "");
+        break;
+      }
+    }
+  }
+  if (!fm) return {};
+  const meta = {};
+  const lines = fm.split(/\r?\n/);
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    const m = line.match(/^([A-Za-z0-9_]+):\s*(.*)$/);
+    if (!m) {
+      i++;
+      continue;
+    }
+    const key = m[1];
+    let val = m[2].trim();
+    if (val === "|" || val === ">") {
+      const buf = [];
+      i++;
+      while (i < lines.length && (/^(\s{2,}|\t)/.test(lines[i]) || !lines[i].trim())) {
+        if (lines[i].trim()) buf.push(lines[i].replace(/^\s{2}/, ""));
+        i++;
+      }
+      meta[key] = buf.join("\n").trim();
+      continue;
+    }
+    if (!val && i + 1 < lines.length && /^\s+-\s+/.test(lines[i + 1])) {
+      const arr = [];
+      i++;
+      while (i < lines.length && /^\s+-\s+/.test(lines[i])) {
+        let item = lines[i].replace(/^\s+-\s+/, "").trim();
+        if (
+          (item.startsWith('"') && item.endsWith('"')) ||
+          (item.startsWith("'") && item.endsWith("'"))
+        ) {
+          item = item.slice(1, -1);
+        }
+        arr.push(item);
+        i++;
+      }
+      meta[key] = arr;
+      continue;
+    }
+    if (
+      (val.startsWith('"') && val.endsWith('"')) ||
+      (val.startsWith("'") && val.endsWith("'"))
+    ) {
+      val = val.slice(1, -1);
+    }
+    if (val === "true") val = true;
+    else if (val === "false") val = false;
+    else if (/^\d+$/.test(val)) val = Number(val);
+    meta[key] = val;
+    i++;
+  }
+  return meta;
 }
 
 function cleanInline(s) {
@@ -428,6 +533,12 @@ function shouldSkipTech(rel) {
   return false;
 }
 
+function shouldSkipEssay(rel) {
+  const n = path.basename(rel).toLowerCase();
+  if (n === "readme.md" || n === "llms.txt" || n === "license" || n === "license.md") return true;
+  return false;
+}
+
 function shouldSkipCti(rel) {
   const n = path.basename(rel).toLowerCase();
   if (n === "readme.md" || n === "llms.txt") return true;
@@ -505,47 +616,108 @@ function sortByDateThenPath(items) {
 }
 
 function scanColumns() {
-  const files = walkMd(COL_SRC, shouldSkipColumn);
-  const gitDates = loadGitDates(ROOT, "02.Investment Idea Column");
+  const invFiles = walkMd(COL_SRC, shouldSkipColumn);
+  const mediaFiles = fs.existsSync(MEDIA_COL_SRC)
+    ? walkMd(MEDIA_COL_SRC, shouldSkipColumn)
+    : [];
+  const gitInv = loadGitDates(ROOT, "02.Investment Idea Column");
+  const gitMedia = fs.existsSync(MEDIA_COL_SRC)
+    ? loadGitDates(ROOT, "03. Media-Column")
+    : new Map();
   const items = [];
-  for (const rel of files) {
-    const full = path.join(COL_SRC, rel);
+
+  function pushColumn({ rel, srcDir, blob, gitDates, pathPrefix }) {
+    const full = path.join(srcDir, rel);
     let md = "";
     try {
       md = fs.readFileSync(full, "utf8");
     } catch {
-      continue;
+      return;
     }
-    const group = resolveGroup(rel, COLUMN_GROUP_RULES, COLUMN_GROUP_FALLBACK);
+    const meta = parseColumnMeta(md);
+    if (meta.draft === true) return;
+    const groupId = meta.group || null;
+    const group = groupId
+      ? COLUMN_GROUP_RULES.find((g) => g.id === groupId) ||
+        resolveGroup(rel, COLUMN_GROUP_RULES, COLUMN_GROUP_FALLBACK)
+      : resolveGroup(rel, COLUMN_GROUP_RULES, COLUMN_GROUP_FALLBACK);
+    const groupTitle = group.title_ko || groupId || COLUMN_GROUP_FALLBACK.title_ko;
     const baseTitle = path.basename(rel, path.extname(rel)).replace(/[_-]+/g, " ");
-    const parsed = parseDoc(md, baseTitle);
+    const parsed = parseDoc(md, meta.title || baseTitle);
+    if (meta.title) parsed.title = String(meta.title).slice(0, 200);
+    if (meta.description) parsed.description = String(meta.description).slice(0, 200);
+    if (meta.subtitle) parsed.subtitle = String(meta.subtitle).slice(0, 160);
     const dates = resolveItemDates({ md, relPath: rel, gitEntry: gitDates.get(rel) });
-    const featuredRank = FEATURED_COLUMN_PATHS.findIndex((p) => {
-      const needle = p.replace(/\\/g, "/").toLowerCase();
-      const hay = rel.toLowerCase();
-      if (hay === needle || hay.endsWith("/" + needle) || hay.includes(needle)) return true;
-      const featBase = path.basename(needle).toLowerCase();
-      const fileBase = path.basename(hay).toLowerCase();
-      return featBase.length >= 8 && featBase === fileBase;
-    });
+    const catalogPath = pathPrefix ? `${pathPrefix}${rel}` : rel;
+    const featLists = [FEATURED_COLUMN_PATHS, FEATURED_MEDIA_COLUMN_PATHS];
+    let featuredRank = 999;
+    let featured = false;
+    if (meta.featured === true) {
+      featured = true;
+      featuredRank = Number(meta.featured_rank ?? 50);
+    } else {
+      for (const list of featLists) {
+        const idx = list.findIndex((p) => {
+          const needle = p.replace(/\\/g, "/").toLowerCase();
+          const hay = catalogPath.toLowerCase();
+          if (hay === needle || hay.endsWith("/" + needle) || hay.includes(needle)) return true;
+          const featBase = path.basename(needle).toLowerCase();
+          const fileBase = path.basename(hay).toLowerCase();
+          return featBase.length >= 8 && (featBase === fileBase || fileBase.startsWith(featBase));
+        });
+        if (idx >= 0) {
+          featured = true;
+          featuredRank = idx;
+          break;
+        }
+      }
+    }
+    const tags = Array.isArray(meta.tags)
+      ? meta.tags.map(String)
+      : [groupTitle, ...(meta.media ? [String(meta.media)] : []), ...rel.split("/").slice(0, -1)].slice(
+          0,
+          8
+        );
     items.push({
       kind: "column",
-      slug: makeSlug(rel),
-      path: rel,
+      slug: makeSlug(catalogPath),
+      path: catalogPath,
       title: parsed.title,
       description: parsed.description,
       subtitle: parsed.subtitle,
       byline: parsed.byline,
-      group: group.id,
-      groupTitle: group.title_ko,
-      tags: [group.title_ko, ...rel.split("/").slice(0, -1)].slice(0, 5),
-      featured: featuredRank >= 0,
-      featuredRank: featuredRank >= 0 ? featuredRank : 999,
-      github: githubUrl(COL_BLOB, rel),
+      group: group.id || groupId || COLUMN_GROUP_FALLBACK.id,
+      groupTitle,
+      tags,
+      media: meta.media ? String(meta.media) : pathPrefix ? "미디어" : "",
+      sourceUrl: meta.source_url ? String(meta.source_url) : "",
+      featured,
+      featuredRank: featured ? featuredRank : 999,
+      github: githubUrl(blob, rel),
+      srcDir,
+      relPath: rel,
+      datePublished: dates.datePublished || (meta.date ? String(meta.date).slice(0, 10) : null),
+      dateModified: dates.dateModified || dates.datePublished,
+      dateSource: dates.dateSource || (meta.date ? "frontmatter" : null),
+    });
+  }
+
+  for (const rel of invFiles) {
+    pushColumn({
+      rel,
       srcDir: COL_SRC,
-      datePublished: dates.datePublished,
-      dateModified: dates.dateModified,
-      dateSource: dates.dateSource,
+      blob: COL_BLOB,
+      gitDates: gitInv,
+      pathPrefix: "",
+    });
+  }
+  for (const rel of mediaFiles) {
+    pushColumn({
+      rel,
+      srcDir: MEDIA_COL_SRC,
+      blob: MEDIA_COL_BLOB,
+      gitDates: gitMedia,
+      pathPrefix: "media/",
     });
   }
   unifyFamilyDates(items);
@@ -568,6 +740,14 @@ function scanTech() {
     const baseTitle = path.basename(rel, path.extname(rel)).replace(/[_-]+/g, " ");
     const parsed = parseDoc(md, baseTitle);
     const dates = resolveItemDates({ md, relPath: rel, gitEntry: gitDates.get(rel) });
+    const featuredRank = FEATURED_TECH_PATHS.findIndex((p) => {
+      const needle = p.replace(/\\/g, "/").toLowerCase();
+      const hay = rel.toLowerCase();
+      if (hay === needle || hay.endsWith("/" + needle) || hay.includes(needle)) return true;
+      const featBase = path.basename(needle).toLowerCase();
+      const fileBase = path.basename(hay).toLowerCase();
+      return featBase.length >= 8 && featBase === fileBase;
+    });
     items.push({
       kind: "tech",
       slug: makeSlug("tech/" + rel),
@@ -579,10 +759,81 @@ function scanTech() {
       group: group.id,
       groupTitle: group.title_ko,
       tags: [group.title_ko, rel.split("/")[0]].filter(Boolean),
-      featured: false,
-      featuredRank: 999,
+      featured: featuredRank >= 0,
+      featuredRank: featuredRank >= 0 ? featuredRank : 999,
       github: githubUrl(TECH_BLOB, rel),
       srcDir: TECH_SRC,
+      datePublished: dates.datePublished,
+      dateModified: dates.dateModified,
+      dateSource: dates.dateSource,
+    });
+  }
+  unifyFamilyDates(items);
+  return sortByDateThenPath(items);
+}
+
+function ensureEssaySrc() {
+  if (fs.existsSync(path.join(ESSAY_SRC, "README.md")) || fs.existsSync(path.join(ESSAY_SRC, "art"))) {
+    return true;
+  }
+  try {
+    ensureDir(path.dirname(ESSAY_SRC));
+    execFileSync(
+      "git",
+      ["-c", "core.hooksPath=/dev/null", "clone", "--depth", "1", "https://github.com/gameworkerkim/essays.git", ESSAY_SRC],
+      { stdio: "inherit" }
+    );
+    return fs.existsSync(ESSAY_SRC);
+  } catch (e) {
+    console.warn("  essays clone failed:", e.message || e);
+    return false;
+  }
+}
+
+function scanEssays() {
+  if (!ensureEssaySrc()) {
+    console.warn(`  essays source missing: ${ESSAY_SRC}`);
+    return [];
+  }
+  const files = walkMd(ESSAY_SRC, shouldSkipEssay);
+  // loadGitDates(repoRoot, subdir) — essays root is the repo
+  const gitDates = loadGitDates(ESSAY_SRC, ".");
+  const items = [];
+  for (const rel of files) {
+    const full = path.join(ESSAY_SRC, rel);
+    let md = "";
+    try {
+      md = fs.readFileSync(full, "utf8");
+    } catch {
+      continue;
+    }
+    const group = resolveGroup(rel, ESSAY_GROUP_RULES, ESSAY_GROUP_FALLBACK);
+    const baseTitle = path.basename(rel, path.extname(rel)).replace(/^\d+-/, "").replace(/[_-]+/g, " ");
+    const parsed = parseDoc(md, baseTitle);
+    const dates = resolveItemDates({ md, relPath: rel, gitEntry: gitDates.get(rel) });
+    const featuredRank = FEATURED_ESSAY_PATHS.findIndex((p) => {
+      const needle = p.replace(/\\/g, "/").toLowerCase();
+      const hay = rel.toLowerCase();
+      if (hay === needle || hay.endsWith("/" + needle) || hay.includes(needle)) return true;
+      const featBase = path.basename(needle).toLowerCase();
+      const fileBase = path.basename(hay).toLowerCase();
+      return featBase.length >= 8 && featBase === fileBase;
+    });
+    items.push({
+      kind: "essay",
+      slug: makeSlug("essays/" + rel),
+      path: rel,
+      title: parsed.title,
+      description: parsed.description,
+      subtitle: parsed.subtitle,
+      byline: parsed.byline,
+      group: group.id,
+      groupTitle: group.title_ko,
+      tags: [group.title_ko, rel.split("/")[0]].filter(Boolean),
+      featured: featuredRank >= 0,
+      featuredRank: featuredRank >= 0 ? featuredRank : 999,
+      github: githubUrl(ESSAY_BLOB, rel),
+      srcDir: ESSAY_SRC,
       datePublished: dates.datePublished,
       dateModified: dates.dateModified,
       dateSource: dates.dateSource,
@@ -726,6 +977,7 @@ function ctiLangSwitchHtml(currentLang, langsMap, { absoluteBase = "" } = {}) {
 function sectionLabel(section) {
   if (section === "tech") return "Tech";
   if (section === "cti") return "CTI";
+  if (section === "essays") return "Essays";
   return "Columns";
 }
 
@@ -735,17 +987,21 @@ function authorBioHtml(section) {
 
 function renderNav(active) {
   const items = [
-    { href: `${SITE}/`, id: "demo", label: "Home" },
     { href: `${SITE_DOCS}/columns/`, id: "columns", label: "Columns" },
     { href: `${SITE_TECH}/tech/`, id: "tech", label: "Tech" },
-    { href: `${SITE_CTI}/cti/`, id: "cti", label: "CTI" },
     { href: `${SITE_PLAY}/play/`, id: "play", label: "Play" },
+    { href: `${SITE_CTI}/cti/`, id: "cti", label: "CTI" },
+    { href: `${SITE_ESSAY}/essays/`, id: "essays", label: "Essay" },
+    { href: SITE_LAB, id: "lab", label: "Lab" },
+    { href: SITE_RESEARCH, id: "research", label: "Research" },
+    { href: GITHUB_HOME, id: "github", label: "GitHub", external: true },
     { href: `${SITE}/about/`, id: "about", label: "About" },
   ];
   return items
     .map((i) => {
       const cls = i.id === active ? "site-nav-link is-active" : "site-nav-link";
-      return `<a class="${cls}" href="${i.href}">${i.label}</a>`;
+      const extra = i.external ? ' target="_blank" rel="noopener noreferrer"' : "";
+      return `<a class="${cls}" href="${i.href}"${extra}>${i.label}</a>`;
     })
     .join("\n        ");
 }
@@ -801,7 +1057,7 @@ function layout({
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="${prefix}css/content.css?v=6" />
+  <link rel="stylesheet" href="${prefix}css/content.css?v=7" />
   ${extraHead}
   ${ld}
 </head>
@@ -814,7 +1070,7 @@ function layout({
   </header>
   ${body}
   <footer class="site-foot">
-    <p><a href="${SITE}/">Home</a> · <a href="${SITE_DOCS}/columns/">Columns</a> · <a href="${SITE_TECH}/tech/">Tech</a> · <a href="${SITE_CTI}/cti/">CTI</a> · <a href="${SITE_PLAY}/play/">Play</a> · <a href="${SITE}/about/">About</a></p>
+    <p><a href="${SITE}/">Home</a> · <a href="${SITE_DOCS}/columns/">Columns</a> · <a href="${SITE_TECH}/tech/">Tech</a> · <a href="${SITE_PLAY}/play/">Play</a> · <a href="${SITE_CTI}/cti/">CTI</a> · <a href="${SITE_ESSAY}/essays/">Essay</a> · <a href="${SITE_LAB}">Lab</a> · <a href="${SITE_RESEARCH}">Research</a> · <a href="${GITHUB_HOME}">GitHub</a> · <a href="${SITE}/about/">About</a></p>
     <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
   </footer>
 </body>
@@ -823,9 +1079,12 @@ function layout({
 }
 
 function buildArticle(item, section) {
-  const full = path.join(item.srcDir, item.path);
+  const full = path.join(item.srcDir, item.relPath || item.path);
   const raw = fs.readFileSync(full, "utf8");
+  const meta = parseColumnMeta(raw);
   const parsed = parseDoc(raw, item.title);
+  if (meta.title) parsed.title = String(meta.title);
+  if (meta.description) parsed.description = String(meta.description);
   let htmlBody = marked.parse(sanitizeMd(parsed.bodyMd || stripFrontmatter(raw)));
   htmlBody = fixLiteralBoldHtml(htmlBody);
   htmlBody = htmlBody.replace(/^\s*<h1\b[^>]*>[\s\S]*?<\/h1>\s*/i, "");
@@ -838,13 +1097,26 @@ function buildArticle(item, section) {
     !ledeCandidate ||
     isMetaLine(ledeCandidate) ||
     META_LABEL.test(ledeCandidate) ||
-    /^(작성일|발행|저자|작성자)\b/.test(ledeCandidate);
+    /^(작성일|발행|저자|작성자)\b/.test(ledeCandidate) ||
+    /기고\s*$/.test(ledeCandidate.trim());
   const ledeText = ledeIsMeta ? parsed.description || item.description : ledeCandidate;
   const datePub = item.datePublished || null;
   const dateMod = item.dateModified || datePub;
-  const dateHtml = datePub
-    ? `<p class="article-dates"><time datetime="${esc(datePub)}">발행 ${esc(formatDisplayDate(datePub))}</time>${
-        dateMod && dateMod !== datePub
+  const mediaLabel = item.media || meta.media || "";
+  const topicTags = Array.isArray(meta.tags)
+    ? meta.tags.filter((t) => t && t !== "미디어칼럼" && t !== mediaLabel).slice(0, 6)
+    : (item.tags || []).slice(0, 6);
+  const metaBits = [];
+  if (datePub) {
+    metaBits.push(
+      `<time datetime="${esc(datePub)}">발행 ${esc(formatDisplayDate(datePub))}</time>`
+    );
+  }
+  if (mediaLabel) metaBits.push(`미디어 <strong>${esc(mediaLabel)}</strong>`);
+  if (topicTags.length) metaBits.push(`주제 ${esc(topicTags.join(" · "))}`);
+  const dateHtml = metaBits.length
+    ? `<p class="article-dates">${metaBits.join(" · ")}${
+        dateMod && datePub && dateMod !== datePub
           ? ` · <time datetime="${esc(dateMod)}">수정 ${esc(formatDisplayDate(dateMod))}</time>`
           : ""
       }</p>`
@@ -857,12 +1129,18 @@ function buildArticle(item, section) {
     section === "cti" && item.langs && Object.keys(item.langs).length > 1
       ? ctiLangSwitchHtml(item.lang || "KR", item.langs, { absoluteBase: `${prefix}${section}/` })
       : "";
+  const sourceUrl = item.sourceUrl || meta.source_url || "";
+  const sourceHtml = sourceUrl
+    ? `<p class="author-links"><a href="${esc(sourceUrl)}" rel="noopener noreferrer" target="_blank">원문 링크 (${esc(
+        mediaLabel || "언론사"
+      )})</a></p>`
+    : "";
   const body = `
   <main class="article-wrap">
     <p class="crumb"><a href="${prefix}${section}/">${sectionLabel(section)}</a> · ${esc(item.groupTitle)}</p>
     <article class="article">
       <header class="article-head">
-        <p class="eyebrow">${esc(item.groupTitle)}</p>
+        <p class="eyebrow">${esc(item.groupTitle)}${mediaLabel ? ` · ${esc(mediaLabel)}` : ""}</p>
         <h1>${esc(parsed.title || item.title)}</h1>
         ${dateHtml}
         ${langSwitch}
@@ -873,6 +1151,7 @@ function buildArticle(item, section) {
       <aside class="author-box">
         <h2>작성자 / Source</h2>
         <p>${authorBioHtml(section)}</p>
+        ${sourceHtml}
         <p class="author-links">
           <a href="${SITE}/about/">About</a>
           · <a href="${esc(item.github)}">GitHub 원문</a>
@@ -891,19 +1170,28 @@ function buildArticle(item, section) {
     description: metaDesc,
     author: { "@type": "Person", name: "Dennis Kim", alternateName: "김호광" },
     mainEntityOfPage: canonical,
-    isBasedOn: item.github,
+    isBasedOn: sourceUrl || item.github,
     image: `${SITE}/og-default.png`,
   };
   if (datePub) jsonLd.datePublished = datePub;
   if (dateMod) jsonLd.dateModified = dateMod;
   if (item.lang) jsonLd.inLanguage = htmlLang;
+  if (mediaLabel) jsonLd.publisher = { "@type": "Organization", name: mediaLabel };
+  if (topicTags.length) jsonLd.keywords = topicTags.join(", ");
   fs.writeFileSync(
     path.join(outDir, "index.html"),
     layout({
       title: parsed.title || item.title,
       description: metaDesc,
       canonical,
-      active: section === "tech" ? "tech" : section === "cti" ? "cti" : "columns",
+      active:
+        section === "tech"
+          ? "tech"
+          : section === "cti"
+            ? "cti"
+            : section === "essays"
+              ? "essays"
+              : "columns",
       prefix,
       body,
       ogType: "article",
@@ -920,6 +1208,7 @@ function cardHtml(item, hrefPrefix = "./") {
     item.description,
     item.groupTitle,
     item.datePublished,
+    item.media,
     ...(item.tags || []),
     item.path,
   ]
@@ -927,11 +1216,16 @@ function cardHtml(item, hrefPrefix = "./") {
     .toLowerCase();
   const langAttr = item.lang ? ` data-lang="${esc(item.lang)}"` : "";
   const dateAttr = item.datePublished ? ` data-date="${esc(item.datePublished)}"` : "";
+  const mediaAttr = item.media ? ` data-media="${esc(item.media)}"` : "";
+  const featAttr = item.featured
+    ? ` data-featured="1" data-featured-rank="${esc(String(item.featuredRank ?? 999))}"`
+    : ` data-featured-rank="999"`;
   const dateLabel = item.datePublished
     ? `<time class="col-date" datetime="${esc(item.datePublished)}">${esc(formatDisplayDate(item.datePublished))}</time>`
     : "";
-  return `<a class="col-card" href="${hrefPrefix}${esc(item.slug)}/" data-group="${esc(item.group)}" data-search="${esc(search)}"${langAttr}${dateAttr}${item.featured ? ' data-featured="1"' : ""}>
-        <span class="col-group">${esc(item.groupTitle)}${dateLabel ? ` · ${dateLabel}` : ""}</span>
+  const mediaBit = item.media ? `${esc(item.media)} · ` : "";
+  return `<a class="col-card" href="${hrefPrefix}${esc(item.slug)}/" data-group="${esc(item.group)}" data-search="${esc(search)}"${langAttr}${dateAttr}${mediaAttr}${featAttr}>
+        <span class="col-group">${mediaBit}${esc(item.groupTitle)}${dateLabel ? ` · ${dateLabel}` : ""}</span>
         <strong class="col-title">${esc(item.title)}</strong>
         <span class="col-desc">${esc(item.description)}</span>
       </a>`;
@@ -941,13 +1235,21 @@ function writeCatalogSearchJs(outPath) {
   const js = `(() => {
   const q = document.getElementById("col-search");
   const g = document.getElementById("col-group");
+  const sortEl = document.getElementById("col-sort");
   const root = document.getElementById("col-root");
   const count = document.getElementById("col-count");
+  const flatSec = document.getElementById("sort-flat-section");
+  const flatGrid = document.getElementById("sort-flat");
+  const flatLabel = document.getElementById("sort-flat-label");
   if (!q || !root) return;
-  const cards = [...root.querySelectorAll(".col-card")];
   const sections = [...root.querySelectorAll("[data-group-section]")];
+  const mainCards = [...root.querySelectorAll("[data-group-section] .col-card")];
+  const feat = document.getElementById("featured-section");
+  const featCards = feat ? [...feat.querySelectorAll(".col-card")] : [];
+  const allFilterCards = [...mainCards, ...featCards];
   const langBtns = [...document.querySelectorAll("[data-lang-btn]")];
   const LANG_KEY = "vq-cti-lang";
+  const SORT_KEY = "vq-catalog-sort:" + location.pathname;
   const hasLangFilter = langBtns.length > 0;
 
   function browserLang() {
@@ -966,6 +1268,11 @@ function writeCatalogSearchJs(outPath) {
   let lang = hasLangFilter ? (localStorage.getItem(LANG_KEY) || browserLang()) : "";
   if (hasLangFilter && !["KR", "EN", "JP", "CN"].includes(lang)) lang = browserLang();
 
+  function sortMode() {
+    const v = (sortEl && sortEl.value) || "group";
+    return v === "date" || v === "featured" ? v : "group";
+  }
+
   function matchCard(card, termTokens, group, langFilter) {
     const okG = !group || card.dataset.group === group;
     if (!okG) return false;
@@ -983,55 +1290,93 @@ function writeCatalogSearchJs(outPath) {
     }
   }
 
+  function compareCards(a, b, mode) {
+    if (mode === "featured") {
+      const fa = a.dataset.featured === "1" ? 0 : 1;
+      const fb = b.dataset.featured === "1" ? 0 : 1;
+      if (fa !== fb) return fa - fb;
+      const ra = Number(a.dataset.featuredRank || 999);
+      const rb = Number(b.dataset.featuredRank || 999);
+      if (ra !== rb) return ra - rb;
+    }
+    const da = a.dataset.date || "";
+    const db = b.dataset.date || "";
+    if (da && db && da !== db) return db.localeCompare(da);
+    if (da && !db) return -1;
+    if (!da && db) return 1;
+    const ta = (a.querySelector(".col-title") && a.querySelector(".col-title").textContent) || "";
+    const tb = (b.querySelector(".col-title") && b.querySelector(".col-title").textContent) || "";
+    return ta.localeCompare(tb, "ko");
+  }
+
+  function setSectionVisible(el, show) {
+    if (!el) return;
+    el.classList.toggle("is-hidden", !show);
+    el.hidden = !show;
+    el.style.display = show ? "" : "none";
+  }
+
   function apply() {
     const termTokens = tokens(q.value);
     const group = (g && g.value) || "";
     const langFilter = hasLangFilter ? lang : "";
-    const mainCards = cards.filter((c) => !c.closest("#featured-section"));
+    const mode = sortMode();
     const pool = langFilter
       ? mainCards.filter((c) => !c.dataset.lang || c.dataset.lang === langFilter)
       : mainCards;
-    let n = 0;
-    for (const c of cards) {
+
+    for (const c of allFilterCards) {
       const show = matchCard(c, termTokens, group, langFilter);
       c.classList.toggle("is-hidden", !show);
       c.hidden = !show;
       c.style.display = show ? "" : "none";
-      if (show && !c.closest("#featured-section")) n++;
     }
-    for (const sec of sections) {
-      const gid = sec.dataset.groupSection;
-      const visibleInSec = cards.filter(
-        (c) =>
-          !c.closest("#featured-section") &&
-          c.dataset.group === gid &&
-          !c.classList.contains("is-hidden")
-      );
-      const any = visibleInSec.length > 0;
-      sec.classList.toggle("is-hidden", !any);
-      sec.hidden = !any;
-      sec.style.display = any ? "" : "none";
-      const cnt = sec.querySelector(".section-count");
-      if (cnt) cnt.textContent = "(" + visibleInSec.length + ")";
-    }
-    const feat = document.getElementById("featured-section");
-    if (feat) {
-      const featCards = [...feat.querySelectorAll(".col-card")];
-      const anyFeat = featCards.some((c) => !c.classList.contains("is-hidden"));
-      const filtering = termTokens.length || group || (hasLangFilter && lang !== "KR");
-      if (filtering) {
-        feat.classList.toggle("is-hidden", !anyFeat);
-        feat.hidden = !anyFeat;
-        feat.style.display = anyFeat ? "" : "none";
-      } else {
-        feat.classList.toggle("is-hidden", !anyFeat);
-        feat.hidden = !anyFeat;
-        feat.style.display = anyFeat ? "" : "none";
+
+    let n = 0;
+    if (mode === "group") {
+      setSectionVisible(flatSec, false);
+      if (flatGrid) flatGrid.innerHTML = "";
+      for (const sec of sections) {
+        const gid = sec.dataset.groupSection;
+        const visibleInSec = mainCards.filter(
+          (c) => c.dataset.group === gid && !c.classList.contains("is-hidden")
+        );
+        setSectionVisible(sec, visibleInSec.length > 0);
+        const cnt = sec.querySelector(".section-count");
+        if (cnt) cnt.textContent = "(" + visibleInSec.length + ")";
+        n += visibleInSec.length;
+      }
+      if (feat) {
+        const anyFeat = featCards.some((c) => !c.classList.contains("is-hidden"));
+        setSectionVisible(feat, anyFeat);
+      }
+    } else {
+      setSectionVisible(feat, false);
+      for (const sec of sections) setSectionVisible(sec, false);
+      const visible = mainCards.filter((c) => !c.classList.contains("is-hidden"));
+      const sorted = visible.slice().sort((a, b) => compareCards(a, b, mode));
+      n = sorted.length;
+      if (flatSec && flatGrid) {
+        setSectionVisible(flatSec, n > 0);
+        if (flatLabel) {
+          flatLabel.textContent = mode === "featured" ? "추천순" : "날짜순 (최신)";
+        }
+        flatGrid.innerHTML = "";
+        for (const c of sorted) flatGrid.appendChild(c.cloneNode(true));
       }
     }
+
     if (count) count.textContent = n + " / " + pool.length + " shown";
   }
 
+  if (sortEl) {
+    const saved = localStorage.getItem(SORT_KEY);
+    if (saved === "date" || saved === "featured" || saved === "group") sortEl.value = saved;
+    sortEl.addEventListener("change", () => {
+      localStorage.setItem(SORT_KEY, sortMode());
+      apply();
+    });
+  }
   q.addEventListener("input", apply);
   q.addEventListener("search", apply);
   g?.addEventListener("change", apply);
@@ -1069,9 +1414,17 @@ function buildListPage({ section, items, groups, title, lede, active, githubTree
     .map((g) => `<option value="${esc(g.id)}">${esc(g.title_ko)} (${(byGroup.get(g.id) || []).length})</option>`)
     .join("\n            ");
 
-  const featuredLabel = section === "cti" ? "추천 리포트" : "추천 칼럼";
+  const featuredLabel =
+    section === "cti"
+      ? "추천 리포트"
+      : section === "tech"
+        ? "추천 TechDoc"
+        : section === "essays"
+          ? "추천 에세이"
+          : "추천 칼럼";
   const featuredBlock =
-    featured.length && (section === "columns" || section === "cti")
+    featured.length &&
+    (section === "columns" || section === "cti" || section === "tech" || section === "essays")
       ? `<section id="featured-section" class="featured-section">
         <h2 class="section-label">${featuredLabel}</h2>
         <div class="col-grid featured-grid">
@@ -1103,24 +1456,34 @@ function buildListPage({ section, items, groups, title, lede, active, githubTree
       ${langSwitch}
       <div class="filters">
         <label class="sr-only" for="col-search">검색</label>
-        <input id="col-search" type="search" placeholder="제목·주제·경로 검색 (여러 단어 AND)…" autocomplete="off" />
+        <input id="col-search" type="search" placeholder="제목·미디어·주제·날짜 검색 (예: 전자신문 스테이블)…" autocomplete="off" />
         <label class="sr-only" for="col-group">그룹</label>
         <select id="col-group">
           <option value="">모든 그룹</option>
           ${groupOpts}
+        </select>
+        <label class="sr-only" for="col-sort">정렬</label>
+        <select id="col-sort">
+          <option value="group">${section === "essays" ? "폴더별" : "그룹별"}</option>
+          <option value="date">날짜순 (최신)</option>
+          <option value="featured">추천순</option>
         </select>
       </div>
       <p id="col-count" class="muted" aria-live="polite"></p>
     </header>
     <div id="col-root">
       ${featuredBlock}
+      <section id="sort-flat-section" class="sort-flat-section is-hidden" hidden>
+        <h2 id="sort-flat-label" class="section-label">정렬</h2>
+        <div id="sort-flat" class="col-grid"></div>
+      </section>
       ${sectionsHtml}
     </div>
     <p class="muted source-note">원문:
       <a href="${esc(githubTree)}">GitHub</a>
     </p>
   </main>
-  <script src="./catalog-search.js?v=3" defer></script>`;
+  <script src="./catalog-search.js?v=4" defer></script>`;
 
   ensureDir(path.join(PAGES, section));
   fs.writeFileSync(
@@ -1194,7 +1557,7 @@ function buildAbout() {
   );
 }
 
-function buildSeo(columns, tech, cti = []) {
+function buildSeo(columns, tech, cti = [], essays = []) {
   const entry = (loc, lastmod) =>
     `  <url><loc>${loc}</loc><lastmod>${lastmod || new Date().toISOString().slice(0, 10)}</lastmod></url>`;
   const today = new Date().toISOString().slice(0, 10);
@@ -1202,12 +1565,16 @@ function buildSeo(columns, tech, cti = []) {
     entry(`${SITE}/`, today),
     entry(`${SITE}/about/`, today),
     entry(`${SITE}/play/`, today),
+    entry(`${SITE_LAB}/`, today),
+    entry(`${SITE_RESEARCH}/`, today),
     entry(`${SITE_DOCS}/columns/`, today),
     entry(`${SITE_TECH}/tech/`, today),
     entry(`${SITE_CTI}/cti/`, today),
+    entry(`${SITE_ESSAY}/essays/`, today),
     ...columns.map((c) => entry(`${SITE_DOCS}/columns/${c.slug}/`, c.dateModified || c.datePublished || today)),
     ...tech.map((t) => entry(`${SITE_TECH}/tech/${t.slug}/`, t.dateModified || t.datePublished || today)),
     ...cti.map((r) => entry(`${SITE_CTI}/cti/${r.slug}/`, r.dateModified || r.datePublished || today)),
+    ...essays.map((e) => entry(`${SITE_ESSAY}/essays/${e.slug}/`, e.dateModified || e.datePublished || today)),
   ];
   fs.writeFileSync(
     path.join(PAGES, "sitemap.xml"),
@@ -1241,21 +1608,26 @@ Sitemap: ${SITE}/sitemap.xml
 # Columns (docs host): ${SITE_DOCS}/columns/
 # Tech: ${SITE_TECH}/tech/
 # CTI: ${SITE_CTI}/cti/
+# Essays: ${SITE_ESSAY}/essays/
 `
   );
   const dated = (c) => (c.datePublished ? ` (${c.datePublished})` : "");
   const llms = [
     "# VibeQuant Content",
-    "> Multi-LLM quant committee demo + investment columns + tech docs + CTI by Dennis Kim.",
+    "> Multi-LLM quant committee demo + investment columns + tech docs + CTI + essays by Dennis Kim.",
     "> Thesis: an LLM is a spreadsheet, not an oracle.",
-    "> Domain map: docs.vibequant.cc = Investment Columns; tech = TechDoc; cti = CTI reports; play = Python playground; vibequant.cc = hub.",
+    "> Domain map: docs=Columns; tech=TechDoc; cti=CTI; essays=Essays; play=Playground; lab/research=soon; vibequant.cc=hub.",
     "",
     "## Site",
     `- [Home](${SITE}/)`,
-    `- [Play](${SITE_PLAY}/play/) — Browser Python Quant`,
-    `- [Columns](${SITE_DOCS}/columns/) (${columns.length}) — investment idea columns (NOT API docs)`,
+    `- [Columns](${SITE_DOCS}/columns/) (${columns.length})`,
     `- [Tech](${SITE_TECH}/tech/) (${tech.length})`,
+    `- [Play](${SITE_PLAY}/play/)`,
     `- [CTI](${SITE_CTI}/cti/) (${cti.length})`,
+    `- [Essay](${SITE_ESSAY}/essays/) (${essays.length})`,
+    `- [Lab](${SITE_LAB}/) — soon`,
+    `- [Research](${SITE_RESEARCH}/) — soon`,
+    `- [GitHub](${GITHUB_HOME})`,
     `- [About](${SITE}/about/)`,
     "",
     "## Recent columns (by datePublished)",
@@ -1270,11 +1642,23 @@ Sitemap: ${SITE}/sitemap.xml
       .sort((a, b) => a.featuredRank - b.featuredRank)
       .map((c) => `- [${c.title}](${SITE_DOCS}/columns/${c.slug}/)${dated(c)}`),
     "",
+    "## Featured essays",
+    ...essays
+      .filter((c) => c.featured)
+      .sort((a, b) => a.featuredRank - b.featuredRank)
+      .map((c) => `- [${c.title}](${SITE_ESSAY}/essays/${c.slug}/)${dated(c)}`),
+    "",
     "## Featured CTI",
     ...cti
       .filter((c) => c.featured)
       .sort((a, b) => a.featuredRank - b.featuredRank)
       .map((c) => `- [${c.title}](${SITE_CTI}/cti/${c.slug}/)${dated(c)}`),
+    "",
+    "## Featured tech",
+    ...tech
+      .filter((c) => c.featured)
+      .sort((a, b) => a.featuredRank - b.featuredRank)
+      .map((c) => `- [${c.title}](${SITE_TECH}/tech/${c.slug}/)${dated(c)}`),
     "",
     "## Column groups",
     ...groupsFromRules(COLUMN_GROUP_RULES, COLUMN_GROUP_FALLBACK).map(
@@ -1284,6 +1668,11 @@ Sitemap: ${SITE}/sitemap.xml
     "## Tech groups",
     ...groupsFromRules(TECH_GROUP_RULES, TECH_GROUP_FALLBACK).map(
       (g) => `- ${g.title_en}: filter on ${SITE_TECH}/tech/ (group=${g.id})`
+    ),
+    "",
+    "## Essay groups",
+    ...groupsFromRules(ESSAY_GROUP_RULES, ESSAY_GROUP_FALLBACK).map(
+      (g) => `- ${g.title_en}: filter on ${SITE_ESSAY}/essays/ (group=${g.id})`
     ),
     "",
     "## CTI groups",
@@ -1314,6 +1703,13 @@ Sitemap: ${SITE}/sitemap.xml
       ["# VibeQuant CTI", "", ...cti.map((r) => `- [${r.title}](${SITE_CTI}/cti/${r.slug}/)${dated(r)}`), ""].join("\n")
     );
   }
+  if (essays.length) {
+    ensureDir(path.join(PAGES, "essays"));
+    fs.writeFileSync(
+      path.join(PAGES, "essays", "llms.txt"),
+      ["# VibeQuant Essays", "", ...essays.map((e) => `- [${e.title}](${SITE_ESSAY}/essays/${e.slug}/)${dated(e)}`), ""].join("\n")
+    );
+  }
 }
 
 function cleanSection(section) {
@@ -1339,10 +1735,15 @@ function main() {
   const cti = scanCti();
   const ctiDated = cti.filter((r) => r.datePublished).length;
   console.log(`  ${cti.length} CTI reports (${ctiDated} with datePublished) (${CTI_SRC})`);
+  console.log("Scanning essays…");
+  const essays = scanEssays();
+  const essayDated = essays.filter((e) => e.datePublished).length;
+  console.log(`  ${essays.length} essays (${essayDated} with datePublished) (${ESSAY_SRC})`);
 
   cleanSection("columns");
   cleanSection("tech");
   cleanSection("cti");
+  cleanSection("essays");
 
   let i = 0;
   for (const col of columns) {
@@ -1362,15 +1763,21 @@ function main() {
     if (i % 25 === 0 || i === cti.length) console.log(`  cti ${i}/${cti.length}`);
     buildArticle(report, "cti");
   }
+  i = 0;
+  for (const essay of essays) {
+    i++;
+    if (i % 10 === 0 || i === essays.length) console.log(`  essays ${i}/${essays.length}`);
+    buildArticle(essay, "essays");
+  }
 
   buildListPage({
     section: "columns",
     items: columns,
     groups: groupsFromRules(COLUMN_GROUP_RULES, COLUMN_GROUP_FALLBACK),
-    title: "Investment Columns",
-    lede: `전체 ${columns.length}편 — 발행일 표기 · 추천 · 주제별 그룹 · 검색(여러 단어 AND).`,
+    title: "Investment & Media Columns",
+    lede: `전체 ${columns.length}편 — 투자 칼럼 + 미디어 기고. 발행일 · 미디어 · 주제 검색(여러 단어 AND) · 그룹별/날짜순/추천순.`,
     active: "columns",
-    githubTree: "https://github.com/gameworkerkim/vibe-investing/tree/main/02.Investment%20Idea%20Column",
+    githubTree: "https://github.com/gameworkerkim/vibe-investing/tree/main/03.%20Media-Column",
   });
 
   buildListPage({
@@ -1378,7 +1785,7 @@ function main() {
     items: tech,
     groups: groupsFromRules(TECH_GROUP_RULES, TECH_GROUP_FALLBACK),
     title: "Tech Docs",
-    lede: `기술 문서 ${tech.length}편 — 발행일 · 주제별 그룹 · 검색.`,
+    lede: `기술 문서 ${tech.length}편 — 발행일 · 추천 · 그룹별/날짜순/추천순 정렬 · 검색.`,
     active: "tech",
     githubTree: "https://github.com/gameworkerkim/vibe-investing/tree/main/TechDoc",
   });
@@ -1388,13 +1795,23 @@ function main() {
     items: cti,
     groups: groupsFromRules(CTI_GROUP_RULES, CTI_GROUP_FALLBACK),
     title: "Cyber Threat Intelligence",
-    lede: `CTI 리포트 ${cti.length}편 — 발행일 · 추천 · 주제별 그룹 · 한/영/일/중.`,
+    lede: `CTI 리포트 ${cti.length}편 — 발행일 · 추천 · 그룹별/날짜순/추천순 정렬 · 한/영/일/중.`,
     active: "cti",
     githubTree: "https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT",
   });
 
+  buildListPage({
+    section: "essays",
+    items: essays,
+    groups: groupsFromRules(ESSAY_GROUP_RULES, ESSAY_GROUP_FALLBACK),
+    title: "Essays",
+    lede: `에세이 ${essays.length}편 — Art · Book Review · Culture & Taste · 폴더별/날짜순/추천순.`,
+    active: "essays",
+    githubTree: "https://github.com/gameworkerkim/essays",
+  });
+
   buildAbout();
-  buildSeo(columns, tech, cti);
+  buildSeo(columns, tech, cti, essays);
 
   // Keep hub counts in sync with published catalog
   const homePath = path.join(PAGES, "index.html");
@@ -1403,6 +1820,10 @@ function main() {
     home = home.replace(
       /id="hub-col-count">[^<]*<\/span>/,
       `id="hub-col-count">${columns.length}편</span>`
+    );
+    home = home.replace(
+      /id="hub-essay-count">[^<]*<\/span>/,
+      `id="hub-essay-count">${essays.length}편</span>`
     );
     fs.writeFileSync(homePath, home);
   }

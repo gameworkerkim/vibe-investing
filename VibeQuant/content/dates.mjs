@@ -60,6 +60,21 @@ export function extractFrontmatterDate(md) {
       }
     }
   }
+  // HTML-comment-wrapped YAML (TechDoc often uses <!-- --- ... --- -->)
+  const comments = text.match(/<!--[\s\S]*?-->/g) || [];
+  for (const block of comments.slice(0, 4)) {
+    const m = block.match(/(?:^|\n)date:\s*["']?([^\n"']+)/i);
+    if (m) {
+      const d = toIsoDate(m[1].trim());
+      if (d) return d;
+    }
+  }
+  // Essay byline: **Dennis Kim … | 2026년 7월 17일**
+  const byline = text.slice(0, 1500).match(/\|\s*(\d{4}\s*년\s*\d{1,2}\s*월\s*\d{1,2}\s*일)/);
+  if (byline) {
+    const d = toIsoDate(byline[1].trim());
+    if (d) return d;
+  }
   // Leading CTI-style 2-column meta table (before first # heading)
   const beforeH1 = text.split(/^#\s+/m)[0] || text.slice(0, 2500);
   if (beforeH1.includes("|")) {

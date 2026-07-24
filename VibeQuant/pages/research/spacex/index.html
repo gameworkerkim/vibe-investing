@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Space basket — Research · VibeQuant</title>
+  <meta name="description" content="우주·방산 바스켓 모멘텀·Williams %R·RSI 시그널. 4시간 캐시." />
+  <link rel="canonical" href="https://vibequant.cc/research/spacex/" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/research.css" />
+</head>
+<body class="rq-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../">Research</a>
+      <a class="site-nav-link" href="../quant/">Quant</a>
+      <a class="site-nav-link is-active" href="./">Space</a>
+      <a class="site-nav-link" href="../trump/">Trump</a>
+    </nav>
+  </header>
+
+  <main class="rq-wrap">
+    <h1>Space basket</h1>
+    <p class="rq-lede">Rocket Lab · ASTS · ARKX · LMT 등 우주/방산 바스켓. Williams %R · RSI · MA · 모멘텀 합성 점수. 4시간 캐시.</p>
+    <div class="rq-meta">
+      <span id="meta">로딩…</span>
+      <button type="button" class="rq-btn" id="refresh">새로고침</button>
+    </div>
+    <p class="err" id="err" hidden></p>
+
+    <section class="panel">
+      <div class="tbl-wrap">
+        <table class="rq">
+          <thead>
+            <tr>
+              <th>종목</th>
+              <th>그룹</th>
+              <th>가격</th>
+              <th>1D%</th>
+              <th>5D%</th>
+              <th>%R</th>
+              <th>RSI</th>
+              <th>Mom20</th>
+              <th>점수</th>
+              <th>시그널</th>
+            </tr>
+          </thead>
+          <tbody id="body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <p>투자 조언 아님 · Yahoo Finance · <a href="../">Research</a></p>
+  </footer>
+
+  <script>
+    const API = (() => {
+      const h = location.hostname;
+      if (h === "vibequant.cc" || h.endsWith(".vibequant-web.pages.dev") || h === "localhost")
+        return "/api/research/spacex";
+      return "https://vibequant.cc/api/research/spacex";
+    })();
+    const GROUP = { pure_space: "순수우주", etf: "ETF", defense: "방산" };
+
+    function pct(n) {
+      if (n == null || Number.isNaN(n)) return "—";
+      return (n >= 0 ? "+" : "") + Number(n).toFixed(2) + "%";
+    }
+    function cls(n) {
+      if (n == null) return "";
+      return n >= 0 ? "up" : "down";
+    }
+    function sigHtml(s) {
+      const k = (s || "HOLD").replace(/[^A-Z]/g, "");
+      return `<span class="sig sig-${k}">${s || "HOLD"}</span>`;
+    }
+
+    async function load(force) {
+      const btn = document.getElementById("refresh");
+      const err = document.getElementById("err");
+      btn.disabled = true;
+      err.hidden = true;
+      try {
+        const url = force ? API + "?refresh=1" : API;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const d = await res.json();
+        if (d.error && !d.stocks) throw new Error(d.error);
+
+        document.getElementById("body").innerHTML = (d.stocks || []).map((s) => `
+          <tr>
+            <td><strong>${s.symbol}</strong> <span style="color:var(--muted);font-size:0.75rem">${s.name || ""}</span></td>
+            <td>${GROUP[s.group] || s.group || "—"}</td>
+            <td class="num">${s.price != null ? s.price : "—"}</td>
+            <td class="num ${cls(s.change1d)}">${pct(s.change1d)}</td>
+            <td class="num ${cls(s.change5d)}">${pct(s.change5d)}</td>
+            <td class="num">${s.williamsR != null ? s.williamsR : "—"}</td>
+            <td class="num">${s.rsi14 != null ? s.rsi14 : "—"}</td>
+            <td class="num ${cls(s.momentum20)}">${pct(s.momentum20)}</td>
+            <td class="num">${s.score}</td>
+            <td>${sigHtml(s.signal)}</td>
+          </tr>`).join("");
+
+        const when = d.generatedAt ? new Date(d.generatedAt).toLocaleString("ko-KR") : "—";
+        let cache = d.fromCache
+          ? `캐시 · ${Math.floor((d.cachedSecondsAgo || 0) / 60)}분 전`
+          : "실시간 갱신";
+        if (d.stale) cache += " (stale)";
+        document.getElementById("meta").textContent = `${when} · ${cache}`;
+      } catch (e) {
+        err.hidden = false;
+        err.textContent = "로드 실패: " + (e.message || e);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById("refresh").addEventListener("click", () => load(true));
+    load(false);
+    setInterval(() => load(false), 4 * 60 * 60 * 1000);
+  </script>
+</body>
+</html>

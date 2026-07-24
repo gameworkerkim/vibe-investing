@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quant — Research · VibeQuant</title>
+  <meta name="description" content="ARDS-X 시장 국면 · AMQS-M7 AI 반도체 모멘텀 · 헤지 비중. 로그인 없이 공개." />
+  <link rel="canonical" href="https://vibequant.cc/research/quant/" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/research.css" />
+</head>
+<body class="rq-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../">Research</a>
+      <a class="site-nav-link is-active" href="./">Quant</a>
+      <a class="site-nav-link" href="../spacex/">Space</a>
+      <a class="site-nav-link" href="../trump/">Trump</a>
+    </nav>
+  </header>
+
+  <main class="rq-wrap">
+    <h1>Quant</h1>
+    <p class="rq-lede">ARDS-X(QQQ·VIX) 국면 분류 + AMQS-M7 반도체 모멘텀. 장중 30분 / 장외 2시간 캐시.</p>
+    <div class="rq-meta">
+      <span id="meta">로딩…</span>
+      <button type="button" class="rq-btn" id="refresh">새로고침</button>
+    </div>
+    <p class="err" id="err" hidden></p>
+
+    <section class="panel" id="ards-panel">
+      <h2>ARDS-X · 시장 국면</h2>
+      <div class="metric-grid" id="ards-metrics"></div>
+      <p class="rq-lede" style="margin-top:0.85rem;font-size:0.82rem;margin-bottom:0">
+        QQQ MA20/MA60 · RSI(14) · VIX로 하락/횡보/상승/급등 4단계 분류.
+      </p>
+    </section>
+
+    <section class="panel">
+      <h2>헤지 비중 가이드</h2>
+      <div class="hedge-bar" id="hedge-bar" aria-hidden="true"></div>
+      <div class="hedge-legend" id="hedge-legend"></div>
+    </section>
+
+    <section class="panel">
+      <h2>AMQS-M7 · AI 반도체 모멘텀</h2>
+      <div class="metric-grid" id="amqs-summary" style="margin-bottom:0.85rem"></div>
+      <div class="tbl-wrap">
+        <table class="rq">
+          <thead>
+            <tr>
+              <th>종목</th>
+              <th>가격</th>
+              <th>1D%</th>
+              <th>Mom20</th>
+              <th>RSI</th>
+              <th>시그널</th>
+              <th>점수</th>
+            </tr>
+          </thead>
+          <tbody id="amqs-body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <p>투자 조언 아님 · Yahoo Finance · <a href="../">Research</a></p>
+  </footer>
+
+  <script>
+    const API = (() => {
+      const h = location.hostname;
+      if (h === "vibequant.cc" || h.endsWith(".vibequant-web.pages.dev") || h === "localhost")
+        return "/api/research/quant";
+      return "https://vibequant.cc/api/research/quant";
+    })();
+    const REGIME = { 0: "하락", 1: "횡보", 2: "상승", 3: "급등" };
+    const RCOLOR = { 0: "#e74c3c", 1: "#e6a817", 2: "#3d9bdb", 3: "#2ecc71" };
+
+    function pct(n) {
+      if (n == null || Number.isNaN(n)) return "—";
+      const s = (n >= 0 ? "+" : "") + Number(n).toFixed(2) + "%";
+      return s;
+    }
+    function cls(n) {
+      if (n == null) return "";
+      return n >= 0 ? "up" : "down";
+    }
+    function sigHtml(s) {
+      const k = (s || "HOLD").replace(/[^A-Z—]/g, "");
+      return `<span class="sig sig-${k === "—" ? "HOLD" : k}">${s || "—"}</span>`;
+    }
+
+    async function load(force) {
+      const btn = document.getElementById("refresh");
+      const err = document.getElementById("err");
+      btn.disabled = true;
+      err.hidden = true;
+      try {
+        const url = force ? API + (API.includes("?") ? "&" : "?") + "refresh=1" : API;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const d = await res.json();
+        if (d.error && !d.ardsX) throw new Error(d.error);
+
+        const ax = d.ardsX || {};
+        const rc = RCOLOR[ax.regime] ?? "#3d9bdb";
+        document.getElementById("ards-metrics").innerHTML = [
+          { lbl: "현재 국면", val: REGIME[ax.regime] ?? "—", sub: ax.signal || "", color: rc },
+          { lbl: "QQQ", val: ax.qqq != null ? ax.qqq : "—", sub: "종가" },
+          { lbl: "VIX", val: ax.vix != null ? ax.vix : "—", sub: ax.vix > 25 ? "공포" : ax.vix < 15 ? "안정" : "중립" },
+          { lbl: "RSI(14)", val: ax.rsi != null ? Math.round(ax.rsi) : "—", sub: ax.rsi > 70 ? "과매수" : ax.rsi < 30 ? "과매도" : "중립" },
+          { lbl: "MA20", val: ax.ma20 != null ? ax.ma20.toFixed(1) : "—" },
+          { lbl: "MA60", val: ax.ma60 != null ? ax.ma60.toFixed(1) : "—" },
+          { lbl: "20일 고점↓", val: ax.drawdown20 != null ? ax.drawdown20.toFixed(1) + "%" : "—" },
+        ].map((m) => `
+          <div class="metric">
+            <div class="lbl">${m.lbl}</div>
+            <div class="val" style="${m.color ? "color:" + m.color : ""}">${m.val}</div>
+            ${m.sub ? `<div class="sub">${m.sub}</div>` : ""}
+          </div>`).join("");
+
+        const h = d.hedge || { long: 0, hedge: 0, safe: 0 };
+        document.getElementById("hedge-bar").innerHTML =
+          `<span style="width:${h.long}%;background:#2ecc71"></span>` +
+          `<span style="width:${h.hedge}%;background:#e74c3c"></span>` +
+          `<span style="width:${h.safe}%;background:#8b9aab"></span>`;
+        document.getElementById("hedge-legend").innerHTML =
+          `<span>Long ${h.long}%</span><span>Hedge ${h.hedge}%</span><span>Safe ${h.safe}%</span>`;
+
+        const am = d.amqs || {};
+        document.getElementById("amqs-summary").innerHTML = [
+          { lbl: "평균 Mom20", val: am.avgMom != null ? pct(am.avgMom) : "—", cls: cls(am.avgMom) },
+          { lbl: "평균 점수", val: am.avgScore != null ? am.avgScore : "—" },
+          { lbl: "종합 시그널", val: am.overallSignal || "—", html: true },
+        ].map((m) => `
+          <div class="metric">
+            <div class="lbl">${m.lbl}</div>
+            <div class="val ${m.cls || ""}">${m.html ? sigHtml(m.val) : m.val}</div>
+          </div>`).join("");
+
+        document.getElementById("amqs-body").innerHTML = (am.stocks || []).map((s) => `
+          <tr>
+            <td><strong>${s.ticker}</strong> <span style="color:var(--muted);font-size:0.75rem">${s.name || ""}</span></td>
+            <td class="num">${s.price != null ? s.price : "—"}</td>
+            <td class="num ${cls(s.change1d)}">${pct(s.change1d)}</td>
+            <td class="num ${cls(s.momentum20)}">${pct(s.momentum20)}</td>
+            <td class="num">${s.rsi != null ? s.rsi : "—"}</td>
+            <td>${sigHtml(s.signal)}</td>
+            <td class="num">${s.score}</td>
+          </tr>`).join("");
+
+        const when = d.generatedAt ? new Date(d.generatedAt).toLocaleString("ko-KR") : "—";
+        let cache = d.fromCache
+          ? `캐시 · ${Math.floor((d.cachedSecondsAgo || 0) / 60)}분 전`
+          : "실시간 갱신";
+        if (d.stale) cache += " (stale)";
+        document.getElementById("meta").textContent = `${when} · ${cache}`;
+      } catch (e) {
+        err.hidden = false;
+        err.textContent = "로드 실패: " + (e.message || e);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById("refresh").addEventListener("click", () => load(true));
+    load(false);
+    setInterval(() => load(false), 30 * 60 * 1000);
+  </script>
+</body>
+</html>

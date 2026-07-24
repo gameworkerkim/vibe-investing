@@ -148,6 +148,7 @@ Free-tier serverless platforms and SaaS services for developers and startups.
 
 | Document | Lang | Description | Last Updated |
 |----------|------|-------------|--------------|
+| [Cloudflare Free Tier Usage — VibeQuant (KR)](CloudFlare/Cloudflare_무료티어_사용법.md) | KO | Pros/cons, PaaS comparison, recommended stack, vibequant.cc free-tier case study, setup & caveats. | 2026-07-24 |
 | [Cloudflare Free Tier Guide](CloudFlare/Cloudflare%20free%20tier%20guide.md) · [EN](CloudFlare/Cloudflare%20free%20tier%20guide%20EN.md) | KO·EN | Cloudflare Workers, Pages, D1, R2, KV, security services. | 2026-05-12 |
 | [Oracle Cloud Free Tier Guide](OracleCloud/02.%20Oracle%20Cloud%20Free%20Tier%20Guide.md) · [EN](OracleCloud/Oracle%20Cloud%20Free%20Tier%20Guide%20EN.md) | KO·EN | Oracle Cloud always-free tier — ARM VM, Compute, databases, networking. | 2026-05-09 |
 | [Neon Review](Neon/Neon_review.md) · [EN](Neon/Neon_review_EN.md) | KO·EN | Neon.tech — serverless PostgreSQL, branching, free tier, pricing, performance. | 2026-06-09 |
@@ -286,6 +287,7 @@ Korean translation project for the **OpenCode** AI coding CLI tool.
 | 2026-07-28 | MCP Server Getting Started | MCP concepts + AMQS signal server complete guide |
 | 2026-07-28 | AMQS-AI-Infra MCP Server | MCP server (4 Tools, 1 Resource, 1 Prompt) |
 | 2026-07-19 | Pyodide Technical Docs | Browser Python execution — verified & expanded (8 competitors) |
+| 2026-07-24 | Cloudflare Free Tier Usage — VibeQuant | Free-tier architecture case study (KR) |
 | 2026-07-18 | Qlib Getting Started | Microsoft Qlib complete guide (KO + EN) |
 | 2026-07-18 | toss-qlib-middleware | Toss Open API ↔ Qlib middleware (KO + EN) |
 | 2026-07-18 | NiceGUI Getting Started | Python web UI (4-framework comparison) |
