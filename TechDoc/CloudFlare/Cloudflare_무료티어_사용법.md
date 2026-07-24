@@ -1,27 +1,32 @@
 # Cloudflare 무료 티어 사용법 — VibeQuant 운영 사례
 
 > 작성: 2026-07-24 · 대상: 개인·독립 연구자·소규모 오픈소스 사이트를 **유료 전환 없이** 운영하려는 개발자  
-> 관련: [Cloudflare 무료 티어 가입·한도 가이드](Cloudflare%20free%20tier%20guide.md) · [Vercel 분석](../vercel/vercel_analysis.md) · [무료 웹호스팅 비교](../Free_Hosting/FreeHosting.md) · 실사이트 [vibequant.cc](https://vibequant.cc/)
+> 관련: [Cloudflare 무료 티어 가입·한도 가이드](Cloudflare%20free%20tier%20guide.md) · [Vercel 분석](../vercel/vercel_analysis.md) · [무료 웹호스팅 비교](../Free_Hosting/FreeHosting.md) · 사이트 [vibequant.cc](https://vibequant.cc/)
 
-본 문서는 “한도표만 나열한 매뉴얼”이 아니라, **[VibeQuant](https://vibequant.cc/)를 Cloudflare 무료 티어만으로 설계·운영한 이유와 방법**을 정리한다. 숫자·쿼터 상세는 기존 [가입·한도 가이드](Cloudflare%20free%20tier%20guide.md)를 본다.
+본 문서는 “제대로된 운영 없이 구글링 LLM이 나열한 매뉴얼”이 아니라, **[VibeQuant](https://vibequant.cc/)를 Cloudflare 무료 티어만으로 설계·운영한 이유와 방법**을 정리한 문서이다. 
+클라우드플레어의 기본적인 정보, 쿼터 상세는 기존 [가입·한도 가이드](Cloudflare%20free%20tier%20guide.md)를 살펴보면 된다.
 
 ---
 
 ## 1. Cloudflare란?
 
-Cloudflare는 원래 **DNS·CDN·DDoS 방어**로 유명해진 엣지 네트워크 회사다. 2020년대 들어 **Workers(서버리스) · Pages(정적/SSR) · R2(오브젝트 스토리지) · D1(SQLite) · KV · Cache API** 등을 한 계정에 묶어, “도메인 앞단 보안 + 전 세계 배포 + 가벼운 백엔드”를 **같은 엣지**에서 처리하는 **개발자 플랫폼**으로 확장했다.
+Cloudflare는 원래 **DNS·CDN·DDoS 방어**로 유명해진 엣지 네트워크 회사다. 많은 Web3, 코인 거래소가 Cloudflare를 사용하고 있다. 2020년대 들어 **Workers(서버리스) · Pages(정적/SSR) · R2(오브젝트 스토리지) · D1(SQLite) · KV · Cache API** 등을 한 계정에 묶어, “도메인 앞단 보안 + 전 세계 배포 + 가벼운 백엔드”를 **같은 엣지**에서 처리하는 **개발자 플랫폼**으로 확장했다. 최근에는 인공지능을 위한 서비스가 런칭되고 있다.
 
-한 줄로 말하면:
+한 줄로 요약하면
 
 > **트래픽이 어디서 오든, 가까운 PoP에서 HTML·API·캐시를 처리하고, 원본 서버 비용을 최대한 없앤다.**
 
 무료 플랜에서도 (제한은 있지만) 커스텀 도메인, HTTPS, CDN, 기본 WAF/봇 완화, Pages·Workers를 쓸 수 있다. VibeQuant처럼 **콘텐츠 아카이브 + 얇은 API + 브라우저 퀀트 실험**에 잘 맞는다.
 
+나는 도메인을 구매하여 도메인 비용만 사용되었다. SEO에는 도메인이 붙은 서비스가 더 유리하기 때문이다. 
+
 ---
 
 ## 2. 장점
 
-### 2.1 보안 (앞단에서 끝나는 공격면)
+### 2.1 보안
+
+디도스 방어에 특화된 Cloudflare 답게 트래픽 앞단에서 비정상적인 트래픽을 걸러준다.
 
 | 항목 | 의미 |
 |------|------|
@@ -30,15 +35,15 @@ Cloudflare는 원래 **DNS·CDN·DDoS 방어**로 유명해진 엣지 네트워�
 | DNS가 플랫폼과 동일 | 네임서버만 Cloudflare면 CDN·WAF·Pages가 한 흐름 |
 | 시크릿은 Worker에만 | Pages HTML에는 API 키를 넣지 않는 구조가 자연스럽다 |
 
-정적 HTML이 대부분이라면 **원본 서버를 노출하지 않는** 설계가 된다. 공격 트래픽이 “앱 서버 CPU”가 아니라 “엣지 한도”로 먼저 부딪힌다.
+정적 HTML이 대부분이라면 **원본 서버를 노출하지 않는** 설계가 된다. 공격 트래픽이 “앱 서버 CPU”가 아니라 “Cloudflare 엣지”에 먼저 충돌한다.
 
 ### 2.2 CDN (대역폭이 무료에 가깝다)
 
-Pages 정적 자산은 **대역폭 무제한**에 가깝게 쓸 수 있다(공정 사용·약관은 별도). R2는 **egress 무료**가 핵심 차별점이다. “칼럼·TechDoc HTML이 늘어도 전송료 폭탄”이 상대적으로 적다. Vercel Hobby의 월 대역폭 상한·초과 과금 구조와 대비된다.
+Pages 정적 자산은 **대역폭 무제한**에 가깝게 쓸 수 있다(공정 사용·약관은 별도). R2는 **egress 무료**가 핵심 차별점이다. “칼럼·TechDoc HTML이 늘어도 전송료 폭탄”이 상대적으로 적다. Vercel Hobby의 월 대역폭 상한·초과 과금 구조와 대비되어 더 무료 서비스, 효율적인 사용이 가능하다.
 
 ### 2.3 서버리스 통합성
 
-한 계정에서 대략 이런 조합이 가능하다.
+한 계정에서 대략 이런 서비스 조합이 가능하다.
 
 ```
 Pages (HTML/SEO)  +  Pages Functions / Workers (API)
@@ -48,6 +53,8 @@ Pages (HTML/SEO)  +  Pages Functions / Workers (API)
 ```
 
 “정적 사이트는 A사, API는 B사, CDN은 C사”로 쪼개지 않아도 된다. VibeQuant는 **콘텐츠는 Pages 정적 HTML**, **시세·연구 API는 Worker/Pages Functions**, **브라우저 퀀트는 Pyodide**로 역할을 나눴다.
+
+서비스 유지보수 구조가 간단하고, 장애의 포인트가 심플해진다. 운영의 편의성에서 이를 따를 것이 없다.
 
 ### 2.4 기타 실무 이점
 
@@ -60,7 +67,7 @@ Pages (HTML/SEO)  +  Pages Functions / Workers (API)
 
 ## 3. 단점
 
-솔직히 적는다. 무료 티어를 “무제한 PaaS”로 오해하면 바로 깨진다.
+솔직히 적는다. 무료 티어를 “무제한 PaaS”로 오해하면 바로 문제가 될 수 있다.
 
 | 단점 | 설명 |
 |------|------|
@@ -74,6 +81,8 @@ Pages (HTML/SEO)  +  Pages Functions / Workers (API)
 | **약관·공정 사용** | 대역폭 “무제한”도 남용·공격·상업 대량 배포에는 제약이 걸릴 수 있다 |
 
 **요약:** 보안·CDN·정적+얇은 API에는 강하지만, **무거운 백엔드·강한 일관성 DB·장시간 Python**은 다른 곳으로 빼는 편이 맞다.
+
+그래서 서비스 트래픽을 모니터링하다가 트래픽이 좀 넘치면 SaaS Redis, Vercel이나 다른 무료 SaaS를 섞어 사용하는 것을 권한다. 
 
 ---
 
@@ -89,17 +98,19 @@ Pages (HTML/SEO)  +  Pages Functions / Workers (API)
 | **AWS Amplify / Azure Static Web Apps** | 클라우드 벤더 종속 | 엔터프라이즈 IAM·기존 클라우드와 통합 시. 개인 무료 운영에는 CF가 단순한 편 |
 | **Oracle Cloud Free** | Always Free VM | IaaS. 관리 부담↑, 통제권↑ — [별도 가이드](../OracleCloud/02.%20Oracle%20Cloud%20Free%20Tier%20Guide.md) |
 
-선택 휴리스틱:
+선택 휴리스틱
 
 - **Next.js App Router 중심 제품** → Vercel을 먼저 검토하되, 비용·약관을 읽고 시작
 - **Markdown 아카이브 + SEO + 얇은 API + 비용 0** → Cloudflare Pages (+ Workers)
 - **장시간 Python / DB 워커** → Railway·Render·Fly 또는 별도 VPS + 앞단만 Cloudflare
 
+AWS에 락인되는 것보다 훨씬 저렴하고 디도스 공격 등 사이버 공격을 서비스 앞단에서 막기 때문에 트래픽 폭탄을 맞을 일이 줄어든다. 
+
 ---
 
 ## 5. 효율적인 개발 언어와 스택
 
-무료 티어에서 **덜 싸우는** 조합이다.
+무료 티어에서 **덜 싸우는** 조합, 백엔드가 복잡한 서비스는 외부로 빼는 것을 권한다.
 
 ### 5.1 추천 스택 (VibeQuant형)
 
@@ -122,7 +133,7 @@ Pages (HTML/SEO)  +  Pages Functions / Workers (API)
 ### 5.3 언어 한 줄 요약
 
 > **엣지는 TypeScript, 문서는 Markdown, 퀀트 실험은 브라우저 Python.**  
-> 이 삼각형이 Cloudflare 무료 티어와 가장 덜 싸운다.
+> 이 삼각형이 Cloudflare 무료 티어를 운영하기 좋다. 맞지 않는 기술 스팩을 가지고 억지로 맞추다가 기술 완성도와 안정성, 레이턴시 등 다양한 문제를 겪을 수 있다.
 
 ---
 
@@ -131,7 +142,7 @@ Pages (HTML/SEO)  +  Pages Functions / Workers (API)
 ### 6.1 문제의식
 
 1. **뉴스·칼럼 웹의 휘발성**  
-   미디어·블로그 개편이 반복되면 과거 글 URL이 사라지고, **2014년 이전 칼럼이 통째로 없는** 식의 공백이 생긴다. “14년치가 없다”는 건 검색·인용·연구 연속성 측면에서 치명적이다.  
+   나는 2000년부터 뉴스 칼럼을 작성했다. 미디어·블로그 개편이 반복되면 과거 글 URL이 사라지고, **2014년 이전 칼럼이 통째로 없는** 식의 공백이 생긴다. “14년치가 없다”는 건 검색·인용·연구 연속성 측면에서 치명적이다. 그리고 네이버의 폐쇄적인 정책으로 구글 검색을 허용하지 않는다. 
    → **GitHub에 Markdown으로 원문을 영구 보관**하고, 웹은 **그 원본의 발행면**으로 둔다.
 
 2. **사람 검색(SEO)과 AI 검색(GEO)을 동시에**  
@@ -162,7 +173,7 @@ Pages (HTML/SEO)  +  Pages Functions / Workers (API)
 [브라우저]  Pyodide + GS Quant 스타일 실험 (서버 CPU 미사용)
 ```
 
-### 6.3 실제로 올린 면
+### 6.3 실제로 올린 서비스
 
 | 면 | URL 예 | 역할 |
 |----|--------|------|
@@ -250,7 +261,7 @@ npx wrangler pages deploy ./pages --project-name=vibequant-web
    페이지뷰 카운터를 KV에 쓰면 바로 터진다. 통계는 외부 또는 포기, 시세는 Cache API.
 
 3. **CPU 10ms**  
-   암호화폐 수준 연산·대용량 JSON 파싱을 엣지에서 돌리지 말 것. 사전 계산하거나 클라이언트.
+   암호화폐 수준 연산·대용량 JSON 파싱을 엣지에서 돌리지 말 것. 사전 계산하거나 클라이언트, 다른 서비스를 믹싱.
 
 4. **R2 활성화**  
    대시보드에서 R2를 켜야 하며, 정책에 따라 결제수단을 요구할 수 있다. 켜기 전 `10042` 에러가 난다.
@@ -285,7 +296,9 @@ npx wrangler pages deploy ./pages --project-name=vibequant-web
 | VibeQuant 핵심 제약? | **무료 티어만**, GitHub 원본 영속화, SEO+AI 검색, 브라우저 퀀트 |
 | 스택? | Markdown → 정적 HTML + TS 엣지 API + Pyodide |
 
-칼럼이 웹에서 사라지는 경험, 검색·LLM에 안 잡히는 GitHub 트리, 월 과금 공포 — 이 세 가지를 동시에 풀려다 보면, Cloudflare 무료 티어는 “차선”이 아니라 **의도된 선택**이 된다.
+칼럼이 웹에서 사라지는 경험, 가독성이 떨어지고 검색·LLM에 안 잡히는 GitHub 트리, 월 과금 공포라는 이 세 가지를 동시에 풀려다 보면, Cloudflare 무료 티어는 “차선”이 아니라 **의도된 선택**이라고 봐야 한다.
+
+작은 스타트업은 이런 무료 티어 서비스의 한계와 장점을 잘 판단하여 스케일업하기 전까지 존버해야 한다. 이제 AWS가 모든 서비스의 선택지가 아니다.
 
 ---
 
