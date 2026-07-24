@@ -1,4 +1,42 @@
-# OpenCodex 프로젝트 분석
+---
+title: "OpenCodex 프로젝트 분석 — Codex·Claude Code용 멀티 LLM 프록시"
+subtitle: "Responses API를 40+ 제공자로 라우팅하는 로컬 프록시의 설치·장단점·약관 리스크"
+description: "OpenCodex(@bitkyc08/opencodex)로 Codex·Claude Code에서 Anthropic·Gemini·xAI·DeepSeek·Ollama 등을 쓰는 방법, 장단점, 동명 프로젝트 구분과 약관 리스크를 정리했다."
+abstract: |
+  OpenCodex(lidge-jun/opencodex, npm @bitkyc08/opencodex)는 OpenAI Codex·Claude Code의 요청을 다수 LLM 제공자 프로토콜로 변환하는 경량 로컬 프록시다.
+  ocx init/start로 설정 주입·대시보드(localhost:10100)·모델 라우팅·ChatGPT 계정 풀을 지원하며, 바이너리 패치 없이 stop 시 원복된다.
+  도입 시 핵심 변수는 OAuth·계정 풀의 제공자 약관 리스크와 로컬 자격증명 집중이다. API 키 연동 위주 실험이 안전하다.
+summary_for_ai: |
+  TechDoc about OpenCodex provider proxy for Codex CLI/App/SDK and Claude Code.
+  Package: @bitkyc08/opencodex · Repo: github.com/lidge-jun/opencodex · Not the same as AITabby/opencodex, RyensX/OpenCodex, or codingmoh Open Codex.
+  Covers install (npm -g, ocx init/start/stop), adapters, routing, risks (ToS, credential concentration, preview release cadence).
+  As of mid-2026 (v2.7.x). Prefer API-key providers over OAuth account pooling in work environments.
+date: 2026-07-24
+author: "Dennis Kim"
+lang: ko
+tags:
+  - OpenCodex
+  - Codex
+  - Claude Code
+  - LLM Proxy
+  - Multi-provider
+  - ocx
+keywords:
+  - OpenCodex
+  - Codex 프록시
+  - Claude Code 멀티 모델
+  - @bitkyc08/opencodex
+  - ocx init
+  - LLM provider proxy
+  - OpenAI Responses API
+group: llm-agents
+featured: true
+featured_rank: 2
+schema_type: TechArticle
+draft: false
+---
+
+# OpenCodex 프로젝트 분석 — Codex·Claude Code용 멀티 LLM 프록시
 
 | 항목 | 내용 |
 |---|---|

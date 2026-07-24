@@ -736,11 +736,19 @@ function scanTech() {
     } catch {
       continue;
     }
-    const group = resolveGroup(rel, TECH_GROUP_RULES, TECH_GROUP_FALLBACK);
+    const meta = parseColumnMeta(md);
+    if (meta.draft === true) continue;
+    const groupId = meta.group ? String(meta.group) : null;
+    const group =
+      (groupId && TECH_GROUP_RULES.find((g) => g.id === groupId)) ||
+      resolveGroup(rel, TECH_GROUP_RULES, TECH_GROUP_FALLBACK);
     const baseTitle = path.basename(rel, path.extname(rel)).replace(/[_-]+/g, " ");
-    const parsed = parseDoc(md, baseTitle);
+    const parsed = parseDoc(md, meta.title || baseTitle);
+    if (meta.title) parsed.title = String(meta.title).slice(0, 200);
+    if (meta.description) parsed.description = String(meta.description).slice(0, 200);
+    if (meta.subtitle) parsed.subtitle = String(meta.subtitle).slice(0, 160);
     const dates = resolveItemDates({ md, relPath: rel, gitEntry: gitDates.get(rel) });
-    const featuredRank = FEATURED_TECH_PATHS.findIndex((p) => {
+    let featuredRank = FEATURED_TECH_PATHS.findIndex((p) => {
       const needle = p.replace(/\\/g, "/").toLowerCase();
       const hay = rel.toLowerCase();
       if (hay === needle || hay.endsWith("/" + needle) || hay.includes(needle)) return true;
@@ -748,6 +756,19 @@ function scanTech() {
       const fileBase = path.basename(hay).toLowerCase();
       return featBase.length >= 8 && featBase === fileBase;
     });
+    let featured = featuredRank >= 0;
+    if (!featured && meta.featured === true) {
+      featured = true;
+      featuredRank = Number(meta.featured_rank ?? 50);
+    }
+    const fmTags = Array.isArray(meta.tags) ? meta.tags.map(String) : [];
+    const fmKeywords = Array.isArray(meta.keywords) ? meta.keywords.map(String) : [];
+    const tags = [
+      ...fmTags,
+      ...fmKeywords,
+      group.title_ko,
+      rel.split("/")[0],
+    ].filter(Boolean);
     items.push({
       kind: "tech",
       slug: makeSlug("tech/" + rel),
@@ -756,16 +777,17 @@ function scanTech() {
       description: parsed.description,
       subtitle: parsed.subtitle,
       byline: parsed.byline,
+      abstract: meta.abstract ? String(meta.abstract).trim() : "",
       group: group.id,
       groupTitle: group.title_ko,
-      tags: [group.title_ko, rel.split("/")[0]].filter(Boolean),
-      featured: featuredRank >= 0,
-      featuredRank: featuredRank >= 0 ? featuredRank : 999,
+      tags,
+      featured,
+      featuredRank: featured ? featuredRank : 999,
       github: githubUrl(TECH_BLOB, rel),
       srcDir: TECH_SRC,
-      datePublished: dates.datePublished,
-      dateModified: dates.dateModified,
-      dateSource: dates.dateSource,
+      datePublished: dates.datePublished || (meta.date ? String(meta.date).slice(0, 10) : null),
+      dateModified: dates.dateModified || dates.datePublished || (meta.date ? String(meta.date).slice(0, 10) : null),
+      dateSource: dates.dateSource || (meta.date ? "frontmatter" : null),
     });
   }
   unifyFamilyDates(items);

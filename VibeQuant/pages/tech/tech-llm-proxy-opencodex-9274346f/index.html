@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OpenCodex 프로젝트 분석 — Codex·Claude Code용 멀티 LLM 프록시 — VibeQuant</title>
+  <meta name="description" content="OpenCodex(@bitkyc08/opencodex)로 Codex·Claude Code에서 Anthropic·Gemini·xAI·DeepSeek·Ollama 등을 쓰는 방법, 장단점, 동명 프로젝트 구분과 약관 리스크를 정리했다." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/tech-llm-proxy-opencodex-9274346f/" />
+  <meta property="og:title" content="OpenCodex 프로젝트 분석 — Codex·Claude Code용 멀티 LLM 프록시" />
+  <meta property="og:description" content="OpenCodex(@bitkyc08/opencodex)로 Codex·Claude Code에서 Anthropic·Gemini·xAI·DeepSeek·Ollama 등을 쓰는 방법, 장단점, 동명 프로젝트 구분과 약관 리스크를 정리했다." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/tech-llm-proxy-opencodex-9274346f/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"OpenCodex 프로젝트 분석 — Codex·Claude Code용 멀티 LLM 프록시","description":"OpenCodex(@bitkyc08/opencodex)로 Codex·Claude Code에서 Anthropic·Gemini·xAI·DeepSeek·Ollama 등을 쓰는 방법, 장단점, 동명 프로젝트 구분과 약관 리스크를 정리했다.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/tech-llm-proxy-opencodex-9274346f/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Proxy/Opencodex.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-24","dateModified":"2026-07-24","keywords":"OpenCodex, Codex, Claude Code, LLM Proxy, Multi-provider, ocx"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>OpenCodex 프로젝트 분석 — Codex·Claude Code용 멀티 LLM 프록시</h1>
+        <p class="article-dates"><time datetime="2026-07-24">발행 2026.07.24</time> · 주제 OpenCodex · Codex · Claude Code · LLM Proxy · Multi-provider · ocx</p>
+        
+        <p class="lede">OpenCodex(@bitkyc08/opencodex)로 Codex·Claude Code에서 Anthropic·Gemini·xAI·DeepSeek·Ollama 등을 쓰는 방법, 장단점, 동명 프로젝트 구분과 약관 리스크를 정리했다.</p>
+        
+      </header>
+      <div class="article-body prose"><p>OpenCodex는 Codex의 Responses API 요청을 각 LLM 제공자의 프로토콜로 변환하는 경량 로컬 프록시다. Codex CLI, App, SDK 및 Claude Code에서 Anthropic, Google, xAI, Kimi, DeepSeek, GLM, Qwen, Ollama 등을 사용할 수 있게 한다. 스트리밍, 도구 호출, 추론 토큰, 이미지 입력이 양방향으로 변환된다.</p>
+<hr>
+<h2>1. 시작하기</h2>
+<h3>요구사항</h3>
+<ul>
+<li>Node.js 18 이상</li>
+<li>Bun 런타임은 npm 의존성으로 번들되어 Node 런처를 통해 실행되므로 별도 설치 불필요</li>
+<li>주의: <code>npm</code>이 lifecycle 스크립트를 차단한 상태로 설치하면 &quot;bundled Bun runtime is missing&quot; 오류가 발생한다. 이 경우 스크립트 허용 후 재설치하거나 Bun을 직접 설치해야 한다</li>
+<li><code>sudo npm install -g</code> 대신 nvm/fnm 등 사용자 소유 Node 환경 권장</li>
+</ul>
+<h3>설치 및 실행</h3>
+<pre><code class="language-bash"># 1. 전역 설치 (Bun 런타임 자동 번들)
+npm install -g @bitkyc08/opencodex
+
+# 2. 대화형 초기화 (설정 파일 작성 + Codex 설정 주입 + 자동 시작 shim 설치 안내)
+ocx init
+
+# 3. 프록시 시작
+ocx start
+</code></pre>
+<p>이후 Codex를 평소대로 사용하면 요청이 opencodex를 경유한다.</p>
+<pre><code class="language-bash">codex &quot;Write a hello world in Rust&quot;
+</code></pre>
+<p>대시보드는 <code>http://localhost:10100</code>에서 접근한다.</p>
+<h3>제거 및 원복</h3>
+<pre><code class="language-bash">ocx stop        # 프록시 중지, 백그라운드 서비스 중지, Codex 설정 원복
+ocx uninstall   # 잔여 설정 정리 (npm 제거 전 실행 권장)
+npm uninstall -g @bitkyc08/opencodex
+</code></pre>
+<h3>지원 플랫폼</h3>
+<table>
+<thead>
+<tr>
+<th>OS</th>
+<th>상태</th>
+<th>서비스 매니저</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>macOS (arm64/x64)</td>
+<td>지원</td>
+<td>launchd</td>
+</tr>
+<tr>
+<td>Linux (x64/arm64)</td>
+<td>지원</td>
+<td>systemd</td>
+</tr>
+<tr>
+<td>Windows (x64)</td>
+<td>지원 (WSL 불필요)</td>
+<td>Task Scheduler</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. 장점</h2>
+<table>
+<thead>
+<tr>
+<th>번호</th>
+<th>항목</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>모델 자유도</td>
+<td>Anthropic, Google, xAI, Kimi, Ollama Cloud, Groq, OpenRouter, Azure, DeepSeek, GLM 및 OpenAI 자체를 포함해 40개 이상의 내장 제공자를 지원한다. 동일한 Codex 워크플로 안에서 모델을 전환할 수 있다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>어댑터 기반 변환</td>
+<td>Anthropic Messages, Google Gemini, Azure, OpenAI Responses 패스스루, OpenAI 호환 Chat Completions의 5개 어댑터로 대부분의 엔드포인트를 흡수한다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>설치·설정 간소화</td>
+<td>프록시 체인을 직접 구성할 필요 없이 <code>ocx init</code> 대화형 설정으로 완료된다. xAI, Anthropic, Kimi는 OAuth 로그인을 지원해 API 키 없이 연결 가능하다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>바이너리 무수정</td>
+<td>Codex 앱 바이너리를 패치하지 않고 Codex 설정 파일과 모델 카탈로그에 provider를 주입하는 방식이다. <code>ocx stop</code>으로 원본 설정이 복원된다</td>
+</tr>
+<tr>
+<td>5</td>
+<td>통합 대시보드</td>
+<td>제공자, API 키, 모델 별칭(alias), 로그, 계정 관리를 웹 대시보드에서 처리한다</td>
+</tr>
+<tr>
+<td>6</td>
+<td>모델 라우팅 규칙</td>
+<td><code>provider/model</code> 형식으로 명시 지정하거나, prefix 생략 시 모델명 패턴으로 자동 매칭한다(<code>claude-*</code> → Anthropic, <code>gpt-*</code> → OpenAI)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Codex App 통합</td>
+<td>라우팅된 모델이 Codex App 모델 선택기에 네이티브 모델과 함께 노출되며 모델별 reasoning effort 조절이 가능하다</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ChatGPT 계정 풀</td>
+<td>복수 ChatGPT/Codex 계정을 등록해 5시간·주간·30일 쿼터를 갱신하고 신규 세션을 사용량이 가장 낮은 계정으로 라우팅한다. 기존 스레드는 시작한 계정에 고정된다</td>
+</tr>
+<tr>
+<td>9</td>
+<td>백그라운드 서비스</td>
+<td>시스템 서비스로 등록해 부팅 시 자동 실행되며, 중지 시 잔여 설정·좀비 프로세스를 남기지 않도록 설계되어 있다</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. 단점 및 리스크</h2>
+<table>
+<thead>
+<tr>
+<th>번호</th>
+<th>항목</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>약관 리스크</td>
+<td>OAuth·구독 계정 연동은 기술적으로 가능하더라도 해당 제공자가 서드파티 프록시 경유를 허용한다는 의미가 아니다. 프로젝트 문서 자체가 계정 제한·정지 가능성을 경고하고 있다. 특히 계정 풀 기능은 사용량 우회로 해석될 여지가 있다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>추가 계층의 복잡성</td>
+<td>Codex 위에 프록시 계층이 하나 더 생겨 설정 결정과 디버깅 지점이 늘어난다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>기능 호환성 지연</td>
+<td>자체 API 변환 계층이므로 Codex나 Claude Code의 최신 기능이 즉시 반영되지 않을 수 있다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>프로젝트 성숙도</td>
+<td>공식 도구 대비 생태계가 작고, 릴리스 주기가 매우 짧다(주 단위 preview 태그 다수). 안정성과 장기 유지보수에 대한 검증이 필요하다</td>
+</tr>
+<tr>
+<td>5</td>
+<td>상시 실행 의존성</td>
+<td>Node 환경과 <code>ocx</code> 데몬의 상시 구동이 전제된다. Codex 단독 사용 대비 리소스를 더 사용한다</td>
+</tr>
+<tr>
+<td>6</td>
+<td>로컬 자격증명 집중</td>
+<td>다수 제공자의 API 키와 OAuth 토큰이 로컬 설정(<code>~/.opencodex/config.json</code>)에 모인다. 단말 침해 시 피해 범위가 확대된다</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 이름이 유사한 별개 프로젝트</h2>
+<p>&quot;OpenCodex&quot;라는 이름을 쓰는 프로젝트가 여러 개 존재한다. 기능을 혼동하지 않도록 구분이 필요하다.</p>
+<table>
+<thead>
+<tr>
+<th>프로젝트</th>
+<th>정체</th>
+<th>본 문서 대상과의 관계</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>lidge-jun/opencodex</td>
+<td>본 문서의 대상. Codex/Claude Code용 범용 제공자 프록시</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AITabby/opencodex</td>
+<td>Codex Desktop용 로컬 게이트웨이. Vision Bridge, Computer Use 엔진, 음성 컴패니언(OpenCodexBar) 보유</td>
+<td>별개 프로젝트. Vision Bridge·음성 기능은 이쪽 기능이며 lidge-jun 버전의 기능이 아니다</td>
+</tr>
+<tr>
+<td>RyensX/OpenCodex</td>
+<td>Codex Desktop 미들웨어. 브라우저 원격 접근에 특화</td>
+<td>별개 프로젝트. 원격 접근 기능은 이쪽 기능이다</td>
+</tr>
+<tr>
+<td>Open Codex (codingmoh)</td>
+<td>완전 로컬 실행 CLI 어시스턴트. API 키 불필요, phi-4-mini 등 로컬 모델 지원</td>
+<td>별개 프로젝트</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. 경쟁·대체 도구</h2>
+<table>
+<thead>
+<tr>
+<th>도구</th>
+<th>설명</th>
+<th>차이점</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenCode (SST)</td>
+<td>오픈소스 터미널 AI 코딩 에이전트</td>
+<td>프록시가 아닌 독립 에이전트. 다수 제공자를 자체 지원하므로 OpenCode 사용자에게는 opencodex의 실익이 적다</td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td>Anthropic 터미널 코딩 어시스턴트</td>
+<td>Claude 생태계 특화. opencodex는 Claude Code 측 프록시로도 동작한다</td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td>AI 네이티브 코드 에디터</td>
+<td>IDE 내장형 경험 중심</td>
+</tr>
+<tr>
+<td>GitHub Copilot</td>
+<td>IDE 플러그인형 코딩 어시스턴트</td>
+<td>제공자 선택 폭이 제한적</td>
+</tr>
+<tr>
+<td>Aider / Cline / Windsurf</td>
+<td>각기 다른 접근의 코딩 에이전트</td>
+<td>워크플로와 특화 영역이 상이</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Codex와의 비교</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Codex 단독</th>
+<th>Codex + OpenCodex</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>사용 가능 모델</td>
+<td>OpenAI 계열</td>
+<td>40개 이상 제공자</td>
+</tr>
+<tr>
+<td>설정 난이도</td>
+<td>낮음</td>
+<td>중간</td>
+</tr>
+<tr>
+<td>비용 최적화</td>
+<td>제한적</td>
+<td>저가 모델 라우팅으로 유리</td>
+</tr>
+<tr>
+<td>맞춤화</td>
+<td>제한적</td>
+<td>높음</td>
+</tr>
+<tr>
+<td>운영 리스크</td>
+<td>낮음</td>
+<td>프록시 장애 지점 추가, 제공자 약관 리스크</td>
+</tr>
+<tr>
+<td>적합 사용자</td>
+<td>즉시 사용을 원하는 일반 사용자</td>
+<td>모델 실험·비용 최적화를 중시하는 파워 유저</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. 종합 평가</h2>
+<p>기술적 설계는 합리적이다. 바이너리 패치 대신 설정 주입 방식을 택하고 <code>ocx stop</code> 한 줄로 원복되는 구조는 이 범주의 도구에서 가장 중요한 안전장치다. 어댑터를 5종으로 추상화한 점도 제공자 확장 비용을 낮춘다.</p>
+<p>다만 도입 판단에서 기술적 편의보다 앞서는 변수는 약관 리스크다. API 키 기반 연동과 구독 계정(OAuth) 기반 연동은 성격이 전혀 다르며, 특히 다중 ChatGPT 계정 풀링은 제공자 관점에서 사용량 정책 우회로 판단될 수 있다. 업무용 환경이라면 API 키 기반 제공자만 등록하고 계정 풀 기능은 사용하지 않는 구성이 안전하다.</p>
+<p>주 단위로 preview 릴리스가 쏟아지는 개발 속도는 기능 확장 측면에서는 긍정적이나, 프로덕션 의존성으로 삼기에는 아직 이르다. 개인 개발 환경에서의 실험적 도입이 현재 적정 수준이다.</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Proxy/Opencodex.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
