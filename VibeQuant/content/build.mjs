@@ -868,9 +868,9 @@ function scanEssays() {
 function normalizeCtiLang(raw) {
   const u = String(raw || "").toUpperCase();
   if (u === "KO" || u === "KOR" || u === "KOREAN") return "KR";
-  if (u === "ZH") return "CN";
-  if (u === "JA") return "JP";
-  if (u === "KR" || u === "EN" || u === "JP" || u === "CN") return u;
+  if (u === "ZH" || u === "ZH-CN" || u === "ZH-HANS" || u === "CN" || u === "CHINESE") return "CN";
+  if (u === "JA" || u === "JP" || u === "JAPANESE") return "JP";
+  if (u === "KR" || u === "EN") return u;
   return "";
 }
 
