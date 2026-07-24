@@ -91,7 +91,7 @@ Model Context Protocol(MCP)은 LLM이 외부 도구·데이터소스와 안전�
 
 | 문서 | 설명 | 최종 수정일 |
 |------|------|------------|
-| [Cloudflare 무료 티어 사용법 — VibeQuant 사례](CloudFlare/Cloudflare_무료티어_사용법.md) | Cloudflare란·장단점·Vercel 등 PaaS 비교·권장 스택·vibequant.cc 설계(무료만·GitHub SEO/GEO·칼럼 유실 문제·GS Quant/Pyodide)·설정·주의점. | 2026-07-24 |
+| [Cloudflare 무료 티어 사용법 — VibeQuant 사례](CloudFlare/Cloudflare_무료티어_사용법.md) | Cloudflare란·장단점·Vercel 등 PaaS 비교·권장 스택·vibequant.cc 설계(무료만·GitHub SEO/GEO·칼럼 유실 문제·GS Quant/Pyodide)·설정·주의점. **추천 1순위** | 2026-07-24 |
 | [Cloudflare 무료 티어 가이드](CloudFlare/Cloudflare%20free%20tier%20guide.md) | Cloudflare 무료 티어 종합 가이드: Workers, Pages, D1, R2, KV, 보안 서비스. | 2026-05-12 |
 | [Oracle Cloud 무료 티어 가이드](OracleCloud/02.%20Oracle%20Cloud%20Free%20Tier%20Guide.md) | Oracle Cloud 평생 무료 티어 한국어 가이드: ARM VM, Compute, 데이터베이스, 네트워킹. | 2026-05-09 |
 | [Neon 리뷰](Neon/Neon_review.md) | Neon.tech 평가 — 서버리스 PostgreSQL, 브랜칭, 무료 티어 제한, 가격, 성능 분석. | 2026-06-09 |

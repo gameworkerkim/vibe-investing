@@ -81,6 +81,7 @@ export const FEATURED_COLUMN_PATHS = [
 
 /** TechDoc recommended — order = display order */
 export const FEATURED_TECH_PATHS = [
+  "CloudFlare/Cloudflare_무료티어_사용법.md",
   "AI-Agent-Framework/AI-Agent-Framework.md",
   "Awesome-LLM-Apps/Awesome-LLM-Apps-review.md",
   "agent-friendly-website-guide/agent-friendly-website-guide.ko.md",
