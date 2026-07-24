@@ -545,7 +545,8 @@ function shouldSkipCti(rel) {
   if (n === "cti_guideline.md" || n === "cti_template.md") return true;
   if (n.startsWith("awesome ")) return true;
   if (n.includes("-press")) return true;
-  if (!/^cti-/i.test(n)) return true;
+  // CTI-YYYY-… reports, plus curated analysis notes (e.g. Awesome-*-Analysis.md)
+  if (!/^cti-/i.test(n) && !/^awesome-.+-analysis\.md$/i.test(n)) return true;
   return false;
 }
 
