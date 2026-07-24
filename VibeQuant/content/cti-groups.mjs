@@ -16,6 +16,7 @@ export const CTI_GROUP_FALLBACK = { id: "other", title_ko: "기타 CTI", title_e
 
 /** Featured CTI reports (basename match) — order = display order */
 export const FEATURED_CTI_PATHS = [
+  "CTI-2026-0724-WEEKLY_KR.md",
   "CTI-2026-0718-WEEKLY_KR.md",
   "CTI-2026-0708-KAKAO_KR.md",
   "CTI-2026-0704-SCATTEREDSPIDER_KR.md",

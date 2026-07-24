@@ -845,6 +845,7 @@ function scanEssays() {
 
 function normalizeCtiLang(raw) {
   const u = String(raw || "").toUpperCase();
+  if (u === "KO" || u === "KOR" || u === "KOREAN") return "KR";
   if (u === "ZH") return "CN";
   if (u === "JA") return "JP";
   if (u === "KR" || u === "EN" || u === "JP" || u === "CN") return u;
@@ -908,21 +909,43 @@ function scanCti() {
     } catch {
       continue;
     }
-    const group = resolveGroup(rel, CTI_GROUP_RULES, CTI_GROUP_FALLBACK);
+    const meta = parseColumnMeta(md);
+    if (meta.draft === true) continue;
+    const groupId = meta.group ? String(meta.group) : null;
+    const group =
+      (groupId &&
+        CTI_GROUP_RULES.find((g) => g.id === groupId) && {
+          id: groupId,
+          title_ko: CTI_GROUP_RULES.find((g) => g.id === groupId).title_ko,
+        }) ||
+      resolveGroup(rel, CTI_GROUP_RULES, CTI_GROUP_FALLBACK);
     const baseTitle = path.basename(rel, path.extname(rel)).replace(/[_-]+/g, " ");
-    const parsed = parseDoc(md, baseTitle);
-    const featuredRank = FEATURED_CTI_PATHS.findIndex((p) => {
+    const parsed = parseDoc(md, meta.title || baseTitle);
+    if (meta.title) parsed.title = String(meta.title).slice(0, 200);
+    if (meta.description) parsed.description = String(meta.description).slice(0, 200);
+    if (meta.subtitle) parsed.subtitle = String(meta.subtitle).slice(0, 160);
+    let featuredRank = FEATURED_CTI_PATHS.findIndex((p) => {
       const needle = p.replace(/\\/g, "/").toLowerCase();
       const hay = rel.toLowerCase();
       if (hay === needle || hay.endsWith("/" + needle)) return true;
       return path.basename(needle) === path.basename(hay);
     });
-    const lang = normalizeCtiLang((rel.match(/_(KR|EN|JP|CN|ZH|JA)\.md$/i) || [, ""])[1]);
+    let featured = featuredRank >= 0;
+    if (!featured && meta.featured === true) {
+      featured = true;
+      featuredRank = Number(meta.featured_rank ?? 50);
+    }
+    const lang = normalizeCtiLang(
+      meta.lang || (rel.match(/_(KR|EN|JP|CN|ZH|JA)\.md$/i) || [, ""])[1]
+    );
     const dates = resolveItemDates({
       md,
       relPath: rel,
       gitEntry: gitDates.get(rel) || gitDates.get(path.basename(rel)),
     });
+    const fmTags = Array.isArray(meta.tags) ? meta.tags.map(String) : [];
+    const fmKeywords = Array.isArray(meta.keywords) ? meta.keywords.map(String) : [];
+    const tags = [...fmTags, ...fmKeywords, group.title_ko, lang, "CTI"].filter(Boolean);
     items.push({
       kind: "cti",
       slug: makeSlug("cti/" + rel),
@@ -931,19 +954,20 @@ function scanCti() {
       description: parsed.description,
       subtitle: parsed.subtitle,
       byline: parsed.byline,
+      abstract: meta.abstract ? String(meta.abstract).trim() : "",
       group: group.id,
       groupTitle: group.title_ko,
-      tags: [group.title_ko, lang, "CTI"].filter(Boolean),
-      featured: featuredRank >= 0,
-      featuredRank: featuredRank >= 0 ? featuredRank : 999,
+      tags,
+      featured,
+      featuredRank: featured ? featuredRank : 999,
       github: githubUrl(CTI_BLOB, rel),
       srcDir: CTI_SRC,
       dateKey: ctiDateKey(rel),
       lang,
       family: ctiFamilyKey(rel),
-      datePublished: dates.datePublished,
-      dateModified: dates.dateModified || dates.datePublished,
-      dateSource: dates.dateSource,
+      datePublished: dates.datePublished || (meta.date ? String(meta.date).slice(0, 10) : null),
+      dateModified: dates.dateModified || dates.datePublished || (meta.date ? String(meta.date).slice(0, 10) : null),
+      dateSource: dates.dateSource || (meta.date ? "frontmatter" : null),
     });
   }
   items.sort((a, b) => (b.dateKey || 0) - (a.dateKey || 0) || a.path.localeCompare(b.path));
@@ -1206,12 +1230,15 @@ function cardHtml(item, hrefPrefix = "./") {
   const search = [
     item.title,
     item.description,
+    item.subtitle,
+    item.abstract,
     item.groupTitle,
     item.datePublished,
     item.media,
     ...(item.tags || []),
     item.path,
   ]
+    .filter(Boolean)
     .join(" ")
     .toLowerCase();
   const langAttr = item.lang ? ` data-lang="${esc(item.lang)}"` : "";
@@ -1700,7 +1727,23 @@ Sitemap: ${SITE}/sitemap.xml
     ensureDir(path.join(PAGES, "cti"));
     fs.writeFileSync(
       path.join(PAGES, "cti", "llms.txt"),
-      ["# VibeQuant CTI", "", ...cti.map((r) => `- [${r.title}](${SITE_CTI}/cti/${r.slug}/)${dated(r)}`), ""].join("\n")
+      [
+        "# VibeQuant CTI",
+        "> Host: cti.vibequant.cc/cti/ — cyber threat intelligence reports.",
+        "",
+        "## Featured",
+        ...cti
+          .filter((r) => r.featured)
+          .sort((a, b) => a.featuredRank - b.featuredRank)
+          .map((r) => {
+            const abs = r.abstract ? `\n  ${String(r.abstract).replace(/\s+/g, " ").slice(0, 280)}` : "";
+            return `- [${r.title}](${SITE_CTI}/cti/${r.slug}/)${dated(r)}${abs}`;
+          }),
+        "",
+        "## All reports",
+        ...cti.map((r) => `- [${r.title}](${SITE_CTI}/cti/${r.slug}/)${dated(r)}`),
+        "",
+      ].join("\n")
     );
   }
   if (essays.length) {
