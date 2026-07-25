@@ -1,6 +1,45 @@
-# Cloudflare 생태계에서 웹 분석 지표를 보기 위한 솔루션 가이드 Cloudflare web analytics guide
+---
+title: "Cloudflare 웹 분석 솔루션 가이드 — Web Analytics·Zaraz·Umami 비교"
+subtitle: "PV부터 스크롤·커스텀 이벤트까지, Cloudflare 생태계에서 지표를 고르는 방법"
+description: "Cloudflare Web Analytics·Zaraz·Workers Analytics Engine과 Umami·Plausible·GoatCounter·GA4의 장단점, 적합 사례, 단계별 선택 가이드를 정리했다."
+abstract: |
+  Cloudflare Pages/Workers 위에 콘텐츠를 올릴 때 글별 PV·referrer·읽음 깊이를 보려면 목적에 따라 도구가 갈린다.
+  시작은 무료·쿠키 없는 Web Analytics, 이벤트·다중 사이트는 Umami, 광고·퍼널은 Zaraz+GA4, 완전 소유는 Analytics Engine+Logpush+R2가 현실적이다.
+  콘텐츠 아카이브에는 Matomo·PostHog·Clarity는 과한 경우가 많다. 권장 경로는 Web Analytics → 필요 시 Umami 확장이다.
+summary_for_ai: |
+  TechDoc comparing web analytics options for Cloudflare-hosted sites (as of mid-2026 context in the article).
+  Native: Web Analytics (privacy-first PV/referrer), Zaraz (tag manager), Workers Analytics Engine + Logpush + R2.
+  Third-party/OSS: Umami, Plausible, GoatCounter, Matomo, GA4, PostHog/Clarity, Fathom, Simple Analytics, Ackee, Pirsch.
+  Recommended path for content archives: start Web Analytics, expand to Umami; avoid heavy stacks unless needed.
+date: 2026-07-25
+author: "Dennis Kim"
+lang: ko
+tags:
+  - Cloudflare
+  - Web Analytics
+  - Umami
+  - Zaraz
+  - Privacy
+  - Observability
+keywords:
+  - Cloudflare Web Analytics
+  - Zaraz
+  - Umami
+  - Plausible
+  - GoatCounter
+  - Workers Analytics Engine
+  - 웹 분석
+  - 프라이버시 분석
+group: cloud-free
+featured: true
+featured_rank: 2
+schema_type: TechArticle
+draft: false
+---
 
-Cloudflare 위에 사이트를 올려두고 "내 글은 누가, 어디서 읽고 있을까?"라는 궁금증이 생긴다면, 지표를 보기 위한 선택지는 생각보다 다양합니다. 단순히 PV만 확인할 것인지, 스크롤 깊이나 커스텀 이벤트까지 추적할 것인지, 데이터를 내 손에 온전히 갖고 싶은지에 따라 방향이 완전히 달라집니다. 이 칼럼에서는 Cloudflare 네이티브 솔루션부터 서드파티·오픈소스 도구까지, 각각의 장단점과 적합한 사용 사례를 정리해보겠습니다.
+# Cloudflare 웹 분석 솔루션 가이드 — Web Analytics·Zaraz·Umami 비교
+
+Cloudflare 위에 사이트를 올려두고 "내 글은 누가, 어디서 읽고 있을까?"라는 궁금증이 생긴다면, 지표를 보기 위한 선택지는 생각보다 다양합니다. 단순히 PV만 확인할 것인지, 스크롤 깊이나 커스텀 이벤트까지 추적할 것인지, 데이터를 내 손에 온전히 갖고 싶은지에 따라 방향이 완전히 달라집니다. 이 글에서는 Cloudflare 네이티브 솔루션부터 서드파티·오픈소스 도구까지, 각각의 장단점과 적합한 사용 사례를 정리합니다.
 
 ---
 
