@@ -10,6 +10,7 @@ export const CTI_GROUP_RULES = [
   { id: "vuln-patch", title_ko: "취약점 · 패치", title_en: "Vuln · Patch", match: [/websphere/i, /exchange/i, /drupal/i, /cpanel/i, /gogs/i, /gitea/i, /netscaler/i, /android/i, /phpbb/i, /marimo/i, /fast16/i, /patchtuesday/i, /msft/i] },
   { id: "crypto-web3", title_ko: "크립토 · Web3", title_en: "Crypto · Web3", match: [/litecoin/i, /kelpdao/i, /ostium/i, /eviltokens/i, /aicryptojack/i, /crypto/i, /sanctions/i] },
   { id: "cloud-saas", title_ko: "클라우드 · SaaS", title_en: "Cloud · SaaS", match: [/vercel/i, /github/i, /coruna/i, /chatgphish/i, /qshing/i] },
+  { id: "tool-review", title_ko: "도구 · 리뷰", title_en: "Tool Review", match: [/flowsint/i, /tool-review/i] },
 ];
 
 export const CTI_GROUP_FALLBACK = { id: "other", title_ko: "기타 CTI", title_en: "Other CTI" };

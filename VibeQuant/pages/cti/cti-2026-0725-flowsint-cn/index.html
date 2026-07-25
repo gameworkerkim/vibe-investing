@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flowsint — OSINT 图探索工具评测 — VibeQuant</title>
+  <meta name="description" content="对 reconurge 开发的开源 OSINT 图探索工具 Flowsint 的全面评测。涵盖功能、架构、Enricher、竞争格局、安全考量和 CTI 工作流评估。" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-cn/" />
+  <meta property="og:title" content="Flowsint — OSINT 图探索工具评测" />
+  <meta property="og:description" content="对 reconurge 开发的开源 OSINT 图探索工具 Flowsint 的全面评测。涵盖功能、架构、Enricher、竞争格局、安全考量和 CTI 工作流评估。" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Flowsint — OSINT 图探索工具评测","description":"对 reconurge 开发的开源 OSINT 图探索工具 Flowsint 的全面评测。涵盖功能、架构、Enricher、竞争格局、安全考量和 CTI 工作流评估。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-cn/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0725-FLOWSINT_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"zh-Hans","keywords":"OSINT, Open-Source-Tool, Graph-Investigation, Tool-Review, Flowsint, Maltego-Alternative"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 도구 · 리뷰</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">도구 · 리뷰</p>
+        <h1>Flowsint — OSINT 图探索工具评测</h1>
+        <p class="article-dates"><time datetime="2026-07-25">발행 2026.07.25</time> · 주제 OSINT · Open-Source-Tool · Graph-Investigation · Tool-Review · Flowsint · Maltego-Alternative</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0725-flowsint-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0725-flowsint-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0725-flowsint-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0725-flowsint-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">对 reconurge 开发的开源 OSINT 图探索工具 Flowsint 的全面评测。涵盖功能、架构、Enricher、竞争格局、安全考量和 CTI 工作流评估。</p>
+        
+      </header>
+      <div class="article-body prose"><p><em>面向网络安全分析师和 OSINT 调查人员的开源 Maltego 替代方案</em></p>
+<hr>
+<h2>目录</h2>
+<ol>
+<li>项目概述</li>
+<li>核心功能与架构</li>
+<li>Enricher 生态系统</li>
+<li>竞争对比</li>
+<li>安全考量</li>
+<li>CTI 工作流运营评估</li>
+<li>结论</li>
+<li>参考文献</li>
+</ol>
+<hr>
+<h2>1. 项目概述</h2>
+<p><strong>Flowsint</strong> (<code>reconurge/flowsint</code>) 是一个 Apache 2.0 许可的开源 OSINT 图探索工具，专为需要通过可视化图接口映射实体间关系的网络安全分析师、记者和调查人员设计。</p>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>详情</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>仓库</td>
+<td><a href="https://github.com/reconurge/flowsint">github.com/reconurge/flowsint</a></td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>Apache 2.0</td>
+</tr>
+<tr>
+<td>GitHub 星标</td>
+<td>7,400+</td>
+</tr>
+<tr>
+<td>Fork 数</td>
+<td>935</td>
+</tr>
+<tr>
+<td>提交数</td>
+<td>871</td>
+</tr>
+<tr>
+<td>主要语言</td>
+<td>Python (后端), TypeScript (前端)</td>
+</tr>
+<tr>
+<td>开发阶段</td>
+<td>早期开发 (pre-1.0, 活跃)</td>
+</tr>
+<tr>
+<td>网站</td>
+<td><a href="https://flowsint.io">flowsint.io</a></td>
+</tr>
+</tbody></table>
+<h3>核心原则</h3>
+<ul>
+<li><strong>道德调查</strong>：仅用于合法、道德的 OSINT 和威胁情报研究</li>
+<li><strong>透明性</strong>：Apache 2.0 许可的完全开源代码库</li>
+<li><strong>验证</strong>：自动化的 Enricher，可交叉引用多个数据源</li>
+<li><strong>本地优先隐私</strong>：所有数据默认存储在用户本地机器上</li>
+</ul>
+<p>Flowsint 在其 <code>ETHICS.md</code> 和 <code>DISCLAIMER.md</code> 中明确禁止用于未经授权的监控、人肉搜索 (doxxing)、骚扰或政治操纵。</p>
+<hr>
+<h2>2. 核心功能与架构</h2>
+<h3>2.1 可视化图探索</h3>
+<p>主要界面是一个交互式节点-边图可视化。分析师创建实体（域名、IP、个人、组织、电子邮件地址、加密货币钱包），并通过自动化 Enrichment 和手动链接来探索关系。</p>
+<h3>2.2 系统架构</h3>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>技术</th>
+<th>角色</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>flowsint-app</code></td>
+<td>TypeScript (Vite)</td>
+<td>交互式图前端 UI</td>
+</tr>
+<tr>
+<td><code>flowsint-api</code></td>
+<td>FastAPI (Python)</td>
+<td>REST API、认证、事件流</td>
+</tr>
+<tr>
+<td><code>flowsint-core</code></td>
+<td>Python</td>
+<td>编排器、Celery 任务、Vault</td>
+</tr>
+<tr>
+<td><code>flowsint-enrichers</code></td>
+<td>Python</td>
+<td>Enricher 模块和扫描逻辑</td>
+</tr>
+<tr>
+<td><code>flowsint-types</code></td>
+<td>Pydantic</td>
+<td>数据模型和类型定义</td>
+</tr>
+<tr>
+<td>数据库 (图)</td>
+<td>Neo4j</td>
+<td>实体-关系图存储</td>
+</tr>
+<tr>
+<td>数据库 (关系型)</td>
+<td>PostgreSQL</td>
+<td>用户账户、配置、元数据</td>
+</tr>
+<tr>
+<td>缓存 / 队列</td>
+<td>Redis + Celery</td>
+<td>任务队列和缓存</td>
+</tr>
+</tbody></table>
+<h3>2.3 部署模型</h3>
+<p>通过 Docker Compose 完全容器化。单条命令部署：</p>
+<pre><code>git clone https://github.com/reconurge/flowsint.git
+cd flowsint
+make prod
+</code></pre>
+<p>支持 Linux、macOS 和 Windows。团队/服务器部署通过内部前端代理架构开箱即用，仅暴露端口 5173；PostgreSQL、Redis、Neo4j 和 API 绑定到 localhost，仅可通过代理访问。</p>
+<h3>2.4 关键设计决策</h3>
+<table>
+<thead>
+<tr>
+<th>决策</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>本地优先存储</td>
+<td>无云依赖；数据主权得到保障</td>
+</tr>
+<tr>
+<td>仅 Docker Compose</td>
+<td>无裸机安装路径；需要熟悉 Docker</td>
+</tr>
+<tr>
+<td>Neo4j 作为图数据库</td>
+<td>通过 Cypher 进行强大的关系查询，但增加学习曲线</td>
+</tr>
+<tr>
+<td>团队内部代理</td>
+<td>单端口暴露简化网络连接，生产环境需要 HTTPS</td>
+</tr>
+<tr>
+<td>模块化单体仓库</td>
+<td>清晰的关注点分离；Enricher 可独立开发</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Enricher 生态系统</h2>
+<p>Enricher 是自动化模块，以实体为输入，生成相关实体或元数据。Flowsint 随附了广泛的 Enricher 集合。</p>
+<h3>3.1 域名 Enricher</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reverse DNS</td>
+<td>查找指向某个 IP 的域名</td>
+</tr>
+<tr>
+<td>DNS Resolution</td>
+<td>将域名解析为 IP 地址</td>
+</tr>
+<tr>
+<td>Subdomain Discovery</td>
+<td>枚举子域名</td>
+</tr>
+<tr>
+<td>WHOIS Lookup</td>
+<td>检索域名注册数据</td>
+</tr>
+<tr>
+<td>Domain to Website</td>
+<td>将域名转换为网站实体</td>
+</tr>
+<tr>
+<td>Domain to Root Domain</td>
+<td>提取根域名</td>
+</tr>
+<tr>
+<td>Domain to ASN</td>
+<td>将域名映射到自治系统编号 (ASN)</td>
+</tr>
+<tr>
+<td>Domain History</td>
+<td>检索历史域名数据</td>
+</tr>
+</tbody></table>
+<h3>3.2 IP 与 ASN Enricher</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IP Information</td>
+<td>地理位置和网络详细信息</td>
+</tr>
+<tr>
+<td>IP to ASN</td>
+<td>将 IP 映射到自治系统 (AS)</td>
+</tr>
+<tr>
+<td>ASN to CIDRs</td>
+<td>检索某个 ASN 的 IP 范围</td>
+</tr>
+<tr>
+<td>CIDR to IPs</td>
+<td>枚举某个范围内的单个 IP</td>
+</tr>
+</tbody></table>
+<h3>3.3 身份与联系方式 Enricher</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Maigret</td>
+<td>在 2,500 多个社交平台上搜索用户名</td>
+</tr>
+<tr>
+<td>Email to Gravatar</td>
+<td>从电子邮件查找 Gravatar 个人资料</td>
+</tr>
+<tr>
+<td>Email to Breaches</td>
+<td>将电子邮件与泄露数据库交叉引用</td>
+</tr>
+<tr>
+<td>Email to Domains</td>
+<td>查找与电子邮件关联的域名</td>
+</tr>
+<tr>
+<td>Phone to Breaches</td>
+<td>将电话号码与泄露数据库交叉引用</td>
+</tr>
+<tr>
+<td>Individual to Org</td>
+<td>查找组织隶属关系</td>
+</tr>
+<tr>
+<td>Individual to Domains</td>
+<td>查找与个人关联的域名</td>
+</tr>
+</tbody></table>
+<h3>3.4 组织与基础设施 Enricher</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Organization to ASN</td>
+<td>查找组织拥有的 ASN</td>
+</tr>
+<tr>
+<td>Organization Information</td>
+<td>检索公司注册详细信息</td>
+</tr>
+<tr>
+<td>Organization to Domains</td>
+<td>查找组织拥有的域名</td>
+</tr>
+</tbody></table>
+<h3>3.5 加密货币 Enricher</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Wallet to Transactions</td>
+<td>检索交易历史</td>
+</tr>
+<tr>
+<td>Wallet to NFTs</td>
+<td>识别钱包持有的 NFT</td>
+</tr>
+</tbody></table>
+<h3>3.6 网站 Enricher</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Website Crawler</td>
+<td>爬取并映射网站结构</td>
+</tr>
+<tr>
+<td>Website to Links</td>
+<td>提取所有外部链接</td>
+</tr>
+<tr>
+<td>Website to Domain</td>
+<td>从 URL 提取域名</td>
+</tr>
+<tr>
+<td>Website to Webtrackers</td>
+<td>识别追踪/分析脚本</td>
+</tr>
+<tr>
+<td>Website to Text</td>
+<td>提取纯文本内容</td>
+</tr>
+</tbody></table>
+<h3>3.7 集成 Enricher</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>功能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>N8n Connector</td>
+<td>将 Flowsint 连接到 N8n 自动化工作流</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 竞争对比</h2>
+<h3>4.1 直接对比</h3>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>许可证</th>
+<th>类型</th>
+<th>与 Flowsint 的主要差异</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Maltego</strong></td>
+<td>商业 (Freemium)</td>
+<td>图 OSINT</td>
+<td>行业标准，成熟的 Transform 库，付费层级</td>
+</tr>
+<tr>
+<td><strong>SpiderFoot</strong></td>
+<td>GPL-3.0</td>
+<td>自动化扫描</td>
+<td>200 多个 OSINT 源，CLI 优先，更强的自动化能力</td>
+</tr>
+<tr>
+<td><strong>Recon-ng</strong></td>
+<td>MIT</td>
+<td>CLI 框架</td>
+<td>Metasploit 风格模块化侦察，纯终端操作</td>
+</tr>
+<tr>
+<td><strong>SpectraGraph</strong></td>
+<td>开源</td>
+<td>图工作室</td>
+<td>交互式图工作区，类似的可视化方法</td>
+</tr>
+<tr>
+<td><strong>PANO</strong></td>
+<td>开源</td>
+<td>图 + AI</td>
+<td>时间线视图 + 超出 Flowsint 范围的 AI 辅助</td>
+</tr>
+<tr>
+<td><strong>Helix</strong></td>
+<td>开源</td>
+<td>身份图</td>
+<td>D3.js 实时关系图，以身份映射为核心</td>
+</tr>
+<tr>
+<td><strong>Flowintel</strong></td>
+<td>开源</td>
+<td>案例管理</td>
+<td>调查案例/协作管理，而非探索</td>
+</tr>
+</tbody></table>
+<h3>4.2 Flowsint 的定位</h3>
+<p>Flowsint 占据了一个独特的细分领域：</p>
+<ul>
+<li><strong>Maltego 替代方案</strong>：最常被引述为 Maltego 基于图的 OSINT 工作流的开源替代品</li>
+<li><strong>可视化优先</strong>：与 SpiderFoot 和 Recon-ng（CLI 为中心）不同，Flowsint 优先考虑交互式可视化探索</li>
+<li><strong>本地隐私</strong>：大多数竞品要么需要云账户，要么会回传遥测数据</li>
+<li><strong>Reconurge 生态系统</strong>：与兄弟工具（Recontrack, Reconcrawl）紧密集成</li>
+<li><strong>平衡方法</strong>：将自动化 Enricher 与手动图操作相结合</li>
+</ul>
+<hr>
+<h2>5. 安全考量</h2>
+<h3>5.1 已报告的漏洞</h3>
+<p>Flowsint 处于早期开发阶段，已有多项 CVE 被报告。分析师在将其部署到敏感环境之前应评估自身的风险承受能力。</p>
+<table>
+<thead>
+<tr>
+<th>CVE ID</th>
+<th>类型</th>
+<th>描述</th>
+<th>状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CVE-2026-32311</td>
+<td>OS 命令注入</td>
+<td><code>org_to_asn</code> Enricher 易受通过构造输入的命令注入攻击</td>
+<td>已报告</td>
+</tr>
+<tr>
+<td>CVE-2026-44352</td>
+<td>访问控制</td>
+<td>用户可查看其他用户的草图日志 (pre-v1.2.3)</td>
+<td>1.2.3 中已修复</td>
+</tr>
+<tr>
+<td>CVE-2026-42156</td>
+<td>Cypher 查询注入</td>
+<td>通过未净化的实体输入进行图查询注入</td>
+<td>已报告</td>
+</tr>
+</tbody></table>
+<h3>5.2 运营安全建议</h3>
+<ol>
+<li><strong>网络隔离</strong>：在隔离的 VLAN 或专用分析 VM 中部署</li>
+<li><strong>不要暴露到公网</strong>：内部代理架构专为 LAN/可信网络使用而设计。如需要公网访问，请在前方放置带 HTTPS 终止的反向代理</li>
+<li><strong>轮换默认密钥</strong>：<code>.env</code> 文件中的 <code>AUTH_SECRET</code>、<code>MASTER_VAULT_KEY_V1</code> 和 <code>NEO4J_PASSWORD</code> 附带占位值。在任何部署之前生成唯一值</li>
+<li><strong>监控更新</strong>：跟踪 <a href="https://github.com/reconurge/flowsint/blob/main/CHANGELOG.md">CHANGELOG.md</a> 和 GitHub Security Advisories 以获取补丁</li>
+<li><strong>生产就绪状态</strong>：在当前开发阶段，Flowsint 最适合用于研究和测试环境，而非生产级分析师工作流</li>
+</ol>
+<h3>5.3 供应链风险</h3>
+<ul>
+<li>来自多名贡献者的 871 次提交；无单一供应商锁定</li>
+<li>Docker 镜像从 GitHub Container Registry (<code>ghcr.io</code>) 拉取；尽可能验证镜像签名</li>
+<li>Python 依赖链通过 <code>uv</code>/<code>pyproject.toml</code> 管理；部署前使用 <code>pip-audit</code> 或类似工具进行审计</li>
+</ul>
+<hr>
+<h2>6. CTI 工作流运营评估</h2>
+<h3>6.1 Flowsint 适用的环节</h3>
+<table>
+<thead>
+<tr>
+<th>CTI 工作流阶段</th>
+<th>Flowsint 的实用性</th>
+<th>评级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>初始侦察</td>
+<td>域名/IP/ASN Enricher 提供快速映射</td>
+<td>高</td>
+</tr>
+<tr>
+<td>实体归属</td>
+<td>Maigret、电子邮件-泄露匹配、钱包追踪</td>
+<td>中-高</td>
+</tr>
+<tr>
+<td>基础设施映射</td>
+<td>ASN-to-CIDRs、反向 DNS、子域名发现</td>
+<td>高</td>
+</tr>
+<tr>
+<td>关系发现</td>
+<td>使用 Neo4j Cypher 查询进行图可视化</td>
+<td>高</td>
+</tr>
+<tr>
+<td>报告生成</td>
+<td>截图/导出图；无内置报告模板</td>
+<td>低-中</td>
+</tr>
+<tr>
+<td>团队协作</td>
+<td>服务器部署支持多用户；暂无 RBAC</td>
+<td>中</td>
+</tr>
+<tr>
+<td>证据保全</td>
+<td>本地存储；无内置监管链功能</td>
+<td>低</td>
+</tr>
+</tbody></table>
+<h3>6.2 推荐用例</h3>
+<ul>
+<li>从单个指标映射攻击者基础设施（域名、IP、ASN）</li>
+<li>在勒索软件/APT 调查中追踪加密货币钱包关系</li>
+<li>跨泄露数据库和社交平台交叉引用电子邮件地址和用户名</li>
+<li>为供应链风险评估构建组织关联图</li>
+</ul>
+<h3>6.3 生产级 CTI 的局限性</h3>
+<ul>
+<li>没有用于向 SIEM/SOAR 平台以编程方式导出图的 API</li>
+<li>没有内置的 IoC 共享格式（尚不支持 STIX/MISP 导出）</li>
+<li>早期阶段的稳定性——版本间可能存在破坏性变更</li>
+<li>文档不完整；仅通过 Discord 提供社区支持</li>
+</ul>
+<hr>
+<h2>7. 结论</h2>
+<p>Flowsint 是一个前景广阔的开源 OSINT 图探索工具，作为 Maltego 替代方案已迅速获得社区关注（7,400 多个星标）。其本地优先的隐私架构、广泛的 Enricher 生态系统以及基于 Docker 的部署使其对个人分析师和小型团队都非常易用。</p>
+<p><strong>优势</strong>：可视化图探索、模块化 Enricher 架构、零云依赖、Apache 2.0 许可、覆盖域名/IP/电子邮件/加密货币/社交媒体的 Enricher 生态系统。</p>
+<p><strong>劣势</strong>：早期开发阶段（pre-1.0）、存在需要监控的已记录 CVE、无 STIX/MISP 导出、仅支持 Docker 部署、文档不完整。</p>
+<p><strong>结论</strong>：适用于 CTI 研究和实验环境。在未进行额外安全加固和隔离之前，尚不推荐用于生产级分析师流水线。该项目的发展轨迹（871 次提交、活跃的社区、快速的星标增长）值得持续关注——它有潜力成为开源 OSINT 工具包中的标准工具。</p>
+<blockquote>
+<p><strong>免责声明</strong>：Flowsint 仅设计用于合法、道德的调查和研究目的。未经授权的监控、人肉搜索、骚扰或任何非法使用均受项目 ETHICS.md 指南的禁止。</p>
+</blockquote>
+<hr>
+<h2>8. 参考文献</h2>
+<p>[1] reconurge/flowsint -- GitHub 仓库. <a href="https://github.com/reconurge/flowsint">https://github.com/reconurge/flowsint</a></p>
+<p>[2] Flowsint 官方网站. <a href="https://flowsint.io">https://flowsint.io</a></p>
+<p>[3] Flowsint ETHICS.md. <a href="https://github.com/reconurge/flowsint/blob/main/ETHICS.md">https://github.com/reconurge/flowsint/blob/main/ETHICS.md</a></p>
+<p>[4] Flowsint DISCLAIMER.md. <a href="https://github.com/reconurge/flowsint/blob/main/DISCLAIMER.md">https://github.com/reconurge/flowsint/blob/main/DISCLAIMER.md</a></p>
+<p>[5] Flowsint CHANGELOG.md. <a href="https://github.com/reconurge/flowsint/blob/main/CHANGELOG.md">https://github.com/reconurge/flowsint/blob/main/CHANGELOG.md</a></p>
+<p>[6] Maltego -- 商业 OSINT 图平台. <a href="https://www.maltego.com">https://www.maltego.com</a></p>
+<p>[7] SpiderFoot -- 开源 OSINT 自动化. <a href="https://github.com/smicallef/spiderfoot">https://github.com/smicallef/spiderfoot</a></p>
+<p>[8] Recon-ng -- Web 侦察框架. <a href="https://github.com/lanmaster53/recon-ng">https://github.com/lanmaster53/recon-ng</a></p>
+<hr>
+<p>(c) 2026 Dennis Kim (HoKwang Kim) | 独立 CTI 档案 (TLP:GREEN)
+联系方式: <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> | GitHub: <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0725-FLOWSINT_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

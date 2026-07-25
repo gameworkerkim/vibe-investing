@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flowsint — OSINT Graph Exploration Tool Review — VibeQuant</title>
+  <meta name="description" content="A comprehensive review of Flowsint, an open-source OSINT graph exploration tool by reconurge. Covers features, architecture, enrichers, competitive landscape, security considerations, and evaluation for CTI workflows." />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-en/" />
+  <meta property="og:title" content="Flowsint — OSINT Graph Exploration Tool Review" />
+  <meta property="og:description" content="A comprehensive review of Flowsint, an open-source OSINT graph exploration tool by reconurge. Covers features, architecture, enrichers, competitive landscape, security considerations, and evaluation for CTI workflows." />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Flowsint — OSINT Graph Exploration Tool Review","description":"A comprehensive review of Flowsint, an open-source OSINT graph exploration tool by reconurge. Covers features, architecture, enrichers, competitive landscape, security considerations, and evaluation for CTI workflows.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0725-flowsint-en/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0725-FLOWSINT_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"en","keywords":"OSINT, Open-Source-Tool, Graph-Investigation, Tool-Review, Flowsint, Maltego-Alternative"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 도구 · 리뷰</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">도구 · 리뷰</p>
+        <h1>Flowsint — OSINT Graph Exploration Tool Review</h1>
+        <p class="article-dates"><time datetime="2026-07-25">발행 2026.07.25</time> · 주제 OSINT · Open-Source-Tool · Graph-Investigation · Tool-Review · Flowsint · Maltego-Alternative</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0725-flowsint-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0725-flowsint-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0725-flowsint-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0725-flowsint-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Open-source Maltego alternative for cybersecurity analysts and OSINT investigators</p>
+        <p class="article-byline">Dennis Kim (HoKwang Kim) · 2026-07-25</p>
+      </header>
+      <div class="article-body prose"><p><em>Open-source Maltego alternative for cybersecurity analysts and OSINT investigators</em></p>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li>Project Overview</li>
+<li>Core Features &amp; Architecture</li>
+<li>Enricher Ecosystem</li>
+<li>Competitive Comparison</li>
+<li>Security Considerations</li>
+<li>Operational Assessment for CTI Workflows</li>
+<li>Conclusion</li>
+<li>References</li>
+</ol>
+<hr>
+<h2>1. Project Overview</h2>
+<p><strong>Flowsint</strong> (<code>reconurge/flowsint</code>) is an open-source OSINT graph exploration tool under the Apache 2.0 license, designed for cybersecurity analysts, journalists, and investigators who need to map relationships between entities through a visual graph interface.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Repository</td>
+<td><a href="https://github.com/reconurge/flowsint">github.com/reconurge/flowsint</a></td>
+</tr>
+<tr>
+<td>License</td>
+<td>Apache 2.0</td>
+</tr>
+<tr>
+<td>GitHub Stars</td>
+<td>7,400+</td>
+</tr>
+<tr>
+<td>Forks</td>
+<td>935</td>
+</tr>
+<tr>
+<td>Commits</td>
+<td>871</td>
+</tr>
+<tr>
+<td>Primary Languages</td>
+<td>Python (backend), TypeScript (frontend)</td>
+</tr>
+<tr>
+<td>Development Stage</td>
+<td>Early development (pre-1.0, active)</td>
+</tr>
+<tr>
+<td>Website</td>
+<td><a href="https://flowsint.io">flowsint.io</a></td>
+</tr>
+</tbody></table>
+<h3>Core Principles</h3>
+<ul>
+<li><strong>Ethical investigation</strong>: Exclusively for lawful, ethical OSINT and threat intelligence research</li>
+<li><strong>Transparency</strong>: Fully open-source codebase with Apache 2.0 licensing</li>
+<li><strong>Verification</strong>: Automated enrichers that cross-reference multiple data sources</li>
+<li><strong>Local-first privacy</strong>: All data stored on the user&#39;s machine by default</li>
+</ul>
+<p>Flowsint explicitly prohibits use for unauthorized surveillance, doxxing, harassment, or political manipulation, as documented in its <code>ETHICS.md</code> and <code>DISCLAIMER.md</code>.</p>
+<hr>
+<h2>2. Core Features &amp; Architecture</h2>
+<h3>2.1 Visual Graph Exploration</h3>
+<p>The primary interface is an interactive node-and-edge graph visualization. Analysts create entities (domains, IPs, individuals, organizations, email addresses, crypto wallets) and explore relationships through automated enrichment and manual linking.</p>
+<h3>2.2 System Architecture</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Technology</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>flowsint-app</code></td>
+<td>TypeScript (Vite)</td>
+<td>Frontend UI with interactive graph</td>
+</tr>
+<tr>
+<td><code>flowsint-api</code></td>
+<td>FastAPI (Python)</td>
+<td>REST API, authentication, event stream</td>
+</tr>
+<tr>
+<td><code>flowsint-core</code></td>
+<td>Python</td>
+<td>Orchestrator, Celery tasks, vault</td>
+</tr>
+<tr>
+<td><code>flowsint-enrichers</code></td>
+<td>Python</td>
+<td>Enricher modules and scanning logic</td>
+</tr>
+<tr>
+<td><code>flowsint-types</code></td>
+<td>Pydantic</td>
+<td>Data models and type definitions</td>
+</tr>
+<tr>
+<td>Database (Graph)</td>
+<td>Neo4j</td>
+<td>Entity-relationship graph storage</td>
+</tr>
+<tr>
+<td>Database (Relational)</td>
+<td>PostgreSQL</td>
+<td>User accounts, configuration, metadata</td>
+</tr>
+<tr>
+<td>Cache / Queue</td>
+<td>Redis + Celery</td>
+<td>Task queue and caching</td>
+</tr>
+</tbody></table>
+<h3>2.3 Deployment Model</h3>
+<p>Fully containerized via Docker Compose. Single-command deployment:</p>
+<pre><code>git clone https://github.com/reconurge/flowsint.git
+cd flowsint
+make prod
+</code></pre>
+<p>Supports Linux, macOS, and Windows. Team/server deployment is supported out of the box with internal frontend proxy architecture -- only port 5173 is exposed; PostgreSQL, Redis, Neo4j, and the API are bound to localhost and accessible only through the proxy.</p>
+<h3>2.4 Key Design Decisions</h3>
+<table>
+<thead>
+<tr>
+<th>Decision</th>
+<th>Implication</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Local-first storage</td>
+<td>No cloud dependency; data sovereignty guaranteed</td>
+</tr>
+<tr>
+<td>Docker Compose only</td>
+<td>No bare-metal install path; requires Docker familiarity</td>
+</tr>
+<tr>
+<td>Neo4j as graph DB</td>
+<td>Powerful relationship queries via Cypher, but adds learning curve</td>
+</tr>
+<tr>
+<td>Internal proxy for teams</td>
+<td>Single port exposure simplifies networking but needs HTTPS for production</td>
+</tr>
+<tr>
+<td>Modular monorepo</td>
+<td>Clean separation of concerns; enrichers can be developed independently</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Enricher Ecosystem</h2>
+<p>Enrichers are automated modules that take an entity as input and produce related entities or metadata. Flowsint ships with a broad set.</p>
+<h3>3.1 Domain Enrichers</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reverse DNS</td>
+<td>Find domains pointing to an IP</td>
+</tr>
+<tr>
+<td>DNS Resolution</td>
+<td>Resolve domain to IP addresses</td>
+</tr>
+<tr>
+<td>Subdomain Discovery</td>
+<td>Enumerate subdomains</td>
+</tr>
+<tr>
+<td>WHOIS Lookup</td>
+<td>Retrieve domain registration data</td>
+</tr>
+<tr>
+<td>Domain to Website</td>
+<td>Convert domain to website entity</td>
+</tr>
+<tr>
+<td>Domain to Root Domain</td>
+<td>Extract root domain</td>
+</tr>
+<tr>
+<td>Domain to ASN</td>
+<td>Map domain to autonomous system number</td>
+</tr>
+<tr>
+<td>Domain History</td>
+<td>Retrieve historical domain data</td>
+</tr>
+</tbody></table>
+<h3>3.2 IP &amp; ASN Enrichers</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IP Information</td>
+<td>Geolocation and network details</td>
+</tr>
+<tr>
+<td>IP to ASN</td>
+<td>Map IP to autonomous system</td>
+</tr>
+<tr>
+<td>ASN to CIDRs</td>
+<td>Retrieve IP ranges for an ASN</td>
+</tr>
+<tr>
+<td>CIDR to IPs</td>
+<td>Enumerate individual IPs in a range</td>
+</tr>
+</tbody></table>
+<h3>3.3 Identity &amp; Contact Enrichers</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Maigret</td>
+<td>Username search across 2,500+ social platforms</td>
+</tr>
+<tr>
+<td>Email to Gravatar</td>
+<td>Find Gravatar profile from email</td>
+</tr>
+<tr>
+<td>Email to Breaches</td>
+<td>Cross-reference email against breach databases</td>
+</tr>
+<tr>
+<td>Email to Domains</td>
+<td>Find domains associated with email</td>
+</tr>
+<tr>
+<td>Phone to Breaches</td>
+<td>Cross-reference phone number against breaches</td>
+</tr>
+<tr>
+<td>Individual to Org</td>
+<td>Find organizational affiliations</td>
+</tr>
+<tr>
+<td>Individual to Domains</td>
+<td>Find domains associated with a person</td>
+</tr>
+</tbody></table>
+<h3>3.4 Organization &amp; Infrastructure Enrichers</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Organization to ASN</td>
+<td>Find ASNs owned by an organization</td>
+</tr>
+<tr>
+<td>Organization Information</td>
+<td>Retrieve company registration details</td>
+</tr>
+<tr>
+<td>Organization to Domains</td>
+<td>Find domains owned by an organization</td>
+</tr>
+</tbody></table>
+<h3>3.5 Cryptocurrency Enrichers</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Wallet to Transactions</td>
+<td>Retrieve transaction history</td>
+</tr>
+<tr>
+<td>Wallet to NFTs</td>
+<td>Identify NFTs held by a wallet</td>
+</tr>
+</tbody></table>
+<h3>3.6 Website Enrichers</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Website Crawler</td>
+<td>Crawl and map website structure</td>
+</tr>
+<tr>
+<td>Website to Links</td>
+<td>Extract all outbound links</td>
+</tr>
+<tr>
+<td>Website to Domain</td>
+<td>Extract domain from URL</td>
+</tr>
+<tr>
+<td>Website to Webtrackers</td>
+<td>Identify tracking/analytics scripts</td>
+</tr>
+<tr>
+<td>Website to Text</td>
+<td>Extract plain text content</td>
+</tr>
+</tbody></table>
+<h3>3.7 Integration Enrichers</h3>
+<table>
+<thead>
+<tr>
+<th>Enricher</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>N8n Connector</td>
+<td>Connect Flowsint to N8n automation workflows</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Competitive Comparison</h2>
+<h3>4.1 Direct Comparisons</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>License</th>
+<th>Type</th>
+<th>Key Differentiator vs Flowsint</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Maltego</strong></td>
+<td>Commercial (Freemium)</td>
+<td>Graph OSINT</td>
+<td>Industry standard, mature Transform library, paid tiers</td>
+</tr>
+<tr>
+<td><strong>SpiderFoot</strong></td>
+<td>GPL-3.0</td>
+<td>Automated Scan</td>
+<td>200+ OSINT sources, CLI-first, stronger automation</td>
+</tr>
+<tr>
+<td><strong>Recon-ng</strong></td>
+<td>MIT</td>
+<td>CLI Framework</td>
+<td>Metasploit-style modular recon, terminal-only</td>
+</tr>
+<tr>
+<td><strong>SpectraGraph</strong></td>
+<td>Open-Source</td>
+<td>Graph Studio</td>
+<td>Interactive graph workspace, similar visual approach</td>
+</tr>
+<tr>
+<td><strong>PANO</strong></td>
+<td>Open-Source</td>
+<td>Graph + AI</td>
+<td>Timeline view + AI assistance beyond Flowsint&#39;s scope</td>
+</tr>
+<tr>
+<td><strong>Helix</strong></td>
+<td>Open-Source</td>
+<td>Identity Graph</td>
+<td>D3.js real-time relationship graph, identity mapping focus</td>
+</tr>
+<tr>
+<td><strong>Flowintel</strong></td>
+<td>Open-Source</td>
+<td>Case Management</td>
+<td>Investigation case/collaboration management vs exploration</td>
+</tr>
+</tbody></table>
+<h3>4.2 Flowsint&#39;s Positioning</h3>
+<p>Flowsint occupies a distinctive niche:</p>
+<ul>
+<li><strong>Maltego alternative</strong>: Most frequently cited as the open-source replacement for Maltego&#39;s graph-based OSINT workflow</li>
+<li><strong>Visual-first</strong>: Unlike SpiderFoot and Recon-ng (CLI-centric), Flowsint prioritizes interactive visual exploration</li>
+<li><strong>Local privacy</strong>: Most competitors either require cloud accounts or phone home with telemetry</li>
+<li><strong>Reconurge ecosystem</strong>: Tight integration with sibling tools (Recontrack, Reconcrawl)</li>
+<li><strong>Balanced approach</strong>: Combines automated enrichers with manual graph manipulation</li>
+</ul>
+<hr>
+<h2>5. Security Considerations</h2>
+<h3>5.1 Reported Vulnerabilities</h3>
+<p>Flowsint is in early development and has several reported CVEs. Analysts should evaluate their risk tolerance before deploying in sensitive environments.</p>
+<table>
+<thead>
+<tr>
+<th>CVE ID</th>
+<th>Type</th>
+<th>Description</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CVE-2026-32311</td>
+<td>OS Command Injection</td>
+<td><code>org_to_asn</code> enricher vulnerable to command injection via crafted input</td>
+<td>Reported</td>
+</tr>
+<tr>
+<td>CVE-2026-44352</td>
+<td>Access Control</td>
+<td>Users could view other users&#39; sketch logs (pre-v1.2.3)</td>
+<td>Patched in 1.2.3</td>
+</tr>
+<tr>
+<td>CVE-2026-42156</td>
+<td>Cypher Query Injection</td>
+<td>Graph query injection through unsanitized entity input</td>
+<td>Reported</td>
+</tr>
+</tbody></table>
+<h3>5.2 Operational Security Recommendations</h3>
+<ol>
+<li><strong>Network isolation</strong>: Deploy in an isolated VLAN or dedicated analysis VM</li>
+<li><strong>Do not expose to public internet</strong>: The internal proxy architecture is designed for LAN/trusted network use. If public access is required, place a reverse proxy with HTTPS termination in front</li>
+<li><strong>Rotate default secrets</strong>: The <code>.env</code> file ships with placeholder values for <code>AUTH_SECRET</code>, <code>MASTER_VAULT_KEY_V1</code>, and <code>NEO4J_PASSWORD</code>. Generate unique values before any deployment</li>
+<li><strong>Monitor updates</strong>: Track the <a href="https://github.com/reconurge/flowsint/blob/main/CHANGELOG.md">CHANGELOG.md</a> and GitHub Security Advisories for patches</li>
+<li><strong>Production readiness</strong>: At this development stage, Flowsint is best suited for research and testing environments rather than production analyst workflows</li>
+</ol>
+<h3>5.3 Supply Chain Risk</h3>
+<ul>
+<li>871 commits from multiple contributors; no single-vendor lock-in</li>
+<li>Docker images pulled from GitHub Container Registry (<code>ghcr.io</code>); verify image signatures when available</li>
+<li>Python dependency chain managed via <code>uv</code>/<code>pyproject.toml</code>; audit with <code>pip-audit</code> or similar before deployment</li>
+</ul>
+<hr>
+<h2>6. Operational Assessment for CTI Workflows</h2>
+<h3>6.1 Where Flowsint Fits</h3>
+<table>
+<thead>
+<tr>
+<th>CTI Workflow Stage</th>
+<th>Flowsint Utility</th>
+<th>Rating</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Initial Reconnaissance</td>
+<td>Domain/IP/ASN enrichers provide rapid mapping</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Entity Attribution</td>
+<td>Maigret, email-to-breaches, wallet tracing</td>
+<td>Medium-High</td>
+</tr>
+<tr>
+<td>Infrastructure Mapping</td>
+<td>ASN-to-CIDRs, reverse DNS, subdomain discovery</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Relationship Discovery</td>
+<td>Graph visualization with Neo4j Cypher queries</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Report Generation</td>
+<td>Screenshot/export graph; no built-in report templates</td>
+<td>Low-Medium</td>
+</tr>
+<tr>
+<td>Team Collaboration</td>
+<td>Server deployment supports multi-user; no RBAC yet</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Evidence Preservation</td>
+<td>Local storage; no built-in chain-of-custody features</td>
+<td>Low</td>
+</tr>
+</tbody></table>
+<h3>6.2 Recommended Use Cases</h3>
+<ul>
+<li>Mapping attacker infrastructure (domains, IPs, ASNs) from a single indicator</li>
+<li>Tracing cryptocurrency wallet relationships in ransomware/APT investigations</li>
+<li>Cross-referencing email addresses and usernames across breach databases and social platforms</li>
+<li>Building organizational link charts for supply chain risk assessments</li>
+</ul>
+<h3>6.3 Limitations for Production CTI</h3>
+<ul>
+<li>No API for programmatic graph export to SIEM/SOAR platforms</li>
+<li>No built-in IoC sharing format (STIX/MISP export not yet available)</li>
+<li>Early-stage stability -- expect breaking changes between releases</li>
+<li>Documentation is incomplete; community support via Discord only</li>
+</ul>
+<hr>
+<h2>7. Conclusion</h2>
+<p>Flowsint is a promising open-source OSINT graph exploration tool that has rapidly gained community traction (7,400+ stars) as a Maltego alternative. Its local-first privacy architecture, broad enricher ecosystem, and Docker-based deployment make it accessible for individual analysts and small teams.</p>
+<p><strong>Strengths</strong>: Visual graph exploration, modular enricher architecture, zero cloud dependency, Apache 2.0 licensing, Enricher ecosystem coverage across domains/IPs/email/crypto/social media.</p>
+<p><strong>Weaknesses</strong>: Early development stage (pre-1.0), documented CVEs requiring monitoring, no STIX/MISP export, Docker-only deployment, incomplete documentation.</p>
+<p><strong>Verdict</strong>: Suitable for CTI research and lab environments. Not yet recommended for production analyst pipelines without additional security hardening and isolation. The project&#39;s trajectory (871 commits, active community, rapid star growth) warrants continued monitoring -- it has the potential to become a standard tool in the open-source OSINT toolkit.</p>
+<blockquote>
+<p><strong>Disclaimer</strong>: Flowsint is designed strictly for lawful, ethical investigation and research purposes. Unauthorized surveillance, doxxing, harassment, or any illegal use is prohibited under the project&#39;s ETHICS.md guidelines.</p>
+</blockquote>
+<hr>
+<h2>8. References</h2>
+<p>[1] reconurge/flowsint -- GitHub Repository. <a href="https://github.com/reconurge/flowsint">https://github.com/reconurge/flowsint</a></p>
+<p>[2] Flowsint Official Site. <a href="https://flowsint.io">https://flowsint.io</a></p>
+<p>[3] Flowsint ETHICS.md. <a href="https://github.com/reconurge/flowsint/blob/main/ETHICS.md">https://github.com/reconurge/flowsint/blob/main/ETHICS.md</a></p>
+<p>[4] Flowsint DISCLAIMER.md. <a href="https://github.com/reconurge/flowsint/blob/main/DISCLAIMER.md">https://github.com/reconurge/flowsint/blob/main/DISCLAIMER.md</a></p>
+<p>[5] Flowsint CHANGELOG.md. <a href="https://github.com/reconurge/flowsint/blob/main/CHANGELOG.md">https://github.com/reconurge/flowsint/blob/main/CHANGELOG.md</a></p>
+<p>[6] Maltego -- Commercial OSINT Graph Platform. <a href="https://www.maltego.com">https://www.maltego.com</a></p>
+<p>[7] SpiderFoot -- Open-Source OSINT Automation. <a href="https://github.com/smicallef/spiderfoot">https://github.com/smicallef/spiderfoot</a></p>
+<p>[8] Recon-ng -- Web Reconnaissance Framework. <a href="https://github.com/lanmaster53/recon-ng">https://github.com/lanmaster53/recon-ng</a></p>
+<hr>
+<p>(c) 2026 Dennis Kim (HoKwang Kim) | Independent CTI Archive (TLP:GREEN)
+Contact: <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> | GitHub: <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0725-FLOWSINT_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
