@@ -516,15 +516,228 @@ function descriptionFromMd(md, fallback) {
   return parseDoc(md, fallback).description;
 }
 
-function makeSlug(relPath) {
-  const noExt = relPath.replace(/\.md$/i, "");
+/**
+ * Readable slugs (no content-hash). Collisions get -2, -3…
+ * Viral / hand-picked URLs via SLUG_OVERRIDES.
+ */
+const SLUG_OVERRIDES = {
+  "Cyworld/The-Pros-and-Cons-of-VC-Investment-as-Seen-Through-the-Cyworld-RCPS-Contract.md":
+    "cyworld-rcps-vc-investment-pros-cons",
+};
+
+const slugRegistry = new Map(); // section -> Set<slug>
+
+function resetSlugRegistry() {
+  slugRegistry.clear();
+}
+
+function slugifyPath(relPath) {
+  const norm = String(relPath || "").replace(/\\/g, "/");
+  if (SLUG_OVERRIDES[norm]) return SLUG_OVERRIDES[norm];
+  const noExt = norm.replace(/\.md$/i, "");
   const ascii = noExt
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "")
-    .slice(0, 40);
-  const h = crypto.createHash("sha1").update(relPath).digest("hex").slice(0, 8);
-  return `${ascii || "doc"}-${h}`;
+    .slice(0, 80);
+  return ascii || "doc";
+}
+
+function allocateSlug(section, relPath) {
+  if (!slugRegistry.has(section)) slugRegistry.set(section, new Set());
+  const used = slugRegistry.get(section);
+  const base = slugifyPath(relPath);
+  let slug = base;
+  let n = 2;
+  while (used.has(slug)) {
+    slug = `${base}-${n++}`;
+  }
+  used.add(slug);
+  return slug;
+}
+
+/** @deprecated use allocateSlug — kept for any external callers */
+function makeSlug(relPath) {
+  return slugifyPath(relPath);
+}
+
+const REDIRECT_BEGIN = "# --- AUTO SLUG REDIRECTS (generated; do not edit) ---";
+const REDIRECT_END = "# --- END AUTO SLUG REDIRECTS ---";
+
+function loadLegacySlugIndex() {
+  /** @type {Map<string, { section: string, oldSlug: string }>} */
+  const byKey = new Map();
+  for (const section of ["columns", "tech", "cti", "essays"]) {
+    const dir = path.join(PAGES, section);
+    if (!fs.existsSync(dir)) continue;
+    for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (!ent.isDirectory()) continue;
+      const indexPath = path.join(dir, ent.name, "index.html");
+      if (!fs.existsSync(indexPath)) continue;
+      let html = "";
+      try {
+        html = fs.readFileSync(indexPath, "utf8");
+      } catch {
+        continue;
+      }
+      const based =
+        html.match(/"isBasedOn"\s*:\s*"([^"]+)"/) ||
+        html.match(/href="(https:\/\/github\.com\/[^"]+\/blob\/main\/[^"]+)"/);
+      if (!based) continue;
+      const key = githubUrlToContentKey(based[1], section);
+      if (!key) continue;
+      byKey.set(`${section}::${key}`, { section, oldSlug: ent.name });
+    }
+  }
+  return byKey;
+}
+
+function githubUrlToContentKey(url, section) {
+  let u = "";
+  try {
+    u = decodeURIComponent(String(url || ""));
+  } catch {
+    u = String(url || "");
+  }
+  u = u.replace(/\\/g, "/");
+  const mainIdx = u.indexOf("/blob/main/");
+  if (mainIdx === -1) return null;
+  let rest = u.slice(mainIdx + "/blob/main/".length);
+  if (section === "columns") {
+    const inv = "02.Investment Idea Column/";
+    const media = "03. Media-Column/";
+    if (rest.includes(inv)) return rest.slice(rest.indexOf(inv) + inv.length);
+    if (rest.includes(media)) return "media/" + rest.slice(rest.indexOf(media) + media.length);
+    // already relative in some pages
+    if (!rest.includes("github.com")) return rest;
+  }
+  if (section === "tech") {
+    const marker = "TechDoc/";
+    if (rest.includes(marker)) return rest.slice(rest.indexOf(marker) + marker.length);
+  }
+  if (section === "cti") {
+    // repo root files
+    return path.basename(rest);
+  }
+  if (section === "essays") {
+    return rest.replace(/^essays\//i, "");
+  }
+  return rest;
+}
+
+function contentKeyForItem(item, section) {
+  if (section === "columns") return String(item.path || item.relPath || "").replace(/\\/g, "/");
+  if (section === "cti") return path.basename(String(item.path || item.relPath || ""));
+  return String(item.path || item.relPath || "").replace(/\\/g, "/");
+}
+
+function loadSlugHistory() {
+  const historyPath = path.join(PAGES, "slug-history.json");
+  if (!fs.existsSync(historyPath)) return {};
+  try {
+    return JSON.parse(fs.readFileSync(historyPath, "utf8")) || {};
+  } catch {
+    return {};
+  }
+}
+
+function writeSlugRedirects(legacyIndex, sections) {
+  /** @type {Record<string, { current: string, previous: string[] }>} */
+  const history = loadSlugHistory();
+  const rules = [];
+  const stubs = [];
+  const seenRule = new Set();
+
+  for (const { section, items, host } of sections) {
+    for (const item of items) {
+      const key = `${section}::${contentKeyForItem(item, section)}`;
+      const entry = history[key] || { current: "", previous: [] };
+      const previous = new Set(entry.previous || []);
+      if (entry.current && entry.current !== item.slug) previous.add(entry.current);
+      const fromLegacy = legacyIndex.get(key);
+      if (fromLegacy?.oldSlug && fromLegacy.oldSlug !== item.slug) {
+        previous.add(fromLegacy.oldSlug);
+      }
+      previous.delete(item.slug);
+      history[key] = { current: item.slug, previous: [...previous].sort() };
+
+      const toPath = `/${section}/${item.slug}/`;
+      for (const oldSlug of previous) {
+        const fromPath = `/${section}/${oldSlug}/`;
+        const pathRule = `${fromPath}  ${toPath}  301`;
+        const bareRule = `/${section}/${oldSlug}  ${toPath}  301`;
+        if (!seenRule.has(pathRule)) {
+          rules.push(pathRule);
+          seenRule.add(pathRule);
+        }
+        if (!seenRule.has(bareRule)) {
+          rules.push(bareRule);
+          seenRule.add(bareRule);
+        }
+        stubs.push({ section, oldSlug, newSlug: item.slug, host });
+      }
+    }
+  }
+
+  const redirectsPath = path.join(PAGES, "_redirects");
+  let base = fs.existsSync(redirectsPath) ? fs.readFileSync(redirectsPath, "utf8") : "";
+  const start = base.indexOf(REDIRECT_BEGIN);
+  const end = base.indexOf(REDIRECT_END);
+  if (start !== -1 && end !== -1 && end > start) {
+    base = (base.slice(0, start) + base.slice(end + REDIRECT_END.length)).trimEnd() + "\n";
+  }
+  // drop prior manual CrytoHFT block (now covered by AUTO) if present
+  base = base
+    .split("\n")
+    .filter((line) => !/crytohft-hft-infra/i.test(line) && !/CrytoHFT typo/i.test(line) && !/path-only CrytoHFT/i.test(line))
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trimEnd();
+
+  const block = [
+    "",
+    REDIRECT_BEGIN,
+    `# ${rules.length} rules · ${stubs.length} stub pages`,
+    ...rules,
+    REDIRECT_END,
+    "",
+  ].join("\n");
+  fs.writeFileSync(redirectsPath, base + "\n" + block);
+
+  for (const s of stubs) {
+    const dir = path.join(PAGES, s.section, s.oldSlug);
+    ensureDir(dir);
+    const abs = s.host
+      ? `${s.host}/${s.section}/${s.newSlug}/`
+      : `${siteForSection(s.section)}/${s.section}/${s.newSlug}/`;
+    fs.writeFileSync(
+      path.join(dir, "index.html"),
+      `<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>Moved</title>
+  <link rel="canonical" href="${esc(abs)}" />
+  <meta http-equiv="refresh" content="0;url=${esc(abs)}" />
+  <script>location.replace(${JSON.stringify(abs)});</script>
+</head>
+<body><p>Moved to <a href="${esc(abs)}">${esc(abs)}</a></p></body>
+</html>
+`
+    );
+  }
+
+  const mapPath = path.join(PAGES, "slug-map.json");
+  const map = {};
+  for (const { section, items } of sections) {
+    map[section] = {};
+    for (const item of items) {
+      map[section][contentKeyForItem(item, section)] = item.slug;
+    }
+  }
+  fs.writeFileSync(mapPath, JSON.stringify(map, null, 2));
+  fs.writeFileSync(path.join(PAGES, "slug-history.json"), JSON.stringify(history, null, 2));
+  console.log(`  slug redirects: ${stubs.length} moves (${rules.length} rules)`);
 }
 
 function githubUrl(base, relPath) {
@@ -710,7 +923,7 @@ function scanColumns() {
     const lang = detectDocLang(rel, meta);
     items.push({
       kind: "column",
-      slug: makeSlug(catalogPath),
+      slug: allocateSlug("columns", catalogPath),
       path: catalogPath,
       title: parsed.title,
       description: parsed.description,
@@ -804,7 +1017,7 @@ function scanTech() {
     const lang = detectDocLang(rel, meta);
     items.push({
       kind: "tech",
-      slug: makeSlug("tech/" + rel),
+      slug: allocateSlug("tech", rel),
       path: rel,
       title: parsed.title,
       description: parsed.description,
@@ -878,7 +1091,7 @@ function scanEssays() {
     });
     items.push({
       kind: "essay",
-      slug: makeSlug("essays/" + rel),
+      slug: allocateSlug("essays", rel),
       path: rel,
       title: parsed.title,
       description: parsed.description,
@@ -1005,7 +1218,7 @@ function scanCti() {
     const tags = [...fmTags, ...fmKeywords, group.title_ko, lang, "CTI"].filter(Boolean);
     items.push({
       kind: "cti",
-      slug: makeSlug("cti/" + rel),
+      slug: allocateSlug("cti", rel),
       path: rel,
       title: parsed.title,
       description: parsed.description,
@@ -1869,6 +2082,11 @@ function cleanSection(section) {
 }
 
 function main() {
+  resetSlugRegistry();
+  console.log("Loading legacy slugs…");
+  const legacyIndex = loadLegacySlugIndex();
+  console.log(`  ${legacyIndex.size} legacy article URLs`);
+
   console.log("Scanning columns…");
   const columns = scanColumns();
   const colDated = columns.filter((c) => c.datePublished).length;
@@ -1915,6 +2133,13 @@ function main() {
     if (i % 10 === 0 || i === essays.length) console.log(`  essays ${i}/${essays.length}`);
     buildArticle(essay, "essays");
   }
+
+  writeSlugRedirects(legacyIndex, [
+    { section: "columns", items: columns, host: SITE_DOCS },
+    { section: "tech", items: tech, host: SITE_TECH },
+    { section: "cti", items: cti, host: SITE_CTI },
+    { section: "essays", items: essays, host: SITE_ESSAY },
+  ]);
 
   buildListPage({
     section: "columns",
