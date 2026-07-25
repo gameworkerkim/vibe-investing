@@ -1,3 +1,15 @@
+---
+title: "The Structural Limits of Improving Crypto HFT Infrastructure — Why Better Servers Won't Fix This"
+description: "Why better servers alone cannot fix crypto HFT — liquidation cascades, cloud/CDN coupling, and market microstructure limits."
+date: 2025-11-20
+lang: en
+tags: [Crypto, HFT, Infrastructure]
+keywords: ["crypto HFT", "liquidation", "Cloudflare", "AWS", "market microstructure"]
+draft: false
+---
+
+> Web: [docs.vibequant.cc](https://docs.vibequant.cc/columns/cryptohft-hft-infra-en-43bda122/) · [한국어](https://docs.vibequant.cc/columns/cryptohft-hft-infra-8e1e64d6/)
+
 # The Structural Limits of Improving Crypto HFT Infrastructure — Why Better Servers Won't Fix This
 
 ## Introduction

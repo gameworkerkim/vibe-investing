@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>The Structural Limits of Improving Crypto HFT Infrastructure — Why Better Servers Won't Fix This — VibeQuant</title>
-  <meta name="description" content="On October 10, 2025, the cryptocurrency market experienced the largest forced liquidation event in its history. Within 24 hours, $19.13 billion in…" />
-  <link rel="canonical" href="https://docs.vibequant.cc/columns/crytohft-hft-infra-en-08fbeb74/" />
+  <meta name="description" content="Why better servers alone cannot fix crypto HFT — liquidation cascades, cloud/CDN coupling, and market microstructure limits." />
+  <link rel="canonical" href="https://docs.vibequant.cc/columns/cryptohft-hft-infra-en-43bda122/" />
   <meta property="og:title" content="The Structural Limits of Improving Crypto HFT Infrastructure — Why Better Servers Won't Fix This" />
-  <meta property="og:description" content="On October 10, 2025, the cryptocurrency market experienced the largest forced liquidation event in its history. Within 24 hours, $19.13 billion in…" />
-  <meta property="og:url" content="https://docs.vibequant.cc/columns/crytohft-hft-infra-en-08fbeb74/" />
+  <meta property="og:description" content="Why better servers alone cannot fix crypto HFT — liquidation cascades, cloud/CDN coupling, and market microstructure limits." />
+  <meta property="og:url" content="https://docs.vibequant.cc/columns/cryptohft-hft-infra-en-43bda122/" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="VibeQuant" />
   <meta property="og:image" content="https://vibequant.cc/og-default.png" />
@@ -21,8 +21,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="../../css/content.css?v=7" />
-  
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"The Structural Limits of Improving Crypto HFT Infrastructure — Why Better Servers Won't Fix This","description":"On October 10, 2025, the cryptocurrency market experienced the largest forced liquidation event in its history. Within 24 hours, $19.13 billion in…","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://docs.vibequant.cc/columns/crytohft-hft-infra-en-08fbeb74/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/CrytoHFT/HFT-Infra_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-19","dateModified":"2026-07-19","keywords":"크립토 · Web3, CrytoHFT"}</script>
+  <link rel="alternate" hreflang="ko" href="https://docs.vibequant.cc/columns/cryptohft-hft-infra-8e1e64d6/" />
+  <link rel="alternate" hreflang="en" href="https://docs.vibequant.cc/columns/cryptohft-hft-infra-en-43bda122/" />
+  <link rel="alternate" hreflang="x-default" href="https://docs.vibequant.cc/columns/cryptohft-hft-infra-8e1e64d6/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"The Structural Limits of Improving Crypto HFT Infrastructure — Why Better Servers Won't Fix This","description":"Why better servers alone cannot fix crypto HFT — liquidation cascades, cloud/CDN coupling, and market microstructure limits.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://docs.vibequant.cc/columns/cryptohft-hft-infra-en-43bda122/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/CryptoHFT/HFT-Infra_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2025-11-20","dateModified":"2025-11-20","inLanguage":"en","keywords":"크립토 · Web3, CryptoHFT"}</script>
 </head>
 <body class="content-body">
   <header class="site-top">
@@ -46,12 +48,22 @@
       <header class="article-head">
         <p class="eyebrow">크립토 · Web3</p>
         <h1>The Structural Limits of Improving Crypto HFT Infrastructure — Why Better Servers Won't Fix This</h1>
-        <p class="article-dates"><time datetime="2026-07-19">발행 2026.07.19</time> · 주제 크립토 · Web3 · CrytoHFT</p>
-        
-        <p class="lede">Introduction</p>
+        <p class="article-dates"><time datetime="2025-11-20">발행 2025.11.20</time> · 주제 크립토 · Web3 · CryptoHFT</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../columns/cryptohft-hft-infra-8e1e64d6/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../columns/cryptohft-hft-infra-en-43bda122/" data-lang="EN" aria-current="true">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">Why better servers alone cannot fix crypto HFT — liquidation cascades, cloud/CDN coupling, and market microstructure limits.</p>
         
       </header>
-      <div class="article-body prose"><p>On October 10, 2025, the cryptocurrency market experienced the largest forced liquidation event in its history. Within 24 hours, $19.13 billion in leveraged positions were liquidated, affecting more than 1.6 million traders. On Binance, assets such as Cosmos (ATOM) and IoTeX (IOTX) briefly traded near $0, and the stablecoin USDe dislocated to $0.65. Ten days later, on October 20, the AWS us-east-1 region went down for roughly 15 hours, taking Coinbase and Robinhood offline with it. A month after that, on November 18, a global CloudFlare outage knocked out roughly 20% of worldwide internet traffic.</p>
+      <div class="article-body prose"><blockquote>
+<p>Web: <a href="https://docs.vibequant.cc/columns/cryptohft-hft-infra-en-43bda122/">docs.vibequant.cc</a> · <a href="https://docs.vibequant.cc/columns/cryptohft-hft-infra-8e1e64d6/">한국어</a></p>
+</blockquote>
+<h1>The Structural Limits of Improving Crypto HFT Infrastructure — Why Better Servers Won&#39;t Fix This</h1>
+<h2>Introduction</h2>
+<p>On October 10, 2025, the cryptocurrency market experienced the largest forced liquidation event in its history. Within 24 hours, $19.13 billion in leveraged positions were liquidated, affecting more than 1.6 million traders. On Binance, assets such as Cosmos (ATOM) and IoTeX (IOTX) briefly traded near $0, and the stablecoin USDe dislocated to $0.65. Ten days later, on October 20, the AWS us-east-1 region went down for roughly 15 hours, taking Coinbase and Robinhood offline with it. A month after that, on November 18, a global CloudFlare outage knocked out roughly 20% of worldwide internet traffic.</p>
 <p>Three events, three different causes — yet they converge on a single question: <strong>why does centralized exchange (CEX) infrastructure fail precisely at the moment users need access the most, and would more infrastructure investment solve the problem?</strong></p>
 <p>Let me state the conclusion up front. It would not. But the reason is not the one commonly given — that &quot;the technology isn&#39;t good enough.&quot; The problem is that three mutually independent failure axes — demand-side divergence, supply-side random failure, and unverifiability — are structurally embedded in today&#39;s CEX architecture. This essay analyzes each axis quantitatively, answers the anticipated objections, and argues why what is needed is not infrastructure improvement but a redesign of market structure.</p>
 <p>One clarification before we begin. This essay does not claim that low-latency processing of massive traffic is mathematically impossible. Korea&#39;s KOSDAQ, NASDAQ, and CME process millions of messages per second at microsecond latencies. It is not impossible. What this essay claims is this: <strong>for a CEX that has chosen an internet-facing cloud architecture for the sake of global retail accessibility and DDoS defense, that choice carries an irreducible time-constant mismatch as its price.</strong> This distinction runs through the entire essay.</p>
@@ -284,7 +296,7 @@
         
         <p class="author-links">
           <a href="https://vibequant.cc/about/">About</a>
-          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/CrytoHFT/HFT-Infra_EN.md">GitHub 원문</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/CryptoHFT/HFT-Infra_EN.md">GitHub 원문</a>
         </p>
       </aside>
     </article>

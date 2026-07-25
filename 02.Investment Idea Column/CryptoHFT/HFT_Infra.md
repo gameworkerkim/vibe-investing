@@ -1,4 +1,16 @@
-# 크립토 HTF 인프라 개선의 구조적 한계 — 왜 더 좋은 서버로는 해결되지 않는가?
+---
+title: "크립토 HFT 인프라 개선의 구조적 한계 — 왜 더 좋은 서버로는 해결되지 않는가?"
+description: "크립토 HFT가 더 좋은 서버만으로는 해결되지 않는 구조적 한계 — 청산·클라우드·CDN 연쇄와 시장 미시구조를 정리한다."
+date: 2025-11-20
+lang: ko
+tags: [Crypto, HFT, Infrastructure]
+keywords: ["크립토 HFT", "crypto HFT", "청산", "Cloudflare", "AWS"]
+draft: false
+---
+
+> 웹 버전: [docs.vibequant.cc](https://docs.vibequant.cc/columns/cryptohft-hft-infra-8e1e64d6/) · [English](https://docs.vibequant.cc/columns/cryptohft-hft-infra-en-43bda122/)
+
+# 크립토 HFT 인프라 개선의 구조적 한계 — 왜 더 좋은 서버로는 해결되지 않는가?
 
 ## 들어가며
 

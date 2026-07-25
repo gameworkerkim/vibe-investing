@@ -707,6 +707,7 @@ function scanColumns() {
           0,
           8
         );
+    const lang = detectDocLang(rel, meta);
     items.push({
       kind: "column",
       slug: makeSlug(catalogPath),
@@ -725,6 +726,8 @@ function scanColumns() {
       github: githubUrl(blob, rel),
       srcDir,
       relPath: rel,
+      lang,
+      family: contentFamilyKey(catalogPath),
       datePublished: dates.datePublished || (meta.date ? String(meta.date).slice(0, 10) : null),
       dateModified: dates.dateModified || dates.datePublished,
       dateSource: dates.dateSource || (meta.date ? "frontmatter" : null),
@@ -750,7 +753,7 @@ function scanColumns() {
     });
   }
   unifyFamilyDates(items);
-  return sortByDateThenPath(dedupeByTitle(items));
+  return attachContentLangSiblings(sortByDateThenPath(dedupeByTitle(items)));
 }
 
 function scanTech() {
@@ -798,6 +801,7 @@ function scanTech() {
       group.title_ko,
       rel.split("/")[0],
     ].filter(Boolean);
+    const lang = detectDocLang(rel, meta);
     items.push({
       kind: "tech",
       slug: makeSlug("tech/" + rel),
@@ -814,13 +818,15 @@ function scanTech() {
       featuredRank: featured ? featuredRank : 999,
       github: githubUrl(TECH_BLOB, rel),
       srcDir: TECH_SRC,
+      lang,
+      family: contentFamilyKey(rel),
       datePublished: dates.datePublished || (meta.date ? String(meta.date).slice(0, 10) : null),
       dateModified: dates.dateModified || dates.datePublished || (meta.date ? String(meta.date).slice(0, 10) : null),
       dateSource: dates.dateSource || (meta.date ? "frontmatter" : null),
     });
   }
   unifyFamilyDates(items);
-  return sortByDateThenPath(items);
+  return attachContentLangSiblings(sortByDateThenPath(items));
 }
 
 function ensureEssaySrc() {
@@ -1081,8 +1087,51 @@ function renderNav(active) {
     .join("\n        ");
 }
 
+function detectDocLang(rel, meta = {}) {
+  const fromMeta = normalizeCtiLang(meta.lang || meta.language || "");
+  if (fromMeta) return fromMeta;
+  const base = path.basename(String(rel || ""), path.extname(String(rel || "")));
+  let m = base.match(/[_\-.](KR|EN|JP|JA|CN|ZH|KO)$/i);
+  if (m) return normalizeCtiLang(m[1]);
+  m = base.match(/[_\-.](en|ko|ja|zh|cn)$/i);
+  if (m) return normalizeCtiLang(m[1]);
+  return "KR";
+}
+
+/** Folder + basename without language suffix — pairs KO/EN tech & column twins. */
+function contentFamilyKey(rel) {
+  const p = String(rel || "").replace(/\\/g, "/");
+  const dir = path
+    .dirname(p)
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "");
+  let base = path.basename(p, path.extname(p));
+  base = base
+    .replace(/[_\-.](KR|EN|JP|JA|CN|ZH|KO)$/i, "")
+    .replace(/[_\-.](en|ko|ja|zh|cn)$/i, "");
+  base = base.toLowerCase().replace(/[^a-z0-9]+/g, "");
+  return `${dir}::${base || "doc"}`;
+}
+
+function attachContentLangSiblings(items) {
+  const byFamily = new Map();
+  for (const item of items) {
+    if (!item.family || !item.lang) continue;
+    if (!byFamily.has(item.family)) byFamily.set(item.family, {});
+    byFamily.get(item.family)[item.lang] = item.slug;
+  }
+  for (const item of items) {
+    item.langs = byFamily.get(item.family) || (item.lang ? { [item.lang]: item.slug } : {});
+  }
+  return items;
+}
+
+function absoluteSitePath(base) {
+  return String(base || "").replace(/\/+$/, "") + "/";
+}
+
 function hreflangLinks(item, section) {
-  if (section !== "cti" || !item.langs || Object.keys(item.langs).length < 2) return "";
+  if (!item.langs || Object.keys(item.langs).length < 2) return "";
   const base = siteForSection(section);
   const lines = [];
   for (const L of CTI_LANG_ORDER) {
@@ -1204,7 +1253,7 @@ function buildArticle(item, section) {
     : "";
   const ledeHtml = ledeText ? `<p class="lede">${esc(ledeText)}</p>` : "";
   const langSwitch =
-    section === "cti" && item.langs && Object.keys(item.langs).length > 1
+    item.langs && Object.keys(item.langs).length > 1
       ? ctiLangSwitchHtml(item.lang || "KR", item.langs, { absoluteBase: `${prefix}${section}/` })
       : "";
   const sourceUrl = item.sourceUrl || meta.source_url || "";
@@ -1643,15 +1692,15 @@ function buildSeo(columns, tech, cti = [], essays = []) {
     `  <url><loc>${loc}</loc><lastmod>${lastmod || new Date().toISOString().slice(0, 10)}</lastmod></url>`;
   const today = new Date().toISOString().slice(0, 10);
   const urls = [
-    entry(`${SITE}/`, today),
-    entry(`${SITE}/about/`, today),
-    entry(`${SITE}/play/`, today),
-    entry(`${SITE_LAB}/`, today),
-    entry(`${SITE_RESEARCH}/`, today),
-    entry(`${SITE_DOCS}/columns/`, today),
-    entry(`${SITE_TECH}/tech/`, today),
-    entry(`${SITE_CTI}/cti/`, today),
-    entry(`${SITE_ESSAY}/essays/`, today),
+    entry(absoluteSitePath(SITE), today),
+    entry(absoluteSitePath(`${SITE}/about`), today),
+    entry(absoluteSitePath(`${SITE}/play`), today),
+    entry(absoluteSitePath(SITE_LAB), today),
+    entry(absoluteSitePath(SITE_RESEARCH), today),
+    entry(absoluteSitePath(`${SITE_DOCS}/columns`), today),
+    entry(absoluteSitePath(`${SITE_TECH}/tech`), today),
+    entry(absoluteSitePath(`${SITE_CTI}/cti`), today),
+    entry(absoluteSitePath(`${SITE_ESSAY}/essays`), today),
     ...columns.map((c) => entry(`${SITE_DOCS}/columns/${c.slug}/`, c.dateModified || c.datePublished || today)),
     ...tech.map((t) => entry(`${SITE_TECH}/tech/${t.slug}/`, t.dateModified || t.datePublished || today)),
     ...cti.map((r) => entry(`${SITE_CTI}/cti/${r.slug}/`, r.dateModified || r.datePublished || today)),
@@ -1706,8 +1755,8 @@ Sitemap: ${SITE}/sitemap.xml
     `- [Play](${SITE_PLAY}/play/)`,
     `- [CTI](${SITE_CTI}/cti/) (${cti.length})`,
     `- [Essay](${SITE_ESSAY}/essays/) (${essays.length})`,
-    `- [Lab](${SITE_LAB}/) — soon`,
-    `- [Research](${SITE_RESEARCH}/) — soon`,
+    `- [Lab](${absoluteSitePath(SITE_LAB)}) — soon`,
+    `- [Research](${absoluteSitePath(SITE_RESEARCH)})`,
     `- [GitHub](${GITHUB_HOME})`,
     `- [About](${SITE}/about/)`,
     "",
