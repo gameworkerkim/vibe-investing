@@ -151,6 +151,7 @@ Python으로 만든 웹앱을 공짜로 배포하는 방법과 PaaS 플랫폼 �
 | [Caveman RTK 토큰 최적화](LLM/Caveman%20rtk%20token%20optimization.md) | LLM 상호작용 토큰 최적화 기법 — 프롬프트 엔지니어링과 컨텍스트 관리를 통한 비용/지연 감소. | 2026-06-13 |
 | [Quivr 가이드](LLM/Quivr_guide.md) | LLM 기반 오픈소스 세컨드 브레인/지식 관리 플랫폼 Quivr 설정 및 활용 가이드. 38,000+★. | 2026-06-13 |
 | [시크릿 스캐닝 LLM 하니스 프롬프트](LLM_Security/Secret%20scanning%20llm%20harness%20prompt.md) | 코드베이스에서 시크릿, API 키, 자격 증명을 탐지하는 LLM 기반 프롬프트 하니스 설계. | 2026-06-06 |
+| [Claude Security Plugin 가이드 (KR)](LLM_Security/Claude-Security-Plugin-Guide_KR.md) · [EN](LLM_Security/Claude-Security-Plugin-Guide_EN.md) · [CN](LLM_Security/Claude-Security-Plugin-Guide_CN.md) · [JA](LLM_Security/Claude-Security-Plugin-Guide_JA.md) **NEW** | Claude Code 내 멀티에이전트 취약점 스캐너(`claude-security`) + 예방적 코드 리뷰(`security-guidance`) 완전 가이드. 아키텍처·6페이즈 파이프라인·3렌즈 검증 패널·12종 경쟁사 비교·Getting Started. 4개국어. | 2026-07-26 |
 | [Ollama 설치 가이드](Local_LLM/Ollama_Install_Guilde.md) | 개인 하드웨어에서 로컬 LLM(Llama, Mistral 등)을 실행하는 Ollama 단계별 설치 가이드. | 2026-05-xx |
 | [Headroom 완전 가이드](Headroom/Headroom%20complete%20guide.md) | AI 에이전트 컨텍스트 지능형 압축 도구 — 토큰 60~95% 절감. SmartCrusher, CodeCompressor, CacheAligner 엔진. | 2026-06-12 |
 | [Open Code 리뷰 가이드](LLM/Open%20code%20review%20guide.md) | AI 코딩 CLI 도구 Open Code 심층 리뷰 — DeepSeek V4 Pro 연동, 설치, 설정 최적화, 커맨드 레퍼런스, 타 도구와 비교 분석. | 2026-06-15 |
@@ -243,6 +244,7 @@ AI 코딩 CLI 도구 **OpenCode**의 한국어 번역 및 현지화 프로젝트
 
 | 날짜 | 문서 | 내용 |
 |------|------|------|
+| 2026-07-26 | Claude Security Plugin 가이드 | claude-security + security-guidance 멀티에이전트 보안 플러그인 완전 가이드 (4개국어) |
 | 2026-07-28 | MCP 서버 개발 Getting Started | MCP 개념 + AMQS 시그널 서버 구현 완전 가이드 |
 | 2026-07-28 | AMQS-AI-Infra MCP Server | MCP 서버 README (4 Tools·1 Resource·1 Prompt) |
 | 2026-07-19 | Pyodide 기술 문서 | 브라우저 Python 실행 — 검증·확장판 (8종 비교) |

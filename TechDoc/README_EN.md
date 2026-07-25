@@ -204,6 +204,7 @@ Token optimization, local deployment, security, knowledge management.
 | [Caveman RTK Token Optimization](LLM/Caveman%20rtk%20token%20optimization.md) | KO | LLM interaction token optimization — cost/latency reduction. | 2026-06-13 |
 | [Quivr Guide](LLM/Quivr_guide.md) | KO | Open-source second brain/knowledge management platform. 38,000+ stars. | 2026-06-13 |
 | [Secret Scanning Harness Prompt](LLM_Security/Secret%20scanning%20llm%20harness%20prompt.md) | KO | LLM-based detection of secrets, API keys, credentials in codebases. | 2026-06-06 |
+| [Claude Security Plugin Guide (KR)](LLM_Security/Claude-Security-Plugin-Guide_KR.md) · [EN](LLM_Security/Claude-Security-Plugin-Guide_EN.md) · [CN](LLM_Security/Claude-Security-Plugin-Guide_CN.md) · [JA](LLM_Security/Claude-Security-Plugin-Guide_JA.md) **NEW** | KO·EN·CN·JA | Multi-agent vulnerability scanner + preventative code review (claude-security + security-guidance) — architecture, 6-phase pipeline, 3-lens verification panel, 12-product competitive comparison, Getting Started. 4 languages. | 2026-07-26 |
 | [Ollama Installation Guide](Local_LLM/Ollama_Install_Guilde.md) | KO | Local LLMs (Llama, Mistral, etc.) on personal hardware. | 2026-05-xx |
 | [Headroom Complete Guide](Headroom/Headroom%20complete%20guide.md) | KO | AI agent context-aware compression — 60-95% token savings. | 2026-06-12 |
 | [Open Code Review Guide](LLM/Open%20code%20review%20guide.md) | KO | Deep review of Open Code CLI — DeepSeek V4 Pro, setup, optimization, comparison. | 2026-06-15 |
@@ -286,6 +287,7 @@ Korean translation project for the **OpenCode** AI coding CLI tool.
 |------|----------|---------|
 | 2026-07-28 | MCP Server Getting Started | MCP concepts + AMQS signal server complete guide |
 | 2026-07-28 | AMQS-AI-Infra MCP Server | MCP server (4 Tools, 1 Resource, 1 Prompt) |
+| 2026-07-26 | Claude Security Plugin Guide | claude-security + security-guidance complete guide (4 languages) |
 | 2026-07-19 | Pyodide Technical Docs | Browser Python execution — verified & expanded (8 competitors) |
 | 2026-07-24 | Cloudflare Free Tier Usage — VibeQuant | Free-tier architecture case study (KR) |
 | 2026-07-18 | Qlib Getting Started | Microsoft Qlib complete guide (KO + EN) |
