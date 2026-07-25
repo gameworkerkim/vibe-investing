@@ -1,6 +1,41 @@
+---
+title: "Claude Security Plugin 기술 분석 및 Getting Started"
+subtitle: "security-guidance와 claude-security를 구분하고, 멀티에이전트 검증 파이프라인·도입 절차·경쟁 위치를 정리한다"
+description: "Claude Code용 claude-security(Beta)와 security-guidance(GA)의 구조, 3인 검증 패널, BYO inference, 도입 절차와 Defense-in-Depth 스택 내 위치를 정리한 기술 가이드."
+abstract: |
+  Anthropic Claude Code의 보안 플러그인 두 종(security-guidance GA, claude-security Beta v0.10.0)을 구분하고,
+  추론 기반 취약점 스캔·적대적 검증(2/3 정족수)·로컬 실행(BYO inference)·Human-in-the-loop 패치 원칙을 설명한다.
+  기존 SAST 대체가 아닌 보완재로서의 위치, 요금·CLI 요건, 도입 체크리스트를 포함한다. 기준일 2026-07-26.
+summary_for_ai: |
+  Tech guide (KO) for Anthropic Claude Security Plugin: distinguishes security-guidance (in-session GA) vs claude-security (on-demand multi-agent deep scan, Beta v0.10.0, paid plan, CLI ≥2.1.154).
+  Core: reasoning-over-pattern, adversarial 3-panel verification, locality/BYO inference, human-in-the-loop patches; complements SAST in a 6-tier defense stack. Reference docs accessed 2026-07-23; document date 2026-07-26.
+date: 2026-07-26
+author: "Dennis Kim"
+lang: ko
+tags:
+  - Claude
+  - LLM Security
+  - AppSec
+  - DevSecOps
+  - SAST
+keywords:
+  - Claude Security Plugin
+  - claude-security
+  - security-guidance
+  - multi-agent vulnerability scanner
+  - adversarial verification
+  - BYO inference
+group: security
+featured: true
+featured_rank: 1
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+
 # Claude Security Plugin 기술 분석 및 Getting Started
 
-기존의 전통적인 보안 솔루션, github의 오픈소스 보안 솔루션들은 이제 새로운 가치를 주지 않으면 몰락하게 되었다. Claude Security Plugin이 보안을 in-House 기술로 확장한 것이다.
+기존의 전통적인 보안 솔루션, github등의 오픈소스 보안 솔루션들은 이제 새로운 가치를 주지 않으면 몰락하게 되었다. Claude Security Plugin이 보안을 in-House 기술로 확장한 것이다.
 
 | 항목 | 내용 |
 |:---|:---|

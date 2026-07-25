@@ -1,0 +1,1280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claude Security Plugin — Technical Analysis &amp; Getting Started Guide — VibeQuant</title>
+  <meta name="description" content="Technical guide to Claude Code's claude-security (Beta) and security-guidance (GA): architecture, 3-panel adversarial verification, BYO inference, adoption steps, and position in a defense-in-depth stack." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-en/" />
+  <meta property="og:title" content="Claude Security Plugin — Technical Analysis &amp; Getting Started Guide" />
+  <meta property="og:description" content="Technical guide to Claude Code's claude-security (Beta) and security-guidance (GA): architecture, 3-panel adversarial verification, BYO inference, adoption steps, and position in a defense-in-depth stack." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-kr/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Claude Security Plugin — Technical Analysis & Getting Started Guide","description":"Technical guide to Claude Code's claude-security (Beta) and security-guidance (GA): architecture, 3-panel adversarial verification, BYO inference, adoption steps, and position in a defense-in-depth stack.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-en/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Security/Claude-Security-Plugin-Guide_EN.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-en/","datePublished":"2026-07-26","dateModified":"2026-07-26","inLanguage":"en","keywords":"Claude, LLM Security, AppSec, DevSecOps, SAST"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"Claude Security Plugin — Technical Analysis & Getting Started Guide","item":"https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-en/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 보안</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">보안</p>
+        <h1>Claude Security Plugin — Technical Analysis &amp; Getting Started Guide</h1>
+        <p class="article-dates"><time datetime="2026-07-26">발행 2026.07.26</time> · 주제 Claude · LLM Security · AppSec · DevSecOps · SAST</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/llm-security-claude-security-plugin-guide-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/llm-security-claude-security-plugin-guide-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/llm-security-claude-security-plugin-guide-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/llm-security-claude-security-plugin-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Technical guide to Claude Code's claude-security (Beta) and security-guidance (GA): architecture, 3-panel adversarial verification, BYO inference, adoption steps, and position in a defense-in-depth stack.</p>
+        
+      </header>
+      <div class="article-body prose"><p>Traditional security solutions and GitHub open-source security tools face obsolescence unless they deliver new value. The Claude Security Plugin extends security into an in-house technology layer.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Item</th>
+<th align="left">Content</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Document Version</td>
+<td align="left">1.0</td>
+</tr>
+<tr>
+<td align="left">Date</td>
+<td align="left">2026-07-26</td>
+</tr>
+<tr>
+<td align="left">Target Products</td>
+<td align="left"><code>claude-security</code> (Beta, plugin v0.10.0), <code>security-guidance</code> (GA)</td>
+</tr>
+<tr>
+<td align="left">Reference</td>
+<td align="left">code.claude.com/docs official documentation (accessed 2026-07-23)</td>
+</tr>
+<tr>
+<td align="left">Target Audience</td>
+<td align="left">AppSec / DevSecOps engineers, security architects, development leads</td>
+</tr>
+<tr>
+<td align="left">Summary</td>
+<td align="left">Architecture, verification pipeline, adoption procedure, and competitive positioning of a multi-agent vulnerability scanner that operates inside Claude Code sessions</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>0. Two Plugins You Must Distinguish First</h2>
+<p>Under the name &quot;Claude Security Plugin,&quot; two fundamentally different products exist. Confusion is common, so let&#39;s separate them first.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Distinction</th>
+<th align="left"><code>security-guidance</code></th>
+<th align="left"><code>claude-security</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">One-liner</td>
+<td align="left">Claude reviews its own changes <strong>while writing code</strong></td>
+<td align="left">Multi-agent<strong>on-demand deep-scan</strong> of the entire repository</td>
+</tr>
+<tr>
+<td align="left">Trigger</td>
+<td align="left">Automatic (no invocation command)</td>
+<td align="left">Manual <code>/claude-security</code></td>
+</tr>
+<tr>
+<td align="left">Status</td>
+<td align="left">GA</td>
+<td align="left">Beta (released 2026-07-22)</td>
+</tr>
+<tr>
+<td align="left">Plan</td>
+<td align="left">All plans (including free)</td>
+<td align="left"><strong>Paid plan required</strong></td>
+</tr>
+<tr>
+<td align="left">Min CLI</td>
+<td align="left">v2.1.144+</td>
+<td align="left">v2.1.154+ (dynamic workflows)</td>
+</tr>
+<tr>
+<td align="left">Output</td>
+<td align="left">Interactive in-session findings → immediate fix</td>
+<td align="left">Timestamped report directory + <code>.patch</code> files</td>
+</tr>
+<tr>
+<td align="left">Nature</td>
+<td align="left">Preventative guardrail (shift-left)</td>
+<td align="left">Auditing scanner (complements SAST, does not replace it)</td>
+</tr>
+<tr>
+<td align="left">Cost profile</td>
+<td align="left">Low-to-medium per layer</td>
+<td align="left">Heavy token consumption per scan</td>
+</tr>
+</tbody></table>
+<p>In this document, &quot;Claude Security Plugin&quot; refers to the latter (<code>claude-security</code>). Chapter 5 covers <code>security-guidance</code> separately.</p>
+<hr>
+<h2>1. Concept</h2>
+<h3>1.1 Design Premise</h3>
+<p>Traditional SAST relies on rule-based pattern matching. It catches known patterns but (a) has high false-positive rates and (b) misses context-dependent vulnerabilities such as cross-file logic flaws and authentication bypasses. Claude Security targets this gap by <strong>reproducing a skilled security researcher&#39;s reasoning process through an agent team.</strong> It maps architecture, builds threat models, traces data flows from entry points to sinks, refutes its own discoveries, then reports.</p>
+<p>The core concept compresses into four principles:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Concept</th>
+<th align="left">Implementation</th>
+<th align="left">Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Reasoning over pattern</strong></td>
+<td align="left">LLM agents read and reason about code. Regex/rulesets are not the primary engine</td>
+<td align="left">Detects novel and logic-based vulnerabilities, though non-deterministic</td>
+</tr>
+<tr>
+<td align="left"><strong>Adversarial verification</strong></td>
+<td align="left">Every candidate finding passes a 3-member verification panel with 2/3 quorum</td>
+<td align="left">False-positive suppression built into the architecture</td>
+</tr>
+<tr>
+<td align="left"><strong>Locality (BYO inference)</strong></td>
+<td align="left">Scans run locally in the user&#39;s session with user permissions</td>
+<td align="left">Code never leaves the environment. Supports GitLab, Bitbucket, air-gapped networks</td>
+</tr>
+<tr>
+<td align="left"><strong>Human-in-the-loop</strong></td>
+<td align="left">Patches are never auto-applied</td>
+<td align="left">Raises approval material quality without removing the approval checkpoint</td>
+</tr>
+</tbody></table>
+<h3>1.2 Position in the Defense-in-Depth Stack</h3>
+<p>Anthropic positions this plugin as one layer in a 6-tier stack, not a standalone solution.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Tier</th>
+<th align="left">Tool</th>
+<th align="left">Coverage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">In-session</td>
+<td align="left"><code>security-guidance</code> plugin</td>
+<td align="left">Common vulnerabilities in Claude-written code, fixed in the same session</td>
+</tr>
+<tr>
+<td align="left">On-demand single pass</td>
+<td align="left"><code>/security-review</code></td>
+<td align="left">One-time security review of the current branch</td>
+</tr>
+<tr>
+<td align="left"><strong>On-demand deep scan</strong></td>
+<td align="left"><strong><code>claude-security</code> plugin</strong></td>
+<td align="left"><strong>Repository/diff multi-agent scan with independently verified findings and patches</strong></td>
+</tr>
+<tr>
+<td align="left">At PR time</td>
+<td align="left">Code Review (Team/Enterprise)</td>
+<td align="left">Full codebase context consistency &amp; security multi-agent review</td>
+</tr>
+<tr>
+<td align="left">Managed</td>
+<td align="left">Claude Security product (Enterprise)</td>
+<td align="left">Hosted scanning with continuous monitoring of connected repositories</td>
+</tr>
+<tr>
+<td align="left">CI</td>
+<td align="left">Existing SAST + dependency scanners</td>
+<td align="left">Language-specific rules, supply chain checks, policy enforcement</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Official stance: <strong>Does not replace existing source-code security tools.</strong> It complements static analysis, dependency scanning, and code review.</p>
+</blockquote>
+<hr>
+<h2>2. Feature Details</h2>
+<h3>2.1 Commands and 3 Operations</h3>
+<p>The plugin adds a single command <code>/claude-security</code> with a menu offering three operations.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Operation</th>
+<th align="left">Target</th>
+<th align="left">Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Scan codebase</strong></td>
+<td align="left">Entire repo or scoped subset</td>
+<td align="left">Works even on non-version-controlled directories. Reads the working tree (uncommitted changes)</td>
+</tr>
+<tr>
+<td align="left"><strong>Scan changes</strong></td>
+<td align="left">Branch diff, PR diff, single commit</td>
+<td align="left">Git required.<strong>Committed changes only.</strong> Research agents read the entire repo for context, not just the diff</td>
+</tr>
+<tr>
+<td align="left"><strong>Suggest patches</strong></td>
+<td align="left">Selected findings from the report</td>
+<td align="left">Generates <code>.patch</code> files. No auto-apply</td>
+</tr>
+</tbody></table>
+<p>You can bypass the menu with direct arguments or natural language:</p>
+<pre><code class="language-text">/claude-security scan my branch
+/claude-security          → &quot;scan commit abc1234&quot;
+</code></pre>
+<p>Permission prompts appear at each stage and will block the scan. <strong>Use auto mode.</strong></p>
+<h3>2.2 Scan Pipeline: 6 Phases</h3>
+<p>The scan is implemented as a JavaScript orchestration script (dynamic workflow) that fans out work to sub-agents.</p>
+<table>
+<thead>
+<tr>
+<th align="left">#</th>
+<th align="left">Phase</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><strong>Inventory</strong></td>
+<td align="left">Partition the repository into components. Every top-level directory must be scanned or<strong>excluded with a stated reason</strong></td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><strong>Threat model</strong></td>
+<td align="left">One modeler per component. Produces entry points, sinks, trust boundaries, and files requiring expert review</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><strong>Research</strong></td>
+<td align="left">One researcher per (component × category) cell</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><strong>Sweep</strong></td>
+<td align="left">Gap-fill areas not covered by the matrix</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><strong>Panel</strong></td>
+<td align="left">3-lens adversarial verification, 1 voter per lens</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><strong>Adversarial</strong></td>
+<td align="left">Max effort only. Re-examine borderline decisions, then red-team all surviving findings</td>
+</tr>
+</tbody></table>
+<p>Research categories are fixed at 4:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Category</th>
+<th align="left">Scope</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>injection-and-input</code></td>
+<td align="left">Injection, input validation</td>
+</tr>
+<tr>
+<td align="left"><code>auth-and-access</code></td>
+<td align="left">Authentication, authorization, access control (IDOR, privilege escalation)</td>
+</tr>
+<tr>
+<td align="left"><code>memory-and-unsafe</code></td>
+<td align="left">Memory corruption, unsafe constructs</td>
+</tr>
+<tr>
+<td align="left"><code>crypto-and-secrets</code></td>
+<td align="left">Cryptographic misuse, secret exposure</td>
+</tr>
+</tbody></table>
+<p>Components written entirely in memory-safe languages skip <code>memory-and-unsafe</code>, operating with 3 lenses. Pure Python/TypeScript components avoid wasted tokens on irrelevant lenses.</p>
+<h3>2.3 Effort Tiers</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Tier</th>
+<th align="left">Max Components</th>
+<th align="left">Researchers per Cell</th>
+<th align="left">Gap-fill Sweep</th>
+<th align="left">Adversarial Phase</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">low</td>
+<td align="left">12</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">Not run</td>
+</tr>
+<tr>
+<td align="left">medium</td>
+<td align="left">12</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">Not run</td>
+</tr>
+<tr>
+<td align="left">high</td>
+<td align="left">24</td>
+<td align="left">2</td>
+<td align="left">2</td>
+<td align="left">Not run</td>
+</tr>
+<tr>
+<td align="left">max</td>
+<td align="left">24</td>
+<td align="left">2</td>
+<td align="left">2</td>
+<td align="left">Run</td>
+</tr>
+</tbody></table>
+<p>Small scopes or small diffs may collapse to a single-researcher configuration, but <strong>verification criteria remain unchanged.</strong></p>
+<h3>2.4 Model Layers</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Role</th>
+<th align="left">Model</th>
+<th align="left">Tool Permissions</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Orchestrator</td>
+<td align="left">Opus</td>
+<td align="left">—</td>
+</tr>
+<tr>
+<td align="left">Repository cartographer, read-only code explorer</td>
+<td align="left">Sonnet</td>
+<td align="left">Read-only</td>
+</tr>
+<tr>
+<td align="left">Researcher, verifier</td>
+<td align="left">Inherits session model</td>
+<td align="left">Read-only</td>
+</tr>
+</tbody></table>
+<p>Scan agents are limited to read-only tools — the architectural guarantee that scanning itself does not modify code.</p>
+<h3>2.5 Verification Panel — The Core of This Product</h3>
+<p>A finding reaches the report not because &quot;the researcher found it&quot; but because <strong>it passed the panel.</strong></p>
+<table>
+<thead>
+<tr>
+<th align="left">Element</th>
+<th align="left">Rule</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Voters</td>
+<td align="left">3, one per lens: <code>REACHABILITY</code> / <code>IMPACT</code> / <code>DEFENSES</code></td>
+</tr>
+<tr>
+<td align="left">Judgment format</td>
+<td align="left"><code>TRUE_POSITIVE</code> or <code>FALSE_POSITIVE</code> + decisive <code>file:line</code> evidence (1–2 lines)</td>
+</tr>
+<tr>
+<td align="left">Retention quorum</td>
+<td align="left">2 out of 3</td>
+</tr>
+<tr>
+<td align="left">Insufficient votes</td>
+<td align="left">Fewer than 3 replies → candidate cannot be retained</td>
+</tr>
+<tr>
+<td align="left">Confidence cap</td>
+<td align="left">Unanimous 3/3 → <code>high</code> allowed / 2/3 → capped at <code>medium</code></td>
+</tr>
+<tr>
+<td align="left">Aggregation engine</td>
+<td align="left"><strong>Calculated by the report renderer&#39;s Python code.</strong> Not a model-claimed value</td>
+</tr>
+<tr>
+<td align="left">Verification stamp</td>
+<td align="left"><code>verification.status = verified</code> only when vote records prove panel execution for all findings; otherwise <code>unverified</code> with stated reason</td>
+</tr>
+</tbody></table>
+<p>The critical practical point: aggregation is performed by code, not by the model, and the result is stamped into per-commit revision files. <strong>The report&#39;s claimed rigor is verifiable by arithmetic, not by trust.</strong> From a CTI/audit perspective, this is equivalent to auto-generating an Admiralty Code-like reliability framework.</p>
+<h3>2.6 Outputs</h3>
+<p>Every scan creates exactly one <code>CLAUDE-SECURITY-&lt;timestamp&gt;/</code> directory in the repository.</p>
+<table>
+<thead>
+<tr>
+<th align="left">File</th>
+<th align="left">Content</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>CLAUDE-SECURITY-RESULTS.md</code></td>
+<td align="left">Human-readable report. Finding IDs (<code>F1</code>, etc.), severity (HIGH/MEDIUM/LOW), confidence, CWE ID, exact sink line, impact, exploit scenario, prerequisites, recommendation</td>
+</tr>
+<tr>
+<td align="left"><code>CLAUDE-SECURITY-RESULTS.jsonl</code></td>
+<td align="left">Machine-readable format of the same findings, one JSON object per line</td>
+</tr>
+<tr>
+<td align="left"><code>CLAUDE-SECURITY-REVISION-&lt;commit&gt;.json</code></td>
+<td align="left">Revision stamp: scanned commit, effort, severity counts, verification level. Uncommitted changes → <code>-dirty</code> suffix; no VCS → <code>UNVERSIONED</code></td>
+</tr>
+</tbody></table>
+<p>This directory includes its own <code>.gitignore</code>. Even accidental <code>git add</code> won&#39;t mix reports into commits. Conversely, to <strong>preserve an audit trail in history, delete that single <code>.gitignore</code> and commit as normal.</strong></p>
+<h3>2.7 Patch Generation — 3 Claims Requirement</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Step</th>
+<th align="left">Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">Patches are written in a <strong>scratch clone</strong> of the repository. Working tree and index are untouched</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">An <strong>independent</strong> verification agent (different from the patching agent) reviews the staged diff</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">If a project test suite exists, it runs against the changed code</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">Only when all 3 claims are confidently met is the <code>.patch</code> file written</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><code>patches/F&lt;n&gt;.patch</code> + change description notes are placed</td>
+</tr>
+</tbody></table>
+<p><strong>3 Claims:</strong>1. The change resolves that<strong>single</strong> finding
+2. It introduces no new vulnerabilities
+3. All other behavior is unchanged — <em>a change in the set of inputs the code accepts counts as a behavioral change</em></p>
+<p>Changes that weaken security while claiming to fix it (loosening auth checks, disabling tests, etc.) are <strong>automatically rejected.</strong> If the 3 claims cannot be guaranteed, a reason note replaces the patch. When the target code lacks tests, the note states &quot;verified by code review only — no test execution.&quot;</p>
+<p>Application is always the user&#39;s decision:</p>
+<pre><code class="language-bash">git apply CLAUDE-SECURITY-&lt;timestamp&gt;/patches/F1.patch
+</code></pre>
+<p><strong>One PR per patch</strong> is the official recommendation to ensure individual reviewability and testability.</p>
+<p>Additionally, if the report is stale (code has changed since discovery), that finding is skipped and a re-scan is suggested. Patches are never generated from stale reports.</p>
+<hr>
+<h2>3. Strengths</h2>
+<table>
+<thead>
+<tr>
+<th align="left">#</th>
+<th align="left">Strength</th>
+<th align="left">Rationale</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><strong>Context-dependent vulnerability detection</strong></td>
+<td align="left">Cross-file data flow tracing, multi-component combination patterns, auth bypasses, and compound logic flaws — classes that pattern matching misses</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><strong>Verifiable false-positive suppression</strong></td>
+<td align="left">3-lens panel + 2/3 quorum + confidence cap. FP suppression is not marketing language — it&#39;s pipeline structure</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><strong>Code-based proof of report integrity</strong></td>
+<td align="left">Vote aggregation computed in Python by the renderer and stamped into revision files. Audit artifact reliability</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><strong>Code never leaves the environment</strong></td>
+<td align="left">In-session local execution. Reaches code that managed SaaS cannot: GitLab, Bitbucket, air-gapped private networks</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><strong>No additional vendor or contract</strong></td>
+<td align="left">Runs on existing Claude access and token budget. PoC cost is effectively zero</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><strong>Machine-readable output</strong></td>
+<td align="left">JSONL output enables ticket/SIEM/dashboard pipeline integration</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left"><strong>Patch safety gate</strong></td>
+<td align="left">Scratch clone + independent verification + 3 claims + no auto-apply. Security-weakening &quot;fixes&quot; auto-rejected</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left"><strong>Scopable</strong></td>
+<td align="left">Effort tiers and component scoping enable zone-by-zone scanning of large monorepos</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left"><strong>No workflow context switch</strong></td>
+<td align="left">Scan → analyze → patch → PR all within the terminal session. No separate console required</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Weaknesses &amp; Risks</h2>
+<table>
+<thead>
+<tr>
+<th align="left">#</th>
+<th align="left">Weakness</th>
+<th align="left">Detail</th>
+<th align="left">Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><strong>Non-determinism</strong></td>
+<td align="left">Two scans of the same code may yield different findings</td>
+<td align="left">Scheduled scans + revision stamps bind reports to code/config. Do not use as the sole release gate</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><strong>Lack of reproducibility → compliance unsuitable</strong></td>
+<td align="left">Cannot directly satisfy audit frameworks requiring &quot;scan passed&quot; proof</td>
+<td align="left">Maintain deterministic SAST in parallel. Treat this tool as supplementary evidence</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><strong>No isolation</strong></td>
+<td align="left">Scans run with user permissions; committed <code>.claude/</code> settings, hooks, and <code>CLAUDE.md</code> apply. Treats repo contents as data but<strong>is not a defense against adversarial repos</strong></td>
+<td align="left">Scan untrusted code in <code>sandbox-runtime</code> or VM/container</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><strong>Token cost</strong></td>
+<td align="left">Deep scans consume substantial tokens, deducted from plan limits</td>
+<td align="left">Zone-by-zone scanning, lower effort tier, prioritize change scans</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><strong>Session lock</strong></td>
+<td align="left">Claude Code must remain open until scan completes</td>
+<td align="left">Separate session/machine, consider CI execution</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><strong>Uncommitted change limitation</strong></td>
+<td align="left">Change scans see only committed changes</td>
+<td align="left">Pre-commit or stash; otherwise use full scan</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left"><strong>Coverage opacity</strong></td>
+<td align="left">The report&#39;s coverage section must be reviewed. A human must read what was excluded and why</td>
+<td align="left">Institutionalize exclusion reason review</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left"><strong>Dependency/supply chain not covered</strong></td>
+<td align="left">No SCA, license, container, IaC, or DAST coverage</td>
+<td align="left">Maintain existing SCA/secret scanners</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left"><strong>Paid plan dependency</strong></td>
+<td align="left">Paid plan + v2.1.154+ + dynamic workflows required. Pro must manually enable in <code>/config</code></td>
+<td align="left">Pre-standardize environment</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left"><strong>Beta</strong></td>
+<td align="left">Feature and output schema may change. Risk of breakage in automated pipelines</td>
+<td align="left">Version-guard JSONL parser</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left"><strong>Auto-downgrade with Fable 5</strong></td>
+<td align="left">Cybersecurity safety classifier may block some model activity, auto-downgrading to Opus (normal behavior — scan still completes)</td>
+<td align="left">Recognize as expected behavior</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Companion Product: <code>security-guidance</code> Plugin</h2>
+<p>This should actually be adopted before deep scanning. <strong>Free on all plans</strong>, it is the preventative layer where &quot;Claude catches vulnerabilities Claude created, in the same session.&quot;</p>
+<h3>5.1 3-Tier Review</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Tier</th>
+<th align="left">Timing</th>
+<th align="left">Method</th>
+<th align="left">Cost</th>
+<th align="left">Example Detections</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Per-edit</td>
+<td align="left">Immediately after Edit/Write/NotebookEdit</td>
+<td align="left">Regex/substring deterministic matching, <strong>no model calls</strong></td>
+<td align="left">0</td>
+<td align="left"><code>eval(</code>, <code>new Function</code>, <code>os.system</code>, <code>child_process.exec</code>, <code>pickle</code>, <code>dangerouslySetInnerHTML</code>, <code>.innerHTML =</code>, <code>document.write</code>, <code>.github/workflows/</code> modifications</td>
+</tr>
+<tr>
+<td align="left">End-of-turn</td>
+<td align="left">At turn completion</td>
+<td align="left">Working tree git diff from the turn is passed to a separate Claude reviewer, runs in background</td>
+<td align="left">~1 call per turn</td>
+<td align="left">Auth bypass, IDOR, injection, SSRF, weak cryptography</td>
+</tr>
+<tr>
+<td align="left">Commit/Push</td>
+<td align="left">When Claude executes <code>git commit</code>/<code>git push</code> via Bash</td>
+<td align="left">Agentic deep review. Reads callers, sanitizers, and related files to determine actual exploitability</td>
+<td align="left">Multiple turns per commit</td>
+<td align="left">Eliminates false positives on patterns that look dangerous but are contextually safe</td>
+</tr>
+</tbody></table>
+<p>Key limits and constraints:</p>
+<ul>
+<li>End-of-turn: max 30 changed files per turn, yields to user after 3 consecutive rounds</li>
+<li>Commit review: rolling 20-per-hour cap</li>
+<li><strong>Commits made in the user&#39;s own shell (or via <code>!</code> escape) are NOT reviewed</strong></li>
+<li>No tier blocks writes or commits (non-blocking, best-effort)</li>
+<li>The reviewer is a separate invocation with fresh context and security-specific prompts — it does not grade its own code</li>
+</ul>
+<h3>5.2 Extension Points</h3>
+<table>
+<thead>
+<tr>
+<th align="left">File</th>
+<th align="left">Purpose</th>
+<th align="left">Limit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>.claude/claude-security-guidance.md</code></td>
+<td align="left">Inject organizational threat models/checklists as natural language into model-based reviews</td>
+<td align="left">8KB total across all scopes</td>
+</tr>
+<tr>
+<td align="left"><code>.claude/security-patterns.yaml</code> (<code>.yml</code>/<code>.json</code>)</td>
+<td align="left">Add deterministic per-edit rules</td>
+<td align="left">Max 50 rules, <code>reminder</code> 1KB</td>
+</tr>
+</tbody></table>
+<p>Lookup path: <code>~/.claude/</code> (user global) → <code>.claude/</code> (repo checked-in) → <code>.claude/*.local.md</code> (gitignored, personal). All existing files are concatenated. Deploying user-scope files via device management enables organization-wide rules.</p>
+<p>Example pattern file:</p>
+<pre><code class="language-yaml">patterns:
+  - rule_name: internal_api_key
+    substrings: [&quot;sk_live_&quot;, &quot;AKIA&quot;]
+    reminder: &quot;Hardcoded API key prefix detected. Load from secrets manager.&quot;
+  - rule_name: tenant_unfiltered_query
+    regex: &quot;\\.objects\\.all\\(\\)&quot;
+    paths: [&quot;<strong>/src/tenants/</strong>&quot;]
+    reminder: &quot;Multi-tenant code must filter by org_id.&quot;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">Field</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>rule_name</code></td>
+<td align="left">Identifier shown in the warning</td>
+</tr>
+<tr>
+<td align="left"><code>reminder</code></td>
+<td align="left">Warning text injected into Claude&#39;s context (1KB limit)</td>
+</tr>
+<tr>
+<td align="left"><code>regex</code></td>
+<td align="left">Python regex matched against edit content</td>
+</tr>
+<tr>
+<td align="left"><code>substrings</code></td>
+<td align="left">Literal substrings (alternative to <code>regex</code>)</td>
+</tr>
+<tr>
+<td align="left"><code>paths</code> / <code>exclude_paths</code></td>
+<td align="left">Glob. Matches against full paths; prefix project-relative patterns with <code>**/</code></td>
+</tr>
+</tbody></table>
+<p>Note: Guidance files are <strong>additive.</strong> You cannot suppress default checks with &quot;ignore this vulnerability class&quot; rules. For hard enforcement, combine with hooks or CI checks that block edits. The YAML format requires importable PyYAML — the plugin does not install it. If unavailable, use <code>.json</code>.</p>
+<h3>5.3 Disable Switches</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Environment Variable</th>
+<th align="left">Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>ENABLE_PATTERN_RULES=0</code></td>
+<td align="left">Disable per-edit pattern checks</td>
+</tr>
+<tr>
+<td align="left"><code>ENABLE_STOP_REVIEW=0</code></td>
+<td align="left">Disable end-of-turn diff reviews</td>
+</tr>
+<tr>
+<td align="left"><code>ENABLE_COMMIT_REVIEW=0</code></td>
+<td align="left">Disable commit/push reviews</td>
+</tr>
+<tr>
+<td align="left"><code>ENABLE_CODE_SECURITY_REVIEW=0</code></td>
+<td align="left">Disable all model-based reviews</td>
+</tr>
+<tr>
+<td align="left"><code>SECURITY_GUIDANCE_DISABLE=1</code></td>
+<td align="left">Disable entire plugin without uninstalling</td>
+</tr>
+<tr>
+<td align="left"><code>SECURITY_REVIEW_MODEL</code></td>
+<td align="left">Specify model for end-of-turn reviews (default Opus 4.7)</td>
+</tr>
+<tr>
+<td align="left"><code>SG_AGENTIC_MODEL</code></td>
+<td align="left">Specify model for commit reviews</td>
+</tr>
+</tbody></table>
+<h3>5.4 Implementation Architecture</h3>
+<p>The plugin is implemented entirely on <strong>hooks.</strong> It can serve as a reference implementation for your own hooks.</p>
+<table>
+<thead>
+<tr>
+<th align="left">Hook Event</th>
+<th align="left">Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>SessionStart</code></td>
+<td align="left">Bootstrap plugin Python environment</td>
+</tr>
+<tr>
+<td align="left"><code>UserPromptSubmit</code></td>
+<td align="left">Capture working tree baseline for end-of-turn diffing</td>
+</tr>
+<tr>
+<td align="left"><code>PostToolUse</code> (Edit/Write/NotebookEdit)</td>
+<td align="left">Per-edit pattern matching</td>
+</tr>
+<tr>
+<td align="left"><code>Stop</code></td>
+<td align="left">End-of-turn diff review (background)</td>
+</tr>
+<tr>
+<td align="left"><code>PostToolUse</code> (Bash, filtered to <code>git commit</code>/<code>git push</code>)</td>
+<td align="left">Commit/push review (background)</td>
+</tr>
+</tbody></table>
+<p>Based on Anthropic&#39;s own rollout and benchmarks, PRs raised with this plugin saw a <strong>30–40% reduction in security-related comments.</strong> It is positioned as a &quot;lightweight first pass,&quot; not a replacement for full code review.</p>
+<hr>
+<h2>6. Competitive Comparison</h2>
+<h3>6.1 Direct Competitors: AI-Native Agentic Security Reviewers</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Product</th>
+<th align="left">Vendor</th>
+<th align="left">Status (2026-07)</th>
+<th align="left">Execution</th>
+<th align="left">Verification</th>
+<th align="left">Patching</th>
+<th align="left">Key Differentiator</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Claude Security Plugin</strong></td>
+<td align="left">Anthropic</td>
+<td align="left">Beta</td>
+<td align="left">Local session (BYO inference)</td>
+<td align="left">3-lens panel 2/3 quorum, code-aggregated</td>
+<td align="left"><code>.patch</code>, manual apply</td>
+<td align="left">Code-based proof of report integrity. Supports private networks, non-GitHub</td>
+</tr>
+<tr>
+<td align="left"><strong>Codex Security</strong>(fka Aardvark)</td>
+<td align="left">OpenAI</td>
+<td align="left">Research preview (transitioned 2026-03)</td>
+<td align="left">Cloud (Codex Web)</td>
+<td align="left">Sandbox exploit verification using real triggers</td>
+<td align="left">PR proposals via Codex</td>
+<td align="left"><strong>Sandbox exploit verification</strong> is the key differentiator. Commit continuous monitoring. Claims 92% detection on known+synthetic vulns in golden repos</td>
+</tr>
+<tr>
+<td align="left"><strong>Claude Security (Managed)</strong></td>
+<td align="left">Anthropic</td>
+<td align="left">Enterprise</td>
+<td align="left">Hosted</td>
+<td align="left">Same adversarial verification family</td>
+<td align="left">Recommended patches</td>
+<td align="left">Continuous monitoring of connected repos, webhooks (Slack/Jira), CSV/Markdown export, scheduled scans, dismissal history inheritance</td>
+</tr>
+<tr>
+<td align="left"><strong>ZeroPath</strong></td>
+<td align="left">ZeroPath</td>
+<td align="left">Commercial</td>
+<td align="left">SaaS</td>
+<td align="left">AI-native detection</td>
+<td align="left">Auto-fix proposals</td>
+<td align="left">Strong on auth logic, IDOR, access control flaws. Natural-language rules. Relatively narrower language coverage</td>
+</tr>
+<tr>
+<td align="left"><strong>Corgea</strong></td>
+<td align="left">Corgea</td>
+<td align="left">Commercial</td>
+<td align="left">SaaS</td>
+<td align="left">AI triage of upstream scanner results</td>
+<td align="left">High-confidence patch generation</td>
+<td align="left">Not an independent scanner.<strong>Fix layer</strong> for Semgrep/CodeQL/Snyk/Checkmarx results. Detection quality depends on upstream tool</td>
+</tr>
+<tr>
+<td align="left"><strong>CodeAnt AI / Arnica</strong></td>
+<td align="left">Respective vendors</td>
+<td align="left">Commercial</td>
+<td align="left">SaaS</td>
+<td align="left">LLM first-pass detection</td>
+<td align="left">Auto-fix</td>
+<td align="left">AI-native tier. Platform-integration oriented</td>
+</tr>
+</tbody></table>
+<h3>6.2 Adjacent Competitors: Traditional SAST/AppSec Platforms</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Product</th>
+<th align="left">Detection Engine</th>
+<th align="left">AI Layer</th>
+<th align="left">Strengths</th>
+<th align="left">vs Claude Security</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Semgrep</strong></td>
+<td align="left">Rule-based (YAML)</td>
+<td align="left">Assistant (triage, fix assist)</td>
+<td align="left">40+ languages, custom rule flexibility, free OSS engine, low FP rate</td>
+<td align="left">Deterministic and reproducible. But inherently a &quot;detection engine&quot; — weak on one-click fixes</td>
+</tr>
+<tr>
+<td align="left"><strong>Snyk Code</strong></td>
+<td align="left">Static analysis + DeepCode AI</td>
+<td align="left">Agent Fix</td>
+<td align="left">SAST+SCA+Container+IaC integration, broadest IDE/registry ecosystem, free tier</td>
+<td align="left">Overwhelming platform breadth. Weaker on logic flaw reasoning</td>
+</tr>
+<tr>
+<td align="left"><strong>GitHub Advanced Security (CodeQL)</strong></td>
+<td align="left">CodeQL dataflow queries</td>
+<td align="left">Copilot Autofix</td>
+<td align="left">GitHub Enterprise native, shortest PR loop, predictable per-active-committer billing</td>
+<td align="left">GitHub-dependent. Claude plugin covers GitLab/Bitbucket/air-gapped networks</td>
+</tr>
+<tr>
+<td align="left"><strong>Checkmarx One</strong></td>
+<td align="left">Rule-based (CxQL)</td>
+<td align="left">AI triage</td>
+<td align="left">Enterprise portfolio governance, compliance response</td>
+<td align="left">Steep learning curve. FedRAMP High-Ready</td>
+</tr>
+<tr>
+<td align="left"><strong>Veracode</strong></td>
+<td align="left">Binary + static</td>
+<td align="left">AI fix</td>
+<td align="left">Legacy language &amp; binary analysis, FedRAMP Moderate ATO</td>
+<td align="left">Irreplaceable for regulated/defense sectors</td>
+</tr>
+<tr>
+<td align="left"><strong>SonarQube CE</strong></td>
+<td align="left">Rule-based</td>
+<td align="left">Limited</td>
+<td align="left">Self-hosted free, integrated code quality</td>
+<td align="left">Baseline for budget-constrained teams</td>
+</tr>
+<tr>
+<td align="left"><strong>Aikido Security</strong></td>
+<td align="left">Multi-engine unified</td>
+<td align="left">FP filtering</td>
+<td align="left">SAST+SCA+DAST+IaC+Secrets, 15-min setup, flat monthly pricing</td>
+<td align="left">SMB one-stop. Breadth over depth</td>
+</tr>
+<tr>
+<td align="left"><strong>DryRun Security</strong></td>
+<td align="left">Context analysis</td>
+<td align="left">PR-native enforcement</td>
+<td align="left">Enforces code policies at PR/MR time</td>
+<td align="left">Gate-oriented rather than &quot;backlog report&quot;</td>
+</tr>
+</tbody></table>
+<h3>6.3 Market Context &amp; Positioning</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Tier</th>
+<th align="left">Definition</th>
+<th align="left">Examples</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Tier 1</td>
+<td align="left">Pure rule-based</td>
+<td align="left">SonarQube CE, Semgrep OSS</td>
+</tr>
+<tr>
+<td align="left">Tier 2</td>
+<td align="left">AI-assisted SAST — rules detect, AI triages/fixes</td>
+<td align="left">Snyk Code, Semgrep Pro, Checkmarx One</td>
+</tr>
+<tr>
+<td align="left">Tier 3</td>
+<td align="left"><strong>AI-native SAST</strong>— LLM is the primary detection engine</td>
+<td align="left"><strong>Claude Security</strong>, Codex Security, ZeroPath, CodeAnt AI</td>
+</tr>
+</tbody></table>
+<p>Context numbers: AI-generated code appears in 93% of enterprise development workflows, ~45% introduces known defects, and application vulnerability exploitation attacks increased 44% in 2026 (Veracode). Tier 3&#39;s reason for existence: &quot;Rule scanners cannot keep pace with the volume of AI-written code or novel vulnerability patterns.&quot;</p>
+<p><strong>Practical conclusion:</strong>The Claude Security Plugin is a<strong>complement, not a replacement</strong>for Snyk, Semgrep, or GHAS. Deterministic tools handle reproducibility, compliance, and supply chain; this plugin handles context-dependent logic flaws that those tools structurally cannot catch. The key adoption question is not &quot;what to remove&quot; but<strong>does the marginal detection rate justify the token cost when added to the existing stack?</strong> — and since no additional vendor contract is needed, the cost of that validation itself is very low.</p>
+<hr>
+<h2>7. Getting Started</h2>
+<h3>7.1 Prerequisites</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Item</th>
+<th align="left"><code>claude-security</code></th>
+<th align="left">Check Command</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Claude Code CLI</td>
+<td align="left">v2.1.154+</td>
+<td align="left"><code>claude --version</code></td>
+</tr>
+<tr>
+<td align="left">Plan</td>
+<td align="left">Paid plan required</td>
+<td align="left">—</td>
+</tr>
+<tr>
+<td align="left">Dynamic workflows</td>
+<td align="left">Must be enabled. Pro: enable in <code>/config</code> → Dynamic workflows</td>
+<td align="left"><code>/config</code></td>
+</tr>
+<tr>
+<td align="left">Python</td>
+<td align="left">3.9.6+, exposed as <code>python3</code> on <code>PATH</code>. Uses stdlib only — no additional installs</td>
+<td align="left"><code>python3 --version</code></td>
+</tr>
+<tr>
+<td align="left">OS</td>
+<td align="left">Linux, macOS, Windows</td>
+<td align="left">—</td>
+</tr>
+<tr>
+<td align="left">Git</td>
+<td align="left">Required for change scans and patch generation (other VCS not supported). Full scans work without VCS</td>
+<td align="left"><code>git --version</code></td>
+</tr>
+</tbody></table>
+<p>If also adopting <code>security-guidance</code>:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Item</th>
+<th align="left">Requirement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">CLI</td>
+<td align="left">v2.1.144+</td>
+</tr>
+<tr>
+<td align="left">Python</td>
+<td align="left">3.7+. <strong>Agentic commit review requires 3.10+.</strong> Third-party providers (Bedrock, Google Cloud Agent Platform) require 3.10+ for all model-based reviews. Resolution order: <code>python3.13</code>~`python3.10<code>→</code>python3<code>→</code>python<code>→</code>py -3`</td>
+</tr>
+<tr>
+<td align="left">First run</td>
+<td align="left">Creates venv in <code>~/.claude/security/</code> + installs Claude Agent SDK → needs <code>pip</code> and network access</td>
+</tr>
+<tr>
+<td align="left">Git</td>
+<td align="left">End-of-turn/commit reviews diff against git state; silently skip outside repos. Per-edit checks work anywhere</td>
+</tr>
+</tbody></table>
+<h3>7.2 Installation</h3>
+<p>Install from the official Anthropic marketplace within a Claude Code session:</p>
+<pre><code class="language-text">/plugin install claude-security@claude-plugins-official
+/reload-plugins
+</code></pre>
+<p>Together with <code>security-guidance</code>:</p>
+<pre><code class="language-text">/plugin install security-guidance@claude-plugins-official
+/reload-plugins
+</code></pre>
+<p><strong>Installation scope:</strong> choose <code>user</code>. It is written to user settings and auto-loads in all future local sessions on this machine.</p>
+<p>Troubleshooting:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Symptom</th>
+<th align="left">Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>Marketplace &quot;claude-plugins-official&quot; not found</code></td>
+<td align="left"><code>/plugin marketplace add anthropics/claude-plugins-official</code> then retry</td>
+</tr>
+<tr>
+<td align="left">Marketplace reports plugin missing</td>
+<td align="left">Local copy is stale. <code>/plugin marketplace update claude-plugins-official</code> then retry</td>
+</tr>
+<tr>
+<td align="left"><code>/plugin</code> not available</td>
+<td align="left">Desktop app: <strong>+</strong> next to prompt → Plugins → Add plugin. Web/cloud sessions: declare in <code>.claude/settings.json</code></td>
+</tr>
+</tbody></table>
+<p><code>/reload-plugins</code> applies pending changes without restart.</p>
+<h3>7.3 Team / Cloud Session Rollout</h3>
+<p>User-scope plugins do not carry over to Claude Code web sessions (they run on Anthropic infrastructure). To enable for everyone cloning the repository, declare in checked-in settings:</p>
+<pre><code class="language-json">{
+  &quot;enabledPlugins&quot;: {
+    &quot;security-guidance@claude-plugins-official&quot;: true,
+    &quot;claude-security@claude-plugins-official&quot;: true
+  }
+}
+</code></pre>
+<p>Administrators can enable organization-wide via managed settings&#39; <code>enabledPlugins</code>.</p>
+<h3>7.4 First Scan (Happy Path)</h3>
+<pre><code class="language-text">1) /claude-security  →  Select &quot;Scan codebase&quot;
+2) Select scan scope
+   - Plugin reads the repo first, presents full or focused areas with file counts and relative cost
+   - &quot;I don&#39;t know&quot; → auto-selects defaults appropriate to repo size
+3) Confirm execution
+   - Takes significant time and tokens; Claude Code must remain open throughout
+   - Nothing runs until confirmed
+4) Observe progress
+   - Each phase reports at start. Details via /workflows
+5) Review report
+   - CLAUDE-SECURITY-&lt;timestamp&gt;/ directory created
+6) /claude-security  →  &quot;Suggest patches&quot; → select findings to address
+7) Apply only accepted patches: git apply, 1 PR per patch
+</code></pre>
+<p>Recommended: <strong>enable auto mode</strong> to prevent scan agents from being blocked by permission prompts at each stage. The plugin guides activation at the start of the operation.</p>
+<h3>7.5 Change-Only Scanning (Daily Workflow)</h3>
+<p>When a branch has commits not on base, the menu offers to scan just that diff.</p>
+<pre><code class="language-text">/claude-security scan my branch
+/claude-security          → &quot;scan commit abc1234&quot;
+</code></pre>
+<table>
+<thead>
+<tr>
+<th align="left">Constraint</th>
+<th align="left">Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Committed changes only</td>
+<td align="left">In-progress edits must be committed or stashed first. Otherwise use full scan (reads working tree)</td>
+</tr>
+<tr>
+<td align="left">Git required</td>
+<td align="left">Change scans need a git repo. Non-VCS directories support full scan only</td>
+</tr>
+<tr>
+<td align="left">PR lookup</td>
+<td align="left">Finding open PRs is the <strong>only network-access step.</strong> Only offered when the session already has GitHub CLI execution permission and <code>gh</code> is logged in</td>
+</tr>
+</tbody></table>
+<h3>7.6 Scoping Large Repositories</h3>
+<p>Do not run the entire tree at once — partition by zone. Pick one of the focused scopes the plugin suggests (API layer, auth code, etc.), and execution scales accordingly. The report&#39;s coverage section documents what was and wasn&#39;t scanned. Other zones can be scanned separately at any time.</p>
+<h3>7.7 Report Reading Order</h3>
+<pre><code class="language-text">1. CLAUDE-SECURITY-REVISION-&lt;commit&gt;.json
+   → Check verification.status. If unverified, read the reason
+   → Check if filename contains -dirty (uncommitted code mixed in)
+   → Check effort tier. low/medium means Adversarial phase did not run
+
+2. CLAUDE-SECURITY-RESULTS.md coverage section
+   → What was not scanned and why
+
+3. Finding list
+   → Sort by severity × confidence
+   → confidence: high = 3/3 unanimous, medium = 2/3 quorum
+   → Review each finding&#39;s CWE, sink line, prerequisites, exploit scenario
+
+4. CLAUDE-SECURITY-RESULTS.jsonl
+   → Connect to ticket system / dashboard pipeline
+</code></pre>
+<p>For audit trails, delete the directory&#39;s single <code>.gitignore</code> and commit it. When distributing internally, treat reports as <strong>TLP:AMBER or higher</strong> — they contain exact vulnerability locations.</p>
+<h3>7.8 Troubleshooting</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Symptom</th>
+<th align="left">Cause / Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>/claude-security</code> menu shows Python warning</td>
+<td align="left"><code>python3</code> 3.9.6+ required. If not found at all: install warning. If first <code>python3</code> is outdated: specific version noted. Install or reorder <code>PATH</code>, then <strong>start a new session</strong></td>
+</tr>
+<tr>
+<td align="left">&quot;Fable 5&#39;s safeguards flagged this message&quot;</td>
+<td align="left">Cybersecurity classifier in Fable 5 blocked some activity; auto-downgraded to Opus. <strong>Normal behavior, scan completes</strong></td>
+</tr>
+<tr>
+<td align="left"><code>security-guidance</code> reviews not appearing</td>
+<td align="left">Check <code>~/.claude/security/log.txt</code>. (a) Not a git repo (b) No Anthropic auth / third-party provider → model-based reviews skip, only per-edit works (c) <code>security-patterns.yaml</code> exists but PyYAML can&#39;t import → file ignored, use <code>.json</code></td>
+</tr>
+<tr>
+<td align="left">Patch not generated, only notes</td>
+<td align="left">Independent verifier could not guarantee the 3 claims. Review note reasons, then fix manually</td>
+</tr>
+<tr>
+<td align="left">Finding skipped</td>
+<td align="left">Code changed since discovery → report is stale. Re-scan</td>
+</tr>
+</tbody></table>
+<h3>7.9 Removal</h3>
+<pre><code class="language-text"># claude-security
+/plugin  →  uninstall
+claude plugin uninstall claude-security
+
+# security-guidance
+/plugin disable security-guidance@claude-plugins-official     # Pause
+/plugin uninstall security-guidance@claude-plugins-official   # Remove user scope
+</code></pre>
+<p>When enabled via project <code>.claude/settings.json</code>, disabling from <code>/plugin</code> writes an override to <code>.claude/settings.local.json</code> without modifying the checked-in file. Only you are affected — teammates are not. The same dialog can remove from shared settings to disable for everyone (requires v2.1.203+). Managed settings activations can only be disabled by administrators.</p>
+<hr>
+<h2>8. Adoption Recommendations by Scenario</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Organization Situation</th>
+<th align="left">Recommendation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Already using Claude Code, no AppSec tools</td>
+<td align="left">Deploy <code>security-guidance</code> immediately (free). Use <code>claude-security</code> for pre-release branch scans</td>
+</tr>
+<tr>
+<td align="left">Existing SAST in place</td>
+<td align="left">Keep current stack. Use <code>claude-security</code> on high-risk components (auth, payments) to measure marginal detection rate</td>
+</tr>
+<tr>
+<td align="left">GitHub Enterprise-centric</td>
+<td align="left">GHAS + Copilot Autofix has the advantage in the PR loop. <code>claude-security</code> as secondary for logic flaws GHAS misses</td>
+</tr>
+<tr>
+<td align="left">GitLab / Bitbucket / air-gapped</td>
+<td align="left">Where managed SaaS cannot reach. Plugin&#39;s local execution is a structural advantage</td>
+</tr>
+<tr>
+<td align="left">Regulatory/audit compliance required</td>
+<td align="left">Deterministic SAST (Veracode, Checkmarx) must be maintained. Non-determinism prevents standalone evidence</td>
+</tr>
+<tr>
+<td align="left">Auditing external/untrusted code</td>
+<td align="left">Must use <code>sandbox-runtime</code> or VM. Plugin provides no inherent isolation</td>
+</tr>
+<tr>
+<td align="left">Enterprise, continuous monitoring needed</td>
+<td align="left">Evaluate the managed Claude Security product (webhooks, scheduled scans, dismissal history inheritance)</td>
+</tr>
+</tbody></table>
+<h3>Minimum Operating Procedure Proposal</h3>
+<pre><code class="language-text">[Daily]     security-guidance always active (free, automatic)
+[Pre-PR]    /claude-security scan my branch  (changes only, medium effort)
+[Sprint]    Full scan of 1 high-risk component (high effort) → commit report for audit trail
+[Release]   Existing SAST + SCA + secret scan (deterministic gate)
+[Quarterly] Full repo traversal scan (max effort), revision stamp for history
+</code></pre>
+<hr>
+<h2>9. Sources</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Source</th>
+<th align="left">URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Claude Security Plugin Official Docs</td>
+<td align="left"><a href="https://code.claude.com/docs/en/claude-security">https://code.claude.com/docs/en/claude-security</a></td>
+</tr>
+<tr>
+<td align="left">security-guidance Plugin Official Docs</td>
+<td align="left"><a href="https://code.claude.com/docs/en/security-guidance">https://code.claude.com/docs/en/security-guidance</a></td>
+</tr>
+<tr>
+<td align="left">Claude Security Product Page</td>
+<td align="left"><a href="https://claude.com/product/claude-security">https://claude.com/product/claude-security</a></td>
+</tr>
+<tr>
+<td align="left">Plugin Source (claude-security)</td>
+<td align="left"><a href="https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-security">https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-security</a></td>
+</tr>
+<tr>
+<td align="left">Plugin Source (security-guidance)</td>
+<td align="left"><a href="https://github.com/anthropics/claude-plugins-official/tree/main/plugins/security-guidance">https://github.com/anthropics/claude-plugins-official/tree/main/plugins/security-guidance</a></td>
+</tr>
+<tr>
+<td align="left">Sandbox Runtime</td>
+<td align="left"><a href="https://github.com/anthropic-experimental/sandbox-runtime">https://github.com/anthropic-experimental/sandbox-runtime</a></td>
+</tr>
+<tr>
+<td align="left">Auto Security Review Support Docs</td>
+<td align="left"><a href="https://support.claude.com/en/articles/11932705-automated-security-reviews-in-claude-code">https://support.claude.com/en/articles/11932705-automated-security-reviews-in-claude-code</a></td>
+</tr>
+<tr>
+<td align="left">Security Review GitHub Action</td>
+<td align="left"><a href="https://github.com/anthropics/claude-code-security-review">https://github.com/anthropics/claude-code-security-review</a></td>
+</tr>
+</tbody></table>
+<p>Beta product — features, output schemas, and requirements may change. Re-verify against official documentation before attaching automation pipelines.</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Security/Claude-Security-Plugin-Guide_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

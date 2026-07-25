@@ -1,3 +1,38 @@
+---
+title: "Claude Security Plugin — Technical Analysis & Getting Started Guide"
+subtitle: "Distinguish security-guidance vs claude-security, then map the multi-agent verification pipeline and adoption path"
+description: "Technical guide to Claude Code's claude-security (Beta) and security-guidance (GA): architecture, 3-panel adversarial verification, BYO inference, adoption steps, and position in a defense-in-depth stack."
+abstract: |
+  Separates Anthropic's two Claude Code security plugins (security-guidance GA vs claude-security Beta v0.10.0),
+  covering reasoning-based scanning, adversarial verification (2/3 quorum), local BYO inference, and human-in-the-loop patches.
+  Positions the tool as a SAST complement in a six-tier stack, with plan/CLI requirements and an adoption checklist. Dated 2026-07-26.
+summary_for_ai: |
+  Tech guide (EN) for Anthropic Claude Security Plugin: security-guidance (in-session GA) vs claude-security (on-demand multi-agent deep scan, Beta v0.10.0, paid plan, CLI ≥2.1.154).
+  Core ideas: reasoning-over-pattern, adversarial 3-panel verification, locality/BYO inference, human-in-the-loop patches; complements SAST. Docs accessed 2026-07-23; published 2026-07-26.
+date: 2026-07-26
+author: "Dennis Kim"
+lang: en
+tags:
+  - Claude
+  - LLM Security
+  - AppSec
+  - DevSecOps
+  - SAST
+keywords:
+  - Claude Security Plugin
+  - claude-security
+  - security-guidance
+  - multi-agent vulnerability scanner
+  - adversarial verification
+  - BYO inference
+group: security
+featured: true
+featured_rank: 1
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+
 # Claude Security Plugin — Technical Analysis & Getting Started Guide
 
 Traditional security solutions and GitHub open-source security tools face obsolescence unless they deliver new value. The Claude Security Plugin extends security into an in-house technology layer.

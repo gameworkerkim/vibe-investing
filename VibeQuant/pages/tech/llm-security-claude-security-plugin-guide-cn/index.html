@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claude Security Plugin — 技术分析与入门指南 — VibeQuant</title>
+  <meta name="description" content="面向 Claude Code 的 claude-security（Beta）与 security-guidance（GA）技术指南：架构、三人验证小组、BYO inference、采用流程及在纵深防御栈中的位置。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-cn/" />
+  <meta property="og:title" content="Claude Security Plugin — 技术分析与入门指南" />
+  <meta property="og:description" content="面向 Claude Code 的 claude-security（Beta）与 security-guidance（GA）技术指南：架构、三人验证小组、BYO inference、采用流程及在纵深防御栈中的位置。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-kr/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Claude Security Plugin — 技术分析与入门指南","description":"面向 Claude Code 的 claude-security（Beta）与 security-guidance（GA）技术指南：架构、三人验证小组、BYO inference、采用流程及在纵深防御栈中的位置。","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-cn/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Security/Claude-Security-Plugin-Guide_CN.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-cn/","datePublished":"2026-07-26","dateModified":"2026-07-26","inLanguage":"zh-Hans","keywords":"Claude, LLM Security, AppSec, DevSecOps, SAST"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"Claude Security Plugin — 技术分析与入门指南","item":"https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-cn/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 보안</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">보안</p>
+        <h1>Claude Security Plugin — 技术分析与入门指南</h1>
+        <p class="article-dates"><time datetime="2026-07-26">발행 2026.07.26</time> · 주제 Claude · LLM Security · AppSec · DevSecOps · SAST</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/llm-security-claude-security-plugin-guide-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/llm-security-claude-security-plugin-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/llm-security-claude-security-plugin-guide-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/llm-security-claude-security-plugin-guide-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">面向 Claude Code 的 claude-security（Beta）与 security-guidance（GA）技术指南：架构、三人验证小组、BYO inference、采用流程及在纵深防御栈中的位置。</p>
+        
+      </header>
+      <div class="article-body prose"><p>传统安全解决方案和 GitHub 开源安全工具如果不提供新的价值，将面临淘汰。Claude Security Plugin 将安全能力扩展为内部技术层。</p>
+<table>
+<thead>
+<tr>
+<th align="left">项目</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">文档版本</td>
+<td align="left">1.0</td>
+</tr>
+<tr>
+<td align="left">日期</td>
+<td align="left">2026-07-26</td>
+</tr>
+<tr>
+<td align="left">目标产品</td>
+<td align="left"><code>claude-security</code> (Beta, plugin v0.10.0), <code>security-guidance</code> (GA)</td>
+</tr>
+<tr>
+<td align="left">参考文档</td>
+<td align="left">code.claude.com/docs 官方文档 (2026-07-23 访问)</td>
+</tr>
+<tr>
+<td align="left">目标读者</td>
+<td align="left">AppSec / DevSecOps 工程师、安全架构师、开发主管</td>
+</tr>
+<tr>
+<td align="left">摘要</td>
+<td align="left">在 Claude Code 会话内运行的多代理漏洞扫描器的架构、验证流水线、采用流程及竞争定位</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>0. 首先需要区分的两个插件</h2>
+<p>&quot;Claude 安全插件&quot;这一名称下存在两个性质完全不同的产品。</p>
+<table>
+<thead>
+<tr>
+<th align="left">区分</th>
+<th align="left"><code>security-guidance</code></th>
+<th align="left"><code>claude-security</code></th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">一句话定义</td>
+<td align="left">Claude <strong>在编写代码时</strong>审查自己的变更</td>
+<td align="left">对整个仓库进行<strong>按需深度扫描</strong>的多代理审计</td>
+</tr>
+<tr>
+<td align="left">触发方式</td>
+<td align="left">自动（无需调用命令）</td>
+<td align="left">手动 <code>/claude-security</code></td>
+</tr>
+<tr>
+<td align="left">状态</td>
+<td align="left">GA（正式发布）</td>
+<td align="left">Beta（2026-07-22 发布）</td>
+</tr>
+<tr>
+<td align="left">套餐</td>
+<td align="left">全部套餐（含免费）</td>
+<td align="left"><strong>需要付费套餐</strong></td>
+</tr>
+<tr>
+<td align="left">最低 CLI</td>
+<td align="left">v2.1.144+</td>
+<td align="left">v2.1.154+ (dynamic workflows)</td>
+</tr>
+<tr>
+<td align="left">输出</td>
+<td align="left">会话内交互式发现 → 即时修复</td>
+<td align="left">带时间戳的报告目录 + <code>.patch</code> 文件</td>
+</tr>
+<tr>
+<td align="left">性质</td>
+<td align="left">预防性护栏 (shift-left)</td>
+<td align="left">审计扫描器（补充 SAST，而非替代）</td>
+</tr>
+</tbody></table>
+<p>本文档中的 &quot;Claude Security Plugin&quot; 指后者 (<code>claude-security</code>)。</p>
+<hr>
+<h2>1. 概念</h2>
+<h3>1.1 设计前提</h3>
+<p>传统 SAST 依赖基于规则的模式匹配。它能捕获已知模式，但 (a) 误报率高，且 (b) 遗漏跨文件逻辑缺陷和认证绕过等需要上下文的漏洞。Claude Security 针对这一差距，通过<strong>用代理团队再现熟练安全研究人员的推理过程</strong>来解决问题。</p>
+<table>
+<thead>
+<tr>
+<th align="left">概念</th>
+<th align="left">实现</th>
+<th align="left">含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Reasoning over pattern</strong></td>
+<td align="left">LLM 代理阅读并推理代码，正则/规则集不是主要引擎</td>
+<td align="left">可检测新型和逻辑型漏洞，但具有非确定性</td>
+</tr>
+<tr>
+<td align="left"><strong>Adversarial verification</strong></td>
+<td align="left">每个候选发现通过 3 人验证小组投票（2/3 法定人数）</td>
+<td align="left">误报抑制内置于架构中</td>
+</tr>
+<tr>
+<td align="left"><strong>Locality (BYO inference)</strong></td>
+<td align="left">扫描在用户会话中以用户权限本地运行</td>
+<td align="left">代码不离开环境。支持 GitLab、Bitbucket、气隙网络</td>
+</tr>
+<tr>
+<td align="left"><strong>Human-in-the-loop</strong></td>
+<td align="left">补丁绝不自动应用</td>
+<td align="left">不移除审批节点，只提高审批材料的质量</td>
+</tr>
+</tbody></table>
+<h3>1.2 纵深防御栈中的位置</h3>
+<p>Anthropic 将此插件定位为 6 层栈中的一层，而非独立解决方案。</p>
+<table>
+<thead>
+<tr>
+<th align="left">层级</th>
+<th align="left">工具</th>
+<th align="left">覆盖范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">会话中</td>
+<td align="left"><code>security-guidance</code> 插件</td>
+<td align="left">Claude 编写代码的常见漏洞</td>
+</tr>
+<tr>
+<td align="left">按需单次</td>
+<td align="left"><code>/security-review</code></td>
+<td align="left">当前分支一次性安全审查</td>
+</tr>
+<tr>
+<td align="left"><strong>按需深度扫描</strong></td>
+<td align="left"><strong><code>claude-security</code> 插件</strong></td>
+<td align="left"><strong>仓库/diff 多代理扫描，独立验证的发现和补丁</strong></td>
+</tr>
+<tr>
+<td align="left">PR 时</td>
+<td align="left">Code Review (Team/Enterprise)</td>
+<td align="left">全代码库上下文一致性审查</td>
+</tr>
+<tr>
+<td align="left">托管</td>
+<td align="left">Claude Security 产品 (Enterprise)</td>
+<td align="left">连接的仓库持续监控</td>
+</tr>
+<tr>
+<td align="left">CI</td>
+<td align="left">现有 SAST + 依赖扫描器</td>
+<td align="left">语言特定规则、供应链检查</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>官方立场：<strong>不替代现有源代码安全工具。</strong> 与静态分析、依赖扫描和代码审查并行使用。</p>
+</blockquote>
+<hr>
+<h2>2. 功能详情</h2>
+<h3>2.1 命令与三种操作</h3>
+<table>
+<thead>
+<tr>
+<th align="left">操作</th>
+<th align="left">目标</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Scan codebase</strong></td>
+<td align="left">整个仓库或限定范围的子集</td>
+<td align="left">即使在无版本控制的目录中也可运行</td>
+</tr>
+<tr>
+<td align="left"><strong>Scan changes</strong></td>
+<td align="left">分支 diff、PR diff、单个提交</td>
+<td align="left">需要 Git。<strong>仅限已提交的变更</strong></td>
+</tr>
+<tr>
+<td align="left"><strong>Suggest patches</strong></td>
+<td align="left">报告中的选定发现</td>
+<td align="left">生成 <code>.patch</code> 文件。不自动应用</td>
+</tr>
+</tbody></table>
+<p>直接参数调用：</p>
+<pre><code class="language-text">/claude-security scan my branch
+/claude-security          → &quot;scan commit abc1234&quot;
+</code></pre>
+<p>建议启用 <strong>auto mode</strong> 以防止权限提示阻碍扫描。</p>
+<h3>2.2 扫描流水线：6 个阶段</h3>
+<table>
+<thead>
+<tr>
+<th align="left">#</th>
+<th align="left">阶段</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><strong>Inventory</strong></td>
+<td align="left">将仓库划分为组件</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><strong>Threat model</strong></td>
+<td align="left">每个组件一个建模器</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><strong>Research</strong></td>
+<td align="left">每个（组件 × 类别）单元格一名研究员</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left"><strong>Sweep</strong></td>
+<td align="left">填补矩阵未覆盖的空白区域</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left"><strong>Panel</strong></td>
+<td align="left">3 视角对抗验证</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left"><strong>Adversarial</strong></td>
+<td align="left">仅 max effort。重新审查边界判定，红队所有存活发现</td>
+</tr>
+</tbody></table>
+<p>四个固定研究类别: <code>injection-and-input</code>, <code>auth-and-access</code>, <code>memory-and-unsafe</code>, <code>crypto-and-secrets</code></p>
+<h3>2.3 努力等级</h3>
+<table>
+<thead>
+<tr>
+<th align="left">等级</th>
+<th align="left">最大组件数</th>
+<th align="left">每格研究员</th>
+<th align="left">间隙扫描</th>
+<th align="left">对抗阶段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">low</td>
+<td align="left">12</td>
+<td align="left">1</td>
+<td align="left">0</td>
+<td align="left">不运行</td>
+</tr>
+<tr>
+<td align="left">medium</td>
+<td align="left">12</td>
+<td align="left">1</td>
+<td align="left">1</td>
+<td align="left">不运行</td>
+</tr>
+<tr>
+<td align="left">high</td>
+<td align="left">24</td>
+<td align="left">2</td>
+<td align="left">2</td>
+<td align="left">不运行</td>
+</tr>
+<tr>
+<td align="left">max</td>
+<td align="left">24</td>
+<td align="left">2</td>
+<td align="left">2</td>
+<td align="left">运行</td>
+</tr>
+</tbody></table>
+<h3>2.4 模型层级</h3>
+<table>
+<thead>
+<tr>
+<th align="left">角色</th>
+<th align="left">模型</th>
+<th align="left">工具权限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">编排器</td>
+<td align="left">Opus</td>
+<td align="left">—</td>
+</tr>
+<tr>
+<td align="left">仓库制图师</td>
+<td align="left">Sonnet</td>
+<td align="left">只读</td>
+</tr>
+<tr>
+<td align="left">研究员、验证员</td>
+<td align="left">继承会话模型</td>
+<td align="left">只读</td>
+</tr>
+</tbody></table>
+<h3>2.5 验证小组 — 本产品的核心</h3>
+<p>发现进入报告不是因为&quot;研究员找到了&quot;，而是<strong>通过了小组验证</strong>。</p>
+<table>
+<thead>
+<tr>
+<th align="left">要素</th>
+<th align="left">规则</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">投票者</td>
+<td align="left">3 名，每个视角 1 名: <code>REACHABILITY</code> / <code>IMPACT</code> / <code>DEFENSES</code></td>
+</tr>
+<tr>
+<td align="left">判定格式</td>
+<td align="left"><code>TRUE_POSITIVE</code> 或 <code>FALSE_POSITIVE</code> + 决定性 <code>file:line</code> 证据</td>
+</tr>
+<tr>
+<td align="left">维持法定人数</td>
+<td align="left">3 票中的 2 票</td>
+</tr>
+<tr>
+<td align="left">置信度上限</td>
+<td align="left">一致 3/3 → <code>high</code> / 2/3 → 限制为 <code>medium</code></td>
+</tr>
+<tr>
+<td align="left">聚合引擎</td>
+<td align="left"><strong>由报告渲染器的 Python 代码计算</strong>，非模型声称值</td>
+</tr>
+<tr>
+<td align="left">验证戳记</td>
+<td align="left">仅当投票记录证明所有发现均经过小组执行时为 <code>verified</code></td>
+</tr>
+</tbody></table>
+<h3>2.6 输出物</h3>
+<table>
+<thead>
+<tr>
+<th align="left">文件</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>CLAUDE-SECURITY-RESULTS.md</code></td>
+<td align="left">人类可读报告。发现 ID、严重性、置信度、CWE、精确接收器行</td>
+</tr>
+<tr>
+<td align="left"><code>CLAUDE-SECURITY-RESULTS.jsonl</code></td>
+<td align="left">机器可读格式，每行一个 JSON 对象</td>
+</tr>
+<tr>
+<td align="left"><code>CLAUDE-SECURITY-REVISION-&lt;commit&gt;.json</code></td>
+<td align="left">修订戳记</td>
+</tr>
+</tbody></table>
+<p>该目录自带 <code>.gitignore</code>。如需保留审计追踪，删除该 <code>.gitignore</code> 文件并正常提交。</p>
+<h3>2.7 补丁生成 — 三大声明要求</h3>
+<ol>
+<li>该变更解决了<strong>该单一</strong>发现</li>
+<li>不引入新漏洞</li>
+<li>所有其他行为不变 — 代码接受的输入集变化视为行为变化</li>
+</ol>
+<p>削弱安全性的&quot;修复&quot;会被<strong>自动拒绝</strong>。三个声明无法保证时，输出原因说明而非补丁。</p>
+<p>应用始终由用户决定：<code>git apply CLAUDE-SECURITY-&lt;timestamp&gt;/patches/F1.patch</code>。<strong>每个补丁一个 PR</strong> 是官方建议。</p>
+<hr>
+<h2>3. 优势</h2>
+<table>
+<thead>
+<tr>
+<th align="left">#</th>
+<th align="left">优势</th>
+<th align="left">依据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">上下文相关漏洞检测</td>
+<td align="left">跨文件数据流追踪、复合逻辑缺陷</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">可验证的误报抑制</td>
+<td align="left">3 视角小组 + 2/3 法定人数 + 置信度上限</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">基于代码的报告完整性证明</td>
+<td align="left">投票聚合由 Python 代码计算</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">代码不离开环境</td>
+<td align="left">会话内本地执行</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">无需额外供应商或合同</td>
+<td align="left">使用现有 Claude 访问权限和 Token 预算</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">机器可读输出</td>
+<td align="left">JSONL → 工单/SIEM/仪表板集成</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">补丁安全门</td>
+<td align="left">临时克隆 + 独立验证 + 自动应用禁用</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">可限定范围</td>
+<td align="left">努力等级和组件范围</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">无工作流切换</td>
+<td align="left">终端会话内完成扫描→分析→补丁→PR</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 劣势与风险</h2>
+<table>
+<thead>
+<tr>
+<th align="left">#</th>
+<th align="left">劣势</th>
+<th align="left">详情</th>
+<th align="left">缓解措施</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">非确定性</td>
+<td align="left">相同代码两次扫描可能产生不同发现</td>
+<td align="left">定期扫描，不作为发布门唯一依据</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">缺乏可复现性</td>
+<td align="left">无法直接满足审计框架要求</td>
+<td align="left">保持确定性 SAST 并行运行</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">无隔离</td>
+<td align="left">非对抗性仓库的防御措施</td>
+<td align="left">不信任代码用 sandbox-runtime/VM</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">Token 成本</td>
+<td align="left">深度扫描消耗大量 Token</td>
+<td align="left">分区扫描，降低努力等级</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">会话锁定</td>
+<td align="left">扫描完成前需保持 Claude Code 开启</td>
+<td align="left">独立会话/机器</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">未提交变更限制</td>
+<td align="left">变更扫描仅看已提交的变更</td>
+<td align="left">先提交或 stash</td>
+</tr>
+<tr>
+<td align="left">7</td>
+<td align="left">覆盖不透明</td>
+<td align="left">需人工阅读排除原因</td>
+<td align="left">将排除原因审查制度化</td>
+</tr>
+<tr>
+<td align="left">8</td>
+<td align="left">依赖/供应链未覆盖</td>
+<td align="left">不包括 SCA、许可证、容器、IaC、DAST</td>
+<td align="left">保持现有 SCA/密钥扫描器</td>
+</tr>
+<tr>
+<td align="left">9</td>
+<td align="left">付费套餐依赖</td>
+<td align="left">付费套餐 + dynamic workflows 必需</td>
+<td align="left">预先标准化环境</td>
+</tr>
+<tr>
+<td align="left">10</td>
+<td align="left">Beta</td>
+<td align="left">模式可能变更</td>
+<td align="left">JSONL 解析器添加版本保护</td>
+</tr>
+<tr>
+<td align="left">11</td>
+<td align="left">Fable 5 自动降级</td>
+<td align="left">网络安全分类器可能阻止部分模型活动</td>
+<td align="left">视为预期行为</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. 配套产品: <code>security-guidance</code></h2>
+<p><strong>所有套餐免费</strong>。&quot;Claude 创建的漏洞由 Claude 在同一会话中捕获&quot;的预防层。</p>
+<h3>5.1 三层审查</h3>
+<table>
+<thead>
+<tr>
+<th align="left">层级</th>
+<th align="left">时机</th>
+<th align="left">方式</th>
+<th align="left">成本</th>
+<th align="left">示例检测</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Per-edit</td>
+<td align="left">Edit/Write/NotebookEdit 后立即</td>
+<td align="left">正则/子串确定性匹配，<strong>不调用模型</strong></td>
+<td align="left">0</td>
+<td align="left"><code>eval(</code>, <code>new Function</code>, <code>os.system</code>, <code>dangerouslySetInnerHTML</code></td>
+</tr>
+<tr>
+<td align="left">End-of-turn</td>
+<td align="left">回合完成时</td>
+<td align="left">工作树 git diff 传递给独立 Claude 审查</td>
+<td align="left">每回合约 1 次调用</td>
+<td align="left">认证绕过、IDOR、注入、SSRF</td>
+</tr>
+<tr>
+<td align="left">Commit/Push</td>
+<td align="left">Claude 通过 Bash 执行 <code>git commit</code>/<code>git push</code> 时</td>
+<td align="left">代理深度审查</td>
+<td align="left">每次提交多次回合</td>
+<td align="left">消除上下文安全但模式危险的情况的误报</td>
+</tr>
+</tbody></table>
+<p>关键限制：非阻塞（best-effort），不阻止写入或提交。<strong>用户在自有 Shell 中的提交不会被审查。</strong></p>
+<h3>5.2 扩展点</h3>
+<table>
+<thead>
+<tr>
+<th align="left">文件</th>
+<th align="left">用途</th>
+<th align="left">上限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>.claude/claude-security-guidance.md</code></td>
+<td align="left">注入组织威胁模型/检查清单</td>
+<td align="left">8KB</td>
+</tr>
+<tr>
+<td align="left"><code>.claude/security-patterns.yaml</code></td>
+<td align="left">添加确定性 per-edit 规则</td>
+<td align="left">最多 50 规则</td>
+</tr>
+</tbody></table>
+<p>注意：指南文件是<strong>可加的</strong>（additive）。不能用&quot;忽略此类漏洞&quot;的规则来抑制默认检查。</p>
+<h3>5.3 禁用开关</h3>
+<table>
+<thead>
+<tr>
+<th align="left">环境变量</th>
+<th align="left">效果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>SECURITY_GUIDANCE_DISABLE=1</code></td>
+<td align="left">禁用整个插件</td>
+</tr>
+<tr>
+<td align="left"><code>ENABLE_PATTERN_RULES=0</code></td>
+<td align="left">禁用 per-edit 检查</td>
+</tr>
+<tr>
+<td align="left"><code>ENABLE_STOP_REVIEW=0</code></td>
+<td align="left">禁用 end-of-turn 审查</td>
+</tr>
+<tr>
+<td align="left"><code>ENABLE_COMMIT_REVIEW=0</code></td>
+<td align="left">禁用 commit/push 审查</td>
+</tr>
+</tbody></table>
+<h3>5.4 实现架构</h3>
+<p>插件完全基于 <strong>hooks</strong>实现，可作为自身 hooks 的参考实现。Anthropic 自部署中 PR 的<strong>安全相关评论减少 30–40%</strong>。</p>
+<hr>
+<h2>6. 竞争比较</h2>
+<h3>6.1 直接竞争: AI 原生代理安全审查</h3>
+<table>
+<thead>
+<tr>
+<th align="left">产品</th>
+<th align="left">供应商</th>
+<th align="left">执行位置</th>
+<th align="left">验证方式</th>
+<th align="left">关键差异</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Claude Security Plugin</strong></td>
+<td align="left">Anthropic</td>
+<td align="left">本地会话</td>
+<td align="left">3 视角小组 2/3 法定人数</td>
+<td align="left">基于代码的报告完整性证明</td>
+</tr>
+<tr>
+<td align="left"><strong>Codex Security</strong></td>
+<td align="left">OpenAI</td>
+<td align="left">云端</td>
+<td align="left">沙盒漏洞利用验证</td>
+<td align="left">沙盒验证是最大差异点</td>
+</tr>
+<tr>
+<td align="left"><strong>Claude Security (Managed)</strong></td>
+<td align="left">Anthropic</td>
+<td align="left">托管</td>
+<td align="left">同系列验证</td>
+<td align="left">持续监控、webhook</td>
+</tr>
+<tr>
+<td align="left"><strong>ZeroPath</strong></td>
+<td align="left">ZeroPath</td>
+<td align="left">SaaS</td>
+<td align="left">AI 原生检测</td>
+<td align="left">授权逻辑、IDOR 优势</td>
+</tr>
+<tr>
+<td align="left"><strong>Corgea</strong></td>
+<td align="left">Corgea</td>
+<td align="left">SaaS</td>
+<td align="left">上游扫描器 AI 分类</td>
+<td align="left">修复层，检测质量依赖上游</td>
+</tr>
+</tbody></table>
+<h3>6.2 邻近竞争: 传统 SAST/AppSec 平台</h3>
+<table>
+<thead>
+<tr>
+<th align="left">产品</th>
+<th align="left">检测引擎</th>
+<th align="left">对比 Claude Security</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Semgrep</strong></td>
+<td align="left">规则驱动</td>
+<td align="left">确定性可复现，但逻辑缺陷推理较弱</td>
+</tr>
+<tr>
+<td align="left"><strong>Snyk Code</strong></td>
+<td align="left">静态分析 + DeepCode AI</td>
+<td align="left">平台广度压倒性，逻辑缺陷较弱</td>
+</tr>
+<tr>
+<td align="left"><strong>GitHub Advanced Security (CodeQL)</strong></td>
+<td align="left">CodeQL 数据流查询</td>
+<td align="left">GitHub 依赖，Claude 覆盖 GitLab/Bitbucket/气隙</td>
+</tr>
+<tr>
+<td align="left"><strong>Checkmarx One</strong></td>
+<td align="left">规则驱动</td>
+<td align="left">企业级治理</td>
+</tr>
+<tr>
+<td align="left"><strong>Veracode</strong></td>
+<td align="left">二进制+静态</td>
+<td align="left">受监管/国防领域不可替代</td>
+</tr>
+<tr>
+<td align="left"><strong>SonarQube CE</strong></td>
+<td align="left">规则驱动</td>
+<td align="left">预算受限团队的基线</td>
+</tr>
+</tbody></table>
+<h3>6.3 市场定位</h3>
+<table>
+<thead>
+<tr>
+<th align="left">层级</th>
+<th align="left">定义</th>
+<th align="left">代表</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Tier 1</td>
+<td align="left">纯规则驱动</td>
+<td align="left">SonarQube CE, Semgrep OSS</td>
+</tr>
+<tr>
+<td align="left">Tier 2</td>
+<td align="left">AI 辅助 SAST</td>
+<td align="left">Snyk Code, Semgrep Pro, Checkmarx One</td>
+</tr>
+<tr>
+<td align="left">Tier 3</td>
+<td align="left"><strong>AI 原生 SAST</strong>— LLM 为主检测引擎</td>
+<td align="left"><strong>Claude Security</strong>, Codex Security, ZeroPath</td>
+</tr>
+</tbody></table>
+<p><strong>实际结论:</strong>Claude Security Plugin 是 Snyk、Semgrep、GHAS 的<strong>补充而非替代</strong>。确定性工具负责可复现性、合规性和供应链；本插件负责那些工具结构上无法捕获的上下文相关逻辑缺陷。</p>
+<hr>
+<h2>7. 入门指南</h2>
+<h3>7.1 前提条件</h3>
+<table>
+<thead>
+<tr>
+<th align="left">项目</th>
+<th align="left"><code>claude-security</code></th>
+<th align="left">检查命令</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Claude Code CLI</td>
+<td align="left">v2.1.154+</td>
+<td align="left"><code>claude --version</code></td>
+</tr>
+<tr>
+<td align="left">套餐</td>
+<td align="left">付费套餐必需</td>
+<td align="left">—</td>
+</tr>
+<tr>
+<td align="left">Dynamic workflows</td>
+<td align="left">必须启用</td>
+<td align="left"><code>/config</code></td>
+</tr>
+<tr>
+<td align="left">Python</td>
+<td align="left">3.9.6+, <code>PATH</code> 上有 <code>python3</code></td>
+<td align="left"><code>python3 --version</code></td>
+</tr>
+<tr>
+<td align="left">Git</td>
+<td align="left">变更扫描和补丁生成需要</td>
+<td align="left"><code>git --version</code></td>
+</tr>
+</tbody></table>
+<h3>7.2 安装</h3>
+<pre><code class="language-text">/plugin install claude-security@claude-plugins-official
+/reload-plugins
+</code></pre>
+<p>同时安装 <code>security-guidance</code>:</p>
+<pre><code class="language-text">/plugin install security-guidance@claude-plugins-official
+/reload-plugins
+</code></pre>
+<h3>7.3 团队部署</h3>
+<pre><code class="language-json">{
+  &quot;enabledPlugins&quot;: {
+    &quot;security-guidance@claude-plugins-official&quot;: true,
+    &quot;claude-security@claude-plugins-official&quot;: true
+  }
+}
+</code></pre>
+<h3>7.4 首次扫描</h3>
+<pre><code class="language-text">1) /claude-security → 选择 &quot;Scan codebase&quot;
+2) 选择扫描范围
+3) 确认执行（消耗大量 Token，需保持 Claude Code 开启）
+4) 观察进度（通过 /workflows 查看详情）
+5) 查看 CLAUDE-SECURITY-&lt;timestamp&gt;/ 目录
+6) /claude-security → &quot;Suggest patches&quot; → 选择要处理的发现
+7) 仅应用已接受的补丁：git apply（每个补丁一个 PR）
+</code></pre>
+<p>建议启用 <strong>auto mode</strong>。</p>
+<h3>7.5 仅扫描变更</h3>
+<pre><code class="language-text">/claude-security scan my branch
+</code></pre>
+<p>仅限已提交变更。进行中的编辑请先提交或 stash。</p>
+<h3>7.6 大型仓库范围控制</h3>
+<p>不要一次处理整个树，按区域划分。选择插件建议的聚焦范围（API 层、认证代码等）。</p>
+<h3>7.7 报告阅读顺序</h3>
+<pre><code class="language-text">1. CLAUDE-SECURITY-REVISION-&lt;commit&gt;.json → 检查 verification.status
+2. CLAUDE-SECURITY-RESULTS.md coverage 部分 → 检查排除内容
+3. 发现列表 → 按 severity × confidence 排序
+4. CLAUDE-SECURITY-RESULTS.jsonl → 工单系统集成
+</code></pre>
+<h3>7.8 故障排除</h3>
+<table>
+<thead>
+<tr>
+<th align="left">症状</th>
+<th align="left">原因/对策</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Python 警告</td>
+<td align="left">需要 <code>python3</code> 3.9.6+</td>
+</tr>
+<tr>
+<td align="left">&quot;Fable 5&#39;s safeguards flagged this message&quot;</td>
+<td align="left">正常行为，扫描完成</td>
+</tr>
+<tr>
+<td align="left">security-guidance 审查不显示</td>
+<td align="left">检查日志，非 git 仓库则跳过</td>
+</tr>
+<tr>
+<td align="left">仅输出说明无补丁</td>
+<td align="left">独立验证者无法保证三大声明</td>
+</tr>
+</tbody></table>
+<h3>7.9 卸载</h3>
+<pre><code class="language-text">claude plugin uninstall claude-security
+/plugin uninstall security-guidance@claude-plugins-official
+</code></pre>
+<hr>
+<h2>8. 采用建议场景</h2>
+<table>
+<thead>
+<tr>
+<th align="left">组织情况</th>
+<th align="left">建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">使用 Claude Code，无 AppSec 工具</td>
+<td align="left">立即部署 <code>security-guidance</code>（免费）。<code>claude-security</code> 从发版前分支开始</td>
+</tr>
+<tr>
+<td align="left">现有 SAST 运行中</td>
+<td align="left">保持当前栈。在高风险组件投入 <code>claude-security</code></td>
+</tr>
+<tr>
+<td align="left">GitHub Enterprise 中心</td>
+<td align="left">GHAS + Copilot Autofix 在 PR 循环中占优。Claude 作为逻辑缺陷的二次审查</td>
+</tr>
+<tr>
+<td align="left">GitLab / Bitbucket / 气隙网络</td>
+<td align="left">插件的本地执行具有结构性优势</td>
+</tr>
+<tr>
+<td align="left">监管/审计合规必需</td>
+<td align="left">确定性 SAST 必须保持</td>
+</tr>
+</tbody></table>
+<h3>最小操作流程建议</h3>
+<pre><code class="language-text">[日常]    security-guidance 始终启用（免费、自动）
+[PR 前]   /claude-security scan my branch（仅变更、medium effort）
+[Sprint]  1 个高风险组件全扫描（high effort）→ 提交报告用于审计追踪
+[发版]    现有 SAST + SCA + 密钥扫描（确定性门）
+[季度]   全仓库遍历扫描（max effort），通过修订戳记录管理历史
+</code></pre>
+<hr>
+<h2>9. 来源</h2>
+<table>
+<thead>
+<tr>
+<th align="left">来源</th>
+<th align="left">URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Claude Security Plugin 官方文档</td>
+<td align="left"><a href="https://code.claude.com/docs/en/claude-security">https://code.claude.com/docs/en/claude-security</a></td>
+</tr>
+<tr>
+<td align="left">security-guidance Plugin 官方文档</td>
+<td align="left"><a href="https://code.claude.com/docs/en/security-guidance">https://code.claude.com/docs/en/security-guidance</a></td>
+</tr>
+<tr>
+<td align="left">Claude Security 产品页面</td>
+<td align="left"><a href="https://claude.com/product/claude-security">https://claude.com/product/claude-security</a></td>
+</tr>
+<tr>
+<td align="left">插件源码 (claude-security)</td>
+<td align="left"><a href="https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-security">https://github.com/anthropics/claude-plugins-official/tree/main/plugins/claude-security</a></td>
+</tr>
+<tr>
+<td align="left">插件源码 (security-guidance)</td>
+<td align="left"><a href="https://github.com/anthropics/claude-plugins-official/tree/main/plugins/security-guidance">https://github.com/anthropics/claude-plugins-official/tree/main/plugins/security-guidance</a></td>
+</tr>
+<tr>
+<td align="left">Sandbox Runtime</td>
+<td align="left"><a href="https://github.com/anthropic-experimental/sandbox-runtime">https://github.com/anthropic-experimental/sandbox-runtime</a></td>
+</tr>
+<tr>
+<td align="left">安全审查 GitHub Action</td>
+<td align="left"><a href="https://github.com/anthropics/claude-code-security-review">https://github.com/anthropics/claude-code-security-review</a></td>
+</tr>
+</tbody></table>
+<p>Beta 产品 — 功能、输出模式和需求可能变更。接入自动化流水线前，请以官方文档为准再次确认。</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Security/Claude-Security-Plugin-Guide_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

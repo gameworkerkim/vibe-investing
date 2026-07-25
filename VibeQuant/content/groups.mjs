@@ -93,6 +93,7 @@ export const FEATURED_TECH_PATHS = [
   "MCP/MCP-2026-07-28-Security-Migration-Guide.md",
   "effective_LLM/AI coding workflow claude code cursor chatgpt.md",
   "LLM_Security/Secret scanning llm harness prompt.md",
+  "LLM_Security/Claude-Security-Plugin-Guide_KR.md",
   "CloudFlare/Cloudflare free tier guide.md",
   "Python_Pyodide/Pyodide.md",
 ];

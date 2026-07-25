@@ -1,6 +1,39 @@
-# Claude Security Plugin — 技术分析与入门指南
+---
+title: "Claude Security プラグイン — 技術分析とスタートガイド"
+subtitle: "security-guidance と claude-security を区別し、マルチエージェント検証と導入手順を整理する"
+description: "Claude Code 向け claude-security (Beta) と security-guidance (GA) の構造、3名検証パネル、BYO inference、導入手順、Defense-in-Depth スタック内の位置をまとめた技術ガイド。"
+abstract: |
+  Anthropic Claude Code のセキュリティプラグイン2種（security-guidance GA、claude-security Beta v0.10.0）を区別し、
+  推論ベースの脆弱性スキャン、敵対的検証（2/3定足数）、ローカル実行（BYO inference）、Human-in-the-loop パッチ原則を説明する。
+  既存 SAST の代替ではなく補完としての位置づけ、料金・CLI 要件、導入チェックリストを含む。基準日 2026-07-26。
+summary_for_ai: |
+  Tech guide (JA) for Anthropic Claude Security Plugin: security-guidance (in-session GA) vs claude-security (on-demand multi-agent deep scan, Beta v0.10.0, paid, CLI ≥2.1.154).
+  Core: reasoning-over-pattern, adversarial 3-panel verification, locality/BYO inference, HITL patches; complements SAST. Docs 2026-07-23; published 2026-07-26.
+date: 2026-07-26
+author: "Dennis Kim"
+lang: ja
+tags:
+  - Claude
+  - LLM Security
+  - AppSec
+  - DevSecOps
+  - SAST
+keywords:
+  - Claude Security Plugin
+  - claude-security
+  - security-guidance
+  - multi-agent vulnerability scanner
+  - adversarial verification
+  - BYO inference
+group: security
+featured: true
+featured_rank: 1
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
 
-## Claude Security プラグイン — 技術分析とスタートガイド
+# Claude Security プラグイン — 技術分析とスタートガイド
 
 > 本ドキュメントは Claude Security Plugin (`claude-security` Beta v0.10.0 および `security-guidance` GA) の技術分析、検証パイプライン、導入ガイド、競合比較をカバーします。
 

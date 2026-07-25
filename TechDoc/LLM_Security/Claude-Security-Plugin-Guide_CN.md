@@ -1,3 +1,38 @@
+---
+title: "Claude Security Plugin — 技术分析与入门指南"
+subtitle: "区分 security-guidance 与 claude-security，梳理多代理验证流水线与落地步骤"
+description: "面向 Claude Code 的 claude-security（Beta）与 security-guidance（GA）技术指南：架构、三人验证小组、BYO inference、采用流程及在纵深防御栈中的位置。"
+abstract: |
+  区分 Anthropic Claude Code 的两款安全插件（security-guidance GA 与 claude-security Beta v0.10.0），
+  说明基于推理的漏洞扫描、对抗式验证（2/3 法定人数）、本地 BYO inference 以及人工审批补丁原则。
+  定位为 SAST 的补充而非替代，并包含套餐/CLI 要求与采用清单。基准日期 2026-07-26。
+summary_for_ai: |
+  Tech guide (ZH) for Anthropic Claude Security Plugin: security-guidance (in-session GA) vs claude-security (on-demand multi-agent deep scan, Beta v0.10.0, paid, CLI ≥2.1.154).
+  Core: reasoning-over-pattern, adversarial 3-panel verification, locality/BYO inference, HITL patches; complements SAST. Docs 2026-07-23; published 2026-07-26.
+date: 2026-07-26
+author: "Dennis Kim"
+lang: zh
+tags:
+  - Claude
+  - LLM Security
+  - AppSec
+  - DevSecOps
+  - SAST
+keywords:
+  - Claude Security Plugin
+  - claude-security
+  - security-guidance
+  - multi-agent vulnerability scanner
+  - adversarial verification
+  - BYO inference
+group: security
+featured: true
+featured_rank: 1
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+
 # Claude Security Plugin — 技术分析与入门指南
 
 传统安全解决方案和 GitHub 开源安全工具如果不提供新的价值，将面临淘汰。Claude Security Plugin 将安全能力扩展为内部技术层。
