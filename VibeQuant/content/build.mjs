@@ -564,6 +564,22 @@ function makeSlug(relPath) {
 const REDIRECT_BEGIN = "# --- AUTO SLUG REDIRECTS (generated; do not edit) ---";
 const REDIRECT_END = "# --- END AUTO SLUG REDIRECTS ---";
 
+function contentKeyFromArticleHtml(html, section) {
+  // Prefer GitHub blob links (media columns often set isBasedOn to the publisher URL).
+  const githubRe = /https:\/\/github\.com\/[^"'\\\s]+\/blob\/main\/[^"'\\\s]+/g;
+  let gm;
+  while ((gm = githubRe.exec(html))) {
+    const key = githubUrlToContentKey(gm[0], section);
+    if (key) return key;
+  }
+  const based = html.match(/"isBasedOn"\s*:\s*"([^"]+)"/);
+  if (based) {
+    const key = githubUrlToContentKey(based[1], section);
+    if (key) return key;
+  }
+  return null;
+}
+
 function loadLegacySlugIndex() {
   /** @type {Map<string, { section: string, oldSlug: string }>} */
   const byKey = new Map();
@@ -572,6 +588,7 @@ function loadLegacySlugIndex() {
     if (!fs.existsSync(dir)) continue;
     for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
       if (!ent.isDirectory()) continue;
+      // Skip redirect stubs — they have no article body / github source.
       const indexPath = path.join(dir, ent.name, "index.html");
       if (!fs.existsSync(indexPath)) continue;
       let html = "";
@@ -580,16 +597,24 @@ function loadLegacySlugIndex() {
       } catch {
         continue;
       }
-      const based =
-        html.match(/"isBasedOn"\s*:\s*"([^"]+)"/) ||
-        html.match(/href="(https:\/\/github\.com\/[^"]+\/blob\/main\/[^"]+)"/);
-      if (!based) continue;
-      const key = githubUrlToContentKey(based[1], section);
+      if (/http-equiv="refresh"/i.test(html) && /Moved to/i.test(html)) continue;
+      const key = contentKeyFromArticleHtml(html, section);
       if (!key) continue;
       byKey.set(`${section}::${key}`, { section, oldSlug: ent.name });
     }
   }
   return byKey;
+}
+
+/** Durable old→current slug map (survives cleanSection). Merged into slug-history. */
+function loadLegacySlugSeed() {
+  const seedPath = path.join(VQ, "content", "legacy-slugs.json");
+  if (!fs.existsSync(seedPath)) return {};
+  try {
+    return JSON.parse(fs.readFileSync(seedPath, "utf8")) || {};
+  } catch {
+    return {};
+  }
 }
 
 function githubUrlToContentKey(url, section) {
@@ -644,9 +669,12 @@ function loadSlugHistory() {
 function writeSlugRedirects(legacyIndex, sections) {
   /** @type {Record<string, { current: string, previous: string[] }>} */
   const history = loadSlugHistory();
+  const seed = loadLegacySlugSeed();
   const rules = [];
   const stubs = [];
   const seenRule = new Set();
+  /** @type {Map<string, string>} section/oldSlug -> newSlug (first claim wins) */
+  const claimedOld = new Map();
 
   for (const { section, items, host } of sections) {
     for (const item of items) {
@@ -658,11 +686,30 @@ function writeSlugRedirects(legacyIndex, sections) {
       if (fromLegacy?.oldSlug && fromLegacy.oldSlug !== item.slug) {
         previous.add(fromLegacy.oldSlug);
       }
+      // Seed file: { "columns::path.md": ["old-slug-hash", ...] }
+      const seeded = seed[key];
+      if (Array.isArray(seeded)) {
+        for (const s of seeded) if (s && s !== item.slug) previous.add(s);
+      }
       previous.delete(item.slug);
-      history[key] = { current: item.slug, previous: [...previous].sort() };
+
+      const kept = [];
+      for (const oldSlug of [...previous].sort()) {
+        const claimKey = `${section}/${oldSlug}`;
+        const prior = claimedOld.get(claimKey);
+        if (prior && prior !== item.slug) {
+          console.warn(
+            `  skip duplicate legacy slug ${claimKey} → ${item.slug} (kept ${prior})`
+          );
+          continue;
+        }
+        claimedOld.set(claimKey, item.slug);
+        kept.push(oldSlug);
+      }
+      history[key] = { current: item.slug, previous: kept };
 
       const toPath = `/${section}/${item.slug}/`;
-      for (const oldSlug of previous) {
+      for (const oldSlug of kept) {
         const fromPath = `/${section}/${oldSlug}/`;
         const pathRule = `${fromPath}  ${toPath}  301`;
         const bareRule = `/${section}/${oldSlug}  ${toPath}  301`;
@@ -1904,12 +1951,16 @@ function buildSeo(columns, tech, cti = [], essays = []) {
   const entry = (loc, lastmod) =>
     `  <url><loc>${loc}</loc><lastmod>${lastmod || new Date().toISOString().slice(0, 10)}</lastmod></url>`;
   const today = new Date().toISOString().slice(0, 10);
+  const researchPages = ["", "paper", "quant", "spacex", "trump"];
   const urls = [
     entry(absoluteSitePath(SITE), today),
     entry(absoluteSitePath(`${SITE}/about`), today),
-    entry(absoluteSitePath(`${SITE}/play`), today),
+    entry(absoluteSitePath(`${SITE_PLAY}/play`), today),
     entry(absoluteSitePath(SITE_LAB), today),
     entry(absoluteSitePath(SITE_RESEARCH), today),
+    ...researchPages
+      .filter(Boolean)
+      .map((slug) => entry(absoluteSitePath(`${SITE}/research/${slug}`), today)),
     entry(absoluteSitePath(`${SITE_DOCS}/columns`), today),
     entry(absoluteSitePath(`${SITE_TECH}/tech`), today),
     entry(absoluteSitePath(`${SITE_CTI}/cti`), today),

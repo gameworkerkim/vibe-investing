@@ -22,6 +22,8 @@
 2. **GitHub md** — 이 레포 아카이브
 3. **docs** — [docs.vibequant.cc](https://docs.vibequant.cc/columns/) 게시본
 
+해시 접미 구 URL(예: `…-p2e-b2bde438`)은 가독 슬러그로 **301/스텁 리다이렉트**된다. 예: [구 링크](https://docs.vibequant.cc/columns/media-blockchain-p2e-2022-08-17-p2e-b2bde438/) → [현 링크](https://docs.vibequant.cc/columns/media-blockchain-p2e-2022-08-17-p2e/).
+
 ### 빠른 스팟 체크
 
 | 확인 포인트 | 원문 | GitHub | 사이트 |
