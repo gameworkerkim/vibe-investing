@@ -795,6 +795,7 @@ function shouldSkipColumn(rel) {
   const n = path.basename(rel).toLowerCase();
   const p = rel.replace(/\\/g, "/").toLowerCase();
   if (n === "readme.md" || n === "llms.txt" || n === "ideanote.md") return true;
+  if (n === "fix_history.md" || n === "media-columns.csv") return true;
   if (n === "description.md" || n === "descsiption.md") return true;
   if (n === "column_guideline.md" || n === "column_template.md") return true;
   if (n === "changelog.md" || n === "data_dictionary.md" || n === "figures_guide.md") return true;
