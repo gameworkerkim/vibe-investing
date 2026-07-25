@@ -65,12 +65,84 @@ const TECH_BLOB = "https://github.com/gameworkerkim/vibe-investing/blob/main/Tec
 const CTI_BLOB = "https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main";
 const ESSAY_BLOB = "https://github.com/gameworkerkim/essays/blob/main";
 const GITHUB_HOME = "https://github.com/gameworkerkim/vibe-investing";
+const ORCID_URL = "https://orcid.org/0009-0002-0962-2175";
+const SSRN_AUTHOR_URL =
+  "https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088";
+/** Representative ETNews-bylined column (no stable writer profile URL published). */
+const ETNEWS_AUTHOR_URL = "https://www.etnews.com/20260223000270";
+const LINKEDIN_URL = "https://www.linkedin.com/in/testcode/";
+const GITHUB_PROFILE_URL = "https://github.com/gameworkerkim";
+const GITHUB_README_URL =
+  "https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md";
+const PERSON_ID = `${SITE}/about/#person`;
+const ORG_ID = `${SITE}/#organization`;
+const LOGO_URL = `${SITE}/og-default.png`;
+
+const PERSON_SAME_AS = [
+  GITHUB_README_URL,
+  GITHUB_PROFILE_URL,
+  LINKEDIN_URL,
+  ORCID_URL,
+  SSRN_AUTHOR_URL,
+  ETNEWS_AUTHOR_URL,
+];
+
+const ORG_SAME_AS = [
+  GITHUB_HOME,
+  GITHUB_PROFILE_URL,
+  ORCID_URL,
+  SSRN_AUTHOR_URL,
+  ETNEWS_AUTHOR_URL,
+  LINKEDIN_URL,
+];
 
 const AUTHOR_BIO = {
   default:
     "<strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).",
   cti: "<strong>Dennis Kim</strong> · 前 싸이월드 대표.",
 };
+
+function organizationLd(extra = {}) {
+  return {
+    "@type": "Organization",
+    "@id": ORG_ID,
+    name: "VibeQuant",
+    url: absoluteSitePath(SITE),
+    logo: {
+      "@type": "ImageObject",
+      url: LOGO_URL,
+    },
+    sameAs: ORG_SAME_AS,
+    founder: { "@id": PERSON_ID },
+    ...extra,
+  };
+}
+
+function personAuthorLd(extra = {}) {
+  return {
+    "@type": "Person",
+    "@id": PERSON_ID,
+    name: "Dennis Kim",
+    alternateName: "김호광",
+    url: `${SITE}/about/`,
+    email: "gameworker@gmail.com",
+    identifier: ORCID_URL,
+    sameAs: PERSON_SAME_AS,
+    ...extra,
+  };
+}
+
+function breadcrumbLd(items) {
+  return {
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((it, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: it.name,
+      item: it.item,
+    })),
+  };
+}
 
 function siteForSection(section) {
   if (section === "columns") return SITE_DOCS;
@@ -1419,8 +1491,11 @@ function layout({
   htmlLang = "ko",
   extraHead = "",
 }) {
-  const ld = jsonLd ? `<script type="application/ld+json">${JSON.stringify(jsonLd)}</script>` : "";
-  const ogImage = `${SITE}/og-default.png`;
+  const ldBlocks = Array.isArray(jsonLd) ? jsonLd.filter(Boolean) : jsonLd ? [jsonLd] : [];
+  const ld = ldBlocks
+    .map((block) => `<script type="application/ld+json">${JSON.stringify(block)}</script>`)
+    .join("\n  ");
+  const ogImage = LOGO_URL;
   return `<!DOCTYPE html>
 <html lang="${esc(htmlLang)}">
 <head>
@@ -1552,21 +1627,41 @@ function buildArticle(item, section) {
   ensureDir(outDir);
   const metaDesc = parsed.description || item.description;
   const htmlLang = langToHreflang(item.lang) || "ko";
-  const jsonLd = {
+  const fmSchema = meta.schema_type || meta.schemaType;
+  const resolvedType =
+    fmSchema === "Article" ||
+    fmSchema === "BlogPosting" ||
+    fmSchema === "TechArticle" ||
+    fmSchema === "NewsArticle"
+      ? fmSchema
+      : schemaType;
+  const articleLd = {
     "@context": "https://schema.org",
-    "@type": schemaType,
+    "@type": resolvedType,
     headline: parsed.title || item.title,
     description: metaDesc,
-    author: { "@type": "Person", name: "Dennis Kim", alternateName: "김호광" },
-    mainEntityOfPage: canonical,
+    author: personAuthorLd(),
+    publisher: organizationLd(),
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": canonical,
+    },
     isBasedOn: sourceUrl || item.github,
-    image: `${SITE}/og-default.png`,
+    image: LOGO_URL,
+    url: canonical,
   };
-  if (datePub) jsonLd.datePublished = datePub;
-  if (dateMod) jsonLd.dateModified = dateMod;
-  if (item.lang) jsonLd.inLanguage = htmlLang;
-  if (mediaLabel) jsonLd.publisher = { "@type": "Organization", name: mediaLabel };
-  if (topicTags.length) jsonLd.keywords = topicTags.join(", ");
+  if (datePub) articleLd.datePublished = datePub;
+  if (dateMod) articleLd.dateModified = dateMod;
+  if (item.lang) articleLd.inLanguage = htmlLang;
+  if (mediaLabel) {
+    articleLd.copyrightHolder = { "@type": "Organization", name: mediaLabel };
+  }
+  if (topicTags.length) articleLd.keywords = topicTags.join(", ");
+  const crumbs = [
+    { name: "VibeQuant", item: absoluteSitePath(SITE) },
+    { name: sectionLabel(section), item: absoluteSitePath(`${base}/${section}`) },
+    { name: parsed.title || item.title, item: canonical },
+  ];
   fs.writeFileSync(
     path.join(outDir, "index.html"),
     layout({
@@ -1586,7 +1681,10 @@ function buildArticle(item, section) {
       ogType: "article",
       htmlLang,
       extraHead: hreflangLinks(item, section),
-      jsonLd,
+      jsonLd: [
+        articleLd,
+        { "@context": "https://schema.org", ...breadcrumbLd(crumbs) },
+      ],
     })
   );
 }
@@ -1898,20 +1996,36 @@ function buildListPage({ section, items, groups, title, lede, active, githubTree
       body,
       ogType: "website",
       htmlLang: "ko",
-      jsonLd: {
-        "@context": "https://schema.org",
-        "@type": "CollectionPage",
-        name: title,
-        url: canonical,
-        description: lede,
-        numberOfItems: items.length,
-        ...langAvail,
-        isPartOf: {
-          "@type": "WebSite",
-          name: "VibeQuant",
-          url: SITE,
+      jsonLd: [
+        {
+          "@context": "https://schema.org",
+          "@type": "CollectionPage",
+          name: title,
+          url: canonical,
+          description: lede,
+          numberOfItems: items.length,
+          ...langAvail,
+          publisher: { "@id": ORG_ID },
+          isPartOf: {
+            "@type": "WebSite",
+            "@id": `${SITE}/#website`,
+            name: "VibeQuant",
+            url: SITE,
+            publisher: { "@id": ORG_ID },
+          },
         },
-      },
+        {
+          "@context": "https://schema.org",
+          ...organizationLd(),
+        },
+        {
+          "@context": "https://schema.org",
+          ...breadcrumbLd([
+            { name: "VibeQuant", item: absoluteSitePath(SITE) },
+            { name: title, item: canonical },
+          ]),
+        },
+      ],
     })
   );
   writeCatalogSearchJs(path.join(PAGES, section, "catalog-search.js"));
@@ -1953,15 +2067,16 @@ function buildAbout() {
       prefix,
       body,
       ogType: "profile",
-      jsonLd: {
-        "@context": "https://schema.org",
-        "@type": "Person",
-        name: "Dennis Kim",
-        alternateName: "김호광",
-        url: canonical,
-        email: "gameworker@gmail.com",
-        sameAs: [profileUrl, "https://github.com/gameworkerkim", "https://www.linkedin.com/in/testcode/", "https://orcid.org/0009-0002-0962-2175"],
-      },
+      jsonLd: [
+        {
+          "@context": "https://schema.org",
+          ...personAuthorLd({ url: canonical }),
+        },
+        {
+          "@context": "https://schema.org",
+          ...organizationLd(),
+        },
+      ],
     })
   );
 }
@@ -2012,7 +2127,7 @@ function buildSeo(columns, tech, cti = [], essays = []) {
     entry(absoluteSitePath(`${SITE_TECH}/tech`), today),
     entry(absoluteSitePath(`${SITE_CTI}/cti`), today),
     entry(absoluteSitePath(`${SITE_ESSAY}/essays`), today),
-    ...columns.map((c) => entry(`${SITE_DOCS}/columns/${c.slug}/`, c.dateModified || c.datePublished || today)),
+    ...columns.map((c) => sitemapEntryWithAlternates(c, "columns", SITE_DOCS, today)),
     ...tech.map((t) => sitemapEntryWithAlternates(t, "tech", SITE_TECH, today)),
     ...cti.map((r) => sitemapEntryWithAlternates(r, "cti", SITE_CTI, today)),
     ...essays.map((e) => entry(`${SITE_ESSAY}/essays/${e.slug}/`, e.dateModified || e.datePublished || today)),
@@ -2322,7 +2437,7 @@ function main() {
   buildAbout();
   buildSeo(columns, tech, cti, essays);
 
-  // Keep hub counts in sync with published catalog
+  // Keep hub counts + root Organization JSON-LD in sync
   const homePath = path.join(PAGES, "index.html");
   if (fs.existsSync(homePath)) {
     let home = fs.readFileSync(homePath, "utf8");
@@ -2334,6 +2449,32 @@ function main() {
       /id="hub-essay-count">[^<]*<\/span>/,
       `id="hub-essay-count">${essays.length}편</span>`
     );
+    const homeGraph = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "WebSite",
+          "@id": `${SITE}/#website`,
+          name: "VibeQuant",
+          url: absoluteSitePath(SITE),
+          description:
+            "VibeQuant — AI Quant · Cyber Threat Intelligence · Web3. 투자 칼럼·Tech·CTI·에세이 오픈 리서치.",
+          publisher: { "@id": ORG_ID },
+          inLanguage: ["ko", "en", "ja", "zh-Hans"],
+        },
+        organizationLd(),
+        personAuthorLd(),
+      ],
+    };
+    const homeLd = `<script type="application/ld+json" id="vq-org-ld">${JSON.stringify(homeGraph)}</script>`;
+    if (/id="vq-org-ld"/.test(home)) {
+      home = home.replace(
+        /<script type="application\/ld\+json" id="vq-org-ld">[\s\S]*?<\/script>/,
+        homeLd
+      );
+    } else {
+      home = home.replace(/<\/head>/i, `  ${homeLd}\n</head>`);
+    }
     fs.writeFileSync(homePath, home);
   }
 
