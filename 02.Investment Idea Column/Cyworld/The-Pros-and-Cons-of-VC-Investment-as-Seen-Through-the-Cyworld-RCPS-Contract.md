@@ -48,6 +48,8 @@ robots: index,follow
 
 2026.07.23 김호광 / Dennis Kim · Cyworld CEO
 
+> 웹 버전: [정식 슬러그](https://docs.vibequant.cc/columns/cyworld-rcps-vc-investment-pros-cons/) · [구 슬러그(해시)](https://docs.vibequant.cc/columns/cyworld-the-pros-and-cons-of-vc-investme-37dc18b1/)
+
 ---
 
 ## 1. 판결문은 재산이 있을 때만 돈이 된다

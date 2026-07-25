@@ -8,7 +8,7 @@ keywords: ["crypto HFT", "liquidation", "Cloudflare", "AWS", "market microstruct
 draft: false
 ---
 
-> Web: [docs.vibequant.cc](https://docs.vibequant.cc/columns/cryptohft-hft-infra-en-43bda122/) · [한국어](https://docs.vibequant.cc/columns/cryptohft-hft-infra-8e1e64d6/)
+> Web: [docs.vibequant.cc](https://docs.vibequant.cc/columns/cryptohft-hft-infra-en/) · [한국어](https://docs.vibequant.cc/columns/cryptohft-hft-infra/)
 
 # The Structural Limits of Improving Crypto HFT Infrastructure — Why Better Servers Won't Fix This
 

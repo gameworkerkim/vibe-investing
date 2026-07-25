@@ -8,7 +8,7 @@ keywords: ["크립토 HFT", "crypto HFT", "청산", "Cloudflare", "AWS"]
 draft: false
 ---
 
-> 웹 버전: [docs.vibequant.cc](https://docs.vibequant.cc/columns/cryptohft-hft-infra-8e1e64d6/) · [English](https://docs.vibequant.cc/columns/cryptohft-hft-infra-en-43bda122/)
+> 웹 버전: [docs.vibequant.cc](https://docs.vibequant.cc/columns/cryptohft-hft-infra/) · [English](https://docs.vibequant.cc/columns/cryptohft-hft-infra-en/)
 
 # 크립토 HFT 인프라 개선의 구조적 한계 — 왜 더 좋은 서버로는 해결되지 않는가?
 
