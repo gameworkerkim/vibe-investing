@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MCPサーバー開発 Getting Started — 概念からAMQS-AI-Infra Signal Serverの実装まで — VibeQuant</title>
+  <meta name="description" content="MCP(Model Context Protocol)の概念・特徴・APIとの違いを第1部で包括的に整理し、第2部でAMQSクオンツ戦略を題材に実際に動作するMCPサーバーを構築・テスト・Claude Desktopへ接続する実践ガイド。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started-ja/" />
+  <meta property="og:title" content="MCPサーバー開発 Getting Started — 概念からAMQS-AI-Infra Signal Serverの実装まで" />
+  <meta property="og:description" content="MCP(Model Context Protocol)の概念・特徴・APIとの違いを第1部で包括的に整理し、第2部でAMQSクオンツ戦略を題材に実際に動作するMCPサーバーを構築・テスト・Claude Desktopへ接続する実践ガイド。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MCPサーバー開発 Getting Started — 概念からAMQS-AI-Infra Signal Serverの実装まで","description":"MCP(Model Context Protocol)の概念・特徴・APIとの違いを第1部で包括的に整理し、第2部でAMQSクオンツ戦略を題材に実際に動作するMCPサーバーを構築・テスト・Claude Desktopへ接続する実践ガイド。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MCP/Mcp%20server%20getting%20started_JA.md","image":"https://vibequant.cc/og-default.png","inLanguage":"ja","keywords":"MCP, Model Context Protocol, MCPサーバー開発, FastMCP, Claude Desktop, AMQS"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>MCPサーバー開発 Getting Started — 概念からAMQS-AI-Infra Signal Serverの実装まで</h1>
+        <p class="article-dates">주제 MCP · Model Context Protocol · MCPサーバー開発 · FastMCP · Claude Desktop · AMQS</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/mcp-mcp-server-getting-started/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/mcp-mcp-server-getting-started-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/mcp-mcp-server-getting-started-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/mcp-mcp-server-getting-started-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">MCP(Model Context Protocol)の概念・特徴・APIとの違いを第1部で包括的に整理し、第2部でAMQSクオンツ戦略を題材に実際に動作するMCPサーバーを構築・テスト・Claude Desktopへ接続する実践ガイド。</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>第1部でMCP(Model Context Protocol)の概念・特徴・APIとの違いを包括的に整理する。
+第2部で<a href="https://github.com/gameworkerkim/vibe-investing/tree/main/01.Trading%20Strategy/Adaptive%20Momentum%20Quant%20Strategy%20(AMQS)%20for%20AI%20Infra">vibe-investing / AMQS-AI-Infra</a>
+クオンツ戦略を題材に<strong>実際に動作するMCPサーバーを自作し、テストし、Claude Desktopに接続する</strong>全過程を扱う。
+同梱コード(<code>server.py</code>)はstdioハンドシェイクからtool呼び出しまで実際に検証済みである。</p>
+</blockquote>
+<hr>
+<h1>第1部 — MCPの概念理解</h1>
+<h2>1. MCPとは何か?</h2>
+<p>MCP(Model Context Protocol)は、2024年11月にAnthropicが発表した<strong>オープン標準プロトコル</strong>であり、AIモデル(特にLLM)が外部のデータソースやツールと接続できるようにする通信規約である。その後OpenAI、Google、Microsoftなど主要IT企業が採用し、AI業界の事実上の標準(de facto standard)として定着した。</p>
+<h3>1.1 なぜMCPが必要なのか? — 問題の系譜</h3>
+<table>
+<thead>
+<tr>
+<th>段階</th>
+<th>状況</th>
+<th>限界</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. LLM単独</td>
+<td>学習時点の知識のみで応答</td>
+<td>リアルタイム情報(&quot;今の天気&quot;)が取得できず、外部世界との相互作用ができない</td>
+</tr>
+<tr>
+<td>2. Agentフレームワーク</td>
+<td>Langchain・CrewAIなどがLLMを外部ツール(検索・API・DB)に接続</td>
+<td>フレームワークごとにツール別の個別SDK作成が必要 — M×N統合問題</td>
+</tr>
+<tr>
+<td>3. <strong>MCP</strong></td>
+<td>単一標準プロトコルで統合</td>
+<td>M+Nに縮小 — ツール提供者はMCPサーバーを1つ作れば、すべてのホストで利用可能</td>
+</tr>
+</tbody></table>
+<p>M×N問題を具体的に見ると、Agentフレームワークがた個 × 外部ツールが個の組み合わせごとにコネクタを個別開発する必要があった。ツール提供者はすべてのフレームワークと個別に連携しなければならない非効率に悩まされていた。MCPはこれを<strong>「AI分野のUSB-Cポート」</strong>のような標準接続方式で解決する — MCPをサポートするどのAIアプリケーションも、MCPをサポートするどのデータソースにも即座に接続できる。</p>
+<h3>1.2 MCPアーキテクチャ</h3>
+<table>
+<thead>
+<tr>
+<th>構成要素</th>
+<th>役割</th>
+<th>例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>MCPホスト(Host)</strong></td>
+<td>LLMを含むAIアプリケーション環境</td>
+<td>Claude Desktop、Cursor、Windsurf</td>
+</tr>
+<tr>
+<td><strong>MCPクライアント(Client)</strong></td>
+<td>ホスト内でLLMとMCPサーバー間の通信を仲介。サーバーごとに1:1接続</td>
+<td>ホストに内蔵</td>
+</tr>
+<tr>
+<td><strong>MCPサーバー(Server)</strong></td>
+<td>外部サービス(DB・Web API・ファイルシステムなど)と接続し、LLMにコンテキストと機能を提供</td>
+<td>slack-mcp-server、notion-mcp-server、<strong>本文書のAMQSサーバー</strong></td>
+</tr>
+<tr>
+<td><strong>転送層(Transport)</strong></td>
+<td>JSON-RPC 2.0ベースのメッセージ交換</td>
+<td>stdio(ローカル)、Streamable HTTP(リモート)</td>
+</tr>
+</tbody></table>
+<pre><code>┌─────────────── Host (Claude Desktop) ───────────────┐
+│  LLM ↔ Client A ── stdio ──→ Server A (AMQS信号)     │
+│        Client B ── stdio ──→ Server B (Slack)        │
+│        Client C ── HTTP ───→ Server C (リモートDB)   │
+└──────────────────────────────────────────────────────┘
+</code></pre>
+<p>1つのホストが複数のサーバーに同時接続し、LLMは対話コンテキストに応じてどのサーバーのどの機能を使うかを自ら判断する。</p>
+<h2>2. MCPの中核的な特徴</h2>
+<table>
+<thead>
+<tr>
+<th>特徴</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>オープン標準(Open Standard)</strong></td>
+<td>仕様とSDKがオープンソースで公開。特定のAIモデル・ベンダーに依存せず、誰でもサーバー・クライアントを実装できる</td>
+</tr>
+<tr>
+<td><strong>双方向通信(Bidirectional)</strong></td>
+<td>一回限りのリクエスト-レスポンスではなく、継続セッションベース。サーバーがクライアントに通知(notification)を送る、またはサーバーが逆にLLM推論を要求(sampling)することも仕様に含まれる</td>
+</tr>
+<tr>
+<td><strong>汎用性(Universality)</strong></td>
+<td>一度MCP標準を実装すれば、様々なデータソースへのアクセスが標準化される。サーバーはホストがClaudeかCursorかを気にする必要がない</td>
+</tr>
+<tr>
+<td><strong>動的発見(Dynamic Discovery)</strong></td>
+<td>クライアントが実行時に<code>list_tools</code>でサーバー機能を照会 — 事前コーディングなしにAIがツールを自動探索・相互作用</td>
+</tr>
+<tr>
+<td><strong>組み合わせ可能性(Composability)</strong></td>
+<td>複数サーバーのtoolをLLMが自由に組み合わせ、マルチステップワークフローを実行</td>
+</tr>
+</tbody></table>
+<h2>3. MCP vs 既存API — 何が違うのか?</h2>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>既存APIの直接統合</th>
+<th>MCP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>接続方式</td>
+<td>サービスごとに個別接続・個別SDK</td>
+<td>単一標準プロトコルで複数ツールにアクセス</td>
+</tr>
+<tr>
+<td>ツール発見</td>
+<td>開発者がドキュメントを読み手動でコーディング</td>
+<td>AIが実行時に自動探索(<code>list_tools</code>)</td>
+</tr>
+<tr>
+<td>通信モデル</td>
+<td>一回限りのリクエスト-レスポンス(stateless)</td>
+<td>継続セッションベースの双方向リアルタイム通信</td>
+</tr>
+<tr>
+<td>呼び出し主体</td>
+<td>アプリケーションコードが呼び出しタイミングを決定</td>
+<td><strong>LLMが対話コンテキストの中で呼び出しの有無・順序・組み合わせを決定</strong></td>
+</tr>
+<tr>
+<td>インターフェース仕様</td>
+<td>OpenAPI/Swagger — 人間・コード向け</td>
+<td>JSON Schema + 自然言語description — <strong>LLM向け</strong></td>
+</tr>
+<tr>
+<td>統合コスト</td>
+<td>M(アプリ)×N(ツール)コネクタ</td>
+<td>M+N(ツールごとにサーバー1個)</td>
+</tr>
+<tr>
+<td>関係性</td>
+<td>—</td>
+<td><strong>MCPはAPIを代替しない</strong> — サーバー内部では依然としてREST API・DBを呼び出す。MCPはその上のLLMフレンドリーなアダプタ層</td>
+</tr>
+</tbody></table>
+<p>最後の行が最も重要である。MCPサーバー開発とは、結局「既存のAPI・ライブラリ・計算ロジックを<strong>LLMが理解し呼び出せる形にラップすること</strong>」である。第2部で作るAMQSサーバーも内部的にはyfinance APIとpandasの計算を使いつつ、これをMCP toolとして公開する。</p>
+<h2>4. MCP活用例 — 概念から実践へ</h2>
+<h3>例1: ニュース要約とSlack送信</h3>
+<p>「今朝のニュース3件を要約してSlackのAI newsチャンネルに投稿して」→ AIが検索MCPサーバーでニュースを収集 → 核心を要約 → slack-mcp-serverで指定チャンネルに投稿。<strong>異なる2つのサーバーをLLMが自律的に組み合わせる</strong>ことがポイントである。</p>
+<h3>例2: YouTubeチャンネル分析とNotionレポート</h3>
+<p>「最近の動画10本を分析してNotionにレポートを作って」→ YouTube AnalyticsのMCPで視聴継続率・離脱地点を分析 → インサイト文書を作成 → notion-mcp-serverでレポートページを生成。</p>
+<h3>例3: 業務自動化サーバーのエコシステム</h3>
+<p><code>slack-mcp-server</code>(メッセージ送受信)・<code>notion-mcp-server</code>(DB管理)・<code>google-calendar-mcp-server</code>(スケジュール管理)など — すでに数千の公開サーバーが存在する。</p>
+<h3>例4: クオンツ投資信号サーバー(本文書のテーマ)</h3>
+<p>「今のレジームを確認して、RISK_ONならTop 10を出して、私のMUの損切りラインも見て」→ AMQS MCPサーバーの3つのtoolをLLMが順次組み合わせる。例1〜3が<em>他人が作ったサーバーを使う</em>ことなら、第2部は<strong>このようなサーバーを自分で作る方法</strong>である。</p>
+<hr>
+<h1>第2部 — MCPサーバー開発実践: AMQS-AI-Infra Signal Server</h1>
+<h2>5. なぜAMQSがMCPサンプルに適しているのか</h2>
+<p>AMQS-AI-Infraの原文書には既に<strong>Python / LLMの役割分担表</strong>が存在する。この表がそのままMCPサーバーの設計図になり得る。</p>
+<table>
+<thead>
+<tr>
+<th>AMQS役割分担</th>
+<th>担当</th>
+<th>MCPマッピング</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4-Factorモメンタム・損切り・レジーム・Top-N選別</td>
+<td>Python(自動)</td>
+<td><strong>Tools</strong> — LLMが呼び出す決定論的計算</td>
+</tr>
+<tr>
+<td>Universe・戦略パラメータ(静的参照)</td>
+<td>Python</td>
+<td><strong>Resources</strong> — 読み取り専用コンテキスト</td>
+</tr>
+<tr>
+<td>Revenue Acceleration・13F・EPS Revision・ナラティブ</td>
+<td>LLM(知識・検索)</td>
+<td><strong>Prompts</strong> — クロス検証ワークフローテンプレート</td>
+</tr>
+</tbody></table>
+<p>つまり、「Pythonが技術信号を計算し、LLMがファンダメンタルズを検討する」というAMQSの哲学(「LLMはエクセルであり、オラクルではない」)が、MCPの3大primitive(Tools / Resources / Prompts)に1:1で対応する。決定論的計算はコードに、判断はモデルに置く構造 — これがMCPサーバー設計の定石である。</p>
+<h2>6. 開発者視点でのアーキテクチャ再解釈</h2>
+<p>第1部のHost / Client / Server構造を開発者の視点で見直してみる。</p>
+<table>
+<thead>
+<tr>
+<th>構成要素</th>
+<th>開発者が実際に触るもの</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Host</td>
+<td>作らない(既製アプリを使用)</td>
+</tr>
+<tr>
+<td>Client</td>
+<td>作らない(ホストに内蔵) — プロトコルテスト用にのみ記述</td>
+</tr>
+<tr>
+<td><strong>Server</strong></td>
+<td><strong>私たちが作るもの</strong> — 本文書のすべて</td>
+</tr>
+<tr>
+<td>転送層</td>
+<td>SDKが処理 — transportの種類だけ選択</td>
+</tr>
+</tbody></table>
+<h3>6.1 3大Primitive</h3>
+<table>
+<thead>
+<tr>
+<th>Primitive</th>
+<th>制御主体</th>
+<th>用途</th>
+<th>AMQSサンプルでは</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Tools</strong></td>
+<td>model-controlled(LLMが呼び出しを決定)</td>
+<td>関数実行、副作用の可能性あり</td>
+<td><code>get_regime</code>、<code>get_momentum_score</code>、<code>get_top_signals</code>、<code>check_stop_loss</code></td>
+</tr>
+<tr>
+<td><strong>Resources</strong></td>
+<td>application-controlled(ホストが管理)</td>
+<td>読み取り専用データ、URIで識別</td>
+<td><code>amqs://universe</code></td>
+</tr>
+<tr>
+<td><strong>Prompts</strong></td>
+<td>user-controlled(ユーザーが選択)</td>
+<td>再利用可能なプロンプトテンプレート</td>
+<td><code>cross_validate_ticker</code></td>
+</tr>
+</tbody></table>
+<h3>6.2 Transportの選択</h3>
+<table>
+<thead>
+<tr>
+<th>Transport</th>
+<th>通信方式</th>
+<th>用途</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>stdio</strong></td>
+<td>標準入出力</td>
+<td>ローカル(Claude Desktop、Cursor)</td>
+<td>最初は必ずこれから。デプロイ・認証不要</td>
+</tr>
+<tr>
+<td><strong>Streamable HTTP</strong></td>
+<td>単一HTTPエンドポイント</td>
+<td>リモートサーバー</td>
+<td>2025-03仕様以降SSEを代替する現行標準</td>
+</tr>
+<tr>
+<td>SSE(legacy)</td>
+<td>HTTP + Server-Sent Events</td>
+<td>リモート(旧型)</td>
+<td>deprecated — 新規開発では使用しないこと</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>初期資料の「stdio(ローカル)またはSSE(リモート)」という記述は旧仕様基準である。現行仕様ではリモートtransportは<strong>Streamable HTTP</strong>に統合された。</p>
+</blockquote>
+<h3>6.3 SDKの選択</h3>
+<table>
+<thead>
+<tr>
+<th>基準</th>
+<th>Python(<code>mcp</code> + FastMCP)</th>
+<th>TypeScript(<code>@modelcontextprotocol/sdk</code>)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>クオンツ・データ作業</td>
+<td>pandas / numpy / yfinanceエコシステムに直結</td>
+<td>別途ブリッジが必要</td>
+</tr>
+<tr>
+<td>コード量</td>
+<td>デコレータ3種で完結</td>
+<td>やや冗長</td>
+</tr>
+<tr>
+<td>デプロイ</td>
+<td><code>uv</code> / <code>pip</code></td>
+<td><code>npx</code>ワンコマンドデプロイが有利</td>
+</tr>
+<tr>
+<td>本サンプル</td>
+<td><strong>採用</strong></td>
+<td>—</td>
+</tr>
+</tbody></table>
+<p>クオンツ信号サーバーはデータスタックがPythonにあるため、Python SDKが自然な選択である。<code>FastMCP</code>は関数シグネチャとdocstringからtool schemaを自動生成する — docstringがそのままLLMに表示されるtool descriptionになるため、<strong>docstringの品質がtool呼び出しの精度を左右する</strong>。</p>
+<h2>7. プロジェクト構造と環境設定</h2>
+<pre><code>amqs-mcp-server/
+├── server.py                            # MCPサーバー本体(単一ファイル)
+├── requirements.txt
+├── claude_desktop_config.example.json   # Claude Desktop接続の設定例
+└── MCP_Server_Getting_Started.md        # 本文書
+</code></pre>
+<pre><code class="language-bash">python -m venv venv &amp;&amp; source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+# 即時デモ(ネットワーク・APIキー不要、合成価格)
+AMQS_MOCK=1 python server.py
+
+# 実データ(yfinance)
+python server.py
+</code></pre>
+<p><code>AMQS_MOCK=1</code>は再現可能な合成価格で動作するオフラインモードである。Tossダッシュボードのモックモードと同じ考え方 — キーなしでロジックを実演できることが、文書とCIを「生きた文書」にする条件である。</p>
+<h2>8. サーバー実装の段階別解剖</h2>
+<p><code>server.py</code>の全文は同梱ファイルを参照。ここでは核心パターンのみ取り上げる。</p>
+<h3>Step 1 — サーバーインスタンスとinstructions</h3>
+<pre><code class="language-python">from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP(
+    &quot;amqs-ai-infra&quot;,
+    instructions=(
+        &quot;AMQS-AI-Infra quant strategy signal server. ... &quot;
+        &quot;All output is a research reference signal, not investment advice.&quot;
+    ),
+)
+</code></pre>
+<p><code>instructions</code>はクライアントがサーバー全体の性格を理解するためのシステムヒントである。金融ツールであれば<strong>ディスクレーマーをサーバーレベルに埋め込むこと</strong>が、各tool出力に繰り返すよりも安全である(本サンプルは両方行う)。</p>
+<h3>Step 2 — 層の分離: データ / 戦略 / MCP</h3>
+<pre><code>データ層     get_prices()          yfinanceまたは合成データ + キャッシュ
+戦略層       composite_scores()    4-Factor z-score → 0〜100スコア(MCPと無関係な純関数)
+MCP層        @mcp.tool()           戦略関数を薄くラップしJSONにシリアライズ
+</code></pre>
+<p>戦略ロジックをMCPデコレータから分離すると、(1)ユニットテストが容易になり、(2)同じロジックをCLI・バックテスト・Signal Botで再利用できる。元リポジトリの<code>script/strategy.py</code>(エンジン)/<code>script/amqs_ai_infra.py</code>(CLI)の分離と同じ原理である。これが3章で述べた「MCPはAPIのアダプタ層」のコード実装である。</p>
+<h3>Step 3 — Tool定義: docstring = LLM向け仕様書</h3>
+<pre><code class="language-python">@mcp.tool()
+def get_top_signals(top_n: int = 10) -&gt; str:
+    &quot;&quot;&quot;AMQS Top-Nの買い候補を返す。サブテーマごとに最大4種のキャップを適用し、
+    GPUなど単一テーマへの過集中を防止する。マクロレジームがRISK_ONでない場合は警告を含む。&quot;&quot;&quot;
+</code></pre>
+<p>チェックリスト</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>型ヒント必須(<code>top_n: int = 10</code>)</td>
+<td>JSON Schema自動生成の根拠</td>
+</tr>
+<tr>
+<td>docstringに動作・制約・前提を明記</td>
+<td>LLMがこのtoolをいつ使うか判断する唯一の根拠</td>
+</tr>
+<tr>
+<td>戻り値は構造化されたJSON文字列</td>
+<td>LLMのパース安定性を確保(<code>ensure_ascii=False</code>で非ASCII文字を保存)</td>
+</tr>
+<tr>
+<td>入力検証+エラーをJSONで返す</td>
+<td>universe外のticker要求時に例外の代わりに<code>{&quot;error&quot;: ..., &quot;universe&quot;: [...]}</code> — LLMが自ら復旧可能</td>
+</tr>
+<tr>
+<td>上限クランプ(<code>min(top_n, len(UNIVERSE))</code>)</td>
+<td>LLMが<code>top_n=999</code>を入れても安全</td>
+</tr>
+</tbody></table>
+<h3>Step 4 — ドメインルールをtool内部で強制</h3>
+<p>サブテーマキャップ(テーマごとに最大4種)は、LLMに「守ってください」と依頼するものではなく、<strong>コードが強制する</strong>:</p>
+<pre><code class="language-python">for t, row in df.iterrows():
+    theme = row[&quot;subtheme&quot;]
+    if theme_count.get(theme, 0) &gt;= SUBTHEME_CAP:
+        continue          # GPU偏重をコードレベルで遮断
+</code></pre>
+<p>検証結果(Top-10、mock): <code>compute 4 / server 3 / software 2 / network 1</code> — キャップが正常に動作。リスクルールはプロンプトではなくコードに置く。これが「LLMはエクセル」原則のMCP版である。</p>
+<h3>Step 5 — ResourceとPrompt</h3>
+<pre><code class="language-python">@mcp.resource(&quot;amqs://universe&quot;)     # URIスキームは自由 — サーバー内の名前空間の慣例
+def universe_resource() -&gt; str: ...
+
+@mcp.prompt()
+def cross_validate_ticker(ticker: str) -&gt; str: ...
+</code></pre>
+<p>Promptは「Pythonができないこと(売上加速・13F・EPS Revision)をLLMに実行させる標準指示文」をサーバーが配布するチャネルである。元リポジトリの<code>prompts/AMQS_AI_Infra_kr.MD</code>をコピー&amp;ペーストしていたワークフローが、MCPではホストUIからのワンクリック呼び出しに変わる。</p>
+<h2>9. テスト — 3段階検証パイプライン</h2>
+<table>
+<thead>
+<tr>
+<th>段階</th>
+<th>方法</th>
+<th>検証対象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. ユニット</td>
+<td>モジュールをimportして関数を直接呼び出す</td>
+<td>戦略ロジック(MCPとは無関係)</td>
+</tr>
+<tr>
+<td>2. プロトコル</td>
+<td>MCPクライアントによるstdioハンドシェイク</td>
+<td>initialize → list_tools → call_tool</td>
+</tr>
+<tr>
+<td>3. インタラクティブ</td>
+<td>MCP Inspector</td>
+<td>実際のホスト視点でのUI検証</td>
+</tr>
+</tbody></table>
+<h3>9.1 ユニットテスト</h3>
+<pre><code class="language-python">import os; os.environ[&quot;AMQS_MOCK&quot;] = &quot;1&quot;
+import server
+print(server.get_top_signals(10))   # デコレータを経ても関数として直接呼び出し可能
+</code></pre>
+<h3>9.2 プロトコルテスト(実行検証済み)</h3>
+<pre><code class="language-python">from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+params = StdioServerParameters(command=&quot;python&quot;, args=[&quot;server.py&quot;],
+                               env={&quot;AMQS_MOCK&quot;: &quot;1&quot;})
+async with stdio_client(params) as (r, w):
+    async with ClientSession(r, w) as s:
+        await s.initialize()
+        tools = await s.list_tools()      # 4つのtoolを確認
+        out = await s.call_tool(&quot;get_regime&quot;, {})
+</code></pre>
+<p>実行結果</p>
+<pre><code>TOOLS: [&#39;get_regime&#39;, &#39;get_momentum_score&#39;, &#39;get_top_signals&#39;, &#39;check_stop_loss&#39;]
+RESOURCES: [&#39;amqs://universe&#39;]
+PROMPTS: [&#39;cross_validate_ticker&#39;]
+CALL get_regime OK: {&quot;regime&quot;: &quot;RISK_ON&quot;, ...}
+</code></pre>
+<p>このテストが第1部第2章の「動的発見(Dynamic Discovery)」特徴の実証である — クライアントはサーバーコードを一切知らずに、実行時の照会だけで機能一覧とschemaを取得する。</p>
+<h3>9.3 MCP Inspector</h3>
+<pre><code class="language-bash">npx @modelcontextprotocol/inspector python server.py
+</code></pre>
+<p>ブラウザUIでtool一覧・schema・呼び出し結果を対話的に確認する。Claude Desktop接続前の必須関門。</p>
+<blockquote>
+<p>よくある落とし穴: stdioサーバーで<code>print()</code>デバッグを禁止。stdoutはJSON-RPCチャネルであるため、ログは必ず<code>logging</code>(stderr)に送ること。これがstdioサーバー誤動作の原因第1位である。</p>
+</blockquote>
+<h2>10. Claude Desktopへの接続</h2>
+<p><code>claude_desktop_config.json</code>の位置:</p>
+<table>
+<thead>
+<tr>
+<th>OS</th>
+<th>パス</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>macOS</td>
+<td><code>~/Library/Application Support/Claude/claude_desktop_config.json</code></td>
+</tr>
+<tr>
+<td>Windows</td>
+<td><code>%APPDATA%\Claude\claude_desktop_config.json</code></td>
+</tr>
+</tbody></table>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;amqs-ai-infra&quot;: {
+      &quot;command&quot;: &quot;python&quot;,
+      &quot;args&quot;: [&quot;/ABSOLUTE/PATH/TO/amqs-mcp-server/server.py&quot;],
+      &quot;env&quot;: { &quot;AMQS_MOCK&quot;: &quot;0&quot; }
+    }
+  }
+}
+</code></pre>
+<p>注意事項: (1)パスは必ず絶対パス、(2)venv使用時は<code>command</code>をvenv内のpythonの絶対パスに、(3)修正後はClaude Desktopを完全に再起動すること。接続すると次のような対話が可能になる:</p>
+<pre><code>ユーザー: 今のレジームを確認して、RISK_ONならTop 10を出してMUが何位か教えて。
+         あとMUの平均取得単価が200ドルだから損切りラインに達したかも見て。
+
+Claude: [get_regime] → RISK_ON
+        [get_top_signals(10)] → MU 3位、tier SATELLITE
+        [check_stop_loss(&quot;MU&quot;, 200.0)] → pnl -17.95%, action EXIT
+        → 「損切りライン-12%を下回りました。AMQSルール上EXIT信号です...」
+</code></pre>
+<p>第1部第4章の「ニュース要約→Slack送信」の例と同様に、ユーザーは自然言語で話し、LLMがtoolの組み合わせを自ら決定する。このtool orchestrationがMCPの実質的な価値である。</p>
+<h2>11. リモートデプロイ(Streamable HTTP)</h2>
+<p>stdioからリモートへの切り替えは最後の1行変更のみで完了する:</p>
+<pre><code class="language-python">mcp.run(transport=&quot;streamable-http&quot;)   # デフォルト http://localhost:8000/mcp
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>stdio</th>
+<th>Streamable HTTP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>利用者</td>
+<td>本人1人</td>
+<td>チーム・外部公開</td>
+</tr>
+<tr>
+<td>認証</td>
+<td>不要(ローカルプロセス)</td>
+<td><strong>OAuth 2.1必須</strong>(仕様要件)</td>
+</tr>
+<tr>
+<td>デプロイ</td>
+<td>—</td>
+<td>Docker + reverse proxy、またはCloudflare Workersなど</td>
+</tr>
+<tr>
+<td>状態管理</td>
+<td>プロセス=セッション</td>
+<td>セッションIDベース、サーバースケールアウトを考慮</td>
+</tr>
+</tbody></table>
+<p>Signal Botのウェブビュー(<code>python -m http.server 8011</code>)をチームに共有していたのと同様に、MCPサーバーもリモート化すればチーム全員のClaudeが同一のAMQS信号ソースを使えるようになる — ただし認証なしの公開は絶対に禁止(次節参照)。</p>
+<h2>12. セキュリティ考慮事項(CTI視点)</h2>
+<p>MCPは新たな攻撃対象領域である。サーバーを作った瞬間、防御者視点も同時に持つ必要がある。</p>
+<table>
+<thead>
+<tr>
+<th>脅威</th>
+<th>内容</th>
+<th>本サンプルの対応/推奨</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tool Poisoning</td>
+<td>悪意あるサーバーがtool descriptionに隠れた指示を埋め込み、LLMを操作</td>
+<td><strong>サーバー作成者</strong>として: descriptionを機能説明に限定。<strong>利用者</strong>として: サードパーティサーバーのdescriptionを監査後にインストール</td>
+</tr>
+<tr>
+<td>Prompt Injection(間接的)</td>
+<td>toolが返した外部データ(ニュース・Web)内の指示文をLLMが実行</td>
+<td>戻り値を構造化JSONに限定し、自由テキストを最小化</td>
+</tr>
+<tr>
+<td>Confused Deputy</td>
+<td>LLMがユーザーの意図を超えるtool呼び出しを実行</td>
+<td>副作用のあるtool(注文実行など)は作らない — 本サーバーは<strong>read-only信号専用</strong>。実取引連携時はhuman-in-the-loopの承認を必須化</td>
+</tr>
+<tr>
+<td>Secrets露出</td>
+<td>configの<code>env</code>にAPIキーを平文保存</td>
+<td>KIS APIなどの連携時はOSキーチェーン/シークレットマネージャーを使用。<code>.gitignore</code>+pre-commitシークレットスキャン(LAON VaultGuard系ツール)</td>
+</tr>
+<tr>
+<td>Rug Pull</td>
+<td>信頼を得た後、サーバーのアップデートでtoolの動作が変更される</td>
+<td>バージョン固定インストール、変更差分のレビュー</td>
+</tr>
+<tr>
+<td>無認証のリモート公開</td>
+<td>Streamable HTTPサーバーの公開時に無断使用・データ漏洩</td>
+<td>OAuth 2.1+レート制限、内部網は最低限mTLS</td>
+</tr>
+</tbody></table>
+<p>金融信号サーバー特有のリスクの一つ: <strong>LLMがtool出力を過剰解釈し確定的な取引助言に変換すること</strong>。対策は三重である — サーバー<code>instructions</code>にディスクレーマー、各tool出力に<code>disclaimer</code>フィールド、promptテンプレート末尾に告知を強制。</p>
+<h2>13. 拡張ロードマップ</h2>
+<table>
+<thead>
+<tr>
+<th>段階</th>
+<th>内容</th>
+<th>難易度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><code>backtest.py</code>連携 — <code>run_backtest(start, end)</code> toolを追加</td>
+<td>低</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Signal Botの<code>signals.json</code>をResourceとして公開(<code>amqs://signals/latest</code>)</td>
+<td>低</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ARDS-Xレジーム分類器を別のMCPサーバーへ — AMQS/ARDSのハンドオフをLLMがオーケストレーション</td>
+<td>中</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Toss Open API / KIS API連携 — ただし実注文toolは承認ゲート必須</td>
+<td>高</td>
+</tr>
+<tr>
+<td>5</td>
+<td>クリプトニュースパイプライン(web3paper)連携 — ニュース収集・要約toolでCTI/投資を統合</td>
+<td>中</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Streamable HTTP + OAuthによるチーム展開、多言語(KR/EN/ZH/JP)のtool description</td>
+<td>中</td>
+</tr>
+</tbody></table>
+<h2>14. まとめ</h2>
+<p><strong>概念(第1部)</strong></p>
+<ol>
+<li>MCPはLLMと外部ツールのM×N統合問題をM+Nに縮小するオープン標準 — 「AIのUSB-Cポート」。</li>
+<li>Host / Client / Server構造で開発者が作るのはServerだけである。</li>
+<li>MCPはAPIを代替しない — 既存API上に載る<strong>LLMフレンドリーなアダプタ層</strong>であり、核心的な違いは動的発見とLLM主導の呼び出しである。</li>
+</ol>
+<p><strong>開発(第2部)</strong>4. MCPサーバー開発とは、<strong>決定論的計算をTools、静的データをResources、LLMワークフローをPrompts</strong>として公開することである。
+5. AMQSのPython/LLM役割分担表がそのままMCP設計図になる — リスクルール(サブテーマキャップ、損切り)はプロンプトではなくコードに強制する。
+6. 開発順序: FastMCP + stdio → ユニットテスト → プロトコルテスト → Inspector → Claude Desktop → (必要に応じて)Streamable HTTP + OAuth。
+7. サーバーを作る瞬間、攻撃対象領域も作られる — Tool Poisoning、Injection、Secretsを設計段階から考慮する。</p>
+<h2>参考リンク</h2>
+<ul>
+<li>MCP公式仕様・文書: <a href="https://modelcontextprotocol.io">https://modelcontextprotocol.io</a></li>
+<li>Python SDK: <a href="https://github.com/modelcontextprotocol/python-sdk">https://github.com/modelcontextprotocol/python-sdk</a></li>
+<li>MCP Inspector: <a href="https://github.com/modelcontextprotocol/inspector">https://github.com/modelcontextprotocol/inspector</a></li>
+<li>AMQS-AI-Infra原文書: <a href="https://github.com/gameworkerkim/vibe-investing/tree/main/01.Trading%20Strategy/Adaptive%20Momentum%20Quant%20Strategy%20(AMQS)%20for%20AI%20Infra">https://github.com/gameworkerkim/vibe-investing/tree/main/01.Trading%20Strategy/Adaptive%20Momentum%20Quant%20Strategy%20(AMQS)%20for%20AI%20Infra</a></li>
+</ul>
+<hr>
+<p><em>本文書とコードは研究・教育目的であり、投資勧誘ではない。AMQSは高リスクなクオンツ戦略であり、元本損失の可能性がある。</em>
+<em>License: MIT — &quot;Built on AMQS by Dennis Kim, vibe-investing repository.&quot;</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MCP/Mcp%20server%20getting%20started_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mapping AI Agent Frameworks: Microsoft Agent Framework for Go vs LangChain / LangGraph — VibeQuant</title>
+  <meta name="description" content="Centered on Microsoft Agent Framework for Go and LangChain/LangGraph, this piece maps the structure, trade-offs, and selection criteria for AI agent and multi-agent orchestration frameworks, with runnable starter code." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-en/" />
+  <meta property="og:title" content="Mapping AI Agent Frameworks: Microsoft Agent Framework for Go vs LangChain / LangGraph" />
+  <meta property="og:description" content="Centered on Microsoft Agent Framework for Go and LangChain/LangGraph, this piece maps the structure, trade-offs, and selection criteria for AI agent and multi-agent orchestration frameworks, with runnable starter code." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Mapping AI Agent Frameworks: Microsoft Agent Framework for Go vs LangChain / LangGraph","description":"Centered on Microsoft Agent Framework for Go and LangChain/LangGraph, this piece maps the structure, trade-offs, and selection criteria for AI agent and multi-agent orchestration frameworks, with runnable starter code.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AI-Agent-Framework/AI-Agent-Framework_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-22","dateModified":"2026-07-22","inLanguage":"en","keywords":"AI Agents, Microsoft Agent Framework, LangGraph, LangChain, Go, Multi-agent"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Mapping AI Agent Frameworks: Microsoft Agent Framework for Go vs LangChain / LangGraph</h1>
+        <p class="article-dates"><time datetime="2026-07-22">발행 2026.07.22</time> · 주제 AI Agents · Microsoft Agent Framework · LangGraph · LangChain · Go · Multi-agent</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/ai-agent-framework-ai-agent-framework/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/ai-agent-framework-ai-agent-framework-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/ai-agent-framework-ai-agent-framework-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/ai-agent-framework-ai-agent-framework-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">The concepts, competitive landscape, and a working Getting Started for agent orchestration frameworks</p>
+        <p class="article-byline">2026.07.22 Dennis Kim</p>
+      </header>
+      <div class="article-body prose"><h2>1. Introduction — The Problem Frameworks Actually Solve</h2>
+<p>Wiring a tool onto an LLM for a single call takes maybe 40 lines of code. Frameworks become necessary at the next stage: where do you resume when an agent dies three hours into a task, how do you express a branch that requires human approval, and how do you trace why call number 7 out of 12 tool calls went wrong. None of these are solved by prompt engineering.</p>
+<p>To repeat an expression I keep coming back to: <strong>an LLM is a spreadsheet, not an oracle.</strong> The same applies to frameworks. A framework doesn&#39;t raise a model&#39;s reasoning quality. What it raises is <em>the odds of recovering when the model is wrong</em> and <em>how fast you notice it was wrong.</em> Viewed through this lens, tool selection becomes much simpler.</p>
+<p>This market went through a consolidation between Q4 2025 and the first half of 2026. LangChain and LangGraph shipped 1.0 in October 2025, and Microsoft Agent Framework (MAF) went through an RC in February 2026 before reaching .NET/Python 1.0 GA in April. AutoGen and Semantic Kernel are both on a path to being absorbed into MAF. In other words, this isn&#39;t a moment for picking a framework — it&#39;s a moment for <strong>deciding which layer you want to hand off to a framework.</strong></p>
+<hr>
+<h2>2. Concepts — The Three Layers of the Agent Stack</h2>
+<p>The reason these frameworks feel incomparable is that they operate at different layers. Let&#39;s split them apart first.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>What it does</th>
+<th>What breaks without it</th>
+<th>Representative implementations</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>L1. Agent harness</strong></td>
+<td>The model-call → tool-call → inject-result → re-call loop, structured output, retries</td>
+<td>You can write it yourself (tens of lines). But add streaming, token accounting, and error branching and it quickly becomes hundreds of lines</td>
+<td>LangChain <code>create_agent</code>, MAF <code>agent</code>, Eino ADK</td>
+</tr>
+<tr>
+<td><strong>L2. Orchestration</strong></td>
+<td>Multi-agent graphs, conditional routing, parallel/sequential/group collaboration, sub-workflows</td>
+<td>State passed between agents degrades into a global dict. Debugging becomes impossible</td>
+<td>LangGraph, MAF <code>workflow</code>, CrewAI Flows</td>
+</tr>
+<tr>
+<td><strong>L3. Runtime / operations</strong></td>
+<td>Checkpointing, restarts, durable execution, HITL interrupts, observability (OTel), deployment</td>
+<td>A long-running task loses everything on a single process restart</td>
+<td>LangGraph durable execution, MAF checkpointing, Foundry Hosted Agents</td>
+</tr>
+</tbody></table>
+<p>The key point is that <strong>L3 is the real moat.</strong> Anyone can write L1, and L2 can be expressed as code, but the property of &quot;a three-day approval workflow keeps going even if the server dies&quot; effectively means building a task queue + state store + idempotency design from scratch if you try to implement it yourself.</p>
+<h3>2.1 Not using a framework is also a legitimate choice</h3>
+<p>There&#39;s a particularly strong counter-argument in the Go community. The agent loop itself is short, OpenAI, Anthropic, and Google all provide official Go SDKs, and Go engineers customarily prefer the standard library plus a handful of dependencies. In fact, as of mid-2026, a large share of Go teams don&#39;t use a framework at all.</p>
+<p>There&#39;s also a security angle layered on top. A multi-provider SDK is <strong>the single point where every provider&#39;s API key ends up concentrated.</strong> The dependency tree itself is becoming an attack surface.</p>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Approximate dependency count (community measurement, as of 2026-04)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LangChainGo</td>
+<td>170+</td>
+</tr>
+<tr>
+<td>Genkit Go</td>
+<td>129</td>
+</tr>
+<tr>
+<td>Eino</td>
+<td>37</td>
+</tr>
+<tr>
+<td>Lightweight SDKs (GoAI, etc.)</td>
+<td>2–5</td>
+</tr>
+</tbody></table>
+<p>After the 2025–2026 LiteLLM package tampering incident and the npm axios supply-chain breach, this table is no longer just a reference figure. From a CTI standpoint, adopting an agent framework is <strong>a trade-off between runtime convenience and supply-chain exposure.</strong></p>
+<hr>
+<h2>3. Microsoft Agent Framework for Go</h2>
+<blockquote>
+<p>Repository: <code>github.com/microsoft/agent-framework-go</code> · License MIT · Language 100% Go</p>
+</blockquote>
+<h3>3.1 Summary</h3>
+<p>MAF is a multi-language open-source framework spanning .NET, Python, and Go, aimed at going beyond prototypes to <strong>agents actually operated in production.</strong> It supports a broad ecosystem including Microsoft Foundry, Azure OpenAI, OpenAI, MCP, A2A, AG-UI, and the GitHub Copilot SDK.</p>
+<p>There&#39;s one important structural fact. <strong>The Go implementation is developed in a separate repository from the mainline .NET/Python repo, and it&#39;s in public preview.</strong> In other words, the &quot;MAF 1.0 GA&quot; headline is a .NET/Python story, not a Go story. Missing this distinction leads to disappointment once you notice how many features are actually missing when planning an adoption.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>.NET / Python</th>
+<th>Go</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Status</td>
+<td>1.0 GA (2026-04)</td>
+<td>Public preview</td>
+</tr>
+<tr>
+<td>Repository</td>
+<td><code>microsoft/agent-framework</code></td>
+<td><code>microsoft/agent-framework-go</code> (separate)</td>
+</tr>
+<tr>
+<td>Breadth of product integration</td>
+<td>Wide</td>
+<td>Narrow</td>
+</tr>
+<tr>
+<td>Unimplemented features</td>
+<td>Mostly resolved</td>
+<td>Numerous (see §3.3)</td>
+</tr>
+</tbody></table>
+<h3>3.2 Advantages</h3>
+<ol>
+<li><strong>Fully leverages Go&#39;s runtime characteristics</strong> — goroutine-based concurrency, low memory footprint, single-binary deployment. Agent workloads are inherently long-running, concurrent, and I/O-bound, so they map well onto Go&#39;s shape.</li>
+<li><strong>Operational features built into the framework</strong> — checkpointing, restartability, streaming, human-in-the-loop (HITL), and time-travel patterns provided at the workflow layer.</li>
+<li><strong>Graph-based orchestration</strong> — supports sequential, concurrent, group-collaboration, conditional-routing, and sub-workflow patterns.</li>
+<li><strong>Middleware chain</strong>— request/response handling, logging, OpenTelemetry, context providers,<strong>tool approval</strong>, and automatic tool calling. The tool-approval middleware matters especially from a security standpoint (see §7).</li>
+<li><strong>First-class observability</strong> — OpenTelemetry integration for both agents and workflows.</li>
+<li><strong>Provider flexibility</strong> — not tied to a specific LLM vendor; you can swap without rewriting the architecture.</li>
+<li><strong>Agent Skills</strong> — build a domain knowledge base from files, inline definitions, or scripts that agents can discover and use.</li>
+<li><strong>MIT license</strong> — low barrier to commercial use.</li>
+</ol>
+<h3>3.3 Drawbacks and Limitations</h3>
+<p>The unimplemented list is not short. Based on the repository README and the .NET–Go feature comparison document, it breaks down as follows.</p>
+<table>
+<thead>
+<tr>
+<th>Missing feature</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Handoff orchestration</strong></td>
+<td>You have to build control-transfer patterns between agents yourself. Directly impacts customer-facing routing scenarios</td>
+</tr>
+<tr>
+<td><strong>Declarative agents</strong></td>
+<td>No YAML/JSON-config-based agent definitions → can&#39;t modify agents without a code deployment</td>
+</tr>
+<tr>
+<td><strong>RAG</strong></td>
+<td>Retrieval-augmented pipelines need to be built separately</td>
+</tr>
+<tr>
+<td><strong>CodeAct</strong></td>
+<td>No support for code-execution-based actions</td>
+</tr>
+<tr>
+<td><strong>Functional workflows</strong></td>
+<td>No support for functional-workflow style</td>
+</tr>
+<tr>
+<td><strong>Foundry-hosted deployment</strong></td>
+<td>Can&#39;t deploy directly to Foundry (requires a container workaround, etc.)</td>
+</tr>
+<tr>
+<td><strong>DevUI / AF Labs</strong></td>
+<td>No developer UI or experimental features → local debugging experience is worse than Python&#39;s</td>
+</tr>
+</tbody></table>
+<p>Additional points to consider</p>
+<ul>
+<li><strong>Ecosystem maturity</strong> — less product integration than .NET, and the API surface is still moving. You should assume breaking changes are possible in the preview stage.</li>
+<li><strong>Small community size</strong> — see the fact-check below.</li>
+<li><strong>Third-party system responsibility shift</strong> — if you use external servers, agents, or models instead of the Azure Direct model, responsibility for data flow, cost, and compliance falls entirely on you. Microsoft&#39;s documentation states this explicitly.</li>
+<li><strong>The <code>DefaultAzureCredential</code> trap</strong> — it&#39;s meant for development convenience. In production, you should specify a concrete credential such as a managed identity. The fallback mechanism performs a sequential search, adding latency and creating a security risk that an unintended credential gets picked.</li>
+</ul>
+<h3>3.4 Fact-Check — Circulating Figures Contain Errors</h3>
+<p>Several summaries describe this repository as having &quot;360 stars, 14 contributors.&quot; <strong>A direct check of the repository page in July 2026 shows roughly 16 stars, 1 fork, 3 contributors, 406 commits, and no published release.</strong> The figure of 360 appears to be confused with the mainline <code>microsoft/agent-framework</code> repository (tens of thousands) or a different project.</p>
+<p>This gap isn&#39;t trivial. 16 stars versus 360 stars implies entirely different expectations about <strong>will I get a response if I file an issue.</strong> If you&#39;re basing an adoption decision on community size, be sure to check the repository directly.</p>
+<blockquote>
+<p>Metrics change depending on when they&#39;re checked. The figures above are as of July 2026; when citing them, it&#39;s advisable to note the snapshot date alongside.</p>
+</blockquote>
+<hr>
+<h2>4. LangChain 1.0 / LangGraph 1.0</h2>
+<h3>4.1 The division of roles is now clear after 1.0</h3>
+<p>The October 2025 1.0 release redefined the relationship between the two projects. Previously the framing was &quot;use LangChain, and move to LangGraph if it&#39;s insufficient,&quot; but now <strong>LangChain is a higher-level abstraction sitting on top of the LangGraph runtime.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Dimension</th>
+<th>LangChain 1.0</th>
+<th>LangGraph 1.0</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Layer</td>
+<td>L1 (agent harness)</td>
+<td>L2 + L3 (orchestration + runtime)</td>
+</tr>
+<tr>
+<td>Core API</td>
+<td><code>create_agent</code></td>
+<td><code>StateGraph</code>, checkpointers, <code>interrupt</code></td>
+</tr>
+<tr>
+<td>Orientation</td>
+<td>Build and ship fast</td>
+<td>Fine-grained control and durability</td>
+</tr>
+<tr>
+<td>Execution model</td>
+<td>Standard tool-calling loop</td>
+<td>Graph-based execution (branches, loops, state revisits)</td>
+</tr>
+<tr>
+<td>Stability commitment</td>
+<td>No breaking changes before 2.0</td>
+<td>Same</td>
+</tr>
+<tr>
+<td>Languages</td>
+<td>Python, TypeScript</td>
+<td>Python, TypeScript</td>
+</tr>
+</tbody></table>
+<p>LangChain 1.0 was rewritten to focus on the core agent loop, and introduced a new concept, <strong>middleware</strong>, providing HITL, summarization, and PII masking as built-in middleware. Structured output was integrated into the main loop, eliminating an extra LLM call and reducing both latency and cost.</p>
+<p>LangGraph 1.0 bills itself as &quot;the first stable major release in the space of durable agent frameworks.&quot; The only significant change is the deprecation of <code>langgraph.prebuilt</code>, with its functionality moved to <code>langchain.agents</code>. Backward compatibility is preserved.</p>
+<h3>4.2 LangGraph&#39;s Decisive Strength — Durable Execution</h3>
+<p>The reason to use LangGraph essentially comes down to one thing: <strong>state persists automatically.</strong> Even if the server restarts mid-conversation, or a long-running workflow is interrupted, execution resumes precisely at the point it stopped. Because persistence and resumption happen without custom DB logic, you can express approval processes spanning several days or background work that crosses sessions.</p>
+<p>HITL is also a first-class API. Pausing execution for human review, revision, or approval comes down to a single line: <code>interrupt</code>. In systems that need a human in the loop for high-stakes decisions, this one line dictates the entire architecture.</p>
+<h3>4.3 Advantages</h3>
+<ol>
+<li><strong>An overwhelming ecosystem</strong> — #1 in integration count, documentation, examples, Stack Overflow answers, and the job market. Tens of millions of downloads per month.</li>
+<li><strong>Production references</strong> — Uber, LinkedIn, Klarna, and J.P. Morgan have publicly stated they run LangGraph in production.</li>
+<li><strong>Mixed expression of determinism and agency</strong> — real systems are never 100% agentic nor 100% deterministic. You can explicitly model a structure where some branches use fixed logic and others use LLM judgment, via a graph.</li>
+<li><strong>LangSmith integration</strong> — observability, evaluation, and deployment tooling attach across the lifecycle.</li>
+<li><strong>Dynamic tool calling</strong> — control the set of available tools per execution point.</li>
+</ol>
+<h3>4.4 Drawbacks</h3>
+<ol>
+<li><strong>Python/TypeScript only</strong> — can&#39;t be directly attached to Go, Java, or Rust backends. You&#39;d need to split it out as an HTTP service or switch languages.</li>
+<li><strong>Weight of the abstraction layer</strong> — early LangChain was criticized for building a &quot;customization wall&quot; through hidden prompts and implicit context manipulation. 1.0 resolved much of this, but there&#39;s still a burden of having to read what the framework is doing.</li>
+<li><strong>Dependency footprint</strong> — not lightweight from a supply-chain perspective.</li>
+<li><strong>Coupling with a commercial product</strong> — LangSmith is not open source. Using observability to its fullest puts you on a commercial path. You can substitute your own OTel stack, but the integration quality differs.</li>
+<li><strong>A different position on the learning curve</strong> — LangChain is easy, LangGraph is hard. You need to understand state schemas, reducers, checkpointers, and the thread concept.</li>
+</ol>
+<hr>
+<h2>5. Full Map of Competing Projects</h2>
+<h3>5.1 Positioning by Language and Layer</h3>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Language</th>
+<th>Primary layer</th>
+<th>Status (2026-07)</th>
+<th>One-line description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Microsoft Agent Framework</strong></td>
+<td>C#, Python</td>
+<td>L1–L3</td>
+<td>1.0 GA (2026-04)</td>
+<td>Successor to SK/AutoGen. Oriented toward enterprise governance</td>
+</tr>
+<tr>
+<td><strong>Microsoft Agent Framework for Go</strong></td>
+<td>Go</td>
+<td>L1–L3</td>
+<td>Public preview</td>
+<td>The Go implementation above. Feature gaps exist</td>
+</tr>
+<tr>
+<td><strong>LangGraph</strong></td>
+<td>Python, TS</td>
+<td>L2–L3</td>
+<td>1.0 GA (2025-10)</td>
+<td>Durable state-graph runtime. The de facto standard</td>
+</tr>
+<tr>
+<td><strong>LangChain</strong></td>
+<td>Python, TS</td>
+<td>L1</td>
+<td>1.0 GA (2025-10)</td>
+<td>The fastest path to building an agent</td>
+</tr>
+<tr>
+<td><strong>AutoGen</strong></td>
+<td>Python</td>
+<td>L2</td>
+<td>On a path into MAF</td>
+<td>Started from multi-agent conversation/collaboration research</td>
+</tr>
+<tr>
+<td><strong>Semantic Kernel</strong></td>
+<td>C#, Python, Java</td>
+<td>L1–L2</td>
+<td>On a path into MAF</td>
+<td>Lightweight orchestration SDK. Migration tooling provided</td>
+</tr>
+<tr>
+<td><strong>CrewAI</strong></td>
+<td>Python</td>
+<td>L2</td>
+<td>Active</td>
+<td>Role-based collaboration + event-driven Flows</td>
+</tr>
+<tr>
+<td><strong>Google ADK</strong></td>
+<td>Python,<strong>Go</strong>, Java</td>
+<td>L1–L2</td>
+<td>Go 1.0 (2025-11)</td>
+<td>Sequential/parallel/loop agent primitives, native OTel</td>
+</tr>
+<tr>
+<td><strong>Genkit</strong></td>
+<td><strong>Go</strong>, JS</td>
+<td>L1</td>
+<td>Production-oriented</td>
+<td>Flow-centric. Strong local debugging/tracing</td>
+</tr>
+<tr>
+<td><strong>Eino (CloudWeGo)</strong></td>
+<td><strong>Go</strong></td>
+<td>L1–L2</td>
+<td>Active, validated at large-scale operation</td>
+<td>Used in production at ByteDance. Component graph, circuit breaker/backoff</td>
+</tr>
+<tr>
+<td><strong>LangChainGo</strong></td>
+<td><strong>Go</strong></td>
+<td>L1</td>
+<td>Community port</td>
+<td>Widest surface area, lags behind the mainline</td>
+</tr>
+<tr>
+<td><strong>OpenAI Agents SDK</strong></td>
+<td>Python,<strong>Go</strong></td>
+<td>L1</td>
+<td>Active</td>
+<td>Handoffs + guardrails, MCP support</td>
+</tr>
+<tr>
+<td><strong>Dify</strong></td>
+<td>Python (product)</td>
+<td>GUI</td>
+<td>Active</td>
+<td>No-code workflow / RAG pipelines</td>
+</tr>
+</tbody></table>
+<h3>5.2 Competitors Within the Go Camp</h3>
+<p>&quot;Real, but young&quot; is the accurate description of the Go agent ecosystem. Reference figures from community tallies as of May 2026:</p>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Stars (approx.)</th>
+<th>MCP support</th>
+<th>Strengths</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Eino</td>
+<td>11,100+</td>
+<td>Unsupported (as of that time)</td>
+<td>Production hardening, graph composition</td>
+</tr>
+<tr>
+<td>LangChainGo</td>
+<td>9,200+</td>
+<td>Unsupported (as of that time)</td>
+<td>10+ providers, a complete RAG pipeline</td>
+</tr>
+<tr>
+<td>Google ADK Go</td>
+<td>—</td>
+<td>Supported</td>
+<td>Reached 1.0, native OTel</td>
+</tr>
+<tr>
+<td>OpenAI Agents Go</td>
+<td>255</td>
+<td>Supported</td>
+<td>Handoffs + guardrails</td>
+</tr>
+<tr>
+<td><strong>MAF for Go</strong></td>
+<td>~16</td>
+<td>Supported (MCP/A2A/AG-UI)</td>
+<td>Aligned with Azure/Foundry, checkpointing</td>
+</tr>
+</tbody></table>
+<p>If MCP integration is the priority, Google ADK Go, OpenAI Agents Go, and MAF Go are candidates. For pure throughput and proven stability, Eino is strong. On the other hand, <strong>if Azure Entra ID/Purview/Defender-based governance is a requirement, there&#39;s effectively no alternative to MAF.</strong> This is the one sufficient reason MAF Go stays under consideration despite its low star count.</p>
+<hr>
+<h2>6. Selection Criteria — What Should You Use for Which Workload?</h2>
+<h3>6.1 Decision order</h3>
+<pre><code>1) Is the language stack fixed?
+   Go/single-binary required → MAF Go / Eino / ADK Go / no framework
+   Python·TS is possible     → go to 2)
+
+2) Does execution run for minutes or more, or involve a human approval step midway?
+   Yes  → LangGraph (or MAF workflow)
+   No → go to 3)
+
+3) Is the organization within an Azure/Entra governance boundary?
+   Yes  → MAF (.NET/Python) + Foundry Hosted Agents
+   No → start with LangChain create_agent, drop down to LangGraph if needed
+
+4) Do non-developers need to modify the workflow?
+   Yes → GUI-based tools like Dify
+</code></pre>
+<h3>6.2 Concrete Use Cases</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Recommendation</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Internal document Q&amp;A bot, 3–5 tools</td>
+<td><strong>LangChain <code>create_agent</code></strong></td>
+<td>Ships in a day. No graph needed</td>
+</tr>
+<tr>
+<td>A 3-day multi-stage approval pipeline</td>
+<td><strong>LangGraph</strong></td>
+<td>Durable state + <code>interrupt</code>. Resilient to server restarts</td>
+</tr>
+<tr>
+<td>Multi-agent research → verification → report drafting</td>
+<td><strong>LangGraph</strong>or<strong>CrewAI</strong></td>
+<td>The former if you need graph control, the latter for role-based collaboration description</td>
+</tr>
+<tr>
+<td>An agent monitoring exchange quotes/order flow in real time</td>
+<td><strong>Go: MAF Go / Eino / no framework</strong></td>
+<td>Latency and GC pressure dominate. Keep the Python runtime off the critical path</td>
+</tr>
+<tr>
+<td>A CTI ingestion → normalization → report drafting pipeline</td>
+<td><strong>LangGraph + a separate collector</strong></td>
+<td>Per-source failure isolation and retry points need to be explicit</td>
+</tr>
+<tr>
+<td>An internal agent deployed to Microsoft 365 / Teams</td>
+<td><strong>MAF (.NET/Python)</strong></td>
+<td>Foundry Hosted Agents, Teams/M365 Copilot publishing path</td>
+</tr>
+<tr>
+<td>An existing Semantic Kernel / AutoGen codebase</td>
+<td><strong>Migrate to MAF</strong></td>
+<td>Official migration guide and tooling provided</td>
+</tr>
+<tr>
+<td>A non-developer planner needs to edit prompt chains directly</td>
+<td><strong>Dify</strong></td>
+<td>Declarative GUI. Versioning and audit still need separate design</td>
+</tr>
+<tr>
+<td>Agent logic fits in a 40-line loop</td>
+<td><strong>No framework</strong></td>
+<td>This is the majority position among Go teams</td>
+</tr>
+</tbody></table>
+<h3>6.3 A Hybrid Deployment Is Realistic</h3>
+<p>Foundry&#39;s hosted runtime is designed to be <strong>framework-agnostic</strong>, letting you deploy agents built with MAF, the GitHub Copilot SDK, LangGraph, and others without rewriting them. In other words, a combination like &quot;orchestration on LangGraph, hosting and governance on Foundry&quot; is viable. It&#39;s practically advantageous not to treat framework choice as all-or-nothing.</p>
+<hr>
+<h2>7. Getting Started for Beginners</h2>
+<h3>7.1 Microsoft Agent Framework for Go</h3>
+<p><strong>Install</strong></p>
+<pre><code class="language-bash">go get github.com/microsoft/agent-framework-go
+</code></pre>
+<p><strong>Environment variables</strong></p>
+<pre><code class="language-bash">export FOUNDRY_PROJECT_ENDPOINT=&quot;&lt;your-endpoint&gt;&quot;
+export FOUNDRY_MODEL=&quot;gpt-4o-mini&quot;   # optional
+az login                              # secure credential source
+</code></pre>
+<p><strong>A basic agent</strong></p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;cmp&quot;
+	&quot;context&quot;
+	&quot;fmt&quot;
+	&quot;os&quot;
+
+	&quot;github.com/Azure/azure-sdk-for-go/sdk/azidentity&quot;
+	&quot;github.com/microsoft/agent-framework-go/provider/foundryprovider&quot;
+)
+
+func main() {
+	endpoint := os.Getenv(&quot;FOUNDRY_PROJECT_ENDPOINT&quot;)
+	model := cmp.Or(os.Getenv(&quot;FOUNDRY_MODEL&quot;), &quot;gpt-4o-mini&quot;)
+
+	// Authenticate with Microsoft Foundry
+	token, err := azidentity.NewDefaultAzureCredential(nil)
+	if err != nil {
+		panic(err)
+	}
+
+	// Create the Foundry agent
+	a := foundryprovider.NewAgent(endpoint, token, foundryprovider.ModelDeployment(model),
+		foundryprovider.AgentConfig{
+			Instructions: &quot;You are a helpful assistant.&quot;,
+		},
+	)
+
+	// Run it
+	ctx := context.Background()
+	fmt.Println(a.RunText(ctx, &quot;Write a haiku about the Microsoft Agent Framework&quot;).Collect())
+}
+</code></pre>
+<p><strong>The one line you must change before going to production</strong></p>
+<pre><code class="language-go">// Development: probes multiple credential sources sequentially → latency, false positives, security risk
+token, _ := azidentity.NewDefaultAzureCredential(nil)
+
+// Production: specify the credential to use explicitly
+token, _ := azidentity.NewManagedIdentityCredential(&amp;azidentity.ManagedIdentityCredentialOptions{
+	ID: azidentity.ClientID(&quot;&lt;user-assigned-client-id&gt;&quot;),
+})
+</code></pre>
+<p><strong>Directories to look at next</strong></p>
+<table>
+<thead>
+<tr>
+<th>Path</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>examples/01-get-started</code></td>
+<td>hello world → step by step up to workflows</td>
+</tr>
+<tr>
+<td><code>examples/02-agents</code></td>
+<td>Tools, middleware, providers, observability, A2A, AG-UI, MCP, skills</td>
+</tr>
+<tr>
+<td><code>examples/03-workflows</code></td>
+<td>Multi-agent patterns, routing, checkpointing</td>
+</tr>
+<tr>
+<td><code>examples/05-end-to-end</code></td>
+<td>Complete applications</td>
+</tr>
+<tr>
+<td><code>docs/dotnet-go-sdk-feature-comparison.md</code></td>
+<td><strong>Must-read before adoption.</strong> The feature gap vs. .NET</td>
+</tr>
+<tr>
+<td><code>provider/</code></td>
+<td>List of provider packages (check options beyond Foundry)</td>
+</tr>
+</tbody></table>
+<p><strong>Troubleshooting summary</strong></p>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Cause</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Azure credential authentication failure</td>
+<td>Not logged into Azure CLI, or credential source not configured</td>
+<td>Run <code>az login</code>, or explicitly configure the credential to use</td>
+</tr>
+<tr>
+<td>API key error</td>
+<td>Wrong key, or mismatched with the target resource</td>
+<td>Verify the key against its corresponding resource/provider</td>
+</tr>
+<tr>
+<td>Provider endpoint error</td>
+<td>Missing or mistyped endpoint, deployment name, model, or API version</td>
+<td>Cross-check the sample&#39;s environment variables and constructor options</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>7.2 LangChain 1.0 — The Fastest Path</h3>
+<pre><code class="language-bash">pip install --upgrade langchain
+</code></pre>
+<pre><code class="language-python">from langchain.agents import create_agent
+from langchain.tools import tool
+
+
+@tool
+def get_close_price(ticker: str) -&gt; str:
+    &quot;&quot;&quot;Return the recent closing price for the given ticker.&quot;&quot;&quot;
+    # In a real implementation, call an actual data source
+    return f&quot;{ticker}: no lookup result&quot;
+
+
+agent = create_agent(
+    model=&quot;openai:gpt-4.1-mini&quot;,
+    tools=[get_close_price],
+    system_prompt=(
+        &quot;You are a market-data lookup assistant. &quot;
+        &quot;If a tool returns no value, answer &#39;no data available&#39;. &quot;
+        &quot;Never fabricate a number.&quot;
+    ),
+)
+
+result = agent.invoke(
+    {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What&#39;s NVDA&#39;s recent closing price?&quot;}]}
+)
+print(result[&quot;messages&quot;][-1].content)
+</code></pre>
+<p>That last sentence in the system prompt isn&#39;t boilerplate. A model fabricating a plausible-looking number when a tool call fails is the most common and most expensive failure mode in agent systems. It will happen without exception if you don&#39;t specify the behavior for an empty tool result.</p>
+<hr>
+<h3>7.3 LangGraph 1.0 — Checkpoints + Human Approval</h3>
+<pre><code class="language-bash">pip install --upgrade langgraph langchain
+</code></pre>
+<pre><code class="language-python">from typing import Annotated, TypedDict
+
+from langchain.chat_models import init_chat_model
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.types import interrupt, Command
+
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+    approval: str
+
+
+llm = init_chat_model(&quot;openai:gpt-4.1-mini&quot;)
+
+
+def analyze(state: State):
+    &quot;&quot;&quot;Produce a first-pass analysis draft&quot;&quot;&quot;
+    resp = llm.invoke(state[&quot;messages&quot;])
+    return {&quot;messages&quot;: [resp]}
+
+
+def human_review(state: State):
+    &quot;&quot;&quot;Pause execution and wait for human approval&quot;&quot;&quot;
+    decision = interrupt(
+        {
+            &quot;question&quot;: &quot;Do you approve this judgment?&quot;,
+            &quot;draft&quot;: state[&quot;messages&quot;][-1].content,
+        }
+    )
+    return {&quot;approval&quot;: decision}
+
+
+def finalize(state: State):
+    if state[&quot;approval&quot;] != &quot;approved&quot;:
+        return {&quot;messages&quot;: [{&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Rejected. Needs revision.&quot;}]}
+    return {&quot;messages&quot;: [{&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Approved. Added to the deployment queue.&quot;}]}
+
+
+builder = StateGraph(State)
+builder.add_node(&quot;analyze&quot;, analyze)
+builder.add_node(&quot;human_review&quot;, human_review)
+builder.add_node(&quot;finalize&quot;, finalize)
+
+builder.add_edge(START, &quot;analyze&quot;)
+builder.add_edge(&quot;analyze&quot;, &quot;human_review&quot;)
+builder.add_edge(&quot;human_review&quot;, &quot;finalize&quot;)
+builder.add_edge(&quot;finalize&quot;, END)
+
+# The checkpointer is the core of durable execution. Use a Postgres/Redis checkpointer in production
+graph = builder.compile(checkpointer=InMemorySaver())
+
+config = {&quot;configurable&quot;: {&quot;thread_id&quot;: &quot;review-001&quot;}}
+
+# Step 1: pauses at the interrupt point
+for event in graph.stream(
+    {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Summarize this quarter&#39;s risk.&quot;}]},
+    config,
+):
+    print(event)
+
+# ... the process can safely die here. State stays with the checkpointer ...
+
+# Step 2: once a human approves days later, resume exactly from that point
+final = graph.invoke(Command(resume=&quot;approved&quot;), config)
+print(final[&quot;messages&quot;][-1].content)
+</code></pre>
+<p><strong>Three things to notice here</strong></p>
+<ol>
+<li><code>thread_id</code> is the identity of the conversation/task. Resumption happens through this key.</li>
+<li><code>InMemorySaver</code> is example-only. If you use this as-is in production, the whole rationale for adopting durability disappears.</li>
+<li>The <code>interrupt</code> call site <strong>re-executes the node from the beginning upon resume.</strong> So placing side effects (payments, sending email, orders) before the interrupt causes duplicate execution. Move side effects into a node after the interrupt.</li>
+</ol>
+<hr>
+<h3>7.4 In Go, Without a Framework — Structural Analysis</h3>
+<p>Writing this structure by hand once, before adopting a framework, makes clear exactly what the framework is doing for you. Below is a conceptual structure that isn&#39;t tied to any particular vendor SDK.</p>
+<pre><code class="language-go">// Conceptual sketch: swap in whichever vendor SDK&#39;s actual types you&#39;re using
+func RunAgent(ctx context.Context, c ModelClient, tools map[string]Tool, prompt string) (string, error) {
+	msgs := []Message{{Role: &quot;user&quot;, Content: prompt}}
+
+	for turn := 0; turn &lt; maxTurns; turn++ {
+		resp, err := c.Complete(ctx, msgs, toolSpecs(tools))
+		if err != nil {
+			return &quot;&quot;, err
+		}
+		msgs = append(msgs, resp.Message)
+
+		if len(resp.ToolCalls) == 0 {
+			return resp.Message.Content, nil // exit condition
+		}
+
+		// Concurrent execution: where Go&#39;s strength shows
+		results := make([]Message, len(resp.ToolCalls))
+		var wg sync.WaitGroup
+		for i, call := range resp.ToolCalls {
+			wg.Add(1)
+			go func(i int, call ToolCall) {
+				defer wg.Done()
+				out, err := tools[call.Name].Invoke(ctx, call.Args)
+				results[i] = toolResultMessage(call.ID, out, err) // return errors to the model too
+			}(i, call)
+		}
+		wg.Wait()
+		msgs = append(msgs, results...)
+	}
+	return &quot;&quot;, fmt.Errorf(&quot;exceeded max turns (%d)&quot;, maxTurns)
+}
+</code></pre>
+<p>What&#39;s <strong>missing</strong> from these roughly 40 lines is exactly the reason frameworks exist: checkpointing, resumption, streaming, token accounting, tool-approval gates, OTel spans, sub-agent routing, and context-window management. If two or three of these are all you actually need, writing it yourself is usually the better call.</p>
+<hr>
+<h2>8. Pre-Operations Checklist — Security and Governance Perspective</h2>
+<p>An agent framework is <strong>a mechanism that grants an LLM execution authority.</strong> Here&#39;s a list of items to verify before adoption.</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>What to check</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Supply chain</strong></td>
+<td>The number of transitive dependencies in the framework and its signature-verification setup. For Go, <code>go.sum</code> + the GOPROXY transparency log is the line of defense</td>
+<td>Numerous package-tampering incidents in 2025–2026</td>
+</tr>
+<tr>
+<td><strong>MCP trust boundary</strong></td>
+<td>MCP servers are external code. Pin the server list/permissions to a whitelist and don&#39;t enable dynamic discovery in production</td>
+<td>MCP tool descriptions themselves are a prompt-injection vector</td>
+</tr>
+<tr>
+<td><strong>Tool approval</strong></td>
+<td>Destructive operations (file deletion, money transfers, deployments) must sit behind an approval middleware. Use MAF&#39;s tool approval or LangChain&#39;s HITL middleware</td>
+<td>Automatic tool calling is the default in many frameworks</td>
+</tr>
+<tr>
+<td><strong>Credentials</strong></td>
+<td>Ban fallback-style credentials (<code>DefaultAzureCredential</code>, etc.). Specify explicitly, e.g. via managed identity</td>
+<td>Official Microsoft recommendation</td>
+</tr>
+<tr>
+<td><strong>Data boundary</strong></td>
+<td>When using third-party models/agents, review whether data crosses your organization&#39;s compliance/geographic boundaries. Responsibility falls on the user</td>
+<td>Explicitly stated in MAF documentation</td>
+</tr>
+<tr>
+<td><strong>Observability</strong></td>
+<td>OTel spans may carry raw prompt/response text. Establish a masking policy first</td>
+<td>A leakage vector for PII/trade secrets</td>
+</tr>
+<tr>
+<td><strong>Side-effect idempotency</strong></td>
+<td>Check that no operation gets duplicated on resume/retry</td>
+<td>See §7.3</td>
+</tr>
+<tr>
+<td><strong>Version pinning</strong></td>
+<td>Recommend pinning preview-stage SDKs to a specific commit</td>
+<td>MAF Go has not published release tags</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. Summary</h2>
+<p>Choose your solution through the following lens.</p>
+<ol>
+<li><p><strong>Decide the layer first.</strong> Sorting out whether what you need is a tool loop (L1), a graph (L2), or a durable runtime (L3) narrows the candidates to two or three. What most teams actually want is L3, and that&#39;s the one thing that&#39;s expensive to build yourself.</p>
+</li>
+<li><p><strong>The language dominates the decision.</strong> For Python/TS, LangGraph is the realistic default; for .NET, MAF is the default. For Go, the options are thin. MAF Go&#39;s direction is right, but as of July 2026 it&#39;s still in public preview, lacking handoffs, declarative agents, RAG, CodeAct, and DevUI, with a very small community. If Azure governance isn&#39;t a requirement, Eino, ADK Go, or a no-framework implementation may be the safer choice.</p>
+</li>
+<li><p><strong>A framework buys failure handling, not performance.</strong> If an adoption review document says &quot;performance improves,&quot; that document is wrong. The correct statement is &quot;failures become observable and recoverable.&quot; An LLM is a spreadsheet, not an oracle, and a framework is the tool that turns that spreadsheet into an auditable one.</p>
+</li>
+</ol>
+<p>The practical recommendation for MAF Go is as follows. <strong>Keep it at the pilot/PoC stage for now, and first check whether your required features are implemented in <code>docs/dotnet-go-sdk-feature-comparison.md</code>.</strong> If handoff orchestration is among your requirements, it&#39;s not currently a candidate for adoption.</p>
+<hr>
+<h2>Appendix A. Reference Links</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Microsoft Agent Framework for Go</td>
+<td><a href="https://github.com/microsoft/agent-framework-go">https://github.com/microsoft/agent-framework-go</a></td>
+</tr>
+<tr>
+<td>.NET–Go feature comparison document</td>
+<td><a href="https://github.com/microsoft/agent-framework-go/blob/main/docs/dotnet-go-sdk-feature-comparison.md">https://github.com/microsoft/agent-framework-go/blob/main/docs/dotnet-go-sdk-feature-comparison.md</a></td>
+</tr>
+<tr>
+<td>Go reference</td>
+<td><a href="https://pkg.go.dev/github.com/microsoft/agent-framework-go">https://pkg.go.dev/github.com/microsoft/agent-framework-go</a></td>
+</tr>
+<tr>
+<td>MAF mainline (.NET/Python)</td>
+<td><a href="https://github.com/microsoft/agent-framework">https://github.com/microsoft/agent-framework</a></td>
+</tr>
+<tr>
+<td>MS Learn documentation</td>
+<td><a href="https://learn.microsoft.com/agent-framework/">https://learn.microsoft.com/agent-framework/</a></td>
+</tr>
+<tr>
+<td>Agent Framework dev blog</td>
+<td><a href="https://devblogs.microsoft.com/agent-framework/">https://devblogs.microsoft.com/agent-framework/</a></td>
+</tr>
+<tr>
+<td>LangChain·LangGraph 1.0 announcement</td>
+<td><a href="https://blog.langchain.com/langchain-langgraph-1dot0/">https://blog.langchain.com/langchain-langgraph-1dot0/</a></td>
+</tr>
+<tr>
+<td>LangGraph 1.0 changelog</td>
+<td><a href="https://changelog.langchain.com/announcements/langgraph-1-0-is-now-generally-available">https://changelog.langchain.com/announcements/langgraph-1-0-is-now-generally-available</a></td>
+</tr>
+<tr>
+<td>Eino (CloudWeGo)</td>
+<td><a href="https://github.com/cloudwego/eino">https://github.com/cloudwego/eino</a></td>
+</tr>
+<tr>
+<td>Foundry Build 2026 summary</td>
+<td><a href="https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-build-2026/">https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-build-2026/</a></td>
+</tr>
+</tbody></table>
+<h2>Appendix B. Glossary</h2>
+<table>
+<thead>
+<tr>
+<th>Abbreviation</th>
+<th>Full form</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MAF</td>
+<td>Microsoft Agent Framework</td>
+<td>Microsoft&#39;s multi-language agent framework</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Model Context Protocol</td>
+<td>Standard protocol for models to discover/call external tools</td>
+</tr>
+<tr>
+<td>A2A</td>
+<td>Agent-to-Agent</td>
+<td>A messaging protocol between agents across runtimes</td>
+</tr>
+<tr>
+<td>AG-UI</td>
+<td>Agent-GUI protocol</td>
+<td>A protocol for interaction between agents and user interfaces</td>
+</tr>
+<tr>
+<td>HITL</td>
+<td>Human-in-the-Loop</td>
+<td>A pattern that inserts human review/approval during execution</td>
+</tr>
+<tr>
+<td>OTel</td>
+<td>OpenTelemetry</td>
+<td>Standard for distributed tracing and metrics collection</td>
+</tr>
+<tr>
+<td>SK</td>
+<td>Semantic Kernel</td>
+<td>Microsoft&#39;s previous-generation orchestration SDK</td>
+</tr>
+<tr>
+<td>GA</td>
+<td>General Availability</td>
+<td>Official release, supported for production</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>Data as of: July 22, 2026. GitHub metrics and framework feature lists change quickly. Cite the snapshot date alongside any figures and check the repository directly before making an adoption decision.</em></p>
+<p><em>This piece is provided for informational purposes and is not an endorsement of any specific product or investment advice.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AI-Agent-Framework/AI-Agent-Framework_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claude Skill ガイド — VibeQuant</title>
+  <meta name="description" content="Anthropic Agent Skillsを活用して自分だけの再利用可能なワークフローを作る方法。実例としてクオンツ市況ブリーフとポートフォリオデイリーレビューのスキルを紹介" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/claude-skill-claude-skill-guide-ja/" />
+  <meta property="og:title" content="Claude Skill ガイド" />
+  <meta property="og:description" content="Anthropic Agent Skillsを活用して自分だけの再利用可能なワークフローを作る方法。実例としてクオンツ市況ブリーフとポートフォリオデイリーレビューのスキルを紹介" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/claude-skill-claude-skill-guide-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/claude-skill-claude-skill-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/claude-skill-claude-skill-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/claude-skill-claude-skill-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/claude-skill-claude-skill-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/claude-skill-claude-skill-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Claude Skill ガイド","description":"Anthropic Agent Skillsを活用して自分だけの再利用可能なワークフローを作る方法。実例としてクオンツ市況ブリーフとポートフォリオデイリーレビューのスキルを紹介","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/claude-skill-claude-skill-guide-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/claude_skill/Claude_skill_guide_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-20","dateModified":"2026-07-20","inLanguage":"ja","keywords":"LLM · 에이전트, claude_skill"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Claude Skill ガイド</h1>
+        <p class="article-dates"><time datetime="2026-07-20">발행 2026.07.20</time> · 주제 LLM · 에이전트 · claude_skill</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/claude-skill-claude-skill-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/claude-skill-claude-skill-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/claude-skill-claude-skill-guide-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/claude-skill-claude-skill-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Anthropic Agent Skillsを活用して自分だけの再利用可能なワークフローを作る方法。実例としてクオンツ市況ブリーフとポートフォリオデイリーレビューのスキルを紹介</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>Anthropic Agent Skillsを活用して自分だけの再利用可能なワークフローを作る方法
+参考: <a href="https://github.com/anthropics/skills">anthropics/skillsリポジトリ</a> · <a href="http://agentskills.io">Agent Skills標準</a></p>
+</blockquote>
+<hr>
+<h2>1. Skillとは何か?</h2>
+<p>Skillは、Claudeが特定の作業を<strong>再利用可能な方式</strong>でより上手く実行できるように教える<strong>指示・スクリプト・リソースが入ったフォルダ</strong>です。Claudeは作業状況に応じてSkillを動的にロードします。</p>
+<p>一言でまとめると、よく使う機能をまとめたコレクションを作ったものです。</p>
+<p>核心的なアイデアは単純です。</p>
+<ul>
+<li><strong>プロンプトを毎回書き直さない。</strong> よく練られたワークフローを1つのフォルダに収めておけば、Claudeは関連する作業に出会うたびにその指示に従う。</li>
+<li><strong>段階的ローディング(Progressive Disclosure)。</strong> Skillの名前と説明(description)だけが常にコンテキストに常駐し、本文とバンドルされたリソースは必要な時だけロードされる。コンテキストを節約しながらも深い専門性を持たせられる。</li>
+<li><strong>LLMはエクセルであってオラクル(神託)ではない。</strong> Skillはこの原則の実務的な実装である — モデルに「うまくやって」を期待する代わりに、検証済みの手順とチェックリストを明示的に注入する。</li>
+</ul>
+<hr>
+<h2>2. リポジトリ構造</h2>
+<p><a href="https://github.com/anthropics/skills">anthropics/skills</a>リポジトリの構成</p>
+<table>
+<thead>
+<tr>
+<th>ディレクトリ</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>./skills</code></td>
+<td>実際のSkill例(Creative &amp; Design、Development &amp; Technical、Enterprise &amp; Communication、Document Skills)</td>
+</tr>
+<tr>
+<td><code>./spec</code></td>
+<td>Agent Skills標準の仕様</td>
+</tr>
+<tr>
+<td><code>./template</code></td>
+<td>新しいSkillを作成する際に使うテンプレート</td>
+</tr>
+</tbody></table>
+<p>特に<code>skills/docx</code>、<code>skills/pdf</code>、<code>skills/pptx</code>、<code>skills/xlsx</code>は、Claudeの実際の文書生成機能を動かしているプロダクションSkillであり、複雑なSkillを設計する際の良い参考資料になります(ソース公開、オープンソースではない)。</p>
+<hr>
+<h2>3. Skillの解剖学</h2>
+<pre><code>skill-name/
+├── SKILL.md            (必須)
+│   ├── YAMLフロントマター  (name, descriptionが必須)
+│   └── Markdown指示
+└── バンドルリソース          (任意)
+    ├── scripts/        - 決定的/繰り返し作業用の実行コード
+    ├── references/     - 必要な時だけコンテキストにロードされるドキュメント
+    └── assets/         - 出力に使用されるファイル(テンプレート、アイコン、フォント)
+</code></pre>
+<h3>フロントマターの必須項目</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>name</code></td>
+<td>一意の識別子(小文字、スペースはハイフンに)</td>
+</tr>
+<tr>
+<td><code>description</code></td>
+<td><strong>トリガーメカニズムの核心。</strong> 何をするか + いつ使うべきかの両方をここに記す</td>
+</tr>
+</tbody></table>
+<h3>設計原則</h3>
+<ol>
+<li><strong>descriptionはやや「積極的に」</strong> — Claudeは Skillをあまり使わない(undertrigger)傾向があるため、「ユーザーがX、Y、Zに言及したら明示的に要求されなくてもこのSkillを使え」のようにトリガー条件を具体的に列挙する。</li>
+<li><strong>SKILL.mdの本文は500行以下</strong> — 超える場合は<code>references/</code>に階層を分離し、いつ読むべきかを明確に案内する。</li>
+<li><strong>決定的な作業はスクリプトで</strong> — 計算、パース、API呼び出しのように毎回同じ結果になるべき作業は、LLMの自由生成に任せず<code>scripts/</code>にコードとして固定する。</li>
+<li><strong>ドメインが複数ある場合はvariantごとに分離</strong> — 例: <code>references/krx.md</code>、<code>references/us-market.md</code>のように市場別の参照ファイルを分けると、Claudeは必要なものだけを読む。</li>
+</ol>
+<hr>
+<h2>4. 使用方法</h2>
+<h3>Claude Code</h3>
+<pre><code class="language-bash">/plugin marketplace add anthropics/skills
+/plugin install example-skills@anthropic-agent-skills
+</code></pre>
+<p>インストール後は自然言語で言及するだけです:</p>
+<blockquote>
+<p>「クオンツ市況スキルで今日の相場を要約して」</p>
+</blockquote>
+<p>個人用Skillは<code>~/.claude/skills/</code>にフォルダごと入れればよいです。</p>
+<h3>Claude.ai (Web/アプリ)</h3>
+<p>有料プランではSettings → CapabilitiesからSkillのアップロードが可能です。<code>.skill</code>パッケージまたはSKILL.mdが入ったzipをアップロードすればよいです。(<a href="https://support.claude.com/en/articles/12512180-using-skills-in-claude">公式ガイド</a>)</p>
+<h3>Claude API</h3>
+<p>事前構築されたSkillの使用、またはカスタムSkillのアップロードが可能です。(<a href="https://docs.claude.com/en/api/skills-guide#creating-a-skill">Skills API Quickstart</a>)</p>
+<hr>
+<h2>5. 例①: クオンツ視点のデイリー市況サマリースキル</h2>
+<p>毎朝「今日の市況を要約して」の一言で、単なるニュースの列挙ではなく<strong>ファクター・需給・ボラティリティの観点から構造化されたブリーフィング</strong>を受け取るスキルです。</p>
+<h3>フォルダ構造</h3>
+<pre><code>quant-market-brief/
+├── SKILL.md
+└── references/
+    ├── factor-checklist.md    # チェックすべきファクターのリストと解釈基準
+    └── output-template.md     # ブリーフィング出力テンプレート
+</code></pre>
+<h3>SKILL.md</h3>
+<pre><code class="language-markdown">---
+name: quant-market-brief
+description: &gt;
+  今日の株式市況をクオンツの観点から要約するスキル。ユーザーが「市況」、「今日の相場」、
+  「マーケットブリーフィング」、「相場まとめ」、「今日のKOSPI/ナスダックどう」などに言及したら、
+  明示的に「クオンツ」という単語がなくても必ずこのスキルを使うこと。
+  単純なニュースの列挙ではなく、ファクター・ボラティリティ・需給フレームで構造化されたブリーフィングを生成する。
+---
+
+# Quant Market Brief
+
+## 目的
+個別ニュースではなく市場構造(レジーム)を読む。「何が起きたか」ではなく
+「ファクター・ボラティリティ・需給の観点で市場がどのレジームにあり、何が変わったか」に答える。
+
+## ワークフロー
+
+### ステップ1: データ収集(Web検索必須)
+以下を必ず検索で確認する。学習データの記憶で答えない:
+- 主要指数の終値/変動率: KOSPI、KOSDAQ、S&amp;P 500、NASDAQ、フィラデルフィア半導体
+- ボラティリティ: VIXレベルと前日比の変化、VKOSPI
+- 金利/為替: 米国10年債、ウォン/ドル、ドルインデックス(DXY)
+- 需給: 外国人/機関投資家の純買越(KRX)、主要セクターETFの資金フロー
+- 暗号資産(任意): BTC、キムチプレミアム — リスク選好度プロキシとしてのみ使用
+
+### ステップ2: ファクターレンズの適用
+references/factor-checklist.mdを読み、以下を判定する:
+- モメンタム vs リバーサル: 最近の主導株が続くか、失速するか
+- グロース vs バリュー: 金利方向とスタイルローテーションの整合性
+- 大型 vs 小型: リスク選好度の拡散の有無
+- クオリティ/低ボラ: 防御ファクターへの資金移動の有無
+
+### ステップ3: レジーム判定
+以下のいずれかに明示的に分類し、根拠を1行で付ける:
+Risk-On / Risk-Off / Rotation(ローテーション) / Chop(方向感なし)
+
+### ステップ4: 出力
+references/output-template.mdのテンプレートに従う。必ず含める内容:
+1. 一言レジーム判定(最上部)
+2. 数値テーブル(指数/ボラティリティ/金利/為替/需給)
+3. ファクタースコアカード(各ファクター: 強気/中立/弱気 + 根拠1行)
+4. 「昨日と変わったこと」セクション — デルタに焦点
+5. 反証条件 — 今日の判定が間違っていた場合、何が観測されるか
+
+## ガイドライン
+- 予測しない。観測された事実 → ファクター解釈 → 条件付きシナリオの順序を守る。
+- すべての数値に出典と基準時刻を明記する。
+- 確信度を上/中/下で表記する。データが矛盾する場合は「矛盾」と書く。
+- 投資勧誘の表現(「買え/売れ」)を使わない。判断材料のみを提供する。
+</code></pre>
+<h3>references/factor-checklist.md (抜粋)</h3>
+<pre><code class="language-markdown"># ファクターチェックリスト
+
+## モメンタム
+- 信号: 直近1ヶ月の上位リターンセクターが当日も相対的に強いか
+- 強気判定: 主導セクターの相対リターン &gt; 市場 &amp;&amp; 出来高維持
+- 崩壊信号: 主導株の急落 + 出来高急増(分散売り)
+
+## ボラティリティレジーム
+- VIX &lt; 15: 低ボラティリティ(キャリー/モメンタムに有利)
+- VIX 15–25: 中立
+- VIX &gt; 25: 高ボラティリティ(低ボラ/クオリティ、ポジション縮小検討区間)
+- 注意: VIXの「レベル」より「変化率」が短期信号として有効
+</code></pre>
+<hr>
+<h2>6. 例②: ポートフォリオデイリーモニタリング &amp; 評価スキル</h2>
+<p>自分のポートフォリオを登録しておき、<strong>1日1回</strong>変動が発生した際にクオンツの観点+市場ニュース+SNSセンチメントを総合して「投資判断に反映できる形」で評価するスキルです。</p>
+<p>核心的な設計ポイント:</p>
+<ul>
+<li><strong>ポートフォリオは<code>assets/portfolio.json</code>に状態として保存</strong> — 毎回入力し直さない</li>
+<li><strong>変動トリガールールをコード/仕様として固定</strong> — 「変動があった」の定義をLLMの裁量に任せない</li>
+<li><strong>3つの情報源(クオンツ/ニュース/SNS)を分離収集後に相互検証</strong> — 1つのソースが結論を支配しないようにする(マルチソース委員会方式)</li>
+</ul>
+<h3>フォルダ構造</h3>
+<pre><code>portfolio-daily-review/
+├── SKILL.md
+├── assets/
+│   └── portfolio.json         # 保有銘柄・数量・平均取得単価・リスク限度
+├── references/
+│   ├── trigger-rules.md       # 「変動」の定量的定義
+│   ├── sentiment-guide.md     # SNSセンチメント解釈時の注意事項
+│   └── action-framework.md    # 評価 → アクション候補のマッピング基準
+└── scripts/
+    └── check_triggers.py      # 価格変動/限度違反判定スクリプト(任意)
+</code></pre>
+<h3>assets/portfolio.json</h3>
+<pre><code class="language-json">{
+  &quot;base_currency&quot;: &quot;KRW&quot;,
+  &quot;last_review&quot;: &quot;2026-07-04&quot;,
+  &quot;risk_limits&quot;: {
+    &quot;single_position_max_pct&quot;: 20,
+    &quot;daily_drawdown_alert_pct&quot;: -3.0,
+    &quot;portfolio_drawdown_alert_pct&quot;: -5.0
+  },
+  &quot;positions&quot;: [
+    { &quot;ticker&quot;: &quot;005930.KS&quot;, &quot;name&quot;: &quot;삼성전자&quot;, &quot;qty&quot;: 100, &quot;avg_price&quot;: 72000, &quot;thesis&quot;: &quot;HBMサイクル&quot; },
+    { &quot;ticker&quot;: &quot;NVDA&quot;,      &quot;name&quot;: &quot;엔비디아&quot;, &quot;qty&quot;: 10,  &quot;avg_price&quot;: 118.5, &quot;thesis&quot;: &quot;AIインフラcapex&quot; },
+    { &quot;ticker&quot;: &quot;BTC&quot;,       &quot;name&quot;: &quot;비트코인&quot;, &quot;qty&quot;: 0.5, &quot;avg_price&quot;: 61000000, &quot;thesis&quot;: &quot;マクロヘッジ&quot; }
+  ]
+}
+</code></pre>
+<h3>SKILL.md</h3>
+<pre><code class="language-markdown">---
+name: portfolio-daily-review
+description: &gt;
+  ユーザーの投資ポートフォリオを1日1回チェックし、事前定義された変動トリガーが
+  作動した場合にクオンツ分析・市場ニュース・SNSセンチメントを総合して投資判断材料を生成する
+  スキル。ユーザーが「ポートフォリオチェック」、「自分のアカウント」、「今日のレビュー」、「保有銘柄どう」、
+  「リバランス」などに言及したり、デイリーチェックを要求したら必ずこのスキルを使うこと。
+  ポートフォリオの状態はassets/portfolio.jsonから読み込む。
+---
+
+# Portfolio Daily Review
+
+## 目的
+感情ではなくルールでポートフォリオをチェックする。トリガー未発動なら「異常なし」
+の一言で終わり、発動時のみ3ソース総合評価を行う。
+
+## ワークフロー
+
+### ステップ0: 状態のロード
+assets/portfolio.jsonを読む。last_reviewが今日なら
+「今日のレビューは既に完了済み」と伝え、再実行するか確認する(1日1回の原則)。
+
+### ステップ1: 相場の更新とトリガー判定
+各ポジションの現在価格をWeb検索で確認し、references/trigger-rules.mdの
+ルールで判定する。要約:
+- 個別銘柄の日次変動 ±3%以上
+- ポートフォリオ全体の評価額の日次変動 ±2%以上
+- risk_limits違反(単一銘柄比重超過、損失限度到達)
+- 保有銘柄関連の重大ニュース(業績、規制、ハッキング/セキュリティ事故、上場廃止関連)
+
+<strong>トリガー未発動時</strong>: 現在価格テーブル + 「トリガーなし、アクション不要」で終了。
+不必要な分析を生成しない。
+
+### ステップ2: 3ソース収集(トリガー発動銘柄のみ)
+各ソースを独立して収集し、互いに混在させない:
+
+[A] クオンツの観点
+- 該当銘柄のファクター状態: モメンタム(1M/3M)、セクター相対強度、ボラティリティ変化
+- 市場レジームとの整合性(quant-market-briefスキルがあればその結果を再利用)
+
+[B] 市場ニュース
+- Web検索でトリガー原因のニュースを特定する。一次情報源(開示、業績発表、
+  規制機関発表)を優先する。推測性の記事とファクトを区別して表記する。
+
+[C] SNSセンチメント
+- X(旧Twitter)、Reddit、国内コミュニティの反応の方向性と強度をWeb検索で把握。
+- references/sentiment-guide.mdを必ず先に読む。核心:
+  SNSは逆指標になりうる。極端な偏り(恐怖/興奮)はそれ自体が信号であり、
+  方向性の信号としてそのまま使わない。
+
+### ステップ3: 相互検証と総合評価
+3つのソースの方向性が一致するかをマトリクスで整理する:
+
+| ソース | 方向 | 強度 | 核心根拠 |
+|---|---|---|---|
+| クオンツ | ネガティブ | 中 | モメンタム失速 + セクター相対弱さ |
+| ニュース | ネガティブ | 強 | 業績ガイダンス下方修正(一次情報源) |
+| SNS  | 極端な恐怖 | 強 | 逆指標の可能性を表記 |
+
+- 3つ一致 → 信頼度高い
+- 2:1に分裂 → 少数意見の根拠を必ず本文に残す
+- ニュース(ファクト)とクオンツ(価格アクション)が衝突する場合、その事実自体を強調する
+
+### ステップ4: アクション候補の提示
+references/action-framework.mdの基準で以下の形式を守る:
+- アクション候補: 維持 / 比重縮小 / 比重拡大 / 損切り検討 / 追加観察のうち1~2つ選択
+- 各候補の根拠と反対論拠の両方を明示
+- 反証条件: 「Xが観測されればこの評価は無効」を必ず含める
+- 最終決定はユーザーの判断であることを明示する。買い/売りの指示語は使わない。
+
+### ステップ5: 状態の更新
+portfolio.jsonのlast_reviewを今日の日付に更新し、
+レビューの要約をログとして残す(次回レビュー時の「昨日とのデルタ」計算に使用)。
+
+## ガイドライン
+- トリガーがなければ沈黙する。毎日長文の分析を吐き出すのはノイズである。
+- 3つのソースの重み付けを任意に決めない。不一致は不一致として報告する。
+- SNSを引用する際は個別アカウントを特定せず、集計された方向性/強度のみを扱う。
+- すべての数値に照会時刻を明記する。
+</code></pre>
+<h3>references/trigger-rules.md (抜粋)</h3>
+<pre><code class="language-markdown"># 変動トリガー定義
+
+「変動があった」とは、以下の定量条件のうち1つ以上を満たすことを意味する。
+LLMの主観的判断(「かなり下がった気がする」)をトリガーとして使わない。
+
+| トリガー | 条件 | 優先度 |
+|---|---|---|
+| T1 個別急変動 | 銘柄の日次変動 |±3%| 以上 | 中 |
+| T2 ポートフォリオ変動 | 全体評価額の日次変動 |±2%| 以上 | 高 |
+| T3 リスク限度 | risk_limits項目違反 | 最高 |
+| T4 イベント | 業績/規制/セキュリティ事故/上場廃止関連の一次情報源ニュース | 高 |
+| T5 ボラティリティジャンプ | 銘柄のインプライド/ヒストリカルボラティリティが前日比+50% | 中 |
+
+複数トリガーが同時に発動した場合、優先度の高いものから報告する。
+</code></pre>
+<h3>実行例 (Claude Code)</h3>
+<pre><code>&gt; 今日のポートフォリオをレビューして
+
+[portfolio-daily-review スキル発動]
+1. portfolio.jsonロード → 3ポジション
+2. 相場検索 → NVDA -4.2%(T1発動)、残りはトリガーなし
+3. NVDAについてクオンツ/ニュース/SNSの3ソース収集
+4. 相互検証マトリクス + アクション候補 + 反証条件を出力
+5. last_review更新
+</code></pre>
+<hr>
+<h2>7. 2つのスキルを連携する</h2>
+<p>2つのスキルは独立して動作しますが、一緒にインストールするとシナジーが生まれます:</p>
+<pre><code>朝のルーティン:
+1. quant-market-brief  → 市場レジーム判定 (Risk-On / Off / Rotation / Chop)
+2. portfolio-daily-review → そのレジームをコンテキストとして個別ポジションを評価
+   (SKILL.mdステップ2 [A]で「quant-market-brief結果を再利用」と明示)
+</code></pre>
+<p>こうしたスキル間の参照が、Skillsシステムの実践的な活用パターンです — 各スキルは小さく単一責任を持ちながら、ワークフローレベルで組み合わされます。</p>
+<hr>
+<h2>8. 作成時によくある間違い</h2>
+<table>
+<thead>
+<tr>
+<th>間違い</th>
+<th>修正</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>descriptionに機能だけ書いてトリガー条件を書かない</td>
+<td>「ユーザーがX、Yに言及したら使うこと」を明示する(undertrigger防止)</td>
+</tr>
+<tr>
+<td>判断基準をLLMの裁量に任せる</td>
+<td>定量ルールをreferences/に固定する(例: トリガー定義)</td>
+</tr>
+<tr>
+<td>毎回ポートフォリオを対話形式で入力</td>
+<td>assets/に状態ファイルとして保存する</td>
+</tr>
+<tr>
+<td>SKILL.md1つにすべてを詰め込む</td>
+<td>500行を超えたらreferences/に分離し、読むタイミングを案内する</td>
+</tr>
+<tr>
+<td>予測/売買指示の出力</td>
+<td>観測 → 解釈 → 条件付きシナリオ + 反証条件の構造を強制する</td>
+</tr>
+<tr>
+<td>テストせずに配布</td>
+<td>実際のプロンプト3~5個で発動有無と出力品質を検証する</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. 関連リンク</h2>
+<ul>
+<li><a href="https://github.com/anthropics/skills">anthropics/skillsリポジトリ</a></li>
+<li><a href="https://support.claude.com/en/articles/12512176-what-are-skills">What are skills?</a></li>
+<li><a href="https://support.claude.com/en/articles/12512180-using-skills-in-claude">Using skills in Claude</a></li>
+<li><a href="https://support.claude.com/en/articles/12512198-creating-custom-skills">Creating custom skills</a></li>
+<li><a href="https://anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills">Equipping agents for the real world with Agent Skills (エンジニアリングブログ)</a></li>
+<li><a href="https://docs.claude.com/en/api/skills-guide#creating-a-skill">Skills API Quickstart</a></li>
+<li><a href="http://agentskills.io">Agent Skills標準</a></li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>: リポジトリのSkillsはデモ/教育目的です。実際のClaudeの動作と異なる場合があるため、重要な作業の前には必ず自分の環境でテストしてください。本ガイドの投資関連スキルは判断材料を構造化するツールであり、投資アドバイスではありません。</p>
+</blockquote>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/claude_skill/Claude_skill_guide_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

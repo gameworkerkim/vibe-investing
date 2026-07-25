@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloudflare 免费套餐注册指南 — VibeQuant</title>
+  <meta name="description" content="Cloudflare 免费套餐的注册步骤、Workers/Workers KV/R2/Pages 免费额度的实用估算、从 Azure Functions + Blob Storage 迁移的分阶段计划、初次环境搭建，以及运营中需要注意的四个要点。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide-cn/" />
+  <meta property="og:title" content="Cloudflare 免费套餐注册指南" />
+  <meta property="og:description" content="Cloudflare 免费套餐的注册步骤、Workers/Workers KV/R2/Pages 免费额度的实用估算、从 Azure Functions + Blob Storage 迁移的分阶段计划、初次环境搭建，以及运营中需要注意的四个要点。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Cloudflare 免费套餐注册指南","description":"Cloudflare 免费套餐的注册步骤、Workers/Workers KV/R2/Pages 免费额度的实用估算、从 Azure Functions + Blob Storage 迁移的分阶段计划、初次环境搭建，以及运营中需要注意的四个要点。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudFlare/Cloudflare%20free%20tier%20guide_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-05-12","dateModified":"2026-05-12","inLanguage":"zh-Hans","keywords":"Cloudflare, 免费套餐, Workers, R2, Pages, Azure 迁移"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 클라우드 · Free tier</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · Free tier</p>
+        <h1>Cloudflare 免费套餐注册指南</h1>
+        <p class="article-dates"><time datetime="2026-05-12">발행 2026.05.12</time> · 주제 Cloudflare · 免费套餐 · Workers · R2 · Pages · Azure 迁移</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/cloudflare-cloudflare-free-tier-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/cloudflare-cloudflare-free-tier-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/cloudflare-cloudflare-free-tier-guide-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/cloudflare-cloudflare-free-tier-guide-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">Cloudflare 免费套餐的注册步骤、Workers/Workers KV/R2/Pages 免费额度的实用估算、从 Azure Functions + Blob Storage 迁移的分阶段计划、初次环境搭建，以及运营中需要注意的四个要点。</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>以 Azure → Cloudflare 迁移的视角撰写，用于评估现有 Azure Functions + Blob Storage 架构的迁移方案。</p>
+</blockquote>
+<hr>
+<h2>1. 注册步骤 —— 耗时 3 分钟</h2>
+<h3>步骤 1. 创建账户</h3>
+<ol>
+<li>访问 <a href="https://dash.cloudflare.com/sign-up">https://dash.cloudflare.com/sign-up</a></li>
+<li>输入邮箱 + 密码（也可用 GitHub SSO）</li>
+<li>完成邮箱验证（记得检查垃圾邮件文件夹）</li>
+</ol>
+<p>无需输入信用卡。Workers / Pages / R2 / KV 的免费套餐均可在无需信用卡的情况下立即使用。</p>
+<h3>步骤 2. 添加域名（可选）</h3>
+<p>如果已有域名：</p>
+<ol>
+<li>进入 Dashboard → Add a Site</li>
+<li>输入域名 → 选择 Free 套餐</li>
+<li>修改域名服务器（在域名注册商处改为 Cloudflare 的 ns1/ns2）</li>
+</ol>
+<p>没有现成域名可以跳过这一步，使用 <code>*.workers.dev</code> 或 <code>*.pages.dev</code> 子域名即可。</p>
+<h3>步骤 3. 启用 2FA（强烈建议）</h3>
+<ol>
+<li>进入 My Profile → Authentication</li>
+<li>Two-factor Authentication → Enable</li>
+<li>用 Google Authenticator 或 Authy 完成注册</li>
+</ol>
+<p>Cloudflare 账户一旦被劫持，会影响其下所有服务。2FA 不是可选项，而是必需项。</p>
+<hr>
+<h2>2. 免费额度 —— 从应用角度估算</h2>
+<h3>Workers（无服务器函数）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>免费额度</th>
+<th>估算使用量（DAU 1,000）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>请求数</td>
+<td>每日 10 万次</td>
+<td>DAU 1,000 × 每人 100 次请求 = 10 万（接近上限）</td>
+</tr>
+<tr>
+<td>每次请求 CPU 时间</td>
+<td>10ms</td>
+<td>LLM 调用属于等待时间（非 CPU 时间），安全</td>
+</tr>
+<tr>
+<td>子请求数</td>
+<td>每次调用 50 个</td>
+<td>充足</td>
+</tr>
+<tr>
+<td>脚本大小</td>
+<td>1 MB</td>
+<td>充足</td>
+</tr>
+</tbody></table>
+<p>DAU 1,000 以内可以免费运行。DAU 5,000+ 时需切换到 Workers Paid（每月 5 美元）。</p>
+<h3>Workers KV（键值缓存）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>免费额度</th>
+<th>应用使用量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>读取</td>
+<td>每日 10 万次</td>
+<td>缓存命中率 80% × DAU 1,000 × 每人 100 次请求 = 8 万（安全）</td>
+</tr>
+<tr>
+<td>写入</td>
+<td>每日 1,000 次</td>
+<td>用于缓存新的 LLM 响应</td>
+</tr>
+<tr>
+<td>删除</td>
+<td>每日 1,000 次</td>
+<td>充足</td>
+</tr>
+<tr>
+<td>列表</td>
+<td>每日 1,000 次</td>
+<td>几乎不使用</td>
+</tr>
+<tr>
+<td>存储</td>
+<td>1 GB</td>
+<td>若仅缓存文本，足够</td>
+</tr>
+<tr>
+<td>单键值大小限制</td>
+<td>每键 25 MB</td>
+<td>单条 LLM 响应仅几 KB，充足</td>
+</tr>
+</tbody></table>
+<p>只要保持 80% 的缓存命中率，就能完全落在免费额度之内。</p>
+<h3>R2（对象存储，Azure Blob 的替代方案）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>免费额度</th>
+<th>应用使用量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>存储</td>
+<td>10 GB</td>
+<td>Azure Blob 当前使用量估计不到 1 GB</td>
+</tr>
+<tr>
+<td>A 类操作（写入）</td>
+<td>每月 100 万次</td>
+<td>充足</td>
+</tr>
+<tr>
+<td>B 类操作（读取）</td>
+<td>每月 1000 万次</td>
+<td>非常充足</td>
+</tr>
+<tr>
+<td>出站流量（带宽）</td>
+<td>无限免费</td>
+<td>决定性的差异化优势</td>
+</tr>
+</tbody></table>
+<p>出站流量免费是 R2 最大的优势，Azure Blob 的出站流量费用负担就此消失。</p>
+<h3>Pages（静态站点）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>免费额度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>带宽</td>
+<td>无限</td>
+</tr>
+<tr>
+<td>构建次数</td>
+<td>每月 500 次</td>
+</tr>
+<tr>
+<td>并发构建数</td>
+<td>1</td>
+</tr>
+<tr>
+<td>自定义域名</td>
+<td>100 个</td>
+</tr>
+<tr>
+<td>站点数</td>
+<td>无限</td>
+</tr>
+</tbody></table>
+<p>对于前端托管来说完全足够，相当于 Azure Static Web Apps 的同等替代品。</p>
+<h3>Workers AI（可选使用）</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>免费额度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Neurons</td>
+<td>每日 1 万（约 5,000-10,000 次请求）</td>
+</tr>
+<tr>
+<td>模型</td>
+<td>Llama 3.x、DeepSeek 等</td>
+</tr>
+</tbody></table>
+<p>如果本身已直接调用 DeepSeek API，则无需使用 Workers AI；但作为备用 LLM 仍有价值。</p>
+<h3>重置时间</h3>
+<p>所有免费额度重置时间：每日 UTC 00:00（韩国时间 09:00）</p>
+<hr>
+<h2>3. 推荐的迁移阶段</h2>
+<h3>第一阶段：仅迁移静态资源（低风险，2-3 小时）</h3>
+<pre><code>Azure Static Web Apps -&gt; Cloudflare Pages
+- 将前端（HTML/CSS/JS）部署到 Pages
+- LLM 调用仍保留在 Azure Functions
+- 唯一改动：更新前端中的 API 端点 URL
+</code></pre>
+<ul>
+<li>风险：非常低（仅迁移前端）</li>
+<li>效果：韩国用户首屏加载速度提升 50-100ms</li>
+</ul>
+<h3>第二阶段：将 Blob 迁移到 R2（建议在上线后进行）</h3>
+<pre><code>Azure Blob Storage -&gt; Cloudflare R2
+- 通过 Super Slurper 或 Sippy 自动迁移
+- S3 兼容 API，代码改动极小
+- 出站流量成本可大幅节省
+</code></pre>
+<ul>
+<li>风险：中等（URL 结构会变化）</li>
+<li>效果：出站流量免费 + 边缘缓存增强</li>
+</ul>
+<h3>第三阶段：将函数迁移到 Workers（建议在上线 14 天后评估）</h3>
+<pre><code>Azure Functions (Python) -&gt; Cloudflare Workers (JS/TS or Python WASM)
+- 用 fetch() 重写 DeepSeek API 调用
+- 用 Workers KV + Cache API 重新设计四层缓存
+</code></pre>
+<ul>
+<li>风险：高（运行时环境不同）</li>
+<li>效果：消除冷启动，进一步降低边缘延迟</li>
+<li>建议时机：基于上线 + 14 天的 burn-in 数据之后</li>
+</ul>
+<hr>
+<h2>4. 注册后的初次环境搭建 —— 5 分钟</h2>
+<h3>安装 Wrangler CLI</h3>
+<pre><code class="language-bash"># 需要 Node.js 18+
+npm install -g wrangler
+
+# 登录（浏览器认证）
+wrangler login
+
+# 验证
+wrangler whoami
+</code></pre>
+<h3>首次 Pages 部署（静态站点测试）</h3>
+<pre><code class="language-bash"># Git 集成
+# Dashboard -&gt; Pages -&gt; Connect to Git
+# 关联 GitHub 仓库 -&gt; main 分支自动构建
+
+# 或直接部署
+wrangler pages deploy ./build --project-name=my-test
+</code></pre>
+<p>部署完成后：<code>https://my-test.pages.dev</code></p>
+<h3>首次创建 R2 存储桶</h3>
+<pre><code class="language-bash"># 在免费额度内创建存储桶
+wrangler r2 bucket create my-blob
+
+# 测试文件上传
+wrangler r2 object put my-blob/test.txt --file ./test.txt
+</code></pre>
+<hr>
+<h2>5. 四个注意事项</h2>
+<h3>注意事项 1：Workers 对 Python 的支持有限</h3>
+<pre><code>支持：基于 Pyodide 的 WASM（标准库受限）
+不支持：依赖原生 C 的包（部分 numpy、asyncio 等）
+</code></pre>
+<p>需要确认自己的应用代码依赖哪些 Python 包。纯 Python + fetch 的代码可以移植；依赖复杂的代码则需要用 JavaScript/TypeScript 重写。</p>
+<h3>注意事项 2：KV 的一致性是最终一致性（eventual）</h3>
+<pre><code>KV 写入 -&gt; 其他边缘节点最长需要 60 秒后才能读取到
+不适合需要即时一致性的数据（例如用户会话）
+</code></pre>
+<p>像用户会话这类需要强一致性的数据，应使用 Durable Objects（需要 Workers Paid，每月 5 美元）。</p>
+<h3>注意事项 3：免费额度每日重置带来的风险</h3>
+<pre><code>Workers 每日 10 万次请求 = 平均每小时 4,166 次
+如果高峰时段（例如美股收盘后的韩国时间 22:30）每小时产生 1 万次请求
+-&gt; 10 万次的上限会在当天下午就被耗尽
+-&gt; 服务将中断，直到下一个 UTC 00:00（韩国时间 09:00）
+</code></pre>
+<p>必须监控高峰时段。建议在用户数达到 1,000 人时切换到 Workers Paid（每月 5 美元）。</p>
+<h3>注意事项 4：DeepSeek API 调用延迟是瓶颈</h3>
+<pre><code>Cloudflare 边缘：10-50ms
+DeepSeek API：2,000-8,000ms（LLM 推理）
+用户感知延迟：95% 以上来自 LLM 调用
+</code></pre>
+<p>Cloudflare 迁移带来的可感知效果主要集中在首屏加载上，LLM 响应时间本身不会改变。在计算迁移 ROI 时应如实反映这一点。</p>
+<hr>
+<h2>参考资料</h2>
+<ul>
+<li>注册：<a href="https://dash.cloudflare.com/sign-up">https://dash.cloudflare.com/sign-up</a></li>
+<li>Workers 免费额度：<a href="https://developers.cloudflare.com/workers/platform/pricing/">https://developers.cloudflare.com/workers/platform/pricing/</a></li>
+<li>R2 免费额度：<a href="https://developers.cloudflare.com/r2/pricing/">https://developers.cloudflare.com/r2/pricing/</a></li>
+<li>KV 免费额度：<a href="https://developers.cloudflare.com/kv/platform/pricing/">https://developers.cloudflare.com/kv/platform/pricing/</a></li>
+<li>Pages 免费额度：<a href="https://www.cloudflare.com/plans/developer-platform/">https://www.cloudflare.com/plans/developer-platform/</a></li>
+<li>Wrangler CLI：<a href="https://developers.cloudflare.com/workers/wrangler/">https://developers.cloudflare.com/workers/wrangler/</a></li>
+<li>Super Slurper（S3 -&gt; R2 迁移）：<a href="https://developers.cloudflare.com/r2/data-migration/super-slurper/">https://developers.cloudflare.com/r2/data-migration/super-slurper/</a></li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudFlare/Cloudflare%20free%20tier%20guide_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

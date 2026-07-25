@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AIコーディングアシスタントガイド — MiniMaxでコーディングする — VibeQuant</title>
+  <meta name="description" content="Visual Studio Code連携・エージェントワークフロー・価格性能比較。DeepSeek・Anthropic Claude・OpenAI ChatGPTとのCoding Plan・API・セルフホスト・オープンウェイト比較分析。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/minimax-coding-guide-minimax-coding-guide-ja/" />
+  <meta property="og:title" content="AIコーディングアシスタントガイド — MiniMaxでコーディングする" />
+  <meta property="og:description" content="Visual Studio Code連携・エージェントワークフロー・価格性能比較。DeepSeek・Anthropic Claude・OpenAI ChatGPTとのCoding Plan・API・セルフホスト・オープンウェイト比較分析。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/minimax-coding-guide-minimax-coding-guide-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/minimax-coding-guide-minimax-coding-guide-ko/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/minimax-coding-guide-minimax-coding-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/minimax-coding-guide-minimax-coding-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/minimax-coding-guide-minimax-coding-guide-zh/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/minimax-coding-guide-minimax-coding-guide-ko/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"AIコーディングアシスタントガイド — MiniMaxでコーディングする","description":"Visual Studio Code連携・エージェントワークフロー・価格性能比較。DeepSeek・Anthropic Claude・OpenAI ChatGPTとのCoding Plan・API・セルフホスト・オープンウェイト比較分析。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/minimax-coding-guide-minimax-coding-guide-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MiniMax%20Coding%20Guide/minimax-coding-guide.ja.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-04","dateModified":"2026-06-04","inLanguage":"ja","keywords":"LLM · 에이전트, MiniMax Coding Guide"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>AIコーディングアシスタントガイド — MiniMaxでコーディングする</h1>
+        <p class="article-dates"><time datetime="2026-06-04">발행 2026.06.04</time> · 주제 LLM · 에이전트 · MiniMax Coding Guide</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/minimax-coding-guide-minimax-coding-guide-ko/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/minimax-coding-guide-minimax-coding-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/minimax-coding-guide-minimax-coding-guide-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/minimax-coding-guide-minimax-coding-guide-zh/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Visual Studio Code連携・エージェントワークフロー・価格性能比較。DeepSeek・Anthropic Claude・OpenAI ChatGPTとのCoding Plan・API・セルフホスト・オープンウェイト比較分析。</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>Visual Studio Code連携・エージェントワークフロー・価格性能比較
+DeepSeek・Anthropic Claude・OpenAI ChatGPT — Coding Plan・API・セルフホスト・オープンウェイト比較分析</p>
+</blockquote>
+<ul>
+<li><strong>作成日</strong>: 2026年6月2日</li>
+<li><strong>対象読者</strong>: Python/JS/TS開発者、DevOpsエンジニア、AI/MLエンジニア</li>
+<li><strong>文書バージョン</strong>: 1.1 · データ出典: 公式APIドキュメントおよび公開ベンチマーク(2026-06-02時点)</li>
+</ul>
+<hr>
+<h2>目次</h2>
+<ol>
+<li><a href="#1-minimax%E3%81%AE%E7%B4%B9%E4%BB%8B">MiniMaxの紹介</a></li>
+<li><a href="#2-visual-studio-code%E9%80%A3%E6%90%BA%E3%82%AC%E3%82%A4%E3%83%89">Visual Studio Code連携ガイド</a></li>
+<li><a href="#3-%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E3%83%AF%E3%83%BC%E3%82%AF%E3%83%95%E3%83%AD%E3%83%BC%E8%A8%AD%E8%A8%88">エージェントワークフロー設計</a></li>
+<li><a href="#4-%E4%BE%A1%E6%A0%BC%E6%AF%94%E8%BC%83--minimax-vs-deepseek-vs-anthropic-vs-openai">価格比較 — MiniMax vs DeepSeek vs Anthropic vs OpenAI</a></li>
+<li><a href="#5-%E3%82%B3%E3%83%BC%E3%83%87%E3%82%A3%E3%83%B3%E3%82%B0%E6%80%A7%E8%83%BD%E6%AF%94%E8%BC%83">コーディング性能比較</a></li>
+<li><a href="#6-%E6%84%8F%E6%80%9D%E6%B1%BA%E5%AE%9A%E3%82%AC%E3%82%A4%E3%83%89--%E3%81%A9%E3%81%AE%E3%83%A2%E3%83%87%E3%83%AB%E3%82%92%E3%81%84%E3%81%A4%E4%BD%BF%E3%81%86%E3%81%8B">意思決定ガイド — どのモデルをいつ使うか?</a></li>
+<li><a href="#7-%E7%B5%90%E8%AB%96%E3%81%A8%E5%8F%82%E8%80%83%E8%B3%87%E6%96%99">結論と参考資料</a></li>
+</ol>
+<hr>
+<h2>1. MiniMaxの紹介</h2>
+<h3>1.1 会社とモデルラインアップ</h3>
+<p>MiniMax(正式社名: 上海稀宇科技有限公司、MiniMax)は2021年末に上海で設立された中国のAIスタートアップで、テキスト・映像・音声・音楽・画像の全モダリティ(full-modality)基盤モデルを自社開発している。2026年1月に香港証券取引所(0100.HK)に上場し、累計ユーザー2億人、200カ国以上でサービスを提供している。</p>
+<p><strong>主力モデルラインアップ</strong></p>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>タイプ</th>
+<th>コンテキスト</th>
+<th>主な特徴</th>
+<th>公開状況</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>M2.1</td>
+<td>テキスト(コーディング特化)</td>
+<td>197K</td>
+<td>多言語(13+)・低コスト</td>
+<td>オープンウェイト</td>
+</tr>
+<tr>
+<td>M2.5</td>
+<td>テキスト(エージェント)</td>
+<td>197K</td>
+<td>SWE-bench 80.2%・MoE 230B/10B</td>
+<td>オープンウェイト</td>
+</tr>
+<tr>
+<td>M2.7</td>
+<td>テキスト(エージェント)</td>
+<td>205K</td>
+<td>M2.5後継・recursive self-improve</td>
+<td>オープンウェイト</td>
+</tr>
+<tr>
+<td>M3(2026-06-01リリース)</td>
+<td>テキスト+マルチモーダル</td>
+<td>1M</td>
+<td>MSA・ネイティブマルチモーダル・Agent Coding SOTA</td>
+<td>オープンウェイト(予定)</td>
+</tr>
+<tr>
+<td>Hailuo 2.3</td>
+<td>動画生成</td>
+<td>—</td>
+<td>1080p・最大10秒</td>
+<td>API専用</td>
+</tr>
+<tr>
+<td>Speech 2.6 / Music 2.6</td>
+<td>音声/音楽</td>
+<td>—</td>
+<td>40言語・250ms遅延</td>
+<td>API専用</td>
+</tr>
+</tbody></table>
+<h3>1.2 なぜMiniMaxか — 主な強み</h3>
+<ul>
+<li><strong>圧倒的なコストパフォーマンス</strong>: M2.5はSWE-bench Verifiedで80.2%を記録し、Claude Opus 4.7(82.0%)とは1.8ポイント差だが、価格は約1/17である(第4章参照)。</li>
+<li><strong>OpenAI / Anthropic両方のAPI互換</strong>: OpenAI(<code>/v1/chat/completions</code>)とAnthropic(<code>/anthropic</code>)の両プロトコルを同時サポート — 既存コードの1行変更で移行可能。</li>
+<li><strong>Coding Plan サブスクリプション</strong>: 開発者専用の従量制プラン。OpenAI/Anthropicに比べて10~20倍安い。</li>
+<li><strong>オープンウェイト公開</strong>: M2 / M2.5 / M2.7の重みをHugging Faceで公開 — セルフホスト・ファインチューニング・プライベートクラスタ展開が可能。</li>
+<li><strong>M3(2026-06-01リリース)</strong>: 1Mトークンコンテキスト+ネイティブマルチモーダル。SWE-Bench Proで59.0%を記録し、GPT-5.5(58.6%)をわずかに上回る。</li>
+<li><strong>豊富なエコシステム</strong>: VS Code(Cline / Claude Code / Continue / Kilo Code)、JetBrains、OpenClaw、Cursor、Zedなど主要コーディングツールで1分以内にセットアップ完了。</li>
+</ul>
+<hr>
+<h2>2. Visual Studio Code連携ガイド</h2>
+<h3>2.1 事前準備: APIキー発行とエンドポイント</h3>
+<p>VS CodeにMiniMaxを接続する前に2つを準備する。(1) MiniMax開発者プラットフォームでAPIキーを発行、(2) 使用するツールを選択。MiniMax APIはOpenAI互換(<code>/v1</code>)とAnthropic互換(<code>/anthropic</code>)の両エンドポイントを同時に提供するため、ツール選択は自由である。</p>
+<p><strong>① グローバルエンドポイント(海外ユーザー)</strong></p>
+<ul>
+<li>OpenAI互換: <code>https://api.minimax.io/v1</code></li>
+<li>Anthropic互換: <code>https://api.minimax.io/anthropic</code></li>
+<li>APIキー発行元: <code>https://platform.minimax.io</code> → API Keysメニュー</li>
+</ul>
+<p><strong>② 中国エンドポイント(中国本土)</strong></p>
+<ul>
+<li>OpenAI互換: <code>https://api.minimaxi.com/v1</code></li>
+<li>Anthropic互換: <code>https://api.minimaxi.com/anthropic</code></li>
+<li>APIキー発行元: <code>https://platform.minimaxi.com</code></li>
+</ul>
+<blockquote>
+<p><strong>注意</strong>: <code>chat.minimax.io</code>のSubscription Keyはチャット専用であり、コーディングツールでは動作しない。必ず「API Keys」メニューのPay-as-You-Goキーを使用すること。</p>
+</blockquote>
+<p><strong>推奨ツール別マッピング要約</strong></p>
+<table>
+<thead>
+<tr>
+<th>VS Codeツール</th>
+<th>プロトコル</th>
+<th>Base URL</th>
+<th>APIキー設定場所</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cline</td>
+<td>Anthropic</td>
+<td><code>https://api.minimax.io/anthropic</code></td>
+<td>Provider → MiniMax → Entrypoint</td>
+</tr>
+<tr>
+<td>Claude Code(拡張)</td>
+<td>Anthropic</td>
+<td><code>https://api.minimax.io/anthropic</code></td>
+<td>環境変数<code>ANTHROPIC_BASE_URL</code> + <code>API_KEY</code></td>
+</tr>
+<tr>
+<td>Continue</td>
+<td>OpenAI</td>
+<td><code>https://api.minimax.io/v1</code></td>
+<td><code>config.json</code> providersブロック</td>
+</tr>
+<tr>
+<td>Kilo Code(旧Roo Code)</td>
+<td>Anthropic</td>
+<td><code>https://api.minimax.io/anthropic</code></td>
+<td>Provider → MiniMax</td>
+</tr>
+<tr>
+<td>Cursor(Pro以上)</td>
+<td>Anthropic</td>
+<td><code>https://api.minimax.io/anthropic</code></td>
+<td>Settings → Override OpenAI Base URL</td>
+</tr>
+<tr>
+<td>Zed / OpenCode</td>
+<td>OpenAI</td>
+<td><code>https://api.minimax.io/v1</code></td>
+<td>Provider設定 → API Key</td>
+</tr>
+</tbody></table>
+<h3>2.2 Clineのインストールと設定(最も普及)</h3>
+<p>Cline(旧Claude Dev)はVS Codeで最も広く使われているオープンソースAIコーディングエージェントである。Apache 2.0ライセンス、500万+インストール、GitHub 61k+スター。ファイルの読み書き、ターミナル実行、ブラウザ自動化までサポートする本格的なエージェントである。</p>
+<p><strong>インストール手順</strong></p>
+<ol>
+<li>VS Code左側のExtensionsタブ(<code>Ctrl+Shift+X</code>)で「Cline」を検索 → Install</li>
+<li>サイドバーのClineアイコンをクリック → 「Use your own API Key」を選択</li>
+<li>API Providerドロップダウンから「MiniMax」を選択</li>
+<li>Entrypointで場所を選択(海外: <code>api.minimax.io</code>、中国: <code>api.minimaxi.com</code>)</li>
+<li>APIキーを入力 → 右上の「Done」をクリック</li>
+<li>モデル選択: MiniMax-M3(またはM2.5 / M2.7) → 「Auto-approve: Edit」を有効化して使用開始</li>
+</ol>
+<p><strong>Cline独自機能の活用ヒント</strong>-<strong>Plan / Actモードの分離</strong>: Planは複数ファイル変更計画の提案のみ、Actは実際の編集を実行。大きなリファクタリングはまずPlanで検討。</p>
+<ul>
+<li><strong>MCPマーケットプレイス</strong>: 内蔵ツール(ブラウザ、GitHub、DBクライアントなど)をワンクリックで追加。</li>
+<li><strong>@メンション</strong>: チャット欄に<code>@ファイルパス</code>を入力すると該当ファイルをコンテキストとして自動注入。</li>
+<li><strong>Checkpoints</strong>: 段階ごとのスナップショットが保存され、ミス時にワンクリックでロールバック。</li>
+</ul>
+<h3>2.3 Claude Code拡張(VS Code公式)</h3>
+<p>Claude CodeはAnthropicが作ったCLIツールだが、2026年からVS Code拡張として正式リリースされた。ターミナルエージェントの強力さとVS Code UIを組み合わせた形で、OpenAIのCodex CLIと直接競合するツールである。</p>
+<p><strong>インストール手順</strong></p>
+<ol>
+<li>VS Code Extensionsで「Claude Code」を検索(Anthropic公式発行者を確認) → Install</li>
+<li>左側サイドバーのClaudeアイコンをクリック</li>
+<li>デフォルトはClaude APIなので、MiniMax APIに切り替えるため環境変数を設定:</li>
+</ol>
+<pre><code class="language-bash"># ~/.zshrc または ~/.bashrcに追加
+export ANTHROPIC_BASE_URL=&quot;https://api.minimax.io/anthropic&quot;
+export ANTHROPIC_API_KEY=&quot;ここにMiniMaxのAPIキー&quot;
+
+# VS Code内で使用するモデルを指定
+claude --model MiniMax-M3
+</code></pre>
+<ol start="4">
+<li>VS Code再起動後、Claudeパネルで<code>/model</code>コマンドでモデル切り替え(M3 / M2.7 / M2.5)</li>
+<li><code>/agents</code>、<code>/compact</code>、<code>/clear</code>などのスラッシュコマンドはすべてMiniMax M3で正常動作(Anthropic-SDK互換)</li>
+</ol>
+<p><strong>Claude Codeの強み</strong></p>
+<ul>
+<li>並列ワークロード処理に強い — 複数ファイルにわたる同時分析。</li>
+<li>Planモードで大規模リファクタリング戦略を先に立ててから実行。</li>
+<li>VS Codeターミナル統合でgit / CI/CDパイプラインを1画面で制御。</li>
+</ul>
+<h3>2.4 Continue(タブ補完+チャット)</h3>
+<p>Continueは「日常のドライビング」に強いツールである。高速なタブ自動補完、<code>@codebase</code>質疑応答、シンプルなチャットを一つにまとめた形で、ローカルモデル(Ollama / LM Studio)からOpenAI互換APIまで幅広くサポートする。</p>
+<p><strong>インストール手順</strong></p>
+<ol>
+<li>Extensionsで「Continue」を検索 → Install</li>
+<li><code>Ctrl+L</code>でチャットパネルを開く → <code>config.json</code>が自動生成される</li>
+<li><code>config.json</code>を以下のように修正:</li>
+</ol>
+<pre><code class="language-json">{
+  &quot;models&quot;: [
+    {
+      &quot;title&quot;: &quot;MiniMax M2.5&quot;,
+      &quot;provider&quot;: &quot;openai&quot;,
+      &quot;model&quot;: &quot;MiniMax-M2.5&quot;,
+      &quot;apiBase&quot;: &quot;https://api.minimax.io/v1&quot;,
+      &quot;apiKey&quot;: &quot;ここにMiniMaxのAPIキー&quot;
+    }
+  ],
+  &quot;tabAutocompleteModel&quot;: {
+    &quot;title&quot;: &quot;MiniMax M2.5 Lightning&quot;,
+    &quot;provider&quot;: &quot;openai&quot;,
+    &quot;model&quot;: &quot;MiniMax-M2.5-highspeed&quot;,
+    &quot;apiBase&quot;: &quot;https://api.minimax.io/v1&quot;,
+    &quot;apiKey&quot;: &quot;ここにMiniMaxのAPIキー&quot;
+  }
+}
+</code></pre>
+<p>保存すると即座に適用される。大規模リポジトリでは<code>@codebase</code>でインデックス後にRAG検索が動作する。</p>
+<h3>2.5 Kilo Code(旧Roo Code)</h3>
+<p>Kilo CodeはRoo Codeの精神的後継である。Roo Codeは2026年5月15日付で公式に終了(リポジトリアーカイブ)されたが、既存インストール分はマーケットプレイスに残っている期間中は引き続き動作する。新規ユーザーはKilo Codeのインストールを推奨。</p>
+<p><strong>インストール手順</strong></p>
+<ol>
+<li>Extensionsで「Kilo Code」を検索 → Install(旧Roo Codeユーザーは<code>~/.roo/</code>設定を<code>~/.kilocode/</code>にコピーすればそのまま動作)</li>
+<li>Kilo Codeサイドバー → API Provider: MiniMaxを選択</li>
+<li>Entrypoint: <code>api.minimax.io</code>または<code>api.minimaxi.com</code></li>
+<li>APIキーを入力 → Model: MiniMax-M3を選択 → Done</li>
+</ol>
+<p><strong>Kilo Code独自の強み</strong>-<strong>Orchestratorモード</strong>: 複雑な作業をサブタスクに分解し、Architect・Code・Debugなど専門モードに自動委任するマルチステップオーケストレーション。大規模な機能実装やPR単位の作業を一度に自律処理する際、Clineの単一Plan-Actループより有利な選択肢である。</p>
+<ul>
+<li><strong>カスタムモードマーケットプレイス</strong>: Architect、Ask、Code、Debugなどロールベースのプリセット。</li>
+<li><strong>Side-by-side Diffビュー</strong>: Clineより精緻に変更内容をプレビュー。</li>
+<li><strong>段階的なターミナル権限制御</strong>: セーフティファーストのワークフロー。</li>
+</ul>
+<blockquote>
+<p><strong>実務ヒント</strong>: VS Codeワークフローでは「作業規模」を基準にツールを分けると良い。単一機能の修正・デバッグはClineのPlan-Actで、複数モジュールにわたる大規模機能実装はKilo CodeのOrchestratorモードに委任する、といった形である。</p>
+</blockquote>
+<h3>2.6 VS Code内の推奨ワークフロー</h3>
+<p>一つの組み合わせだけ選ぶなら以下を推奨する。</p>
+<ul>
+<li><strong>日常のコーディング</strong>: Continue(タブ補完) + ClineまたはKilo Code(エージェントサイドバー)</li>
+<li><strong>大規模リファクタリング / PR自動化</strong>: Claude Code拡張 + Cline MCP統合、またはKilo Code Orchestrator</li>
+<li><strong>Cursor有料ユーザー</strong>: Cursor Pro($20/月) + Anthropic Base URL OverrideでM3を使用</li>
+<li><strong>フリーランス / コスト重視</strong>: MiniMax Coding Plan + Continue(オープンソース自動補完) + Cline(エージェント)</li>
+</ul>
+<blockquote>
+<p><strong>実践ヒント</strong>: 2つのツールを同時に有効にすると衝突する可能性があるため、一時点では1つのツールのみ有効化する。コードレビュー中はCline Planモードのみ、高速入力中はContinue自動補完のみを使用すること。</p>
+</blockquote>
+<hr>
+<h2>3. エージェントワークフロー設計</h2>
+<h3>3.1 Plan-Actループの理解</h3>
+<p>2026年のAIコーディングエージェントは単純なQ&amp;Aではなく、「読む → 考える → 書く → 検証する」ループを自律的に繰り返す。これを<strong>Plan-Act-Verifyループ</strong>と呼び、VS Codeツール群はこのループを様々な形で実装している。</p>
+<p><strong>ループの4段階</strong>1.<strong>Read</strong>: 作業ディレクトリ・ファイル・文書を能動的に探索(grep、find、sed、lsなど)。
+2. <strong>Think</strong>: 作業分解、意図推論、呼び出すツール/APIの決定。MiniMax M3ではthinkingブロックが応答に含まれる。
+3. <strong>Act</strong>: ファイル作成・修正、コマンド実行、関数呼び出し。すべての変更はユーザー承認後に適用(Human-in-the-loop)。
+4. <strong>Verify</strong>: テスト実行、型チェック、ビルド確認。失敗時は1~2段階に戻って自己修正。</p>
+<p><strong>例: 「JWT認証ミドルウェア追加」作業の実際の流れ</strong></p>
+<pre><code class="language-javascript">// Cline / Kilo Codeが実行するステップ
+// 1. Read:   src/middleware/auth.ts, src/routes/api.ts, AGENTS.md
+// 2. Think:  「JWTミドルウェア追加、access 15分/refresh 7日ポリシー適用が必要」
+// 3. Act:
+//    - src/middleware/jwt.ts を新規作成
+//    - src/routes/api.ts にmiddlewareを登録
+//    - package.jsonにjsonwebtoken、bcrypt依存を追加
+// 4. Verify:
+//    - npm run build  (TypeScriptコンパイル)
+//    - npm test       (既存+新規ミドルウェアテスト)
+//    - 失敗時はimportエラーなどを自動修正
+</code></pre>
+<h3>3.2 MCP(Model Context Protocol)統合</h3>
+<p>MCPは2024年にAnthropicが提案した開放型プロトコルで、AIエージェントが外部ツール/データソースに標準化された方式でアクセスできるようにする。Cline、Kilo Code、Claude Codeはすべてネイティブでサポートしている。</p>
+<p><strong>MCPで可能なこと</strong></p>
+<ul>
+<li>Postgres / MySQL / MongoDBデータベースの直接照会・変更</li>
+<li>GitHub Issues / PR / Actionワークフローの制御</li>
+<li>Notion / Confluence / Slackドキュメントの検索・作成</li>
+<li>Puppeteer / Playwrightブラウザ自動化(Computer Use)</li>
+<li>社内APIエンドポイントの呼び出し</li>
+</ul>
+<blockquote>
+<p><strong>実務価値</strong>: MCP統合の効用は自動化ポイントで最も大きい。GitHubサーバーを通じたPRレビュー自動化(イシュー → パッチ → PR作成 → レビューコメント)、DBサーバーを通じたスキーマ認識クエリ作成などは、MiniMaxの低コストモデルと組み合わせることで、繰り返し作業のコスト・時間を同時に削減できる。</p>
+</blockquote>
+<p><strong>MCP設定例(Cline <code>.mcp.json</code>)</strong></p>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;github&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-github&quot;],
+      &quot;env&quot;: { &quot;GITHUB_TOKEN&quot;: &quot;ghp_...&quot; }
+    },
+    &quot;postgres&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;@modelcontextprotocol/server-postgres&quot;],
+      &quot;env&quot;: { &quot;DATABASE_URL&quot;: &quot;postgresql://...&quot; }
+    }
+  }
+}
+</code></pre>
+<h3>3.3 チェックポイントとGit安全網</h3>
+<p>AIエージェントが誤ってファイルを破損させる可能性への懸念は自然なものである。2026年のツール群はこの問題を二重の安全網で解決する。</p>
+<p><strong>① Cline / Kilo Code Checkpoints(エージェント単位)</strong></p>
+<ul>
+<li>各ステップごとに作業ディレクトリのスナップショットを自動保存。</li>
+<li>誤った方向に進んだ場合、「Restore Checkpoint」を一度クリックすれば戻せる。</li>
+<li>ストレージ効率のため、増分スナップショット(ファイル変更分のみ)を使用。</li>
+</ul>
+<p><strong>② Gitブランチ(コードベース単位)</strong></p>
+<ul>
+<li>重要なエージェントセッション開始前に<code>git checkout -b feature/agent-task</code></li>
+<li>エージェント作業後に<code>git diff</code>をレビュー → 満足であればcommit</li>
+<li>失敗時は<code>git reset --hard</code>でブランチを破棄</li>
+</ul>
+<p>両方の安全網は相互補完的である。Checkpointは「数ステップ前に戻る」用途、Gitは「全て破棄する」用途である。</p>
+<h3>3.4 マルチエージェント / ルーティングパターン(ハイブリッド戦略)</h3>
+<p>単一モデルに依存するよりも、作業特性に応じてモデルをルーティングするパターンが2026年の標準である。核心はコスト-精度のトレードオフである。複雑で精密さが重要な作業は高価な高精度モデル(Opus 4.7)へ、繰り返し・機械的な作業は安価な小型モデル(MiniMax M2.5 / DeepSeek V4-Flash)へルーティングするハイブリッド構成が実務上最もコスト効率が高い。MiniMaxは単価の幅が広く($0.14~$1.20/M)、ルーティング効果が特に大きい。</p>
+<table>
+<thead>
+<tr>
+<th>作業タイプ</th>
+<th>推奨モデル</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>タブ補完 / 単純クエリ</td>
+<td>M2.5-highspeed・DeepSeek V4-Flash</td>
+<td>速度・コストを同時に最適化(最低価格帯)</td>
+</tr>
+<tr>
+<td>関数単位のコード生成</td>
+<td>M2.5またはSonnet 4.6</td>
+<td>SWE-bench 80%台で同等</td>
+</tr>
+<tr>
+<td>複数ファイルのリファクタリング</td>
+<td>M3 / Opus 4.7</td>
+<td>1Mコンテキストでコードベース全体を認識</td>
+</tr>
+<tr>
+<td>エージェントループ(CI自動化)</td>
+<td>M2.7またはSonnet 4.6</td>
+<td>tool-use安定性が検証済み</td>
+</tr>
+<tr>
+<td>数学・アルゴリズム解法</td>
+<td>GPT-5.5 Thinking・DeepSeek V4-Pro</td>
+<td>FrontierMath / LiveCodeBench上位</td>
+</tr>
+<tr>
+<td>高精度コードレビュー</td>
+<td>Opus 4.7 / Sonnet 4.6</td>
+<td>SWE-Bench Pro 64.0%で1位</td>
+</tr>
+<tr>
+<td>大量バッチ処理</td>
+<td>DeepSeek V4-Flash / V3.2</td>
+<td>Batch + Context Cacheでトークン単価を最小化</td>
+</tr>
+</tbody></table>
+<p><strong>ルーティング実装例(OpenClaw)</strong></p>
+<pre><code class="language-json">// ~/.openclaw/openclaw.json
+{
+  &quot;models&quot;: {
+    &quot;providers&quot;: {
+      &quot;minimax&quot;:   { &quot;baseUrl&quot;: &quot;https://api.minimax.io/anthropic&quot;, &quot;apiKey&quot;: &quot;$MINIMAX_API_KEY&quot;,   &quot;api&quot;: &quot;anthropic-messages&quot; },
+      &quot;anthropic&quot;: { &quot;baseUrl&quot;: &quot;https://api.anthropic.com&quot;,         &quot;apiKey&quot;: &quot;$ANTHROPIC_API_KEY&quot;, &quot;api&quot;: &quot;anthropic-messages&quot; },
+      &quot;openai&quot;:    { &quot;baseUrl&quot;: &quot;https://api.openai.com/v1&quot;,         &quot;apiKey&quot;: &quot;$OPENAI_API_KEY&quot;,    &quot;api&quot;: &quot;openai-completions&quot; }
+    }
+  },
+  &quot;agents&quot;: {
+    &quot;defaults&quot;: {
+      &quot;model&quot;: {
+        &quot;primary&quot;: &quot;minimax/MiniMax-M3&quot;,
+        &quot;fallbacks&quot;: [&quot;anthropic/claude-opus-4-7&quot;, &quot;openai/gpt-5.5&quot;]
+      }
+    }
+  }
+}
+</code></pre>
+<p>このように設定すると、MiniMax M3が優先的に呼び出され、rate limitや一時的な障害が発生した場合、Opus 4.7 → GPT-5.5の順に自動フェイルオーバーされる。コストの90%以上がM3で発生しつつ、品質の限界時点でのみ上位モデルへの安全網が作動する。</p>
+<hr>
+<h2>4. 価格比較 — MiniMax vs DeepSeek vs Anthropic vs OpenAI</h2>
+<h3>4.1 モデル別単価表</h3>
+<p>2026年6月時点、100万トークン(MTok)あたりの単価。すべて公式価格(USD)であり、バッチ/キャッシュ割引は別途。</p>
+<table>
+<thead>
+<tr>
+<th>ベンダー</th>
+<th>モデル</th>
+<th>Input($/M)</th>
+<th>Output($/M)</th>
+<th>コンテキスト</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MiniMax</td>
+<td>M2.5(オープン)</td>
+<td>0.30</td>
+<td>1.20</td>
+<td>197K</td>
+<td>SWE 80.2%</td>
+</tr>
+<tr>
+<td>MiniMax</td>
+<td>M2.5-highspeed</td>
+<td>0.30</td>
+<td>2.40</td>
+<td>197K</td>
+<td>2倍速</td>
+</tr>
+<tr>
+<td>MiniMax</td>
+<td>M2.7</td>
+<td>0.26</td>
+<td>1.20</td>
+<td>205K</td>
+<td>recursive self-improve</td>
+</tr>
+<tr>
+<td>MiniMax</td>
+<td>M3(新規)</td>
+<td>0.30</td>
+<td>1.20</td>
+<td>1M</td>
+<td>1Mコンテキスト、マルチモーダル</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>V3.2</td>
+<td>0.28</td>
+<td>0.42</td>
+<td>128K</td>
+<td>最安のclosed-tier</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>V3.2 Speciale</td>
+<td>0.27</td>
+<td>0.40</td>
+<td>164K</td>
+<td>SWE 89.6%(experimental)</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>V4-Flash</td>
+<td>0.14</td>
+<td>0.28</td>
+<td>1M</td>
+<td>最低価格・キャッシュヒット時$0.028</td>
+</tr>
+<tr>
+<td>DeepSeek</td>
+<td>V4-Pro</td>
+<td>1.74</td>
+<td>3.48</td>
+<td>1M</td>
+<td>数学・アルゴリズムに強い</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Haiku 4.5</td>
+<td>1.00</td>
+<td>5.00</td>
+<td>200K</td>
+<td>軽量作業用</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Sonnet 4.6</td>
+<td>3.00</td>
+<td>15.00</td>
+<td>1M</td>
+<td>標準productionティア</td>
+</tr>
+<tr>
+<td>Anthropic</td>
+<td>Opus 4.7 / 4.8</td>
+<td>5.00</td>
+<td>25.00</td>
+<td>1M</td>
+<td>SWE-Bench Pro 1位 64.0%</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT-5.4</td>
+<td>2.50</td>
+<td>15.00</td>
+<td>1M</td>
+<td>Computer useネイティブ</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT-5.4-mini</td>
+<td>0.40</td>
+<td>1.60</td>
+<td>272K</td>
+<td>低価格帯、性能94%</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT-5.5</td>
+<td>5.00</td>
+<td>30.00</td>
+<td>1M</td>
+<td>Terminal-Bench 82.7% 1位</td>
+</tr>
+<tr>
+<td>OpenAI</td>
+<td>GPT-5.5 Pro</td>
+<td>30.00</td>
+<td>180.00</td>
+<td>1M</td>
+<td>研究/高度な分析</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>キャッシング参考</strong>: MiniMaxはキャッシュヒット時にinputが約$0.03/Mまで下がり、DeepSeek V4-Flashは$0.028/Mまで下がる。逆にClaude Opusは2026年のトークナイザー変更で同一テキストのトークン数が増え、実質コストが上昇したため、表の名目単価だけで比較するとOpusの実際のコストが過小評価される可能性がある。</p>
+</blockquote>
+<h3>4.2 シナリオ別月間コスト</h3>
+<p>実際の開発ワークロード基準に換算した月間コスト。すべて1日50回のリクエスト×22日、入力50K/出力10Kトークンを想定。</p>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>単価($/M in/out)</th>
+<th>月間コスト(USD)</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek V4-Flash</td>
+<td>0.14 / 0.28</td>
+<td>$5.39</td>
+<td>最低価格の1Mコンテキスト</td>
+</tr>
+<tr>
+<td>DeepSeek V3.2</td>
+<td>0.28 / 0.42</td>
+<td>$7.92</td>
+<td>低価格多言語</td>
+</tr>
+<tr>
+<td>MiniMax M2.5</td>
+<td>0.30 / 1.20</td>
+<td>$17.16</td>
+<td>SWE 80.2%+オープンウェイト</td>
+</tr>
+<tr>
+<td>MiniMax M3</td>
+<td>0.30 / 1.20</td>
+<td>$17.16</td>
+<td>1Mコンテキスト、マルチモーダル</td>
+</tr>
+<tr>
+<td>DeepSeek V4-Pro</td>
+<td>1.74 / 3.48</td>
+<td>$53.20</td>
+<td>数学・アルゴリズム</td>
+</tr>
+<tr>
+<td>GPT-5.4</td>
+<td>2.50 / 15.00</td>
+<td>$192.50</td>
+<td>Computer useネイティブ</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td>3.00 / 15.00</td>
+<td>$215.50</td>
+<td>Claude品質・1M</td>
+</tr>
+<tr>
+<td>Claude Opus 4.7</td>
+<td>5.00 / 25.00</td>
+<td>$330.00</td>
+<td>SWE Pro 1位、高価格</td>
+</tr>
+<tr>
+<td>GPT-5.5</td>
+<td>5.00 / 30.00</td>
+<td>$385.00</td>
+<td>Terminal-Bench 1位</td>
+</tr>
+</tbody></table>
+<p><strong>観察事項</strong></p>
+<ul>
+<li>MiniMax M2.5はOpus 4.7比で約1/19のコストでSWE-benchスコアの98%水準を提供する。</li>
+<li>DeepSeek V4-Flashは名目単価が最低(M2.5の約1/2)であり、1Mコンテキストを含め大量バッチに最適。</li>
+<li>Sonnet 4.6とGPT-5.4は似た価格帯だが、Sonnetは1Mコンテキストが標準、GPT-5.4はComputer Useが差別化点である。</li>
+<li>高価格モデル(Opus 4.7、GPT-5.5)は「本当に必要な時だけ」ルーティングするパターンがコスト最適化の核心である。</li>
+</ul>
+<h3>4.3 コスト最適化レバー</h3>
+<p>すべてのベンダーが共通で提供する4つの割引メカニズムである。</p>
+<table>
+<thead>
+<tr>
+<th>メカニズム</th>
+<th>削減率</th>
+<th>動作方式</th>
+<th>注意点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Prompt Caching</td>
+<td>~90%</td>
+<td>繰り返しコンテキストをキャッシュから読み取り</td>
+<td>初回書き込みは1.25x課金(Anthropic)</td>
+</tr>
+<tr>
+<td>Batch API</td>
+<td>~50%</td>
+<td>非同期一括処理</td>
+<td>数時間の遅延許容が必要</td>
+</tr>
+<tr>
+<td>ティアルーティング</td>
+<td>30~60%</td>
+<td>簡単な作業はmini/flashへ</td>
+<td>ルーティングロジックを自前実装</td>
+</tr>
+<tr>
+<td>Context Caching</td>
+<td>90%+</td>
+<td>DeepSeek V4自動キャッシュ</td>
+<td>繰り返しprefixパターンが必要</td>
+</tr>
+</tbody></table>
+<p>MiniMaxはキャッシュヒット時にinputが$0.03/M(約10%水準)まで下がり、1Mコンテキストのフルウィンドウが標準価格に含まれ追加課金がない(Sonnetの200K超過surchargeと対照的)。トークン単価が同じに見えてもトークナイザー効率によって実質コストは変わるため、同一コードサンプルで実測トークン数を比較した上で決定することを推奨する。</p>
+<hr>
+<h2>5. コーディング性能比較</h2>
+<p>コーディングLLMの性能は単一のベンチマークでは判断できない。2026年の標準は以下の4つのベンチマークの相互確認である。</p>
+<ul>
+<li><strong>SWE-bench Verified</strong>(500件のGitHubイシュー、Python中心) — 最も権威ある総合指標</li>
+<li><strong>SWE-Bench Pro</strong>(1,865件の多言語作業、Python/Go/TS/JS) — 多言語エージェントコーディング</li>
+<li><strong>Terminal-Bench 2.0</strong>(CLI環境での自律作業) — エージェントのターミナル使用能力</li>
+<li><strong>LiveCodeBench</strong>(競技プログラミング) — 純粋なアルゴリズム問題解決</li>
+</ul>
+<blockquote>
+<p><strong>重要</strong>: ベンチマークスコアはエージェントのスキャフォールド・ツール環境・プロンプト設定によって偏差が大きい。以下の数値は同一時点(2026-05-28~06-02)の公開リーダーボードを整理したものであり、絶対的な序列よりも「どのベンチマークに強いか」を読み取ることが実務上有用である。</p>
+</blockquote>
+<h3>5.1 SWE-bench Verifiedスコア</h3>
+<p>2026年6月時点。500件の作業の人間検証セット、標準mini-SWE-agent+bashツール環境。</p>
+<table>
+<thead>
+<tr>
+<th>順位</th>
+<th>モデル</th>
+<th>ベンダー</th>
+<th>SWE-bench Verified</th>
+<th>入力価格</th>
+<th>10万トークンあたりコスト*</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>GPT-5.5</td>
+<td>OpenAI</td>
+<td>82.60%</td>
+<td>$5.00/M</td>
+<td>$0.50</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Claude Opus 4.7</td>
+<td>Anthropic</td>
+<td>82.00%</td>
+<td>$5.00/M</td>
+<td>$0.50</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Claude Opus 4.6</td>
+<td>Anthropic</td>
+<td>80.80%</td>
+<td>$5.00/M</td>
+<td>$0.50</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Gemini 3.1 Pro</td>
+<td>Google</td>
+<td>80.60%</td>
+<td>$2.00/M</td>
+<td>$0.20</td>
+</tr>
+<tr>
+<td>5</td>
+<td>DeepSeek V4-Pro</td>
+<td>DeepSeek</td>
+<td>80.60%</td>
+<td>$1.74/M</td>
+<td>$0.17</td>
+</tr>
+<tr>
+<td>6</td>
+<td>MiniMax M2.5</td>
+<td>MiniMax</td>
+<td>80.20%</td>
+<td>$0.30/M</td>
+<td>$0.03</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Claude Sonnet 4.6</td>
+<td>Anthropic</td>
+<td>79.60%</td>
+<td>$3.00/M</td>
+<td>$0.30</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Kimi K2.5</td>
+<td>Moonshot</td>
+<td>76.80%</td>
+<td>オープンソース</td>
+<td>セルフホスト</td>
+</tr>
+<tr>
+<td>9</td>
+<td>DeepSeek V3.2</td>
+<td>DeepSeek</td>
+<td>72~74%</td>
+<td>$0.28/M</td>
+<td>$0.03</td>
+</tr>
+<tr>
+<td>10</td>
+<td>GPT-5.4</td>
+<td>OpenAI</td>
+<td>~80%</td>
+<td>$2.50/M</td>
+<td>$0.25</td>
+</tr>
+</tbody></table>
+<p>* 10万トークンあたりコスト = 入力単価基準(出力1万トークン追加時は各モデルの価格に応じて増加)。</p>
+<p><strong>主なインサイト</strong></p>
+<ul>
+<li>上位6モデルが1.3ポイント以内に集まっており、スコアだけでは大きな差がない。価格と組み合わせてこそ実質的な勝者が見える。</li>
+<li>MiniMax M2.5はOpus 4.6に0.6ポイント劣るが価格は1/17 — コスト効率最高。</li>
+<li>DeepSeek V4-Proは1Mフルウィンドウでopus 4.6級のスコア、価格1/21 — コスト重視チームに強力。</li>
+<li>GPT-5.5はSWE-bench 1位だが2位との差はわずか0.6ポイント。単純なコーディングには過剰な選択である。</li>
+</ul>
+<h3>5.2 SWE-Bench Pro / Terminal-Bench</h3>
+<p>SWE-Bench Proは多言語・エージェント環境で測定した強化指標、Terminal-BenchはCLI自律作業能力である。</p>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>SWE-Bench Pro</th>
+<th>Terminal-Bench 2.0</th>
+<th>LiveCodeBench</th>
+<th>特化した強み</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claude Opus 4.7</td>
+<td>64.0%(1位)</td>
+<td>69.40%</td>
+<td>88.80</td>
+<td>GitHubイシュー解決1位</td>
+</tr>
+<tr>
+<td>MiniMax M3</td>
+<td>59.0%</td>
+<td>—</td>
+<td>—</td>
+<td>オープンウェイトAgent Coding SOTA</td>
+</tr>
+<tr>
+<td>GPT-5.5</td>
+<td>58.6%</td>
+<td>82.70%(1位)</td>
+<td>—</td>
+<td>長時間自律作業最強</td>
+</tr>
+<tr>
+<td>GPT-5.4</td>
+<td>57.70%</td>
+<td>75.10%</td>
+<td>—</td>
+<td>Computer Useネイティブ</td>
+</tr>
+<tr>
+<td>Gemini 3.1 Pro</td>
+<td>54.20%</td>
+<td>68.50%</td>
+<td>2887 Elo(1位)</td>
+<td>競技プログラミング最強</td>
+</tr>
+<tr>
+<td>MiniMax M2.5</td>
+<td>51.30%</td>
+<td>—</td>
+<td>82.6 Elo</td>
+<td>オープンウェイト・Multi-SWE 1位</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td>~50%</td>
+<td>—</td>
+<td>—</td>
+<td>コストパフォーマンスの良いClaude</td>
+</tr>
+<tr>
+<td>DeepSeek V3.2</td>
+<td>—</td>
+<td>—</td>
+<td>83.3 Pass@1</td>
+<td>低価格多言語コーディング</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>ベンチマーク逆転の事例</strong>: 同じモデルでもベンチマークによって順位が逆転する。例えばDeepSWEベンチマークではGPT-5.5が70%で1位、Opus 4.7は54%で3位となり、SWE-Bench Proと正反対の結果になる。これはモデルごとに特化領域が異なることを示す信号であり、自社の作業分布に最も近いベンチマークを基準に選ぶべきことを意味する。またMiniMax M3がSWE-Bench Proで59.0%を記録しGPT-5.5(58.6%)をわずかに上回った点は、オープンウェイトモデルがエージェントコーディングで商用最上位層と競合し始めたという信号である。</p>
+</blockquote>
+<h3>5.3 主要モデル直接比較(数値ベース)</h3>
+<p>実務で最も頻繁に候補に挙がる5つのモデルを項目別の公式数値で整理した。一部項目は公式発表がなく「情報なし」と表記しており、ベンチマークは環境設定によって偏差が存在することを前提に読む必要がある。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>MiniMax M3(推奨)</th>
+<th>MiniMax M2.5</th>
+<th>DeepSeek V4-Pro</th>
+<th>DeepSeek V4-Flash</th>
+<th>Claude Opus 4.7</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Input / Output($/M)</td>
+<td>0.30 / 1.20</td>
+<td>0.30 / 1.20</td>
+<td>1.74 / 3.48</td>
+<td>0.14 / 0.28</td>
+<td>5.00 / 25.00</td>
+</tr>
+<tr>
+<td>Prompt Cache($/M)</td>
+<td>~0.03</td>
+<td>~0.03</td>
+<td>0.145</td>
+<td>0.028</td>
+<td>書き込みコスト別途</td>
+</tr>
+<tr>
+<td>SWE-bench Verified</td>
+<td>情報なし</td>
+<td>80.2%</td>
+<td>80.6%</td>
+<td>未公開</td>
+<td>82.0%</td>
+</tr>
+<tr>
+<td>LiveCodeBench</td>
+<td>情報なし</td>
+<td>情報なし</td>
+<td>93.5(V4-Pro-Max)</td>
+<td>未公開</td>
+<td>情報なし</td>
+</tr>
+<tr>
+<td>SWE-Bench Pro</td>
+<td>59.0%</td>
+<td>51.3%</td>
+<td>未公開</td>
+<td>未公開</td>
+<td>64.0%</td>
+</tr>
+<tr>
+<td>Context Window</td>
+<td>1M</td>
+<td>197K</td>
+<td>1M</td>
+<td>1M</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>強み</td>
+<td>Agent Coding SOTA・低価格な1M Context</td>
+<td>効率的なMoE(229B/10B active)</td>
+<td>複雑な数学・アルゴリズムに強い</td>
+<td>最低価格・M2.5比1/2の価格</td>
+<td>高精度コードレビュー・Enterprise向け</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>表の解釈</strong>: M3とM2.5は同一単価($0.30/$1.20)で1M vs 197Kのコンテキスト差が核心であり、V4-Flashは最低価格の1Mオプション、V4-Proは数学・アルゴリズム特化、Opus 4.7はSWE-Bench Pro精度1位である。同じ「推奨」表記でも作業内容によって最適解が異なるため、価格・コンテキスト・ベンチマークの3軸を合わせて見て決定すること。</p>
+</blockquote>
+<h3>5.4 総合評価マトリクス</h3>
+<p>単一ベンチマークではなく、実際の使用時に考慮される6つの次元での総合評価である。</p>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>コード品質</th>
+<th>エージェントループ</th>
+<th>コンテキスト長</th>
+<th>速度</th>
+<th>価格効率</th>
+<th>オープンソース</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MiniMax M2.5</td>
+<td>★★★★★</td>
+<td>★★★★★</td>
+<td>★★(197K)</td>
+<td>★★★</td>
+<td>★★★★★</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>MiniMax M3</td>
+<td>★★★★★</td>
+<td>★★★★★</td>
+<td>★★★★★(1M)</td>
+<td>★★★★</td>
+<td>★★★★</td>
+<td>予定</td>
+</tr>
+<tr>
+<td>DeepSeek V4-Pro</td>
+<td>★★★★★</td>
+<td>★★★★</td>
+<td>★★★★★(1M)</td>
+<td>★★★</td>
+<td>★★★★★</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>DeepSeek V4-Flash</td>
+<td>★★★★</td>
+<td>★★★★</td>
+<td>★★★★★(1M)</td>
+<td>★★★★★</td>
+<td>★★★★★</td>
+<td>✓</td>
+</tr>
+<tr>
+<td>Claude Opus 4.7</td>
+<td>★★★★★</td>
+<td>★★★★★</td>
+<td>★★★★★(1M)</td>
+<td>★★</td>
+<td>★★</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td>★★★★</td>
+<td>★★★★★</td>
+<td>★★★★★(1M)</td>
+<td>★★★★</td>
+<td>★★★</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>GPT-5.5</td>
+<td>★★★★★</td>
+<td>★★★★★</td>
+<td>★★★★★(1M)</td>
+<td>★★★</td>
+<td>★</td>
+<td>✗</td>
+</tr>
+<tr>
+<td>GPT-5.4</td>
+<td>★★★★</td>
+<td>★★★★</td>
+<td>★★★★★(1M)</td>
+<td>★★★★</td>
+<td>★★★</td>
+<td>✗</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. 意思決定ガイド — どのモデルをいつ使うか?</h2>
+<p>すべての状況を単一モデルで解決しようとしないこと。以下の意思決定ツリーで30秒以内に選択できる。</p>
+<p><strong>① 予算が最大の制約であれば</strong>→ MiniMax M2.5またはDeepSeek V4-Flash。SWE-bench 70~80%台を10万トークンあたり$0.03前後で使用できる。M2.5はM3へのアップグレードパスが明確で、M3リリース後は1Mコンテキストまでそのまま使用可能。<strong>② コード品質(微細な意図の把握)が最優先であれば</strong>→ Claude Opus 4.7。SWE-Bench Pro 64.0%で実際のGitHubイシュー解決1位。「ほぼ正しいがわずかにずれた」結果が繰り返されるチームであれば、Opusへルーティングするフェイルオーバー構成を推奨する。<strong>③ 長時間の自律作業(8時間以上連続)が多ければ</strong>→ GPT-5.5。Terminal-Bench 2.0で82.7%で1位、長時間自律作業最強。ただし価格($5/$30)が2倍なので本当に長い作業にのみルーティングすること。<strong>④ 1Mトークンのフルコードベース分析が必要であれば</strong>→ MiniMax M3、Gemini 3.1 Pro、DeepSeek V4-Pro / V4-Flash、Claude Opus 4.7/4.8(すべて1M対応)。このうち価格効率はV4-Flash($0.14/$0.28)とM3($0.30/$1.20)が優位。Sonnet 4.6も1Mをサポートする。<strong>⑤ データ主権/オンプレミスが必要であれば</strong>→ MiniMax M2.5/M2.7(オープンウェイト)またはDeepSeek V3.2/V4。Hugging Faceから重みを取得しvLLM/SGLangで社内クラスタにサービングする。MiniMaxはMIT-style、DeepSeekはMIT+Model License(商用許可)である。<strong>⑥ Computer Use(ブラウザ/OS自動化)が必要であれば</strong>→ GPT-5.4(ネイティブ、OSWorld 75%)またはClaude Opus 4.7(API)。MiniMax M3はネイティブマルチモーダルだが、Computer Useはツール呼び出しで別途実装が必要である。<strong>⑦ 推奨ハイブリッドルーティング構成(OpenClaw例)</strong></p>
+<pre><code class="language-json">{
+  &quot;agents&quot;: {
+    &quot;defaults&quot;: {
+      &quot;model&quot;: { &quot;primary&quot;: &quot;minimax/MiniMax-M3&quot;, &quot;fallbacks&quot;: [&quot;anthropic/claude-opus-4-7&quot;] }
+    },
+    &quot;overrides&quot;: {
+      &quot;complex_reasoning&quot;: { &quot;primary&quot;: &quot;anthropic/claude-opus-4-7&quot;, &quot;fallbacks&quot;: [&quot;minimax/MiniMax-M3&quot;] },
+      &quot;math_algorithm&quot;:    { &quot;primary&quot;: &quot;openai/gpt-5.5&quot;,            &quot;fallbacks&quot;: [&quot;deepseek/deepseek-v4-pro&quot;] },
+      &quot;autocomplete&quot;:      { &quot;primary&quot;: &quot;minimax/MiniMax-M2.5-highspeed&quot; },
+      &quot;bulk_batch&quot;:        { &quot;primary&quot;: &quot;deepseek/deepseek-v4-flash&quot; }
+    }
+  }
+}
+</code></pre>
+<hr>
+<h2>7. 結論と参考資料</h2>
+<h3>7.1 一言まとめ</h3>
+<blockquote>
+<p>MiniMax M2.5/M3はSWE-bench Verified 80%台、SWE-Bench Pro 59%台のスコアに197K~1Mコンテキスト、OpenAI・Anthropic両方のAPI互換、オープンウェイト、そして低価格($0.30/$1.20)をすべて備えた2026年最もバランスの取れたコーディングLLMである。</p>
+</blockquote>
+<p>VS CodeのCline・Claude Code・Continue・Kilo Codeと1分以内に連携でき、OpenClaw/OpenCodeのようなマルチベンダールーターでもprimaryとして設定しやすい。</p>
+<h3>7.2 推奨意思決定まとめ</h3>
+<ul>
+<li><strong>今すぐ始める</strong>: MiniMaxプラットフォーム登録 → APIキー発行 → Clineインストール → 5分で最初のエージェントセッション。</li>
+<li><strong>既存のOpenAI/Anthropicユーザー</strong>: base_urlを変えるだけで1行変更で移行可能。Coding Planが最速のオンボーディング。</li>
+<li><strong>エンタープライズ/データセンシティブ</strong>: M2.5/M2.7の重みをHuggingFaceから取得し社内vLLMクラスタにサービング。</li>
+<li><strong>性能限界を感じたら</strong>: MiniMax M3 → Opus 4.7 → GPT-5.5の順にフェイルオーバールーティングを追加。</li>
+</ul>
+<h3>7.3 参考資料(2026-06-02時点)</h3>
+<p><strong>公式ドキュメントと価格</strong></p>
+<ul>
+<li>MiniMax APIドキュメント: <a href="https://platform.minimax.io/docs/guides/models-intro">https://platform.minimax.io/docs/guides/models-intro</a></li>
+<li>MiniMax OpenAI SDKガイド: <a href="https://platform.minimax.io/docs/api-reference/text-openai-api">https://platform.minimax.io/docs/api-reference/text-openai-api</a></li>
+<li>Anthropic Pricing: <a href="https://platform.claude.com/docs/en/about-claude/pricing">https://platform.claude.com/docs/en/about-claude/pricing</a></li>
+<li>OpenAI API Pricing: <a href="https://openai.com/api/pricing/">https://openai.com/api/pricing/</a></li>
+<li>DeepSeek API Updates: <a href="https://api-docs.deepseek.com/updates">https://api-docs.deepseek.com/updates</a></li>
+</ul>
+<p><strong>ベンチマーク</strong></p>
+<ul>
+<li>SWE-bench公式リーダーボード: <a href="https://www.swebench.com/">https://www.swebench.com/</a></li>
+<li>Vals AI SWE-bench Verified: <a href="https://www.vals.ai/benchmarks/swebench">https://www.vals.ai/benchmarks/swebench</a></li>
+<li>Morphモデル比較: <a href="https://www.morphllm.com/best-ai-model-for-coding">https://www.morphllm.com/best-ai-model-for-coding</a></li>
+<li>Price Per Token: <a href="https://pricepertoken.com/">https://pricepertoken.com/</a></li>
+</ul>
+<p><strong>VS Codeツール</strong></p>
+<ul>
+<li>Cline: <a href="https://github.com/cline/cline">https://github.com/cline/cline</a></li>
+<li>Kilo Code: <a href="https://github.com/Kilo-Org/kilocode">https://github.com/Kilo-Org/kilocode</a></li>
+<li>Continue: <a href="https://continue.dev/">https://continue.dev/</a></li>
+<li>Claude Code: <a href="https://code.claude.com/docs/">https://code.claude.com/docs/</a></li>
+<li>OpenClaw: <a href="https://docs.openclaw.ai/providers/MiniMax">https://docs.openclaw.ai/providers/MiniMax</a></li>
+</ul>
+<p><strong>オープンウェイト</strong></p>
+<ul>
+<li>HuggingFace MiniMaxAI: <a href="https://huggingface.co/MiniMaxAI">https://huggingface.co/MiniMaxAI</a></li>
+<li>HuggingFace DeepSeek: <a href="https://huggingface.co/deepseek-ai">https://huggingface.co/deepseek-ai</a></li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>免責事項</strong>: 本文書の価格・ベンチマーク・モデル情報は2026-06-02時点であり、急速に変動する。実際の導入前に各ベンダーの公式文書で最新の数値を再確認すること。APIキー・トークンなどの機密情報は環境変数で管理し、絶対にコード/リポジトリにコミットしないこと。</p>
+</blockquote>
+<p><em>─ 本文書終わり ─</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MiniMax%20Coding%20Guide/minimax-coding-guide.ja.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

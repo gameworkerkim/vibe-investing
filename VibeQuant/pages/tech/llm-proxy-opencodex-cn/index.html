@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OpenCodex 项目分析 — 面向 Codex、Claude Code 的多 LLM 代理 — VibeQuant</title>
+  <meta name="description" content="梳理如何用 OpenCodex(@bitkyc08/opencodex)让 Codex、Claude Code 使用 Anthropic、Gemini、xAI、DeepSeek、Ollama 等模型,包括其优缺点、同名项目辨析以及服务条款风险。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-proxy-opencodex-cn/" />
+  <meta property="og:title" content="OpenCodex 项目分析 — 面向 Codex、Claude Code 的多 LLM 代理" />
+  <meta property="og:description" content="梳理如何用 OpenCodex(@bitkyc08/opencodex)让 Codex、Claude Code 使用 Anthropic、Gemini、xAI、DeepSeek、Ollama 等模型,包括其优缺点、同名项目辨析以及服务条款风险。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-proxy-opencodex-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/llm-proxy-opencodex/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/llm-proxy-opencodex-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-proxy-opencodex-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-proxy-opencodex-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-proxy-opencodex/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"OpenCodex 项目分析 — 面向 Codex、Claude Code 的多 LLM 代理","description":"梳理如何用 OpenCodex(@bitkyc08/opencodex)让 Codex、Claude Code 使用 Anthropic、Gemini、xAI、DeepSeek、Ollama 等模型,包括其优缺点、同名项目辨析以及服务条款风险。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-proxy-opencodex-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Proxy/Opencodex_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-24","dateModified":"2026-07-24","inLanguage":"zh-Hans","keywords":"OpenCodex, Codex, Claude Code, LLM Proxy, Multi-provider, ocx"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>OpenCodex 项目分析 — 面向 Codex、Claude Code 的多 LLM 代理</h1>
+        <p class="article-dates"><time datetime="2026-07-24">발행 2026.07.24</time> · 주제 OpenCodex · Codex · Claude Code · LLM Proxy · Multi-provider · ocx</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/llm-proxy-opencodex/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/llm-proxy-opencodex-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/llm-proxy-opencodex-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/llm-proxy-opencodex-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">梳理如何用 OpenCodex(@bitkyc08/opencodex)让 Codex、Claude Code 使用 Anthropic、Gemini、xAI、DeepSeek、Ollama 等模型,包括其优缺点、同名项目辨析以及服务条款风险。</p>
+        
+      </header>
+      <div class="article-body prose"><p>OpenCodex 是一款轻量级本地代理,能将 Codex 的 Responses API 请求转换为各个 LLM 提供商自己的协议。它让 Codex CLI、App、SDK 以及 Claude Code 都能使用 Anthropic、Google、xAI、Kimi、DeepSeek、GLM、Qwen、Ollama 等模型。流式响应、工具调用、推理 token、图像输入都会双向转换。</p>
+<hr>
+<h2>1. 快速上手</h2>
+<h3>环境要求</h3>
+<ul>
+<li>Node.js 18 及以上</li>
+<li>Bun 运行时作为 npm 依赖被打包,通过 Node 启动器执行,无需单独安装</li>
+<li>注意:如果 <code>npm</code> 配置为阻止生命周期脚本运行,安装时会出现 &quot;bundled Bun runtime is missing&quot; 错误。此时需要允许脚本后重新安装,或者直接安装 Bun</li>
+<li>建议使用 nvm/fnm 等用户自有的 Node 环境,而不是 <code>sudo npm install -g</code></li>
+</ul>
+<h3>安装与运行</h3>
+<pre><code class="language-bash"># 1. 全局安装(自动打包 Bun 运行时)
+npm install -g @bitkyc08/opencodex
+
+# 2. 交互式初始化(写入配置文件 + 注入 Codex 配置 + 引导安装自动启动 shim)
+ocx init
+
+# 3. 启动代理
+ocx start
+</code></pre>
+<p>之后照常使用 Codex,请求会自动经过 opencodex。</p>
+<pre><code class="language-bash">codex &quot;Write a hello world in Rust&quot;
+</code></pre>
+<p>仪表盘可通过 <code>http://localhost:10100</code> 访问。</p>
+<h3>卸载与还原</h3>
+<pre><code class="language-bash">ocx stop        # 停止代理、停止后台服务、还原 Codex 配置
+ocx uninstall   # 清理残留配置(建议在卸载 npm 包之前执行)
+npm uninstall -g @bitkyc08/opencodex
+</code></pre>
+<h3>支持平台</h3>
+<table>
+<thead>
+<tr>
+<th>系统</th>
+<th>状态</th>
+<th>服务管理器</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>macOS(arm64/x64)</td>
+<td>支持</td>
+<td>launchd</td>
+</tr>
+<tr>
+<td>Linux(x64/arm64)</td>
+<td>支持</td>
+<td>systemd</td>
+</tr>
+<tr>
+<td>Windows(x64)</td>
+<td>支持(无需 WSL)</td>
+<td>任务计划程序</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. 优点</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>项目</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>模型自由度</td>
+<td>支持 40 多个内置提供商,包括 Anthropic、Google、xAI、Kimi、Ollama Cloud、Groq、OpenRouter、Azure、DeepSeek、GLM 以及 OpenAI 本身。可以在同一个 Codex 工作流中切换模型</td>
+</tr>
+<tr>
+<td>2</td>
+<td>基于适配器的转换</td>
+<td>通过 Anthropic Messages、Google Gemini、Azure、OpenAI Responses 透传、OpenAI 兼容 Chat Completions 这 5 种适配器,覆盖大部分端点</td>
+</tr>
+<tr>
+<td>3</td>
+<td>简化安装配置</td>
+<td>不需要自己搭建代理链,通过 <code>ocx init</code> 的交互式设置即可完成。xAI、Anthropic、Kimi 支持 OAuth 登录,无需 API Key 即可连接</td>
+</tr>
+<tr>
+<td>4</td>
+<td>不修改二进制文件</td>
+<td>不是修改 Codex 应用的二进制文件,而是将 provider 注入到 Codex 的配置文件和模型目录中。执行 <code>ocx stop</code> 即可恢复原始配置</td>
+</tr>
+<tr>
+<td>5</td>
+<td>统一仪表盘</td>
+<td>提供商、API Key、模型别名(alias)、日志、账号管理都可以在网页仪表盘中处理</td>
+</tr>
+<tr>
+<td>6</td>
+<td>模型路由规则</td>
+<td>可以用 <code>provider/model</code> 格式显式指定,若省略 prefix,则按模型名称模式自动匹配(<code>claude-*</code> → Anthropic,<code>gpt-*</code> → OpenAI)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Codex App 集成</td>
+<td>路由后的模型会与原生模型一起出现在 Codex App 的模型选择器中,并可按模型调整 reasoning effort</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ChatGPT 账号池</td>
+<td>可注册多个 ChatGPT/Codex 账号,轮转刷新 5 小时、每周、30 天的配额,并将新会话路由到用量最低的账号。已有的会话线程则固定使用当初创建它的账号</td>
+</tr>
+<tr>
+<td>9</td>
+<td>后台服务</td>
+<td>注册为系统服务,开机自动运行,设计上停止时不会留下残留配置或僵尸进程</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. 缺点与风险</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>项目</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>服务条款风险</td>
+<td>技术上能够接入 OAuth/订阅账号,并不意味着相应提供商允许通过第三方代理使用该账号。项目自身的文档也警告存在账号受限或被封的可能性,尤其是账号池功能,有可能被解读为绕过使用量限制的手段</td>
+</tr>
+<tr>
+<td>2</td>
+<td>增加了一层复杂度</td>
+<td>在 Codex 之上多了一层代理,意味着更多的配置决策点和调试环节</td>
+</tr>
+<tr>
+<td>3</td>
+<td>功能兼容存在延迟</td>
+<td>由于是自建的 API 转换层,Codex 或 Claude Code 的最新功能可能无法立即得到支持</td>
+</tr>
+<tr>
+<td>4</td>
+<td>项目成熟度</td>
+<td>相比官方工具,生态规模较小,发布节奏非常快(存在大量按周发布的 preview 标签),其稳定性和长期维护能力还需进一步观察</td>
+</tr>
+<tr>
+<td>5</td>
+<td>依赖持续运行</td>
+<td>前提是 Node 环境和 <code>ocx</code> 守护进程始终在运行,相比单独使用 Codex 会占用更多资源</td>
+</tr>
+<tr>
+<td>6</td>
+<td>本地凭据集中存放</td>
+<td>多个提供商的 API Key 和 OAuth Token 都会集中存放在本地配置文件(<code>~/.opencodex/config.json</code>)中,一旦终端被攻破,受影响范围会扩大</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 名称相似的其他独立项目</h2>
+<p>有多个项目使用了&quot;OpenCodex&quot;这个名字,需要加以区分,以免混淆各自的功能。</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>定位</th>
+<th>与本文所述项目的关系</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>lidge-jun/opencodex</td>
+<td>本文所述的项目。面向 Codex/Claude Code 的通用提供商代理</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AITabby/opencodex</td>
+<td>面向 Codex Desktop 的本地网关,具备 Vision Bridge、Computer Use 引擎、语音助手(OpenCodexBar)</td>
+<td>完全不同的项目。Vision Bridge、语音功能属于该项目,而非 lidge-jun 的版本</td>
+</tr>
+<tr>
+<td>RyensX/OpenCodex</td>
+<td>Codex Desktop 中间件,专注于浏览器远程访问</td>
+<td>完全不同的项目,远程访问功能属于该项目</td>
+</tr>
+<tr>
+<td>Open Codex(codingmoh)</td>
+<td>完全本地运行的 CLI 助手,无需 API Key,支持 phi-4-mini 等本地模型</td>
+<td>完全不同的项目</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. 竞品与替代工具</h2>
+<table>
+<thead>
+<tr>
+<th>工具</th>
+<th>说明</th>
+<th>区别</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenCode(SST)</td>
+<td>开源终端 AI 编码代理</td>
+<td>是独立代理,而非中转代理。原生支持多个提供商,对 OpenCode 用户来说 opencodex 的实际价值有限</td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td>Anthropic 的终端编码助手</td>
+<td>专注于 Claude 生态,opencodex 也可作为 Claude Code 侧的代理运行</td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td>AI 原生代码编辑器</td>
+<td>以 IDE 内置体验为核心</td>
+</tr>
+<tr>
+<td>GitHub Copilot</td>
+<td>IDE 插件式编码助手</td>
+<td>提供商选择范围有限</td>
+</tr>
+<tr>
+<td>Aider / Cline / Windsurf</td>
+<td>各有不同方式的编码代理</td>
+<td>工作流和专长领域各不相同</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. 与单独使用 Codex 的对比</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>单独使用 Codex</th>
+<th>Codex + OpenCodex</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>可用模型</td>
+<td>仅 OpenAI 系列</td>
+<td>40 多个提供商</td>
+</tr>
+<tr>
+<td>配置难度</td>
+<td>低</td>
+<td>中等</td>
+</tr>
+<tr>
+<td>成本优化</td>
+<td>有限</td>
+<td>借助低价模型路由更具优势</td>
+</tr>
+<tr>
+<td>定制化</td>
+<td>有限</td>
+<td>高</td>
+</tr>
+<tr>
+<td>运维风险</td>
+<td>低</td>
+<td>新增代理故障点、提供商服务条款风险</td>
+</tr>
+<tr>
+<td>适合人群</td>
+<td>想立即上手使用的普通用户</td>
+<td>重视模型实验和成本优化的高级用户</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. 综合评价</h2>
+<p>其技术设计是合理的。选择配置注入而不是修改二进制文件,并且能通过一句 <code>ocx stop</code> 完全还原,这是这类工具中最重要的安全保障。将适配器抽象为 5 种类型,也降低了扩展新提供商的成本。</p>
+<p>不过,在决定是否采用它时,比技术便利性更重要的变量是服务条款风险。基于 API Key 的接入方式,与基于订阅账号(OAuth)的接入方式性质完全不同,尤其是多个 ChatGPT 账号池化,从提供商的角度可能被判定为规避使用量政策的行为。在工作环境中,更安全的配置是只注册基于 API Key 的提供商,而不使用账号池功能。</p>
+<p>按周发布 preview 版本的开发节奏,在功能扩展方面是积极信号,但作为生产环境依赖来说还为时过早。目前更适合在个人开发环境中进行实验性尝试。</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Proxy/Opencodex_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

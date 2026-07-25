@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MCP Server Development Getting Started — From Concepts to Building the AMQS-AI-Infra Signal Server — VibeQuant</title>
+  <meta name="description" content="A comprehensive getting-started guide to the Model Context Protocol (MCP): concepts, architecture, and how it differs from APIs in Part 1, followed by a hands-on walkthrough in Part 2 building, testing, and connecting a working MCP server based on the AMQS quant strategy to Claude Desktop." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started-en/" />
+  <meta property="og:title" content="MCP Server Development Getting Started — From Concepts to Building the AMQS-AI-Infra Signal Server" />
+  <meta property="og:description" content="A comprehensive getting-started guide to the Model Context Protocol (MCP): concepts, architecture, and how it differs from APIs in Part 1, followed by a hands-on walkthrough in Part 2 building, testing, and connecting a working MCP server based on the AMQS quant strategy to Claude Desktop." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MCP Server Development Getting Started — From Concepts to Building the AMQS-AI-Infra Signal Server","description":"A comprehensive getting-started guide to the Model Context Protocol (MCP): concepts, architecture, and how it differs from APIs in Part 1, followed by a hands-on walkthrough in Part 2 building, testing, and connecting a working MCP server based on the AMQS quant strategy to Claude Desktop.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/mcp-mcp-server-getting-started-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MCP/Mcp%20server%20getting%20started_EN.md","image":"https://vibequant.cc/og-default.png","inLanguage":"en","keywords":"MCP, Model Context Protocol, MCP server development, FastMCP, Claude Desktop, AMQS"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>MCP Server Development Getting Started — From Concepts to Building the AMQS-AI-Infra Signal Server</h1>
+        <p class="article-dates">주제 MCP · Model Context Protocol · MCP server development · FastMCP · Claude Desktop · AMQS</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/mcp-mcp-server-getting-started/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/mcp-mcp-server-getting-started-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/mcp-mcp-server-getting-started-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/mcp-mcp-server-getting-started-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">A comprehensive getting-started guide to the Model Context Protocol (MCP): concepts, architecture, and how it differs from APIs in Part 1, followed by a hands-on walkthrough in Part 2 building, testing, and connecting a working MCP server based on the AMQS quant strategy to Claude Desktop.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>Part 1 comprehensively covers the concepts, characteristics, and API differences of MCP (Model Context Protocol).
+Part 2 walks through the full process of <strong>building, testing, and connecting to Claude Desktop a working MCP server</strong> based on the <a href="https://github.com/gameworkerkim/vibe-investing/tree/main/01.Trading%20Strategy/Adaptive%20Momentum%20Quant%20Strategy%20(AMQS)%20for%20AI%20Infra">vibe-investing / AMQS-AI-Infra</a> quant strategy.
+The accompanying code (<code>server.py</code>) has been verified end-to-end, including the stdio handshake and tool calls.</p>
+</blockquote>
+<hr>
+<h1>Part 1 — Understanding MCP Concepts</h1>
+<h2>1. What Is MCP?</h2>
+<p>MCP (Model Context Protocol) is an <strong>open standard protocol</strong> announced by Anthropic in November 2024 that lets AI models (particularly LLMs) connect to external data sources and tools. It has since been adopted by major tech companies including OpenAI, Google, and Microsoft, establishing itself as a de facto standard in the AI industry.</p>
+<h3>1.1 Why Is MCP Needed? — The Lineage of the Problem</h3>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Situation</th>
+<th>Limitation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. LLM alone</td>
+<td>Responds only with knowledge from training time</td>
+<td>Cannot access real-time info (&quot;what&#39;s the weather now&quot;), cannot interact with the outside world</td>
+</tr>
+<tr>
+<td>2. Agent frameworks</td>
+<td>Langchain, CrewAI, etc. connect LLMs to external tools (search, APIs, DBs)</td>
+<td>Every framework requires its own SDK per tool — the M×N integration problem</td>
+</tr>
+<tr>
+<td>3. <strong>MCP</strong></td>
+<td>Unified via a single standard protocol</td>
+<td>Reduced to M+N — a tool provider builds just one MCP server and it works with every host</td>
+</tr>
+</tbody></table>
+<p>Concretely, the M×N problem meant a connector had to be built for every combination of M agent frameworks × N external tools. Tool providers were burdened with the inefficiency of collaborating individually with every framework. MCP solves this with a standardized connection method — the <strong>USB-C port of AI</strong> — any AI application that supports MCP connects instantly to any data source that supports MCP.</p>
+<h3>1.2 MCP Architecture</h3>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Role</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>MCP Host</strong></td>
+<td>The AI application environment that contains the LLM</td>
+<td>Claude Desktop, Cursor, Windsurf</td>
+</tr>
+<tr>
+<td><strong>MCP Client</strong></td>
+<td>Mediates communication between the LLM and MCP servers within the host. 1:1 connection per server</td>
+<td>Built into the host</td>
+</tr>
+<tr>
+<td><strong>MCP Server</strong></td>
+<td>Connects to external services (DBs, web APIs, filesystems, etc.) to provide context and functionality to the LLM</td>
+<td>slack-mcp-server, notion-mcp-server,<strong>the AMQS server built in this document</strong></td>
+</tr>
+<tr>
+<td><strong>Transport layer</strong></td>
+<td>Message exchange based on JSON-RPC 2.0</td>
+<td>stdio (local), Streamable HTTP (remote)</td>
+</tr>
+</tbody></table>
+<pre><code>┌─────────────── Host (Claude Desktop) ───────────────┐
+│  LLM ↔ Client A ── stdio ──→ Server A (AMQS signals) │
+│        Client B ── stdio ──→ Server B (Slack)        │
+│        Client C ── HTTP ───→ Server C (remote DB)     │
+└──────────────────────────────────────────────────────┘
+</code></pre>
+<p>A single host can connect to multiple servers simultaneously, and the LLM decides on its own, based on conversational context, which server&#39;s which function to use.</p>
+<h2>2. Core Characteristics of MCP</h2>
+<table>
+<thead>
+<tr>
+<th>Characteristic</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Open Standard</strong></td>
+<td>Spec and SDKs are open source. Not tied to a specific AI model or vendor; anyone can implement a server or client</td>
+</tr>
+<tr>
+<td><strong>Bidirectional Communication</strong></td>
+<td>Session-based rather than one-off request-response. The spec includes servers sending notifications to clients, or a server requesting LLM inference from the client (sampling)</td>
+</tr>
+<tr>
+<td><strong>Universality</strong></td>
+<td>Once you implement the MCP standard, access to various data sources is standardized. A server need not care whether the host is Claude or Cursor</td>
+</tr>
+<tr>
+<td><strong>Dynamic Discovery</strong></td>
+<td>Clients query server capabilities at runtime via <code>list_tools</code> — the AI can automatically discover and interact with tools without any hardcoded prior knowledge</td>
+</tr>
+<tr>
+<td><strong>Composability</strong></td>
+<td>The LLM can freely combine tools from multiple servers to perform multi-step workflows</td>
+</tr>
+</tbody></table>
+<h2>3. MCP vs Traditional APIs — What&#39;s Different?</h2>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Direct API integration</th>
+<th>MCP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Connection method</td>
+<td>Separate connection and SDK per service</td>
+<td>Access multiple tools via a single standard protocol</td>
+</tr>
+<tr>
+<td>Tool discovery</td>
+<td>Developer reads docs and codes manually</td>
+<td>AI auto-discovers at runtime (<code>list_tools</code>)</td>
+</tr>
+<tr>
+<td>Communication model</td>
+<td>One-off request-response (stateless)</td>
+<td>Persistent session-based bidirectional real-time communication</td>
+</tr>
+<tr>
+<td>Who decides to call</td>
+<td>Application code decides when to call</td>
+<td><strong>The LLM decides whether, when, and how to combine calls based on conversational context</strong></td>
+</tr>
+<tr>
+<td>Interface spec</td>
+<td>OpenAPI/Swagger — for humans and code</td>
+<td>JSON Schema + natural-language description — <strong>for LLMs</strong></td>
+</tr>
+<tr>
+<td>Integration cost</td>
+<td>M (apps) × N (tools) connectors</td>
+<td>M+N (one server per tool)</td>
+</tr>
+<tr>
+<td>Relationship</td>
+<td>—</td>
+<td><strong>MCP does not replace APIs</strong> — internally, a server still calls REST APIs and DBs. MCP is an LLM-friendly adapter layer on top</td>
+</tr>
+</tbody></table>
+<p>The last row is the most important. Building an MCP server ultimately means &quot;<strong>wrapping existing APIs, libraries, and calculation logic in a form the LLM can understand and call</strong>.&quot; The AMQS server we build in Part 2 also internally uses the yfinance API and pandas calculations, but exposes them as MCP tools.</p>
+<h2>4. MCP Use Cases — From Concept to Practice</h2>
+<h3>Example 1: News Summarization and Slack Posting</h3>
+<p>&quot;Summarize today&#39;s top 3 news items and post them to the Slack AI news channel&quot; → the AI collects news via a search MCP server → summarizes the key points → posts to the specified channel via slack-mcp-server. The key here is <strong>the LLM autonomously combining two different servers</strong>.</p>
+<h3>Example 2: YouTube Channel Analysis and Notion Report</h3>
+<p>&quot;Analyze the last 10 videos and create a report in Notion&quot; → analyzes retention rate and drop-off points via a YouTube analytics MCP → writes an insights document → creates a report page via notion-mcp-server.</p>
+<h3>Example 3: Ecosystem of Work Automation Servers</h3>
+<p><code>slack-mcp-server</code> (send/query messages), <code>notion-mcp-server</code> (DB management), <code>google-calendar-mcp-server</code> (schedule management), etc. — thousands of public servers already exist.</p>
+<h3>Example 4: Quant Investment Signal Server (the topic of this document)</h3>
+<p>&quot;Check the current regime, and if it&#39;s RISK_ON, pull the Top 10, and also check my MU stop-loss&quot; → the LLM sequentially combines three tools from the AMQS MCP server. If Examples 1–3 are about <em>using servers someone else built</em>, Part 2 is about <strong>how to build such a server yourself</strong>.</p>
+<hr>
+<h1>Part 2 — MCP Server Development in Practice: The AMQS-AI-Infra Signal Server</h1>
+<h2>5. Why AMQS Is a Good MCP Sample</h2>
+<p>The original AMQS-AI-Infra document already contains a <strong>Python / LLM role-division table</strong>. This table alone can serve as a blueprint for the MCP server design.</p>
+<table>
+<thead>
+<tr>
+<th>AMQS role division</th>
+<th>Owner</th>
+<th>MCP mapping</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4-factor momentum, stop-loss, regime, Top-N selection</td>
+<td>Python (automated)</td>
+<td><strong>Tools</strong> — deterministic calculations the LLM invokes</td>
+</tr>
+<tr>
+<td>Universe / strategy parameters (static reference)</td>
+<td>Python</td>
+<td><strong>Resources</strong> — read-only context</td>
+</tr>
+<tr>
+<td>Revenue acceleration, 13F, EPS revision, narrative</td>
+<td>LLM (knowledge/search)</td>
+<td><strong>Prompts</strong> — cross-verification workflow templates</td>
+</tr>
+</tbody></table>
+<p>In other words, the AMQS philosophy — &quot;Python computes the technical signal, the LLM reviews the fundamentals&quot; (&quot;the LLM is Excel, not an oracle&quot;) — maps 1:1 to MCP&#39;s three primitives (Tools / Resources / Prompts). Placing deterministic computation in code and judgment in the model is the textbook pattern for MCP server design.</p>
+<h2>6. Reinterpreting the Architecture From a Developer&#39;s Perspective</h2>
+<p>Let&#39;s revisit the Part 1 Host / Client / Server structure from a developer&#39;s viewpoint.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>What the developer actually touches</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Host</td>
+<td>Not built (use an off-the-shelf app)</td>
+</tr>
+<tr>
+<td>Client</td>
+<td>Not built (built into the host) — only written for protocol testing</td>
+</tr>
+<tr>
+<td><strong>Server</strong></td>
+<td><strong>What we build</strong> — the entirety of this document</td>
+</tr>
+<tr>
+<td>Transport layer</td>
+<td>Handled by the SDK — you only choose the transport type</td>
+</tr>
+</tbody></table>
+<h3>6.1 The Three Primitives</h3>
+<table>
+<thead>
+<tr>
+<th>Primitive</th>
+<th>Controlled by</th>
+<th>Purpose</th>
+<th>In the AMQS sample</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Tools</strong></td>
+<td>Model-controlled (LLM decides whether to call)</td>
+<td>Execute functions, may have side effects</td>
+<td><code>get_regime</code>, <code>get_momentum_score</code>, <code>get_top_signals</code>, <code>check_stop_loss</code></td>
+</tr>
+<tr>
+<td><strong>Resources</strong></td>
+<td>Application-controlled (host manages)</td>
+<td>Read-only data identified by URI</td>
+<td><code>amqs://universe</code></td>
+</tr>
+<tr>
+<td><strong>Prompts</strong></td>
+<td>User-controlled (user selects)</td>
+<td>Reusable prompt templates</td>
+<td><code>cross_validate_ticker</code></td>
+</tr>
+</tbody></table>
+<h3>6.2 Choosing a Transport</h3>
+<table>
+<thead>
+<tr>
+<th>Transport</th>
+<th>Communication</th>
+<th>Use case</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>stdio</strong></td>
+<td>Standard I/O</td>
+<td>Local (Claude Desktop, Cursor)</td>
+<td>Always start here. No deployment or auth needed</td>
+</tr>
+<tr>
+<td><strong>Streamable HTTP</strong></td>
+<td>Single HTTP endpoint</td>
+<td>Remote server</td>
+<td>The current standard replacing SSE since the 2025-03 spec</td>
+</tr>
+<tr>
+<td>SSE (legacy)</td>
+<td>HTTP + Server-Sent Events</td>
+<td>Remote (older)</td>
+<td>Deprecated — do not use for new development</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>The &quot;stdio (local) or SSE (remote)&quot; description in earlier materials reflects the old spec. In the current spec, remote transport has been unified under <strong>Streamable HTTP</strong>.</p>
+</blockquote>
+<h3>6.3 Choosing an SDK</h3>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Python (<code>mcp</code> + FastMCP)</th>
+<th>TypeScript (<code>@modelcontextprotocol/sdk</code>)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Quant/data work</td>
+<td>Direct access to pandas/numpy/yfinance ecosystem</td>
+<td>Requires a separate bridge</td>
+</tr>
+<tr>
+<td>Amount of code</td>
+<td>Done with 3 decorators</td>
+<td>Somewhat verbose</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td><code>uv</code> / <code>pip</code></td>
+<td><code>npx</code> one-command deployment advantage</td>
+</tr>
+<tr>
+<td>This sample</td>
+<td><strong>Chosen</strong></td>
+<td>—</td>
+</tr>
+</tbody></table>
+<p>For a quant signal server, since the data stack lives in Python, the Python SDK is the natural choice. <code>FastMCP</code> auto-generates the tool schema from function signatures and docstrings — since the docstring is exactly what the LLM sees as the tool description, <strong>docstring quality directly determines tool-call accuracy</strong>.</p>
+<h2>7. Project Structure and Environment Setup</h2>
+<pre><code>amqs-mcp-server/
+├── server.py                            # The MCP server itself (single file)
+├── requirements.txt
+├── claude_desktop_config.example.json   # Example Claude Desktop connection config
+└── MCP_Server_Getting_Started.md        # This document
+</code></pre>
+<pre><code class="language-bash">python -m venv venv &amp;&amp; source venv/bin/activate   # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+
+# Instant demo (no network/API key required, synthetic prices)
+AMQS_MOCK=1 python server.py
+
+# Real data (yfinance)
+python server.py
+</code></pre>
+<p><code>AMQS_MOCK=1</code> is an offline mode that runs on reproducible synthetic prices — same principle as the Toss dashboard&#39;s MOCK mode. Being able to demonstrate the logic without any keys is what makes documentation and CI a &quot;living document.&quot;</p>
+<h2>8. Step-by-Step Anatomy of the Server Implementation</h2>
+<p>See the enclosed <code>server.py</code> for the full source. Here we cover only the key patterns.</p>
+<h3>Step 1 — Server Instance and Instructions</h3>
+<pre><code class="language-python">from mcp.server.fastmcp import FastMCP
+
+mcp = FastMCP(
+    &quot;amqs-ai-infra&quot;,
+    instructions=(
+        &quot;AMQS-AI-Infra quant strategy signal server. ... &quot;
+        &quot;All output is a research reference signal, not investment advice.&quot;
+    ),
+)
+</code></pre>
+<p><code>instructions</code> is the system-level hint that helps the client understand the server&#39;s overall nature. For a financial tool, <strong>baking a disclaimer into the server level</strong> is safer than repeating it in every single tool output (this sample does both).</p>
+<h3>Step 2 — Layer Separation: Data / Strategy / MCP</h3>
+<pre><code>Data layer      get_prices()          yfinance or synthetic data + cache
+Strategy layer  composite_scores()    4-factor z-score → 0-100 score (pure function, unrelated to MCP)
+MCP layer       @mcp.tool()           thinly wraps the strategy function and serializes it to JSON
+</code></pre>
+<p>Separating strategy logic from the MCP decorator makes it (1) easy to unit test, and (2) reusable across CLI, backtests, and the Signal Bot with the same logic. This mirrors the original repo&#39;s separation of <code>script/strategy.py</code> (the engine) from <code>script/amqs_ai_infra.py</code> (the CLI). This is the code-level implementation of the &quot;MCP is an adapter layer over APIs&quot; idea from Section 3.</p>
+<h3>Step 3 — Defining Tools: The Docstring Is the LLM-Facing Spec</h3>
+<pre><code class="language-python">@mcp.tool()
+def get_top_signals(top_n: int = 10) -&gt; str:
+    &quot;&quot;&quot;Returns AMQS&#39;s Top-N buy candidates. Applies a cap of at most 4 tickers per
+    sub-theme to prevent over-concentration in a single theme like GPUs. Includes a
+    warning if the macro regime is not RISK_ON.&quot;&quot;&quot;
+</code></pre>
+<p>Checklist</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Type hints required (<code>top_n: int = 10</code>)</td>
+<td>The basis for auto-generating the JSON Schema</td>
+</tr>
+<tr>
+<td>Docstring specifies behavior, constraints, preconditions</td>
+<td>The LLM&#39;s only basis for deciding when to use this tool</td>
+</tr>
+<tr>
+<td>Return a structured JSON string</td>
+<td>Ensures parsing stability for the LLM (<code>ensure_ascii=False</code> preserves non-ASCII text)</td>
+</tr>
+<tr>
+<td>Input validation + errors returned as JSON</td>
+<td>For a ticker outside the universe, return <code>{&quot;error&quot;: ..., &quot;universe&quot;: [...]}</code> instead of raising an exception — lets the LLM self-recover</td>
+</tr>
+<tr>
+<td>Clamp upper bounds (<code>min(top_n, len(UNIVERSE))</code>)</td>
+<td>Stays safe even if the LLM passes <code>top_n=999</code></td>
+</tr>
+</tbody></table>
+<h3>Step 4 — Enforcing Domain Rules Inside the Tool</h3>
+<p>The sub-theme cap (max 4 tickers per theme) is not something you politely ask the LLM to respect — <strong>the code enforces it</strong>:</p>
+<pre><code class="language-python">for t, row in df.iterrows():
+    theme = row[&quot;subtheme&quot;]
+    if theme_count.get(theme, 0) &gt;= SUBTHEME_CAP:
+        continue          # blocks GPU over-concentration at the code level
+</code></pre>
+<p>Verification result (Top-10, mock): <code>compute 4 / server 3 / software 2 / network 1</code> — the cap works correctly. Risk rules belong in code, not prompts. This is the MCP version of the &quot;LLM is Excel&quot; principle.</p>
+<h3>Step 5 — Resources and Prompts</h3>
+<pre><code class="language-python">@mcp.resource(&quot;amqs://universe&quot;)     # URI scheme is arbitrary — a server namespace convention
+def universe_resource() -&gt; str: ...
+
+@mcp.prompt()
+def cross_validate_ticker(ticker: str) -&gt; str: ...
+</code></pre>
+<p>A Prompt is a channel through which the server distributes &quot;standard instructions telling the LLM to do what Python cannot (revenue acceleration, 13F, EPS revision).&quot; The workflow of copy-pasting the original repo&#39;s <code>prompts/AMQS_AI_Infra_kr.MD</code> becomes, in MCP, a one-click call from the host&#39;s UI.</p>
+<h2>9. Testing — A Three-Stage Verification Pipeline</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Method</th>
+<th>What&#39;s verified</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. Unit</td>
+<td>Import the module and call functions directly</td>
+<td>Strategy logic (independent of MCP)</td>
+</tr>
+<tr>
+<td>2. Protocol</td>
+<td>stdio handshake via an MCP client</td>
+<td>initialize → list_tools → call_tool</td>
+</tr>
+<tr>
+<td>3. Interactive</td>
+<td>MCP Inspector</td>
+<td>UI-level verification from a real host&#39;s perspective</td>
+</tr>
+</tbody></table>
+<h3>9.1 Unit Testing</h3>
+<pre><code class="language-python">import os; os.environ[&quot;AMQS_MOCK&quot;] = &quot;1&quot;
+import server
+print(server.get_top_signals(10))   # Can still be called directly as a function despite the decorator
+</code></pre>
+<h3>9.2 Protocol Testing (Verified in Execution)</h3>
+<pre><code class="language-python">from mcp import ClientSession, StdioServerParameters
+from mcp.client.stdio import stdio_client
+
+params = StdioServerParameters(command=&quot;python&quot;, args=[&quot;server.py&quot;],
+                               env={&quot;AMQS_MOCK&quot;: &quot;1&quot;})
+async with stdio_client(params) as (r, w):
+    async with ClientSession(r, w) as s:
+        await s.initialize()
+        tools = await s.list_tools()      # confirms 4 tools
+        out = await s.call_tool(&quot;get_regime&quot;, {})
+</code></pre>
+<p>Execution result</p>
+<pre><code>TOOLS: [&#39;get_regime&#39;, &#39;get_momentum_score&#39;, &#39;get_top_signals&#39;, &#39;check_stop_loss&#39;]
+RESOURCES: [&#39;amqs://universe&#39;]
+PROMPTS: [&#39;cross_validate_ticker&#39;]
+CALL get_regime OK: {&quot;regime&quot;: &quot;RISK_ON&quot;, ...}
+</code></pre>
+<p>This test demonstrates the &quot;Dynamic Discovery&quot; characteristic from Part 1, Section 2 — the client never sees the server code and obtains the full list of capabilities and schemas purely through a runtime query.</p>
+<h3>9.3 MCP Inspector</h3>
+<pre><code class="language-bash">npx @modelcontextprotocol/inspector python server.py
+</code></pre>
+<p>Interactively verify the tool list, schema, and call results in a browser UI. A mandatory checkpoint before connecting to Claude Desktop.</p>
+<blockquote>
+<p>Common pitfall: never debug with <code>print()</code> in a stdio server. Since stdout is the JSON-RPC channel, logs must be sent to <code>logging</code> (stderr). This is the #1 cause of stdio server malfunctions.</p>
+</blockquote>
+<h2>10. Connecting to Claude Desktop</h2>
+<p>Location of <code>claude_desktop_config.json</code>:</p>
+<table>
+<thead>
+<tr>
+<th>OS</th>
+<th>Path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>macOS</td>
+<td><code>~/Library/Application Support/Claude/claude_desktop_config.json</code></td>
+</tr>
+<tr>
+<td>Windows</td>
+<td><code>%APPDATA%\Claude\claude_desktop_config.json</code></td>
+</tr>
+</tbody></table>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;amqs-ai-infra&quot;: {
+      &quot;command&quot;: &quot;python&quot;,
+      &quot;args&quot;: [&quot;/ABSOLUTE/PATH/TO/amqs-mcp-server/server.py&quot;],
+      &quot;env&quot;: { &quot;AMQS_MOCK&quot;: &quot;0&quot; }
+    }
+  }
+}
+</code></pre>
+<p>Cautions: (1) the path must be absolute, (2) if using a venv, <code>command</code> should be the absolute path to the venv&#39;s python, (3) fully restart Claude Desktop after editing. Once connected, conversations like the following become possible:</p>
+<pre><code>User: Check the current regime, and if it&#39;s RISK_ON, pull the Top 10 and tell me
+      where MU ranks. Also, my MU average cost is $200 — check if the stop-loss
+      has triggered.
+
+Claude: [get_regime] → RISK_ON
+        [get_top_signals(10)] → MU ranked #3, tier SATELLITE
+        [check_stop_loss(&quot;MU&quot;, 200.0)] → pnl -17.95%, action EXIT
+        → &quot;The -12% stop-loss threshold has been breached. Under AMQS rules,
+           this is an EXIT signal...&quot;
+</code></pre>
+<p>Just as in the &quot;news summary → Slack post&quot; example in Part 1, Section 4, the user speaks in natural language and the LLM decides on its own how to combine tools. This tool orchestration is MCP&#39;s real value.</p>
+<h2>11. Remote Deployment (Streamable HTTP)</h2>
+<p>Switching from stdio to remote is a single line change:</p>
+<pre><code class="language-python">mcp.run(transport=&quot;streamable-http&quot;)   # default http://localhost:8000/mcp
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>stdio</th>
+<th>Streamable HTTP</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Users</td>
+<td>Just yourself</td>
+<td>Team / external public</td>
+</tr>
+<tr>
+<td>Auth</td>
+<td>Not needed (local process)</td>
+<td><strong>OAuth 2.1 required</strong> (spec requirement)</td>
+</tr>
+<tr>
+<td>Deployment</td>
+<td>—</td>
+<td>Docker + reverse proxy, or Cloudflare Workers, etc.</td>
+</tr>
+<tr>
+<td>State management</td>
+<td>Process = session</td>
+<td>Session-ID based, consider server scale-out</td>
+</tr>
+</tbody></table>
+<p>Just as the Signal Bot&#39;s webview (<code>python -m http.server 8011</code>) was shared with the team, remoting the MCP server lets every team member&#39;s Claude use the same AMQS signal source — but public exposure without authentication is an absolute no-go (see the next section).</p>
+<h2>12. Security Considerations (from a CTI Perspective)</h2>
+<p>MCP is a new attack surface. The moment you build a server, you must also adopt a defender&#39;s mindset.</p>
+<table>
+<thead>
+<tr>
+<th>Threat</th>
+<th>Description</th>
+<th>This sample&#39;s mitigation / recommendation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tool Poisoning</td>
+<td>A malicious server embeds hidden instructions in a tool description to manipulate the LLM</td>
+<td>As a <strong>server author</strong>: keep descriptions strictly functional. As a <strong>user</strong>: audit third-party server descriptions before installing</td>
+</tr>
+<tr>
+<td>Prompt Injection (indirect)</td>
+<td>The LLM executes instructions embedded in external data (news/web) returned by a tool</td>
+<td>Restrict return values to structured JSON, minimize free text</td>
+</tr>
+<tr>
+<td>Confused Deputy</td>
+<td>The LLM performs a tool call beyond the user&#39;s intent</td>
+<td>Do not build tools with side effects (e.g., order execution) — this server is <strong>read-only signals only</strong>. Real-trade integration requires mandatory human-in-the-loop approval</td>
+</tr>
+<tr>
+<td>Secrets Exposure</td>
+<td>API keys stored in plaintext in config <code>env</code></td>
+<td>Use OS keychain / secret manager for integrations like the KIS API. <code>.gitignore</code> + pre-commit secret scanning (LAON VaultGuard-class tools)</td>
+</tr>
+<tr>
+<td>Rug Pull</td>
+<td>A server changes tool behavior after gaining trust via an update</td>
+<td>Pin versions when installing, review diffs on changes</td>
+</tr>
+<tr>
+<td>Unauthenticated remote exposure</td>
+<td>Unauthorized use and data leakage when publishing a Streamable HTTP server</td>
+<td>OAuth 2.1 + rate limiting; at minimum mTLS for internal networks</td>
+</tr>
+</tbody></table>
+<p>One risk specific to financial signal servers: <strong>the LLM over-interpreting tool output as a definitive trading recommendation</strong>. The mitigation is threefold — a disclaimer in the server <code>instructions</code>, a <code>disclaimer</code> field in every tool output, and a mandatory notice at the end of prompt templates.</p>
+<h2>13. Expansion Roadmap</h2>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Content</th>
+<th>Difficulty</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Integrate <code>backtest.py</code> — add a <code>run_backtest(start, end)</code> tool</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Expose the Signal Bot&#39;s <code>signals.json</code> as a Resource (<code>amqs://signals/latest</code>)</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Turn the ARDS-X regime classifier into a separate MCP server — let the LLM orchestrate AMQS/ARDS handoffs</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Integrate Toss Open API / KIS API — but real-order tools require a mandatory approval gate</td>
+<td>High</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Integrate the crypto news pipeline (web3paper) — a news collection/summarization tool integrating CTI/investment</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Team deployment via Streamable HTTP + OAuth, multilingual (KR/EN/ZH/JP) tool descriptions</td>
+<td>Medium</td>
+</tr>
+</tbody></table>
+<h2>14. Summary</h2>
+<p><strong>Concepts (Part 1)</strong></p>
+<ol>
+<li>MCP is an open standard that reduces the M×N integration problem between LLMs and external tools to M+N — the &quot;USB-C port of AI.&quot;</li>
+<li>In the Host / Client / Server structure, the only thing a developer builds is the Server.</li>
+<li>MCP does not replace APIs — it&#39;s an <strong>LLM-friendly adapter layer</strong>on top of existing APIs, and the key differences are dynamic discovery and LLM-driven invocation.<strong>Development (Part 2)</strong>4. Building an MCP server means exposing<strong>deterministic computation as Tools, static data as Resources, and LLM workflows as Prompts</strong>.</li>
+<li>AMQS&#39;s Python/LLM role-division table becomes the MCP design blueprint as-is — risk rules (sub-theme caps, stop-losses) are enforced in code, not prompts.</li>
+<li>Development order: FastMCP + stdio → unit tests → protocol tests → Inspector → Claude Desktop → (if needed) Streamable HTTP + OAuth.</li>
+<li>Building a server also creates an attack surface — consider Tool Poisoning, Injection, and Secrets at the design stage.</li>
+</ol>
+<h2>Reference Links</h2>
+<ul>
+<li>MCP official spec/docs: <a href="https://modelcontextprotocol.io">https://modelcontextprotocol.io</a></li>
+<li>Python SDK: <a href="https://github.com/modelcontextprotocol/python-sdk">https://github.com/modelcontextprotocol/python-sdk</a></li>
+<li>MCP Inspector: <a href="https://github.com/modelcontextprotocol/inspector">https://github.com/modelcontextprotocol/inspector</a></li>
+<li>AMQS-AI-Infra original: <a href="https://github.com/gameworkerkim/vibe-investing/tree/main/01.Trading%20Strategy/Adaptive%20Momentum%20Quant%20Strategy%20(AMQS)%20for%20AI%20Infra">https://github.com/gameworkerkim/vibe-investing/tree/main/01.Trading%20Strategy/Adaptive%20Momentum%20Quant%20Strategy%20(AMQS)%20for%20AI%20Infra</a></li>
+</ul>
+<hr>
+<p><em>This document and code are for research and educational purposes and do not constitute investment advice. AMQS is a high-risk quant strategy with the potential for principal loss.</em>
+<em>License: MIT — &quot;Built on AMQS by Dennis Kim, vibe-investing repository.&quot;</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MCP/Mcp%20server%20getting%20started_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

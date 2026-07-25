@@ -4,7 +4,7 @@ title_en: "Agent-Friendly Website Construction: A Practical Technical Guide"
 description: "AIエージェント時代のWeb UX・アクセシビリティ・構造化標準を統合した実践ガイド。Google web.dev、Chrome WebMCP、llms.txt標準に基づく。"
 slug: agent-friendly-website-guide
 language: ja
-languages_available: [ko, en, ja]
+languages_available: [ko, en, ja, zh]
 canonical: https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/agent-friendly-website-guide/agent-friendly-website-guide.ja.md
 version: "1.0"
 date_published: 2026-05-19
@@ -77,7 +77,7 @@ sources:
 
 > AIエージェントがユーザーに代わってWebサイトを巡回・要約・決済する時代が到来しました。本ガイドは、Google web.dev (2026-04-01)、Chrome WebMCP EPP (2026-02-10)、Jeremy Howardのllms.txt標準を統合し、エージェントが自社サイトを正確に理解しタスクを完遂できるようにするための、全11章+付録の実務マニュアルです。
 
-🌐 **他の言語** — [한국어](./agent-friendly-website-guide.ko.md) · [English](./agent-friendly-website-guide.en.md)
+🌐 **他の言語** — [한국어](./agent-friendly-website-guide.ko.md) · [English](./agent-friendly-website-guide.en.md) · [中文](./agent-friendly-website-guide.zh.md)
 
 📌 **タグ** — `#AIエージェント` `#WebMCP` `#llms-txt` `#セマンティックHTML` `#アクセシビリティ` `#Schema.org` `#GEO` `#CoreWebVitals` `#MCP`
 

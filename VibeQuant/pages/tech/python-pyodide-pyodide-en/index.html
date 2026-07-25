@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pyodide Technical Guide (Verified and Expanded Edition) — VibeQuant</title>
+  <meta name="description" content="A fact-checked and expanded technical guide to Pyodide, the WebAssembly-based CPython distribution for running Python in the browser and Node.js, covering PEP 783, performance, memory limits, and getting started." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/python-pyodide-pyodide-en/" />
+  <meta property="og:title" content="Pyodide Technical Guide (Verified and Expanded Edition)" />
+  <meta property="og:description" content="A fact-checked and expanded technical guide to Pyodide, the WebAssembly-based CPython distribution for running Python in the browser and Node.js, covering PEP 783, performance, memory limits, and getting started." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/python-pyodide-pyodide-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/python-pyodide-pyodide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/python-pyodide-pyodide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/python-pyodide-pyodide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/python-pyodide-pyodide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/python-pyodide-pyodide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Pyodide Technical Guide (Verified and Expanded Edition)","description":"A fact-checked and expanded technical guide to Pyodide, the WebAssembly-based CPython distribution for running Python in the browser and Node.js, covering PEP 783, performance, memory limits, and getting started.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/python-pyodide-pyodide-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Python_Pyodide/Pyodide_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-19","dateModified":"2026-07-19","inLanguage":"en","keywords":"Python, WebAssembly, Pyodide, Browser, Data Science"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 퀀트 · 데이터</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">퀀트 · 데이터</p>
+        <h1>Pyodide Technical Guide (Verified and Expanded Edition)</h1>
+        <p class="article-dates"><time datetime="2026-07-19">발행 2026.07.19</time> · 주제 Python · WebAssembly · Pyodide · Browser · Data Science</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/python-pyodide-pyodide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/python-pyodide-pyodide-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/python-pyodide-pyodide-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/python-pyodide-pyodide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">A fact-checked and expanded technical guide to Pyodide, the WebAssembly-based CPython distribution for running Python in the browser and Node.js, covering PEP 783, performance, memory limits, and getting started.</p>
+        <p class="article-byline">- Written as of: 2026-07-19</p>
+      </header>
+      <div class="article-body prose"><ul>
+<li>Latest stable version: Pyodide 314.0.x (based on Python 3.14)</li>
+<li>License: MPL-2.0</li>
+<li>Official site: <a href="https://pyodide.org">https://pyodide.org</a></li>
+</ul>
+<hr>
+<h2>1. What Is Pyodide?</h2>
+<p>Pyodide is a <strong>Python distribution for the browser and Node.js</strong>that compiles the entire CPython interpreter using<strong>WebAssembly</strong>and<strong>Emscripten</strong>. It lets you run Python code directly in a browser with no server involved, and it originated as a 2018 internal Mozilla project (iodide) before evolving into an independent community project after 2019.</p>
+<h3>Verification Notes (as of July 2026)</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Original Claim</th>
+<th>Verification Result</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Origin</td>
+<td>Started at Mozilla in 2018</td>
+<td>Accurate</td>
+</tr>
+<tr>
+<td>Version scheme</td>
+<td>Not mentioned</td>
+<td><strong>Changed.</strong> Since June 2026, versioning shifted to track Python versions directly (0.29.x → 314.x, aligned with Python 3.14). Major releases now sync with upstream Python once a year</td>
+</tr>
+<tr>
+<td>Performance</td>
+<td>3–5x slower than native</td>
+<td>Mostly accurate. 3–5x for pure Python code; WASM-compiled C code runs at roughly 2–2.5x slower</td>
+</tr>
+<tr>
+<td>Memory limit</td>
+<td>~2GB</td>
+<td><strong>Outdated.</strong> Currently usable up to the wasm32 address space limit of 4GB. Bugs related to addressing beyond 2GB have also recently been fixed</td>
+</tr>
+<tr>
+<td>C extension packages</td>
+<td>Unusable unless ported</td>
+<td><strong>Needs softening.</strong> Adoption of PEP 783 enables official pyemscripten-tagged binary wheel distribution on PyPI. 250+ C/C++/Rust extensions — NumPy, SciPy, cryptography, and more — are already ported</td>
+</tr>
+<tr>
+<td>stdlib bundling</td>
+<td>Not mentioned</td>
+<td>Starting with 314.0, sqlite3 and lzma are included in the default bundle (unvendoring has been discontinued)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Key Features</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>In-browser Python execution</td>
+<td>Runs CPython 3.14 in a web browser with no server</td>
+</tr>
+<tr>
+<td>JavaScript-Python FFI</td>
+<td>Automatic bidirectional object conversion, error propagation, mutual async/await support</td>
+</tr>
+<tr>
+<td>Bundled scientific stack</td>
+<td>NumPy, pandas, SciPy, Matplotlib, scikit-learn, and more, prebuilt</td>
+</tr>
+<tr>
+<td>micropip</td>
+<td>Installs pure-Python wheels and pyemscripten wheels from PyPI</td>
+</tr>
+<tr>
+<td>Web API access</td>
+<td>Full access to browser APIs — DOM, fetch, Canvas, and more</td>
+</tr>
+<tr>
+<td>Node.js support</td>
+<td>Runs in server-side/CLI environments via the <code>pyodide</code> npm package</td>
+</tr>
+<tr>
+<td>PEP 783 standardization</td>
+<td>Secures an official PyPI distribution path for Emscripten wheels (2026)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Additional Capabilities (Not Covered in the Original)</h2>
+<h3>3.1 JavaScript ↔ Python FFI Details</h3>
+<ul>
+<li>Proxy-based interoperability: <code>PyProxy</code> (references a Python object from JS), <code>JsProxy</code> (references a JS object from Python)</li>
+<li>Automatic type conversion: JS Array ↔ Python list, JS Map ↔ Python dict, TypedArray ↔ memoryview</li>
+<li>BigInt round-tripping: starting in 314.0, <code>pyodide.ffi.JsBigInt</code> supports round-trip conversion of integers exceeding 2^53 with JS bigint</li>
+<li>Mutual exception propagation: an exception thrown in one language can be caught in the other</li>
+</ul>
+<h3>3.2 Running in a Web Worker</h3>
+<p>To avoid blocking the main thread, running Pyodide inside a Web Worker has become the de facto standard pattern. Heavy computation (pandas processing, model inference) is isolated in the worker, exchanging only results via <code>postMessage</code>.</p>
+<h3>3.3 Virtual Filesystem (Emscripten FS)</h3>
+<ul>
+<li>Memory-based MEMFS is the default; IndexedDB-based IDBFS enables persistence across browser sessions</li>
+<li>The <code>pyodide.FS</code> API lets you directly control file reads/writes from the JS side</li>
+</ul>
+<h3>3.4 Dual Package Loading</h3>
+<table>
+<thead>
+<tr>
+<th>Method</th>
+<th>Purpose</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pyodide.loadPackage()</code></td>
+<td>Loads packages prebuilt for the Pyodide CDN (e.g., NumPy)</td>
+</tr>
+<tr>
+<td><code>micropip.install()</code></td>
+<td>Installs pure-Python wheels and pyemscripten wheels from PyPI</td>
+</tr>
+<tr>
+<td><code>loadPackagesFromImports()</code></td>
+<td>Analyzes import statements in code and automatically loads required packages</td>
+</tr>
+</tbody></table>
+<h3>3.5 Developer Tooling Ecosystem</h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pyodide-build</td>
+<td>Cross-builds C/Rust extension packages into pyemscripten wheels</td>
+</tr>
+<tr>
+<td>pytest-pyodide</td>
+<td>Automates testing against Pyodide across Chrome/Firefox/Node runtimes</td>
+</tr>
+<tr>
+<td>pyodide-pack</td>
+<td>Minimizes distribution bundles (removes unused modules)</td>
+</tr>
+<tr>
+<td>auditwheel-emscripten</td>
+<td>Validation tool for Emscripten wheels</td>
+</tr>
+<tr>
+<td>Pyodide CLI</td>
+<td>Creates a venv-like environment and runs a REPL via the <code>pyodide</code> command in the terminal</td>
+</tr>
+</tbody></table>
+<h3>3.6 SharedArrayBuffer and Synchronous I/O</h3>
+<p>With COOP/COEP headers configured, synchronous communication between the worker and main thread becomes possible via SharedArrayBuffer, which can be used to emulate synchronous standard input such as <code>input()</code>.</p>
+<hr>
+<h2>4. Advantages</h2>
+<ol>
+<li><strong>Lower server costs and simpler infrastructure</strong> — Python computation runs on the client, so the server only handles essentials like auth and database access. Compute cost doesn&#39;t scale proportionally with user count.</li>
+<li><strong>No installation, runs immediately</strong> — Runs Python with just a browser. Can operate offline after the first load.</li>
+<li><strong>Full integration with JavaScript</strong> — Bidirectional automatic conversion, exception propagation, async/await support.</li>
+<li><strong>Rich scientific computing ecosystem</strong> — Use essential data science libraries with no extra setup.</li>
+<li><strong>Ideal for education and interactive content</strong> — Build serverless notebook environments with tools like JupyterLite. Student code is sandboxed in the browser, eliminating server-side security risk.</li>
+<li><strong>(New) Packaging standardization</strong> — With PEP 783 adopted, package authors can publish Emscripten wheels directly to PyPI. Wheel compatibility across Pyodide releases within the same Python version is guaranteed.</li>
+</ol>
+<hr>
+<h2>5. Disadvantages</h2>
+<ol>
+<li><strong>Performance overhead</strong> — Pure Python code runs about 3–5x slower than native; WASM-compiled C code about 2–2.5x slower. The root cause is interpreter execution with no JIT.</li>
+<li><strong>Memory constraints</strong> — Capped at roughly 4GB due to the wasm32 address space limit. The initial load alone consumes hundreds of MB, which becomes a burden with multiple tabs on low-spec devices. (The old 2GB hard limit has been resolved)</li>
+<li><strong>Initial load size</strong> — The core runtime alone is several MB; loading NumPy/pandas and similar requires tens of MB more. A caching strategy (Service Worker, CDN) is effectively mandatory.</li>
+<li><strong>Package coverage limits</strong> — Significantly improved by PEP 783, but OS-dependent features (multiprocessing, low-level sockets, synchronous sleep, etc.) remain limited. This is not a fully equivalent implementation of CPython.</li>
+<li><strong>Network request restrictions</strong> — Subject to browser CORS policy. Requires using <code>pyodide.http.pyfetch</code> instead of <code>requests</code>, or working around it with a proxy.</li>
+<li><strong>Browser requirements</strong> — Requires a modern browser with WebAssembly support. Features relying on SharedArrayBuffer additionally require COOP/COEP headers to be configured.</li>
+</ol>
+<hr>
+<h2>6. Getting Started</h2>
+<h3>6.1 Browser: Start With One CDN Line</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/pyodide/v314.0.2/full/pyodide.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;script type=&quot;module&quot;&gt;
+    const pyodide = await loadPyodide();
+    // Basic execution
+    console.log(pyodide.runPython(&quot;1 + 2&quot;));  // 3
+
+    // Multi-line Python code
+    pyodide.runPython(`
+      import sys
+      print(f&quot;Python {sys.version} in the browser&quot;)
+    `);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>Always pin the version string (<code>v314.0.2</code>) at deployment time. Never use a non-versioned URL like <code>dev</code> in production.</p>
+<h3>6.2 Loading a Prebuilt Package (NumPy Example)</h3>
+<pre><code class="language-javascript">await pyodide.loadPackage(&quot;numpy&quot;);
+pyodide.runPython(`
+  import numpy as np
+  a = np.random.rand(1000, 1000)
+  print(a.mean())
+`);
+</code></pre>
+<h3>6.3 Installing PyPI Packages With micropip</h3>
+<pre><code class="language-javascript">await pyodide.loadPackage(&quot;micropip&quot;);
+const micropip = pyodide.pyimport(&quot;micropip&quot;);
+await micropip.install(&quot;cowsay&quot;);   // pure Python wheel
+pyodide.runPython(`
+  import cowsay
+  cowsay.cow(&quot;Hello from PyPI&quot;)
+`);
+</code></pre>
+<h3>6.4 Exchanging Data Between JavaScript and Python</h3>
+<pre><code class="language-javascript">// JS → Python
+pyodide.globals.set(&quot;js_data&quot;, [10, 20, 30]);
+const result = pyodide.runPython(`
+  data = js_data.to_py()      # JsProxy → Python list
+  sum(data)
+`);
+console.log(result);  // 60
+
+// Python → JS
+const pyDict = pyodide.runPython(`{&quot;en&quot;: &quot;London&quot;, &quot;jp&quot;: &quot;Tokyo&quot;}`);
+console.log(pyDict.toJs());   // Map(2) { &quot;en&quot; → &quot;London&quot;, ... }
+pyDict.destroy();             // Free PyProxy memory (prevents leaks)
+</code></pre>
+<h3>6.5 Async Execution and Network Requests</h3>
+<pre><code class="language-javascript">await pyodide.loadPackage(&quot;micropip&quot;);
+const out = await pyodide.runPythonAsync(`
+  from pyodide.http import pyfetch
+  resp = await pyfetch(&quot;https://api.github.com/repos/pyodide/pyodide&quot;)
+  data = await resp.json()
+  data[&quot;stargazers_count&quot;]
+`);
+</code></pre>
+<h3>6.6 Web Worker Pattern (Recommended Production Structure)</h3>
+<pre><code class="language-javascript">// worker.js
+importScripts(&quot;https://cdn.jsdelivr.net/pyodide/v314.0.2/full/pyodide.js&quot;);
+
+let pyodideReady = loadPyodide();
+
+self.onmessage = async (e) =&gt; {
+  const pyodide = await pyodideReady;
+  await pyodide.loadPackagesFromImports(e.data.code);
+  const result = await pyodide.runPythonAsync(e.data.code);
+  self.postMessage({ result });
+};
+</code></pre>
+<pre><code class="language-javascript">// main.js
+const worker = new Worker(&quot;worker.js&quot;);
+worker.postMessage({ code: &quot;import numpy as np; float(np.pi)&quot; });
+worker.onmessage = (e) =&gt; console.log(e.data.result);
+</code></pre>
+<h3>6.7 Using Pyodide in Node.js</h3>
+<pre><code class="language-bash">npm install pyodide
+</code></pre>
+<pre><code class="language-javascript">import { loadPyodide } from &quot;pyodide&quot;;
+
+const pyodide = await loadPyodide();
+console.log(pyodide.runPython(&quot;2 ** 10&quot;));  // 1024
+</code></pre>
+<h3>6.8 Building Your Own Package (C/Rust Extensions)</h3>
+<pre><code class="language-bash">pip install pyodide-build
+pyodide build            # generates a pyemscripten wheel from the project root
+</code></pre>
+<p>The resulting wheel can be uploaded directly to PyPI under the PEP 783 standard and installed via micropip.</p>
+<hr>
+<h2>7. Comparison With Competing Products</h2>
+<p>Approaches to running Python in the browser fall broadly into three families: (A) porting CPython itself to WASM, (B) reimplementing a Python interpreter in JavaScript, (C) transpiling Python code into JavaScript.</p>
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Approach</th>
+<th>Strengths</th>
+<th>Weaknesses</th>
+<th>Primary Use</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Pyodide</strong></td>
+<td>(A) CPython → WASM</td>
+<td>Full CPython compatibility, scientific stack, PEP 783 standardization</td>
+<td>Initial load size, interpreter speed</td>
+<td>Data science, general purpose</td>
+</tr>
+<tr>
+<td><strong>PyScript</strong></td>
+<td>Framework on top of Pyodide/MicroPython</td>
+<td>Embed Python with just an HTML tag, lowest barrier to entry</td>
+<td>Not its own runtime (depends on Pyodide underneath), abstraction overhead</td>
+<td>Education, prototyping, widgets</td>
+</tr>
+<tr>
+<td><strong>MicroPython (WASM)</strong></td>
+<td>Lightweight Python reimplementation → WASM</td>
+<td>Load size in the hundreds of KB, best startup speed</td>
+<td>Significantly reduced stdlib/CPython compatibility, no C extension ecosystem</td>
+<td>Lightweight scripting, embedded widgets</td>
+</tr>
+<tr>
+<td><strong>Brython</strong></td>
+<td>(B) Interpreter reimplemented in JS</td>
+<td>Light to load, natural DOM manipulation via <code>text/python</code> script tags, CPython-level speed for simple operations</td>
+<td>No C extensions like NumPy, large performance variance on complex operations</td>
+<td>DOM-centric web scripting</td>
+</tr>
+<tr>
+<td><strong>Skulpt</strong></td>
+<td>(B) Interpreter reimplemented in JS</td>
+<td>Fully client-side execution, validated on education platforms (Anvil, etc.)</td>
+<td>Tens of times slower than CPython, limited Python feature coverage</td>
+<td>Beginner education, tutorials</td>
+</tr>
+<tr>
+<td><strong>Transcrypt</strong></td>
+<td>(C) Python → JS transpiler</td>
+<td>Output is pure JS, so it loads/runs fast, can directly use JS libraries</td>
+<td>Not a runtime interpreter (limits dynamic features), requires a build step</td>
+<td>Writing frontend apps with Python syntax</td>
+</tr>
+<tr>
+<td><strong>CPython WASI build</strong></td>
+<td>(A) CPython → WASI</td>
+<td>Officially supported by upstream CPython (tier 2), well-suited to serverless/edge runtimes</td>
+<td>Browser integration (FFI, DOM) less mature than Pyodide</td>
+<td>Edge computing, sandboxed execution</td>
+</tr>
+</tbody></table>
+<h3>Derivative Ecosystem (Products Built on Pyodide, Not Competitors)</h3>
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>JupyterLite</td>
+<td>Serverless, in-browser Jupyter notebook. Uses Pyodide as the kernel</td>
+</tr>
+<tr>
+<td>stlite</td>
+<td>Runs Streamlit apps serverlessly in the browser</td>
+</tr>
+<tr>
+<td>marimo (WASM mode)</td>
+<td>Browser-executable version of the reactive Python notebook</td>
+</tr>
+<tr>
+<td>Cloudflare Workers Python</td>
+<td>Uses Pyodide to power Python support in the edge runtime</td>
+</tr>
+</tbody></table>
+<h3>Selection Guide</h3>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Need a scientific stack like NumPy/pandas</td>
+<td>Pyodide</td>
+</tr>
+<tr>
+<td>Want to embed Python quickly with just HTML</td>
+<td>PyScript</td>
+</tr>
+<tr>
+<td>Load size is the top priority (hundreds of KB)</td>
+<td>MicroPython (WASM) or Brython</td>
+</tr>
+<tr>
+<td>Lightweight scripting centered on DOM manipulation</td>
+<td>Brython</td>
+</tr>
+<tr>
+<td>Beginner programming education platform</td>
+<td>Skulpt or PyScript</td>
+</tr>
+<tr>
+<td>Deploying build output as JS</td>
+<td>Transcrypt</td>
+</tr>
+<tr>
+<td>Serverless/edge sandboxed execution</td>
+<td>CPython WASI or Pyodide (Node)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. Use Case Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Good Fit</th>
+<th>Poor Fit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Educational interactive content</td>
+<td>Large-scale data processing (multiple GB or more)</td>
+</tr>
+<tr>
+<td>Prototyping and demos</td>
+<td>Applications requiring real-time low latency</td>
+</tr>
+<tr>
+<td>Scientific computation visualization, in-browser analysis tools</td>
+<td>Complex networking/socket operations</td>
+</tr>
+<tr>
+<td>Serverless Python applications</td>
+<td>OS-dependent workloads such as multiprocessing</td>
+</tr>
+<tr>
+<td>Client-side processing of sensitive data (data never leaves the browser)</td>
+<td>Cases requiring every PyPI package</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. Conclusion</h2>
+<p>Pyodide started as a project that opened up the possibility of &quot;running Python on the web without a server,&quot; and with the 2026 adoption of PEP 783 and a release scheme now tied to Python versions, it has established itself as <strong>the de facto standard platform for browser-based Python</strong>. The structural limitations of performance (3–5x slower than native) and initial load size remain, so it&#39;s reasonable to apply it to education, visualization, client-side data processing, and serverless tools rather than compute-intensive workloads. The basic rule of thumb: choose MicroPython/Brython if lightweight footprint is the top priority, and choose Pyodide if you need the full CPython ecosystem.</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Python_Pyodide/Pyodide_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

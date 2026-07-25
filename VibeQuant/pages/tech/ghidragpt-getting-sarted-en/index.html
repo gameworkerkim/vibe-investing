@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GhidraGPT Getting Started — VibeQuant</title>
+  <meta name="description" content="GhidraGPT plugs LLMs (OpenAI, Anthropic, Ollama, Qwen, and more) into Ghidra to speed up decompilation, renaming, and vulnerability analysis." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted-en/" />
+  <meta property="og:title" content="GhidraGPT Getting Started" />
+  <meta property="og:description" content="GhidraGPT plugs LLMs (OpenAI, Anthropic, Ollama, Qwen, and more) into Ghidra to speed up decompilation, renaming, and vulnerability analysis." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"GhidraGPT Getting Started","description":"GhidraGPT plugs LLMs (OpenAI, Anthropic, Ollama, Qwen, and more) into Ghidra to speed up decompilation, renaming, and vulnerability analysis.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/ghidragpt-getting-sarted-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/GhidraGPT-Getting-Sarted_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-21","dateModified":"2026-07-21","inLanguage":"en","keywords":"기타 기술문서, GhidraGPT-Getting-Sarted_EN.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 기타 기술문서</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 기술문서</p>
+        <h1>GhidraGPT Getting Started</h1>
+        <p class="article-dates"><time datetime="2026-07-21">발행 2026.07.21</time> · 주제 기타 기술문서 · GhidraGPT-Getting-Sarted_EN.md</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/ghidragpt-getting-sarted/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/ghidragpt-getting-sarted-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/ghidragpt-getting-sarted-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/ghidragpt-getting-sarted-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">GhidraGPT plugs LLMs (OpenAI, Anthropic, Ollama, Qwen, and more) into Ghidra to speed up decompilation, renaming, and vulnerability analysis.</p>
+        
+      </header>
+      <div class="article-body prose"><p><strong>GhidraGPT</strong> is a plugin that integrates LLMs into Ghidra, NSA&#39;s open-source reversing framework.
+Ghidra is a powerful software reverse engineering tool developed by the U.S. National Security Agency (NSA) and released as open source.
+Ghidra was developed by the NSA and used by several U.S. intelligence agencies as a reverse engineering tool; the world first learned of its existence around March 7, 2017, through WikiLeaks&#39; CIA Vault 7 leak.
+Later, on March 5, 2019, the NSA publicly released the executable for the first time at the RSA Conference, and a month later, in April 2019, published the source code on GitHub.</p>
+<p>As LLMs have advanced, GhidraGPT lets an LLM assist with the core function that would otherwise require tedious manual labor from humans: analyzing compiled machine code, converting it into human-readable assembly (disassembling), and reconstructing it into C-level code (decompiling).
+In short, it&#39;s an extension that bolts an LLM onto Ghidra, with the concept being to offload time-consuming work like disassembly to the LLM.</p>
+<p>Its key features and capabilities are as follows.</p>
+<ul>
+<li>Powerful decompiler: converts machine code into C-like form, making code flow and logic far easier to understand.</li>
+<li>Broad platform support: runs on Windows, macOS, and Linux, and supports architectures like x86, ARM, and MIPS.</li>
+<li>Collaboration features: server functionality for sharing and analyzing projects as a team.</li>
+<li>Extensibility: supports Python and Java scripting, letting users implement their own analysis automation.</li>
+<li>Free and open source: a strong alternative to expensive commercial reversing tools (e.g., IDA Pro), widely used by security researchers, malware analysts, and developers.</li>
+</ul>
+<hr>
+<h2>Core Advantages</h2>
+<ol>
+<li><strong>Productivity boost</strong><ul>
+<li>Automatic function/variable renaming, type inference, and comment insertion improve human readability of decompiled output</li>
+<li>One right-click in the context menu triggers AI analysis (extremely convenient)</li>
+</ul>
+</li>
+<li><strong>Broad LLM support</strong><ul>
+<li>Supports a wide range of models: OpenAI, Anthropic, Google Gemini, Cohere, Mistral, DeepSeek, Grok, Ollama, and more</li>
+<li>OpenAI-compatible APIs are also supported</li>
+</ul>
+</li>
+<li><strong>Security and usability</strong><ul>
+<li>API keys are automatically encrypted and stored safely</li>
+<li>Real-time streaming responses minimize wait time</li>
+<li>Results can be viewed in a dedicated console</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>Drawbacks and Cautions</h2>
+<p><strong>Drawbacks:</strong></p>
+<ul>
+<li>LLM responses aren&#39;t always accurate and can lead to incorrect analysis results (LLM hallucinations and errors occur)</li>
+<li>Internet connectivity and API costs are essentially required (except for local Ollama; DeepSeek v4 pro or Qwen are usually sufficient)</li>
+<li>Combining with Ghidra&#39;s complex internals can cause unexpected conflicts</li>
+</ul>
+<p><strong>Cautions:</strong></p>
+<ul>
+<li>If the binary being analyzed contains sensitive code, you must check what data gets sent to external APIs</li>
+<li>Never blindly trust LLM-generated code or type information — always verify</li>
+<li>Requires Ghidra 10.0+, Java 11+, and a Maven environment, and the <code>File → Install Extensions</code> path must be followed exactly during installation</li>
+</ul>
+<hr>
+<h2>Competing Projects</h2>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Differentiator</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Ghidra Assist</strong></td>
+<td>More optimized for local models, with active open-source community support</td>
+</tr>
+<tr>
+<td><strong>BinAI</strong></td>
+<td>A commercial product offering its own model specialized for binary analysis, with an accuracy advantage</td>
+</tr>
+<tr>
+<td><strong>IAIK&#39;s Ghidra Plugin</strong></td>
+<td>Built on academic research, strong at specific analysis algorithms</td>
+</tr>
+<tr>
+<td><strong>IDA Pro + ChatGPT</strong></td>
+<td>A script for IDA users; larger ecosystem but not Ghidra-specific</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Summary</strong>: GhidraGPT is a powerful plugin supporting a wide range of LLMs, but API dependency and verifying the reliability of analysis results are essential. For sensitive code analysis, using a local model (Ollama) is recommended.</p>
+</blockquote>
+<hr>
+<h1>Getting Started with GhidraGPT: Ollama, ChatGPT, Claude, and Qwen Setup Guide</h1>
+<p>This guide walks through installing the GhidraGPT plugin and connecting various LLMs — Ollama (local), ChatGPT, Claude, and Qwen — step by step.</p>
+<hr>
+<h2>Prerequisites</h2>
+<p>Before using GhidraGPT, make sure the following environment is in place:</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Ghidra</strong></td>
+<td>10.0 or later</td>
+</tr>
+<tr>
+<td><strong>Java</strong></td>
+<td>Java 11+</td>
+</tr>
+<tr>
+<td><strong>Maven</strong></td>
+<td>Build system</td>
+</tr>
+<tr>
+<td><strong>Internet</strong></td>
+<td>Required for API-based models (not for Ollama)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. Installing the GhidraGPT Plugin</h2>
+<h3>1.1 Clone the Repository and Build</h3>
+<pre><code class="language-bash">git clone https://github.com/ZeroDaysBroker/GhidraGPT.git
+cd GhidraGPT
+GHIDRA_INSTALL_DIR=/path/to/ghidra mvn clean package
+</code></pre>
+<p>Once the build finishes, a <code>target/GhidraGPT-x.y.z.zip</code> file is generated.</p>
+<h3>1.2 Installing the Plugin in Ghidra</h3>
+<ol>
+<li>Launch Ghidra</li>
+<li>Go to <code>File → Install Extensions</code></li>
+<li>Click the <code>+</code> button and select <code>target/GhidraGPT-x.y.z.zip</code></li>
+<li>Restart Ghidra</li>
+<li>Enable the plugin under <code>File → Configure → Analysis → GhidraGPTPlugin</code></li>
+</ol>
+<hr>
+<h2>2. Setting Up API Keys for Each LLM Service</h2>
+<p>After installing the plugin, go to the <code>GhidraGPT configuration panel</code> inside Ghidra to enter your API keys. All API keys are automatically encrypted and stored safely.</p>
+<h3>OpenAI (ChatGPT)</h3>
+<ol>
+<li>Get an API key from the <a href="https://platform.openai.com/api-keys">OpenAI Platform</a></li>
+<li>Select <strong>OpenAI</strong> in the GhidraGPT settings panel</li>
+<li>Enter the API key you received</li>
+<li>Select the model to use (e.g., <code>gpt-4</code>, <code>gpt-3.5-turbo</code>)</li>
+</ol>
+<blockquote>
+<p><strong>Note</strong>: GhidraGPT supports OpenAI&#39;s GPT models by default.</p>
+</blockquote>
+<hr>
+<h3>Anthropic (Claude)</h3>
+<ol>
+<li>Get an API key from the <a href="https://console.anthropic.com/">Anthropic Console</a></li>
+<li>Select <strong>Anthropic</strong> in the GhidraGPT settings panel</li>
+<li>Enter the API key</li>
+<li>Select the Claude model to use (e.g., <code>claude-3-opus</code>, <code>claude-3-sonnet</code>)</li>
+</ol>
+<p>GhidraGPT officially supports Anthropic&#39;s Claude models.</p>
+<hr>
+<h3>Ollama (Free Local Model)</h3>
+<p>Ollama is a tool for running LLMs locally, letting you use GhidraGPT <strong>without an internet connection</strong>.</p>
+<h4>2.1 Installing Ollama</h4>
+<p><strong>macOS / Linux:</strong></p>
+<pre><code class="language-bash">curl -fsSL https://ollama.com/install.sh | sh
+</code></pre>
+<p><strong>Windows:</strong> Download the installer from the <a href="https://ollama.com/">official Ollama site</a></p>
+<h4>2.2 Downloading an LLM Model</h4>
+<p>Download whichever model you want. Examples:</p>
+<pre><code class="language-bash"># Meta&#39;s Llama 3.1 (8B lightweight model)
+ollama run llama3.1:8b
+
+# Qwen (strong at code analysis)
+ollama run qwen2.5-coder:7b
+
+# Mistral
+ollama run mistral
+</code></pre>
+<blockquote>
+<p><strong>Tip</strong>: Choose a model that matches your hardware specs. <code>llama3.1:8b</code> runs smoothly with 8GB of VRAM.</p>
+</blockquote>
+<h4>2.3 Verifying the Ollama Server</h4>
+<p>Ollama runs an API server on <code>localhost:11434</code> by default.</p>
+<pre><code class="language-bash"># Check running models
+ollama list
+</code></pre>
+<h4>2.4 Connecting Ollama to GhidraGPT</h4>
+<ol>
+<li>Select <strong>Ollama</strong> in the GhidraGPT settings panel</li>
+<li><strong>Server URL</strong>: enter <code>http://localhost:11434</code></li>
+<li><strong>Model</strong>: enter the name of the model you downloaded (e.g., <code>llama3.1:8b</code>, <code>qwen2.5-coder:7b</code>)</li>
+</ol>
+<blockquote>
+<p><strong>Note</strong>: Ollama works through GhidraGPT&#39;s &quot;bring your own model&quot; mechanism.</p>
+</blockquote>
+<hr>
+<h3>Qwen (OpenAI-Compatible API or Ollama)</h3>
+<p>Qwen can be used in two ways:</p>
+<h4>Method A: Local Execution via Ollama (Free)</h4>
+<pre><code class="language-bash">ollama run qwen2.5-coder:7b
+</code></pre>
+<p>Then connect it in GhidraGPT the same way as the Ollama setup above.</p>
+<h4>Method B: DashScope API (Cloud)</h4>
+<ol>
+<li>Get an API key from <a href="https://dashscope.aliyun.com/">Alibaba Cloud DashScope</a></li>
+<li>Select <strong>OpenAI Compatible</strong> in the GhidraGPT settings panel</li>
+<li><strong>Base URL</strong>: enter <code>https://dashscope.aliyuncs.com/compatible-mode/v1</code></li>
+<li><strong>API Key</strong>: enter your DashScope API key</li>
+<li><strong>Model</strong>: enter <code>qwen-max</code>, <code>qwen-plus</code>, etc.</li>
+</ol>
+<blockquote>
+<p>Because GhidraGPT supports OpenAI-compatible APIs, you can connect to Qwen through its OpenAI-compatible endpoint.</p>
+</blockquote>
+<hr>
+<h2>3. Using the Main Features</h2>
+<p>Once installation and setup are complete, the following features become available:</p>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+<th>How to Use</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Function Rewrite</strong></td>
+<td>Renames functions/variables, infers types, adds comments</td>
+<td>Right-click a function in the decompile window → Rewrite</td>
+</tr>
+<tr>
+<td><strong>Code Explanation</strong></td>
+<td>Detailed explanation of function logic</td>
+<td>Right-click → Explain</td>
+</tr>
+<tr>
+<td><strong>Code Analysis</strong></td>
+<td>Vulnerability detection and security analysis</td>
+<td>Right-click → Analyze</td>
+</tr>
+<tr>
+<td><strong>Console</strong></td>
+<td>View model responses and results</td>
+<td>Check the GhidraGPT console window</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Comparison and Recommendations by Service</h2>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Pros</th>
+<th>Cons</th>
+<th>Recommended For</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Ollama</strong></td>
+<td>Free, offline, guarantees privacy</td>
+<td>Needs local hardware performance, slower response</td>
+<td>Security-sensitive analysis, no internet access</td>
+</tr>
+<tr>
+<td><strong>ChatGPT (OpenAI)</strong></td>
+<td>Excellent performance, fast responses</td>
+<td>Paid, requires internet</td>
+<td>General reversing work</td>
+</tr>
+<tr>
+<td><strong>Claude</strong></td>
+<td>Long context, strong code comprehension</td>
+<td>Paid, requires internet</td>
+<td>Analyzing complex, large-scale functions</td>
+</tr>
+<tr>
+<td><strong>Qwen (Ollama)</strong></td>
+<td>Free, code-specialized, Korean language support</td>
+<td>Needs local hardware performance</td>
+<td>When Korean comments/explanations are needed</td>
+</tr>
+<tr>
+<td><strong>Qwen (API)</strong></td>
+<td>Cloud-level performance, Korean language support</td>
+<td>Paid, requires internet</td>
+<td>When you need Korean + cloud-level performance</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Cautions</h2>
+<ol>
+<li><strong>Data privacy</strong>: When analyzing sensitive binaries, always use a local model like <strong>Ollama</strong>. Cloud APIs send the code being analyzed off-device.</li>
+<li><strong>Verify results</strong>: LLM-generated code or type information <strong>must always be manually verified</strong>. AI can sometimes produce incorrect analysis results.</li>
+<li><strong>API costs</strong>: OpenAI, Anthropic, and DashScope (Qwen) charge based on usage.</li>
+</ol>
+<hr>
+<h2>References</h2>
+<ul>
+<li><a href="https://github.com/ZeroDaysBroker/GhidraGPT">GhidraGPT GitHub Repository</a></li>
+<li><a href="https://ollama.com/">Ollama Official Site</a></li>
+<li><a href="https://ollama.ai/library">List of Ollama-Supported Models</a></li>
+<li><a href="https://huggingface.co/docs/hub/en/ollama">Hugging Face GGUF Models</a> - runnable via Ollama</li>
+</ul>
+<hr>
+<p>Now go ahead and start AI-powered reverse engineering with GhidraGPT.</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/GhidraGPT-Getting-Sarted_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

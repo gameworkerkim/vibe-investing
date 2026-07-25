@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Quivr: Open Source Second Brain Powered by Generative AI — VibeQuant</title>
+  <meta name="description" content="An overview of Quivr, an open-source RAG platform that turns personal and enterprise data into an intelligent AI assistant." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-quivr-guide-en/" />
+  <meta property="og:title" content="Quivr: Open Source Second Brain Powered by Generative AI" />
+  <meta property="og:description" content="An overview of Quivr, an open-source RAG platform that turns personal and enterprise data into an intelligent AI assistant." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-quivr-guide-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/llm-quivr-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/llm-quivr-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-quivr-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-quivr-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-quivr-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Quivr: Open Source Second Brain Powered by Generative AI","description":"An overview of Quivr, an open-source RAG platform that turns personal and enterprise data into an intelligent AI assistant.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-quivr-guide-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Quivr_guide_EN.md","image":"https://vibequant.cc/og-default.png","inLanguage":"en","keywords":"RAG, Open Source, AI Assistant, LLM"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Quivr: Open Source Second Brain Powered by Generative AI</h1>
+        <p class="article-dates">주제 RAG · Open Source · AI Assistant · LLM</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/llm-quivr-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/llm-quivr-guide-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/llm-quivr-guide-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/llm-quivr-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">An overview of Quivr, an open-source RAG platform that turns personal and enterprise data into an intelligent AI assistant.</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. Overview</h2>
+<p>Quivr is an open-source RAG (Retrieval-Augmented Generation) platform — a &quot;Second Brain&quot; that turns personal or enterprise data into an intelligent AI assistant. Users simply upload documents and ask questions in natural language to easily search and leverage vast amounts of information.</p>
+<p>Quivr has attracted attention from developers worldwide with over 38,000 GitHub stars, and is used by more than 50,000 users and 6,000+ companies. Backed by Y Combinator, the project was founded by three French friends who had known each other for 20 years.</p>
+<hr>
+<h2>2. Why Quivr? (Pain Point &amp; Solution)</h2>
+<p>In a corporate setting, employees spend roughly 20% of their working hours simply searching for information. Employees repeatedly face difficulties such as:</p>
+<ul>
+<li>Having to ask an urgent question to a colleague who&#39;s on vacation</li>
+<li>The inefficiency of asking and answering the same question repeatedly</li>
+<li>Not knowing where the information they need is — or even whether it exists</li>
+</ul>
+<p>Quivr solves these problems by providing an open-source AI platform that connects all of a company&#39;s tools, documents, APIs, and databases, letting you converse with them. Quivr automates tasks such as:</p>
+<ul>
+<li>Summarizing lengthy documents to extract the essentials</li>
+<li>Extracting actionable information from databases</li>
+<li>Auto-drafting context-aware emails</li>
+</ul>
+<hr>
+<h2>3. Key Features</h2>
+<h3>3.1 Opinionated RAG (Optimized RAG Workflow)</h3>
+<p>Quivr provides a pre-designed, optimized RAG workflow so developers don&#39;t need to build a RAG pipeline from scratch. Designed around speed and efficiency, it&#39;s ready for immediate production use.</p>
+<h3>3.2 Support for All File Formats</h3>
+<p>Supports a wide range of file formats, and custom parsers can be added as needed:</p>
+<ul>
+<li>Text files (.txt)</li>
+<li>PDF documents</li>
+<li>Markdown (.md)</li>
+<li>Presentations (.ppt, .pptx)</li>
+<li>Spreadsheets (.csv, .xlsx)</li>
+<li>Word documents</li>
+<li>Audio and video files</li>
+</ul>
+<h3>3.3 Multi-LLM Support</h3>
+<p>Quivr supports a variety of LLMs (Large Language Models) to avoid vendor lock-in:</p>
+<ul>
+<li>OpenAI (GPT-4, GPT-3.5)</li>
+<li>Anthropic (Claude)</li>
+<li>Mistral</li>
+<li>Google (Gemma)</li>
+<li>Groq</li>
+<li>Local models (Ollama) — complete data privacy guaranteed</li>
+</ul>
+<h3>3.4 Customizable RAG Workflow</h3>
+<p>A YAML config file lets you fine-tune elements such as:</p>
+<ul>
+<li>Reranker model and settings</li>
+<li>History depth (how much conversational context is retained)</li>
+<li>LLM temperature and max input tokens</li>
+<li>Retrieval chunk size and count</li>
+</ul>
+<h3>3.5 Tool Integration and Internet Search</h3>
+<p>Beyond static document knowledge, Quivr can connect to internet search and external tools/APIs to enable dynamic information gathering and real-time intelligence.</p>
+<h3>3.6 Megaparse Integration</h3>
+<p>Megaparse, developed by the same team (QuivrHQ), is a tool for efficiently parsing large-scale documents, letting you preprocess thousands of files and connect them directly to a Quivr &quot;Brain.&quot;</p>
+<h3>3.7 Privacy and Self-Hosting</h3>
+<p>For companies and developers where data privacy matters, Quivr supports local deployment and self-hosting. Data stays under the user&#39;s control and can operate in a fully on-premises environment with no external API calls.</p>
+<h3>3.8 Tech Stack</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+<th>Characteristics</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Frontend</td>
+<td>Next.js + Vercel</td>
+<td>SSR-based, automated deployment</td>
+</tr>
+<tr>
+<td>Backend API</td>
+<td>FastAPI</td>
+<td>High-performance Python-based API framework</td>
+</tr>
+<tr>
+<td>Async tasks</td>
+<td>Celery + Queue</td>
+<td>Handles large-file embedding and indexing</td>
+</tr>
+<tr>
+<td>Vector store</td>
+<td>PGVector / FAISS</td>
+<td>High-performance semantic search</td>
+</tr>
+<tr>
+<td>Auth/DB</td>
+<td>Supabase</td>
+<td>Open-source Firebase alternative</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Advantages for Developers</h2>
+<h3>4.1 Fast Start (Ready in 30 Seconds)</h3>
+<pre><code class="language-bash">pip install quivr-core
+# A complete RAG system built with just 5 lines of code
+</code></pre>
+<h3>4.2 Rich API Support</h3>
+<p>Quivr provides a RESTful API, easily explorable and testable via Swagger docs. API-key-based authentication makes it easy to integrate into applications.</p>
+<h3>4.3 Extensible Architecture</h3>
+<ul>
+<li>Add custom file parsers</li>
+<li>Extend RAG workflow nodes</li>
+<li>Swap out vector stores</li>
+<li>Support for various embedding models (LangChain integration)</li>
+</ul>
+<h3>4.4 Active Open-Source Community</h3>
+<ul>
+<li>38k+ stars on GitHub, active contributions</li>
+<li>Regular updates and feature improvements</li>
+<li>Active issue response and PR review</li>
+</ul>
+<h3>4.5 Improved Development Productivity</h3>
+<ul>
+<li>Abstracts RAG&#39;s complex internals so you can focus on business logic</li>
+<li>YAML-based config lets you experiment with RAG strategies without code changes</li>
+<li>Various example code provided (Chainlit, Streamlit integration)</li>
+</ul>
+<hr>
+<h2>5. Installation and Usage</h2>
+<h3>5.1 Python Package Installation (Quick Start)</h3>
+<p>For the fastest start, install the quivr-core package.</p>
+<pre><code class="language-bash"># Step 1: install the package
+pip install quivr-core
+
+# Verify installation
+python -c &quot;import quivr_core; print(&#39;Quivr installed!&#39;)&quot;
+</code></pre>
+<h3>5.2 Basic Usage Example</h3>
+<pre><code class="language-python">from quivr_core import Brain
+
+# 1. Create a Brain from documents
+brain = Brain.from_files(
+    name=&quot;my_smart_brain&quot;,
+    file_paths=[&quot;./my_document.pdf&quot;, &quot;./my_notes.txt&quot;]
+)
+
+# 2. Ask the Brain a question
+answer = brain.ask(&quot;Summarize the key points of this document&quot;)
+print(answer.answer)
+
+# 3. Run an interactive interface
+while True:
+    question = input(&quot;Question: &quot;)
+    if question.lower() == &quot;exit&quot;:
+        break
+    response = brain.ask(question)
+    print(f&quot;Answer: {response.answer}&quot;)
+</code></pre>
+<h3>5.3 Docker-Based Local Deployment (Self-Hosted)</h3>
+<p>If data privacy matters or you want full functionality:</p>
+<pre><code class="language-bash"># Step 1: clone the repository
+git clone https://github.com/quivrhq/quivr.git &amp;&amp; cd quivr
+
+# Step 2: configure the environment
+cp .env.example .env
+# enter OPENAI_API_KEY in the .env file
+
+# Step 3: run with Docker
+docker compose pull
+docker compose up
+
+# Step 4: access
+# Web UI: http://localhost:3000
+# API docs: http://localhost:5050/docs
+</code></pre>
+<h3>5.4 Setting Up a Custom RAG Workflow</h3>
+<p>You can customize your RAG strategy via a YAML file:</p>
+<pre><code class="language-yaml"># custom_rag.yaml
+workflow_config:
+  name: &quot;advanced_rag&quot;
+  max_history: 10
+  reranker_config:
+    supplier: &quot;cohere&quot;
+    model: &quot;rerank-multilingual-v3.0&quot;
+    top_n: 5
+  llm_config:
+    max_input_tokens: 4000
+    temperature: 0.3
+</code></pre>
+<pre><code class="language-python">from quivr_core import Brain
+from quivr_core.config import RetrievalConfig
+
+brain = Brain.from_files(
+    name=&quot;custom_brain&quot;,
+    file_paths=[&quot;./data/*.pdf&quot;]
+)
+
+config = RetrievalConfig.from_yaml(&quot;./custom_rag.yaml&quot;)
+answer = brain.ask(&quot;your question&quot;, retrieval_config=config)
+</code></pre>
+<h3>5.5 Building a Chat UI with Chainlit</h3>
+<pre><code class="language-bash">cd examples/chatbot
+rye sync
+rye run chainlit run chainlit.py
+</code></pre>
+<h3>5.6 Issuing and Using an API Key</h3>
+<pre><code class="language-bash"># 1. Log into the Quivr web app
+# 2. Generate an API key on the /user page
+# 3. Use the Bearer token when calling the API
+
+curl -X GET https://api.quivr.app/brains/ \
+  -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
+</code></pre>
+<hr>
+<h2>6. Understanding the &#39;Brain&#39; Concept</h2>
+<p>Quivr&#39;s core concept is the &quot;Brain.&quot; A Brain is the fundamental component that stores and processes a user&#39;s knowledge.</p>
+<ul>
+<li>A single Brain can have multiple documents attached</li>
+<li>Each Brain can have its own RAG configuration and LLM</li>
+<li>Can be set to Public/Private (shared or private)</li>
+<li>Other users&#39; Brains can also be used via the Brain Marketplace</li>
+</ul>
+<hr>
+<h2>7. References</h2>
+<h3>Official Documentation</h3>
+<ul>
+<li>Official homepage: <a href="https://quivr.app">https://quivr.app</a></li>
+<li>Core docs: <a href="https://core.quivr.com">https://core.quivr.com</a></li>
+<li>API Swagger docs: <a href="https://api.quivr.app/docs">https://api.quivr.app/docs</a></li>
+</ul>
+<h3>GitHub Repositories</h3>
+<ul>
+<li>QuivrHQ/quivr: <a href="https://github.com/quivrhq/quivr">https://github.com/quivrhq/quivr</a> (38k+ stars)</li>
+<li>Megaparse (document parsing tool): <a href="https://github.com/quivrhq/megaparse">https://github.com/quivrhq/megaparse</a></li>
+</ul>
+<h3>Quick Links</h3>
+<ul>
+<li>Quick Start: <a href="https://core.quivr.com/en/stable/">https://core.quivr.com/en/stable/</a></li>
+<li>Brain API guide: create a Brain via the POST /brains/ endpoint</li>
+<li>Chat API: retrieve conversation history via GET /chat/{chat_id}/history</li>
+</ul>
+<h3>Community</h3>
+<ul>
+<li>Product Hunt: <a href="https://www.producthunt.com/products/quivr">https://www.producthunt.com/products/quivr</a></li>
+<li>Y Combinator Launch: <a href="https://www.ycombinator.com/launches/KPF-quivr">https://www.ycombinator.com/launches/KPF-quivr</a></li>
+</ul>
+<hr>
+<h2>8. Conclusion</h2>
+<p>Quivr is designed to be more than a simple RAG tool — it&#39;s a developer-friendly AI framework. Prioritizing simplicity and extensibility above all, it contributes to productivity gains for everyone from individual developers to large AI teams.</p>
+<p>Reasons to choose Quivr:</p>
+<ul>
+<li>Open source for complete transparency and free customization</li>
+<li>Up and running in 30 seconds, usable in just 5 lines of code</li>
+<li>Data privacy — supports on-premises deployment</li>
+<li>No vendor lock-in — compatible with all major LLMs</li>
+<li>Active community and continuous updates</li>
+</ul>
+<p>As one description puts it, &quot;the idea is like Obsidian, but supercharged with AI features&quot; — Quivr presents a new paradigm for knowledge management. Build your own &quot;second brain&quot; with Quivr today.</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Quivr_guide_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

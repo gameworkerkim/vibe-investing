@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claude Prompt Optimizer Tools: Getting Started — VibeQuant</title>
+  <meta name="description" content="A survey of five open-source prompt optimizers that raise Claude output quality. Since our Fable access is limited, we have to relentlessly optimize Opus 4.8 prompts." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide-en/" />
+  <meta property="og:title" content="Claude Prompt Optimizer Tools: Getting Started" />
+  <meta property="og:description" content="A survey of five open-source prompt optimizers that raise Claude output quality. Since our Fable access is limited, we have to relentlessly optimize Opus 4.8 prompts." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Claude Prompt Optimizer Tools: Getting Started","description":"A survey of five open-source prompt optimizers that raise Claude output quality. Since our Fable access is limited, we have to relentlessly optimize Opus 4.8 prompts.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/claude/Claude-prompt-optimizer-tools-guide_EN.md","image":"https://vibequant.cc/og-default.png","inLanguage":"en","keywords":"Claude, Prompt Engineering, Claude Code, Anthropic"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Claude Prompt Optimizer Tools: Getting Started</h1>
+        <p class="article-dates">주제 Claude · Prompt Engineering · Claude Code · Anthropic</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/claude-claude-prompt-optimizer-tools-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/claude-claude-prompt-optimizer-tools-guide-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/claude-claude-prompt-optimizer-tools-guide-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/claude-claude-prompt-optimizer-tools-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">A survey of five open-source prompt optimizers that raise Claude output quality. Since our Fable access is limited, we have to relentlessly optimize Opus 4.8 prompts.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>A survey of five open-source prompt optimizers that raise Claude&#39;s output quality. Since our Fable access is limited, we have to relentlessly optimize Opus 4.8 instead.
+This guide covers each project&#39;s mechanism, usage examples, pros and cons, and setup instructions — using these optimization skills and hooks improves efficiency.</p>
+</blockquote>
+<hr>
+<h2>0. At a Glance</h2>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Type</th>
+<th>Environment</th>
+<th>Core Mechanism</th>
+<th>Scale (stars)</th>
+<th>Recommended For</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>CheswickDEV/claude-opus-4.8-prompt-optimizer</strong></td>
+<td>Meta optimizer (system prompt)</td>
+<td>Any Claude interface (claude.ai / API / Code)</td>
+<td><code>prompt:</code> trigger -&gt; 11 rules + 10-component XML structuring</td>
+<td>New</td>
+<td>Users who want to repeatedly generate consistent, high-quality prompts</td>
+</tr>
+<tr>
+<td><strong>johnpsasser/claude-code-prompt-optimizer</strong></td>
+<td>Hook</td>
+<td>Claude Code</td>
+<td>Intercepts <code>&lt;optimize&gt;</code> tags -&gt; expands via extended thinking</td>
+<td>Small</td>
+<td>Developers who need on-the-fly expansion for specific prompts in Claude Code</td>
+</tr>
+<tr>
+<td><strong>severity1/claude-code-prompt-improver</strong></td>
+<td>Hook + Skill (plugin)</td>
+<td>Claude Code</td>
+<td>Filters only ambiguous prompts -&gt; injects research and clarifying questions</td>
+<td>~1.4k</td>
+<td>Heavy Claude Code users who want fewer correction round-trips</td>
+</tr>
+<tr>
+<td><strong>Hashaam101/prompt-optimizer</strong></td>
+<td>Skill</td>
+<td>Claude Code</td>
+<td>Dual mode: auto (silent refinement) / manual (<code>/optimize</code> text output)</td>
+<td>Small</td>
+<td>Users who want to switch between automatic and manual refinement</td>
+</tr>
+<tr>
+<td><strong>nidhinjs/prompt-master</strong></td>
+<td>Skill</td>
+<td>Multi-tool (Claude, ChatGPT, Midjourney, etc.)</td>
+<td>Generates target-tool-specific prompts, retains memory</td>
+<td>Small</td>
+<td>Users working across multiple AI tools</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Skill</strong>: An instruction file placed in <code>~/.claude/skills/</code>. Claude loads it on its own when the conditions match and reflects it in its behavior.</li>
+<li><strong>Meta optimizer</strong>: A tool that operates as a system prompt itself. It treats the input prompt not as something to execute, but as something to <em>optimize</em>, and returns a newly structured prompt.</li>
+</ul>
+<hr>
+<h2>1. CheswickDEV/claude-opus-4.8-prompt-optimizer</h2>
+<p>A meta-prompting system that converts raw prompts into production-ready, XML-structured prompts tuned for the Opus 4.8 architecture. It features 11 optimization rules, a 10-component framework, complexity-based routing, and a mandatory <code>prompt:</code> trigger — all derived from Anthropic&#39;s official documentation. Its key differentiator is that it&#39;s not a prompt collection but an &quot;optimization engine.&quot; (MIT License)</p>
+<h3>How It Works (5 Steps)</h3>
+<ol>
+<li><strong>Prompt analysis</strong> — detects intent, complexity, domain, expected output, and missing elements</li>
+<li><strong>Complexity routing</strong> — simple prompts get 3-4 components, moderate ones get 5-7, complex ones get the full 10-component structure</li>
+<li><strong>Rule application</strong> — fires only the relevant subset of the 11 rules</li>
+<li><strong>Quality check</strong> — verifies task clarity, XML tag validity, example consistency, and contradictory instructions</li>
+<li><strong>Structured output</strong> — returns analysis + a copy-ready optimized prompt + notes explaining the changes</li>
+</ol>
+<h3>Usage Example (Before / After)</h3>
+<p><strong>Input (raw)</strong></p>
+<pre><code>Write me a Python script that analyzes CSV files and finds anomalies
+</code></pre>
+<p><strong>Output (optimized, excerpt)</strong></p>
+<pre><code>&lt;role&gt;
+You are a senior data engineer specializing in anomaly detection and
+statistical analysis with Python.
+&lt;/role&gt;
+
+&lt;context&gt;
+CSV datasets come from production IoT sensors. Files range from
+10K–5M rows with columns: timestamp, sensor_id, value, status.
+&lt;/context&gt;
+
+&lt;task&gt;
+1. Loads one or more CSV files
+2. Detects statistical anomalies using z-score and IQR methods
+3. Handles missing data gracefully
+4. Outputs a summary report with flagged rows
+&lt;/task&gt;
+
+&lt;constraints&gt;
+- Use only pandas, numpy, scipy (no ML libraries)
+- Handle files up to 5M rows efficiently
+- Include type hints and docstrings
+&lt;/constraints&gt;
+
+&lt;output_format&gt;
+Single Python code block, followed by a usage example and sample output.
+&lt;/output_format&gt;
+</code></pre>
+<p>Prefixing input with <code>prompt:</code> ensures that even if the input contains questions, instructions, attached PDFs, or prompt-injection attempts, none of it is executed — it is always treated purely as material to optimize. Attached documents are substituted with a <code>{{DOCUMENT}}</code> placeholder.</p>
+<pre><code>prompt: Based on the attached PDF, explain the GDPR compliance risks and mitigation.
+</code></pre>
+<h3>Pros</h3>
+<ul>
+<li><strong>Works across every Claude interface</strong> — not Claude Code-only; being system-prompt-based, it works in claude.ai Projects, direct paste, or the API</li>
+<li><strong>Tuned specifically for Opus 4.8</strong> — reflects the default <code>high</code> effort setting, per-turn adaptive thinking, improved tool triggering, and the 1M-token context window, even noting recommended effort levels</li>
+<li><strong>Scales with complexity</strong> — doesn&#39;t wrap simple questions in an excessive 10-tag structure</li>
+<li><strong>Reusable templates</strong> — outputs <code>{{VARIABLE}}</code>-style placeholders directly usable for repeated tasks</li>
+</ul>
+<h3>Cons</h3>
+<ul>
+<li><strong>Manual workflow</strong> — unlike a Hook/Skill that fires automatically, users must set up the system prompt themselves and paste in prompts</li>
+<li><strong>Opus 4.8 dependency</strong> — some rules may not fit other models (third-party LLMs, older Claude versions); not model-agnostic</li>
+<li><strong>Young repository</strong> — low star count means thin community validation and issue tracking</li>
+<li>Users must be aware of Opus 4.8 API constraints themselves (no <code>temperature</code>/<code>top_p</code>/<code>top_k</code>, no assistant prefill)</li>
+</ul>
+<h3>Setup Guide</h3>
+<p>Repository contents: <code>README.md</code>, <code>CLAUDE.md</code> (the engine itself), <code>GUIDE.md</code> (usage patterns), <code>QUICKSTART.md</code>, <code>LICENSE</code></p>
+<p><strong>Option A — Claude Project (Recommended)</strong>1. Create a new<strong>Project</strong> on claude.ai
+2. Paste the contents of <code>CLAUDE.md</code> into the <strong>Project Instructions</strong> field
+3. Upload <code>GUIDE.md</code> as a <strong>knowledge file</strong>4. Start a conversation -&gt; enter a raw prompt<strong>Option B — Direct Paste</strong></p>
+<ol>
+<li>Copy the entirety of <code>CLAUDE.md</code></li>
+<li>Paste it into the <strong>system prompt</strong> of any Claude interface</li>
+<li>Send the raw prompt as a user message</li>
+</ol>
+<p><strong>Option C — API Integration</strong></p>
+<pre><code class="language-python">import anthropic
+
+client = anthropic.Anthropic()
+
+with open(&quot;CLAUDE.md&quot;, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
+    system_prompt = f.read()
+
+response = client.messages.create(
+    model=&quot;claude-opus-4-8&quot;,
+    max_tokens=8192,
+    system=system_prompt,
+    thinking={&quot;type&quot;: &quot;adaptive&quot;},
+    output_config={&quot;effort&quot;: &quot;high&quot;},   # default high; xhigh/max for harder tasks
+    messages=[
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;prompt: Your raw prompt here&quot;}
+    ],
+)
+print(response.content[0].text)
+</code></pre>
+<blockquote>
+<p>API note: <code>temperature</code>/<code>top_p</code>/<code>top_k</code> are forbidden (400 error), assistant prefill is forbidden, and adaptive thinking is off by default and must be explicitly enabled.</p>
+</blockquote>
+<p>Repo: <code>github.com/CheswickDEV/claude-opus-4.8-prompt-optimizer</code></p>
+<hr>
+<h2>2. johnpsasser/claude-code-prompt-optimizer</h2>
+<p>A hook for Claude Code that expands simple prompts into detailed, structured instructions. Attaching an <code>&lt;optimize&gt;</code> tag to a prompt causes the hook to intercept it and route it through Claude&#39;s extended thinking mode, inflating the original request into a specification covering architecture, endpoints, error handling, auth, validation, and testing. It effectively performs prompt engineering on your behalf.</p>
+<h3>Usage Example</h3>
+<pre><code>&lt;optimize&gt; build me a REST API for a todo app
+</code></pre>
+<p>-&gt; The hook intercepts this and expands it into a structured spec covering architecture, endpoints, error handling, auth, validation, and testing. For performance-related requests, it expands into a plan including profiling steps, bottleneck identification, prioritized refactoring targets, and benchmark criteria.</p>
+<h3>Pros</h3>
+<ul>
+<li><strong>Explicit tag-based triggering</strong> — only prompts tagged with <code>&lt;optimize&gt;</code> get expanded, so there&#39;s no unintended interference</li>
+<li><strong>Leverages extended thinking</strong> — not a simple rewrite, but a reasoning-backed specification expansion</li>
+<li><strong>Easy to tune</strong> — model, fallback model, timeout, and system prompt are separated into <code>optimizer.config.json</code> / <code>system-prompt.md</code>, adjustable without touching TypeScript. Debug logs go to <code>/tmp/claude-code-hook-debug.log</code></li>
+</ul>
+<h3>Cons</h3>
+<ul>
+<li><strong>Claude Code only</strong> — not usable on the claude.ai web/app</li>
+<li><strong>Complex auth setup</strong> — OAuth token / API key priority resolution logic requires understanding environment variables during initial setup</li>
+<li><strong>Node dependency</strong> — npm-based install, requires separate Agent SDK auth configuration</li>
+</ul>
+<h3>Setup Guide</h3>
+<pre><code class="language-bash">git clone https://github.com/johnpsasser/claude-code-prompt-optimizer.git
+cd claude-code-prompt-optimizer
+npm run install-hook
+</code></pre>
+<p>The installer handles dependencies, auth setup, hook configuration, and verification. Issue and register an auth token as follows:</p>
+<pre><code class="language-bash">claude auth token
+export CLAUDE_CODE_OAUTH_TOKEN=&quot;your-oauth-token&quot;   # add to shell profile
+</code></pre>
+<p>For manual hook registration, specify the path to <code>src/hooks/optimize-prompt.sh</code> as a <code>UserPromptSubmit</code> hook in <code>~/.claude/settings.json</code> (or project settings).</p>
+<p>Repo: <code>github.com/johnpsasser/claude-code-prompt-optimizer</code></p>
+<hr>
+<h2>3. severity1/claude-code-prompt-improver</h2>
+<p>&quot;Type vibes, ship precision.&quot; An intelligent prompt-improvement plugin (Hook + Skill) for Claude Code. Rather than unconditionally refining every prompt, it <strong>lets clear prompts pass through unchanged and only selects ambiguous prompts</strong> to route through research and clarifying questions. Its goal is to inject just-in-time context at prompt submission, tool use, and subagent-start moments to raise the quality of the &quot;first output&quot; — reducing correction round-trips and saving tokens and time.</p>
+<h3>How It Works</h3>
+<ol>
+<li>A hook receives the prompt and judges its clarity using a ~189-token evaluation prompt</li>
+<li><strong>Ambiguous</strong> -&gt; fires the prompt-improver skill -&gt; builds a research plan (TodoWrite) -&gt; launches an Explore subagent for Glob/Grep/Web/multi-file Read -&gt; synthesizes findings -&gt; presents 1-6 evidence-based questions to the user -&gt; executes the original request with the answers incorporated</li>
+<li><strong>Clear</strong> -&gt; proceeds immediately without loading the skill</li>
+</ol>
+<p>Design principle: &quot;fire wide, self-cancel cheap&quot; — a missed nudge wastes a full correction round-trip, while a wrongly fired nudge only costs a few discarded tokens, so the system uses a high-recall gate but has each nudge self-cancel when it doesn&#39;t fit.</p>
+<h3>Usage Example</h3>
+<pre><code>fix the bug
+</code></pre>
+<p>-&gt; Judged ambiguous -&gt; researches the codebase -&gt; presents 1-6 evidence-based questions (&quot;which file / what symptom / what reproduction steps&quot;) -&gt; performs the actual fix once answered. Sufficiently specific prompts, by contrast, execute immediately with no intervention.</p>
+<h3>Pros</h3>
+<ul>
+<li><strong>Selective intervention</strong> — most prompts pass through unmodified; the hook only fires when needed, minimizing overhead</li>
+<li><strong>Optimizes first-output quality</strong> — improves the entire &quot;prompt -&gt; output&quot; path, not just word-level rewriting (questions + context injection)</li>
+<li><strong>Transparency</strong> — injected context is visible in the conversation</li>
+<li><strong>Battle-tested at scale</strong> — ~1.4k stars, active community adoption and maintenance</li>
+</ul>
+<h3>Cons</h3>
+<ul>
+<li><strong>Claude Code only</strong> — no web/app support</li>
+<li><strong>Adds an extra turn on intervention</strong> — the clarifying-question step when judged ambiguous can conflict with flows that want an immediate answer</li>
+<li><strong>Configuration learning curve</strong> — requires understanding the plugin/hook/skill/nudge registry structure</li>
+</ul>
+<h3>Setup Guide</h3>
+<p>Since it&#39;s a <code>.claude-plugin</code>-structured Claude Code plugin, install it via the plugin marketplace mechanism. (Check the repo&#39;s latest README for exact commands.)</p>
+<pre><code># Inside Claude Code
+/plugin marketplace add severity1/claude-code-prompt-improver
+/plugin install prompt-improver
+</code></pre>
+<p>For manual installation, clone the repo, place <code>hooks/</code> and <code>skills/prompt-improver/</code> under <code>~/.claude/</code>, and register the hook in settings.</p>
+<p>Repo: <code>github.com/severity1/claude-code-prompt-improver</code></p>
+<hr>
+<h2>4. Hashaam101/prompt-optimizer</h2>
+<p>A Claude Code skill offering two modes. <strong>Auto mode</strong>silently refines every prompt after installation to steer toward better results, while<strong>manual mode</strong> shows a refined prompt as text via <code>/optimize {prompt}</code> instead of executing it — useful for reusing prompts or learning better prompt-writing.</p>
+<h3>Usage Example</h3>
+<pre><code># manual: view the refined output as text
+/optimize analyze the quarterly sales data
+
+# or prefix style
+optimize: analyze the quarterly sales data
+optimize prompt: analyze the quarterly sales data
+</code></pre>
+<p>Simply installing the skill activates auto mode (Mode 1) for every prompt automatically, with no separate slash command needed.</p>
+<h3>Pros</h3>
+<ul>
+<li><strong>Dual mode</strong> — auto-refines by default, and <code>/optimize</code> extracts the refined text for reuse or study when needed</li>
+<li><strong>Simple install</strong> — just copy one <code>SKILL.md</code> file</li>
+<li><strong>Silent operation</strong> — auto mode doesn&#39;t disrupt your workflow</li>
+</ul>
+<h3>Cons</h3>
+<ul>
+<li><strong>Claude Code only</strong>-<strong>Opacity of auto mode</strong> — silent auto-refinement can make it hard to track what changed (mitigated by manual mode)</li>
+<li><strong>Small repository</strong> — thin community validation</li>
+</ul>
+<h3>Setup Guide</h3>
+<p>Copy <code>SKILL.md</code> either globally (all projects) or per-project.</p>
+<pre><code class="language-bash"># Global install (Linux/macOS)
+cp SKILL.md ~/.claude/skills/prompt-optimizer.md
+
+# Per-project (Linux/macOS)
+cp SKILL.md .claude/skills/prompt-optimizer.md
+</code></pre>
+<pre><code class="language-powershell"># Windows (PowerShell) — global
+Copy-Item SKILL.md &quot;$env:USERPROFILE\.claude\skills\prompt-optimizer.md&quot;
+</code></pre>
+<p>Activates automatically after installation. Invoke manual mode with <code>/optimize</code>.</p>
+<p>Repo: <code>github.com/Hashaam101/prompt-optimizer</code></p>
+<hr>
+<h2>5. nidhinjs/prompt-master</h2>
+<p>&quot;A Claude skill that writes accurate prompts for every AI tool.&quot; Aims to eliminate the token/credit waste caused by re-prompting by producing an accurate prompt on the first try. It generates optimal prompts tailored to target tools including Claude, ChatGPT, Gemini, o1/o3, Cursor, Claude Code, GitHub Copilot, Windsurf, Bolt, v0, Lovable, Perplexity, Midjourney, DALL-E, Stable Diffusion, ComfyUI, Sora, Runway, ElevenLabs, Zapier, and Make.</p>
+<p>Design philosophy: &quot;The best prompt isn&#39;t the longest one — it&#39;s the one where every word is load-bearing.&quot; It views forgetting earlier decisions in long sessions as the biggest source of waste, and maintains memory blocks to preserve decisions across a session.</p>
+<h3>Usage Example</h3>
+<pre><code>Build a claude code prompt for a landing page for a business dashboard
+that looks and feels exactly like notion - smooth animations, clean ui
+</code></pre>
+<p>-&gt; Routes based on target (Claude Code), framework, and estimated token count, then outputs a production-quality spec. If Midjourney is the target, it generates image-tool-specific formatting such as comma-separated descriptors, lighting/mood anchoring, fixed aspect ratio/version, and negative prompts.</p>
+<h3>Pros</h3>
+<ul>
+<li><strong>Multi-tool routing</strong> — automatically applies the optimal format per tool, from Claude to ChatGPT, Midjourney, and coding agents</li>
+<li><strong>Retains memory</strong> — remembers in-session decisions, reducing re-prompt waste</li>
+<li><strong>Actively updated</strong> — Opus 4.8 compatible (v1.7.0), version-aware routing (4.6/4.7/4.8), Prompt Decompiler mode, and other continuous updates</li>
+</ul>
+<h3>Cons</h3>
+<ul>
+<li><strong>Uses Claude as a &quot;prompt generator&quot;</strong> — leans more toward generating prompts for other tools rather than directly improving Claude&#39;s own output</li>
+<li><strong>Requires Claude Code skill infrastructure</strong> — needs a skill environment</li>
+<li><strong>Small repository</strong> — thin community validation</li>
+</ul>
+<h3>Setup Guide</h3>
+<pre><code class="language-bash">mkdir -p ~/.claude/skills
+git clone https://github.com/nidhinjs/prompt-master.git ~/.claude/skills/prompt-master
+</code></pre>
+<p>Once installed, the skill fires automatically when trigger conditions match. Templates in the references folder assist target-tool-specific output.</p>
+<p>Repo: <code>github.com/nidhinjs/prompt-master</code></p>
+<hr>
+<h2>6. Selection Guide</h2>
+<table>
+<thead>
+<tr>
+<th>Situation</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Repeatedly generating structured prompts on claude.ai web/app or the API</td>
+<td><strong>CheswickDEV 4.8</strong> (register as a Project)</td>
+</tr>
+<tr>
+<td>On-the-fly expansion of specific prompts in Claude Code</td>
+<td><strong>johnpsasser</strong> (<code>&lt;optimize&gt;</code> tag)</td>
+</tr>
+<tr>
+<td>Heavy Claude Code user wanting fewer correction round-trips and better first-output quality</td>
+<td><strong>severity1</strong> (selective intervention)</td>
+</tr>
+<tr>
+<td>Want auto-refinement plus manual extraction of the refined text in Claude Code</td>
+<td><strong>Hashaam101</strong> (dual mode)</td>
+</tr>
+<tr>
+<td>Generating prompts for ChatGPT, Midjourney, and coding agents besides Claude, all in one place</td>
+<td><strong>nidhinjs</strong> (multi-tool)</td>
+</tr>
+<tr>
+<td>Want to reference well-crafted prompt &quot;examples&quot; (not a tool)</td>
+<td>Curated collections like <code>langgptai/awesome-claude-prompts</code></td>
+</tr>
+</tbody></table>
+<p><strong>Combination tip</strong>: If your environment is Claude Code, keep a selective-intervention tool (severity1) always on, and run CheswickDEV 4.8 as a claude.ai Project separately when building formal prompt assets. For workflows where consistency of repeated output matters (e.g., structured reports, quantitative-analysis prompts), it&#39;s more stable to reference the optimizer&#39;s component framework or your own hand-built templates rather than a prompt collection.</p>
+<hr>
+<h2>7. General Cautions</h2>
+<ul>
+<li><strong>Check model dependency</strong> — tools tuned specifically for Opus 4.8 (like CheswickDEV) may have rules that don&#39;t fit other models.</li>
+<li><strong>Opacity of auto-firing tools</strong> — auto mode/silent hooks can make it hard to track what changed, so pair them with a manual mode or transparency option that exposes the changes whenever possible.</li>
+<li><strong>Auth/token management</strong> — hook-type tools handle OAuth tokens/API keys, so be careful about exposure via environment variables and shell profiles.</li>
+<li><strong>Repository trust</strong> — check stars, commits, and issue activity, and always cross-reference install commands against each repo&#39;s latest README. The commands in this document reflect the time of writing.</li>
+<li><strong>Use alongside official guides</strong> — don&#39;t rely solely on tools; cross-referencing Anthropic&#39;s official prompt engineering documentation (<code>docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview</code>) helps you better validate each tool&#39;s output.</li>
+</ul>
+<hr>
+<p><em>As of: 2026-06-21. Each project&#39;s features and setup instructions may change over time, so check the latest README in each repository.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/claude/Claude-prompt-optimizer-tools-guide_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

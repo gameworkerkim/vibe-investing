@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Supabase 完全指南 (Full Version) — VibeQuant</title>
+  <meta name="description" content="涵盖开源 Firebase 替代方案 Supabase 的核心功能、架构、优缺点、Vercel 集成方法与定价方案的完整指南" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide-cn/" />
+  <meta property="og:title" content="Supabase 完全指南 (Full Version)" />
+  <meta property="og:description" content="涵盖开源 Firebase 替代方案 Supabase 的核心功能、架构、优缺点、Vercel 集成方法与定价方案的完整指南" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Supabase 完全指南 (Full Version)","description":"涵盖开源 Firebase 替代方案 Supabase 的核心功能、架构、优缺点、Vercel 集成方法与定价方案的完整指南","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/OpenSource_Firebase/SuperBase_guide_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-21","dateModified":"2026-07-21","inLanguage":"zh-Hans","keywords":"BaaS · DB, OpenSource_Firebase"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · BaaS · DB</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">BaaS · DB</p>
+        <h1>Supabase 完全指南 (Full Version)</h1>
+        <p class="article-dates"><time datetime="2026-07-21">발행 2026.07.21</time> · 주제 BaaS · DB · OpenSource_Firebase</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/opensource-firebase-superbase-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/opensource-firebase-superbase-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/opensource-firebase-superbase-guide-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/opensource-firebase-superbase-guide-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">涵盖开源 Firebase 替代方案 Supabase 的核心功能、架构、优缺点、Vercel 集成方法与定价方案的完整指南</p>
+        
+      </header>
+      <div class="article-body prose"><p><strong>版本:</strong>截至 2026 年 6 月<strong>目标读者:</strong> 基于 Vercel + Next.js 的全栈开发者</p>
+<hr>
+<h2>1. 什么是 Supabase?</h2>
+<p>Supabase 是<strong>开源的 Firebase 替代方案</strong>。以 PostgreSQL 数据库为核心,统一提供认证(Auth)、实时(Realtime)、存储(Storage)、边缘函数(Edge Functions)等功能的后端平台(BaaS)。</p>
+<ul>
+<li><strong>开源</strong>: 所有代码均公开在 GitHub 上,也可以自行托管。</li>
+<li><strong>基于 PostgreSQL</strong>: 直接使用关系型数据库的强大能力(JOIN、事务、RLS 等)。</li>
+<li><strong>开发者体验</strong>: 提供 SDK(JavaScript、Flutter、Swift、Python 等)及 CLI,可实现快速原型开发。</li>
+</ul>
+<hr>
+<h2>2. 核心功能 (Core Features)</h2>
+<h3>2.1 Database (PostgreSQL)</h3>
+<ul>
+<li><strong>完全托管的 PostgreSQL</strong>: 版本 15.x,自动化配置与补丁管理。</li>
+<li><strong>表格编辑器</strong>: 可在 Web UI 中创建表、编辑 SQL、设置关联关系。</li>
+<li><strong>SQL 编辑器</strong>: 在线执行 SQL 查询并保存历史记录。</li>
+<li><strong>备份 &amp; PITR</strong>: 每日自动备份,时间点恢复(Point-in-Time Recovery)需 Pro 及以上套餐。</li>
+<li><strong>模式迁移</strong>: 通过 <code>supabase migration</code> CLI 进行版本管理。</li>
+</ul>
+<h3>2.2 Authentication (Auth)</h3>
+<ul>
+<li><strong>支持的登录方式</strong>:<ul>
+<li>邮箱/密码(含 Magic Link)</li>
+<li>社交 OAuth:Google、Apple、GitHub、GitLab、Facebook、Discord、Slack、Kakao(部分提供商)</li>
+<li>手机号短信认证(需集成 Twilio)</li>
+<li>企业级 SSO(SAML、Azure AD) – Enterprise 套餐</li>
+</ul>
+</li>
+<li><strong>基于 JWT 的会话</strong>: 自动刷新的访问/刷新令牌。</li>
+<li><strong>Row Level Security (RLS) 集成</strong>: 可在数据库策略中直接使用 <code>auth.uid()</code>。</li>
+<li><strong>用户管理 API</strong>: 创建/删除用户、重置密码、更改邮箱等。</li>
+<li><strong>自定义邮件模板</strong>: 可自定义注册确认、密码重置等邮件内容及 SMTP 配置。</li>
+</ul>
+<h3>2.3 Storage</h3>
+<ul>
+<li><strong>S3 兼容的对象存储</strong>: 图片、视频、文件上传。</li>
+<li><strong>存储桶策略与 RLS</strong>: 可通过 RLS 控制文件级别的访问权限。</li>
+<li><strong>图片转换</strong>: 通过 <code>?width=200&amp;height=200</code> 参数支持动态缩放。</li>
+<li><strong>公开/私有存储桶</strong>: 可通过签名 URL 实现临时访问。</li>
+</ul>
+<h3>2.4 Realtime</h3>
+<ul>
+<li><strong>基于 WebSocket 的实时订阅</strong>: 将表变更(INSERT、UPDATE、DELETE)实时推送给客户端。</li>
+<li><strong>Broadcast</strong>: 客户端之间的消息广播(聊天、协同工作)。</li>
+<li><strong>Presence</strong>: 在线用户列表管理(实时用户状态)。</li>
+<li><strong>PostgreSQL 变更数据捕获(CDC)</strong>: 需设置 <code>REPLICA IDENTITY FULL</code>。</li>
+</ul>
+<h3>2.5 Edge Functions</h3>
+<ul>
+<li><strong>基于 Deno 的无服务器函数</strong>: 在全球边缘节点运行(类似 Vercel Edge Functions)。</li>
+<li><strong>低延迟</strong>: 适用于 JWT 认证、支付 Webhook、AI API 代理等场景。</li>
+<li><strong>支持语言</strong>: TypeScript、JavaScript(Deno 运行时)。</li>
+<li><strong>限制</strong>: 执行时间 10 秒(免费),内存 150MB。</li>
+</ul>
+<h3>2.6 Vector (pgvector)</h3>
+<ul>
+<li><strong>内置 PostgreSQL 扩展 pgvector</strong>: 存储嵌入向量并进行相似度搜索(余弦、欧氏距离等)。</li>
+<li><strong>AI 应用</strong>: 可用于 RAG(检索增强生成)、推荐系统。</li>
+</ul>
+<h3>2.7 GraphQL(通过 pg_graphql)</h3>
+<ul>
+<li><strong>自动生成的 GraphQL API</strong>: 基于 PostgreSQL 模式提供 GraphQL 端点。</li>
+<li><strong>支持过滤、排序、分页</strong>。</li>
+</ul>
+<hr>
+<h2>3. 理解架构</h2>
+<p>Supabase 由多个开源组件组合构建而成。</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>技术</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Database</strong></td>
+<td>PostgreSQL</td>
+<td>数据存储与查询</td>
+</tr>
+<tr>
+<td><strong>API</strong></td>
+<td>PostgREST</td>
+<td>自动生成 RESTful API</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>GoTrue</td>
+<td>基于 JWT 的认证</td>
+</tr>
+<tr>
+<td><strong>Storage</strong></td>
+<td>Supabase Storage(基于 S3)</td>
+<td>文件上传/下载</td>
+</tr>
+<tr>
+<td><strong>Realtime</strong></td>
+<td>Realtime server(Elixir)</td>
+<td>WebSocket 广播</td>
+</tr>
+<tr>
+<td><strong>Edge Functions</strong></td>
+<td>Supabase Edge Runtime(Deno)</td>
+<td>边缘函数执行</td>
+</tr>
+<tr>
+<td><strong>Dashboard</strong></td>
+<td>基于 Next.js 的 Web UI</td>
+<td>管理控制台</td>
+</tr>
+</tbody></table>
+<ul>
+<li>所有服务均为<strong>开源</strong>,各组件相互独立且可扩展。</li>
+<li>客户端可通过<strong>单一 API URL</strong> 访问所有服务(例如:<code>https://&lt;ref&gt;.supabase.co</code>)。</li>
+</ul>
+<hr>
+<h2>4. 优点 (Pros)</h2>
+<h3>相较 Firebase 的优势</h3>
+<ul>
+<li><strong>关系型数据库</strong>: 支持复杂查询、JOIN、事务(Firebase Firestore 基于文档)。</li>
+<li><strong>价格可预测性</strong>: 按计算 + 存储 + 带宽计费,而非按用户数计费。</li>
+<li><strong>开源</strong>: 摆脱厂商锁定,支持自托管。</li>
+</ul>
+<h3>开发者生产力</h3>
+<ul>
+<li><strong>15 分钟搭建认证 + 数据库</strong>: 通过 UI 创建表、设置 RLS 策略、启用社交登录。</li>
+<li><strong>自动生成 API</strong>: 仅需创建表即可立即使用 REST/GraphQL 端点。</li>
+<li><strong>TypeScript 支持</strong>: 通过 <code>supabase gen types</code> 命令自动将数据库模式生成为 TypeScript 类型。</li>
+</ul>
+<h3>安全性(RLS)</h3>
+<ul>
+<li><strong>数据库层级权限</strong>: 通过 RLS 策略以 SQL 声明&quot;用户只能查看自己的行&quot;等规则。</li>
+<li><strong>默认所有 API 均需认证</strong>: <code>anon</code> 密钥仅有限访问权限,只有 <code>service_role</code> 密钥拥有完全权限。</li>
+</ul>
+<h3>可扩展性</h3>
+<ul>
+<li><strong>利用 PostgreSQL 生态</strong>: 索引、视图、函数、触发器、pg_cron、pgvector 等扩展。</li>
+<li><strong>纵向/横向扩展</strong>: Pro 及以上套餐正在准备专用计算资源、读副本、分片。</li>
+</ul>
+<h3>与 Vercel 完美契合</h3>
+<ul>
+<li><strong>Vercel Marketplace 集成</strong>: 一键创建 Supabase 项目并注入环境变量。</li>
+<li><strong>官方 <code>@supabase/ssr</code> 包</strong>: 在 Next.js App Router 中实现基于 Cookie 的会话管理。</li>
+<li><strong>边缘函数的相似性</strong>: Vercel Edge Runtime 与 Supabase Edge Functions 均基于 Deno → 逻辑易于复用。</li>
+</ul>
+<h3>免费套餐的吸引力</h3>
+<ul>
+<li><strong>50,000 MAU</strong>(月活跃用户) – 远比 Firebase Auth 免费套餐宽松。</li>
+<li><strong>无时间限制</strong> – 不会在 12 个月后突然开始收费。</li>
+<li><strong>500MB 数据库、1GB 存储、2GB 带宽</strong> – 足以支撑 MVP、副业项目。</li>
+</ul>
+<hr>
+<h2>5. 缺点 (Cons)</h2>
+<h3>带宽瓶颈(免费套餐)</h3>
+<ul>
+<li><strong>实际带宽上限约为 2GB</strong>: 官方文档标注为 5GB,但社区实测结果显示约 2GB 时便会触发限制。</li>
+<li><strong>影响</strong>: 以图片、视频为主的应用可能一天内就超出限额。API 响应优化与 CDN 是必需的。</li>
+</ul>
+<h3>数据库计算性能(免费套餐)</h3>
+<ul>
+<li><strong>共享 CPU</strong>: 高峰时段查询延迟可能达到 200~500ms。</li>
+<li><strong>连接池限制</strong>: 免费套餐最多 50 个并发连接,Pro 为 200 个。</li>
+</ul>
+<h3>社交登录提供商的限制</h3>
+<ul>
+<li><strong>Naver、Kakao、Line 等韩国服务</strong>: 默认不支持(可通过 OIDC 兼容提供商集成,但配置复杂)。</li>
+<li><strong>中国提供商(WeChat、QQ)</strong>: 不支持。</li>
+</ul>
+<h3>定制困难(托管服务的局限)</h3>
+<ul>
+<li><strong>自定义域名</strong>: 仅 Pro 套餐及以上($25/月)可用。</li>
+<li><strong>无法修改 JWT 过期时间</strong>: 默认为 1 小时(Google/Auth0 等可设置为 15 分钟等)。</li>
+<li><strong>虽可直接配置 SMTP,但相较专业邮件发送服务功能不足</strong>(无营销邮件、批量发送功能)。</li>
+</ul>
+<h3>缺乏审计日志(免费/Pro)</h3>
+<ul>
+<li><strong>仅 Enterprise 套餐提供审计日志</strong>: 若需查看谁在何时访问了哪些数据,需支付 $2,500/月。</li>
+</ul>
+<h3>轻度厂商锁定</h3>
+<ul>
+<li><strong>RLS 策略</strong>: 若严重依赖 Supabase 的 <code>auth.uid()</code> 函数,迁移到其他身份提供商时需要重写所有策略。</li>
+<li><strong>存储 URL 格式</strong>: <code>https://&lt;ref&gt;.supabase.co/storage/v1/...</code> – 切换到自有域名时需要额外工作。</li>
+</ul>
+<h3>大规模场景下的 Realtime 性能问题</h3>
+<ul>
+<li><strong>每个频道的连接数限制</strong>: 免费套餐 200 个,Pro 套餐 5,000 个,超出则需基于 Redis 进行扩展。</li>
+<li><strong>CDC 负载</strong>: 在变更数据捕获频繁的表上使用会给 PostgreSQL 的 WAL 带来负担。</li>
+</ul>
+<h3>Edge Functions 的限制</h3>
+<ul>
+<li><strong>执行时间 10 秒</strong>: 无法处理繁重任务(视频编码、大规模数据处理)。</li>
+<li><strong>外部网络访问受限</strong>: 免费套餐仅允许部分 IP 段(Pro 套餐可解除)。</li>
+<li><strong>本地调试困难</strong>: <code>supabase functions serve</code> 速度较慢,与 VS Code 调试器的集成不够稳定。</li>
+</ul>
+<hr>
+<h2>6. Vercel + Supabase 集成指南</h2>
+<h3>6.1 基础设置(5 分钟)</h3>
+<ol>
+<li><strong>Vercel 控制台</strong> → Integrations → Supabase → 点击&quot;Connect&quot;。</li>
+<li>创建新的 Supabase 项目或选择现有项目。</li>
+<li>自动注入环境变量(<code>NEXT_PUBLIC_SUPABASE_URL</code>、<code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>)。</li>
+<li>安装 <code>@supabase/ssr</code> 包:</li>
+</ol>
+<pre><code class="language-bash">npm install @supabase/supabase-js @supabase/ssr
+</code></pre>
+<h3>6.2 中间件设置 (<code>middleware.ts</code>)</h3>
+<pre><code class="language-typescript">import { createMiddlewareClient } from &#39;@supabase/ssr&#39;
+import { NextResponse } from &#39;next/server&#39;
+
+export async function middleware(req) {
+  const res = NextResponse.next()
+  const supabase = createMiddlewareClient({ req, res })
+  await supabase.auth.getSession()
+  return res
+}
+</code></pre>
+<blockquote>
+<p><strong>注意</strong>: <code>createMiddlewareClient</code> 适用于 <code>@supabase/ssr</code> v0.1.0 及以上版本。请不要与旧版本的 <code>@supabase/auth-helpers-nextjs</code> 混用。</p>
+</blockquote>
+<h3>6.3 初始化 Supabase 客户端</h3>
+<p>服务端组件与客户端组件需分别采用不同的方式进行初始化。</p>
+<p><strong>服务端组件 (Server Component)</strong></p>
+<pre><code class="language-typescript">import { createServerComponentClient } from &#39;@supabase/ssr&#39;
+import { cookies } from &#39;next/headers&#39;
+
+export default async function Page() {
+  const supabase = createServerComponentClient({ cookies })
+  const { data: { session } } = await supabase.auth.getSession()
+  // ...
+}
+</code></pre>
+<p><strong>客户端组件 (Client Component)</strong></p>
+<pre><code class="language-typescript">&#39;use client&#39;
+import { createClientComponentClient } from &#39;@supabase/ssr&#39;
+
+export default function Component() {
+  const supabase = createClientComponentClient()
+  // ...
+}
+</code></pre>
+<h3>6.4 配置 Google OAuth(在控制台中 3 分钟完成)</h3>
+<ol>
+<li>Supabase 控制台 → Authentication → Providers → 启用 Google。</li>
+<li>输入 Client ID / Secret → 复制重定向 URL 并在 Google Cloud Console 中注册。</li>
+</ol>
+<h3>6.5 RLS 示例(论坛)</h3>
+<pre><code class="language-sql">-- 创建表
+CREATE TABLE posts (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id uuid REFERENCES auth.users(id),
+  content text,
+  created_at timestamptz DEFAULT now()
+);
+
+-- 启用 RLS
+ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
+
+-- 策略:用户只能查看自己的帖子
+CREATE POLICY &quot;Users can view own posts&quot; ON posts
+  FOR SELECT USING (auth.uid() = user_id);
+
+-- 策略:仅登录用户可以发帖
+CREATE POLICY &quot;Authenticated users can insert&quot; ON posts
+  FOR INSERT WITH CHECK (auth.role() = &#39;authenticated&#39;);
+</code></pre>
+<h3>6.6 生成 TypeScript 类型</h3>
+<pre><code class="language-bash">npx supabase gen types typescript --project-id &lt;ref&gt; &gt; types/supabase.ts
+</code></pre>
+<p>在查询中使用生成的类型,可以在编译期捕获模式错误。</p>
+<pre><code class="language-typescript">import { Database } from &#39;@/types/supabase&#39;
+
+const supabase = createClientComponentClient&lt;Database&gt;()
+const { data } = await supabase.from(&#39;posts&#39;).select(&#39;*&#39;)
+// data 会被推断为 Database[&#39;public&#39;][&#39;Tables&#39;][&#39;posts&#39;][&#39;Row&#39;][] 类型
+</code></pre>
+<h3>6.7 环境变量管理</h3>
+<p>本地开发时请在 <code>.env.local</code> 中添加以下内容。使用 Vercel 集成后,预览/生产环境的变量会自动注入。</p>
+<pre><code class="language-bash">NEXT_PUBLIC_SUPABASE_URL=https://&lt;ref&gt;.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=&lt;anon-key&gt;
+# 切勿暴露给客户端
+SUPABASE_SERVICE_ROLE_KEY=&lt;service-role-key&gt;
+</code></pre>
+<hr>
+<h2>7. 定价方案(截至 2026 年 6 月)</h2>
+<table>
+<thead>
+<tr>
+<th>套餐</th>
+<th>价格</th>
+<th>MAU</th>
+<th>数据库容量</th>
+<th>带宽</th>
+<th>Edge Functions</th>
+<th>实时连接数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Free</td>
+<td>$0</td>
+<td>50,000</td>
+<td>500MB</td>
+<td>2GB</td>
+<td>每月 50 万次调用</td>
+<td>200</td>
+</tr>
+<tr>
+<td>Pro</td>
+<td>$25</td>
+<td>100,000</td>
+<td>8GB</td>
+<td>100GB</td>
+<td>每月 200 万次调用</td>
+<td>5,000</td>
+</tr>
+<tr>
+<td>Team</td>
+<td>$599</td>
+<td>500,000</td>
+<td>40GB</td>
+<td>400GB</td>
+<td>每月 500 万次调用</td>
+<td>20,000</td>
+</tr>
+<tr>
+<td>Enterprise</td>
+<td>定制</td>
+<td>无限制</td>
+<td>无限制</td>
+<td>无限制</td>
+<td>无限制</td>
+<td>无限制</td>
+</tr>
+</tbody></table>
+<p><strong>额外费用:</strong></p>
+<ul>
+<li>超出的数据库存储: $0.125/GB(Pro 及以上)</li>
+<li>超出的带宽: $0.09/GB(Pro 及以上)</li>
+<li>额外边缘函数调用: 每百万次 $2</li>
+</ul>
+<blockquote>
+<p><strong>注意:</strong> 免费套餐每个账户限制 2 个项目,Pro 套餐组织下的项目数量不受限制。</p>
+</blockquote>
+<hr>
+<h2>8. 何时应选择 Supabase</h2>
+<h3>适合的项目</h3>
+<ul>
+<li><strong>MVP、创业公司早期产品</strong>: 快速开发速度与宽松的免费套餐 MAU。</li>
+<li><strong>Vercel + Next.js 全栈</strong>: 官方集成优化了开发者体验。</li>
+<li><strong>以关系型数据为核心的应用</strong>: 需要复杂查询的订单、预订、库存管理等场景。</li>
+<li><strong>需要通过 RLS 加强数据安全的服务</strong>: 医疗、金融、个人信息处理。</li>
+<li><strong>需要实时功能的应用</strong>: 聊天、协作工具、仪表盘。</li>
+<li><strong>AI/向量搜索应用</strong>: 内置 pgvector,无需单独的向量数据库即可实现 RAG。</li>
+</ul>
+<h3>不适合的项目</h3>
+<ul>
+<li><strong>媒体带宽消耗较大的应用(图片/视频)</strong>: 带宽计费会造成较大负担,建议改用 Vercel Blob Storage 或 Cloudflare R2。</li>
+<li><strong>必须支持韩国社交登录(Naver、Kakao)</strong>: 直接使用 Auth.js 或 Passport.js 实现会更简单。</li>
+<li><strong>需要企业级审计日志与 SSO</strong>: Auth0、WorkOS、Clerk 更为合适。</li>
+<li><strong>无服务器函数需要长时间运行(&gt;10 秒)</strong>: 需要后台 Worker 时应单独搭建服务器。</li>
+</ul>
+<hr>
+<h2>9. Supabase 与竞品对比</h2>
+<table>
+<thead>
+<tr>
+<th>特性</th>
+<th>Supabase</th>
+<th>Firebase</th>
+<th>Auth0</th>
+<th>Clerk</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>数据库</td>
+<td>PostgreSQL</td>
+<td>Firestore(NoSQL)</td>
+<td>无</td>
+<td>无</td>
+</tr>
+<tr>
+<td>认证免费 MAU</td>
+<td>50k</td>
+<td>50k(按用户计)</td>
+<td>7,500</td>
+<td>10k</td>
+</tr>
+<tr>
+<td>实时功能</td>
+<td>支持(WebSocket)</td>
+<td>支持</td>
+<td>不支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>存储</td>
+<td>支持(S3 兼容)</td>
+<td>支持</td>
+<td>不支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>开源</td>
+<td>全部公开</td>
+<td>不公开</td>
+<td>不公开</td>
+<td>不公开</td>
+</tr>
+<tr>
+<td>自托管</td>
+<td>支持(Docker)</td>
+<td>不支持</td>
+<td>不支持</td>
+<td>不支持</td>
+</tr>
+<tr>
+<td>价格可预测性</td>
+<td>中等(按用量)</td>
+<td>较低(按请求)</td>
+<td>较高(按 MAU)</td>
+<td>中等(MAU + 功能)</td>
+</tr>
+<tr>
+<td>自定义域名</td>
+<td>Pro 及以上</td>
+<td>Blaze 套餐及以上</td>
+<td>Standard 及以上</td>
+<td>Pro 及以上</td>
+</tr>
+<tr>
+<td>pgvector / 向量搜索</td>
+<td>内置</td>
+<td>不支持</td>
+<td>不支持</td>
+<td>不支持</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>10. 常见问题 (FAQ)</h2>
+<p><strong>问:在 Supabase 免费套餐中可以使用 Naver 登录吗?</strong>答:可以直接实现,但较为复杂。建议搭配使用 Auth.js(NextAuth)会更简单。<strong>问:从 Vercel 直接连接 Supabase 安全吗?</strong>答:是的。<code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code> 默认是安全的,但仍需通过 RLS 保护数据。<code>service_role</code> 密钥切勿暴露给客户端。<strong>问:可以用 Supabase 发送邮件营销(新闻通讯)吗?</strong>答:可以连接 SMTP,但并非为大批量发送设计。请使用 Resend、SendGrid、Brevo 等专业服务。<strong>问:生产环境可以使用免费套餐吗?</strong>答:如果用户量较少(MAU &lt; 5,000)且带宽消耗较小,是可以的。但流量激增时应考虑升级为付费套餐。<strong>问:自托管 Supabase 是完全免费的吗?</strong>答:仍会产生服务器成本(云端虚拟机或本地部署),且管理开销较大,小规模场景下托管服务反而更经济。<strong>问:使用 pgvector 实现 RAG 需要什么套餐?</strong>答:免费套餐即可启用 pgvector 扩展。但随着嵌入向量数量增多,需注意数据库容量 500MB 的上限。<strong>问:如何配置连接池(Connection Pooling)?</strong>
+答:Supabase 内置了 PgBouncer。只需将连接字符串中的端口从 <code>5432</code>(直连)改为 <code>6543</code>(Pooler 模式)即可。在无服务器环境(Next.js API Routes、Edge Functions)中必须使用 Pooler。</p>
+<hr>
+<h2>11. 延伸学习资源</h2>
+<ul>
+<li><strong>官方文档</strong>: <a href="https://supabase.com/docs">supabase.com/docs</a></li>
+<li><strong>Vercel 集成</strong>: <a href="https://vercel.com/integrations/supabase">vercel.com/integrations/supabase</a></li>
+<li><strong>GitHub 仓库</strong>: <a href="https://github.com/supabase/supabase">github.com/supabase/supabase</a></li>
+<li><strong>Discord 社区</strong>: <a href="https://discord.supabase.com">discord.supabase.com</a></li>
+<li><strong>Supabase YouTube 频道</strong>: 提供官方教程与发布说明视频</li>
+</ul>
+<hr>
+<h2>12. 结论</h2>
+<p>Supabase 巧妙地将开源的自由度与托管服务的便捷性结合在一起。得益于与 Vercel 的协同效应、PostgreSQL 的强大能力以及宽松的免费套餐,从个人开发者到创业公司都广受喜爱。</p>
+<p>不过,带宽限制与对韩国社交登录支持的不足是其明显的缺点。请根据项目需求权衡,再决定是否采用 Supabase 或考虑替代方案。</p>
+<p>&quot;Supabase 已不仅仅是 Firebase 的替代品,正逐渐成为开源生态系统的新标准。&quot;</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/OpenSource_Firebase/SuperBase_guide_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

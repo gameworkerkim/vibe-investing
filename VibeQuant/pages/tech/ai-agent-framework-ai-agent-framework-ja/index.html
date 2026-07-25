@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AIエージェントフレームワーク地図: Microsoft Agent Framework for GoとLangChain・LangGraph — VibeQuant</title>
+  <meta name="description" content="Microsoft Agent Framework for GoとLangChain・LangGraphを軸に、AIエージェント・マルチエージェント・オーケストレーションフレームワークの構造、長所短所、選択基準と実行可能なスタートコードを整理した。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-ja/" />
+  <meta property="og:title" content="AIエージェントフレームワーク地図: Microsoft Agent Framework for GoとLangChain・LangGraph" />
+  <meta property="og:description" content="Microsoft Agent Framework for GoとLangChain・LangGraphを軸に、AIエージェント・マルチエージェント・オーケストレーションフレームワークの構造、長所短所、選択基準と実行可能なスタートコードを整理した。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"AIエージェントフレームワーク地図: Microsoft Agent Framework for GoとLangChain・LangGraph","description":"Microsoft Agent Framework for GoとLangChain・LangGraphを軸に、AIエージェント・マルチエージェント・オーケストレーションフレームワークの構造、長所短所、選択基準と実行可能なスタートコードを整理した。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AI-Agent-Framework/AI-Agent-Framework_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-22","dateModified":"2026-07-22","inLanguage":"ja","keywords":"AIエージェント, Microsoft Agent Framework, LangGraph, LangChain, Go, マルチエージェント"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>AIエージェントフレームワーク地図: Microsoft Agent Framework for GoとLangChain・LangGraph</h1>
+        <p class="article-dates"><time datetime="2026-07-22">발행 2026.07.22</time> · 주제 AIエージェント · Microsoft Agent Framework · LangGraph · LangChain · Go · マルチエージェント</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/ai-agent-framework-ai-agent-framework/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/ai-agent-framework-ai-agent-framework-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/ai-agent-framework-ai-agent-framework-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/ai-agent-framework-ai-agent-framework-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">エージェント・オーケストレーションフレームワークのコンセプト、競争構図、そして実際に動くGetting Started</p>
+        <p class="article-byline">2026.07.22 Dennis Kim</p>
+      </header>
+      <div class="article-body prose"><h2>1. 導入 — フレームワークが実際に解決する問題</h2>
+<p>LLMにツールを一つ付けて一回呼び出すコードは40行で終わる。フレームワークが必要になるのはその次の段階だ。エージェントが3時間かかるタスクの途中で落ちたときどこから再開するか、人間の承認が必要な分岐をどう表現するか、ツール呼び出し12回中7回目でなぜ間違えたのかをどう追跡するか。これらはプロンプトエンジニアリングでは解決できない。</p>
+<p>私が繰り返し使う表現を再度使うなら、<strong>LLMはExcelであってOracleではない。</strong>フレームワークも同じだ。フレームワークはモデルの推論品質を上げてくれない。上げてくれるのは<em>モデルが間違えたときの復旧可能性</em>と<em>間違えたという事実に気づく速度</em>だ。この観点を基準にすれば、ツール選択はずっと単純になる。</p>
+<p>2025年第4四半期から2026年上半期にかけて、この市場は一度整理された。LangChainとLangGraphが2025年10月に1.0を出し、Microsoft Agent Framework(MAF)が2026年2月のRCを経て4月に.NET/Python 1.0 GAに到達した。AutoGenとSemantic KernelはMAFに吸収される経路に乗った。つまり今は、フレームワークを選ぶ時点ではなく、<strong>どのレイヤーをフレームワークに任せるかを選ぶ時点</strong>である。</p>
+<hr>
+<h2>2. 概念整理 — エージェントスタックの3つのレイヤー</h2>
+<p>フレームワーク同士が互いに比較不可能に見える理由は、扱うレイヤーが異なるからだ。まず層を分ける。</p>
+<table>
+<thead>
+<tr>
+<th>レイヤー</th>
+<th>役割</th>
+<th>ないと生じる問題</th>
+<th>代表実装</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>L1. エージェントハーネス</strong></td>
+<td>モデル呼び出し → ツール呼び出し → 結果注入 → 再呼び出しループ、構造化出力、リトライ</td>
+<td>直接書いても構わない(数十行)。ただしストリーミング・トークン会計・エラー分岐が付くとすぐ数百行になる</td>
+<td>LangChain <code>create_agent</code>、MAF <code>agent</code>、Eino ADK</td>
+</tr>
+<tr>
+<td><strong>L2. オーケストレーション</strong></td>
+<td>複数エージェントのグラフ、条件付きルーティング、並列・順次・グループ協業、サブワークフロー</td>
+<td>エージェント間の状態伝達がグローバル辞書に退化する。デバッグ不可能</td>
+<td>LangGraph、MAF <code>workflow</code>、CrewAI Flows</td>
+</tr>
+<tr>
+<td><strong>L3. ランタイム/運用</strong></td>
+<td>チェックポインティング、再起動、持続実行、HITLインターラプト、可観測性(OTel)、デプロイ</td>
+<td>長時間タスクがプロセス再起動一回で全て失われる</td>
+<td>LangGraphの持続実行、MAFのチェックポインティング、Foundry Hosted Agents</td>
+</tr>
+</tbody></table>
+<p>核心は<strong>L3が本当の堀(moat)</strong>であるという点だ。L1は誰でも書けるし、L2はコードで表現可能だが、「サーバーが落ちても3日がかりの承認ワークフローが継続する」という性質は、自分で実装すると実質的にタスクキュー+状態ストア+冪等性設計を新たに作ることになる。</p>
+<h3>2.1 フレームワークを使わない選択も正当である</h3>
+<p>Goコミュニティには特に強い反論がある。エージェントループ自体は短く、OpenAI・Anthropic・Googleすべてが公式Go SDKを提供し、Goエンジニアは慣例的に標準ライブラリ+少数の依存を好む。実際、2026年中頃時点で多数のGoチームはフレームワークを使わない。</p>
+<p>ここにセキュリティの観点がもう一つ加わる。マルチプロバイダーSDKは<strong>すべてのプロバイダーのAPIキーが一箇所に集まる地点</strong>だ。依存関係ツリーそのものが攻撃対象になっている。</p>
+<table>
+<thead>
+<tr>
+<th>プロジェクト</th>
+<th>大まかな依存数(2026年4月時点のコミュニティ測定)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LangChainGo</td>
+<td>170+</td>
+</tr>
+<tr>
+<td>Genkit Go</td>
+<td>129</td>
+</tr>
+<tr>
+<td>Eino</td>
+<td>37</td>
+</tr>
+<tr>
+<td>軽量SDK(GoAIなど)</td>
+<td>2〜5</td>
+</tr>
+</tbody></table>
+<p>2025〜2026年のLiteLLMパッケージ改竄事件、npm axiosサプライチェーン侵害事例を経た今、この表は単純な参考数値ではない。CTIの観点からは、エージェントフレームワークの導入は<strong>ランタイムの便利さとサプライチェーン露出を引き換える決定</strong>だ。</p>
+<hr>
+<h2>3. Microsoft Agent Framework for Go</h2>
+<blockquote>
+<p>リポジトリ: <code>github.com/microsoft/agent-framework-go</code> · ライセンス MIT · 言語 Go 100%</p>
+</blockquote>
+<h3>3.1 概要</h3>
+<p>MAFは.NET・Python・Goを横断する多言語オープンソースフレームワークで、プロトタイプを超えて<strong>プロダクションで運用されるエージェント</strong>を目指す。Microsoft Foundry、Azure OpenAI、OpenAI、MCP、A2A、AG-UI、GitHub Copilot SDKなど広範なエコシステムをサポートする。</p>
+<p>重要な構造的事実が一つある。<strong>Go実装は.NET/Python本流のリポジトリとは分離され、別のリポジトリで開発が進んでおり、公開プレビュー(public preview)状態にある。</strong>つまり「MAF 1.0 GA」という見出しは.NET/Pythonの話であり、Goの話ではない。この区別を見逃すと、導入計画で機能が大きく不足していることに気づき失望することになる。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>.NET / Python</th>
+<th>Go</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>状態</td>
+<td>1.0 GA(2026-04)</td>
+<td>公開プレビュー</td>
+</tr>
+<tr>
+<td>リポジトリ</td>
+<td><code>microsoft/agent-framework</code></td>
+<td><code>microsoft/agent-framework-go</code>(別)</td>
+</tr>
+<tr>
+<td>製品統合の幅</td>
+<td>広い</td>
+<td>狭い</td>
+</tr>
+<tr>
+<td>未実装機能</td>
+<td>大半解消</td>
+<td>多数存在(§3.3)</td>
+</tr>
+</tbody></table>
+<h3>3.2 長所</h3>
+<ol>
+<li><strong>Goのランタイム特性をそのまま活用</strong> — ゴルーチンベースの同時実行、低メモリフットプリント、単一バイナリデプロイ。エージェントワークロードは本質的に長時間・同時・I/Oバウンドであり、Goの形とよく合う。</li>
+<li><strong>運用機能がフレームワークに内蔵</strong> — チェックポインティング、再起動可能性、ストリーミング、human-in-the-loop(HITL)、タイムトラベルパターンをワークフロー層で提供。</li>
+<li><strong>グラフベースのオーケストレーション</strong> — 順次・並行・グループ協業・条件付きルーティング・サブワークフローをサポート。</li>
+<li><strong>ミドルウェアチェーン</strong>— リクエスト/レスポンス処理、ロギング、OpenTelemetry、コンテキストプロバイダー、<strong>ツール承認(tool approval)</strong>、自動ツール呼び出し。ツール承認ミドルウェアはセキュリティの観点で特に重要(§7参照)。</li>
+<li><strong>可観測性の一級サポート</strong> — エージェントとワークフロー両方にOpenTelemetry統合を提供。</li>
+<li><strong>プロバイダーの柔軟性</strong> — 特定のLLMベンダーに縛られず、アーキテクチャの書き換えなしに交換可能。</li>
+<li><strong>Agent Skills</strong> — ファイル・インライン定義・スクリプトでドメイン知識ベースを構成し、エージェントが発見・使用。</li>
+<li><strong>MITライセンス</strong> — 商用利用の制約が低い。</li>
+</ol>
+<h3>3.3 短所と限界</h3>
+<p>未実装リストは短くない。リポジトリのREADMEと.NET–Go機能比較文書を基に整理すると以下の通り。</p>
+<table>
+<thead>
+<tr>
+<th>未実装機能</th>
+<th>影響</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ハンドオフ・オーケストレーション</strong></td>
+<td>エージェント間の制御権移譲パターンを自分で実装する必要がある。カスタマー対応型ルーティングシナリオに直接打撃</td>
+</tr>
+<tr>
+<td><strong>宣言的エージェント</strong></td>
+<td>YAML/JSON設定ベースのエージェント定義が不可能 → コードデプロイなしにエージェント修正不可</td>
+</tr>
+<tr>
+<td><strong>RAG</strong></td>
+<td>検索拡張パイプラインを別途構成する必要がある</td>
+</tr>
+<tr>
+<td><strong>CodeAct</strong></td>
+<td>コード実行ベースのアクション未サポート</td>
+</tr>
+<tr>
+<td><strong>Functional workflows</strong></td>
+<td>関数型ワークフロースタイル未サポート</td>
+</tr>
+<tr>
+<td><strong>Foundryホスティングデプロイ</strong></td>
+<td>Foundryへの直接デプロイ不可(コンテナなどの迂回が必要)</td>
+</tr>
+<tr>
+<td><strong>DevUI / AF Labs</strong></td>
+<td>開発者UI・実験機能が存在しない → ローカルデバッグ体験がPythonに比べ劣る</td>
+</tr>
+</tbody></table>
+<p>追加で考慮すべき点</p>
+<ul>
+<li><strong>エコシステムの成熟度</strong> — .NETに比べ製品統合が少なく、APIの表面がまだ動いている。プレビュー段階ではブレイキングチェンジの可能性を前提とすべき。</li>
+<li><strong>コミュニティ規模が小さい</strong> — 下記のファクトチェック参照。</li>
+<li><strong>サードパーティシステムへの責任転嫁</strong> — Azure Direct モデルではなく外部サーバー・エージェント・モデルを使う場合、データフロー・コスト・コンプライアンスの責任は全面的に利用者にある。Microsoftの文書がこれを明示している。</li>
+<li><strong><code>DefaultAzureCredential</code>の罠</strong> — 開発の便宜用である。プロダクションでは管理ID(Managed Identity)など具体的な資格情報を指定する必要がある。フォールバック機構が順次探索を行うことで遅延が増え、意図しない資格情報が選択されるセキュリティリスクがある。</li>
+</ul>
+<h3>3.4 ファクトチェック — 流通している数値には誤りがある</h3>
+<p>複数の要約でこのリポジトリを「スター360、コントリビューター14名」と記述する場合がある。<strong>2026年7月にリポジトリページを直接確認した結果、スター約16、フォーク1、コントリビューター3名、コミット406件、リリース未発行である。</strong>360という数字は本流の<code>microsoft/agent-framework</code>リポジトリ(数万単位)、または別プロジェクトと混同されたものと見られる。</p>
+<p>この差は小さくない。スター16とスター360は<strong>「イシューを立てたときに返信が来るか」</strong>について全く異なる予測を与える。コミュニティ規模を根拠に導入を決める場合は、必ずリポジトリを直接確認してほしい。</p>
+<blockquote>
+<p>指標は照会時点によって変化する。上記の数値の基準日は2026年7月であり、引用時には基準日を併記することを推奨する。</p>
+</blockquote>
+<hr>
+<h2>4. LangChain 1.0 / LangGraph 1.0</h2>
+<h3>4.1 1.0以降、役割分担が明確になった</h3>
+<p>2025年10月の1.0リリースで両プロジェクトの関係が再定義された。以前は「LangChainを使って不足したらLangGraphへ」という構図だったが、今は<strong>LangChainがLangGraphランタイムの上に乗る上位抽象</strong>である。</p>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>LangChain 1.0</th>
+<th>LangGraph 1.0</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>レイヤー</td>
+<td>L1(エージェントハーネス)</td>
+<td>L2 + L3(オーケストレーション+ランタイム)</td>
+</tr>
+<tr>
+<td>核心API</td>
+<td><code>create_agent</code></td>
+<td><code>StateGraph</code>、チェックポインター、<code>interrupt</code></td>
+</tr>
+<tr>
+<td>志向</td>
+<td>速く作って出す</td>
+<td>細かい制御と耐久性</td>
+</tr>
+<tr>
+<td>実行モデル</td>
+<td>標準ツール呼び出しループ</td>
+<td>グラフベース実行(分岐・ループ・状態再訪)</td>
+</tr>
+<tr>
+<td>安定性の約束</td>
+<td>2.0までブレイキングチェンジなし</td>
+<td>同じ</td>
+</tr>
+<tr>
+<td>言語</td>
+<td>Python、TypeScript</td>
+<td>Python、TypeScript</td>
+</tr>
+</tbody></table>
+<p>LangChain 1.0はコアエージェントループに集中するよう書き直され、<strong>ミドルウェア</strong>という新概念を導入してHITL・要約・PIIマスキングを組み込みミドルウェアとして提供する。構造化出力はメインループに統合され、追加のLLM呼び出しが消えたことで遅延とコストが減った。</p>
+<p>LangGraph 1.0は「耐久性のあるエージェントフレームワーク領域の最初の安定メジャーリリース」を標榜する。唯一の主要変更は<code>langgraph.prebuilt</code>の廃止であり、機能は<code>langchain.agents</code>に移動した。下位互換性は維持される。</p>
+<h3>4.2 LangGraphの決定的な強み — 耐久性のある実行</h3>
+<p>LangGraphを使う理由は事実上一つに収束する。<strong>状態が自動的に持続する</strong>ということだ。サーバーが対話の途中で再起動しても、長時間ワークフローが中断されても、中断地点から正確に再開される。カスタムDBロジックなしに保存・再開ができるため、数日にわたる承認プロセスやセッションを跨ぐバックグラウンド作業を表現できる。</p>
+<p>HITLも一級APIだ。人間の検討・修正・承認のために実行を一時停止することが<code>interrupt</code>一行で済む。高リスク判断に人間を介入させるシステムでは、この一行がアーキテクチャ全体を左右する。</p>
+<h3>4.3 長所</h3>
+<ol>
+<li><strong>圧倒的なエコシステム</strong> — 統合数、文書、例、Stack Overflowの回答、採用市場すべてで1位。月数千万回のダウンロード規模。</li>
+<li><strong>プロダクションのリファレンス</strong> — Uber、LinkedIn、Klarna、J.P. Morganなどが LangGraphを本番運用に使用していると公開している。</li>
+<li><strong>決定論とエージェンシーの混合表現</strong> — 実際のシステムは100%エージェント的でも100%決定論的でもない。一部の分岐は固定ロジック、一部はLLM判断とする構造をグラフで明示的にモデリングできる。</li>
+<li><strong>LangSmith連携</strong> — 可観測性・評価・デプロイまでライフサイクルツールが付く。</li>
+<li><strong>動的ツール呼び出し</strong> — 実行地点ごとに使用可能なツールの集合を制御。</li>
+</ol>
+<h3>4.4 短所</h3>
+<ol>
+<li><strong>Python/TypeScript限定</strong> — Go・Java・Rustのバックエンドに直接付けられない。HTTPサービスとして分離するか言語を変える必要がある。</li>
+<li><strong>抽象レイヤーの重さ</strong> — 初期のLangChainは隠れたプロンプトと暗黙のコンテキスト操作で「カスタマイズの壁」を作ったと批判された。1.0がこれをかなり解消したが、フレームワークが何をしているか読まなければならない負担は残る。</li>
+<li><strong>依存関係の体積</strong> — サプライチェーンの観点で軽くはない。</li>
+<li><strong>商用製品との結合</strong> — LangSmithはオープンソースではない。可観測性を完全に活用するには商用パスに入る。自体のOTelスタックで代替可能だが統合品質は差がある。</li>
+<li><strong>学習曲線の位置が異なる</strong> — LangChainは易しく、LangGraphは難しい。状態スキーマ、リデューサー、チェックポインター、スレッドの概念を理解する必要がある。</li>
+</ol>
+<hr>
+<h2>5. 競合プロジェクト全体マップ</h2>
+<h3>5.1 言語・レイヤー別の配置</h3>
+<table>
+<thead>
+<tr>
+<th>プロジェクト</th>
+<th>言語</th>
+<th>主レイヤー</th>
+<th>状態(2026-07)</th>
+<th>一言特徴</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Microsoft Agent Framework</strong></td>
+<td>C#、Python</td>
+<td>L1〜L3</td>
+<td>1.0 GA(2026-04)</td>
+<td>SK・AutoGenの後継。エンタープライズガバナンス志向</td>
+</tr>
+<tr>
+<td><strong>Microsoft Agent Framework for Go</strong></td>
+<td>Go</td>
+<td>L1〜L3</td>
+<td>公開プレビュー</td>
+<td>上記のGo実装。機能ギャップが存在</td>
+</tr>
+<tr>
+<td><strong>LangGraph</strong></td>
+<td>Python、TS</td>
+<td>L2〜L3</td>
+<td>1.0 GA(2025-10)</td>
+<td>耐久性のある状態グラフランタイム。事実上の標準</td>
+</tr>
+<tr>
+<td><strong>LangChain</strong></td>
+<td>Python、TS</td>
+<td>L1</td>
+<td>1.0 GA(2025-10)</td>
+<td>最速のエージェント構築経路</td>
+</tr>
+<tr>
+<td><strong>AutoGen</strong></td>
+<td>Python</td>
+<td>L2</td>
+<td>MAFへの統合経路</td>
+<td>マルチエージェント対話・協業研究から出発</td>
+</tr>
+<tr>
+<td><strong>Semantic Kernel</strong></td>
+<td>C#、Python、Java</td>
+<td>L1〜L2</td>
+<td>MAFへの統合経路</td>
+<td>軽量オーケストレーションSDK。マイグレーションツール提供</td>
+</tr>
+<tr>
+<td><strong>CrewAI</strong></td>
+<td>Python</td>
+<td>L2</td>
+<td>活発</td>
+<td>ロール(role)ベース協業+イベントベースFlows</td>
+</tr>
+<tr>
+<td><strong>Google ADK</strong></td>
+<td>Python、<strong>Go</strong>、Java</td>
+<td>L1〜L2</td>
+<td>Go 1.0(2025-11)</td>
+<td>順次・並列・ループのエージェントプリミティブ、ネイティブOTel</td>
+</tr>
+<tr>
+<td><strong>Genkit</strong></td>
+<td><strong>Go</strong>、JS</td>
+<td>L1</td>
+<td>プロダクション志向</td>
+<td>フロー中心。ローカルデバッグ・トレーシングに優れる</td>
+</tr>
+<tr>
+<td><strong>Eino(CloudWeGo)</strong></td>
+<td><strong>Go</strong></td>
+<td>L1〜L2</td>
+<td>活発、大規模運用で検証済み</td>
+<td>ByteDance実運用。コンポーネントグラフ、サーキットブレーカー・バックオフ</td>
+</tr>
+<tr>
+<td><strong>LangChainGo</strong></td>
+<td><strong>Go</strong></td>
+<td>L1</td>
+<td>コミュニティポーティング</td>
+<td>最も広い表面積、本家に比べ遅延</td>
+</tr>
+<tr>
+<td><strong>OpenAI Agents SDK</strong></td>
+<td>Python、<strong>Go</strong></td>
+<td>L1</td>
+<td>活発</td>
+<td>ハンドオフ+ガードレール、MCPサポート</td>
+</tr>
+<tr>
+<td><strong>Dify</strong></td>
+<td>Python(製品)</td>
+<td>GUI</td>
+<td>活発</td>
+<td>ノーコード・ワークフロー・RAGパイプライン</td>
+</tr>
+</tbody></table>
+<h3>5.2 Go陣営内での競合</h3>
+<p>Goエージェントエコシステムは「実在するが若い」というのが正確な表現だ。2026年5月時点のコミュニティ集計に基づく参考数値:</p>
+<table>
+<thead>
+<tr>
+<th>フレームワーク</th>
+<th>スター(概算)</th>
+<th>MCPサポート</th>
+<th>強み</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Eino</td>
+<td>11,100+</td>
+<td>未サポート(当時基準)</td>
+<td>プロダクションハードニング、グラフ合成</td>
+</tr>
+<tr>
+<td>LangChainGo</td>
+<td>9,200+</td>
+<td>未サポート(当時基準)</td>
+<td>10以上のプロバイダー、完全なRAGパイプライン</td>
+</tr>
+<tr>
+<td>Google ADK Go</td>
+<td>—</td>
+<td>サポート</td>
+<td>1.0到達、OTelネイティブ</td>
+</tr>
+<tr>
+<td>OpenAI Agents Go</td>
+<td>255</td>
+<td>サポート</td>
+<td>ハンドオフ+ガードレール</td>
+</tr>
+<tr>
+<td><strong>MAF for Go</strong></td>
+<td>約16</td>
+<td>サポート(MCP/A2A/AG-UI)</td>
+<td>Azure・Foundry整合、チェックポインティング</td>
+</tr>
+</tbody></table>
+<p>MCP統合を優先するならGoogle ADK GoやOpenAI Agents Go、MAF Goが候補だ。純粋なスループットと実証済みの安定性ならEinoが強い。一方で<strong>Azure Entra ID・Purview・Defenderベースのガバナンスが要件であれば、MAF以外に事実上代替がない。</strong>これがMAF Goのスター数が少なくても検討対象になる唯一かつ十分な理由だ。</p>
+<hr>
+<h2>6. 選択基準 — どのワークロードに何を使うか?</h2>
+<h3>6.1 判断順序</h3>
+<pre><code>1) 言語スタックは固定されているか?
+   Go/単一バイナリ必須 → MAF Go / Eino / ADK Go / フレームワークなし
+   Python・TS可能        → 2)へ
+
+2) 実行が数分以上続くか、人間の承認が途中に挟まるか?
+   はい → LangGraph(またはMAF workflow)
+   いいえ → 3)へ
+
+3) 組織はAzure/Entraガバナンス境界内にあるか?
+   はい → MAF(.NET/Python)+ Foundry Hosted Agents
+   いいえ → LangChain create_agentで始め、必要時にLangGraphへ降下
+
+4) 非開発者がワークフローを修正する必要があるか?
+   はい → Difyなどのgui系
+</code></pre>
+<h3>6.2 具体的な使用例</h3>
+<table>
+<thead>
+<tr>
+<th>シナリオ</th>
+<th>推奨</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>社内文書Q&amp;Aボット、ツール3〜5個</td>
+<td><strong>LangChain <code>create_agent</code></strong></td>
+<td>1日で作れる。グラフは不要</td>
+</tr>
+<tr>
+<td>3日がかりの多段階承認パイプライン</td>
+<td><strong>LangGraph</strong></td>
+<td>持続状態+<code>interrupt</code>。サーバー再起動に耐性</td>
+</tr>
+<tr>
+<td>リサーチ→検証→レポート作成のマルチエージェント</td>
+<td><strong>LangGraph</strong>または<strong>CrewAI</strong></td>
+<td>グラフ制御が必要なら前者、ロールベース協業記述なら後者</td>
+</tr>
+<tr>
+<td>取引所相場・注文フローをリアルタイム監視するエージェント</td>
+<td><strong>Go: MAF Go / Eino / フレームワークなし</strong></td>
+<td>遅延とGC圧力が支配変数。Pythonランタイムをクリティカルパスに置かない</td>
+</tr>
+<tr>
+<td>CTI収集・正規化・レポート初稿パイプライン</td>
+<td><strong>LangGraph + 別途収集器</strong></td>
+<td>ソースごとの失敗分離とリトライ地点が明確である必要がある</td>
+</tr>
+<tr>
+<td>Microsoft 365 / Teamsにデプロイされる社内エージェント</td>
+<td><strong>MAF(.NET/Python)</strong></td>
+<td>Foundry Hosted Agents、Teams・M365 Copilot公開経路</td>
+</tr>
+<tr>
+<td>既存のSemantic Kernel / AutoGenコードベース</td>
+<td><strong>MAFへ移行</strong></td>
+<td>公式マイグレーションガイド・ツールを提供</td>
+</tr>
+<tr>
+<td>非開発企画者が直接プロンプトチェーンを修正する必要がある</td>
+<td><strong>Dify</strong></td>
+<td>宣言的GUI。ただしバージョン管理と監査は別途設計が必要</td>
+</tr>
+<tr>
+<td>エージェントロジックが40行のループで十分</td>
+<td><strong>フレームワークなし</strong></td>
+<td>Goチームではこれが多数派</td>
+</tr>
+</tbody></table>
+<h3>6.3 混合配置が現実的である</h3>
+<p>Foundryのホスティングランタイムは<strong>フレームワーク非依存</strong>として設計され、MAF・GitHub Copilot SDK・LangGraphなどで作ったエージェントを書き換えずにデプロイできる。つまり「オーケストレーションはLangGraph、ホスティングとガバナンスはFoundry」という組み合わせが成立する。フレームワーク選択を全か無かの問題にしないことが実務的に有利だ。</p>
+<hr>
+<h2>7. 初心者向けの使い方 - Getting Started</h2>
+<h3>7.1 Microsoft Agent Framework for Go</h3>
+<p><strong>インストール</strong></p>
+<pre><code class="language-bash">go get github.com/microsoft/agent-framework-go
+</code></pre>
+<p><strong>環境変数</strong></p>
+<pre><code class="language-bash">export FOUNDRY_PROJECT_ENDPOINT=&quot;&lt;your-endpoint&gt;&quot;
+export FOUNDRY_MODEL=&quot;gpt-4o-mini&quot;   # 任意
+az login                              # 資格証明の元を確保
+</code></pre>
+<p><strong>基本エージェント</strong></p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;cmp&quot;
+	&quot;context&quot;
+	&quot;fmt&quot;
+	&quot;os&quot;
+
+	&quot;github.com/Azure/azure-sdk-for-go/sdk/azidentity&quot;
+	&quot;github.com/microsoft/agent-framework-go/provider/foundryprovider&quot;
+)
+
+func main() {
+	endpoint := os.Getenv(&quot;FOUNDRY_PROJECT_ENDPOINT&quot;)
+	model := cmp.Or(os.Getenv(&quot;FOUNDRY_MODEL&quot;), &quot;gpt-4o-mini&quot;)
+
+	// Microsoft Foundry 認証
+	token, err := azidentity.NewDefaultAzureCredential(nil)
+	if err != nil {
+		panic(err)
+	}
+
+	// Foundryエージェント生成
+	a := foundryprovider.NewAgent(endpoint, token, foundryprovider.ModelDeployment(model),
+		foundryprovider.AgentConfig{
+			Instructions: &quot;You are a helpful assistant.&quot;,
+		},
+	)
+
+	// 実行
+	ctx := context.Background()
+	fmt.Println(a.RunText(ctx, &quot;Write a haiku about the Microsoft Agent Framework&quot;).Collect())
+}
+</code></pre>
+<p><strong>プロダクション移行時に必ず変えるべき一行</strong></p>
+<pre><code class="language-go">// 開発用: 複数の資格証明ソースを順次探索 → 遅延・誤検知・セキュリティリスク
+token, _ := azidentity.NewDefaultAzureCredential(nil)
+
+// プロダクション: 使用する資格証明を明示
+token, _ := azidentity.NewManagedIdentityCredential(&amp;azidentity.ManagedIdentityCredentialOptions{
+	ID: azidentity.ClientID(&quot;&lt;user-assigned-client-id&gt;&quot;),
+})
+</code></pre>
+<p><strong>次に見るべきディレクトリ</strong></p>
+<table>
+<thead>
+<tr>
+<th>パス</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>examples/01-get-started</code></td>
+<td>hello world → ワークフローまで段階別</td>
+</tr>
+<tr>
+<td><code>examples/02-agents</code></td>
+<td>ツール、ミドルウェア、プロバイダー、可観測性、A2A、AG-UI、MCP、スキル</td>
+</tr>
+<tr>
+<td><code>examples/03-workflows</code></td>
+<td>マルチエージェントパターン、ルーティング、チェックポインティング</td>
+</tr>
+<tr>
+<td><code>examples/05-end-to-end</code></td>
+<td>完成型アプリケーション</td>
+</tr>
+<tr>
+<td><code>docs/dotnet-go-sdk-feature-comparison.md</code></td>
+<td><strong>導入前必読。</strong>.NETに対するGoの機能ギャップ</td>
+</tr>
+<tr>
+<td><code>provider/</code></td>
+<td>プロバイダーパッケージ一覧(Foundry以外のオプション確認)</td>
+</tr>
+</tbody></table>
+<p><strong>トラブルシューティング要約</strong></p>
+<table>
+<thead>
+<tr>
+<th>症状</th>
+<th>原因</th>
+<th>対処</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Azure資格証明認証失敗</td>
+<td>Azure CLI未ログイン、または資格証明ソース未設定</td>
+<td><code>az login</code>を実行、または使用する資格証明を明示的に設定</td>
+</tr>
+<tr>
+<td>APIキーエラー</td>
+<td>キーが間違っている、または対象リソースと不一致</td>
+<td>キーと該当リソース・プロバイダーの対応を確認</td>
+</tr>
+<tr>
+<td>プロバイダーエンドポイントエラー</td>
+<td>エンドポイント・デプロイ名・モデル・APIバージョンの欠落または誤記</td>
+<td>サンプルの環境変数とコンストラクタオプションを対照</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>7.2 LangChain 1.0 — 最も速い経路</h3>
+<pre><code class="language-bash">pip install --upgrade langchain
+</code></pre>
+<pre><code class="language-python">from langchain.agents import create_agent
+from langchain.tools import tool
+
+
+@tool
+def get_close_price(ticker: str) -&gt; str:
+    &quot;&quot;&quot;指定したティッカーの直近の終値を返す。&quot;&quot;&quot;
+    # 実際の実装ではデータソースを呼び出す
+    return f&quot;{ticker}: 検索結果なし&quot;
+
+
+agent = create_agent(
+    model=&quot;openai:gpt-4.1-mini&quot;,
+    tools=[get_close_price],
+    system_prompt=(
+        &quot;あなたは市場データ検索のアシスタントです。&quot;
+        &quot;ツールが値を返さない場合は「データなし」と答えてください。&quot;
+        &quot;絶対に数値を推測して作り出さないでください。&quot;
+    ),
+)
+
+result = agent.invoke(
+    {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;NVDAの直近の終値を教えて&quot;}]}
+)
+print(result[&quot;messages&quot;][-1].content)
+</code></pre>
+<p>システムプロンプトの最後の文は形式的な文言ではない。ツール失敗時にモデルがそれらしい数値を生成することが、エージェントシステムで最も頻繁かつ最も高コストな失敗モードだ。ツール結果が空の場合の挙動を明示しなければ必ず発生する。</p>
+<hr>
+<h3>7.3 LangGraph 1.0 — チェックポイント + 人間承認</h3>
+<pre><code class="language-bash">pip install --upgrade langgraph langchain
+</code></pre>
+<pre><code class="language-python">from typing import Annotated, TypedDict
+
+from langchain.chat_models import init_chat_model
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.types import interrupt, Command
+
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+    approval: str
+
+
+llm = init_chat_model(&quot;openai:gpt-4.1-mini&quot;)
+
+
+def analyze(state: State):
+    &quot;&quot;&quot;一次分析の草案を生成&quot;&quot;&quot;
+    resp = llm.invoke(state[&quot;messages&quot;])
+    return {&quot;messages&quot;: [resp]}
+
+
+def human_review(state: State):
+    &quot;&quot;&quot;人間の承認を待って実行を中断する&quot;&quot;&quot;
+    decision = interrupt(
+        {
+            &quot;question&quot;: &quot;この判断を承認しますか?&quot;,
+            &quot;draft&quot;: state[&quot;messages&quot;][-1].content,
+        }
+    )
+    return {&quot;approval&quot;: decision}
+
+
+def finalize(state: State):
+    if state[&quot;approval&quot;] != &quot;approved&quot;:
+        return {&quot;messages&quot;: [{&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;却下されました。再作成が必要です。&quot;}]}
+    return {&quot;messages&quot;: [{&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;承認されました。デプロイキューに登録しました。&quot;}]}
+
+
+builder = StateGraph(State)
+builder.add_node(&quot;analyze&quot;, analyze)
+builder.add_node(&quot;human_review&quot;, human_review)
+builder.add_node(&quot;finalize&quot;, finalize)
+
+builder.add_edge(START, &quot;analyze&quot;)
+builder.add_edge(&quot;analyze&quot;, &quot;human_review&quot;)
+builder.add_edge(&quot;human_review&quot;, &quot;finalize&quot;)
+builder.add_edge(&quot;finalize&quot;, END)
+
+# チェックポインターが持続実行の核心。プロダクションではPostgres/Redisチェックポインターを使用
+graph = builder.compile(checkpointer=InMemorySaver())
+
+config = {&quot;configurable&quot;: {&quot;thread_id&quot;: &quot;review-001&quot;}}
+
+# 段階1: interrupt地点で停止する
+for event in graph.stream(
+    {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;今四半期のリスクを要約してください&quot;}]},
+    config,
+):
+    print(event)
+
+# ... ここでプロセスが落ちても問題ない。状態はチェックポインターに残る ...
+
+# 段階2: 数日後に人間が承認したら、その地点から正確に再開
+final = graph.invoke(Command(resume=&quot;approved&quot;), config)
+print(final[&quot;messages&quot;][-1].content)
+</code></pre>
+<p><strong>ここで見るべき3つのポイント</strong></p>
+<ol>
+<li><code>thread_id</code>が対話・タスクのアイデンティティである。再開はこのキーで行われる。</li>
+<li><code>InMemorySaver</code>は例示専用である。プロダクションでこれをそのまま使うと、持続性という導入名分そのものが消える。</li>
+<li><code>interrupt</code>呼び出し部は<strong>再開時にノードの最初から再実行される。</strong>したがってインターラプト以前に副作用(決済、メール送信、注文)を置くと重複実行される。副作用はインターラプト以降のノードに分離する。</li>
+</ol>
+<hr>
+<h3>7.4 Goでフレームワークなしに — 構造分析</h3>
+<p>フレームワーク導入前にこの構造を一度手で書いてみると、フレームワークが何を代わりにしてくれているかが明確になる。以下はベンダーSDKに依存しない概念的な構造を持つ。</p>
+<pre><code class="language-go">// 概念スケッチ: 実際の型は使用するベンダーSDKに合わせて置き換える
+func RunAgent(ctx context.Context, c ModelClient, tools map[string]Tool, prompt string) (string, error) {
+	msgs := []Message{{Role: &quot;user&quot;, Content: prompt}}
+
+	for turn := 0; turn &lt; maxTurns; turn++ {
+		resp, err := c.Complete(ctx, msgs, toolSpecs(tools))
+		if err != nil {
+			return &quot;&quot;, err
+		}
+		msgs = append(msgs, resp.Message)
+
+		if len(resp.ToolCalls) == 0 {
+			return resp.Message.Content, nil // 終了条件
+		}
+
+		// 同時実行: Goの強みが現れる地点
+		results := make([]Message, len(resp.ToolCalls))
+		var wg sync.WaitGroup
+		for i, call := range resp.ToolCalls {
+			wg.Add(1)
+			go func(i int, call ToolCall) {
+				defer wg.Done()
+				out, err := tools[call.Name].Invoke(ctx, call.Args)
+				results[i] = toolResultMessage(call.ID, out, err) // エラーもモデルに返す
+			}(i, call)
+		}
+		wg.Wait()
+		msgs = append(msgs, results...)
+	}
+	return &quot;&quot;, fmt.Errorf(&quot;最大ターン(%d)を超過&quot;, maxTurns)
+}
+</code></pre>
+<p>この約40行に<strong>ないもの</strong>のリストがそのままフレームワークの存在理由である。チェックポインティング、再開、ストリーミング、トークン会計、ツール承認ゲート、OTelスパン、サブエージェントルーティング、コンテキストウィンドウ管理。この中で必要な項目が2〜3個以下なら、直接書く方が大抵は良い。</p>
+<hr>
+<h2>8. 運用前チェックリスト — セキュリティ・ガバナンスの観点</h2>
+<p>エージェントフレームワークは<strong>LLMに実行権限を付与する装置</strong>である。導入前に確認すべき項目を整理した。</p>
+<table>
+<thead>
+<tr>
+<th>領域</th>
+<th>確認事項</th>
+<th>根拠</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>サプライチェーン</strong></td>
+<td>フレームワークの推移的依存数と署名検証体系。Goは<code>go.sum</code> + GOPROXY透明性ログが防御線</td>
+<td>2025〜2026年の多数のパッケージ改竄事例</td>
+</tr>
+<tr>
+<td><strong>MCP信頼境界</strong></td>
+<td>MCPサーバーは外部コードである。サーバー一覧・権限をホワイトリストで固定し、プロダクションで動的発見を有効にしないこと</td>
+<td>MCPはツール説明自体がプロンプトインジェクションのベクトルになる</td>
+</tr>
+<tr>
+<td><strong>ツール承認</strong></td>
+<td>破壊的作業(ファイル削除、送金、デプロイ)は必ず承認ミドルウェアの後ろに置く。MAFのtool approval、LangChainのHITLミドルウェアを使用</td>
+<td>自動ツール呼び出しがデフォルトのフレームワークが多い</td>
+</tr>
+<tr>
+<td><strong>資格証明</strong></td>
+<td>フォールバック型の資格証明(<code>DefaultAzureCredential</code>など)を禁止。管理IDなど明示指定</td>
+<td>Microsoft公式推奨</td>
+</tr>
+<tr>
+<td><strong>データ境界</strong></td>
+<td>サードパーティモデル・エージェント使用時、データが組織のコンプライアンス・地理的境界を超えるか検討。責任は利用者にある</td>
+<td>MAF文書に明示</td>
+</tr>
+<tr>
+<td><strong>可観測性</strong></td>
+<td>OTelスパンにプロンプト・応答の原文が載る可能性がある。マスキング方針を先行</td>
+<td>PII・企業秘密流出の経路</td>
+</tr>
+<tr>
+<td><strong>副作用の冪等性</strong></td>
+<td>再開・リトライ時に重複実行される作業がないか</td>
+<td>§7.3参照</td>
+</tr>
+<tr>
+<td><strong>バージョン固定</strong></td>
+<td>プレビュー状態のSDKはコミット単位での固定を推奨</td>
+<td>MAF Goはリリースタグ未発行</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. まとめ</h2>
+<p>どのソリューションを使うかは以下の観点で選択せよ。</p>
+<ol>
+<li><p><strong>レイヤーを先に決めよ。</strong> 必要なのがツールループ(L1)なのか、グラフ(L2)なのか、耐久性のあるランタイム(L3)なのかを区別すれば、候補は2〜3個に絞られる。大半のチームが実際に望んでいるのはL3であり、これだけは自作すると高コストである。</p>
+</li>
+<li><p><strong>言語が決定を支配する。</strong> Python・TSならLangGraphが現実的な既定値、.NETならMAFが既定値だ。Goなら選択肢が薄い。MAF Goは方向性は正しいが、2026年7月現在公開プレビューであり、ハンドオフ・宣言的エージェント・RAG・CodeAct・DevUIがなく、コミュニティが非常に小さい。Azureガバナンスが要件でなければ、EinoやADK Go、またはフレームワークなしの実装がより安全な選択かもしれない。</p>
+</li>
+<li><p><strong>フレームワークは性能ではなく失敗処理を買う。</strong> 導入検討文書に「性能が良くなる」と書かれているなら、その文書は誤りである。正しい文は「失敗が観測可能になり、復旧可能になる」だ。LLMはExcelであってOracleではなく、フレームワークはそのExcelを監査可能なスプレッドシートにする道具である。</p>
+</li>
+</ol>
+<p>MAF Goに対する実務的な推奨は以下の通りである。<strong>今はパイロットと技術検証(PoC)段階に置き、<code>docs/dotnet-go-sdk-feature-comparison.md</code>で自分の必須機能が実装されているか先に確認すること。</strong>ハンドオフ・オーケストレーションが要件に含まれている場合、現時点では導入対象ではない。</p>
+<hr>
+<h2>付録A. 参考リンク</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Microsoft Agent Framework for Go</td>
+<td><a href="https://github.com/microsoft/agent-framework-go">https://github.com/microsoft/agent-framework-go</a></td>
+</tr>
+<tr>
+<td>.NET–Go機能比較文書</td>
+<td><a href="https://github.com/microsoft/agent-framework-go/blob/main/docs/dotnet-go-sdk-feature-comparison.md">https://github.com/microsoft/agent-framework-go/blob/main/docs/dotnet-go-sdk-feature-comparison.md</a></td>
+</tr>
+<tr>
+<td>Goリファレンス</td>
+<td><a href="https://pkg.go.dev/github.com/microsoft/agent-framework-go">https://pkg.go.dev/github.com/microsoft/agent-framework-go</a></td>
+</tr>
+<tr>
+<td>MAF本流(.NET/Python)</td>
+<td><a href="https://github.com/microsoft/agent-framework">https://github.com/microsoft/agent-framework</a></td>
+</tr>
+<tr>
+<td>MS Learn文書</td>
+<td><a href="https://learn.microsoft.com/agent-framework/">https://learn.microsoft.com/agent-framework/</a></td>
+</tr>
+<tr>
+<td>Agent Framework開発ブログ</td>
+<td><a href="https://devblogs.microsoft.com/agent-framework/">https://devblogs.microsoft.com/agent-framework/</a></td>
+</tr>
+<tr>
+<td>LangChain・LangGraph 1.0発表</td>
+<td><a href="https://blog.langchain.com/langchain-langgraph-1dot0/">https://blog.langchain.com/langchain-langgraph-1dot0/</a></td>
+</tr>
+<tr>
+<td>LangGraph 1.0チェンジログ</td>
+<td><a href="https://changelog.langchain.com/announcements/langgraph-1-0-is-now-generally-available">https://changelog.langchain.com/announcements/langgraph-1-0-is-now-generally-available</a></td>
+</tr>
+<tr>
+<td>Eino(CloudWeGo)</td>
+<td><a href="https://github.com/cloudwego/eino">https://github.com/cloudwego/eino</a></td>
+</tr>
+<tr>
+<td>Foundry Build 2026要約</td>
+<td><a href="https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-build-2026/">https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-build-2026/</a></td>
+</tr>
+</tbody></table>
+<h2>付録B. 用語対照表</h2>
+<table>
+<thead>
+<tr>
+<th>略語</th>
+<th>原語</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MAF</td>
+<td>Microsoft Agent Framework</td>
+<td>Microsoftの多言語エージェントフレームワーク</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Model Context Protocol</td>
+<td>モデルが外部ツールを発見・呼び出すための標準プロトコル</td>
+</tr>
+<tr>
+<td>A2A</td>
+<td>Agent-to-Agent</td>
+<td>ランタイムを跨ぐエージェント間メッセージングプロトコル</td>
+</tr>
+<tr>
+<td>AG-UI</td>
+<td>Agent-GUI protocol</td>
+<td>エージェントとユーザーインターフェース間の相互作用プロトコル</td>
+</tr>
+<tr>
+<td>HITL</td>
+<td>Human-in-the-Loop</td>
+<td>実行中に人間の検討・承認を挿入するパターン</td>
+</tr>
+<tr>
+<td>OTel</td>
+<td>OpenTelemetry</td>
+<td>分散トレーシング・メトリクス収集の標準</td>
+</tr>
+<tr>
+<td>SK</td>
+<td>Semantic Kernel</td>
+<td>Microsoftの前世代オーケストレーションSDK</td>
+</tr>
+<tr>
+<td>GA</td>
+<td>General Availability</td>
+<td>正式リリース。プロダクションサポート対象</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>データ基準日: 2026年7月22日。GitHubの指標とフレームワークの機能リストは急速に変化する。引用時は基準日を併記し、導入決定前にリポジトリを直接確認することを推奨する。</em></p>
+<p><em>本稿は技術情報提供の目的であり、特定製品の導入推奨や投資推奨ではない。</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AI-Agent-Framework/AI-Agent-Framework_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

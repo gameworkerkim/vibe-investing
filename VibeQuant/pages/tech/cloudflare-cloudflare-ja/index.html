@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloudflare無料ティアで実際に運用する方法 — VibeQuant運用事例 — VibeQuant</title>
+  <meta name="description" content="VibeQuantをCloudflareの無料ティアだけで設計・運用している理由と方法をまとめた実務記録。一般的な登録マニュアルではなく、実際の運用判断・落とし穴・無料ティアと衝突しないスタックを紹介する。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-ja/" />
+  <meta property="og:title" content="Cloudflare無料ティアで実際に運用する方法 — VibeQuant運用事例" />
+  <meta property="og:description" content="VibeQuantをCloudflareの無料ティアだけで設計・運用している理由と方法をまとめた実務記録。一般的な登録マニュアルではなく、実際の運用判断・落とし穴・無料ティアと衝突しないスタックを紹介する。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/cloudflare-cloudflare-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Cloudflare無料ティアで実際に運用する方法 — VibeQuant運用事例","description":"VibeQuantをCloudflareの無料ティアだけで設計・運用している理由と方法をまとめた実務記録。一般的な登録マニュアルではなく、実際の運用判断・落とし穴・無料ティアと衝突しないスタックを紹介する。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/cloudflare-cloudflare-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudFlare/Cloudflare_%EB%AC%B4%EB%A3%8C%ED%8B%B0%EC%96%B4_%EC%82%AC%EC%9A%A9%EB%B2%95_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-24","dateModified":"2026-07-24","inLanguage":"ja","keywords":"Cloudflare, 無料ティア, Workers, Pages, サーバーレス, VibeQuant"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 클라우드 · Free tier</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · Free tier</p>
+        <h1>Cloudflare無料ティアで実際に運用する方法 — VibeQuant運用事例</h1>
+        <p class="article-dates"><time datetime="2026-07-24">발행 2026.07.24</time> · 주제 Cloudflare · 無料ティア · Workers · Pages · サーバーレス · VibeQuant</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/cloudflare-cloudflare/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/cloudflare-cloudflare-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/cloudflare-cloudflare-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/cloudflare-cloudflare-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">VibeQuantをCloudflareの無料ティアだけで設計・運用している理由と方法をまとめた実務記録。一般的な登録マニュアルではなく、実際の運用判断・落とし穴・無料ティアと衝突しないスタックを紹介する。</p>
+        
+      </header>
+      <div class="article-body prose"><p>本文書は「まともな運用経験なしにググった・LLMが並べたマニュアル」ではなく、<strong><a href="https://vibequant.cc/">VibeQuant</a>をCloudflareの無料ティアだけで設計・運用した理由と方法</strong>をまとめたものである。
+登録・上限・クオータの数値は既存の<a href="Cloudflare%20free%20tier%20guide.md">登録・上限ガイド</a>を参照すること。</p>
+<hr>
+<h2>1. Cloudflareとは?</h2>
+<p>Cloudflareはもともと<strong>DNS・CDN・DDoS防御</strong>で名を上げたエッジネットワーク企業である。業界ではWeb3・取引所・トラフィック変動の大きいサービスの前段に置かれることが多い。2020年代以降は<strong>Workers(サーバーレス)・Pages(静的/SSR)・R2(オブジェクトストレージ)・D1(SQLite)・KV・Cache API</strong>などを1つのアカウントに統合し、「ドメイン前段のセキュリティ+全世界配信+軽量バックエンド」を<strong>同一エッジ</strong>で処理する<strong>開発者プラットフォーム</strong>へと拡張している。最近は<strong>Workers AI・AI Gateway</strong>などAI関連製品も増えている。</p>
+<p>一言でまとめると:</p>
+<blockquote>
+<p><strong>トラフィックがどこから来ても、最も近いPoPでHTML・API・キャッシュを処理し、オリジンサーバーのコストを極力なくす。</strong>無料プランでも(制限はあるが)カスタムドメイン、HTTPS、CDN、基本的なWAF/ボット緩和、Pages・Workersが使える。VibeQuantのような<strong>コンテンツアーカイブ+薄いAPI+ブラウザクオンツ実験</strong>にはよく合う。</p>
+</blockquote>
+<p>私はカスタムドメインを購入し、<strong>ドメイン代のみ</strong>を支出している。<code>*.pages.dev</code>だけでも運用可能だが、SEO・ブランディングにはドメインがある方が有利である。</p>
+<hr>
+<h2>2. 長所</h2>
+<h3>2.1 セキュリティ</h3>
+<p>DDoS防御に特化したCloudflareらしく、トラフィックの前段で異常なリクエストをフィルタリングする。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>意味</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>自動HTTPS/TLS</td>
+<td>証明書更新の負担が減る</td>
+</tr>
+<tr>
+<td>DDoS・ボット緩和</td>
+<td>オリジンが弱くてもエッジで吸収</td>
+</tr>
+<tr>
+<td>DNSがプラットフォームと同一</td>
+<td>ネームサーバーがCloudflareであれば、CDN・WAF・Pagesが一つの流れになる</td>
+</tr>
+<tr>
+<td>シークレットはWorkerのみ</td>
+<td>Pages HTMLにAPIキーを入れない構造が自然に成立する</td>
+</tr>
+</tbody></table>
+<p>静的HTMLが中心であれば、<strong>オリジンサーバーを露出しない</strong>設計になる。攻撃トラフィックは「アプリサーバーのCPU」ではなく<strong>Cloudflareのエッジ</strong>に先に当たる。
+ただし無料ティアでは<strong>エッジの日次上限・公正利用</strong>が残る。オリジンへの砲撃は減っても、上限消費・利用規約の問題は別である(§3・§8)。</p>
+<h3>2.2 CDN(帯域幅が実質無料に近い)</h3>
+<p>Pagesの静的アセットは<strong>実質無制限</strong>に近い帯域幅で使える(公正利用・利用規約は別)。R2は<strong>egress無料</strong>が最大の差別化ポイントである。「コラム・TechDocのHTMLが増えても転送料が爆発しない」という点が、Vercel Hobbyの月間帯域上限・超過課金構造と対照的である。</p>
+<h3>2.3 サーバーレス統合性</h3>
+<p>1つのアカウントで概ね次のような組み合わせが可能である。</p>
+<pre><code>Pages (HTML/SEO)  +  Pages Functions / Workers (API)
+      +  Cache API · KV (キャッシュ)
+      +  R2 / D1 (ストレージ)
+      +  カスタムドメイン・サブドメイン
+</code></pre>
+<p>「静的サイトはA社、APIはB社、CDNはC社」と分割する必要がない。VibeQuantは<strong>コンテンツはPagesの静的HTML</strong>、<strong>相場・研究APIはWorker/Pages Functions</strong>、<strong>ブラウザクオンツはPyodide</strong>という役割分担にしている。</p>
+<p>個人・小規模の<strong>静的+薄いエッジAPI</strong>基準では、障害点が少なく保守が単純である。</p>
+<h3>2.4 その他の実務上の利点</h3>
+<ul>
+<li><strong>クレジットカードなし</strong>でWorkers/Pagesを開始可能(製品・時期によってはR2などで決済手段が必要な場合あり — §8)</li>
+<li><code>*.pages.dev</code>/<code>*.workers.dev</code>でドメインなしでもプロトタイプ可能</li>
+<li>Wrangler CLIによりローカルと同一のデプロイスクリプトが使える</li>
+<li>GitHub Markdown→静的HTMLビルドとの相性が良い(SEO・GEO)</li>
+</ul>
+<hr>
+<h2>3. 短所</h2>
+<p>正直に書く。無料ティアを「無制限PaaS」と誤解すると即座に問題になる。</p>
+<table>
+<thead>
+<tr>
+<th>短所</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>日次リクエスト・CPU上限</strong></td>
+<td>Workers無料枠は概ね<strong>10万リクエスト/日</strong>、リクエストあたりCPU<strong>約10ms</strong>程度。ピーク時に消費し尽くすとUTC深夜(KST 09:00)までブロックされる可能性がある</td>
+</tr>
+<tr>
+<td><strong>KV書き込み上限</strong></td>
+<td>無料KV書き込みは1日約1,000件と厳しい。セッション・リアルタイムカウンターには不向き→<strong>Cache API優先</strong>が実務パターン</td>
+</tr>
+<tr>
+<td><strong>Python ネイティブサポートが弱い</strong></td>
+<td>WorkersのPythonはPyodide/WASMベース。<code>numpy</code>・重いC拡張・長時間ジョブをエッジに載せるのは難しい</td>
+</tr>
+<tr>
+<td><strong>コールド起動・ランタイム制約</strong></td>
+<td>Nodeフルスタック(長時間バックグラウンドジョブ、WebSocket、任意のバイナリ)はVercel/Railwayの方が扱いやすいことが多い</td>
+</tr>
+<tr>
+<td><strong>デバッグUX</strong></td>
+<td>ローカル再現・ログは慣れるまでもたつく可能性がある</td>
+</tr>
+<tr>
+<td><strong>ベンダー境界</strong></td>
+<td>Durable Objects・一部AI・高度なWAFは有料。「完全無料でエンタープライズ級」は幻想である</td>
+</tr>
+<tr>
+<td><strong>サブドメイン・プロジェクトの分散</strong></td>
+<td>カスタムホストを複数のPagesプロジェクトに接続していくと、DNS・ミドルウェア・リダイレクトが複雑になる(VibeQuantはハブ単一プロジェクト+パスルーティングで単純化)</td>
+</tr>
+<tr>
+<td><strong>利用規約・公正利用</strong></td>
+<td>帯域幅の「無制限」も、乱用・攻撃・商用大量配信には制約がかかる可能性がある</td>
+</tr>
+</tbody></table>
+<p>トラフィック・役割が溢れる場合は<strong>役割ごとに</strong>混合する。例: 読み取りキャッシュ→Upstash Redis、長時間ジョブ・Python API→Render/Railway、Nextフルスタック実験→Vercel(利用規約・帯域幅を確認)。「とにかくVercelを乗せる」のではなく、<strong>上限・利用規約に合致する部分だけ</strong>を接続する。</p>
+<hr>
+<h2>4. 競合サービス(Vercelを含むPaaS)</h2>
+<table>
+<thead>
+<tr>
+<th>サービス</th>
+<th>ポジション</th>
+<th>Cloudflare比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><a href="../vercel/vercel_analysis.md">Vercel</a></strong></td>
+<td>Next.js最適化PaaS、DX最高</td>
+<td>Hobbyは商用制限・帯域上限・超過課金リスクあり。Nextフルスタックなら魅力的、<strong>トラフィックの大きい静的アーカイブ</strong>ならCFが有利な場合が多い</td>
+</tr>
+<tr>
+<td><strong>Netlify</strong></td>
+<td>JAMstack・フォーム・ビルドパイプライン</td>
+<td>ビルド分の削減など無料枠が厳しくなる傾向</td>
+</tr>
+<tr>
+<td><strong>GitHub Pages</strong></td>
+<td>文書・ポートフォリオ</td>
+<td>サーバーレスAPI・エッジキャッシュ・統合WAFは弱い。<strong>原文MDの保管庫</strong>としては最高(VibeQuantはGitHub+CFの二重構造)</td>
+</tr>
+<tr>
+<td><strong>Railway / Render / Fly.io</strong></td>
+<td>コンテナ・長時間プロセス</td>
+<td>スリープ・時間制限・有料化への圧力。Python APIサーバーに適合</td>
+</tr>
+<tr>
+<td><strong>Firebase Hosting</strong></td>
+<td>Googleエコシステム</td>
+<td>Auth/Firestoreと組み合わせる場合に強い</td>
+</tr>
+<tr>
+<td><strong>AWS Amplify / Azure Static Web Apps</strong></td>
+<td>クラウドベンダー依存</td>
+<td>エンタープライズIAM・既存クラウドとの統合時に有効。個人の無料運用にはCFの方が単純</td>
+</tr>
+<tr>
+<td><strong>Oracle Cloud Free</strong></td>
+<td>Always Free VM</td>
+<td>IaaS。管理負担↑、統制権↑ — <a href="../OracleCloud/02.%20Oracle%20Cloud%20Free%20Tier%20Guide.md">別ガイド</a></td>
+</tr>
+</tbody></table>
+<p>選定のヒューリスティック:</p>
+<ul>
+<li><strong>Next.js App Router中心の製品</strong> → まずVercelを検討するが、コスト・利用規約を読んで開始する</li>
+<li><strong>Markdownアーカイブ+SEO+薄いAPI+コストゼロ</strong> → Cloudflare Pages(+Workers)</li>
+<li><strong>長時間Python/DBワーカー</strong> → Railway・Render・Fly、または別VPS+前段のみCloudflare</li>
+</ul>
+<p>AWSに全て閉じ込めるよりも初期コストは概ね低い。DDoS・スクレイピングを<strong>オリジン前段</strong>で防ぐ構造のため、オリジンサーバーが即座に落ちることは減る。ただし<strong>エッジ上限・公正利用</strong>は残る(§3)。</p>
+<hr>
+<h2>5. 効率的な開発言語とスタック</h2>
+<p>無料ティアで<strong>より衝突しにくい</strong>組み合わせである。バックエンドが複雑な場合は外部に切り出す。</p>
+<h3>5.1 推奨スタック(VibeQuant型)</h3>
+<table>
+<thead>
+<tr>
+<th>層</th>
+<th>技術</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>コンテンツ原本</td>
+<td><strong>Markdown(GitHub)</strong></td>
+<td>バージョン管理・PR・AI検索(DeepWiki等)・人間の可読性</td>
+</tr>
+<tr>
+<td>発行面</td>
+<td><strong>静的HTML</strong>(ビルドスクリプト)</td>
+<td>Pagesにアップし、Core Web Vitals・OG・sitemap・<code>llms.txt</code>を整備</td>
+</tr>
+<tr>
+<td>エッジAPI</td>
+<td><strong>JavaScript/TypeScript</strong>(Workers、Pages Functions)</td>
+<td>ランタイムの第一級市民。<code>fetch</code>・Cache APIとの相性が良い</td>
+</tr>
+<tr>
+<td>ブラウザクオンツ</td>
+<td><strong>Python + Pyodide</strong></td>
+<td>サーバーCPUクオータを使わない。GS Quant型実験はクライアント側で実行</td>
+</tr>
+<tr>
+<td>キャッシュ</td>
+<td><strong>Cache API</strong>(優先)・KV(読み取り中心)</td>
+<td>KV書き込み上限を回避</td>
+</tr>
+<tr>
+<td>シークレット</td>
+<td>Worker環境変数/<code>wrangler secret</code></td>
+<td>フロントエンドバンドルにキーを入れない</td>
+</tr>
+</tbody></table>
+<h3>5.2 避けるべき、または「境界外へ」</h3>
+<ul>
+<li>Workers上での<strong>重いnumpy/pandasバッチ処理</strong> — ブラウザPyodideまたは外部PaaSへ</li>
+<li><strong>Prisma + Neon TCP</strong>のような長寿命接続 — Pages Functionsでの再設計が必要(REST/HTTPクライアント・キャッシュ)</li>
+<li><strong>Puppeteer/ローカルfs</strong> — エッジには存在しない。事前ビルドまたは別ランタイムを使用</li>
+<li><strong>リクエストごとのLLM呼び出し</strong>— キャッシュ・日次上限・コストに注意。DeepSeek等はWorkerから呼び出すが<strong>結果をキャッシュ</strong>する</li>
+</ul>
+<h3>5.3 言語の一言まとめ</h3>
+<blockquote>
+<p><strong>エッジはTypeScript、文書はMarkdown、クオンツ実験はブラウザPython。</strong>
+この三角形がCloudflareの無料ティアとよく合う。合わない技術スタックを無理に当てはめると、完成度・安定性・レイテンシで損をしやすい。</p>
+</blockquote>
+<hr>
+<h2>6. どのようにサイトを開発したか? — 設計とコンセプト</h2>
+<h3>6.1 問題意識</h3>
+<ol>
+<li><p><strong>ニュース・コラムウェブの揮発性</strong>私は2000年からニュースコラムを執筆してきた。メディア・ブログの改編が繰り返されると過去記事のURLが消え、<strong>2014年以前のコラムがまるごとない</strong>といった空白が生じる。「14年分がない」ということは検索・引用・研究の連続性の観点で致命的である。Naverのように検索エンジンに閉じた空間にだけ置くと、Google・LLMからの流入も阻まれる。
+→ <strong>GitHub上にMarkdownで原文を永続保存</strong>し、ウェブは<strong>その原本の発行面</strong>として扱う。</p>
+</li>
+<li><p><strong>人間の検索(SEO)とAI検索(GEO)の同時対応</strong>
+GitHubのツリーだけではGoogle・ソーシャルOGが弱く、ChatGPT・Perplexity・CursorのようなエージェントはRoot <code>llms.txt</code>・セマンティックHTML・個別URLがなければ引用で不利になる。
+→ Pagesに<strong>個別文書URL+sitemap+llms.txt+canonical(GitHub blobリンク)</strong>を整備する。</p>
+</li>
+<li><p><strong>インフラコストゼロを前提とした実験場</strong>
+個人研究・オープンソースアーカイブに月数十ドルのPaaSは過剰である。
+→ <strong>Cloudflare無料ティアのみでの運用</strong>をハード制約として設定する。</p>
+</li>
+<li><p><strong>クオンツにおける「見せるもの」と「実行するもの」の分離</strong>
+GS Quant・相場・戦略検証をサーバーで実行すると、上限・依存関係に阻まれる。
+→ <strong>PlaygroundはPyodide(ブラウザPython)</strong>、APIは相場・キャッシュ・薄いプロキシのみを担当。</p>
+</li>
+</ol>
+<h3>6.2 コンセプト図解</h3>
+<pre><code>[GitHub vibe-investing]
+  ├─ 02.Investment Idea Column / essays / CTI / TechDoc   ← 原本・SEOソース
+  └─ VibeQuant/
+        build → 静的HTML
+             ↓
+[Cloudflare Pages]  vibequant.cc  (ハブ)
+  docs / tech / cti / play / essays / research …
+             ↓
+[Workers / Pages Functions]  相場・研究API・キャッシュ
+             ↓
+[ブラウザ]  Pyodide + GS Quant型実験(サーバーCPU未使用)
+</code></pre>
+<h3>6.3 実際にリリースしたサービス</h3>
+<table>
+<thead>
+<tr>
+<th>面</th>
+<th>URL例</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ハブ</td>
+<td><a href="https://vibequant.cc/">vibequant.cc</a></td>
+<td>入口・ブランディング</td>
+</tr>
+<tr>
+<td>Columns</td>
+<td>docs.vibequant.cc</td>
+<td>投資コラムアーカイブ</td>
+</tr>
+<tr>
+<td>Tech</td>
+<td>tech.vibequant.cc</td>
+<td>TechDoc</td>
+</tr>
+<tr>
+<td>CTI</td>
+<td>cti.vibequant.cc</td>
+<td>脅威インテリジェンスレポート</td>
+</tr>
+<tr>
+<td>Play</td>
+<td>play.vibequant.cc</td>
+<td>Python/クオンツWebビュー</td>
+</tr>
+<tr>
+<td>Research</td>
+<td>vibequant.cc/research</td>
+<td>Quant/Space/Trumpシグナル(ログインなし、キャッシュ)</td>
+</tr>
+<tr>
+<td>Essays</td>
+<td>vibequant.cc/essays</td>
+<td>エッセイ</td>
+</tr>
+</tbody></table>
+<p>原則: <strong>ログインの壁でコンテンツを閉じ込めない。</strong>研究ダッシュボードも公開+キャッシュTTLで無料上限を守る。</p>
+<h3>6.4 「無料のみ」を守るための設計ルール</h3>
+<ol>
+<li>HTMLはビルド産物 — ランタイムレンダリングを最小化</li>
+<li>キャッシュ可能なものはキャッシュ(取引時間中30分/取引時間外2時間など)</li>
+<li>KV書き込みの濫用禁止→Cache API</li>
+<li>重い計算はエッジではなく<strong>ユーザーのブラウザ</strong>で実行</li>
+<li>Neon/Prisma/Puppeteerのような<strong>TCP・ローカルランタイム前提</strong>の構成は移植対象から除外、または事前計算に切り替える</li>
+<li>デプロイは<code>wrangler pages deploy</code> — ローカルの<code>HTTP_PROXY</code>などがあればunsetする</li>
+</ol>
+<hr>
+<h2>7. 基本設定(最小チェックリスト)</h2>
+<p>詳細なクオータ・マイグレーションは<a href="Cloudflare%20free%20tier%20guide.md">登録・上限ガイド</a>を参照。ここでは<strong>最小経路</strong>のみ記す。</p>
+<h3>7.1 アカウント</h3>
+<ol>
+<li><a href="https://dash.cloudflare.com/sign-up">dash.cloudflare.com/sign-up</a></li>
+<li>メール認証</li>
+<li><strong>2FA必須</strong>(アカウント=全サイトの鍵)</li>
+</ol>
+<h3>7.2 Wrangler</h3>
+<pre><code class="language-bash"># Node.js 18+
+npm i -g wrangler   # またはプロジェクトローカルのnode_modules
+wrangler login
+wrangler whoami
+</code></pre>
+<h3>7.3 Pagesデプロイ</h3>
+<pre><code class="language-bash">wrangler pages deploy ./dist --project-name=my-site --commit-dirty=true
+# → https://my-site.pages.dev
+</code></pre>
+<p>ドメイン: Dashboard → Pages → Custom domains。ネームサーバーをCloudflareに移せば、DNS・SSLが一箇所で管理できる。</p>
+<h3>7.4 Worker(API)</h3>
+<pre><code class="language-bash">cd cloudflare-worker
+wrangler deploy
+wrangler secret put MY_API_KEY
+</code></pre>
+<p><strong>PagesとWorkerの設定を無理に1つの<code>wrangler.toml</code>にまとめないこと。</strong>
+Pagesは<code>cd pages &amp;&amp; wrangler pages deploy .</code>が安全である。</p>
+<h3>7.5 VibeQuant式パイプライン(概念)</h3>
+<pre><code class="language-bash">node content/build.mjs
+npx wrangler pages deploy ./pages --project-name=vibequant-web
+</code></pre>
+<p>原本は常にGitHub、ウェブは派生版。<strong>削除された報道記事の代わりに、リポジトリが真実の源泉となる</strong>ようにする。</p>
+<hr>
+<h2>8. 注意点(運用で実際に踏んだもの)</h2>
+<ol>
+<li><strong>Workers日次10万リクエスト</strong> — 市場終了・バイラル発生時に午後に消費し尽くす可能性がある。キャッシュ・静的化でAPI呼び出しを減らす。</li>
+<li><strong>KV書き込み1,000/日</strong> — ページビューをKVに書き込むと即座に破綻する。相場・レスポンスはCache APIへ。</li>
+<li><strong>CPU約10ms</strong> — 重い演算・大容量JSONは事前計算・クライアント・外部サービスに委ねる。</li>
+<li><strong>R2の有効化</strong> — ダッシュボードで有効化する必要があり、決済手段を要求される可能性がある(<code>10042</code>)。</li>
+<li><strong>プロキシ環境</strong> — <code>HTTP_PROXY</code>が有効だと<code>api.cloudflare.com</code>へのデプロイが失敗する可能性がある。</li>
+<li><strong>サブドメインの522</strong> — カスタムホストの接続前はapexパスで提供し、DNSが準備できたら移行する。</li>
+<li><strong>ミドルウェアでパスを塞がないこと</strong> — 「まもなく接続」のHTMLを<code>/research/*</code>に被せると、静的コンテンツ・APIが見えなくなる(実際の障害事例)。</li>
+<li><strong>シークレットをHTML/Gitに入れないこと</strong> — DeepSeek・取引所のキーはWorker secretへ。</li>
+<li><strong>無料=SLAなし</strong> — GitHub原本と<code>pages.dev</code> URLを文書に記録しておく。</li>
+<li><strong>商用・大量スクレイピング</strong> — 利用規約・公正利用を読み、研究公開と乱用を区別する。</li>
+</ol>
+<hr>
+<h2>9. まとめ</h2>
+<table>
+<thead>
+<tr>
+<th>質問</th>
+<th>答え</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>なぜCloudflareを使うのか?</td>
+<td>セキュリティ+CDN+サーバーレスを<strong>単一エッジ</strong>で、無料で静的サイト・薄いAPIを運用できる</td>
+</tr>
+<tr>
+<td>どこが弱いか?</td>
+<td>重いPythonサーバー、強い一貫性、長時間ジョブ、予測不能なピークリクエスト</td>
+</tr>
+<tr>
+<td>Vercelとの違いは?</td>
+<td>Next DX・プレビューはVercel、<strong>帯域幅・コスト予測性・エッジ統合</strong>はCloudflareが有利な場合が多い</td>
+</tr>
+<tr>
+<td>VibeQuantの核心制約は?</td>
+<td><strong>無料ティアのみ</strong>、GitHub原本の永続化、SEO+AI検索、ブラウザクオンツ</td>
+</tr>
+<tr>
+<td>スタックは?</td>
+<td>Markdown→静的HTML+TSエッジAPI+Pyodide</td>
+</tr>
+</tbody></table>
+<p>コラムがウェブから消える経験、検索・LLMに捕捉されないGitHubツリー、月額課金への不安 — この3つを同時に解決しようとすると、Cloudflare無料ティアは「次善策」ではなく<strong>意図された選択</strong>になる。</p>
+<p>小規模チームは無料ティアの<strong>限界と長所</strong>を見て、スケールアップまでコストを抑える戦略を取ることが合理的な場合がある。もはや全てのワークロードのデフォルトがAWSである必要はない。</p>
+<hr>
+<h2>参考</h2>
+<ul>
+<li><a href="Cloudflare%20free%20tier%20guide.md">Cloudflare無料ティア登録・上限ガイド</a>(KR)・<a href="Cloudflare%20free%20tier%20guide_EN.md">EN</a></li>
+<li><a href="../vercel/vercel_analysis.md">Vercelプラットフォーム分析</a></li>
+<li><a href="../Free_Hosting/FreeHosting.md">無料Webホスティングガイド</a></li>
+<li><a href="../agent-friendly-website-guide/agent-friendly-website-guide.ja.md">エージェント親和的Webサイトガイド</a></li>
+<li><a href="../GS_Quant/GS%20Quant%20Getting%20Started.md">GS Quant Getting Started</a></li>
+<li><a href="../Python_Pyodide/Pyodide.md">Pyodide</a></li>
+<li>Cloudflare Workers Pricing: <a href="https://developers.cloudflare.com/workers/platform/pricing/">https://developers.cloudflare.com/workers/platform/pricing/</a></li>
+<li>Cloudflare Pages: <a href="https://developers.cloudflare.com/pages/">https://developers.cloudflare.com/pages/</a></li>
+<li>Workers AI: <a href="https://developers.cloudflare.com/workers-ai/">https://developers.cloudflare.com/workers-ai/</a></li>
+<li>VibeQuantデプロイメモ: <code>VibeQuant/cloudflare/DEPLOY_KR.md</code>(リポジトリ内)</li>
+<li>サイト: <a href="https://vibequant.cc/">https://vibequant.cc/</a> · 原本: <a href="https://github.com/gameworkerkim/vibe-investing">https://github.com/gameworkerkim/vibe-investing</a></li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudFlare/Cloudflare_%EB%AC%B4%EB%A3%8C%ED%8B%B0%EC%96%B4_%EC%82%AC%EC%9A%A9%EB%B2%95_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

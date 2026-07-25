@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Visual Studio C#開発用LLMアシスタント — 検証版 + DeepSeek・マルチLLM連携ガイド — VibeQuant</title>
+  <meta name="description" content="Visual StudioでのC#コーディング向けAIアシスタントの推奨と、DeepSeekをはじめとする各種LLMを接続する実際の方法を検証・整理したガイド" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/minimax-coding-guide-visual-studio-csharp-llm-guide-ja/" />
+  <meta property="og:title" content="Visual Studio C#開発用LLMアシスタント — 検証版 + DeepSeek・マルチLLM連携ガイド" />
+  <meta property="og:description" content="Visual StudioでのC#コーディング向けAIアシスタントの推奨と、DeepSeekをはじめとする各種LLMを接続する実際の方法を検証・整理したガイド" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/minimax-coding-guide-visual-studio-csharp-llm-guide-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/minimax-coding-guide-visual-studio-csharp-llm-guide-ko/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/minimax-coding-guide-visual-studio-csharp-llm-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/minimax-coding-guide-visual-studio-csharp-llm-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/minimax-coding-guide-visual-studio-csharp-llm-guide-zh/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/minimax-coding-guide-visual-studio-csharp-llm-guide-ko/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Visual Studio C#開発用LLMアシスタント — 検証版 + DeepSeek・マルチLLM連携ガイド","description":"Visual StudioでのC#コーディング向けAIアシスタントの推奨と、DeepSeekをはじめとする各種LLMを接続する実際の方法を検証・整理したガイド","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/minimax-coding-guide-visual-studio-csharp-llm-guide-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MiniMax%20Coding%20Guide/visual-studio-csharp-llm-guide.ja.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-04","dateModified":"2026-06-04","inLanguage":"ja","keywords":"LLM · 에이전트, MiniMax Coding Guide"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Visual Studio C#開発用LLMアシスタント — 検証版 + DeepSeek・マルチLLM連携ガイド</h1>
+        <p class="article-dates"><time datetime="2026-06-04">발행 2026.06.04</time> · 주제 LLM · 에이전트 · MiniMax Coding Guide</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/minimax-coding-guide-visual-studio-csharp-llm-guide-ko/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/minimax-coding-guide-visual-studio-csharp-llm-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/minimax-coding-guide-visual-studio-csharp-llm-guide-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/minimax-coding-guide-visual-studio-csharp-llm-guide-zh/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Visual StudioでのC#コーディング向けAIアシスタントの推奨と、DeepSeekをはじめとする各種LLMを接続する実際の方法を検証・整理したガイド</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>Visual StudioでC#コーディングを行うためのAIアシスタントを推奨し、DeepSeekをはじめとする様々なLLMを接続する実際の方法を整理する。主要項目は公開情報源(マーケットプレイス・ベンダードキュメント)と対照して検証した。
+姉妹文書: <a href="minimax-coding-guide.ja.md">MiniMaxコーディングガイド</a> (VS Code中心)</p>
+</blockquote>
+<ul>
+<li><strong>基準日</strong>: 2026-06-04</li>
+<li><strong>検証出典</strong>: 公式マーケットプレイス、ベンダー公式ドキュメント、公開資料の相互確認</li>
+<li><strong>検証状態表記</strong>: 検証済み / 修正 / 未検証</li>
+</ul>
+<hr>
+<h2>0. ファクトチェック結果</h2>
+<p>Visual Studio C# AIアシスタントに関連する主要項目を公開情報源と対照した結果である。公開情報源で実在性・保守状況を確定できなかった項目は<strong>未検証</strong>とのみ表記する。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>検証状態</th>
+<th>根拠 / 備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GitHub Copilotエージェントモード</td>
+<td>検証済み</td>
+<td>Agent ModeがMCPサポートとともにGA。VS 2022 17.14+ / VS 2026対応。複数ファイル編集・エラー繰り返し修正・ツール呼び出し</td>
+</tr>
+<tr>
+<td>MCP + Roslynの意味理解</td>
+<td>修正</td>
+<td>Copilotは<code>find_symbol</code>ツールで言語認識シンボル探索を提供。「Roslyn直接通信」は別のMCPサーバー拡張(例: MCP AI Server)を通じて成立する</td>
+</tr>
+<tr>
+<td>MCP AI Server</td>
+<td>検証済み</td>
+<td><code>LadislavSopko/mcp-ai-server-visual-studio</code>。Roslynベースの20個のツール、MCPクライアント用</td>
+</tr>
+<tr>
+<td>OpenCode AI Assistant</td>
+<td>検証済み</td>
+<td>マーケットプレイスに実在(<code>NatanaelNunez.opencode-ai-assistant-vs</code>)。マルチプロバイダー対応</td>
+</tr>
+<tr>
+<td>Visual chatGPT Studio</td>
+<td>検証済み</td>
+<td>無料、OpenAI APIキーが必要。リファクタリング・バグ検出・テスト生成コマンドを提供</td>
+</tr>
+<tr>
+<td>Tongyi Lingma</td>
+<td>修正</td>
+<td>「Qoder(旧Lingma)」にリブランドされた。全チャネル累計350万+ダウンロード。無料体験/期間限定無料の形態</td>
+</tr>
+<tr>
+<td>CursorでのMS C#拡張の使用</td>
+<td>検証済み</td>
+<td>MSがC#/C++/C# Dev KitをMS系エディタに限定。Anysphereがnetcoredbgベースの独自C#拡張を配布(<code>@id:anysphere.csharp</code>)</td>
+</tr>
+<tr>
+<td>ReSharper for VS Code</td>
+<td>検証済み</td>
+<td>2026-03-05リリース(VS Code・Cursor対応)。AI Assistantは有料(非営利・学習用は無料)</td>
+</tr>
+<tr>
+<td>DeepSeek連携</td>
+<td>検証済み</td>
+<td>DeepSeekはOpenAI互換(<code>https://api.deepseek.com</code>)。OpenAI互換base_urlを受け付ける拡張であれば接続可能</td>
+</tr>
+<tr>
+<td>IntelliCode</td>
+<td>検証済み</td>
+<td>MSデフォルト提供。コードパターン学習ベースの自動補完</td>
+</tr>
+<tr>
+<td>A3sist</td>
+<td>未検証</td>
+<td>公開情報源で実在性・保守を確認できない。導入前にマーケットプレイス・GitHubで直接確認すること</td>
+</tr>
+<tr>
+<td>L.AI</td>
+<td>未検証</td>
+<td>公開情報源で確定できない。直接確認が必要</td>
+</tr>
+<tr>
+<td>Fitten Code / CodeAnalyzerAI</td>
+<td>未検証</td>
+<td>詳細数値・現状維持の有無を直接確認する必要がある</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>要旨</strong>: 大枠(Copilotエージェントモード、MCP+Roslyn、Cursor C#の制約、ReSharper VS Code、無料拡張群)は概ね正確である。ただし一部のマイナー拡張(A3sist・L.AIなど)は公開情報源で実在性・保守を確定するのが難しく、導入前に直接確認が必要である。</p>
+</blockquote>
+<hr>
+<h2>1. Visual Studio標準搭載AI (最初に検討すべきもの)</h2>
+<ul>
+<li><strong>GitHub Copilot</strong> (検証済み) — リアルタイム自動補完 + エージェントモード(VS 2022 17.14+ / VS 2026)。エージェントモードは複数ファイル編集、エラー繰り返し修正、ツール呼び出し、MCPサーバー接続をサポートする。<code>.agent.md</code>でカスタムエージェントも定義可能。</li>
+<li><strong>IntelliCode</strong> (検証済み) — コードパターン学習ベースの文脈自動補完(モデル追加不要)。</li>
+</ul>
+<blockquote>
+<p>別途のキー・設定なしで始めるならCopilot + IntelliCodeが出発点である。ただし、Copilotのデフォルトモデルはある OpenAI/Anthropicであり、任意の外部OpenAI互換エンドポイント(DeepSeekなど)への直結は限定的である(2章・3章の外部拡張で迂回)。</p>
+</blockquote>
+<hr>
+<h2>2. C#開発者向けAI拡張の推奨(Visual Studio)</h2>
+<blockquote>
+<p>インストール数・価格は時点によって変わるため、マーケットプレイスで最新の数値を再確認することを前提に読むこと。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>拡張</th>
+<th>核心的な価値</th>
+<th>マルチLLM接続</th>
+<th>価格/ライセンス</th>
+<th>検証状態</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Visual chatGPT Studio</strong></td>
+<td>リファクタリング・バグ検出・テスト生成コマンド、エディタ内チャット</td>
+<td>OpenAI互換キー + Base URLオーバーライド → DeepSeek/MiniMax/ローカル</td>
+<td>無料(キーが必要)</td>
+<td>検証済み</td>
+</tr>
+<tr>
+<td><strong>OpenCode AI Assistant</strong></td>
+<td>大規模ソリューション・Roslynシンボルインデックス</td>
+<td>OpenAI・Anthropic・Ollamaなどマルチプロバイダー</td>
+<td>無料(MIT、キーが必要)</td>
+<td>検証済み</td>
+</tr>
+<tr>
+<td><strong>MCP AI Server</strong></td>
+<td>Roslynの20個のツールをMCPで公開(AIが意味単位で理解)</td>
+<td>モデル非依存(MCPクライアントがモデルを選択)</td>
+<td>キー/クライアント別途</td>
+<td>検証済み</td>
+</tr>
+<tr>
+<td><strong>Qoder (旧Tongyi Lingma)</strong></td>
+<td>自然言語→コード、複数行生成</td>
+<td>アリババのモデル(自社)</td>
+<td>無料体験/期間限定無料</td>
+<td>修正(リブランド)</td>
+</tr>
+<tr>
+<td><strong>ReSharper + AI Assistant</strong></td>
+<td>静的解析・リファクタリング最強 + AIチャット/補完</td>
+<td>JetBrains AI Service(モデル選択)</td>
+<td>有料(非営利は無料)</td>
+<td>検証済み</td>
+</tr>
+<tr>
+<td>A3sist / L.AI</td>
+<td>ローカル(Ollama)プライバシー特化を主張</td>
+<td>確認要</td>
+<td>確認要</td>
+<td>未検証</td>
+</tr>
+</tbody></table>
+<p><strong>状況別推奨</strong>-<strong>公式・最新・無難</strong>: GitHub Copilot(エージェントモード) + IntelliCode</p>
+<ul>
+<li><strong>様々なLLMを柔軟に</strong>: OpenCode AI AssistantまたはVisual chatGPT Studio(Base URLオーバーライド)</li>
+<li><strong>AIがコードを意味で理解(正確な探索/リファクタリング)</strong>: MCP AI Server(+ Copilotエージェントモードまたは他のMCPクライアント)</li>
+<li><strong>リファクタリング品質最優先</strong>: ReSharper + AI Assistant(有料)</li>
+<li><strong>ローカル・プライバシー</strong>: 第一候補としてOllama + OpenAI互換拡張(下記3.4)を推奨。A3sist/L.AIは実在性・保守を確認後に採用</li>
+</ul>
+<hr>
+<h2>3. DeepSeekおよび様々なLLMの接続方法(核心)</h2>
+<p>原理は1つである。大半の商用LLMはOpenAI互換(<code>/v1/chat/completions</code>)エンドポイントを提供するため、「Base URL + API Key + モデル名」だけ変えれば同じ拡張で複数のモデルを使うことができる。</p>
+<h3>3.1 OpenAI互換エンドポイントまとめ</h3>
+<table>
+<thead>
+<tr>
+<th>プロバイダー</th>
+<th>Base URL</th>
+<th>例のモデル名</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>DeepSeek</strong></td>
+<td><code>https://api.deepseek.com</code> (<code>/v1</code>も可)</td>
+<td><code>deepseek-chat</code>、<code>deepseek-reasoner</code></td>
+<td>OpenAI互換。モデル名はコンソールで最新を確認</td>
+</tr>
+<tr>
+<td><strong>MiniMax</strong></td>
+<td><code>https://api.minimax.io/v1</code></td>
+<td><code>MiniMax-M3</code>、<code>MiniMax-M2.5</code></td>
+<td>OpenAI・Anthropic両方互換(<a href="minimax-coding-guide.ja.md">ガイド</a>)</td>
+</tr>
+<tr>
+<td><strong>OpenAI</strong></td>
+<td><code>https://api.openai.com/v1</code></td>
+<td><code>gpt-5.5</code>、<code>gpt-5.4-mini</code></td>
+<td>基準実装</td>
+</tr>
+<tr>
+<td><strong>OpenRouter</strong></td>
+<td><code>https://openrouter.ai/api/v1</code></td>
+<td><code>deepseek/deepseek-chat</code>など</td>
+<td>単一キーで多数のモデルをルーティング</td>
+</tr>
+<tr>
+<td><strong>ローカルOllama</strong></td>
+<td><code>http://localhost:11434/v1</code></td>
+<td><code>qwen2.5-coder</code>、<code>deepseek-coder-v2</code></td>
+<td>完全オフライン・プライバシー</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>DeepSeek APIキー発行: <code>https://platform.deepseek.com</code> → API Keys。モデル識別子(deepseek-chat/-reasonerなど)は時点によって変わるため、コンソールで最新を確認してから入力すること。</p>
+</blockquote>
+<h3>3.2 Visual chatGPT StudioでDeepSeekを接続する(最も簡単)</h3>
+<ol>
+<li>マーケットプレイスでVisual chatGPT Studioをインストール</li>
+<li><code>Tools → Options → Visual chatGPT Studio</code>を開く</li>
+<li><strong>API Key</strong>: DeepSeekのキーを入力</li>
+<li><strong>Base URL / Base API URL</strong>(OpenAIエンドポイントのオーバーライド項目): <code>https://api.deepseek.com</code></li>
+<li><strong>Model</strong>: <code>deepseek-chat</code>(またはコンソールで確認した現行のモデル名)</li>
+<li>コードを選択 → 右クリックまたはコマンドでリファクタリング/バグ検出/テスト生成を実行</li>
+</ol>
+<blockquote>
+<p>同じ方式でBase URLだけを<code>https://api.minimax.io/v1</code>(MiniMax)、<code>https://openrouter.ai/api/v1</code>(OpenRouter)、<code>http://localhost:11434/v1</code>(Ollama)に変えれば、同じUIでモデルを切り替えることができる。</p>
+</blockquote>
+<h3>3.3 OpenCode AI Assistantでマルチプロバイダー構成</h3>
+<ul>
+<li>インストール後、Providerを選択(OpenAI / Anthropic / Ollama / OpenAI互換カスタム)</li>
+<li>カスタムOpenAI互換を選び、Base URL + Key + モデル名をDeepSeek/MiniMax/ローカルに指定</li>
+<li>大規模ソリューションでRoslynシンボルインデックスによりプロジェクト全体の型を認識 → 正確なコンテキストを提供</li>
+</ul>
+<h3>3.4 ローカル(オフライン) — Ollama + 任意の拡張</h3>
+<ol>
+<li>Ollamaをインストール後、モデルを取得: <code>ollama pull qwen2.5-coder</code> (または<code>deepseek-coder-v2</code>)</li>
+<li>Ollamaは<code>http://localhost:11434/v1</code>でOpenAI互換のサービングを行う</li>
+<li>Visual chatGPT Studio・OpenCodeなどでBase URLを上記アドレスに、Keyは何でもよい値(<code>ollama</code>)を入力</li>
+<li>ネットワーク遮断環境・機密コードに適している(完全ローカル)</li>
+</ol>
+<h3>3.5 MCPで「AIがコードを意味で理解」できるようにする</h3>
+<ul>
+<li>MCP AI Server(Roslynの20個のツール)をインストールすると、MCPクライアント(例: Copilotエージェントモード)が<code>FindSymbols</code>などコンパイラレベルのツールを呼び出し、単純なテキストではなくシンボル単位でコードを扱う。</li>
+<li>モデル自体は何でもよい(商用/DeepSeek/ローカル)がクライアントで選択できる — 「正確なコード理解」はMCPサーバーが、「推論」はモデルが担当する分離構造である。</li>
+</ul>
+<hr>
+<h2>4. ハイブリッドルーティング(コスト・品質の同時最適化)</h2>
+<p>作業の難易度に応じてモデルを分けると、コストを大幅に削減できる(詳しい単価・根拠は<a href="minimax-coding-guide.ja.md">MiniMaxガイド4・6章</a>)。</p>
+<table>
+<thead>
+<tr>
+<th>作業</th>
+<th>推奨</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>自動補完・単純な質問</td>
+<td>ローカル(Ollama)またはDeepSeekの低価格モデル</td>
+</tr>
+<tr>
+<td>関数単位の生成</td>
+<td>DeepSeek / MiniMax M2.5</td>
+</tr>
+<tr>
+<td>複数ファイルのリファクタリング</td>
+<td>MiniMax M3 / 1Mコンテキストモデル</td>
+</tr>
+<tr>
+<td>高精度コードレビュー</td>
+<td>Claude Opus / GPT上位モデル(必要時のみフェイルオーバー)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>核心: デフォルトは低価格・ローカル、精度が必要な瞬間だけ上位モデルにフェイルオーバーする。Visual chatGPT Studio/OpenCodeでBase URLを変えて手動切り替えするか、OpenRouterでルーティングを1つのキーに委任することができる。</p>
+</blockquote>
+<hr>
+<h2>5. 選定ガイド (要約)</h2>
+<table>
+<thead>
+<tr>
+<th>優先順位</th>
+<th>推奨構成</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>無難に公式</td>
+<td>GitHub Copilot(エージェントモード) + IntelliCode</td>
+</tr>
+<tr>
+<td>DeepSeek/マルチLLMを自由に</td>
+<td>Visual chatGPT StudioまたはOpenCode AI Assistant (Base URLオーバーライド)</td>
+</tr>
+<tr>
+<td>ローカル・プライバシー</td>
+<td>Ollama + OpenAI互換拡張</td>
+</tr>
+<tr>
+<td>意味単位の精度(探索/リファクタリング)</td>
+<td>MCP AI Server + エージェントモード</td>
+</tr>
+<tr>
+<td>リファクタリング最強(有料)</td>
+<td>ReSharper + AI Assistant</td>
+</tr>
+<tr>
+<td>VS Codeの軽快さを好む</td>
+<td>ReSharper for VS Code (C#/Razor/Blazor)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>参考資料 (2026-06-04確認)</h2>
+<ul>
+<li>Visual Studio Agent Mode + MCP: <a href="https://learn.microsoft.com/en-us/visualstudio/ide/copilot-agent-mode">https://learn.microsoft.com/en-us/visualstudio/ide/copilot-agent-mode</a> · <a href="https://learn.microsoft.com/en-us/visualstudio/ide/mcp-servers">https://learn.microsoft.com/en-us/visualstudio/ide/mcp-servers</a></li>
+<li>MCP AI Server (Roslyn): <a href="https://github.com/LadislavSopko/mcp-ai-server-visual-studio">https://github.com/LadislavSopko/mcp-ai-server-visual-studio</a></li>
+<li>OpenCode AI Assistant: <a href="https://marketplace.visualstudio.com/items?itemName=NatanaelNunez.opencode-ai-assistant-vs">https://marketplace.visualstudio.com/items?itemName=NatanaelNunez.opencode-ai-assistant-vs</a></li>
+<li>Visual chatGPT Studio: <a href="https://marketplace.visualstudio.com/items?itemName=jefferson-pires.VisualChatGPTStudio">https://marketplace.visualstudio.com/items?itemName=jefferson-pires.VisualChatGPTStudio</a> · <a href="https://github.com/jeffdapaz/VisualChatGPTStudio">https://github.com/jeffdapaz/VisualChatGPTStudio</a></li>
+<li>Qoder (旧Tongyi Lingma): <a href="https://marketplace.visualstudio.com/items?itemName=Alibaba-Cloud.tongyi-lingma">https://marketplace.visualstudio.com/items?itemName=Alibaba-Cloud.tongyi-lingma</a></li>
+<li>ReSharper for VS Code (リリース): <a href="https://blog.jetbrains.com/dotnet/2026/03/05/resharper-for-visual-studio-code-cursor-and-compatible-editors-is-out/">https://blog.jetbrains.com/dotnet/2026/03/05/resharper-for-visual-studio-code-cursor-and-compatible-editors-is-out/</a></li>
+<li>Cursor C#ライセンス/netcoredbg: <a href="https://devclass.com/2025/04/08/vs-code-extension-marketplace-wars-cursor-users-hit-roadblocks/">https://devclass.com/2025/04/08/vs-code-extension-marketplace-wars-cursor-users-hit-roadblocks/</a></li>
+<li>DeepSeek API(OpenAI互換): <a href="https://api-docs.deepseek.com/">https://api-docs.deepseek.com/</a></li>
+</ul>
+<hr>
+<blockquote>
+<p><strong>免責事項</strong>: 本文書は2026-06-04時点の公開情報を検証・整理した参考資料である。拡張のインストール数・価格・モデル名・保守状態は急速に変わるため、導入前に公式出典で再確認すること。未検証と表記したツール(A3sist・L.AIなど)は実在性・信頼性を直接確認した上で使用すること。APIキーは環境変数/IDEのセキュアストレージで管理し、リポジトリにコミットしないこと。</p>
+</blockquote>
+<p><em>— 本文書終わり —</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MiniMax%20Coding%20Guide/visual-studio-csharp-llm-guide.ja.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

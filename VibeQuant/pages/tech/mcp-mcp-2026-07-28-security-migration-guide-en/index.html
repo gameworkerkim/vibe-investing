@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MCP 2026-07-28 Spec Transition: Security-Critical Changes and Migration Guide — VibeQuant</title>
+  <meta name="description" content="A security-focused breakdown of the MCP 2026-07-28 specification: the move to a stateless protocol, mandatory OAuth 2.1 authorization, and the new Extension Framework, plus a practical migration checklist and toolset." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide-en/" />
+  <meta property="og:title" content="MCP 2026-07-28 Spec Transition: Security-Critical Changes and Migration Guide" />
+  <meta property="og:description" content="A security-focused breakdown of the MCP 2026-07-28 specification: the move to a stateless protocol, mandatory OAuth 2.1 authorization, and the new Extension Framework, plus a practical migration checklist and toolset." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MCP 2026-07-28 Spec Transition: Security-Critical Changes and Migration Guide","description":"A security-focused breakdown of the MCP 2026-07-28 specification: the move to a stateless protocol, mandatory OAuth 2.1 authorization, and the new Extension Framework, plus a practical migration checklist and toolset.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MCP/MCP-2026-07-28-Security-Migration-Guide_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-19","dateModified":"2026-07-19","inLanguage":"en","keywords":"MCP, Model Context Protocol, Security, OAuth 2.1, API Security, Migration"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>MCP 2026-07-28 Spec Transition: Security-Critical Changes and Migration Guide</h1>
+        <p class="article-dates"><time datetime="2026-07-19">발행 2026.07.19</time> · 주제 MCP · Model Context Protocol · Security · OAuth 2.1 · API Security · Migration</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/mcp-mcp-2026-07-28-security-migration-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/mcp-mcp-2026-07-28-security-migration-guide-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/mcp-mcp-2026-07-28-security-migration-guide-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/mcp-mcp-2026-07-28-security-migration-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">A security-focused breakdown of the MCP 2026-07-28 specification: the move to a stateless protocol, mandatory OAuth 2.1 authorization, and the new Extension Framework, plus a practical migration checklist and toolset.</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. Overview</h2>
+<p>On July 28, 2026, the Model Context Protocol (MCP) transitions to a new specification containing the largest architectural change since its launch. The revision centers on three points.</p>
+<ol>
+<li><strong>A stateless protocol</strong> — the session concept is removed, and requests become self-contained</li>
+<li><strong>OAuth 2.1-based authorization standardization</strong> — authorization, previously left to implementer discretion, is now enforced as a standard</li>
+<li><strong>Official introduction of the Extension Framework</strong> — Roots/Sampling/Logging are split out of Core, and auditing/consent/approval functions are standardized</li>
+</ol>
+<p>The essence of this shift is a <strong>transfer of security responsibility</strong>. The state management and trust boundaries that the protocol layer (sessions, handshakes) used to provide implicitly disappear, and that responsibility moves to the explicit design of developers and platform operators. A stateless architecture has clear benefits for scalability and load balancing, but if a client&#39;s state data is trusted without validation, a new attack surface opens up.</p>
+<hr>
+<h2>2. Key Security-Relevant Changes</h2>
+<h3>2.1 Transition to a Stateless Architecture</h3>
+<p>The <code>initialize</code> handshake and the <code>Mcp-Session-Id</code> header are removed, and every request becomes self-contained. Protocol version, client information, and capabilities are now included in the <code>_meta</code> object of each request, and server capability discovery is replaced by the <code>server/discover</code> method.</p>
+<p><strong>Before (2025-11-25)</strong> — state maintained via <code>Mcp-Session-Id</code> after session establishment:</p>
+<pre><code class="language-http">POST /mcp HTTP/1.1
+Mcp-Session-Id: 1868a90c-3a3f-4f5b
+Content-Type: application/json
+
+{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:2,&quot;method&quot;:&quot;tools/call&quot;,
+ &quot;params&quot;:{&quot;name&quot;:&quot;search&quot;,&quot;arguments&quot;:{&quot;q&quot;:&quot;otters&quot;}}}
+</code></pre>
+<p><strong>After (2026-07-28)</strong> — all context is included in the request itself:</p>
+<pre><code class="language-http">POST /mcp HTTP/1.1
+MCP-Protocol-Version: 2026-07-28
+Mcp-Method: tools/call
+Mcp-Name: search
+Content-Type: application/json
+
+{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:1,&quot;method&quot;:&quot;tools/call&quot;,
+ &quot;params&quot;:{&quot;name&quot;:&quot;search&quot;,&quot;arguments&quot;:{&quot;q&quot;:&quot;otters&quot;},
+ &quot;_meta&quot;:{&quot;io.modelcontextprotocol/clientInfo&quot;:{&quot;name&quot;:&quot;my-app&quot;,&quot;version&quot;:&quot;1.0&quot;}}}}
+</code></pre>
+<p><strong>Security implications</strong></p>
+<table>
+<thead>
+<tr>
+<th>Threat</th>
+<th>Description</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>State hijacking</td>
+<td>If the server blindly trusts a resource handle passed by the client (e.g. <code>basket_id</code>), a predictable ID can let an attacker hijack another user&#39;s workflow</td>
+<td>Use handles with sufficient entropy and verify ownership</td>
+</tr>
+<tr>
+<td>State object tampering</td>
+<td>If the integrity of a state object that is returned to the client and later sent back is not verified, privilege escalation becomes possible</td>
+<td>Apply signing (e.g. HMAC) or store server-side and reference by ID</td>
+</tr>
+<tr>
+<td>Header/body mismatch</td>
+<td>If the <code>Mcp-Method</code>/<code>Mcp-Name</code> headers disagree with the JSON-RPC body, this creates a proxy/WAF bypass vector</td>
+<td>The server must mandatorily verify that headers and body agree</td>
+</tr>
+</tbody></table>
+<h3>2.2 OAuth-Based Authorization Standardization</h3>
+<p>Authorization, which was previously left to implementer discretion, is now enforced under the OAuth 2.1 standard. There are four core components.</p>
+<table>
+<thead>
+<tr>
+<th>Component</th>
+<th>Standard</th>
+<th>Description</th>
+<th>Attack it defends against</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Protected Resource Metadata</td>
+<td>RFC 9728</td>
+<td>Exposes Authorization Server info via <code>/.well-known/oauth-protected-resource</code></td>
+<td>Connecting to the wrong AS, misconfiguration</td>
+</tr>
+<tr>
+<td>Resource Indicators</td>
+<td>RFC 8707</td>
+<td>Specifies the target resource server via the <code>resource</code> parameter in a token request; the server verifies the token was issued for itself</td>
+<td>Token misuse (token passthrough), confused deputy</td>
+</tr>
+<tr>
+<td>Client ID Metadata Documents (CIMD)</td>
+<td>-</td>
+<td>Replaces repeated per-server DCR registration with standard document-based configuration</td>
+<td>Registration abuse, client identity confusion</td>
+</tr>
+<tr>
+<td>Issuer verification</td>
+<td>RFC 9207</td>
+<td>Mandates verifying, via the <code>iss</code> parameter, that the token was actually issued by the requested AS</td>
+<td>OAuth mix-up attack</td>
+</tr>
+</tbody></table>
+<p>Example Protected Resource Metadata configuration:</p>
+<pre><code class="language-json">{
+  &quot;authorization_servers&quot;: [&quot;https://auth.example.com&quot;],
+  &quot;resource&quot;: &quot;https://mcp.example.com&quot;
+}
+</code></pre>
+<p>A token request including a Resource Indicator:</p>
+<pre><code class="language-http">POST /token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&amp;
+code=...&amp;
+resource=https://mcp.example.com
+</code></pre>
+<h3>2.3 Introduction of the Extension Framework</h3>
+<p>Security operations functions such as audit logging, user consent, and approval are now standardized as official Extensions.</p>
+<ul>
+<li><strong>Roots, Sampling, Logging</strong>: split from Core into Extensions, officially deprecated</li>
+<li><strong>MCP Apps</strong>: the first official Extension, providing server-rendered UI support</li>
+<li><strong>Tasks Extension</strong>: standardizes long-running operations</li>
+</ul>
+<p>From a security standpoint, this means audit/consent/approval flows converge on a standard interface rather than each implementer&#39;s ad-hoc design — a positive for compliance and auditability. However, code that relied on former Core features (especially Sampling) must migrate to the Extension namespace pattern.</p>
+<hr>
+<h2>3. Breaking Changes Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Change</th>
+<th>Before (2025-11-25)</th>
+<th>After (2026-07-28)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Sessions</td>
+<td><code>initialize</code> handshake + <code>Mcp-Session-Id</code></td>
+<td>Removed, stateless</td>
+</tr>
+<tr>
+<td>Error codes</td>
+<td><code>-32002</code> (Resource not found)</td>
+<td><code>-32602</code> (JSON-RPC standard)</td>
+</tr>
+<tr>
+<td>Capability discovery</td>
+<td>Exchanged during handshake</td>
+<td><code>server/discover</code> method</td>
+</tr>
+<tr>
+<td>HTTP headers</td>
+<td><code>Mcp-Session-Id</code></td>
+<td><code>Mcp-Method</code>, <code>Mcp-Name</code> required</td>
+</tr>
+<tr>
+<td>SSE</td>
+<td>Server-Sent Events stream retained</td>
+<td>Replaced by Multi Round-Trip Requests (MRTR)</td>
+</tr>
+<tr>
+<td>Authorization</td>
+<td>Implementation-dependent</td>
+<td>OAuth 2.1 standardized</td>
+</tr>
+<tr>
+<td>Roots/Sampling/Logging</td>
+<td>Core features</td>
+<td>Split into Extensions (deprecated)</td>
+</tr>
+<tr>
+<td>Caching</td>
+<td>Required separate implementation</td>
+<td><code>ttlMs</code>, <code>cacheScope</code> fields provided</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Migration Guide</h2>
+<h3>4.1 Removing Session State</h3>
+<table>
+<thead>
+<tr>
+<th>Old approach</th>
+<th>New approach</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>initialize</code> handshake</td>
+<td>Capability discovery via <code>server/discover</code></td>
+</tr>
+<tr>
+<td><code>Mcp-Session-Id</code> header</td>
+<td>Client info included in the <code>_meta</code> object</td>
+</tr>
+<tr>
+<td>Session-based state storage</td>
+<td>State passed via explicit resource handles (e.g. <code>basket_id</code>)</td>
+</tr>
+<tr>
+<td>Sticky sessions required</td>
+<td>Round-robin load balancing possible</td>
+</tr>
+</tbody></table>
+<pre><code class="language-typescript">// Before: session-based state management
+class SessionManager {
+  private sessions: Map&lt;string, SessionState&gt;;
+
+  async handleRequest(sessionId: string, request: Request) {
+    const session = this.sessions.get(sessionId);
+    // Relies on session state
+  }
+}
+
+// After: explicit handle-based
+class StatelessHandler {
+  async handleRequest(request: Request) {
+    // Everything needed is included in the request
+    const { basketId, clientInfo } = request.params._meta;
+    // basketId is passed as an explicit parameter and processed
+    // Note: verifying basketId ownership and integrity is mandatory
+  }
+}
+</code></pre>
+<h3>4.2 Authorization Migration</h3>
+<table>
+<thead>
+<tr>
+<th>Old approach</th>
+<th>New approach</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Custom-built authorization</td>
+<td>OAuth 2.1 compliance</td>
+</tr>
+<tr>
+<td>Separate configuration required</td>
+<td>Auto-discovery via <code>.well-known/oauth-protected-resource</code></td>
+</tr>
+<tr>
+<td>Token scope unspecified</td>
+<td>Scoped via Resource Indicators (RFC 8707)</td>
+</tr>
+<tr>
+<td>DCR-based client registration</td>
+<td>Migrate to CIMD-based configuration</td>
+</tr>
+<tr>
+<td>Issuer verification optional</td>
+<td>Issuer verification mandatory (RFC 9207)</td>
+</tr>
+</tbody></table>
+<p>Implementation checklist:</p>
+<ol>
+<li>Configure the <code>.well-known/oauth-protected-resource</code> endpoint (RFC 9728)</li>
+<li>Implement an OAuth 2.1-compliant authorization flow (PKCE required)</li>
+<li>Apply Resource Indicators (RFC 8707)</li>
+<li>Add issuer (<code>iss</code>) parameter verification logic (RFC 9207)</li>
+<li>Migrate to CIMD-based client configuration</li>
+</ol>
+<h3>4.3 Extension Migration</h3>
+<pre><code class="language-typescript">// Before: Sampling relying on Core
+server.setCapabilities({
+  sampling: { /* ... */ }
+});
+
+// After: using functionality split into Extensions
+server.setCapabilities({
+  extensions: {
+    &quot;io.modelcontextprotocol/sampling&quot;: { /* ... */ },
+    &quot;io.modelcontextprotocol/logging&quot;: { /* ... */ }
+  }
+});
+</code></pre>
+<h3>4.4 Production Migration Checklist</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>Remove session state</strong>: migrate <code>Mcp-Session-Id</code>-based state storage logic to explicit resource handle structures</li>
+<li><input disabled="" type="checkbox"> <strong>Fix error codes</strong>: change <code>-32002</code> -&gt; <code>-32602</code></li>
+<li><input disabled="" type="checkbox"> <strong>Configure OAuth</strong>: set up the <code>.well-known/oauth-protected-resource</code> endpoint (RFC 9728)</li>
+<li><input disabled="" type="checkbox"> <strong>Resource Indicators</strong>: verify RFC 8707 adoption</li>
+<li><input disabled="" type="checkbox"> <strong>CIMD migration</strong>: plan the move from DCR-based to CIMD-based configuration</li>
+<li><input disabled="" type="checkbox"> <strong>Verify Extensions</strong>: confirm Roots, Sampling, and Logging have been split from Core</li>
+<li><input disabled="" type="checkbox"> <strong>Stateless testing</strong>: verify stateless behavior across multiple instances behind a load balancer</li>
+<li><input disabled="" type="checkbox"> <strong>Header validation</strong>: add logic to verify that <code>Mcp-Method</code>/<code>Mcp-Name</code> headers match the body content</li>
+<li><input disabled="" type="checkbox"> <strong><code>_meta</code> object validation</strong>: implement integrity checks for the client-supplied <code>_meta</code> object</li>
+<li><input disabled="" type="checkbox"> <strong>Token validation</strong>: add issuer (<code>iss</code>) parameter verification logic (RFC 9207)</li>
+</ul>
+<hr>
+<h2>5. Migration Tools</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Purpose</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mcp-herald</td>
+<td>A static migration linter for the MCP 2026-07-28 spec. Scans source code to detect breaking-change signatures and suggests fixes</td>
+<td><a href="https://github.com/studiomeyer-io/mcp-herald">https://github.com/studiomeyer-io/mcp-herald</a></td>
+</tr>
+<tr>
+<td>mcp-auth-adapter</td>
+<td>An adapter sitting in front of an OAuth 2.0/OIDC IdP that provides the functionality (RFC 9728/8707/9207) required by the MCP authorization spec</td>
+<td><a href="https://github.com/velias/mcp-auth-adapter">https://github.com/velias/mcp-auth-adapter</a></td>
+</tr>
+</tbody></table>
+<p>Recommended usage order: (1) scan the entire codebase with mcp-herald to enumerate breaking changes, (2) fix protocol-layer items such as sessions/error codes/Extensions, (3) standardize the authorization layer with mcp-auth-adapter, (4) run integration tests in a stateless environment (multiple instances + load balancer).</p>
+<hr>
+<h2>6. Conclusion and Recommendations</h2>
+<p>The core of the 2026-07-28 MCP spec is the shift to a stateless architecture, standardization of authorization under OAuth 2.1, and the introduction of the Extension Framework. As the trust boundaries the protocol used to provide implicitly disappear, security responsibility moves to developers and platform operators, and the quality of each implementation&#39;s security design now determines the overall security level of the system.</p>
+<p>Given the 12-month deprecation window, the following phased approach is recommended.</p>
+<table>
+<thead>
+<tr>
+<th>Phase</th>
+<th>Duration (recommended)</th>
+<th>Work</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. Diagnosis</td>
+<td>1 month</td>
+<td>mcp-herald scan, assess breaking-change impact</td>
+</tr>
+<tr>
+<td>2. Protocol migration</td>
+<td>2-3 months</td>
+<td>Remove sessions, fix headers/error codes, migrate Extensions</td>
+</tr>
+<tr>
+<td>3. Authorization standardization</td>
+<td>2-3 months</td>
+<td>Implement OAuth 2.1 flow, apply RFC 9728/8707/9207</td>
+</tr>
+<tr>
+<td>4. Verification</td>
+<td>1-2 months</td>
+<td>Stateless load testing, penetration testing, verify header/body mismatch and handle-tampering scenarios</td>
+</tr>
+<tr>
+<td>5. Parallel operation</td>
+<td>Remaining time</td>
+<td>Support old and new specs in parallel before retiring the legacy path</td>
+</tr>
+</tbody></table>
+<p>In particular, throughout the migration it is essential to keep in mind that if validation logic for client-supplied data (resource handles, state objects, <code>_meta</code>) is missing during the stateless transition, hijacking and privilege-escalation vectors that did not exist in the session era can emerge.</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MCP/MCP-2026-07-28-Security-Migration-Guide_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

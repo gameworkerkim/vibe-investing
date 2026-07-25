@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiniCPM5-1B-Claude-Opus-Fable5-Thinking (GGUF) — 入门指南 — VibeQuant</title>
+  <meta name="description" content="超轻量级1B本地LLM MiniCPM5-1B-Fable5-Thinking入门指南:GGUF量化选择、运行环境配置、工具调用基准测试。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-cn/" />
+  <meta property="og:title" content="MiniCPM5-1B-Claude-Opus-Fable5-Thinking (GGUF) — 入门指南" />
+  <meta property="og:description" content="超轻量级1B本地LLM MiniCPM5-1B-Fable5-Thinking入门指南:GGUF量化选择、运行环境配置、工具调用基准测试。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MiniCPM5-1B-Claude-Opus-Fable5-Thinking (GGUF) — 入门指南","description":"超轻量级1B本地LLM MiniCPM5-1B-Fable5-Thinking入门指南:GGUF量化选择、运行环境配置、工具调用基准测试。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_%20Minicpm5/Minicpm5%201b%20fable5%20thinking%20getting%20started_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-17","dateModified":"2026-07-17","inLanguage":"zh-Hans","keywords":"LLM · 에이전트, LLM_ Minicpm5"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>MiniCPM5-1B-Claude-Opus-Fable5-Thinking (GGUF) — 入门指南</h1>
+        <p class="article-dates"><time datetime="2026-07-17">발행 2026.07.17</time> · 주제 LLM · 에이전트 · LLM_ Minicpm5</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">超轻量级1B本地LLM MiniCPM5-1B-Fable5-Thinking入门指南:GGUF量化选择、运行环境配置、工具调用基准测试。</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>超轻量级1B参数本地LLM入门指南
+模型页面:<a href="https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF">https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF</a>
+许可证:Apache-2.0(继承自基础模型MiniCPM5-1B)</p>
+</blockquote>
+<hr>
+<h2>1. 模型概述</h2>
+<table>
+<thead>
+<tr>
+<th align="left">项目</th>
+<th align="left">内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">参数规模</td>
+<td align="left">1B(10亿)</td>
+</tr>
+<tr>
+<td align="left">基础模型</td>
+<td align="left"><code>openbmb/MiniCPM5-1B</code></td>
+</tr>
+<tr>
+<td align="left">微调数据</td>
+<td align="left">Fable 5数据(post-training)</td>
+</tr>
+<tr>
+<td align="left">分发格式</td>
+<td align="left">GGUF(适用于llama.cpp系运行时的量化构建)</td>
+</tr>
+<tr>
+<td align="left">最大上下文</td>
+<td align="left">128K token(131,072 / 以上游<code>config.json</code>为准)</td>
+</tr>
+<tr>
+<td align="left">架构</td>
+<td align="left">llama</td>
+</tr>
+<tr>
+<td align="left">聊天模板</td>
+<td align="left">MiniCPM5原生模板已内置于GGUF元数据中</td>
+</tr>
+<tr>
+<td align="left">支持语言</td>
+<td align="left">英语、中文</td>
+</tr>
+<tr>
+<td align="left">特化领域</td>
+<td align="left">代码生成/调试、指令遵循(Instruction Following)、工具调用(Tool Calling)</td>
+</tr>
+</tbody></table>
+<p>该模型是一个可仅在CPU或低配GPU环境下运行的超轻量模型,可在llama.cpp、Ollama、LM Studio、jan、KoboldCpp等全部兼容GGUF的运行环境中使用。其特点是具备可在&quot;Thinking&quot;模式(思维链推理)和&quot;No Think&quot;模式(快速响应)之间切换的混合推理结构。</p>
+<p>说明:名称中的&quot;Fable 5&quot;指的是训练数据的来源标注,与Anthropic的商业闭源模型&quot;Claude Fable 5&quot;是完全不同的开源社区模型。</p>
+<hr>
+<h2>2. 提供的文件(量化版本选择)</h2>
+<table>
+<thead>
+<tr>
+<th align="left">文件</th>
+<th align="left">量化方式</th>
+<th align="left">大小</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>...-Q4_K_M.gguf</code></td>
+<td align="left">Q4_K_M</td>
+<td align="left">约657 MB</td>
+<td align="left">最小体积,适合低内存环境</td>
+</tr>
+<tr>
+<td align="left"><code>...-Q5_K_M.gguf</code></td>
+<td align="left">Q5_K_M</td>
+<td align="left">约751 MB</td>
+<td align="left">质量与体积的平衡</td>
+</tr>
+<tr>
+<td align="left"><code>...-Q8_0.gguf</code></td>
+<td align="left">Q8_0</td>
+<td align="left">约1.1 GB</td>
+<td align="left"><strong>推荐默认选项</strong></td>
+</tr>
+<tr>
+<td align="left"><code>...-F16.gguf</code></td>
+<td align="left">F16</td>
+<td align="left">约2.1 GB</td>
+<td align="left">全精度转换原始版本</td>
+</tr>
+</tbody></table>
+<p><strong>选择指南</strong>:1B模型对量化损失相对敏感,如果内存充足,建议默认使用<strong>Q8_0</strong>。仅在内存低于2GB这种极端受限的环境下才考虑使用Q4_K_M。</p>
+<hr>
+<h2>3. 安装与运行方法</h2>
+<h3>3.1 llama.cpp(CLI)</h3>
+<p>macOS / Linux安装:</p>
+<pre><code class="language-bash">curl -LsSf https://llama.app/install.sh | sh
+</code></pre>
+<p>Windows(WinGet):</p>
+<pre><code class="language-bash">winget install llama.cpp
+</code></pre>
+<p>在终端中直接推理:</p>
+<pre><code class="language-bash">llama cli -hf GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF:Q4_K_M
+</code></pre>
+<p>直接使用本地文件运行(以Q8_0为例):</p>
+<pre><code class="language-bash">llama-cli \
+  -m MiniCPM5-1B-Claude-Opus-Fable5-Thinking-Q8_0.gguf \
+  -p &quot;Write a Python function to merge two sorted lists.&quot; \
+  -n 512 \
+  --temp 0.9 --top-p 0.95 \
+  -c 8192
+</code></pre>
+<p>上下文长度(<code>-c</code>)最多支持131,072,但实际可用长度需根据显存/内存进行调整。</p>
+<h3>3.2 llama.cpp服务器(OpenAI兼容API)</h3>
+<pre><code class="language-bash">llama-server \
+  -m MiniCPM5-1B-Claude-Opus-Fable5-Thinking-Q8_0.gguf \
+  -c 8192 --port 8080
+</code></pre>
+<p>服务器启动后,可在<code>http://localhost:8080</code>使用网页界面以及OpenAI兼容的<code>/v1/chat/completions</code>端点。基于OpenAI SDK的现有代码只需修改<code>base_url</code>即可直接对接使用。</p>
+<h3>3.3 Ollama</h3>
+<pre><code class="language-bash">ollama run hf.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF:Q4_K_M
+</code></pre>
+<p>这种方式直接从HuggingFace仓库拉取并运行,无需另外编写Modelfile。</p>
+<h3>3.4 LM Studio / jan / KoboldCpp</h3>
+<p>只需下载仓库中的<code>.gguf</code>文件并加载即可。由于MiniCPM5聊天模板已内置于GGUF元数据中,无需手动配置模板。</p>
+<ul>
+<li>LM Studio:在搜索栏中输入<code>GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF</code>,下载所需的量化版本</li>
+</ul>
+<h3>3.5 llama-cpp-python(Python集成)</h3>
+<pre><code class="language-bash">pip install llama-cpp-python
+</code></pre>
+<pre><code class="language-python">from llama_cpp import Llama
+
+llm = Llama.from_pretrained(
+    repo_id=&quot;GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF&quot;,
+    filename=&quot;MiniCPM5-1B-Claude-Opus-Fable5-Thinking-Q8_0.gguf&quot;,
+)
+
+response = llm.create_chat_completion(
+    messages=[
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;请写一个合并两个已排序列表的Python函数。&quot;}
+    ]
+)
+print(response[&quot;choices&quot;][0][&quot;message&quot;][&quot;content&quot;])
+</code></pre>
+<h3>3.6 vLLM</h3>
+<pre><code class="language-bash">pip install vllm
+vllm serve &quot;GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF&quot;
+</code></pre>
+<p>OpenAI兼容API调用:</p>
+<pre><code class="language-bash">curl -X POST &quot;http://localhost:8000/v1/chat/completions&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  --data &#39;{
+    &quot;model&quot;: &quot;GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF&quot;,
+    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is the capital of France?&quot;}]
+  }&#39;
+</code></pre>
+<h3>3.7 Docker Model Runner</h3>
+<pre><code class="language-bash">docker model run hf.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF:Q4_K_M
+</code></pre>
+<h3>3.8 编码代理集成(Pi / Hermes / OpenClaw)</h3>
+<p>先将llama.cpp服务器作为后端启动,再将OpenAI兼容端点(<code>http://localhost:8080/v1</code>)注册为各代理的自定义提供商。这种方式适合用于本地编码代理的实验。</p>
+<hr>
+<h2>4. 推荐采样参数</h2>
+<p>继承自基础模型(MiniCPM5-1B)的默认生成参数。</p>
+<table>
+<thead>
+<tr>
+<th align="left">模式</th>
+<th align="left">参数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Think</strong>(默认)</td>
+<td align="left"><code>temperature=0.9</code>、<code>top_p=0.95</code></td>
+</tr>
+<tr>
+<td align="left"><strong>No Think</strong></td>
+<td align="left"><code>temperature=0.7</code>、<code>top_p=0.95</code>、<code>enable_thinking=False</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Think模式</strong>:在最终答案之前输出内部推理(reasoning)区块。适合复杂的编码/推理任务,但在集成到流水线中时,需要额外的后处理逻辑来解析并剔除推理区块。</li>
+<li><strong>No Think模式</strong>:无需推理过程即可立即给出答案。适合对延迟敏感的聊天机器人/分类任务。</li>
+</ul>
+<hr>
+<h2>5. 性能基准测试</h2>
+<p>V2版本在工具调用(Tool Calling)性能上有显著提升。(数据以模型作者公开的数值为准)</p>
+<table>
+<thead>
+<tr>
+<th align="left">模型</th>
+<th align="left">BFCL (non_live)</th>
+<th align="left">BFCL (live)</th>
+<th align="left">API-Bank</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">MiniCPM5-1B(基础版)</td>
+<td align="left">41.51%</td>
+<td align="left">60.24%</td>
+<td align="left">7.30%</td>
+</tr>
+<tr>
+<td align="left"><strong>V2 Thinking模型</strong></td>
+<td align="left"><strong>43.06%</strong></td>
+<td align="left"><strong>63.33%</strong></td>
+<td align="left"><strong>22.10%</strong></td>
+</tr>
+</tbody></table>
+<p>尤其是API-Bank分数从7.30%提升至22.10%,约提升了3倍,这体现了针对工具调用专项训练的效果。此外还单独提供了在工具使用方面更专精的衍生模型<code>MiniCPM5-Claude-Toolusage</code>。</p>
+<hr>
+<h2>6. 优点</h2>
+<ul>
+<li><strong>超轻量本地运行</strong>:最低仅需657MB(Q4_K_M),即可在纯CPU、树莓派级SBC甚至老旧笔记本上运行</li>
+<li><strong>128K长上下文</strong>:对于1B级模型而言,这是罕见的长上下文支持,可用于分析大型代码库和长篇文档</li>
+<li><strong>混合推理</strong>:可在Think/No Think模式间切换,针对不同任务在质量与速度之间做选择</li>
+<li><strong>工具调用能力增强</strong>:设计目标是在同级1B开源模型中实现工具调用(Tool Calling)性能的SOTA水平</li>
+<li><strong>广泛的运行环境兼容性</strong>:支持llama.cpp、Ollama、LM Studio、vLLM、Docker等几乎整个GGUF生态</li>
+<li><strong>Apache-2.0许可证</strong>:对商业使用和再分发的限制较少</li>
+<li><strong>内置模板</strong>:聊天模板已包含在GGUF文件中,无需额外配置即可立即使用</li>
+</ul>
+<hr>
+<h2>7. 缺点与局限</h2>
+<ul>
+<li><strong>1B规模的根本局限</strong>:在复杂通用推理、多步逻辑以及广博世界知识方面,与前沿级模型(GPT-4、Claude等)仍存在较大差距。现实的做法是将其用于特定任务(编码辅助、工具调用路由、分类),而非作为通用助手</li>
+<li><strong>Thinking模式的额外输出</strong>:由于推理区块会在最终答案之前输出,集成到应用程序时需要额外的解析逻辑。推理区块也会相应增加token消耗和延迟</li>
+<li><strong>实际可用上下文的限制</strong>:128K是理论上限,实际可用长度取决于运行环境和硬件(RAM/VRAM)。在低配环境下,8K左右的设置更为现实</li>
+<li><strong>量化敏感度</strong>:作为小型模型,在Q4以下量化时质量下降可能相对明显(这也是推荐使用Q8_0的原因)</li>
+<li><strong>语言覆盖范围</strong>:官方支持的语言以英语和中文为主。韩语性能需要单独验证</li>
+<li><strong>不支持推理服务提供商</strong>:目前尚未部署在HuggingFace Inference Providers上,因此无法以云端API形式使用(仅支持本地运行)</li>
+</ul>
+<hr>
+<h2>8. 应用场景建议</h2>
+<table>
+<thead>
+<tr>
+<th align="left">场景</th>
+<th align="left">推荐设置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">本地编码助手(离线)</td>
+<td align="left">Q8_0 + Think模式,llama-server + 编辑器集成</td>
+</tr>
+<tr>
+<td align="left">端侧工具调用路由器</td>
+<td align="left">Q8_0 + Think模式(利用BFCL/API-Bank的优势)</td>
+</tr>
+<tr>
+<td align="left">低延迟聊天机器人/分类器</td>
+<td align="left">Q5_K_M + No Think模式</td>
+</tr>
+<tr>
+<td align="left">大型文档/代码库摘要</td>
+<td align="left">F16或Q8_0 + 较长的<code>-c</code>设置(需确保内存充足)</td>
+</tr>
+<tr>
+<td align="left">边缘设备实验</td>
+<td align="left">Q4_K_M + 上下文4K以下</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. 参考链接</h2>
+<ul>
+<li>GGUF仓库:<a href="https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF">https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF</a></li>
+<li>Transformers检查点:<a href="https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking">https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking</a></li>
+<li>基础模型:<a href="https://huggingface.co/openbmb/MiniCPM5-1B">https://huggingface.co/openbmb/MiniCPM5-1B</a></li>
+<li>llama.cpp:<a href="https://github.com/ggml-org/llama.cpp">https://github.com/ggml-org/llama.cpp</a></li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_%20Minicpm5/Minicpm5%201b%20fable5%20thinking%20getting%20started_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

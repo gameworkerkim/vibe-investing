@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloudflare無料ティア登録ガイド — VibeQuant</title>
+  <meta name="description" content="Cloudflareの無料ティアへの登録手順、Workers・Workers KV・R2・Pagesの無料枠の実用的な見積もり、Azure Functions+Blob Storageからの段階的マイグレーション計画、初回セットアップ、そして運用上の4つの注意点をまとめたガイド。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide-ja/" />
+  <meta property="og:title" content="Cloudflare無料ティア登録ガイド" />
+  <meta property="og:description" content="Cloudflareの無料ティアへの登録手順、Workers・Workers KV・R2・Pagesの無料枠の実用的な見積もり、Azure Functions+Blob Storageからの段階的マイグレーション計画、初回セットアップ、そして運用上の4つの注意点をまとめたガイド。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Cloudflare無料ティア登録ガイド","description":"Cloudflareの無料ティアへの登録手順、Workers・Workers KV・R2・Pagesの無料枠の実用的な見積もり、Azure Functions+Blob Storageからの段階的マイグレーション計画、初回セットアップ、そして運用上の4つの注意点をまとめたガイド。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/cloudflare-cloudflare-free-tier-guide-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudFlare/Cloudflare%20free%20tier%20guide_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-05-12","dateModified":"2026-05-12","inLanguage":"ja","keywords":"Cloudflare, 無料ティア, Workers, R2, Pages, Azure移行"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 클라우드 · Free tier</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · Free tier</p>
+        <h1>Cloudflare無料ティア登録ガイド</h1>
+        <p class="article-dates"><time datetime="2026-05-12">발행 2026.05.12</time> · 주제 Cloudflare · 無料ティア · Workers · R2 · Pages · Azure移行</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/cloudflare-cloudflare-free-tier-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/cloudflare-cloudflare-free-tier-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/cloudflare-cloudflare-free-tier-guide-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/cloudflare-cloudflare-free-tier-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Cloudflareの無料ティアへの登録手順、Workers・Workers KV・R2・Pagesの無料枠の実用的な見積もり、Azure Functions+Blob Storageからの段階的マイグレーション計画、初回セットアップ、そして運用上の4つの注意点をまとめたガイド。</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>Azure→Cloudflareへの移行という観点で執筆。Azure Functions+Blob Storageの既存アーキテクチャのマイグレーション検討用。</p>
+</blockquote>
+<hr>
+<h2>1. 登録手順 — 3分で完了</h2>
+<h3>Step 1. アカウント作成</h3>
+<ol>
+<li><a href="https://dash.cloudflare.com/sign-up">https://dash.cloudflare.com/sign-up</a> にアクセス</li>
+<li>メールアドレス+パスワードを入力(またはGitHub SSOも可)</li>
+<li>メール認証(スパムフォルダも確認)</li>
+</ol>
+<p>クレジットカードの入力は不要。Workers/Pages/R2/KVの無料ティアはすべてクレジットカードなしで即座に利用可能。</p>
+<h3>Step 2. ドメインの追加(任意)</h3>
+<p>既存のドメインがある場合:</p>
+<ol>
+<li>Dashboard → Add a Site</li>
+<li>ドメインを入力 → Freeプランを選択</li>
+<li>ネームサーバーの変更(ドメイン登録業者側でCloudflareのns1/ns2に変更)</li>
+</ol>
+<p>既存ドメインがなければスキップしてよい。<code>*.workers.dev</code>または<code>*.pages.dev</code>のサブドメインを利用できる。</p>
+<h3>Step 3. 2FAの有効化(強く推奨)</h3>
+<ol>
+<li>My Profile → Authentication</li>
+<li>Two-factor Authentication → Enable</li>
+<li>Google AuthenticatorまたはAuthyで登録</li>
+</ol>
+<p>Cloudflareアカウントが乗っ取られると全サービスに影響する。2FAはオプションではなく必須である。</p>
+<hr>
+<h2>2. 無料枠 — アプリ観点での見積もり</h2>
+<h3>Workers(サーバーレス関数)</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>無料枠</th>
+<th>見積もり使用量(DAU 1,000)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Requests</td>
+<td>10万/日</td>
+<td>DAU 1,000 × 100 req = 10万(限界に近い)</td>
+</tr>
+<tr>
+<td>Request当たりCPU時間</td>
+<td>10ms</td>
+<td>LLM呼び出しはwait時間(CPU時間ではない)、安全</td>
+</tr>
+<tr>
+<td>Subrequests</td>
+<td>50/呼び出し</td>
+<td>十分</td>
+</tr>
+<tr>
+<td>Scriptサイズ</td>
+<td>1 MB</td>
+<td>十分</td>
+</tr>
+</tbody></table>
+<p>DAU 1,000までは無料で可能。DAU 5,000+ではWorkers Paid($5/月)への移行が必要。</p>
+<h3>Workers KV(キーバリューキャッシュ)</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>無料枠</th>
+<th>アプリ使用量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reads</td>
+<td>10万/日</td>
+<td>cache hit率80% × DAU 1,000 × 100 req = 8万(安全)</td>
+</tr>
+<tr>
+<td>Writes</td>
+<td>1,000/日</td>
+<td>LLM応答の新規キャッシング時に使用</td>
+</tr>
+<tr>
+<td>Deletes</td>
+<td>1,000/日</td>
+<td>十分</td>
+</tr>
+<tr>
+<td>List</td>
+<td>1,000/日</td>
+<td>ほとんど使用しない</td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>1 GB</td>
+<td>text-onlyキャッシュなら十分</td>
+</tr>
+<tr>
+<td>Value size limit</td>
+<td>25 MB/key</td>
+<td>LLM応答1件は数KB、十分</td>
+</tr>
+</tbody></table>
+<p>cache hit率80%で運用すれば完全に無料枠内に収まる。</p>
+<h3>R2(オブジェクトストレージ、Azure Blobの代替)</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>無料枠</th>
+<th>アプリ使用量</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Storage</td>
+<td>10 GB</td>
+<td>Azure Blob現在の使用量は1 GB未満と推定</td>
+</tr>
+<tr>
+<td>Class A operations(writes)</td>
+<td>100万/月</td>
+<td>十分</td>
+</tr>
+<tr>
+<td>Class B operations(reads)</td>
+<td>1,000万/月</td>
+<td>非常に十分</td>
+</tr>
+<tr>
+<td>Egress(帯域幅)</td>
+<td>無制限・無料</td>
+<td>決定的な差別化要素</td>
+</tr>
+</tbody></table>
+<p>egress無料がR2の最大の利点。Azure Blobのegress課金負担が消える。</p>
+<h3>Pages(静的サイト)</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>無料枠</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Bandwidth</td>
+<td>無制限</td>
+</tr>
+<tr>
+<td>Builds</td>
+<td>500/月</td>
+</tr>
+<tr>
+<td>Concurrent builds</td>
+<td>1</td>
+</tr>
+<tr>
+<td>Custom domains</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Sites</td>
+<td>無制限</td>
+</tr>
+</tbody></table>
+<p>フロントエンドホスティングには完全に十分。Azure Static Web Appsと同等。</p>
+<h3>Workers AI(任意利用)</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>無料枠</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Neurons</td>
+<td>1万/日(≈5,000-10,000リクエスト)</td>
+</tr>
+<tr>
+<td>Models</td>
+<td>Llama 3.x、DeepSeekなど</td>
+</tr>
+</tbody></table>
+<p>DeepSeek APIを直接利用しているなら不要。ただし代替LLMのバックアップとしては有用。</p>
+<h3>リセットのタイミング</h3>
+<p>すべての無料枠のリセット: 毎日UTC 00:00(韓国時間09:00)</p>
+<hr>
+<h2>3. 推奨マイグレーション段階</h2>
+<h3>Phase 1. 静的アセットのみ(低リスク、2-3時間)</h3>
+<pre><code>Azure Static Web Apps -&gt; Cloudflare Pages
+- フロントエンド(HTML/CSS/JS)をPagesにデプロイ
+- LLM呼び出しはAzure Functionsのまま維持
+- 変更点: フロントエンドのAPIエンドポイントURLのみ更新
+</code></pre>
+<ul>
+<li>リスク: 非常に低い(フロントエンドのみ移動)</li>
+<li>効果: 韓国ユーザーの初回ページロードが50-100ms短縮</li>
+</ul>
+<h3>Phase 2. BlobをR2へマイグレーション(ローンチ後に推奨)</h3>
+<pre><code>Azure Blob Storage -&gt; Cloudflare R2
+- Super SlurperまたはSippyで自動マイグレーション
+- S3互換APIのためコード変更は最小限
+- egressコストの節約効果が大きい
+</code></pre>
+<ul>
+<li>リスク: 中程度(URL構造の変更)</li>
+<li>効果: egressの無料化+edgeキャッシュの強化</li>
+</ul>
+<h3>Phase 3. 関数をWorkersへ移動(ローンチ14日後に検討)</h3>
+<pre><code>Azure Functions (Python) -&gt; Cloudflare Workers (JS/TS or Python WASM)
+- DeepSeek API呼び出しをfetch()で再実装
+- 4-tierキャッシュをWorkers KV + Cache APIで再設計
+</code></pre>
+<ul>
+<li>リスク: 高い(ランタイム環境が異なる)</li>
+<li>効果: コールドスタートが解消、edgeレイテンシがさらに短縮</li>
+<li>推奨タイミング: ローンチ+14日間のburn-inデータを踏まえた後</li>
+</ul>
+<hr>
+<h2>4. 登録後の初回セットアップ — 5分</h2>
+<h3>Wrangler CLIのインストール</h3>
+<pre><code class="language-bash"># Node.js 18+が必要
+npm install -g wrangler
+
+# ログイン(ブラウザ認証)
+wrangler login
+
+# 確認
+wrangler whoami
+</code></pre>
+<h3>Pagesの初回デプロイ(静的サイトのテスト)</h3>
+<pre><code class="language-bash"># Git連携
+# Dashboard -&gt; Pages -&gt; Connect to Git
+# GitHubリポジトリを連携 -&gt; mainブランチで自動ビルド
+
+# または直接デプロイ
+wrangler pages deploy ./build --project-name=my-test
+</code></pre>
+<p>デプロイ後: <code>https://my-test.pages.dev</code></p>
+<h3>R2バケットの初回作成</h3>
+<pre><code class="language-bash"># 無料枠内でバケットを作成
+wrangler r2 bucket create my-blob
+
+# ファイルアップロードのテスト
+wrangler r2 object put my-blob/test.txt --file ./test.txt
+</code></pre>
+<hr>
+<h2>5. 4つの注意点</h2>
+<h3>注意1. WorkersのPythonサポートは限定的</h3>
+<pre><code>サポート対象: Pyodideベースのwasm(限定的なstdlib)
+非サポート: native C依存パッケージ(numpyの一部、asyncioなど)
+</code></pre>
+<p>自分のアプリコードがどのPythonパッケージに依存しているか確認する必要がある。純粋なPython+fetchであれば移植可能、複雑な依存関係があればJavaScript/TypeScriptへの再実装が必要。</p>
+<h3>注意2. KVのconsistencyはeventual(結果整合性)</h3>
+<pre><code>KVへの書き込み -&gt; 他のedge locationからは最大60秒後に読み取り可能
+即時整合性が必要なデータ(例: ユーザーセッション)には不適合
+</code></pre>
+<p>ユーザーセッションのようなstrong consistencyが必要なデータにはDurable Objectsを使用する(Workers Paid $5/月が必要)。</p>
+<h3>注意3. 無料枠の日次リセットのリスク</h3>
+<pre><code>Workers requests 10万/日 = 時間当たり平均4,166 req
+peak hour(例: 米国市場終了直後の韓国時間22:30)に時間当たり10K req発生した場合
+-&gt; 10万の上限が午後に消耗
+-&gt; 次のUTC 00:00(韓国時間09:00)までサービス停止
+</code></pre>
+<p>peak hourの監視は必須。ユーザー1,000人に達した時点でWorkers Paid($5/月)への移行を推奨。</p>
+<h3>注意4. DeepSeek API呼び出しのレイテンシがボトルネック</h3>
+<pre><code>Cloudflare edge: 10-50ms
+DeepSeek API: 2,000-8,000ms(LLM推論)
+ユーザー体感latency: 95%以上がLLM呼び出し
+</code></pre>
+<p>Cloudflareマイグレーションの体感効果はfirst-page-loadに集中する。LLM応答時間そのものは変わらない。マイグレーションのROI計算時には正直に反映する必要がある。</p>
+<hr>
+<h2>参考資料</h2>
+<ul>
+<li>登録: <a href="https://dash.cloudflare.com/sign-up">https://dash.cloudflare.com/sign-up</a></li>
+<li>Workers無料枠: <a href="https://developers.cloudflare.com/workers/platform/pricing/">https://developers.cloudflare.com/workers/platform/pricing/</a></li>
+<li>R2無料枠: <a href="https://developers.cloudflare.com/r2/pricing/">https://developers.cloudflare.com/r2/pricing/</a></li>
+<li>KV無料枠: <a href="https://developers.cloudflare.com/kv/platform/pricing/">https://developers.cloudflare.com/kv/platform/pricing/</a></li>
+<li>Pages無料枠: <a href="https://www.cloudflare.com/plans/developer-platform/">https://www.cloudflare.com/plans/developer-platform/</a></li>
+<li>Wrangler CLI: <a href="https://developers.cloudflare.com/workers/wrangler/">https://developers.cloudflare.com/workers/wrangler/</a></li>
+<li>Super Slurper(S3 -&gt; R2マイグレーション): <a href="https://developers.cloudflare.com/r2/data-migration/super-slurper/">https://developers.cloudflare.com/r2/data-migration/super-slurper/</a></li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudFlare/Cloudflare%20free%20tier%20guide_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

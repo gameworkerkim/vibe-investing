@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Qwenローカルインストールガイド&amp;注意事項(改訂版) — VibeQuant</title>
+  <meta name="description" content="Ollama・LM Studio・Hugging Face Transformersを使ったQwenのローカルインストールを解説するファクトチェック済みガイド。Qwen3/Qwen3.5/Qwen3.6ラインアップのハードウェア別表を収録。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde-ja/" />
+  <meta property="og:title" content="Qwenローカルインストールガイド&amp;注意事項(改訂版)" />
+  <meta property="og:description" content="Ollama・LM Studio・Hugging Face Transformersを使ったQwenのローカルインストールを解説するファクトチェック済みガイド。Qwen3/Qwen3.5/Qwen3.6ラインアップのハードウェア別表を収録。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Qwenローカルインストールガイド&注意事項(改訂版)","description":"Ollama・LM Studio・Hugging Face Transformersを使ったQwenのローカルインストールを解説するファクトチェック済みガイド。Qwen3/Qwen3.5/Qwen3.6ラインアップのハードウェア別表を収録。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Local_LLM/Qwen_Local_Install_guilde_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-30","dateModified":"2026-06-30","inLanguage":"ja","keywords":"LLM · 에이전트, Local_LLM"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Qwenローカルインストールガイド&amp;注意事項(改訂版)</h1>
+        <p class="article-dates"><time datetime="2026-06-30">발행 2026.06.30</time> · 주제 LLM · 에이전트 · Local_LLM</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/local-llm-qwen-local-install-guilde/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/local-llm-qwen-local-install-guilde-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/local-llm-qwen-local-install-guilde-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/local-llm-qwen-local-install-guilde-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Ollama・LM Studio・Hugging Face Transformersを使ったQwenのローカルインストールを解説するファクトチェック済みガイド。Qwen3/Qwen3.5/Qwen3.6ラインアップのハードウェア別表を収録。</p>
+        
+      </header>
+      <div class="article-body prose"><h2>Qwen概要</h2>
+<p>Qwen(中国語: 千問、「チュエン」と発音)はアリババグループが開発した大規模言語モデル(LLM)および大規模マルチモーダルモデルの製品群である。初版は2023年4月にベータ形式で公開され、現在では世界最大級のオープンソースAIエコシステムの一つに成長した。2026年3月、アリババはAIブランドを「Qwen大規模モデル」に統一し、以前の混乱を解消した。</p>
+<h2>主要機能</h2>
+<p>Qwenは様々なマルチモーダル・言語タスクを実行できる。</p>
+<p>自然言語理解およびテキスト生成</p>
+<p>視覚理解(画像、動画)</p>
+<p>音声理解および処理</p>
+<p>ツール呼び出しおよびAIエージェント機能</p>
+<p>ロールプレイおよび複数ターンの対話</p>
+<p>モデルは大規模な多言語・マルチモーダルデータで事前訓練され、高品質データで微調整することで人間の選好に合致するよう設計されている。</p>
+<h2>技術構造と特徴</h2>
+<p>デュアルモードアーキテクチャ(思考モード/非思考モード)
+Qwen3の核心的な革新は、一つのモデルに「思考モード」と「非思考モード」を同時に搭載して効率を高めたことである。</p>
+<table>
+<thead>
+<tr>
+<th>モード</th>
+<th>適用状況</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>思考モード</td>
+<td>複雑な論理推論、数学、プログラミングなど深い思考が必要な作業</td>
+</tr>
+<tr>
+<td>非思考モード</td>
+<td>高速な応答が必要な一般対話</td>
+</tr>
+</tbody></table>
+<p>モデルは「思考予算(thinking budget)」メカニズムを通じて問題の複雑さを動的に評価し、計算資源を自動配分する。</p>
+<p>モデル構造
+DenseモデルとMoE(Mixture of Experts)モデルが並存し、0.6Bから235Bまで様々な規模を提供する。</p>
+<p>Qwen3-Nextは高疎度MoEアーキテクチャを採用: 総パラメータ800億、推論時には約30億パラメータ(約3.75%)のみを活性化して効率性を大幅に向上させている。</p>
+<p>Qwen3-Maxは総パラメータ1兆(1T)以上、事前訓練に36Tトークンを使用。</p>
+<p>訓練戦略
+3段階の事前訓練: 言語基盤の構築 → 推論能力の強化 → 長文テキスト能力の拡張</p>
+<p>4段階の事後訓練: 長い思考連鎖のコールドスタート、推論強化学習、モード融合などを含む</p>
+<p>「大モデルが小モデルを育成する」蒸留方式: 大モデルのデータで小モデルを訓練</p>
+<h2>主要バージョンとモデル</h2>
+<p>Qwen 3.5
+2026年2月 - フラッグシップモデル
+総397B(アクティブ17B)
+262Kネイティブコンテキスト(1Mまで拡張可能)
+201言語対応、Apache 2.0オープンソース</p>
+<p>Qwen3.7-Max
+2026年5月 - エージェント特化
+35時間以上の超長期複雑タスクを完全自律で実行可能</p>
+<p>Qwen3-Max
+2025年9月 - 総パラメータ1T以上、LMArenaランキング世界3位</p>
+<p>オープンソースモデルはQwen、Qwen1.5、Qwen2、Qwen2.5シリーズなどがあり、0.5B~110Bまで様々。また専用のビジョン言語モデル(Qwen-VL)、音声モデル(Qwen-Audio)、コードモデル(Qwen-Coder)、推論モデル(QwQ)などが存在する。</p>
+<h1>適用分野</h1>
+<p>Qwenは様々な分野で活用可能である。</p>
+<p>ソフトウェア開発: コード生成、デバッグ、レビュー、50以上のプログラミング言語をサポート</p>
+<p>コンテンツ制作: 長文作成、SEO、ソーシャルメディア、翻訳(201言語)</p>
+<p>研究およびデータ分析: 文献レビュー、チャート解釈、科学的推論、医療分析</p>
+<p>企業業務: カスタマーサービスチャットボット、文書処理、ナレッジベース質疑応答</p>
+<p>ベンチマークテストでQwen 3.5はSWE-Bench Verifiedで76.4点を記録し、GPT-5.2およびClaude Opus 4.5と同等の水準である。</p>
+<h2>使用方法</h2>
+<p>オープンソースモデル: Apache 2.0ライセンスで無料使用可能、Ollama、llama.cpp、LM Studioなどでのローカル実行をサポート</p>
+<p>APIサービス: アリババクラウドのDashScope APIを通じて呼び出し</p>
+<p>無料体験: Qwen Chat公式ウェブサイト(chat.qwen.ai)で対話可能</p>
+<p>企業サービス: 全世界29万社以上の企業顧客に提供</p>
+<hr>
+<h2>0. まず知っておくべきバージョン整理(文書アップデート)</h2>
+<p>原文は<code>qwen2.5</code>/<code>qwen3</code>/散発的な<code>qwen3.5:4b</code>のみを扱っていたが、2026年6月時点のラインアップは以下のように拡張されている。</p>
+<table>
+<thead>
+<tr>
+<th>世代</th>
+<th>リリース</th>
+<th>構成</th>
+<th>マルチモーダル</th>
+<th>対応言語</th>
+<th>ライセンス</th>
+<th>ローカル可否</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Qwen3</td>
+<td>2025-04</td>
+<td>dense 0.6B~32B + MoE 30B-A3B、235B-A22B</td>
+<td>テキスト</td>
+<td>119</td>
+<td>Apache-2.0</td>
+<td>可 [R2][R7]</td>
+</tr>
+<tr>
+<td>Qwen3.5</td>
+<td>2026-02</td>
+<td>Small 0.8B/2B/4B/9B + 27B / 35B-A3B / 122B-A10B / 397B-A17B</td>
+<td>ビジョン(ネイティブ)</td>
+<td>201</td>
+<td>Apache-2.0</td>
+<td>可 [R1][R9]</td>
+</tr>
+<tr>
+<td>Qwen3.6</td>
+<td>2026-04~05</td>
+<td>27B(dense) / 35B-A3B(MoE)、コーディング・エージェント強化</td>
+<td>ビジョン</td>
+<td>-</td>
+<td>Apache-2.0</td>
+<td>可 [R11][R12]</td>
+</tr>
+<tr>
+<td>Qwen3.7-Max</td>
+<td>2026-05-20</td>
+<td>独占API専用、オープンウェイト未公開</td>
+<td>-</td>
+<td>-</td>
+<td>非公開</td>
+<td><strong>不可(ローカル実行不可)</strong> [R7]</td>
+</tr>
+</tbody></table>
+<p>注意:</p>
+<ul>
+<li>本ガイドは<strong>オープンウェイトモデルのみ</strong>を対象とする。<code>*-Max</code>、<code>*-Plus</code>などAPI専用モデルはローカルインストールの対象外である。[R7][R12]</li>
+<li>2025年7~8月の「2507」リフレッシュで、Qwen3はハイブリッド(トグル)方式から<strong>thinking/instruct分離チェックポイント</strong>に分かれた。ダウンロード時にどの変種かを確認すること。[R7]</li>
+</ul>
+<hr>
+<h2>1. インストール方法の選択</h2>
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>特徴</th>
+<th>推奨対象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ollama</td>
+<td>コマンド一行でインストール/実行、最も簡単</td>
+<td>LLM初心者、迅速なテスト</td>
+</tr>
+<tr>
+<td>LM Studio</td>
+<td>GUIベース、数クリックで完了。MLX・GGUF対応</td>
+<td>コーディングなしで使いたい方</td>
+</tr>
+<tr>
+<td>Hugging Face Transformers</td>
+<td>Pythonコードで細部まで制御</td>
+<td>開発者、カスタマイズ</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Ollamaのインストール(最も簡単)</h2>
+<h3>2.1 Ollamaのインストール [R8]</h3>
+<p>Windows</p>
+<pre><code class="language-powershell">irm https://ollama.com/install.ps1 | iex
+</code></pre>
+<p>または公式サイト(ollama.com)からインストーラーをダウンロード。</p>
+<p>macOS</p>
+<pre><code class="language-bash">brew install ollama
+</code></pre>
+<p>Linux</p>
+<pre><code class="language-bash">curl -fsSL https://ollama.com/install.sh | sh
+</code></pre>
+<h3>2.2 実行</h3>
+<pre><code class="language-bash">ollama serve   # 手動起動(通常はインストール後に自動実行)
+</code></pre>
+<h3>2.3 モデルのダウンロードと実行 [R8][R16]</h3>
+<pre><code class="language-bash"># 現行推奨 - Qwen3系列
+ollama run qwen3:8b            # 基本/入門、約5GB
+ollama run qwen3:4b            # 軽量
+ollama run qwen3:14b           # 約9GB
+ollama run qwen3:32b           # dense上位
+ollama run qwen3:30b-a3b       # MoE: 30B品質・8B級速度(VRAMは全体分必要)
+
+# Qwen3.5系列(マルチモーダル)
+ollama run qwen3.5:9b          # 8GBカード推奨のデフォルト、約6.6GB
+ollama run qwen3.5:4b          # 軽量、約3.4GB(ファイル)
+
+# 旧バージョン
+ollama run qwen2.5:7b
+</code></pre>
+<p>利用可能なサイズ(例): qwen2.5 0.5/1.5/3/7/14/32/72B、qwen3 0.6~32B + 30B-A3B/235B-A22B、qwen3.5 0.8/2/4/9/27/35/122/397B系列。[R1][R2][R10]</p>
+<p>注意:</p>
+<ul>
+<li>Ollamaのタグに<code>instruct</code>がなくてもchat用モデルである場合が多いが、Qwen3 2507以降はthinking/instruct変種が別々に配布されるため、<strong>タグを直接確認</strong>すること。(原文の「全てInstruct」という断定は現行基準では不正確) [R7]</li>
+<li><code>qwen3.5:4b</code>の「3.4GB」は<strong>GGUFファイルサイズ</strong>であり、実行時のRAMではない。実際にはKVキャッシュとcontextオーバーヘッドを加算する必要がある。[R7][R14]</li>
+</ul>
+<h3>2.4 独自のGGUFファイルを使用(Modelfile) [R8]</h3>
+<pre><code class="language-text">FROM qwen2.5-7b-instruct-q5_0.gguf
+PARAMETER temperature 0.7
+PARAMETER top_p 0.8
+PARAMETER repeat_penalty 1.05
+PARAMETER top_k 20
+</code></pre>
+<pre><code class="language-bash">ollama create my-qwen -f Modelfile
+ollama run my-qwen
+</code></pre>
+<p>注意: Qwen3.5のような<strong>マルチモーダルGGUFはビジョン(mmproj)ファイル分離</strong>の問題でOllamaへの直接インポートが制限される場合がある。この場合はllama.cpp系バックエンドまたはLM Studioを推奨する。(Ollamaライブラリタグで取得する場合は正常に動作する。) [R9]</p>
+<hr>
+<h2>3. LM Studioのインストール(GUI)</h2>
+<ol>
+<li>公式サイトからmacOS/Windows/Linux用インストーラーをダウンロードしてインストール。</li>
+<li>アプリを起動 → <code>Cmd+Shift+M</code>(Mac)/<code>Ctrl+Shift+M</code>(PC)でモデルを検索。</li>
+<li>「Qwen」を検索 → ハードウェアに合ったモデルをダウンロード。</li>
+<li>Hugging Faceのモデルカードの「Use this model → LM Studio」から直接連携可能。</li>
+<li>マルチモーダル/Thinkingトグルはモデルごとのyaml設定が必要な場合があり、CLIで<code>lms import &lt;パス&gt;</code>による手動インポートもサポートされている。[R9]</li>
+</ol>
+<p>Apple Siliconでは<strong>MLXフォーマット</strong>に対応したLM Studioを使用すると性能面で大きな利点がある。[R9][R11]</p>
+<hr>
+<h2>4. Hugging Face Transformers(開発者向け)</h2>
+<h3>4.1 事前準備</h3>
+<pre><code class="language-bash">pip install transformers torch accelerate
+pip install modelscope   # 中国地域からのダウンロードが高速
+</code></pre>
+<h3>4.2 ロードと実行</h3>
+<pre><code class="language-python">from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model_name = &quot;Qwen/Qwen3-30B-A3B&quot;   # またはQwen/Qwen3-8Bなど
+
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+model = AutoModelForCausalLM.from_pretrained(
+    model_name,
+    torch_dtype=&quot;auto&quot;,
+    device_map=&quot;auto&quot;,   # GPU/CPU自動割り当て、不足時はCPUオフロード
+)
+
+messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Qwen、日本語で自己紹介してください。&quot;}]
+text = tokenizer.apply_chat_template(
+    messages,
+    tokenize=False,
+    add_generation_prompt=True,
+    enable_thinking=True,   # 思考モード(Qwen3以上)
+)
+
+outputs = model.generate(
+    **tokenizer([text], return_tensors=&quot;pt&quot;).to(model.device),
+    max_new_tokens=200,
+)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+</code></pre>
+<p><code>enable_thinking=True</code>は複雑な推論に有利だが応答が遅くなる。日常会話には<code>False</code>を推奨する。[R2][R8]</p>
+<p>インストール前のVRAM適合性チェックのヒント - ダウンロードせずヘッダーのみ読み取ってメモリを推定: [R18]</p>
+<pre><code class="language-bash">uvx hf-mem --model-id Qwen/Qwen3-8B --experimental --max-model-len 8192
+</code></pre>
+<hr>
+<h2>5. モデル選択ガイド(ハードウェア別・Q4_K_M基準)</h2>
+<p>VRAM数値はQ4_K_M GGUF基準であり、4Kコンテキストの KVキャッシュとして<strong>+1<del>2GB</strong>を加算すること。VRAM不足時はOllama/llama.cppがシステムRAMに自動オフロードするが、速度が大幅に低下する(10</del>20倍遅いメモリ帯域幅)。[R13][R18]</p>
+<table>
+<thead>
+<tr>
+<th>ハードウェア</th>
+<th>推奨モデル</th>
+<th>大まかなVRAM/RAM</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>旧型ノートPC(RAM 4~8GB)</td>
+<td>qwen3.5:4b / qwen2.5:3b</td>
+<td>3~4GB(ファイル)</td>
+<td>CPU-only可能、低速</td>
+</tr>
+<tr>
+<td>一般デスクトップ(RAM 16GB)</td>
+<td>qwen3:8b / qwen3.5:9b</td>
+<td>約5~6.6GB</td>
+<td>CPU-only可能 [R13][R14]</td>
+</tr>
+<tr>
+<td>GPU VRAM 8GB</td>
+<td>qwen3.5:9b(Q4) / qwen3:7~8b</td>
+<td>約5.5~6.6GB</td>
+<td>RTX 3060/4060級 [R13][R14]</td>
+</tr>
+<tr>
+<td>GPU VRAM 12GB</td>
+<td>qwen3:14b(Q4)</td>
+<td>約9~9.5GB</td>
+<td>Q6_Kの余裕あり [R13][R14]</td>
+</tr>
+<tr>
+<td>GPU VRAM 16~24GB</td>
+<td>qwen3:32b / qwen3.6:27b(約17GB)</td>
+<td>17~20GB</td>
+<td>24GBでQ4_K_Mが快適 [R12][R14]</td>
+</tr>
+<tr>
+<td>GPU VRAM 24GB</td>
+<td>qwen3.6:35b-a3b(UD-Q4約22GB)</td>
+<td>約22GB</td>
+<td>contextを過剰に設定しないこと [R12][R14]</td>
+</tr>
+<tr>
+<td>マルチGPU/サーバー</td>
+<td>qwen2.5:72b / 235B-A22B / 397B-A17B</td>
+<td>数十~数百GB</td>
+<td>tensor-parallelが必要 [R16][R19]</td>
+</tr>
+</tbody></table>
+<p>MoEの落とし穴: <code>30B-A3B</code>、<code>35B-A3B</code>、<code>80B-A3B</code>などは<strong>アクティブパラメータが3Bであっても全体のウェイトをVRAMに読み込む</strong>必要がある。「アクティブ3B=メモリ3B」ではない。例: Qwen3-Next-80B-A3Bは非量子化時に約160GBのVRAMが必要。[R14][R19]</p>
+<hr>
+<h2>6. 注意事項とヒント</h2>
+<h3>6.1 ストレージ容量</h3>
+<ul>
+<li>7B ≈ 5GB、14B ≈ 9GB、27B ≈ 17GB、32B ≈ 20GB、35B-A3B ≈ 22GB(Q4基準)。[R13][R14]</li>
+<li>Ollamaのデフォルト保存パス: <code>~/.ollama/models</code>。空き容量を確保すること。[R8]</li>
+</ul>
+<h3>6.2 量子化(Quantization) [R13][R16][R18]</h3>
+<ul>
+<li>Q4_K_M: 大部分のデフォルト値。VRAM約75%削減、品質損失は最小限。</li>
+<li>Q5_K_M: ~60%削減、Q4よりやや高品質。</li>
+<li>Q8_0: 最高品質の量子化。VRAMに余裕がある場合。</li>
+<li>NVFP4: Blackwell(RTX 5060 Ti/5090)ネイティブ、Q4より効率的。</li>
+<li>明示指定の例: <code>ollama run qwen3:8b-q4_K_M</code></li>
+<li>警告: <strong>Q2_Kは日本語/中国語/韓国語などCJK出力品質が目に見えて低下する。</strong> CJK作業ではQ4_K_Mを最低ラインとすること。[R13]</li>
+</ul>
+<h3>6.3 GPU使用</h3>
+<ul>
+<li>NVIDIA: CUDAドライバーが必要。</li>
+<li>Apple Silicon(M1~M4): 統合メモリが大型モデルに有利。MLXフォーマット+LM Studioを推奨。(例: M3 Max 64GBでqwen3:32bが約22 tok/s) [R13]</li>
+<li>VRAM不足時は<code>device_map=&quot;auto&quot;</code>でCPUオフロードされるが、10~20%を超えると体感速度が急落する - より小型のモデルを推奨。[R18]</li>
+</ul>
+<h3>6.4 日本語での利用</h3>
+<ul>
+<li>Qwen3系列は119言語、Qwen3.5以降は201言語をサポート。日本語性能は優秀で、日本語プロンプトをそのまま使用可能。[R2][R9]</li>
+</ul>
+<h3>6.5 Thinking Mode(Qwen3以上)</h3>
+<ul>
+<li>CLI: <code>ollama run qwen3 --think</code> / <code>--no-think</code> [R8]</li>
+<li>API: <code>{&quot;model&quot;:&quot;qwen3&quot;,&quot;think&quot;:false,...}</code>または<code>{&quot;thinking&quot;:{&quot;budget_tokens&quot;:1024}}</code>で推論予算の上限を設定 [R8]</li>
+<li>プロンプト内での<code>/think</code>、<code>/no_think</code>トグルも一部の変種でサポートされている。</li>
+<li>推奨: 要約・ドラフトはno-think、コードデバッグ・数学・論理はthink。</li>
+</ul>
+<h3>6.6 Context/KVキャッシュの注意(原文の不足を補完)</h3>
+<ul>
+<li>Qwen3.5/3.6はネイティブ256K(262,144)コンテキスト、YaRNで~1Mまで拡張可能。[R12][R17]</li>
+<li>contextを長く設定するほどKVキャッシュがVRAMを大きく消費する。「最小VRAM」表は短・中コンテキスト基準であり、128K~256Kを実際に使う場合は大幅な余裕を確保する必要がある。[R12]</li>
+</ul>
+<h3>6.7 ネットワーク</h3>
+<ul>
+<li>初回ダウンロード時はインターネットが必要(数GB~数十GB)。以降は完全オフラインで使用可能。[R8]</li>
+</ul>
+<h3>6.8 ライセンス</h3>
+<ul>
+<li>Qwen3/3.5/3.6のオープンウェイトはApache-2.0であり、商用利用が可能。(ただし<code>*-Max</code> APIモデルは別途規約がある) [R7]</li>
+</ul>
+<hr>
+<h2>7. トラブルシューティング</h2>
+<table>
+<thead>
+<tr>
+<th>問題</th>
+<th>解決方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>「CUDA out of memory」</td>
+<td>より小さいモデル、より低い量子化(Q4→Q3)、またはcontextの縮小 [R12][R14]</td>
+</tr>
+<tr>
+<td>Ollamaがモデルを見つけられない</td>
+<td><code>ollama pull qwen3:8b</code>で明示的にダウンロード [R8]</td>
+</tr>
+<tr>
+<td>応答が遅すぎる</td>
+<td>CPU-onlyなら小型モデル(0.6<del>4B)、またはオフロード率を確認(&gt;10</del>20%はGPU不足) [R18]</td>
+</tr>
+<tr>
+<td>LM Studioでモデルが表示されない</td>
+<td><code>lms import &lt;モデルパス&gt;</code>で手動インポート [R9]</td>
+</tr>
+<tr>
+<td>マルチモーダルGGUFがOllamaで壊れる</td>
+<td>mmproj分離の問題 - llama.cpp/LM Studioを使用 [R9]</td>
+</tr>
+<tr>
+<td>ダウンロード前のVRAM適合性確認</td>
+<td><code>uvx hf-mem --model-id &lt;repo&gt; --experimental</code> [R18]</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>参考文献(References)</h2>
+<ul>
+<li>[R1] Ollama Library - qwen3.5(タグ、サイズ/マルチモーダル/256Kコンテキスト)。<a href="https://ollama.com/library/qwen3.5">https://ollama.com/library/qwen3.5</a></li>
+<li>[R2] Ollama Library - qwen3(dense+MoE、thinkingフレームワーク)。<a href="https://ollama.com/library/qwen3">https://ollama.com/library/qwen3</a></li>
+<li>[R7] Local AI Master, &quot;How to Run Qwen3 Locally (2026): Setup Guide&quot; - 8モデル構成、119言語、2507分離、Qwen3.7-Max API専用の明示。<a href="https://localaimaster.com/blog/qwen-3-local-setup-guide">https://localaimaster.com/blog/qwen-3-local-setup-guide</a></li>
+<li>[R8] Serverman, &quot;Run Qwen3 on Ollama: All Sizes and Hardware Guide&quot; - インストール/実行、--thinkトグル、KV/予算。<a href="https://www.serverman.co.uk/ai/ollama/how-to-run-qwen3-on-ollama/">https://www.serverman.co.uk/ai/ollama/how-to-run-qwen3-on-ollama/</a></li>
+<li>[R9] Unsloth Docs, &quot;Qwen3.5 - How to Run Locally&quot; - Small/大型構成、Ollama GGUF mmproj制限、LM Studio yamlトグル。<a href="https://unsloth.ai/docs/models/qwen3.5">https://unsloth.ai/docs/models/qwen3.5</a></li>
+<li>[R10] Ollama Library - qwen3.5 Tags(0.8b~122bサイズ/容量)。<a href="https://ollama.com/library/qwen3.5/tags">https://ollama.com/library/qwen3.5/tags</a></li>
+<li>[R11] Ollama Library - qwen3.6(27B/35B、MLX、コーディング強化)。<a href="https://ollama.com/library/qwen3.6">https://ollama.com/library/qwen3.6</a></li>
+<li>[R12] knightli, &quot;Qwen3.6 VRAM Table&quot; - 27B≈17GB、35B-A3B≈22GB(UD-Q4)、context/KVの注意。<a href="https://knightli.com/en/2026/05/01/qwen3-6-local-vram-quantization-table/">https://knightli.com/en/2026/05/01/qwen3-6-local-vram-quantization-table/</a></li>
+<li>[R13] PromptQuorum, &quot;Qwen Local Deployment Guide 2026&quot; - Q4_K_M VRAM表、Q2_K CJK低下の警告、Apple Silicon tok/s。<a href="https://www.promptquorum.com/local-llms/qwen-local-deployment-guide-2026">https://www.promptquorum.com/local-llms/qwen-local-deployment-guide-2026</a></li>
+<li>[R14] InsiderLLM, &quot;VRAM Cheat Sheet for Local LLMs&quot; - qwen3.5 9B 6.6GB、visionオーバーヘッド、MoE全体ウェイトの読み込み。<a href="https://insiderllm.com/guides/vram-requirements-local-llms/">https://insiderllm.com/guides/vram-requirements-local-llms/</a></li>
+<li>[R16] Compute Market, &quot;Qwen 3 Hardware Guide 0.8B~72B&quot; - ハードウェア階層/価格、量子化フォーマット。<a href="https://www.compute-market.com/blog/qwen-3-local-hardware-guide-2026">https://www.compute-market.com/blog/qwen-3-local-hardware-guide-2026</a></li>
+<li>[R17] M. Chen (Medium), &quot;Run Qwen3.6-35B-A3B on 6GB VRAM Using Llama.cpp&quot; - 低スペックオフロードの事例。<a href="https://mychen76.medium.com/run-qwen3-6-35b-a3b-on-6gb-vram-using-llama-cpp-30-tps-a89032e5a60c">https://mychen76.medium.com/run-qwen3-6-35b-a3b-on-6gb-vram-using-llama-cpp-30-tps-a89032e5a60c</a></li>
+<li>[R18] ai.rs, &quot;Will This LLM Fit My GPU?&quot; - hf-mem事前チェック、オフロードによる性能損失。<a href="https://ai.rs/ai-developer/will-llm-fit-my-gpu-vram-requirements">https://ai.rs/ai-developer/will-llm-fit-my-gpu-vram-requirements</a></li>
+<li>[R19] Hugging Face Discussion - Qwen3-Next-80B-A3Bメモリ(非量子化≈160GB、MoE全体読み込み)。<a href="https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct/discussions/7">https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct/discussions/7</a></li>
+</ul>
+<blockquote>
+<p>免責事項: モデルラインアップ・タグ・容量は上流(Ollama/HF/Unsloth)で随時更新される。実際のインストール前に該当ライブラリページで最新のタグ・ファイルサイズを再確認すること。</p>
+</blockquote>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Local_LLM/Qwen_Local_Install_guilde_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

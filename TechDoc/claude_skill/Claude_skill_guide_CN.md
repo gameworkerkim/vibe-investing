@@ -1,0 +1,384 @@
+---
+title: "Claude Skill 指南"
+description: "利用 Anthropic Agent Skills 构建可复用工作流的方法，并以量化市场简报与投资组合每日回顾两个 Skill 为实例讲解"
+lang: zh
+featured: false
+schema_type: TechArticle
+---
+
+# Claude Skill 指南
+
+> 利用 Anthropic Agent Skills 构建专属可复用工作流的方法
+> 参考: [anthropics/skills 仓库](https://github.com/anthropics/skills) · [Agent Skills 标准](http://agentskills.io)
+
+---
+
+## 1. 什么是 Skill?
+
+Skill 是一个**包含指令、脚本和资源的文件夹**,用于教会 Claude 以**可复用的方式**更好地完成特定任务。Claude 会根据任务场景动态加载 Skill。
+
+一句话概括,就是把常用功能打包成的一个合集。
+
+其核心理念很简单:
+
+- **不必每次都重新编写提示词。** 将打磨好的工作流放入一个文件夹中,Claude 在遇到相关任务时就会遵循其中的指令。
+- **渐进式披露(Progressive Disclosure)。** 只有 Skill 的名称和描述(description)始终驻留在上下文中,正文与打包资源仅在需要时才会加载。既能节省上下文,又能承载深厚的专业知识。
+- **LLM 是 Excel,不是神谕(Oracle)。** Skill 正是这一原则的实践 —— 与其期待模型"自己发挥",不如向其显式注入经过验证的流程和检查清单。
+
+---
+
+## 2. 仓库结构
+
+[anthropics/skills](https://github.com/anthropics/skills) 仓库的构成
+
+| 目录 | 说明 |
+|---|---|
+| `./skills` | 实际的 Skill 示例(Creative & Design、Development & Technical、Enterprise & Communication、Document Skills) |
+| `./spec` | Agent Skills 标准规范 |
+| `./template` | 创建新 Skill 时使用的模板 |
+
+其中,`skills/docx`、`skills/pdf`、`skills/pptx`、`skills/xlsx` 是驱动 Claude 实际文档生成功能的生产级 Skill,是设计复杂 Skill 时的优质参考资料(源码公开,但非开源)。
+
+---
+
+## 3. Skill 的解剖结构
+
+```
+skill-name/
+├── SKILL.md            (必需)
+│   ├── YAML 前置元数据(frontmatter)  (name、description 为必填项)
+│   └── Markdown 指令
+└── 打包资源          (可选)
+    ├── scripts/        - 用于确定性/重复性任务的可执行代码
+    ├── references/     - 仅在需要时才加载到上下文中的文档
+    └── assets/         - 用于输出的文件(模板、图标、字体)
+```
+
+### 前置元数据的必填项
+
+| 项目 | 说明 |
+|---|---|
+| `name` | 唯一标识符(小写,空格用连字符代替) |
+| `description` | **触发机制的核心。** 既要说明功能是什么,也要说明何时应该使用 |
+
+### 设计原则
+
+1. **description 应略微"积极"** — Claude 有较少触发(undertrigger)Skill 的倾向,因此应具体列出触发条件,例如"当用户提到 X、Y、Z 时,即使没有明确要求,也应使用此 Skill"。
+2. **SKILL.md 正文不超过 500 行** — 超过此长度时,应拆分到 `references/` 中,并明确说明何时应阅读这些内容。
+3. **确定性任务应用脚本实现** — 对于计算、解析、API 调用等每次都应产生相同结果的任务,不应交由 LLM 自由生成,而应固定为 `scripts/` 中的代码。
+4. **存在多个领域时按变体拆分** — 例如按市场拆分 `references/krx.md`、`references/us-market.md` 等参考文件,让 Claude 只读取所需内容。
+
+---
+
+## 4. 使用方法
+
+### Claude Code
+
+```bash
+/plugin marketplace add anthropics/skills
+/plugin install example-skills@anthropic-agent-skills
+```
+
+安装后只需用自然语言提及即可:
+> "用量化市场简报 Skill 总结一下今天的行情"
+
+个人 Skill 只需将整个文件夹放入 `~/.claude/skills/` 即可。
+
+### Claude.ai (网页/应用)
+
+付费套餐可在 Settings → Capabilities 中上传 Skill。上传 `.skill` 包或包含 SKILL.md 的 zip 文件即可。([官方指南](https://support.claude.com/en/articles/12512180-using-skills-in-claude))
+
+### Claude API
+
+可以使用预置 Skill,或上传自定义 Skill。([Skills API 快速入门](https://docs.claude.com/en/api/skills-guide#creating-a-skill))
+
+---
+
+## 5. 示例①:量化视角每日市场简报 Skill
+
+每天早上只需一句"总结一下今天的行情",即可获得一份**基于因子、资金面、波动率视角构建**的结构化简报,而不是简单的新闻列表。
+
+### 文件夹结构
+
+```
+quant-market-brief/
+├── SKILL.md
+└── references/
+    ├── factor-checklist.md    # 需检查的因子清单与解读标准
+    └── output-template.md     # 简报输出模板
+```
+
+### SKILL.md
+
+```markdown
+---
+name: quant-market-brief
+description: >
+  从量化角度总结今日股市行情的 Skill。当用户提到"行情"、"今天大盘"、
+  "市场简报"、"收盘总结"、"今天 KOSPI/纳斯达克怎么样"等内容时,
+  即使没有明确出现"量化"一词,也必须使用此 Skill。
+  生成基于因子、波动率、资金面框架构建的结构化简报,而非简单的新闻列表。
+---
+
+# Quant Market Brief
+
+## 目的
+解读的是市场结构(regime),而非孤立的新闻事件。回答的不是"发生了什么",而是
+"从因子、波动率、资金面的角度看,市场处于哪种regime,发生了哪些变化"。
+
+## 工作流程
+
+### 第 1 步:数据采集(必须通过网络搜索)
+必须通过搜索确认以下内容,不能凭训练数据中的记忆回答:
+- 主要指数收盘价/涨跌幅: KOSPI、KOSDAQ、S&P 500、NASDAQ、费城半导体指数
+- 波动率: VIX 水平及较前一日的变化、VKOSPI
+- 利率/汇率: 美国10年期国债、韩元/美元、美元指数(DXY)
+- 资金面: 外资/机构净买卖情况(KRX)、主要行业 ETF 资金流向
+- 加密货币(可选): BTC、泡菜溢价(Kimchi Premium) — 仅作为风险偏好的代理指标使用
+
+### 第 2 步:应用因子透镜
+阅读 references/factor-checklist.md,判定以下内容:
+- 动量 vs 反转: 近期领涨股是延续还是转弱
+- 成长 vs 价值: 利率方向与风格轮动的一致性
+- 大盘 vs 小盘: 风险偏好是否扩散
+- 质量/低波动: 资金是否流向防御型因子
+
+### 第 3 步:判定 Regime
+明确归类为以下之一,并附上一句话依据:
+Risk-On(风险偏好) / Risk-Off(风险规避) / Rotation(轮动) / Chop(方向不明)
+
+### 第 4 步:输出
+遵循 references/output-template.md 模板。必须包含:
+1. 一句话 Regime 判定(置于最上方)
+2. 数据表格(指数/波动率/利率/汇率/资金面)
+3. 因子评分卡(每个因子: 强/中性/弱 + 一句话依据)
+4. "与昨日相比的变化"板块 — 聚焦于增量变化(delta)
+5. 反证条件 — 如果今天的判定是错的,应该会观察到什么
+
+## 指导原则
+- 不做预测。遵循 观察到的事实 → 因子解读 → 条件性场景 的顺序。
+- 所有数字都要注明来源和基准时间。
+- 用高/中/低标注置信度。若数据出现矛盾,写明"矛盾"。
+- 不使用投资建议性的措辞("买入/卖出")。仅提供判断素材。
+```
+
+### references/factor-checklist.md (节选)
+
+```markdown
+# 因子检查清单
+
+## 动量
+- 信号: 最近1个月收益领先的板块,当天是否依然保持相对强势
+- 判定为强: 领涨板块相对收益 > 大盘 && 成交额维持
+- 崩溃信号: 领涨股急跌 + 成交量激增(分散抛售)
+
+## 波动率 Regime
+- VIX < 15: 低波动率(利好套息/动量策略)
+- VIX 15–25: 中性
+- VIX > 25: 高波动率(利好低波动/质量因子,应考虑降低仓位)
+- 注意: VIX 的"变化率"比"绝对水平"更能作为短期有效信号
+```
+
+---
+
+## 6. 示例②:投资组合每日监控与评估 Skill
+
+将自己的投资组合登记后,**每天一次**在发生变动时综合量化视角+市场新闻+社交媒体情绪,以"可用于投资决策"的形式进行评估的 Skill。
+
+核心设计要点:
+
+- **投资组合以状态形式保存在 `assets/portfolio.json` 中** — 无需每次重新输入
+- **将变动触发规则固定为代码/规范** — 不将"发生了变动"的定义交由 LLM 自行判断
+- **分别独立采集三个信息源(量化/新闻/社交媒体)后再交叉验证** — 避免单一来源主导结论(多源委员会方式)
+
+### 文件夹结构
+
+```
+portfolio-daily-review/
+├── SKILL.md
+├── assets/
+│   └── portfolio.json         # 持仓股票、数量、均价、风险限额
+├── references/
+│   ├── trigger-rules.md       # "变动"的量化定义
+│   ├── sentiment-guide.md     # 解读社交媒体情绪时的注意事项
+│   └── action-framework.md    # 评估 → 行动候选项的映射标准
+└── scripts/
+    └── check_triggers.py      # 价格变动/限额违规判定脚本(可选)
+```
+
+### assets/portfolio.json
+
+```json
+{
+  "base_currency": "KRW",
+  "last_review": "2026-07-04",
+  "risk_limits": {
+    "single_position_max_pct": 20,
+    "daily_drawdown_alert_pct": -3.0,
+    "portfolio_drawdown_alert_pct": -5.0
+  },
+  "positions": [
+    { "ticker": "005930.KS", "name": "三星电子", "qty": 100, "avg_price": 72000, "thesis": "HBM周期" },
+    { "ticker": "NVDA",      "name": "英伟达", "qty": 10,  "avg_price": 118.5, "thesis": "AI基础设施资本开支" },
+    { "ticker": "BTC",       "name": "比特币", "qty": 0.5, "avg_price": 61000000, "thesis": "宏观对冲" }
+  ]
+}
+```
+
+### SKILL.md
+
+```markdown
+---
+name: portfolio-daily-review
+description: >
+  每天一次检查用户的投资组合,当预定义的变动触发条件被激活时,
+  综合量化分析、市场新闻与社交媒体情绪生成投资判断素材的 Skill。
+  当用户提到"检查投资组合"、"我的账户"、"今日回顾"、"持仓怎么样"、
+  "再平衡"等内容,或要求进行每日检查时,必须使用此 Skill。
+  投资组合状态从 assets/portfolio.json 中读取。
+---
+
+# Portfolio Daily Review
+
+## 目的
+依靠规则而非情绪来检查投资组合。若未触发任何条件,以一句"无异常"
+结束;仅在触发时才进行三源综合评估。
+
+## 工作流程
+
+### 第 0 步:加载状态
+读取 assets/portfolio.json。若 last_review 为今天,则
+提示"今日回顾已完成",并确认是否需要重新执行(遵循每日一次原则)。
+
+### 第 1 步:更新行情并判定触发条件
+通过网络搜索确认各持仓的当前价格,并依据 references/trigger-rules.md
+中的规则进行判定。摘要如下:
+- 个股单日涨跌幅 ±3% 以上
+- 投资组合整体估值单日变动 ±2% 以上
+- 违反 risk_limits(单一股票占比超限、达到亏损限额)
+- 持仓相关的重大新闻(业绩、监管、黑客/安全事件、退市相关)
+
+**未触发时**: 以当前价格表 + "无触发,无需采取行动" 结束。
+不生成不必要的分析。
+
+### 第 2 步:三源信息采集(仅针对触发的股票)
+独立采集每个来源的信息,不相互混合:
+
+[A] 量化视角
+- 该股票的因子状态: 动量(1个月/3个月)、行业相对强度、波动率变化
+- 与市场 regime 的一致性(如已安装 quant-market-brief Skill,复用其结果)
+
+[B] 市场新闻
+- 通过网络搜索确定触发原因的相关新闻。优先使用一次信息源(公告、
+  业绩发布、监管机构公告)。区分标注推测性文章与事实。
+
+[C] 社交媒体情绪
+- 通过网络搜索了解 X(推特)、Reddit、国内社区的反应方向与强度。
+- 必须先阅读 references/sentiment-guide.md。核心要点:
+  社交媒体可能是反向指标。极端的情绪倾斜(恐惧/亢奋)本身就是一种信号,
+  不应直接作为方向性信号使用。
+
+### 第 3 步:交叉验证与综合评估
+用矩阵梳理三个来源的方向是否一致:
+
+| 来源 | 方向 | 强度 | 核心依据 |
+|---|---|---|---|
+| 量化 | 负面 | 中 | 动量转弱 + 行业相对弱势 |
+| 新闻 | 负面 | 强 | 业绩指引下调(一次信息源) |
+| 社交媒体  | 极端恐慌 | 强 | 标注反向指标可能性 |
+
+- 三者一致 → 置信度高
+- 2:1 分裂 → 必须在正文中保留少数意见的依据
+- 若新闻(事实)与量化(价格行为)相互矛盾,应重点强调这一矛盾本身
+
+### 第 4 步:提出行动候选项
+按照 references/action-framework.md 的标准遵循以下格式:
+- 行动候选项: 从维持 / 减仓 / 加仓 / 考虑止损 / 继续观察 中选择 1~2 项
+- 同时明确列出每个候选项的支持依据与反对论据
+- 反证条件: 必须包含"若观测到 X,则此评估失效"
+- 明确说明最终决定权在于用户。不使用买入/卖出的指令性措辞。
+
+### 第 5 步:更新状态
+将 portfolio.json 中的 last_review 更新为当天日期,
+并将本次回顾摘要记录为日志(供下次回顾计算"与昨日相比的变化"时使用)。
+
+## 指导原则
+- 若未触发,则保持沉默。每天输出长篇分析本身就是一种噪音。
+- 不要随意设定三个来源的权重。出现不一致时应如实报告不一致。
+- 引用社交媒体内容时不指名具体账号,仅处理汇总后的方向与强度。
+- 所有数值均需注明查询时间。
+```
+
+### references/trigger-rules.md (节选)
+
+```markdown
+# 变动触发条件定义
+
+"发生了变动"意味着满足以下量化条件中的至少一项。
+不将 LLM 的主观判断("感觉跌了不少")用作触发条件。
+
+| 触发条件 | 条件 | 优先级 |
+|---|---|---|
+| T1 个股急变 | 股票单日涨跌幅 |±3%| 以上 | 中 |
+| T2 投资组合变动 | 整体估值单日变动 |±2%| 以上 | 高 |
+| T3 风险限额 | 违反 risk_limits 项 | 最高 |
+| T4 事件 | 业绩/监管/安全事件/退市相关的一次信息源新闻 | 高 |
+| T5 波动率跳升 | 股票隐含/历史波动率较前一日 +50% | 中 |
+
+若多个触发条件同时激活,应按优先级从高到低依次报告。
+```
+
+### 执行示例 (Claude Code)
+
+```
+> 帮我回顾一下今天的投资组合
+
+[portfolio-daily-review Skill 触发]
+1. 加载 portfolio.json → 3 个持仓
+2. 搜索行情 → NVDA -4.2%(触发 T1),其余无触发
+3. 针对 NVDA 采集量化/新闻/社交媒体三个来源信息
+4. 输出交叉验证矩阵 + 行动候选项 + 反证条件
+5. 更新 last_review
+```
+
+---
+
+## 7. 连接两个 Skill
+
+这两个 Skill 可以独立运行,但一起安装时会产生协同效应:
+
+```
+早晨例行流程:
+1. quant-market-brief  → 判定市场 regime (Risk-On / Off / Rotation / Chop)
+2. portfolio-daily-review → 以该 regime 为上下文评估个别持仓
+   (在 SKILL.md 第 2 步 [A] 中明确说明"复用 quant-market-brief 的结果")
+```
+
+这种 Skill 之间的相互引用,正是 Skills 系统在实践中的典型应用模式 —— 每个 Skill 保持小而单一职责,但在工作流层面进行组合。
+
+---
+
+## 8. 制作时常见的错误
+
+| 错误 | 修正方法 |
+|---|---|
+| description 只写功能,不写触发条件 | 明确写出"当用户提到 X、Y 时应使用"(防止 undertrigger) |
+| 将判断标准交由 LLM 自行裁量 | 将量化规则固定在 references/ 中(例如触发条件定义) |
+| 每次都以对话形式重新输入投资组合 | 将其保存为 assets/ 中的状态文件 |
+| 将所有内容都塞进一个 SKILL.md | 超过 500 行时拆分到 references/,并说明何时阅读 |
+| 输出预测/交易指令 | 强制遵循 观察 → 解读 → 条件性场景 + 反证条件 的结构 |
+| 未经测试直接发布 | 使用 3~5 个实际提示词验证触发情况与输出质量 |
+
+---
+
+## 9. 相关链接
+
+- [anthropics/skills 仓库](https://github.com/anthropics/skills)
+- [What are skills?](https://support.claude.com/en/articles/12512176-what-are-skills)
+- [Using skills in Claude](https://support.claude.com/en/articles/12512180-using-skills-in-claude)
+- [Creating custom skills](https://support.claude.com/en/articles/12512198-creating-custom-skills)
+- [Equipping agents for the real world with Agent Skills (工程博客)](https://anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills)
+- [Skills API 快速入门](https://docs.claude.com/en/api/skills-guide#creating-a-skill)
+- [Agent Skills 标准](http://agentskills.io)
+
+> **注意**: 该仓库中的 Skills 仅用于演示/教学目的,可能与 Claude 的实际行为存在差异,重要任务前请务必在自己的环境中进行测试。本指南中与投资相关的 Skill 是用于结构化判断素材的工具,并非投资建议。

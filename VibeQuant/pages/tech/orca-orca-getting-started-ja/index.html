@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orca Getting Started — マルチAIエージェントオーケストレーションガイド — VibeQuant</title>
+  <meta name="description" content="1つのプロンプトを複数のCLIコーディングエージェントにFan-outし、git worktreeで隔離実行して最良の結果だけをマージするOrcaの入門ガイド。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/orca-orca-getting-started-ja/" />
+  <meta property="og:title" content="Orca Getting Started — マルチAIエージェントオーケストレーションガイド" />
+  <meta property="og:description" content="1つのプロンプトを複数のCLIコーディングエージェントにFan-outし、git worktreeで隔離実行して最良の結果だけをマージするOrcaの入門ガイド。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/orca-orca-getting-started-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/orca-orca-getting-started/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/orca-orca-getting-started-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/orca-orca-getting-started-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/orca-orca-getting-started-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/orca-orca-getting-started/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Orca Getting Started — マルチAIエージェントオーケストレーションガイド","description":"1つのプロンプトを複数のCLIコーディングエージェントにFan-outし、git worktreeで隔離実行して最良の結果だけをマージするOrcaの入門ガイド。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/orca-orca-getting-started-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/orca/Orca%20getting%20started_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-15","dateModified":"2026-07-15","inLanguage":"ja","keywords":"UI · 개발도구, orca"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · UI · 개발도구</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">UI · 개발도구</p>
+        <h1>Orca Getting Started — マルチAIエージェントオーケストレーションガイド</h1>
+        <p class="article-dates"><time datetime="2026-07-15">발행 2026.07.15</time> · 주제 UI · 개발도구 · orca</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/orca-orca-getting-started/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/orca-orca-getting-started-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/orca-orca-getting-started-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/orca-orca-getting-started-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">1つのプロンプトを複数のCLIコーディングエージェントにFan-outし、git worktreeで隔離実行して最良の結果だけをマージするOrcaの入門ガイド。</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. Orcaとは何か?</h2>
+<p>Orcaは、Claude Code、Codex、OpenCode、Cursor CLI、Gemini CLIなどのターミナルベースAIコーディングエージェントを<strong>1画面から並列に指揮するオーケストレーター</strong>である。既存IDEにAIを載せたものではなく、最初から「エージェント艦隊(fleet)の運用」を前提に設計されたADE (Agent Development Environment)である。</p>
+<p>コアアイデアは単純である。</p>
+<ol>
+<li>1つの開発リクエストを複数のエージェントに同時に配信する (Fan-out)</li>
+<li>各エージェントは自分専用の <code>git worktree</code> で隔離して作業する</li>
+<li>完了後、Diffを並べて比較し、最良の結果だけをマージする (Merge the winner)</li>
+</ol>
+<p>注意: OrcaはCursorの代替ではない。Cursor CLIでさえ、Orca内で動くエージェントの1つに過ぎない。Orcaが置き換えるのは「ターミナルタブを5枚開いて手動管理していた従来のワークフロー」である。</p>
+<hr>
+<h2>2. 事前準備</h2>
+<p>Orca自体にログインやAPIキー登録は不要である。代わりに、<strong>使用するエージェントCLIがあらかじめインストール・認証されている必要がある。</strong> OrcaはAPIをプロキシしたり再販したりせず、各エージェントがユーザーのマシンから直接プロバイダーを呼び出す。</p>
+<table>
+<thead>
+<tr>
+<th>準備物</th>
+<th>確認方法</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Git 2.5以上</td>
+<td><code>git --version</code></td>
+<td>worktree機能が必須</td>
+</tr>
+<tr>
+<td>使用するエージェントCLI 1つ以上</td>
+<td><code>claude --version</code>, <code>codex --version</code> など</td>
+<td>Claude Code、Codex、OpenCode、Gemini CLI、Cursor CLIなど、ターミナルで動くものなら何でも可</td>
+</tr>
+<tr>
+<td>各エージェントの認証完了</td>
+<td>ターミナルで単独実行が正常に動作するか</td>
+<td>例: <code>claude</code> 実行後にログイン完了状態であること</td>
+</tr>
+<tr>
+<td>作業対象のGitリポジトリ</td>
+<td>ローカルクローンまたはGitHubリポジトリ</td>
+<td>worktreeベースのためGitリポジトリが前提</td>
+</tr>
+</tbody></table>
+<p>コスト構造: Orca自体は無料だが、内部で動くエージェントのサブスクリプション料 (Claude Pro/Max、ChatGPT Plusなど) やAPI利用料は各自負担となる。</p>
+<hr>
+<h2>3. インストール</h2>
+<h3>macOS (Homebrew)</h3>
+<pre><code class="language-bash">brew install --cask stablyai/orca/orca
+</code></pre>
+<p>注意: <code>brew install --cask orca</code> (tapパス省略) は動作しない。必ず <code>stablyai/orca/orca</code> のフルパスを使用すること。</p>
+<h3>Arch Linux (AUR)</h3>
+<pre><code class="language-bash">yay -S stably-orca-bin
+# ソースビルドを希望する場合: yay -S stably-orca-git
+</code></pre>
+<h3>Windows / その他Linux</h3>
+<ul>
+<li>onorca.dev または GitHub Releases (github.com/stablyai/orca/releases) からインストーラーをダウンロード</li>
+</ul>
+<h3>モバイルコンパニオンアプリ</h3>
+<ul>
+<li>iOS: App Store / TestFlight</li>
+<li>Android: GitHub ReleasesのAPK</li>
+<li>デスクトップアプリとペアリングすると、エージェントの進捗監視、完了通知の受信、リモートからのフォローアッププロンプト送信が可能になる。</li>
+</ul>
+<hr>
+<h2>4. 初期設定 (First Run)</h2>
+<ol>
+<li><strong>プロジェクト接続</strong>: Orca起動後、ローカルGitリポジトリを追加する。GitHub連携を設定すると、PR・Issue・プロジェクトボードをアプリ内ですぐに閲覧できる。</li>
+<li><strong>エージェント確認</strong>: OrcaはシステムにインストールされたCLIエージェントを認識する。新しいworktree作成時に、どのエージェントを割り当てるかを選択する方式である。</li>
+<li><strong>通知設定</strong>: エージェントが作業を終えたり入力待ちになったりした際に、デスクトップ/モバイル通知を受け取れるように設定する。並列運用ではこの機能が事実上必須である。</li>
+<li><strong>(任意) アカウント切替/使用量追跡</strong>: Claude・Codexの使用量とrate-limitリセット時刻をダッシュボードで確認し、複数アカウントを再ログインなしで切り替えられる。</li>
+</ol>
+<hr>
+<h2>5. コアワークフロー</h2>
+<h3>5.1 基本サイクル: Fan-out → 隔離 → 比較 → マージ</h3>
+<table>
+<thead>
+<tr>
+<th>段階</th>
+<th>動作</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. Fan-out</td>
+<td>1つのプロンプトを複数エージェントに同時送信</td>
+<td>例: 同じバグ修正依頼をClaude Code、Codex、OpenCodeの3つに並列発射</td>
+</tr>
+<tr>
+<td>2. 隔離実行</td>
+<td>各エージェントが独立したgit worktree + 専用ターミナルで作業</td>
+<td>worktreeは同じリポジトリを共有するが、作業ディレクトリとブランチは完全に分離される。メインブランチは汚染されない</td>
+</tr>
+<tr>
+<td>3. モニタリング</td>
+<td>ライブステータスダッシュボードですべてのエージェント状態を確認</td>
+<td>作業中 / 入力待ち / 完了状態が一目で表示される。モバイルアプリからも確認可能</td>
+</tr>
+<tr>
+<td>4. 比較</td>
+<td>各worktreeのDiffを並べて比較</td>
+<td>特定行にコメントを付け、エージェントへ修正フィードバックを返送できる</td>
+</tr>
+<tr>
+<td>5. マージ</td>
+<td>最良の結果を選びメインブランチにMerge</td>
+<td>残りのworktreeは破棄</td>
+</tr>
+</tbody></table>
+<h3>5.2 実践シナリオ</h3>
+<ul>
+<li><strong>並列バグ修正</strong>: 同じバグを3エージェントに同時に任せ、実際に動作する解決策だけをマージ</li>
+<li><strong>リスク分散</strong>: 1つのモデルが誤った方向にコードを書く確率を、複数試行でヘッジ</li>
+<li><strong>GitHub/Linearタスクベース作業</strong>: PR、Issue、Linearチケットから直接worktreeを開くと、エージェントがタスクコンテキストを自動受信</li>
+<li><strong>Design Mode (フロントエンド)</strong>: 内蔵ChromiumブラウザでUI要素をクリックすると、その要素のHTML、CSS、クロップ済みスクリーンショットがエージェントプロンプトに自動注入される</li>
+<li><strong>リモート実行 (SSH worktree)</strong>: 高性能リモートサーバーでエージェントを実行しつつ、ローカルでファイル編集・git・ターミナルをそのまま使用。自動再接続とポートフォワーディングに対応</li>
+<li><strong>Orca CLI</strong>: ターミナルからプロジェクト追加、worktree作成、進捗チェックポイント投稿など、IDE自体をスクリプトで制御可能</li>
+</ul>
+<hr>
+<h2>6. 長所</h2>
+<table>
+<thead>
+<tr>
+<th>長所</th>
+<th>詳細</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ツール統合</td>
+<td>乱立するCLIエージェント (Claude Code、Codex、Gemini、Copilot、Clineなど30種以上) を単一UIで管理。「ターミナルで動けばOrcaで動く」</td>
+</tr>
+<tr>
+<td>リスク分散</td>
+<td>同一タスクを複数回試行し最良の結果を選択。単一モデル依存リスクを軽減</td>
+</tr>
+<tr>
+<td>完全な隔離</td>
+<td>git worktreeベースで各作業を物理的に分離。ブランチジャグリングやstash地獄を排除</td>
+</tr>
+<tr>
+<td>コードレビュー環境</td>
+<td>Diff可視化 + 行単位コメント + エージェントフィードバックループ + アプリ内コミット</td>
+</tr>
+<tr>
+<td>リモート/モバイル</td>
+<td>SSHリモートworktree、モバイル監視・操作。席を外してもエージェント艦隊は動き続ける</td>
+</tr>
+<tr>
+<td>サブスクリプション親和</td>
+<td>ユーザー保有のサブスクリプションをそのまま使用。ベンダーロックインなし。使用量追跡とアカウントホットスワップに対応</td>
+</tr>
+<tr>
+<td>オープンソース</td>
+<td>MITライセンス。毎日リリースされる高速な開発ペース</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. 短所と注意事項</h2>
+<table>
+<thead>
+<tr>
+<th>短所</th>
+<th>詳細</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>参入障壁</td>
+<td>git worktree概念とエージェントCLIの事前設定が前提。「インストール即コーディング」のCursorと比べ初期学習コストがある</td>
+</tr>
+<tr>
+<td>UI/UX未成熟</td>
+<td>画面分割を小さくするとターミナル入力欄が狭くなるなど、細部の仕上げがまだ荒い部分がある</td>
+</tr>
+<tr>
+<td>間欠的不安定</td>
+<td>ターミナルエスケープシーケンスの破損などで再起動が必要になる場合がある</td>
+</tr>
+<tr>
+<td>急速な変化自体がリスク</td>
+<td>初期段階の製品で機能面が毎日変わる。チーム標準ワークフローがアップデートで揺らぐ可能性がある</td>
+</tr>
+<tr>
+<td>追加コスト</td>
+<td>Orcaは無料だがエージェントのサブスクリプション/API費用は別途。並列実行はトークン消費を倍数に増やす点に注意</td>
+</tr>
+<tr>
+<td>オーバーヘッド</td>
+<td>エージェントを1つだけ、1タスクずつ使うユーザーには純粋なターミナルより運用負担が大きい場合がある</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. 競合製品比較</h2>
+<p>Orcaの位置づけは「Cursorの代替」ではなく「エージェント群の上の管制塔」である。</p>
+<table>
+<thead>
+<tr>
+<th>製品</th>
+<th>種類</th>
+<th>Orcaとの違い</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cursor / Windsurf</td>
+<td>AI内蔵オールインワンIDE</td>
+<td>インストール即使用可能だが、マルチエージェント並列実行・比較機能はない。Cursor CLIはむしろOrca内で動作可能</td>
+</tr>
+<tr>
+<td>Aider / Continue.dev</td>
+<td>オープンソース単一エージェントツール</td>
+<td>並列実行と視覚的Diff比較がコアではない</td>
+</tr>
+<tr>
+<td>Claude Squad</td>
+<td>ターミナルTUI型マルチエージェントマネージャー</td>
+<td>tmuxスタイルワークフロー好み向け。デスクトップGUI・モバイル・ブラウザ統合はない</td>
+</tr>
+<tr>
+<td>Agent Deck</td>
+<td>ターミナルセッションマネージャー</td>
+<td>コンダクター・通知・MCPソケットプーリング中心。Orcaより軽量</td>
+</tr>
+<tr>
+<td>Paseo</td>
+<td>セルフホスティングクロスデバイスコントロール</td>
+<td>デスクトップIDE面よりWeb/モバイル/CLI全方位アクセスを優先する場合向け</td>
+</tr>
+<tr>
+<td>純粋ターミナル (Claude Code単独など)</td>
+<td>基本ワークフロー</td>
+<td>1タスクずつしか回さないならオーケストレーション自体が不要</td>
+</tr>
+</tbody></table>
+<p>結論: Orcaの最大の競合は依然として開発者の「既存の習慣」である。マルチエージェントを本気で運用するパワーユーザーには強力だが、単一エージェントユーザーにはオーバースペックである。</p>
+<hr>
+<h2>9. 5分クイックスタートチェックリスト</h2>
+<pre><code class="language-text">[ ] git --version で Git 2.5+ を確認
+[ ] エージェントCLIを最低1つインストールしログイン完了 (例: claude)
+[ ] brew install --cask stablyai/orca/orca (macOS)
+[ ] Orca起動後、ローカルGitリポジトリを追加
+[ ] 新しいworktree作成 → エージェント選択 → 最初のプロンプト送信
+[ ] 2つ目のエージェントに同じプロンプトをFan-out
+[ ] Diff比較画面で2つの結果をレビュー
+[ ] 勝者をマージ、敗者のworktreeを破棄
+[ ] (任意) モバイルアプリをペアリングし通知を有効化
+</code></pre>
+<hr>
+<h2>10. 参考リンク</h2>
+<ul>
+<li>リポジトリ: <a href="https://github.com/stablyai/orca">https://github.com/stablyai/orca</a></li>
+<li>公式サイト/ドキュメント: <a href="https://www.onorca.dev">https://www.onorca.dev</a></li>
+<li>リリース: <a href="https://github.com/stablyai/orca/releases">https://github.com/stablyai/orca/releases</a></li>
+<li>コミュニティ: Discord, X(@orca_build)</li>
+</ul>
+<hr>
+<p><em>作成日: 2026-07-15。Orcaは毎日リリースされるプロジェクトのため、詳細機能はchangelog基準での再確認を推奨する。</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/orca/Orca%20getting%20started_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

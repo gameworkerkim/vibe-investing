@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>甲骨文云免费套餐 (OCI Free Tier) 使用指南 — VibeQuant</title>
+  <meta name="description" content="OCI Always Free 资源上限、韩国用户注册流程、ARM A1「Out of host capacity」规避策略、安全配置及 PAYG 迁移决策标准的实践指南。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/oraclecloud-02-oracle-cloud-free-tier-guide-cn/" />
+  <meta property="og:title" content="甲骨文云免费套餐 (OCI Free Tier) 使用指南" />
+  <meta property="og:description" content="OCI Always Free 资源上限、韩国用户注册流程、ARM A1「Out of host capacity」规避策略、安全配置及 PAYG 迁移决策标准的实践指南。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/oraclecloud-02-oracle-cloud-free-tier-guide-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/oraclecloud-02-oracle-cloud-free-tier-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/oraclecloud-02-oracle-cloud-free-tier-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/oraclecloud-02-oracle-cloud-free-tier-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/oraclecloud-02-oracle-cloud-free-tier-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/oraclecloud-02-oracle-cloud-free-tier-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"甲骨文云免费套餐 (OCI Free Tier) 使用指南","description":"OCI Always Free 资源上限、韩国用户注册流程、ARM A1「Out of host capacity」规避策略、安全配置及 PAYG 迁移决策标准的实践指南。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/oraclecloud-02-oracle-cloud-free-tier-guide-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/OracleCloud/02.%20Oracle%20Cloud%20Free%20Tier%20Guide_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-05-01","dateModified":"2026-05-01","inLanguage":"zh-Hans","keywords":"클라우드 · Free tier, OracleCloud"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 클라우드 · Free tier</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · Free tier</p>
+        <h1>甲骨文云免费套餐 (OCI Free Tier) 使用指南</h1>
+        <p class="article-dates"><time datetime="2026-05-01">발행 2026.05.01</time> · 주제 클라우드 · Free tier · OracleCloud</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/oraclecloud-02-oracle-cloud-free-tier-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/oraclecloud-02-oracle-cloud-free-tier-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/oraclecloud-02-oracle-cloud-free-tier-guide-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/oraclecloud-02-oracle-cloud-free-tier-guide-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">2026 年 5 月 · 韩国用户视角 · 以 Always Free 为主</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. 为什么选择 OCI Free Tier</h2>
+<p>在行业免费套餐中，OCI 的资源规模最大，且没有时间限制。与同类 AWS、GCP 免费套餐相比，差异非常明显。</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>OCI Always Free</th>
+<th>AWS Free Tier (12 个月)</th>
+<th>GCP Always Free</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>核心 VM</td>
+<td>ARM Ampere A1 4 OCPU / 24 GB RAM</td>
+<td>t2.micro / t3.micro 1 vCPU / 1 GB RAM</td>
+<td>e2-micro 1 vCPU / 1 GB RAM</td>
+</tr>
+<tr>
+<td>实例拆分</td>
+<td>最多拆成 4 台</td>
+<td>1 台</td>
+<td>1 台</td>
+</tr>
+<tr>
+<td>额外 x86 实例</td>
+<td>E2.1.Micro 2 台 (1 OCPU / 1 GB)</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>块存储</td>
+<td>200 GB</td>
+<td>30 GB EBS</td>
+<td>30 GB</td>
+</tr>
+<tr>
+<td>出站流量</td>
+<td>10 TB/月</td>
+<td>100 GB/月</td>
+<td>1 GB/月</td>
+</tr>
+<tr>
+<td>期限</td>
+<td>无限制 (Always Free)</td>
+<td>12 个月</td>
+<td>无限制</td>
+</tr>
+</tbody></table>
+<p>关键不只是 ARM 4 核 24GB 的物理资源本身，而是 <strong>可以永久免费使用</strong>。个人 VPN、自托管 AI 代理、K3s 集群、轻量 LLM 推理服务器等实际工作负载，基本上只有这一家免费云能跑。</p>
+<hr>
+<h2>2. 免费套餐的两条轨道</h2>
+<p>注册后会同时获得两类免费资源。混淆两者可能产生账单。</p>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>Always Free</th>
+<th>Free Trial</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>期限</td>
+<td>无限制</td>
+<td>注册后 30 天</td>
+</tr>
+<tr>
+<td>上限</td>
+<td>固定资源清单 (见下文 §3)</td>
+<td>$300 USD 额度</td>
+</tr>
+<tr>
+<td>到期后</td>
+<td>继续可用</td>
+<td>未用额度作废，仅保留 Always Free 资源</td>
+</tr>
+<tr>
+<td>风险</td>
+<td>几乎无</td>
+<td>30 天内创建付费资源，额度耗尽后可能自动扣费</td>
+</tr>
+</tbody></table>
+<p><strong>原则</strong>：若不想被扣费，前 30 天在控制台只创建带 &quot;Always Free Eligible&quot; 标签的资源。30 天后，付费资源创建会被阻止（在维持 Always Free 账户的前提下）。</p>
+<hr>
+<h2>3. Always Free 资源详情</h2>
+<p>整体上限如下。所有资源仅在注册时选择的 Home Region 提供。</p>
+<h3>3.1 计算</h3>
+<table>
+<thead>
+<tr>
+<th>Shape</th>
+<th>数量</th>
+<th>规格</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>VM.Standard.A1.Flex (ARM Ampere)</td>
+<td>最多 4 台</td>
+<td>合计 4 OCPU / 24 GB RAM</td>
+<td>每月 3,000 OCPU 小时 + 18,000 GB 小时。4 OCPU × 24h × 31 天 = 2,976 小时，满负荷也在限额内</td>
+</tr>
+<tr>
+<td>VM.Standard.E2.1.Micro (AMD x86)</td>
+<td>2 台</td>
+<td>各 1 OCPU / 1 GB RAM</td>
+<td>用于不兼容 ARM 的软件</td>
+</tr>
+</tbody></table>
+<p>ARM 与 x86 可混用，最多同时运行 6 台。但启动卷合计不得超过 200 GB。</p>
+<h3>3.2 存储</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>上限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Block Volume (启动+附加)</td>
+<td>合计 200 GB，最多 5 个</td>
+</tr>
+<tr>
+<td>Block Volume Backup</td>
+<td>5 个 (存于对象存储，单独计数)</td>
+</tr>
+<tr>
+<td>Object Storage</td>
+<td>Standard 10 GB + Infrequent Access 10 GB + Archive 10 GB，每月 50,000 次 API 请求 (S3 兼容)</td>
+</tr>
+</tbody></table>
+<h3>3.3 数据库</h3>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>上限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Autonomous Database (ATP/ADW/JSON)</td>
+<td>2 个，各 1 OCPU / 20 GB</td>
+</tr>
+<tr>
+<td>NoSQL Database</td>
+<td>仅限 Phoenix 区域</td>
+</tr>
+</tbody></table>
+<h3>3.4 网络及其他</h3>
+<ul>
+<li>Flexible Load Balancer: 1 个 (10 Mbps)</li>
+<li>Network Load Balancer: 1 个</li>
+<li>VCN、Site-to-Site VPN: 无限制</li>
+<li>出站流量: 10 TB/月</li>
+<li>Vault、Bastions、Monitoring、Logging: 基础用量免费</li>
+<li>Email Delivery: 每日 200 封</li>
+</ul>
+<hr>
+<h2>4. 注册流程 (韩国用户)</h2>
+<h3>4.1 事前准备</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>银行卡</td>
+<td>新办的 VISA/Master <strong>信用卡或借记卡</strong></td>
+</tr>
+<tr>
+<td>不可用</td>
+<td>PIN 借记卡、<strong>预付卡、虚拟卡、一次性卡</strong> (Oracle 明确拒绝)</td>
+</tr>
+<tr>
+<td>邮箱</td>
+<td>从未用于 OCI Free Tier 或旧 Free Trial 的地址</td>
+</tr>
+<tr>
+<td>手机</td>
+<td>从未用于 OCI 的号码 (需 SMS 验证)</td>
+</tr>
+<tr>
+<td>英文地址</td>
+<td>准确的道路英文拼写 (掩码或随意修改会被拒)</td>
+</tr>
+</tbody></table>
+<p>OCI 通过邮箱 + 手机号 + 卡号组合识别重复注册。同一张卡可重复使用有限次数，但尽量用新卡更安全。
+最重要的是核对发卡行登记的地址，必须准确填写才能进入下一步。</p>
+<h3>4.2 步骤</h3>
+<ol>
+<li>访问 <a href="https://www.oracle.com/kr/cloud/free/">https://www.oracle.com/kr/cloud/free/</a> → 「무료로 시작하기」(免费开始)</li>
+<li>邮箱验证 → 设置密码</li>
+<li><strong>账户信息</strong>：姓名与持卡人一致，地址用准确英文</li>
+<li><strong>选择 Home Region</strong>：选定后不可更改。韩国用户通常从以下选择<ul>
+<li><strong>Seoul (ap-seoul-1)</strong>：延迟最低，但 ARM 容量经常不足</li>
+<li><strong>Chuncheon (ap-chuncheon-1)</strong>：韩国第二个区域，相对较空</li>
+<li><strong>Tokyo / Osaka</strong>：延迟 30~50ms，ARM 容量较易获得</li>
+<li>可用性优先选 Chuncheon 或 Osaka，延迟优先选 Seoul</li>
+</ul>
+</li>
+<li><strong>手机验证</strong>：010-1234-5678 → 输入 <code>1012345678</code> (去掉前导 0)</li>
+<li><strong>绑卡</strong>：产生 $1 授权冻结后立即取消，无实际扣款</li>
+<li>同意条款 → 「Complete Sign-up」</li>
+</ol>
+<h3>4.3 注册失败时</h3>
+<p>最常见提示是「交易处理错误」。原因多半是以下之一：</p>
+<ul>
+<li>卡被拒绝 (韩国发行的部分卡被拒案例较多)</li>
+<li>IP/位置不一致 (若开着 VPN 请关闭)</li>
+<li>邮箱、手机、卡全部相同信息反复重试 → 被封锁</li>
+<li>地址与卡登记地址不一致</li>
+</ul>
+<p><strong>解决顺序</strong>：</p>
+<ol>
+<li>立即换另一张卡重试 (禁止用相同信息重复)</li>
+<li>仍失败则通过 <a href="https://www.oracle.com/cloud/contact.html">Oracle Cloud Customer Service</a> 聊天或表单提交工单</li>
+<li>还不行则用新邮箱 + 新手机号 + 新卡组合重新注册</li>
+<li>Facebook「Oracle Cloud KR User Group」有韩国甲骨文员工活跃，拒批案例可求助</li>
+</ol>
+<hr>
+<h2>5. 创建 ARM 实例：规避「Out of host capacity」</h2>
+<p>OCI 免费套餐最大的实战坑。韩国、东京区域的 ARM A1 新分配几乎总是满的。
+当前情况是在仁川区域用 AMD 1 vCore 先应付。</p>
+<h3>5.1 推荐配置</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>建议</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Image</td>
+<td>Canonical Ubuntu 24.04 Minimal <strong>aarch64</strong></td>
+</tr>
+<tr>
+<td>Shape</td>
+<td>VM.Standard.A1.Flex</td>
+</tr>
+<tr>
+<td>OCPU/RAM</td>
+<td><strong>2 OCPU / 12 GB</strong> (比 4 OCPU 更容易抢到)</td>
+</tr>
+<tr>
+<td>Boot Volume</td>
+<td>47~50 GB (默认)</td>
+</tr>
+<tr>
+<td>SSH Key</td>
+<td>本地 <code>~/.ssh/id_ed25519.pub</code> 或在控制台生成密钥对后立即下载私钥</td>
+</tr>
+<tr>
+<td>Public IP</td>
+<td>勾选「Assign a public IPv4 address」</td>
+</tr>
+</tbody></table>
+<h3>5.2 容量获取策略 (按效果排序)</h3>
+<ol>
+<li><strong>OCPU 从 4 降到 2</strong>：一次要 4 OCPU 几乎必失败。拆成 2 台各 2 OCPU，总资源相同但成功率高很多。</li>
+<li><strong>凌晨重试 (韩国时间 02:00~06:00)</strong>：其他用户活动少时会有资源回收。</li>
+<li><strong>切换 Availability Domain</strong>：分别试 AD-1、AD-2、AD-3。同一区域内各 AD 容量不同。</li>
+<li><strong>自动重试脚本</strong>：GitHub 上的 <code>hitrov/oci-arm-host-capacity</code> 等 OSS 轮询 OCI API，有空位立即创建实例。需注册自己的 OCI API 密钥。</li>
+<li><strong>转 PAYG</strong>：绑定卡信息转为按量付费账户后，据称 ARM 容量优先级会提高。Always Free 限额内仍为 0 元，但 <strong>误建付费资源会扣费</strong> — 不用的付费服务务必设控制台告警。</li>
+</ol>
+<h3>5.3 仍然抢不到时</h3>
+<ul>
+<li>先用 VM.Standard.E2.1.Micro (AMD) 创建实例，可立即成功。ARM 之后再慢慢抢。</li>
+<li>要改 Home Region 只能开新账户，已注册账户无法更改 Home Region。</li>
+</ul>
+<hr>
+<h2>6. 安全与运维基础配置</h2>
+<h3>6.1 网络</h3>
+<p>OCI 默认 <strong>阻断所有入站</strong>。与 AWS Security Group 不同，需开两层：</p>
+<ol>
+<li><strong>VCN Security List</strong>：控制台 → Networking → Virtual Cloud Networks → 对应 VCN → Security Lists → Default Security List → Ingress Rules 添加 80/443/所需端口</li>
+<li><strong>实例 OS 的 iptables</strong>：Ubuntu 镜像启用 iptables 会额外阻断。用以下命令检查并放行</li>
+</ol>
+<pre><code class="language-bash">sudo iptables -L INPUT -n --line-numbers
+sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 80 -j ACCEPT
+sudo iptables -I INPUT 6 -m state --state NEW -p tcp --dport 443 -j ACCEPT
+sudo netfilter-persistent save
+</code></pre>
+<p>两步都做完才能从外网访问。</p>
+<h3>6.2 SSH 连接</h3>
+<pre><code class="language-bash">ssh -i ~/.ssh/id_ed25519 ubuntu@&lt;public-ip&gt;
+# Oracle Linux 镜像用 opc 而非 ubuntu
+</code></pre>
+<h3>6.3 避免 Idle Reclamation</h3>
+<p>Always Free 实例在以下条件下会被回收：</p>
+<ul>
+<li>7 天 CPU 95 分位 <strong>低于 20%</strong> <em>且</em></li>
+<li>7 天网络使用 95 分位 <strong>低于 20%</strong> <em>且</em></li>
+<li>7 天内存使用 95 分位 <strong>低于 20%</strong></li>
+</ul>
+<p>须三者同时满足，因此常见自托管负载（博客、VPN、机器人）是安全的。若真是闲置的学习 VM，可用以下 cron 故意制造负载：</p>
+<pre><code class="language-bash"># /etc/cron.d/keepalive — 每小时占用 CPU 1 分钟
+0 * * * * root timeout 60 yes &gt; /dev/null
+</code></pre>
+<h3>6.4 必设计费告警</h3>
+<p>控制台 → Billing → Budgets 创建 $1 上限预算，在 50%、80%、100% 阈值发邮件。转 PAYG 时尤其重要。</p>
+<hr>
+<h2>7. 韩国用户常见陷阱</h2>
+<table>
+<thead>
+<tr>
+<th>陷阱</th>
+<th>后果</th>
+<th>规避</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>注册时开 VPN</td>
+<td>位置不一致 → 被拒</td>
+<td>注册时关 VPN，注册后再开</td>
+</tr>
+<tr>
+<td>使用预付/虚拟卡</td>
+<td>被拒</td>
+<td>用 VISA/Master 信用/借记卡</td>
+</tr>
+<tr>
+<td>相同信息反复尝试</td>
+<td>可能永久封锁</td>
+<td>试 1~2 次后换信息</td>
+</tr>
+<tr>
+<td>一次申请 4 OCPU</td>
+<td>Out of capacity 无限循环</td>
+<td>拆成 2 OCPU × 2 台</td>
+</tr>
+<tr>
+<td>只开 Security List 未开 iptables</td>
+<td>外网无法访问</td>
+<td>两边都要配置</td>
+</tr>
+<tr>
+<td>Docker 容器含外部矿机</td>
+<td>账户立即永久封禁</td>
+<td>只用可信镜像，官方 Hub 也要验证</td>
+</tr>
+<tr>
+<td>30 天试用期内创建付费资源</td>
+<td>$300 额度耗尽后自动扣费</td>
+<td>只用带「Always Free Eligible」标签的资源</td>
+</tr>
+<tr>
+<td>Home Region 选错</td>
+<td>无法更改，需新账户</td>
+<td>推荐 Chuncheon/Osaka</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. 推荐用例</h2>
+<p>ARM 4 OCPU / 24 GB 可实际运行的负载：</p>
+<table>
+<thead>
+<tr>
+<th>用途</th>
+<th>配置</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>个人 VPN</td>
+<td>单独 WireGuard</td>
+<td>1 OCPU 足够，10 TB 流量</td>
+</tr>
+<tr>
+<td>博客/主页</td>
+<td>Nginx + WordPress + MariaDB</td>
+<td>1 OCPU / 6 GB</td>
+</tr>
+<tr>
+<td>K3s 集群</td>
+<td>1 控制面 + 3 worker (各 1 OCPU / 6 GB)</td>
+<td>Kubernetes 学习</td>
+</tr>
+<tr>
+<td>自托管 AI</td>
+<td>Ollama + 7B/8B 量化模型</td>
+<td>8~20 tokens/s，占满 4 OCPU</td>
+</tr>
+<tr>
+<td>自动化工作流</td>
+<td>n8n + Postgres (Docker Compose)</td>
+<td>必须确认 ARM 兼容镜像</td>
+</tr>
+<tr>
+<td>游戏服务器</td>
+<td>Minecraft Java + GeyserMC</td>
+<td>建议 2 OCPU / 12 GB</td>
+</tr>
+<tr>
+<td>个人 DNS/广告拦截</td>
+<td>AdGuard Home / Pi-hole</td>
+<td>几乎不占资源</td>
+</tr>
+</tbody></table>
+<p>ARM 兼容性：多数开源软件提供多架构镜像。但 <strong>部分闭源或老旧 Docker 镜像仅 amd64</strong>，<code>docker pull</code> 时需检查 platform 选项。最后手段是在 E2.1.Micro x86 实例上运行。</p>
+<hr>
+<h2>9. PAYG (Pay-As-You-Go) 迁移考量</h2>
+<p>迁移优点：</p>
+<ul>
+<li>更容易获得 ARM A1 容量</li>
+<li>可使用 AI/ML、高性能网络等付费服务</li>
+<li>可正式提交客户支持工单</li>
+<li>Always Free 资源仍免费</li>
+</ul>
+<p>迁移风险：</p>
+<ul>
+<li>误建无「Always Free Eligible」标签的资源会立即计费</li>
+<li>启动卷超过 200 GB 按超出部分计费</li>
+<li>流量超过 10 TB 按超出部分计费</li>
+</ul>
+<p><strong>PAYG 迁移决策标准</strong>：仅当必须将 ARM 实例放在韩国/东京区域，且自动化脚本仍抢不到时才考虑。否则建议维持 Always Free。</p>
+<hr>
+<h2>10. 参考链接</h2>
+<ul>
+<li>官方文档: <a href="https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier.htm">https://docs.oracle.com/en-us/iaas/Content/FreeTier/freetier.htm</a></li>
+<li>韩语 FAQ: <a href="https://www.oracle.com/kr/cloud/free/faq/">https://www.oracle.com/kr/cloud/free/faq/</a></li>
+<li>韩国用户指南: <a href="http://taewan.kim/oci_docs/">http://taewan.kim/oci_docs/</a> (김태완)</li>
+<li>ARM 自动创建脚本: <a href="https://github.com/hitrov/oci-arm-host-capacity">https://github.com/hitrov/oci-arm-host-capacity</a></li>
+<li>韩国用户群组: Facebook「Oracle Cloud KR User Group」</li>
+</ul>
+<hr>
+<p><em>本文假定仅在 Always Free 限额内运营；使用付费资源需另行评估。</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/OracleCloud/02.%20Oracle%20Cloud%20Free%20Tier%20Guide_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

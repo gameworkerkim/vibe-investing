@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GitHubリポジトリとjsDelivr CDNを活用したJSONファイルホスティングガイド — VibeQuant</title>
+  <meta name="description" content="GitHubの公開リポジトリとjsDelivr CDNを連携させて、JSONファイルを無料でホスティングし世界中に高速配信する方法の手順ガイド" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/github-cdn-github-cdn-ja/" />
+  <meta property="og:title" content="GitHubリポジトリとjsDelivr CDNを活用したJSONファイルホスティングガイド" />
+  <meta property="og:description" content="GitHubの公開リポジトリとjsDelivr CDNを連携させて、JSONファイルを無料でホスティングし世界中に高速配信する方法の手順ガイド" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/github-cdn-github-cdn-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/github-cdn-github-cdn/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/github-cdn-github-cdn-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/github-cdn-github-cdn-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/github-cdn-github-cdn-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/github-cdn-github-cdn/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"GitHubリポジトリとjsDelivr CDNを活用したJSONファイルホスティングガイド","description":"GitHubの公開リポジトリとjsDelivr CDNを連携させて、JSONファイルを無料でホスティングし世界中に高速配信する方法の手順ガイド","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/github-cdn-github-cdn-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/github_cdn/github_cdn_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-21","dateModified":"2026-07-21","inLanguage":"ja","keywords":"클라우드 · Free tier, github_cdn"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 클라우드 · Free tier</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · Free tier</p>
+        <h1>GitHubリポジトリとjsDelivr CDNを活用したJSONファイルホスティングガイド</h1>
+        <p class="article-dates"><time datetime="2026-07-21">발행 2026.07.21</time> · 주제 클라우드 · Free tier · github_cdn</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/github-cdn-github-cdn/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/github-cdn-github-cdn-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/github-cdn-github-cdn-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/github-cdn-github-cdn-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">GitHubの公開リポジトリとjsDelivr CDNを連携させて、JSONファイルを無料でホスティングし世界中に高速配信する方法の手順ガイド</p>
+        
+      </header>
+      <div class="article-body prose"><p>GitHubの公開リポジトリとjsDelivr CDNを連携させると、JSONファイルを無料でホスティングし、世界中に高速に配信できます。</p>
+<p>このガイドは初心者でも簡単に実践できるよう、ステップごとの手順とともに制限事項や運用時の注意点をまとめています。</p>
+<h1>目次</h1>
+<ol>
+<li>GitHubリポジトリの作成</li>
+<li>JSONファイルのアップロード</li>
+<li>jsDelivr CDNアドレスの生成</li>
+<li>CDNアドレスの利用と確認</li>
+<li>重要な参考事項</li>
+<li>参考資料</li>
+</ol>
+<h1>ステップ1: GitHubリポジトリの作成</h1>
+<h2>リポジトリ作成手順</h2>
+<ol>
+<li>GitHubにログイン</li>
+<li>右上の「+」ボタンをクリック</li>
+<li>「New repository」を選択</li>
+<li>リポジトリ名を入力</li>
+</ol>
+<p>例:</p>
+<p>text my-json-data</p>
+<ol start="5">
+<li>リポジトリを公開設定にする</li>
+</ol>
+<p>text Public</p>
+<blockquote>
+<p>jsDelivrは公開リポジトリのみをサポートします。</p>
+</blockquote>
+<ol start="6">
+<li>「Add a README file」にチェック</li>
+<li>「Create repository」をクリック</li>
+</ol>
+<h1>ステップ2: JSONファイルのアップロード</h1>
+<p>作成されたリポジトリで:</p>
+<ol>
+<li>「Add file」</li>
+<li>「Upload files」</li>
+<li>JSONファイルをアップロード</li>
+<li>「Commit changes」をクリック</li>
+</ol>
+<p>例の構造:</p>
+<p>text my-json-data/ ├── README.md └── data.json</p>
+<h1>ステップ3: jsDelivr CDNアドレスの生成</h1>
+<h2>基本URL形式</h2>
+<p>text <a href="https://cdn.jsdelivr.net/gh/%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E5%90%8D/%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E5%90%8D/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%83%91%E3%82%B9">https://cdn.jsdelivr.net/gh/ユーザー名/リポジトリ名/ファイルパス</a></p>
+<h3>例</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ユーザー名</td>
+<td>honggildong</td>
+</tr>
+<tr>
+<td>リポジトリ名</td>
+<td>my-json-data</td>
+</tr>
+<tr>
+<td>ファイル名</td>
+<td>data.json</td>
+</tr>
+</tbody></table>
+<p>生成されたURL:</p>
+<p>text <a href="https://cdn.jsdelivr.net/gh/honggildong/my-json-data/data.json">https://cdn.jsdelivr.net/gh/honggildong/my-json-data/data.json</a></p>
+<h2>URL構造の説明</h2>
+<p>text <a href="https://cdn.jsdelivr.net/gh/user/repo@version/file">https://cdn.jsdelivr.net/gh/user/repo@version/file</a></p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>user</td>
+<td>GitHubのユーザー名または組織名</td>
+</tr>
+<tr>
+<td>repo</td>
+<td>リポジトリ名</td>
+</tr>
+<tr>
+<td>version</td>
+<td>ブランチ、タグ、コミットハッシュ</td>
+</tr>
+<tr>
+<td>file</td>
+<td>ファイルパス</td>
+</tr>
+</tbody></table>
+<p>例:</p>
+<p>text <a href="https://cdn.jsdelivr.net/gh/honggildong/my-json-data@v1.0.0/data.json">https://cdn.jsdelivr.net/gh/honggildong/my-json-data@v1.0.0/data.json</a></p>
+<h1>ステップ4: CDNアドレスの利用と確認</h1>
+<h2>Webブラウザで確認</h2>
+<p>生成されたURLをブラウザのアドレスバーに入力します。</p>
+<p>text <a href="https://cdn.jsdelivr.net/gh/honggildong/my-json-data/data.json">https://cdn.jsdelivr.net/gh/honggildong/my-json-data/data.json</a></p>
+<p>JSONの内容が表示されれば成功です。</p>
+<h2>JavaScriptで使用</h2>
+<p>html <script> fetch('<a href="https://cdn.jsdelivr.net/gh/honggildong/my-json-data/data.json">https://cdn.jsdelivr.net/gh/honggildong/my-json-data/data.json</a>')   .then(response => response.json())   .then(data => console.log(data))   .catch(error => console.error(error)); </script></p>
+<h2>cURLでのテスト</h2>
+<p>bash curl <a href="https://cdn.jsdelivr.net/gh/honggildong/my-json-data/data.json">https://cdn.jsdelivr.net/gh/honggildong/my-json-data/data.json</a></p>
+<h1>重要な参考事項</h1>
+<h2>1. キャッシュの問題とバージョン管理</h2>
+<p>jsDelivrはCDNキャッシュを積極的に使用します。</p>
+<h3>一般的なキャッシュ方針</h3>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>キャッシュ期間</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ブランチ参照</td>
+<td>約12時間</td>
+</tr>
+<tr>
+<td>@latest</td>
+<td>最大7日</td>
+</tr>
+</tbody></table>
+<p>そのため、ファイルを修正しても即時に反映されない場合があります。</p>
+<h2>推奨方法: Gitタグの使用</h2>
+<h3>リリースの作成</h3>
+<ol>
+<li>リポジトリへ移動</li>
+<li>「Releases」</li>
+<li>「Draft a new release」</li>
+<li>バージョンを入力</li>
+</ol>
+<p>例:</p>
+<p>text v1.0.0 v1.0.1 v1.1.0</p>
+<ol start="5">
+<li>「Publish release」</li>
+</ol>
+<h3>バージョン固定URLの使用</h3>
+<p>text <a href="https://cdn.jsdelivr.net/gh/%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E5%90%8D/%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E5%90%8D@v1.0.0/data.json">https://cdn.jsdelivr.net/gh/ユーザー名/リポジトリ名@v1.0.0/data.json</a></p>
+<h3>タグURLのキャッシュ方針</h3>
+<ul>
+<li>最大1年間キャッシュ</li>
+<li>S3に永久保存</li>
+</ul>
+<p>本番サービスではタグURLの使用を推奨します。</p>
+<h2>2. GitHubリポジトリのサイズ制限</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>制限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>推奨リポジトリサイズ</td>
+<td>1GB未満</td>
+</tr>
+<tr>
+<td>GitHubの警告</td>
+<td>1GB超過時</td>
+</tr>
+<tr>
+<td>単一ファイル制限</td>
+<td>100MB</td>
+</tr>
+<tr>
+<td>非公式な最大サイズ</td>
+<td>約5GB</td>
+</tr>
+</tbody></table>
+<h2>GitHub Packagesのデータ転送量</h2>
+<p>Freeプラン基準:</p>
+<p>text 月1GB</p>
+<h2>3. jsDelivr帯域幅の制限</h2>
+<h3>長所</h3>
+<p>jsDelivr自体は</p>
+<ul>
+<li>帯域幅制限なし</li>
+<li>無料利用</li>
+<li>グローバルCDN</li>
+</ul>
+<h3>参考</h3>
+<p>GitHub Pagesには別途の制限が存在</p>
+<p>text 月100GB</p>
+<h2>4. jsDelivrの利用制限</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>制限</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>パッケージサイズ</td>
+<td>150MB</td>
+</tr>
+<tr>
+<td>単一ファイル</td>
+<td>20MB</td>
+</tr>
+<tr>
+<td>HTMLファイル</td>
+<td>text/plainとして提供</td>
+</tr>
+</tbody></table>
+<h3>サポート対象外のケース</h3>
+<p>text Packages larger than 150 MB Single files larger than 20 MB</p>
+<h2>5. キャッシュパージ (Purge)</h2>
+<p>緊急にキャッシュを更新する必要がある場合に使用します。</p>
+<h3>cURLの例</h3>
+<p>bash curl <a href="https://purge.jsdelivr.net/gh/%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%BC%E5%90%8D/%E3%83%AA%E3%83%9D%E3%82%B8%E3%83%88%E3%83%AA%E5%90%8D@%E3%83%90%E3%83%BC%E3%82%B8%E3%83%A7%E3%83%B3/%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB%E3%83%91%E3%82%B9">https://purge.jsdelivr.net/gh/ユーザー名/リポジトリ名@バージョン/ファイルパス</a></p>
+<p>例:</p>
+<p>bash curl <a href="https://purge.jsdelivr.net/gh/honggildong/my-json-data@v1.0.0/data.json">https://purge.jsdelivr.net/gh/honggildong/my-json-data@v1.0.0/data.json</a></p>
+<h3>Webインターフェース</h3>
+<p>jsDelivr公式のPurge Toolを使用</p>
+<p>text <a href="https://www.jsdelivr.com/tools/purge">https://www.jsdelivr.com/tools/purge</a></p>
+<h1>参考資料</h1>
+<table>
+<thead>
+<tr>
+<th>資料</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>jsDelivr公式ホームページ</td>
+<td>CDNサービス</td>
+</tr>
+<tr>
+<td>jsDelivr GitHubリポジトリ</td>
+<td>ソースコード</td>
+</tr>
+<tr>
+<td>jsDelivr Purge Tool</td>
+<td>キャッシュ削除</td>
+</tr>
+<tr>
+<td>GitHubリポジトリ制限ドキュメント</td>
+<td>リポジトリ容量ポリシー</td>
+</tr>
+<tr>
+<td>GitHub Billing Docs</td>
+<td>データ転送ポリシー</td>
+</tr>
+<tr>
+<td>jsDelivr GitHub Delivery Docs</td>
+<td>URL構造とキャッシュ方針</td>
+</tr>
+</tbody></table>
+<h1>運用チェックリスト</h1>
+<ul>
+<li><input disabled="" type="checkbox"> GitHub公開リポジトリの作成</li>
+<li><input disabled="" type="checkbox"> JSONファイルのアップロード</li>
+<li><input disabled="" type="checkbox"> jsDelivr URLの生成</li>
+<li><input disabled="" type="checkbox"> ブラウザテストの完了</li>
+<li><input disabled="" type="checkbox"> JavaScript fetchテストの完了</li>
+<li><input disabled="" type="checkbox"> Gitリリースタグの作成</li>
+<li><input disabled="" type="checkbox"> バージョンURLの適用</li>
+<li><input disabled="" type="checkbox"> キャッシュ方針の確認</li>
+<li><input disabled="" type="checkbox"> データ転送量のモニタリング</li>
+</ul>
+<hr>
+<h1>注意事項</h1>
+<p>この方法は以下の用途に適しています。</p>
+<ul>
+<li>個人プロジェクト</li>
+<li>開発およびテスト</li>
+<li>小規模サービス</li>
+<li>設定ファイル(JSON)の配布</li>
+<li>静的データの提供</li>
+</ul>
+<p>以下の環境では別途のCDNまたはオブジェクトストレージの使用を推奨します。</p>
+<ul>
+<li>大規模商用サービス</li>
+<li>金融システム</li>
+<li>ミッションクリティカルサービス</li>
+<li>リアルタイム大容量データサービス</li>
+</ul>
+<p>GitHubリポジトリを単純なファイルストレージとして過度に使用する場合、GitHub利用規約に抵触する可能性があるため注意が必要です。</p>
+<h2>結論</h2>
+<p>GitHub + jsDelivrの組み合わせは、無料でありながら非常に強力な静的JSON配信方法です。</p>
+<p>特に:</p>
+<ul>
+<li>API設定ファイル</li>
+<li>LLMプロンプトデータ</li>
+<li>株式/暗号資産のメタデータ</li>
+<li>バージョン管理が必要な静的データ</li>
+</ul>
+<p>の配信に非常に適しており、Gitタグベースのバージョン管理を併用すれば、安定した本番運用も可能です。</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/github_cdn/github_cdn_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

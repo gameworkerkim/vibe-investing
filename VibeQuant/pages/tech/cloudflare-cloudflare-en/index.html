@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>How I Actually Run on the Cloudflare Free Tier — the VibeQuant Operations Case Study — VibeQuant</title>
+  <meta name="description" content="A practical account of why and how VibeQuant is designed and operated entirely on Cloudflare's free tier — not a generic sign-up manual, but real operational decisions, pitfalls, and a stack that avoids fighting the free-tier limits." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-en/" />
+  <meta property="og:title" content="How I Actually Run on the Cloudflare Free Tier — the VibeQuant Operations Case Study" />
+  <meta property="og:description" content="A practical account of why and how VibeQuant is designed and operated entirely on Cloudflare's free tier — not a generic sign-up manual, but real operational decisions, pitfalls, and a stack that avoids fighting the free-tier limits." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/cloudflare-cloudflare-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"How I Actually Run on the Cloudflare Free Tier — the VibeQuant Operations Case Study","description":"A practical account of why and how VibeQuant is designed and operated entirely on Cloudflare's free tier — not a generic sign-up manual, but real operational decisions, pitfalls, and a stack that avoids fighting the free-tier limits.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/cloudflare-cloudflare-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudFlare/Cloudflare_%EB%AC%B4%EB%A3%8C%ED%8B%B0%EC%96%B4_%EC%82%AC%EC%9A%A9%EB%B2%95_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-24","dateModified":"2026-07-24","inLanguage":"en","keywords":"Cloudflare, Free Tier, Workers, Pages, Serverless, VibeQuant"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 클라우드 · Free tier</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · Free tier</p>
+        <h1>How I Actually Run on the Cloudflare Free Tier — the VibeQuant Operations Case Study</h1>
+        <p class="article-dates"><time datetime="2026-07-24">발행 2026.07.24</time> · 주제 Cloudflare · Free Tier · Workers · Pages · Serverless · VibeQuant</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/cloudflare-cloudflare/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/cloudflare-cloudflare-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/cloudflare-cloudflare-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/cloudflare-cloudflare-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">A practical account of why and how VibeQuant is designed and operated entirely on Cloudflare's free tier — not a generic sign-up manual, but real operational decisions, pitfalls, and a stack that avoids fighting the free-tier limits.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>Written: 2026-07-24 · Audience: developers who want to run a personal site, independent research project, or small open-source site <strong>without ever switching to a paid plan</strong>
+Related: <a href="Cloudflare%20free%20tier%20guide.md">Cloudflare Free Tier Sign-Up &amp; Limits Guide</a> · <a href="../vercel/vercel_analysis.md">Vercel Analysis</a> · <a href="../Free_Hosting/FreeHosting.md">Free Web Hosting Comparison</a> · Site: <a href="https://vibequant.cc/">vibequant.cc</a></p>
+</blockquote>
+<p>This document is not &quot;a Googled-and-LLM-generated manual without real operational experience.&quot; It&#39;s a record of <strong>why and how <a href="https://vibequant.cc/">VibeQuant</a> was designed and operated using only Cloudflare&#39;s free tier</strong>.
+For sign-up steps, limits, and quota numbers, see the existing <a href="Cloudflare%20free%20tier%20guide.md">sign-up &amp; limits guide</a>.</p>
+<hr>
+<h2>1. What Is Cloudflare?</h2>
+<p>Cloudflare originally built its reputation on <strong>DNS, CDN, and DDoS protection</strong>as an edge network company. In the industry, it&#39;s often placed in front of Web3 services, exchanges, and other services with volatile traffic. Since the 2020s, it has expanded into a<strong>developer platform</strong>that bundles<strong>Workers (serverless), Pages (static/SSR), R2 (object storage), D1 (SQLite), KV, and the Cache API</strong>into a single account, handling &quot;security in front of the domain + global distribution + a lightweight backend&quot; all<strong>on the same edge</strong>. More recently, AI-related products such as <strong>Workers AI and AI Gateway</strong> have been added too.</p>
+<p>In one line:</p>
+<blockquote>
+<p><strong>No matter where the traffic comes from, handle HTML, API calls, and caching at the nearest PoP, and eliminate as much origin server cost as possible.</strong>Even on the free plan, you get custom domains, HTTPS, CDN, basic WAF/bot mitigation, and Pages/Workers — with some limits. It fits well with something like VibeQuant:<strong>a content archive + a thin API + browser-based quant experiments</strong>.</p>
+</blockquote>
+<p>I bought a custom domain, so the only cost I actually incur is the domain itself. A <code>*.pages.dev</code> subdomain would work too, but having a real domain helps with SEO and branding.</p>
+<hr>
+<h2>2. Advantages</h2>
+<h3>2.1 Security</h3>
+<p>True to its DDoS-protection roots, Cloudflare filters abnormal requests before they ever reach your origin.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Automatic HTTPS / TLS</td>
+<td>Less burden managing certificate renewal</td>
+</tr>
+<tr>
+<td>DDoS / bot mitigation</td>
+<td>Absorbed at the edge even if the origin is weak</td>
+</tr>
+<tr>
+<td>DNS lives on the same platform</td>
+<td>Once nameservers point to Cloudflare, CDN, WAF, and Pages operate as one pipeline</td>
+</tr>
+<tr>
+<td>Secrets live only in Workers</td>
+<td>It naturally becomes structural to never put API keys in Pages HTML</td>
+</tr>
+</tbody></table>
+<p>If your site is mostly static HTML, this becomes a design where <strong>the origin server is never exposed</strong>. Attack traffic hits <strong>Cloudflare&#39;s edge</strong> first, rather than your application server&#39;s CPU.
+That said, on the free tier you still have <strong>daily edge limits and fair-use policy</strong> to deal with. Reduced origin bombardment is a separate matter from quota exhaustion and terms-of-service issues (see §3, §8).</p>
+<h3>2.2 CDN (Bandwidth That&#39;s Nearly Free)</h3>
+<p>Pages static assets can be served with close to <strong>unlimited bandwidth</strong>(subject to fair use / terms of service). R2&#39;s key differentiator is<strong>free egress</strong>. This means &quot;more Columns/TechDoc HTML pages&quot; doesn&#39;t translate into &quot;a bandwidth cost bomb&quot; — a notable contrast to Vercel Hobby&#39;s monthly bandwidth cap and overage billing structure.</p>
+<h3>2.3 Serverless Integration</h3>
+<p>A single account can combine roughly this:</p>
+<pre><code>Pages (HTML/SEO)  +  Pages Functions / Workers (API)
+      +  Cache API · KV (cache)
+      +  R2 / D1 (storage)
+      +  Custom domain · subdomains
+</code></pre>
+<p>You don&#39;t need to split &quot;static site on Provider A, API on Provider B, CDN on Provider C.&quot; VibeQuant splits roles this way: <strong>content as static HTML on Pages</strong>, <strong>price/research APIs on Workers/Pages Functions</strong>, and <strong>browser-side quant work on Pyodide</strong>.</p>
+<p>For a small, individually-run <strong>static site + thin edge API</strong>, this means fewer failure points and simpler maintenance.</p>
+<h3>2.4 Other Practical Benefits</h3>
+<ul>
+<li>Workers/Pages can be started <strong>without a credit card</strong> (some products like R2 may require a payment method depending on the product/timing — see §8)</li>
+<li>Prototype without even owning a domain, via <code>*.pages.dev</code> / <code>*.workers.dev</code></li>
+<li>Wrangler CLI gives you the same deploy script locally and in CI</li>
+<li>Pairs well with a GitHub Markdown -&gt; static HTML build pipeline (good for SEO/GEO)</li>
+</ul>
+<hr>
+<h2>3. Disadvantages</h2>
+<p>Being blunt here. Mistaking the free tier for an &quot;unlimited PaaS&quot; causes problems immediately.</p>
+<table>
+<thead>
+<tr>
+<th>Drawback</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Daily request/CPU limits</strong></td>
+<td>Workers free tier is roughly<strong>100k requests/day</strong>, with about <strong>~10ms CPU per request</strong>. If you exhaust it during a peak, you can be blocked until UTC midnight (09:00 KST)</td>
+</tr>
+<tr>
+<td><strong>KV write limits</strong></td>
+<td>Free KV writes are capped at roughly 1,000/day — tight. Not suitable for sessions or real-time counters →<strong>prefer the Cache API</strong> as the practical pattern</td>
+</tr>
+<tr>
+<td><strong>Weak native Python</strong></td>
+<td>Workers&#39; Python support is Pyodide/WASM-based. <code>numpy</code>, heavy C extensions, and long-running jobs are hard to put on the edge</td>
+</tr>
+<tr>
+<td><strong>Cold-start / runtime constraints</strong></td>
+<td>Full Node backends (long background jobs, WebSockets, arbitrary binaries) are often more comfortable on Vercel/Railway</td>
+</tr>
+<tr>
+<td><strong>Debugging UX</strong></td>
+<td>Local reproduction and logs can be frustrating until you get used to them</td>
+</tr>
+<tr>
+<td><strong>Vendor boundaries</strong></td>
+<td>Durable Objects, some AI features, and advanced WAF are paid. &quot;Fully free enterprise-grade&quot; is a fantasy</td>
+</tr>
+<tr>
+<td><strong>Subdomain/project sprawl</strong></td>
+<td>Attaching custom hosts to multiple Pages projects can make DNS, middleware, and redirects complicated (VibeQuant simplified this into a single hub project with path-based routing)</td>
+</tr>
+<tr>
+<td><strong>Terms of service / fair use</strong></td>
+<td>Even &quot;unlimited&quot; bandwidth can be restricted for abuse, attacks, or large-scale commercial distribution</td>
+</tr>
+</tbody></table>
+<p>When traffic or roles exceed what fits, mix providers <strong>by role</strong>. For example: read cache -&gt; Upstash Redis, long jobs/Python APIs -&gt; Render/Railway, Next.js full-stack experiments -&gt; Vercel (check terms/bandwidth). Rather than &quot;just bolt on Vercel,&quot; attach <strong>only the piece that fits the limits and terms</strong>.</p>
+<hr>
+<h2>4. Competing Services (PaaS, Including Vercel)</h2>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Position</th>
+<th>vs. Cloudflare</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><a href="../vercel/vercel_analysis.md">Vercel</a></strong></td>
+<td>Next.js-optimized PaaS, best-in-class DX</td>
+<td>Hobby plan has commercial-use restrictions, bandwidth caps, and overage-billing risk. Attractive for Next.js full-stack apps; for<strong>high-traffic static archives</strong>, CF is often the better fit</td>
+</tr>
+<tr>
+<td><strong>Netlify</strong></td>
+<td>JAMstack, forms, build pipelines</td>
+<td>Free-tier limits (e.g., build minutes) have been trending tighter</td>
+</tr>
+<tr>
+<td><strong>GitHub Pages</strong></td>
+<td>Docs, portfolios</td>
+<td>Weak on serverless APIs, edge caching, integrated WAF. Best as<strong>an archive of the original Markdown</strong> (VibeQuant uses a dual GitHub + CF structure)</td>
+</tr>
+<tr>
+<td><strong>Railway / Render / Fly.io</strong></td>
+<td>Containers, long-running processes</td>
+<td>Sleep, time limits, pressure to upgrade to paid. Well suited to Python API servers</td>
+</tr>
+<tr>
+<td><strong>Firebase Hosting</strong></td>
+<td>Google ecosystem</td>
+<td>Strong when paired with Auth/Firestore</td>
+</tr>
+<tr>
+<td><strong>AWS Amplify / Azure Static Web Apps</strong></td>
+<td>Cloud-vendor lock-in</td>
+<td>Good when integrating with enterprise IAM or an existing cloud. CF tends to be simpler for personal, free-tier operation</td>
+</tr>
+<tr>
+<td><strong>Oracle Cloud Free</strong></td>
+<td>Always Free VM</td>
+<td>IaaS. More management burden, more control — see <a href="../OracleCloud/02.%20Oracle%20Cloud%20Free%20Tier%20Guide.md">separate guide</a></td>
+</tr>
+</tbody></table>
+<p>Selection heuristic:</p>
+<ul>
+<li><strong>Next.js App Router-centric product</strong> -&gt; Consider Vercel first, but read the cost/terms before starting</li>
+<li><strong>Markdown archive + SEO + thin API + zero cost</strong> -&gt; Cloudflare Pages (+ Workers)</li>
+<li><strong>Long-running Python / DB workers</strong> -&gt; Railway, Render, Fly, or a separate VPS with only the front end on Cloudflare</li>
+</ul>
+<p>Initial cost is generally lower than locking everything into AWS. Because DDoS and scraping get blocked <strong>in front of the origin</strong>, the origin server is far less likely to melt down instantly. But <strong>edge limits and fair-use policy</strong> remain (§3).</p>
+<hr>
+<h2>5. An Efficient Language and Stack Combination</h2>
+<p>A combination that <strong>fights the free tier less</strong>. Push complex backends out to other providers.</p>
+<h3>5.1 Recommended Stack (VibeQuant Style)</h3>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Technology</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Content source of truth</td>
+<td><strong>Markdown (GitHub)</strong></td>
+<td>Version control, PRs, AI search (DeepWiki, etc.), human readability</td>
+</tr>
+<tr>
+<td>Publishing surface</td>
+<td><strong>Static HTML</strong> (build script)</td>
+<td>Deploy to Pages with Core Web Vitals, OG tags, sitemap, <code>llms.txt</code></td>
+</tr>
+<tr>
+<td>Edge API</td>
+<td><strong>JavaScript / TypeScript</strong> (Workers, Pages Functions)</td>
+<td>First-class runtime citizen. Pairs well with <code>fetch</code> and the Cache API</td>
+</tr>
+<tr>
+<td>Browser-side quant</td>
+<td><strong>Python + Pyodide</strong></td>
+<td>Doesn&#39;t consume server CPU quota. GS Quant-style experiments run client-side</td>
+</tr>
+<tr>
+<td>Cache</td>
+<td><strong>Cache API</strong> (preferred) · KV (read-heavy)</td>
+<td>Avoids the KV write limit</td>
+</tr>
+<tr>
+<td>Secrets</td>
+<td>Worker environment variables / <code>wrangler secret</code></td>
+<td>Never bundle keys into the frontend</td>
+</tr>
+</tbody></table>
+<h3>5.2 Avoid or Push &quot;Outside the Boundary&quot;</h3>
+<ul>
+<li><strong>Heavy numpy/pandas batch jobs</strong> on Workers — use browser-side Pyodide or an external PaaS instead</li>
+<li><strong>Long-lived connections</strong> like Prisma + Neon over TCP — needs a redesign for Pages Functions (REST/HTTP client + caching)</li>
+<li><strong>Puppeteer / local filesystem access</strong> — not available at the edge. Pre-build the output or use a different runtime</li>
+<li><strong>LLM calls on every request</strong>— cache, respect daily limits and cost. Call things like DeepSeek from a Worker, but<strong>cache the result</strong></li>
+</ul>
+<h3>5.3 One-Line Language Summary</h3>
+<blockquote>
+<p><strong>TypeScript for the edge, Markdown for documents, browser Python for quant experiments.</strong>
+This triangle fits well with Cloudflare&#39;s free tier. Forcing a tech stack that doesn&#39;t fit tends to cost you completeness, stability, and latency.</p>
+</blockquote>
+<hr>
+<h2>6. How the Site Was Actually Built — Design and Concept</h2>
+<h3>6.1 The Problem</h3>
+<ol>
+<li><p><strong>The volatility of news/column pages on the web</strong>
+I&#39;ve been writing news columns since 2000. Media outlets and blog platforms keep getting redesigned, old article URLs disappear, and gaps appear — like an entire block of pre-2014 columns going missing. Losing 14 years of writing is a serious problem for search, citation, and research continuity. Keeping it locked inside a search engine&#39;s closed platform (like Naver) also blocks discovery by Google and LLMs.
+-&gt; <strong>Permanently archive the original text as Markdown on GitHub</strong>, and treat the web as <strong>the publishing surface for that source of truth</strong>.</p>
+</li>
+<li><p><strong>Optimizing for both human search (SEO) and AI search (GEO) at once</strong>
+A GitHub tree alone is weak for Google and social OG previews, and agents like ChatGPT, Perplexity, and Cursor tend to skip citing content without <code>llms.txt</code>, semantic HTML, and individual URLs.
+-&gt; Deploy to Pages with <strong>individual document URLs + sitemap + llms.txt + canonical links back to the GitHub blob</strong>.</p>
+</li>
+<li><p><strong>A testing ground built on the premise of zero infrastructure cost</strong>
+Tens of dollars a month in PaaS fees is overkill for a personal research/open-source archive.
+-&gt; Impose <strong>operating entirely on Cloudflare&#39;s free tier</strong> as a hard constraint.</p>
+</li>
+<li><p><strong>Separating &quot;what quant shows&quot; from &quot;what quant runs&quot;</strong>
+Running GS Quant-style price/strategy validation on a server runs into limits and dependency issues.
+-&gt; <strong>The playground runs on Pyodide (browser-side Python)</strong>; the API only handles prices, caching, and thin proxying.</p>
+</li>
+</ol>
+<h3>6.2 The Concept in One Diagram</h3>
+<pre><code>[GitHub vibe-investing]
+  ├─ 02.Investment Idea Column / essays / CTI / TechDoc   ← source of truth / SEO source
+  └─ VibeQuant/
+        build → static HTML
+             ↓
+[Cloudflare Pages]  vibequant.cc  (hub)
+  docs / tech / cti / play / essays / research …
+             ↓
+[Workers / Pages Functions]  price/research API · caching
+             ↓
+[Browser]  Pyodide + GS Quant-style experiments (no server CPU used)
+</code></pre>
+<h3>6.3 Services Actually Deployed</h3>
+<table>
+<thead>
+<tr>
+<th>Surface</th>
+<th>Example URL</th>
+<th>Role</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Hub</td>
+<td><a href="https://vibequant.cc/">vibequant.cc</a></td>
+<td>Entry point, branding</td>
+</tr>
+<tr>
+<td>Columns</td>
+<td>docs.vibequant.cc</td>
+<td>Investment column archive</td>
+</tr>
+<tr>
+<td>Tech</td>
+<td>tech.vibequant.cc</td>
+<td>TechDoc</td>
+</tr>
+<tr>
+<td>CTI</td>
+<td>cti.vibequant.cc</td>
+<td>Threat intelligence reports</td>
+</tr>
+<tr>
+<td>Play</td>
+<td>play.vibequant.cc</td>
+<td>Python/quant web view</td>
+</tr>
+<tr>
+<td>Research</td>
+<td>vibequant.cc/research</td>
+<td>Quant / Space / Trump signals (no login, cached)</td>
+</tr>
+<tr>
+<td>Essays</td>
+<td>vibequant.cc/essays</td>
+<td>Essays</td>
+</tr>
+</tbody></table>
+<p>Principle: <strong>never gate content behind a login wall.</strong> Even the research dashboard is public, with cache TTLs used to stay within free-tier limits.</p>
+<h3>6.4 Design Rules for Staying &quot;Free Only&quot;</h3>
+<ol>
+<li>HTML is a build artifact — minimize runtime rendering</li>
+<li>Cache everything cacheable (e.g., 30 minutes during market hours, 2 hours after close)</li>
+<li>No excessive KV writes -&gt; use the Cache API instead</li>
+<li>Heavy computation runs in <strong>the user&#39;s browser</strong>, not the edge</li>
+<li>Exclude anything assuming TCP connections or a local runtime — Neon/Prisma/Puppeteer — from what gets ported, or precompute it instead</li>
+<li>Deploy with <code>wrangler pages deploy</code> — unset any local <code>HTTP_PROXY</code> if present</li>
+</ol>
+<hr>
+<h2>7. Basic Setup (Minimal Checklist)</h2>
+<p>For detailed quotas and migration, see the <a href="Cloudflare%20free%20tier%20guide.md">sign-up &amp; limits guide</a>. Here&#39;s just <strong>the minimal path</strong>.</p>
+<h3>7.1 Account</h3>
+<ol>
+<li><a href="https://dash.cloudflare.com/sign-up">dash.cloudflare.com/sign-up</a></li>
+<li>Verify email</li>
+<li><strong>2FA is mandatory</strong> (the account is the key to every site)</li>
+</ol>
+<h3>7.2 Wrangler</h3>
+<pre><code class="language-bash"># Node.js 18+
+npm i -g wrangler   # or a project-local node_modules install
+wrangler login
+wrangler whoami
+</code></pre>
+<h3>7.3 Deploying Pages</h3>
+<pre><code class="language-bash">wrangler pages deploy ./dist --project-name=my-site --commit-dirty=true
+# → https://my-site.pages.dev
+</code></pre>
+<p>Domain: Dashboard -&gt; Pages -&gt; Custom domains. Pointing nameservers to Cloudflare lets DNS and SSL be managed in one place.</p>
+<h3>7.4 Worker (API)</h3>
+<pre><code class="language-bash">cd cloudflare-worker
+wrangler deploy
+wrangler secret put MY_API_KEY
+</code></pre>
+<p><strong>Don&#39;t force Pages and Worker configuration into a single <code>wrangler.toml</code>.</strong>
+It&#39;s safer to run Pages with <code>cd pages &amp;&amp; wrangler pages deploy .</code>.</p>
+<h3>7.5 The VibeQuant-Style Pipeline (Concept)</h3>
+<pre><code class="language-bash">node content/build.mjs
+npx wrangler pages deploy ./pages --project-name=vibequant-web
+</code></pre>
+<p>The source of truth is always GitHub; the web version is a derivative. <strong>Even if a news article gets deleted, the repository stays the source of truth.</strong></p>
+<hr>
+<h2>8. Things to Watch Out For (Real Operational Pitfalls)</h2>
+<ol>
+<li><strong>100k requests/day on Workers</strong> — this can be exhausted by the afternoon during a market close or a viral spike. Reduce API calls with caching and static generation.</li>
+<li><strong>1,000 KV writes/day</strong> — writing page views to KV will blow through this instantly. Use the Cache API for prices/responses instead.</li>
+<li><strong>~10ms CPU</strong> — precompute heavy calculations and large JSON payloads, or push them to the client or an external service.</li>
+<li><strong>Activating R2</strong> — must be enabled from the dashboard, and may require a payment method (<code>10042</code>).</li>
+<li><strong>Proxy environments</strong> — an active <code>HTTP_PROXY</code> can cause deploys to <code>api.cloudflare.com</code> to fail.</li>
+<li><strong>522 on subdomains</strong> — before a custom host is connected, serve from the apex path and move it over once DNS is ready.</li>
+<li><strong>Don&#39;t let middleware block a path</strong> — overlaying a &quot;coming soon&quot; HTML page on <code>/research/*</code> hides both the static content and the API (a real incident that happened).</li>
+<li><strong>Never put secrets in HTML/Git</strong> — DeepSeek and exchange keys belong in Worker secrets.</li>
+<li><strong>Free = no SLA</strong> — keep the GitHub source and the <code>pages.dev</code> URL documented as backups.</li>
+<li><strong>Commercial / large-scale scraping</strong> — read the terms and fair-use policy, and distinguish between open research publication and abuse.</li>
+</ol>
+<hr>
+<h2>9. Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>Answer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Why use Cloudflare?</td>
+<td>Security + CDN + serverless on <strong>a single edge</strong>, running static sites and thin APIs for free</td>
+</tr>
+<tr>
+<td>Where is it weak?</td>
+<td>Heavy Python backends, strong consistency, long-running jobs, unpredictable traffic spikes</td>
+</tr>
+<tr>
+<td>How does it differ from Vercel?</td>
+<td>Vercel wins on Next.js DX and previews; Cloudflare often wins on <strong>bandwidth, predictable cost, and edge integration</strong></td>
+</tr>
+<tr>
+<td>VibeQuant&#39;s core constraint?</td>
+<td><strong>Free tier only</strong>, permanent GitHub source of truth, SEO + AI search, browser-based quant</td>
+</tr>
+<tr>
+<td>The stack?</td>
+<td>Markdown → static HTML + TypeScript edge API + Pyodide</td>
+</tr>
+</tbody></table>
+<p>The experience of columns disappearing from the web, GitHub trees invisible to search and LLMs, and the fear of monthly bills — solving all three at once makes Cloudflare&#39;s free tier not a &quot;second-best option&quot; but <strong>a deliberate choice</strong>.</p>
+<p>For a small team, it can be rational to see the free tier&#39;s <strong>limits and strengths</strong> and use it to cap costs until it&#39;s time to scale up. AWS no longer has to be the default for every workload.</p>
+<hr>
+<h2>References</h2>
+<ul>
+<li><a href="Cloudflare%20free%20tier%20guide.md">Cloudflare Free Tier Sign-Up &amp; Limits Guide</a> (KR) · <a href="Cloudflare%20free%20tier%20guide_EN.md">EN</a></li>
+<li><a href="../vercel/vercel_analysis.md">Vercel Platform Analysis</a></li>
+<li><a href="../Free_Hosting/FreeHosting.md">Free Web Hosting Guide</a></li>
+<li><a href="../agent-friendly-website-guide/agent-friendly-website-guide.en.md">Agent-Friendly Website Guide</a></li>
+<li><a href="../GS_Quant/GS%20Quant%20Getting%20Started.md">GS Quant Getting Started</a></li>
+<li><a href="../Python_Pyodide/Pyodide.md">Pyodide</a></li>
+<li>Cloudflare Workers Pricing: <a href="https://developers.cloudflare.com/workers/platform/pricing/">https://developers.cloudflare.com/workers/platform/pricing/</a></li>
+<li>Cloudflare Pages: <a href="https://developers.cloudflare.com/pages/">https://developers.cloudflare.com/pages/</a></li>
+<li>Workers AI: <a href="https://developers.cloudflare.com/workers-ai/">https://developers.cloudflare.com/workers-ai/</a></li>
+<li>VibeQuant deployment notes: <code>VibeQuant/cloudflare/DEPLOY_KR.md</code> (in-repo)</li>
+<li>Site: <a href="https://vibequant.cc/">https://vibequant.cc/</a> · Source: <a href="https://github.com/gameworkerkim/vibe-investing">https://github.com/gameworkerkim/vibe-investing</a></li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudFlare/Cloudflare_%EB%AC%B4%EB%A3%8C%ED%8B%B0%EC%96%B4_%EC%82%AC%EC%9A%A9%EB%B2%95_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

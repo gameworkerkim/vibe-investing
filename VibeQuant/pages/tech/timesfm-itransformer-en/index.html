@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iTransformer Getting Started Guide — VibeQuant</title>
+  <meta name="description" content="Tsinghua University x Ant Group's 'inverted Transformer' — a new paradigm for multivariate time-series forecasting." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/timesfm-itransformer-en/" />
+  <meta property="og:title" content="iTransformer Getting Started Guide" />
+  <meta property="og:description" content="Tsinghua University x Ant Group's 'inverted Transformer' — a new paradigm for multivariate time-series forecasting." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/timesfm-itransformer-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/timesfm-itransformer/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/timesfm-itransformer-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/timesfm-itransformer-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/timesfm-itransformer-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/timesfm-itransformer/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"iTransformer Getting Started Guide","description":"Tsinghua University x Ant Group's 'inverted Transformer' — a new paradigm for multivariate time-series forecasting.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/timesfm-itransformer-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/TimesFM/iTransformer_%EA%B0%80%EC%9D%B4%EB%93%9C_EN.md","image":"https://vibequant.cc/og-default.png","inLanguage":"en","keywords":"Time Series, Transformer, Machine Learning, Quant"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 퀀트 · 데이터</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">퀀트 · 데이터</p>
+        <h1>iTransformer Getting Started Guide</h1>
+        <p class="article-dates">주제 Time Series · Transformer · Machine Learning · Quant</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/timesfm-itransformer/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/timesfm-itransformer-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/timesfm-itransformer-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/timesfm-itransformer-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Tsinghua University x Ant Group's 'inverted Transformer' — a new paradigm for multivariate time-series forecasting.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>Tsinghua University x Ant Group&#39;s &quot;inverted Transformer&quot; — a new paradigm for multivariate time-series forecasting</p>
+</blockquote>
+<hr>
+<h2>Introduction</h2>
+<p>iTransformer (Inverted Transformer) is a time-series forecasting model jointly proposed by Tsinghua University and Ant Group (Alipay), selected as an <strong>ICLR 2024 Spotlight</strong>.</p>
+<p>The core of the name is &quot;Inverted&quot; — the Transformer architecture itself is left untouched, but <strong>the direction in which data is fed in is flipped 180 degrees</strong>. This simple inversion of thinking achieved SOTA in multivariate time-series forecasting.</p>
+<p>If TimesFM is a foundation model that &quot;covers every domain with a single model,&quot; iTransformer is a multivariate-specialized model that &quot;captures inter-variable correlations best.&quot; The two models have different goals, so they are both competitors and complements to each other.</p>
+<p>It excels at finding coupling signals that capture correlations between stock tickers. This makes it effective for trading strategies that catch price asymmetry and market inefficiency, timing the return from imbalance to equilibrium. It&#39;s useful for capturing sector rotation or generating rebalancing triggers by predicting the covariance structure between stocks. That said, it requires substantial hands-on effort. It has advantages over TimesFM, and mixing the two is useful.</p>
+<p>One-line summary: 中原多俊杰，灿若江沙；天下尽英雄，壮如三国。</p>
+<hr>
+<h2>Project Overview</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Developer</td>
+<td>Tsinghua University + Ant Group (Alipay)</td>
+</tr>
+<tr>
+<td>Published</td>
+<td>ICLR 2024 Spotlight</td>
+</tr>
+<tr>
+<td>License</td>
+<td>MIT (open source)</td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td><a href="https://github.com/thuml/iTransformer">https://github.com/thuml/iTransformer</a></td>
+</tr>
+<tr>
+<td>pip package</td>
+<td><code>pip install iTransformer</code></td>
+</tr>
+<tr>
+<td>Related libraries</td>
+<td>GluonTS (AWS), NeuralForecast (Nixtla), Time-Series-Library</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Core Idea — What Got &quot;Inverted&quot;?</h2>
+<h3>The Problem with Conventional Transformers</h3>
+<p>When conventional Transformers process multivariate time series, they bundle <strong>multiple variables at the same point in time</strong> into a single token (Temporal Token). For example, in power grid data, &quot;temperature + humidity + wind speed at 9 AM&quot; would be treated as one token.</p>
+<p>Problems with this approach:</p>
+<ul>
+<li>Forcing together values with <strong>completely different physical meanings and units</strong>, like temperature (°C) and power (kWh), loses semantic information.</li>
+<li>The timestamp itself, unlike a word in natural language, <strong>doesn&#39;t carry independent meaning</strong>.</li>
+</ul>
+<h3>iTransformer&#39;s Solution</h3>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Conventional Transformer</th>
+<th>iTransformer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Token definition</strong></td>
+<td>Each time step is one token</td>
+<td><strong>Each variable (channel) is one token</strong></td>
+</tr>
+<tr>
+<td><strong>Attention role</strong></td>
+<td>Models temporal dependencies</td>
+<td>Models<strong>multivariate correlations between variables</strong></td>
+</tr>
+<tr>
+<td><strong>Feed-forward role</strong></td>
+<td>Encodes features at each time point</td>
+<td>Encodes<strong>the entire time series representation</strong></td>
+</tr>
+</tbody></table>
+<p>In other words, iTransformer treats <strong>the entire time series as a feature</strong>, and <strong>each variable as a token</strong>. Attention learns &quot;what&#39;s the relationship between variable A and variable B?&quot;, while the FFN learns &quot;what&#39;s the temporal pattern of variable A?&quot;</p>
+<hr>
+<h2>Pros</h2>
+<h3>1. SOTA Multivariate Forecasting Performance</h3>
+<p>Achieves state-of-the-art performance on multiple real-world datasets.</p>
+<ul>
+<li>GNSS altitude time series: <strong>RMSE 5.1mm, MAE 3.7mm</strong> (tied for #1 with PatchTST)</li>
+<li>Broadly outperforms conventional Transformer-family models on standard benchmarks like Traffic, ETTh1, and Weather</li>
+</ul>
+<h3>2. No Need to Modify Transformer Modules</h3>
+<p>Attention, feed-forward, layer normalization, and other <strong>core Transformer modules are entirely unmodified</strong>. Since only the data organization was redesigned:</p>
+<ul>
+<li>Efficient attention mechanisms like FlashAttention can be plugged in directly</li>
+<li>Future Transformer improvements can be absorbed immediately</li>
+</ul>
+<h3>3. Generalization to Unseen Variables</h3>
+<p>Because the number of input tokens is flexible, <strong>there&#39;s no limit on the number of variable channels</strong>. The model can generalize to new variables not seen during training after training on only a subset.</p>
+<h3>4. Effective Use of Long Lookback Windows</h3>
+<p>Performance degrades less as the lookback window lengthens. Conventional Temporal Transformers had a problem where longer contexts actually increased noise.</p>
+<h3>5. Rich Ecosystem Integration</h3>
+<ul>
+<li><strong>GluonTS</strong> (AWS) — cloud time-series pipelines</li>
+<li><strong>NeuralForecast</strong> (Nixtla) — the same ecosystem as TimeGPT</li>
+<li><strong>Time-Series-Library</strong> (Tsinghua) — the official benchmark library</li>
+</ul>
+<hr>
+<h2>Cons</h2>
+<h3>1. O(N²) Computational Complexity</h3>
+<p>Has <strong>O(N²)</strong> complexity with respect to the number of variables N. With very many variables — thousands of IoT sensors, for example — memory and compute costs grow exponentially.</p>
+<h3>2. Weakened Local Temporal Information</h3>
+<p>While the inverted framework captures inter-variable correlations well, dependencies between adjacent time points (temporal locality) can be weakened. For univariate time series or cases where temporal patterns matter, it can be less favorable than a regular Transformer.</p>
+<h3>3. Sensitivity to Seasonality Noise</h3>
+<p>Research shows iTransformer is relatively sensitive to <strong>seasonality noise</strong>. For data with strong seasonal patterns (tourism, retail, etc.), preprocessing is important.</p>
+<h3>4. Latent Representations Lack Time-Series Structure</h3>
+<p>Some research points out that the latent representations learned by standard iTransformer can lack <strong>clear time-series locality</strong>. Representations of neighboring time points may end up scattered far apart in the latent space.</p>
+<h3>5. Not a Foundation Model</h3>
+<p>Unlike TimesFM, iTransformer <strong>requires training for each new domain</strong>. It does not support zero-shot forecasting; fine-tuning per dataset is required.</p>
+<hr>
+<h2>Installation and Setup</h2>
+<h3>Requirements</h3>
+<ul>
+<li>Python 3.7 or higher</li>
+<li>PyTorch 2.3+ recommended</li>
+<li>CUDA-capable GPU (recommended for large datasets)</li>
+</ul>
+<h3>Method 1: pip Install (Quick Start)</h3>
+<pre><code class="language-bash">pip install iTransformer
+</code></pre>
+<h3>Method 2: Source Install (Official Implementation)</h3>
+<pre><code class="language-bash">git clone https://github.com/thuml/iTransformer.git
+cd iTransformer
+
+conda create --name itransformer python=3.7
+conda activate itransformer
+pip install -r requirements.txt
+</code></pre>
+<h3>Verifying the Install</h3>
+<pre><code class="language-python">import torch
+from iTransformer import iTransformer
+
+print(&quot;iTransformer installed successfully!&quot;)
+print(f&quot;PyTorch version: {torch.__version__}&quot;)
+</code></pre>
+<hr>
+<h2>Usage Examples</h2>
+<h3>Basic Univariate Forecasting</h3>
+<pre><code class="language-python">import torch
+from iTransformer import iTransformer
+
+model = iTransformer(
+    num_variates=1,           # number of variables
+    lookback_len=96,          # length of historical data
+    dim=256,                  # model dimension
+    depth=6,                  # number of Transformer layers
+    heads=8,                  # number of attention heads
+    dim_head=64,              # dimension per head
+    pred_length=24,           # prediction length
+    use_reversible_instance_norm=True
+)
+
+# Input: (batch, lookback length, number of variables)
+time_series = torch.randn(2, 96, 1)
+predictions = model(time_series)
+print(f&quot;Prediction result: {predictions.shape}&quot;)  # (2, 24, 1)
+</code></pre>
+<h3>Multivariate Multi-Step Forecasting</h3>
+<pre><code class="language-python">multi_model = iTransformer(
+    num_variates=137,         # 137 variables in the Solar dataset
+    lookback_len=96,
+    dim=256,
+    depth=6,
+    heads=8,
+    dim_head=64,
+    pred_length=(12, 24, 36, 48),  # output multiple prediction lengths simultaneously
+    use_reversible_instance_norm=True
+)
+
+multi_input = torch.randn(2, 96, 137)
+multi_predictions = multi_model(multi_input)
+
+for pred_len, pred in multi_predictions.items():
+    print(f&quot;{pred_len}-step prediction: {pred.shape}&quot;)
+</code></pre>
+<h3>iTransformer2D: Spatiotemporal Dual Attention</h3>
+<p>When you need to consider variable relationships and temporal patterns <strong>simultaneously</strong> (e.g., spatially distributed sensors):</p>
+<pre><code class="language-python">from iTransformer import iTransformer2D
+
+model_2d = iTransformer2D(
+    num_variates=137,
+    num_time_tokens=16,       # split the time series into 16 time tokens
+    lookback_len=96,
+    dim=256,
+    depth=6,
+    heads=8,
+    dim_head=64,
+    pred_length=(12, 24, 36, 48)
+)
+
+input_data = torch.randn(2, 96, 137)
+predictions_2d = model_2d(input_data)
+</code></pre>
+<blockquote>
+<p><strong>When to choose iTransformer2D</strong>: When forecasting time series from spatially adjacent sensors, such as weather stations. It leverages both cross-variable attention and temporal attention, learning richer representations than the standard iTransformer.</p>
+</blockquote>
+<h3>Training with Official Scripts</h3>
+<pre><code class="language-bash"># Multivariate forecasting (Traffic dataset)
+bash ./scripts/multivariate_forecasting/Traffic/iTransformer.sh
+
+# Transformer vs iTransformer performance comparison
+bash ./scripts/boost_performance/Weather/iTransformer.sh
+
+# Unseen-variable generalization test
+bash ./scripts/variate_generalization/ECL/iTransformer.sh
+
+# Effect of increasing lookback window
+bash ./scripts/increasing_lookback/Traffic/iTransformer.sh
+
+# FlashAttention-accelerated version
+bash ./scripts/efficient_attentions/iFlashTransformer.sh
+</code></pre>
+<h3>Datasets</h3>
+<p>Download the official experiment datasets:</p>
+<ul>
+<li><a href="https://drive.google.com/drive/folders/1ZOYpTUa82_jCcxIdTmyr0LXQfvaM9vIy">Google Drive</a></li>
+<li><a href="https://cloud.tsinghua.edu.cn/f/84fbc752d0e94980a610/">Tsinghua Cloud</a></li>
+</ul>
+<hr>
+<h2>Key Hyperparameters</h2>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+<th>Typical Values</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>num_variates</code></td>
+<td>Number of variables (channels)</td>
+<td>Number of dataset features</td>
+</tr>
+<tr>
+<td><code>lookback_len</code></td>
+<td>Lookback window length</td>
+<td>96, 192, 336, 720</td>
+</tr>
+<tr>
+<td><code>dim</code></td>
+<td>Model hidden dimension</td>
+<td>256, 512</td>
+</tr>
+<tr>
+<td><code>depth</code></td>
+<td>Number of Transformer layers</td>
+<td>2, 3, 6</td>
+</tr>
+<tr>
+<td><code>heads</code></td>
+<td>Number of attention heads</td>
+<td>4, 8</td>
+</tr>
+<tr>
+<td><code>dim_head</code></td>
+<td>Dimension per head</td>
+<td>64</td>
+</tr>
+<tr>
+<td><code>pred_length</code></td>
+<td>Prediction length (can be a tuple for multiple)</td>
+<td>24, 48, 96, 192</td>
+</tr>
+<tr>
+<td><code>use_reversible_instance_norm</code></td>
+<td>Reversible instance normalization</td>
+<td>True recommended</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Representative Use Cases</h2>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Description</th>
+<th>iTransformer Fit</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GNSS altitude time series</td>
+<td>Satellite navigation data processing</td>
+<td>★★★★★ (tied for #1)</td>
+</tr>
+<tr>
+<td>Electricity price forecasting</td>
+<td>Real-time power market forecasting</td>
+<td>★★★★☆</td>
+</tr>
+<tr>
+<td>Solar power generation forecasting</td>
+<td>Daily generation forecasting</td>
+<td>★★★★☆</td>
+</tr>
+<tr>
+<td>Highway traffic volume forecasting</td>
+<td>Traffic flow forecasting</td>
+<td>★★★★★</td>
+</tr>
+<tr>
+<td>Coalbed methane production forecasting</td>
+<td>Energy drilling production</td>
+<td>★★★★☆</td>
+</tr>
+<tr>
+<td>Sea surface temperature forecasting</td>
+<td>Combined with transfer learning</td>
+<td>★★★★☆</td>
+</tr>
+<tr>
+<td>Anomaly detection</td>
+<td>Multivariate time-series anomaly detection</td>
+<td>★★★☆☆</td>
+</tr>
+<tr>
+<td>Stock portfolio analysis</td>
+<td>Capturing correlations between tickers</td>
+<td>★★★★☆</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>TimesFM vs iTransformer Comparison</h2>
+<p>The two models have different purposes, so the choice depends on the situation.</p>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>TimesFM</th>
+<th>iTransformer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Model type</strong></td>
+<td>Foundation model</td>
+<td>Specialized architecture</td>
+</tr>
+<tr>
+<td><strong>Zero-shot forecasting</strong></td>
+<td>Yes</td>
+<td>No (requires training)</td>
+</tr>
+<tr>
+<td><strong>Multivariate support</strong></td>
+<td>Limited</td>
+<td>Yes (core strength)</td>
+</tr>
+<tr>
+<td><strong>Univariate performance</strong></td>
+<td>Yes</td>
+<td>Relatively weaker</td>
+</tr>
+<tr>
+<td><strong>Captures inter-variable relationships</strong></td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><strong>Google ecosystem integration</strong></td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+<tr>
+<td><strong>AWS ecosystem integration</strong></td>
+<td>No</td>
+<td>Yes (GluonTS)</td>
+</tr>
+<tr>
+<td><strong>Installation difficulty</strong></td>
+<td>High (JAX dependency)</td>
+<td>Low (one pip line)</td>
+</tr>
+<tr>
+<td><strong>Immediate usability</strong></td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+</tbody></table>
+<ul>
+<li>Correlations between sensor/financial variables matter -&gt; <strong>iTransformer</strong> (multivariate)</li>
+<li>Combine both: check a baseline with TimesFM before fine-tuning with iTransformer</li>
+</ul>
+<hr>
+<h2>Potential Applications in Stock and Prediction Markets</h2>
+<h3>iTransformer in Stock Markets</h3>
+<p>iTransformer&#39;s <strong>learning of inter-variable correlations</strong>is especially useful for financial data.<strong>Scenarios where its strengths shine:</strong>-<strong>Sector rotation analysis</strong>: capturing shifting correlations among tech/energy/financial stocks</p>
+<ul>
+<li><strong>Factor model augmentation</strong>: learning the interrelationships among factors like PBR, PER, ROE</li>
+<li><strong>Portfolio optimization</strong>: generating rebalancing triggers by forecasting the covariance structure among tickers</li>
+<li><strong>Pair trading</strong>: forecasting the spread between two stocks in the same sector</li>
+</ul>
+<p><strong>Usage example:</strong></p>
+<pre><code class="language-python"># Forecasting 30-day returns for KOSPI 200 constituents
+model = iTransformer(
+    num_variates=200,    # 200 stocks
+    lookback_len=252,    # one year of trading days
+    pred_length=20,      # 20 trading days (1 month) forecast
+    dim=512,
+    depth=4,
+    heads=8,
+    dim_head=64,
+    use_reversible_instance_norm=True
+)
+</code></pre>
+<h3>Applications on Polymarket</h3>
+<p>iTransformer is well-suited to Polymarket&#39;s complex markets because it can <strong>simultaneously consider multiple economic indicators</strong>.</p>
+<p>Example: a &quot;US recession by end of 2025?&quot; market</p>
+<pre><code>Input variables (num_variates=6):
+- Unemployment rate
+- 10-year yield
+- 2-year yield (yield curve)
+- ISM manufacturing PMI
+- Consumer confidence index
+- S&amp;P 500 return
+
+-&gt; iTransformer learns correlations across the 6 variables to estimate recession probability
+-&gt; Compare against current Polymarket prices to search for arbitrage opportunities
+</code></pre>
+<hr>
+<h2>References</h2>
+<ul>
+<li><strong>Paper</strong>: <a href="https://arxiv.org/abs/2310.06625">iTransformer: Inverted Transformers Are Effective for Time Series Forecasting (ICLR 2024)</a></li>
+<li><strong>Official code</strong>: <a href="https://github.com/thuml/iTransformer">https://github.com/thuml/iTransformer</a></li>
+<li><strong>Presentation slides</strong>: <a href="https://cloud.tsinghua.edu.cn/f/175ff98f7e2d44fbbe8e/">https://cloud.tsinghua.edu.cn/f/175ff98f7e2d44fbbe8e/</a></li>
+<li><strong>Poster</strong>: <a href="https://cloud.tsinghua.edu.cn/f/36a2ae6c132d44c0bd8c/">https://cloud.tsinghua.edu.cn/f/36a2ae6c132d44c0bd8c/</a></li>
+<li><strong>Time-Series-Library</strong> (Tsinghua&#39;s official benchmark): <a href="https://github.com/thuml/Time-Series-Library">https://github.com/thuml/Time-Series-Library</a></li>
+</ul>
+<hr>
+<p><em>Last updated: June 2025 | Written by: Vibe Investing Research</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/TimesFM/iTransformer_%EA%B0%80%EC%9D%B4%EB%93%9C_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

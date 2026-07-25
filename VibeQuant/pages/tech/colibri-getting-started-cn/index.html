@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Colibri 入门指南 — VibeQuant</title>
+  <meta name="description" content="Colibri是一个纯C、零依赖的引擎,通过磁盘流式加载专家网络,让744B参数的MoE模型GLM-5.2能在25GB内存的消费级设备上运行。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/colibri-getting-started-cn/" />
+  <meta property="og:title" content="Colibri 入门指南" />
+  <meta property="og:description" content="Colibri是一个纯C、零依赖的引擎,通过磁盘流式加载专家网络,让744B参数的MoE模型GLM-5.2能在25GB内存的消费级设备上运行。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/colibri-getting-started-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/colibri-getting-started/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/colibri-getting-started-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/colibri-getting-started-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/colibri-getting-started-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/colibri-getting-started/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Colibri 入门指南","description":"Colibri是一个纯C、零依赖的引擎,通过磁盘流式加载专家网络,让744B参数的MoE模型GLM-5.2能在25GB内存的消费级设备上运行。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/colibri-getting-started-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Colibri-Getting-Started_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-21","dateModified":"2026-07-21","inLanguage":"zh-Hans","keywords":"기타 기술문서, Colibri-Getting-Started_CN.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 기타 기술문서</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 기술문서</p>
+        <h1>Colibri 入门指南</h1>
+        <p class="article-dates"><time datetime="2026-07-21">발행 2026.07.21</time> · 주제 기타 기술문서 · Colibri-Getting-Started_CN.md</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/colibri-getting-started/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/colibri-getting-started-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/colibri-getting-started-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/colibri-getting-started-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">Colibri是一个纯C、零依赖的引擎,通过磁盘流式加载专家网络,让744B参数的MoE模型GLM-5.2能在25GB内存的消费级设备上运行。</p>
+        
+      </header>
+      <div class="article-body prose"><p><strong>Colibri</strong>是一个项目,它用纯C语言编写的超轻量引擎来驱动<strong>744B参数的MoE(混合专家)模型GLM-5.2</strong>,设计目标是让<strong>仅有25GB内存</strong>的普通消费级设备也能运行。局限在于这里的&quot;普通&quot;其实还是指开发者级别的高配设备,而磁盘流式加载的体验也会让人略感迟滞。不过,能在本地跑起这种规模的模型本身就是它的价值所在。</p>
+<p>相比首次使用,持续使用会让相关主题逐渐加载进内存,因此速度会逐步提升。</p>
+<hr>
+<h2>项目说明</h2>
+<p>Colibri利用了这样一个事实:744B规模的MoE模型每个token<strong>仅激活约40B参数</strong>,而且每个token激活的专家(Expert)各不相同(约11GB):</p>
+<ul>
+<li><strong>密集部分(Dense part)</strong>— Attention、共享专家、Embeddings等约17B参数 →<strong>以int4常驻内存</strong>(约9.9GB)</li>
+<li><strong>路由专家(Routed Experts)</strong>— 75个MoE层 × 256 =<strong>19,456个专家</strong>,每个专家在int4下约19MB → <strong>存储在磁盘上</strong>(约370GB)</li>
+</ul>
+<p>核心思路是<strong>模型不需要&quot;塞进&quot;快速内存</strong>。专家会在需要时从磁盘流式加载,将显存、内存和存储视为一个统一管理的内存层级结构。</p>
+<hr>
+<h2>工作原理</h2>
+<h3>每个token的处理路径</h3>
+<p>每一层的每个token都会经历<strong>Route(路由) → Union(去重) → Place(放置) → Overlap(重叠) → Learn(学习)</strong>这五个阶段:</p>
+<ol>
+<li><strong>Route</strong> — 路由器决定针对输入token激活哪些专家</li>
+<li><strong>Union</strong>— 当批次内多个token选中相同专家时,进行<strong>去重</strong>(batch-union)</li>
+<li><strong>Place</strong>— 决定从哪里获取专家(显存 &gt; 内存 &gt; 磁盘)。批处理策略<strong>仅影响速度</strong>,不会改变路由决策或权重精度</li>
+<li><strong>Overlap</strong>— 异步I/O池(<code>PIPE=1</code>)在从磁盘加载缺失专家的同时,用已常驻的专家继续计算。路由预览线程(<code>PILOT=1</code>)会预取下一层的专家(路由具有<strong>71.6%的可预测性</strong>)</li>
+<li><strong>Learn</strong> — 将路由记录保存到<code>.coli_usage</code>文件,并自动固定(Pin)常用专家</li>
+</ol>
+<h3>内存层级结构</h3>
+<p>[显存 / 内存 / NVMe 三层专家放置方案]</p>
+<p>同一引擎覆盖整个硬件谱系:</p>
+<ul>
+<li><strong>25GB笔记本</strong>:所有专家均从磁盘流式加载(慢但精确)</li>
+<li><strong>大型主机</strong>:全部专家常驻(<code>CUDA_EXPERT_GB=auto PIN_GB=all</code>) → 完全消除磁盘瓶颈</li>
+<li><strong>多插槽主机</strong>:通过<code>COLI_NUMA=1</code>实现内存控制器交织</li>
+</ul>
+<p>各层之间由<strong>学习型缓存</strong>运作。它会记录用户工作负载使用了哪些专家,并自动固定最频繁使用的专家 —— <strong>用得越多就越快</strong>。</p>
+<h3>压缩KV状态</h3>
+<p>MLA(多头潜在注意力,Multi-head Latent Attention)将每个token的KV状态压缩为576个浮点数(32,768 → 576,<strong>压缩57倍</strong>)。它被保存到<code>.coli_kv</code>文件中,因此重启后KV状态仍能保留,与未中断会话的结果逐字节一致。</p>
+<h3>推测解码(推理加速)</h3>
+<p>GLM-5.2原生的MTP(多token预测,Multi-Token Prediction)头为主模型草拟待验证的token,通过一次批量前向传播完成验证,达到<strong>2.2-2.8 tokens/forward</strong>。</p>
+<blockquote>
+<p>⚠<strong>重要规则</strong>:MTP头必须使用<strong>int8</strong>。int4版本会导致接受率崩溃至0-4%(<a href="https://github.com/JustVugg/colibri/issues/8">#8</a>)。由于草拟和验证必须计算相同的函数,<code>SPEC_PIN=1</code>会将两种运算固定到同一内核系列上(<a href="https://github.com/JustVugg/colibri/issues/163">#163</a>)。</p>
+</blockquote>
+<hr>
+<h2>优点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>超低配置即可运行</strong></td>
+<td>仅25GB内存的笔记本也能运行744B模型</td>
+</tr>
+<tr>
+<td><strong>纯C,零依赖</strong></td>
+<td>不需要BLAS、Python运行时或GPU</td>
+</tr>
+<tr>
+<td><strong>保持精度</strong></td>
+<td>默认策略<strong>绝不改变模型精度或路由语义</strong></td>
+</tr>
+<tr>
+<td><strong>学习型缓存</strong></td>
+<td>记录工作负载中常用的专家并自动固定,用得越多越快</td>
+</tr>
+<tr>
+<td><strong>GPU支持</strong></td>
+<td>CUDA后端可将专家常驻显存,消除磁盘瓶颈</td>
+</tr>
+<tr>
+<td><strong>Metal支持</strong></td>
+<td>在Apple Silicon上可实现GPU加速</td>
+</tr>
+<tr>
+<td><strong>压缩KV状态</strong></td>
+<td>MLA注意力实现每token 576个浮点数(压缩57倍) → 重启后KV状态仍保留</td>
+</tr>
+<tr>
+<td><strong>推理加速</strong></td>
+<td>推测解码(MTP头)实现2.2-2.8 tokens/forward</td>
+</tr>
+<tr>
+<td><strong>NUMA支持</strong></td>
+<td>多插槽主机上的内存控制器交织</td>
+</tr>
+<tr>
+<td><strong>网页仪表盘</strong></td>
+<td>实时token指标、硬件面板、Expert Brain/Atlas可视化</td>
+</tr>
+<tr>
+<td><strong>语法强制输出</strong></td>
+<td><code>GRAMMAR=file.gbnf</code>可在结构化JSON输出时进一步提升接受率</td>
+</tr>
+<tr>
+<td><strong>开源</strong></td>
+<td>Apache 2.0许可证(GLM-5.2权重为Z.ai的MIT许可证)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>缺点</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>依赖磁盘</strong></td>
+<td>需要在磁盘上保存370GB的专家数据</td>
+</tr>
+<tr>
+<td><strong>低配置环境下速度下降</strong></td>
+<td>在25GB内存环境下仅0.05-0.1 tok/s,非常慢</td>
+</tr>
+<tr>
+<td><strong>初始模型下载/转换</strong></td>
+<td>需要自行转换或下载370GB以上容量的模型</td>
+</tr>
+<tr>
+<td><strong>int4 MTP头需注意</strong></td>
+<td>int4 MTP头接受率会崩溃至0-4%,因此int8版本是必须的</td>
+</tr>
+<tr>
+<td><strong>部分依赖Python</strong></td>
+<td>转换器和API网关需要Python</td>
+</tr>
+<tr>
+<td><strong>Windows构建</strong></td>
+<td>建议使用预构建二进制文件而非本地构建</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>实际性能表现</h2>
+<p>相同引擎,相同int4容器 —— 硬件只决定专家的放置位置。参见<a href="https://github.com/JustVugg/colibri/blob/main/docs/benchmarks.md">完整基准测试</a>:</p>
+<table>
+<thead>
+<tr>
+<th>硬件</th>
+<th>解码速度</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>6× RTX 5090(全部专家常驻显存)</strong></td>
+<td><strong>5.8-6.8 tok/s</strong></td>
+<td>首token延迟约13秒</td>
+</tr>
+<tr>
+<td><strong>128GB纯CPU台式机</strong></td>
+<td>~1.8 tok/s(热启动)</td>
+<td>内存常驻</td>
+</tr>
+<tr>
+<td><strong>单张RTX 5070 Ti</strong></td>
+<td>1.07 tok/s</td>
+<td>GPU常驻流水线</td>
+</tr>
+<tr>
+<td><strong>25GB开发机</strong></td>
+<td>0.05-0.1 tok/s(冷启动)</td>
+<td>纯磁盘流式加载</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>竞品对比</h2>
+<p>README中没有直接提及竞品项目。但考虑到Colibri所解决的问题领域(在低配硬件上运行超大型MoE模型),以下项目采用了类似的思路:</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>llama.cpp</strong></td>
+<td>基于C++的推理引擎,可在CPU/GPU上高效运行各类LLM</td>
+</tr>
+<tr>
+<td><strong>ExLlamaV2</strong></td>
+<td>利用GPTQ量化的GPU中心高速推理引擎</td>
+</tr>
+<tr>
+<td><strong>vLLM</strong></td>
+<td>通过PagedAttention技术最大化GPU内存效率的推理服务器</td>
+</tr>
+<tr>
+<td><strong>DeepSpeed</strong></td>
+<td>微软推出的大规模分布式训练/推理框架</td>
+</tr>
+</tbody></table>
+<p>Colibri的差异化优势在于其极致的轻量化 —— <strong>纯C、零依赖,在25GB内存上运行744B参数的MoE模型</strong>。</p>
+<hr>
+<h2>安装方法</h2>
+<h3>1. 系统要求</h3>
+<ul>
+<li><strong>内存</strong>:最低25GB(推荐)</li>
+<li><strong>磁盘</strong>:至少400GB以上的可用空间(模型370GB + 其他文件)</li>
+<li><strong>操作系统</strong>:Linux、Windows、macOS</li>
+<li><strong>编译器</strong>:GCC(Linux/macOS)或MSVC(Windows)</li>
+<li><strong>Python 3</strong>:用于模型转换和API网关(运行时不需要)</li>
+</ul>
+<h3>2. 克隆仓库</h3>
+<pre><code class="language-bash">git clone https://github.com/JustVugg/colibri.git
+cd colibri
+</code></pre>
+<h3>3. 构建</h3>
+<pre><code class="language-bash">cd c
+./setup.sh   # 检查GCC/OpenMP、构建并运行自测
+</code></pre>
+<p>也可以在根目录使用<code>make</code>命令构建。</p>
+<p>Nix/NixOS用户:</p>
+<pre><code class="language-bash">nix develop   # 提供flake.nix
+</code></pre>
+<h3>4. 下载模型</h3>
+<p>从Hugging Face下载<strong>预转换的GLM-5.2 int4容器</strong>:</p>
+<blockquote>
+<p>⚠<strong>务必使用包含int8 MTP头的版本!</strong>
+原始镜像提供的是int4 MTP头,会导致接受率崩溃至0%。</p>
+</blockquote>
+<pre><code class="language-bash"># 正确的版本(包含int8 MTP)
+huggingface-cli download mateogrgic/GLM-5.2-colibri-int4-with-int8-mtp
+</code></pre>
+<p>也可以直接从FP8源转换(需要Python,按分片处理,不需要一次性把756GB全部放到磁盘上):</p>
+<pre><code class="language-bash">cd c
+./coli convert --model /nvme/glm52_i4   # 按分片下载+转换(一次性)
+</code></pre>
+<p><strong>验证int8 MTP头的方法</strong>:</p>
+<pre><code class="language-bash">ls -l /path/to/model/out-mtp-*
+# int8(正确): 3527131672 / 5366238584 / 1065950496
+</code></pre>
+<h3>5. 运行</h3>
+<pre><code class="language-bash"># 通过环境变量设置模型路径
+export COLI_MODEL=/path/to/glm52_i4
+
+# 交互式聊天
+./coli chat
+
+# 查看放置计划(显存/内存/磁盘放置方案)
+./coli plan
+
+# 状态诊断(只读)
+./coli doctor
+
+# 网页仪表盘 + API服务器(单端口)
+./coli web --model /path/to/glm52_i4
+
+# OpenAI兼容API服务器(仅API)
+./coli serve --model /path/to/glm52_i4
+</code></pre>
+<p>运行时引擎以纯C运行。Python仅用于一次性转换器和可选的API网关。</p>
+<h3>6. Windows用户</h3>
+<p>下载预构建二进制文件是最简单的方式:</p>
+<ol>
+<li>从<a href="https://github.com/JustVugg/colibri/releases">Releases页面</a>下载<code>colibri--windows-x86_64.zip</code></li>
+<li>解压后将<code>colibri-*-windows-x86_64.exe</code>重命名为<code>glm.exe</code></li>
+<li>安装<a href="https://www.python.org/downloads/">Python 3</a></li>
+<li>运行<code>coli chat</code></li>
+</ol>
+<p>详情参见<a href="https://github.com/JustVugg/colibri/blob/main/docs/windows.md">Windows指南</a>。</p>
+<hr>
+<h2>仪表盘功能</h2>
+<p>通过<code>./coli web</code>启动的网页仪表盘提供三个主要页面:</p>
+<table>
+<thead>
+<tr>
+<th>页面</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Dashboard</strong></td>
+<td>实时token指标、每轮耗时分析、显存/内存/磁盘层级条、实时mini-brain</td>
+</tr>
+<tr>
+<td><strong>Brain</strong></td>
+<td>将19,456个专家可视化为一个鲜活的皮层(cortex) —— 颜色代表存储层级,亮度代表路由频率,悬停可显示主题亲和度</td>
+</tr>
+<tr>
+<td><strong>Atlas</strong></td>
+<td>将测得的Expert Atlas以3D星系形式展示 —— 13,260个专家按主题(诗歌、法律、中文、SQL等)聚类</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>项目支持</h2>
+<p>Colibri最初是在一台25GB内存、12核的笔记本上启动的个人项目。目前已借助真实硬件测得的社区数据不断发展。参与方式:</p>
+<ul>
+<li>为仓库加星并分享</li>
+<li>分享你自己硬件上的基准测试数据(通过Issues)</li>
+<li>通过GitHub Issues赞助开发或提供硬件捐赠</li>
+</ul>
+<hr>
+<h2>更多资料</h2>
+<table>
+<thead>
+<tr>
+<th>主题</th>
+<th>文档</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>快速上手指南</td>
+<td><a href="https://github.com/JustVugg/colibri/blob/main/docs/quickstart.md">docs/quickstart.md</a></td>
+</tr>
+<tr>
+<td>基准测试与质量测量</td>
+<td><a href="https://github.com/JustVugg/colibri/blob/main/docs/benchmarks.md">docs/benchmarks.md</a></td>
+</tr>
+<tr>
+<td>调优指南</td>
+<td><a href="https://github.com/JustVugg/colibri/blob/main/docs/tuning.md">docs/tuning.md</a></td>
+</tr>
+<tr>
+<td>Windows原生构建(+ CUDA DLL)</td>
+<td><a href="https://github.com/JustVugg/colibri/blob/main/docs/windows.md">docs/windows.md</a></td>
+</tr>
+<tr>
+<td>CUDA后端</td>
+<td><a href="https://github.com/JustVugg/colibri/blob/main/docs/cuda.md">docs/cuda.md</a></td>
+</tr>
+<tr>
+<td>Metal后端</td>
+<td><a href="https://github.com/JustVugg/colibri/blob/main/docs/metal.md">docs/metal.md</a></td>
+</tr>
+<tr>
+<td>OpenAI兼容API + KV槽位</td>
+<td><a href="https://github.com/JustVugg/colibri/blob/main/docs/api.md">docs/api.md</a></td>
+</tr>
+<tr>
+<td>Grammar-forced Drafts(结构化输出)</td>
+<td><a href="https://github.com/JustVugg/colibri/blob/main/docs/grammar-draft.md">docs/grammar-draft.md</a></td>
+</tr>
+<tr>
+<td>环境变量列表</td>
+<td><a href="https://github.com/JustVugg/colibri/blob/main/docs/ENVIRONMENT.md">docs/ENVIRONMENT.md</a></td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p><strong>提示</strong>:Colibri用得越多就越快(路由记录保存在<code>.coli_usage</code>文件中,常用专家会自动固定)。刚开始可能较慢,但持续使用后性能会提升。MTP推测解码是否有效取决于缓存温度(cache temperature),建议自行测量并决定是否用<code>DRAFT=0</code>将其关闭。</p>
+</blockquote>
+<hr>
+<h2>名称由来</h2>
+<p>蜂鸟(Colibri/Hummingbird)体重仅几克,但每天要造访数千朵花。这个引擎让一个744B参数的庞然大物依靠蜂鸟般的&quot;口粮&quot;维持运转:25GB内存、12个CPU核心,以及大量磁盘上的耐心等待。</p>
+<hr>
+<p><strong>许可证</strong>:引擎 —— Apache 2.0 / GLM-5.2权重 —— Z.ai发布,MIT</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Colibri-Getting-Started_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

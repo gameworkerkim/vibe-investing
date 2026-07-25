@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>caveman + rtk: The Complete AI Coding Assistant Token Optimization Guide — VibeQuant</title>
+  <meta name="description" content="How two open-source projects, caveman and rtk, cut AI coding assistant token usage by 80-95% combined." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-en/" />
+  <meta property="og:title" content="caveman + rtk: The Complete AI Coding Assistant Token Optimization Guide" />
+  <meta property="og:description" content="How two open-source projects, caveman and rtk, cut AI coding assistant token usage by 80-95% combined." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"caveman + rtk: The Complete AI Coding Assistant Token Optimization Guide","description":"How two open-source projects, caveman and rtk, cut AI coding assistant token usage by 80-95% combined.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Caveman%20rtk%20token%20optimization_EN.md","image":"https://vibequant.cc/og-default.png","inLanguage":"en","keywords":"LLM, Claude Code, Cost Optimization, CLI Tools"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>caveman + rtk: The Complete AI Coding Assistant Token Optimization Guide</h1>
+        <p class="article-dates">주제 LLM · Claude Code · Cost Optimization · CLI Tools</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/llm-caveman-rtk-token-optimization/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/llm-caveman-rtk-token-optimization-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/llm-caveman-rtk-token-optimization-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/llm-caveman-rtk-token-optimization-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">How two open-source projects, caveman and rtk, cut AI coding assistant token usage by 80-95% combined.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>&quot;Why use many token when few token do trick?&quot; — the caveman slogan</p>
+</blockquote>
+<hr>
+<h2>1. Overview</h2>
+<p>As AI coding assistants become mainstream, API costs and context token consumption are becoming an ever-larger burden for developers. Against this backdrop, two innovative open-source projects have emerged.</p>
+<p><strong>caveman</strong> started from the idea, &quot;why use many token when few token do trick?&quot; It nudges the AI to convey only the essentials without unnecessary phrasing, cutting output tokens by roughly 65-75% while keeping technical accuracy at 100%. Since its April 2026 release, it quickly gained attention, surpassing 71,000 GitHub stars (as of June 2026).</p>
+<p>rtk (Rust Token Killer) is a proxy tool that filters and compresses CLI command output in real time, reducing input token usage by 60-90% before it ever reaches the LLM&#39;s context. Built as a single dependency-free Rust binary with under 10ms of overhead, it has over 42,000 GitHub stars.</p>
+<p>Because the two tools operate on different layers (input/output), using them together maximizes the synergy.</p>
+<hr>
+<h2>2. caveman</h2>
+<h3>2.1 Background</h3>
+<p>caveman was born from a critical look at how AI&#39;s excessive verbosity and unnecessary phrasing affect cost and efficiency. A paper published on arXiv in March 2026 (&quot;Brevity Constraints Reverse Performance Hierarchies in Language Models,&quot; number 2604.00025) demonstrated that the shorter and more concise an AI&#39;s answer, the more its accuracy can actually improve — by as much as 26 percentage points on certain benchmarks. caveman is the practical implementation of this academic finding.</p>
+<p>Claude is trained by default to respond in a friendly, verbose manner. That&#39;s an advantage in casual conversation, but a costly inefficiency in automated development pipelines. caveman changes this default, stripping away the natural-language wrapping while keeping technical information — code, URLs, file paths — byte-perfect.</p>
+<h3>2.2 Effects</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Effect</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Output token reduction</td>
+<td>Average 65-75% (range 22-87%)</td>
+</tr>
+<tr>
+<td>Response speed improvement</td>
+<td>About 3x faster</td>
+</tr>
+<tr>
+<td>Technical accuracy</td>
+<td>100% maintained</td>
+</tr>
+<tr>
+<td>Input token reduction</td>
+<td>~46% when compressing config files like CLAUDE.md</td>
+</tr>
+<tr>
+<td>Example API cost savings</td>
+<td>~$7,665/year saved at 10,000 API calls/day (based on Claude Sonnet)</td>
+</tr>
+</tbody></table>
+<h3>2.3 Compression Intensity Levels</h3>
+<p>caveman offers four adjustable intensity levels to fit different situations.</p>
+<table>
+<thead>
+<tr>
+<th>Level</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>lite</code></td>
+<td>Preserves grammar, removes unnecessary modifiers</td>
+<td>&quot;Your component re-renders because you create a new object reference each render.&quot;</td>
+</tr>
+<tr>
+<td><code>full</code></td>
+<td>Removes articles/greetings, condenses sentences</td>
+<td>&quot;New object ref each render. Inline object prop = new ref = re-render.&quot;</td>
+</tr>
+<tr>
+<td><code>ultra</code></td>
+<td>Maximum compression, keeps technical terms</td>
+<td>&quot;Inline obj prop -&gt; new ref -&gt; re-render. useMemo.&quot;</td>
+</tr>
+<tr>
+<td><code>wenyan</code></td>
+<td>Classical Chinese style</td>
+<td>&quot;物出新參照，致重繪。useMemo Wrap之。&quot;</td>
+</tr>
+</tbody></table>
+<h4>Real Comparison Example</h4>
+<p>Normal response:</p>
+<pre><code>I&#39;ve successfully completed the refactoring of the authentication module.
+The changes include updating the token validation logic to handle edge cases
+more gracefully, adding appropriate error handling, and ensuring backwards
+compatibility with the existing API contracts.
+</code></pre>
+<p>After applying caveman <code>ultra</code>:</p>
+<pre><code>Auth module refactored. Token validation, error handling, backward compat.
+</code></pre>
+<p>The same information is conveyed with roughly 75% fewer tokens.</p>
+<h3>2.4 Additional Utility Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Function</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/caveman-commit</code></td>
+<td>Generates a commit message under 50 characters</td>
+</tr>
+<tr>
+<td><code>/caveman-review</code></td>
+<td>Writes a one-line PR comment</td>
+</tr>
+<tr>
+<td><code>/caveman-stats</code></td>
+<td>Shows real-time token statistics and cost</td>
+</tr>
+<tr>
+<td><code>/caveman-compress</code></td>
+<td>Compresses config files like CLAUDE.md</td>
+</tr>
+</tbody></table>
+<h3>2.5 Installation and Usage</h3>
+<p><strong>macOS / Linux / WSL</strong></p>
+<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash
+</code></pre>
+<p><strong>Windows (PowerShell)</strong></p>
+<pre><code class="language-powershell">irm https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.ps1 | iex
+</code></pre>
+<p><strong>Activating in Claude Code</strong></p>
+<pre><code class="language-bash"># Register the skill
+claude skills add JuliusBrussee/caveman
+
+# Basic activation
+/caveman
+
+# Activate with a specific intensity
+/caveman ultra
+
+# Deactivate
+stop caveman
+</code></pre>
+<p><strong>Inserting directly into CLAUDE.md / AGENTS.md (system prompt approach)</strong></p>
+<pre><code class="language-text">You are a code assistant. Respond in caveman speak only. No pleasantries.
+No greetings, no sign-offs, no narration. Just the answer.
+</code></pre>
+<blockquote>
+<p>Supported platforms: 34+ AI coding tools including Claude Code, Codex, Gemini CLI, Cursor, Windsurf, Cline, and GitHub Copilot</p>
+</blockquote>
+<h3>2.6 Caveats</h3>
+<p>caveman only affects <strong>output tokens</strong>. Thinking/reasoning tokens are unaffected. &quot;Caveman no make brain smaller. Caveman make mouth smaller.&quot; Accordingly, its benefits stand out more in conversational, brainstorming, and Q&amp;A-heavy sessions than in tasks primarily focused on code generation.</p>
+<hr>
+<h2>3. rtk (Rust Token Killer)</h2>
+<h3>3.1 Background</h3>
+<p>When AI coding agents run tests, linting, git commands, and similar operations, the massive volume of logs and console output generated consumes enormous input tokens. For example, a single <code>git status</code> alone can produce 2,000 tokens, and running <code>cargo test</code> injects 200+ lines of raw output directly into the context window. The agent reads every single line of it.</p>
+<p>rtk solves this by filtering and compressing command output before it reaches the LLM&#39;s context, operating transparently with no workflow changes required.</p>
+<h3>3.2 Effects</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Token reduction rate</td>
+<td>60-90%</td>
+</tr>
+<tr>
+<td>Supported commands</td>
+<td>100+</td>
+</tr>
+<tr>
+<td>Overhead</td>
+<td>Under 10ms</td>
+</tr>
+<tr>
+<td>Dependencies</td>
+<td>None (single Rust binary)</td>
+</tr>
+<tr>
+<td>GitHub stars</td>
+<td>42,000+ (June 2026)</td>
+</tr>
+<tr>
+<td>License</td>
+<td>Apache-2.0</td>
+</tr>
+</tbody></table>
+<h3>3.3 Core Compression Strategies</h3>
+<p>rtk compresses output using four strategies:</p>
+<ol>
+<li><strong>Smart Filtering</strong>: removes ANSI codes, progress bars, comments, excessive whitespace, and boilerplate</li>
+<li><strong>Group Aggregation</strong>: groups similar items (files by directory, errors by type, etc.)</li>
+<li><strong>Intelligent Truncation</strong>: keeps relevant context, removes duplication</li>
+<li><strong>Deduplication</strong>: collapses repeated lines into counts</li>
+</ol>
+<h4>Before/After Comparison: <code>git status</code></h4>
+<p>Normal output (~2,000 tokens):</p>
+<pre><code>On branch main
+Your branch is ahead of &#39;origin/main&#39; by 1 commit.
+  (use &quot;git push&quot; to publish your local commits)
+
+Changes not staged for commit:
+  (use &quot;git add &lt;file&gt;...&quot; to update what will be staged)
+  (use &quot;git restore &lt;file&gt;...&quot; to discard changes in working directory)
+        modified:   src/auth/token.ts
+
+no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
+</code></pre>
+<p>After rtk (~400 tokens):</p>
+<pre><code>main...origin/main ~ Modified: 1 files src/auth/token.ts
+</code></pre>
+<p>Only the information the LLM actually needs (branch, changed files) remains; everything else is removed.</p>
+<h3>3.4 Savings by Command (30-Minute Session Basis)</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Executions</th>
+<th>Normal tokens</th>
+<th>With rtk</th>
+<th>Reduction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ls</code> / <code>tree</code></td>
+<td>10</td>
+<td>2,000</td>
+<td>400</td>
+<td>80%</td>
+</tr>
+<tr>
+<td><code>cat</code> / <code>read</code></td>
+<td>20</td>
+<td>40,000</td>
+<td>12,000</td>
+<td>70%</td>
+</tr>
+<tr>
+<td><code>grep</code> / <code>rg</code></td>
+<td>8</td>
+<td>16,000</td>
+<td>3,200</td>
+<td>80%</td>
+</tr>
+<tr>
+<td><code>git status</code></td>
+<td>10</td>
+<td>3,000</td>
+<td>600</td>
+<td>80%</td>
+</tr>
+<tr>
+<td><code>git diff</code></td>
+<td>5</td>
+<td>10,000</td>
+<td>2,500</td>
+<td>75%</td>
+</tr>
+<tr>
+<td><code>git add/commit/push</code></td>
+<td>8</td>
+<td>1,600</td>
+<td>120</td>
+<td>92%</td>
+</tr>
+<tr>
+<td><code>npm test</code> / <code>cargo test</code></td>
+<td>5</td>
+<td>25,000</td>
+<td>2,500</td>
+<td>90%</td>
+</tr>
+<tr>
+<td><code>pytest</code></td>
+<td>4</td>
+<td>8,000</td>
+<td>800</td>
+<td>90%</td>
+</tr>
+<tr>
+<td><code>go test</code></td>
+<td>3</td>
+<td>6,000</td>
+<td>600</td>
+<td>90%</td>
+</tr>
+<tr>
+<td><code>docker ps</code></td>
+<td>3</td>
+<td>900</td>
+<td>180</td>
+<td>80%</td>
+</tr>
+<tr>
+<td><strong>Total</strong></td>
+<td>—</td>
+<td><strong>~118,000</strong></td>
+<td><strong>~23,900</strong></td>
+<td><strong>80%</strong></td>
+</tr>
+</tbody></table>
+<h3>3.5 Installation and Usage</h3>
+<p><strong>Homebrew (macOS, recommended)</strong></p>
+<pre><code class="language-bash">brew install rtk
+</code></pre>
+<p><strong>Direct Install on Linux / macOS</strong></p>
+<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/rtk-ai/rtk/refs/heads/master/install.sh | sh
+
+# add to PATH (zsh example)
+echo &#39;export PATH=&quot;$HOME/.local/bin:$PATH&quot;&#39; &gt;&gt; ~/.zshrc
+source ~/.zshrc
+</code></pre>
+<p><strong>Install via Cargo</strong></p>
+<pre><code class="language-bash">cargo install --git https://github.com/rtk-ai/rtk
+</code></pre>
+<p><strong>Windows</strong>: download <code>rtk-x86_64-pc-windows-msvc.zip</code> from the releases page and add <code>rtk.exe</code> to PATH.</p>
+<p><strong>Claude Code Integration (automatic hooking)</strong></p>
+<pre><code class="language-bash"># Automatically install Claude Code&#39;s PreToolUse hook
+rtk init -g --claude-md
+
+# Verify installation
+rtk --version
+
+# Test operation
+rtk git status
+</code></pre>
+<p>Running <code>rtk init -g</code> automatically adds a <code>PreToolUse</code> hook to <code>~/.claude/settings.json</code>, routing all Bash commands through rtk. You don&#39;t need to manually prefix commands with <code>rtk</code>.</p>
+<p><strong>Checking Savings Statistics</strong></p>
+<pre><code class="language-bash"># View cumulative savings statistics and an ASCII chart
+rtk gain
+
+# Export daily statistics as JSON
+rtk gain --json
+
+# Discover missed savings opportunities
+rtk discover
+</code></pre>
+<p><strong>Custom Configuration (<code>~/.config/rtk/config.toml</code>)</strong></p>
+<pre><code class="language-toml">[filters]
+exclude_commands = [&quot;echo&quot;, &quot;pwd&quot;]
+tee_mode = true   # restore original output on failure
+
+[project.myapp]
+extra_filters = [&quot;*.lock&quot;]
+</code></pre>
+<h3>3.6 Caveats</h3>
+<p>Very short commands may actually see a slight token increase after going through rtk (rtk header overhead). Already-structured short output passes through unmodified. Check actual savings with <code>rtk gain</code>, and if savings remain below 10% after a week, consider removing it with <code>rtk init -g --uninstall</code>.</p>
+<hr>
+<h2>4. Combined caveman + rtk Optimization Guide</h2>
+<h3>4.1 The Combined Concept: Bidirectional Input + Output Optimization</h3>
+<p>Because the two tools operate on different layers, using them together maximizes their effect.</p>
+<pre><code>[Developer command]
+     |
+     v
+[rtk CLI Proxy]  &lt;-- filters/compresses command output (60-90% reduction) [input optimization]
+     |
+     v
+[Sent to LLM]   (input tokens already optimized)
+     |
+     v
+[LLM processing]
+     |
+     v
+[LLM response]
+     |
+     v
+[caveman transformation]   &lt;-- makes the response concise (65-75% reduction) [output optimization]
+     |
+     v
+[Final compressed response]
+
+Overall reduction: 80-95%
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Role</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rtk</td>
+<td>Compresses CLI output before it reaches the LLM</td>
+<td>Input tokens</td>
+</tr>
+<tr>
+<td>caveman</td>
+<td>Transforms the LLM&#39;s response into concise form</td>
+<td>Output tokens</td>
+</tr>
+</tbody></table>
+<h3>4.2 Combined Setup</h3>
+<p><strong>Step 1: Install caveman and register the skill</strong></p>
+<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash
+claude skills add JuliusBrussee/caveman
+</code></pre>
+<p><strong>Step 2: Install rtk and hook it into Claude Code</strong></p>
+<pre><code class="language-bash">brew install rtk          # macOS
+rtk init -g --claude-md   # auto-install Claude Code&#39;s PreToolUse hook
+</code></pre>
+<p><strong>Step 3: Add a session-start hook to <code>~/.claude/settings.json</code></strong></p>
+<pre><code class="language-json">{
+  &quot;hooks&quot;: {
+    &quot;SessionStart&quot;: [
+      {
+        &quot;command&quot;: &quot;echo &#39;RTK proxy active. Caveman mode ready.&#39;&quot;
+      }
+    ]
+  }
+}
+</code></pre>
+<p><strong>Step 4: Register shell aliases (optional, <code>~/.zshrc</code> or <code>~/.bashrc</code>)</strong></p>
+<pre><code class="language-bash"># Automatically apply the rtk proxy
+for cmd in git ls cat grep rg cargo npm pytest go docker kubectl; do
+  alias $cmd=&quot;rtk $cmd&quot;
+done
+</code></pre>
+<p><strong>Step 5: caveman config file (create <code>.caveman.config</code> in your project root)</strong></p>
+<pre><code class="language-text">mode=ultra
+exclude_files=Dockerfile,*.log
+always_compress_tokens=true
+</code></pre>
+<h3>4.3 Advanced: OmniRoute Stacked Mode</h3>
+<p>OmniRoute is a tool that bundles multiple LLM optimization engines into a unified pipeline. Chaining caveman + rtk in Stacked mode lets both tools run automatically in sequence with a single configuration.</p>
+<pre><code class="language-json">{
+  &quot;compression&quot;: {
+    &quot;mode&quot;: &quot;stacked&quot;,
+    &quot;pipeline&quot;: [&quot;rtk&quot;, &quot;caveman&quot;],
+    &quot;caveman_intensity&quot;: &quot;ultra&quot;,
+    &quot;rtk_filters_path&quot;: &quot;.rtk/filters.json&quot;
+  }
+}
+</code></pre>
+<h3>4.4 Summary of Savings</h3>
+<table>
+<thead>
+<tr>
+<th>Setup</th>
+<th>Reduction</th>
+<th>Target</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>rtk alone</td>
+<td>60-90%</td>
+<td>Command output (input tokens)</td>
+</tr>
+<tr>
+<td>caveman alone</td>
+<td>65-75%</td>
+<td>LLM response (output tokens)</td>
+</tr>
+<tr>
+<td>rtk + caveman combined</td>
+<td><strong>80-95%</strong></td>
+<td>Both input and output</td>
+</tr>
+</tbody></table>
+<h3>4.5 Example Commands by Real-World Scenario</h3>
+<p><strong>Scenario 1: Debugging test failures</strong></p>
+<pre><code class="language-bash"># rtk extracts only failed tests, caveman returns a concise analysis
+rtk cargo test
+# example caveman response: &quot;3 tests fail: auth::token_expired, db::conn_timeout, api::rate_limit. See logs.&quot;
+</code></pre>
+<p><strong>Scenario 2: Requesting a code review</strong></p>
+<pre><code class="language-bash"># rtk compresses the diff, caveman returns the review in one line
+rtk git diff HEAD~1
+/caveman-review
+# example response: &quot;Missing null check in token.ts:42. Add early return.&quot;
+</code></pre>
+<p><strong>Scenario 3: Generating a commit message</strong></p>
+<pre><code class="language-bash">rtk git status
+/caveman-commit
+# example response: &quot;fix: null check in token validation&quot;
+</code></pre>
+<p><strong>Scenario 4: Summarizing long logs</strong></p>
+<pre><code class="language-bash">rtk grep &quot;ERROR&quot; app.log
+# example caveman ultra response: &quot;14 errors: 11x DB timeout, 3x auth fail. Peak 14:30-15:00.&quot;
+</code></pre>
+<p><strong>Scenario 5: Checking dependencies</strong></p>
+<pre><code class="language-bash">rtk npm list --depth=0
+# rtk removes duplicate/unnecessary info and delivers only the key package list
+</code></pre>
+<h3>4.6 Real User Experiences</h3>
+<p>Users who combined the two tools consistently report similar effects. Claude Code contexts that used to run out within a 30-minute session have been extended to 3+ hours, with the effect particularly pronounced in environments with heavy repetitive CLI work (test-driven development, browsing large git histories, etc.).</p>
+<hr>
+<h2>5. Cost Savings Calculator (Quick Estimate)</h2>
+<p>Based on Claude Sonnet (early 2026, input $3/million tokens, output $15/million tokens):</p>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Monthly cost (before optimization)</th>
+<th>After caveman</th>
+<th>After rtk</th>
+<th>Combined</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Individual developer (small)</td>
+<td>$50</td>
+<td>~$17</td>
+<td>~$15</td>
+<td>~$5-10</td>
+</tr>
+<tr>
+<td>Team of 10 (medium)</td>
+<td>$2,500</td>
+<td>~$800</td>
+<td>~$500</td>
+<td>~$125-250</td>
+</tr>
+<tr>
+<td>Enterprise pipeline</td>
+<td>$10,000+</td>
+<td>~$3,000</td>
+<td>~$2,000</td>
+<td>~$500-1,000</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Actual savings vary by task type, LLM model, and usage patterns. Check your real measurements with <code>rtk gain</code> and <code>/caveman-stats</code>.</p>
+</blockquote>
+<hr>
+<h2>6. Closing</h2>
+<p>caveman and rtk each take a distinct approach to LLM cost optimization. caveman specializes in <strong>output optimization</strong>, rtk in <strong>input optimization</strong>, making the two tools perfectly complementary.</p>
+<p>The core principle is simple. An LLM&#39;s defaults are optimized for <strong>human-friendly responses</strong>, not cost efficiency. caveman changes the response style; rtk removes context noise. Together, they let you use AI coding assistants more cheaply, faster, and with sharper focus.</p>
+<hr>
+<h2>7. References</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>caveman GitHub</td>
+<td><a href="https://github.com/JuliusBrussee/caveman">https://github.com/JuliusBrussee/caveman</a></td>
+</tr>
+<tr>
+<td>rtk GitHub</td>
+<td><a href="https://github.com/rtk-ai/rtk">https://github.com/rtk-ai/rtk</a></td>
+</tr>
+<tr>
+<td>rtk official site</td>
+<td><a href="https://www.rtk-ai.app">https://www.rtk-ai.app</a></td>
+</tr>
+<tr>
+<td>arXiv paper (2604.00025)</td>
+<td><a href="https://arxiv.org/abs/2604.00025">https://arxiv.org/abs/2604.00025</a></td>
+</tr>
+<tr>
+<td>Claude Plugin Hub - caveman</td>
+<td><a href="https://www.claudepluginhub.com/plugins/juliusbrussee-caveman">https://www.claudepluginhub.com/plugins/juliusbrussee-caveman</a></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>GitHub star counts and figures are as of June 2026; the projects continue to evolve. Refer to each repository&#39;s official documentation for the latest information.</p>
+</blockquote>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Caveman%20rtk%20token%20optimization_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

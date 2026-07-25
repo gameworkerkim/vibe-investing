@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pyodide 技術ドキュメント(検証・拡張版) — VibeQuant</title>
+  <meta name="description" content="ブラウザとNode.jsでPythonを実行するWebAssemblyベースのCPythonディストリビューションPyodideについて、事実確認と拡張を加えた技術ガイド。PEP 783、性能、メモリ制限、導入手順を扱う。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/python-pyodide-pyodide-ja/" />
+  <meta property="og:title" content="Pyodide 技術ドキュメント(検証・拡張版)" />
+  <meta property="og:description" content="ブラウザとNode.jsでPythonを実行するWebAssemblyベースのCPythonディストリビューションPyodideについて、事実確認と拡張を加えた技術ガイド。PEP 783、性能、メモリ制限、導入手順を扱う。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/python-pyodide-pyodide-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/python-pyodide-pyodide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/python-pyodide-pyodide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/python-pyodide-pyodide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/python-pyodide-pyodide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/python-pyodide-pyodide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Pyodide 技術ドキュメント(検証・拡張版)","description":"ブラウザとNode.jsでPythonを実行するWebAssemblyベースのCPythonディストリビューションPyodideについて、事実確認と拡張を加えた技術ガイド。PEP 783、性能、メモリ制限、導入手順を扱う。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/python-pyodide-pyodide-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Python_Pyodide/Pyodide_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-19","dateModified":"2026-07-19","inLanguage":"ja","keywords":"Python, WebAssembly, Pyodide, ブラウザ, データサイエンス"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 퀀트 · 데이터</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">퀀트 · 데이터</p>
+        <h1>Pyodide 技術ドキュメント(検証・拡張版)</h1>
+        <p class="article-dates"><time datetime="2026-07-19">발행 2026.07.19</time> · 주제 Python · WebAssembly · Pyodide · ブラウザ · データサイエンス</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/python-pyodide-pyodide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/python-pyodide-pyodide-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/python-pyodide-pyodide-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/python-pyodide-pyodide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">ブラウザとNode.jsでPythonを実行するWebAssemblyベースのCPythonディストリビューションPyodideについて、事実確認と拡張を加えた技術ガイド。PEP 783、性能、メモリ制限、導入手順を扱う。</p>
+        <p class="article-byline">- 作成基準日: 2026-07-19</p>
+      </header>
+      <div class="article-body prose"><ul>
+<li>最新安定版: Pyodide 314.0.x(Python 3.14ベース)</li>
+<li>ライセンス: MPL-2.0</li>
+<li>公式サイト: <a href="https://pyodide.org">https://pyodide.org</a></li>
+</ul>
+<hr>
+<h2>1. Pyodideとは?</h2>
+<p>Pyodideは<strong>WebAssembly</strong>と<strong>Emscripten</strong>をベースにCPythonインタープリタを丸ごとコンパイルした<strong>ブラウザおよびNode.js向けPythonディストリビューション</strong>である。サーバーなしでブラウザから直接Pythonコードを実行でき、2018年にMozilla社内プロジェクト(iodide)として始まり、2019年以降は独立したコミュニティプロジェクトとして発展した。</p>
+<h3>検証ノート(2026年7月時点)</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>原文の記述</th>
+<th>検証結果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>プロジェクトの起源</td>
+<td>Mozilla、2018年開始</td>
+<td>正確</td>
+</tr>
+<tr>
+<td>バージョン体系</td>
+<td>言及なし</td>
+<td><strong>変更あり。</strong>2026年6月からPythonバージョン連動体系へ移行(0.29.x→314.x、Python 3.14対応)。メジャーリリースは年1回、Pythonアップストリームと同期</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>ネイティブ比3〜5倍遅い</td>
+<td>概ね正確。純粋なPythonコードでは3〜5倍、WASMコンパイルされたCコードでは2〜2.5倍程度</td>
+</tr>
+<tr>
+<td>メモリ制限</td>
+<td>約2GB</td>
+<td><strong>旧バージョン基準。</strong>現在はwasm32アドレス空間の上限である4GBまで使用可能。2GB以上のアドレス領域に関するバグも最近修正された</td>
+</tr>
+<tr>
+<td>C拡張パッケージ</td>
+<td>ポーティングされなければ使用不可</td>
+<td><strong>緩和が必要。</strong>PEP 783の採用によりpyemscriptenプラットフォームタグのバイナリwheelをPyPIに正式配布可能。NumPy、SciPy、cryptographyなどC/C++/Rust拡張250以上が既にポーティング済み</td>
+</tr>
+<tr>
+<td>stdlibバンドル</td>
+<td>言及なし</td>
+<td>314.0からsqlite3、lzmaが標準バンドルに含まれる(unvendoringは中止)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. 主な特徴</h2>
+<table>
+<thead>
+<tr>
+<th>特徴</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ブラウザ内Python実行</td>
+<td>サーバーなしでWebブラウザ上でCPython 3.14を実行</td>
+</tr>
+<tr>
+<td>JavaScript-Python FFI</td>
+<td>双方向オブジェクト自動変換、エラー伝播、async/await相互サポート</td>
+</tr>
+<tr>
+<td>科学計算スタック内蔵</td>
+<td>NumPy、pandas、SciPy、Matplotlib、scikit-learnなどを事前ビルドで提供</td>
+</tr>
+<tr>
+<td>micropip</td>
+<td>PyPIの純粋なPython wheelおよびpyemscripten wheelをインストール</td>
+</tr>
+<tr>
+<td>Web APIアクセス</td>
+<td>DOM、fetch、Canvasなどブラウザ API全体にアクセス可能</td>
+</tr>
+<tr>
+<td>Node.jsサポート</td>
+<td>npmパッケージ(<code>pyodide</code>)でサーバーサイド・CLI環境で実行</td>
+</tr>
+<tr>
+<td>PEP 783標準化</td>
+<td>Emscripten wheelのPyPI正式配布経路を確保(2026年)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. 追加機能(原文未収録項目)</h2>
+<h3>3.1 JavaScript ↔ Python FFI詳細</h3>
+<ul>
+<li>プロキシベースの相互運用: <code>PyProxy</code>(JSからPythonオブジェクトを参照)、<code>JsProxy</code>(PythonからJSオブジェクトを参照)</li>
+<li>自動型変換: JS Array ↔ Python list、JS Map ↔ Python dict、TypedArray ↔ memoryview</li>
+<li>BigIntラウンドトリップ: 314.0から<code>pyodide.ffi.JsBigInt</code>導入により2^53を超える整数のJS bigint相互変換をサポート</li>
+<li>例外の相互伝播: 一方の言語でthrowされた例外を他方でcatchできる</li>
+</ul>
+<h3>3.2 Web Worker実行</h3>
+<p>メインスレッドのブロッキングを避けるため、PyodideをWeb Worker内で動かすパターンが事実上の標準である。重い計算(pandas処理、モデル推論)をワーカーに分離し、<code>postMessage</code>で結果だけをやり取りする。</p>
+<h3>3.3 仮想ファイルシステム(Emscripten FS)</h3>
+<ul>
+<li>メモリベースのMEMFSがデフォルトで、IndexedDBベースのIDBFSによりブラウザセッション間で永続化可能</li>
+<li><code>pyodide.FS</code> APIによりJS側からファイルの読み書きを直接制御できる</li>
+</ul>
+<h3>3.4 パッケージ読み込みの二系統</h3>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>pyodide.loadPackage()</code></td>
+<td>Pyodide CDNに事前ビルドされたパッケージ(NumPyなど)を読み込む</td>
+</tr>
+<tr>
+<td><code>micropip.install()</code></td>
+<td>PyPIの純粋なPython wheelおよびpyemscripten wheelをインストール</td>
+</tr>
+<tr>
+<td><code>loadPackagesFromImports()</code></td>
+<td>コードのimport文を解析し必要なパッケージを自動読み込み</td>
+</tr>
+</tbody></table>
+<h3>3.5 開発ツールエコシステム</h3>
+<table>
+<thead>
+<tr>
+<th>ツール</th>
+<th>機能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>pyodide-build</td>
+<td>C/Rust拡張パッケージをpyemscripten wheelへクロスビルド</td>
+</tr>
+<tr>
+<td>pytest-pyodide</td>
+<td>Chrome/Firefox/Nodeランタイムでのpyodide向けテストを自動化</td>
+</tr>
+<tr>
+<td>pyodide-pack</td>
+<td>配布用バンドルの最小化(未使用モジュールを除去)</td>
+</tr>
+<tr>
+<td>auditwheel-emscripten</td>
+<td>Emscripten wheelの検証ツール</td>
+</tr>
+<tr>
+<td>Pyodide CLI</td>
+<td>ターミナルで<code>pyodide</code>コマンドによりvenv類似環境の作成とREPL実行</td>
+</tr>
+</tbody></table>
+<h3>3.6 SharedArrayBufferと同期入出力</h3>
+<p>COOP/COEPヘッダーを設定すると、SharedArrayBufferベースでワーカーとメインスレッド間の同期通信が可能になり、これにより<code>input()</code>のような同期式標準入力をエミュレートできる。</p>
+<hr>
+<h2>4. 長所</h2>
+<ol>
+<li><strong>サーバーコスト削減とインフラの単純化</strong> — Python処理をクライアント側で行うため、サーバーは認証やDBなど必須の処理のみを担当する。処理コストがユーザー数に比例して増加しない。</li>
+<li><strong>インストール不要、即時実行</strong> — ブラウザだけでPythonを実行。初回読み込み後はオフラインでも動作可能。</li>
+<li><strong>JavaScriptとの完全な統合</strong> — 双方向自動変換、例外伝播、async/awaitサポート。</li>
+<li><strong>豊富な科学計算エコシステム</strong> — データサイエンスに必須のライブラリを別途セットアップなしで利用できる。</li>
+<li><strong>教育・インタラクティブコンテンツに最適</strong> — JupyterLiteなどでサーバーレスノートブック環境を構築。学生のコードがブラウザのサンドボックスに隔離され、サーバー側のセキュリティリスクがない。</li>
+<li><strong>(新規)パッケージング標準化</strong> — PEP 783の採用によりパッケージ作者がPyPIに直接Emscripten wheelを配布可能。同一Pythonバージョン内のPyodideリリース間でwheelの互換性が保証される。</li>
+</ol>
+<hr>
+<h2>5. 短所</h2>
+<ol>
+<li><strong>性能低下</strong> — 純粋なPythonコードはネイティブ比約3〜5倍、WASMコンパイルされたCコードは約2〜2.5倍遅い。JITのないインタープリタ実行が根本原因。</li>
+<li><strong>メモリ制約</strong> — wasm32アドレス空間の上限により最大約4GB。初期読み込みだけで数百MBを占有するため、低スペック機器での複数タブ利用時に負担となる。(旧バージョンの2GBハードリミットは解消済み)</li>
+<li><strong>初期読み込みサイズ</strong> — コアランタイムだけで数MB、NumPy/pandasなどの読み込み時には数十MBのダウンロードが必要。キャッシュ戦略(Service Worker、CDN)が事実上必須。</li>
+<li><strong>パッケージカバレッジの限界</strong> — PEP 783により大幅に改善されたが、OS依存機能(マルチプロセッシング、低レベルソケット、同期sleepなど)は依然として制限がある。CPythonの完全な等価実装ではない。</li>
+<li><strong>ネットワークリクエストの制限</strong> — ブラウザのCORSポリシーが適用される。<code>requests</code>の代わりに<code>pyodide.http.pyfetch</code>を使用するか、プロキシで回避する必要がある。</li>
+<li><strong>ブラウザ要件</strong> — WebAssemblyをサポートする最新ブラウザが必要。SharedArrayBufferを活用する機能にはさらにCOOP/COEPヘッダーの設定が求められる。</li>
+</ol>
+<hr>
+<h2>6. Getting Started</h2>
+<h3>6.1 ブラウザ: CDN一行で開始</h3>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/pyodide/v314.0.2/full/pyodide.js&quot;&gt;&lt;/script&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;script type=&quot;module&quot;&gt;
+    const pyodide = await loadPyodide();
+    // 基本実行
+    console.log(pyodide.runPython(&quot;1 + 2&quot;));  // 3
+
+    // 複数行のPythonコード
+    pyodide.runPython(`
+      import sys
+      print(f&quot;Python {sys.version} in the browser&quot;)
+    `);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>バージョン文字列(<code>v314.0.2</code>)は配布時に必ず固定すること。<code>dev</code>など非バージョンURLを本番環境で使用してはならない。</p>
+<h3>6.2 事前ビルド済みパッケージの読み込み(NumPy例)</h3>
+<pre><code class="language-javascript">await pyodide.loadPackage(&quot;numpy&quot;);
+pyodide.runPython(`
+  import numpy as np
+  a = np.random.rand(1000, 1000)
+  print(a.mean())
+`);
+</code></pre>
+<h3>6.3 micropipによるPyPIパッケージのインストール</h3>
+<pre><code class="language-javascript">await pyodide.loadPackage(&quot;micropip&quot;);
+const micropip = pyodide.pyimport(&quot;micropip&quot;);
+await micropip.install(&quot;cowsay&quot;);   // 純粋なPython wheel
+pyodide.runPython(`
+  import cowsay
+  cowsay.cow(&quot;Hello from PyPI&quot;)
+`);
+</code></pre>
+<h3>6.4 JavaScript ↔ Pythonデータ交換</h3>
+<pre><code class="language-javascript">// JS → Python
+pyodide.globals.set(&quot;js_data&quot;, [10, 20, 30]);
+const result = pyodide.runPython(`
+  data = js_data.to_py()      # JsProxy → Python list
+  sum(data)
+`);
+console.log(result);  // 60
+
+// Python → JS
+const pyDict = pyodide.runPython(`{&quot;jp&quot;: &quot;東京&quot;, &quot;kr&quot;: &quot;ソウル&quot;}`);
+console.log(pyDict.toJs());   // Map(2) { &quot;jp&quot; → &quot;東京&quot;, ... }
+pyDict.destroy();             // PyProxyメモリの解放(リーク防止)
+</code></pre>
+<h3>6.5 非同期実行とネットワークリクエスト</h3>
+<pre><code class="language-javascript">await pyodide.loadPackage(&quot;micropip&quot;);
+const out = await pyodide.runPythonAsync(`
+  from pyodide.http import pyfetch
+  resp = await pyfetch(&quot;https://api.github.com/repos/pyodide/pyodide&quot;)
+  data = await resp.json()
+  data[&quot;stargazers_count&quot;]
+`);
+</code></pre>
+<h3>6.6 Web Workerパターン(推奨プロダクション構成)</h3>
+<pre><code class="language-javascript">// worker.js
+importScripts(&quot;https://cdn.jsdelivr.net/pyodide/v314.0.2/full/pyodide.js&quot;);
+
+let pyodideReady = loadPyodide();
+
+self.onmessage = async (e) =&gt; {
+  const pyodide = await pyodideReady;
+  await pyodide.loadPackagesFromImports(e.data.code);
+  const result = await pyodide.runPythonAsync(e.data.code);
+  self.postMessage({ result });
+};
+</code></pre>
+<pre><code class="language-javascript">// main.js
+const worker = new Worker(&quot;worker.js&quot;);
+worker.postMessage({ code: &quot;import numpy as np; float(np.pi)&quot; });
+worker.onmessage = (e) =&gt; console.log(e.data.result);
+</code></pre>
+<h3>6.7 Node.jsでの利用</h3>
+<pre><code class="language-bash">npm install pyodide
+</code></pre>
+<pre><code class="language-javascript">import { loadPyodide } from &quot;pyodide&quot;;
+
+const pyodide = await loadPyodide();
+console.log(pyodide.runPython(&quot;2 ** 10&quot;));  // 1024
+</code></pre>
+<h3>6.8 自作パッケージのビルド(C/Rust拡張)</h3>
+<pre><code class="language-bash">pip install pyodide-build
+pyodide build            # プロジェクトルートでpyemscripten wheelを生成
+</code></pre>
+<p>生成されたwheelはPEP 783標準に従いPyPIへ直接アップロードでき、micropipでインストール可能である。</p>
+<hr>
+<h2>7. 競合製品との比較</h2>
+<p>ブラウザでPythonを実行するアプローチは大きく3系統に分かれる: (A) CPython自体をWASMへポーティング、(B) JavaScriptでPythonインタープリタを再実装、(C) PythonコードをJavaScriptへトランスパイル。</p>
+<table>
+<thead>
+<tr>
+<th>製品</th>
+<th>アプローチ</th>
+<th>強み</th>
+<th>弱み</th>
+<th>主な用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Pyodide</strong></td>
+<td>(A) CPython → WASM</td>
+<td>完全なCPython互換性、科学計算スタック、PEP 783標準化</td>
+<td>初期読み込みサイズ、インタープリタ速度</td>
+<td>データサイエンス、汎用</td>
+</tr>
+<tr>
+<td><strong>PyScript</strong></td>
+<td>Pyodide/MicroPython上のフレームワーク</td>
+<td>HTMLタグだけでPythonを埋め込める、導入障壁が最も低い</td>
+<td>独自ランタイムではない(内部はPyodideに依存)、抽象化オーバーヘッド</td>
+<td>教育、プロトタイプ、ウィジェット</td>
+</tr>
+<tr>
+<td><strong>MicroPython (WASM)</strong></td>
+<td>軽量Python再実装 → WASM</td>
+<td>読み込みサイズが数百KB規模、起動速度が最速</td>
+<td>標準ライブラリ・CPython互換性が大幅に縮小、C拡張エコシステムなし</td>
+<td>軽量スクリプティング、組み込みウィジェット</td>
+</tr>
+<tr>
+<td><strong>Brython</strong></td>
+<td>(B) JSでインタープリタを再実装</td>
+<td>読み込みが軽い、<code>text/python</code>スクリプトタグによるDOM操作が自然、単純演算はCPython級の速度</td>
+<td>NumPyなどのC拡張が不可、複雑な演算では性能差が大きい</td>
+<td>DOM中心のWebスクリプティング</td>
+</tr>
+<tr>
+<td><strong>Skulpt</strong></td>
+<td>(B) JSでインタープリタを再実装</td>
+<td>完全クライアント実行、教育プラットフォーム(Anvilなど)で実績あり</td>
+<td>CPython比で数十倍遅い、Python機能のカバレッジが限定的</td>
+<td>初級教育、チュートリアル</td>
+</tr>
+<tr>
+<td><strong>Transcrypt</strong></td>
+<td>(C) Python → JSトランスパイル</td>
+<td>出力が純粋なJSのため読み込み・実行が速い、JSライブラリを直接活用可能</td>
+<td>ランタイムインタープリタではない(動的機能に制約)、ビルド段階が必要</td>
+<td>フロントエンドアプリをPython文法で記述</td>
+</tr>
+<tr>
+<td><strong>CPython WASIビルド</strong></td>
+<td>(A) CPython → WASI</td>
+<td>CPython公式アップストリームでサポート(tier 2)、サーバーレス・エッジランタイムに適合</td>
+<td>ブラウザ統合(FFI、DOM)はPyodideより未成熟</td>
+<td>エッジコンピューティング、サンドボックス実行</td>
+</tr>
+</tbody></table>
+<h3>派生エコシステム(競合ではなくPyodideベースの製品)</h3>
+<table>
+<thead>
+<tr>
+<th>製品</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>JupyterLite</td>
+<td>サーバーレスなブラウザ内Jupyterノートブック。カーネルにPyodideを使用</td>
+</tr>
+<tr>
+<td>stlite</td>
+<td>Streamlitアプリをブラウザでサーバーレスに実行</td>
+</tr>
+<tr>
+<td>marimo (WASMモード)</td>
+<td>リアクティブPythonノートブックのブラウザ実行版</td>
+</tr>
+<tr>
+<td>Cloudflare Workers Python</td>
+<td>エッジランタイムのPythonサポートにPyodideを活用</td>
+</tr>
+</tbody></table>
+<h3>選定ガイド</h3>
+<table>
+<thead>
+<tr>
+<th>要件</th>
+<th>推奨</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NumPy/pandasなど科学計算スタックが必要</td>
+<td>Pyodide</td>
+</tr>
+<tr>
+<td>HTMLだけで手早くPythonを埋め込みたい</td>
+<td>PyScript</td>
+</tr>
+<tr>
+<td>読み込みサイズが最優先(数百KB)</td>
+<td>MicroPython(WASM)またはBrython</td>
+</tr>
+<tr>
+<td>DOM操作中心の軽量スクリプティング</td>
+<td>Brython</td>
+</tr>
+<tr>
+<td>初級プログラミング教育プラットフォーム</td>
+<td>SkulptまたはPyScript</td>
+</tr>
+<tr>
+<td>ビルド成果物をJSとして配布</td>
+<td>Transcrypt</td>
+</tr>
+<tr>
+<td>サーバーレス・エッジサンドボックス実行</td>
+<td>CPython WASIまたはPyodide(Node)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. 活用例のまとめ</h2>
+<table>
+<thead>
+<tr>
+<th>適している場合</th>
+<th>適していない場合</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>教育用インタラクティブコンテンツ</td>
+<td>大規模データ処理(数GB以上)</td>
+</tr>
+<tr>
+<td>プロトタイピングおよびデモ</td>
+<td>リアルタイム低遅延が必須のアプリケーション</td>
+</tr>
+<tr>
+<td>科学計算の可視化、ブラウザ内分析ツール</td>
+<td>複雑なネットワーク・ソケット処理</td>
+</tr>
+<tr>
+<td>サーバーレスPythonアプリケーション</td>
+<td>マルチプロセッシングなどOS依存ワークロード</td>
+</tr>
+<tr>
+<td>機密データのクライアント内処理(データがブラウザを離れない)</td>
+<td>全てのPyPIパッケージが必要な場合</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. 結論</h2>
+<p>Pyodideは「サーバーなしでPythonをウェブ上で実行する」という可能性を開いたプロジェクトから、2026年のPEP 783採用とPythonバージョン連動のリリース体系導入によって<strong>ブラウザPythonの事実上の標準プラットフォーム</strong>として位置づけられるようになった。性能(ネイティブ比3〜5倍の低下)と初期読み込みサイズという構造的な限界は依然として残るため、計算集約型ワークロードよりも教育・可視化・クライアントサイドデータ処理・サーバーレスツールへの適用が合理的である。軽量性が最優先ならMicroPython/Brython系を、完全なCPythonエコシステムが必要ならPyodideを選ぶのが基本原則である。</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Python_Pyodide/Pyodide_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

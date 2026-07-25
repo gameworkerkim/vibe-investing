@@ -4,7 +4,7 @@ title_ko: "에이전트 친화적인 웹사이트 구축을 위한 실무 기술
 description: "A practical, code-first guide to building websites that AI agents can navigate, understand, and act on. Synthesizes Google web.dev's Building Agent-Friendly Websites (2026-04-01), Chrome's WebMCP Early Preview Program (2026-02-10), and Jeremy Howard's llms.txt standard."
 slug: agent-friendly-website-guide
 language: en
-languages_available: [ko, en, ja]
+languages_available: [ko, en, ja, zh]
 canonical: https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/agent-friendly-website-guide/agent-friendly-website-guide.en.md
 version: "1.0"
 date_published: 2026-05-19
@@ -77,7 +77,7 @@ sources:
 
 > AI agents now browse, summarize, and transact on websites on behalf of users. This guide consolidates Google web.dev (2026-04-01), Chrome's WebMCP EPP (2026-02-10), and Jeremy Howard's llms.txt standard into an 11-chapter practical manual for making your site one that agents can reliably understand and act on.
 
-🌐 **Other languages** — [한국어](./agent-friendly-website-guide.ko.md) · [日本語](./agent-friendly-website-guide.ja.md)
+🌐 **Other languages** — [한국어](./agent-friendly-website-guide.ko.md) · [日本語](./agent-friendly-website-guide.ja.md) · [中文](./agent-friendly-website-guide.zh.md)
 
 📌 **Tags** — `#AIAgents` `#WebMCP` `#llms-txt` `#SemanticHTML` `#Accessibility` `#Schema.org` `#GEO` `#CoreWebVitals` `#MCP`
 

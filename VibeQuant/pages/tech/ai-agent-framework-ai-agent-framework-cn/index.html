@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI 代理框架地图:Microsoft Agent Framework for Go 与 LangChain·LangGraph — VibeQuant</title>
+  <meta name="description" content="以 Microsoft Agent Framework for Go 与 LangChain/LangGraph 为主轴,梳理 AI 代理与多代理编排框架的结构、优缺点、选型标准,并提供可直接运行的起步代码。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-cn/" />
+  <meta property="og:title" content="AI 代理框架地图:Microsoft Agent Framework for Go 与 LangChain·LangGraph" />
+  <meta property="og:description" content="以 Microsoft Agent Framework for Go 与 LangChain/LangGraph 为主轴,梳理 AI 代理与多代理编排框架的结构、优缺点、选型标准,并提供可直接运行的起步代码。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"AI 代理框架地图:Microsoft Agent Framework for Go 与 LangChain·LangGraph","description":"以 Microsoft Agent Framework for Go 与 LangChain/LangGraph 为主轴,梳理 AI 代理与多代理编排框架的结构、优缺点、选型标准,并提供可直接运行的起步代码。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/ai-agent-framework-ai-agent-framework-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AI-Agent-Framework/AI-Agent-Framework_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-22","dateModified":"2026-07-22","inLanguage":"zh-Hans","keywords":"AI 代理, Microsoft Agent Framework, LangGraph, LangChain, Go, 多代理"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>AI 代理框架地图:Microsoft Agent Framework for Go 与 LangChain·LangGraph</h1>
+        <p class="article-dates"><time datetime="2026-07-22">발행 2026.07.22</time> · 주제 AI 代理 · Microsoft Agent Framework · LangGraph · LangChain · Go · 多代理</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/ai-agent-framework-ai-agent-framework/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/ai-agent-framework-ai-agent-framework-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/ai-agent-framework-ai-agent-framework-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/ai-agent-framework-ai-agent-framework-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">代理编排框架的概念、竞争格局,以及一份真正能跑起来的 Getting Started</p>
+        <p class="article-byline">2026.07.22 Dennis Kim</p>
+      </header>
+      <div class="article-body prose"><h2>1. 引言 —— 框架真正解决的问题</h2>
+<p>给 LLM 挂上一个工具、调用一次,这样的代码 40 行就能搞定。框架真正变得必要的是下一个阶段:代理在一项耗时 3 小时的任务中途挂掉时该从哪里恢复,需要人工审批的分支该如何表达,12 次工具调用中第 7 次出错时该如何追溯原因。这些问题都不是靠提示词工程能解决的。</p>
+<p>再重复一次我常说的一句话:<strong>LLM 是 Excel,不是先知(Oracle)。</strong>框架也是同样的道理。框架不会提升模型的推理质量,它提升的是<em>模型出错时的恢复能力</em>,以及<em>察觉到模型出错的速度</em>。以这个视角为基准,工具选型会变得简单得多。</p>
+<p>从 2025 年第四季度到 2026 年上半年,这个市场经历了一次整合。LangChain 和 LangGraph 在 2025 年 10 月发布了 1.0,Microsoft Agent Framework(MAF)在 2026 年 2 月经过 RC 阶段,于 4 月达到 .NET/Python 1.0 GA。AutoGen 和 Semantic Kernel 都走上了被并入 MAF 的路径。也就是说,现在已经不是&quot;选哪个框架&quot;的阶段,而是<strong>决定把哪一层交给框架</strong>的阶段。</p>
+<hr>
+<h2>2. 概念梳理 —— 代理技术栈的三个层次</h2>
+<p>各个框架之间看起来无法比较,原因在于它们处理的是不同的层次。先把这些层次拆开来看。</p>
+<table>
+<thead>
+<tr>
+<th>层次</th>
+<th>职责</th>
+<th>缺失时会出现的问题</th>
+<th>代表实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>L1. 代理 harness</strong></td>
+<td>模型调用 → 工具调用 → 结果注入 → 再次调用的循环、结构化输出、重试</td>
+<td>自己写也可以(几十行)。但一旦加上流式输出、token 计费、错误分支,很快就会膨胀到几百行</td>
+<td>LangChain <code>create_agent</code>、MAF <code>agent</code>、Eino ADK</td>
+</tr>
+<tr>
+<td><strong>L2. 编排</strong></td>
+<td>多代理图、条件路由、并行/顺序/群组协作、子工作流</td>
+<td>代理之间的状态传递会退化成一个全局字典,无法调试</td>
+<td>LangGraph、MAF <code>workflow</code>、CrewAI Flows</td>
+</tr>
+<tr>
+<td><strong>L3. 运行时/运维</strong></td>
+<td>检查点(checkpoint)、重启、持久化执行、HITL 中断、可观测性(OTel)、部署</td>
+<td>一次长时间运行的任务,进程一重启就全部丢失</td>
+<td>LangGraph 的持久化执行、MAF 的检查点机制、Foundry Hosted Agents</td>
+</tr>
+</tbody></table>
+<p>关键在于<strong>L3 才是真正的护城河(moat)</strong>。L1 谁都能写,L2 也可以用代码表达,但&quot;服务器挂了,一个持续三天的审批工作流依然能继续&quot;这种特性,如果自己实现,本质上等于要重新搭建一套任务队列 + 状态存储 + 幂等性设计。</p>
+<h3>2.1 不用框架也是一个正当的选择</h3>
+<p>Go 社区中有一种特别强烈的反对声音。代理循环本身很短,OpenAI、Anthropic、Google 都提供官方 Go SDK,而 Go 工程师习惯上更偏好标准库加少量依赖。实际上,截至 2026 年年中,相当多的 Go 团队根本不使用框架。</p>
+<p>这里还叠加了一个安全层面的考量。多提供商 SDK 是<strong>所有提供商 API Key 汇聚到一处的节点</strong>。依赖树本身正在变成一个攻击面。</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>大致依赖数量(2026 年 4 月社区统计)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LangChainGo</td>
+<td>170+</td>
+</tr>
+<tr>
+<td>Genkit Go</td>
+<td>129</td>
+</tr>
+<tr>
+<td>Eino</td>
+<td>37</td>
+</tr>
+<tr>
+<td>轻量级 SDK(GoAI 等)</td>
+<td>2–5</td>
+</tr>
+</tbody></table>
+<p>在经历了 2025–2026 年 LiteLLM 包篡改事件、npm axios 供应链入侵事件之后,这张表已经不只是参考数字。从 CTI 的视角看,引入代理框架是一种<strong>用运行时便利性换取供应链暴露面</strong>的决策。</p>
+<hr>
+<h2>3. Microsoft Agent Framework for Go</h2>
+<blockquote>
+<p>仓库:<code>github.com/microsoft/agent-framework-go</code> · 许可证 MIT · 语言 100% Go</p>
+</blockquote>
+<h3>3.1 概述</h3>
+<p>MAF 是一个横跨 .NET、Python、Go 的多语言开源框架,目标是超越原型阶段,构建<strong>真正在生产环境中运行的代理</strong>。它支持包括 Microsoft Foundry、Azure OpenAI、OpenAI、MCP、A2A、AG-UI、GitHub Copilot SDK 等广泛的生态系统。</p>
+<p>这里有一个重要的结构性事实。<strong>Go 实现与 .NET/Python 主线仓库是分开的,在独立仓库中开发,目前处于公开预览(public preview)状态。</strong>也就是说,&quot;MAF 1.0 GA&quot;这个标题说的是 .NET/Python,而不是 Go。如果忽略这个区分,在制定落地计划时会因为发现功能大量缺失而感到失望。</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>.NET / Python</th>
+<th>Go</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>状态</td>
+<td>1.0 GA(2026-04)</td>
+<td>公开预览</td>
+</tr>
+<tr>
+<td>仓库</td>
+<td><code>microsoft/agent-framework</code></td>
+<td><code>microsoft/agent-framework-go</code>(独立)</td>
+</tr>
+<tr>
+<td>产品集成广度</td>
+<td>广</td>
+<td>窄</td>
+</tr>
+<tr>
+<td>未实现功能</td>
+<td>大部分已解决</td>
+<td>数量较多(见 §3.3)</td>
+</tr>
+</tbody></table>
+<h3>3.2 优点</h3>
+<ol>
+<li><strong>充分发挥 Go 的运行时特性</strong> —— 基于 goroutine 的并发、低内存占用、单二进制部署。代理工作负载本质上是长时间运行、并发、I/O 密集型的,与 Go 的形态非常契合。</li>
+<li><strong>运维能力内置于框架</strong> —— 检查点、可重启性、流式输出、human-in-the-loop(HITL)、时间回溯模式都在工作流层提供。</li>
+<li><strong>基于图的编排</strong> —— 支持顺序、并发、群组协作、条件路由、子工作流。</li>
+<li><strong>中间件链</strong>—— 请求/响应处理、日志记录、OpenTelemetry、上下文提供者、<strong>工具审批(tool approval)</strong>、自动工具调用。工具审批中间件从安全角度尤其重要(见 §7)。</li>
+<li><strong>一级可观测性支持</strong> —— 代理和工作流两端都提供 OpenTelemetry 集成。</li>
+<li><strong>提供商灵活性</strong> —— 不绑定特定 LLM 供应商,无需重写架构即可切换。</li>
+<li><strong>Agent Skills</strong> —— 通过文件、内联定义或脚本构建领域知识库,供代理发现和使用。</li>
+<li><strong>MIT 许可证</strong> —— 商业使用的限制较低。</li>
+</ol>
+<h3>3.3 缺点与局限</h3>
+<p>未实现功能列表并不短。根据仓库 README 和 .NET–Go 功能对比文档整理如下。</p>
+<table>
+<thead>
+<tr>
+<th>未实现功能</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Handoff 编排</strong></td>
+<td>需要自己实现代理之间的控制权转移模式,直接冲击客户服务类路由场景</td>
+</tr>
+<tr>
+<td><strong>声明式代理</strong></td>
+<td>无法基于 YAML/JSON 配置定义代理 → 不发布代码就无法修改代理</td>
+</tr>
+<tr>
+<td><strong>RAG</strong></td>
+<td>检索增强流水线需要单独搭建</td>
+</tr>
+<tr>
+<td><strong>CodeAct</strong></td>
+<td>不支持基于代码执行的动作</td>
+</tr>
+<tr>
+<td><strong>Functional workflows</strong></td>
+<td>不支持函数式工作流风格</td>
+</tr>
+<tr>
+<td><strong>Foundry 托管部署</strong></td>
+<td>无法直接部署到 Foundry(需要容器等变通方案)</td>
+</tr>
+<tr>
+<td><strong>DevUI / AF Labs</strong></td>
+<td>缺少开发者 UI 和实验性功能 → 本地调试体验不及 Python</td>
+</tr>
+</tbody></table>
+<p>需要额外考虑的地方</p>
+<ul>
+<li><strong>生态成熟度</strong> —— 相比 .NET,产品集成较少,API 表面仍在变动。预览阶段应默认存在破坏性变更的可能性。</li>
+<li><strong>社区规模较小</strong> —— 参见下方的事实核查。</li>
+<li><strong>第三方系统的责任转移</strong> —— 如果使用的不是 Azure Direct 模型,而是外部服务器、代理或模型,数据流转、成本和合规责任全部由使用者承担,Microsoft 文档明确说明了这一点。</li>
+<li><strong><code>DefaultAzureCredential</code> 陷阱</strong> —— 这是为开发便利而设计的。生产环境中应指定具体的凭据,例如托管身份(Managed Identity)。回退机制会依次尝试多个凭据源,不仅增加延迟,还存在选中非预期凭据的安全风险。</li>
+</ul>
+<h3>3.4 事实核查 —— 流传的数字存在错误</h3>
+<p>多篇摘要文章将这个仓库描述为&quot;星标 360、贡献者 14 人&quot;。<strong>2026 年 7 月直接查看仓库页面后确认,实际数字为星标约 16、fork 1 个、贡献者 3 人、提交 406 次,尚未发布任何 release。</strong>360 这个数字看起来是与主线仓库 <code>microsoft/agent-framework</code>(数万级别)或其他项目混淆所致。</p>
+<p>这个差距并不小。星标 16 和星标 360,对&quot;提 issue 之后是否会有人回复&quot;给出的是完全不同的预期。如果打算以社区规模作为引入决策的依据,请务必直接查看仓库本身。</p>
+<blockquote>
+<p>指标会随查询时间而变化。上述数字的基准日期为 2026 年 7 月,引用时建议同时标注基准日期。</p>
+</blockquote>
+<hr>
+<h2>4. LangChain 1.0 / LangGraph 1.0</h2>
+<h3>4.1 1.0 之后角色分工更清晰</h3>
+<p>2025 年 10 月的 1.0 发布重新定义了两个项目的关系。此前的模式是&quot;先用 LangChain,不够用了再转向 LangGraph&quot;,但现在<strong>LangChain 是构建在 LangGraph 运行时之上的高层抽象</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>维度</th>
+<th>LangChain 1.0</th>
+<th>LangGraph 1.0</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>层次</td>
+<td>L1(代理 harness)</td>
+<td>L2 + L3(编排 + 运行时)</td>
+</tr>
+<tr>
+<td>核心 API</td>
+<td><code>create_agent</code></td>
+<td><code>StateGraph</code>、检查点器、<code>interrupt</code></td>
+</tr>
+<tr>
+<td>取向</td>
+<td>快速构建、快速上线</td>
+<td>精细控制与持久性</td>
+</tr>
+<tr>
+<td>执行模型</td>
+<td>标准工具调用循环</td>
+<td>基于图的执行(分支、循环、状态重访)</td>
+</tr>
+<tr>
+<td>稳定性承诺</td>
+<td>2.0 之前不会有破坏性变更</td>
+<td>相同</td>
+</tr>
+<tr>
+<td>语言</td>
+<td>Python、TypeScript</td>
+<td>Python、TypeScript</td>
+</tr>
+</tbody></table>
+<p>LangChain 1.0 被重写为专注于核心代理循环,并引入了一个新概念——<strong>中间件</strong>,以内置中间件的形式提供 HITL、摘要和 PII 屏蔽。结构化输出被整合进主循环,省去了额外的一次 LLM 调用,从而降低了延迟和成本。</p>
+<p>LangGraph 1.0 号称是&quot;持久化代理框架领域的第一个稳定大版本&quot;。唯一的重大变更是废弃了 <code>langgraph.prebuilt</code>,相关功能迁移到了 <code>langchain.agents</code>,向后兼容性得以保留。</p>
+<h3>4.2 LangGraph 的决定性优势 —— 持久化执行</h3>
+<p>使用 LangGraph 的理由基本可以归结为一点:<strong>状态会自动持久化。</strong>即使服务器在对话中途重启,或者长时间运行的工作流被中断,执行也能从中断点精确恢复。由于不需要自定义数据库逻辑就能实现保存和恢复,因此可以表达持续数天的审批流程,或者跨会话的后台任务。</p>
+<p>HITL 也是一等公民 API。为了让人工审阅、修改、批准而暂停执行,只需要一行 <code>interrupt</code> 即可完成。在需要人工介入高风险判断的系统中,这一行代码决定了整个架构的走向。</p>
+<h3>4.3 优点</h3>
+<ol>
+<li><strong>压倒性的生态系统</strong> —— 在集成数量、文档、示例、Stack Overflow 回答、招聘市场等方面都排名第一,每月下载量达数千万次。</li>
+<li><strong>生产环境的参考案例</strong> —— Uber、LinkedIn、Klarna、摩根大通等公司公开表示在生产环境中使用 LangGraph。</li>
+<li><strong>确定性与代理性的混合表达</strong> —— 现实系统从来不是 100% 代理化,也不是 100% 确定性的。可以在图中显式建模:部分分支走固定逻辑,部分分支交给 LLM 判断。</li>
+<li><strong>与 LangSmith 集成</strong> —— 可观测性、评估、部署等生命周期工具都能接上。</li>
+<li><strong>动态工具调用</strong> —— 可以按执行节点控制可用工具的集合。</li>
+</ol>
+<h3>4.4 缺点</h3>
+<ol>
+<li><strong>仅限 Python/TypeScript</strong> —— 无法直接接入 Go、Java、Rust 后端,需要拆分成 HTTP 服务或更换语言。</li>
+<li><strong>抽象层的负担</strong> —— 早期 LangChain 曾因隐藏的提示词和隐式上下文操作而被批评构筑了一道&quot;定制化的墙&quot;。1.0 在很大程度上解决了这个问题,但仍需要花精力去读懂框架在做什么。</li>
+<li><strong>依赖体积</strong> —— 从供应链角度看并不轻量。</li>
+<li><strong>与商业产品的绑定</strong> —— LangSmith 并非开源。要充分利用可观测性,就会走上商业路径;虽然可以用自建的 OTel 技术栈替代,但集成质量存在差距。</li>
+<li><strong>学习曲线的落点不同</strong> —— LangChain 容易上手,LangGraph 较难,需要理解状态 schema、reducer、检查点器、thread 等概念。</li>
+</ol>
+<hr>
+<h2>5. 竞品全景图</h2>
+<h3>5.1 按语言与层次的分布</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>语言</th>
+<th>主要层次</th>
+<th>状态(2026-07)</th>
+<th>一句话特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Microsoft Agent Framework</strong></td>
+<td>C#、Python</td>
+<td>L1–L3</td>
+<td>1.0 GA(2026-04)</td>
+<td>SK、AutoGen 的继任者,面向企业级治理</td>
+</tr>
+<tr>
+<td><strong>Microsoft Agent Framework for Go</strong></td>
+<td>Go</td>
+<td>L1–L3</td>
+<td>公开预览</td>
+<td>上述框架的 Go 实现,存在功能差距</td>
+</tr>
+<tr>
+<td><strong>LangGraph</strong></td>
+<td>Python、TS</td>
+<td>L2–L3</td>
+<td>1.0 GA(2025-10)</td>
+<td>持久化状态图运行时,事实上的标准</td>
+</tr>
+<tr>
+<td><strong>LangChain</strong></td>
+<td>Python、TS</td>
+<td>L1</td>
+<td>1.0 GA(2025-10)</td>
+<td>构建代理最快的路径</td>
+</tr>
+<tr>
+<td><strong>AutoGen</strong></td>
+<td>Python</td>
+<td>L2</td>
+<td>正走向并入 MAF</td>
+<td>起源于多代理对话/协作研究</td>
+</tr>
+<tr>
+<td><strong>Semantic Kernel</strong></td>
+<td>C#、Python、Java</td>
+<td>L1–L2</td>
+<td>正走向并入 MAF</td>
+<td>轻量编排 SDK,提供迁移工具</td>
+</tr>
+<tr>
+<td><strong>CrewAI</strong></td>
+<td>Python</td>
+<td>L2</td>
+<td>活跃</td>
+<td>基于角色(role)的协作 + 事件驱动的 Flows</td>
+</tr>
+<tr>
+<td><strong>Google ADK</strong></td>
+<td>Python、<strong>Go</strong>、Java</td>
+<td>L1–L2</td>
+<td>Go 1.0(2025-11)</td>
+<td>顺序/并行/循环代理原语,原生 OTel</td>
+</tr>
+<tr>
+<td><strong>Genkit</strong></td>
+<td><strong>Go</strong>、JS</td>
+<td>L1</td>
+<td>面向生产</td>
+<td>以 Flow 为中心,本地调试/追踪体验出色</td>
+</tr>
+<tr>
+<td><strong>Eino(CloudWeGo)</strong></td>
+<td><strong>Go</strong></td>
+<td>L1–L2</td>
+<td>活跃,已在大规模生产中验证</td>
+<td>字节跳动实际使用,组件图、断路器/退避机制</td>
+</tr>
+<tr>
+<td><strong>LangChainGo</strong></td>
+<td><strong>Go</strong></td>
+<td>L1</td>
+<td>社区移植</td>
+<td>覆盖面最广,落后于官方版本</td>
+</tr>
+<tr>
+<td><strong>OpenAI Agents SDK</strong></td>
+<td>Python、<strong>Go</strong></td>
+<td>L1</td>
+<td>活跃</td>
+<td>Handoff + 安全护栏,支持 MCP</td>
+</tr>
+<tr>
+<td><strong>Dify</strong></td>
+<td>Python(产品)</td>
+<td>GUI</td>
+<td>活跃</td>
+<td>无代码工作流、RAG 流水线</td>
+</tr>
+</tbody></table>
+<h3>5.2 Go 阵营内部的竞争</h3>
+<p>&quot;真实存在,但还年轻&quot;,是对 Go 代理生态最准确的描述。以下是截至 2026 年 5 月社区统计的参考数字:</p>
+<table>
+<thead>
+<tr>
+<th>框架</th>
+<th>星标(大致)</th>
+<th>是否支持 MCP</th>
+<th>优势</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Eino</td>
+<td>11,100+</td>
+<td>不支持(截至当时)</td>
+<td>生产级加固、图组合能力</td>
+</tr>
+<tr>
+<td>LangChainGo</td>
+<td>9,200+</td>
+<td>不支持(截至当时)</td>
+<td>10+ 提供商、完整的 RAG 流水线</td>
+</tr>
+<tr>
+<td>Google ADK Go</td>
+<td>—</td>
+<td>支持</td>
+<td>已达到 1.0,原生 OTel</td>
+</tr>
+<tr>
+<td>OpenAI Agents Go</td>
+<td>255</td>
+<td>支持</td>
+<td>Handoff + 安全护栏</td>
+</tr>
+<tr>
+<td><strong>MAF for Go</strong></td>
+<td>约 16</td>
+<td>支持(MCP/A2A/AG-UI)</td>
+<td>与 Azure/Foundry 对齐,支持检查点机制</td>
+</tr>
+</tbody></table>
+<p>如果 MCP 集成是优先事项,Google ADK Go、OpenAI Agents Go 以及 MAF Go 都是候选。如果看重纯粹的吞吐量和已验证的稳定性,Eino 更有优势。但另一方面,<strong>如果需求是基于 Azure Entra ID、Purview、Defender 的治理,除了 MAF 几乎没有其他选择。</strong>这正是 MAF Go 即便星标数不高,依然值得纳入考察范围的唯一但充分的理由。</p>
+<hr>
+<h2>6. 选型标准 —— 什么工作负载该用什么?</h2>
+<h3>6.1 判断顺序</h3>
+<pre><code>1) 语言技术栈是否已经固定?
+   必须用 Go/单一二进制 → MAF Go / Eino / ADK Go / 不用框架
+   可以用 Python·TS        → 进入 2)
+
+2) 执行是否会持续数分钟以上,或中途需要人工审批?
+   是  → LangGraph(或 MAF workflow)
+   否 → 进入 3)
+
+3) 组织是否处于 Azure/Entra 治理边界内?
+   是  → MAF(.NET/Python)+ Foundry Hosted Agents
+   否 → 先用 LangChain create_agent 起步,需要时再下沉到 LangGraph
+
+4) 是否需要非开发人员修改工作流?
+   是 → Dify 等 GUI 类工具
+</code></pre>
+<h3>6.2 具体使用场景</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>内部文档问答机器人,3–5 个工具</td>
+<td><strong>LangChain <code>create_agent</code></strong></td>
+<td>一天就能搭好,不需要图</td>
+</tr>
+<tr>
+<td>一个持续 3 天的多阶段审批流水线</td>
+<td><strong>LangGraph</strong></td>
+<td>持久化状态 + <code>interrupt</code>,能承受服务器重启</td>
+</tr>
+<tr>
+<td>研究 → 验证 → 撰写报告的多代理场景</td>
+<td><strong>LangGraph</strong>或<strong>CrewAI</strong></td>
+<td>需要图级控制选前者,基于角色的协作描述选后者</td>
+</tr>
+<tr>
+<td>实时监控交易所行情/订单流的代理</td>
+<td><strong>Go:MAF Go / Eino / 不用框架</strong></td>
+<td>延迟和 GC 压力是主导变量,不要把 Python 运行时放在关键路径上</td>
+</tr>
+<tr>
+<td>CTI 采集 → 归一化 → 报告初稿流水线</td>
+<td><strong>LangGraph + 独立的采集器</strong></td>
+<td>需要明确的按数据源隔离失败和重试点</td>
+</tr>
+<tr>
+<td>部署到 Microsoft 365 / Teams 的内部代理</td>
+<td><strong>MAF(.NET/Python)</strong></td>
+<td>Foundry Hosted Agents、Teams·M365 Copilot 发布路径</td>
+</tr>
+<tr>
+<td>已有的 Semantic Kernel / AutoGen 代码库</td>
+<td><strong>迁移到 MAF</strong></td>
+<td>提供官方迁移指南和工具</td>
+</tr>
+<tr>
+<td>非开发的策划人员需要直接修改提示词链</td>
+<td><strong>Dify</strong></td>
+<td>声明式 GUI,但版本管理和审计需要单独设计</td>
+</tr>
+<tr>
+<td>代理逻辑用 40 行循环就够了</td>
+<td><strong>不用框架</strong></td>
+<td>在 Go 团队中这是多数派做法</td>
+</tr>
+</tbody></table>
+<h3>6.3 混合部署是现实的选择</h3>
+<p>Foundry 的托管运行时被设计为<strong>框架无关(framework-agnostic)</strong>,可以将用 MAF、GitHub Copilot SDK、LangGraph 等构建的代理部署上去而无需重写。也就是说,&quot;编排用 LangGraph,托管和治理用 Foundry&quot;这样的组合是可行的。不把框架选择当作全有或全无的问题,在实践中更有利。</p>
+<hr>
+<h2>7. 新手上手指南 - Getting Started</h2>
+<h3>7.1 Microsoft Agent Framework for Go</h3>
+<p><strong>安装</strong></p>
+<pre><code class="language-bash">go get github.com/microsoft/agent-framework-go
+</code></pre>
+<p><strong>环境变量</strong></p>
+<pre><code class="language-bash">export FOUNDRY_PROJECT_ENDPOINT=&quot;&lt;your-endpoint&gt;&quot;
+export FOUNDRY_MODEL=&quot;gpt-4o-mini&quot;   # 可选
+az login                              # 确保凭据来源可用
+</code></pre>
+<p><strong>基础代理</strong></p>
+<pre><code class="language-go">package main
+
+import (
+	&quot;cmp&quot;
+	&quot;context&quot;
+	&quot;fmt&quot;
+	&quot;os&quot;
+
+	&quot;github.com/Azure/azure-sdk-for-go/sdk/azidentity&quot;
+	&quot;github.com/microsoft/agent-framework-go/provider/foundryprovider&quot;
+)
+
+func main() {
+	endpoint := os.Getenv(&quot;FOUNDRY_PROJECT_ENDPOINT&quot;)
+	model := cmp.Or(os.Getenv(&quot;FOUNDRY_MODEL&quot;), &quot;gpt-4o-mini&quot;)
+
+	// Microsoft Foundry 认证
+	token, err := azidentity.NewDefaultAzureCredential(nil)
+	if err != nil {
+		panic(err)
+	}
+
+	// 创建 Foundry 代理
+	a := foundryprovider.NewAgent(endpoint, token, foundryprovider.ModelDeployment(model),
+		foundryprovider.AgentConfig{
+			Instructions: &quot;You are a helpful assistant.&quot;,
+		},
+	)
+
+	// 运行
+	ctx := context.Background()
+	fmt.Println(a.RunText(ctx, &quot;Write a haiku about the Microsoft Agent Framework&quot;).Collect())
+}
+</code></pre>
+<p><strong>转向生产环境前必须修改的一行代码</strong></p>
+<pre><code class="language-go">// 开发用:依次尝试多个凭据源 → 延迟增加、误判、安全风险
+token, _ := azidentity.NewDefaultAzureCredential(nil)
+
+// 生产用:明确指定要使用的凭据
+token, _ := azidentity.NewManagedIdentityCredential(&amp;azidentity.ManagedIdentityCredentialOptions{
+	ID: azidentity.ClientID(&quot;&lt;user-assigned-client-id&gt;&quot;),
+})
+</code></pre>
+<p><strong>接下来应该看的目录</strong></p>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>examples/01-get-started</code></td>
+<td>从 hello world 到工作流的分步示例</td>
+</tr>
+<tr>
+<td><code>examples/02-agents</code></td>
+<td>工具、中间件、提供商、可观测性、A2A、AG-UI、MCP、技能</td>
+</tr>
+<tr>
+<td><code>examples/03-workflows</code></td>
+<td>多代理模式、路由、检查点</td>
+</tr>
+<tr>
+<td><code>examples/05-end-to-end</code></td>
+<td>完整应用</td>
+</tr>
+<tr>
+<td><code>docs/dotnet-go-sdk-feature-comparison.md</code></td>
+<td><strong>落地前必读。</strong>Go 相对 .NET 的功能差距</td>
+</tr>
+<tr>
+<td><code>provider/</code></td>
+<td>提供商包列表(可查看 Foundry 之外的其他选项)</td>
+</tr>
+</tbody></table>
+<p><strong>故障排查摘要</strong></p>
+<table>
+<thead>
+<tr>
+<th>现象</th>
+<th>原因</th>
+<th>处理方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Azure 凭据认证失败</td>
+<td>未登录 Azure CLI,或未配置凭据源</td>
+<td>执行 <code>az login</code>,或明确配置要使用的凭据</td>
+</tr>
+<tr>
+<td>API Key 错误</td>
+<td>Key 有误,或与目标资源不匹配</td>
+<td>核对 Key 与对应资源/提供商是否一致</td>
+</tr>
+<tr>
+<td>提供商端点错误</td>
+<td>端点、部署名称、模型或 API 版本缺失或写错</td>
+<td>对照示例中的环境变量和构造函数选项逐一核实</td>
+</tr>
+</tbody></table>
+<hr>
+<h3>7.2 LangChain 1.0 —— 最快的路径</h3>
+<pre><code class="language-bash">pip install --upgrade langchain
+</code></pre>
+<pre><code class="language-python">from langchain.agents import create_agent
+from langchain.tools import tool
+
+
+@tool
+def get_close_price(ticker: str) -&gt; str:
+    &quot;&quot;&quot;返回指定股票代码的近期收盘价。&quot;&quot;&quot;
+    # 实际实现中应调用真实数据源
+    return f&quot;{ticker}: 未查询到结果&quot;
+
+
+agent = create_agent(
+    model=&quot;openai:gpt-4.1-mini&quot;,
+    tools=[get_close_price],
+    system_prompt=(
+        &quot;你是一个市场数据查询助手。&quot;
+        &quot;如果工具没有返回值,请回答&#39;无可用数据&#39;。&quot;
+        &quot;绝对不要凭空编造数值。&quot;
+    ),
+)
+
+result = agent.invoke(
+    {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;告诉我 NVDA 最近的收盘价&quot;}]}
+)
+print(result[&quot;messages&quot;][-1].content)
+</code></pre>
+<p>系统提示词的最后一句并不是走个形式。当工具调用失败时,模型编造一个看似合理的数字,是代理系统中最常见、代价也最高的失败模式。如果不明确规定工具结果为空时的行为,这种情况一定会发生。</p>
+<hr>
+<h3>7.3 LangGraph 1.0 —— 检查点 + 人工审批</h3>
+<pre><code class="language-bash">pip install --upgrade langgraph langchain
+</code></pre>
+<pre><code class="language-python">from typing import Annotated, TypedDict
+
+from langchain.chat_models import init_chat_model
+from langgraph.graph import StateGraph, START, END
+from langgraph.graph.message import add_messages
+from langgraph.checkpoint.memory import InMemorySaver
+from langgraph.types import interrupt, Command
+
+
+class State(TypedDict):
+    messages: Annotated[list, add_messages]
+    approval: str
+
+
+llm = init_chat_model(&quot;openai:gpt-4.1-mini&quot;)
+
+
+def analyze(state: State):
+    &quot;&quot;&quot;生成初步分析草稿&quot;&quot;&quot;
+    resp = llm.invoke(state[&quot;messages&quot;])
+    return {&quot;messages&quot;: [resp]}
+
+
+def human_review(state: State):
+    &quot;&quot;&quot;等待人工审批,期间暂停执行&quot;&quot;&quot;
+    decision = interrupt(
+        {
+            &quot;question&quot;: &quot;是否批准这一判断?&quot;,
+            &quot;draft&quot;: state[&quot;messages&quot;][-1].content,
+        }
+    )
+    return {&quot;approval&quot;: decision}
+
+
+def finalize(state: State):
+    if state[&quot;approval&quot;] != &quot;approved&quot;:
+        return {&quot;messages&quot;: [{&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;已驳回,需要重新撰写。&quot;}]}
+    return {&quot;messages&quot;: [{&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;已批准,已加入部署队列。&quot;}]}
+
+
+builder = StateGraph(State)
+builder.add_node(&quot;analyze&quot;, analyze)
+builder.add_node(&quot;human_review&quot;, human_review)
+builder.add_node(&quot;finalize&quot;, finalize)
+
+builder.add_edge(START, &quot;analyze&quot;)
+builder.add_edge(&quot;analyze&quot;, &quot;human_review&quot;)
+builder.add_edge(&quot;human_review&quot;, &quot;finalize&quot;)
+builder.add_edge(&quot;finalize&quot;, END)
+
+# 检查点器是持久化执行的核心。生产环境请使用 Postgres/Redis 检查点器
+graph = builder.compile(checkpointer=InMemorySaver())
+
+config = {&quot;configurable&quot;: {&quot;thread_id&quot;: &quot;review-001&quot;}}
+
+# 第一阶段:在 interrupt 处停下
+for event in graph.stream(
+    {&quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;总结一下本季度的风险&quot;}]},
+    config,
+):
+    print(event)
+
+# ... 此时进程即使挂掉也没问题,状态保存在检查点器中 ...
+
+# 第二阶段:数天后人工批准,从中断点精确恢复
+final = graph.invoke(Command(resume=&quot;approved&quot;), config)
+print(final[&quot;messages&quot;][-1].content)
+</code></pre>
+<p><strong>这里有三个需要关注的点</strong></p>
+<ol>
+<li><code>thread_id</code> 是对话/任务的身份标识,恢复操作依靠这个 key 完成。</li>
+<li><code>InMemorySaver</code> 仅用于示例。如果在生产环境中原样使用,持久化这个引入理由本身就不成立了。</li>
+<li><code>interrupt</code> 调用处<strong>在恢复时会从节点开头重新执行。</strong>因此如果在 interrupt 之前放置副作用(支付、发邮件、下单),会导致重复执行。应将副作用拆分到 interrupt 之后的节点中。</li>
+</ol>
+<hr>
+<h3>7.4 在 Go 中不使用框架 —— 结构剖析</h3>
+<p>在引入框架之前,自己动手写一遍这样的结构,能清楚看出框架究竟替你做了什么。下面是一个不绑定特定厂商 SDK 的概念性结构。</p>
+<pre><code class="language-go">// 概念草图:实际类型请替换为你所使用的厂商 SDK
+func RunAgent(ctx context.Context, c ModelClient, tools map[string]Tool, prompt string) (string, error) {
+	msgs := []Message{{Role: &quot;user&quot;, Content: prompt}}
+
+	for turn := 0; turn &lt; maxTurns; turn++ {
+		resp, err := c.Complete(ctx, msgs, toolSpecs(tools))
+		if err != nil {
+			return &quot;&quot;, err
+		}
+		msgs = append(msgs, resp.Message)
+
+		if len(resp.ToolCalls) == 0 {
+			return resp.Message.Content, nil // 结束条件
+		}
+
+		// 并发执行:Go 优势体现的地方
+		results := make([]Message, len(resp.ToolCalls))
+		var wg sync.WaitGroup
+		for i, call := range resp.ToolCalls {
+			wg.Add(1)
+			go func(i int, call ToolCall) {
+				defer wg.Done()
+				out, err := tools[call.Name].Invoke(ctx, call.Args)
+				results[i] = toolResultMessage(call.ID, out, err) // 错误信息也返回给模型
+			}(i, call)
+		}
+		wg.Wait()
+		msgs = append(msgs, results...)
+	}
+	return &quot;&quot;, fmt.Errorf(&quot;超过最大轮次(%d)&quot;, maxTurns)
+}
+</code></pre>
+<p>这大约 40 行代码中<strong>没有</strong>的东西,正是框架存在的理由:检查点、恢复、流式输出、token 计费、工具审批门、OTel span、子代理路由、上下文窗口管理。如果这些当中真正需要的不超过两三项,通常自己写会更划算。</p>
+<hr>
+<h2>8. 上线前检查清单 —— 安全与治理视角</h2>
+<p>代理框架本质上是<strong>赋予 LLM 执行权限的装置</strong>。以下是落地前需要确认的事项。</p>
+<table>
+<thead>
+<tr>
+<th>领域</th>
+<th>检查内容</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>供应链</strong></td>
+<td>框架的传递依赖数量及签名验证机制。在 Go 中,<code>go.sum</code> + GOPROXY 透明日志是主要防线</td>
+<td>2025–2026 年多起软件包篡改事件</td>
+</tr>
+<tr>
+<td><strong>MCP 信任边界</strong></td>
+<td>MCP 服务器属于外部代码,应将服务器列表和权限固定为白名单,生产环境中不要开启动态发现</td>
+<td>MCP 的工具描述本身就是提示词注入的攻击面</td>
+</tr>
+<tr>
+<td><strong>工具审批</strong></td>
+<td>破坏性操作(删除文件、转账、部署)必须放在审批中间件之后。使用 MAF 的 tool approval 或 LangChain 的 HITL 中间件</td>
+<td>许多框架默认开启自动工具调用</td>
+</tr>
+<tr>
+<td><strong>凭据管理</strong></td>
+<td>禁止使用回退型凭据(如 <code>DefaultAzureCredential</code>),应明确指定,例如托管身份</td>
+<td>Microsoft 官方建议</td>
+</tr>
+<tr>
+<td><strong>数据边界</strong></td>
+<td>使用第三方模型/代理时,需评估数据是否会跨越组织的合规和地理边界,责任由使用者承担</td>
+<td>MAF 文档中已明确说明</td>
+</tr>
+<tr>
+<td><strong>可观测性</strong></td>
+<td>OTel span 中可能携带提示词/响应的原文,需提前制定屏蔽策略</td>
+<td>存在 PII、商业机密泄露的路径</td>
+</tr>
+<tr>
+<td><strong>副作用幂等性</strong></td>
+<td>检查恢复/重试时是否存在被重复执行的操作</td>
+<td>参见 §7.3</td>
+</tr>
+<tr>
+<td><strong>版本锁定</strong></td>
+<td>预览阶段的 SDK 建议锁定到具体的 commit</td>
+<td>MAF Go 尚未发布 release 标签</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. 总结</h2>
+<p>应从以下角度来选择使用哪种方案。</p>
+<ol>
+<li><p><strong>先确定层次。</strong> 先分清自己真正需要的是工具循环(L1)、图(L2)还是持久化运行时(L3),候选方案就能缩减到两三个。大多数团队实际想要的其实是 L3,而这恰恰是自己搭建成本最高的部分。</p>
+</li>
+<li><p><strong>语言决定了大方向。</strong> 如果是 Python/TS,LangGraph 是现实中的默认选择;如果是 .NET,MAF 是默认选择;如果是 Go,选项就比较有限。MAF Go 的方向是对的,但截至 2026 年 7 月仍处于公开预览阶段,缺少 handoff、声明式代理、RAG、CodeAct、DevUI,社区规模也非常小。如果 Azure 治理不是硬性需求,Eino、ADK Go,或者不使用框架的实现,可能是更安全的选择。</p>
+</li>
+<li><p><strong>框架买的是失败处理能力,不是性能。</strong> 如果一份引入评估文档写着&quot;性能会提升&quot;,那这份文档就是错的。正确的说法应该是&quot;失败会变得可观测、可恢复&quot;。LLM 是 Excel,不是先知,框架就是把这份 Excel 变成一张可审计的表格的工具。</p>
+</li>
+</ol>
+<p>对 MAF Go 的实务建议如下:<strong>目前应将其定位在试点和技术验证(PoC)阶段,先去 <code>docs/dotnet-go-sdk-feature-comparison.md</code> 确认自己所需的功能是否已经实现。</strong>如果 handoff 编排是必需的功能之一,那么目前它还不在可采用的范围内。</p>
+<hr>
+<h2>附录 A. 参考链接</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Microsoft Agent Framework for Go</td>
+<td><a href="https://github.com/microsoft/agent-framework-go">https://github.com/microsoft/agent-framework-go</a></td>
+</tr>
+<tr>
+<td>.NET–Go 功能对比文档</td>
+<td><a href="https://github.com/microsoft/agent-framework-go/blob/main/docs/dotnet-go-sdk-feature-comparison.md">https://github.com/microsoft/agent-framework-go/blob/main/docs/dotnet-go-sdk-feature-comparison.md</a></td>
+</tr>
+<tr>
+<td>Go 参考文档</td>
+<td><a href="https://pkg.go.dev/github.com/microsoft/agent-framework-go">https://pkg.go.dev/github.com/microsoft/agent-framework-go</a></td>
+</tr>
+<tr>
+<td>MAF 主线(.NET/Python)</td>
+<td><a href="https://github.com/microsoft/agent-framework">https://github.com/microsoft/agent-framework</a></td>
+</tr>
+<tr>
+<td>MS Learn 文档</td>
+<td><a href="https://learn.microsoft.com/agent-framework/">https://learn.microsoft.com/agent-framework/</a></td>
+</tr>
+<tr>
+<td>Agent Framework 开发博客</td>
+<td><a href="https://devblogs.microsoft.com/agent-framework/">https://devblogs.microsoft.com/agent-framework/</a></td>
+</tr>
+<tr>
+<td>LangChain·LangGraph 1.0 发布公告</td>
+<td><a href="https://blog.langchain.com/langchain-langgraph-1dot0/">https://blog.langchain.com/langchain-langgraph-1dot0/</a></td>
+</tr>
+<tr>
+<td>LangGraph 1.0 更新日志</td>
+<td><a href="https://changelog.langchain.com/announcements/langgraph-1-0-is-now-generally-available">https://changelog.langchain.com/announcements/langgraph-1-0-is-now-generally-available</a></td>
+</tr>
+<tr>
+<td>Eino(CloudWeGo)</td>
+<td><a href="https://github.com/cloudwego/eino">https://github.com/cloudwego/eino</a></td>
+</tr>
+<tr>
+<td>Foundry Build 2026 概要</td>
+<td><a href="https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-build-2026/">https://devblogs.microsoft.com/foundry/whats-new-in-microsoft-foundry-build-2026/</a></td>
+</tr>
+</tbody></table>
+<h2>附录 B. 术语对照表</h2>
+<table>
+<thead>
+<tr>
+<th>缩写</th>
+<th>全称</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MAF</td>
+<td>Microsoft Agent Framework</td>
+<td>Microsoft 的多语言代理框架</td>
+</tr>
+<tr>
+<td>MCP</td>
+<td>Model Context Protocol</td>
+<td>供模型发现/调用外部工具的标准协议</td>
+</tr>
+<tr>
+<td>A2A</td>
+<td>Agent-to-Agent</td>
+<td>跨运行时的代理间消息协议</td>
+</tr>
+<tr>
+<td>AG-UI</td>
+<td>Agent-GUI protocol</td>
+<td>代理与用户界面之间的交互协议</td>
+</tr>
+<tr>
+<td>HITL</td>
+<td>Human-in-the-Loop</td>
+<td>在执行过程中插入人工审阅/审批的模式</td>
+</tr>
+<tr>
+<td>OTel</td>
+<td>OpenTelemetry</td>
+<td>分布式追踪与指标采集标准</td>
+</tr>
+<tr>
+<td>SK</td>
+<td>Semantic Kernel</td>
+<td>Microsoft 上一代编排 SDK</td>
+</tr>
+<tr>
+<td>GA</td>
+<td>General Availability</td>
+<td>正式发布,支持生产环境使用</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>数据基准日期:2026 年 7 月 22 日。GitHub 指标和框架功能列表变化很快,引用时请同时标注基准日期,并在做出引入决策前直接查看仓库本身。</em></p>
+<p><em>本文仅用于技术信息分享,不构成对特定产品的推荐,也不构成投资建议。</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AI-Agent-Framework/AI-Agent-Framework_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

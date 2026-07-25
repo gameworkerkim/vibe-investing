@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TimesFM(时间序列基础模型)分析指南 — VibeQuant</title>
+  <meta name="description" content="对 Google Research 开发的时间序列预测基础模型的全面分析" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/timesfm-timesfm-cn/" />
+  <meta property="og:title" content="TimesFM(时间序列基础模型)分析指南" />
+  <meta property="og:description" content="对 Google Research 开发的时间序列预测基础模型的全面分析" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/timesfm-timesfm-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/timesfm-timesfm/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/timesfm-timesfm-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/timesfm-timesfm-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/timesfm-timesfm-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/timesfm-timesfm/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"TimesFM(时间序列基础模型)分析指南","description":"对 Google Research 开发的时间序列预测基础模型的全面分析","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/timesfm-timesfm-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/TimesFM/TimesFM_%EB%B6%84%EC%84%9D_%EA%B0%80%EC%9D%B4%EB%93%9C_CN.md","image":"https://vibequant.cc/og-default.png","inLanguage":"zh-Hans","keywords":"时间序列, 基础模型, Google, 量化"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 퀀트 · 데이터</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">퀀트 · 데이터</p>
+        <h1>TimesFM(时间序列基础模型)分析指南</h1>
+        <p class="article-dates">주제 时间序列 · 基础模型 · Google · 量化</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/timesfm-timesfm/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/timesfm-timesfm-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/timesfm-timesfm-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/timesfm-timesfm-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">对 Google Research 开发的时间序列预测基础模型的全面分析</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>对 Google Research 开发的时间序列预测基础模型的全面分析</p>
+</blockquote>
+<hr>
+<h2>简介</h2>
+<p>TimesFM 是由 Google Research 开发的专用于时间序列预测的基础模型(Foundation Model)。</p>
+<p>传统的时间序列预测需要为每个领域单独训练模型。零售需求预测、金融价格预测、制造设备异常检测都各自需要不同的数据和模型。TimesFM 改变了这一范式。该模型在超过 1000 亿个真实时间序列数据点上进行了预训练,<strong>无需任何额外训练(零样本)</strong>即可立即对新领域的时间序列数据进行预测。</p>
+<p>正如 ChatGPT 在文本领域所实现的那样,TimesFM 正在时间序列数据领域实现&quot;一个模型预测一切&quot;的愿景。</p>
+<p>该模型基于 2024 年 ICML(国际机器学习大会)上发表的论文 <em>&quot;A decoder-only foundation model for time-series forecasting&quot;</em>,目前最新版本为 TimesFM 2.5(2025 年 9 月)。</p>
+<hr>
+<h2>项目概览</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开发方</td>
+<td>Google Research</td>
+</tr>
+<tr>
+<td>发表</td>
+<td>ICML 2024</td>
+</tr>
+<tr>
+<td>最新版本</td>
+<td>TimesFM 2.5(2025 年 9 月)</td>
+</tr>
+<tr>
+<td>参数量</td>
+<td>200M(以 v2.5 为准)</td>
+</tr>
+<tr>
+<td>预训练数据</td>
+<td>超过 1000 亿个真实时间序列数据点</td>
+</tr>
+<tr>
+<td>许可证</td>
+<td>Apache 2.0 开源(并非官方支持的 Google 产品)</td>
+</tr>
+<tr>
+<td>主要集成</td>
+<td>BigQuery ML、Google Sheets、Vertex Model Garden</td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td><a href="https://github.com/google-research/timesfm">https://github.com/google-research/timesfm</a></td>
+</tr>
+<tr>
+<td>HuggingFace</td>
+<td>google/timesfm-2.0-500m-pytorch</td>
+</tr>
+</tbody></table>
+<p>TimesFM 采用<strong>基于 patch 的仅解码器(decoder-only)Transformer 架构</strong>。它将 32 个连续时间点(timepoints)标记为一个 patch 进行处理,这种方式在结构上与 LLM 处理文本 token 的方式类似。</p>
+<hr>
+<h2>优点</h2>
+<h3>1. 出色的零样本(Zero-Shot)性能</h3>
+<p>无需额外训练,即可对新的时间序列数据立即提供优秀的预测。在零售、金融、制造、医疗等多个领域以及不同时间粒度(秒/分/时/日/月/年)上均验证了其性能。</p>
+<h3>2. 高效的模型规模</h3>
+<p>200M 参数相比当下的大型 LLM 而言规模非常小。约为 GPT-4(数千亿参数)的千分之一,但在时间序列预测上表现相当甚至更优。</p>
+<h3>3. 支持长上下文长度</h3>
+<p>TimesFM 2.5 最多支持 <strong>16K 上下文长度</strong>,约为前一版本(2,048)的 8 倍,可以一次性处理数年的日度数据作为输入。</p>
+<h3>4. 支持概率预测(分位数预测)</h3>
+<p>可选择性使用一个 3000 万参数的分位数头(quantile head),提供最长达 1K horizon 的连续分位数预测。相比简单的点预测(point forecast),它能够提供带置信区间的概率预测。</p>
+<h3>5. 与 Google 生态的集成</h3>
+<ul>
+<li><strong>BigQuery ML</strong>: 一行 SQL 即可执行大规模时间序列预测</li>
+<li><strong>Google Sheets</strong>: 直接在表格中使用预测功能</li>
+<li><strong>Vertex Model Garden</strong>: 集成企业级 MLOps 流水线</li>
+</ul>
+<h3>6. 多种后端及可扩展性</h3>
+<ul>
+<li>同时支持 PyTorch 和 Flax(JAX)后端</li>
+<li>支持多 GPU 训练与微调(fine-tuning)</li>
+<li>通过 HuggingFace Transformers + PEFT(LoRA)实现高效微调</li>
+</ul>
+<h3>7. XReg: 协变量(Covariate)支持</h3>
+<p>从 TimesFM 2.5 开始,XReg 功能使模型能够结合外部变量(天气、事件、促销等)进行预测。</p>
+<h3>8. 持续更新</h3>
+<p>2025 年以来,Flax 版本、XReg 支持、Agent Skills 等各种改进不断推出,社区提交的 Pull Request 也在积极被合并。</p>
+<hr>
+<h2>缺点</h2>
+<h3>1. 并非官方支持的产品</h3>
+<p>尽管是开源模型,但<strong>并非官方支持的 Google 产品</strong>。企业采用时不应期待获得 SLA 或官方技术支持。</p>
+<h3>2. 以单变量为中心</h3>
+<p>公开发布的检查点针对单变量时间序列预测进行了优化。在多个变量间相关性至关重要的多变量(multivariate)预测场景中存在局限。</p>
+<h3>3. 依赖与安装问题</h3>
+<p>存在 JAX、Lingvo、Praxis 等特殊依赖。</p>
+<ul>
+<li>已有报告指出存在 Python 版本兼容性问题</li>
+<li>在 Colab 环境中出现过 <code>lingvo</code> 包安装失败的案例</li>
+<li>初期设置可能需要相当多的试错</li>
+</ul>
+<h3>4. 黑箱模型</h3>
+<p>由于是预训练的基础模型,<strong>难以解释预测的依据</strong>。在金融、医疗等对可解释性要求较高的领域存在监管风险。</p>
+<h3>5. 特定领域验证不足</h3>
+<p>研究表明,在电力价格预测等某些领域,其性能低于 Chronos-Bolt 或 Time-MoE。在采用前,必须在目标领域进行验证。</p>
+<h3>6. 实时处理的限制</h3>
+<p>对大规模时间序列数据进行实时(real-time)处理需要单独搭建服务基础设施。</p>
+<hr>
+<h2>在股票及预测市场中的应用潜力</h2>
+<h3>TimesFM 在股票市场预测中的应用</h3>
+<p>TimesFM 具有可直接应用于股价预测的结构,但实际应用时需要考虑以下事项。</p>
+<p><strong>可能性</strong></p>
+<ul>
+<li>将 OHLCV(开盘/最高/最低/收盘/成交量)数据作为时间序列处理</li>
+<li>零样本预测使个股无需单独训练即可立即预测</li>
+<li>通过分位数预测估算价格区间及波动性</li>
+<li>与 BigQuery ML 结合可实现大规模个股的批量预测</li>
+</ul>
+<p><strong>局限性</strong></p>
+<ul>
+<li>股票市场除时间序列外,还受新闻、公告、情绪等非结构化数据的重大影响</li>
+<li>可能对市场结构变化(regime change)较为脆弱</li>
+<li>若要直接用作交易策略,需要额外的风险管理与组合优化层</li>
+<li>相比短期(1-5 天)预测,可能更适合中长期趋势预测</li>
+</ul>
+<p><strong>实际应用场景</strong></p>
+<table>
+<thead>
+<tr>
+<th>应用场景</th>
+<th>适配度</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>股价趋势方向预测</td>
+<td>★★★☆☆</td>
+<td>可进行方向性预测,但精度有限</td>
+</tr>
+<tr>
+<td>波动性预测</td>
+<td>★★★★☆</td>
+<td>利用分位数预测时效果较好</td>
+</tr>
+<tr>
+<td>需求/营收预测(企业分析)</td>
+<td>★★★★★</td>
+<td>有助于在业绩发布前估算营收</td>
+</tr>
+<tr>
+<td>宏观经济指标预测</td>
+<td>★★★★☆</td>
+<td>CPI、利率等经济指标预测</td>
+</tr>
+<tr>
+<td>组合再平衡触发信号</td>
+<td>★★★☆☆</td>
+<td>可用于检测趋势反转点</td>
+</tr>
+</tbody></table>
+<h3>在预测市场(Prediction Market)中的应用</h3>
+<h4>在 Polymarket 上的直接适用性</h4>
+<p>Polymarket 是一个交易特定事件 YES/NO 概率的预测市场。TimesFM 直接有用的类别:</p>
+<p><strong>高适配度</strong>-<strong>经济指标相关市场</strong>: 利用历史 CPI 时间序列预测类似&quot;2025 年美国 CPI 是否超过 3%&quot;的市场</p>
+<ul>
+<li><strong>金融事件</strong>: 预测利率路径,例如&quot;美联储 2025 年降息次数&quot;</li>
+<li><strong>商品价格</strong>: 与原油、黄金价格相关的市场</li>
+</ul>
+<p><strong>低适配度</strong></p>
+<ul>
+<li>政治事件(选举结果等)—— 民调数据比时间序列更合适</li>
+<li>一次性事件(体育比赛结果等)—— 不存在时间序列模式</li>
+</ul>
+<p><strong>Polymarket 应用策略示例</strong></p>
+<pre><code>1. 选定目标市场: &quot;2025 年 12 月美国失业率是否超过 4.5%?&quot;
+2. 收集历史数据: 从 FRED API 下载月度失业率时间序列
+3. 运行 TimesFM 预测: 未来 6 个月的分位数预测
+4. 转换为概率: 根据预测分布计算超过阈值的概率
+5. 与市场价格比较: 与 Polymarket 当前价格对比,寻找套利机会
+</code></pre>
+<h4>国内(韩国)预测市场</h4>
+<p>韩国尚未出现像 Polymarket 一样成熟的预测市场。在韩国,类似 Polymarket 的预测市场是非法的。</p>
+<ul>
+<li><strong>KakaoTalk 公开聊天室的舆情汇总</strong>等非官方预测渠道</li>
+<li><strong>券商研究共识</strong> —— 可用 TimesFM 预测相对于共识的业绩超预期情况</li>
+</ul>
+<hr>
+<h2>与竞品的比较</h2>
+<h3>全球竞品模型</h3>
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>开发方</th>
+<th>国家</th>
+<th>参数量</th>
+<th>开源</th>
+<th>零样本</th>
+<th>多变量</th>
+<th>概率预测</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TimesFM 2.5</strong></td>
+<td>Google Research</td>
+<td>美国</td>
+<td>200M</td>
+<td>是</td>
+<td>是</td>
+<td>有限</td>
+<td>部分支持</td>
+</tr>
+<tr>
+<td>TimeGPT</td>
+<td>Nixtla</td>
+<td>美国</td>
+<td>未公开</td>
+<td>否(商用 API)</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>Chronos-Bolt</td>
+<td>Amazon</td>
+<td>美国</td>
+<td>多种</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>Moirai</td>
+<td>Salesforce</td>
+<td>美国</td>
+<td>多种</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>Time-MoE</td>
+<td>北京航空航天大学</td>
+<td>中国</td>
+<td>多种</td>
+<td>是</td>
+<td>是</td>
+<td>部分支持</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>MOMENT</td>
+<td>CMU</td>
+<td>美国</td>
+<td>多种</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>Lag-Llama</td>
+<td>ServiceNow</td>
+<td>加拿大</td>
+<td>多种</td>
+<td>是</td>
+<td>是</td>
+<td>否</td>
+<td>是</td>
+</tr>
+<tr>
+<td>UniTS</td>
+<td>复旦大学</td>
+<td>中国</td>
+<td>多种</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>TimesNet</td>
+<td>同济大学</td>
+<td>中国</td>
+<td>多种</td>
+<td>是</td>
+<td>否</td>
+<td>是</td>
+<td>否</td>
+</tr>
+</tbody></table>
+<h3>中国竞品项目详细分析</h3>
+<h4>1. Time-MoE(Time Mixture of Experts)</h4>
+<ul>
+<li><strong>开发</strong>: 北京航空航天大学(Beihang University)</li>
+<li><strong>特点</strong>: 首次将混合专家(MoE)架构应用于时间序列</li>
+<li><strong>优势</strong>: 在电力价格预测(Electricity Price Forecasting)上超越 TimesFM</li>
+<li><strong>劣势</strong>: 概率预测功能有限,社区规模相对较小</li>
+<li><strong>GitHub</strong>: <a href="https://github.com/Time-MoE/Time-MoE">https://github.com/Time-MoE/Time-MoE</a></li>
+</ul>
+<h4>2. UniTS(Universal Time Series)</h4>
+<ul>
+<li><strong>开发</strong>: 复旦大学(Fudan University)</li>
+<li><strong>特点</strong>: 单一模型处理预测、分类、异常检测、插值等多种任务</li>
+<li><strong>优势</strong>: 多任务学习、支持多变量</li>
+<li><strong>劣势</strong>: 相较专用模型,单任务性能可能有所欠缺</li>
+<li><strong>备注</strong>: 将中国 NLP 研究团队的 LLM 方法论迁移应用于时间序列</li>
+</ul>
+<h4>3. TimesNet</h4>
+<ul>
+<li><strong>开发</strong>: 同济大学(Tongji University)</li>
+<li><strong>特点</strong>: 将一维时间序列转换为二维空间以用 CNN 处理的独创方法</li>
+<li><strong>优势</strong>: 覆盖长期预测、短期预测、插值、异常检测、分类五种任务</li>
+<li><strong>劣势</strong>: 属于架构研究层面而非基础模型,不支持零样本</li>
+<li><strong>GitHub</strong>: <a href="https://github.com/thuml/Time-Series-Library">https://github.com/thuml/Time-Series-Library</a></li>
+</ul>
+<h4>4. PatchTST</h4>
+<ul>
+<li><strong>开发</strong>: 清华大学 + IBM Research</li>
+<li><strong>特点</strong>: 与 TimesFM 类似的基于 patch 的方法,基于 Transformer</li>
+<li><strong>备注</strong>: 可视为 TimesFM 架构上的先行研究</li>
+</ul>
+<h4>5. iTransformer</h4>
+<ul>
+<li><strong>开发</strong>: 中国科学院(Chinese Academy of Sciences)</li>
+<li><strong>特点</strong>: 将 Transformer 的注意力机制应用于变量维度而非时间维度</li>
+<li><strong>优势</strong>: 在多变量预测中表现优异</li>
+</ul>
+<h3>美国/加拿大竞品项目详细分析</h3>
+<h4>1. Chronos &amp; Chronos-Bolt(Amazon)</h4>
+<ul>
+<li><strong>特点</strong>: 基于 T5 架构,将时间序列数值标记化后作为语言模型处理</li>
+<li><strong>优势</strong>: 概率预测领域的最强者,在电力价格预测上超越 TimesFM</li>
+<li><strong>劣势</strong>: Chronos-Bolt 大幅提升了推理速度,但仍相对较重</li>
+<li><strong>特别说明</strong>: 支持通过 AWS SageMaker JumpStart 一键部署</li>
+</ul>
+<h4>2. TimeGPT(Nixtla)</h4>
+<ul>
+<li><strong>特点</strong>: 首个商用时间序列基础模型,以 API 形式提供</li>
+<li><strong>优势</strong>: 界面最易用,支持微调,内置异常检测</li>
+<li><strong>劣势</strong>: 非开源,产生 API 费用,模型内部结构未公开</li>
+<li><strong>价格</strong>: 每月 $29-$299(以 2025 年为准)</li>
+</ul>
+<h4>3. Moirai(Salesforce)</h4>
+<ul>
+<li><strong>特点</strong>: 基于 patch 的掩码编码器,单一模型处理多种频率(frequency)</li>
+<li><strong>优势</strong>: 支持多变量、概率预测,拥有多种模型规模(Small/Base/Large)</li>
+<li><strong>劣势</strong>: 推理速度、在特定领域相对 TimesFM 存在性能差距</li>
+</ul>
+<h4>4. MOMENT(CMU)</h4>
+<ul>
+<li><strong>特点</strong>: 用于时间序列分析的大型预训练模型,采用掩码方式</li>
+<li><strong>优势</strong>: 涵盖异常检测、分类、插值等广泛任务</li>
+<li><strong>特别说明</strong>: 基于监督学习,微调后性能最大化</li>
+</ul>
+<h3>性能比较(研究结果汇总)</h3>
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>第一名</th>
+<th>第二名</th>
+<th>TimesFM 排名</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>长期预测(Long-horizon)</td>
+<td>TimesFM</td>
+<td>Moirai</td>
+<td><strong>第一</strong></td>
+</tr>
+<tr>
+<td>电力价格预测</td>
+<td>Chronos-Bolt</td>
+<td>Time-MoE</td>
+<td>第三</td>
+</tr>
+<tr>
+<td>短期负荷预测</td>
+<td>TimesFM</td>
+<td>Chronos</td>
+<td><strong>第一</strong></td>
+</tr>
+<tr>
+<td>月度降水量预测</td>
+<td>TimesFM</td>
+<td>SARIMA</td>
+<td><strong>第一</strong>(部分季节)</td>
+</tr>
+<tr>
+<td>多变量预测</td>
+<td>Moirai</td>
+<td>iTransformer</td>
+<td>排名靠后</td>
+</tr>
+<tr>
+<td>异常检测</td>
+<td>MOMENT</td>
+<td>UniTS</td>
+<td>不适用</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>快速开始指南</h2>
+<h3>安装</h3>
+<pre><code class="language-bash"># PyTorch 版本(推荐)
+pip install timesfm[torch]
+
+# JAX/Flax 版本
+pip install timesfm[jax]
+</code></pre>
+<h3>基础预测示例(PyTorch)</h3>
+<pre><code class="language-python">import timesfm
+import numpy as np
+
+# 加载模型
+tfm = timesfm.TimesFm(
+    hparams=timesfm.TimesFmHparams(
+        backend=&quot;torch&quot;,
+        per_core_batch_size=32,
+        horizon_len=128,
+    ),
+    checkpoint=timesfm.TimesFmCheckpoint(
+        huggingface_repo_id=&quot;google/timesfm-2.0-200m-pytorch&quot;
+    ),
+)
+
+# 执行预测
+forecast_input = [np.sin(np.linspace(0, 20, 100))]  # 示例时间序列
+point_forecast, quantile_forecast = tfm.forecast(forecast_input)
+</code></pre>
+<h3>BigQuery ML 集成</h3>
+<pre><code class="language-sql">-- 在 BigQuery ML 中使用 TimesFM 的示例
+SELECT *
+FROM ML.FORECAST(
+  MODEL `project.dataset.timesfm_model`,
+  STRUCT(30 AS horizon, 0.9 AS confidence_level)
+)
+</code></pre>
+<hr>
+<h2>应用路线图(投资场景)</h2>
+<pre><code>阶段 1: 数据收集
+├── FRED API: 宏观经济时间序列(GDP、CPI、失业率)
+├── Yahoo Finance / FinanceDataReader: 股价数据
+└── DART: 企业季度业绩数据
+
+阶段 2: 应用 TimesFM
+├── 通过零样本预测衡量基线性能
+├── 使用领域数据进行 LoRA 微调
+└── 通过分位数预测生成置信区间
+
+阶段 3: 信号生成
+├── 预测值与共识对比
+├── 比较 Polymarket 价格与 TimesFM 概率
+└── 计算风险调整后收益
+
+阶段 4: 实战应用
+├── 组合再平衡触发信号
+├── 期权策略(利用波动性预测)
+└── 预测市场套利
+</code></pre>
+<hr>
+<h2>汇总比较表</h2>
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>TimesFM</th>
+<th>TimeGPT</th>
+<th>Chronos</th>
+<th>Moirai</th>
+<th>Time-MoE</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>开发方</td>
+<td>Google</td>
+<td>Nixtla</td>
+<td>Amazon</td>
+<td>Salesforce</td>
+<td>北京航空航天大学</td>
+</tr>
+<tr>
+<td>参数量</td>
+<td>200M</td>
+<td>未公开</td>
+<td>多种</td>
+<td>多种</td>
+<td>多种</td>
+</tr>
+<tr>
+<td>开源</td>
+<td>是</td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>零样本</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+</tr>
+<tr>
+<td>多变量</td>
+<td>有限</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>部分支持</td>
+</tr>
+<tr>
+<td>概率预测</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>有限</td>
+</tr>
+<tr>
+<td>Google 集成</td>
+<td>是</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+</tr>
+<tr>
+<td>推理速度</td>
+<td>★★★★☆</td>
+<td>★★★★☆</td>
+<td>★★★☆☆</td>
+<td>★★★☆☆</td>
+<td>★★★★☆</td>
+</tr>
+<tr>
+<td>社区活跃度</td>
+<td>★★★★★</td>
+<td>★★★☆☆</td>
+<td>★★★★☆</td>
+<td>★★★☆☆</td>
+<td>★★★☆☆</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>结论</h2>
+<p>TimesFM 是 Google Research 开发的<strong>轻量化时间序列基础模型</strong>,其主要优势在于零样本预测性能和与 Google 生态的集成。凭借 200M 这一较小的参数规模实现了出色性能,并可通过 BigQuery ML 实现企业级应用。</p>
+<p><strong>在投资/金融场景中的应用要点</strong>- 相比股价本身,更适合用于<strong>宏观经济指标、企业营收、需求预测</strong></p>
+<ul>
+<li>可用于 Polymarket 等预测市场中经济指标相关市场的概率计算</li>
+<li>单独使用效果有限,与基于 LLM 的新闻情绪分析结合时可最大化协同效应</li>
+</ul>
+<p><strong>选择标准</strong>- BigQuery/GCP 环境 -&gt;<strong>TimesFM</strong>- AWS 环境 -&gt;<strong>Chronos-Bolt</strong>- 仅需 API -&gt;<strong>TimeGPT</strong>- 多变量 + 概率预测 -&gt;<strong>Moirai</strong>- 电力/能源领域 -&gt;<strong>Time-MoE</strong></p>
+<hr>
+<h2>参考资料</h2>
+<ul>
+<li><a href="https://github.com/google-research/timesfm">GitHub 仓库</a></li>
+<li><a href="https://arxiv.org/abs/2310.10688">论文(arXiv)</a></li>
+<li><a href="https://huggingface.co/google/timesfm-2.0-200m-pytorch">HuggingFace 检查点</a></li>
+<li><a href="https://research.google/blog/a-decoder-only-foundation-model-for-time-series-forecasting/">Google Research 博客</a></li>
+<li><a href="https://cloud.google.com/bigquery/docs/reference/standard-sql/bigqueryml-syntax-forecast">BigQuery ML 集成文档</a></li>
+</ul>
+<hr>
+<p><em>最后更新: 2025年6月 | 撰写: Vibe Investing Research</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/TimesFM/TimesFM_%EB%B6%84%EC%84%9D_%EA%B0%80%EC%9D%B4%EB%93%9C_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

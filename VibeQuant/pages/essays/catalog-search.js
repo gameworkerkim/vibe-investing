@@ -14,7 +14,7 @@
   const featCards = feat ? [...feat.querySelectorAll(".col-card")] : [];
   const allFilterCards = [...mainCards, ...featCards];
   const langBtns = [...document.querySelectorAll("[data-lang-btn]")];
-  const LANG_KEY = "vq-cti-lang";
+  const LANG_KEY = "vq-content-lang";
   const SORT_KEY = "vq-catalog-sort:" + location.pathname;
   const hasLangFilter = langBtns.length > 0;
 
@@ -31,7 +31,9 @@
     return (s || "").trim().toLowerCase().split(/\s+/).filter(Boolean);
   }
 
-  let lang = hasLangFilter ? (localStorage.getItem(LANG_KEY) || browserLang()) : "";
+  let lang = hasLangFilter
+    ? (localStorage.getItem(LANG_KEY) || localStorage.getItem("vq-cti-lang") || browserLang())
+    : "";
   if (hasLangFilter && !["KR", "EN", "JP", "CN"].includes(lang)) lang = browserLang();
 
   function sortMode() {

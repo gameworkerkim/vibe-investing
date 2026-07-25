@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bonsai-27B-gguf: 1ビット量子化で実現したオンデバイス27B推論モデル — VibeQuant</title>
+  <meta name="description" content="Bonsai-27B-guufは27B推論モデルを1.125bit/weightに圧縮し約3.9GBのサイズでFP16性能の89.5%を維持、ラップトップやスマホで利用可能。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf-ja/" />
+  <meta property="og:title" content="Bonsai-27B-gguf: 1ビット量子化で実現したオンデバイス27B推論モデル" />
+  <meta property="og:description" content="Bonsai-27B-guufは27B推論モデルを1.125bit/weightに圧縮し約3.9GBのサイズでFP16性能の89.5%を維持、ラップトップやスマホで利用可能。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Bonsai-27B-gguf: 1ビット量子化で実現したオンデバイス27B推論モデル","description":"Bonsai-27B-guufは27B推論モデルを1.125bit/weightに圧縮し約3.9GBのサイズでFP16性能の89.5%を維持、ラップトップやスマホで利用可能。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Bonsai/Bonsai-27b-gguf_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-18","dateModified":"2026-07-18","inLanguage":"ja","keywords":"LLM · 에이전트, LLM_Bonsai"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Bonsai-27B-gguf: 1ビット量子化で実現したオンデバイス27B推論モデル</h1>
+        <p class="article-dates"><time datetime="2026-07-18">발행 2026.07.18</time> · 주제 LLM · 에이전트 · LLM_Bonsai</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/llm-bonsai-bonsai-27b-gguf/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/llm-bonsai-bonsai-27b-gguf-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/llm-bonsai-bonsai-27b-gguf-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/llm-bonsai-bonsai-27b-gguf-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Bonsai-27B-guufは27B推論モデルを1.125bit/weightに圧縮し約3.9GBのサイズでFP16性能の89.5%を維持、ラップトップやスマホで利用可能。</p>
+        
+      </header>
+      <div class="article-body prose"><p><strong>リポジトリ</strong>: <a href="https://huggingface.co/prism-ml/Bonsai-27B-gguf">https://huggingface.co/prism-ml/Bonsai-27B-gguf</a></p>
+<blockquote>
+<p><strong>核心要約</strong>: 27B級の推論能力を実効1.125 bit/weightに圧縮し、配布サイズ約3.9GBを達成したモデル。FP16対比89.5%の平均性能を維持しながらノートPC・スマートフォンでの単体機器駆動を可能にした、「極限の軽量化 × 実用的推論」のトレードオフの事例である。</p>
+</blockquote>
+<p>出張が多い環境で常時インターネット接続を保証できず、多様な業務を処理する際に補助するLLMを探していたところ、27B級の推論能力を持つBonsaiを見つけた。</p>
+<hr>
+<h2>1. プロジェクト概要</h2>
+<p>Bonsai-27B-guufは27Bパラメータモデルを1ビット重み(実効1.125 bit/weight、Q1_0_g128フォーマット)に量子化したGGUF配布版である。既存の低ビット量子化(2-bit IQ2、Q2_K系列)が複雑な推論課題で性能が急激に崩壊するのとは異なり、数学・コーディングなど推論中心のベンチマークで87点以上を維持することが差別点である。</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>仕様</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>パラメータ規模</td>
+<td>27B</td>
+</tr>
+<tr>
+<td>配布サイズ</td>
+<td><del>3.9GB(FP16対比</del>14.2倍縮小)</td>
+</tr>
+<tr>
+<td>実効ビット幅</td>
+<td>1.125 bit/weight</td>
+</tr>
+<tr>
+<td>量子化フォーマット</td>
+<td>Q1_0_g128(PrismML llama.cppフォーク必須)</td>
+</tr>
+<tr>
+<td>コンテキスト長</td>
+<td>262Kトークン</td>
+</tr>
+<tr>
+<td>KVキャッシュ</td>
+<td>4-bit、262Kフルコンテキスト時ピークメモリ~9.4GB</td>
+</tr>
+<tr>
+<td>マルチモーダル</td>
+<td>4-bit HQQビジョンタワー(選択的、画像入力時のみロード)</td>
+</tr>
+<tr>
+<td>推論加速</td>
+<td>DSparkアクセラレータ、無損失1.37倍速度向上(CUDA基準)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. 強み分析</h2>
+<h3>2.1 圧倒的な軽量化</h3>
+<ul>
+<li>FP16対比約14.2倍小さい~3.9GBで、一般的なノートPC・単一GPUでの27Bモデル駆動が可能である。</li>
+<li>実効1.125 bit/weightという透明なビット幅の公開は、低ビット量子化モデルでは珍しい正直なスペック表記といえる。</li>
+</ul>
+<h3>2.2 性能-サイズ効率(Intelligence Density)</h3>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>数値</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Thinking Avg</td>
+<td>76.11</td>
+<td>FP16対比89.5%</td>
+</tr>
+<tr>
+<td>数学</td>
+<td>91.66</td>
+<td>性能低下最小</td>
+</tr>
+<tr>
+<td>コーディング</td>
+<td>81.88</td>
+<td>性能低下最小</td>
+</tr>
+<tr>
+<td>Intelligence Density</td>
+<td>0.530</td>
+<td>サイズ対比性能、同級最高水準</td>
+</tr>
+</tbody></table>
+<h3>2.3 オンデバイス駆動性能</h3>
+<table>
+<thead>
+<tr>
+<th>デバイス</th>
+<th>推論速度</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Apple M5 Max</td>
+<td>66.4 tokens/s</td>
+<td></td>
+</tr>
+<tr>
+<td>Apple M5 Pro</td>
+<td>44 tokens/s</td>
+<td></td>
+</tr>
+<tr>
+<td>iPhone 17 Pro Max</td>
+<td>~11 tokens/s</td>
+<td>MLXバージョン</td>
+</tr>
+</tbody></table>
+<p>262Kトークンの長文コンテキストをオンデバイスで処理しながら、4-bit KVキャッシュでピークメモリを~9.4GBに抑えた点は、実用面でリソースが限られた環境でも効率的な利用を可能にする。</p>
+<hr>
+<h2>3. 弱み分析</h2>
+<h3>3.1 課題別性能のばらつき</h3>
+<table>
+<thead>
+<tr>
+<th>課題</th>
+<th>点数</th>
+<th>評価</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>指示追従</td>
+<td>65.74</td>
+<td>低下幅大きい</td>
+</tr>
+<tr>
+<td>エージェント課題</td>
+<td>66.03</td>
+<td>低下幅大きい</td>
+</tr>
+<tr>
+<td>IFBench(prompt-loose)</td>
+<td>52.36</td>
+<td>FP16対比半分程度</td>
+</tr>
+</tbody></table>
+<p>平均89.5%維持というヘッドライン数値の裏で、指示追従・エージェントワークフローでは体感低下が大きい。「<strong>数学は得意だが指示通りに動かないモデル</strong>」になり得る点を、導入前に必ず検証する必要がある。</p>
+<h3>3.2 使用ケースの制限</h3>
+<ul>
+<li>長期エージェントコーディング(複数ファイル、実行-テスト-修正ループ)は現在サポート対象ではなく、ロードマップ段階である。</li>
+<li>テキスト推論に最適化されており、ビジョンタワーは画像入力時のみロードされる付加機能である。</li>
+</ul>
+<h3>3.3 エコシステム依存</h3>
+<ul>
+<li>Q1_0_g128フォーマットは<strong>PrismML専用llama.cppフォーク</strong>でのみ動作する。アップストリームのllama.cpp、Ollama、LM Studioなど標準エコシステムとの互換性が断たれている点は運用リスクである。</li>
+<li>Apple Siliconでは、DSparkアクセラレータがデフォルトで無効化されており、CUDA環境対比で速度優位性が制限される。</li>
+</ul>
+<hr>
+<h2>4. 競合モデルとの比較</h2>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>サイズ</th>
+<th>平均性能</th>
+<th>FP16対比</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1-bit Bonsai 27B</strong></td>
+<td><strong>3.9 GB</strong></td>
+<td><strong>76.11</strong></td>
+<td><strong>89.5%</strong></td>
+</tr>
+<tr>
+<td>Ternary Bonsai 27B</td>
+<td>5.9 GB</td>
+<td>80.49</td>
+<td>94.6%</td>
+</tr>
+<tr>
+<td>Qwen3.6-27B IQ2_XXS(「2-bit」)</td>
+<td>9.4 GB</td>
+<td>72.73</td>
+<td>85.5%</td>
+</tr>
+<tr>
+<td>Gemma-4-31B Q2_K_XL(「2-bit」)</td>
+<td>11.8 GB</td>
+<td>73.31</td>
+<td>86.2%</td>
+</tr>
+</tbody></table>
+<p>核心ポイント</p>
+<ol>
+<li><strong>半分以下のサイズでより高い性能</strong> — 同級27Bおよび上位31Bモデルの2-bit量子化対比、サイズは半分以下、平均性能は3〜4点優位。</li>
+<li><strong>推論能力の保存</strong> — AIME、LiveCodeBenchなど既存の低ビット量子化が崩壊する課題で87点以上を維持。</li>
+<li><strong>Ternaryバージョンとの選択肢</strong> — 2GBを追加で使えるならTernary(5.9GB、94.6%)がバランスポイントになり得、デバイスメモリ予算に応じた段階的選択が可能。</li>
+</ol>
+<hr>
+<h2>5. 実際の使用シナリオ</h2>
+<h3>シナリオ1: オフラインCTI初動分析(セキュリティ実務)</h3>
+<p><strong>状況</strong>: インシデント対応(IR)現場で外部ネットワークが遮断されたクリーンルーム環境。クラウドLLM API使用がセキュリティポリシー上不可。</p>
+<p><strong>活用</strong>: M5 ProのMacBookにBonsai-27Bを搭載し、262Kコンテキストを活用して数MB分量のログファイル・IOCリスト・マルウェアデコンパイル結果を一度に投入、初動タイムライン再構成とTTP仮説生成を行う。</p>
+<p><strong>適合理由</strong>: データが機器外に出ないため、TLP:RED資料も処理可能。44 tokens/sは対話型分析に十分な速度。ただし指示追従性能の低下(65.74)を考慮し、出力フォーマット強制(YAMLテーブルなど)は後処理スクリプトで補完するのが安全である。</p>
+<h3>シナリオ2: 機内・出張中の文書作業(モバイル生産性)</h3>
+<p><strong>状況</strong>: ソウル-東京出張フライト中にインターネットなしで契約書草案レビュー、会議資料要約、発表ロジック点検が必要な場合。</p>
+<p><strong>活用</strong>: iPhone 17 Pro MaxのMLXバージョン(~11 tokens/s)で文書要約・質疑応答を行い、着陸後にクラウドモデルで最終検収する2段階ワークフローを構成する。</p>
+<p><strong>適合理由</strong>: 11 tokens/sはリアルタイムチャット用としては遅いが、「質問を投げて他の作業をしながら後で確認する」非同期使用パターンには実用的である。機密契約条件が外部サーバーに記録されない点が核心的価値である。</p>
+<h3>シナリオ3: 数学・アルゴリズム問題解決補助(教育/研究)</h3>
+<p><strong>状況</strong>: 大学院生またはクォンツリサーチャーがGPUなしのノートPCで数式導出、アルゴリズム検証、コードスニペット生成を繰り返し行う。</p>
+<p><strong>活用</strong>: 数学91.66、コーディング81.88という推論特化性能を活用し、ローカル常駐「数学アシスタント」として運用する。API課金なしで無制限に繰り返し質問可能。</p>
+<p><strong>適合理由</strong>: このモデルの性能プロファイル(推論強い、指示追従弱い)と最も適合する使用先である。正解導出能力が重要で、出力フォーマットの厳格性はさほど重要でない領域だからである。</p>
+<h3>シナリオ4: プライバシー機密データの一次前処理(エンタープライズ)</h3>
+<p><strong>状況</strong>: 医療・法律・金融文書をクラウドLLMに送信する前に、個人情報マスキングと機密度分類が必要なパイプライン。</p>
+<p><strong>活用</strong>: オンプレミスサーバー(単一GPU + DSparkアクセラレーションで1.37倍速度)でBonsaiが一次匿名化・分類を行い、マスキングされた結果のみを上位クラウドモデルに渡すハイブリッド構造を作る。</p>
+<p><strong>適合理由</strong>: 配布サイズ3.9GBのためコンテナイメージが軽量で、数十台のエッジノードへ同時展開するコストが低い。ただし、PrismMLフォーク依存のため標準llama.cpp基盤のインフラとは別のビルドパイプラインが必要な点を運用設計に反映すべきである。</p>
+<h3>シナリオ5: 長文文書対照分析(リサーチ)</h3>
+<p><strong>状況</strong>: 判決文、学術論文、白書など数百ページ規模の文書複数件を相互比較し、論理矛盾・核心争点を抽出。</p>
+<p><strong>活用</strong>: 262Kコンテキストに文書全体を投入し、4-bit KVキャッシュのおかげでピークメモリ~9.4GBに抑え、32GB級ノートPCでもフルコンテキスト分析が可能になる。</p>
+<p><strong>適合理由</strong>: チャンキング(chunking)なしで文書全体を単一コンテキストとして処理すれば、文書間の参照関係追跡品質が大幅に向上する。クラウド長文コンテキストAPIの高いトークンコストを回避できる。</p>
+<h3>導入前に留意すべき不適合シナリオ</h3>
+<table>
+<thead>
+<tr>
+<th>使用先</th>
+<th>不適合理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>マルチファイルエージェントコーディング</td>
+<td>実行-テスト-修正ループ未サポート、ロードマップ段階</td>
+</tr>
+<tr>
+<td>厳格な出力フォーマットが必須な自動化パイプライン</td>
+<td>IFBench 52.36、指示追従信頼度が低い</td>
+</tr>
+<tr>
+<td>既存llama.cpp/Ollamaインフラへの即時統合</td>
+<td>専用フォーク必須、標準エコシステム非互換</td>
+</tr>
+<tr>
+<td>Apple Siliconで最大処理量が必要なバッチ作業</td>
+<td>DSpark未サポートによりCUDA対比速度優位性が制限</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. 総合評価</h2>
+<p>Bonsai-27B-guufは「極限の軽量化と実用的推論能力の絶妙なバランス」を達成したモデルである。1-bit量子化がすなわち性能崩壊を意味するという通念を破り、27B級推論を3.9GBに収めてノートPCとスマートフォンにもたらしたという点で、オンデバイスAIの道標的な事例である。</p>
+<p>ただし、導入判断は性能プロファイルの非対称性を直視した上で行われるべきである。このモデルは「<strong>賢いが言うことをよく聞かない</strong>」特性を持ち、推論能力が核心となる用途(数学・コーディング・分析)には卓越しているが、指示追従とエージェント信頼性が核心となる用途(自動化パイプライン・長期エージェント)にはまだ不適合である。専用フォーク依存という運用リスクまで考慮すると、現時点での最適ポジションは<strong>プライバシー中心の個人・エッジ推論ワークロード</strong>である。</p>
+<hr>
+<p><em>作成日: 2026-07-18</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Bonsai/Bonsai-27b-gguf_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ClawSecCheck Project Analysis and Getting Started — VibeQuant</title>
+  <meta name="description" content="A local, read-only, offline security self-audit tool for OpenClaw AI agents. Grades your config A-F, flags the Lethal Trifecta, and ships fix prompts." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/claw-security-clawseccheck-en/" />
+  <meta property="og:title" content="ClawSecCheck Project Analysis and Getting Started" />
+  <meta property="og:description" content="A local, read-only, offline security self-audit tool for OpenClaw AI agents. Grades your config A-F, flags the Lethal Trifecta, and ships fix prompts." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/claw-security-clawseccheck-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/claw-security-clawseccheck/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/claw-security-clawseccheck-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/claw-security-clawseccheck-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/claw-security-clawseccheck-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/claw-security-clawseccheck/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"ClawSecCheck Project Analysis and Getting Started","description":"A local, read-only, offline security self-audit tool for OpenClaw AI agents. Grades your config A-F, flags the Lethal Trifecta, and ships fix prompts.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/claw-security-clawseccheck-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Claw_Security/ClawSecCheck_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-21","dateModified":"2026-06-21","inLanguage":"en","keywords":"보안, Claw_Security"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 보안</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">보안</p>
+        <h1>ClawSecCheck Project Analysis and Getting Started</h1>
+        <p class="article-dates"><time datetime="2026-06-21">발행 2026.06.21</time> · 주제 보안 · Claw_Security</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/claw-security-clawseccheck/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/claw-security-clawseccheck-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/claw-security-clawseccheck-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/claw-security-clawseccheck-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">A local, read-only, offline security self-audit tool for OpenClaw AI agents. Grades your config A-F, flags the Lethal Trifecta, and ships fix prompts.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>Based on the official repository <code>github.com/gl0di/clawseccheck</code>, latest release v0.30.1 (2026-06-21)
+MIT license · Zero dependencies (Python standard library only) · Single author (gl0di)</p>
+</blockquote>
+<hr>
+<h2>Concept</h2>
+<p>OpenClaw has recently become a frequent target for attackers. Between vulnerabilities in OpenClaw itself and a wave of LLM-friendly attack techniques, the threat landscape has grown noisy. ClawSecCheck was built to address this problem.</p>
+<p><strong>ClawSecCheck</strong>is a<strong>local, read-only, offline security self-audit tool</strong> for OpenClaw AI agents. It can be installed as an OpenClaw skill and used conversationally, or run as a standard CLI.</p>
+<blockquote>
+<p>&quot;A one-command security self-audit for <em>your own</em> agent.&quot;</p>
+</blockquote>
+<p>The core design principle is not &quot;scan someone else&#39;s agent&quot; but <strong>audit your own agent yourself</strong>. That sidesteps ownership-proof and legal gray-area problems entirely. The tool grades your configuration A through F, surfaces the most urgent gaps in plain language, and hands you copy-paste-ready fixes along with a <strong>shareable grade badge</strong>.</p>
+<p>OpenClaw agents read user messages, remember conversations, hold keys, and act on the user&#39;s behalf. Those exact privileges are what attackers target — a single poisoned message or a single malicious skill can quietly turn an agent against its owner. ClawSecCheck inspects and grades your configuration to catch that risk before it materializes.</p>
+<h3>Operating Principles</h3>
+<ul>
+<li><strong>Conversation-driven auditing</strong>: run inside OpenClaw and it walks the whole process conversationally, even if the agent doesn&#39;t know any flags (guided mode).</li>
+<li><strong>Read-only</strong>: never modifies configuration or skills. There is no <code>--fix</code> feature at all.</li>
+<li><strong>Offline, zero-transmission</strong>: no network calls, no API keys, no telemetry. It only reads <code>~/.openclaw/openclaw.json</code> and workspace bootstrap markdown files.</li>
+<li><strong>Honesty first</strong>: anything it can&#39;t determine is marked <code>UNKNOWN</code> and excluded from scoring. <code>UNKNOWN</code> is never treated as <code>PASS</code>.</li>
+</ul>
+<p>Internally, it invokes exactly one thing — the platform&#39;s own audit — read-only, and merges the result. No shell access, no <code>--fix</code>, a timeout exists, and it can be skipped with <code>--no-native</code>.</p>
+<pre><code>openclaw security audit --json
+</code></pre>
+<hr>
+<h2>What Does It Check?</h2>
+<h3>Lethal Trifecta — the flagship framework</h3>
+<p>This is the headline metric ClawSecCheck surfaces at the top of every report. When <strong>untrusted input × sensitive data access × external (egress/execution) action</strong>all hold true simultaneously, a compromise becomes fatal or trivial. The tool recommends keeping<strong>at most 2 of the 3</strong> satisfied, and displays Score, Grade, and Trifecta ratio together at the top (the shareable badge exposes only the grade).</p>
+<h3>Check families (by check ID)</h3>
+<p>Checks are implemented under the following ID scheme: exposure/permissions/secrets (B1-B12), supply chain (B13-B15), preparedness (B16-B17), agent behavior (B18-B24), injection/deep exposure (B26 onward), capability/host expansion (B43, B50s), plus native audit merging (A1) and the risk engine (RISK).</p>
+<table>
+<thead>
+<tr>
+<th>Check family</th>
+<th>Representative items</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>B1-B12</strong></td>
+<td>Gateway exposure/channel auth, plaintext secrets, least privilege, execution sandbox, TLS, local model hygiene</td>
+</tr>
+<tr>
+<td><strong>B6</strong></td>
+<td>Checks bootstrap files (<code>SOUL.md</code>, <code>AGENTS.md</code>, <code>TOOLS.md</code>) for prompt-injection-inducing directives</td>
+</tr>
+<tr>
+<td><strong>B13</strong></td>
+<td>Static inspection of installed third-party skill content. Detects ClawHavoc-style malware and base64-hidden payloads. From v0.21, Python AST parsing catches obfuscation like <code>exec(base64.b64decode(...))</code>; from v0.23, it traces taint from credential files flowing to network sinks</td>
+</tr>
+<tr>
+<td><strong>B14 / B15</strong></td>
+<td>Egress surface / MCP server trust boundary</td>
+</tr>
+<tr>
+<td><strong>B16 / B17</strong></td>
+<td>Presence of threat monitoring / autonomy and heartbeat</td>
+</tr>
+<tr>
+<td><strong>B18-B24</strong></td>
+<td>Subagent delegation, data-at-rest exposure, identity/memory file write protection, tool output trust boundary, self-modification, approval bypass, deep MCP hardening</td>
+</tr>
+<tr>
+<td><strong>B26</strong></td>
+<td>Untrusted context exposure (<code>contextVisibility=&quot;all&quot;</code> default)</td>
+</tr>
+<tr>
+<td><strong>B30 / B31 / B32</strong></td>
+<td>Sender identity strength / the <code>tools.deny:[&quot;write&quot;]</code> footgun that fails to block <code>apply_patch</code>/<code>exec</code> / control-plane change reachability</td>
+</tr>
+<tr>
+<td><strong>B33</strong></td>
+<td>Known-vulnerable version gate (checked against <code>meta.lastTouchedVersion</code>)</td>
+</tr>
+<tr>
+<td><strong>B38 / B39 / B41 / B42</strong></td>
+<td>Browser SSRF (e.g. 169.254.169.254) / session visibility and cross-user leakage / credential blast radius / install-time supply chain (preinstall hooks, world-writable skill directories)</td>
+</tr>
+<tr>
+<td><strong>B43 / B44 (attestation layer)</strong></td>
+<td>Supplements static scanning — which can&#39;t see real tool/verb usage — with agent self-reported inventory. Classifies into <code>EXEC/DESTRUCTIVE/EGRESS/MAILBOX_CONFIG/REVERSIBLE</code> and checks drift against config (confidence <code>ATTESTED</code>, experimental)</td>
+</tr>
+<tr>
+<td><strong>B50-B54 (Host Watch)</strong></td>
+<td>Whether the host the agent runs on is itself monitored: network IDS, host auditing, file integrity, EDR, host firewall. LOW severity, never causes a FAIL</td>
+</tr>
+<tr>
+<td><strong>A1</strong></td>
+<td>Runs the platform&#39;s own <code>openclaw security audit</code> and merges it into the same report (does not affect the score)</td>
+</tr>
+</tbody></table>
+<p>The dirty-input sanitizer, action gate, and taint labeling (B26-B28) are still on the roadmap — the largest remaining coverage gap. That&#39;s also why some items remain marked <code>UNKNOWN</code>.</p>
+<h3>Risk engine — RISK-01 through RISK-10</h3>
+<p>Beyond individual checks, the tool separately detects ten <strong>capability chains</strong> — combinations where a breach becomes catastrophic once two or more properties hold simultaneously.</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>Severity</th>
+<th>Chain</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RISK-01</td>
+<td>CRITICAL</td>
+<td>Untrusted sender → exec/write/escalation tool → host/filesystem</td>
+</tr>
+<tr>
+<td>RISK-02</td>
+<td>HIGH</td>
+<td>Untrusted input → sensitive data reachability → egress/execution (Lethal Trifecta)</td>
+</tr>
+<tr>
+<td>RISK-03</td>
+<td>HIGH</td>
+<td>Untrusted ingress + no sandbox → direct exec/write on the host</td>
+</tr>
+<tr>
+<td>RISK-04</td>
+<td>HIGH</td>
+<td>Mutable identity (name-matching) → escalation/exec tool → privilege escalation</td>
+</tr>
+<tr>
+<td>RISK-05</td>
+<td>HIGH</td>
+<td>Browser SSRF (private network) → secrets/credentials → exfiltration</td>
+</tr>
+<tr>
+<td>RISK-06</td>
+<td>CRITICAL</td>
+<td>Open/untrusted surface → control-plane endpoint → full takeover</td>
+</tr>
+<tr>
+<td>RISK-07</td>
+<td>HIGH</td>
+<td>Exec/write with no approval gate → writable bootstrap/identity files → persistent compromise</td>
+</tr>
+<tr>
+<td>RISK-08</td>
+<td>MEDIUM</td>
+<td>Multi-user channel → shared session (<code>dmScope=&quot;main&quot;</code>) → cross-user leakage</td>
+</tr>
+<tr>
+<td>RISK-09</td>
+<td>CRITICAL</td>
+<td>Malicious installed skill (B13 fail) → reachable secrets → egress → exfiltration</td>
+</tr>
+<tr>
+<td>RISK-10</td>
+<td>MEDIUM</td>
+<td>Untrusted input → host exec/write → no host detection → invisible compromise</td>
+</tr>
+</tbody></table>
+<p>Each chain only fires when every link has positive evidence (evidence-gated), keeping false positives low. The risk engine doesn&#39;t alter the deterministic A-F score and is surfaced separately, showing worst-case paths at a glance without score inflation.</p>
+<hr>
+<h2>How Scoring Works</h2>
+<p>Scoring uses a weighted pass rate (CRITICAL=10, HIGH=6, MEDIUM=3, LOW=1), with an added <strong>honesty hard cap</strong>: any unresolved CRITICAL caps the score at <strong>49</strong>, and any unresolved HIGH caps it at <strong>79</strong> — so you can&#39;t earn an A while carrying a fatal hole.</p>
+<table>
+<thead>
+<tr>
+<th>Grade</th>
+<th>Score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>90+</td>
+</tr>
+<tr>
+<td>B</td>
+<td>80-89</td>
+</tr>
+<tr>
+<td>C</td>
+<td>70-79</td>
+</tr>
+<tr>
+<td>D</td>
+<td>50-69</td>
+</tr>
+<tr>
+<td>F</td>
+<td>&lt;50</td>
+</tr>
+</tbody></table>
+<p><code>UNKNOWN</code> items are never scored, and advisory checks never move the grade. The shareable card exposes only grade, score, and Trifecta ratio, keeping findings private — because sharing shouldn&#39;t hand attackers a map.</p>
+<hr>
+<h2>Strengths</h2>
+<ul>
+<li><strong>Privacy-first, fully local</strong>: no accounts, no API keys, no telemetry, no network requests. The only thing it stores by default is a single owner-only local score history line (<code>~/.clawseccheck/history.jsonl</code>), which you can opt out of with <code>--no-history</code>.</li>
+<li><strong>Covers what native audits miss</strong>: inspects bootstrap files (<code>SOUL.md</code>, <code>AGENTS.md</code>, <code>TOOLS.md</code>) — which the platform&#39;s own audit doesn&#39;t check — from a prompt-injection angle (B6).</li>
+<li><strong>Pre-install risk assessment</strong>: vet skills before installing/trusting them with <code>--vet &lt;skill&gt;</code>, and connected MCP servers with <code>--vet-mcp</code> (SAFE/SUSPICIOUS/DANGEROUS). Most tools only look at skills and miss the MCP-server supply-chain gap this targets — especially important since the ClawHavoc incident.</li>
+<li><strong>Active injection testing</strong>: <code>--canary</code> (manual injection self-test), <code>--redteam</code> (tool poisoning, MCP response injection, memory poisoning, multi-agent, approval bypass, dirty-to-exfiltration scenarios), and <code>--dryrun</code> (runtime behavior testing with fake secrets and fake tools).</li>
+<li><strong>Honest design</strong>: <code>UNKNOWN != PASS</code>, and limitations aren&#39;t hidden behind a green score. Risk chains only fire with evidence.</li>
+<li><strong>Completely free, open-source, zero dependencies</strong>: MIT license, pure Python standard library.</li>
+<li><strong>Multiple output formats and CI gating</strong>: human-readable reports, <code>--json</code>, <code>--sarif</code> (SARIF 2.1.0), <code>--html</code>, <code>--badge</code> (SVG), <code>--card</code>. Gate CI with <code>--fail-under 70</code> and <code>--exit-code</code>.</li>
+</ul>
+<hr>
+<h2>Weaknesses and Limitations</h2>
+<ul>
+<li><strong>OpenClaw-ecosystem only</strong>: not applicable to other agent platforms.</li>
+<li><strong>Requires awareness of conversational exposure</strong>: using it inside OpenClaw chat makes the report text part of that conversation, processed by whichever model provider you&#39;re already using. The scanner itself doesn&#39;t open a new channel, but this is worth being aware of.</li>
+<li><strong>CLI usage requires a Python environment</strong>: pipx installation is recommended (<code>pip install .</code> also works). On Windows, POSIX permission checks are skipped, and unicode-unsupported consoles fall back to ASCII.</li>
+<li><strong>Static, heuristic auditing</strong>: this is not runtime verification or formal proof, and false positives/negatives can occur. It cannot replace adversarial testing of a running agent. Its scope is also limited to config files, bootstrap markdown, and installed skill text.</li>
+<li><strong>Very new, small-scale project</strong>: still pre-1.0 (0.x) and run by a single author. Flags, schema, and check IDs can change even in minor releases, and the contract only stabilizes at 1.0. In terms of maturity and validation history, it lags behind larger projects like ClawSec or ClawSecure. It&#39;s safer to note this explicitly when citing it in public reports or columns.</li>
+</ul>
+<hr>
+<h2>Comparison With Similar Projects</h2>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Form</th>
+<th>Characteristics</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ClawSec</strong> (prompt-security)</td>
+<td>Skill suite</td>
+<td>Targets OpenClaw, Hermes, PicoClaw, NanoClaw. Drift detection, skill integrity verification, NVD-based security advisory feed</td>
+</tr>
+<tr>
+<td><strong>ClawSecure</strong></td>
+<td>Cloud audit platform</td>
+<td>Audits 3,000+ skills, OWASP ASI 10/10 coverage, 3-Layer Audit Protocol, continuous monitoring</td>
+</tr>
+<tr>
+<td><strong>ClawScan</strong></td>
+<td>CLI (<code>npx clawscan</code>)</td>
+<td>Detects malware, reverse shells, prompt injection, and unicode attacks before skill install, MIT</td>
+</tr>
+<tr>
+<td><strong>ClawVitals</strong></td>
+<td>Skill + plugin</td>
+<td>Local execution health checks, config tampering/drift alerts, scoring</td>
+</tr>
+<tr>
+<td><strong>openclaw-security-scan</strong>(legendaryabhi)</td>
+<td>Pure Bash CLI</td>
+<td>No Python required, auto-fix for critical issues, JSON output for CI</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Getting Started</h2>
+<h3>From OpenClaw chat (no terminal needed)</h3>
+<pre><code>openclaw skills install clawseccheck            # from ClawHub (unique slug)
+openclaw skills install git:gl0di/clawseccheck  # or directly from GitHub
+</code></pre>
+<p>Once installed, just ask <strong>audit my OpenClaw setup with clawseccheck</strong> and the grade plus the most urgent issues show up right in the chat.
+ClawHub skill page: <strong><a href="https://clawhub.ai/gl0di/clawseccheck">https://clawhub.ai/gl0di/clawseccheck</a></strong></p>
+<h3>Standard CLI</h3>
+<pre><code>pipx install git+https://github.com/gl0di/clawseccheck   # or pip install .
+clawseccheck --home ~/.openclaw                          # afterward, just clawseccheck
+python -m clawseccheck                                    # works the same way
+</code></pre>
+<h3>Running the bundled script directly</h3>
+<pre><code>python3 audit.py                 # human-readable report + shareable card
+python3 audit.py --json          # machine-readable
+python3 audit.py --card          # badge only
+python3 audit.py --sarif results.sarif   # for GitHub Code Scanning upload (local record)
+python3 audit.py --html report.html      # standalone HTML report (owner-only)
+python3 audit.py --fail-under 70         # exit 1 if score is below 70 (CI)
+python3 audit.py --ascii         # fallback for unicode-unsupported consoles
+</code></pre>
+<h3>Integrity verification</h3>
+<pre><code>python3 audit.py --verify-self    # SHA-256 of ClawSecCheck&#39;s own source (tamper protection)
+</code></pre>
+<p>Releases are tagged and public, so for security-sensitive use, it&#39;s safer to <strong>review and pin a tag before updating</strong> rather than relying on blind auto-update.</p>
+<h3>Conversational commands and what happens under the hood</h3>
+<table>
+<thead>
+<tr>
+<th>User request</th>
+<th>What happens internally</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&quot;Audit my OpenClaw setup&quot;</td>
+<td>Default audit: A-F grade + prioritized fix list + Trifecta</td>
+</tr>
+<tr>
+<td>&quot;Is this skill safe to install?&quot;</td>
+<td><code>--vet &lt;skill&gt;</code> (SAFE/SUSPICIOUS/DANGEROUS)</td>
+</tr>
+<tr>
+<td>&quot;Are my MCP servers safe?&quot;</td>
+<td><code>--vet-mcp</code></td>
+</tr>
+<tr>
+<td>&quot;Am I vulnerable to prompt injection?&quot;</td>
+<td><code>--canary</code> / <code>--redteam</code></td>
+</tr>
+<tr>
+<td>&quot;Watch my setup for changes&quot;</td>
+<td><code>--monitor</code> (drift/score-drop/new-skill/MCP/channel alerts)</td>
+</tr>
+<tr>
+<td>&quot;What should I fix first?&quot;</td>
+<td><code>--next</code> (finding-based prioritization)</td>
+</tr>
+<tr>
+<td>&quot;Give me fix prompts&quot;</td>
+<td><code>--prompts</code> (copy-paste fix prompt per finding)</td>
+</tr>
+<tr>
+<td>&quot;Share my grade&quot;</td>
+<td><code>--badge</code> / <code>--card</code> (grade only, publicly)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>References</h2>
+<ul>
+<li>Repository: <a href="https://github.com/gl0di/clawseccheck">https://github.com/gl0di/clawseccheck</a></li>
+<li>Security model: <a href="https://github.com/gl0di/clawseccheck/blob/main/SECURITY_MODEL.md">https://github.com/gl0di/clawseccheck/blob/main/SECURITY_MODEL.md</a></li>
+<li>Skill definition: <a href="https://github.com/gl0di/clawseccheck/blob/main/SKILL.md">https://github.com/gl0di/clawseccheck/blob/main/SKILL.md</a></li>
+<li>ClawHub skill page: <a href="https://clawhub.ai/gl0di/clawseccheck">https://clawhub.ai/gl0di/clawseccheck</a></li>
+</ul>
+<hr>
+<p><em>This document is based on README v0.30.1. Being a pre-1.0 project, flags, schema, and check IDs may change in later releases.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Claw_Security/ClawSecCheck_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

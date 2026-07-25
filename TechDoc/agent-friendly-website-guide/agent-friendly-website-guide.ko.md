@@ -4,7 +4,7 @@ title_en: "Agent-Friendly Website Construction: A Practical Technical Guide"
 description: "AI 에이전트 시대의 웹 UX·접근성·구조화 표준을 통합한 실무 가이드. Google web.dev, Chrome WebMCP, llms.txt 표준 기반."
 slug: agent-friendly-website-guide
 language: ko
-languages_available: [ko, en, ja]
+languages_available: [ko, en, ja, zh]
 canonical: https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/agent-friendly-website-guide/agent-friendly-website-guide.ko.md
 version: "1.0"
 date_published: 2026-05-19
@@ -77,7 +77,7 @@ sources:
 
 > AI 에이전트가 사용자를 대신해 웹사이트를 탐색·요약·결제하는 시대가 도래했습니다. 이 가이드는 Google web.dev(2026-04-01), Chrome WebMCP EPP(2026-02-10), Jeremy Howard의 llms.txt 표준을 통합해, 에이전트가 우리 사이트를 정확히 이해하고 작업을 완수할 수 있도록 만드는 11장+부록 분량의 실무 매뉴얼입니다.
 
-🌐 **다른 언어** — [English](./agent-friendly-website-guide.en.md) · [日本語](./agent-friendly-website-guide.ja.md)
+🌐 **다른 언어** — [English](./agent-friendly-website-guide.en.md) · [日本語](./agent-friendly-website-guide.ja.md) · [中文](./agent-friendly-website-guide.zh.md)
 
 📌 **태그** — `#AI에이전트` `#WebMCP` `#llms-txt` `#시맨틱HTML` `#접근성` `#Schema.org` `#GEO` `#CoreWebVitals` `#MCP`
 

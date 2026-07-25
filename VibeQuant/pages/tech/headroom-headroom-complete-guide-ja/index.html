@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Headroom 完全ガイド — VibeQuant</title>
+  <meta name="description" content="オープンソースのコンテキスト圧縮ツールHeadroomの説明・インストール・設定・DeepSeek V4 Pro / Open Code連携" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/headroom-headroom-complete-guide-ja/" />
+  <meta property="og:title" content="Headroom 完全ガイド" />
+  <meta property="og:description" content="オープンソースのコンテキスト圧縮ツールHeadroomの説明・インストール・設定・DeepSeek V4 Pro / Open Code連携" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/headroom-headroom-complete-guide-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/headroom-headroom-complete-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/headroom-headroom-complete-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/headroom-headroom-complete-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/headroom-headroom-complete-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/headroom-headroom-complete-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Headroom 完全ガイド","description":"オープンソースのコンテキスト圧縮ツールHeadroomの説明・インストール・設定・DeepSeek V4 Pro / Open Code連携","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/headroom-headroom-complete-guide-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Headroom/Headroom%20complete%20guide_JA.md","image":"https://vibequant.cc/og-default.png","inLanguage":"ja","keywords":"LLM, コスト最適化, プロキシ, CLIツール"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Headroom 完全ガイド</h1>
+        <p class="article-dates">주제 LLM · コスト最適化 · プロキシ · CLIツール</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/headroom-headroom-complete-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/headroom-headroom-complete-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/headroom-headroom-complete-guide-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/headroom-headroom-complete-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">オープンソースのコンテキスト圧縮ツールHeadroomの説明・インストール・設定・DeepSeek V4 Pro / Open Code連携</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>説明・インストール・設定・DeepSeek V4 Pro / Open Code連携まで</p>
+</blockquote>
+<hr>
+<h2>目次</h2>
+<ol>
+<li><a href="#1-headroom%E3%81%A8%E3%81%AF">Headroomとは?</a></li>
+<li><a href="#2-%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%ABproxy%E3%83%A2%E3%83%BC%E3%83%89%E6%8E%A8%E5%A5%A8">インストール(Proxyモード推奨)</a></li>
+<li><a href="#3-ai%E3%83%84%E3%83%BC%E3%83%AB%E9%80%A3%E6%90%BAproxy%E3%83%A2%E3%83%BC%E3%83%89">AIツール連携</a></li>
+<li><a href="#4-deepseek-v4-pro--open-code%E7%92%B0%E5%A2%83%E3%81%A7%E3%81%AE%E4%BD%BF%E7%94%A8">DeepSeek V4 Pro + Open Code環境での使用</a></li>
+<li><a href="#5-headroom%E3%81%AE%E4%BB%96%E3%81%AE%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95">Headroomの他の使用方法</a></li>
+<li><a href="#6-%E6%9C%89%E7%94%A8%E3%81%AA%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%81%A8%E3%83%92%E3%83%B3%E3%83%88">有用なコマンドとヒント</a></li>
+<li><a href="#7-%E3%83%88%E3%83%A9%E3%83%96%E3%83%AB%E3%82%B7%E3%83%A5%E3%83%BC%E3%83%86%E3%82%A3%E3%83%B3%E3%82%B0">トラブルシューティング</a></li>
+<li><a href="#8-%E3%83%AC%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9%E3%81%8A%E3%82%88%E3%81%B3%E4%B8%BB%E8%A6%81%E3%83%AA%E3%83%B3%E3%82%AF">レファレンスおよび主要リンク</a></li>
+</ol>
+<hr>
+<h2>1. Headroomとは?</h2>
+<p><strong>Headroom</strong>はAIエージェント(特にコーディング用AIモデル)との通信で発生する膨大なコンテキスト(コード、ログ、検索結果など)を知的に圧縮し、<strong>コストを最大95%削減しながらも応答品質を維持</strong>するオープンソースプロジェクトである。</p>
+<blockquote>
+<p>Netflixシニアエンジニアの Tejas Chopra が開発し、2026年1月にオープンソース公開。Apache 2.0ライセンス。</p>
+</blockquote>
+<h3>なぜ必要なのか?</h3>
+<p>AIが作業を行う際は、毎リクエストごとに次のような大量のコンテキストが送信される。</p>
+<ul>
+<li>コード検索結果</li>
+<li>ログファイル</li>
+<li>API応答</li>
+<li>以前の対話履歴</li>
+</ul>
+<p>これは<strong>コスト増加</strong>と<strong>情報過負荷</strong>につながり、AIが重要な部分を見逃す原因となる。</p>
+<h3>動作方式</h3>
+<pre><code>[AIエージェント] --リクエスト--&gt; [Headroom Proxy] --圧縮されたリクエスト--&gt; [LLM API]
+                              |
+                         スマート圧縮
+                    (繰り返し・不要情報の除去)
+                    CacheAligner適用
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>段階</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>リクエスト傍受</strong></td>
+<td>AIエージェントとAPIの間に位置し、すべてのリクエストを中間で傍受する</td>
+</tr>
+<tr>
+<td><strong>スマート圧縮</strong></td>
+<td>繰り返し的または重要度の低い情報を参照リンクに置き換えるか圧縮する</td>
+</tr>
+<tr>
+<td><strong>キャッシュ整列</strong></td>
+<td>CacheAligner技術でプロンプトキャッシュ破壊問題を解決し、コスト削減を最大化する</td>
+</tr>
+</tbody></table>
+<h3>主な圧縮エンジン</h3>
+<table>
+<thead>
+<tr>
+<th>エンジン</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>SmartCrusher</code></td>
+<td>汎用JSON配列・入れ子オブジェクトの圧縮</td>
+</tr>
+<tr>
+<td><code>CodeCompressor</code></td>
+<td>Python、JS、Go、Rust、Java、C++のAST-aware圧縮</td>
+</tr>
+<tr>
+<td><code>Kompress-base</code></td>
+<td>HuggingFace訓練モデルベースのエージェントトレース圧縮</td>
+</tr>
+<tr>
+<td><code>CacheAligner</code></td>
+<td>Anthropic/OpenAI KVキャッシュprefixの安定化</td>
+</tr>
+<tr>
+<td><code>IntelligentContext</code></td>
+<td>重要度スコアベースのコンテキストフィッティング</td>
+</tr>
+<tr>
+<td><code>CCR</code></td>
+<td>可逆圧縮(LLMが必要時に原本検索可能)</td>
+</tr>
+</tbody></table>
+<h3>主な効果</h3>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>削減効果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>トークン削減</td>
+<td><strong>60%〜95%</strong></td>
+</tr>
+<tr>
+<td>コスト削減</td>
+<td><strong>最大〜50%</strong>(同一予算で約2倍使用可能)</td>
+</tr>
+<tr>
+<td>品質</td>
+<td>同等または小幅向上</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. インストール(Proxyモード推奨)</h2>
+<p>Proxyモードは既存コードの変更なしにHeadroomを最も簡単に使用できる方法である。
+DeepSeek V4 Pro、Open Codeなどすべてのllmとツールで動作する。</p>
+<h3>2.1 Headroomのインストール</h3>
+<pre><code class="language-bash">pip install &quot;headroom-ai[proxy]&quot;
+</code></pre>
+<blockquote>
+<p>全機能インストール: <code>pip install &quot;headroom-ai[all]&quot;</code></p>
+</blockquote>
+<h3>2.2 プロキシサーバーの実行</h3>
+<pre><code class="language-bash">headroom proxy --port 8787
+</code></pre>
+<ul>
+<li><code>--port 8787</code>: プロキシサーバーが使用するポートを指定(他のポートも可能)</li>
+<li>正常実行時、<code>Listening on http://localhost:8787</code>メッセージが出力される</li>
+</ul>
+<h3>2.3 正常動作の確認</h3>
+<pre><code class="language-bash">curl http://localhost:8787/health
+</code></pre>
+<p>成功応答:</p>
+<pre><code class="language-json">{&quot;status&quot;: &quot;healthy&quot;, &quot;version&quot;: &quot;x.x.x&quot;}
+</code></pre>
+<hr>
+<h2>3. AIツール連携(Proxyモード)</h2>
+<p>プロキシサーバーが実行中の状態で、各AIツールがこのプロキシを通じてapiを呼び出すよう設定する。</p>
+<h3>基本原理</h3>
+<table>
+<thead>
+<tr>
+<th>互換方式</th>
+<th>環境変数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenAI互換ツール</td>
+<td><code>OPENAI_BASE_URL=http://localhost:8787/v1</code></td>
+</tr>
+<tr>
+<td>Anthropic互換ツール</td>
+<td><code>ANTHROPIC_BASE_URL=http://localhost:8787</code></td>
+</tr>
+</tbody></table>
+<h3>ツール別連携例</h3>
+<table>
+<thead>
+<tr>
+<th>ツール</th>
+<th>コマンド</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Open Code(OpenClaude)</td>
+<td><code>OPENAI_BASE_URL=http://localhost:8787/v1 openclaude</code></td>
+</tr>
+<tr>
+<td>DeepSeek V4 Pro</td>
+<td><code>OPENAI_BASE_URL=http://localhost:8787/v1 deepseek</code></td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td><code>OPENAI_BASE_URL=http://localhost:8787/v1 cursor</code></td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td><code>ANTHROPIC_BASE_URL=http://localhost:8787 claude</code></td>
+</tr>
+<tr>
+<td>Codex CLI</td>
+<td><code>OPENAI_BASE_URL=http://localhost:8787/v1 codex</code></td>
+</tr>
+<tr>
+<td>Aider</td>
+<td><code>OPENAI_BASE_URL=http://localhost:8787/v1 aider</code></td>
+</tr>
+<tr>
+<td>Copilot CLI</td>
+<td><code>OPENAI_BASE_URL=http://localhost:8787/v1 copilot</code></td>
+</tr>
+<tr>
+<td>Continue</td>
+<td>設定ファイルに<code>OPENAI_BASE_URL=http://localhost:8787/v1</code>を入力</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>永久設定のヒント:</strong> <code>~/.bashrc</code>または<code>~/.zshrc</code>に以下の行を追加</p>
+<pre><code class="language-bash">export OPENAI_BASE_URL=http://localhost:8787/v1
+</code></pre>
+</blockquote>
+<hr>
+<h2>4. DeepSeek V4 Pro + Open Code環境での使用</h2>
+<h3>段階別実行</h3>
+<p><strong>第1段階: Headroomプロキシの実行</strong></p>
+<pre><code class="language-bash">headroom proxy --port 8787
+</code></pre>
+<p><strong>第2段階: Open Codeをプロキシ経由で実行</strong></p>
+<pre><code class="language-bash">OPENAI_BASE_URL=http://localhost:8787/v1 openclaude
+</code></pre>
+<p>DeepSeek V4 Proを直接呼び出す場合:</p>
+<pre><code class="language-bash">OPENAI_BASE_URL=http://localhost:8787/v1 deepseek-v4-pro --model deepseek-v4-pro
+</code></pre>
+<p><strong>第3段階: 正常動作の確認</strong></p>
+<ul>
+<li>Open Codeで一般的なコーディングの質問を入力</li>
+<li>Headroomプロキシのターミナルに圧縮統計(削減されたトークン数)が表示される</li>
+<li><code>headroom stats</code>コマンドで累積削減量を確認できる</li>
+</ul>
+<blockquote>
+<p><strong>互換性の保証:</strong> Headroomはプロキシレベルで動作するため、DeepSeek V4 Proの固有のAPI形式やOpen Codeの通信方式を全く侵害しない。</p>
+</blockquote>
+<hr>
+<h2>5. Headroomの他の使用方法</h2>
+<h3>5.1 Agent Wrap(エージェントラッピング) — 最も簡単</h3>
+<pre><code class="language-bash">headroom wrap openclaude
+headroom wrap cursor
+</code></pre>
+<p>以後<code>openclaude</code>実行時に自動的にHeadroomが適用される。</p>
+<blockquote>
+<p>Quick Win: <code>pip install &quot;headroom-ai[all]&quot;</code>の後<code>headroom wrap claude</code></p>
+</blockquote>
+<h3>5.2 MCPサーバー(Model Context Protocol)</h3>
+<p>複数のMCPクライアントを使用するならこの方法が効率的である。</p>
+<pre><code class="language-bash">headroom mcp install
+</code></pre>
+<p>提供されるMCPツール:</p>
+<table>
+<thead>
+<tr>
+<th>ツール</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>headroom_compress</code></td>
+<td>テキスト圧縮リクエスト</td>
+</tr>
+<tr>
+<td><code>headroom_retrieve</code></td>
+<td>圧縮されたコンテキストの検索</td>
+</tr>
+<tr>
+<td><code>headroom_stats</code></td>
+<td>統計照会</td>
+</tr>
+</tbody></table>
+<h3>5.3 Pythonライブラリ</h3>
+<pre><code class="language-python">from headroom import compress
+
+compressed = compress(
+    text=&quot;非常に長いログファイルの内容...&quot;,
+    model=&quot;deepseek-v4-pro&quot;  # モデル指定可能
+)
+</code></pre>
+<h3>5.4 マルチエージェント環境</h3>
+<p>Claude + Codexを並行運用する場合、SharedContextで自動的に重複除去された共通圧縮コンテキストストアを共有できる。</p>
+<hr>
+<h2>6. 有用なコマンドとヒント</h2>
+<table>
+<thead>
+<tr>
+<th>コマンド</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>headroom stats</code></td>
+<td>これまで削減したトークン/コスト統計を出力</td>
+</tr>
+<tr>
+<td><code>headroom reset</code></td>
+<td>統計を初期化</td>
+</tr>
+<tr>
+<td><code>headroom proxy --help</code></td>
+<td>プロキシオプション全体を表示</td>
+</tr>
+<tr>
+<td><code>headroom config</code></td>
+<td>設定ファイルを編集(圧縮レベルなど調整可能)</td>
+</tr>
+</tbody></table>
+<h3>圧縮レベルの調整(config.yaml)</h3>
+<pre><code class="language-yaml">compression:
+  level: &quot;balanced&quot;  # &quot;aggressive&quot; | &quot;balanced&quot; | &quot;conservative&quot;
+  cache_alignment: true
+</code></pre>
+<h3>クイックスタート(ワンライナー)</h3>
+<pre><code class="language-bash"># インストール + プロキシ実行
+pip install &quot;headroom-ai[proxy]&quot; &amp;&amp; headroom proxy --port 8787
+
+# 別のターミナルで
+OPENAI_BASE_URL=http://localhost:8787/v1 openclaude
+</code></pre>
+<hr>
+<h2>7. トラブルシューティング</h2>
+<p><strong>Q: プロキシサーバーが起動しません。</strong></p>
+<ul>
+<li>ポート競合を確認: <code>lsof -i :8787</code> → 他のポート使用時は<code>--port 8788</code>などに変更</li>
+<li>Headroomの再インストール: <code>pip install --upgrade &quot;headroom-ai[proxy]&quot;</code></li>
+</ul>
+<p><strong>Q: ツールで「Connection refused」エラーが出ます。</strong></p>
+<ul>
+<li>プロキシサーバーが先に実行されているか確認</li>
+<li>環境変数のポート番号の一致を確認(<code>http://localhost:8787</code>)</li>
+</ul>
+<p><strong>Q: DeepSeek V4 Proの特定パラメータが効きません。</strong></p>
+<ul>
+<li>Headroomはパラメータを無条件に通過させるため、ツール自体の問題である可能性が高い</li>
+<li>Headroomなしで先にテストして比較</li>
+</ul>
+<p><strong>Q: 削減効果がほとんどありません。</strong></p>
+<ul>
+<li><code>headroom stats</code>で実際の圧縮率を確認</li>
+<li>コンテキストが既に小さい場合は圧縮効果が微小な場合がある</li>
+</ul>
+<hr>
+<h2>8. レファレンスおよび主要リンク</h2>
+<h3>公式リソース</h3>
+<table>
+<thead>
+<tr>
+<th>リソース</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>公式ホームページ</td>
+<td><a href="https://headroomlabs.ai/">headroomlabs.ai</a></td>
+</tr>
+<tr>
+<td>GitHubリポジトリ</td>
+<td><a href="https://github.com/chopratejas/headroom">github.com/chopratejas/headroom</a></td>
+</tr>
+<tr>
+<td>公式ドキュメント(docs/)</td>
+<td><a href="https://github.com/chopratejas/headroom/tree/main/docs">github.com/chopratejas/headroom/tree/main/docs</a></td>
+</tr>
+<tr>
+<td>PyPIパッケージ</td>
+<td><a href="https://pypi.org/project/headroom-ai/">pypi.org/project/headroom-ai</a></td>
+</tr>
+</tbody></table>
+<h3>連携ガイド(公式ドキュメント)</h3>
+<table>
+<thead>
+<tr>
+<th>ガイド</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LangChain連携</td>
+<td><a href="https://github.com/chopratejas/headroom/blob/main/docs/langchain.md">docs/langchain.md</a></td>
+</tr>
+<tr>
+<td>CCR(可逆圧縮)ガイド</td>
+<td><a href="https://github.com/chopratejas/headroom/blob/main/docs/ccr.md">docs/ccr.md</a></td>
+</tr>
+<tr>
+<td>Metrics &amp; Monitoring</td>
+<td><a href="https://github.com/chopratejas/headroom/blob/main/docs/metrics.md">docs/metrics.md</a></td>
+</tr>
+</tbody></table>
+<h3>参考記事</h3>
+<table>
+<thead>
+<tr>
+<th>タイトル</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Building Cost-Efficient Agents with Headroom (Medium)</td>
+<td><a href="https://subratpati.medium.com/building-cost-efficient-agents-with-headroom-context-compression-for-llm-applications-b665128153b6">subratpati.medium.com</a></td>
+</tr>
+<tr>
+<td>Headroom: Cut LLM Token Usage by Up to 95% (DEV.to)</td>
+<td><a href="https://dev.to/arshtechpro/headroom-cut-your-llm-token-usage-by-up-to-95-without-changing-your-answers-5g06">dev.to/arshtechpro</a></td>
+</tr>
+<tr>
+<td>Headroom Token Compression実戦ガイド(Build This Now)</td>
+<td><a href="https://www.buildthisnow.com/blog/tools/extensions/headroom-token-compression">buildthisnow.com</a></td>
+</tr>
+</tbody></table>
+<h3>関連技術参考資料</h3>
+<table>
+<thead>
+<tr>
+<th>資料</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Phil Schmid — Context Engineering原則</td>
+<td>Headroom哲学の基盤: 「Raw &gt; Compaction &gt; Summarization」優先順位</td>
+</tr>
+<tr>
+<td>Anthropic Prompt Cachingドキュメント</td>
+<td>CacheAligner理解のための背景知識</td>
+</tr>
+<tr>
+<td>OpenAI Compatible APIスペック</td>
+<td>Proxyモード BASE_URL連携の基盤</td>
+</tr>
+</tbody></table>
+<hr>
+<blockquote>
+<p><strong>バージョン情報:</strong> 本ドキュメントはHeadroom v0.22基準で作成された(2026年6月基準)。
+Apache 2.0 License | 開発者: Tejas Chopra(Netflix Senior Engineer)</p>
+</blockquote>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Headroom/Headroom%20complete%20guide_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

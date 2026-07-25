@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ClawSecCheck 项目分析与入门指南 — VibeQuant</title>
+  <meta name="description" content="面向OpenClaw AI代理的本地、只读、离线安全自查工具。以A-F评分配置,检测Lethal Trifecta,并提供修复提示。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/claw-security-clawseccheck-cn/" />
+  <meta property="og:title" content="ClawSecCheck 项目分析与入门指南" />
+  <meta property="og:description" content="面向OpenClaw AI代理的本地、只读、离线安全自查工具。以A-F评分配置,检测Lethal Trifecta,并提供修复提示。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/claw-security-clawseccheck-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/claw-security-clawseccheck/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/claw-security-clawseccheck-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/claw-security-clawseccheck-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/claw-security-clawseccheck-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/claw-security-clawseccheck/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"ClawSecCheck 项目分析与入门指南","description":"面向OpenClaw AI代理的本地、只读、离线安全自查工具。以A-F评分配置,检测Lethal Trifecta,并提供修复提示。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/claw-security-clawseccheck-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Claw_Security/ClawSecCheck_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-21","dateModified":"2026-06-21","inLanguage":"zh-Hans","keywords":"보안, Claw_Security"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 보안</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">보안</p>
+        <h1>ClawSecCheck 项目分析与入门指南</h1>
+        <p class="article-dates"><time datetime="2026-06-21">발행 2026.06.21</time> · 주제 보안 · Claw_Security</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/claw-security-clawseccheck/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/claw-security-clawseccheck-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/claw-security-clawseccheck-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/claw-security-clawseccheck-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">面向OpenClaw AI代理的本地、只读、离线安全自查工具。以A-F评分配置,检测Lethal Trifecta,并提供修复提示。</p>
+        
+      </header>
+      <div class="article-body prose"><h2>背景</h2>
+<p>OpenClaw最近已成为黑客攻击的常见目标。除了OpenClaw自身的漏洞外,各种针对LLM的攻击手法也层出不穷。ClawSecCheck正是为解决这一问题而开发。</p>
+<p><strong>ClawSecCheck</strong>是面向OpenClaw AI代理的<strong>本地、只读、离线安全自查(self-audit)工具</strong>。可以作为OpenClaw技能安装并以对话方式使用,也可以作为标准CLI运行。</p>
+<blockquote>
+<p>&quot;一条命令,对<em>你自己的</em>代理进行安全自查。&quot;</p>
+</blockquote>
+<p>其核心设计理念不是&quot;扫描别人的代理&quot;,而是<strong>审查自己的代理</strong>。这样就完全避开了所有权证明和法律灰色地带的问题。该工具将配置评为A到F等级,用通俗语言指出最紧迫的漏洞,并提供可直接复制粘贴的修复建议以及<strong>可分享的等级徽章</strong>。</p>
+<p>OpenClaw代理会读取用户消息、记住对话、持有密钥并代表用户行事。这些权限恰恰是攻击者瞄准的攻击面——一条被污染的消息或一个恶意技能就可能悄然将代理变成敌人。ClawSecCheck通过检查并评分配置,提前发现这种风险。</p>
+<h3>运行原则</h3>
+<ul>
+<li><strong>对话驱动的审计</strong>:在OpenClaw内运行时,即使代理不知道任何标志参数,也会以对话方式引导整个流程(引导模式)。</li>
+<li><strong>只读</strong>:绝不修改配置或技能。不存在类似<code>--fix</code>的功能。</li>
+<li><strong>离线、零传输</strong>:没有任何网络调用、API密钥或遥测。仅读取<code>~/.openclaw/openclaw.json</code>和工作区的引导Markdown文件。</li>
+<li><strong>诚实优先</strong>:无法判断的项目标记为<code>UNKNOWN</code>并从评分中排除。<code>UNKNOWN</code>绝不等同于<code>PASS</code>。</li>
+</ul>
+<p>在内部,它只调用一件事——用户自己的平台审计,以只读方式调用并合并结果。无shell访问、无<code>--fix</code>、存在超时机制,并可通过<code>--no-native</code>跳过。</p>
+<pre><code>openclaw security audit --json
+</code></pre>
+<hr>
+<h2>检查内容是什么?</h2>
+<h3>Lethal Trifecta(致命三要素)——旗舰框架</h3>
+<p>这是ClawSecCheck在报告顶部展示的核心指标。当<strong>不可信输入 × 敏感数据访问 × 外部(出站/执行)行为</strong>三者同时成立时,一旦发生入侵就会是致命或显而易见的。该工具建议<strong>最多满足其中两项</strong>,并在顶部同时显示Score、Grade和Trifecta比例(分享徽章仅公开等级)。</p>
+<h3>检查族(按检查ID)</h3>
+<p>检查按以下检查ID体系实现:暴露/权限/密钥(B1-B12)、供应链(B13-B15)、防备状态(B16-B17)、代理行为(B18-B24)、注入/深层暴露(B26及以后)、能力/主机扩展(B43、B50系列),以及原生审计合并(A1)和风险引擎(RISK)。</p>
+<table>
+<thead>
+<tr>
+<th>检查族</th>
+<th>代表项目</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>B1-B12</strong></td>
+<td>网关暴露/通道认证、明文密钥、最小权限、执行沙箱、TLS、本地模型卫生</td>
+</tr>
+<tr>
+<td><strong>B6</strong></td>
+<td>检查引导文件(<code>SOUL.md</code>、<code>AGENTS.md</code>、<code>TOOLS.md</code>)中是否存在诱发提示注入的指令</td>
+</tr>
+<tr>
+<td><strong>B13</strong></td>
+<td>对已安装第三方技能内容进行静态检查。检测ClawHavoc类恶意软件和base64隐藏载荷。从v0.21起通过Python AST解析捕获<code>exec(base64.b64decode(...))</code>等混淆手法,从v0.23起追踪凭据文件流向网络汇出点的污点</td>
+</tr>
+<tr>
+<td><strong>B14 / B15</strong></td>
+<td>出站面 / MCP服务器信任边界</td>
+</tr>
+<tr>
+<td><strong>B16 / B17</strong></td>
+<td>是否存在威胁监控 / 自主性与心跳(heartbeat)</td>
+</tr>
+<tr>
+<td><strong>B18-B24</strong></td>
+<td>子代理委托、静态数据暴露、身份/记忆文件写保护、工具输出信任边界、自我修改、审批绕过、深层MCP加固</td>
+</tr>
+<tr>
+<td><strong>B26</strong></td>
+<td>不可信上下文暴露(<code>contextVisibility=&quot;all&quot;</code>默认值)</td>
+</tr>
+<tr>
+<td><strong>B30 / B31 / B32</strong></td>
+<td>发送者身份强度 / <code>tools.deny:[&quot;write&quot;]</code>无法阻止<code>apply_patch</code>、<code>exec</code>的漏洞设计(footgun) / 控制平面变更的可达性</td>
+</tr>
+<tr>
+<td><strong>B33</strong></td>
+<td>已知漏洞版本门槛(与<code>meta.lastTouchedVersion</code>比对)</td>
+</tr>
+<tr>
+<td><strong>B38 / B39 / B41 / B42</strong></td>
+<td>浏览器SSRF(如169.254.169.254等) / 会话可见性与跨用户泄露 / 凭据爆炸半径 / 安装时供应链(preinstall钩子、全局可写的技能目录)</td>
+</tr>
+<tr>
+<td><strong>B43 / B44(证言层)</strong></td>
+<td>用代理自我报告的方式补充静态扫描无法看到的实际工具/动词清单。分类为<code>EXEC/DESTRUCTIVE/EGRESS/MAILBOX_CONFIG/REVERSIBLE</code>,并检查与配置的偏差(置信度<code>ATTESTED</code>,实验性)</td>
+</tr>
+<tr>
+<td><strong>B50-B54(Host Watch)</strong></td>
+<td>代理运行所在的主机本身是否受到监控:网络IDS、主机审计、文件完整性、EDR、主机防火墙。属于LOW严重级别,绝不会导致FAIL</td>
+</tr>
+<tr>
+<td><strong>A1</strong></td>
+<td>代为运行平台自身的<code>openclaw security audit</code>并合并到同一份报告中(不影响评分)</td>
+</tr>
+</tbody></table>
+<p>脏输入净化器、动作门和污点标记(B26-B28)仍处于路线图阶段,是目前最大的覆盖缺口。这也是部分项目仍标记为<code>UNKNOWN</code>的原因。</p>
+<h3>风险引擎——RISK-01至RISK-10</h3>
+<p>除了单项检查之外,该工具还单独检测十种<strong>组合(能力链)</strong>——当两个或更多属性同时成立时,入侵就会变得致命。</p>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>严重级别</th>
+<th>链条</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RISK-01</td>
+<td>CRITICAL</td>
+<td>不可信发送者 → exec/write/提权工具 → 主机/文件系统</td>
+</tr>
+<tr>
+<td>RISK-02</td>
+<td>HIGH</td>
+<td>不可信输入 → 可达敏感数据 → 出站/执行(Lethal Trifecta)</td>
+</tr>
+<tr>
+<td>RISK-03</td>
+<td>HIGH</td>
+<td>不可信入口 + 无沙箱 → 在主机上直接exec/write</td>
+</tr>
+<tr>
+<td>RISK-04</td>
+<td>HIGH</td>
+<td>可变身份(基于名称匹配) → 提权/exec工具 → 权限提升</td>
+</tr>
+<tr>
+<td>RISK-05</td>
+<td>HIGH</td>
+<td>浏览器SSRF(私有网络) → 密钥/凭据 → 数据外泄</td>
+</tr>
+<tr>
+<td>RISK-06</td>
+<td>CRITICAL</td>
+<td>开放/不可信表面 → 控制平面端点 → 完全接管</td>
+</tr>
+<tr>
+<td>RISK-07</td>
+<td>HIGH</td>
+<td>无审批门的exec/write → 可写的引导/身份文件 → 持续性入侵</td>
+</tr>
+<tr>
+<td>RISK-08</td>
+<td>MEDIUM</td>
+<td>多用户通道 → 共享会话(<code>dmScope=&quot;main&quot;</code>) → 跨用户泄露</td>
+</tr>
+<tr>
+<td>RISK-09</td>
+<td>CRITICAL</td>
+<td>恶意已安装技能(B13未通过) → 可达密钥 → 出站 → 数据外泄</td>
+</tr>
+<tr>
+<td>RISK-10</td>
+<td>MEDIUM</td>
+<td>不可信输入 → 主机exec/write → 缺乏主机检测 → 入侵不可见</td>
+</tr>
+</tbody></table>
+<p>每条链只有在所有环节都有正向证据时才会触发(evidence-gated),因此误报率较低。风险引擎不会改变确定性的A-F评分,而是单独展示,在不夸大分数的前提下让最坏路径一目了然。</p>
+<hr>
+<h2>评分方式</h2>
+<p>评分采用加权通过率(CRITICAL=10,HIGH=6,MEDIUM=3,LOW=1),并附加<strong>诚实性硬上限</strong>:只要存在一个未解决的CRITICAL,分数上限就锁定为<strong>49</strong>;存在未解决的HIGH,则上限为<strong>79</strong>——因此无法在带着致命漏洞的情况下获得A等级。</p>
+<table>
+<thead>
+<tr>
+<th>等级</th>
+<th>分数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A</td>
+<td>90以上</td>
+</tr>
+<tr>
+<td>B</td>
+<td>80-89</td>
+</tr>
+<tr>
+<td>C</td>
+<td>70-79</td>
+</tr>
+<tr>
+<td>D</td>
+<td>50-69</td>
+</tr>
+<tr>
+<td>F</td>
+<td>&lt;50</td>
+</tr>
+</tbody></table>
+<p><code>UNKNOWN</code>项目不计入评分,咨询类(advisory)检查也不会影响等级。分享卡片仅公开等级、分数和Trifecta比例,发现事项保持私密——因为分享不应该把地图递给攻击者。</p>
+<hr>
+<h2>优点</h2>
+<ul>
+<li><strong>隐私优先、完全本地化</strong>:没有账户、API密钥、遥测或网络请求。默认存储的只有一行仅供所有者查看的本地评分历史(<code>~/.clawseccheck/history.jsonl</code>),可通过<code>--no-history</code>退出。</li>
+<li><strong>检查原生审计遗漏的部分</strong>:从提示注入角度(B6)检查平台自身审计不会检查的引导文件(<code>SOUL.md</code>、<code>AGENTS.md</code>、<code>TOOLS.md</code>)。</li>
+<li><strong>安装前风险评估</strong>:通过<code>--vet &lt;技能&gt;</code>在安装/信任前验证技能,通过<code>--vet-mcp</code>验证已连接的MCP服务器(SAFE/SUSPICIOUS/DANGEROUS)。大多数工具只检查技能而遗漏MCP服务器,该功能正针对这一供应链缺口——自ClawHavoc事件以来尤为重要。</li>
+<li><strong>主动注入测试</strong>:提供<code>--canary</code>(手动注入自测)、<code>--redteam</code>(工具投毒、MCP响应注入、记忆投毒、多代理、审批绕过、脏数据外泄场景)以及<code>--dryrun</code>(使用假密钥、假工具进行运行时行为测试)。</li>
+<li><strong>诚实设计</strong>:<code>UNKNOWN ≠ PASS</code>,不会把局限性隐藏在绿色分数背后。风险链只在有证据时才触发。</li>
+<li><strong>完全免费、开源、零依赖</strong>:MIT许可证,纯Python标准库。</li>
+<li><strong>多种输出格式与CI门控</strong>:人类可读报告、<code>--json</code>、<code>--sarif</code>(SARIF 2.1.0)、<code>--html</code>、<code>--badge</code>(SVG)、<code>--card</code>。可通过<code>--fail-under 70</code>和<code>--exit-code</code>在CI中设置门控。</li>
+</ul>
+<hr>
+<h2>缺点与局限</h2>
+<ul>
+<li><strong>仅适用于OpenClaw生态</strong>:无法应用于其他代理平台。</li>
+<li><strong>需要意识到对话暴露</strong>:在OpenClaw聊天中使用时,报告文本会成为对话的一部分,由你已在使用的模型提供商处理。扫描器本身不会创建新的通道,但这一点需要留意。</li>
+<li><strong>CLI使用需要Python环境</strong>:推荐使用pipx安装(<code>pip install .</code>同样可行)。在Windows上会跳过POSIX权限检查,不支持Unicode的控制台会回退到ASCII。</li>
+<li><strong>静态、启发式审计</strong>:并非运行时验证或形式化证明,可能出现误报或漏报。无法替代对运行中代理的对抗性测试。其检查范围也仅限于配置文件、引导Markdown和已安装技能文本。</li>
+<li><strong>非常新且规模很小的项目</strong>:目前仍处于pre-1.0(0.x)阶段,由单一作者运营。标志、模式和检查ID即使在小版本更新中也可能变化,只有到1.0版本契约才会固定。在成熟度和验证历史方面,不及ClawSec、ClawSecure等大型项目。在公开报告或专栏中引用时,最好明确说明这一点。</li>
+</ul>
+<hr>
+<h2>与类似项目的比较</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>形式</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ClawSec</strong> (prompt-security)</td>
+<td>技能套件</td>
+<td>面向OpenClaw、Hermes、PicoClaw、NanoClaw。漂移检测、技能完整性验证、基于NVD的安全公告推送</td>
+</tr>
+<tr>
+<td><strong>ClawSecure</strong></td>
+<td>云审计平台</td>
+<td>审计3,000+个技能,覆盖OWASP ASI 10/10,三层审计协议,持续监控</td>
+</tr>
+<tr>
+<td><strong>ClawScan</strong></td>
+<td>CLI(<code>npx clawscan</code>)</td>
+<td>在技能安装前检测恶意软件、反向shell、提示注入和Unicode攻击,MIT许可</td>
+</tr>
+<tr>
+<td><strong>ClawVitals</strong></td>
+<td>技能+插件</td>
+<td>本地运行健康检查,配置篡改检测/漂移告警,评分功能</td>
+</tr>
+<tr>
+<td><strong>openclaw-security-scan</strong>(legendaryabhi)</td>
+<td>纯Bash CLI</td>
+<td>无需Python,自动修复严重问题,为CI提供JSON输出</td>
+</tr>
+</tbody></table>
+<p><strong>ClawSecCheck的差异化优势</strong>在于完全离线本地运行且零依赖(相较于云端仪表盘型方案)、检查原生审计遗漏的引导文件注入(B6)、Lethal Trifecta比例与发现事项非公开的分享徽章、MCP服务器的安装前验证(<code>--vet-mcp</code>),以及将检查范围进一步扩展到主机监控态势(B50-B54)和证言层(B43/B44)。</p>
+<hr>
+<h2>快速开始</h2>
+<h3>在OpenClaw聊天中(无需终端)</h3>
+<pre><code>openclaw skills install clawseccheck            # 从ClawHub安装(唯一slug)
+openclaw skills install git:gl0di/clawseccheck  # 或直接从GitHub安装
+</code></pre>
+<p>安装后,只需请求<strong>audit my OpenClaw setup with clawseccheck</strong>,等级和最紧迫的问题就会直接显示在聊天中。
+ClawHub技能页面:<strong><a href="https://clawhub.ai/gl0di/clawseccheck">https://clawhub.ai/gl0di/clawseccheck</a></strong></p>
+<h3>标准CLI</h3>
+<pre><code>pipx install git+https://github.com/gl0di/clawseccheck   # 或 pip install .
+clawseccheck --home ~/.openclaw                          # 之后直接运行 clawseccheck
+python -m clawseccheck                                    # 效果相同
+</code></pre>
+<h3>直接运行内置脚本</h3>
+<pre><code>python3 audit.py                 # 人类可读报告 + 分享卡片
+python3 audit.py --json          # 机器可读格式
+python3 audit.py --card          # 仅生成徽章
+python3 audit.py --sarif results.sarif   # 用于上传GitHub Code Scanning(本地记录)
+python3 audit.py --html report.html      # 独立HTML报告(仅供所有者查看)
+python3 audit.py --fail-under 70         # 分数低于70时exit 1(用于CI)
+python3 audit.py --ascii         # 不支持Unicode的控制台回退方案
+</code></pre>
+<h3>完整性验证</h3>
+<pre><code>python3 audit.py --verify-self    # ClawSecCheck自身源码的SHA-256(防篡改)
+</code></pre>
+<p>发布版本会打标签并公开,因此在安全敏感场合,<strong>在更新前审查并锁定标签</strong>比盲目自动更新更安全。</p>
+<h3>对话命令与内部运作</h3>
+<table>
+<thead>
+<tr>
+<th>用户请求</th>
+<th>内部动作</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&quot;Audit my OpenClaw setup&quot;</td>
+<td>默认审计:A-F等级 + 优先级修复清单 + Trifecta</td>
+</tr>
+<tr>
+<td>&quot;Is this skill safe to install?&quot;</td>
+<td><code>--vet &lt;技能&gt;</code>(SAFE/SUSPICIOUS/DANGEROUS)</td>
+</tr>
+<tr>
+<td>&quot;Are my MCP servers safe?&quot;</td>
+<td><code>--vet-mcp</code></td>
+</tr>
+<tr>
+<td>&quot;Am I vulnerable to prompt injection?&quot;</td>
+<td><code>--canary</code> / <code>--redteam</code></td>
+</tr>
+<tr>
+<td>&quot;Watch my setup for changes&quot;</td>
+<td><code>--monitor</code>(漂移、评分下降、新技能/MCP/通道提醒)</td>
+</tr>
+<tr>
+<td>&quot;What should I fix first?&quot;</td>
+<td><code>--next</code>(基于发现事项的优先级排序)</td>
+</tr>
+<tr>
+<td>&quot;Give me fix prompts&quot;</td>
+<td><code>--prompts</code>(针对每项发现的可复制粘贴修复提示)</td>
+</tr>
+<tr>
+<td>&quot;Share my grade&quot;</td>
+<td><code>--badge</code> / <code>--card</code>(仅公开等级)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>参考文档</h2>
+<ul>
+<li>仓库:<a href="https://github.com/gl0di/clawseccheck">https://github.com/gl0di/clawseccheck</a></li>
+<li>安全模型:<a href="https://github.com/gl0di/clawseccheck/blob/main/SECURITY_MODEL.md">https://github.com/gl0di/clawseccheck/blob/main/SECURITY_MODEL.md</a></li>
+<li>技能定义:<a href="https://github.com/gl0di/clawseccheck/blob/main/SKILL.md">https://github.com/gl0di/clawseccheck/blob/main/SKILL.md</a></li>
+<li>ClawHub技能页面:<a href="https://clawhub.ai/gl0di/clawseccheck">https://clawhub.ai/gl0di/clawseccheck</a></li>
+</ul>
+<hr>
+<p><em>本文档基于README v0.30.1版本。作为pre-1.0项目,标志、模式与检查ID可能在后续版本中变更。</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Claw_Security/ClawSecCheck_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

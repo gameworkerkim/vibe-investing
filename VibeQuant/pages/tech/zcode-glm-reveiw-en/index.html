@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Experiencing GLM-5.2 with Zcode — VibeQuant</title>
+  <meta name="description" content="A hands-on guide to Zhipu AI's flagship open-weight coding model GLM-5.2 via Zcode, API, and third-party tools, plus pros, cons, and a three-way comparison with DeepSeek V4-Pro and Claude Opus 4.8." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/zcode-glm-reveiw-en/" />
+  <meta property="og:title" content="Experiencing GLM-5.2 with Zcode" />
+  <meta property="og:description" content="A hands-on guide to Zhipu AI's flagship open-weight coding model GLM-5.2 via Zcode, API, and third-party tools, plus pros, cons, and a three-way comparison with DeepSeek V4-Pro and Claude Opus 4.8." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/zcode-glm-reveiw-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/zcode-glm-reveiw/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/zcode-glm-reveiw-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/zcode-glm-reveiw-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/zcode-glm-reveiw-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/zcode-glm-reveiw/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Experiencing GLM-5.2 with Zcode","description":"A hands-on guide to Zhipu AI's flagship open-weight coding model GLM-5.2 via Zcode, API, and third-party tools, plus pros, cons, and a three-way comparison with DeepSeek V4-Pro and Claude Opus 4.8.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/zcode-glm-reveiw-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Zcode/GLM_Reveiw_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-17","dateModified":"2026-06-17","inLanguage":"en","keywords":"LLM · 에이전트, Zcode"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Experiencing GLM-5.2 with Zcode</h1>
+        <p class="article-dates"><time datetime="2026-06-17">발행 2026.06.17</time> · 주제 LLM · 에이전트 · Zcode</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/zcode-glm-reveiw/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/zcode-glm-reveiw-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/zcode-glm-reveiw-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/zcode-glm-reveiw-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">A hands-on guide to Zhipu AI's flagship open-weight coding model GLM-5.2 via Zcode, API, and third-party tools, plus pros, cons, and a three-way comparison with DeepSeek V4-Pro and Claude Opus 4.8.</p>
+        
+      </header>
+      <div class="article-body prose"><p>Chinese AI company <strong>Zhipu AI</strong>recently released its flagship model<strong>GLM-5.2</strong>, which is drawing attention in the US developer community. Despite being offered as open-weight, it delivers coding performance comparable to closed models. This article walks through how to experience GLM-5.2 hands-on via Zcode and examines the model&#39;s strengths and weaknesses.</p>
+<h2>What Is GLM-5.2?</h2>
+<p>GLM-5.2 is the latest flagship model from Z.ai (Zhipu AI), designed with long-horizon software engineering tasks in mind. Following GLM-5 in February 2026 and GLM-5.1 in April, it was first released to GLM Coding Plan subscribers on June 13, with full weights released on Hugging Face under the MIT license on June 17. Key specifications are as follows.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Specification</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Context length</td>
+<td>1M tokens (1,048,576 tokens)</td>
+</tr>
+<tr>
+<td>Max output tokens</td>
+<td>128K</td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td>~753B (MoE architecture, ~40B active per token)</td>
+</tr>
+<tr>
+<td>License</td>
+<td>MIT open source</td>
+</tr>
+<tr>
+<td>Supported languages</td>
+<td>English, Chinese</td>
+</tr>
+</tbody></table>
+<p>GLM-5.2 introduces a new sparse attention technique called <strong>IndexShare</strong>, reducing per-token compute at 1M context length to roughly one-third of conventional approaches, and improves MTP layers to increase speculative decoding acceptance length by up to 20%.</p>
+<p>Benchmark performance is also impressive. It scored 81.0 on Terminal-Bench 2.1, a substantial improvement over GLM-5.1 (63.5), and achieved 62.1 on SWE-bench Pro. On Code Arena it scored 1595, ranking 2nd overall and 1st among globally available models. However, note that many of these figures are vendor (Z.ai) self-reported measurements and have not yet been independently verified.</p>
+<h2>Getting Started: Using GLM-5.2</h2>
+<p>There are three main ways to use GLM-5.2: <strong>Zcode (official desktop app)</strong>, <strong>direct API calls</strong>, and <strong>third-party coding tool integrations</strong>.</p>
+<h3>1. Installing and Running Zcode</h3>
+<p>Zcode is the official desktop application from Z.ai and the easiest way to experience GLM-5.2.</p>
+<p><strong>Step 1: Download Zcode</strong>Download the installer for macOS, Windows, or Linux from the official site (zcode.z.ai).<strong>Step 2: Sign Up and Obtain an API Key</strong>Register at z.ai and create an API key from the dashboard. If you want coding-focused usage, subscribing to the GLM Coding Plan is recommended. Plans include Lite (~$18/month), Pro, Max, Team, and others.<strong>Step 3: Launch Zcode and Select the Model</strong></p>
+<p>After logging into Zcode, select GLM-5.2 on the model selection screen to start using it immediately.</p>
+<h3>2. Calling the API Directly</h3>
+<p>To use GLM-5.2 programmatically, you can use the OpenAI-compatible API.</p>
+<p><strong>Endpoint information:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Chat completions endpoint</td>
+<td><code>https://api.z.ai/api/paas/v4/chat/completions</code></td>
+</tr>
+<tr>
+<td>Base URL for SDK</td>
+<td><code>https://api.z.ai/api/paas/v4/</code></td>
+</tr>
+<tr>
+<td>Model ID</td>
+<td><code>glm-5.2</code></td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td><code>Authorization: Bearer $ZAI_API_KEY</code></td>
+</tr>
+</tbody></table>
+<p><strong>cURL example:</strong></p>
+<pre><code class="language-bash">curl https://api.z.ai/api/paas/v4/chat/completions \
+  -H &quot;Authorization: Bearer $ZAI_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{
+    &quot;model&quot;: &quot;glm-5.2&quot;,
+    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Hello, GLM-5.2!&quot;}]
+  }&#39;
+</code></pre>
+<p><strong>Python example:</strong></p>
+<pre><code class="language-python">import openai
+
+client = openai.OpenAI(
+    base_url=&quot;https://api.z.ai/api/paas/v4/&quot;,
+    api_key=&quot;YOUR_API_KEY&quot;
+)
+
+response = client.chat.completions.create(
+    model=&quot;glm-5.2&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Write a Python function to reverse a linked list&quot;}]
+)
+print(response.choices[0].message.content)
+</code></pre>
+<h3>3. Integration with Claude Code, Cline, Cursor, and Others</h3>
+<p>GLM-5.2 integrates easily with coding tools developers already use.</p>
+<p><strong>Claude Code configuration:</strong></p>
+<pre><code class="language-bash">export ANTHROPIC_BASE_URL=&quot;https://api.z.ai/api/anthropic&quot;
+export ANTHROPIC_API_KEY=&quot;your-glm-coding-plan-key&quot;
+# Set model ID to glm-5.2[1m] in settings.json
+</code></pre>
+<p><strong>OpenAI-compatible tools (Cline, OpenCode, etc.) configuration:</strong></p>
+<pre><code class="language-text">Base URL: https://api.z.ai/api/paas/v4/
+Model ID: glm-5.2
+API Key: your-api-key
+</code></pre>
+<h2>Using GLM-5.2: Practical Workflows</h2>
+<p>Once connected to GLM-5.2 via Zcode or the API, how can you leverage it in real development workflows? Official documentation suggests three representative usage scenarios.</p>
+<h3>Scenario 1: Project-Level Codebase Understanding</h3>
+<p>GLM-5.2&#39;s 1M context is optimized for understanding an entire project at once. Select a real production codebase with complex backend and frontend intermixing, then ask the model something like:</p>
+<blockquote>
+<p>&quot;Read the current project and output a system architecture map, core module responsibilities, major API contracts, data flows, key call chains, potential technical debt, and engineering constraints to follow in future refactoring.&quot;</p>
+</blockquote>
+<h3>Scenario 2: Long-Horizon Refactoring</h3>
+<p>GLM-5.2 is more stable on cross-file, multi-step, long-chain tasks. It suits work requiring continuous progress such as module separation, API migration, and directory reorganization. Enable <code>/goal</code> mode and instruct as follows:</p>
+<blockquote>
+<p>&quot;Complete the separation and refactoring of the current module without changing business logic, API signatures, or runtime behavior. First provide an execution plan, impact scope, risk boundaries, and verification methods, then run necessary tests after completion and output verification results.&quot;</p>
+</blockquote>
+<h3>Scenario 3: Adherence to Engineering Standards</h3>
+<p>GLM-5.2 excels at consistently following engineering standards. Define your team&#39;s actual lint rules, build commands, test requirements, and commit conventions in <code>CLAUDE.md</code> or <code>Agent.md</code>, then instruct as follows:</p>
+<blockquote>
+<p>&quot;Strictly follow the engineering standards of the current repository. Do not introduce new dependencies, do not modify API contracts, and do not commit changes prematurely. After completing modifications, run build, lint, and tests and report verification results along with any risks identified.&quot;</p>
+</blockquote>
+<h2>Pros</h2>
+<h3>1. Open-Weight + Low Cost</h3>
+<p>GLM-5.2 is offered as open-weight with publicly released model weights. Developers and enterprises can download and run or modify the model in their own environments, reducing cost burden compared to closed models while gaining greater flexibility. API pricing is also very competitive at <strong>$1.40</strong>per 1M input tokens and<strong>$4.40</strong> per 1M output tokens.</p>
+<h3>2. Strong Coding Performance</h3>
+<p>GLM-5.2 is regarded as a model with strengths in coding tasks and software development workflows rather than simple chatbot use. Many independent testers, including developers from Meta and Google DeepMind, have called it &quot;the first open model to pass everyday work standards.&quot;</p>
+<h3>3. 1M Token Context</h3>
+<p>Stable 1M context is GLM-5.2&#39;s biggest strength. It reliably handles project-scale engineering context, and context fragmentation in the latter stages of long-running tasks is significantly reduced.</p>
+<h3>4. Diverse Integration Options</h3>
+<p>Integration with widely used coding tools such as Claude Code, Cline, Cursor, and OpenCode is straightforward (20+ third-party environments supported at launch). Developers can keep their familiar environment while leveraging GLM-5.2&#39;s performance.</p>
+<h3>5. Adjustable Thinking Effort</h3>
+<p>GLM-5.2 offers two reasoning effort levels, High and Max, allowing you to balance performance and response speed based on task complexity.</p>
+<h2>Cons</h2>
+<h3>1. Concerns About Chinese-Origin Models</h3>
+<p>Following DeepSeek, GLM-5.2 is also a Chinese-origin open-weight model. Some enterprises and developers may hesitate to use Chinese AI models due to data security, national security, and technology dependency concerns. In fact, the US Department of Commerce Bureau of Industry and Security (BIS) added Zhipu AI to the Entity List in January 2025, and in May 2026 the US House of Representatives launched an investigation into cybersecurity risks of core infrastructure for PRC-origin AI models, naming Zhipu AI alongside DeepSeek, MiniMax, and ByteDance. GLM-5.2 is being received sensitively in the US tech industry as a &quot;new DeepSeek moment.&quot;</p>
+<h3>2. Performance Gap with Closed Models</h3>
+<p>Despite strong benchmark performance, it still trails top-tier closed models like Claude Opus 4.8 and GPT-5.5 in some areas. The gap is especially noticeable on ultra-long-horizon, high-difficulty tasks, though the general assessment is that this has narrowed to &quot;score differences on specific benchmarks&quot; rather than a &quot;generation gap.&quot;</p>
+<h3>3. API Billing Structure</h3>
+<p>The API uses token-based billing, and costs can spike on large-scale automation workloads. Subscribing to the Coding Plan can reduce costs to some extent, but it may still be a burden for high-usage teams.</p>
+<h3>4. Limited Korean Language Support</h3>
+<p>Official documentation states that GLM-5.2 supports English and Chinese. Performance may be somewhat lower for Korean prompts, code comments, and documentation tasks.</p>
+<h3>5. Ecosystem Maturity</h3>
+<p>Compared to closed models from OpenAI and Anthropic, the community and third-party tool ecosystem is less mature. Tutorials and troubleshooting resources are relatively scarce.</p>
+<h2>Three-Way Comparison: DeepSeek V4-Pro vs Claude Opus 4.8 vs GLM-5.2</h2>
+<p>To accurately position GLM-5.2, it must be viewed alongside competing models released in the same period. The coding model market in the first half of 2026 is effectively a three-way battle among three camps: <strong>Claude Opus 4.8</strong>representing the closed frontier,<strong>DeepSeek V4-Pro</strong>as the open-weight value champion, and<strong>GLM-5.2</strong> pushing up as an open-weight coding specialist.</p>
+<h3>Specs and Positioning</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>DeepSeek V4-Pro</th>
+<th>Claude Opus 4.8</th>
+<th>GLM-5.2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Developer</td>
+<td>DeepSeek (China)</td>
+<td>Anthropic (US)</td>
+<td>Z.ai / Zhipu AI (China)</td>
+</tr>
+<tr>
+<td>Release</td>
+<td>2026.04.24</td>
+<td>2026.05.28</td>
+<td>2026.06.13 (Coding Plan) / 06.17 (open-weight)</td>
+</tr>
+<tr>
+<td>License</td>
+<td>MIT open-weight</td>
+<td>Closed</td>
+<td>MIT open-weight</td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td>1.6T MoE (~49B active)</td>
+<td>Undisclosed</td>
+<td>753B MoE (~40B active)</td>
+</tr>
+<tr>
+<td>Context</td>
+<td>1M</td>
+<td>1M</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>Max output</td>
+<td>Within 1M context</td>
+<td>128K</td>
+<td>128K~131K</td>
+</tr>
+<tr>
+<td>Core focus</td>
+<td>Value / general-purpose</td>
+<td>Agentic reliability / knowledge work</td>
+<td>Long-horizon coding agent</td>
+</tr>
+</tbody></table>
+<h3>Coding Benchmarks</h3>
+<p>The table below combines figures from different vendors, but <strong>all three models include self-reported measurements and differ in harness and benchmark versions, limiting direct comparison.</strong> The closest apples-to-apples metric is SWE-bench Pro.</p>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th>DeepSeek V4-Pro</th>
+<th>Claude Opus 4.8</th>
+<th>GLM-5.2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SWE-bench Verified</td>
+<td>80.6</td>
+<td><strong>88.6</strong></td>
+<td>(not disclosed)</td>
+</tr>
+<tr>
+<td>SWE-bench Pro</td>
+<td>55.4</td>
+<td><strong>69.2</strong></td>
+<td>62.1</td>
+</tr>
+<tr>
+<td>Terminal-Bench</td>
+<td>67.9 (v2.0)</td>
+<td>74.6 (v2.1, Terminus-2)</td>
+<td>81.0 (v2.1, vendor-reported)</td>
+</tr>
+<tr>
+<td>Code Arena (Elo)</td>
+<td>—</td>
+<td>—</td>
+<td>1595 (global #1)</td>
+</tr>
+<tr>
+<td>LiveCodeBench</td>
+<td>93.5</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Note:</strong>Terminal-Bench scores vary by version (2.0/2.1) and harness, so placing them in one row is an apples-to-oranges comparison. GLM-5.2&#39;s 81.0 is a Z.ai self-harness figure, while Opus 4.8&#39;s 74.6 is based on the public Terminus-2 harness. Conditions differ, so you cannot conclude that &quot;GLM beat Opus.&quot; SWE-bench Pro is a relatively standardized set, and the ranking is<strong>Opus 4.8 (69.2) &gt; GLM-5.2 (62.1) &gt; DeepSeek V4-Pro (55.4)</strong>.</p>
+</blockquote>
+<h3>Pricing</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>DeepSeek V4-Pro</th>
+<th>Claude Opus 4.8</th>
+<th>GLM-5.2</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Input (per 1M)</td>
+<td>$0.435</td>
+<td>$5.00</td>
+<td>$1.40</td>
+</tr>
+<tr>
+<td>Output (per 1M)</td>
+<td>$0.87</td>
+<td>$25.00</td>
+<td>$4.40</td>
+</tr>
+<tr>
+<td>Subscription plan</td>
+<td>—</td>
+<td>Claude Pro/Max</td>
+<td>GLM Coding Plan ~$18/month</td>
+</tr>
+<tr>
+<td>Relative output token cost</td>
+<td>1.0x (lowest)</td>
+<td>~28.7x</td>
+<td>~5.1x</td>
+</tr>
+</tbody></table>
+<p>Pricing is the key variable in this three-way battle. Setting DeepSeek V4-Pro output token cost to 1, GLM-5.2 is roughly 5x and Opus 4.8 is roughly 29x. In other words, the token cost to gain roughly 7 more points on SWE-bench Pro with Opus 4.8 compared to GLM-5.2 is 5–6x higher.</p>
+<h3>One-Line Summary</h3>
+<ul>
+<li><strong>DeepSeek V4-Pro</strong> — Value champion. Delivers near-frontier scores at overwhelmingly the lowest price. Best for large-scale automation, RAG, and high-volume pipelines. However, scores drop one tier on the hardest agentic loops.</li>
+<li><strong>Claude Opus 4.8</strong> — Closed frontier. #1 on SWE-bench Pro, with advantages in agentic reliability and &quot;honesty&quot; (reporting flaws rather than hiding them). Also the most expensive of the three. Worth it for high-difficulty, long-horizon work where failure cost exceeds token cost.</li>
+<li><strong>GLM-5.2</strong> — Strongest open-weight coding candidate. The open model closest to closed models in 1M context stability and coding scores. Pricing sits between DeepSeek and Opus. Self-hosting under MIT is significant for enterprises.</li>
+</ul>
+<p>Compressed selection criteria: <strong>if cost is priority #1, choose DeepSeek V4-Pro; if reliability on the hardest long-horizon tasks is priority #1, choose Claude Opus 4.8; if the balance of open-weight self-hosting and coding performance is priority #1, choose GLM-5.2.</strong> However, for both Chinese-origin models (DeepSeek and GLM), the first step is evaluating whether regulatory and security risks from routing sensitive data through Z.ai/DeepSeek cloud APIs can be mitigated via self-hosting.</p>
+<h2>Conclusion: What GLM-5.2 Will Change</h2>
+<p>Zhipu AI&#39;s GLM-5.2 extends the &quot;low-cost, high-performance open-weight&quot; strategy that Chinese AI companies chose after DeepSeek into coding and development automation. Coding models connect directly not only to developer productivity but also to enterprise AI agents, workflow automation, and software maintenance markets. For enterprises, if an open-weight model with sufficient performance can run on internal infrastructure, dependence on expensive API-based closed models can be significantly reduced.</p>
+<p>However, benchmark scores are reference points only. Once vendor self-reported figures and harness differences are stripped away, the real difference among the three models converges on the question: &quot;On my workload, is one failure more expensive than the token price difference?&quot; The optimal model for the same task varies depending on the answer.</p>
+<p>As industry observers note, the influence of open-weight models can grow further the moment developers judge them usable in real work. Whether GLM-5.2 becomes that tipping point remains to be seen.</p>
+<hr>
+<h3>Reference: Data Sources and Caveats</h3>
+<ul>
+<li>Benchmark and pricing figures reference vendor announcements (Anthropic, DeepSeek, Z.ai) and public trackers as of June 2026 (llm-stats, Artificial Analysis, etc.); many are vendor self-reported and independent verification is ongoing.</li>
+<li>Terminal-Bench scores vary by version (2.0/2.1) and harness (Terminus-2, Codex CLI, etc.), so direct comparison is not recommended even when figures appear in the same table.</li>
+<li>DeepSeek V4-Pro pricing is the permanently applied $0.435/$0.87 as of May 22, 2026; the previous list price ($1.74/$3.48) is historical.</li>
+<li>Claude Opus 4.8 pricing is standard mode $5/$25, Fast mode $10/$50.</li>
+<li>GLM-5.2 pricing is Z.ai API $1.40/$4.40, GLM Coding Plan ~$18/month (lower during promotions).</li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Zcode/GLM_Reveiw_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GhidraGPT 入门指南 — VibeQuant</title>
+  <meta name="description" content="GhidraGPT将OpenAI、Anthropic、Ollama、Qwen等多种LLM接入Ghidra,加速反编译、重命名与漏洞分析。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted-cn/" />
+  <meta property="og:title" content="GhidraGPT 入门指南" />
+  <meta property="og:description" content="GhidraGPT将OpenAI、Anthropic、Ollama、Qwen等多种LLM接入Ghidra,加速反编译、重命名与漏洞分析。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/ghidragpt-getting-sarted/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"GhidraGPT 入门指南","description":"GhidraGPT将OpenAI、Anthropic、Ollama、Qwen等多种LLM接入Ghidra,加速反编译、重命名与漏洞分析。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/ghidragpt-getting-sarted-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/GhidraGPT-Getting-Sarted_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-21","dateModified":"2026-07-21","inLanguage":"zh-Hans","keywords":"기타 기술문서, GhidraGPT-Getting-Sarted_CN.md"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 기타 기술문서</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 기술문서</p>
+        <h1>GhidraGPT 入门指南</h1>
+        <p class="article-dates"><time datetime="2026-07-21">발행 2026.07.21</time> · 주제 기타 기술문서 · GhidraGPT-Getting-Sarted_CN.md</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/ghidragpt-getting-sarted/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/ghidragpt-getting-sarted-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/ghidragpt-getting-sarted-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/ghidragpt-getting-sarted-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">GhidraGPT将OpenAI、Anthropic、Ollama、Qwen等多种LLM接入Ghidra,加速反编译、重命名与漏洞分析。</p>
+        
+      </header>
+      <div class="article-body prose"><p><strong>GhidraGPT</strong>是一个将LLM集成到Ghidra(NSA开源逆向工程框架)中的插件。
+Ghidra是由美国国家安全局(NSA)开发并以开源形式发布的强大软件逆向工程(reverse engineering)工具。
+Ghidra由美国国家安全局开发,曾被多个美国情报机构用作逆向工程工具,大约在2017年3月7日的WikiLeaks &quot;CIA Vault 7&quot;泄密事件中,其存在才首次为世人所知。
+此后,美国国家安全局于2019年3月5日在RSA大会上首次公开发布了可执行文件,一个月后即2019年4月又在GitHub上公开了源代码。</p>
+<p>随着LLM的发展,GhidraGPT让LLM能够辅助完成本需要人工进行大量重复劳动的核心工作:分析已编译的机器码,将其转换为人类可读的汇编语言(反汇编),并还原为C语言级别的代码(反编译)。
+简而言之,这是一个为Ghidra加装LLM的扩展服务,其扩展理念是让LLM代替完成反汇编等耗时的工作。</p>
+<p>其主要特点和功能如下。</p>
+<ul>
+<li>强大的反编译器:将机器码转换为类C语言形式,让代码流程和逻辑更容易理解。</li>
+<li>支持多种平台:可在Windows、macOS、Linux上运行,并支持x86、ARM、MIPS等多种处理器架构。</li>
+<li>协作功能:提供支持团队共享和分析项目的服务器功能。</li>
+<li>可扩展性:支持Python和Java脚本,用户可以自行实现所需的分析自动化功能。</li>
+<li>免费开源:是IDA Pro等昂贵商业逆向工具的有力替代品,被安全研究人员、恶意软件分析师和开发者广泛使用。</li>
+</ul>
+<hr>
+<h2>核心优势</h2>
+<ol>
+<li><strong>提升生产力</strong><ul>
+<li>自动重命名函数名/变量名、类型推断、添加注释,使反编译结果更易于人类阅读</li>
+<li>在上下文菜单中右键点击一次即可执行AI分析(非常方便)</li>
+</ul>
+</li>
+<li><strong>支持多种LLM</strong><ul>
+<li>支持OpenAI、Anthropic、Google Gemini、Cohere、Mistral、DeepSeek、Grok、Ollama等广泛的模型</li>
+<li>也可使用OpenAI兼容API</li>
+</ul>
+</li>
+<li><strong>安全性与易用性</strong><ul>
+<li>自动加密API密钥并安全存储</li>
+<li>实时流式响应,最大限度减少等待时间</li>
+<li>可在专用控制台查看结果</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>缺点与注意事项</h2>
+<p><strong>缺点:</strong></p>
+<ul>
+<li>LLM的响应并非总是准确,可能导致错误的分析结果(会出现LLM幻觉和错误)</li>
+<li>基本上需要网络连接和API费用(本地Ollama除外;DeepSeek v4 pro、Qwen通常已足够)</li>
+<li>与Ghidra复杂的内部结构结合时可能出现意外冲突</li>
+</ul>
+<p><strong>注意事项:</strong></p>
+<ul>
+<li>如果分析的二进制文件包含敏感代码,必须确认发送到外部API的数据内容</li>
+<li>不要盲目相信LLM生成的代码或类型信息,必须进行验证</li>
+<li>需要Ghidra 10.0以上、Java 11以上及Maven环境,安装时必须严格按照<code>File → Install Extensions</code>路径操作</li>
+</ul>
+<hr>
+<h2>竞品对比</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>差异化点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Ghidra Assist</strong></td>
+<td>对本地模型进行了更多优化,开源社区支持活跃</td>
+</tr>
+<tr>
+<td><strong>BinAI</strong></td>
+<td>商业产品,提供专为二进制分析设计的自有模型,准确性有优势</td>
+</tr>
+<tr>
+<td><strong>IAIK&#39;s Ghidra Plugin</strong></td>
+<td>基于学术研究,在特定分析算法上表现突出</td>
+</tr>
+<tr>
+<td><strong>IDA Pro + ChatGPT</strong></td>
+<td>面向IDA用户的脚本,生态更大但并非专为Ghidra设计</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>总结</strong>:GhidraGPT是一款支持多种LLM的强大插件,但API依赖和分析结果可靠性的验证是必不可少的。在分析敏感代码时,建议使用本地模型(Ollama)。</p>
+</blockquote>
+<hr>
+<h1>GhidraGPT入门:Ollama、ChatGPT、Claude、Qwen设置指南</h1>
+<p>本指南将逐步介绍如何安装GhidraGPT插件,并连接Ollama(本地)、ChatGPT、Claude、Qwen等多种LLM。</p>
+<hr>
+<h2>前置准备</h2>
+<p>在使用GhidraGPT之前,需要具备以下环境:</p>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>要求</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Ghidra</strong></td>
+<td>10.0以上</td>
+</tr>
+<tr>
+<td><strong>Java</strong></td>
+<td>Java 11+</td>
+</tr>
+<tr>
+<td><strong>Maven</strong></td>
+<td>构建系统</td>
+</tr>
+<tr>
+<td><strong>网络</strong></td>
+<td>使用基于API的模型时必须(Ollama除外)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. 安装GhidraGPT插件</h2>
+<h3>1.1 克隆仓库并构建</h3>
+<pre><code class="language-bash">git clone https://github.com/ZeroDaysBroker/GhidraGPT.git
+cd GhidraGPT
+GHIDRA_INSTALL_DIR=/path/to/ghidra mvn clean package
+</code></pre>
+<p>构建完成后,会生成<code>target/GhidraGPT-x.y.z.zip</code>文件。</p>
+<h3>1.2 在Ghidra中安装插件</h3>
+<ol>
+<li>启动Ghidra</li>
+<li>进入<code>File → Install Extensions</code></li>
+<li>点击<code>+</code>按钮,选择<code>target/GhidraGPT-x.y.z.zip</code></li>
+<li>重启Ghidra</li>
+<li>在<code>File → Configure → Analysis → GhidraGPTPlugin</code>中启用插件</li>
+</ol>
+<hr>
+<h2>2. 为各LLM服务设置API密钥</h2>
+<p>安装插件后,进入Ghidra内的<code>GhidraGPT configuration panel</code>输入API密钥。所有API密钥都会自动加密并安全存储。</p>
+<h3>OpenAI(ChatGPT)</h3>
+<ol>
+<li>在<a href="https://platform.openai.com/api-keys">OpenAI Platform</a>获取API密钥</li>
+<li>在GhidraGPT设置面板中选择<strong>OpenAI</strong></li>
+<li>输入获取到的API密钥</li>
+<li>选择要使用的模型(例如<code>gpt-4</code>、<code>gpt-3.5-turbo</code>)</li>
+</ol>
+<blockquote>
+<p><strong>提示</strong>:GhidraGPT默认支持OpenAI的GPT模型。</p>
+</blockquote>
+<hr>
+<h3>Anthropic(Claude)</h3>
+<ol>
+<li>在<a href="https://console.anthropic.com/">Anthropic Console</a>获取API密钥</li>
+<li>在GhidraGPT设置面板中选择<strong>Anthropic</strong></li>
+<li>输入API密钥</li>
+<li>选择要使用的Claude模型(例如<code>claude-3-opus</code>、<code>claude-3-sonnet</code>)</li>
+</ol>
+<p>GhidraGPT正式支持Anthropic的Claude模型。</p>
+<hr>
+<h3>Ollama(免费本地模型)</h3>
+<p>Ollama是一款可在本地运行LLM的工具,能让你<strong>无需联网</strong>即可使用GhidraGPT。</p>
+<h4>2.1 安装Ollama</h4>
+<p><strong>macOS / Linux:</strong></p>
+<pre><code class="language-bash">curl -fsSL https://ollama.com/install.sh | sh
+</code></pre>
+<p><strong>Windows:</strong> 从<a href="https://ollama.com/">Ollama官方网站</a>下载安装文件</p>
+<h4>2.2 下载LLM模型</h4>
+<p>下载你需要的模型。示例:</p>
+<pre><code class="language-bash"># Meta的Llama 3.1(8B轻量模型)
+ollama run llama3.1:8b
+
+# Qwen(擅长代码分析)
+ollama run qwen2.5-coder:7b
+
+# Mistral
+ollama run mistral
+</code></pre>
+<blockquote>
+<p><strong>提示</strong>:请选择与你的硬件规格匹配的模型。<code>llama3.1:8b</code>在8GB显存下可流畅运行。</p>
+</blockquote>
+<h4>2.3 确认Ollama服务器</h4>
+<p>Ollama默认在<code>localhost:11434</code>上运行API服务器。</p>
+<pre><code class="language-bash"># 查看正在运行的模型
+ollama list
+</code></pre>
+<h4>2.4 将Ollama连接到GhidraGPT</h4>
+<ol>
+<li>在GhidraGPT设置面板中选择<strong>Ollama</strong>2.<strong>Server URL</strong>:输入<code>http://localhost:11434</code></li>
+<li><strong>Model</strong>:输入之前下载的模型名称(例如<code>llama3.1:8b</code>、<code>qwen2.5-coder:7b</code>)</li>
+</ol>
+<blockquote>
+<p><strong>提示</strong>:Ollama通过GhidraGPT支持的&quot;自带模型(Bring your own model)&quot;方式运作。</p>
+</blockquote>
+<hr>
+<h3>Qwen(OpenAI兼容API或Ollama)</h3>
+<p>Qwen可以通过两种方式使用:</p>
+<h4>方式A:通过Ollama本地运行(免费)</h4>
+<pre><code class="language-bash">ollama run qwen2.5-coder:7b
+</code></pre>
+<p>之后,按照与Ollama相同的设置方式在GhidraGPT中连接。</p>
+<h4>方式B:DashScope API(云端)</h4>
+<ol>
+<li>在<a href="https://dashscope.aliyun.com/">阿里云 DashScope</a>获取API密钥</li>
+<li>在GhidraGPT设置面板中选择<strong>OpenAI Compatible</strong>3.<strong>Base URL</strong>:输入<code>https://dashscope.aliyuncs.com/compatible-mode/v1</code></li>
+<li><strong>API Key</strong>:输入DashScope API密钥</li>
+<li><strong>Model</strong>:输入<code>qwen-max</code>、<code>qwen-plus</code>等</li>
+</ol>
+<blockquote>
+<p>由于GhidraGPT支持OpenAI兼容API,你可以通过Qwen的OpenAI兼容端点进行连接。</p>
+</blockquote>
+<hr>
+<h2>3. 主要功能使用方法</h2>
+<p>安装和设置完成后,即可使用以下功能:</p>
+<table>
+<thead>
+<tr>
+<th>功能</th>
+<th>说明</th>
+<th>使用方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Function Rewrite</strong></td>
+<td>重命名函数名/变量名、类型推断、添加注释</td>
+<td>在反编译窗口中右键点击函数 → Rewrite</td>
+</tr>
+<tr>
+<td><strong>Code Explanation</strong></td>
+<td>详细解释函数逻辑</td>
+<td>右键点击 → Explain</td>
+</tr>
+<tr>
+<td><strong>Code Analysis</strong></td>
+<td>检测漏洞并进行安全分析</td>
+<td>右键点击 → Analyze</td>
+</tr>
+<tr>
+<td><strong>Console</strong></td>
+<td>查看模型响应与结果</td>
+<td>在GhidraGPT控制台窗口中查看</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 各服务对比与推荐</h2>
+<table>
+<thead>
+<tr>
+<th>服务</th>
+<th>优点</th>
+<th>缺点</th>
+<th>推荐场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Ollama</strong></td>
+<td>免费、离线、保障隐私</td>
+<td>需要本地硬件性能,响应速度较慢</td>
+<td>安全性至关重要的分析、无网络环境</td>
+</tr>
+<tr>
+<td><strong>ChatGPT (OpenAI)</strong></td>
+<td>性能出色,响应迅速</td>
+<td>收费,必须联网</td>
+<td>一般性逆向工作</td>
+</tr>
+<tr>
+<td><strong>Claude</strong></td>
+<td>上下文长,代码理解能力出色</td>
+<td>收费,必须联网</td>
+<td>分析复杂的大型函数</td>
+</tr>
+<tr>
+<td><strong>Qwen (Ollama)</strong></td>
+<td>免费、代码特化、支持韩语</td>
+<td>需要本地硬件性能</td>
+<td>需要韩语注释/解释时</td>
+</tr>
+<tr>
+<td><strong>Qwen (API)</strong></td>
+<td>云端性能、支持韩语</td>
+<td>收费,必须联网</td>
+<td>需要韩语+云端性能时</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>注意事项</h2>
+<ol>
+<li><strong>数据隐私</strong>:分析敏感二进制文件时,务必使用<strong>Ollama</strong>等本地模型。云端API会将被分析的代码发送到外部。</li>
+<li><strong>验证结果</strong>:LLM生成的代码或类型信息<strong>必须始终手动验证</strong>。AI有时会生成错误的分析结果。</li>
+<li><strong>API费用</strong>:OpenAI、Anthropic、DashScope(Qwen)会根据使用量产生费用。</li>
+</ol>
+<hr>
+<h2>参考资料</h2>
+<ul>
+<li><a href="https://github.com/ZeroDaysBroker/GhidraGPT">GhidraGPT GitHub仓库</a></li>
+<li><a href="https://ollama.com/">Ollama官方网站</a></li>
+<li><a href="https://ollama.ai/library">Ollama支持的模型列表</a></li>
+<li><a href="https://huggingface.co/docs/hub/en/ollama">Hugging Face GGUF模型</a> - 可通过Ollama运行</li>
+</ul>
+<hr>
+<p>现在,一起开始用GhidraGPT进行AI驱动的逆向工程吧。</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/GhidraGPT-Getting-Sarted_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

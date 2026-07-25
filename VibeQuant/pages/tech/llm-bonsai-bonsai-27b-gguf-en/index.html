@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Bonsai-27B-gguf: An On-Device 27B Reasoning Model via 1-Bit Quantization — VibeQuant</title>
+  <meta name="description" content="Bonsai-27B-gguf compresses a 27B reasoning model to 1.125 bit/weight for a ~3.9GB footprint, keeping 89.5% of FP16 performance for laptop and phone use." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf-en/" />
+  <meta property="og:title" content="Bonsai-27B-gguf: An On-Device 27B Reasoning Model via 1-Bit Quantization" />
+  <meta property="og:description" content="Bonsai-27B-gguf compresses a 27B reasoning model to 1.125 bit/weight for a ~3.9GB footprint, keeping 89.5% of FP16 performance for laptop and phone use." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Bonsai-27B-gguf: An On-Device 27B Reasoning Model via 1-Bit Quantization","description":"Bonsai-27B-gguf compresses a 27B reasoning model to 1.125 bit/weight for a ~3.9GB footprint, keeping 89.5% of FP16 performance for laptop and phone use.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-bonsai-bonsai-27b-gguf-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Bonsai/Bonsai-27b-gguf_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-18","dateModified":"2026-07-18","inLanguage":"en","keywords":"LLM · 에이전트, LLM_Bonsai"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Bonsai-27B-gguf: An On-Device 27B Reasoning Model via 1-Bit Quantization</h1>
+        <p class="article-dates"><time datetime="2026-07-18">발행 2026.07.18</time> · 주제 LLM · 에이전트 · LLM_Bonsai</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/llm-bonsai-bonsai-27b-gguf/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/llm-bonsai-bonsai-27b-gguf-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/llm-bonsai-bonsai-27b-gguf-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/llm-bonsai-bonsai-27b-gguf-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Bonsai-27B-gguf compresses a 27B reasoning model to 1.125 bit/weight for a ~3.9GB footprint, keeping 89.5% of FP16 performance for laptop and phone use.</p>
+        
+      </header>
+      <div class="article-body prose"><p><strong>Repository</strong>: <a href="https://huggingface.co/prism-ml/Bonsai-27B-gguf">https://huggingface.co/prism-ml/Bonsai-27B-gguf</a></p>
+<blockquote>
+<p><strong>Key takeaway</strong>: a model that compresses 27B-class reasoning ability to an effective 1.125 bit/weight, achieving a ~3.9GB deployment footprint. It retains 89.5% of FP16&#39;s average performance while enabling single-device operation on a laptop or smartphone — a case study in the tradeoff between &quot;extreme miniaturization&quot; and &quot;practical reasoning ability.&quot;</p>
+</blockquote>
+<p>While working in an environment with frequent travel where a constant internet connection can&#39;t be guaranteed, and looking for an LLM to assist across varied tasks, I came across Bonsai — a model with 27B-class reasoning capability.</p>
+<hr>
+<h2>1. Project Overview</h2>
+<p>Bonsai-27B-gguf is a GGUF release that quantizes a 27B-parameter model to 1-bit weights (effective 1.125 bit/weight, Q1_0_g128 format). Unlike existing low-bit quantization (2-bit IQ2, Q2_K family), which tends to collapse sharply on complex reasoning tasks, its differentiator is holding above 87 points on reasoning-centric benchmarks like math and coding.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Spec</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Parameter scale</td>
+<td>27B</td>
+</tr>
+<tr>
+<td>Deployment size</td>
+<td><del>3.9GB (</del>14.2x smaller than FP16)</td>
+</tr>
+<tr>
+<td>Effective bit width</td>
+<td>1.125 bit/weight</td>
+</tr>
+<tr>
+<td>Quantization format</td>
+<td>Q1_0_g128 (requires PrismML&#39;s llama.cpp fork)</td>
+</tr>
+<tr>
+<td>Context length</td>
+<td>262K tokens</td>
+</tr>
+<tr>
+<td>KV cache</td>
+<td>4-bit, peak memory ~9.4GB at 262K full context</td>
+</tr>
+<tr>
+<td>Multimodal</td>
+<td>4-bit HQQ vision tower (optional, loaded only on image input)</td>
+</tr>
+<tr>
+<td>Inference acceleration</td>
+<td>DSpark accelerator, lossless 1.37x speedup (on CUDA)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Strengths Analysis</h2>
+<h3>2.1 Overwhelming Miniaturization</h3>
+<ul>
+<li>At ~3.9GB — about 14.2x smaller than FP16 — it enables running a 27B model on an ordinary laptop or a single GPU.</li>
+<li>Transparently disclosing an effective bit width of 1.125 bit/weight is a rare instance of honest spec reporting for a low-bit quantized model.</li>
+</ul>
+<h3>2.2 Performance-to-Size Efficiency (Intelligence Density)</h3>
+<table>
+<thead>
+<tr>
+<th>Metric</th>
+<th>Value</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Thinking Avg</td>
+<td>76.11</td>
+<td>89.5% of FP16</td>
+</tr>
+<tr>
+<td>Math</td>
+<td>91.66</td>
+<td>Minimal degradation</td>
+</tr>
+<tr>
+<td>Coding</td>
+<td>81.88</td>
+<td>Minimal degradation</td>
+</tr>
+<tr>
+<td>Intelligence Density</td>
+<td>0.530</td>
+<td>Performance per size, best-in-class</td>
+</tr>
+</tbody></table>
+<h3>2.3 On-Device Performance</h3>
+<table>
+<thead>
+<tr>
+<th>Device</th>
+<th>Inference speed</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Apple M5 Max</td>
+<td>66.4 tokens/s</td>
+<td></td>
+</tr>
+<tr>
+<td>Apple M5 Pro</td>
+<td>44 tokens/s</td>
+<td></td>
+</tr>
+<tr>
+<td>iPhone 17 Pro Max</td>
+<td>~11 tokens/s</td>
+<td>MLX version</td>
+</tr>
+</tbody></table>
+<p>Processing a 262K-token long context on-device while capping peak memory at ~9.4GB via a 4-bit KV cache means efficient practical use even in resource-constrained environments.</p>
+<hr>
+<h2>3. Weakness Analysis</h2>
+<h3>3.1 Task-Dependent Performance Variance</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>Score</th>
+<th>Assessment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Instruction following</td>
+<td>65.74</td>
+<td>Large degradation</td>
+</tr>
+<tr>
+<td>Agentic tasks</td>
+<td>66.03</td>
+<td>Large degradation</td>
+</tr>
+<tr>
+<td>IFBench (prompt-loose)</td>
+<td>52.36</td>
+<td>About half of FP16</td>
+</tr>
+</tbody></table>
+<p>Behind the headline figure of &quot;89.5% retained on average,&quot; instruction-following and agentic workflows show noticeably larger perceived degradation. It&#39;s important to validate before adoption that this could become &quot;<strong>a model that&#39;s good at math but doesn&#39;t do what you tell it</strong>.&quot;</p>
+<h3>3.2 Use-Case Limitations</h3>
+<ul>
+<li>Long-horizon agentic coding (multi-file, execute-test-fix loops) isn&#39;t a current support target and is still on the roadmap.</li>
+<li>Optimized for text reasoning; the vision tower is a secondary feature loaded only on image input.</li>
+</ul>
+<h3>3.3 Ecosystem Lock-In</h3>
+<ul>
+<li>The Q1_0_g128 format only runs on <strong>PrismML&#39;s dedicated llama.cpp fork</strong>. Losing compatibility with the standard ecosystem — mainline llama.cpp, Ollama, LM Studio — is an operational risk.</li>
+<li>On Apple Silicon, the DSpark accelerator is disabled by default, limiting the speed advantage compared to CUDA environments.</li>
+</ul>
+<hr>
+<h2>4. Comparison With Competing Models</h2>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Size</th>
+<th>Avg Performance</th>
+<th>vs. FP16</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1-bit Bonsai 27B</strong></td>
+<td><strong>3.9 GB</strong></td>
+<td><strong>76.11</strong></td>
+<td><strong>89.5%</strong></td>
+</tr>
+<tr>
+<td>Ternary Bonsai 27B</td>
+<td>5.9 GB</td>
+<td>80.49</td>
+<td>94.6%</td>
+</tr>
+<tr>
+<td>Qwen3.6-27B IQ2_XXS (&quot;2-bit&quot;)</td>
+<td>9.4 GB</td>
+<td>72.73</td>
+<td>85.5%</td>
+</tr>
+<tr>
+<td>Gemma-4-31B Q2_K_XL (&quot;2-bit&quot;)</td>
+<td>11.8 GB</td>
+<td>73.31</td>
+<td>86.2%</td>
+</tr>
+</tbody></table>
+<p>Key points</p>
+<ol>
+<li><strong>Higher performance at less than half the size</strong> — compared to 2-bit quantization of comparable 27B and larger 31B models, size is less than half, with a 3-4 point average performance advantage.</li>
+<li><strong>Preserved reasoning ability</strong> — holds above 87 points on tasks like AIME and LiveCodeBench, where existing low-bit quantization typically collapses.</li>
+<li><strong>A choice against the ternary version</strong> — if you can spare 2 more GB, the Ternary version (5.9GB, 94.6%) can be a balance point, allowing a staged choice based on device memory budget.</li>
+</ol>
+<hr>
+<h2>5. Real-World Use Scenarios</h2>
+<h3>Scenario 1: Offline Initial CTI Triage (Security Operations)</h3>
+<p><strong>Situation</strong>: A clean-room environment during incident response (IR) where external networking is blocked. Cloud LLM API use is prohibited by security policy.</p>
+<p><strong>Usage</strong>: Load Bonsai-27B on an M5 Pro MacBook and, using the 262K context, feed in a several-MB batch of log files, an IOC list, and malware decompilation results all at once, to reconstruct an initial timeline and generate TTP hypotheses.</p>
+<p><strong>Why it fits</strong>: Data never leaves the device, so even TLP:RED material can be processed. 44 tokens/s is sufficient speed for conversational analysis. That said, given the instruction-following degradation (65.74), it&#39;s safer to enforce output format (e.g., YAML tables) with a post-processing script.</p>
+<h3>Scenario 2: In-Flight/Business-Trip Document Work (Mobile Productivity)</h3>
+<p><strong>Situation</strong>: Needing to review a contract draft, summarize meeting materials, and check presentation logic with no internet during a Seoul-Tokyo business flight.</p>
+<p><strong>Usage</strong>: Use the MLX version on iPhone 17 Pro Max (~11 tokens/s) for document summarization and Q&amp;A, then form a two-stage workflow that runs a final review with a cloud model after landing.</p>
+<p><strong>Why it fits</strong>: 11 tokens/s is slow for real-time chat, but practical for the asynchronous pattern of &quot;ask a question, do something else, then check back.&quot; The core value is that confidential contract terms never get logged on an external server.</p>
+<h3>Scenario 3: Math/Algorithm Problem-Solving Support (Education/Research)</h3>
+<p><strong>Situation</strong>: A graduate student or quant researcher repeatedly performing equation derivation, algorithm verification, and code snippet generation on a GPU-less laptop.</p>
+<p><strong>Usage</strong>: Leverage the reasoning-specialized performance — math 91.66, coding 81.88 — to run it as a locally resident &quot;math assistant.&quot; Unlimited repeated queries with no API billing.</p>
+<p><strong>Why it fits</strong>: this is the use case that best matches the model&#39;s performance profile (strong reasoning, weak instruction-following), since answer-derivation ability matters most here and strict output-format compliance matters less.</p>
+<h3>Scenario 4: Privacy-Sensitive Data Pre-Processing (Enterprise)</h3>
+<p><strong>Situation</strong>: A pipeline that needs to mask personal information and classify sensitivity in medical, legal, or financial documents before sending them to a cloud LLM.</p>
+<p><strong>Usage</strong>: Build a hybrid architecture where Bonsai handles initial de-identification and classification on an on-premises server (single GPU + DSpark acceleration for a 1.37x speedup), and only masked results get passed to an upstream cloud model.</p>
+<p><strong>Why it fits</strong>: a 3.9GB deployment size keeps the container image light, lowering the cost of deploying simultaneously across dozens of edge nodes. Note, though, that the PrismML fork dependency requires a separate build pipeline from standard llama.cpp-based infrastructure — factor this into your operational design.</p>
+<h3>Scenario 5: Long-Document Cross-Comparison Analysis (Research)</h3>
+<p><strong>Situation</strong>: Cross-comparing multiple hundred-page-plus documents — rulings, academic papers, white papers — to extract logical contradictions and key issues.</p>
+<p><strong>Usage</strong>: Feed entire documents into the 262K context, and thanks to the 4-bit KV cache, keep peak memory at ~9.4GB, enabling full-context analysis even on a 32GB-class laptop.</p>
+<p><strong>Why it fits</strong>: processing entire documents as a single context without chunking dramatically improves the quality of cross-document reference tracking. It also avoids the high token costs of cloud long-context APIs.</p>
+<h3>Unsuitable Scenarios to Watch Before Adoption</h3>
+<table>
+<thead>
+<tr>
+<th>Use case</th>
+<th>Why it&#39;s unsuitable</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Multi-file agentic coding</td>
+<td>No execute-test-fix loop support; still on the roadmap</td>
+</tr>
+<tr>
+<td>Automation pipelines requiring strict output format</td>
+<td>IFBench 52.36, low instruction-following reliability</td>
+</tr>
+<tr>
+<td>Immediate integration into existing llama.cpp/Ollama infrastructure</td>
+<td>Requires a dedicated fork, incompatible with the standard ecosystem</td>
+</tr>
+<tr>
+<td>Batch jobs needing maximum throughput on Apple Silicon</td>
+<td>DSpark unsupported, limits speed advantage vs. CUDA</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Overall Assessment</h2>
+<p>Bonsai-27B-gguf is a model that achieves &quot;an exquisite balance between extreme miniaturization and practical reasoning ability.&quot; Breaking the conventional wisdom that 1-bit quantization necessarily means performance collapse, it brings 27B-class reasoning to laptops and smartphones in a 3.9GB package — a milestone case for on-device AI.</p>
+<p>That said, adoption decisions should confront the asymmetry in its performance profile head-on. This model is &quot;<strong>smart but doesn&#39;t listen well</strong>&quot; — excellent for use cases where reasoning ability is central (math, coding, analysis), but not yet suited for use cases where instruction-following and agent reliability are central (automation pipelines, long-horizon agents). Factoring in the operational risk of the dedicated fork dependency, its current optimal position is <strong>privacy-centric personal and edge inference workloads</strong>.</p>
+<hr>
+<p><em>Written: 2026-07-18</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Bonsai/Bonsai-27b-gguf_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

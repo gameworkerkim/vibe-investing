@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>テンセント Hunyuan Hy3 の紹介 — Hy3 Getting Started ガイド — VibeQuant</title>
+  <meta name="description" content="テンセントのHy3モデル(2026年7月6日正式リリース)のスペック、DeepSeek/Claude/ChatGPTとの価格比較、長所と短所、競合モデル比較、API・セルフホスティング・AIコーディングツール連携までのGetting Startedガイド。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/tencent-llm-tencent-hy3-getting-started-ja/" />
+  <meta property="og:title" content="テンセント Hunyuan Hy3 の紹介 — Hy3 Getting Started ガイド" />
+  <meta property="og:description" content="テンセントのHy3モデル(2026年7月6日正式リリース)のスペック、DeepSeek/Claude/ChatGPTとの価格比較、長所と短所、競合モデル比較、API・セルフホスティング・AIコーディングツール連携までのGetting Startedガイド。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/tencent-llm-tencent-hy3-getting-started-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/tencent-llm-tencent-hy3-getting-started-kr/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/tencent-llm-tencent-hy3-getting-started-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/tencent-llm-tencent-hy3-getting-started-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/tencent-llm-tencent-hy3-getting-started-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/tencent-llm-tencent-hy3-getting-started-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"テンセント Hunyuan Hy3 の紹介 — Hy3 Getting Started ガイド","description":"テンセントのHy3モデル(2026年7月6日正式リリース)のスペック、DeepSeek/Claude/ChatGPTとの価格比較、長所と短所、競合モデル比較、API・セルフホスティング・AIコーディングツール連携までのGetting Startedガイド。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/tencent-llm-tencent-hy3-getting-started-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Tencent_LLM/Tencent%20HY3%20Getting%20Started_JA.md","image":"https://vibequant.cc/og-default.png","inLanguage":"ja","keywords":"テンセント Hy3, Hunyuan Hy3, Hy3 使い方, Hy3 料金, Hy3 vs DeepSeek, MoE LLM"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>テンセント Hunyuan Hy3 の紹介 — Hy3 Getting Started ガイド</h1>
+        <p class="article-dates">주제 テンセント Hy3 · Hunyuan Hy3 · Hy3 使い方 · Hy3 料金 · Hy3 vs DeepSeek · MoE LLM</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/tencent-llm-tencent-hy3-getting-started-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/tencent-llm-tencent-hy3-getting-started-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/tencent-llm-tencent-hy3-getting-started-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/tencent-llm-tencent-hy3-getting-started-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">テンセントのHy3モデル(2026年7月6日正式リリース)のスペック、DeepSeek/Claude/ChatGPTとの価格比較、長所と短所、競合モデル比較、API・セルフホスティング・AIコーディングツール連携までのGetting Startedガイド。</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. 概要</h2>
+<p>Hy3はテンセントのHyチーム(旧Hunyuan)が2026年7月6日に正式リリースしたMoE(Mixture-of-Experts)ベースのLLMである。4月23日に公開されたHy3 previewを50以上のプロダクトチームのフィードバックと強化学習(RL)のスケールアップで改良した正式版であり、Chief AI Scientistである姚順雨(Yao Shunyu)氏の入社201日目に登場した最初の完成形の成果物である。1月末のインフラ再構築から正式リリースまで約6か月でend-to-endのモデル開発ループを完走した。無限の資金と人員を投入し、996(9時始業・21時終業・週6日勤務、中国でこう呼ばれる)を基本として働いたという。</p>
+<p>コアポジショニングは明確である。最大パラメータ競争ではなく「<strong>実務の生産性シナリオで信頼できる低コストのエージェントモデル</strong>」である。テンセントの表現によれば、自身のサイズの2〜5倍のパラメータを持つフラッグシップオープンソースモデルに匹敵する性能を発揮する。</p>
+<h2>2. モデルスペック</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>アーキテクチャ</td>
+<td>MoE(hybrid fast/slow thinking)</td>
+</tr>
+<tr>
+<td>総パラメータ数</td>
+<td>295B</td>
+</tr>
+<tr>
+<td>アクティブパラメータ数</td>
+<td>21B(192エキスパートのうちtop-8が活性化)</td>
+</tr>
+<tr>
+<td>MTPレイヤー</td>
+<td>3.8B(1層)</td>
+</tr>
+<tr>
+<td>レイヤー数</td>
+<td>80(MTP除く)</td>
+</tr>
+<tr>
+<td>Attention</td>
+<td>GQA、64ヘッド / 8 KVヘッド / head dim 128</td>
+</tr>
+<tr>
+<td>コンテキスト長</td>
+<td>256K</td>
+</tr>
+<tr>
+<td>語彙数</td>
+<td>120,832</td>
+</tr>
+<tr>
+<td>精度</td>
+<td>BF16(FP8量子化版も別途提供)</td>
+</tr>
+<tr>
+<td>ライセンス</td>
+<td><strong>Apache 2.0</strong>(previewはTencent Hy Community Licenseだった)</td>
+</tr>
+<tr>
+<td>重み配布</td>
+<td>Hugging Face、ModelScope、GitCode、CNB</td>
+</tr>
+</tbody></table>
+<h2>3. 価格比較: Hy3 vs DeepSeek vs Claude vs ChatGPT</h2>
+<h3>3.1 Hy3公式価格(Tencent Cloud TokenHub基準)</h3>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>価格(RMB/1Mトークン)</th>
+<th>USD換算</th>
+<th>KRW換算(目安)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Input</td>
+<td>1元</td>
+<td>$0.15</td>
+<td>約195ウォン</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>4元</td>
+<td>$0.59</td>
+<td>約780ウォン</td>
+</tr>
+<tr>
+<td>キャッシュヒットInput</td>
+<td>0.25元</td>
+<td>$0.037</td>
+<td>約49ウォン</td>
+</tr>
+</tbody></table>
+<p>同等性能のモデルと比較して圧倒的に低い価格帯であり、preview公開後、日次トークン消費量が20倍に増加した。</p>
+<h3>3.2 主要モデル価格比較表(2026年7月、公式価格基準、USD/1Mトークン)</h3>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>Input</th>
+<th>Output</th>
+<th>キャッシュヒットInput</th>
+<th>Hy3比のOutput倍率</th>
+<th>Context</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Tencent Hy3</strong></td>
+<td>$0.15</td>
+<td>$0.59</td>
+<td>$0.037</td>
+<td>1.0x</td>
+<td>256K</td>
+</tr>
+<tr>
+<td>DeepSeek V4 Flash</td>
+<td>$0.14</td>
+<td>$0.28</td>
+<td>$0.0028</td>
+<td>0.47x</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>DeepSeek V4 Pro</td>
+<td>$0.435</td>
+<td>$0.87</td>
+<td>$0.003625</td>
+<td>1.5x</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>Claude Haiku 4.5</td>
+<td>$1.00</td>
+<td>$5.00</td>
+<td>$0.10</td>
+<td>8.5x</td>
+<td>200K</td>
+</tr>
+<tr>
+<td>Claude Sonnet 4.6</td>
+<td>$3.00</td>
+<td>$15.00</td>
+<td>$0.30</td>
+<td>25x</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>Claude Opus 4.8</td>
+<td>$5.00</td>
+<td>$25.00</td>
+<td>$0.50</td>
+<td>42x</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>GPT-5.4(OpenAI)</td>
+<td>$2.50</td>
+<td>$15.00</td>
+<td>入力の約0.1倍</td>
+<td>25x</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>GPT-5.5(OpenAI)</td>
+<td>$5.00</td>
+<td>$30.00</td>
+<td>入力の約0.1倍</td>
+<td>51x</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h3>3.3 価格比較の解釈</h3>
+<p><strong>vs DeepSeek — 条件付き。</strong>性能クラスが近いV4 Proと比較すると、Hy3が明確に安い(Inputは約1/3、Outputは約2/3の水準)。ただしV4 Proの現行価格は75%割引適用後のものであり、元の定価は$1.74/$3.48であった。一方、最安ラインであるV4 Flashと比較すると、DeepSeekの方が安い — Inputはほぼ同等だが、Outputは半分以下であり、キャッシュヒット単価は10倍以上安い($0.0028 vs $0.037)。DeepSeekはキャッシュヒット時にInputが98%割引される仕組みが特別な設定なしに自動適用されるため、同一のシステムプロンプトを繰り返し送信するエージェントループやRAGのようにキャッシュヒット率が高いワークロードでは、実効コストの差が表面上の単価より大きく広がる。</p>
+<p><strong>vs Claude / ChatGPT — 圧倒的優位。</strong>Output基準でHy3はClaude Sonnet 4.6の1/25、Opus 4.8の1/42、GPT-5.5の1/51の水準である。両陣営ともプロンプトキャッシング(~90%割引)とバッチAPI(Claudeで50%割引)で実効コストを下げられるが、割引を最大限重ねてもHy3の表面単価には届かない。ただし、この差は性能差との交換であり、最高難度の推論やマルチツール・オーケストレーションが必要なタスクでは、フロンティアモデルのタスク当たり成功率がトークン単価の差を相殺できる場合がある。</p>
+<p><strong>請求書の落とし穴3つ。</strong>
+(1)DeepSeek V4はthinkingモードがデフォルトである — 目に見えない内部推論トークンがoutput料金として請求される。Hy3は<code>no_think</code>がデフォルトのため、突発的な暴走課金のリスクがない。</p>
+<p>(2)OpenAI GPT-5.5のoutput価格は出典間で$25〜30の差があるため、本番予算は公式ページで再確認すること。
+(3)エージェントワークロードは各ステップで累積コンテキストを再送信するため、チャットに比べて10〜100倍のトークンを消費し、単価差がそのまま増幅される。</p>
+<h2>4. 長所</h2>
+<p><strong>(1)コスト効率。</strong>アクティブパラメータ21Bで推論コストを抑えつつ、2〜5倍規模のフラッグシップと競合する性能。OpenRouter基準でテンセントのトークン呼び出しシェアが6月に8.7%まで上昇したことが市場反応の証左。</p>
+<p><strong>(2)エージェント/ツールコールの安定性。</strong>公式リリース版の中核的な改善点。ツールコール成功率とエラー回復の改善、無限ループを誘発する無効な呼び出しの減少。SWE-Bench Verifiedにおいて、CodeBuddy、Cline、KiloCodeなど異なるエージェントスキャフォールディング間の精度差が4%以内 — プロダクションエージェントビルダーにとってベンチマークスコアよりも重要な特性。</p>
+<p><strong>(3)ハルシネーション抑制。</strong>「根拠があれば答え、根拠がなければないと言い、出典を混同したりデータを作り出したりしない」という原則で学習。内部の実使用シナリオ評価でハルシネーション率が12.5%→5.4%、常識エラー率が25.4%→12.7%に改善。</p>
+<p><strong>(4)マルチターン/長文コンテキストの維持。</strong>マルチターン問題率が17.4%→7.9%、MRCR(長対話ベンチマーク)が42.9%→75.1%。指示語解決(coreference)、省略復元、複数ターンにわたる制約の継承など、実務のペインポイントを中心に改善。</p>
+<p><strong>(5)実務での検証。</strong>WorkBuddy内部評価でタスク解決率が72%→90%、平均完了時間が34%短縮。3地域・6鉱区・5,220連結セルの石油会社の連結キャッシュフローモデルをハードコーディングなしにライブ数式で構築した事例など、オフィス/財務モデリングの実践事例が公開されている。</p>
+<p><strong>(6)完全オープンソース。</strong>Apache 2.0の商用フレンドリーなライセンス、FP8量子化版とファインチューニングパイプライン(full/LoRA、DeepSpeed ZeRO、LLaMA-Factory連携)、圧縮ツールキットAngelSlimまで提供。</p>
+<h2>5. 短所と限界</h2>
+<p><strong>(1)最上位推論力の壁。</strong>ハードコアなコーディング、複雑な推論、マルチツール調整などの中核能力において、Claude、GPT-5.5などの第一線のフロンティアモデルに依然として劣るとの評価。GPQA DiamondではHy3とDeepSeek V4 Proともに約90%で、GPT-5.4(93.0%)、Gemini 3.1 Pro(94.3%)に及ばない。</p>
+<p><strong>(2)コンテキスト長。</strong>256Kは実用的だが、DeepSeek V4 Proの1Mに対して1/4。超大規模コードベースや文書の一括分析には不利。</p>
+<p><strong>(3)メモリ要件。</strong>MoEの特性上、リクエスト当たりの計算は21Bだが、295B全体がメモリに常駐する必要がある。セルフホスティング推奨スペックはH20-3eクラス8GPU。</p>
+<p><strong>(4)内部検証値への依存。</strong>ハルシネーション率、WorkBuddy解決率など印象的な数値の多くがテンセントの内部評価に基づく。標準化された公開ベンチマークではないため、独立した再現が難しい。</p>
+<p><strong>(5)テンセント内での地位の限界。</strong>WeChatエコシステムは自社モデルWeLMを主力として維持中 — Hyがテンセントの統合AIファウンデーションになれていないことは、長期戦略上のリスクとして指摘される。</p>
+<h2>6. 競合モデル比較</h2>
+<table>
+<thead>
+<tr>
+<th>軸</th>
+<th>Hy3(Tencent)</th>
+<th>DeepSeek V4系</th>
+<th>Qwen 3.7(Alibaba)</th>
+<th>Claude / GPT-5.5</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>構造</td>
+<td>295B MoE / A21B</td>
+<td>V4 Pro: 1.6T MoE / A約48Bクラス</td>
+<td>3.7 Max: 非公開(proprietary)</td>
+<td>非公開</td>
+</tr>
+<tr>
+<td>Context</td>
+<td>256K</td>
+<td>V4 Pro: 1M</td>
+<td>—</td>
+<td>モデルにより異なる</td>
+</tr>
+<tr>
+<td>ライセンス</td>
+<td>Apache 2.0</td>
+<td>MIT(自己ホスティング可)</td>
+<td>MaxはAPI専用</td>
+<td>クローズド</td>
+</tr>
+<tr>
+<td>強み</td>
+<td>エージェント安定性、ハルシネーション抑制、コスト</td>
+<td>アルゴリズム/競技コーディング(LiveCodeBench 93.5%)、超長文</td>
+<td>長時間自律エージェント(35時間ラン)、SWE-bench Pro 60.6%</td>
+<td>最高難度の推論、マルチツール調整、創造的作業</td>
+</tr>
+<tr>
+<td>価格帯</td>
+<td>最安値ティア</td>
+<td>V4 Proも低価格($0.87/1M output)</td>
+<td>Max $7.50/1M output</td>
+<td>最高価格ティア</td>
+</tr>
+</tbody></table>
+<p><strong>vs DeepSeek V4。</strong>サードパーティ比較(CodingFleet)では、18の共有ベンチマークのうち12でHy3がV4 Proを上回った。特に汚染のない(contamination-free)新規ベンチマークDeepSWEでは28.0% vs 8.0%と20ポイントの差 — ツール使用の一般化能力の違いと解釈される。HLEもツールなしではわずかに劣る(37.0% vs 37.7%)が、ツール使用時には5ポイント優位(53.2% vs 48.2%)。一方V4 Proは1Mコンテキスト、MITライセンス、繰り返しコンテキストにおけるディスクキャッシングのコスト優位性を持つ。SWE-bench VerifiedはHy3が74.4% vs V4の約72%でわずかに優位。</p>
+<p><strong>vs Qwen(アリババ)。</strong>Qwen 3.7 MaxはSWE-bench Pro 60.6%(独占モデル最高値)、35時間の自律エージェントランなど、「Agent Frontier」を標榜するプレミアム路線。ただしAPI専用(アリババクラウドに依存)であり、output基準でHy3より10倍以上高価。オープンウェイト+低コスト+自己ホスティングが必要ならHy3、最長時間の自律エージェント性能が必要ならQwen Max。</p>
+<p><strong>vs Claude / ChatGPT(GPT-5.5)。</strong>フロンティア級の難易度の推論、複雑なマルチステップ問題解決、マルチツールオーケストレーションでは依然としてこれらが優位。Hy3の戦略は正面対決ではなく、「企業実務の大部分を極めて低コストで処理する」ことにある。テンセント自身のブラインド評価(専門家270名、有効比較312件)ではHy3が2.67/4 vs GLM-5.1の2.51/4 — フロントエンド開発、CI/CD、データ・ストレージタスクで差が最も大きかった。</p>
+<h2>7. Getting Started</h2>
+<h3>7.1 アクセス経路の選択</h3>
+<table>
+<thead>
+<tr>
+<th>経路</th>
+<th>対象</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tencent Cloud TokenHub API</td>
+<td>即時利用、インフラ不要</td>
+<td>上記価格表が適用</td>
+</tr>
+<tr>
+<td>OpenRouterなどのグローバルプラットフォーム</td>
+<td>海外開発者</td>
+<td>順次連携中(previewは既に登録済)</td>
+</tr>
+<tr>
+<td>セルフホスティング(vLLM/SGLang)</td>
+<td>データ主権・カスタマイズが必要な場合</td>
+<td>H20-3eクラス8GPU推奨</td>
+</tr>
+<tr>
+<td>Yuanbao / WorkBuddy</td>
+<td>最終ユーザー体験</td>
+<td>Yuanbaoのエージェント機能は無料</td>
+</tr>
+</tbody></table>
+<h3>7.2 Tencent Cloud APIの直接呼び出し(ホスティング型)</h3>
+<p>テンセント公式ドキュメントセンター(aistudio.tencent.com/hunyuan/doc-center)およびTencent Cloud文書に基づく。Hunyuan APIはOpenAIインターフェース仕様に互換性があるため、OpenAI公式SDKで<code>base_url</code>と<code>api_key</code>だけを差し替えれば、アプリケーションの修正なしに切り替えられる。</p>
+<pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI(
+    base_url=&quot;https://api.hunyuan.cloud.tencent.com/v1&quot;,
+    # APIキーはコンソールで発行: console.cloud.tencent.com/hunyuan/api-key
+    api_key=&quot;YOUR_HUNYUAN_API_KEY&quot;,
+)
+
+response = client.chat.completions.create(
+    model=&quot;hy3&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;こんにちは。&quot;}],
+)
+print(response.choices[0].message.content)
+</code></pre>
+<p>公式文書で確認すべき運用上の注意点:</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>エンドポイント</td>
+<td><code>https://api.hunyuan.cloud.tencent.com/v1/chat/completions</code></td>
+</tr>
+<tr>
+<td>同時実行数制限</td>
+<td>デフォルト5並列(メイン・サブアカウントで共有、上限緩和は別途申請)</td>
+</tr>
+<tr>
+<td><code>stop</code>パラメータ</td>
+<td>OpenAIはマッチ文字列の<strong>直前</strong>で停止、Hunyuanはマッチ文字列の<strong>直後</strong>で停止 — この差異に依存する解析ロジックは注意が必要</td>
+</tr>
+<tr>
+<td>ストリーミングusage</td>
+<td><code>stream_options.include_usage=true</code>設定時、最後のチャンクにusageが返る</td>
+</tr>
+<tr>
+<td>Embedding</td>
+<td><code>hunyuan-embedding</code>固定、dimensions 1024固定、<code>input</code>/<code>model</code>パラメータのみサポート</td>
+</tr>
+<tr>
+<td>Function calling</td>
+<td>OpenAI仕様の2パスフローをサポート(モデルが関数・引数を選択→クライアントが実行→結果をコンテキストに付加して再リクエスト)</td>
+</tr>
+<tr>
+<td>プラットフォーム移行</td>
+<td>Hunyuanの機能は<strong>TokenHubへ移行中</strong> — Hy3などの新モデルはTokenHub(<code>tencent-tokenhub</code>)/TokenPlan(<code>tencent-tokenplan</code>)エンドポイントを優先提供。APIキーの権限範囲を制限する場合、許可モデルに<code>hy3</code>を含める必要がある</td>
+</tr>
+</tbody></table>
+<p>テンセントは互換性維持を公言しているが、細部の動作差異が存在するため、OpenAIから移行する際は上表の項目を回帰テスト対象に含めることを推奨する。</p>
+<h3>7.3 モデルのダウンロード(セルフホスティング用)</h3>
+<pre><code class="language-bash"># Hugging Face
+huggingface-cli download tencent/Hy3          # BF16
+huggingface-cli download tencent/Hy3-FP8      # FP8量子化版(メモリ節約)
+</code></pre>
+<p>重みミラー: Hugging Face、ModelScope、GitCode、CNB。</p>
+<h3>7.4 vLLMでのサービング</h3>
+<pre><code class="language-bash"># ソースビルド
+uv venv --python 3.12 --seed --managed-python
+source .venv/bin/activate
+git clone https://github.com/vllm-project/vllm.git
+cd vllm
+uv pip install --editable . --torch-backend=auto
+
+# MTP(Multi-Token Prediction)を有効化してサーバー起動
+export VLLM_FLASHINFER_ALLREDUCE_BACKEND=trtllm
+vllm serve tencent/Hy3 \
+  --tensor-parallel-size 8 \
+  --speculative-config.method mtp \
+  --speculative-config.num_speculative_tokens 2 \
+  --tool-call-parser hy_v3 \
+  --reasoning-parser hy_v3 \
+  --enable-auto-tool-choice \
+  --port 8000 \
+  --served-model-name hy3
+</code></pre>
+<h3>7.5 SGLangでのサービング</h3>
+<pre><code class="language-bash">git clone https://github.com/sgl-project/sglang
+cd sglang
+pip3 install pip --upgrade
+pip3 install &quot;transformers&gt;=5.6.0&quot;
+pip3 install -e &quot;python&quot;
+
+python3 -m sglang.launch_server \
+  --model tencent/Hy3 \
+  --tp-size 8 \
+  --tool-call-parser hunyuan \
+  --reasoning-parser hunyuan \
+  --speculative-num-steps 2 \
+  --speculative-eagle-topk 1 \
+  --speculative-num-draft-tokens 3 \
+  --speculative-algorithm EAGLE \
+  --port 8000 \
+  --served-model-name hy3
+</code></pre>
+<h3>7.6 OpenAI互換APIの呼び出し(セルフホスティングサーバー基準)</h3>
+<pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI(base_url=&quot;http://127.0.0.1:8000/v1&quot;, api_key=&quot;EMPTY&quot;)
+
+response = client.chat.completions.create(
+    model=&quot;hy3&quot;,
+    messages=[
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;こんにちは。簡単に自己紹介してください。&quot;},
+    ],
+    temperature=0.9,   # 公式推奨値
+    top_p=1.0,         # 公式推奨値
+    # reasoning_effort:
+    #   &quot;no_think&quot;(デフォルト、即答) | &quot;low&quot; | &quot;high&quot;(深いchain-of-thought)
+    extra_body={&quot;chat_template_kwargs&quot;: {&quot;reasoning_effort&quot;: &quot;high&quot;}},
+)
+print(response.choices[0].message.content)
+</code></pre>
+<p>運用ヒント: 数学・コーディング・複雑な推論には<code>reasoning_effort=&quot;high&quot;</code>、単純な応答・大量処理には<code>&quot;no_think&quot;</code>。このパラメータ一つでfast/slow thinkingを切り替えることがHy3ハイブリッド設計の中核インターフェースである。</p>
+<h3>7.7 ファインチューニングと量子化</h3>
+<p>Full fine-tuningとLoRAの両方をサポートし、DeepSpeed ZeRO設定とLLaMA-Factory連携を含む公式パイプラインが提供される(リポジトリの<code>finetune/</code>ディレクトリ)。圧縮はAngelSlimツールキットで量子化・低ビット・speculative samplingをサポートする。</p>
+<h3>7.8 AIコーディングツールとの連携(Using Hy3 in Programming/OpenClaw Tools)</h3>
+<p>テンセント公式ドキュメントセンターは、Hy3を主要なAIコーディングツールに接続するガイドを別セクションとして提供している。TokenHub公式文書(接入 AI 工具)に基づき全内容を整理する。</p>
+<h4>7.8.1 共通の事前準備</h4>
+<ol>
+<li>TokenHubコンソールのAPIキー管理ページ(console.cloud.tencent.com/tokenhub/apikey)でAPIキーを生成。</li>
+<li><strong>注意</strong>: アクセス範囲(可访问范围)を「制限範囲」に設定する場合、許可モデルリストに必ず<strong>Hy3</strong>(previewを使う場合は<strong>Hy3 preview</strong>も)をチェックする必要がある。この項目を見逃すと、認証は通るがモデル呼び出しが失敗する。</li>
+<li>生成直後にAPIキーをコピー・保管すること。その後は再確認できない。</li>
+</ol>
+<h4>7.8.2 Claude Code(Anthropicプロトコル)</h4>
+<p>Claude CodeはAnthropic Messagesプロトコルを使用するため、TokenHubのAnthropic互換エンドポイントを利用する。OpenAI互換ツールと異なり、<strong>Base URLはルートパス</strong>(<code>/v1</code>なし)である点に注意。</p>
+<p><code>~/.claude/settings.json</code>(Windows: <code>ユーザーディレクトリ/.claude/settings.json</code>)に以下を設定:</p>
+<pre><code class="language-json">{
+  &quot;env&quot;: {
+    &quot;ANTHROPIC_BASE_URL&quot;: &quot;https://tokenhub.tencentmaas.com&quot;,
+    &quot;ANTHROPIC_AUTH_TOKEN&quot;: &quot;YOUR_API_KEY&quot;,
+    &quot;ANTHROPIC_MODEL&quot;: &quot;hy3&quot;,
+    &quot;ANTHROPIC_DEFAULT_OPUS_MODEL&quot;: &quot;hy3&quot;,
+    &quot;ANTHROPIC_DEFAULT_SONNET_MODEL&quot;: &quot;hy3&quot;,
+    &quot;ANTHROPIC_DEFAULT_HAIKU_MODEL&quot;: &quot;hy3&quot;,
+    &quot;CLAUDE_CODE_SUBAGENT_MODEL&quot;: &quot;hy3&quot;,
+    &quot;ENABLE_TOOL_SEARCH&quot;: false
+  }
+}
+</code></pre>
+<p>各環境変数の意味(公式文書基準):</p>
+<table>
+<thead>
+<tr>
+<th>環境変数</th>
+<th>必須</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ANTHROPIC_BASE_URL</code></td>
+<td>はい</td>
+<td>TokenHub接続時は<code>https://tokenhub.tencentmaas.com</code>に固定</td>
+</tr>
+<tr>
+<td><code>ANTHROPIC_AUTH_TOKEN</code></td>
+<td>はい</td>
+<td>TokenHubコンソールで発行したAPIキー</td>
+</tr>
+<tr>
+<td><code>ANTHROPIC_MODEL</code></td>
+<td>はい</td>
+<td>デフォルト呼び出しモデル名(<code>hy3</code>または<code>hy3-preview</code>)</td>
+</tr>
+<tr>
+<td><code>ANTHROPIC_DEFAULT_OPUS/SONNET/HAIKU_MODEL</code></td>
+<td>いいえ</td>
+<td>Claude Codeの3つのモデルティアをすべて同一モデルにマッピング — バックグラウンドの軽量呼び出しが存在しないデフォルトモデルにルーティングされて静かに失敗する問題を防止</td>
+</tr>
+<tr>
+<td><code>CLAUDE_CODE_SUBAGENT_MODEL</code></td>
+<td>いいえ</td>
+<td>サブエージェントモデル。主モデルと統一することを推奨(クロスモデル互換性問題を防止)</td>
+</tr>
+<tr>
+<td><code>ENABLE_TOOL_SEARCH</code></td>
+<td>いいえ</td>
+<td><code>false</code>必須 — 下記の制約を参照</td>
+</tr>
+</tbody></table>
+<p>設定後、新しいターミナルで<code>claude</code>を実行→<code>/status</code>を入力→API EndpointがHunyuanは<code>https://tokenhub.tencentmaas.com</code>、Modelが<code>hy3</code>と表示されれば適用完了。</p>
+<p>運用上の制約2点(公式文書に明記):</p>
+<p><strong>深い推論の有効化</strong>: 上記設定では、Hy3のデフォルトの思考モードは<code>no_think</code>である。深い推論(high)が必要な場合はClaude Code内で<code>/config</code>を実行→Thinking modeを<code>true</code>に変更→再起動。</p>
+<p><strong>Web検索の制限</strong>: Claude Codeはサードパーティモデルによるネイティブ内蔵Web検索の使用をブロックする。Hy3設定後に検索がトリガーされると失敗する。代替策は検索MCPの接続:</p>
+<pre><code class="language-bash"># テンセントクラウドMCPマーケットのWeb検索MCPを追加(別途クラウドAPIキーが必要)
+claude mcp add --transport sse WebSearchMCP &quot;https://mcp-api.tencent-cloud.com/sse/XXX&quot;
+
+# ネイティブ検索ツールを明示的に無効化して起動(MCP呼び出しの安定性を保証)
+claude --disallowedTools &quot;WebSearch&quot;
+</code></pre>
+<p>MCP追加後はClaude Codeの再起動が必須。検索MCP用のクラウドAPIキーはモデルAPIキーとは別の独立したキーである。</p>
+<h4>7.8.3 OpenAI互換ツール(Cline、Cursor、Roo Code、Kilo Code、OpenCode、Cherry Studio、Codex)</h4>
+<p>このグループはすべて同一の3つの値で連携する。Claude Codeと異なり、<strong>Base URLに<code>/v1</code>が含まれる</strong>点に注意。</p>
+<table>
+<thead>
+<tr>
+<th>設定項目</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>API Provider</td>
+<td><code>OpenAI Compatible</code></td>
+</tr>
+<tr>
+<td>Base URL</td>
+<td><code>https://tokenhub.tencentmaas.com/v1</code></td>
+</tr>
+<tr>
+<td>API Key</td>
+<td>TokenHubで発行したAPIキー</td>
+</tr>
+<tr>
+<td>Model ID</td>
+<td><code>hy3</code></td>
+</tr>
+</tbody></table>
+<p>ツールごとの設定場所(公式文書基準):</p>
+<table>
+<thead>
+<tr>
+<th>ツール</th>
+<th>形態</th>
+<th>設定場所</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cline</td>
+<td>VSCode拡張機能</td>
+<td>初回実行時「Bring my own API key」→Continue、または右上の設定ボタン</td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td>IDE</td>
+<td>Settings → Models → OpenAI互換カスタムエンドポイント</td>
+</tr>
+<tr>
+<td>Roo Code</td>
+<td>VSCode拡張機能</td>
+<td>Provider設定でOpenAI Compatibleを選択</td>
+</tr>
+<tr>
+<td>Kilo Code</td>
+<td>VSCode拡張機能</td>
+<td>Provider設定(リリース時点でHy3無料アクセスプロモーションを提供)</td>
+</tr>
+<tr>
+<td>OpenCode</td>
+<td>CLI</td>
+<td>provider設定ファイルにOpenAI互換エンドポイントを登録</td>
+</tr>
+<tr>
+<td>Cherry Studio</td>
+<td>デスクトップアプリ</td>
+<td>モデルプロバイダー追加 → OpenAI Compatible</td>
+</tr>
+<tr>
+<td>Codex</td>
+<td>CLI</td>
+<td>configにOpenAI互換プロバイダーを登録</td>
+</tr>
+</tbody></table>
+<h4>7.8.4 OpenClaw / Hermes Agent(専用連携)</h4>
+<p><strong>OpenClaw</strong>: 公式プロバイダープラグインが提供される。TokenHub(<code>tencent-tokenhub</code>)とTokenPlan(<code>tencent-tokenplan</code>)の2つのエンドポイントをサポートし、内蔵カタログは<code>https://tokenhub.tencentmaas.com/v1</code>を使用する。モデルIDは<code>hy3</code> — テンセントの<code>HY-3D-*</code>系(3D生成API)と混同しないこと。</p>
+<pre><code class="language-bash"># TokenHub接続
+openclaw onboard --non-interactive \
+  --auth-choice tokenhub-api-key \
+  --tokenhub-api-key &quot;$TOKENHUB_API_KEY&quot;
+</code></pre>
+<p>Gatewayをlaunchd/systemd/Dockerなどのマネージドサービスとして運用する場合、インタラクティブシェルでexportしたキーはマネージドプロセスから見えないため、<code>~/.openclaw/.env</code>に<code>TOKENHUB_API_KEY</code>を永続設定する必要がある。</p>
+<p><strong>Hermes Agent</strong>: Nous Portal(portal.nousresearch.com)のサブスクリプションゲートウェイを通じてアクセスする。<code>hermes setup --portal</code>でOAuth連携後、ポータルカタログからHy3モデルを選択する方式であり、リリースプロモーション期間には無料ティアが提供された。</p>
+<h4>7.8.5 公式連携文書 全リスト</h4>
+<table>
+<thead>
+<tr>
+<th>ツール</th>
+<th>公式文書URL</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ドキュメントセンター(英語)</td>
+<td><a href="https://aistudio.tencent.com/hunyuan/doc-center">https://aistudio.tencent.com/hunyuan/doc-center</a></td>
+</tr>
+<tr>
+<td>接入 AI 工具(連携文書目次)</td>
+<td><a href="https://cloud.tencent.com.cn/document/product/1823/130931">https://cloud.tencent.com.cn/document/product/1823/130931</a></td>
+</tr>
+<tr>
+<td>CodeBuddy Code</td>
+<td><a href="https://cloud.tencent.com.cn/document/product/1823/131901">https://cloud.tencent.com.cn/document/product/1823/131901</a></td>
+</tr>
+<tr>
+<td>WorkBuddy</td>
+<td><a href="https://cloud.tencent.com.cn/document/product/1823/131902">https://cloud.tencent.com.cn/document/product/1823/131902</a></td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td><a href="https://cloud.tencent.com.cn/document/product/1823/131903">https://cloud.tencent.com.cn/document/product/1823/131903</a></td>
+</tr>
+<tr>
+<td>OpenClaw</td>
+<td><a href="https://cloud.tencent.com.cn/document/product/1823/130935">https://cloud.tencent.com.cn/document/product/1823/130935</a></td>
+</tr>
+<tr>
+<td>Hermes Agent</td>
+<td><a href="https://cloud.tencent.com.cn/document/product/1823/131927">https://cloud.tencent.com.cn/document/product/1823/131927</a></td>
+</tr>
+<tr>
+<td>OpenCode</td>
+<td><a href="https://cloud.tencent.com.cn/document/product/1823/130936">https://cloud.tencent.com.cn/document/product/1823/130936</a></td>
+</tr>
+<tr>
+<td>Cline</td>
+<td><a href="https://cloud.tencent.com.cn/document/product/1823/130932">https://cloud.tencent.com.cn/document/product/1823/130932</a></td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td><a href="https://cloud.tencent.com.cn/document/product/1823/130933">https://cloud.tencent.com.cn/document/product/1823/130933</a></td>
+</tr>
+<tr>
+<td>Kilo Code</td>
+<td><a href="https://cloud.tencent.com.cn/document/product/1823/131904">https://cloud.tencent.com.cn/document/product/1823/131904</a></td>
+</tr>
+<tr>
+<td>Roo Code</td>
+<td><a href="https://cloud.tencent.com.cn/document/product/1823/131905">https://cloud.tencent.com.cn/document/product/1823/131905</a></td>
+</tr>
+<tr>
+<td>Codex</td>
+<td><a href="https://cloud.tencent.com.cn/document/product/1823/133532">https://cloud.tencent.com.cn/document/product/1823/133532</a></td>
+</tr>
+</tbody></table>
+<h2>8. 推奨利用シナリオ</h2>
+<p><strong>Hy3推奨:</strong>ツールコールの安定性が中核要件となる企業向けAIエージェント、大量トラフィックの低コスト処理(顧客対応、文書・データ処理の自動化)、オフィス生産性(財務モデリング、レポート・プレゼンテーション生成)、自己ホスティングが必要な規制環境(Apache 2.0)。<strong>他モデル推奨:</strong> 100万トークン級の超長文一括分析→DeepSeek V4 Pro。数十時間単位の自律エージェントラン→Qwen 3.7 Max。最高難度の推論・数学証明・創造的な長文作業→Claude、GPT-5.5。</p>
+<p>一言でまとめると: <strong>Hy3は「日常的な企業業務の大部分をフロンティアのごくわずかなコストで安定的に処理する」実用主義モデルである。</strong>ベンチマーク1位ではなく、プロダクションの信頼性で勝負する姚順雨式「AI後半戦」哲学の最初の実物である。</p>
+<hr>
+<h2>参考文献(References)</h2>
+<ol>
+<li>テンセント公式プレスリリース — &quot;Tencent Hunyuan Officially Releases Hy3&quot;(2026-07-06): <a href="https://www.tencent.com/en-us/articles/2202386.html">https://www.tencent.com/en-us/articles/2202386.html</a></li>
+<li>Tencent Hy技術ブログ — &quot;Introducing Hy3&quot;: <a href="https://hy.tencent.com/research/hy3">https://hy.tencent.com/research/hy3</a></li>
+<li>GitHub公式リポジトリ(スペック・Quickstart・デプロイガイド): <a href="https://github.com/Tencent-Hunyuan/Hy3">https://github.com/Tencent-Hunyuan/Hy3</a></li>
+<li>Hugging Faceモデルカード: <a href="https://huggingface.co/tencent/Hy3">https://huggingface.co/tencent/Hy3</a> / FP8: <a href="https://huggingface.co/tencent/Hy3-FP8">https://huggingface.co/tencent/Hy3-FP8</a></li>
+<li>TechNode — リリースおよび価格報道(2026-07-07): <a href="https://technode.com/2026/07/07/tencent-launches-hunyuan-hy3-integrates-model-across-multiple-products/">https://technode.com/2026/07/07/tencent-launches-hunyuan-hy3-integrates-model-across-multiple-products/</a></li>
+<li>Caixin Global — リリース報道、Yao Shunyu・OpenRouterシェア(2026-07-06): <a href="https://www.caixinglobal.com/2026-07-06/tencent-launches-upgraded-hunyuan-3-ai-model-with-free-agent-feature-102461489.html">https://www.caixinglobal.com/2026-07-06/tencent-launches-upgraded-hunyuan-3-ai-model-with-free-agent-feature-102461489.html</a></li>
+<li>Pandaily — WorkBuddy 90%タスク解決率・実践事例: <a href="https://pandaily.com/tencent-hunyuan-hy3-launch-agent-90-percent-task-resolution-jul2026-v2">https://pandaily.com/tencent-hunyuan-hy3-launch-agent-90-percent-task-resolution-jul2026-v2</a></li>
+<li>CodingFleet — &quot;Hy3 vs DeepSeek V4 Pro&quot;ベンチマーク比較: <a href="https://codingfleet.com/blog/hy3-vs-deepseek-v4-pro/">https://codingfleet.com/blog/hy3-vs-deepseek-v4-pro/</a></li>
+<li>CodingFleet — &quot;DeepSeek V4 Pro vs Qwen 3.7 Max&quot;: <a href="https://codingfleet.com/blog/deepseek-v4-pro-vs-qwen-3-7-max/">https://codingfleet.com/blog/deepseek-v4-pro-vs-qwen-3-7-max/</a></li>
+<li>AIMadeTools — &quot;Tencent Hy3 vs DeepSeek V4&quot;(SWE-bench比較): <a href="https://www.aimadetools.com/blog/tencent-hy3-vs-deepseek-v4/">https://www.aimadetools.com/blog/tencent-hy3-vs-deepseek-v4/</a></li>
+<li>BigGo Finance — Hy3批判的分析(WeLM・第一線との比較における限界): <a href="https://finance.biggo.com/news/eac480c0-1840-4271-858a-eb43389b8811">https://finance.biggo.com/news/eac480c0-1840-4271-858a-eb43389b8811</a></li>
+<li>The Standard — オープンソースライセンス・価格報道: <a href="https://www.thestandard.com.hk/innovation/article/336512/Tencents-Hunyuan-releases-Hy3-available-on-WorkBuddy-and-more">https://www.thestandard.com.hk/innovation/article/336512/Tencents-Hunyuan-releases-Hy3-available-on-WorkBuddy-and-more</a></li>
+<li>OpenRouterモデル比較ページ: <a href="https://openrouter.ai/compare/deepseek/deepseek-v4-pro/tencent/hy3-preview">https://openrouter.ai/compare/deepseek/deepseek-v4-pro/tencent/hy3-preview</a></li>
+<li>Artificial Analysis — Hy3インテリジェンス・価格・速度比較: <a href="https://artificialanalysis.ai/models/comparisons/deepseek-v4-flash-vs-hy3">https://artificialanalysis.ai/models/comparisons/deepseek-v4-flash-vs-hy3</a></li>
+<li>Tencent Hunyuan公式ドキュメントセンター: <a href="https://aistudio.tencent.com/hunyuan/doc-center">https://aistudio.tencent.com/hunyuan/doc-center</a></li>
+<li>Tencent Cloud — Hunyuan OpenAI互換インターフェース公式文書(エンドポイント・stop動作・同時実行・embedding・function call): <a href="https://cloud.tencent.com/document/product/1729/111007">https://cloud.tencent.com/document/product/1729/111007</a></li>
+<li>OpenClaw — Tencent Cloud TokenHub/TokenPlanプロバイダー連携ガイド(hy3モデルアクセス): <a href="https://docs.openclaw.ai/providers/tencent">https://docs.openclaw.ai/providers/tencent</a></li>
+<li>Tencent Cloud TokenHub — Claude Code連携公式文書(settings.json全設定・深い推論・Web検索MCP): <a href="https://cloud.tencent.com.cn/document/product/1823/131903">https://cloud.tencent.com.cn/document/product/1823/131903</a></li>
+<li>Tencent Cloud TokenHub — 接入 AI 工具文書目次(CodeBuddy/WorkBuddy/Claude Code/OpenClaw/Hermes/OpenCode/Cline/Cursor/Kilo/Roo/Codex): <a href="https://cloud.tencent.com.cn/document/product/1823/130931">https://cloud.tencent.com.cn/document/product/1823/130931</a></li>
+<li>Tencent Cloud TokenHub — Cline連携公式文書(OpenAI Compatible設定パターン): <a href="https://cloud.tencent.com.cn/document/product/1823/130932">https://cloud.tencent.com.cn/document/product/1823/130932</a></li>
+<li>DeepSeek公式 Models &amp; Pricing(V4 Flash/Pro価格): <a href="https://api-docs.deepseek.com/quick_start/pricing/">https://api-docs.deepseek.com/quick_start/pricing/</a></li>
+<li>Anthropic公式 Pricing文書(Claudeモデル別価格・キャッシング・バッチ割引): <a href="https://platform.claude.com/docs/en/about-claude/pricing">https://platform.claude.com/docs/en/about-claude/pricing</a></li>
+<li>CloudZero — Claude API Pricing 2026 / Claude Opus 4.8 Pricing(GPT-5.4/5.5価格比較含む): <a href="https://www.cloudzero.com/blog/claude-api-pricing/">https://www.cloudzero.com/blog/claude-api-pricing/</a></li>
+<li>Morphllm — AI Coding Costs 2026(主要モデル公式価格の統合比較、2026-06-18基準): <a href="https://www.morphllm.com/ai-coding-costs">https://www.morphllm.com/ai-coding-costs</a></li>
+</ol>
+<p><em>注: ハルシネーション率(5.4%)、常識エラー率(12.7%)、WorkBuddyタスク解決率(90%)、ブラインド評価(2.67/4 vs GLM-5.1の2.51/4)はテンセント内部評価の数値であり、独立して再現された公開ベンチマークではない。KRW換算は2026年7月初旬の為替レート(1 CNY ≈ 195 KRW)に基づく近似値。3.2節の価格表は2026年7月初旬の各社公式発表に基づき、DeepSeek V4 Proはプロモーション割引価格、GPT-5.5のoutputは出典間で$25〜30の差がある。LLM APIの価格は随時変動するため、本番予算確定前に各社の公式価格ページを再確認すること。</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Tencent_LLM/Tencent%20HY3%20Getting%20Started_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

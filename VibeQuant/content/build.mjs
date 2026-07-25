@@ -1352,9 +1352,10 @@ function detectDocLang(rel, meta = {}) {
   const fromMeta = normalizeCtiLang(meta.lang || meta.language || "");
   if (fromMeta) return fromMeta;
   const base = path.basename(String(rel || ""), path.extname(String(rel || "")));
-  let m = base.match(/[_\-.](KR|EN|JP|JA|CN|ZH|KO)$/i);
+  // "Title EN.md" / "Title_EN.md" / "Title.en.md" / "Title-JA.md"
+  let m = base.match(/(?:^|[\s_\-.])(KR|EN|JP|JA|CN|ZH|KO)$/i);
   if (m) return normalizeCtiLang(m[1]);
-  m = base.match(/[_\-.](en|ko|ja|zh|cn)$/i);
+  m = base.match(/(?:^|[\s_\-.])(en|ko|ja|zh|cn)$/i);
   if (m) return normalizeCtiLang(m[1]);
   return "KR";
 }
@@ -1368,8 +1369,8 @@ function contentFamilyKey(rel) {
     .replace(/[^a-z0-9]+/g, "");
   let base = path.basename(p, path.extname(p));
   base = base
-    .replace(/[_\-.](KR|EN|JP|JA|CN|ZH|KO)$/i, "")
-    .replace(/[_\-.](en|ko|ja|zh|cn)$/i, "");
+    .replace(/(?:[\s_\-.])(KR|EN|JP|JA|CN|ZH|KO)$/i, "")
+    .replace(/(?:[\s_\-.])(en|ko|ja|zh|cn)$/i, "");
   base = base.toLowerCase().replace(/[^a-z0-9]+/g, "");
   return `${dir}::${base || "doc"}`;
 }
@@ -1639,7 +1640,7 @@ function writeCatalogSearchJs(outPath) {
   const featCards = feat ? [...feat.querySelectorAll(".col-card")] : [];
   const allFilterCards = [...mainCards, ...featCards];
   const langBtns = [...document.querySelectorAll("[data-lang-btn]")];
-  const LANG_KEY = "vq-cti-lang";
+  const LANG_KEY = "vq-content-lang";
   const SORT_KEY = "vq-catalog-sort:" + location.pathname;
   const hasLangFilter = langBtns.length > 0;
 
@@ -1656,7 +1657,9 @@ function writeCatalogSearchJs(outPath) {
     return (s || "").trim().toLowerCase().split(/\\s+/).filter(Boolean);
   }
 
-  let lang = hasLangFilter ? (localStorage.getItem(LANG_KEY) || browserLang()) : "";
+  let lang = hasLangFilter
+    ? (localStorage.getItem(LANG_KEY) || localStorage.getItem("vq-cti-lang") || browserLang())
+    : "";
   if (hasLangFilter && !["KR", "EN", "JP", "CN"].includes(lang)) lang = browserLang();
 
   function sortMode() {
@@ -1824,7 +1827,8 @@ function buildListPage({ section, items, groups, title, lede, active, githubTree
       </section>`
       : "";
 
-  const langSwitch = section === "cti" ? ctiLangSwitchHtml("KR", {}) : "";
+  const langSwitch =
+    section === "cti" || section === "tech" ? ctiLangSwitchHtml("KR", {}) : "";
 
   const sectionsHtml = groups
     .filter((g) => (byGroup.get(g.id) || []).length)
@@ -1877,6 +1881,12 @@ function buildListPage({ section, items, groups, title, lede, active, githubTree
   <script src="./catalog-search.js?v=4" defer></script>`;
 
   ensureDir(path.join(PAGES, section));
+  const langAvail =
+    section === "tech" || section === "cti"
+      ? {
+          availableLanguage: ["ko", "en", "ja", "zh-Hans"],
+        }
+      : {};
   fs.writeFileSync(
     path.join(PAGES, section, "index.html"),
     layout({
@@ -1887,12 +1897,20 @@ function buildListPage({ section, items, groups, title, lede, active, githubTree
       prefix,
       body,
       ogType: "website",
+      htmlLang: "ko",
       jsonLd: {
         "@context": "https://schema.org",
         "@type": "CollectionPage",
         name: title,
         url: canonical,
+        description: lede,
         numberOfItems: items.length,
+        ...langAvail,
+        isPartOf: {
+          "@type": "WebSite",
+          name: "VibeQuant",
+          url: SITE,
+        },
       },
     })
   );
@@ -1948,6 +1966,34 @@ function buildAbout() {
   );
 }
 
+function sitemapEntryWithAlternates(item, section, host, today) {
+  const loc = `${host}/${section}/${item.slug}/`;
+  const lastmod = item.dateModified || item.datePublished || today;
+  const langs = item.langs || {};
+  const altIds = Object.keys(langs);
+  if (altIds.length < 2) {
+    return `  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod></url>`;
+  }
+  const links = [];
+  for (const L of CTI_LANG_ORDER) {
+    const slug = langs[L.id];
+    const hl = langToHreflang(L.id);
+    if (!slug || !hl) continue;
+    links.push(
+      `    <xhtml:link rel="alternate" hreflang="${hl}" href="${host}/${section}/${slug}/" />`
+    );
+  }
+  const defSlug = langs.KR || langs.EN || item.slug;
+  links.push(
+    `    <xhtml:link rel="alternate" hreflang="x-default" href="${host}/${section}/${defSlug}/" />`
+  );
+  return `  <url>
+    <loc>${loc}</loc>
+    <lastmod>${lastmod}</lastmod>
+${links.join("\n")}
+  </url>`;
+}
+
 function buildSeo(columns, tech, cti = [], essays = []) {
   const entry = (loc, lastmod) =>
     `  <url><loc>${loc}</loc><lastmod>${lastmod || new Date().toISOString().slice(0, 10)}</lastmod></url>`;
@@ -1967,14 +2013,15 @@ function buildSeo(columns, tech, cti = [], essays = []) {
     entry(absoluteSitePath(`${SITE_CTI}/cti`), today),
     entry(absoluteSitePath(`${SITE_ESSAY}/essays`), today),
     ...columns.map((c) => entry(`${SITE_DOCS}/columns/${c.slug}/`, c.dateModified || c.datePublished || today)),
-    ...tech.map((t) => entry(`${SITE_TECH}/tech/${t.slug}/`, t.dateModified || t.datePublished || today)),
-    ...cti.map((r) => entry(`${SITE_CTI}/cti/${r.slug}/`, r.dateModified || r.datePublished || today)),
+    ...tech.map((t) => sitemapEntryWithAlternates(t, "tech", SITE_TECH, today)),
+    ...cti.map((r) => sitemapEntryWithAlternates(r, "cti", SITE_CTI, today)),
     ...essays.map((e) => entry(`${SITE_ESSAY}/essays/${e.slug}/`, e.dateModified || e.datePublished || today)),
   ];
   fs.writeFileSync(
     path.join(PAGES, "sitemap.xml"),
     `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urls.join("\n")}
 </urlset>
 `
@@ -1982,6 +2029,12 @@ ${urls.join("\n")}
   fs.writeFileSync(
     path.join(PAGES, "robots.txt"),
     `User-agent: *
+Allow: /
+
+# Naver
+User-agent: Yeti
+Allow: /
+User-agent: NaverBot
 Allow: /
 
 # AI / research crawlers
@@ -2087,10 +2140,43 @@ Sitemap: ${SITE}/sitemap.xml
       "",
     ].join("\n")
   );
-  fs.writeFileSync(
-    path.join(PAGES, "tech", "llms.txt"),
-    ["# VibeQuant Tech", "", ...tech.map((t) => `- [${t.title}](${SITE_TECH}/tech/${t.slug}/)${dated(t)}`), ""].join("\n")
-  );
+  {
+    const byLang = { KR: [], EN: [], JP: [], CN: [] };
+    for (const t of tech) {
+      const L = byLang[t.lang] ? t.lang : "KR";
+      byLang[L].push(t);
+    }
+    const langBlock = (id, label) => [
+      `## ${label}`,
+      ...byLang[id].map((t) => {
+        const abs = t.abstract ? `\n  ${String(t.abstract).replace(/\s+/g, " ").slice(0, 280)}` : "";
+        return `- [${t.title}](${SITE_TECH}/tech/${t.slug}/)${dated(t)}${abs}`;
+      }),
+      "",
+    ];
+    fs.writeFileSync(
+      path.join(PAGES, "tech", "llms.txt"),
+      [
+        "# VibeQuant Tech",
+        "> Host: tech.vibequant.cc/tech/ — technical docs (KO/EN/JA/ZH).",
+        "> Prefer language siblings via hreflang; filter UI matches CTI.",
+        "",
+        "## Featured",
+        ...tech
+          .filter((t) => t.featured)
+          .sort((a, b) => a.featuredRank - b.featuredRank)
+          .map((t) => {
+            const abs = t.abstract ? `\n  ${String(t.abstract).replace(/\s+/g, " ").slice(0, 280)}` : "";
+            return `- [${t.title}](${SITE_TECH}/tech/${t.slug}/) [${t.lang}]${dated(t)}${abs}`;
+          }),
+        "",
+        ...langBlock("KR", "Korean (KR)"),
+        ...langBlock("EN", "English (EN)"),
+        ...langBlock("JP", "Japanese (JP)"),
+        ...langBlock("CN", "Chinese (CN)"),
+      ].join("\n")
+    );
+  }
   if (cti.length) {
     ensureDir(path.join(PAGES, "cti"));
     fs.writeFileSync(
@@ -2208,7 +2294,7 @@ function main() {
     items: tech,
     groups: groupsFromRules(TECH_GROUP_RULES, TECH_GROUP_FALLBACK),
     title: "Tech Docs",
-    lede: `기술 문서 ${tech.length}편 — 발행일 · 추천 · 그룹별/날짜순/추천순 정렬 · 검색.`,
+    lede: `기술 문서 ${tech.length}편 (한·영·일·중) — 언어 필터 · 발행일 · 추천 · 그룹별/날짜순/추천순 정렬 · 검색.`,
     active: "tech",
     githubTree: "https://github.com/gameworkerkim/vibe-investing/tree/main/TechDoc",
   });

@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>TimesFM (Time Series Foundation Model) Analysis Guide — VibeQuant</title>
+  <meta name="description" content="A comprehensive analysis of the time-series forecasting foundation model developed by Google Research." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/timesfm-timesfm-en/" />
+  <meta property="og:title" content="TimesFM (Time Series Foundation Model) Analysis Guide" />
+  <meta property="og:description" content="A comprehensive analysis of the time-series forecasting foundation model developed by Google Research." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/timesfm-timesfm-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/timesfm-timesfm/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/timesfm-timesfm-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/timesfm-timesfm-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/timesfm-timesfm-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/timesfm-timesfm/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"TimesFM (Time Series Foundation Model) Analysis Guide","description":"A comprehensive analysis of the time-series forecasting foundation model developed by Google Research.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/timesfm-timesfm-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/TimesFM/TimesFM_%EB%B6%84%EC%84%9D_%EA%B0%80%EC%9D%B4%EB%93%9C_EN.md","image":"https://vibequant.cc/og-default.png","inLanguage":"en","keywords":"Time Series, Foundation Model, Google, Quant"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 퀀트 · 데이터</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">퀀트 · 데이터</p>
+        <h1>TimesFM (Time Series Foundation Model) Analysis Guide</h1>
+        <p class="article-dates">주제 Time Series · Foundation Model · Google · Quant</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/timesfm-timesfm/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/timesfm-timesfm-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/timesfm-timesfm-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/timesfm-timesfm-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">A comprehensive analysis of the time-series forecasting foundation model developed by Google Research.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>A comprehensive analysis of the time-series forecasting foundation model developed by Google Research</p>
+</blockquote>
+<hr>
+<h2>Introduction</h2>
+<p>TimesFM is a foundation model dedicated to time-series forecasting, developed by Google Research.</p>
+<p>Traditionally, time-series forecasting required training a separate model for each domain. Retail demand forecasting, financial price forecasting, and manufacturing equipment anomaly detection each needed their own data and models. TimesFM changes this paradigm. Pre-trained on over 100 billion real-world time-series data points, this model can forecast new domains&#39; time-series data instantly, <strong>without any additional training (zero-shot)</strong>.</p>
+<p>Just as ChatGPT did for the world of text, TimesFM is realizing the vision of &quot;one model to forecast everything&quot; for the world of time-series data.</p>
+<p>It is based on the paper <em>&quot;A decoder-only foundation model for time-series forecasting,&quot;</em> presented at ICML (International Conference on Machine Learning) 2024, and the current latest version is TimesFM 2.5 (September 2025).</p>
+<hr>
+<h2>Project Overview</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Developer</td>
+<td>Google Research</td>
+</tr>
+<tr>
+<td>Published</td>
+<td>ICML 2024</td>
+</tr>
+<tr>
+<td>Latest version</td>
+<td>TimesFM 2.5 (September 2025)</td>
+</tr>
+<tr>
+<td>Parameter count</td>
+<td>200M (as of v2.5)</td>
+</tr>
+<tr>
+<td>Pre-training data</td>
+<td>Over 100 billion real-world time-series data points</td>
+</tr>
+<tr>
+<td>License</td>
+<td>Apache 2.0 open source (not an officially supported Google product)</td>
+</tr>
+<tr>
+<td>Key integrations</td>
+<td>BigQuery ML, Google Sheets, Vertex Model Garden</td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td><a href="https://github.com/google-research/timesfm">https://github.com/google-research/timesfm</a></td>
+</tr>
+<tr>
+<td>HuggingFace</td>
+<td>google/timesfm-2.0-500m-pytorch</td>
+</tr>
+</tbody></table>
+<p>TimesFM uses a <strong>patch-based decoder-only Transformer architecture</strong>. It tokenizes 32 consecutive timepoints into a single patch, structurally similar to how LLMs process text tokens.</p>
+<hr>
+<h2>Pros</h2>
+<h3>1. Excellent Zero-Shot Performance</h3>
+<p>Provides immediately excellent forecasts on new time-series data with no additional training. Its performance has been validated across diverse domains — retail, finance, manufacturing, healthcare — and time granularities (seconds/minutes/hours/days/months/years).</p>
+<h3>2. Efficient Model Size</h3>
+<p>At 200M parameters, this is a very small size compared to modern LLMs. It&#39;s about 1/1000th the size of GPT-4 (hundreds of billions of parameters), yet delivers equal or superior time-series forecasting performance.</p>
+<h3>3. Long Context Length Support</h3>
+<p>TimesFM 2.5 supports up to a <strong>16K context length</strong>. This is roughly 8x longer than the previous version (2,048), allowing years of daily data to be used as input in a single pass.</p>
+<h3>4. Probabilistic (Quantile) Forecasting Support</h3>
+<p>An optional 30M-parameter quantile head provides continuous quantile forecasts up to a 1K horizon. Rather than simple point forecasts, it enables probabilistic forecasting with confidence intervals.</p>
+<h3>5. Google Ecosystem Integration</h3>
+<ul>
+<li><strong>BigQuery ML</strong>: run large-scale time-series forecasting with a single line of SQL</li>
+<li><strong>Google Sheets</strong>: use forecasting features directly from a spreadsheet</li>
+<li><strong>Vertex Model Garden</strong>: integration with enterprise-grade MLOps pipelines</li>
+</ul>
+<h3>6. Multiple Backends and Extensibility</h3>
+<ul>
+<li>Supports both PyTorch and Flax (JAX) backends</li>
+<li>Multi-GPU training and fine-tuning supported</li>
+<li>Efficient fine-tuning via HuggingFace Transformers + PEFT (LoRA)</li>
+</ul>
+<h3>7. XReg: Covariate Support</h3>
+<p>Starting with TimesFM 2.5, the XReg feature enables forecasting that incorporates external variables (weather, events, promotions, etc.).</p>
+<h3>8. Continuous Updates</h3>
+<p>Since 2025, various improvements have been made — a Flax version, XReg support, Agent Skills, and more — with active community pull requests being merged.</p>
+<hr>
+<h2>Cons</h2>
+<h3>1. Not an Officially Supported Product</h3>
+<p>Although open source, it is <strong>not an officially supported Google product</strong>. Enterprise adopters shouldn&#39;t expect an SLA or official technical support.</p>
+<h3>2. Univariate-Centric</h3>
+<p>The publicly released checkpoints are optimized for univariate time-series forecasting. It&#39;s limited in multivariate forecasting scenarios where correlations among multiple variables matter.</p>
+<h3>3. Dependency and Installation Issues</h3>
+<p>Has specialized dependencies including JAX, Lingvo, and Praxis.</p>
+<ul>
+<li>Reported Python version compatibility issues</li>
+<li>Cases of <code>lingvo</code> package installation failures in Colab</li>
+<li>Initial setup may require significant trial and error</li>
+</ul>
+<h3>4. Black-Box Model</h3>
+<p>Given its nature as a pre-trained foundation model, <strong>explaining the basis for its predictions is difficult</strong>. In domains like finance and healthcare where explainability matters, this poses regulatory risk.</p>
+<h3>5. Insufficient Validation in Specific Domains</h3>
+<p>Some research shows lower performance than Chronos-Bolt or Time-MoE in certain domains, such as electricity price forecasting. Validation in the target domain is essential before adoption.</p>
+<h3>6. Real-Time Processing Constraints</h3>
+<p>Real-time processing of large-scale time-series data requires building a separate serving infrastructure.</p>
+<hr>
+<h2>Potential Applications in Stock and Prediction Markets</h2>
+<h3>TimesFM in Stock Market Forecasting</h3>
+<p>TimesFM has a structure directly applicable to stock price forecasting. However, the following considerations apply in practice.</p>
+<p><strong>Potential</strong></p>
+<ul>
+<li>Processes OHLCV (open/high/low/close/volume) data as time series</li>
+<li>Zero-shot forecasting enables immediate prediction without per-stock training</li>
+<li>Quantile forecasts allow estimating price ranges and volatility</li>
+<li>Integration with BigQuery ML enables batch forecasting for large numbers of tickers</li>
+</ul>
+<p><strong>Limitations</strong></p>
+<ul>
+<li>Stock markets are heavily influenced by unstructured data beyond time series — news, disclosures, sentiment</li>
+<li>May be vulnerable to market regime changes</li>
+<li>Additional layers (risk management, portfolio optimization) are needed to use it directly as a trading strategy</li>
+<li>May be better suited to medium/long-term trend forecasting than short-term (1-5 day) forecasting</li>
+</ul>
+<p><strong>Practical use cases</strong></p>
+<table>
+<thead>
+<tr>
+<th>Use case</th>
+<th>Fit</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Stock trend direction forecasting</td>
+<td>★★★☆☆</td>
+<td>Directional forecasting is possible but accuracy is limited</td>
+</tr>
+<tr>
+<td>Volatility forecasting</td>
+<td>★★★★☆</td>
+<td>Effective when using quantile forecasts</td>
+</tr>
+<tr>
+<td>Demand/revenue forecasting (corporate analysis)</td>
+<td>★★★★★</td>
+<td>Useful for estimating revenue ahead of earnings releases</td>
+</tr>
+<tr>
+<td>Macroeconomic indicator forecasting</td>
+<td>★★★★☆</td>
+<td>CPI, interest rates, and other economic indicators</td>
+</tr>
+<tr>
+<td>Portfolio rebalancing trigger</td>
+<td>★★★☆☆</td>
+<td>Used for detecting trend reversal points</td>
+</tr>
+</tbody></table>
+<h3>Applications in Prediction Markets</h3>
+<h4>Direct Applicability on Polymarket</h4>
+<p>Polymarket is a prediction market where users trade the YES/NO probability of specific events. Categories where TimesFM is directly useful:</p>
+<p><strong>High fit</strong>-<strong>Economic indicator markets</strong>: markets like &quot;Will US CPI exceed 3% in 2025?&quot; using historical CPI time series</p>
+<ul>
+<li><strong>Financial events</strong>: forecasting rate paths such as &quot;Number of Fed rate cuts in 2025&quot;</li>
+<li><strong>Commodity prices</strong>: markets related to oil and gold prices</li>
+</ul>
+<p><strong>Low fit</strong></p>
+<ul>
+<li>Political events (election results, etc.) — polling data is more suitable than time series</li>
+<li>One-off events (sports results, etc.) — no time-series pattern exists</li>
+</ul>
+<p><strong>Polymarket usage strategy example</strong></p>
+<pre><code>1. Select target market: &quot;US unemployment rate above 4.5% in December 2025?&quot;
+2. Collect historical data: download monthly unemployment rate time series from the FRED API
+3. Run TimesFM forecast: quantile forecast for the next 6 months
+4. Convert to probability: calculate the probability of exceeding the threshold from the forecast distribution
+5. Compare with market price: search for arbitrage opportunities against the current Polymarket price
+</code></pre>
+<h4>Domestic (Korean) Prediction Markets</h4>
+<p>Korea does not yet have a full-fledged prediction market like Polymarket. Prediction markets and platforms like Polymarket are illegal in Korea.</p>
+<ul>
+<li>Informal prediction channels like <strong>KakaoTalk open-chat public sentiment aggregation</strong>-<strong>Securities firm research consensus</strong> — TimesFM can be used to forecast earnings surprises relative to consensus</li>
+</ul>
+<hr>
+<h2>Comparison with Competing Projects</h2>
+<h3>Global Competing Models</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Developer</th>
+<th>Country</th>
+<th>Parameters</th>
+<th>Open Source</th>
+<th>Zero-Shot</th>
+<th>Multivariate</th>
+<th>Probabilistic</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>TimesFM 2.5</strong></td>
+<td>Google Research</td>
+<td>US</td>
+<td>200M</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Limited</td>
+<td>Partial</td>
+</tr>
+<tr>
+<td>TimeGPT</td>
+<td>Nixtla</td>
+<td>US</td>
+<td>Not disclosed</td>
+<td>No (commercial API)</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Chronos-Bolt</td>
+<td>Amazon</td>
+<td>US</td>
+<td>Various</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Moirai</td>
+<td>Salesforce</td>
+<td>US</td>
+<td>Various</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Time-MoE</td>
+<td>Beihang Univ.</td>
+<td>China</td>
+<td>Various</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Partial</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td>MOMENT</td>
+<td>CMU</td>
+<td>US</td>
+<td>Various</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td>Lag-Llama</td>
+<td>ServiceNow</td>
+<td>Canada</td>
+<td>Various</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>UniTS</td>
+<td>Fudan Univ.</td>
+<td>China</td>
+<td>Various</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td>TimesNet</td>
+<td>Tongji Univ.</td>
+<td>China</td>
+<td>Various</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+<td>No</td>
+</tr>
+</tbody></table>
+<h3>Detailed Analysis of Chinese Competing Projects</h3>
+<h4>1. Time-MoE (Time Mixture of Experts)</h4>
+<ul>
+<li><strong>Developer</strong>: Beihang University</li>
+<li><strong>Feature</strong>: first application of a Mixture of Experts (MoE) architecture to time series</li>
+<li><strong>Strength</strong>: outperforms TimesFM in Electricity Price Forecasting</li>
+<li><strong>Weakness</strong>: limited probabilistic forecasting capability, relatively small community</li>
+<li><strong>GitHub</strong>: <a href="https://github.com/Time-MoE/Time-MoE">https://github.com/Time-MoE/Time-MoE</a></li>
+</ul>
+<h4>2. UniTS (Universal Time Series)</h4>
+<ul>
+<li><strong>Developer</strong>: Fudan University</li>
+<li><strong>Feature</strong>: a single model handles forecasting, classification, anomaly detection, imputation, and other tasks</li>
+<li><strong>Strength</strong>: multi-task learning, multivariate support</li>
+<li><strong>Weakness</strong>: possible performance gap versus specialized models on individual tasks</li>
+<li><strong>Note</strong>: applies Chinese NLP research groups&#39; LLM methodology to time series</li>
+</ul>
+<h4>3. TimesNet</h4>
+<ul>
+<li><strong>Developer</strong>: Tongji University</li>
+<li><strong>Feature</strong>: an original approach that transforms 1D time series into 2D space for CNN processing</li>
+<li><strong>Strength</strong>: covers five tasks — long-term forecasting, short-term forecasting, imputation, anomaly detection, classification</li>
+<li><strong>Weakness</strong>: an architecture research effort rather than a foundation model; no zero-shot</li>
+<li><strong>GitHub</strong>: <a href="https://github.com/thuml/Time-Series-Library">https://github.com/thuml/Time-Series-Library</a></li>
+</ul>
+<h4>4. PatchTST</h4>
+<ul>
+<li><strong>Developer</strong>: Tsinghua University + IBM Research</li>
+<li><strong>Feature</strong>: a patch-based approach similar to TimesFM, Transformer-based</li>
+<li><strong>Note</strong>: can be seen as an architectural precursor to TimesFM</li>
+</ul>
+<h4>5. iTransformer</h4>
+<ul>
+<li><strong>Developer</strong>: Chinese Academy of Sciences</li>
+<li><strong>Feature</strong>: applies the Transformer&#39;s attention mechanism to the variable dimension rather than the time dimension</li>
+<li><strong>Strength</strong>: excellent performance in multivariate forecasting</li>
+</ul>
+<h3>Detailed Analysis of US/Canadian Competing Projects</h3>
+<h4>1. Chronos &amp; Chronos-Bolt (Amazon)</h4>
+<ul>
+<li><strong>Feature</strong>: T5-architecture based, tokenizes time-series values and processes them as a language model</li>
+<li><strong>Strength</strong>: the strongest at probabilistic forecasting; outperforms TimesFM in electricity price forecasting</li>
+<li><strong>Weakness</strong>: inference speed greatly improved in Chronos-Bolt but still relatively heavy</li>
+<li><strong>Note</strong>: supports one-click deployment via AWS SageMaker JumpStart</li>
+</ul>
+<h4>2. TimeGPT (Nixtla)</h4>
+<ul>
+<li><strong>Feature</strong>: the first commercial time-series foundation model, offered as an API</li>
+<li><strong>Strength</strong>: easiest-to-use interface, fine-tuning support, includes anomaly detection</li>
+<li><strong>Weakness</strong>: not open source, incurs API costs, internal model structure undisclosed</li>
+<li><strong>Pricing</strong>: $29-$299/month (as of 2025)</li>
+</ul>
+<h4>3. Moirai (Salesforce)</h4>
+<ul>
+<li><strong>Feature</strong>: patch-based masked encoder, handles various frequencies with a single model</li>
+<li><strong>Strength</strong>: multivariate support, probabilistic forecasting, various model sizes (Small/Base/Large)</li>
+<li><strong>Weakness</strong>: inference speed, some performance gaps versus TimesFM in specific domains</li>
+</ul>
+<h4>4. MOMENT (CMU)</h4>
+<ul>
+<li><strong>Feature</strong>: a large pre-trained model for time-series analysis, uses a masking approach</li>
+<li><strong>Strength</strong>: broad task coverage — anomaly detection, classification, imputation</li>
+<li><strong>Note</strong>: supervised-learning based; fine-tuning maximizes performance</li>
+</ul>
+<h3>Performance Comparison (Research Summary)</h3>
+<table>
+<thead>
+<tr>
+<th>Task</th>
+<th>1st place</th>
+<th>2nd place</th>
+<th>TimesFM ranking</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Long-horizon forecasting</td>
+<td>TimesFM</td>
+<td>Moirai</td>
+<td><strong>1st</strong></td>
+</tr>
+<tr>
+<td>Electricity price forecasting</td>
+<td>Chronos-Bolt</td>
+<td>Time-MoE</td>
+<td>3rd</td>
+</tr>
+<tr>
+<td>Short-term load forecasting</td>
+<td>TimesFM</td>
+<td>Chronos</td>
+<td><strong>1st</strong></td>
+</tr>
+<tr>
+<td>Monthly precipitation forecasting</td>
+<td>TimesFM</td>
+<td>SARIMA</td>
+<td><strong>1st</strong> (for some seasons)</td>
+</tr>
+<tr>
+<td>Multivariate forecasting</td>
+<td>Moirai</td>
+<td>iTransformer</td>
+<td>Lower ranks</td>
+</tr>
+<tr>
+<td>Anomaly detection</td>
+<td>MOMENT</td>
+<td>UniTS</td>
+<td>N/A</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Getting Started Guide</h2>
+<h3>Installation</h3>
+<pre><code class="language-bash"># PyTorch version (recommended)
+pip install timesfm[torch]
+
+# JAX/Flax version
+pip install timesfm[jax]
+</code></pre>
+<h3>Basic Forecasting Example (PyTorch)</h3>
+<pre><code class="language-python">import timesfm
+import numpy as np
+
+# Load model
+tfm = timesfm.TimesFm(
+    hparams=timesfm.TimesFmHparams(
+        backend=&quot;torch&quot;,
+        per_core_batch_size=32,
+        horizon_len=128,
+    ),
+    checkpoint=timesfm.TimesFmCheckpoint(
+        huggingface_repo_id=&quot;google/timesfm-2.0-200m-pytorch&quot;
+    ),
+)
+
+# Run forecast
+forecast_input = [np.sin(np.linspace(0, 20, 100))]  # example time series
+point_forecast, quantile_forecast = tfm.forecast(forecast_input)
+</code></pre>
+<h3>BigQuery ML Integration</h3>
+<pre><code class="language-sql">-- Example of using TimesFM in BigQuery ML
+SELECT *
+FROM ML.FORECAST(
+  MODEL `project.dataset.timesfm_model`,
+  STRUCT(30 AS horizon, 0.9 AS confidence_level)
+)
+</code></pre>
+<hr>
+<h2>Adoption Roadmap (Investment Context)</h2>
+<pre><code>Phase 1: Data Collection
+├── FRED API: macroeconomic time series (GDP, CPI, unemployment rate)
+├── Yahoo Finance / FinanceDataReader: stock price data
+└── DART: corporate quarterly earnings data
+
+Phase 2: Applying TimesFM
+├── Measure baseline performance via zero-shot forecasting
+├── LoRA fine-tuning with domain data
+└── Generate confidence intervals via quantile forecasting
+
+Phase 3: Signal Generation
+├── Compare forecast vs. consensus
+├── Compare Polymarket prices against TimesFM-derived probabilities
+└── Compute risk-adjusted returns
+
+Phase 4: Production Application
+├── Portfolio rebalancing trigger
+├── Options strategy (using volatility forecasts)
+└── Prediction market arbitrage
+</code></pre>
+<hr>
+<h2>Summary Comparison Table</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>TimesFM</th>
+<th>TimeGPT</th>
+<th>Chronos</th>
+<th>Moirai</th>
+<th>Time-MoE</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Developer</td>
+<td>Google</td>
+<td>Nixtla</td>
+<td>Amazon</td>
+<td>Salesforce</td>
+<td>Beihang Univ.</td>
+</tr>
+<tr>
+<td>Parameters</td>
+<td>200M</td>
+<td>Not disclosed</td>
+<td>Various</td>
+<td>Various</td>
+<td>Various</td>
+</tr>
+<tr>
+<td>Open source</td>
+<td>Yes</td>
+<td>No</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Zero-shot</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Multivariate</td>
+<td>Limited</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Partial</td>
+</tr>
+<tr>
+<td>Probabilistic forecasting</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Yes</td>
+<td>Limited</td>
+</tr>
+<tr>
+<td>Google integration</td>
+<td>Yes</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Inference speed</td>
+<td>★★★★☆</td>
+<td>★★★★☆</td>
+<td>★★★☆☆</td>
+<td>★★★☆☆</td>
+<td>★★★★☆</td>
+</tr>
+<tr>
+<td>Community</td>
+<td>★★★★★</td>
+<td>★★★☆☆</td>
+<td>★★★★☆</td>
+<td>★★★☆☆</td>
+<td>★★★☆☆</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Conclusion</h2>
+<p>TimesFM is a <strong>lightweight time-series foundation model</strong>developed by Google Research, with its main strengths being zero-shot forecasting performance and Google ecosystem integration. It delivers strong performance despite a compact 200M-parameter size, and can be adopted at enterprise scale via BigQuery ML.<strong>Application points in an investment/finance context</strong>- More suited to<strong>macroeconomic indicators, corporate revenue, and demand forecasting</strong> than raw stock prices</p>
+<ul>
+<li>Usable for probability estimation in economic-indicator-related markets on prediction platforms like Polymarket</li>
+<li>Synergy is maximized when combined with LLM-based news sentiment analysis rather than used standalone</li>
+</ul>
+<p><strong>Selection criteria</strong>- BigQuery/GCP environment -&gt;<strong>TimesFM</strong>- AWS environment -&gt;<strong>Chronos-Bolt</strong>- API-only requirement -&gt;<strong>TimeGPT</strong>- Multivariate + probabilistic forecasting -&gt;<strong>Moirai</strong>- Power/energy domain -&gt;<strong>Time-MoE</strong></p>
+<hr>
+<h2>References</h2>
+<ul>
+<li><a href="https://github.com/google-research/timesfm">GitHub repository</a></li>
+<li><a href="https://arxiv.org/abs/2310.10688">Paper (arXiv)</a></li>
+<li><a href="https://huggingface.co/google/timesfm-2.0-200m-pytorch">HuggingFace checkpoint</a></li>
+<li><a href="https://research.google/blog/a-decoder-only-foundation-model-for-time-series-forecasting/">Google Research blog</a></li>
+<li><a href="https://cloud.google.com/bigquery/docs/reference/standard-sql/bigqueryml-syntax-forecast">BigQuery ML integration docs</a></li>
+</ul>
+<hr>
+<p><em>Last updated: June 2025 | Written by: Vibe Investing Research</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/TimesFM/TimesFM_%EB%B6%84%EC%84%9D_%EA%B0%80%EC%9D%B4%EB%93%9C_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

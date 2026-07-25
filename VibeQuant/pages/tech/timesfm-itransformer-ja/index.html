@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>iTransformer スタートガイド — VibeQuant</title>
+  <meta name="description" content="清華大学×アントグループの「反転Transformer」— 多変量時系列予測の新しいパラダイム" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/timesfm-itransformer-ja/" />
+  <meta property="og:title" content="iTransformer スタートガイド" />
+  <meta property="og:description" content="清華大学×アントグループの「反転Transformer」— 多変量時系列予測の新しいパラダイム" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/timesfm-itransformer-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/timesfm-itransformer/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/timesfm-itransformer-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/timesfm-itransformer-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/timesfm-itransformer-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/timesfm-itransformer/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"iTransformer スタートガイド","description":"清華大学×アントグループの「反転Transformer」— 多変量時系列予測の新しいパラダイム","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/timesfm-itransformer-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/TimesFM/iTransformer_%EA%B0%80%EC%9D%B4%EB%93%9C_JA.md","image":"https://vibequant.cc/og-default.png","inLanguage":"ja","keywords":"時系列, Transformer, 機械学習, クオンツ"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 퀀트 · 데이터</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">퀀트 · 데이터</p>
+        <h1>iTransformer スタートガイド</h1>
+        <p class="article-dates">주제 時系列 · Transformer · 機械学習 · クオンツ</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/timesfm-itransformer/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/timesfm-itransformer-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/timesfm-itransformer-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/timesfm-itransformer-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">清華大学×アントグループの「反転Transformer」— 多変量時系列予測の新しいパラダイム</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>清華大学×アントグループの「反転Transformer」— 多変量時系列予測の新しいパラダイム</p>
+</blockquote>
+<hr>
+<h2>はじめに</h2>
+<p>iTransformer(Inverted Transformer)は、清華大学(Tsinghua University)とアントグループ(Alipay)が共同で提案した時系列予測モデルであり、<strong>ICLR 2024 Spotlight</strong>に選出された。</p>
+<p>名前の核心は「Inverted(反転)」— Transformerアーキテクチャ自体はそのままに、<strong>データを投入する方向を180度反転させた</strong>。この単純な発想の転換が、多変量時系列予測でSOTAを達成した。</p>
+<p>TimesFMが「一つのモデルで全ドメインをカバー」するファウンデーションモデルであるなら、iTransformerは「<strong>変数間の相関関係を最もよく捉える</strong>」多変量特化モデルである。両モデルは目的が異なるため、競合関係にもあり、相互補完関係にもある。</p>
+<p>株式銘柄間の相関を捉えるカップリングシグナルを見つけるのが得意である。そのため、価格の非対称性・市場の非効率性を捉え、不均衡から均衡へ戻るタイミングを掴んでトレーディングする際に有効である。セクターローテーションの捕捉や、銘柄間の共分散構造予測によるリバランストリガー生成にも有用である。ただし、手間がかかる。TimesFMに対する優位性があり、両者を組み合わせて使うと有用である。</p>
+<p>一行要約: 中原多俊杰，灿若江沙；天下尽英雄，壮如三国。</p>
+<hr>
+<h2>プロジェクト概要</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>開発</td>
+<td>清華大学 + アントグループ(Alipay)</td>
+</tr>
+<tr>
+<td>発表</td>
+<td>ICLR 2024 Spotlight</td>
+</tr>
+<tr>
+<td>ライセンス</td>
+<td>MIT オープンソース</td>
+</tr>
+<tr>
+<td>GitHub</td>
+<td><a href="https://github.com/thuml/iTransformer">https://github.com/thuml/iTransformer</a></td>
+</tr>
+<tr>
+<td>pipパッケージ</td>
+<td><code>pip install iTransformer</code></td>
+</tr>
+<tr>
+<td>関連ライブラリ</td>
+<td>GluonTS(AWS)、NeuralForecast(Nixtla)、Time-Series-Library</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>コアアイデア — 何を「反転」させたのか?</h2>
+<h3>既存Transformerの問題</h3>
+<p>既存のTransformerが多変量時系列を処理する際は、<strong>同一時点の複数変数</strong>を一つのトークン(Temporal Token)にまとめていた。例えば電力網データにおいて「午前9時の温度+湿度+風速」を一つのトークンとして処理する方式である。</p>
+<p>この方式の問題点:</p>
+<ul>
+<li>温度(°C)と電力(kWh)のように<strong>物理的な意味と単位が全く異なる値</strong>を強制的に結合すると、意味情報が失われる。</li>
+<li>タイムスタンプ(時刻)自体は、自然言語の単語のように<strong>独立した意味を持たない</strong>。</li>
+</ul>
+<h3>iTransformerの解決策</h3>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>既存Transformer</th>
+<th>iTransformer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>トークン定義</strong></td>
+<td>各時間ステップを一つのトークンに</td>
+<td><strong>各変数(チャネル)を一つのトークンに</strong></td>
+</tr>
+<tr>
+<td><strong>アテンションの役割</strong></td>
+<td>時間的依存関係のモデリング</td>
+<td><strong>変数間の多変量相関関係</strong>のモデリング</td>
+</tr>
+<tr>
+<td><strong>フィードフォワードの役割</strong></td>
+<td>各時点の特徴のエンコーディング</td>
+<td><strong>全時系列の表現</strong>のエンコーディング</td>
+</tr>
+</tbody></table>
+<p>つまり、iTransformerは<strong>全時系列を特徴(feature)</strong>として、<strong>各変数をトークン</strong>として扱う。アテンションは「変数Aと変数Bはどんな関係か?」を学習し、FFNは「変数Aの時系列パターンは何か?」を学習する。</p>
+<hr>
+<h2>長所(Pros)</h2>
+<h3>1. 多変量予測のSOTA性能</h3>
+<p>複数の実データセットで最先端の性能を達成した。</p>
+<ul>
+<li>GNSS高度時系列: <strong>RMSE 5.1mm、MAE 3.7mm</strong>(PatchTSTと共に1位)</li>
+<li>Traffic、ETTh1、Weatherなどの標準ベンチマークで既存Transformer系モデル全般に対して優位</li>
+</ul>
+<h3>2. Transformerモジュールの修正不要</h3>
+<p>アテンション、フィードフォワード、レイヤー正規化など<strong>Transformerの基本モジュールを一切修正していない</strong>。データ構成方式のみを再設計したため:</p>
+<ul>
+<li>FlashAttentionなど効率的なアテンション機構をそのままプラグイン可能</li>
+<li>今後のTransformer改善事項を即座に吸収可能</li>
+</ul>
+<h3>3. 未見の変数への一般化</h3>
+<p>入力トークン数が柔軟であるため、<strong>変数チャネル数に制限がない</strong>。一部の変数のみで学習した後、学習時に見なかった新しい変数へ一般化できる。</p>
+<h3>4. 長いルックバックウィンドウの活用</h3>
+<p>ルックバックウィンドウが長くなっても性能低下が少ない。既存のTemporal Transformerはコンテキストが長くなるとむしろノイズが増加する問題があった。</p>
+<h3>5. 豊富なエコシステム統合</h3>
+<ul>
+<li><strong>GluonTS</strong>(AWS) — クラウド時系列パイプライン</li>
+<li><strong>NeuralForecast</strong>(Nixtla) — TimeGPTと同じエコシステム</li>
+<li><strong>Time-Series-Library</strong>(清華大学) — 公式ベンチマークライブラリ</li>
+</ul>
+<hr>
+<h2>短所(Cons)</h2>
+<h3>1. O(N²)の計算複雑度</h3>
+<p>変数数Nに対して<strong>O(N²)</strong>の複雑度を持つ。数千個のIoTセンサーのように変数が非常に多い場合、メモリと計算コストが指数的に増加する。</p>
+<h3>2. 時間的局所情報の弱化</h3>
+<p>反転されたフレームワークは変数間の相関関係をよく捉える一方、隣接する時点間の依存性(temporal locality)が弱まる可能性がある。単変量時系列や時間的パターンが重要な場合、通常のTransformerより不利になる場合がある。</p>
+<h3>3. 季節性ノイズへの敏感さ</h3>
+<p>研究によると、iTransformerは<strong>季節性ノイズ(Seasonality Noise)</strong>に比較的敏感である。強い季節パターンがあるデータ(観光、小売など)では前処理が重要になる。</p>
+<h3>4. 潜在表現の時系列構造の欠如</h3>
+<p>一部の研究では、標準的なiTransformerが学習した潜在表現が<strong>明確な時系列局所性</strong>を欠く可能性があると指摘されている。隣接する時点の表現が潜在空間で遠く離れて散らばることがある。</p>
+<h3>5. ファウンデーションモデルではない</h3>
+<p>TimesFMとは異なり、iTransformerは<strong>新しいドメインごとに学習が必要</strong>である。ゼロショット予測を支援せず、各データセットに合わせたファインチューニングが必要である。</p>
+<hr>
+<h2>インストールと構成</h2>
+<h3>環境要件</h3>
+<ul>
+<li>Python 3.7以上</li>
+<li>PyTorch 2.3+推奨</li>
+<li>CUDA対応GPU(大規模データセットに推奨)</li>
+</ul>
+<h3>方法1: pipインストール(クイックスタート)</h3>
+<pre><code class="language-bash">pip install iTransformer
+</code></pre>
+<h3>方法2: ソースコードインストール(公式実装)</h3>
+<pre><code class="language-bash">git clone https://github.com/thuml/iTransformer.git
+cd iTransformer
+
+conda create --name itransformer python=3.7
+conda activate itransformer
+pip install -r requirements.txt
+</code></pre>
+<h3>インストール確認</h3>
+<pre><code class="language-python">import torch
+from iTransformer import iTransformer
+
+print(&quot;iTransformer installed successfully!&quot;)
+print(f&quot;PyTorch version: {torch.__version__}&quot;)
+</code></pre>
+<hr>
+<h2>使用例</h2>
+<h3>基本的な単変量予測</h3>
+<pre><code class="language-python">import torch
+from iTransformer import iTransformer
+
+model = iTransformer(
+    num_variates=1,           # 変数の数
+    lookback_len=96,          # 過去データの長さ
+    dim=256,                  # モデル次元
+    depth=6,                  # Transformerレイヤー数
+    heads=8,                  # アテンションヘッド数
+    dim_head=64,              # 各ヘッドの次元
+    pred_length=24,           # 予測長
+    use_reversible_instance_norm=True
+)
+
+# 入力: (バッチ、過去長、変数数)
+time_series = torch.randn(2, 96, 1)
+predictions = model(time_series)
+print(f&quot;予測結果: {predictions.shape}&quot;)  # (2, 24, 1)
+</code></pre>
+<h3>多変量マルチステップ予測</h3>
+<pre><code class="language-python">multi_model = iTransformer(
+    num_variates=137,         # Solarデータセットの137変数
+    lookback_len=96,
+    dim=256,
+    depth=6,
+    heads=8,
+    dim_head=64,
+    pred_length=(12, 24, 36, 48),  # 複数の予測長を同時出力
+    use_reversible_instance_norm=True
+)
+
+multi_input = torch.randn(2, 96, 137)
+multi_predictions = multi_model(multi_input)
+
+for pred_len, pred in multi_predictions.items():
+    print(f&quot;{pred_len}ステップ予測: {pred.shape}&quot;)
+</code></pre>
+<h3>iTransformer2D: 時空間デュアルアテンション</h3>
+<p>変数関係と時系列パターンを<strong>同時に</strong>考慮する必要がある場合(例: 空間的に分散したセンサー):</p>
+<pre><code class="language-python">from iTransformer import iTransformer2D
+
+model_2d = iTransformer2D(
+    num_variates=137,
+    num_time_tokens=16,       # 時系列を16個の時間トークンに分割
+    lookback_len=96,
+    dim=256,
+    depth=6,
+    heads=8,
+    dim_head=64,
+    pred_length=(12, 24, 36, 48)
+)
+
+input_data = torch.randn(2, 96, 137)
+predictions_2d = model_2d(input_data)
+</code></pre>
+<blockquote>
+<p><strong>iTransformer2Dを選ぶべき場合</strong>: 気象観測所のように空間的に隣接するセンサー群の時系列を予測する場合。変数間アテンションと時間的アテンションの両方を活用し、標準iTransformerより豊かな表現を学習する。</p>
+</blockquote>
+<h3>公式スクリプトによる学習</h3>
+<pre><code class="language-bash"># 多変量予測(Trafficデータセット)
+bash ./scripts/multivariate_forecasting/Traffic/iTransformer.sh
+
+# Transformer対iTransformerの性能比較
+bash ./scripts/boost_performance/Weather/iTransformer.sh
+
+# 未見の変数への一般化テスト
+bash ./scripts/variate_generalization/ECL/iTransformer.sh
+
+# ルックバックウィンドウ拡大の効果テスト
+bash ./scripts/increasing_lookback/Traffic/iTransformer.sh
+
+# FlashAttention高速化バージョン
+bash ./scripts/efficient_attentions/iFlashTransformer.sh
+</code></pre>
+<h3>データセット</h3>
+<p>公式実験データセットのダウンロード:</p>
+<ul>
+<li><a href="https://drive.google.com/drive/folders/1ZOYpTUa82_jCcxIdTmyr0LXQfvaM9vIy">Google Drive</a></li>
+<li><a href="https://cloud.tsinghua.edu.cn/f/84fbc752d0e94980a610/">Tsinghua Cloud</a></li>
+</ul>
+<hr>
+<h2>主要ハイパーパラメータ</h2>
+<table>
+<thead>
+<tr>
+<th>パラメータ</th>
+<th>説明</th>
+<th>代表値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>num_variates</code></td>
+<td>変数(チャネル)の数</td>
+<td>データセットの特徴数</td>
+</tr>
+<tr>
+<td><code>lookback_len</code></td>
+<td>ルックバックウィンドウの長さ</td>
+<td>96、192、336、720</td>
+</tr>
+<tr>
+<td><code>dim</code></td>
+<td>モデル隠れ次元</td>
+<td>256、512</td>
+</tr>
+<tr>
+<td><code>depth</code></td>
+<td>Transformerレイヤー数</td>
+<td>2、3、6</td>
+</tr>
+<tr>
+<td><code>heads</code></td>
+<td>アテンションヘッド数</td>
+<td>4、8</td>
+</tr>
+<tr>
+<td><code>dim_head</code></td>
+<td>各ヘッドの次元</td>
+<td>64</td>
+</tr>
+<tr>
+<td><code>pred_length</code></td>
+<td>予測長(タプルで複数指定可能)</td>
+<td>24、48、96、192</td>
+</tr>
+<tr>
+<td><code>use_reversible_instance_norm</code></td>
+<td>可逆インスタンス正規化</td>
+<td>True推奨</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>代表的な活用事例</h2>
+<table>
+<thead>
+<tr>
+<th>分野</th>
+<th>説明</th>
+<th>iTransformer適合度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GNSS高度時系列</td>
+<td>衛星ナビゲーションデータ処理</td>
+<td>★★★★★(共同1位)</td>
+</tr>
+<tr>
+<td>電力価格予測</td>
+<td>リアルタイム電力市場予測</td>
+<td>★★★★☆</td>
+</tr>
+<tr>
+<td>太陽光発電予測</td>
+<td>日次発電量予測</td>
+<td>★★★★☆</td>
+</tr>
+<tr>
+<td>高速道路通行量予測</td>
+<td>交通流予測</td>
+<td>★★★★★</td>
+</tr>
+<tr>
+<td>石炭層メタン生産予測</td>
+<td>エネルギー採掘生産量</td>
+<td>★★★★☆</td>
+</tr>
+<tr>
+<td>海面温度予測</td>
+<td>転移学習と組み合わせた活用</td>
+<td>★★★★☆</td>
+</tr>
+<tr>
+<td>異常検知</td>
+<td>多変量時系列の異常検知</td>
+<td>★★★☆☆</td>
+</tr>
+<tr>
+<td>株式ポートフォリオ分析</td>
+<td>銘柄間相関の捕捉</td>
+<td>★★★★☆</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>TimesFM対iTransformer比較</h2>
+<p>両モデルは目的が異なるため、状況に応じて選択が変わる。</p>
+<table>
+<thead>
+<tr>
+<th>基準</th>
+<th>TimesFM</th>
+<th>iTransformer</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>モデルタイプ</strong></td>
+<td>ファウンデーションモデル</td>
+<td>特化アーキテクチャ</td>
+</tr>
+<tr>
+<td><strong>ゼロショット予測</strong></td>
+<td>○</td>
+<td>×(学習が必要)</td>
+</tr>
+<tr>
+<td><strong>多変量サポート</strong></td>
+<td>限定的</td>
+<td>○(中核的強み)</td>
+</tr>
+<tr>
+<td><strong>単変量性能</strong></td>
+<td>○</td>
+<td>相対的に劣位</td>
+</tr>
+<tr>
+<td><strong>変数間関係の捕捉</strong></td>
+<td>×</td>
+<td>○</td>
+</tr>
+<tr>
+<td><strong>Googleエコシステム統合</strong></td>
+<td>○</td>
+<td>×</td>
+</tr>
+<tr>
+<td><strong>AWSエコシステム統合</strong></td>
+<td>×</td>
+<td>○(GluonTS)</td>
+</tr>
+<tr>
+<td><strong>インストール難易度</strong></td>
+<td>高(JAX依存)</td>
+<td>低(pip一行)</td>
+</tr>
+<tr>
+<td><strong>即時使用可能性</strong></td>
+<td>○</td>
+<td>×</td>
+</tr>
+</tbody></table>
+<ul>
+<li>センサー/金融変数間の相関が重要 → <strong>iTransformer</strong>(多変量)</li>
+<li>両アプローチの組み合わせ: iTransformerでファインチューニングする前にTimesFMでベースラインを確認</li>
+</ul>
+<hr>
+<h2>株式・予測市場での活用可能性</h2>
+<h3>株式市場でのiTransformer</h3>
+<p>iTransformerの<strong>変数間相関学習</strong>は金融データに特に有用である。</p>
+<p><strong>強みが発揮されるシナリオ:</strong>-<strong>セクターローテーション分析</strong>: テック株/エネルギー株/金融株間の相関変化を捕捉</p>
+<ul>
+<li><strong>ファクターモデル補完</strong>: PBR、PER、ROEなど複数ファクターの相互関係を学習</li>
+<li><strong>ポートフォリオ最適化</strong>: 銘柄間の共分散構造予測によるリバランストリガー生成</li>
+<li><strong>ペアトレーディング</strong>: 同一セクター2銘柄のスプレッド予測</li>
+</ul>
+<p><strong>活用例:</strong></p>
+<pre><code class="language-python"># KOSPI 200銘柄の30日間リターン予測
+model = iTransformer(
+    num_variates=200,    # 200銘柄
+    lookback_len=252,    # 1年間の取引日
+    pred_length=20,      # 20取引日(1ヶ月)予測
+    dim=512,
+    depth=4,
+    heads=8,
+    dim_head=64,
+    use_reversible_instance_norm=True
+)
+</code></pre>
+<h3>Polymarketでの活用</h3>
+<p>iTransformerは<strong>複数の経済指標を同時に考慮</strong>できるため、Polymarketの複合マーケットに有利である。</p>
+<p>例: 「2025年末の米国景気後退の有無」マーケット</p>
+<pre><code>入力変数(num_variates=6):
+- 失業率
+- 10年物金利
+- 2年物金利(イールドカーブ)
+- ISM製造業PMI
+- 消費者信頼感指数
+- S&amp;P 500リターン
+
+→ iTransformerが6変数間の相関を学習し、景気後退確率を推定
+→ Polymarketの現在価格と比較して価格差の機会を探索
+</code></pre>
+<hr>
+<h2>参考資料</h2>
+<ul>
+<li><strong>論文</strong>: <a href="https://arxiv.org/abs/2310.06625">iTransformer: Inverted Transformers Are Effective for Time Series Forecasting (ICLR 2024)</a></li>
+<li><strong>公式コード</strong>: <a href="https://github.com/thuml/iTransformer">https://github.com/thuml/iTransformer</a></li>
+<li><strong>発表スライド</strong>: <a href="https://cloud.tsinghua.edu.cn/f/175ff98f7e2d44fbbe8e/">https://cloud.tsinghua.edu.cn/f/175ff98f7e2d44fbbe8e/</a></li>
+<li><strong>ポスター</strong>: <a href="https://cloud.tsinghua.edu.cn/f/36a2ae6c132d44c0bd8c/">https://cloud.tsinghua.edu.cn/f/36a2ae6c132d44c0bd8c/</a></li>
+<li><strong>Time-Series-Library</strong>(清華大学公式ベンチマーク): <a href="https://github.com/thuml/Time-Series-Library">https://github.com/thuml/Time-Series-Library</a></li>
+</ul>
+<hr>
+<p><em>最終更新: 2025年6月 | 作成: Vibe Investing Research</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/TimesFM/iTransformer_%EA%B0%80%EC%9D%B4%EB%93%9C_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MCP 2026-07-28 仕様移行: セキュリティ視点の変更点と移行ガイド — VibeQuant</title>
+  <meta name="description" content="MCP 2026-07-28仕様をセキュリティ視点で解説する。ステートレスプロトコルへの移行、OAuth 2.1に基づく認可の必須化、Extension Frameworkの正式導入、そして実務的な移行チェックリストとツールを紹介する。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide-ja/" />
+  <meta property="og:title" content="MCP 2026-07-28 仕様移行: セキュリティ視点の変更点と移行ガイド" />
+  <meta property="og:description" content="MCP 2026-07-28仕様をセキュリティ視点で解説する。ステートレスプロトコルへの移行、OAuth 2.1に基づく認可の必須化、Extension Frameworkの正式導入、そして実務的な移行チェックリストとツールを紹介する。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MCP 2026-07-28 仕様移行: セキュリティ視点の変更点と移行ガイド","description":"MCP 2026-07-28仕様をセキュリティ視点で解説する。ステートレスプロトコルへの移行、OAuth 2.1に基づく認可の必須化、Extension Frameworkの正式導入、そして実務的な移行チェックリストとツールを紹介する。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/mcp-mcp-2026-07-28-security-migration-guide-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MCP/MCP-2026-07-28-Security-Migration-Guide_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-19","dateModified":"2026-07-19","inLanguage":"ja","keywords":"MCP, Model Context Protocol, セキュリティ, OAuth 2.1, APIセキュリティ, 移行"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>MCP 2026-07-28 仕様移行: セキュリティ視点の変更点と移行ガイド</h1>
+        <p class="article-dates"><time datetime="2026-07-19">발행 2026.07.19</time> · 주제 MCP · Model Context Protocol · セキュリティ · OAuth 2.1 · APIセキュリティ · 移行</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/mcp-mcp-2026-07-28-security-migration-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/mcp-mcp-2026-07-28-security-migration-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/mcp-mcp-2026-07-28-security-migration-guide-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/mcp-mcp-2026-07-28-security-migration-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">MCP 2026-07-28仕様をセキュリティ視点で解説する。ステートレスプロトコルへの移行、OAuth 2.1に基づく認可の必須化、Extension Frameworkの正式導入、そして実務的な移行チェックリストとツールを紹介する。</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. 概要</h2>
+<p>2026年7月28日、MCP(Model Context Protocol)はリリース以来最大規模のアーキテクチャ変更を含む新仕様へ移行する。今回の改訂の核心は3点である。</p>
+<ol>
+<li><strong>プロトコルのステートレス化</strong> — セッション概念を廃止し、リクエストの自己完結性を確保</li>
+<li><strong>OAuth 2.1に基づく認可(Authorization)の標準化</strong> — 実装者の裁量だった認可を標準として強制</li>
+<li><strong>Extension Frameworkの正式導入</strong> — Roots/Sampling/LoggingをCoreから分離、監査・同意・承認機能の標準化</li>
+</ol>
+<p>この変化の本質は<strong>セキュリティ責任の移転</strong>である。従来はプロトコル層(セッション、ハンドシェイク)が暗黙的に提供していた状態管理と信頼境界が失われ、その責任が開発者とプラットフォーム運用者の明示的な設計に移る。ステートレス構造は拡張性とロードバランシングの観点で大きな利点があるが、クライアントが渡す状態情報を検証なしに信頼すると新たな攻撃面が開く。</p>
+<hr>
+<h2>2. セキュリティ視点の主な変更点</h2>
+<h3>2.1 ステートレス構造への移行</h3>
+<p><code>initialize</code>ハンドシェイクと<code>Mcp-Session-Id</code>ヘッダーが廃止され、すべてのリクエストが自己完結型構造に変わる。プロトコルバージョン・クライアント情報・能力(capabilities)は各リクエストの<code>_meta</code>オブジェクトに含まれ、サーバー能力の照会は<code>server/discover</code>メソッドが代替する。</p>
+<p><strong>変更前(2025-11-25)</strong> — セッション確立後<code>Mcp-Session-Id</code>で状態を維持:</p>
+<pre><code class="language-http">POST /mcp HTTP/1.1
+Mcp-Session-Id: 1868a90c-3a3f-4f5b
+Content-Type: application/json
+
+{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:2,&quot;method&quot;:&quot;tools/call&quot;,
+ &quot;params&quot;:{&quot;name&quot;:&quot;search&quot;,&quot;arguments&quot;:{&quot;q&quot;:&quot;otters&quot;}}}
+</code></pre>
+<p><strong>変更後(2026-07-28)</strong> — リクエスト自体に全コンテキストを含む:</p>
+<pre><code class="language-http">POST /mcp HTTP/1.1
+MCP-Protocol-Version: 2026-07-28
+Mcp-Method: tools/call
+Mcp-Name: search
+Content-Type: application/json
+
+{&quot;jsonrpc&quot;:&quot;2.0&quot;,&quot;id&quot;:1,&quot;method&quot;:&quot;tools/call&quot;,
+ &quot;params&quot;:{&quot;name&quot;:&quot;search&quot;,&quot;arguments&quot;:{&quot;q&quot;:&quot;otters&quot;},
+ &quot;_meta&quot;:{&quot;io.modelcontextprotocol/clientInfo&quot;:{&quot;name&quot;:&quot;my-app&quot;,&quot;version&quot;:&quot;1.0&quot;}}}}
+</code></pre>
+<p><strong>セキュリティ上の意味</strong></p>
+<table>
+<thead>
+<tr>
+<th>脅威</th>
+<th>説明</th>
+<th>対策</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>状態のハイジャック</td>
+<td>クライアントが渡すリソースハンドル(例: <code>basket_id</code>)をサーバーが無条件に信頼すると、予測可能なIDによって他ユーザーのワークフローを乗っ取られる恐れがある</td>
+<td>ハンドルに十分なエントロピーを持たせ、所有権(ownership)を検証する</td>
+</tr>
+<tr>
+<td>State Objectの改ざん</td>
+<td>クライアントへ返却し後で受け取り直すstate objectの整合性を検証しないと、権限昇格が可能になる</td>
+<td>署名(HMACなど)またはサーバー側保存+参照方式を適用する</td>
+</tr>
+<tr>
+<td>ヘッダー/本文の不一致</td>
+<td><code>Mcp-Method</code>/<code>Mcp-Name</code>ヘッダーとJSON-RPC本文が異なると、プロキシ・WAF回避ベクトルが生まれる</td>
+<td>ヘッダーと本文の一致をサーバー側で必ず検証する</td>
+</tr>
+</tbody></table>
+<h3>2.2 OAuthに基づく認可の標準化</h3>
+<p>これまで実装者の裁量だった認可がOAuth 2.1標準として強制される。中核となる構成要素は次の4つである。</p>
+<table>
+<thead>
+<tr>
+<th>構成要素</th>
+<th>標準</th>
+<th>内容</th>
+<th>防御する攻撃</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Protected Resource Metadata</td>
+<td>RFC 9728</td>
+<td><code>/.well-known/oauth-protected-resource</code>でAuthorization Server情報を公開</td>
+<td>誤ったASへの接続、構成ミス</td>
+</tr>
+<tr>
+<td>Resource Indicators</td>
+<td>RFC 8707</td>
+<td>トークン要求時に<code>resource</code>パラメータで対象リソースサーバーを明示、サーバーは自分向けに発行されたトークンかを検証</td>
+<td>トークンの誤用(Token Passthrough)、Confused Deputy</td>
+</tr>
+<tr>
+<td>Client ID Metadata Documents (CIMD)</td>
+<td>-</td>
+<td>サーバーごとのDCR反復登録を標準文書ベースの構成に置き換え</td>
+<td>登録の乱用、クライアント識別の混乱</td>
+</tr>
+<tr>
+<td>Issuer検証</td>
+<td>RFC 9207</td>
+<td>トークン発行後、<code>iss</code>パラメータで実際に要求したASが発行したかを検証することを義務化</td>
+<td>OAuth Mix-up Attack</td>
+</tr>
+</tbody></table>
+<p>Protected Resource Metadataの構成例:</p>
+<pre><code class="language-json">{
+  &quot;authorization_servers&quot;: [&quot;https://auth.example.com&quot;],
+  &quot;resource&quot;: &quot;https://mcp.example.com&quot;
+}
+</code></pre>
+<p>Resource Indicatorを含むトークン要求:</p>
+<pre><code class="language-http">POST /token HTTP/1.1
+Content-Type: application/x-www-form-urlencoded
+
+grant_type=authorization_code&amp;
+code=...&amp;
+resource=https://mcp.example.com
+</code></pre>
+<h3>2.3 Extension Frameworkの導入</h3>
+<p>監査ログ(Audit Logging)、ユーザー同意(Consent)、承認(Approval)などのセキュリティ運用機能が公式Extensionとして標準化された。</p>
+<ul>
+<li><strong>Roots、Sampling、Logging</strong>: CoreからExtensionに分離、公式に非推奨化</li>
+<li><strong>MCP Apps</strong>: 初の公式ExtensionとしてサーバーレンダリングUIをサポート</li>
+<li><strong>Tasks Extension</strong>: 長時間実行(long-running)タスクを標準化</li>
+</ul>
+<p>セキュリティ観点では、これは監査・同意・承認フローが各実装の独自設計ではなく標準インターフェースに収束することを意味する。コンプライアンスと監査可能性(auditability)の確保にはプラスだが、従来のCore機能(特にSampling)に依存していたコードは必ずExtension名前空間方式へ移行する必要がある。</p>
+<hr>
+<h2>3. Breaking Changes 要約</h2>
+<table>
+<thead>
+<tr>
+<th>変更項目</th>
+<th>従来(2025-11-25)</th>
+<th>新規(2026-07-28)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>セッション</td>
+<td><code>initialize</code>ハンドシェイク + <code>Mcp-Session-Id</code></td>
+<td>廃止、ステートレス化</td>
+</tr>
+<tr>
+<td>エラーコード</td>
+<td><code>-32002</code>(Resource not found)</td>
+<td><code>-32602</code>(JSON-RPC標準)</td>
+</tr>
+<tr>
+<td>能力検出</td>
+<td>ハンドシェイク時に交換</td>
+<td><code>server/discover</code>メソッド</td>
+</tr>
+<tr>
+<td>HTTPヘッダー</td>
+<td><code>Mcp-Session-Id</code></td>
+<td><code>Mcp-Method</code>、<code>Mcp-Name</code>が必須</td>
+</tr>
+<tr>
+<td>SSE</td>
+<td>Server-Sent Eventsストリームを維持</td>
+<td>Multi Round-Trip Requests(MRTR)で代替</td>
+</tr>
+<tr>
+<td>認可</td>
+<td>実装依存</td>
+<td>OAuth 2.1標準化</td>
+</tr>
+<tr>
+<td>Roots/Sampling/Logging</td>
+<td>Core機能</td>
+<td>Extensionへ分離(非推奨)</td>
+</tr>
+<tr>
+<td>キャッシュ</td>
+<td>個別実装が必要</td>
+<td><code>ttlMs</code>、<code>cacheScope</code>フィールドを提供</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 移行ガイド</h2>
+<h3>4.1 セッション状態の除去</h3>
+<table>
+<thead>
+<tr>
+<th>従来の方法</th>
+<th>新しい方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>initialize</code>ハンドシェイク</td>
+<td><code>server/discover</code>メソッドで能力を照会</td>
+</tr>
+<tr>
+<td><code>Mcp-Session-Id</code>ヘッダー</td>
+<td><code>_meta</code>オブジェクトにクライアント情報を含める</td>
+</tr>
+<tr>
+<td>セッションベースの状態保存</td>
+<td>明示的なリソースハンドル(例: <code>basket_id</code>)で状態を伝達</td>
+</tr>
+<tr>
+<td>Sticky Sessionが必要</td>
+<td>Round-robinロードバランシングが可能</td>
+</tr>
+</tbody></table>
+<pre><code class="language-typescript">// 従来: セッションベースの状態管理
+class SessionManager {
+  private sessions: Map&lt;string, SessionState&gt;;
+
+  async handleRequest(sessionId: string, request: Request) {
+    const session = this.sessions.get(sessionId);
+    // セッション状態に依存
+  }
+}
+
+// 新規: 明示的なハンドルベース
+class StatelessHandler {
+  async handleRequest(request: Request) {
+    // 必要な情報はすべてリクエストに含まれる
+    const { basketId, clientInfo } = request.params._meta;
+    // basketIdを明示的なパラメータとして受け取り処理する
+    // 注意: basketIdの所有権と整合性の検証が必須
+  }
+}
+</code></pre>
+<h3>4.2 認可(Authorization)の移行</h3>
+<table>
+<thead>
+<tr>
+<th>従来の方法</th>
+<th>新しい方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>独自実装の認可</td>
+<td>OAuth 2.1標準への準拠</td>
+</tr>
+<tr>
+<td>個別設定が必要</td>
+<td><code>.well-known/oauth-protected-resource</code>による自動検出</td>
+</tr>
+<tr>
+<td>トークンスコープ未指定</td>
+<td>Resource Indicators(RFC 8707)でスコープを指定</td>
+</tr>
+<tr>
+<td>DCRベースのクライアント登録</td>
+<td>CIMDベースの構成へ移行</td>
+</tr>
+<tr>
+<td>Issuer検証を省略可能</td>
+<td>Issuer検証の義務化(RFC 9207)</td>
+</tr>
+</tbody></table>
+<p>実装チェックリスト:</p>
+<ol>
+<li><code>.well-known/oauth-protected-resource</code>エンドポイントを構成する(RFC 9728)</li>
+<li>OAuth 2.1準拠の認可フローを実装する(PKCE必須)</li>
+<li>Resource Indicatorsを適用する(RFC 8707)</li>
+<li>Issuer(<code>iss</code>)パラメータの検証ロジックを追加する(RFC 9207)</li>
+<li>CIMDベースのクライアント構成へ移行する</li>
+</ol>
+<h3>4.3 Extensionへの移行</h3>
+<pre><code class="language-typescript">// 従来: Coreに依存していたSampling
+server.setCapabilities({
+  sampling: { /* ... */ }
+});
+
+// 新規: Extensionに分離された機能を使用
+server.setCapabilities({
+  extensions: {
+    &quot;io.modelcontextprotocol/sampling&quot;: { /* ... */ },
+    &quot;io.modelcontextprotocol/logging&quot;: { /* ... */ }
+  }
+});
+</code></pre>
+<h3>4.4 本番移行チェックリスト</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>セッション状態の除去</strong>: <code>Mcp-Session-Id</code>ベースの状態保存ロジックを明示的なリソースハンドル構造へ移行</li>
+<li><input disabled="" type="checkbox"> <strong>エラーコードの修正</strong>: <code>-32002</code> → <code>-32602</code>へ変更</li>
+<li><input disabled="" type="checkbox"> <strong>OAuth構成</strong>: <code>.well-known/oauth-protected-resource</code>エンドポイントを構成する(RFC 9728)</li>
+<li><input disabled="" type="checkbox"> <strong>Resource Indicators</strong>: RFC 8707の適用状況を確認</li>
+<li><input disabled="" type="checkbox"> <strong>CIMD移行</strong>: DCRベース構成からCIMDベース構成への計画を立てる</li>
+<li><input disabled="" type="checkbox"> <strong>Extension確認</strong>: Roots、Sampling、LoggingのCore分離が反映されているか確認</li>
+<li><input disabled="" type="checkbox"> <strong>ステートレステスト</strong>: ロードバランサー配下の複数インスタンス環境でステートレス動作を検証</li>
+<li><input disabled="" type="checkbox"> <strong>ヘッダー検証</strong>: <code>Mcp-Method</code>、<code>Mcp-Name</code>ヘッダーと本文内容の一致検証ロジックを追加</li>
+<li><input disabled="" type="checkbox"> <strong><code>_meta</code>オブジェクト検証</strong>: クライアントが渡す<code>_meta</code>オブジェクトの整合性検証ロジックを実装</li>
+<li><input disabled="" type="checkbox"> <strong>トークン検証</strong>: Issuer(<code>iss</code>)パラメータの検証ロジックを追加(RFC 9207)</li>
+</ul>
+<hr>
+<h2>5. 移行ツール</h2>
+<table>
+<thead>
+<tr>
+<th>ツール</th>
+<th>用途</th>
+<th>リンク</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>mcp-herald</td>
+<td>MCP 2026-07-28仕様向けの静的移行リンター。ソースコードをスキャンしてBreaking Changeのシグネチャを検出し、修正方法を案内する</td>
+<td><a href="https://github.com/studiomeyer-io/mcp-herald">https://github.com/studiomeyer-io/mcp-herald</a></td>
+</tr>
+<tr>
+<td>mcp-auth-adapter</td>
+<td>OAuth 2.0/OIDC IdPの前段でMCP認可仕様に必要な機能(RFC 9728/8707/9207)を提供するアダプター</td>
+<td><a href="https://github.com/velias/mcp-auth-adapter">https://github.com/velias/mcp-auth-adapter</a></td>
+</tr>
+</tbody></table>
+<p>推奨する活用順序: (1) mcp-heraldでコードベース全体をスキャンしBreaking Changeを一覧化する、(2) セッション・エラーコード・Extensionなどプロトコル層を修正する、(3) mcp-auth-adapterで認可層を標準化する、(4) ステートレス環境(複数インスタンス+ロードバランサー)で統合テストを行う。</p>
+<hr>
+<h2>6. 結論と提言</h2>
+<p>2026-07-28 MCP仕様の核心は、ステートレスアーキテクチャへの移行、OAuth 2.1に基づく認可の標準化、Extension Frameworkの導入である。プロトコルが暗黙的に提供していた信頼境界が失われ、セキュリティ責任が開発者とプラットフォーム運用者に移転したことで、各実装のセキュリティ設計の質がシステム全体のセキュリティレベルを決定するようになった。</p>
+<p>12ヶ月の廃止予定期間(Deprecation Window)が設けられているため、次のような段階的アプローチを推奨する。</p>
+<table>
+<thead>
+<tr>
+<th>段階</th>
+<th>期間(推奨)</th>
+<th>作業</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. 診断</td>
+<td>1ヶ月</td>
+<td>mcp-heraldスキャン、Breaking Changeの影響度評価</td>
+</tr>
+<tr>
+<td>2. プロトコル移行</td>
+<td>2-3ヶ月</td>
+<td>セッション除去、ヘッダー/エラーコード修正、Extension移行</td>
+</tr>
+<tr>
+<td>3. 認可標準化</td>
+<td>2-3ヶ月</td>
+<td>OAuth 2.1フローの実装、RFC 9728/8707/9207の適用</td>
+</tr>
+<tr>
+<td>4. 検証</td>
+<td>1-2ヶ月</td>
+<td>ステートレス負荷テスト、侵入テスト、ヘッダー/本文不一致とハンドル改ざんシナリオの検証</td>
+</tr>
+<tr>
+<td>5. 並行運用</td>
+<td>残り期間</td>
+<td>新旧仕様の並行サポート後にレガシーを終了</td>
+</tr>
+</tbody></table>
+<p>特に、ステートレス化への移行過程でクライアントが提供するデータ(リソースハンドル、state object、<code>_meta</code>)に対する検証ロジックが欠落すると、セッション時代には存在しなかったハイジャック・権限奪取ベクトルが生まれる点を、移行の全過程で念頭に置く必要がある。</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MCP/MCP-2026-07-28-Security-Migration-Guide_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

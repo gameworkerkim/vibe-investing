@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ollamaインストールと基本使用法 — トークン貧乏のためのローカルLLM環境構築 — VibeQuant</title>
+  <meta name="description" content="Ollamaで無料のローカルLLM環境を構築する段階別ガイドと、主要オープンソースLLMの比較" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde-ja/" />
+  <meta property="og:title" content="Ollamaインストールと基本使用法 — トークン貧乏のためのローカルLLM環境構築" />
+  <meta property="og:description" content="Ollamaで無料のローカルLLM環境を構築する段階別ガイドと、主要オープンソースLLMの比較" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Ollamaインストールと基本使用法 — トークン貧乏のためのローカルLLM環境構築","description":"Ollamaで無料のローカルLLM環境を構築する段階別ガイドと、主要オープンソースLLMの比較","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Local_LLM/Ollama_Install_Guilde_JA.md","image":"https://vibequant.cc/og-default.png","inLanguage":"ja","keywords":"LLM, Ollama, ローカルAI, オープンソース"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Ollamaインストールと基本使用法 — トークン貧乏のためのローカルLLM環境構築</h1>
+        <p class="article-dates">주제 LLM · Ollama · ローカルAI · オープンソース</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/local-llm-ollama-install-guilde/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/local-llm-ollama-install-guilde-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/local-llm-ollama-install-guilde-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/local-llm-ollama-install-guilde-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Ollamaで無料のローカルLLM環境を構築する段階別ガイドと、主要オープンソースLLMの比較</p>
+        
+      </header>
+      <div class="article-body prose"><p>ChatGPTやClaudeのような高性能AIモデルを使うたびにAPI費用が気になりますか?インターネット接続なしでも、費用の心配なく、自分のコンピューターで直接LLMを実行できたらどうでしょうか?本文書は<strong>Ollama</strong>を活用してトークン費用なしで自分だけのローカルLLM環境を構築する方法を段階別に案内します。文書後半では最新のオープンソースLLMモデルの特徴と長所・短所も紹介するので、自分のPC仕様に合った最適なモデルを探してみてください。</p>
+<blockquote>
+<p><strong>Ollama</strong>はローカルコンピューターでLlama、Mistral、GemmaなどさまざまなオープンソースLLMをDockerコンテナのように簡単に実行できるようにするツールです。</p>
+</blockquote>
+<h2>目次</h2>
+<ul>
+<li><a href="#1-ollama%E3%81%A8%E3%81%AF">1. Ollamaとは?</a></li>
+<li><a href="#2-ollama%E3%81%AE%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">2. Ollamaのインストール</a></li>
+<li><a href="#3-ollama%E3%81%AE%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8%E6%B3%95">3. Ollamaの基本使用法</a></li>
+<li><a href="#4-%E4%B8%BB%E8%A6%81llm%E3%83%A2%E3%83%87%E3%83%AB%E6%AF%94%E8%BC%83%E9%95%B7%E6%89%80%E7%9F%AD%E6%89%80%E7%89%B9%E5%BE%B4">4. 主要LLMモデル比較(長所・短所&amp;特徴)</a></li>
+<li><a href="#5-%E8%87%AA%E5%88%86%E3%81%AEpc%E3%81%AB%E5%90%88%E3%81%A3%E3%81%9F%E3%83%A2%E3%83%87%E3%83%AB%E9%81%B8%E6%8A%9E%E3%82%AC%E3%82%A4%E3%83%89">5. 自分のPCに合ったモデル選択ガイド</a></li>
+<li><a href="#6-%E4%BD%B5%E3%81%9B%E3%81%A6%E8%A6%8B%E3%82%8B%E3%81%A8%E8%89%AF%E3%81%84%E3%83%92%E3%83%B3%E3%83%88%E3%81%A8%E3%83%84%E3%83%BC%E3%83%AB">6. 併せて見ると良いヒントとツール</a></li>
+<li><a href="#7-%E5%8F%82%E8%80%83%E8%B3%87%E6%96%99">7. 参考資料</a></li>
+</ul>
+<h2>1. Ollamaとは?</h2>
+<p>Ollamaは<strong>大規模言語モデル(LLM)をローカル環境で簡単に実行・管理できるオープンソースフレームワーク</strong>です。Dockerがコンテナでアプリケーションをパッケージ化するように、Ollamaはモデルの重みと設定を一つにまとめて簡単に実行できるようにします。インストール後、数行のコマンドだけでMetaのLlama、MistralのMistral、GoogleのGemmaなど多様なLLMを自分のコンピューターで動かすことができます。</p>
+<h3>なぜOllamaを使うべきか?(トークン貧乏脱出記)</h3>
+<table>
+<thead>
+<tr>
+<th>長所</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>コストゼロ</strong></td>
+<td>API呼び出しごとの料金が全くありません。無制限に質問しても課金の心配なし</td>
+</tr>
+<tr>
+<td><strong>完璧なプライバシー</strong></td>
+<td>すべてのデータが自分のコンピューターに留まります。センシティブな文書も安心して分析できます</td>
+</tr>
+<tr>
+<td><strong>オフライン動作</strong></td>
+<td>モデルだけダウンロードしておけばインターネットなしでもどこでも使用可能</td>
+</tr>
+<tr>
+<td><strong>高速応答</strong></td>
+<td>ネットワーク遅延がなく即座に応答を受け取れる</td>
+</tr>
+<tr>
+<td><strong>自由な実験</strong></td>
+<td>さまざまなモデルを自由に切り替えてテストできる</td>
+</tr>
+<tr>
+<td><strong>優れた拡張性</strong></td>
+<td>REST API、Python連携、IDE拡張など多様なツールと統合される</td>
+</tr>
+</tbody></table>
+<h2>2. Ollamaのインストール</h2>
+<h3>事前要件(ハードウェアチェック)</h3>
+<p>Ollamaはすべての最新OSで動作しますが、モデルを円滑に実行するには<strong>最低8GB RAM</strong>(推奨16GB)以上を準備することが望ましいです。参考として、<strong>Q4_K_M量子化された70億(7B)パラメータモデル</strong>は約<strong>4〜6GB</strong>のメモリを必要とします。</p>
+<table>
+<thead>
+<tr>
+<th>モデルサイズ</th>
+<th>Q4量子化基準必要メモリ(推定)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3B〜8B(小型)</td>
+<td>4GB〜6GB</td>
+</tr>
+<tr>
+<td>13B〜20B(中型)</td>
+<td>8GB〜16GB</td>
+</tr>
+<tr>
+<td>32B〜40B(大型)</td>
+<td>20GB〜32GB</td>
+</tr>
+<tr>
+<td>70B以上(超大型)</td>
+<td>40GB以上</td>
+</tr>
+</tbody></table>
+<p>GPUがあればより速い推論速度を体験できますが、必須ではありません。一般的なCPUだけでも70億(7B)パラメータモデル基準で秒間約5〜15個のトークンを生成できます。</p>
+<hr>
+<h3>Windows</h3>
+<ol>
+<li><p><a href="https://ollama.com/download">Ollama公式ダウンロードページ</a>でWindows用インストールファイル(<code>OllamaSetup.exe</code>)をダウンロードします。</p>
+</li>
+<li><p>ダウンロードしたファイルを実行してインストールを完了します。</p>
+</li>
+<li><p>インストールが完了したら<strong>PowerShellまたはコマンドプロンプト(CMD)</strong>を開いて以下のコマンドで正常インストールを確認します。</p>
+<pre><code class="language-bash">ollama --version
+</code></pre>
+</li>
+</ol>
+<hr>
+<h3>MacOS</h3>
+<ul>
+<li><strong>公式インストールファイルの利用</strong>
+<a href="https://ollama.com">ollama.com</a>でmacOS用ファイルをダウンロードしてインストールします。</li>
+<li><strong>Homebrewの利用(推奨)</strong><pre><code class="language-bash">brew install ollama
+</code></pre>
+</li>
+</ul>
+<hr>
+<h3>Linux</h3>
+<p>ターミナルで以下のコマンドを実行します。Ubuntu、Debian、Fedora、CentOSなどほとんどのディストリビューションをサポートします。</p>
+<pre><code class="language-bash">curl -fsSL https://ollama.com/install.sh | sh
+</code></pre>
+<hr>
+<h3>Docker(任意)</h3>
+<p>コンテナベースのデプロイを希望する場合はDockerイメージを使用できます。</p>
+<pre><code class="language-bash">docker pull ollama/ollama
+docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+</code></pre>
+<blockquote>
+<p><code>11434</code>はOllama APIのデフォルトポート番号です。</p>
+</blockquote>
+<h3>インストール確認</h3>
+<p>以下のコマンドでOllamaサービスが正常に実行中か確認します。</p>
+<pre><code class="language-bash">ollama serve   # サーバーが実行中か確認
+</code></pre>
+<p><code>http://localhost:11434</code>でOllamaサーバーが実行中であることを示す出力を確認できます。</p>
+<h2>3. Ollamaの基本使用法</h2>
+<h3>最初のモデル実行 — 最も簡単な方法</h3>
+<pre><code class="language-bash">ollama run llama3.2
+</code></pre>
+<p>このコマンド一行で終わりです!該当モデルがローカルにない場合、自動的にダウンロードした後、対話型プロンプトが実行されます。</p>
+<pre><code>&gt;&gt;&gt; こんにちは、あなたは誰ですか?
+私はMetaのLlama 3.2モデルです。何をお手伝いしましょうか?
+</code></pre>
+<h3>モデル管理コマンド</h3>
+<table>
+<thead>
+<tr>
+<th>コマンド</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ollama list</code></td>
+<td>ダウンロードされたモデルリストの確認</td>
+</tr>
+<tr>
+<td><code>ollama pull &lt;モデル名&gt;</code></td>
+<td>モデルのみダウンロード(実行しない)</td>
+</tr>
+<tr>
+<td><code>ollama run &lt;モデル名&gt;</code></td>
+<td>モデルダウンロード+対話実行</td>
+</tr>
+<tr>
+<td><code>ollama rm &lt;モデル名&gt;</code></td>
+<td>モデル削除</td>
+</tr>
+<tr>
+<td><code>ollama cp &lt;モデル名&gt; &lt;新しい名前&gt;</code></td>
+<td>モデルコピー</td>
+</tr>
+<tr>
+<td><code>ollama show &lt;モデル名&gt;</code></td>
+<td>モデル詳細情報の確認</td>
+</tr>
+</tbody></table>
+<h3>一つのヒント — モデルタグの活用</h3>
+<p>モデル名の後に<code>:latest</code>または特定のタグを付けると希望するバージョンを指定できます。ただし、<code>:latest</code>が常に最高性能のモデルを指すわけではないため、できれば具体的なタグを使用することが望ましいです。</p>
+<pre><code class="language-bash"># 例: 特定のサイズと量子化バージョンの指定
+ollama run llama3.1:8b-q4_K_M
+</code></pre>
+<h3>PythonでOllamaを使用する</h3>
+<p>OllamaはREST APIを提供するため、Pythonなど多様な言語で簡単に連携できます。</p>
+<pre><code class="language-python">import requests
+
+response = requests.post(
+    &quot;http://localhost:11434/api/generate&quot;,
+    json={&quot;model&quot;: &quot;llama3.2&quot;, &quot;prompt&quot;: &quot;こんにちは、よろしくお願いします!&quot;, &quot;stream&quot;: False}
+)
+
+print(response.json()[&quot;response&quot;])
+</code></pre>
+<h2>4. 主要LLMモデル比較(長所・短所&amp;特徴)</h2>
+<p>Ollamaは500以上のモデルをサポートします。ここでは2025〜2026年基準最も注目されている主要モデルの長所・短所と特徴をまとめました。</p>
+<h3>Llama 4シリーズ(Meta)</h3>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>Llama 4 Scout</th>
+<th>Llama 4 Maverick</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>構造</strong></td>
+<td>170億アクティブパラメータ、16個MoEエキスパート</td>
+<td>170億アクティブパラメータ、128個MoEエキスパート</td>
+</tr>
+<tr>
+<td><strong>特徴</strong></td>
+<td><strong>業界最高水準の1,000万(10M)トークン</strong>コンテキストウィンドウ</td>
+<td>1,000万トークンコンテキスト、画像+テキスト完全ネイティブサポート</td>
+</tr>
+<tr>
+<td><strong>主要ベンチマーク</strong></td>
+<td>MMLU Pro 74.3 / GPQA Diamond 57.2</td>
+<td>MMLU Pro 80.5 / GPQA Diamond 69.8</td>
+</tr>
+<tr>
+<td><strong>推定ハードウェア</strong></td>
+<td>単一H100 GPU(Int4量子化基準)</td>
+<td>単一H100ホスト</td>
+</tr>
+<tr>
+<td><strong>効率性(推定)</strong></td>
+<td>〜$0.19〜$0.49 / 百万(1M)トークン</td>
+<td>〜$0.19〜$0.49 / 百万(1M)トークン</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Llama 4は最初に公開された完全ネイティブ(natively)マルチモーダルオープンウェイトモデル</strong>であり、画像とテキストを同時に理解できます。</p>
+</blockquote>
+<p><strong>長所</strong>-<strong>圧倒的な1,000万(10M)コンテキスト</strong>: 小説一冊全体を一度に入れて分析可能。</p>
+<ul>
+<li><strong>優れたマルチモーダル性能</strong>: 画像認識および分析に強い。</li>
+<li><strong>Mixture-of-Experts(MoE)構造</strong>: アクティブパラメータを最適化して効率的。</li>
+</ul>
+<p><strong>短所</strong></p>
+<ul>
+<li>高スペックハードウェアが必要(特にビデオメモリ(VRAM))。</li>
+<li>初期ダウンロード容量が大きい。</li>
+<li>完全オフライン活用のためには最適化された量子化バージョンが必要。</li>
+</ul>
+<hr>
+<h3>Mistral Small 3.1(Mistral AI)</h3>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>詳細</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>パラメータ</strong></td>
+<td>240億(24B)</td>
+</tr>
+<tr>
+<td><strong>コンテキスト</strong></td>
+<td>12.8万(128k)トークン</td>
+</tr>
+<tr>
+<td><strong>推論速度(推定)</strong></td>
+<td>150トークン/秒</td>
+</tr>
+<tr>
+<td><strong>マルチモーダル</strong></td>
+<td>テキスト+画像入力サポート</td>
+</tr>
+<tr>
+<td><strong>ライセンス</strong></td>
+<td>Apache 2.0(完全開放)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Apache 2.0ライセンスは商用利用、修正、再配布がすべて自由な非常に開放的なライセンスです。</p>
+</blockquote>
+<p><strong>長所</strong>-<strong>Apache 2.0完全開放ライセンス</strong>: 商用活用も自由。</p>
+<ul>
+<li><strong>優れた速度と性能バランス</strong>: 240億(24B)パラメータでも速い推論速度。</li>
+<li><strong>多言語サポートの強み</strong>: 韓国語を含む多様な言語サポート。</li>
+</ul>
+<p><strong>短所</strong></p>
+<ul>
+<li>240億(24B)パラメータモデルを円滑に実行するには高スペックハードウェアが必要。一部のテストでは256GB RAM(RAM)とデュアルA100環境でも長いコンテキスト処理時にボトルネック現象が報告された。</li>
+<li>理論的最高速度(150トークン/秒)は実際のローカル環境では達成しにくい場合がある。</li>
+</ul>
+<hr>
+<h3>Gemma 4 / Gemma 3シリーズ(Google)</h3>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>パラメータ</th>
+<th>必要ビデオメモリ(VRAM)(推定)</th>
+<th>特徴</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Gemma 4 E2B / E4B</td>
+<td>20億〜40億(B)〜40億(B)(推定)</td>
+<td>15GB前後</td>
+<td>小さく効率的なモデル、<strong>数学(Math)および科学(ARC)ベンチマーク強め</strong></td>
+</tr>
+<tr>
+<td>Gemma 4 26B-A4B</td>
+<td>260億(26B)</td>
+<td>48GB前後</td>
+<td>MoE構造で推論およびコーディング能力優秀</td>
+</tr>
+<tr>
+<td>Gemma 3 4B</td>
+<td>40億(4B)</td>
+<td>〜3-5GB</td>
+<td><strong>超軽量</strong>、コスト効率最大化</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>2026年の研究によるとGemmaモデルはARC(科学的推論)とMath(数学)領域で特に頭角を現しました。</p>
+</blockquote>
+<p><strong>長所</strong>-<strong>軽量化に最適化</strong>: 少ないコンピューティングリソースで優れた性能。</p>
+<ul>
+<li><strong>科学的推論能力</strong>: 数学・論理問題に強い。</li>
+<li><strong>Gemma 3 4Bはコストパフォーマンス最強</strong>: 秒当たりコストが競合モデル対比約12倍安価な水準。</li>
+</ul>
+<p><strong>短所</strong></p>
+<ul>
+<li>コーディング分野では同じサイズ対比Qwenより多少弱い可能性がある。</li>
+<li>最大性能のためには適切なプロンプト戦略が必要(Few-shot CoTなど)。</li>
+</ul>
+<hr>
+<h3>Phi-4(Microsoft)</h3>
+<p><strong>長所</strong>-<strong>TruthfulQA(事実性)ベンチマーク最強</strong>: 事実に基づいた正確な回答生成に優れる。</p>
+<ul>
+<li><strong>推論専用モデルの強み</strong>: Phi-4-mini-reasoningなど推論に特化した変形が存在。</li>
+<li>合理的なリソース要求量。</li>
+</ul>
+<p><strong>短所</strong></p>
+<ul>
+<li>プロンプト方式による性能偏差が大きい。特にFew-shot CoT(少数샷思考連鎖)方式で急激な性能低下事例が報告された。</li>
+<li>一般的な対話より特殊目的(推論、事実確認)に特化。</li>
+</ul>
+<hr>
+<h3>Qwen 2.5 / Qwen 3シリーズ(Alibaba)</h3>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>パラメータ</th>
+<th>必要ビデオメモリ(VRAM)(推定)</th>
+<th>主要ベンチマーク</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Qwen2.5 7B</td>
+<td>70億(7B)</td>
+<td>〜6GB</td>
+<td>6つの課題でGemma 3 4Bに優位</td>
+</tr>
+<tr>
+<td>Qwen2.5-Coder 32B</td>
+<td>320億(32B)</td>
+<td>〜20GB</td>
+<td><strong>HumanEval 92.7%(GPT-4o水準)</strong></td>
+</tr>
+<tr>
+<td>Qwen2.5 32B</td>
+<td>320億(32B)</td>
+<td>〜20GB</td>
+<td>MMLU 83.2</td>
+</tr>
+<tr>
+<td>Qwen3 30B-A3B</td>
+<td>300億(30B)</td>
+<td>30-40GB</td>
+<td>MoE構造で最新推論能力</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Qwen2.5 7B Instructは8つの共有ベンチマークのうち<strong>6つの分野でGemma 3 4Bを上回る</strong>性能を示します。</p>
+</blockquote>
+<p><strong>長所</strong>-<strong>コーディング分野最強者</strong>: Qwen2.5-Coder 32BはHumanEval 92.7%でGPT-4oに匹敵。</p>
+<ul>
+<li><strong>優れた多言語性能</strong>: 中国語はもちろん、英語と多様な言語をサポート。</li>
+<li><strong>広範なサイズラインアップ</strong>: 7Bから320億(32B)、700億(70B)以上まで多様な選択肢。</li>
+</ul>
+<p><strong>短所</strong></p>
+<ul>
+<li>一部の小型モデル(例: 7B)は出力長制限がある場合がある(Gemma 3 4Bは出力も128kサポートする一方、Qwen2.5 7B Instructは8192トークンに制限)。</li>
+<li>最高性能のためには相対的に高スペックハードウェアが必要。</li>
+</ul>
+<hr>
+<h3>Llama 3.3 70B(Meta)</h3>
+<p><strong>長所</strong>-<strong>2026年基準総合品質1位(MMLU 86.0)</strong></p>
+<ul>
+<li>4,050億(405B)モデル対比効率的でありながら類似した性能を提供。</li>
+<li>大規模ワークロード(合成データ生成など)に適合。</li>
+</ul>
+<p><strong>短所</strong>-<strong>必要ビデオメモリ(VRAM)約40GB</strong>以上必要とし非常に高いスペックを要求。</p>
+<ul>
+<li>一般ユーザーより企業/専門家向け。</li>
+<li>ダウンロード容量が大きい(数十GB)。</li>
+</ul>
+<hr>
+<h3>モデル比較要約表</h3>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>適正ビデオメモリ(VRAM)(推定)</th>
+<th>最高分野</th>
+<th>長所</th>
+<th>短所</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Llama 4 Scout</strong></td>
+<td>〜H100 GPU</td>
+<td>長文分析</td>
+<td>1,000万(10M)コンテキスト、マルチモーダル</td>
+<td>高スペック必要</td>
+</tr>
+<tr>
+<td><strong>Llama 4 Maverick</strong></td>
+<td>〜H100ホスト</td>
+<td>総合マルチモーダル</td>
+<td>高性能、画像理解</td>
+<td>高スペック必要</td>
+</tr>
+<tr>
+<td><strong>Mistral Small 3.1</strong></td>
+<td>24GB+</td>
+<td>多言語対話</td>
+<td>速度/品質バランス、完全開放</td>
+<td>長いコンテキスト処理時過負荷</td>
+</tr>
+<tr>
+<td><strong>Gemma 4 / 3</strong></td>
+<td>4GB〜48GB</td>
+<td>数理・科学推論</td>
+<td>軽量化/効率性、低コスト</td>
+<td>コーディング性能相対的弱め</td>
+</tr>
+<tr>
+<td><strong>Phi-4</strong></td>
+<td>〜16GB+</td>
+<td>事実ベースQA</td>
+<td>TruthfulQA強め</td>
+<td>プロンプト偏差あり</td>
+</tr>
+<tr>
+<td><strong>Qwen 2.5/3</strong></td>
+<td>6GB〜40GB</td>
+<td><strong>コーディング</strong>(最強)</td>
+<td>コーディング能力GPT-4o級、サイズ多様</td>
+<td>一部モデル出力制限</td>
+</tr>
+<tr>
+<td><strong>Llama 3.3 70B</strong></td>
+<td>〜40GB+</td>
+<td>総合品質(MMLU最高)</td>
+<td>圧倒的性能</td>
+<td>非常に高いスペック要求</td>
+</tr>
+</tbody></table>
+<h2>5. 自分のPCに合ったモデル選択ガイド</h2>
+<p>自分のハードウェア仕様に応じて次のモデルを推奨します。</p>
+<h3>低スペック(8GB RAM(RAM)/4GB ビデオメモリ(VRAM)以下)</h3>
+<table>
+<thead>
+<tr>
+<th>推奨モデル</th>
+<th>インストールコマンド</th>
+<th>特徴</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Llama 3.2 3B</strong></td>
+<td><code>ollama pull llama3.2</code></td>
+<td>Meta最新小型モデル、汎用対話に適合</td>
+</tr>
+<tr>
+<td><strong>Gemma 3 4B</strong></td>
+<td><code>ollama pull gemma3:4b</code></td>
+<td>コストパフォーマンス最強、科学的推論に強い</td>
+</tr>
+<tr>
+<td><strong>Phi-4-mini</strong></td>
+<td><code>ollama pull phi4-mini</code></td>
+<td>事実性の高い応答</td>
+</tr>
+</tbody></table>
+<h3>中間スペック(16GB RAM(RAM)/8GB ビデオメモリ(VRAM))</h3>
+<table>
+<thead>
+<tr>
+<th>推奨モデル</th>
+<th>インストールコマンド</th>
+<th>特徴</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Llama 3.1 8B</strong></td>
+<td><code>ollama pull llama3.1:8b</code></td>
+<td>最も大衆的なモデル、汎用性最高</td>
+</tr>
+<tr>
+<td><strong>Qwen2.5 7B</strong></td>
+<td><code>ollama pull qwen2.5:7b</code></td>
+<td>コーディング/多言語に強め</td>
+</tr>
+<tr>
+<td><strong>Mistral 7B</strong></td>
+<td><code>ollama pull mistral</code></td>
+<td>検証された7Bモデル</td>
+</tr>
+</tbody></table>
+<h3>高スペック(24GB ビデオメモリ(VRAM)以上)</h3>
+<table>
+<thead>
+<tr>
+<th>推奨モデル</th>
+<th>インストールコマンド</th>
+<th>特徴</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Qwen2.5-Coder 32B</strong></td>
+<td><code>ollama pull qwen2.5-coder:32b</code></td>
+<td><strong>コーディング最強者</strong>(HumanEval 92.7%)</td>
+</tr>
+<tr>
+<td><strong>Qwen2.5 32B</strong></td>
+<td><code>ollama pull qwen2.5:32b</code></td>
+<td>最高の中型オールラウンダー(MMLU 83.2)</td>
+</tr>
+<tr>
+<td><strong>Mistral Small 22B</strong></td>
+<td><code>ollama pull mistral-small:22b</code></td>
+<td>多言語特化</td>
+</tr>
+</tbody></table>
+<h3>超高スペック(48GB ビデオメモリ(VRAM)以上)</h3>
+<table>
+<thead>
+<tr>
+<th>推奨モデル</th>
+<th>インストールコマンド</th>
+<th>特徴</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Llama 3.3 70B</strong></td>
+<td><code>ollama pull llama3.3:70b</code></td>
+<td><strong>総合品質1位</strong>(MMLU 86.0)</td>
+</tr>
+<tr>
+<td><strong>DeepSeek R1 Distill 70B</strong></td>
+<td><code>ollama pull deepseek-r1:70b</code></td>
+<td>推論特化モデル</td>
+</tr>
+</tbody></table>
+<h3>モデル選択のヒント</h3>
+<ul>
+<li><strong>「常に最も大きいモデルが正解ではない」</strong>: 自分のPCに合った適切なサイズのモデルがより快適な体験を提供します。</li>
+<li><strong>量子化バージョン(Q4_K_Mなど)を積極的に活用しましょう</strong>: わずかな精度の犠牲でメモリ使用量を大幅に減らせます。</li>
+<li><code>:latest</code>タグより具体的なタグを使用しましょう(例: <code>qwen2.5-coder:32b</code>)。</li>
+</ul>
+<h2>6. 併せて見ると良いヒントとツール</h2>
+<h3>Open WebUI — Ollama用ウェブインターフェース</h3>
+<p>ターミナルが不便であれば、以下のコマンドでChatGPTスタイルのウェブインターフェースを構築できます。</p>
+<pre><code class="language-bash">docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
+</code></pre>
+<h3>VS Code拡張プログラム — Continue</h3>
+<p>Continue拡張プログラムをインストールするとVS Code内でOllamaモデルをコーディングアシスタントとして活用できます。</p>
+<h3>LangChain + Ollama連携</h3>
+<pre><code class="language-python">from langchain_ollama import ChatOllama
+
+llm = ChatOllama(model=&quot;llama3.2&quot;)
+response = llm.invoke(&quot;こんにちは、LLMの世界へようこそ!&quot;)
+print(response.content)
+</code></pre>
+<h3>環境変数でパフォーマンス最適化</h3>
+<p>推論速度とメモリ管理のために以下の環境変数を設定してみましょう。</p>
+<pre><code class="language-bash">export OLLAMA_NUM_PARALLEL=4      # 並列リクエスト数(デフォルト値: 1)
+export OLLAMA_MAX_LOADED_MODELS=2 # 最大同時ロードモデル数
+export OLLAMA_HOST=0.0.0.0        # すべてのインターフェースからのAPIアクセス許可
+</code></pre>
+<h3>モデル保存位置の変更</h3>
+<p>デフォルトで<code>~/.ollama/models</code>に保存されます。変更するには環境変数を設定してください。</p>
+<pre><code class="language-bash">export OLLAMA_MODELS=/path/to/your/models
+</code></pre>
+<h2>7. 参考資料</h2>
+<ul>
+<li><strong>Ollama公式ホームページ</strong> — <a href="https://ollama.com">https://ollama.com</a></li>
+<li><strong>Ollama GitHubリポジトリ</strong> — <a href="https://github.com/ollama/ollama">https://github.com/ollama/ollama</a></li>
+<li><strong>Ollama公式ドキュメント</strong> — <a href="https://docs.ollama.com">https://docs.ollama.com</a></li>
+<li><strong>Ollamaモデルライブラリ</strong> — <a href="https://ollama.com/library">https://ollama.com/library</a></li>
+<li><strong>Meta Llama 4公式ブログ</strong> — <a href="https://ai.meta.com/blog/llama-4-multimodal-intelligence/">https://ai.meta.com/blog/llama-4-multimodal-intelligence/</a></li>
+<li><strong>Mistral Small 3.1発表</strong> — <a href="https://mistral.ai/news/mistral-small-3-1">https://mistral.ai/news/mistral-small-3-1</a></li>
+<li><strong>Gemma 4 / Phi-4 / Qwen3性能比較論文(arXiv:2604.07035)</strong> — <a href="https://arxiv.org/abs/2604.07035">https://arxiv.org/abs/2604.07035</a></li>
+<li><strong>Gemma 3 vs Qwen2.5ベンチマーク比較</strong> — <a href="https://llm-stats.com">https://llm-stats.com</a></li>
+<li><strong>Ollamaインストールガイド(SitePoint、2026)</strong> — <a href="https://www.sitepoint.com/ollama-setup-guide-2026/">https://www.sitepoint.com/ollama-setup-guide-2026/</a></li>
+<li><strong>Ollama完璧ガイド(DEV Community)</strong> — <a href="https://dev.to/ajitkumar/the-complete-guide-to-ollama-run-large-language-models-locally-2mge">https://dev.to/ajitkumar/the-complete-guide-to-ollama-run-large-language-models-locally-2mge</a></li>
+</ul>
+<p>これまで<strong>Ollamaインストールおよび主要LLMモデル比較</strong>文書を見てきました。これでトークン費用の心配なく自分のコンピューターで心ゆくまでLLMを実行してみてください。API費用は0円、プライバシーは完璧に保護されます。楽しいローカルAI構築を!</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Local_LLM/Ollama_Install_Guilde_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

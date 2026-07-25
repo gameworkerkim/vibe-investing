@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OpenCodex Project Analysis — A Multi-LLM Proxy for Codex and Claude Code — VibeQuant</title>
+  <meta name="description" content="A rundown of how OpenCodex (@bitkyc08/opencodex) lets Codex and Claude Code talk to Anthropic, Gemini, xAI, DeepSeek, Ollama, and more, along with its pros, cons, name collisions with similarly named projects, and ToS risks." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-proxy-opencodex-en/" />
+  <meta property="og:title" content="OpenCodex Project Analysis — A Multi-LLM Proxy for Codex and Claude Code" />
+  <meta property="og:description" content="A rundown of how OpenCodex (@bitkyc08/opencodex) lets Codex and Claude Code talk to Anthropic, Gemini, xAI, DeepSeek, Ollama, and more, along with its pros, cons, name collisions with similarly named projects, and ToS risks." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-proxy-opencodex-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/llm-proxy-opencodex/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/llm-proxy-opencodex-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-proxy-opencodex-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-proxy-opencodex-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-proxy-opencodex/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"OpenCodex Project Analysis — A Multi-LLM Proxy for Codex and Claude Code","description":"A rundown of how OpenCodex (@bitkyc08/opencodex) lets Codex and Claude Code talk to Anthropic, Gemini, xAI, DeepSeek, Ollama, and more, along with its pros, cons, name collisions with similarly named projects, and ToS risks.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-proxy-opencodex-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Proxy/Opencodex_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-24","dateModified":"2026-07-24","inLanguage":"en","keywords":"OpenCodex, Codex, Claude Code, LLM Proxy, Multi-provider, ocx"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>OpenCodex Project Analysis — A Multi-LLM Proxy for Codex and Claude Code</h1>
+        <p class="article-dates"><time datetime="2026-07-24">발행 2026.07.24</time> · 주제 OpenCodex · Codex · Claude Code · LLM Proxy · Multi-provider · ocx</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/llm-proxy-opencodex/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/llm-proxy-opencodex-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/llm-proxy-opencodex-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/llm-proxy-opencodex-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">A rundown of how OpenCodex (@bitkyc08/opencodex) lets Codex and Claude Code talk to Anthropic, Gemini, xAI, DeepSeek, Ollama, and more, along with its pros, cons, name collisions with similarly named projects, and ToS risks.</p>
+        
+      </header>
+      <div class="article-body prose"><p>OpenCodex is a lightweight local proxy that translates Codex&#39;s Responses API requests into each LLM provider&#39;s own protocol. It lets Codex CLI, App, SDK, and Claude Code use Anthropic, Google, xAI, Kimi, DeepSeek, GLM, Qwen, Ollama, and more. Streaming, tool calls, reasoning tokens, and image inputs are all converted bidirectionally.</p>
+<hr>
+<h2>1. Getting Started</h2>
+<h3>Requirements</h3>
+<ul>
+<li>Node.js 18 or later</li>
+<li>The Bun runtime is bundled as an npm dependency and runs through the Node launcher, so no separate installation is needed</li>
+<li>Caution: if <code>npm</code> is configured to block lifecycle scripts during install, you&#39;ll get a &quot;bundled Bun runtime is missing&quot; error. In that case, either allow scripts and reinstall, or install Bun directly</li>
+<li>A user-owned Node environment (nvm/fnm, etc.) is recommended over <code>sudo npm install -g</code></li>
+</ul>
+<h3>Install and run</h3>
+<pre><code class="language-bash"># 1. Global install (auto-bundles the Bun runtime)
+npm install -g @bitkyc08/opencodex
+
+# 2. Interactive init (writes the config file + injects Codex config + guides you through installing the auto-start shim)
+ocx init
+
+# 3. Start the proxy
+ocx start
+</code></pre>
+<p>From then on, using Codex normally routes requests through opencodex.</p>
+<pre><code class="language-bash">codex &quot;Write a hello world in Rust&quot;
+</code></pre>
+<p>The dashboard is available at <code>http://localhost:10100</code>.</p>
+<h3>Uninstalling and reverting</h3>
+<pre><code class="language-bash">ocx stop        # stop the proxy, stop the background service, restore Codex&#39;s original config
+ocx uninstall   # clean up leftover config (recommended before removing the npm package)
+npm uninstall -g @bitkyc08/opencodex
+</code></pre>
+<h3>Supported platforms</h3>
+<table>
+<thead>
+<tr>
+<th>OS</th>
+<th>Status</th>
+<th>Service manager</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>macOS (arm64/x64)</td>
+<td>Supported</td>
+<td>launchd</td>
+</tr>
+<tr>
+<td>Linux (x64/arm64)</td>
+<td>Supported</td>
+<td>systemd</td>
+</tr>
+<tr>
+<td>Windows (x64)</td>
+<td>Supported (no WSL required)</td>
+<td>Task Scheduler</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Advantages</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Model freedom</td>
+<td>Supports 40+ built-in providers, including Anthropic, Google, xAI, Kimi, Ollama Cloud, Groq, OpenRouter, Azure, DeepSeek, GLM, and OpenAI itself. You can switch models within the same Codex workflow</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Adapter-based translation</td>
+<td>Absorbs most endpoints through 5 adapters: Anthropic Messages, Google Gemini, Azure, OpenAI Responses passthrough, and OpenAI-compatible Chat Completions</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Simplified install/config</td>
+<td>No need to build a proxy chain yourself — the interactive <code>ocx init</code> setup handles it. xAI, Anthropic, and Kimi support OAuth login, so you can connect without an API key</td>
+</tr>
+<tr>
+<td>4</td>
+<td>No binary modification</td>
+<td>Rather than patching the Codex app binary, it injects providers into Codex&#39;s config file and model catalog. <code>ocx stop</code> restores the original config</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Unified dashboard</td>
+<td>Providers, API keys, model aliases, logs, and account management are all handled through a web dashboard</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Model routing rules</td>
+<td>Specify explicitly with <code>provider/model</code> syntax, or let it auto-match by model name pattern when the prefix is omitted (<code>claude-*</code> → Anthropic, <code>gpt-*</code> → OpenAI)</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Codex App integration</td>
+<td>Routed models appear in the Codex App&#39;s model picker alongside native models, with per-model reasoning effort adjustment</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ChatGPT account pool</td>
+<td>Register multiple ChatGPT/Codex accounts to refresh 5-hour, weekly, and 30-day quotas, routing new sessions to whichever account has the lowest usage. Existing threads stay pinned to the account that started them</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Background service</td>
+<td>Registers as a system service to auto-start on boot, designed to leave no leftover config or zombie processes when stopped</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. Drawbacks and Risks</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Item</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>ToS risk</td>
+<td>Being technically able to connect an OAuth/subscription account doesn&#39;t mean the provider permits routing through a third-party proxy. The project&#39;s own documentation warns of possible account restrictions or suspension. The account-pooling feature in particular could be read as a way to circumvent usage limits</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Extra layer of complexity</td>
+<td>Adding a proxy layer on top of Codex creates more configuration decisions and more points to debug</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Delayed feature compatibility</td>
+<td>Since it&#39;s a custom API translation layer, the latest Codex or Claude Code features may not be reflected immediately</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Project maturity</td>
+<td>A smaller ecosystem than official tooling, with a very short release cadence (many weekly preview tags). Stability and long-term maintenance need further validation</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Always-running dependency</td>
+<td>Assumes a persistent Node environment and <code>ocx</code> daemon, using more resources than running Codex alone</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Local credential concentration</td>
+<td>API keys and OAuth tokens for many providers all end up in the local config (<code>~/.opencodex/config.json</code>). A compromised machine has a wider blast radius as a result</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Distinct Projects With Similar Names</h2>
+<p>Several projects share the name &quot;OpenCodex.&quot; It&#39;s worth distinguishing them so their features aren&#39;t conflated.</p>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Identity</th>
+<th>Relationship to this document&#39;s subject</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>lidge-jun/opencodex</td>
+<td>The subject of this document. A general-purpose provider proxy for Codex/Claude Code</td>
+<td>—</td>
+</tr>
+<tr>
+<td>AITabby/opencodex</td>
+<td>A local gateway for Codex Desktop, with a Vision Bridge, a Computer Use engine, and a voice companion (OpenCodexBar)</td>
+<td>A different project. The Vision Bridge and voice features belong here, not to the lidge-jun version</td>
+</tr>
+<tr>
+<td>RyensX/OpenCodex</td>
+<td>Codex Desktop middleware specialized for browser remote access</td>
+<td>A different project. The remote-access feature belongs here</td>
+</tr>
+<tr>
+<td>Open Codex (codingmoh)</td>
+<td>A fully local CLI assistant. No API key required; supports local models like phi-4-mini</td>
+<td>A different project</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Competing and Alternative Tools</h2>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Description</th>
+<th>Difference</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenCode (SST)</td>
+<td>Open-source terminal AI coding agent</td>
+<td>A standalone agent, not a proxy. It supports many providers natively, so opencodex offers little practical benefit for OpenCode users</td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td>Anthropic&#39;s terminal coding assistant</td>
+<td>Specialized for the Claude ecosystem. opencodex can also act as a proxy on the Claude Code side</td>
+</tr>
+<tr>
+<td>Cursor</td>
+<td>AI-native code editor</td>
+<td>Centered on an in-IDE experience</td>
+</tr>
+<tr>
+<td>GitHub Copilot</td>
+<td>IDE-plugin-style coding assistant</td>
+<td>Limited provider choice</td>
+</tr>
+<tr>
+<td>Aider / Cline / Windsurf</td>
+<td>Coding agents with different approaches</td>
+<td>Different workflows and areas of specialization</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Comparison With Codex Alone</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Codex Alone</th>
+<th>Codex + OpenCodex</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Available models</td>
+<td>OpenAI family only</td>
+<td>40+ providers</td>
+</tr>
+<tr>
+<td>Setup difficulty</td>
+<td>Low</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Cost optimization</td>
+<td>Limited</td>
+<td>Favorable via low-cost model routing</td>
+</tr>
+<tr>
+<td>Customization</td>
+<td>Limited</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Operational risk</td>
+<td>Low</td>
+<td>Additional proxy failure point, provider ToS risk</td>
+</tr>
+<tr>
+<td>Best fit</td>
+<td>Casual users who want to get started immediately</td>
+<td>Power users focused on model experimentation and cost optimization</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. Overall Assessment</h2>
+<p>The technical design is reasonable. Choosing config injection over binary patching, and being able to revert with a single <code>ocx stop</code>, is the single most important safety mechanism for tools in this category. Abstracting the adapter layer into 5 types also lowers the cost of adding new providers.</p>
+<p>That said, the variable that outweighs technical convenience when deciding whether to adopt this is ToS risk. API-key-based integration and subscription-account (OAuth)-based integration are fundamentally different in nature, and in particular, pooling multiple ChatGPT accounts could be judged by the provider as a way to circumvent usage policy. For a work environment, the safer configuration is to register only API-key-based providers and skip the account-pooling feature entirely.</p>
+<p>The rapid pace of weekly preview releases is positive for feature growth, but it&#39;s still too early to treat this as a production dependency. Experimental adoption in a personal development environment is the appropriate level of use for now.</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Proxy/Opencodex_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

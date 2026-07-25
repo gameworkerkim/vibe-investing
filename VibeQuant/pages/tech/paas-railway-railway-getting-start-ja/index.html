@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Railway.com Getting Started ガイド — VibeQuant</title>
+  <meta name="description" content="使用量課金制PaaSであるRailwayの入門ガイド。2026年の価格構造、GitHub/CLI/Docker/テンプレートによるデプロイ方法、データベース設定、本番運用チェックリスト、注意点、Heroku・Render・Fly.io・Vercelとの比較。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start-ja/" />
+  <meta property="og:title" content="Railway.com Getting Started ガイド" />
+  <meta property="og:description" content="使用量課金制PaaSであるRailwayの入門ガイド。2026年の価格構造、GitHub/CLI/Docker/テンプレートによるデプロイ方法、データベース設定、本番運用チェックリスト、注意点、Heroku・Render・Fly.io・Vercelとの比較。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Railway.com Getting Started ガイド","description":"使用量課金制PaaSであるRailwayの入門ガイド。2026年の価格構造、GitHub/CLI/Docker/テンプレートによるデプロイ方法、データベース設定、本番運用チェックリスト、注意点、Heroku・Render・Fly.io・Vercelとの比較。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/paas-railway-railway-getting-start-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/PaaS_Railway/Railway_Getting_Start_JA.md","image":"https://vibequant.cc/og-default.png","inLanguage":"ja","keywords":"Railway, Railway.com, PaaS, Railway 料金, Railway CLI, Heroku 代替"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 클라우드 · Free tier</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · Free tier</p>
+        <h1>Railway.com Getting Started ガイド</h1>
+        <p class="article-dates">주제 Railway · Railway.com · PaaS · Railway 料金 · Railway CLI · Heroku 代替</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/paas-railway-railway-getting-start/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/paas-railway-railway-getting-start-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/paas-railway-railway-getting-start-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/paas-railway-railway-getting-start-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">使用量課金制PaaSであるRailwayの入門ガイド。2026年の価格構造、GitHub/CLI/Docker/テンプレートによるデプロイ方法、データベース設定、本番運用チェックリスト、注意点、Heroku・Render・Fly.io・Vercelとの比較。</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. Railwayとは?</h2>
+<p>Railwayは、インフラ管理の複雑さを抽象化し、アプリケーションを迅速にデプロイできるようにするPaaS(Platform as a Service)である。GitHubリポジトリ、Dockerイメージ、ローカルコードを接続すれば、ビルド、デプロイ、ホスティング、観測性(observability)までプラットフォームが処理する。
+個人開発者や趣味のプロジェクト向けに適しており、トラフィックが急増した際には必ず他サービスへ移行できる計画を用意しておく必要がある。秒単位の課金であるため、トラフィックが集中すると、デプロイと保守の便利さを超えて負担が大きくなることがある。</p>
+<ul>
+<li>公式サイト: <a href="https://railway.com">https://railway.com</a></li>
+<li>公式ドキュメント: <a href="https://docs.railway.com">https://docs.railway.com</a></li>
+</ul>
+<h2>2. 料金構造(2026年基準、重要)</h2>
+<p>かつての「無制限無料ティア」は現在存在しない。現行の構造は次の通りである。</p>
+<table>
+<thead>
+<tr>
+<th>プラン</th>
+<th>費用</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Trial</td>
+<td>一度限りの$5クレジット</td>
+<td>登録時に自動付与、30日間有効。最大1GB RAM、共有vCPU、プロジェクト当たり5サービス。GitHubアカウント未検証の場合、アウトバウンドネットワークが制限される(Limited Trial)</td>
+</tr>
+<tr>
+<td>Free</td>
+<td>$0/月</td>
+<td>Trial終了後に切り替わる。月$1クレジット(繰り越し不可)、1 vCPU / 0.5GB RAM、1プロジェクト、プロジェクト当たり3サービス。DBを併用すると数日でクレジットが枯渇する可能性</td>
+</tr>
+<tr>
+<td>Hobby</td>
+<td>$5/月</td>
+<td>実質的な開始点。$5のサブスクリプション料金が使用量に加算される(使用量が$3ならば$5のみ、$8ならば$8を請求)</td>
+</tr>
+<tr>
+<td>Pro</td>
+<td>$20/月(1人当たり)</td>
+<td>チーム/本番用。同様にサブスクリプション料金が使用量クレジットとして機能</td>
+</tr>
+</tbody></table>
+<p>要点</p>
+<ul>
+<li>課金は秒単位の使用量ベース(usage-based)であり、トラフィックの急増に伴いコストも増加する。</li>
+<li>本番ワークロードには最低でもHobby、チーム単位ではProが現実的である。</li>
+<li>Trialクレジットの枯渇または30日経過でサービスが停止し、ボリュームデータは一定期間保存後に削除されるため、バックアップ計画が必要である。</li>
+</ul>
+<p>参考</p>
+<ul>
+<li>料金プラン: <a href="https://docs.railway.com/pricing/plans">https://docs.railway.com/pricing/plans</a></li>
+<li>Free Trialポリシー: <a href="https://docs.railway.com/pricing/free-trial">https://docs.railway.com/pricing/free-trial</a></li>
+<li>料金概要: <a href="https://railway.com/pricing">https://railway.com/pricing</a></li>
+</ul>
+<h2>3. 事前準備</h2>
+<ol>
+<li>Railwayアカウントの作成: <a href="https://railway.com">https://railway.com</a> でLoginをクリックして登録</li>
+<li>GitHubアカウント連携を推奨: アカウント検証(verification)を通過するとFull Trial(ネットワーク制限なし)が適用される。未検証の場合、アウトバウンドネットワークとポートが制限される。</li>
+<li>(CLI使用時) Node.js 18+ またはHomebrew、シェル環境</li>
+</ol>
+<h2>4. デプロイ方法</h2>
+<h3>4.1 GitHubリポジトリからデプロイ(推奨)</h3>
+<ol>
+<li><a href="https://railway.com/new">https://railway.com/new</a> にアクセスしてNew Projectをクリック</li>
+<li>&quot;Deploy from GitHub repo&quot;を選択(最初の1回のみGitHubアカウント連携が必要)</li>
+<li>デプロイするリポジトリを検索して選択</li>
+<li>Deploy Nowをクリック → Railwayがスタック(Next.js、Django、Rails、Goなど)を自動検出してビルド・デプロイ</li>
+<li>以降、そのブランチにpushするたびに自動的に再デプロイされる</li>
+</ol>
+<p>参考: <a href="https://docs.railway.com/quick-start">https://docs.railway.com/quick-start</a></p>
+<h3>4.2 CLIでデプロイ</h3>
+<pre><code class="language-bash"># 1. Railway CLIのインストール(いずれか1つを選択)
+npm install -g @railway/cli
+# または
+brew install railway
+# または
+bash &lt;(curl -fsSL cli.new)
+
+# 2. ログイン
+railway login
+
+# 3. プロジェクトの初期化(新規プロジェクトの場合)
+railway init
+
+# 4. プロジェクトディレクトリでデプロイ
+railway up
+</code></pre>
+<p>参考: <a href="https://docs.railway.com/guides/cli">https://docs.railway.com/guides/cli</a></p>
+<h3>4.3 Dockerイメージのデプロイ</h3>
+<p>Docker HubまたはGitHub Container Registry(ghcr.io)のイメージを直接指定してデプロイできる。カスタムDockerfileをリポジトリのルートに置くと、Railwayはそれを優先的に使用する。将来的に他プラットフォームへの移行の可能性を考慮するなら、最初からDockerベースのデプロイを使用する方が移植性の観点で有利である。</p>
+<p>参考: <a href="https://docs.railway.com/guides/services">https://docs.railway.com/guides/services</a></p>
+<h3>4.4 テンプレートからデプロイ</h3>
+<p>テンプレートマーケットプレイスで事前構成されたスタック(例: Next.js、WordPress、n8n、Strapiなど)をワンクリックでデプロイできる。初めてであれば、公式Next.jsテンプレートで練習することを推奨する。</p>
+<p>参考: <a href="https://railway.com/templates">https://railway.com/templates</a></p>
+<h2>5. データベースの追加</h2>
+<p>プロジェクトキャンバスでNew → Databaseを選択し、PostgreSQL、MySQL、Redis、MongoDBを追加できる。</p>
+<ul>
+<li>サービス間の通信にプライベートネットワーキング(内部ドメイン)を使用すると、イグレス(egress)コストが発生しない。</li>
+<li>接続情報は環境変数(例: <code>DATABASE_URL</code>)として自動注入できる。</li>
+<li>自動バックアップが提供されるが、重要なデータは別途外部バックアップ戦略(定期的な<code>pg_dump</code>実行など)を併用すること。</li>
+</ul>
+<p>参考: <a href="https://docs.railway.com/guides/databases">https://docs.railway.com/guides/databases</a></p>
+<h2>6. 本番運用チェックリスト</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>設定場所 / 方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ヘルスチェック</td>
+<td>サービスSettings → Healthcheck Pathを指定(無停止デプロイの前提条件)</td>
+</tr>
+<tr>
+<td>カスタムドメイン</td>
+<td>サービスSettings → Domains(TLS証明書自動発行)</td>
+</tr>
+<tr>
+<td>環境分離</td>
+<td>Environments機能でproduction / stagingを分離</td>
+</tr>
+<tr>
+<td>水平スケーリング</td>
+<td>サービスSettings → Replicas(マルチリージョン配置可能)</td>
+</tr>
+<tr>
+<td>ロールバック</td>
+<td>Deploymentsタブから以前のデプロイに即時復元</td>
+</tr>
+<tr>
+<td>コストアラート</td>
+<td>Workspace Settings → UsageでUsage Limit / アラート設定が必須</td>
+</tr>
+<tr>
+<td>ログ/メトリクス</td>
+<td>Observabilityタブで統合提供</td>
+</tr>
+</tbody></table>
+<p>参考: <a href="https://docs.railway.com/guides/healthchecks">https://docs.railway.com/guides/healthchecks</a>, <a href="https://docs.railway.com/reference/scaling">https://docs.railway.com/reference/scaling</a></p>
+<h2>7. 注意点</h2>
+<ol>
+<li><strong>コスト監視が必須</strong>: 使用量ベースの課金特性上、月間コストの予測が難しい。Usage Limit(ハードリミット)の設定を推奨する。</li>
+<li><strong>Free/Trialプランの限界</strong>: 月$1クレジットでは常時稼働サービス1つでも厳しく、DB併用は事実上不可能である。本番用途には不適。</li>
+<li><strong>リージョン制限</strong>: AWS/GCPなどの大型クラウドと比較してサポートリージョンが限られている。</li>
+<li><strong>IaCサポートの不足</strong>: Terraformレベルの完全なInfrastructure-as-Codeをサポートしていない。インフラをコードで厳密に管理する必要があるチームには限界がある。</li>
+<li><strong>移植性</strong>: プラットフォーム依存を避けるには、最初からDockerfileベースのデプロイを使用すること。</li>
+<li><strong>パフォーマンス問題の報告</strong>: 一部ワークロード(例: ディスクI/O集約作業)で性能低下の報告があるため、導入前に自前のベンチマークを推奨する。(逸話的な報告レベルであり、一般化された検証資料ではない)</li>
+</ol>
+<h2>8. 競合PaaSとの位置づけ</h2>
+<ul>
+<li><strong>vs Heroku</strong>: Herokuは2026年2月6日にsustaining engineering(維持保守)モードへの移行を発表した。新機能開発が停止し、新規Enterprise契約も受け付けていない(既存顧客は継続利用・更新が可能)。Railwayは同じデプロイモデルを提供しつつ、自動スケーリング、使用量ベース課金、マルチリージョン、永続ストレージをネイティブサポートしており、学習コストが最も低い移行先の一つとされている。</li>
+<li><strong>vs Render</strong>: 両者ともGitベースのデプロイと管理型DBを提供する。Renderは固定インスタンス課金でコスト予測が容易であり、Railwayは使用量課金とマルチリージョンのネイティブサポートが強みである。</li>
+<li><strong>vs Fly.io</strong>: 素早く軽量に始めたいならRailway、Dockerベースのグローバルエッジワークロードが必要ならFly.io。</li>
+<li><strong>vs Vercel</strong>: Vercelはフロントエンド/サーバーレス関数に最適化(実行時間制限あり)、Railwayはバックエンド/DB/ワーカー/cronまで全スタックを長時間実行サーバーモデルで1つのプロジェクトで管理する。</li>
+</ul>
+<p>参考: <a href="https://docs.railway.com/maturity/compare-to-heroku">https://docs.railway.com/maturity/compare-to-heroku</a></p>
+<h2>9. まとめ</h2>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>推奨対象</td>
+<td>サイドプロジェクト、スタートアップ、迅速なプロトタイピング、Heroku移行を検討中のチーム</td>
+</tr>
+<tr>
+<td>価格ポリシー</td>
+<td>使用量ベース(秒単位課金、サブスクリプション料金が使用量クレジットに加算)</td>
+</tr>
+<tr>
+<td>開始コスト</td>
+<td>Trial $5クレジット(30日)→ Free $1/月クレジット → 実質的な開始点Hobby $5/月</td>
+</tr>
+<tr>
+<td>主な強み</td>
+<td>開発者体験、自動スケーリング、ワンクリックDB、自社ハードウェア(Gen 2 Metal)、無停止デプロイ</td>
+</tr>
+<tr>
+<td>主な弱み</td>
+<td>コスト予測の難しさ、リージョン制限、IaC未サポート、実質的な無料ティアの不在</td>
+</tr>
+</tbody></table>
+<h2>参考リンク(Reference)</h2>
+<ul>
+<li>Railway公式サイト: <a href="https://railway.com">https://railway.com</a></li>
+<li>公式ドキュメント: <a href="https://docs.railway.com">https://docs.railway.com</a></li>
+<li>Quick Start: <a href="https://docs.railway.com/quick-start">https://docs.railway.com/quick-start</a></li>
+<li>料金プラン: <a href="https://docs.railway.com/pricing/plans">https://docs.railway.com/pricing/plans</a></li>
+<li>Free Trialポリシー: <a href="https://docs.railway.com/pricing/free-trial">https://docs.railway.com/pricing/free-trial</a></li>
+<li>CLIガイド: <a href="https://docs.railway.com/guides/cli">https://docs.railway.com/guides/cli</a></li>
+<li>データベースガイド: <a href="https://docs.railway.com/guides/databases">https://docs.railway.com/guides/databases</a></li>
+<li>テンプレートマーケットプレイス: <a href="https://railway.com/templates">https://railway.com/templates</a></li>
+<li>Heroku比較(公式): <a href="https://docs.railway.com/maturity/compare-to-heroku">https://docs.railway.com/maturity/compare-to-heroku</a></li>
+<li>Herokuのsustaining mode発表に関する分析: <a href="https://encore.dev/articles/end-of-heroku">https://encore.dev/articles/end-of-heroku</a></li>
+<li>Railway無料ティア現況分析(2026年): <a href="https://kuberns.com/blogs/railway-free-tier/">https://kuberns.com/blogs/railway-free-tier/</a></li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/PaaS_Railway/Railway_Getting_Start_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

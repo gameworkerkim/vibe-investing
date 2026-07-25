@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Umami Self-Hosting Rollout Plan — vibequant.cc — VibeQuant</title>
+  <meta name="description" content="Instead of running Umami purely on Cloudflare, this plan lays out two practical scenarios — hosting the app on Vercel or Fly.io and first-party proxying through a Cloudflare Worker — along with prerequisites, risks, and trade-offs." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant-en/" />
+  <meta property="og:title" content="Umami Self-Hosting Rollout Plan — vibequant.cc" />
+  <meta property="og:description" content="Instead of running Umami purely on Cloudflare, this plan lays out two practical scenarios — hosting the app on Vercel or Fly.io and first-party proxying through a Cloudflare Worker — along with prerequisites, risks, and trade-offs." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Umami Self-Hosting Rollout Plan — vibequant.cc","description":"Instead of running Umami purely on Cloudflare, this plan lays out two practical scenarios — hosting the app on Vercel or Fly.io and first-party proxying through a Cloudflare Worker — along with prerequisites, risks, and trade-offs.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudeFlare-Web-Analytics/Umami-Self-Hosting-Plan-vibequant_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"en","keywords":"Cloudflare, Umami, Analytics, Self-hosting, Free Tier"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 클라우드 · Free tier</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · Free tier</p>
+        <h1>Umami Self-Hosting Rollout Plan — vibequant.cc</h1>
+        <p class="article-dates"><time datetime="2026-07-25">발행 2026.07.25</time> · 주제 Cloudflare · Umami · Analytics · Self-hosting · Free Tier</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Instead of running Umami purely on Cloudflare, this plan lays out two practical scenarios — hosting the app on Vercel or Fly.io and first-party proxying through a Cloudflare Worker — along with prerequisites, risks, and trade-offs.</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. Introduction: A Practical Approach</h2>
+<p>Attempting to run Umami <strong>entirely</strong>on Cloudflare is appealing, but in practice it&#39;s<strong>a path with high complexity.</strong>Umami<strong>officially supports only PostgreSQL or MySQL,</strong> and Cloudflare D1 (SQLite-based) is not officially supported. Cloudflare Workers run in a V8 Isolate environment, so a Node.js-based app like Umami can&#39;t be deployed as-is — you&#39;d need to patch the database layer directly, and that patch carries a high risk of breaking with every update.</p>
+<p>So this document examines two practical approaches to <strong>running Umami as close to Cloudflare as possible, but pragmatically.</strong> The target sites are <a href="https://vibequant.cc">vibequant.cc</a> and its subdomains, currently running on the Cloudflare Pages free tier.</p>
+<p>Related background: this is the execution plan for &quot;start with Web Analytics → expand to Umami if needed,&quot; as recommended in the <a href="./CloudeFlare-Web-Analytics-Guide_EN.md">Cloudflare Web Analytics Solutions Guide</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Approach</th>
+<th>Description</th>
+<th>Recommended When</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>A. Vercel + Cloudflare Worker proxy</strong></td>
+<td>Umami app on Vercel, DB on Neon/Supabase, tracking proxied via a Cloudflare Worker</td>
+<td>Easiest and fastest. Top priority to validate and adopt first</td>
+</tr>
+<tr>
+<td><strong>B. Fly.io + Cloudflare Worker proxy</strong></td>
+<td>Umami app on a Fly.io container, DB on Neon/Supabase, tracking proxied via a Cloudflare Worker</td>
+<td>When cold starts / serverless constraints become an issue. Requires some operational cost and setup</td>
+</tr>
+</tbody></table>
+<pre><code>Visitor&#39;s browser
+    |
+    |  script + /api/send  (analytics.vibequant.cc)
+    v
+Cloudflare Worker (first-party proxy)
+    |
+    v
+Umami app (A: Vercel / B: Fly.io)  &lt;--&gt;  PostgreSQL (Neon or Supabase)
+</code></pre>
+<hr>
+<h2>2. Scenario Comparison Summary</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>A. Vercel + Worker</th>
+<th>B. Fly.io + Worker</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Setup difficulty</td>
+<td>Low (about 40–60 minutes)</td>
+<td>Medium (CLI, memory scaling, deploy retries)</td>
+</tr>
+<tr>
+<td>Monthly cost (small scale)</td>
+<td>Can be effectively $0</td>
+<td>May not stay near $0 (see cost section below)</td>
+</tr>
+<tr>
+<td>Cold start</td>
+<td>Exists when Vercel Function + Neon/Supabase go idle</td>
+<td>Low if the machine is always-on. Exists with scale-to-zero</td>
+</tr>
+<tr>
+<td>Operational complexity</td>
+<td>Fork syncing, Vercel build limits</td>
+<td>Docker images, <code>fly scale</code>, IPv4</td>
+</tr>
+<tr>
+<td>Data ownership</td>
+<td>DB on Neon/Supabase, app on Vercel</td>
+<td>DB on Neon/Supabase (or Fly Postgres), app on Fly</td>
+</tr>
+<tr>
+<td>Fit for vibequant.cc</td>
+<td><strong>Top recommendation</strong></td>
+<td>For migration after traffic/stability issues</td>
+</tr>
+<tr>
+<td>Ad-blocker bypass</td>
+<td>Equally possible via a custom Worker domain</td>
+<td>Same</td>
+</tr>
+</tbody></table>
+<p><strong>Conclusion (recommendation):</strong>Adopt and validate with<strong>A</strong>first, then migrate to<strong>B</strong> if Vercel cold starts, Hobby-plan limits, or Prisma connection issues become noticeable. The Worker proxy and <code>analytics.vibequant.cc</code> domain design are reusable across both approaches.</p>
+<hr>
+<h2>3. Approach A: Vercel + Cloudflare Worker Proxy (Recommended)</h2>
+<p>This is the combination most widely used in the Umami community. Official guide: <a href="https://docs.umami.is/docs/guides/running-on-vercel">Running on Vercel</a>.</p>
+<h3>3.1 Architecture</h3>
+<pre><code>Visitor&#39;s browser
+    |
+    |  GET /u.js , POST /api/send
+    v
+Cloudflare Worker @ analytics.vibequant.cc
+    |
+    v
+Vercel (Umami Next.js)  &lt;--&gt;  Neon or Supabase (PostgreSQL)
+</code></pre>
+<h3>3.2 Prerequisites</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GitHub account</td>
+<td>For forking Umami</td>
+</tr>
+<tr>
+<td>Cloudflare account (free)</td>
+<td>Already running vibequant.cc DNS/Pages</td>
+</tr>
+<tr>
+<td>Vercel account (Hobby)</td>
+<td>Sign in with GitHub</td>
+</tr>
+<tr>
+<td>Neon or Supabase</td>
+<td>Free PostgreSQL</td>
+</tr>
+<tr>
+<td><code>openssl</code> or a password generator</td>
+<td>For <code>APP_SECRET</code></td>
+</tr>
+<tr>
+<td>Permission to modify the vibequant build pipeline</td>
+<td>Injecting a script into <code>VibeQuant/content/build.mjs</code></td>
+</tr>
+</tbody></table>
+<h3>3.3 Step-by-Step Installation</h3>
+<p><strong>Step 1: Fork the Umami repository</strong>Fork <a href="https://github.com/umami-software/umami">umami-software/umami</a> to your GitHub account.<strong>Step 2: Create a PostgreSQL instance</strong></p>
+<p>Create a project on <a href="https://neon.tech">Neon</a> or <a href="https://supabase.com">Supabase</a> and copy the connection string (<code>postgresql://...</code>).</p>
+<ul>
+<li>Neon: serverless Postgres, can suspend (cold start) when idle</li>
+<li>Supabase: check the free tier&#39;s DB storage and connection limits</li>
+</ul>
+<p><strong>Step 3: Deploy Umami to Vercel</strong>1. In Vercel, use<strong>Add New → Project</strong> to import your forked <code>umami</code>
+2. Set the environment variables:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Value</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>DATABASE_URL</code></td>
+<td>PostgreSQL connection string</td>
+<td>Required. For Neon, use the pooled URL</td>
+</tr>
+<tr>
+<td><code>APP_SECRET</code></td>
+<td>Output of <code>openssl rand -hex 32</code></td>
+<td>For v2+. Replaces the older <code>HASH_SALT</code> from older docs (<a href="https://docs.umami.is/docs/environment-variables">Environment variables</a>)</td>
+</tr>
+<tr>
+<td><code>TRACKER_SCRIPT_NAME</code></td>
+<td>e.g. <code>u</code> or <code>vq-beacon</code></td>
+<td>Use instead of the default <code>script.js</code> to reduce the chance of blocking</td>
+</tr>
+<tr>
+<td><code>COLLECT_API_ENDPOINT</code></td>
+<td>e.g. <code>/api/e</code> (optional)</td>
+<td>Can be used instead of the default <code>/api/send</code></td>
+</tr>
+<tr>
+<td><code>DISABLE_TELEMETRY</code></td>
+<td><code>1</code> (optional)</td>
+<td>Disables Umami&#39;s own telemetry</td>
+</tr>
+</tbody></table>
+<ol start="3">
+<li>After deploying, note the <code>.vercel.app</code> URL</li>
+</ol>
+<p><strong>Step 4: Initial Umami setup</strong></p>
+<ol>
+<li>Visit the deployed URL</li>
+<li>Default account: <code>admin</code> / <code>umami</code> (<a href="https://docs.umami.is/docs/login">Login</a>)</li>
+<li><strong>Change the password immediately</strong>4. Add a site under Settings → Websites and copy the<strong>Website ID</strong>Since vibequant has multiple hosts, decide how to split up Websites before this step (see <a href="#8-additional-requirements-for-vibequantcc">Additional Requirements for vibequant.cc</a> below).<strong>Step 5: Cloudflare Worker proxy</strong>The Worker needs to proxy<strong>both the tracker script and the collection API.</strong> If you only pass through <code>/api/send</code> as in the original guide, script loading breaks.</li>
+</ol>
+<p>Example (adjust paths to match your actual <code>TRACKER_SCRIPT_NAME</code> / <code>COLLECT_API_ENDPOINT</code>):</p>
+<pre><code class="language-javascript">const UMAMI_ORIGIN = &quot;https://your-umami.vercel.app&quot;; // Vercel Umami URL
+const SCRIPT_PATH = &quot;/u.js&quot;;          // matches TRACKER_SCRIPT_NAME output
+const COLLECT_PATH = &quot;/api/send&quot;;     // or COLLECT_API_ENDPOINT
+
+export default {
+  async fetch(request) {
+    const url = new URL(request.url);
+    const path = url.pathname;
+
+    const isScript = path === SCRIPT_PATH || path === SCRIPT_PATH.replace(/\.js$/, &quot;&quot;);
+    const isCollect = path === COLLECT_PATH;
+
+    if (!isScript &amp;&amp; !isCollect) {
+      return new Response(&quot;Not found&quot;, { status: 404 });
+    }
+
+    const upstream = new URL(path + url.search, UMAMI_ORIGIN);
+    const headers = new Headers(request.headers);
+    headers.set(&quot;Host&quot;, new URL(UMAMI_ORIGIN).host);
+    // Forward Cloudflare visitor location headers if enabled (with Managed Transforms)
+    // CF-IPCountry, CF-IPCity, etc.
+
+    const init = {
+      method: request.method,
+      headers,
+      body: request.method === &quot;GET&quot; || request.method === &quot;HEAD&quot; ? undefined : request.body,
+      redirect: &quot;follow&quot;,
+    };
+
+    const response = await fetch(upstream, init);
+    const out = new Response(response.body, response);
+    out.headers.set(&quot;Access-Control-Allow-Origin&quot;, &quot;*&quot;); // narrow to a host whitelist if needed
+    return out;
+  },
+};
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>Do not hardcode the dashboard&#39;s statistics API token in the Worker source. Access the dashboard directly via the Vercel URL (or a separate protected path).</li>
+<li>In production, keep <code>UMAMI_ORIGIN</code> in Worker <strong>Secrets / Vars.</strong></li>
+</ul>
+<p><strong>Step 6: Custom domain</strong>Attach <code>analytics.vibequant.cc</code> to the Worker. Making tracking appear first-party (or a subdomain of the same registered domain) increases the odds of avoiding ad blockers. Community discussion: <a href="https://github.com/umami-software/umami/discussions/1026">umami#1026</a>.<strong>Step 7: Insert tracking code into vibequant.cc</strong>The correct script form is as follows (<code>src</code> points to the<strong>script file</strong>, not <code>/api/send</code>):</p>
+<pre><code class="language-html">&lt;script
+  defer
+  src=&quot;https://analytics.vibequant.cc/u.js&quot;
+  data-website-id=&quot;YOUR_WEBSITE_ID&quot;
+&gt;&lt;/script&gt;
+</code></pre>
+<p>Since static HTML is generated by <code>content/build.mjs</code>&#39;s <code>layout()</code>, it&#39;s safer to insert this into the <strong>build template&#39;s <code>&lt;head&gt;</code></strong>(e.g. <code>extraHead</code> or a shared snippet) rather than manually editing every <code>pages/**/index.html</code>. Then redeploy each affected Pages project (<code>vibequant-web</code>, <code>vibequant-tech</code>, <code>vibequant-cti</code>, etc.).</p>
+<h3>3.4 Pros and Cons</h3>
+<table>
+<thead>
+<tr>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fastest setup, matches the official Vercel guide</td>
+<td>Hobby plan Function execution time / concurrency limits</td>
+</tr>
+<tr>
+<td>No Docker/CLI required</td>
+<td>Neon/Supabase idle suspension can overlap with Vercel cold starts</td>
+</tr>
+<tr>
+<td>Easy to keep cost near $0</td>
+<td>Fork needs to be periodically synced with upstream</td>
+</tr>
+<tr>
+<td>Worker proxy is reusable if migrating to B</td>
+<td>Possible Prisma + serverless DB connection pool issues (pooled URL is nearly mandatory)</td>
+</tr>
+<tr>
+<td>Native Next.js hosting</td>
+<td>Dashboard also lives on Vercel, so app and collection are both affected during an outage</td>
+</tr>
+</tbody></table>
+<h3>3.5 Risks (A)</h3>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Impact</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Neon/Supabase idle suspension</td>
+<td>Delayed/dropped first pageview</td>
+<td>Periodic pinging, a minimal paid plan, or migrate to B</td>
+</tr>
+<tr>
+<td>Exceeding Vercel Hobby limits</td>
+<td>Deploy failures, bandwidth throttling</td>
+<td>Monitor traffic; upgrade to Pro or move to B if needed</td>
+</tr>
+<tr>
+<td>Using a non-pooled connection string</td>
+<td>Intermittent DB errors</td>
+<td>Use Neon&#39;s pooled / Supabase&#39;s pooler URL</td>
+</tr>
+<tr>
+<td>Leaving the default <code>admin</code>/<code>umami</code> credentials</td>
+<td>Dashboard takeover</td>
+<td>Change the password immediately, minimize sharing the URL</td>
+</tr>
+<tr>
+<td>Worker becoming an open proxy</td>
+<td>Abuse, cost</td>
+<td>Path whitelisting, Origin restrictions if needed</td>
+</tr>
+<tr>
+<td>Neglected fork</td>
+<td>Missing security patches</td>
+<td>Periodically sync with the upstream remote</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Approach B: Fly.io + Cloudflare Worker Proxy</h2>
+<p>Choose this when Vercel&#39;s serverless constraints are burdensome or you want something closer to an always-on process. Official guide: <a href="https://docs.umami.is/docs/guides/running-on-fly-io">Running on Fly.io</a>.</p>
+<h3>4.1 Architecture</h3>
+<pre><code>Visitor&#39;s browser
+    |
+    v
+Cloudflare Worker (analytics.vibequant.cc)
+    |
+    v
+Fly.io (Umami Docker)  &lt;--&gt;  Neon/Supabase or Fly Postgres
+</code></pre>
+<h3>4.2 Setup Overview</h3>
+<ol>
+<li>Create a PostgreSQL instance on Neon/Supabase (same as A) — or create Postgres during <code>fly launch</code></li>
+<li>Install and log in to <a href="https://fly.io/docs/flyctl/">flyctl</a></li>
+<li>Write a <code>fly.toml</code> and deploy. Example image:</li>
+</ol>
+<pre><code class="language-toml"># Based on the official docs example. Adjust region/app name for your environment
+kill_signal = &quot;SIGINT&quot;
+kill_timeout = &quot;5s&quot;
+
+[experimental]
+auto_rollback = true
+
+[build]
+  # See docs: docker.umami.is/... or ghcr.io/umami-software/umami:postgresql-latest
+  image = &quot;docker.umami.is/umami-software/umami:postgresql-latest&quot;
+
+[[services]]
+  protocol = &quot;tcp&quot;
+  internal_port = 3000
+  processes = [&quot;app&quot;]
+
+  [[services.ports]]
+    port = 80
+    handlers = [&quot;http&quot;]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = [&quot;tls&quot;, &quot;http&quot;]
+
+  [services.concurrency]
+    type = &quot;connections&quot;
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.tcp_checks]]
+    interval = &quot;15s&quot;
+    timeout = &quot;2s&quot;
+    grace_period = &quot;1s&quot;
+</code></pre>
+<ol start="4">
+<li>Key operational steps (per the official docs):</li>
+</ol>
+<pre><code class="language-bash">fly secrets set APP_SECRET=&quot;$(openssl rand -hex 32)&quot;
+fly deploy
+fly scale memory 512   # Umami often fails at 256MB
+fly deploy
+</code></pre>
+<ol start="5">
+<li>Log in: <code>admin</code> / <code>umami</code> → change the password</li>
+<li>Follow the same Worker proxy / domain / site-script setup as Steps 5–7 in A (just change <code>UMAMI_ORIGIN</code> to the Fly URL)</li>
+</ol>
+<h3>4.3 Pros and Cons</h3>
+<table>
+<thead>
+<tr>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Container gives clear control</td>
+<td>Learning cost of CLI, scaling, health checks, etc.</td>
+</tr>
+<tr>
+<td>512MB always-on mitigates cold starts</td>
+<td><strong>The free tier&#39;s 256MB machine alone is likely insufficient</strong></td>
+</tr>
+<tr>
+<td>Region selectable (e.g. <code>nrt</code>/<code>icn</code>)</td>
+<td>Possible <strong>small fixed charges</strong>, e.g. for a public IPv4 (<a href="https://fly.io/docs/about/pricing/">Fly pricing</a>)</td>
+</tr>
+<tr>
+<td>Easy to reuse the Worker/DB from A</td>
+<td>Responsibility for tracking/rolling back the <code>latest</code> image tag</td>
+</tr>
+<tr>
+<td>Independent of Vercel Hobby limits</td>
+<td>Machine costs and orphaned volumes can accumulate if left unmanaged</td>
+</tr>
+</tbody></table>
+<h3>4.4 Risks (B)</h3>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Impact</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Under 512MB memory</td>
+<td>OOM, deploy/migration failures</td>
+<td><code>fly scale memory 512</code> or higher</td>
+</tr>
+<tr>
+<td>Assuming it&#39;s &quot;free&quot;</td>
+<td>Monthly charges of a few dollars</td>
+<td>Set billing alerts; check IPv4 and machine count</td>
+</tr>
+<tr>
+<td>Also running Fly Postgres</td>
+<td>Duplicate storage/machine cost</td>
+<td>Keep the DB on Neon/Supabase instead</td>
+</tr>
+<tr>
+<td>Scale-to-zero</td>
+<td>Delay on the first request</td>
+<td>Keep at least 1 machine always-on, or ping like in A</td>
+</tr>
+<tr>
+<td>Region mismatch (app in Tokyo, DB in the US)</td>
+<td>Latency in the collection API</td>
+<td>Keep app and DB regions close together</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Common: Cloudflare Optimization and Why D1 Is Not Recommended</h2>
+<h3>5.1 Cloudflare location headers</h3>
+<p>Enabling visitor location headers under Managed Transforms in the Cloudflare dashboard lets Umami better recognize country/region. Related environment variables: <code>CLIENT_IP_HEADER</code>, <code>SKIP_LOCATION_HEADERS</code> (<a href="https://docs.umami.is/docs/environment-variables">Environment variables</a>).</p>
+<h3>5.2 Running Umami on D1</h3>
+<p>Running on D1 would require patching the DB layer.</p>
+<ul>
+<li>The patch would need to be reapplied with every Umami update</li>
+<li>Officially unsupported → you&#39;d depend on the community during incidents</li>
+<li>D1&#39;s free quota and SQLite constraints</li>
+</ul>
+<p><strong>Not recommended.</strong> Free PostgreSQL on Neon/Supabase is more favorable relative to maintenance cost.</p>
+<h3>5.3 First-party tracking</h3>
+<p>The combination of <code>analytics.vibequant.cc</code> plus custom <code>TRACKER_SCRIPT_NAME</code> / <code>COLLECT_API_ENDPOINT</code> is the most realistic approach for avoiding ad blockers. This &quot;bypass&quot; is not perfect, and some strict blocklists may still catch it.</p>
+<hr>
+<h2>6. Cost Summary (Free Tier, 2026 Context)</h2>
+<table>
+<thead>
+<tr>
+<th>Service</th>
+<th>Free/allowance (approx.)</th>
+<th>Sufficient for Umami?</th>
+<th>Caveats</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cloudflare Workers</td>
+<td>Daily request limit (per account plan)</td>
+<td>Usually sufficient as a tracking proxy</td>
+<td>Can be exhausted by open-proxy abuse/bots</td>
+</tr>
+<tr>
+<td>Vercel Hobby</td>
+<td>Bandwidth / Function limits</td>
+<td>Usually enough for small content sites</td>
+<td>Commercial-use limits, cold starts</td>
+</tr>
+<tr>
+<td>Neon Free</td>
+<td>Storage / compute time</td>
+<td>Sufficient for early-stage, low-traffic use</td>
+<td>Idle suspension</td>
+</tr>
+<tr>
+<td>Supabase Free</td>
+<td>DB storage / bandwidth</td>
+<td>Sufficient early on</td>
+<td>Check the project pause policy</td>
+</tr>
+<tr>
+<td>Fly.io</td>
+<td>Some shared CPU/time allowance exists</td>
+<td><strong>May conflict with Umami&#39;s 512MB requirement</strong></td>
+<td>Charges kick in past IPv4/memory limits</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>B:</strong> hard to guarantee &quot;completely free.&quot; Memory and IPv4 alone can incur a small monthly charge. Be sure to enable billing alerts.</li>
+</ul>
+<p>&quot;$0/month&quot; is only a safe target with the <strong>A + Neon/Supabase + Worker</strong> combination.</p>
+<hr>
+<h2>7. Common Risks and Operational Issues</h2>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Security</strong></td>
+<td>Change default password, minimize dashboard URL exposure, don&#39;t put an API bearer token in the Worker, never leak <code>APP_SECRET</code></td>
+</tr>
+<tr>
+<td><strong>Privacy</strong></td>
+<td>Umami is close to cookieless, but confirm it matches your public site&#39;s privacy policy/cookie banner policy. State retention period and purpose if you have EU visitors</td>
+</tr>
+<tr>
+<td><strong>Data loss</strong></td>
+<td>Free-tier deletion/pause policies on Neon/Supabase. Do periodic DB dumps or logical backups</td>
+</tr>
+<tr>
+<td><strong>Accuracy</strong></td>
+<td>Ad blockers, ITP, and bot filters mean PV is always somewhat under/overcounted. Recommend cross-checking against Cloudflare Web Analytics</td>
+</tr>
+<tr>
+<td><strong>Dependencies</strong></td>
+<td>Three axes: app host (Vercel/Fly) + DB (Neon/Supabase) + CF Worker. A gap in collection occurs if any one axis fails</td>
+</tr>
+<tr>
+<td><strong>Updates</strong></td>
+<td>Fork syncing (A) or pinned image tags (B). Have a rollback plan for failed Prisma migrations</td>
+</tr>
+<tr>
+<td><strong>Abuse</strong></td>
+<td>DB bloat via <code>/api/send</code> spam. Since the Website ID is inevitably public, monitor for rate limits and anomalies</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. Additional Requirements for vibequant.cc</h2>
+<p>Below are the <strong>additional tasks required specifically because of this repo&#39;s domain/site structure</strong>, which aren&#39;t covered in the original guide.</p>
+<h3>8.1 Multi-host strategy</h3>
+<p>Current approximate mapping (<a href="../../VibeQuant/cloudflare/docs/CUSTOM_DOMAIN_SETUP.md">CUSTOM_DOMAIN_SETUP.md</a>):</p>
+<table>
+<thead>
+<tr>
+<th>Host</th>
+<th>Pages project</th>
+<th>Content</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>vibequant.cc</code></td>
+<td>vibequant-web</td>
+<td>Hub, essays, etc.</td>
+</tr>
+<tr>
+<td><code>docs.vibequant.cc</code></td>
+<td>vibequant-docs</td>
+<td>Columns</td>
+</tr>
+<tr>
+<td><code>tech.vibequant.cc</code></td>
+<td>vibequant-tech</td>
+<td>TechDoc</td>
+</tr>
+<tr>
+<td><code>cti.vibequant.cc</code></td>
+<td>vibequant-cti</td>
+<td>CTI</td>
+</tr>
+<tr>
+<td><code>play.vibequant.cc</code></td>
+<td>vibequant-play</td>
+<td>Playground</td>
+</tr>
+<tr>
+<td><code>lab</code> / <code>research</code></td>
+<td>respective</td>
+<td>Experiments/research</td>
+</tr>
+</tbody></table>
+<p>Options:</p>
+<ol>
+<li><strong>A Website ID per host</strong> — cleaner dashboards, branch the script&#39;s ID per host</li>
+<li><strong>A single Website across multiple domains</strong> — simpler configuration, filter by host/path in reports</li>
+</ol>
+<p>For a content archive use case, <strong>a Website per host</strong> (docs / tech / cti / hub) is better for analysis.</p>
+<h3>8.2 Build pipeline injection</h3>
+<p>The tracking code should go into <code>&lt;head&gt;</code> of the <code>layout()</code> function in <code>VibeQuant/content/build.mjs</code>. Editing the generated HTML directly will just get overwritten on the next build.</p>
+<p>Additional needs:</p>
+<ul>
+<li>Injecting <code>UMAMI_WEBSITE_ID_*</code> or the ID via a build-time env variable</li>
+<li>A flag to disable tracking during local previews (<code>UMAMI_ENABLED=0</code>)</li>
+<li>Redeploying <strong>every affected Pages project</strong> after the build</li>
+</ul>
+<h3>8.3 DNS / Worker</h3>
+<ul>
+<li><code>analytics.vibequant.cc</code> → Worker custom domain</li>
+<li>Verify no conflict with existing Pages custom domains</li>
+<li>CORS: since scripts and POSTs come from multiple subdomains, check the Worker/Umami CORS settings</li>
+</ul>
+<h3>8.4 Relationship with Cloudflare Web Analytics</h3>
+<p>If you&#39;re already using or plan to use Web Analytics:</p>
+<ul>
+<li>Short term: run <strong>both in parallel</strong> to cross-check numbers</li>
+<li>Medium term: once Umami stabilizes, keep Web Analytics only as a PV backup, or clean it up</li>
+</ul>
+<p>Running both is cheap in page overhead, but be careful not to confuse double-counting when interpreting metrics.</p>
+<h3>8.5 Custom events (follow-up)</h3>
+<p>Add scroll depth, outbound clicks, etc. via Umami <a href="https://docs.umami.is/docs/tracker-functions">Custom Events</a>. Implement this after basic pageview tracking has stabilized.</p>
+<h3>8.6 Documentation and ops checks</h3>
+<ul>
+<li>Never commit <code>APP_SECRET</code> or the DB URL to the repo (use <code>.env</code> / Vercel·Fly secrets)</li>
+<li>Incident contact channels: Vercel/Fly status, Neon/Supabase status</li>
+<li>Weekly: fork sync or verify image digest (optional)</li>
+</ul>
+<hr>
+<h2>9. Checklist: vibequant.cc Rollout Timeline</h2>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Task</th>
+<th>Estimated Time</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Decide the per-host Website strategy (single vs. multiple IDs)</td>
+<td>10 min</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Fork Umami on GitHub</td>
+<td>2 min</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Create a Neon/Supabase PostgreSQL instance</td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Deploy to Vercel + set <code>DATABASE_URL</code> / <code>APP_SECRET</code> / tracker name</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Log in, change password, add a Website</td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Cloudflare Worker (script + collect proxy) + Secrets</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Connect <code>analytics.vibequant.cc</code></td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Verify Managed Transforms (visitor location)</td>
+<td>3 min</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Insert the script into <code>build.mjs</code> + verify local build</td>
+<td>15 min</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Redeploy the relevant Pages project</td>
+<td>10–20 min</td>
+</tr>
+<tr>
+<td>11</td>
+<td>Test visit → check Realtime/dashboard</td>
+<td>5 min</td>
+</tr>
+<tr>
+<td>12</td>
+<td>(Optional) Billing alert, DB backup, notes on running alongside Web Analytics</td>
+<td>10 min</td>
+</tr>
+</tbody></table>
+<p><strong>Total estimate: about 1–1.5 hours</strong> (including multi-host and build changes). The original guide&#39;s 40–50 minutes assumes a &quot;single site, manual HTML insertion&quot; scope.</p>
+<p>Choosing Approach B from the start adds <strong>+30–60 minutes</strong> for Fly memory scaling and billing checks, plus the possibility of a small cost.</p>
+<hr>
+<h2>10. Recommended Decision</h2>
+<ol>
+<li><strong>First: Approach A (Vercel + Neon + Worker)</strong><ul>
+<li>The best fit for vibequant.cc in terms of cost, speed, and documentation maturity</li>
+</ul>
+</li>
+<li><strong>Proxy through <code>analytics.vibequant.cc</code> from the start</strong><ul>
+<li>Migrating to B later just means swapping the Worker origin</li>
+</ul>
+</li>
+<li><strong>Do not attempt D1/Workers-native Umami</strong>4.<strong>Insert via build.mjs + use per-host Website IDs</strong>5.<strong>Migrate to B once cold starts / Hobby limits become noticeable</strong><ul>
+<li>Until then, don&#39;t assume Fly is &quot;free&quot;</li>
+</ul>
+</li>
+</ol>
+<p>This combination keeps you close to the free tier while securing first-party tracking, data ownership, and a viable path for Umami updates. Starting light with Cloudflare Web Analytics and then attaching Umami via this plan gives the best return relative to operational burden.</p>
+<hr>
+<h2>11. References</h2>
+<h3>Official documentation</h3>
+<ul>
+<li><a href="https://docs.umami.is/docs/guides/running-on-vercel">Umami — Running on Vercel</a></li>
+<li><a href="https://docs.umami.is/docs/guides/running-on-fly-io">Umami — Running on Fly.io</a></li>
+<li><a href="https://docs.umami.is/docs/environment-variables">Umami — Environment variables</a> (<code>APP_SECRET</code>, <code>TRACKER_SCRIPT_NAME</code>, <code>COLLECT_API_ENDPOINT</code>)</li>
+<li><a href="https://docs.umami.is/docs/login">Umami — Login (default admin / umami)</a></li>
+<li><a href="https://docs.umami.is/docs/tracker-functions">Umami — Tracker functions / custom events</a></li>
+<li><a href="https://github.com/umami-software/umami">Umami GitHub</a></li>
+<li><a href="https://fly.io/docs/about/pricing/">Fly.io — Resource pricing</a></li>
+<li><a href="https://fly.io/docs/flyctl/">Fly.io — flyctl</a></li>
+<li><a href="https://vercel.com/docs/rewrites">Vercel — Rewrites</a> (alternative: same-domain proxy when the main app is on Vercel)</li>
+<li><a href="https://neon.tech">Neon</a> / <a href="https://supabase.com">Supabase</a></li>
+</ul>
+<h3>Community and guides</h3>
+<ul>
+<li><a href="https://github.com/umami-software/umami/discussions/1026">Preventing ad blockers with Cloudflare Worker (umami#1026)</a></li>
+<li><a href="https://www.surajon.dev/how-to-self-host-umami-analytics-with-supabase-and-vercel">Self-hosted Umami on Vercel + Supabase (example post)</a></li>
+<li><a href="https://setuptracking.com/umami-vercel/">Umami on Vercel + Neon (summary guide)</a></li>
+</ul>
+<h3>This repo</h3>
+<ul>
+<li><a href="./CloudeFlare-Web-Analytics-Guide_EN.md">Cloudflare Web Analytics Solutions Guide</a></li>
+<li><a href="../../VibeQuant/cloudflare/docs/CUSTOM_DOMAIN_SETUP.md">VibeQuant Custom Domain Setup</a></li>
+<li>Tracking injection point: <code>VibeQuant/content/build.mjs</code> (<code>layout()</code> <code>&lt;head&gt;</code>)</li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudeFlare-Web-Analytics/Umami-Self-Hosting-Plan-vibequant_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

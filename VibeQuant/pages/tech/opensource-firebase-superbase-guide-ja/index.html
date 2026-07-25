@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Supabase 完全ガイド (Full Version) — VibeQuant</title>
+  <meta name="description" content="オープンソースのFirebase代替であるSupabaseの核心機能、アーキテクチャ、長所短所、Vercel統合方法、料金プランを網羅した完全ガイド" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide-ja/" />
+  <meta property="og:title" content="Supabase 完全ガイド (Full Version)" />
+  <meta property="og:description" content="オープンソースのFirebase代替であるSupabaseの核心機能、アーキテクチャ、長所短所、Vercel統合方法、料金プランを網羅した完全ガイド" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Supabase 完全ガイド (Full Version)","description":"オープンソースのFirebase代替であるSupabaseの核心機能、アーキテクチャ、長所短所、Vercel統合方法、料金プランを網羅した完全ガイド","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/opensource-firebase-superbase-guide-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/OpenSource_Firebase/SuperBase_guide_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-21","dateModified":"2026-07-21","inLanguage":"ja","keywords":"BaaS · DB, OpenSource_Firebase"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · BaaS · DB</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">BaaS · DB</p>
+        <h1>Supabase 完全ガイド (Full Version)</h1>
+        <p class="article-dates"><time datetime="2026-07-21">발행 2026.07.21</time> · 주제 BaaS · DB · OpenSource_Firebase</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/opensource-firebase-superbase-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/opensource-firebase-superbase-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/opensource-firebase-superbase-guide-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/opensource-firebase-superbase-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">オープンソースのFirebase代替であるSupabaseの核心機能、アーキテクチャ、長所短所、Vercel統合方法、料金プランを網羅した完全ガイド</p>
+        
+      </header>
+      <div class="article-body prose"><p><strong>バージョン:</strong>2026年6月時点<strong>対象:</strong> Vercel + Next.jsベースのフルスタック開発者</p>
+<hr>
+<h2>1. Supabaseとは?</h2>
+<p>Supabaseは<strong>オープンソースのFirebase代替</strong>です。PostgreSQLデータベースを核として、認証(Auth)、リアルタイム(Realtime)、ストレージ(Storage)、エッジ関数(Edge Functions)などを統合的に提供するバックエンドプラットフォーム(BaaS)です。</p>
+<ul>
+<li><strong>オープンソース</strong>: すべてのコードはGitHubに公開されており、自分でホスティングすることも可能です。</li>
+<li><strong>PostgreSQLベース</strong>: リレーショナルデータベースの強力さ(JOIN、トランザクション、RLSなど)をそのまま利用できます。</li>
+<li><strong>開発者体験</strong>: SDK(JavaScript、Flutter、Swift、Pythonなど)およびCLIを提供し、迅速なプロトタイピングが可能です。</li>
+</ul>
+<hr>
+<h2>2. 核心機能 (Core Features)</h2>
+<h3>2.1 Database (PostgreSQL)</h3>
+<ul>
+<li><strong>完全マネージドPostgreSQL</strong>: バージョン15.x、設定とパッチの自動化。</li>
+<li><strong>テーブルエディタ</strong>: Web UIでテーブル作成、SQL編集、リレーション設定が可能。</li>
+<li><strong>SQLエディタ</strong>: オンラインでSQLクエリを実行し履歴を保存。</li>
+<li><strong>バックアップ &amp; PITR</strong>: 毎日の自動バックアップ、特定時点への復元(Point-in-Time Recovery)はPro以上。</li>
+<li><strong>スキーママイグレーション</strong>: <code>supabase migration</code> CLIでバージョン管理。</li>
+</ul>
+<h3>2.2 Authentication (Auth)</h3>
+<ul>
+<li><strong>サポートするログイン方法</strong>:<ul>
+<li>メール/パスワード(Magic Link含む)</li>
+<li>ソーシャルOAuth: Google、Apple、GitHub、GitLab、Facebook、Discord、Slack、Kakao(一部プロバイダー)</li>
+<li>電話番号SMS認証(Twilio連携が必要)</li>
+<li>企業向けSSO(SAML、Azure AD) – Enterpriseプラン</li>
+</ul>
+</li>
+<li><strong>JWTベースのセッション</strong>: 自動更新されるアクセス/リフレッシュトークン。</li>
+<li><strong>Row Level Security (RLS) 統合</strong>: データベースポリシーで<code>auth.uid()</code>を直接使用可能。</li>
+<li><strong>ユーザー管理API</strong>: ユーザーの作成/削除、パスワードリセット、メール変更など。</li>
+<li><strong>メールテンプレートのカスタマイズ</strong>: 登録確認、パスワードリセットなどのメール内容とSMTP設定が可能。</li>
+</ul>
+<h3>2.3 Storage</h3>
+<ul>
+<li><strong>S3互換オブジェクトストレージ</strong>: 画像、動画、ファイルアップロード。</li>
+<li><strong>バケットポリシーとRLS</strong>: ファイル単位のアクセス権限をRLSで制御可能。</li>
+<li><strong>画像変換</strong>: <code>?width=200&amp;height=200</code>パラメータで動的リサイズをサポート。</li>
+<li><strong>公開/非公開バケット</strong>: 署名付きURLによる一時アクセスが可能。</li>
+</ul>
+<h3>2.4 Realtime</h3>
+<ul>
+<li><strong>WebSocketベースのリアルタイムサブスクリプション</strong>: テーブルの変更(INSERT、UPDATE、DELETE)をクライアントにリアルタイム送信。</li>
+<li><strong>Broadcast</strong>: クライアント間のメッセージブロードキャスト(チャット、共同作業)。</li>
+<li><strong>Presence</strong>: 接続中のユーザーリスト管理(リアルタイムユーザーステータス)。</li>
+<li><strong>PostgreSQL Change Data Capture (CDC)</strong>: <code>REPLICA IDENTITY FULL</code>設定が必要。</li>
+</ul>
+<h3>2.5 Edge Functions</h3>
+<ul>
+<li><strong>Denoベースのサーバーレス関数</strong>: 世界中のエッジノードで実行(Vercel Edge Functionsと類似)。</li>
+<li><strong>低レイテンシ</strong>: JWT認証、決済Webhook、AI APIプロキシなどに適しています。</li>
+<li><strong>サポート言語</strong>: TypeScript、JavaScript(Denoランタイム)。</li>
+<li><strong>制限</strong>: 実行時間10秒(無料)、メモリ150MB。</li>
+</ul>
+<h3>2.6 Vector (pgvector)</h3>
+<ul>
+<li><strong>PostgreSQL拡張pgvectorを内蔵</strong>: 埋め込みベクトルの保存と類似度検索(コサイン、ユークリッドなど)。</li>
+<li><strong>AIアプリケーション</strong>: RAG(Retrieval-Augmented Generation)、レコメンドシステムに活用。</li>
+</ul>
+<h3>2.7 GraphQL (pg_graphql経由)</h3>
+<ul>
+<li><strong>自動生成されるGraphQL API</strong>: PostgreSQLスキーマに基づいたGraphQLエンドポイントを提供。</li>
+<li><strong>フィルタ、ソート、ページング</strong>をサポート。</li>
+</ul>
+<hr>
+<h2>3. アーキテクチャの理解</h2>
+<p>Supabaseは複数のオープンソースコンポーネントを組み合わせて構築されています。</p>
+<table>
+<thead>
+<tr>
+<th>コンポーネント</th>
+<th>技術</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Database</strong></td>
+<td>PostgreSQL</td>
+<td>データ保存とクエリ</td>
+</tr>
+<tr>
+<td><strong>API</strong></td>
+<td>PostgREST</td>
+<td>RESTful APIの自動生成</td>
+</tr>
+<tr>
+<td><strong>Auth</strong></td>
+<td>GoTrue</td>
+<td>JWTベースの認証</td>
+</tr>
+<tr>
+<td><strong>Storage</strong></td>
+<td>Supabase Storage(S3ベース)</td>
+<td>ファイルアップロード/ダウンロード</td>
+</tr>
+<tr>
+<td><strong>Realtime</strong></td>
+<td>Realtime server(Elixir)</td>
+<td>WebSocketブロードキャスト</td>
+</tr>
+<tr>
+<td><strong>Edge Functions</strong></td>
+<td>Supabase Edge Runtime(Deno)</td>
+<td>エッジ関数の実行</td>
+</tr>
+<tr>
+<td><strong>Dashboard</strong></td>
+<td>Next.jsベースのWeb UI</td>
+<td>管理者コンソール</td>
+</tr>
+</tbody></table>
+<ul>
+<li>すべてのサービスは<strong>オープンソース</strong>であり、それぞれ分離されて拡張可能です。</li>
+<li>クライアントは<strong>1つのAPI URL</strong>ですべてのサービスにアクセスできます(例: <code>https://&lt;ref&gt;.supabase.co</code>)。</li>
+</ul>
+<hr>
+<h2>4. 長所 (Pros)</h2>
+<h3>Firebase比較での優位性</h3>
+<ul>
+<li><strong>リレーショナルデータベース</strong>: 複雑なクエリ、JOIN、トランザクションをサポート(Firebase Firestoreはドキュメントベース)。</li>
+<li><strong>価格の予測可能性</strong>: ユーザー数ベースの課金ではなく、コンピュート+ストレージ+帯域幅ベース。</li>
+<li><strong>オープンソース</strong>: ベンダーロックインから解放され、自己ホスティングも可能。</li>
+</ul>
+<h3>開発者の生産性</h3>
+<ul>
+<li><strong>15分で認証+DB構築</strong>: UIでテーブル作成、RLSポリシー設定、ソーシャルログインの有効化。</li>
+<li><strong>自動API生成</strong>: テーブルを作成するだけでREST/GraphQLエンドポイントを即利用可能。</li>
+<li><strong>TypeScriptサポート</strong>: <code>supabase gen types</code>コマンドでDBスキーマ→TypeScript型を自動生成。</li>
+</ul>
+<h3>セキュリティ (RLS)</h3>
+<ul>
+<li><strong>データベースレベルの権限管理</strong>: RLSポリシーで「ユーザーは自分の行のみ表示可能」のようなルールをSQLで宣言。</li>
+<li><strong>デフォルトで全APIに認証が必要</strong>: <code>anon</code>キーは限定的なアクセス、<code>service_role</code>キーのみが全権限。</li>
+</ul>
+<h3>拡張性</h3>
+<ul>
+<li><strong>PostgreSQLエコシステムの活用</strong>: インデックス、ビュー、関数、トリガー、pg_cron、pgvectorなどの拡張。</li>
+<li><strong>スケールアップ/アウト</strong>: Proプラン以上で専用コンピュート、リードレプリカ、シャーディングを準備中。</li>
+</ul>
+<h3>Vercelとの完璧な相性</h3>
+<ul>
+<li><strong>Vercel Marketplace統合</strong>: 1クリックでSupabaseプロジェクト作成と環境変数の注入。</li>
+<li><strong>公式<code>@supabase/ssr</code>パッケージ</strong>: Next.js App Routerでのクッキーベースセッション管理。</li>
+<li><strong>エッジ関数間の類似性</strong>: Vercel Edge RuntimeとSupabase Edge Functionsは両方Denoベース→ロジック再利用が容易。</li>
+</ul>
+<h3>無料ティアの魅力</h3>
+<ul>
+<li><strong>50,000人のMAU</strong>(月間アクティブユーザー) – Firebase Authの無料ティアよりはるかに寛容。</li>
+<li><strong>期間制限なし</strong> – 12ヶ月後に突然課金されることはない。</li>
+<li><strong>500MB DB、1GBストレージ、2GB帯域幅</strong> – MVP、サイドプロジェクトに十分。</li>
+</ul>
+<hr>
+<h2>5. 短所 (Cons)</h2>
+<h3>帯域幅のボトルネック(無料ティア)</h3>
+<ul>
+<li><strong>実質的な帯域幅上限2GB</strong>: 公式ドキュメントには5GBと記載されていますが、コミュニティの実測結果では2GB程度で制限がかかります。</li>
+<li><strong>影響</strong>: 画像・動画中心のアプリは1日で上限を超える可能性があります。APIレスポンス最適化とCDNが必須です。</li>
+</ul>
+<h3>Database Compute性能(無料ティア)</h3>
+<ul>
+<li><strong>共有CPU</strong>: ピーク時間帯にクエリ遅延200〜500msが発生する可能性があります。</li>
+<li><strong>接続プールの制限</strong>: 無料は最大50同時接続、Proは200。</li>
+</ul>
+<h3>ソーシャルログインプロバイダーの制限</h3>
+<ul>
+<li><strong>Naver、Kakao、Lineなどの韓国サービス</strong>: 基本的にサポートされていない(OIDC Compliantプロバイダーとして連携可能だが設定が複雑)。</li>
+<li><strong>中国のプロバイダー(WeChat、QQ)</strong>: なし。</li>
+</ul>
+<h3>カスタマイズの難しさ(マネージドの限界)</h3>
+<ul>
+<li><strong>カスタムドメイン</strong>: Proプラン以上($25/月)でのみ可能。</li>
+<li><strong>JWT有効期限の変更不可</strong>: デフォルト1時間(Google/Auth0などは15分などに設定可能)。</li>
+<li><strong>SMTPは直接設定可能だが、専用メール送信サービスと比較して機能が劣る</strong>(マーケティングメール、大量送信機能なし)。</li>
+</ul>
+<h3>監査ログの欠如(無料/Pro)</h3>
+<ul>
+<li><strong>Enterpriseでのみ監査ログを提供</strong>: 誰が、いつ、どのデータにアクセスしたかを確認するには$2,500/月が必要。</li>
+</ul>
+<h3>ベンダーロックイン(わずかに)</h3>
+<ul>
+<li><strong>RLSポリシー</strong>: Supabaseの<code>auth.uid()</code>関数に強く依存すると、他のIdPに移行する際にすべてのポリシーを再作成する必要があります。</li>
+<li><strong>ストレージURLの形式</strong>: <code>https://&lt;ref&gt;.supabase.co/storage/v1/...</code> – 独自ドメインへの切り替え時に作業が必要。</li>
+</ul>
+<h3>Realtime性能の問題(大規模時)</h3>
+<ul>
+<li><strong>チャンネルあたりの接続数制限</strong>: 無料は200、Proは5,000、それ以上はRedisベースの拡張が必要。</li>
+<li><strong>CDCの負荷</strong>: 変更データキャプチャの多いテーブルで使用すると、PostgreSQLのWALに負荷がかかります。</li>
+</ul>
+<h3>Edge Functionsの制約</h3>
+<ul>
+<li><strong>実行時間10秒</strong>: 重い作業(動画エンコード、大規模データ処理)は不可。</li>
+<li><strong>外部ネットワークアクセスの制限</strong>: 無料では一部のIP範囲のみ許可(Proで解除)。</li>
+<li><strong>ローカルデバッグが難しい</strong>: <code>supabase functions serve</code>は遅く、VSCodeデバッガとの連携が不安定。</li>
+</ul>
+<hr>
+<h2>6. Vercel + Supabase統合ガイド</h2>
+<h3>6.1 基本設定(5分)</h3>
+<ol>
+<li><strong>Vercelダッシュボード</strong> → Integrations → Supabase → 「Connect」をクリック。</li>
+<li>新しいSupabaseプロジェクトを作成するか既存プロジェクトを選択。</li>
+<li>環境変数(<code>NEXT_PUBLIC_SUPABASE_URL</code>、<code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>)を自動注入。</li>
+<li><code>@supabase/ssr</code>パッケージをインストール:</li>
+</ol>
+<pre><code class="language-bash">npm install @supabase/supabase-js @supabase/ssr
+</code></pre>
+<h3>6.2 ミドルウェア設定 (<code>middleware.ts</code>)</h3>
+<pre><code class="language-typescript">import { createMiddlewareClient } from &#39;@supabase/ssr&#39;
+import { NextResponse } from &#39;next/server&#39;
+
+export async function middleware(req) {
+  const res = NextResponse.next()
+  const supabase = createMiddlewareClient({ req, res })
+  await supabase.auth.getSession()
+  return res
+}
+</code></pre>
+<blockquote>
+<p><strong>参考</strong>: <code>createMiddlewareClient</code>は<code>@supabase/ssr</code> v0.1.0以上で使用します。旧バージョンの<code>@supabase/auth-helpers-nextjs</code>と混用しないでください。</p>
+</blockquote>
+<h3>6.3 Supabaseクライアントの初期化</h3>
+<p>サーバーコンポーネントとクライアントコンポーネントではそれぞれ異なる方式で初期化します。</p>
+<p><strong>サーバーコンポーネント (Server Component)</strong></p>
+<pre><code class="language-typescript">import { createServerComponentClient } from &#39;@supabase/ssr&#39;
+import { cookies } from &#39;next/headers&#39;
+
+export default async function Page() {
+  const supabase = createServerComponentClient({ cookies })
+  const { data: { session } } = await supabase.auth.getSession()
+  // ...
+}
+</code></pre>
+<p><strong>クライアントコンポーネント (Client Component)</strong></p>
+<pre><code class="language-typescript">&#39;use client&#39;
+import { createClientComponentClient } from &#39;@supabase/ssr&#39;
+
+export default function Component() {
+  const supabase = createClientComponentClient()
+  // ...
+}
+</code></pre>
+<h3>6.4 Google OAuth設定(ダッシュボードで3分)</h3>
+<ol>
+<li>Supabaseダッシュボード → Authentication → Providers → Googleを有効化。</li>
+<li>Client ID / Secretを入力 → リダイレクトURLをコピーしてGoogle Cloud Consoleに登録。</li>
+</ol>
+<h3>6.5 RLSの例(掲示板)</h3>
+<pre><code class="language-sql">-- テーブル作成
+CREATE TABLE posts (
+  id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id uuid REFERENCES auth.users(id),
+  content text,
+  created_at timestamptz DEFAULT now()
+);
+
+-- RLSを有効化
+ALTER TABLE posts ENABLE ROW LEVEL SECURITY;
+
+-- ポリシー: ユーザーは自分の投稿のみ表示可能
+CREATE POLICY &quot;Users can view own posts&quot; ON posts
+  FOR SELECT USING (auth.uid() = user_id);
+
+-- ポリシー: ログイン済みユーザーのみ投稿可能
+CREATE POLICY &quot;Authenticated users can insert&quot; ON posts
+  FOR INSERT WITH CHECK (auth.role() = &#39;authenticated&#39;);
+</code></pre>
+<h3>6.6 TypeScript型の生成</h3>
+<pre><code class="language-bash">npx supabase gen types typescript --project-id &lt;ref&gt; &gt; types/supabase.ts
+</code></pre>
+<p>生成された型をクエリに活用すると、コンパイル時にスキーマエラーを検出できます。</p>
+<pre><code class="language-typescript">import { Database } from &#39;@/types/supabase&#39;
+
+const supabase = createClientComponentClient&lt;Database&gt;()
+const { data } = await supabase.from(&#39;posts&#39;).select(&#39;*&#39;)
+// dataはDatabase[&#39;public&#39;][&#39;Tables&#39;][&#39;posts&#39;][&#39;Row&#39;][]型として推論される
+</code></pre>
+<h3>6.7 環境変数の管理</h3>
+<p>ローカル開発時は<code>.env.local</code>に以下を追加します。Vercel統合を使用すればプレビュー/本番環境の環境変数は自動的に注入されます。</p>
+<pre><code class="language-bash">NEXT_PUBLIC_SUPABASE_URL=https://&lt;ref&gt;.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=&lt;anon-key&gt;
+# 絶対にクライアントに公開しないこと
+SUPABASE_SERVICE_ROLE_KEY=&lt;service-role-key&gt;
+</code></pre>
+<hr>
+<h2>7. 料金プラン(2026年6月時点)</h2>
+<table>
+<thead>
+<tr>
+<th>プラン</th>
+<th>価格</th>
+<th>MAU</th>
+<th>DB容量</th>
+<th>帯域幅</th>
+<th>Edge Functions</th>
+<th>リアルタイム接続</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Free</td>
+<td>$0</td>
+<td>50,000</td>
+<td>500MB</td>
+<td>2GB</td>
+<td>50万コール/月</td>
+<td>200</td>
+</tr>
+<tr>
+<td>Pro</td>
+<td>$25</td>
+<td>100,000</td>
+<td>8GB</td>
+<td>100GB</td>
+<td>200万コール/月</td>
+<td>5,000</td>
+</tr>
+<tr>
+<td>Team</td>
+<td>$599</td>
+<td>500,000</td>
+<td>40GB</td>
+<td>400GB</td>
+<td>500万コール/月</td>
+<td>20,000</td>
+</tr>
+<tr>
+<td>Enterprise</td>
+<td>カスタム</td>
+<td>無制限</td>
+<td>無制限</td>
+<td>無制限</td>
+<td>無制限</td>
+<td>無制限</td>
+</tr>
+</tbody></table>
+<p><strong>追加費用:</strong></p>
+<ul>
+<li>超過DBストレージ: $0.125/GB(Pro以上)</li>
+<li>超過帯域幅: $0.09/GB(Pro以上)</li>
+<li>追加エッジ関数コール: $2/100万回</li>
+</ul>
+<blockquote>
+<p><strong>参考:</strong> 無料ティアはプロジェクトあたり2個に制限、Proは組織あたりのプロジェクト数無制限。</p>
+</blockquote>
+<hr>
+<h2>8. Supabaseを選ぶべき場合</h2>
+<h3>適したプロジェクト</h3>
+<ul>
+<li><strong>MVP、スタートアップの初期プロダクト</strong>: 迅速な開発速度と無料ティアの寛容なMAU。</li>
+<li><strong>Vercel + Next.jsフルスタック</strong>: 公式統合により開発者体験を最適化。</li>
+<li><strong>リレーショナルデータが中心のアプリ</strong>: 注文、予約、在庫管理など複雑なクエリが必要。</li>
+<li><strong>RLSでデータセキュリティを強化する必要があるサービス</strong>: 医療、金融、個人情報処理。</li>
+<li><strong>リアルタイム機能が必要なアプリ</strong>: チャット、コラボレーションツール、ダッシュボード。</li>
+<li><strong>AI/ベクトル検索アプリ</strong>: pgvector内蔵により別途のベクトルDBなしでRAGを実装可能。</li>
+</ul>
+<h3>不適切なプロジェクト</h3>
+<ul>
+<li><strong>メディア帯域幅の大きいアプリ(写真/動画)</strong>: 帯域幅課金が負担になる。代わりにVercel Blob StorageまたはCloudflare R2を検討。</li>
+<li><strong>韓国のソーシャルログイン(Naver、Kakao)が必須</strong>: Auth.jsまたはPassport.jsを直接実装する方が簡単。</li>
+<li><strong>エンタープライズの監査ログとSSOが必要</strong>: Auth0、WorkOS、Clerkがより適しています。</li>
+<li><strong>サーバーレス関数での長時間処理(&gt;10秒)</strong>: バックグラウンドWorkerが必要な場合は別途サーバーが必要。</li>
+</ul>
+<hr>
+<h2>9. Supabase vs 競合サービス比較</h2>
+<table>
+<thead>
+<tr>
+<th>特徴</th>
+<th>Supabase</th>
+<th>Firebase</th>
+<th>Auth0</th>
+<th>Clerk</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>データベース</td>
+<td>PostgreSQL</td>
+<td>Firestore(NoSQL)</td>
+<td>なし</td>
+<td>なし</td>
+</tr>
+<tr>
+<td>認証の無料MAU</td>
+<td>50k</td>
+<td>50k(ユーザー基準)</td>
+<td>7,500</td>
+<td>10k</td>
+</tr>
+<tr>
+<td>リアルタイム</td>
+<td>サポート(WebSocket)</td>
+<td>サポート</td>
+<td>非サポート</td>
+<td>非サポート</td>
+</tr>
+<tr>
+<td>ストレージ</td>
+<td>サポート(S3互換)</td>
+<td>サポート</td>
+<td>非サポート</td>
+<td>非サポート</td>
+</tr>
+<tr>
+<td>オープンソース</td>
+<td>全公開</td>
+<td>非公開</td>
+<td>非公開</td>
+<td>非公開</td>
+</tr>
+<tr>
+<td>自己ホスティング</td>
+<td>サポート(Docker)</td>
+<td>非サポート</td>
+<td>非サポート</td>
+<td>非サポート</td>
+</tr>
+<tr>
+<td>価格の予測可能性</td>
+<td>中程度(使用量別)</td>
+<td>低い(リクエストごと)</td>
+<td>高い(MAUごと)</td>
+<td>中程度(MAU+機能)</td>
+</tr>
+<tr>
+<td>カスタムドメイン</td>
+<td>Pro以上</td>
+<td>Blazeプラン以上</td>
+<td>標準以上</td>
+<td>Pro以上</td>
+</tr>
+<tr>
+<td>pgvector / ベクトル検索</td>
+<td>内蔵</td>
+<td>非サポート</td>
+<td>非サポート</td>
+<td>非サポート</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>10. よくある質問 (FAQ)</h2>
+<p><strong>Q: Supabaseの無料ティアでNaverログインを使えますか?</strong>A: 直接実装は可能ですが複雑です。Auth.js(NextAuth)を併用する方が簡単です。<strong>Q: VercelからSupabaseに直接接続しても安全ですか?</strong>A: はい。<code>NEXT_PUBLIC_SUPABASE_ANON_KEY</code>はデフォルトで安全ですが、RLSでデータを保護する必要があります。<code>service_role</code>キーは絶対にクライアントに公開しないでください。<strong>Q: Supabaseでメールマーケティング(ニュースレター)を送れますか?</strong>A: SMTPを接続できますが、大量送信用ではありません。Resend、SendGrid、Brevoのような専用サービスを使用してください。<strong>Q: 本番環境で無料ティアを使ってもよいですか?</strong>A: ユーザーが少なく(MAU &lt; 5,000)、帯域幅が小さければ可能です。ただしトラフィックが急増した場合は有料への切り替えを検討してください。<strong>Q: Supabaseを自己ホスティングすれば完全無料ですか?</strong>A: サーバーコスト(クラウドVMまたはオンプレミス)は発生します。管理オーバーヘッドも大きいため、小規模ではマネージドの方が経済的です。<strong>Q: pgvectorでRAGを実装するにはどのプランが必要ですか?</strong>A: 無料プランでもpgvector拡張を有効化できます。ただし、埋め込みベクトル数が増えるとDB容量500MBの上限に注意が必要です。<strong>Q: Connection Poolingはどのように設定しますか?</strong>
+A: SupabaseはPgBouncerを内蔵しています。接続文字列でポートを<code>5432</code>(直接接続)から<code>6543</code>(Poolerモード)に変更すればよいです。サーバーレス環境(Next.js API Routes、Edge Functions)では必ずPoolerを使用してください。</p>
+<hr>
+<h2>11. 追加学習リソース</h2>
+<ul>
+<li><strong>公式ドキュメント</strong>: <a href="https://supabase.com/docs">supabase.com/docs</a></li>
+<li><strong>Vercel統合</strong>: <a href="https://vercel.com/integrations/supabase">vercel.com/integrations/supabase</a></li>
+<li><strong>GitHubリポジトリ</strong>: <a href="https://github.com/supabase/supabase">github.com/supabase/supabase</a></li>
+<li><strong>Discordコミュニティ</strong>: <a href="https://discord.supabase.com">discord.supabase.com</a></li>
+<li><strong>Supabase YouTubeチャンネル</strong>: 公式チュートリアルとリリースノート動画を提供</li>
+</ul>
+<hr>
+<h2>12. 結論</h2>
+<p>Supabaseは、オープンソースの自由さとマネージドサービスの便利さを絶妙に組み合わせたプラットフォームです。Vercelとのシナジー、PostgreSQLの強力さ、寛容な無料ティアのおかげで、個人開発者からスタートアップまで幅広く愛用されています。</p>
+<p>ただし、帯域幅の制限と韓国のソーシャルログインサポートの不備は明確な短所です。プロジェクトの要件を吟味して、Supabaseを導入するか代替案を検討するか決定してください。</p>
+<p>「Supabaseは単なるFirebaseの代替を超えて、オープンソースエコシステムの新しい標準になりつつあります。」</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/OpenSource_Firebase/SuperBase_guide_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

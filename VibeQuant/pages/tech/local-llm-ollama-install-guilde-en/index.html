@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ollama Installation and Basic Usage — Building a Local LLM Environment for the Token-Poor — VibeQuant</title>
+  <meta name="description" content="A step-by-step guide to building a cost-free local LLM environment with Ollama, plus a comparison of major open-source LLMs." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde-en/" />
+  <meta property="og:title" content="Ollama Installation and Basic Usage — Building a Local LLM Environment for the Token-Poor" />
+  <meta property="og:description" content="A step-by-step guide to building a cost-free local LLM environment with Ollama, plus a comparison of major open-source LLMs." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Ollama Installation and Basic Usage — Building a Local LLM Environment for the Token-Poor","description":"A step-by-step guide to building a cost-free local LLM environment with Ollama, plus a comparison of major open-source LLMs.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/local-llm-ollama-install-guilde-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Local_LLM/Ollama_Install_Guilde_EN.md","image":"https://vibequant.cc/og-default.png","inLanguage":"en","keywords":"LLM, Ollama, Local AI, Open Source"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Ollama Installation and Basic Usage — Building a Local LLM Environment for the Token-Poor</h1>
+        <p class="article-dates">주제 LLM · Ollama · Local AI · Open Source</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/local-llm-ollama-install-guilde/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/local-llm-ollama-install-guilde-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/local-llm-ollama-install-guilde-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/local-llm-ollama-install-guilde-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">A step-by-step guide to building a cost-free local LLM environment with Ollama, plus a comparison of major open-source LLMs.</p>
+        
+      </header>
+      <div class="article-body prose"><p>Tired of worrying about API costs every time you use a high-performance AI model like ChatGPT or Claude? What if you could run an LLM directly on your own computer, with no internet connection and no cost concerns? This document walks you step by step through building your own local LLM environment with <strong>Ollama</strong>, at zero token cost. The latter half also covers the strengths and weaknesses of the latest open-source LLM models, so you can find the best fit for your PC&#39;s specs.</p>
+<blockquote>
+<p><strong>Ollama</strong> is a tool that lets you run various open-source LLMs — Llama, Mistral, Gemma, and more — on your local machine as easily as running a Docker container.</p>
+</blockquote>
+<h2>Table of Contents</h2>
+<ul>
+<li><a href="#1-what-is-ollama">1. What Is Ollama?</a></li>
+<li><a href="#2-installing-ollama">2. Installing Ollama</a></li>
+<li><a href="#3-basic-ollama-usage">3. Basic Ollama Usage</a></li>
+<li><a href="#4-comparing-major-llm-models-pros-cons--features">4. Comparing Major LLM Models (Pros, Cons &amp; Features)</a></li>
+<li><a href="#5-choosing-the-right-model-for-your-pc">5. Choosing the Right Model for Your PC</a></li>
+<li><a href="#6-useful-tips-and-tools">6. Useful Tips and Tools</a></li>
+<li><a href="#7-references">7. References</a></li>
+</ul>
+<h2>1. What Is Ollama?</h2>
+<p>Ollama is an <strong>open-source framework that makes it easy to run and manage large language models (LLMs) in a local environment</strong>. Just as Docker packages applications into containers, Ollama bundles model weights and configuration together so you can run them with ease. After installation, a few command lines are all it takes to run Meta&#39;s Llama, Mistral&#39;s Mistral, Google&#39;s Gemma, and many other LLMs directly on your own computer.</p>
+<h3>Why Use Ollama? (Escaping Token Poverty)</h3>
+<table>
+<thead>
+<tr>
+<th>Advantage</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Zero cost</strong></td>
+<td>No per-API-call fees whatsoever. Ask unlimited questions with no billing worries</td>
+</tr>
+<tr>
+<td><strong>Complete privacy</strong></td>
+<td>All data stays on your computer. Analyze even sensitive documents with peace of mind</td>
+</tr>
+<tr>
+<td><strong>Offline operation</strong></td>
+<td>Once a model is downloaded, use it anywhere, no internet required</td>
+</tr>
+<tr>
+<td><strong>Fast responses</strong></td>
+<td>No network latency, so you get instant responses</td>
+</tr>
+<tr>
+<td><strong>Free experimentation</strong></td>
+<td>Swap between various models and test freely</td>
+</tr>
+<tr>
+<td><strong>Excellent extensibility</strong></td>
+<td>Integrates with a wide range of tools: REST API, Python integration, IDE extensions, and more</td>
+</tr>
+</tbody></table>
+<h2>2. Installing Ollama</h2>
+<h3>Prerequisites (Hardware Check)</h3>
+<p>Ollama runs on all modern OSes, but for smoothly running models, it&#39;s best to have <strong>at least 8GB of RAM</strong>(16GB recommended). For reference, a<strong>Q4_K_M-quantized 7-billion-parameter model</strong>requires about<strong>4-6GB</strong> of memory.</p>
+<table>
+<thead>
+<tr>
+<th>Model size</th>
+<th>Estimated memory needed at Q4 quantization</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>3B ~ 8B (small)</td>
+<td>4GB ~ 6GB</td>
+</tr>
+<tr>
+<td>13B ~ 20B (medium)</td>
+<td>8GB ~ 16GB</td>
+</tr>
+<tr>
+<td>32B ~ 40B (large)</td>
+<td>20GB ~ 32GB</td>
+</tr>
+<tr>
+<td>70B+ (extra-large)</td>
+<td>40GB+</td>
+</tr>
+</tbody></table>
+<p>A GPU gives faster inference speed but isn&#39;t required — even a plain CPU can generate roughly 5-15 tokens per second for a 7-billion-parameter model.</p>
+<hr>
+<h3>Windows</h3>
+<ol>
+<li><p>Download the Windows installer (<code>OllamaSetup.exe</code>) from the <a href="https://ollama.com/download">official Ollama download page</a>.</p>
+</li>
+<li><p>Run the downloaded file to complete the installation.</p>
+</li>
+<li><p>After installation, open <strong>PowerShell or Command Prompt (CMD)</strong> and verify the install with the command below.</p>
+<pre><code class="language-bash">ollama --version
+</code></pre>
+</li>
+</ol>
+<hr>
+<h3>macOS</h3>
+<ul>
+<li><strong>Using the official installer</strong>
+Download and install the macOS file from <a href="https://ollama.com">ollama.com</a>.</li>
+<li><strong>Using Homebrew (recommended)</strong><pre><code class="language-bash">brew install ollama
+</code></pre>
+</li>
+</ul>
+<hr>
+<h3>Linux</h3>
+<p>Run the command below in your terminal. Supports most distributions including Ubuntu, Debian, Fedora, and CentOS.</p>
+<pre><code class="language-bash">curl -fsSL https://ollama.com/install.sh | sh
+</code></pre>
+<hr>
+<h3>Docker (Optional)</h3>
+<p>If you prefer container-based deployment, you can use the Docker image.</p>
+<pre><code class="language-bash">docker pull ollama/ollama
+docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+</code></pre>
+<blockquote>
+<p><code>11434</code> is Ollama&#39;s default API port number.</p>
+</blockquote>
+<h3>Verifying the Installation</h3>
+<p>Verify Ollama&#39;s service is running correctly with the command below.</p>
+<pre><code class="language-bash">ollama serve   # check that the server is running
+</code></pre>
+<p>You&#39;ll see output at <code>http://localhost:11434</code> indicating the Ollama server is running.</p>
+<h2>3. Basic Ollama Usage</h2>
+<h3>Running Your First Model — the Simplest Way</h3>
+<pre><code class="language-bash">ollama run llama3.2
+</code></pre>
+<p>That&#39;s it — just this one line! If the model isn&#39;t already local, it downloads automatically and then launches an interactive prompt.</p>
+<pre><code>&gt;&gt;&gt; Hi, who are you?
+I&#39;m Meta&#39;s Llama 3.2 model. How can I help you?
+</code></pre>
+<h3>Model Management Commands</h3>
+<table>
+<thead>
+<tr>
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ollama list</code></td>
+<td>View downloaded models</td>
+</tr>
+<tr>
+<td><code>ollama pull &lt;model&gt;</code></td>
+<td>Download the model only (doesn&#39;t run it)</td>
+</tr>
+<tr>
+<td><code>ollama run &lt;model&gt;</code></td>
+<td>Download the model + start a chat</td>
+</tr>
+<tr>
+<td><code>ollama rm &lt;model&gt;</code></td>
+<td>Delete a model</td>
+</tr>
+<tr>
+<td><code>ollama cp &lt;model&gt; &lt;new name&gt;</code></td>
+<td>Copy a model</td>
+</tr>
+<tr>
+<td><code>ollama show &lt;model&gt;</code></td>
+<td>View detailed model info</td>
+</tr>
+</tbody></table>
+<h3>One Tip — Using Model Tags</h3>
+<p>Adding <code>:latest</code> or a specific tag after the model name lets you pin a specific version. Note that <code>:latest</code> doesn&#39;t always point to the highest-performing model, so specifying an explicit tag is generally preferable.</p>
+<pre><code class="language-bash"># Example: specifying a particular size and quantization version
+ollama run llama3.1:8b-q4_K_M
+</code></pre>
+<h3>Using Ollama from Python</h3>
+<p>Since Ollama provides a REST API, it&#39;s easy to integrate from Python and other languages.</p>
+<pre><code class="language-python">import requests
+
+response = requests.post(
+    &quot;http://localhost:11434/api/generate&quot;,
+    json={&quot;model&quot;: &quot;llama3.2&quot;, &quot;prompt&quot;: &quot;Hello, nice to meet you!&quot;, &quot;stream&quot;: False}
+)
+
+print(response.json()[&quot;response&quot;])
+</code></pre>
+<h2>4. Comparing Major LLM Models (Pros, Cons &amp; Features)</h2>
+<p>Ollama supports over 500 models. Here&#39;s a rundown of the pros, cons, and features of the most notable models as of 2025-2026.</p>
+<h3>Llama 4 Series (Meta)</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Llama 4 Scout</th>
+<th>Llama 4 Maverick</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Architecture</strong></td>
+<td>17B active parameters, 16 MoE experts</td>
+<td>17B active parameters, 128 MoE experts</td>
+</tr>
+<tr>
+<td><strong>Feature</strong></td>
+<td>Industry-leading<strong>10 million (10M) token</strong> context window</td>
+<td>10M token context, full native image+text support</td>
+</tr>
+<tr>
+<td><strong>Key benchmarks</strong></td>
+<td>MMLU Pro 74.3 / GPQA Diamond 57.2</td>
+<td>MMLU Pro 80.5 / GPQA Diamond 69.8</td>
+</tr>
+<tr>
+<td><strong>Estimated hardware</strong></td>
+<td>Single H100 GPU (at Int4 quantization)</td>
+<td>Single H100 host</td>
+</tr>
+<tr>
+<td><strong>Efficiency (estimated)</strong></td>
+<td>~$0.19-$0.49 / million (1M) tokens</td>
+<td>~$0.19-$0.49 / million (1M) tokens</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Llama 4 is the first publicly released natively multimodal open-weight model</strong>, able to understand images and text simultaneously.</p>
+</blockquote>
+<p><strong>Pros</strong>-<strong>Overwhelming 10M context</strong>: analyze an entire novel in one pass.</p>
+<ul>
+<li><strong>Excellent multimodal performance</strong>: strong image recognition and analysis.</li>
+<li><strong>Mixture-of-Experts (MoE) architecture</strong>: efficient thanks to optimized active parameters.</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>Requires high-end hardware (especially VRAM).</li>
+<li>Large initial download size.</li>
+<li>An optimized quantized version is needed for fully offline use.</li>
+</ul>
+<hr>
+<h3>Mistral Small 3.1 (Mistral AI)</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Parameters</strong></td>
+<td>24B</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>128K tokens</td>
+</tr>
+<tr>
+<td><strong>Inference speed (estimated)</strong></td>
+<td>150 tokens/sec</td>
+</tr>
+<tr>
+<td><strong>Multimodal</strong></td>
+<td>Supports text + image input</td>
+</tr>
+<tr>
+<td><strong>License</strong></td>
+<td>Apache 2.0 (fully open)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>The Apache 2.0 license is a very permissive license allowing free commercial use, modification, and redistribution.</p>
+</blockquote>
+<p><strong>Pros</strong>-<strong>Fully open Apache 2.0 license</strong>: free for commercial use.</p>
+<ul>
+<li><strong>Excellent speed/performance balance</strong>: fast inference despite 24B parameters.</li>
+<li><strong>Strong multilingual support</strong>: supports many languages including Korean.</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>Running the 24B-parameter model smoothly requires high-end hardware. Some tests reported bottlenecks with long-context processing even on 256GB RAM with dual A100s.</li>
+<li>The theoretical max speed (150 tokens/sec) may be hard to achieve in an actual local environment.</li>
+</ul>
+<hr>
+<h3>Gemma 4 / Gemma 3 Series (Google)</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Parameters</th>
+<th>Required VRAM (estimated)</th>
+<th>Feature</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Gemma 4 E2B / E4B</td>
+<td>~2B-4B (estimated)</td>
+<td>~15GB</td>
+<td>Small and efficient, <strong>strong on Math and ARC (science) benchmarks</strong></td>
+</tr>
+<tr>
+<td>Gemma 4 26B-A4B</td>
+<td>26B</td>
+<td>~48GB</td>
+<td>MoE architecture, excellent reasoning and coding ability</td>
+</tr>
+<tr>
+<td>Gemma 3 4B</td>
+<td>4B</td>
+<td>~3-5GB</td>
+<td><strong>Ultra-lightweight</strong>, maximizes cost efficiency</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Research from 2026 shows Gemma models particularly excel in ARC (scientific reasoning) and Math domains.</p>
+</blockquote>
+<p><strong>Pros</strong>-<strong>Optimized for lightweight use</strong>: excellent performance with limited compute resources.</p>
+<ul>
+<li><strong>Strong scientific reasoning</strong>: strong at math/logic problems.</li>
+<li><strong>Gemma 3 4B has unbeatable cost-efficiency</strong>: roughly 12x cheaper per second than competing models.</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>May be somewhat weaker than Qwen at the same size for coding.</li>
+<li>Requires proper prompting strategy (e.g., Few-shot CoT) to achieve peak performance.</li>
+</ul>
+<hr>
+<h3>Phi-4 (Microsoft)</h3>
+<p><strong>Pros</strong>-<strong>Strongest on the TruthfulQA (factuality) benchmark</strong>: excels at generating accurate, fact-based answers.</p>
+<ul>
+<li><strong>Strong reasoning-specialized variants</strong>: variants like Phi-4-mini-reasoning exist for reasoning-focused use.</li>
+<li>Reasonable resource requirements.</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>Large performance variance depending on prompting method. Notably, sharp performance drops have been reported with Few-shot CoT (chain-of-thought) prompting.</li>
+<li>Better suited to specialized purposes (reasoning, fact-checking) than general conversation.</li>
+</ul>
+<hr>
+<h3>Qwen 2.5 / Qwen 3 Series (Alibaba)</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Parameters</th>
+<th>Required VRAM (estimated)</th>
+<th>Key benchmark</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Qwen2.5 7B</td>
+<td>7B</td>
+<td>~6GB</td>
+<td>Outperforms Gemma 3 4B on 6 tasks</td>
+</tr>
+<tr>
+<td>Qwen2.5-Coder 32B</td>
+<td>32B</td>
+<td>~20GB</td>
+<td><strong>HumanEval 92.7% (GPT-4o level)</strong></td>
+</tr>
+<tr>
+<td>Qwen2.5 32B</td>
+<td>32B</td>
+<td>~20GB</td>
+<td>MMLU 83.2</td>
+</tr>
+<tr>
+<td>Qwen3 30B-A3B</td>
+<td>30B</td>
+<td>30-40GB</td>
+<td>MoE architecture, latest reasoning ability</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Qwen2.5 7B Instruct outperforms Gemma 3 4B on <strong>6 out of 8 shared benchmark categories</strong>.</p>
+</blockquote>
+<p><strong>Pros</strong>-<strong>The strongest in coding</strong>: Qwen2.5-Coder 32B matches GPT-4o with 92.7% on HumanEval.</p>
+<ul>
+<li><strong>Excellent multilingual performance</strong>: supports Chinese, English, and many other languages.</li>
+<li><strong>Broad size lineup</strong>: options ranging from 7B up to 32B and 70B+.</li>
+</ul>
+<p><strong>Cons</strong></p>
+<ul>
+<li>Some smaller models (e.g., 7B) may have output length limits (Gemma 3 4B supports 128k output, while Qwen2.5 7B Instruct is capped at 8192 tokens).</li>
+<li>Achieving top-tier performance requires relatively high-end hardware.</li>
+</ul>
+<hr>
+<h3>Llama 3.3 70B (Meta)</h3>
+<p><strong>Pros</strong>-<strong>#1 overall quality as of 2026 (MMLU 86.0)</strong></p>
+<ul>
+<li>Delivers similar performance to the 405B model while being far more efficient.</li>
+<li>Suitable for large-scale workloads (e.g., synthetic data generation).</li>
+</ul>
+<p><strong>Cons</strong>-<strong>Requires roughly 40GB+ VRAM</strong>, a very high hardware bar.</p>
+<ul>
+<li>Better suited to enterprise/expert users than general users.</li>
+<li>Large download size (tens of GB).</li>
+</ul>
+<hr>
+<h3>Model Comparison Summary Table</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Suitable VRAM (estimated)</th>
+<th>Best domain</th>
+<th>Pros</th>
+<th>Cons</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Llama 4 Scout</strong></td>
+<td>~H100 GPU</td>
+<td>Long-form analysis</td>
+<td>10M context, multimodal</td>
+<td>Requires high-end hardware</td>
+</tr>
+<tr>
+<td><strong>Llama 4 Maverick</strong></td>
+<td>~H100 host</td>
+<td>Comprehensive multimodal</td>
+<td>High performance, image understanding</td>
+<td>Requires high-end hardware</td>
+</tr>
+<tr>
+<td><strong>Mistral Small 3.1</strong></td>
+<td>24GB+</td>
+<td>Multilingual conversation</td>
+<td>Speed/quality balance, fully open</td>
+<td>Overloaded on long context</td>
+</tr>
+<tr>
+<td><strong>Gemma 4 / 3</strong></td>
+<td>4GB-48GB</td>
+<td>Math/scientific reasoning</td>
+<td>Lightweight/efficient, low cost</td>
+<td>Relatively weaker coding</td>
+</tr>
+<tr>
+<td><strong>Phi-4</strong></td>
+<td>~16GB+</td>
+<td>Fact-based QA</td>
+<td>Strong on TruthfulQA</td>
+<td>Prompt-sensitive variance</td>
+</tr>
+<tr>
+<td><strong>Qwen 2.5/3</strong></td>
+<td>6GB-40GB</td>
+<td><strong>Coding</strong> (strongest)</td>
+<td>GPT-4o-level coding, various sizes</td>
+<td>Output limits on some models</td>
+</tr>
+<tr>
+<td><strong>Llama 3.3 70B</strong></td>
+<td>~40GB+</td>
+<td>Overall quality (top MMLU)</td>
+<td>Overwhelming performance</td>
+<td>Very high hardware requirement</td>
+</tr>
+</tbody></table>
+<h2>5. Choosing the Right Model for Your PC</h2>
+<p>Here are model recommendations based on your hardware specs.</p>
+<h3>Low-end (8GB RAM / 4GB VRAM or less)</h3>
+<table>
+<thead>
+<tr>
+<th>Recommended model</th>
+<th>Install command</th>
+<th>Feature</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Llama 3.2 3B</strong></td>
+<td><code>ollama pull llama3.2</code></td>
+<td>Meta&#39;s latest small model, good for general conversation</td>
+</tr>
+<tr>
+<td><strong>Gemma 3 4B</strong></td>
+<td><code>ollama pull gemma3:4b</code></td>
+<td>Unbeatable cost-efficiency, strong scientific reasoning</td>
+</tr>
+<tr>
+<td><strong>Phi-4-mini</strong></td>
+<td><code>ollama pull phi4-mini</code></td>
+<td>Highly factual responses</td>
+</tr>
+</tbody></table>
+<h3>Mid-range (16GB RAM / 8GB VRAM)</h3>
+<table>
+<thead>
+<tr>
+<th>Recommended model</th>
+<th>Install command</th>
+<th>Feature</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Llama 3.1 8B</strong></td>
+<td><code>ollama pull llama3.1:8b</code></td>
+<td>The most popular model, best general versatility</td>
+</tr>
+<tr>
+<td><strong>Qwen2.5 7B</strong></td>
+<td><code>ollama pull qwen2.5:7b</code></td>
+<td>Strong at coding/multilingual tasks</td>
+</tr>
+<tr>
+<td><strong>Mistral 7B</strong></td>
+<td><code>ollama pull mistral</code></td>
+<td>Well-proven 7B model</td>
+</tr>
+</tbody></table>
+<h3>High-end (24GB+ VRAM)</h3>
+<table>
+<thead>
+<tr>
+<th>Recommended model</th>
+<th>Install command</th>
+<th>Feature</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Qwen2.5-Coder 32B</strong></td>
+<td><code>ollama pull qwen2.5-coder:32b</code></td>
+<td><strong>The strongest at coding</strong> (92.7% HumanEval)</td>
+</tr>
+<tr>
+<td><strong>Qwen2.5 32B</strong></td>
+<td><code>ollama pull qwen2.5:32b</code></td>
+<td>Best mid-sized all-rounder (MMLU 83.2)</td>
+</tr>
+<tr>
+<td><strong>Mistral Small 22B</strong></td>
+<td><code>ollama pull mistral-small:22b</code></td>
+<td>Multilingual specialist</td>
+</tr>
+</tbody></table>
+<h3>Ultra high-end (48GB+ VRAM)</h3>
+<table>
+<thead>
+<tr>
+<th>Recommended model</th>
+<th>Install command</th>
+<th>Feature</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Llama 3.3 70B</strong></td>
+<td><code>ollama pull llama3.3:70b</code></td>
+<td><strong>#1 overall quality</strong> (MMLU 86.0)</td>
+</tr>
+<tr>
+<td><strong>DeepSeek R1 Distill 70B</strong></td>
+<td><code>ollama pull deepseek-r1:70b</code></td>
+<td>Reasoning-specialized model</td>
+</tr>
+</tbody></table>
+<h3>Model Selection Tips</h3>
+<ul>
+<li><strong>Bigger isn&#39;t always better</strong>: a model sized appropriately for your PC often provides a more pleasant experience.</li>
+<li><strong>Make good use of quantized versions (Q4_K_M, etc.)</strong>: significantly reduces memory usage for a small accuracy trade-off.</li>
+<li>Use specific tags rather than <code>:latest</code> (e.g., <code>qwen2.5-coder:32b</code>).</li>
+</ul>
+<h2>6. Useful Tips and Tools</h2>
+<h3>Open WebUI — a Web Interface for Ollama</h3>
+<p>If the terminal isn&#39;t your preference, you can build a ChatGPT-style web interface with the command below.</p>
+<pre><code class="language-bash">docker run -d -p 3000:8080 --add-host=host.docker.internal:host-gateway -v open-webui:/app/backend/data --name open-webui --restart always ghcr.io/open-webui/open-webui:main
+</code></pre>
+<h3>VS Code Extension — Continue</h3>
+<p>Installing the Continue extension lets you use Ollama models as a coding assistant right inside VS Code.</p>
+<h3>LangChain + Ollama Integration</h3>
+<pre><code class="language-python">from langchain_ollama import ChatOllama
+
+llm = ChatOllama(model=&quot;llama3.2&quot;)
+response = llm.invoke(&quot;Hi, welcome to the world of LLMs!&quot;)
+print(response.content)
+</code></pre>
+<h3>Optimizing Performance with Environment Variables</h3>
+<p>Try setting the following environment variables for inference speed and memory management.</p>
+<pre><code class="language-bash">export OLLAMA_NUM_PARALLEL=4      # number of parallel requests (default: 1)
+export OLLAMA_MAX_LOADED_MODELS=2 # max number of models loaded simultaneously
+export OLLAMA_HOST=0.0.0.0        # allow API access from all interfaces
+</code></pre>
+<h3>Changing the Model Storage Location</h3>
+<p>Models are stored in <code>~/.ollama/models</code> by default. To change this, set the environment variable below.</p>
+<pre><code class="language-bash">export OLLAMA_MODELS=/path/to/your/models
+</code></pre>
+<h2>7. References</h2>
+<ul>
+<li><strong>Ollama official homepage</strong> — <a href="https://ollama.com">https://ollama.com</a></li>
+<li><strong>Ollama GitHub repository</strong> — <a href="https://github.com/ollama/ollama">https://github.com/ollama/ollama</a></li>
+<li><strong>Ollama official documentation</strong> — <a href="https://docs.ollama.com">https://docs.ollama.com</a></li>
+<li><strong>Ollama model library</strong> — <a href="https://ollama.com/library">https://ollama.com/library</a></li>
+<li><strong>Meta Llama 4 official blog</strong> — <a href="https://ai.meta.com/blog/llama-4-multimodal-intelligence/">https://ai.meta.com/blog/llama-4-multimodal-intelligence/</a></li>
+<li><strong>Mistral Small 3.1 announcement</strong> — <a href="https://mistral.ai/news/mistral-small-3-1">https://mistral.ai/news/mistral-small-3-1</a></li>
+<li><strong>Gemma 4 / Phi-4 / Qwen3 performance comparison paper (arXiv:2604.07035)</strong> — <a href="https://arxiv.org/abs/2604.07035">https://arxiv.org/abs/2604.07035</a></li>
+<li><strong>Gemma 3 vs Qwen2.5 benchmark comparison</strong> — <a href="https://llm-stats.com">https://llm-stats.com</a></li>
+<li><strong>Ollama installation guide (SitePoint, 2026)</strong> — <a href="https://www.sitepoint.com/ollama-setup-guide-2026/">https://www.sitepoint.com/ollama-setup-guide-2026/</a></li>
+<li><strong>The Complete Guide to Ollama (DEV Community)</strong> — <a href="https://dev.to/ajitkumar/the-complete-guide-to-ollama-run-large-language-models-locally-2mge">https://dev.to/ajitkumar/the-complete-guide-to-ollama-run-large-language-models-locally-2mge</a></li>
+</ul>
+<p>We&#39;ve now walked through <strong>Ollama installation and a comparison of major LLM models</strong>. Go ahead and run LLMs to your heart&#39;s content on your own computer, with no more worries about token costs. Zero API cost, and complete privacy protection. Happy building with local AI!</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Local_LLM/Ollama_Install_Guilde_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

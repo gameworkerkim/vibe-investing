@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orca Getting Started — A Multi-AI-Agent Orchestration Guide — VibeQuant</title>
+  <meta name="description" content="Orca lets you fan out one prompt to multiple CLI coding agents, run them in isolated git worktrees, and merge whichever result wins - a getting-started guide." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/orca-orca-getting-started-en/" />
+  <meta property="og:title" content="Orca Getting Started — A Multi-AI-Agent Orchestration Guide" />
+  <meta property="og:description" content="Orca lets you fan out one prompt to multiple CLI coding agents, run them in isolated git worktrees, and merge whichever result wins - a getting-started guide." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/orca-orca-getting-started-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/orca-orca-getting-started/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/orca-orca-getting-started-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/orca-orca-getting-started-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/orca-orca-getting-started-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/orca-orca-getting-started/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Orca Getting Started — A Multi-AI-Agent Orchestration Guide","description":"Orca lets you fan out one prompt to multiple CLI coding agents, run them in isolated git worktrees, and merge whichever result wins - a getting-started guide.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/orca-orca-getting-started-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/orca/Orca%20getting%20started_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-15","dateModified":"2026-07-15","inLanguage":"en","keywords":"UI · 개발도구, orca"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · UI · 개발도구</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">UI · 개발도구</p>
+        <h1>Orca Getting Started — A Multi-AI-Agent Orchestration Guide</h1>
+        <p class="article-dates"><time datetime="2026-07-15">발행 2026.07.15</time> · 주제 UI · 개발도구 · orca</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/orca-orca-getting-started/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/orca-orca-getting-started-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/orca-orca-getting-started-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/orca-orca-getting-started-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Orca lets you fan out one prompt to multiple CLI coding agents, run them in isolated git worktrees, and merge whichever result wins - a getting-started guide.</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. What Is Orca?</h2>
+<p>Orca is an <strong>orchestrator that commands terminal-based AI coding agents — Claude Code, Codex, OpenCode, Cursor CLI, Gemini CLI, and more — in parallel from a single screen</strong>. Rather than bolting AI onto an existing IDE, it&#39;s an ADE (Agent Development Environment) designed from the ground up around the premise of &quot;operating a fleet of agents.&quot;</p>
+<p>The core idea is simple.</p>
+<ol>
+<li>Broadcast a single development request to multiple agents at once (fan-out)</li>
+<li>Each agent works in isolation inside its own <code>git worktree</code></li>
+<li>Once done, view the diffs side by side, compare, and merge only the best result (merge the winner)</li>
+</ol>
+<p>Note: Orca is not a Cursor replacement. Even Cursor CLI is just one of the agents that can run inside Orca. What Orca replaces is the &quot;existing workflow of manually juggling 5 open terminal tabs.&quot;</p>
+<hr>
+<h2>2. Prerequisites</h2>
+<p>Orca itself requires no login or API key registration. Instead, <strong>the agent CLI(s) you plan to use must already be installed and authenticated.</strong> Orca doesn&#39;t proxy or resell any API — each agent calls its own provider directly from your machine.</p>
+<table>
+<thead>
+<tr>
+<th>Prerequisite</th>
+<th>How to check</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Git 2.5+</td>
+<td><code>git --version</code></td>
+<td>Required for worktree support</td>
+</tr>
+<tr>
+<td>At least one agent CLI</td>
+<td><code>claude --version</code>, <code>codex --version</code>, etc.</td>
+<td>Anything that runs in a terminal works — Claude Code, Codex, OpenCode, Gemini CLI, Cursor CLI, and more</td>
+</tr>
+<tr>
+<td>Each agent&#39;s authentication completed</td>
+<td>Confirm standalone execution works normally in the terminal</td>
+<td>E.g., confirm you&#39;re logged in after running <code>claude</code></td>
+</tr>
+<tr>
+<td>A Git repository to work on</td>
+<td>A local clone or GitHub repo</td>
+<td>Since it&#39;s worktree-based, a Git repository is a prerequisite</td>
+</tr>
+</tbody></table>
+<p>Cost structure: Orca itself is free, but subscription fees for the agents running inside it (Claude Pro/Max, ChatGPT Plus, etc.) or API usage charges are your own responsibility.</p>
+<hr>
+<h2>3. Installation</h2>
+<h3>macOS (Homebrew)</h3>
+<pre><code class="language-bash">brew install --cask stablyai/orca/orca
+</code></pre>
+<p>Note: <code>brew install --cask orca</code> (omitting the tap path) doesn&#39;t work. You must use the full <code>stablyai/orca/orca</code> path.</p>
+<h3>Arch Linux (AUR)</h3>
+<pre><code class="language-bash">yay -S stably-orca-bin
+# For a source build: yay -S stably-orca-git
+</code></pre>
+<h3>Windows / Other Linux</h3>
+<ul>
+<li>Download an installer from onorca.dev or GitHub Releases (github.com/stablyai/orca/releases)</li>
+</ul>
+<h3>Mobile Companion App</h3>
+<ul>
+<li>iOS: App Store / TestFlight</li>
+<li>Android: APK from GitHub Releases</li>
+<li>Pairing with the desktop app lets you monitor agent progress, receive completion notifications, and send follow-up prompts remotely.</li>
+</ul>
+<hr>
+<h2>4. Initial Setup (First Run)</h2>
+<ol>
+<li><strong>Connect a project</strong>: launch Orca and add a local Git repository. Setting up GitHub integration lets you browse PRs, issues, and project boards directly inside the app.</li>
+<li><strong>Verify agents</strong>: Orca detects CLI agents installed on your system. When creating a new worktree, you choose which agent to attach.</li>
+<li><strong>Configure notifications</strong>: set up desktop/mobile notifications for when an agent finishes a task or is waiting for input. This is effectively essential for parallel operation.</li>
+<li><strong>(Optional) Account switching/usage tracking</strong>: check Claude/Codex usage and rate-limit reset times from the dashboard, and switch between multiple accounts without re-logging in.</li>
+</ol>
+<hr>
+<h2>5. Core Workflow</h2>
+<h3>5.1 Basic Cycle: Fan-out → Isolate → Compare → Merge</h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Action</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. Fan-out</td>
+<td>Send one prompt to multiple agents simultaneously</td>
+<td>E.g., fire the same bug-fix request in parallel to Claude Code, Codex, and OpenCode</td>
+</tr>
+<tr>
+<td>2. Isolated execution</td>
+<td>Each agent works in its own git worktree + dedicated terminal</td>
+<td>Worktrees share the same repository but have completely separate working directories and branches. The main branch is never contaminated</td>
+</tr>
+<tr>
+<td>3. Monitoring</td>
+<td>Check every agent&#39;s status via a live status dashboard</td>
+<td>Working / awaiting input / completed states are shown at a glance, viewable from the mobile app too</td>
+</tr>
+<tr>
+<td>4. Compare</td>
+<td>View each worktree&#39;s diff side by side</td>
+<td>You can leave comments on specific lines and send fix feedback back to the agent</td>
+</tr>
+<tr>
+<td>5. Merge</td>
+<td>Select the best result and merge it to the main branch</td>
+<td>The remaining worktrees are discarded</td>
+</tr>
+</tbody></table>
+<h3>5.2 Real-World Scenarios</h3>
+<ul>
+<li><strong>Parallel bug fixes</strong>: assign the same bug to 3 agents simultaneously and merge only the fix that actually works</li>
+<li><strong>Risk hedging</strong>: hedge against the chance that a single model goes in the wrong direction, using multiple attempts</li>
+<li><strong>GitHub/Linear task-based work</strong>: open a worktree directly from a PR, issue, or Linear ticket, and the agent automatically receives the task context</li>
+<li><strong>Design Mode (frontend)</strong>: clicking a UI element in the built-in Chromium browser automatically injects that element&#39;s HTML, CSS, and a cropped screenshot into the agent&#39;s prompt</li>
+<li><strong>Remote execution (SSH worktree)</strong>: run agents on a high-spec remote server while still editing files, using git, and using the terminal locally as usual. Supports automatic reconnection and port forwarding</li>
+<li><strong>Orca CLI</strong>: control the IDE itself via scripts from the terminal — adding projects, creating worktrees, posting progress checkpoints, and more</li>
+</ul>
+<hr>
+<h2>6. Strengths</h2>
+<table>
+<thead>
+<tr>
+<th>Strength</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Tool integration</td>
+<td>Manages 30+ proliferating CLI agents (Claude Code, Codex, Gemini, Copilot, Cline, and more) from a single UI. &quot;If it runs in a terminal, it runs in Orca&quot;</td>
+</tr>
+<tr>
+<td>Risk hedging</td>
+<td>Multiple attempts at the same task, then select the best result. Mitigates single-model dependency risk</td>
+</tr>
+<tr>
+<td>Complete isolation</td>
+<td>git-worktree-based physical separation of each task. Eliminates branch juggling and stash hell</td>
+</tr>
+<tr>
+<td>Code review environment</td>
+<td>Diff visualization + line-level comments + agent feedback loop + in-app commits</td>
+</tr>
+<tr>
+<td>Remote/mobile</td>
+<td>SSH remote worktrees, mobile monitoring and control. Your agent fleet keeps working even when you&#39;re away</td>
+</tr>
+<tr>
+<td>Subscription-friendly</td>
+<td>Uses your existing subscriptions as-is. No vendor lock-in, with usage tracking and account hot-swapping</td>
+</tr>
+<tr>
+<td>Open source</td>
+<td>MIT license. Fast development pace with daily releases</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. Weaknesses and Cautions</h2>
+<table>
+<thead>
+<tr>
+<th>Weakness</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Barrier to entry</td>
+<td>Assumes familiarity with the git worktree concept and prior agent CLI setup. There&#39;s an initial learning curve compared to Cursor&#39;s &quot;code immediately after install&quot;</td>
+</tr>
+<tr>
+<td>Immature UI/UX</td>
+<td>Some rough edges remain, like the terminal input box narrowing when you shrink a split screen</td>
+</tr>
+<tr>
+<td>Occasional instability</td>
+<td>Terminal escape sequences can break, sometimes requiring a restart</td>
+</tr>
+<tr>
+<td>Rapid change itself is a risk</td>
+<td>As an early-stage product, the feature surface changes daily. Team-standard workflows can be destabilized by updates</td>
+</tr>
+<tr>
+<td>Additional cost</td>
+<td>Orca is free, but agent subscription/API costs are separate. Note that parallel execution multiplies token consumption</td>
+</tr>
+<tr>
+<td>Overhead</td>
+<td>For users who run only one agent on one task at a time, it can be more operational burden than a pure terminal</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. Competitive Comparison</h2>
+<p>Orca&#39;s position isn&#39;t &quot;a Cursor replacement&quot; but &quot;a control tower above the agents.&quot;</p>
+<table>
+<thead>
+<tr>
+<th>Product</th>
+<th>Type</th>
+<th>Difference from Orca</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cursor / Windsurf</td>
+<td>AI-native all-in-one IDE</td>
+<td>Usable immediately after install, but lacks multi-agent parallel execution and comparison features. Cursor CLI can actually run inside Orca</td>
+</tr>
+<tr>
+<td>Aider / Continue.dev</td>
+<td>Open-source single-agent tool</td>
+<td>Parallel execution and visual diff comparison aren&#39;t the core focus</td>
+</tr>
+<tr>
+<td>Claude Squad</td>
+<td>Terminal TUI-style multi-agent manager</td>
+<td>For users who prefer a tmux-style workflow. No desktop GUI, mobile, or browser integration</td>
+</tr>
+<tr>
+<td>Agent Deck</td>
+<td>Terminal session manager</td>
+<td>Focused on conductor, notifications, and MCP socket pooling. Lighter weight than Orca</td>
+</tr>
+<tr>
+<td>Paseo</td>
+<td>Self-hosted cross-device control</td>
+<td>For cases prioritizing web/mobile/CLI access across the board over a desktop IDE surface</td>
+</tr>
+<tr>
+<td>Pure terminal (e.g., Claude Code alone)</td>
+<td>Basic workflow</td>
+<td>If you only run one task at a time, orchestration itself is unnecessary</td>
+</tr>
+</tbody></table>
+<p>Conclusion: Orca&#39;s biggest competitor is still the developer&#39;s &quot;existing habits.&quot; It&#39;s powerful for power users seriously running multiple agents, but overkill for single-agent users.</p>
+<hr>
+<h2>9. 5-Minute Quick-Start Checklist</h2>
+<pre><code class="language-text">[ ] Confirm Git 2.5+ with git --version
+[ ] Install and log in to at least one agent CLI (e.g., claude)
+[ ] brew install --cask stablyai/orca/orca (macOS)
+[ ] Launch Orca and add a local Git repository
+[ ] Create a new worktree → select an agent → send the first prompt
+[ ] Fan out the same prompt to a second agent
+[ ] Review both results on the diff comparison screen
+[ ] Merge the winner, discard the loser&#39;s worktree
+[ ] (Optional) Pair the mobile app and enable notifications
+</code></pre>
+<hr>
+<h2>10. Reference Links</h2>
+<ul>
+<li>Repository: <a href="https://github.com/stablyai/orca">https://github.com/stablyai/orca</a></li>
+<li>Official site/docs: <a href="https://www.onorca.dev">https://www.onorca.dev</a></li>
+<li>Releases: <a href="https://github.com/stablyai/orca/releases">https://github.com/stablyai/orca/releases</a></li>
+<li>Community: Discord, X (@orca_build)</li>
+</ul>
+<hr>
+<p><em>Written: 2026-07-15. Orca ships daily releases, so it&#39;s recommended to reconfirm specific features against the changelog.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/orca/Orca%20getting%20started_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

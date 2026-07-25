@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Open Code Review (OCR) — 完全ガイド — VibeQuant</title>
+  <meta name="description" content="アリババグループが2年間の社内検証を経てオープンソース化したハイブリッドAIコードレビューCLI" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-open-code-review-guide-ja/" />
+  <meta property="og:title" content="Open Code Review (OCR) — 完全ガイド" />
+  <meta property="og:description" content="アリババグループが2年間の社内検証を経てオープンソース化したハイブリッドAIコードレビューCLI" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-open-code-review-guide-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/llm-open-code-review-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/llm-open-code-review-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-open-code-review-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-open-code-review-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-open-code-review-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Open Code Review (OCR) — 完全ガイド","description":"アリババグループが2年間の社内検証を経てオープンソース化したハイブリッドAIコードレビューCLI","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-open-code-review-guide-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Open%20code%20review%20guide_JA.md","image":"https://vibequant.cc/og-default.png","inLanguage":"ja","keywords":"コードレビュー, AIツール, CI/CD, LLM"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Open Code Review (OCR) — 完全ガイド</h1>
+        <p class="article-dates">주제 コードレビュー · AIツール · CI/CD · LLM</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/llm-open-code-review-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/llm-open-code-review-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/llm-open-code-review-guide-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/llm-open-code-review-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">アリババグループが2年間の社内検証を経てオープンソース化したハイブリッドAIコードレビューCLI</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>アリババグループが2年間の社内検証を経てオープンソース化したハイブリッドAIコードレビューCLI
+Apache 2.0 | GitHub: <a href="https://github.com/alibaba/open-code-review">alibaba/open-code-review</a></p>
+</blockquote>
+<hr>
+<h2>目次</h2>
+<ol>
+<li><a href="#1-%E3%83%97%E3%83%AD%E3%82%B8%E3%82%A7%E3%82%AF%E3%83%88%E6%A6%82%E8%A6%81">プロジェクト概要</a></li>
+<li><a href="#2-%E3%82%A2%E3%83%BC%E3%82%AD%E3%83%86%E3%82%AF%E3%83%81%E3%83%A3%E8%A9%B3%E7%B4%B0">アーキテクチャ詳細</a></li>
+<li><a href="#3-%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB">インストール</a></li>
+<li><a href="#4-llm%E8%A8%AD%E5%AE%9A--%E3%82%AF%E3%83%A9%E3%82%A6%E3%83%89api">LLM設定 — クラウドAPI</a></li>
+<li><a href="#5-llm%E8%A8%AD%E5%AE%9A--%E3%83%AD%E3%83%BC%E3%82%AB%E3%83%AB%E3%83%A2%E3%83%87%E3%83%ABdeepseek--qwen--ollama">LLM設定 — ローカルモデル(DeepSeek / Qwen / Ollama)</a></li>
+<li><a href="#6-%E5%9F%BA%E6%9C%AC%E7%9A%84%E3%81%AA%E4%BD%BF%E7%94%A8%E6%B3%95%E3%81%A8%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9">基本的な使用法とコマンドリファレンス</a></li>
+<li><a href="#7-%E3%83%AC%E3%83%93%E3%83%A5%E3%83%BC%E3%83%AB%E3%83%BC%E3%83%AB%E3%81%AE%E3%82%AB%E3%82%B9%E3%82%BF%E3%83%9E%E3%82%A4%E3%82%BA">レビュールールのカスタマイズ</a></li>
+<li><a href="#8-cicd%E7%B5%B1%E5%90%88">CI/CD統合</a></li>
+<li><a href="#9-ai%E3%82%A8%E3%83%BC%E3%82%B8%E3%82%A7%E3%83%B3%E3%83%88%E7%B5%B1%E5%90%88claude-code--codex">AIエージェント統合(Claude Code / Codex)</a></li>
+<li><a href="#10-%E8%A8%AD%E5%AE%9A%E3%83%AA%E3%83%95%E3%82%A1%E3%83%AC%E3%83%B3%E3%82%B9%E5%85%A8%E4%BD%93">設定リファレンス全体</a></li>
+<li><a href="#11-%E9%95%B7%E6%89%80%E7%9F%AD%E6%89%80%E5%88%86%E6%9E%90">長所・短所分析</a></li>
+<li><a href="#12-%E3%83%A2%E3%83%87%E3%83%AB%E9%81%B8%E6%8A%9E%E3%82%AC%E3%82%A4%E3%83%89">モデル選択ガイド</a></li>
+<li><a href="#13-%E9%81%A9%E5%90%88%E3%81%99%E3%82%8B%E3%83%81%E3%83%BC%E3%83%A0%E3%82%BF%E3%82%A4%E3%83%97">適合するチームタイプ</a></li>
+</ol>
+<hr>
+<h2>1. プロジェクト概要</h2>
+<p>Open Code Review(以下OCR)は、アリババグループが内部で2年間運用・検証したAIコードレビューツールをオープンソース化したCLIプロジェクトである。内部運用期間中、2万人以上の開発者が使用し、100万件以上のコード欠陥を検出した。Git diffを読み取り、変更されたファイルを設定済みのLLMに渡し、行レベルの精密なレビューコメントを生成する。</p>
+<p>中核の設計思想は「決定的エンジニアリング(Deterministic Engineering)+ LLMエージェント」のハイブリッドアーキテクチャである。必ず正確でなければならない処理段階はエンジニアリングロジックが担当し、動的判断が必要な部分のみLLMエージェントに委任する。</p>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>数値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>内部使用期間</td>
+<td>2年</td>
+</tr>
+<tr>
+<td>累積使用開発者</td>
+<td>2万人以上</td>
+</tr>
+<tr>
+<td>累積欠陥検出数</td>
+<td>100万件以上</td>
+</tr>
+<tr>
+<td>純粋LLM対比トークン削減</td>
+<td>約80%</td>
+</tr>
+<tr>
+<td>F1性能向上</td>
+<td>26.1%</td>
+</tr>
+<tr>
+<td>ライセンス</td>
+<td>Apache 2.0</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. アーキテクチャ詳細</h2>
+<h3>一般的なAIエージェントの限界</h3>
+<p>Claude Codeや汎用エージェントをコードレビューに直接使用すると、次の問題が繰り返し発生する。</p>
+<ul>
+<li><strong>不完全なカバレッジ</strong>: 変更ファイルが多いPRで一部のファイルが任意に省略される。</li>
+<li><strong>位置のずれ(Position Drift)</strong>: 報告されたイシューの行番号やファイル参照が実際とずれる。</li>
+<li><strong>品質の不安定性</strong>: プロンプトの些細な変動でレビュー品質が大きく変わる。</li>
+</ul>
+<p>OCRはこの3つの問題をアーキテクチャレベルで解決する。</p>
+<h3>決定的エンジニアリング層(Deterministic Engineering)</h3>
+<p>必ず正確でなければならない段階は、LLMではなくエンジニアリングロジックが保証する。</p>
+<table>
+<thead>
+<tr>
+<th>機能</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>精密ファイル選択</td>
+<td>レビュー対象ファイルを正確に決定し、不要なファイルをフィルタリング。重要な変更事項の漏れを防止</td>
+</tr>
+<tr>
+<td>スマートファイルバンドリング</td>
+<td>関連ファイルを一つのレビュー単位にまとめる(例: <code>message_en.properties</code> + <code>message_zh.properties</code>)。各バンドルは独立したコンテキストのサブエージェントとして実行</td>
+</tr>
+<tr>
+<td>きめ細かなルールマッチング</td>
+<td>各ファイルの特性に合ったレビュールールをマッチング。情報ノイズを除去しモデルの集中度を向上</td>
+</tr>
+<tr>
+<td>位置補正モジュール</td>
+<td>独立したコメントポジショニング・反省(reflection)モジュールで、AIフィードバックの位置精度と内容精度を体系的に改善</td>
+</tr>
+</tbody></table>
+<h3>LLMエージェント層</h3>
+<p>動的判断とコンテキスト検索が必要な部分を担当する。</p>
+<ul>
+<li>コードレビューに最適化されたシナリオ別プロンプトテンプレート</li>
+<li>大規模プロダクションデータのツール呼び出し履歴分析で構成された専門化されたツールセット</li>
+<li>リアルタイムコードベース検索、ファイル全体内容の読み取り、変更された他のファイルとの相互参照</li>
+</ul>
+<hr>
+<h2>3. インストール</h2>
+<h3>NPM(推奨)</h3>
+<pre><code class="language-bash">npm install -g @alibaba-group/open-code-review
+</code></pre>
+<p>インストール後、<code>ocr</code>コマンドがグローバルで使用可能になる。</p>
+<h3>バイナリ直接ダウンロード</h3>
+<pre><code class="language-bash"># macOS (Apple Silicon / M1~M4)
+curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-darwin-arm64
+chmod +x ocr &amp;&amp; sudo mv ocr /usr/local/bin/ocr
+
+# macOS (Intel)
+curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-darwin-amd64
+chmod +x ocr &amp;&amp; sudo mv ocr /usr/local/bin/ocr
+
+# Linux (x86_64)
+curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-linux-amd64
+chmod +x ocr &amp;&amp; sudo mv ocr /usr/local/bin/ocr
+
+# Linux (ARM64)
+curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-linux-arm64
+chmod +x ocr &amp;&amp; sudo mv ocr /usr/local/bin/ocr
+</code></pre>
+<h3>ソースビルド</h3>
+<pre><code class="language-bash">git clone https://github.com/alibaba/open-code-review.git
+cd open-code-review
+make build
+sudo cp dist/opencodereview /usr/local/bin/ocr
+</code></pre>
+<hr>
+<h2>4. LLM設定 — クラウドAPI</h2>
+<p>OCRはOpenAI互換エンドポイントとAnthropicネイティブAPIの両方をサポートする。設定ファイルは<code>~/.opencodereview/config.json</code>に保存される。環境変数は設定ファイルより優先適用される。</p>
+<h3>Anthropic(Claude)</h3>
+<pre><code class="language-bash">ocr config set llm.url https://api.anthropic.com/v1/messages
+ocr config set llm.auth_token sk-ant-xxxxxxx
+ocr config set llm.model claude-opus-4-6
+ocr config set llm.use_anthropic true
+</code></pre>
+<p>Claude Codeユーザーであれば、<code>ANTHROPIC_BASE_URL</code>、<code>ANTHROPIC_AUTH_TOKEN</code>、<code>ANTHROPIC_MODEL</code>環境変数を<code>~/.zshrc</code>または<code>~/.bashrc</code>から自動的に認識するため、別途の設定は不要である。</p>
+<p>推奨モデル:</p>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>claude-opus-4-6</code></td>
+<td>最高品質のレビュー、複雑なアーキテクチャ分析</td>
+</tr>
+<tr>
+<td><code>claude-sonnet-4-6</code></td>
+<td>コスト・性能バランス、日常的なPRレビュー</td>
+</tr>
+</tbody></table>
+<h3>OpenAI(ChatGPT)</h3>
+<pre><code class="language-bash">ocr config set llm.url https://api.openai.com/v1/chat/completions
+ocr config set llm.auth_token sk-xxxxxxx
+ocr config set llm.model gpt-4o
+ocr config set llm.use_anthropic false
+</code></pre>
+<p>推奨モデル:</p>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>gpt-4o</code></td>
+<td>コードレビューの基本推奨</td>
+</tr>
+<tr>
+<td><code>o3</code></td>
+<td>複雑なセキュリティ脆弱性分析</td>
+</tr>
+<tr>
+<td><code>gpt-4.1-mini</code></td>
+<td>コスト削減が必要な環境</td>
+</tr>
+</tbody></table>
+<h3>DeepSeek Cloud API</h3>
+<p>DeepSeekはOpenAI互換APIを提供するため<code>use_anthropic false</code>に設定する。</p>
+<pre><code class="language-bash">ocr config set llm.url https://api.deepseek.com/v1/chat/completions
+ocr config set llm.auth_token sk-xxxxxxx
+ocr config set llm.model deepseek-coder
+ocr config set llm.use_anthropic false
+</code></pre>
+<p>推奨モデル:</p>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>特徴</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>deepseek-coder</code></td>
+<td>コード特化、コスト効率優秀</td>
+</tr>
+<tr>
+<td><code>deepseek-reasoner</code></td>
+<td>複雑なロジック分析および推論に強み</td>
+</tr>
+</tbody></table>
+<h3>Alibaba DashScope(Qwen Cloud)</h3>
+<pre><code class="language-bash">ocr config set llm.url https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
+ocr config set llm.auth_token sk-xxxxxxx
+ocr config set llm.model qwen-coder-turbo
+ocr config set llm.use_anthropic false
+</code></pre>
+<hr>
+<h2>5. LLM設定 — ローカルモデル(DeepSeek / Qwen / Ollama)</h2>
+<p>ローカルLLMを使用すると、コードが外部APIに送信されないため完全なデータプライバシーが保証される。OCRはOpenAI互換エンドポイントをローカルで公開するすべてのランタイム(Ollama、LM Studio、vLLMなど)をサポートする。</p>
+<h3>5-1. Ollamaベースの設定(汎用)</h3>
+<p>Ollamaはローカルllmを最も簡単に実行する方法である。インストール後、自動的に<code>http://localhost:11434</code>にOpenAI互換エンドポイントを公開する。</p>
+<pre><code class="language-bash"># Ollamaインストール (macOS)
+brew install ollama
+
+# Ollamaインストール (Linux)
+curl -fsSL https://ollama.com/install.sh | sh
+
+# バックグラウンドサーバー起動
+ollama serve &amp;
+</code></pre>
+<p>OCRとOllamaの接続:</p>
+<pre><code class="language-bash">ocr config set llm.url http://localhost:11434/v1/chat/completions
+ocr config set llm.auth_token ollama
+ocr config set llm.model qwen2.5-coder:32b
+ocr config set llm.use_anthropic false
+</code></pre>
+<blockquote>
+<p>auth_tokenの値は任意の文字列で構わない。Ollamaはローカルでトークン検証を行わない。</p>
+</blockquote>
+<h3>5-2. DeepSeekのローカル実行</h3>
+<h4>OllamaでDeepSeekを実行</h4>
+<pre><code class="language-bash"># DeepSeek-R1(推論特化、コードレビューに適合)
+ollama pull deepseek-r1:14b    # 約9GB VRAM
+ollama pull deepseek-r1:32b    # 約20GB VRAM
+ollama pull deepseek-r1:70b    # 約48GB以上 VRAM
+
+# DeepSeek Coder V2(コード特化)
+ollama pull deepseek-coder-v2:16b    # 約10GB VRAM
+ollama pull deepseek-coder-v2:236b   # 約130GB VRAM、最高品質
+
+# コンテキストウィンドウ拡張(agentic ワークフローに必須)
+ollama run deepseek-r1:14b
+&gt;&gt;&gt; /set parameter num_ctx 32768
+&gt;&gt;&gt; /save deepseek-r1-14b-32k
+</code></pre>
+<p>OCR設定:</p>
+<pre><code class="language-bash">ocr config set llm.url http://localhost:11434/v1/chat/completions
+ocr config set llm.auth_token ollama
+ocr config set llm.model deepseek-r1:14b
+ocr config set llm.use_anthropic false
+</code></pre>
+<h4>vLLMでDeepSeekを実行(高性能GPUサーバー環境)</h4>
+<pre><code class="language-bash">docker pull vllm/vllm-openai:latest
+
+# DeepSeek-R1 14B(約30GB VRAM必要)
+docker run --runtime nvidia --gpus all \
+  -v ~/.cache/huggingface:/root/.cache/huggingface \
+  -p 8000:8000 \
+  vllm/vllm-openai:latest \
+  --model deepseek-ai/DeepSeek-R1-Distill-Qwen-14B \
+  --tensor-parallel-size 1
+</code></pre>
+<p>OCR設定:</p>
+<pre><code class="language-bash">ocr config set llm.url http://localhost:8000/v1/chat/completions
+ocr config set llm.auth_token vllm
+ocr config set llm.model deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
+ocr config set llm.use_anthropic false
+</code></pre>
+<h4>LM StudioでDeepSeekを実行(GUI環境)</h4>
+<ol>
+<li><a href="https://lmstudio.ai">lmstudio.ai</a>でLM Studioをインストール</li>
+<li>&quot;Discover&quot;タブで<code>deepseek-r1</code>を検索し希望のサイズをダウンロード</li>
+<li>&quot;Local Server&quot;タブでサーバー起動(デフォルトポート: 1234)</li>
+</ol>
+<p>OCR設定:</p>
+<pre><code class="language-bash">ocr config set llm.url http://localhost:1234/v1/chat/completions
+ocr config set llm.auth_token lm-studio
+ocr config set llm.model deepseek-r1-distill-qwen-14b
+ocr config set llm.use_anthropic false
+</code></pre>
+<h3>5-3. Qwen(Qwen2.5-Coder / Qwen3)のローカル実行</h3>
+<p>Qwenシリーズはコード生成・レビューで同クラス最強のオープンソース性能を示す。特にQwen2.5-Coder 32BはHumanEval基準92.1%を達成し、Claude Sonnet 4.6(89.4%)を上回る。</p>
+<pre><code class="language-bash"># Qwen2.5-Coder(コード特化 — コードレビュー第1推奨)
+ollama pull qwen2.5-coder:7b     # 約5GB VRAM、高速応答
+ollama pull qwen2.5-coder:14b    # 約9GB VRAM、バランス
+ollama pull qwen2.5-coder:32b    # 約20GB VRAM、最高品質
+
+# Qwen3(汎用最新モデル、2026年2月リリース)
+ollama pull qwen3:8b
+ollama pull qwen3:32b
+
+# コンテキストウィンドウ拡張(256K対応モデル基準)
+ollama run qwen2.5-coder:32b
+&gt;&gt;&gt; /set parameter num_ctx 32768
+&gt;&gt;&gt; /save qwen2.5-coder-32b-32k
+</code></pre>
+<p>OCR設定:</p>
+<pre><code class="language-bash">ocr config set llm.url http://localhost:11434/v1/chat/completions
+ocr config set llm.auth_token ollama
+ocr config set llm.model qwen2.5-coder:32b
+ocr config set llm.use_anthropic false
+</code></pre>
+<h3>5-4. ローカルLLMハードウェア要件</h3>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>VRAM</th>
+<th>速度(トークン/秒)</th>
+<th>推奨用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek-R1 14B</td>
+<td>9GB</td>
+<td>25〜40</td>
+<td>個人開発者ノートPC、推論に強み</td>
+</tr>
+<tr>
+<td>Qwen2.5-Coder 7B</td>
+<td>5GB</td>
+<td>40〜60</td>
+<td>軽量環境、高速PRレビュー</td>
+</tr>
+<tr>
+<td>Qwen2.5-Coder 14B</td>
+<td>9GB</td>
+<td>25〜35</td>
+<td>バランス型推奨</td>
+</tr>
+<tr>
+<td>Qwen2.5-Coder 32B</td>
+<td>20GB</td>
+<td>15〜25</td>
+<td>高品質コードレビュー、エンタープライズ</td>
+</tr>
+<tr>
+<td>DeepSeek-R1 32B</td>
+<td>20GB</td>
+<td>10〜18</td>
+<td>複雑なセキュリティ分析</td>
+</tr>
+<tr>
+<td>DeepSeek Coder V2 236B</td>
+<td>130GB以上</td>
+<td>8〜12</td>
+<td>最高品質、GPUサーバー専用</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Q4量子化を使用するとVRAMを約60%節約でき、品質損失は約2%水準である。Ollamaはモデルpull時に自動的に量子化を適用する。</p>
+</blockquote>
+<h3>5-5. 接続テスト</h3>
+<pre><code class="language-bash"># LLM接続確認(クラウド・ローカル共通)
+ocr llm test
+</code></pre>
+<hr>
+<h2>6. 基本的な使用法とコマンドリファレンス</h2>
+<h3>主要レビューコマンド</h3>
+<pre><code class="language-bash"># 現在の変更事項をレビュー(staged + unstaged + untracked全体)
+ocr review
+
+# ブランチ間比較レビュー
+ocr review --from main --to feature-auth
+
+# 特定コミットのレビュー
+ocr review --commit abc123
+
+# LLM呼び出しなしでレビュー対象ファイルのみ事前確認
+ocr review --preview
+ocr review --commit abc123 --preview
+
+# JSON出力(CI/CDパイプライン、スクリプトパース用)
+ocr review --format json --audience agent
+
+# カスタムルールファイル適用
+ocr review --rule /path/to/my-rules.json
+
+# 同時レビューファイル数調整
+ocr review --from main --to my-feature --concurrency 4
+</code></pre>
+<h3>コマンド一覧</h3>
+<table>
+<thead>
+<tr>
+<th>コマンド</th>
+<th>エイリアス</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ocr review</code></td>
+<td><code>ocr r</code></td>
+<td>コードレビュー開始</td>
+</tr>
+<tr>
+<td><code>ocr rules check &lt;file&gt;</code></td>
+<td>—</td>
+<td>該当ファイルに適用されるルールを事前確認</td>
+</tr>
+<tr>
+<td><code>ocr config set &lt;key&gt; &lt;value&gt;</code></td>
+<td>—</td>
+<td>設定値の変更</td>
+</tr>
+<tr>
+<td><code>ocr llm test</code></td>
+<td>—</td>
+<td>LLM接続テスト</td>
+</tr>
+<tr>
+<td><code>ocr viewer</code></td>
+<td><code>ocr v</code></td>
+<td>ブラウザベースのセッションビューア実行(<code>localhost:5483</code>)</td>
+</tr>
+<tr>
+<td><code>ocr version</code></td>
+<td>—</td>
+<td>バージョン情報出力</td>
+</tr>
+</tbody></table>
+<h3><code>ocr review</code>の主なフラグ</h3>
+<table>
+<thead>
+<tr>
+<th>フラグ</th>
+<th>デフォルト値</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>--repo</code></td>
+<td>現在のディレクトリ</td>
+<td>Gitリポジトリのルートパス</td>
+</tr>
+<tr>
+<td><code>--from</code></td>
+<td>—</td>
+<td>比較基準ref(例: <code>main</code>)</td>
+</tr>
+<tr>
+<td><code>--to</code></td>
+<td>—</td>
+<td>比較対象ref(例: <code>feature-branch</code>)</td>
+</tr>
+<tr>
+<td><code>--commit</code>, <code>-c</code></td>
+<td>—</td>
+<td>単一コミットのレビュー</td>
+</tr>
+<tr>
+<td><code>--preview</code>, <code>-p</code></td>
+<td><code>false</code></td>
+<td>LLM呼び出しなしでレビュー対象ファイルのみ確認</td>
+</tr>
+<tr>
+<td><code>--format</code>, <code>-f</code></td>
+<td><code>text</code></td>
+<td>出力形式: <code>text</code>または<code>json</code></td>
+</tr>
+<tr>
+<td><code>--concurrency</code></td>
+<td><code>8</code></td>
+<td>ファイル同時レビューの最大数</td>
+</tr>
+<tr>
+<td><code>--timeout</code></td>
+<td><code>10</code></td>
+<td>同時作業のタイムアウト(分)</td>
+</tr>
+<tr>
+<td><code>--audience</code></td>
+<td><code>human</code></td>
+<td><code>human</code>(進行状況表示)/ <code>agent</code>(要約のみ出力)</td>
+</tr>
+<tr>
+<td><code>--rule</code></td>
+<td>—</td>
+<td>カスタムレビュールールJSONファイルのパス</td>
+</tr>
+<tr>
+<td><code>--max-tools</code></td>
+<td>内蔵デフォルト値</td>
+<td>ファイル当たりの最大ツール呼び出し回数</td>
+</tr>
+<tr>
+<td><code>--tools</code></td>
+<td>—</td>
+<td>カスタムツール設定JSONファイルのパス</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. レビュールールのカスタマイズ</h2>
+<p>OCRは4段階の優先順位体系でルールを適用する。各段階でファイルパスがパターンに最初にマッチすればそのルールを適用し、マッチしなければ次の段階へ進む。</p>
+<table>
+<thead>
+<tr>
+<th>優先度</th>
+<th>ソース</th>
+<th>パス</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1(最高)</td>
+<td><code>--rule</code>フラグ</td>
+<td>ユーザー指定パス</td>
+<td>CLI明示的オーバーライド</td>
+</tr>
+<tr>
+<td>2</td>
+<td>プロジェクト設定</td>
+<td><code>&lt;repoDir&gt;/.opencodereview/rule.json</code></td>
+<td>プロジェクト別ルール、gitにコミット可能</td>
+</tr>
+<tr>
+<td>3</td>
+<td>グローバル設定</td>
+<td><code>~/.opencodereview/rule.json</code></td>
+<td>個人グローバル設定</td>
+</tr>
+<tr>
+<td>4(最低)</td>
+<td>システムデフォルト値</td>
+<td>内蔵<code>system_rules.json</code></td>
+<td>NPE、XSS、SQL Injectionなど共通ルール</td>
+</tr>
+</tbody></table>
+<h3>ルールファイル形式</h3>
+<pre><code class="language-json">{
+  &quot;rules&quot;: [
+    {
+      &quot;path&quot;: &quot;src/main/java/**/*.java&quot;,
+      &quot;rule&quot;: &quot;全ての新規メソッドの必須パラメータはnull値を検証しなければならない&quot;
+    },
+    {
+      &quot;path&quot;: &quot;**/*mapper*.xml&quot;,
+      &quot;rule&quot;: &quot;SQL Injectionリスク、パラメータエラー、閉じタグの漏れを確認すること&quot;
+    },
+    {
+      &quot;path&quot;: &quot;src/**/*.{ts,tsx}&quot;,
+      &quot;rule&quot;: &quot;非同期関数のエラー処理とPromiseチェーンの漏れを確認すること&quot;
+    }
+  ]
+}
+</code></pre>
+<ul>
+<li><code>path</code>は<code>**</code>再帰マッチングと<code>{java,kt}</code>中括弧展開をサポートする。</li>
+<li>各層内では宣言順に評価し、最初にマッチしたものが適用される。</li>
+<li>ルールファイルが存在しない場合は静かにスキップされる。</li>
+</ul>
+<p>特定ファイルに適用されるルールの事前確認:</p>
+<pre><code class="language-bash">ocr rules check src/main/java/com/example/UserService.java
+ocr rules check --rule custom.json src/main/resources/mapper/UserMapper.xml
+</code></pre>
+<hr>
+<h2>8. CI/CD統合</h2>
+<h3>GitHub Actions</h3>
+<pre><code class="language-yaml"># .github/workflows/code-review.yml
+name: AI Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install OCR
+        run: npm install -g @alibaba-group/open-code-review
+
+      - name: Run Code Review
+        env:
+          OCR_LLM_URL: https://api.anthropic.com/v1/messages
+          OCR_LLM_TOKEN: ${{ secrets.ANTHROPIC_API_KEY }}
+          OCR_LLM_MODEL: claude-sonnet-4-6
+          OCR_USE_ANTHROPIC: &quot;true&quot;
+        run: |
+          ocr review \
+            --from &quot;origin/${{ github.base_ref }}&quot; \
+            --to &quot;origin/${{ github.head_ref }}&quot; \
+            --format json \
+            --audience agent
+</code></pre>
+<h3>GitLab CI</h3>
+<pre><code class="language-yaml"># .gitlab-ci.yml
+code-review:
+  stage: test
+  image: node:20
+  before_script:
+    - npm install -g @alibaba-group/open-code-review
+  script:
+    - ocr review
+        --from &quot;origin/${CI_MERGE_REQUEST_TARGET_BRANCH_NAME}&quot;
+        --to &quot;origin/${CI_MERGE_REQUEST_SOURCE_BRANCH_NAME}&quot;
+        --format json
+        --audience agent
+  variables:
+    OCR_LLM_URL: &quot;https://api.openai.com/v1/chat/completions&quot;
+    OCR_LLM_TOKEN: $OPENAI_API_KEY
+    OCR_LLM_MODEL: &quot;gpt-4o&quot;
+    OCR_USE_ANTHROPIC: &quot;false&quot;
+  rules:
+    - if: $CI_PIPELINE_SOURCE == &quot;merge_request_event&quot;
+</code></pre>
+<h3>汎用CIスクリプトパターン</h3>
+<pre><code class="language-bash">ocr review \
+  --from &quot;origin/main&quot; \
+  --to &quot;origin/feature-branch&quot; \
+  --format json \
+  --audience agent
+</code></pre>
+<p><code>--format json</code> + <code>--audience agent</code>の組み合わせは、CIスクリプトでパース可能な構造化出力を返す。GitHub Marketplaceにも Actionsとして公開されている。</p>
+<hr>
+<h2>9. AIエージェント統合(Claude Code / Codex)</h2>
+<p>OCRをAIコーディングエージェントのスラッシュコマンドとして統合すると、エージェントワークフロー内で直接コードレビューを実行できる。</p>
+<h3>方法1: スキルとしてインストール</h3>
+<pre><code class="language-bash">npx skills add alibaba/open-code-review --skill open-code-review
+</code></pre>
+<p>コーディングエージェントが<code>ocr</code>の呼び出し方、イシューの優先順位分類、自動修正オプションを学習する。</p>
+<h3>方法2: Claude Codeプラグインとしてインストール</h3>
+<p>Claude Code内で次のコマンドを実行する:</p>
+<pre><code>/plugin marketplace add alibaba/open-code-review
+/plugin install open-code-review@open-code-review
+</code></pre>
+<p>インストール後、<code>/open-code-review:review</code>スラッシュコマンドでOCRを実行し、イシューの自動フィルタリングおよび修正まで処理する。</p>
+<h3>方法3: コマンドファイル直接コピー</h3>
+<p>パッケージマネージャーなしで迅速に設定する方法である。</p>
+<pre><code class="language-bash"># プロジェクト単位(チーム共有、gitコミット可能)
+mkdir -p .claude/commands
+curl -o .claude/commands/open-code-review.md \
+  https://raw.githubusercontent.com/alibaba/open-code-review/main/plugins/open-code-review/commands/review.md
+
+# ユーザー単位(全プロジェクトで個人使用)
+mkdir -p ~/.claude/commands
+curl -o ~/.claude/commands/open-code-review.md \
+  https://raw.githubusercontent.com/alibaba/open-code-review/main/plugins/open-code-review/commands/review.md
+</code></pre>
+<h3>OpenAI Codex統合</h3>
+<pre><code class="language-bash"># Codexプラグインマーケットプレイスからインストール
+codex plugin marketplace add alibaba/open-code-review
+codex /plugins
+</code></pre>
+<p>インストール後、Codexで次のように使用する:</p>
+<pre><code>@Open Code Review review my current changes
+@Open Code Review review this branch against main
+@Open Code Review review and fix high-confidence issues
+</code></pre>
+<blockquote>
+<p>すべての統合方法の前提条件: <code>ocr</code> CLIのインストール + LLM設定の完了が必要である。OCRの内部LLMバックエンドはエージェント統合方式とは無関係に独立して動作する。</p>
+</blockquote>
+<hr>
+<h2>10. 設定リファレンス全体</h2>
+<p>設定ファイルパス: <code>~/.opencodereview/config.json</code></p>
+<h3>設定キー一覧</h3>
+<table>
+<thead>
+<tr>
+<th>キー</th>
+<th>タイプ</th>
+<th>例</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>llm.url</code></td>
+<td>string</td>
+<td><code>https://api.openai.com/v1/chat/completions</code></td>
+<td>LLM APIエンドポイント</td>
+</tr>
+<tr>
+<td><code>llm.auth_token</code></td>
+<td>string</td>
+<td><code>sk-xxxxxxx</code></td>
+<td>APIキー / 認証トークン</td>
+</tr>
+<tr>
+<td><code>llm.model</code></td>
+<td>string</td>
+<td><code>claude-opus-4-6</code></td>
+<td>モデル名</td>
+</tr>
+<tr>
+<td><code>llm.use_anthropic</code></td>
+<td>boolean</td>
+<td><code>true</code> / <code>false</code></td>
+<td>Anthropicネイティブapi使用の有無</td>
+</tr>
+<tr>
+<td><code>language</code></td>
+<td>string</td>
+<td><code>English</code> / <code>Chinese</code></td>
+<td>レビュー出力言語(デフォルト: 中国語)</td>
+</tr>
+<tr>
+<td><code>telemetry.enabled</code></td>
+<td>boolean</td>
+<td><code>true</code> / <code>false</code></td>
+<td>テレメトリ有効化</td>
+</tr>
+<tr>
+<td><code>telemetry.exporter</code></td>
+<td>string</td>
+<td><code>console</code> / <code>otlp</code></td>
+<td>テレメトリエクスポート方式</td>
+</tr>
+<tr>
+<td><code>telemetry.otlp_endpoint</code></td>
+<td>string</td>
+<td><code>localhost:4317</code></td>
+<td>OTLPコレクターアドレス</td>
+</tr>
+<tr>
+<td><code>telemetry.content_logging</code></td>
+<td>boolean</td>
+<td>—</td>
+<td>テレメトリにLLMプロンプトを含めるかどうか</td>
+</tr>
+</tbody></table>
+<h3>環境変数一覧</h3>
+<p>環境変数は設定ファイルより高い優先度を持つ。</p>
+<table>
+<thead>
+<tr>
+<th>環境変数</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>OCR_LLM_URL</code></td>
+<td>LLM APIエンドポイントURL</td>
+</tr>
+<tr>
+<td><code>OCR_LLM_TOKEN</code></td>
+<td>APIキー / 認証トークン</td>
+</tr>
+<tr>
+<td><code>OCR_LLM_MODEL</code></td>
+<td>モデル名</td>
+</tr>
+<tr>
+<td><code>OCR_USE_ANTHROPIC</code></td>
+<td><code>true</code> = Anthropic、<code>false</code> = OpenAI互換</td>
+</tr>
+</tbody></table>
+<p>Claude Code環境変数(<code>ANTHROPIC_BASE_URL</code>、<code>ANTHROPIC_AUTH_TOKEN</code>、<code>ANTHROPIC_MODEL</code>)も自動認識する。</p>
+<h3>レビュー出力言語の変更</h3>
+<p>デフォルトの出力言語は中国語である。韓国語または英語に変更するには:</p>
+<pre><code class="language-bash">ocr config set language English
+# または
+ocr config set language Korean
+</code></pre>
+<h3>テレメトリ設定(OpenTelemetry)</h3>
+<pre><code class="language-bash">ocr config set telemetry.enabled true
+ocr config set telemetry.exporter otlp
+ocr config set telemetry.otlp_endpoint localhost:4317
+</code></pre>
+<p><code>telemetry.content_logging</code>を有効化すると、LLMプロンプトと応答がエクスポートデータに含まれる。デフォルトは無効。</p>
+<hr>
+<h2>11. 長所・短所分析</h2>
+<h3>長所</h3>
+<p><strong>大規模検証済み(Battle-tested)</strong>2万人以上のアリババ内部開発者が2年間使用し、100万件以上の欠陥を検出した。SaaSではなくCLIツールであるため、コードとデータが外部に流出せず、エンタープライズのセキュリティ要件を満たす。ローカルLLMと組み合わせると完全なAir-gap環境の構築も可能である。<strong>経済性およびハイブリッド設計</strong>純粋LLMエージェント対比でトークン使用量を80%削減する。一般的なAIコードレビューの3つの慢性的問題(不完全なカバレッジ、位置のずれ、品質の不安定性)を決定的エンジニアリング層で構造的に解決した。<strong>柔軟なモデルサポート</strong>OpenAI、Anthropic、DeepSeek、DashScope(Qwen)、OllamaなどOpenAI互換エンドポイントを公開するすべてのランタイムをサポートする。クラウドとローカルLLMを自由に切り替え可能である。<strong>CI/CDおよびエージェントエコシステム統合</strong></p>
+<p>GitHub Actions、GitLab CIの例を公式提供する。Claude Code、Codexなど主要AIコーディングエージェントとプラグイン/スキル/コマンド方式で統合される。</p>
+<h3>短所および考慮事項</h3>
+<p><strong>LLM API費用</strong>ツール自体はApache 2.0で無料だが、バックエンドLLM API費用はユーザー負担である。ローカルLLMでこの費用を除去できるが、ハードウェア要件が伴う。<strong>初期環境設定</strong>既存のClaude Codeユーザーは環境変数を自動認識するため設定が不要である。しかし新規ユーザーはLLM APIキー、エンドポイント、モデル設定プロセスを経る必要がある。ローカルLLM使用時はOllamaのインストールおよびモデルダウンロード(数GB)が追加で必要である。<strong>ビジネスロジックの限界</strong>内蔵ルールとカスタムルールで相当部分補完可能だが、チーム固有のビジネスロジックやドメイン特化のコンベンションを完全には理解しない。ルールファイルにチーム特化の指針を継続的に追加していく運用が必要である。<strong>AIの根本的限界</strong></p>
+<p>高次元的なアーキテクチャ設計の適合性やビジネス要件との完全な整合性は人間の判断に代替しにくい。OCRはレビュアーの負担を減らす補助ツールであり、完全な代替材ではない。</p>
+<hr>
+<h2>12. モデル選択ガイド</h2>
+<table>
+<thead>
+<tr>
+<th>状況</th>
+<th>推奨モデル</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>最高品質のレビュー、コスト余裕あり</td>
+<td>Claude Opus 4.6(クラウド)</td>
+<td>複雑なコンテキスト理解およびアーキテクチャ分析</td>
+</tr>
+<tr>
+<td>日常的なPRレビュー、コストバランス</td>
+<td>Claude Sonnet 4.6またはGPT-4o</td>
+<td>性能・コストバランス</td>
+</tr>
+<tr>
+<td>コードの完全な外部流出不可</td>
+<td>Qwen2.5-Coder 32B(Ollama)</td>
+<td>ローカル実行、HumanEval 92.1%</td>
+</tr>
+<tr>
+<td>複雑なセキュリティ脆弱性分析</td>
+<td>DeepSeek-R1(ローカルまたはクラウド)</td>
+<td>推論特化アーキテクチャ</td>
+</tr>
+<tr>
+<td>コスト最小化(クラウド)</td>
+<td>DeepSeek Coder API</td>
+<td>コード特化 + 低いAPI単価</td>
+</tr>
+<tr>
+<td>軽量ローカル環境(8GB VRAM以下)</td>
+<td>Qwen2.5-Coder 7B</td>
+<td>高速応答、低いハードウェア要件</td>
+</tr>
+<tr>
+<td>GPUサーバー最高品質</td>
+<td>DeepSeek Coder V2 236B</td>
+<td>HumanEval 95.7%(オープンソース最高)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>13. 適合するチームタイプ</h2>
+<p><strong>大規模コードベース運用組織</strong>多くのファイルが同時に変更されるPRでも、スマートバンドリングとファイル選択ロジックが漏れなく全体をカバーする。汎用エージェント対比で漏れ率が構造的に低い。<strong>セキュリティ脆弱性対応が重要なチーム</strong>NPE、SQL Injection、XSS、Thread-Safetyなど高リスク欠陥をレビュー初期段階で遮断する。ローカルLLMと組み合わせるとコードが外部に出ない完全プライベート環境を構成できる。<strong>AI導入コストに敏感なチーム</strong>80%のトークン削減は同一予算でカバーできるレビュー規模を5倍に増やす。DeepSeekクラウドAPIやQwenローカルモデルを活用すればコストをさらに削減できる。<strong>既存のレビュープロセスにAIを組み合わせたいチーム</strong></p>
+<p>OCRがNPE、セキュリティ脆弱性、コーディングコンベンション違反を1次フィルタリングすると、人間のレビュアーはアーキテクチャ設計とビジネスロジック検討に集中できる。</p>
+<hr>
+<h2>参考資料</h2>
+<ul>
+<li><a href="https://github.com/alibaba/open-code-review">GitHubリポジトリ</a></li>
+<li><a href="https://alibaba.github.io/open-code-review/">公式ドキュメントサイト</a></li>
+<li><a href="https://github.com/marketplace?q=open-code-review">GitHub Marketplace(Actions)</a></li>
+<li><a href="https://digitaltoday.co.kr">Digital Today — トークン使用量80%削減紹介</a>(2026.6.8)</li>
+<li><a href="https://gigazine.net">Gigazine — 内部性能ベンチマーク結果報道</a>(2026.6.7)</li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Open%20code%20review%20guide_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

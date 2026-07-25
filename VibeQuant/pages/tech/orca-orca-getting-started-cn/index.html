@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orca Getting Started — 多 AI 代理编排指南 — VibeQuant</title>
+  <meta name="description" content="Orca 可将同一提示词分发给多个 CLI 编码代理，在隔离的 git worktree 中并行运行，并合并最优结果——入门指南。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/orca-orca-getting-started-cn/" />
+  <meta property="og:title" content="Orca Getting Started — 多 AI 代理编排指南" />
+  <meta property="og:description" content="Orca 可将同一提示词分发给多个 CLI 编码代理，在隔离的 git worktree 中并行运行，并合并最优结果——入门指南。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/orca-orca-getting-started-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/orca-orca-getting-started/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/orca-orca-getting-started-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/orca-orca-getting-started-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/orca-orca-getting-started-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/orca-orca-getting-started/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Orca Getting Started — 多 AI 代理编排指南","description":"Orca 可将同一提示词分发给多个 CLI 编码代理，在隔离的 git worktree 中并行运行，并合并最优结果——入门指南。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/orca-orca-getting-started-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/orca/Orca%20getting%20started_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-15","dateModified":"2026-07-15","inLanguage":"zh-Hans","keywords":"UI · 개발도구, orca"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · UI · 개발도구</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">UI · 개발도구</p>
+        <h1>Orca Getting Started — 多 AI 代理编排指南</h1>
+        <p class="article-dates"><time datetime="2026-07-15">발행 2026.07.15</time> · 주제 UI · 개발도구 · orca</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/orca-orca-getting-started/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/orca-orca-getting-started-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/orca-orca-getting-started-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/orca-orca-getting-started-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">Orca 可将同一提示词分发给多个 CLI 编码代理，在隔离的 git worktree 中并行运行，并合并最优结果——入门指南。</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. Orca 是什么？</h2>
+<p>Orca 是一个<strong>在单屏上并行指挥</strong>Claude Code、Codex、OpenCode、Cursor CLI、Gemini CLI 等终端 AI 编码代理的<strong>编排器</strong>。它不是把 AI 叠加在现有 IDE 上，而是从设计之初就以「代理舰队 (fleet) 运营」为前提的 ADE (Agent Development Environment)。</p>
+<p>核心思路很简单。</p>
+<ol>
+<li>将同一个开发请求同时分发给多个代理 (Fan-out)</li>
+<li>每个代理在各自的 <code>git worktree</code> 中隔离工作</li>
+<li>完成后并排查看 Diff、比较，只合并最佳结果 (Merge the winner)</li>
+</ol>
+<p>注意：Orca 不是 Cursor 的替代品。就连 Cursor CLI 也只是 Orca 内运行的代理之一。Orca 替代的是「开 5 个终端标签页手动管理」的旧工作流。</p>
+<hr>
+<h2>2. 前置准备</h2>
+<p>Orca 本身无需登录或注册 API 密钥。但<strong>你计划使用的代理 CLI 必须已安装并完成认证。</strong> Orca 不会代理或转售任何 API，各代理直接从你的机器调用各自的提供商。</p>
+<table>
+<thead>
+<tr>
+<th>准备项</th>
+<th>确认方法</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Git 2.5 及以上</td>
+<td><code>git --version</code></td>
+<td>必须使用 worktree 功能</td>
+</tr>
+<tr>
+<td>至少一个代理 CLI</td>
+<td><code>claude --version</code>、<code>codex --version</code> 等</td>
+<td>Claude Code、Codex、OpenCode、Gemini CLI、Cursor CLI 等，能在终端运行的均可</td>
+</tr>
+<tr>
+<td>各代理认证完成</td>
+<td>在终端中单独运行是否正常</td>
+<td>例如：运行 <code>claude</code> 后确认已登录</td>
+</tr>
+<tr>
+<td>待操作的 Git 仓库</td>
+<td>本地克隆或 GitHub 仓库</td>
+<td>基于 worktree，必须以 Git 仓库为前提</td>
+</tr>
+</tbody></table>
+<p>成本结构：Orca 本身免费，但内部运行的代理订阅费 (Claude Pro/Max、ChatGPT Plus 等) 或 API 使用费需自行承担。</p>
+<hr>
+<h2>3. 安装</h2>
+<h3>macOS (Homebrew)</h3>
+<pre><code class="language-bash">brew install --cask stablyai/orca/orca
+</code></pre>
+<p>注意：<code>brew install --cask orca</code>（省略 tap 路径）无法工作。必须使用完整的 <code>stablyai/orca/orca</code> 路径。</p>
+<h3>Arch Linux (AUR)</h3>
+<pre><code class="language-bash">yay -S stably-orca-bin
+# 如需源码构建: yay -S stably-orca-git
+</code></pre>
+<h3>Windows / 其他 Linux</h3>
+<ul>
+<li>从 onorca.dev 或 GitHub Releases (github.com/stablyai/orca/releases) 下载安装包</li>
+</ul>
+<h3>移动伴侣应用</h3>
+<ul>
+<li>iOS：App Store / TestFlight</li>
+<li>Android：GitHub Releases 中的 APK</li>
+<li>与桌面应用配对后，可监控代理进度、接收完成通知、远程发送后续提示词。</li>
+</ul>
+<hr>
+<h2>4. 初始设置 (First Run)</h2>
+<ol>
+<li><strong>连接项目</strong>：启动 Orca 后添加本地 Git 仓库。配置 GitHub 集成后，可在应用内直接浏览 PR、Issue 和项目看板。</li>
+<li><strong>确认代理</strong>：Orca 会识别系统中已安装的 CLI 代理。创建新 worktree 时选择要挂载的代理。</li>
+<li><strong>通知设置</strong>：配置桌面/移动通知，在代理完成任务或等待输入时收到提醒。并行运行时此功能几乎必不可少。</li>
+<li><strong>（可选）账户切换/用量追踪</strong>：在仪表板查看 Claude/Codex 用量和 rate-limit 重置时间，可在多个账户间无需重新登录即可切换。</li>
+</ol>
+<hr>
+<h2>5. 核心工作流</h2>
+<h3>5.1 基本循环：Fan-out → 隔离 → 比较 → 合并</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>动作</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. Fan-out</td>
+<td>将同一提示词同时发给多个代理</td>
+<td>例如：将同一 bug 修复请求并行发给 Claude Code、Codex、OpenCode 三个代理</td>
+</tr>
+<tr>
+<td>2. 隔离执行</td>
+<td>各代理在独立 git worktree + 专用终端中工作</td>
+<td>worktree 共享同一仓库，但工作目录和分支完全分离。主分支不会被污染</td>
+</tr>
+<tr>
+<td>3. 监控</td>
+<td>通过实时状态仪表板查看所有代理状态</td>
+<td>工作中 / 等待输入 / 已完成一目了然，移动应用也可查看</td>
+</tr>
+<tr>
+<td>4. 比较</td>
+<td>并排比较各 worktree 的 Diff</td>
+<td>可在特定行添加注释，将修改反馈发回代理</td>
+</tr>
+<tr>
+<td>5. 合并</td>
+<td>选择最佳结果合并到主分支</td>
+<td>其余 worktree 丢弃</td>
+</tr>
+</tbody></table>
+<h3>5.2 实战场景</h3>
+<ul>
+<li><strong>并行修 bug</strong>：同一 bug 同时交给 3 个代理，只合并真正可用的修复</li>
+<li><strong>风险分散</strong>：通过多次尝试对冲单个模型写错方向的概率</li>
+<li><strong>GitHub/Linear 任务驱动</strong>：从 PR、Issue、Linear 工单直接打开 worktree，代理自动接收任务上下文</li>
+<li><strong>Design Mode（前端）</strong>：在内置 Chromium 浏览器中点击 UI 元素，该元素的 HTML、CSS 和裁剪截图会自动注入代理提示词</li>
+<li><strong>远程执行 (SSH worktree)</strong>：在高性能远程服务器上运行代理，同时在本地照常编辑文件、使用 git 和终端。支持自动重连和端口转发</li>
+<li><strong>Orca CLI</strong>：在终端用脚本控制 IDE 本身——添加项目、创建 worktree、发布进度检查点等</li>
+</ul>
+<hr>
+<h2>6. 优点</h2>
+<table>
+<thead>
+<tr>
+<th>优点</th>
+<th>详情</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>工具整合</td>
+<td>在单一 UI 中管理 30+ 种 CLI 代理 (Claude Code、Codex、Gemini、Copilot、Cline 等)。「终端能跑，Orca 就能跑」</td>
+</tr>
+<tr>
+<td>风险分散</td>
+<td>同一任务多次尝试后选最佳结果，降低对单一模型的依赖</td>
+</tr>
+<tr>
+<td>完全隔离</td>
+<td>基于 git worktree 物理分离各任务，消除分支切换和 stash 地狱</td>
+</tr>
+<tr>
+<td>代码审查环境</td>
+<td>Diff 可视化 + 行级注释 + 代理反馈循环 + 应用内提交</td>
+</tr>
+<tr>
+<td>远程/移动</td>
+<td>SSH 远程 worktree、移动监控与操控。离开座位代理舰队仍可继续工作</td>
+</tr>
+<tr>
+<td>订阅友好</td>
+<td>直接使用现有订阅，无厂商锁定，支持用量追踪和账户热切换</td>
+</tr>
+<tr>
+<td>开源</td>
+<td>MIT 许可证，每日发布，开发节奏快</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. 缺点与注意事项</h2>
+<table>
+<thead>
+<tr>
+<th>缺点</th>
+<th>详情</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>入门门槛</td>
+<td>需理解 git worktree 概念并预先配置代理 CLI。相比 Cursor「安装即编码」有初始学习曲线</td>
+</tr>
+<tr>
+<td>UI/UX 不成熟</td>
+<td>仍有粗糙之处，例如缩小分屏后终端输入框变窄</td>
+</tr>
+<tr>
+<td>偶发不稳定</td>
+<td>终端转义序列可能损坏，有时需要重启</td>
+</tr>
+<tr>
+<td>快速变化本身是风险</td>
+<td>早期产品功能面每日变动，团队标准工作流可能因更新而动摇</td>
+</tr>
+<tr>
+<td>额外成本</td>
+<td>Orca 免费，但代理订阅/API 费用另计。并行执行会成倍增加 token 消耗</td>
+</tr>
+<tr>
+<td>开销</td>
+<td>只用一个代理、一次一个任务的用户，可能比纯终端更有运营负担</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. 竞品对比</h2>
+<p>Orca 的定位不是「Cursor 替代品」，而是「代理之上的控制塔」。</p>
+<table>
+<thead>
+<tr>
+<th>产品</th>
+<th>类型</th>
+<th>与 Orca 的差异</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cursor / Windsurf</td>
+<td>AI 内置一体化 IDE</td>
+<td>安装即用，但缺少多代理并行执行与比较功能。Cursor CLI 反而可在 Orca 内运行</td>
+</tr>
+<tr>
+<td>Aider / Continue.dev</td>
+<td>开源单代理工具</td>
+<td>并行执行与可视化 Diff 比较不是核心</td>
+</tr>
+<tr>
+<td>Claude Squad</td>
+<td>终端 TUI 型多代理管理器</td>
+<td>适合 tmux 风格工作流。无桌面 GUI、移动或浏览器集成</td>
+</tr>
+<tr>
+<td>Agent Deck</td>
+<td>终端会话管理器</td>
+<td>侧重指挥、通知、MCP 套接字池。比 Orca 更轻量</td>
+</tr>
+<tr>
+<td>Paseo</td>
+<td>自托管跨设备控制</td>
+<td>优先 Web/移动/CLI 全方位访问而非桌面 IDE 界面时适用</td>
+</tr>
+<tr>
+<td>纯终端 (如单独使用 Claude Code)</td>
+<td>基本工作流</td>
+<td>一次只跑一个任务时，编排本身不必要</td>
+</tr>
+</tbody></table>
+<p>结论：Orca 最大的竞争对手仍是开发者的「现有习惯」。对认真运营多代理的高级用户很强，对单代理用户则过度配置。</p>
+<hr>
+<h2>9. 5 分钟快速入门清单</h2>
+<pre><code class="language-text">[ ] 用 git --version 确认 Git 2.5+
+[ ] 至少安装并登录一个代理 CLI (例如 claude)
+[ ] brew install --cask stablyai/orca/orca (macOS)
+[ ] 启动 Orca 并添加本地 Git 仓库
+[ ] 创建新 worktree → 选择代理 → 发送第一个提示词
+[ ] 向第二个代理 Fan-out 同一提示词
+[ ] 在 Diff 比较界面审查两个结果
+[ ] 合并胜者，丢弃败者 worktree
+[ ] (可选) 配对移动应用并启用通知
+</code></pre>
+<hr>
+<h2>10. 参考链接</h2>
+<ul>
+<li>仓库: <a href="https://github.com/stablyai/orca">https://github.com/stablyai/orca</a></li>
+<li>官网/文档: <a href="https://www.onorca.dev">https://www.onorca.dev</a></li>
+<li>发布: <a href="https://github.com/stablyai/orca/releases">https://github.com/stablyai/orca/releases</a></li>
+<li>社区: Discord, X(@orca_build)</li>
+</ul>
+<hr>
+<p><em>撰写日期: 2026-07-15。Orca 每日发布，建议以 changelog 为准重新确认具体功能。</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/orca/Orca%20getting%20started_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

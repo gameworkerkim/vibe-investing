@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Railway.com 入门指南 — VibeQuant</title>
+  <meta name="description" content="按使用量计费的PaaS平台Railway入门指南:2026年价格结构、GitHub/CLI/Docker/模板部署方式、数据库配置、生产环境检查清单、注意事项,以及与Heroku、Render、Fly.io、Vercel的对比。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start-cn/" />
+  <meta property="og:title" content="Railway.com 入门指南" />
+  <meta property="og:description" content="按使用量计费的PaaS平台Railway入门指南:2026年价格结构、GitHub/CLI/Docker/模板部署方式、数据库配置、生产环境检查清单、注意事项,以及与Heroku、Render、Fly.io、Vercel的对比。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/paas-railway-railway-getting-start/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Railway.com 入门指南","description":"按使用量计费的PaaS平台Railway入门指南:2026年价格结构、GitHub/CLI/Docker/模板部署方式、数据库配置、生产环境检查清单、注意事项,以及与Heroku、Render、Fly.io、Vercel的对比。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/paas-railway-railway-getting-start-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/PaaS_Railway/Railway_Getting_Start_CN.md","image":"https://vibequant.cc/og-default.png","inLanguage":"zh-Hans","keywords":"Railway, Railway.com, PaaS, Railway 价格, Railway CLI, Heroku 替代方案"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 클라우드 · Free tier</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · Free tier</p>
+        <h1>Railway.com 入门指南</h1>
+        <p class="article-dates">주제 Railway · Railway.com · PaaS · Railway 价格 · Railway CLI · Heroku 替代方案</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/paas-railway-railway-getting-start/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/paas-railway-railway-getting-start-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/paas-railway-railway-getting-start-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/paas-railway-railway-getting-start-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">按使用量计费的PaaS平台Railway入门指南:2026年价格结构、GitHub/CLI/Docker/模板部署方式、数据库配置、生产环境检查清单、注意事项,以及与Heroku、Render、Fly.io、Vercel的对比。</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. 什么是Railway?</h2>
+<p>Railway是一个抽象掉基础设施管理复杂性、可快速部署应用的PaaS(平台即服务)。只需连接GitHub仓库、Docker镜像或本地代码,构建、部署、托管乃至可观测性(observability)全部由平台处理。
+它适合独立开发者和业余项目使用,但当流量激增时,务必准备好可迁移的方案。由于按秒计费,一旦流量集中,实际负担可能超出部署与维护便利性带来的收益。</p>
+<ul>
+<li>官方网站:<a href="https://railway.com">https://railway.com</a></li>
+<li>官方文档:<a href="https://docs.railway.com">https://docs.railway.com</a></li>
+</ul>
+<h2>2. 价格结构(截至2026年,重要)</h2>
+<p>过去那种&quot;无限免费层&quot;已不复存在。目前的结构如下。</p>
+<table>
+<thead>
+<tr>
+<th>方案</th>
+<th>费用</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Trial</td>
+<td>一次性$5额度</td>
+<td>注册时自动发放,有效期30天。最多1GB RAM、共享vCPU,每个项目最多5个服务。若GitHub账号未通过验证,出站网络将受限(Limited Trial)</td>
+</tr>
+<tr>
+<td>Free</td>
+<td>$0/月</td>
+<td>Trial结束后转入。每月$1额度(不可结转),1个vCPU / 0.5GB RAM,1个项目,每个项目最多3个服务。若同时运行数据库,额度可能在数天内耗尽</td>
+</tr>
+<tr>
+<td>Hobby</td>
+<td>$5/月</td>
+<td>实际的起始方案。$5的订阅费会计入使用量费用(若使用量为$3,仅收$5;若为$8,则收取$8)</td>
+</tr>
+<tr>
+<td>Pro</td>
+<td>$20/月(每人)</td>
+<td>面向团队/生产环境。订阅费同样作为使用量额度使用</td>
+</tr>
+</tbody></table>
+<p>核心要点</p>
+<ul>
+<li>计费按秒、基于使用量(usage-based),流量激增时费用也会随之上升。</li>
+<li>生产环境工作负载至少需要Hobby方案,团队使用则Pro更现实。</li>
+<li>Trial额度耗尽或超过30天后服务将被中止,存储卷数据会在保留一段时间后删除,因此需要提前制定备份计划。</li>
+</ul>
+<p>参考</p>
+<ul>
+<li>价格方案:<a href="https://docs.railway.com/pricing/plans">https://docs.railway.com/pricing/plans</a></li>
+<li>免费试用政策:<a href="https://docs.railway.com/pricing/free-trial">https://docs.railway.com/pricing/free-trial</a></li>
+<li>价格概览:<a href="https://railway.com/pricing">https://railway.com/pricing</a></li>
+</ul>
+<h2>3. 准备工作</h2>
+<ol>
+<li>创建Railway账号:在 <a href="https://railway.com">https://railway.com</a> 点击Login完成注册</li>
+<li>建议关联GitHub账号:通过账号验证(verification)后才能获得Full Trial(无网络限制)。未验证时,出站网络和端口将受限。</li>
+<li>(若使用CLI)需要Node.js 18+或Homebrew,以及shell环境</li>
+</ol>
+<h2>4. 部署方式</h2>
+<h3>4.1 从GitHub仓库部署(推荐)</h3>
+<ol>
+<li>访问 <a href="https://railway.com/new">https://railway.com/new</a> 并点击New Project</li>
+<li>选择&quot;Deploy from GitHub repo&quot;(首次需要关联GitHub账号)</li>
+<li>搜索并选择要部署的仓库</li>
+<li>点击Deploy Now → Railway会自动识别技术栈(Next.js、Django、Rails、Go等)并进行构建与部署</li>
+<li>此后每次向该分支push都会自动重新部署</li>
+</ol>
+<p>参考:<a href="https://docs.railway.com/quick-start">https://docs.railway.com/quick-start</a></p>
+<h3>4.2 通过CLI部署</h3>
+<pre><code class="language-bash"># 1. 安装Railway CLI(任选其一)
+npm install -g @railway/cli
+# 或
+brew install railway
+# 或
+bash &lt;(curl -fsSL cli.new)
+
+# 2. 登录
+railway login
+
+# 3. 初始化项目(新项目时)
+railway init
+
+# 4. 在项目目录中部署
+railway up
+</code></pre>
+<p>参考:<a href="https://docs.railway.com/guides/cli">https://docs.railway.com/guides/cli</a></p>
+<h3>4.3 部署Docker镜像</h3>
+<p>可以直接指定Docker Hub或GitHub Container Registry(ghcr.io)中的镜像进行部署。若在仓库根目录放置自定义Dockerfile,Railway会优先使用它。若考虑未来可能迁移到其他平台,从一开始就采用基于Docker的部署方式,在可移植性方面更有利。</p>
+<p>参考:<a href="https://docs.railway.com/guides/services">https://docs.railway.com/guides/services</a></p>
+<h3>4.4 从模板部署</h3>
+<p>在模板市场中可以一键部署预配置好的技术栈(例如Next.js、WordPress、n8n、Strapi等)。若是第一次使用,建议先用官方Next.js模板练习。</p>
+<p>参考:<a href="https://railway.com/templates">https://railway.com/templates</a></p>
+<h2>5. 添加数据库</h2>
+<p>在项目画布中选择New → Database,即可添加PostgreSQL、MySQL、Redis、MongoDB。</p>
+<ul>
+<li>服务间通信如使用私有网络(内部域名),则不会产生出站(egress)费用。</li>
+<li>连接信息可通过环境变量(例如<code>DATABASE_URL</code>)自动注入。</li>
+<li>平台提供自动备份,但重要数据应额外配合独立的外部备份策略(例如定期执行<code>pg_dump</code>)。</li>
+</ul>
+<p>参考:<a href="https://docs.railway.com/guides/databases">https://docs.railway.com/guides/databases</a></p>
+<h2>6. 生产环境检查清单</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>设置位置/方法</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>健康检查</td>
+<td>服务Settings → 指定Healthcheck Path(实现零停机部署的前提条件)</td>
+</tr>
+<tr>
+<td>自定义域名</td>
+<td>服务Settings → Domains(自动签发TLS证书)</td>
+</tr>
+<tr>
+<td>环境隔离</td>
+<td>使用Environments功能区分production / staging</td>
+</tr>
+<tr>
+<td>水平扩展</td>
+<td>服务Settings → Replicas(可实现多区域部署)</td>
+</tr>
+<tr>
+<td>回滚</td>
+<td>在Deployments标签页中即时恢复到先前的部署</td>
+</tr>
+<tr>
+<td>费用提醒</td>
+<td>必须在Workspace Settings → Usage中设置Usage Limit / 提醒</td>
+</tr>
+<tr>
+<td>日志/指标</td>
+<td>在Observability标签页中统一提供</td>
+</tr>
+</tbody></table>
+<p>参考:<a href="https://docs.railway.com/guides/healthchecks">https://docs.railway.com/guides/healthchecks</a>, <a href="https://docs.railway.com/reference/scaling">https://docs.railway.com/reference/scaling</a></p>
+<h2>7. 注意事项</h2>
+<ol>
+<li><strong>必须监控成本</strong>:由于按使用量计费,月度费用难以预测。建议设置Usage Limit(硬性上限)。</li>
+<li><strong>Free/Trial方案的局限</strong>:每月$1额度勉强够运行一个常驻服务,几乎无法同时运行数据库,不适合生产环境。</li>
+<li><strong>区域限制</strong>:与AWS/GCP等大型云服务商相比,支持的区域较为有限。</li>
+<li><strong>IaC支持不足</strong>:不支持Terraform级别的完整基础设施即代码(Infrastructure-as-Code)。对于必须严格以代码管理基础设施的团队存在局限。</li>
+<li><strong>可移植性</strong>:为避免平台锁定,建议从一开始就采用基于Dockerfile的部署方式。</li>
+<li><strong>性能问题报告</strong>:部分工作负载(如磁盘I/O密集型任务)有性能下降的报告,建议在采用前自行进行基准测试。(属于个别报告,并非经过普遍验证的资料)</li>
+</ol>
+<h2>8. 与竞品PaaS的定位对比</h2>
+<ul>
+<li><strong>对比Heroku</strong>:Heroku于2026年2月6日宣布转入sustaining engineering(维护模式)。新功能开发已停止,也不再接受新的Enterprise合同(现有客户仍可继续使用及续约)。Railway提供相同的部署模式,同时原生支持自动扩展、按使用量计费、多区域部署与持久化存储,被视为学习成本最低的迁移目标之一。</li>
+<li><strong>对比Render</strong>:两者都提供基于Git的部署和托管数据库。Render采用固定实例计费,成本更易预测;Railway的优势在于按使用量计费和原生多区域支持。</li>
+<li><strong>对比Fly.io</strong>:若想快速轻量地起步,选Railway;若需要基于Docker的全球边缘工作负载,选Fly.io。</li>
+<li><strong>对比Vercel</strong>:Vercel针对前端/无服务器函数进行了优化(存在执行时间限制),而Railway以长时间运行的服务器模型,在单个项目中管理后端、数据库、worker、定时任务等完整技术栈。</li>
+</ul>
+<p>参考:<a href="https://docs.railway.com/maturity/compare-to-heroku">https://docs.railway.com/maturity/compare-to-heroku</a></p>
+<h2>9. 总结</h2>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>推荐对象</td>
+<td>副业项目、初创公司、快速原型开发、考虑从Heroku迁移的团队</td>
+</tr>
+<tr>
+<td>定价政策</td>
+<td>按使用量计费(按秒计费,订阅费计入使用量额度)</td>
+</tr>
+<tr>
+<td>起始成本</td>
+<td>Trial $5额度(30天)→ Free 每月$1额度 → 实际起点Hobby每月$5</td>
+</tr>
+<tr>
+<td>主要优势</td>
+<td>开发者体验、自动扩展、一键数据库、自研硬件(Gen 2 Metal)、零停机部署</td>
+</tr>
+<tr>
+<td>主要劣势</td>
+<td>成本难以预测、区域受限、不支持IaC、几乎没有真正的免费层</td>
+</tr>
+</tbody></table>
+<h2>参考链接(Reference)</h2>
+<ul>
+<li>Railway官方网站:<a href="https://railway.com">https://railway.com</a></li>
+<li>官方文档:<a href="https://docs.railway.com">https://docs.railway.com</a></li>
+<li>Quick Start:<a href="https://docs.railway.com/quick-start">https://docs.railway.com/quick-start</a></li>
+<li>价格方案:<a href="https://docs.railway.com/pricing/plans">https://docs.railway.com/pricing/plans</a></li>
+<li>免费试用政策:<a href="https://docs.railway.com/pricing/free-trial">https://docs.railway.com/pricing/free-trial</a></li>
+<li>CLI指南:<a href="https://docs.railway.com/guides/cli">https://docs.railway.com/guides/cli</a></li>
+<li>数据库指南:<a href="https://docs.railway.com/guides/databases">https://docs.railway.com/guides/databases</a></li>
+<li>模板市场:<a href="https://railway.com/templates">https://railway.com/templates</a></li>
+<li>Heroku对比(官方):<a href="https://docs.railway.com/maturity/compare-to-heroku">https://docs.railway.com/maturity/compare-to-heroku</a></li>
+<li>Heroku sustaining mode公告相关分析:<a href="https://encore.dev/articles/end-of-heroku">https://encore.dev/articles/end-of-heroku</a></li>
+<li>Railway免费层现状分析(2026年):<a href="https://kuberns.com/blogs/railway-free-tier/">https://kuberns.com/blogs/railway-free-tier/</a></li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/PaaS_Railway/Railway_Getting_Start_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

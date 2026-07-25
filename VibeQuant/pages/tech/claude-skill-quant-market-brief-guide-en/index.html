@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>quant-market-brief Installation and Usage Guide — VibeQuant</title>
+  <meta name="description" content="A Claude Skill that summarizes today's stock market from a quant perspective (factors, volatility, flows, regime). Full installation guide, file contents, and customization points." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/claude-skill-quant-market-brief-guide-en/" />
+  <meta property="og:title" content="quant-market-brief Installation and Usage Guide" />
+  <meta property="og:description" content="A Claude Skill that summarizes today's stock market from a quant perspective (factors, volatility, flows, regime). Full installation guide, file contents, and customization points." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/claude-skill-quant-market-brief-guide-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/claude-skill-quant-market-brief-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/claude-skill-quant-market-brief-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/claude-skill-quant-market-brief-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/claude-skill-quant-market-brief-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/claude-skill-quant-market-brief-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"quant-market-brief Installation and Usage Guide","description":"A Claude Skill that summarizes today's stock market from a quant perspective (factors, volatility, flows, regime). Full installation guide, file contents, and customization points.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/claude-skill-quant-market-brief-guide-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/claude_skill/quant-market-brief_guide_EN.md","image":"https://vibequant.cc/og-default.png","inLanguage":"en","keywords":"Claude Skill, quant market brief, market regime, factor checklist, Claude Code skill, VIX regime"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>quant-market-brief Installation and Usage Guide</h1>
+        <p class="article-dates">주제 Claude Skill · quant market brief · market regime · factor checklist · Claude Code skill · VIX regime</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/claude-skill-quant-market-brief-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/claude-skill-quant-market-brief-guide-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/claude-skill-quant-market-brief-guide-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/claude-skill-quant-market-brief-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">A Claude Skill that summarizes today's stock market from a quant perspective (factors, volatility, flows, regime). Full installation guide, file contents, and customization points.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>A Claude Skill that summarizes today&#39;s stock market from a quant perspective (factors, volatility, flows, regime)
+For the concept and design rationale, see Section 5 of <a href="./Claude_skill_guide.md">Claude_skill_guide.md</a></p>
+</blockquote>
+<hr>
+<h2>1. What This Skill Does</h2>
+<p>A single phrase, &quot;summarize today&#39;s market,&quot; produces a <strong>structured regime briefing</strong> — not a list of news headlines.</p>
+<ul>
+<li><strong>Trigger phrases</strong>: &quot;market conditions,&quot; &quot;today&#39;s market,&quot; &quot;market briefing,&quot; &quot;market summary,&quot; &quot;how&#39;s the KOSPI/NASDAQ today,&quot; etc.</li>
+<li><strong>Output structure</strong> (fixed):<ol>
+<li>One-line regime call — <code>Regime: Risk-On|Risk-Off|Rotation|Chop (Confidence: High|Medium|Low) — rationale</code></li>
+<li>Numeric table (index/volatility/rates/FX/flows, with source and as-of time noted)</li>
+<li>Factor scorecard (4 axes: momentum, growth/value, large/small cap, quality)</li>
+<li>&quot;What changed since yesterday&quot; — describe only the delta</li>
+<li>Falsification conditions — what would be observed tomorrow if today&#39;s call is wrong</li>
+</ol>
+</li>
+<li><strong>Design principles</strong>: mandatory web search (never answer from memory), no forecasting (conditional scenarios only), no trading directives</li>
+</ul>
+<p>The regime call line uses a fixed format so other skills (e.g., <code>portfolio-daily-review</code>) can parse and reuse it.</p>
+<hr>
+<h2>2. Installation</h2>
+<p>Choose one of three methods.</p>
+<h3>Method A: Claude.ai (Web/App) — Recommended</h3>
+<ol>
+<li>Zip the entire skill folder from this repo, or prepare the distributed <code>.skill</code> file.<pre><code class="language-bash"># If creating directly from the folder (a zip = the same format as .skill)
+zip -r quant-market-brief.skill quant-market-brief/
+</code></pre>
+</li>
+<li>Upload it under Claude.ai → <strong>Settings → Capabilities → Skills</strong>. (Paid plan required)</li>
+<li>After uploading, simply say a trigger phrase in a new conversation and it activates automatically.</li>
+</ol>
+<h3>Method B: Claude Code</h3>
+<p>Copy the whole folder into your personal skills directory:</p>
+<pre><code class="language-bash">cp -r quant-market-brief/ ~/.claude/skills/quant-market-brief/
+</code></pre>
+<p>After restarting Claude Code, just mention it in natural language.</p>
+<h3>Method C: Claude API</h3>
+<p>Follow the <a href="https://docs.claude.com/en/api/skills-guide#creating-a-skill">Skills API Quickstart</a>
+to upload the <code>.skill</code> package, and it will work the same way via API calls.</p>
+<blockquote>
+<p><strong>Verification tip</strong>: after installing, ask &quot;what skills are currently available?&quot; to confirm it loaded.</p>
+</blockquote>
+<hr>
+<h2>3. Folder Structure</h2>
+<pre><code>quant-market-brief/
+├── SKILL.md                      # The workflow body (4 steps)
+└── references/
+    ├── factor-checklist.md       # Judgment criteria for the 4 factor axes + VIX regime table
+    └── output-template.md        # The fixed output template
+</code></pre>
+<hr>
+<h2>4. Full File Contents</h2>
+<p>Copy the content below as-is into the same folder structure to complete the skill.</p>
+<h3>4.1 SKILL.md</h3>
+<pre><code class="language-markdown">---
+name: quant-market-brief
+description: &gt;
+  A skill that summarizes today&#39;s stock market from a quant perspective. Always
+  use this skill when the user mentions &quot;market conditions,&quot; &quot;today&#39;s market,&quot;
+  &quot;market briefing,&quot; &quot;market summary,&quot; &quot;how&#39;s the KOSPI today,&quot; &quot;how was the
+  NASDAQ,&quot; &quot;sum up the market,&quot; or similar — even without the word &quot;quant&quot;
+  explicitly present. Rather than a plain list of news, it generates a regime
+  determination briefing structured around factors, volatility, and flows. Also
+  use for daily morning/evening market-check requests.
+---
+
+# Quant Market Brief
+
+## Purpose
+
+Read the market&#39;s structure (regime), not individual news items. Answer not
+&quot;what happened&quot; but &quot;what regime is the market in from a factor/volatility/flow
+perspective, and what changed from yesterday.&quot;
+
+Principle: <strong>observed facts → factor interpretation → conditional scenarios.</strong>
+No forecasting.
+
+## Workflow
+
+### Step 1: Data Collection (Web Search Required)
+
+The following must be confirmed via web search. Do not answer with a memory
+from training data. Note the source and as-of time for every figure.
+
+- <strong>Major indices</strong>: KOSPI, KOSDAQ, S&amp;P 500, NASDAQ, Philadelphia Semiconductor
+  Index (SOX) — close/change
+- <strong>Volatility</strong>: VIX level and its change vs. the prior day, VKOSPI
+- <strong>Rates/FX</strong>: US 10-year Treasury yield, USD/KRW, the Dollar Index (DXY)
+- <strong>Flows</strong>: KRX foreign/institutional net buying, major sector ETF fund flows
+- <strong>Crypto (optional)</strong>: BTC price, the Kimchi premium — use only as a
+  risk-appetite proxy, not directly as a directional signal
+
+If the user specifies a particular market (Korea only, US only), focus on that
+market, but always include global risk indicators (VIX, rates, dollar).
+
+### Step 2: Apply the Factor Lens
+
+Read `references/factor-checklist.md` and determine these 4 axes:
+
+1. <strong>Momentum vs. reversal</strong>: are recent leaders continuing, or turning?
+2. <strong>Growth vs. value</strong>: alignment between rate direction and style rotation
+3. <strong>Large-cap vs. small-cap</strong>: is risk appetite spreading down to small caps?
+4. <strong>Quality/low-vol</strong>: is money moving into defensive factors?
+
+Judge each axis as strong/neutral/weak with a one-line rationale.
+
+### Step 3: Regime Determination
+
+Explicitly classify into one of the four below, with a one-line rationale:
+
+- <strong>Risk-On</strong>: broad risk-asset rally, falling volatility, small caps/crypto rallying together
+- <strong>Risk-Off</strong>: preference for defensive assets, volatility spiking, safe-haven currencies strengthening
+- <strong>Rotation</strong>: indices stagnant but clear capital movement between sectors/styles
+- <strong>Chop</strong>: no clear direction, low trading volume, conflicting factor signals
+
+Mark confidence as High/Medium/Low. If the data is mixed, just write &quot;mixed.&quot;
+Do not force a single narrative.
+
+### Step 4: Output
+
+Follow the template in `references/output-template.md`. Required elements:
+
+1. <strong>One-line regime call</strong> (at the top, including confidence)
+2. <strong>Numeric table</strong> (index/volatility/rates/FX/flows)
+3. <strong>Factor scorecard</strong> (4 axes, each with a call + one-line rationale)
+4. <strong>What changed since yesterday</strong> — focus on the delta. Do not repeat what&#39;s unchanged from yesterday
+5. <strong>Falsification conditions</strong> — what would be observed tomorrow if today&#39;s call is wrong
+
+## Guidelines
+
+- Do not forecast. Describe only in conditional scenarios (&quot;if X holds, Y regime persists&quot;).
+- Note the source and as-of time for every figure.
+- Do not use investment-recommendation language (&quot;buy/sell/increase your weight&quot;). Provide only decision-support material.
+- Cite news headlines only where needed for factor interpretation. Do not simply list headlines.
+- If the request comes before market close, state that &quot;this is intraday data and may change after close.&quot;
+- Because other skills (e.g., `portfolio-daily-review`) may reuse this briefing&#39;s regime call, always keep the regime line in the exact same format:
+  `Regime: {Risk-On|Risk-Off|Rotation|Chop} (Confidence: {High|Medium|Low}) — {one-line rationale}`
+</code></pre>
+<h3>4.2 references/factor-checklist.md</h3>
+<pre><code class="language-markdown"># Factor Checklist
+
+Judge each factor as <strong>strong / neutral / weak</strong> and leave a one-line rationale.
+If signals conflict, mark &quot;mixed&quot; and note which indicators are in conflict.
+
+## 1. Momentum vs. Reversal
+
+- <strong>Indicators to check</strong>: same-day relative return of the past month&#39;s
+  top-performing sector, trading volume of leading stocks
+- <strong>Momentum strong</strong>: leading sector&#39;s relative return &gt; market &amp;&amp; trading
+  volume sustained or higher
+- <strong>Momentum-breakdown signal</strong>: sharp drop in leaders + volume spike
+  (distribution/selling pattern)
+- <strong>Reversal signal</strong>: broad rebound in recently oversold names + declining short interest
+
+## 2. Growth vs. Value
+
+- <strong>Indicators to check</strong>: direction of the US 10-year yield, growth index
+  (NASDAQ) vs. value relative performance
+- <strong>Consistency check</strong>: if an &quot;inconsistent&quot; combination appears — e.g., rates
+  rising while growth stocks stay strong — flag it separately; inconsistency
+  can be an early signal of a regime shift
+- <strong>Caution</strong>: do not conclude a style rotation from a single day&#39;s data.
+  Mention the cumulative direction over the last 3-5 trading days as well
+
+## 3. Large-Cap vs. Small-Cap
+
+- <strong>Indicators to check</strong>: KOSPI vs. KOSDAQ relative performance, Russell 2000 vs. S&amp;P 500
+- <strong>Risk appetite spreading</strong>: small-cap index outperforms large caps + trading volume rising
+- <strong>Risk appetite narrowing</strong>: increased concentration in large caps (index gains
+  concentrated in a handful of names) — flag deteriorating breadth as a bearish
+  signal even in a rising market
+
+## 4. Quality / Low-Vol (Defensive Factors)
+
+- <strong>Indicators to check</strong>: relative performance of consumer staples/utilities/healthcare, dividend ETF fund inflows
+- <strong>Defensive-rotation signal</strong>: if defensive sectors outperform while the index is flat-to-up, flag possible pre-emptive defensive positioning by smart money
+
+## Volatility Regime (Background for All Factor Judgments)
+
+| VIX level | Regime | Implication |
+|---|---|---|
+| &lt; 15 | Low volatility | Favorable for carry/momentum strategies, but vulnerable to sharp reversals |
+| 15-25 | Neutral | Interpret factor signals at face value |
+| &gt; 25 | High volatility | Low-vol/quality favored, consider reducing positions |
+
+<strong>Caution</strong>: the VIX&#39;s *rate of change* is a more valid short-term signal than
+its *level*. A jump of +20% or more versus the prior day should be flagged
+separately as a warning regardless of the level.
+
+## Flow Interpretation Principles
+
+- Read foreign net buying alongside the USD/KRW direction (distinguish FX-hedged flows)
+- Distinguish program vs. non-program institutional net buying where possible
+- Do not call a trend from a single day&#39;s flow. Note it alongside the 5-day cumulative figure
+</code></pre>
+<h3>4.3 references/output-template.md</h3>
+<pre><code class="language-markdown"># Briefing Output Template
+
+Follow this structure and order exactly. Do not omit sections or reorder them.
+
+---
+
+## Quant Market Briefing — {YYYY-MM-DD}
+
+<strong>Regime: {Risk-On|Risk-Off|Rotation|Chop} (Confidence: {High|Medium|Low}) — {one-line rationale}</strong>
+
+### Market Indicators
+
+| Category | Indicator | Close/Level | Change | Notes |
+|---|---|---|---|---|
+| Index | KOSPI | | | |
+| Index | KOSDAQ | | | |
+| Index | S&amp;P 500 | | | |
+| Index | NASDAQ | | | |
+| Index | SOX | | | |
+| Volatility | VIX | | % vs. prior day | flag with a caution mark if change is ±20% |
+| Rates | US 10Y | | bp | |
+| FX | USD/KRW | | | |
+| FX | DXY | | | |
+| Flows | Foreign (KRX) | net buy, ₩bn | | note 5-day cumulative |
+| Flows | Institutional (KRX) | net buy, ₩bn | | note 5-day cumulative |
+
+*As of: {time}, Source: {source}*
+
+### Factor Scorecard
+
+| Factor axis | Call | Rationale (1 line) |
+|---|---|---|
+| Momentum vs. reversal | strong/neutral/weak/mixed | |
+| Growth vs. value | | |
+| Large-cap vs. small-cap | | |
+| Quality/low-vol | | |
+
+### What Changed Since Yesterday
+
+- (Describe only the delta. Do not repeat what&#39;s unchanged from yesterday. Max 3 items)
+
+### Falsification Conditions
+
+- What would be observed tomorrow if today&#39;s regime call is wrong: {specific indicator and threshold}
+
+---
+
+*This briefing is decision-support material, not investment advice. Data is as of the lookup time.*
+</code></pre>
+<hr>
+<h2>5. Usage Example</h2>
+<pre><code>&gt; How was the market today?
+
+[quant-market-brief triggered]
+1. Web search: KOSPI/NASDAQ/VIX/10Y/FX/KRX flows
+2. Determine the 4 axes via factor-checklist.md
+3. Classify the regime + confidence
+4. Output the briefing in the format from output-template.md
+</code></pre>
+<p>If you want just one market: &quot;Just summarize the US market today&quot; — global risk indicators (VIX, rates, dollar) are always included regardless.</p>
+<hr>
+<h2>6. Customization Points</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Location</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Add/remove tracked indices</td>
+<td>SKILL.md Step 1</td>
+<td>Edit the index list (e.g., add Nikkei, Hang Seng)</td>
+</tr>
+<tr>
+<td>VIX regime thresholds</td>
+<td>factor-checklist.md</td>
+<td>Adjust the 15/25 boundary values</td>
+</tr>
+<tr>
+<td>Add a factor axis</td>
+<td>factor-checklist.md + SKILL.md Step 2</td>
+<td>e.g., add dividend or size factors</td>
+</tr>
+<tr>
+<td>Output language/format</td>
+<td>output-template.md</td>
+<td>Edit the template directly</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. Cautions</h2>
+<ul>
+<li>The output of this skill is <strong>decision-support material and not investment advice.</strong></li>
+<li>Data is as of the web-search time and may change intraday after market close.</li>
+<li>This skill is for demo/educational purposes; test it thoroughly in your own environment before real use.</li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/claude_skill/quant-market-brief_guide_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

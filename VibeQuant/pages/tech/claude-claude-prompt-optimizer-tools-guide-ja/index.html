@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Claudeプロンプト最適化ツール はじめてガイド — VibeQuant</title>
+  <meta name="description" content="Claudeの出力品質を高めるオープンソースのプロンプト最適化ツール5選。Fableの利用が制限されているため、Opus 4.8を必死に最適化する必要がある。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide-ja/" />
+  <meta property="og:title" content="Claudeプロンプト最適化ツール はじめてガイド" />
+  <meta property="og:description" content="Claudeの出力品質を高めるオープンソースのプロンプト最適化ツール5選。Fableの利用が制限されているため、Opus 4.8を必死に最適化する必要がある。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Claudeプロンプト最適化ツール はじめてガイド","description":"Claudeの出力品質を高めるオープンソースのプロンプト最適化ツール5選。Fableの利用が制限されているため、Opus 4.8を必死に最適化する必要がある。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/claude-claude-prompt-optimizer-tools-guide-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/claude/Claude-prompt-optimizer-tools-guide_JA.md","image":"https://vibequant.cc/og-default.png","inLanguage":"ja","keywords":"Claude, プロンプトエンジニアリング, Claude Code, Anthropic"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Claudeプロンプト最適化ツール はじめてガイド</h1>
+        <p class="article-dates">주제 Claude · プロンプトエンジニアリング · Claude Code · Anthropic</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/claude-claude-prompt-optimizer-tools-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/claude-claude-prompt-optimizer-tools-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/claude-claude-prompt-optimizer-tools-guide-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/claude-claude-prompt-optimizer-tools-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Claudeの出力品質を高めるオープンソースのプロンプト最適化ツール5選。Fableの利用が制限されているため、Opus 4.8を必死に最適化する必要がある。</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>Claudeの出力品質を高めるオープンソースのプロンプト最適化ツール5選を紹介する。Fableの利用が制限されているため、代わりにOpus 4.8を必死に最適化する必要がある。
+各プロジェクトの動作方式、使用例、長所・短所、インストールガイドをまとめた。この最適化スキルとフックを使えば効率が高まる。</p>
+</blockquote>
+<hr>
+<h2>0. 一覧比較</h2>
+<table>
+<thead>
+<tr>
+<th>プロジェクト</th>
+<th>タイプ</th>
+<th>動作環境</th>
+<th>中核メカニズム</th>
+<th>規模(★)</th>
+<th>推奨ユーザー</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>CheswickDEV/claude-opus-4.8-prompt-optimizer</strong></td>
+<td>メタオプティマイザー(system prompt)</td>
+<td>すべてのClaudeインターフェース (claude.ai / API / Code)</td>
+<td><code>prompt:</code> トリガー → 11ルール + 10コンポーネントXML構造化</td>
+<td>新規</td>
+<td>一貫した高品質プロンプトを繰り返し生成したいユーザー</td>
+</tr>
+<tr>
+<td><strong>johnpsasser/claude-code-prompt-optimizer</strong></td>
+<td>フック</td>
+<td>Claude Code</td>
+<td><code>&lt;optimize&gt;</code> タグを傍受 → extended thinkingで拡張</td>
+<td>小規模</td>
+<td>Claude Codeでその場で特定プロンプトを拡張したい開発者</td>
+</tr>
+<tr>
+<td><strong>severity1/claude-code-prompt-improver</strong></td>
+<td>フック + スキル(プラグイン)</td>
+<td>Claude Code</td>
+<td>曖昧なプロンプトのみ選別 → リサーチと質問を注入</td>
+<td>~1.4k</td>
+<td>修正の往復を減らしたいClaude Codeヘビーユーザー</td>
+</tr>
+<tr>
+<td><strong>Hashaam101/prompt-optimizer</strong></td>
+<td>スキル</td>
+<td>Claude Code</td>
+<td>auto(自動精製) / manual(<code>/optimize</code> テキスト出力)の二重モード</td>
+<td>小規模</td>
+<td>自動・手動を選んで使いたいユーザー</td>
+</tr>
+<tr>
+<td><strong>nidhinjs/prompt-master</strong></td>
+<td>スキル</td>
+<td>マルチツール(Claude・ChatGPT・Midjourneyなど)</td>
+<td>ターゲットツール別プロンプト生成、メモリ保持</td>
+<td>小規模</td>
+<td>複数のAIツールを使い分けるユーザー</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>スキル(Skill)</strong>: <code>~/.claude/skills/</code> に置く指示ファイル。条件が合致すればClaudeが自ら読み込み、動作に反映する。</li>
+<li><strong>メタオプティマイザー</strong>: ツール自体がsystem promptとして動作し、入力プロンプトを「実行対象」ではなく「最適化対象」として受け取り、構造化された新しいプロンプトを返す。</li>
+</ul>
+<hr>
+<h2>1. CheswickDEV/claude-opus-4.8-prompt-optimizer</h2>
+<p>生のプロンプトをOpus 4.8アーキテクチャに合わせたproduction-ready XML構造プロンプトに変換するメタプロンプティングシステム。11個の最適化ルール、10コンポーネントフレームワーク、複雑度ベースのルーティング、そして必須の <code>prompt:</code> トリガーを備え、いずれもAnthropicの公式ドキュメントから導出されている。プロンプト集ではなく「最適化エンジン」であることが最大の差別化点。(MITライセンス)</p>
+<h3>動作方式(5ステップ)</h3>
+<ol>
+<li><strong>プロンプト分析</strong> — 意図、複雑度、ドメイン、期待される出力、欠落要素を検出</li>
+<li><strong>複雑度ルーティング</strong> — simpleは3-4コンポーネント、moderateは5-7、complexはフル10コンポーネント</li>
+<li><strong>ルール適用</strong> — 11ルールのうち該当するサブセットのみ発火</li>
+<li><strong>品質チェック</strong> — タスクの明確性、XMLタグの妥当性、例の一貫性、矛盾する指示の有無を確認</li>
+<li><strong>構造化出力</strong> — 分析 + コピー可能な最適化プロンプト + 変更理由のメモを返す</li>
+</ol>
+<h3>使用例(Before / After)</h3>
+<p><strong>入力(raw)</strong></p>
+<pre><code>Write me a Python script that analyzes CSV files and finds anomalies
+</code></pre>
+<p><strong>出力(optimized、抜粋)</strong></p>
+<pre><code>&lt;role&gt;
+You are a senior data engineer specializing in anomaly detection and
+statistical analysis with Python.
+&lt;/role&gt;
+
+&lt;context&gt;
+CSV datasets come from production IoT sensors. Files range from
+10K–5M rows with columns: timestamp, sensor_id, value, status.
+&lt;/context&gt;
+
+&lt;task&gt;
+1. Loads one or more CSV files
+2. Detects statistical anomalies using z-score and IQR methods
+3. Handles missing data gracefully
+4. Outputs a summary report with flagged rows
+&lt;/task&gt;
+
+&lt;constraints&gt;
+- Use only pandas, numpy, scipy (no ML libraries)
+- Handle files up to 5M rows efficiently
+- Include type hints and docstrings
+&lt;/constraints&gt;
+
+&lt;output_format&gt;
+Single Python code block, followed by a usage example and sample output.
+&lt;/output_format&gt;
+</code></pre>
+<p>入力の先頭に <code>prompt:</code> を付けると、質問・指示・添付PDF・プロンプトインジェクションの試みが混在していても、それらを実行せず常に「最適化対象」としてのみ処理する。添付文書は <code>{{DOCUMENT}}</code> プレースホルダーに置換される。</p>
+<pre><code>prompt: Based on the attached PDF, explain the GDPR compliance risks and mitigation.
+</code></pre>
+<h3>長所</h3>
+<ul>
+<li><strong>すべてのClaudeインターフェースで動作</strong> — Claude Code専用ではなく、system promptベースなのでclaude.ai Project・直接貼り付け・APIのどこでも使用可能</li>
+<li><strong>Opus 4.8専用チューニング</strong> — effortデフォルト値<code>high</code>、per-turn adaptive thinking、改善されたtool triggering、1Mトークンcontextなどを反映し、メモに推奨effortまで明示</li>
+<li><strong>複雑度に比例したスケーリング</strong> — 単純な質問に過度な10タグを被せない</li>
+<li><strong>再利用可能なテンプレート</strong> — <code>{{VARIABLE}}</code> 形式で出力され、繰り返し作業にそのまま活用できる</li>
+</ul>
+<h3>短所</h3>
+<ul>
+<li><strong>手動ワークフロー</strong> — フック/スキルのような自動発火ではなく、ユーザー自身がsystem promptを設定してプロンプトを入れる必要がある</li>
+<li><strong>Opus 4.8依存</strong> — 他モデル(サードパーティLLM、旧バージョンのClaude)には一部ルールが合わない可能性がある(model-agnosticではない)</li>
+<li><strong>新興リポジトリ</strong> — スター数が少なく、コミュニティ検証・イシュートラッキングが薄い</li>
+<li>API使用時はOpus 4.8の制約(temperature/top_p/top_k未対応、assistant prefill未対応)をユーザー自身が把握する必要がある</li>
+</ul>
+<h3>インストールガイド</h3>
+<p>リポジトリ構成: <code>README.md</code>、<code>CLAUDE.md</code>(エンジン本体)、<code>GUIDE.md</code>(使用パターン)、<code>QUICKSTART.md</code>、<code>LICENSE</code></p>
+<p><strong>オプションA — Claude Project(推奨)</strong>1. claude.aiで新規<strong>Project</strong>を作成
+2. <code>CLAUDE.md</code> の内容を<strong>Project Instructions</strong>フィールドに貼り付け
+3. <code>GUIDE.md</code> を<strong>knowledge file</strong>としてアップロード
+4. 会話を開始 → rawプロンプトを入力</p>
+<p><strong>オプションB — 直接貼り付け</strong></p>
+<ol>
+<li><code>CLAUDE.md</code> 全体をコピー</li>
+<li>任意のClaudeインターフェースの<strong>system prompt</strong>に貼り付け</li>
+<li>rawプロンプトをuser messageとして送信</li>
+</ol>
+<p><strong>オプションC — API連携</strong></p>
+<pre><code class="language-python">import anthropic
+
+client = anthropic.Anthropic()
+
+with open(&quot;CLAUDE.md&quot;, &quot;r&quot;, encoding=&quot;utf-8&quot;) as f:
+    system_prompt = f.read()
+
+response = client.messages.create(
+    model=&quot;claude-opus-4-8&quot;,
+    max_tokens=8192,
+    system=system_prompt,
+    thinking={&quot;type&quot;: &quot;adaptive&quot;},
+    output_config={&quot;effort&quot;: &quot;high&quot;},   # デフォルトhigh、難度が高ければxhigh/max
+    messages=[
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;prompt: Your raw prompt here&quot;}
+    ],
+)
+print(response.content[0].text)
+</code></pre>
+<blockquote>
+<p>API注意点: <code>temperature</code>/<code>top_p</code>/<code>top_k</code> 設定禁止(400エラー)、assistant prefill禁止、adaptive thinkingはデフォルトoffのため明示的に有効化が必要。</p>
+</blockquote>
+<p>リポジトリ: <code>github.com/CheswickDEV/claude-opus-4.8-prompt-optimizer</code></p>
+<hr>
+<h2>2. johnpsasser/claude-code-prompt-optimizer</h2>
+<p>Claude Code用フック。シンプルなプロンプトを詳細で構造化された指示に拡張する。プロンプトに <code>&lt;optimize&gt;</code> タグを付けるとフックが傍受し、Claudeのextended thinkingモードに回して、元のリクエストをアーキテクチャ・エンドポイント・エラー処理・認証・検証・テストまで包括する仕様に膨らませる。実質的にはプロンプトエンジニアリングを代行しているといえる。</p>
+<h3>使用例</h3>
+<pre><code>&lt;optimize&gt; build me a REST API for a todo app
+</code></pre>
+<p>→ フックがこれを傍受し、architecture、endpoints、error handling、auth、validation、testingを網羅した構造化スペックに拡張する。パフォーマンス関連のリクエストであれば、profilingステップ、ボトルネック特定、優先順位付けされたrefactoringターゲット、ベンチマーク基準を含む計画に拡張される。</p>
+<h3>長所</h3>
+<ul>
+<li><strong>タグベースの明示的発火</strong> — <code>&lt;optimize&gt;</code> を付けたプロンプトのみ拡張するため、意図しない介入がない</li>
+<li><strong>extended thinkingの活用</strong> — 単純なrewriteではなく、推論を経た仕様拡張</li>
+<li><strong>チューニングが容易</strong> — model、fallback model、timeout、system promptが <code>optimizer.config.json</code> / <code>system-prompt.md</code> に分離されており、TypeScriptを修正せずに調整可能。デバッグログは <code>/tmp/claude-code-hook-debug.log</code></li>
+</ul>
+<h3>短所</h3>
+<ul>
+<li><strong>Claude Code専用</strong> — claude.aiのウェブ/アプリでは使用不可</li>
+<li><strong>認証設定が複雑</strong> — OAuthトークン/APIキーの優先順位解析ロジックがあり、初期セットアップ時に環境変数の理解が必要</li>
+<li><strong>Node依存</strong> — npmベースのインストール、別途Agent SDK認証構成が必要</li>
+</ul>
+<h3>インストールガイド</h3>
+<pre><code class="language-bash">git clone https://github.com/johnpsasser/claude-code-prompt-optimizer.git
+cd claude-code-prompt-optimizer
+npm run install-hook
+</code></pre>
+<p>インストーラーが依存関係、認証セットアップ、フック設定、検証まで処理する。認証トークンは以下のように発行・登録する。</p>
+<pre><code class="language-bash">claude auth token
+export CLAUDE_CODE_OAUTH_TOKEN=&quot;your-oauth-token&quot;   # シェルプロファイルに追加
+</code></pre>
+<p>手動でフックを登録する場合は <code>~/.claude/settings.json</code>(またはプロジェクト設定)に <code>UserPromptSubmit</code> フックとして <code>src/hooks/optimize-prompt.sh</code> のパスを指定する。</p>
+<p>リポジトリ: <code>github.com/johnpsasser/claude-code-prompt-optimizer</code></p>
+<hr>
+<h2>3. severity1/claude-code-prompt-improver</h2>
+<p>「Type vibes, ship precision.」Claude Code用の知的なプロンプト改善プラグイン(フック + スキル)。すべてのプロンプトを無条件に整えるのではなく、<strong>明確なプロンプトはそのまま通過させ、曖昧なプロンプトだけを選別</strong>してリサーチと質問を経由させる。プロンプト送信・ツール使用・サブエージェント起動のタイミングで即時コンテキストを注入し、「最初の出力」の品質を高めることが目標であり、修正の往復回数を減らしてトークンと時間を節約する。</p>
+<h3>動作方式</h3>
+<ol>
+<li>フックがプロンプトを受け取り、約189トークンの評価プロンプトで明確性を判定</li>
+<li><strong>曖昧</strong> → prompt-improverスキルが発火 → リサーチ計画(TodoWrite) → ExploreサブエージェントによるGlob/Grep/Web/multi-file Read → 結果を統合 → 根拠に基づく質問(1〜6個)をユーザーに提示 → 回答を反映して元のリクエストを実行</li>
+<li><strong>明確</strong> → スキル読み込みなしで即実行</li>
+</ol>
+<p>設計原則:「fire wide, self-cancel cheap」— 見逃したnudgeは修正の一往復を無駄にするが、誤って発火したnudgeは無視される程度の数トークンしか消費しないため、高recallゲートを使いつつ各nudgeが合わなければ自己キャンセルする。</p>
+<h3>使用例</h3>
+<pre><code>fix the bug
+</code></pre>
+<p>→ 曖昧と判定 → コードベースをリサーチし、「どのファイル/どの症状/どの再現条件か」といった根拠のある質問1〜6個を提示 → 回答を受けて実際の修正を実施。一方、十分に具体的なプロンプトは介入なしでそのまま実行される。</p>
+<h3>長所</h3>
+<ul>
+<li><strong>選別的介入</strong> — 大半のプロンプトは変形なしで通過し、必要な時のみ発火してオーバーヘッドを最小化</li>
+<li><strong>最初の出力の品質最適化</strong> — 単語のrewriteを超えて「プロンプト → 出力」経路全体を改善(質問 + コンテキスト注入)</li>
+<li><strong>透明性</strong> — 注入されたコンテキストが会話上に露出する</li>
+<li><strong>検証済みの規模</strong> — 約1.4kスターでコミュニティの採用・保守が活発</li>
+</ul>
+<h3>短所</h3>
+<ul>
+<li><strong>Claude Code専用</strong> — ウェブ/アプリ未対応</li>
+<li><strong>介入時に追加ターンが発生</strong> — 曖昧判定時に質問ステップが挟まり、即答を望むフローと衝突する可能性がある</li>
+<li><strong>設定の学習曲線</strong> — plugin/hook/skill/nudge registry構造の理解が必要</li>
+</ul>
+<h3>インストールガイド</h3>
+<p><code>.claude-plugin</code> 構造のClaude Codeプラグインなので、プラグインマーケットプレイス方式でインストールする。(正確なコマンドはリポジトリの最新READMEを確認推奨)</p>
+<pre><code># Claude Code内で
+/plugin marketplace add severity1/claude-code-prompt-improver
+/plugin install prompt-improver
+</code></pre>
+<p>または手動インストールの場合はリポジトリをcloneして <code>hooks/</code>・<code>skills/prompt-improver/</code> を <code>~/.claude/</code> 以下に配置し、settingsにフックを登録する。</p>
+<p>リポジトリ: <code>github.com/severity1/claude-code-prompt-improver</code></p>
+<hr>
+<h2>4. Hashaam101/prompt-optimizer</h2>
+<p>Claude Codeスキル。2つのモードを提供する。<strong>autoモード</strong>はインストール後すべてのプロンプトを静かに(silent)精製してより良い結果を導き、<strong>manualモード</strong>は <code>/optimize {prompt}</code> で精製されたプロンプトを実行する代わりにテキストとして表示する — プロンプトを再利用したり、より良い書き方を学ぶのに有用。</p>
+<h3>使用例</h3>
+<pre><code># manual: 精製結果をテキストで確認
+/optimize 四半期の売上データを分析して
+
+# またはプレフィックス方式
+optimize: 四半期の売上データを分析して
+optimize prompt: 四半期の売上データを分析して
+</code></pre>
+<p>インストールだけしておけば、autoモード(Mode 1)が毎プロンプトごとに自動有効化され、別途スラッシュコマンドなしでも精製が適用される。</p>
+<h3>長所</h3>
+<ul>
+<li><strong>二重モード</strong> — 通常は自動精製、必要時は <code>/optimize</code> で精製文のみ抽出して再利用・学習</li>
+<li><strong>インストールが簡単</strong> — SKILL.mdファイル1つのコピーで完了</li>
+<li><strong>silent動作</strong> — autoモードはワークフローを妨げない</li>
+</ul>
+<h3>短所</h3>
+<ul>
+<li><strong>Claude Code専用</strong>-<strong>autoモードの不透明性</strong> — 自動精製が静かに行われるため、何が変わったのか追跡しにくい場合がある(manualモードで補完)</li>
+<li><strong>小規模リポジトリ</strong> — コミュニティ検証が薄い</li>
+</ul>
+<h3>インストールガイド</h3>
+<p>グローバル(全プロジェクト)またはプロジェクト単位で <code>SKILL.md</code> をコピーする。</p>
+<pre><code class="language-bash"># グローバルインストール (Linux/macOS)
+cp SKILL.md ~/.claude/skills/prompt-optimizer.md
+
+# プロジェクト単位 (Linux/macOS)
+cp SKILL.md .claude/skills/prompt-optimizer.md
+</code></pre>
+<pre><code class="language-powershell"># Windows (PowerShell) — グローバル
+Copy-Item SKILL.md &quot;$env:USERPROFILE\.claude\skills\prompt-optimizer.md&quot;
+</code></pre>
+<p>インストール後自動有効化。<code>/optimize</code> でmanualモードを呼び出す。</p>
+<p>リポジトリ: <code>github.com/Hashaam101/prompt-optimizer</code></p>
+<hr>
+<h2>5. nidhinjs/prompt-master</h2>
+<p>「すべてのAIツールのために正確なプロンプトを書くClaudeスキル。」一度で正確なプロンプトを作り、再プロンプトによるトークン・クレジットの浪費をなくすことを目標とする。Claude・ChatGPT・Gemini・o1/o3・Cursor・Claude Code・GitHub Copilot・Windsurf・Bolt・v0・Lovable・Perplexity・Midjourney・DALL-E・Stable Diffusion・ComfyUI・Sora・Runway・ElevenLabs・Zapier・Makeなど、ターゲットツール別に最適なプロンプトを生成する。</p>
+<p>設計思想:「最高のプロンプトは最も長いものではなく、すべての単語がload-bearing(荷を負う)であるもの。」長いセッションで最大の無駄は「AIが以前決めた内容を忘れること」だと捉え、メモリブロックで決定事項を保持する。</p>
+<h3>使用例</h3>
+<pre><code>Build a claude code prompt for a landing page for a business dashboard
+that looks and feels exactly like notion - smooth animations, clean ui
+</code></pre>
+<p>→ ターゲット(Claude Code)、framework、トークン推定、戦略をルーティングした後、production-quality仕様として出力。Midjourneyをターゲットにすると、comma-separated descriptor、lighting/moodアンカリング、aspect ratio・versionの固定、negative promptといった画像ツール特化の形式で生成される。</p>
+<h3>長所</h3>
+<ul>
+<li><strong>マルチツールルーティング</strong> — Claude以外のChatGPT・Midjourney・コーディングエージェントなど、ツール別最適形式を自動適用</li>
+<li><strong>メモリ保持</strong> — セッション内の決定事項を記憶し、再プロンプトの浪費を削減</li>
+<li><strong>活発な更新</strong> — Opus 4.8互換(v1.7.0)、バージョン認識ルーティング(4.6/4.7/4.8)、Prompt Decompilerモードなど継続的に更新</li>
+</ul>
+<h3>短所</h3>
+<ul>
+<li><strong>Claudeを「プロンプト生成器」として使用</strong> — Claude自体の出力を直接改善するというより、他ツールに入れるプロンプトを作る性格が強い</li>
+<li><strong>Claude Codeスキル環境が必要</strong> — スキル環境が前提</li>
+<li><strong>小規模リポジトリ</strong> — コミュニティ検証が薄い</li>
+</ul>
+<h3>インストールガイド</h3>
+<pre><code class="language-bash">mkdir -p ~/.claude/skills
+git clone https://github.com/nidhinjs/prompt-master.git ~/.claude/skills/prompt-master
+</code></pre>
+<p>インストール後、トリガー条件に合致するとスキルが自動発火。referencesフォルダのテンプレートがターゲットツール別の出力を補助する。</p>
+<p>リポジトリ: <code>github.com/nidhinjs/prompt-master</code></p>
+<hr>
+<h2>6. 選択ガイド</h2>
+<table>
+<thead>
+<tr>
+<th>状況</th>
+<th>推奨</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>claude.aiのウェブ/アプリまたはAPIで構造化プロンプトを繰り返し生成</td>
+<td><strong>CheswickDEV 4.8</strong>(Projectとして登録)</td>
+</tr>
+<tr>
+<td>Claude Codeでその場で特定プロンプトだけを選んで拡張</td>
+<td><strong>johnpsasser</strong>(<code>&lt;optimize&gt;</code> タグ)</td>
+</tr>
+<tr>
+<td>Claude Codeヘビーユーザーで、修正往復を減らし最初の出力品質を高めたい</td>
+<td><strong>severity1</strong>(選別的介入)</td>
+</tr>
+<tr>
+<td>Claude Codeで自動精製と手動精製文抽出を併用したい</td>
+<td><strong>Hashaam101</strong>(二重モード)</td>
+</tr>
+<tr>
+<td>Claude以外のChatGPT・Midjourney・コーディングエージェント用プロンプトを一箇所で生成</td>
+<td><strong>nidhinjs</strong>(マルチツール)</td>
+</tr>
+<tr>
+<td>よく作られたプロンプトの「例」を参考にしたい(ツールではない)</td>
+<td><code>langgptai/awesome-claude-prompts</code> などのキュレーション集</td>
+</tr>
+</tbody></table>
+<p><strong>組み合わせのヒント</strong>: 環境がClaude Codeであれば、選別介入型(severity1)を常時導入し、別途正式なプロンプト資産を作る際にCheswickDEV 4.8をclaude.ai Projectとして運用する併用が効果的。繰り返し出力の一貫性が重要なワークフロー(定型レポート、定量分析プロンプトなど)であれば、プロンプト集よりオプティマイザーのコンポーネントフレームワークや自作テンプレートをreferenceとして登録する方が安定する。</p>
+<hr>
+<h2>7. 共通の注意点</h2>
+<ul>
+<li><strong>モデル依存性の確認</strong> — Opus 4.8専用にチューニングされたツール(CheswickDEVなど)は他モデルで一部ルールが合わない可能性がある。</li>
+<li><strong>自動発火型の不透明性</strong> — autoモード/silentフックは何が変わったのか追跡しにくいため、可能であれば変更内容を露出するmanualモードや透明性オプションを併用する。</li>
+<li><strong>認証・トークン管理</strong> — フック系はOAuthトークン/APIキーを扱うため、環境変数やシェルプロファイルへの露出に注意する。</li>
+<li><strong>リポジトリの信頼度</strong> — スター・コミット・イシュー活動を確認し、インストールコマンドは常に各リポジトリの最新READMEと照合する。本文書のコマンドは執筆時点のものである。</li>
+<li><strong>公式ガイドとの併用</strong> — ツールだけに依存せず、Anthropic公式のprompt engineeringドキュメント(<code>docs.claude.com/en/docs/build-with-claude/prompt-engineering/overview</code>)も併せて参照すると、ツールの出力をより良く検証できる。</li>
+</ul>
+<hr>
+<p><em>作成基準日: 2026-06-21。各プロジェクトの機能・インストール方法は更新される可能性があるため、リポジトリの最新READMEを確認すること。</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/claude/Claude-prompt-optimizer-tools-guide_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
