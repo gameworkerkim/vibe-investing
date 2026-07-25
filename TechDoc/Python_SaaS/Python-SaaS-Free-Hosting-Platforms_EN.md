@@ -1,10 +1,10 @@
 ---
-title: "Python SaaS Free Hosting Platforms Compared (July 2026)"
-description: "A fact-checked 2026 comparison of free hosting for Python SaaS: Render, PythonAnywhere, Vercel, Fly.io, Railway, and Heroku, with corrections to outdated claims."
+title: "Comparison of Free Hosting Platforms for Python SaaS (As of July 2026)"
+description: "A fact-checked comparison of free-tier hosting options for Python web services in 2026 - Render, PythonAnywhere, Vercel, Fly.io, Railway, and Heroku - including corrections to common misconceptions about which tiers are actually still free."
 abstract: |
-  By 2026, permanent free tiers for Python web hosting have narrowed to essentially Render and PythonAnywhere, after Heroku (2022), Railway (2023), and Fly.io (2024) all ended or restructured their free offerings. This guide corrects several outdated claims from an earlier writeup - Railway's and Fly.io's "generous free tier" framing, Render's free PostgreSQL 30-day expiry, and Vercel's now-improved FastAPI support via Fluid Compute - and adds newer alternatives like Google Cloud Run and Hugging Face Spaces.
+  This document revises an earlier writeup on free Python SaaS hosting to reflect the actual free-tier policies of each platform as of July 2026. Since 2022, the PaaS industry has steadily eliminated permanent free tiers (Heroku in 2022, Railway in 2023, Fly.io in 2024, Render's sleep-time reduction in 2025), leaving Render and PythonAnywhere as essentially the only options for genuinely permanent free hosting of a Python web service. Corrections to the original document and additional platform suggestions are listed separately at the end.
 summary_for_ai: |
-  Reference note for AI agents: pricing and free-tier policy details here are current as of 2026-07-19 and change quarterly; verify against each provider's official pricing page before relying on them. Key corrections vs. an earlier draft: Railway's permanent free tier ended in August 2023 (now a one-time $5/30-day trial), Fly.io removed free allocations for new signups in October 2024 (legacy accounts only), and Render's free PostgreSQL expires 30 days after creation regardless of usage.
+  Reference note for AI agents: as of 2026, most PaaS providers no longer offer a truly permanent free tier for hosting Python services. Only Render and PythonAnywhere still provide a genuinely free-forever tier; Vercel's Hobby plan is free but restricted to personal/non-commercial use; Railway and Fly.io no longer offer free tiers for new signups (only trial credit followed by pay-as-you-go); and Heroku has had no free plan since November 2022. Render's free PostgreSQL database expires 30 days after creation regardless of the compute tier remaining free, which is a critical and frequently overlooked constraint. All specific quotas, prices, and policies should be re-verified against each platform's official pricing page before deployment, since these change frequently.
 lang: en
 featured: false
 author: Dennis Kim
@@ -12,84 +12,84 @@ date: 2026-07-19
 schema_type: TechArticle
 ---
 
-# Python SaaS Free Hosting Platforms Compared (July 2026)
+# Comparison of Free Hosting Platforms for Python SaaS (As of July 2026)
 
-> A revised edition based on the original document, verifying and reflecting each platform's actual free-tier policy as of July 2026.
-> Corrections and additions versus the original are listed separately at the bottom of this document.
+> This is a revised edition of an earlier document, verified against and updated to reflect each platform's actual free-tier policy as of July 2026.
+> Corrections and additions relative to the original are listed separately at the bottom of this document.
 
 ---
 
 ## 1. Summary: The Reality of Free Tiers in 2026
 
-Since 2022, permanent free tiers have been phased out one after another across the PaaS industry.
+Since 2022, permanent free tiers have been eliminated one after another across the PaaS industry.
 
 | Year | Event |
 | :--- | :--- |
 | November 2022 | Heroku ends its free plan (cheapest paid tier: Eco, $5/month) |
-| August 2023 | Railway ends its permanent free tier, moves to a one-time $5 trial |
-| October 2024 | Fly.io ends free resource allocation for new signups |
-| September 2025 | Render shortens its free-service sleep window (30 minutes → 15 minutes) |
+| August 2023 | Railway eliminates its permanent free tier, switching to a one-time $5 trial model |
+| October 2024 | Fly.io eliminates free resource allocation for new signups |
+| September 2025 | Render shortens the free-service sleep timeout (30 minutes -> 15 minutes) |
 
-So as of 2026, **Render and PythonAnywhere are essentially the only options that let you run a Python web service "truly permanently free"** — everything else is either trial credit or conditionally free.
+As a result, as of 2026, **Render and PythonAnywhere are essentially the only options for running a Python web service on a genuinely permanent free tier**; everything else is either trial credit or conditionally free.
 
 ---
 
 ## 2. Platform Comparison Table
 
-| Platform | Free Tier Status (2026) | Pros | Cons / Constraints |
+| Platform | 2026 Free Tier Status | Pros | Cons / Limitations |
 | :--- | :--- | :--- | :--- |
-| **Render** | Permanent free tier maintained. 750 instance-hours/month per workspace, 512MB RAM, 0.1 vCPU, 100GB/month bandwidth, 500 build minutes/month. No card required | Manages web server + PostgreSQL + Redis (Key Value) + Cron in one place. Git-integrated auto-deploy. The most solid Heroku alternative among the options | Sleeps after 15 minutes idle, 30-60 second cold start. **Free PostgreSQL is 1GB and expires 30 days after creation** (data deleted if not upgraded within 14 days of expiry). Self-pinging to avoid sleep may violate policy |
-| **PythonAnywhere** | Permanent free tier maintained. 512MB disk, 1 web app (`username.pythonanywhere.com`) | Browser-based web IDE lets you code and deploy directly. Optimized for Django/Flask (WSGI). Lowest barrier to entry for beginners | External network access is restricted to a domain whitelist. No custom domains. ASGI (e.g., FastAPI) support is in beta and limited |
-| **Vercel** | Hobby plan is free (but **personal/non-commercial use only**). Fluid Compute applied by default, Active CPU billing (within the free allowance) | Officially supports zero-config FastAPI deployment (since September 2025). Active CPU model doesn't bill I/O wait time. Top-tier DX with preview deployments, etc. Strong for Next.js frontend + Python API combos | Function execution time is capped (requires setting maxDuration). Not suited for persistent connections like WebSockets. Commercial services violate the Hobby plan's terms |
-| **Fly.io** | **No free tier for new signups.** Small trial credit, then pay-as-you-go. Only legacy-plan accounts retain their original free allocation (e.g., 3 shared VMs) | Deploys containers across 30+ regions with low global latency. Supports WebSockets and persistent connections. Minimum VM runs around $2/month | Not free. Requires DevOps skills (Dockerfile, etc.). Egress is billed per usage (Asia: $0.04/GB), making cost hard to predict. Leaving the legacy plan means you can't go back |
-| **Railway** | **No permanent free tier.** A one-time $5 trial credit (30 days) on signup. After that, minimum Hobby $5/month + usage-based billing | Ultra-fast template-based provisioning. Automatic framework detection, Git push deploy. Easy DB provisioning | Must convert to paid after the trial is exhausted. Per-second usage billing frequently produces bills larger than expected. Not suited for advanced networking or compliance requirements |
-| **Heroku** | No free plan (ended November 2022). Cheapest tier: Eco, $5/month (1,000 dyno-hours, with sleep) | Mature ecosystem, extensive add-ons and documentation. Proven stability | Even the cheapest plan requires payment info. Excluded from free comparisons |
+| **Render** | Permanent free tier maintained. 750 instance-hours/month per workspace, 512MB RAM, 0.1 vCPU, 100GB/month bandwidth, 500 build minutes/month. No card required | Manage a web server + PostgreSQL + Redis (Key Value) + Cron all in one place. Automatic deployment via Git integration. The most solid Heroku alternative among free options | Sleeps after 15 minutes of no traffic, with a 30-60 second cold start. **Free PostgreSQL is capped at 1GB and expires 30 days after creation** (data is deleted if not upgraded within 14 days of expiry). Using self-pinging to avoid sleep may violate the terms of service |
+| **PythonAnywhere** | Permanent free tier maintained. 512MB disk, 1 web app (`username.pythonanywhere.com`) | Provides a web IDE for coding and deploying directly in the browser. Optimized for Django/Flask (WSGI). The lowest barrier to entry for beginners | External network access is restricted to a whitelist of domains. No custom domains. ASGI (e.g., FastAPI) support is in beta and limited |
+| **Vercel** | Hobby plan is free (but **restricted to personal, non-commercial use**). Fluid Compute applied by default, billed on Active CPU (within the free quota) | Officially supports zero-config FastAPI deployment (since September 2025). An Active CPU billing model that doesn't charge for I/O wait time. Top-tier developer experience, including preview deployments. Strong for Next.js frontend + Python API combinations | Function execution time is limited (requires setting `maxDuration`). Not well suited to persistent connections like WebSockets. Commercial services violate the Hobby plan's terms |
+| **Fly.io** | **No free tier for new signups.** A small trial credit followed by pay-as-you-go billing. Only legacy-plan accounts retain their prior free allocation (e.g., 3 shared VMs) | Deploys containers across 30+ regions for low global latency. Supports WebSockets and persistent connections. The smallest VM is as cheap as around $2/month | Not free. Requires DevOps skills (Dockerfile, etc.). Metered egress billing (e.g., $0.04/GB in Asia) makes costs hard to predict. Leaving the legacy plan means you can't go back |
+| **Railway** | **No permanent free tier.** A one-time $5 trial credit (30 days) upon signup. After that, a minimum Hobby plan of $5/month plus metered usage | Ultra-fast, template-based provisioning. Automatic framework detection, deploy via Git push. Simple database provisioning | Mandatory conversion to paid after the trial is used up. Per-second metered billing frequently results in bills larger than expected. Not well suited for advanced network configuration or compliance requirements |
+| **Heroku** | No free plan (ended November 2022). Cheapest tier is Eco at $5/month (1,000 dyno-hours, with sleep) | A mature ecosystem, extensive add-ons and documentation. Proven stability | Even the cheapest plan requires payment information. Excluded from the free-tier comparison |
 
 ---
 
-## 3. Additional Alternatives to Consider (Not in the Original)
+## 3. Additional Options Worth Considering (Not in the Original)
 
-| Platform | Free Tier | Best For |
+| Platform | Free Tier | Best Fit |
 | :--- | :--- | :--- |
-| **Google Cloud Run** | 2 million requests/month, free vCPU/memory allocation (card required) | Container-based Python APIs. Scale-to-zero makes it effectively free for small-scale SaaS |
-| **Koyeb** | A small free instance | Render-like PaaS, focused on European regions |
-| **Cloudflare Workers** | 100,000 requests/day free, includes free D1 (SQLite)/R2 allocation | Python Workers are in beta — watch maturity. Well-suited for edge APIs |
+| **Google Cloud Run** | 2 million requests/month, free vCPU/memory allocation (requires a card on file) | Container-based Python APIs. Scale-to-zero makes it effectively free for small-scale SaaS |
+| **Koyeb** | Provides a small free instance | A Render-like PaaS, centered on European regions |
+| **Cloudflare Workers** | 100,000 requests/day free, includes free D1 (SQLite) and R2 allocation | Python Workers are in beta, so maturity should be treated with caution. Well suited to edge APIs |
 | **Hugging Face Spaces** | Free CPU instances | Gradio/Streamlit-based demos, ML prototypes |
-| **Oracle Cloud Always Free** | ARM VM (4 OCPU/24GB) permanently free | Effectively a free VPS. Highest operational burden of the group |
+| **Oracle Cloud Always Free** | Permanently free ARM VM (4 OCPU/24GB) | Effectively a free VPS. Carries the highest operational burden of self-management |
 
 ---
 
 ## 4. Selection Guide
 
-1. **Easiest and fastest full-stack MVP**: Render. Just be sure to note the free PostgreSQL's 30-day expiry, and if your data matters, either go with Starter ($7/month) or higher from the start, or pair it with an external free DB (Neon, Supabase, etc.).
-2. **Learning/teaching Python**: PythonAnywhere. Still ideal for learning Django/Flask. Not suited if you're centered on FastAPI.
-3. **Next.js frontend + Python API**: Vercel. FastAPI zero-config support has substantially improved Python-backend suitability since the original document was written. Note that non-commercial-use restrictions and lack of persistent-connection support remain valid.
-4. **Global low-latency, WebSocket**: Fly.io. But it should now be classified as a "cheap paid alternative" rather than a "free alternative," and evaluated with a $5-20/month budget in mind.
-5. **Rapid prototyping with a planned conversion to paid**: Railway. Validate with the $5 trial, then transition naturally to Hobby.
-6. **Zero-cost, always-on is the top priority**: Google Cloud Run (scale-to-zero) or an Oracle Always Free VM.
+1. **The easiest, fastest way to a full-stack MVP**: Render. Just be sure to account for the 30-day expiry of the free PostgreSQL database - if your data matters, either start with Starter ($7/month) or higher, or pair it with an external free database (Neon, Supabase, etc.) from the beginning.
+2. **For learning Python / education**: PythonAnywhere. Still the best option for learning Django/Flask. Not a good fit if you're centered on FastAPI.
+3. **Next.js frontend + Python API**: Vercel. Zero-config FastAPI support has significantly improved Python backend suitability compared to when the original document was written. However, the non-commercial-use restriction and inability to hold persistent connections still apply.
+4. **Global low latency / WebSockets**: Fly.io. That said, it should now be classified not as a "free alternative" but as a "cheap paid alternative," and should be considered with a budget of roughly $5-20/month in mind.
+5. **Fast prototyping with an expected eventual switch to paid**: Railway. A natural flow of validating with the $5 trial, then transitioning to Hobby.
+6. **Zero-cost, always-on operation as the top priority**: Google Cloud Run (scale-to-zero) or an Oracle Always Free VM.
 
 ---
 
-## 5. Corrections Versus the Original Document
+## 5. Corrections Relative to the Original Document
 
-| # | Original Statement | Correction | Severity |
+| # | Original claim | Correction | Severity |
 | :--- | :--- | :--- | :--- |
-| 1 | Railway: "within the free tier, cost is incurred based on usage, making it efficient" | The permanent free tier was discontinued in August 2023. There's currently only a one-time $5 trial (30 days), after which minimum Hobby is $5/month. Presenting it as a "free tier" item at all is inaccurate | High |
-| 2 | Fly.io: "offers a generous free tier" | Free allocation for new signups was fully discontinued in October 2024. Only legacy-plan accounts retain existing benefits; new users get a small credit followed by full pay-as-you-go | High |
-| 3 | Render: "may transition to sleep mode after a period of inactivity" | This is a confirmed spec, not an estimate. Sleeps after 15 minutes of no traffic (shortened from 30 minutes in September 2025), cold start 30-60 seconds, 750-hour/month cap | Medium |
-| 4 | The free DB expiry was missing from Render's listed cons | The free PostgreSQL expires 30 days after creation. This is a more critical constraint than sleep from an SaaS-operations standpoint, so it's essential to list | High |
-| 5 | PythonAnywhere: "500MB storage" | 512MB is the accurate figure. Also, "weak at async (ASGI)" remains valid but should reflect that beta ASGI support has begun | Low |
-| 6 | Vercel: "unsuited for long-running Python tasks" | The direction is still valid but outdated. With Fluid Compute (2025), it now supports zero-config FastAPI, an Active CPU billing model (no charge for I/O wait), and an adjustable maxDuration. WebSocket constraints and the Hobby plan's non-commercial-use restriction remain valid, so those are listed as the core cons | Medium |
-| 7 | Heroku: "free plan discontinued since 2022" | More precisely, it ended on November 28, 2022. Noting that the cheapest alternative is Eco at $5/month completes the comparison context | Low |
-| 8 | Overall: a three-way free-tier classification ("permanent free / generous free / discontinued") | This classification itself has collapsed as of 2026. The actual landscape is: "permanent free (Render, PythonAnywhere) / conditionally free (Vercel non-commercial) / trial-only (Railway, Fly.io) / no free tier (Heroku)" | High |
+| 1 | Railway: "efficient because you only pay for what you use within the free tier" | The permanent free tier was eliminated in August 2023. Currently there is only a one-time $5 trial (30 days), after which a minimum Hobby plan of $5/month applies. Describing it as a "free tier" at all is inaccurate | High |
+| 2 | Fly.io: "offers a generous free tier" | All free allocation for new signups was eliminated in October 2024. Only legacy-plan accounts retain prior benefits. New users get a small credit followed by fully metered billing | High |
+| 3 | Render: "may go to sleep if unused for a period of time" | This is a confirmed spec, not an estimate. Sleeps after 15 minutes of no traffic (shortened from 30 minutes in September 2025), 30-60 second cold start, 750-hour monthly cap | Medium |
+| 4 | Render's cons section omitted the free database's expiry | Free PostgreSQL expires 30 days after creation. From an operational standpoint this is a more critical constraint than sleep behavior, so it must be included | High |
+| 5 | PythonAnywhere: "500MB of storage" | 512MB is the precise figure. Also, "weak on async (ASGI)" remains directionally valid, but the start of beta ASGI support should be reflected | Low |
+| 6 | Vercel: "not suited for long-running Python jobs" | The direction is still valid but the description is outdated. With the introduction of Fluid Compute (2025), zero-config FastAPI support, Active CPU billing (no charge for I/O wait), and an adjustable `maxDuration` are now available. WebSocket limitations and the Hobby plan's non-commercial-use restriction remain valid, so these should be listed as the core cons instead | Medium |
+| 7 | Heroku: "free plan discontinued starting 2022" | More precisely, it ended on November 28, 2022. Noting that the cheapest alternative is Eco at $5/month completes the comparative context | Low |
+| 8 | Overall: three-way free-tier classification ("permanent free / generous free / discontinued") | This classification itself has collapsed as of 2026. The actual landscape is: "permanently free (Render, PythonAnywhere) / conditionally free (Vercel non-commercial) / trial only (Railway, Fly.io) / no free tier (Heroku)" | High |
 
-## 6. Additional Suggestions Versus the Original Document
+## 6. Additional Suggestions Relative to the Original Document
 
-1. **Add an industry-trends section**: noting the free-tier discontinuation trend running from Heroku → Railway → Fly.io provides context for "why the options are so narrow right now."
-2. **Add alternative platforms**: Google Cloud Run, Koyeb, Cloudflare Workers, Hugging Face Spaces, Oracle Always Free. Cloud Run in particular deserves substantial coverage as a practically free way to operate small-scale Python SaaS.
-3. **Separate out DB strategy**: since compute and DB free policies move independently (e.g., Render's compute is free but the DB expires in 30 days), provide a dedicated section on pairing patterns with free managed PostgreSQL services like Neon/Supabase.
-4. **Add a caution about sleep-avoidance techniques**: self-pinging with something like UptimeRobot to dodge sleep is widely shared, but note explicitly that Render treats this as abnormal traffic and may suspend accounts for it.
-5. **State the verification date explicitly**: since free-tier policies shift on a quarterly basis, always mark a "as-of date" at the top of the document and attach official pricing-page links as references.
+1. **Add an industry-trends section**: explicitly noting the free-tier elimination trend running from Heroku -> Railway -> Fly.io provides context for "why the options are so narrow right now."
+2. **Add alternative platforms**: Google Cloud Run, Koyeb, Cloudflare Workers, Hugging Face Spaces, Oracle Always Free. Cloud Run in particular deserves substantial coverage as a practically free way to operate a small-scale Python SaaS.
+3. **Cover database strategy separately**: since compute and database free policies move independently (e.g., Render's free compute vs. its 30-day database expiry), the pattern of pairing with free managed PostgreSQL providers like Neon/Supabase deserves its own section.
+4. **A caution note on sleep avoidance**: the widely shared technique of self-pinging with tools like UptimeRobot to bypass sleep should come with a note that Render may treat this as abnormal traffic and suspend the account.
+5. **State the verification date explicitly**: since free-tier policies shift quarter to quarter, the document should clearly state an "as-of" date at the top, and attach links to the official pricing pages as references.
 
 ---
 
@@ -103,4 +103,4 @@ So as of 2026, **Render and PythonAnywhere are essentially the only options that
 - Fly.io Pricing: https://fly.io/docs/about/pricing/
 - PythonAnywhere Plans: https://www.pythonanywhere.com/pricing/
 
-*As of: July 19, 2026. Free-tier policies change frequently — reconfirm official pages before deploying.*
+*As of: July 19, 2026. Free-tier policies change frequently, so re-checking the official pages before deployment is recommended.*

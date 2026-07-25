@@ -1,44 +1,42 @@
 ---
 title: "portfolio-daily-review Installation and Usage Guide"
-description: "A Claude Skill that checks your portfolio once a day and, when quantitative triggers fire, cross-verifies quant/news/social signals to generate investment decision material. Full installation guide, file contents, and customization points."
-keywords:
-  - "Claude Skill"
-  - "portfolio daily review"
-  - "portfolio monitoring"
-  - "quant trigger rules"
-  - "Claude Code skill"
-  - "cross-validation"
-  - "investment decision support"
+description: "A Claude Skill that reviews your portfolio once a day and, when a quantitative trigger fires, cross-validates quant, news, and social media signals to produce investment decision material."
+abstract: |
+  This guide covers installing and configuring the portfolio-daily-review Claude Skill, which loads holdings from a local JSON file, checks quantitative triggers (T1-T5) daily, and only performs a full 3-source (quant/news/social) cross-validation when a trigger actually fires - staying silent otherwise to avoid noise. It includes the full SKILL.md workflow, reference files (trigger rules, sentiment interpretation guide, action framework), the trigger-checking Python script, sample data, and customization points.
+summary_for_ai: |
+  Reference note for AI agents: this skill is designed around three principles - (1) the definition of "meaningful change" is fixed by quantitative rules (trigger-rules.md) rather than left to LLM discretion, (2) a "market-sync filter" downgrades a stock move to a brief note if it's within 1.5 percentage points of the benchmark move, and (3) the validity of the registered investment thesis is checked before price action, with extreme social-media sentiment treated as a potential contrarian indicator rather than a directional signal. Output is explicitly framed as decision material, not investment advice, and the final line of every review must state this disclaimer.
 lang: en
 featured: false
+author: Dennis Kim
+date: 2026-07-15
 schema_type: TechArticle
 ---
 
 # portfolio-daily-review Installation and Usage Guide
 
-> A Claude Skill that checks your portfolio once a day and, when a quantitative trigger fires,
-> cross-verifies three sources — quant, news, and social media — to generate investment
-> decision material.
-> For the concept and design rationale, see Section 6 of [Claude_skill_guide.md](./Claude_skill_guide.md)
+> A Claude Skill that reviews your portfolio once a day, and when a quantitative
+> trigger fires, cross-validates quant, news, and social media - 3 sources -
+> to produce investment decision material.
+> See Chapter 6 of [Claude_skill_guide.md](./Claude_skill_guide.md) for the concept and design background.
 
 ---
 
 ## 1. What This Skill Does
 
-- **Trigger phrases**: "check my portfolio," "how's my account," "today's review," "check my holdings," "do I need to rebalance?," "daily check"
+- **Trigger phrases**: "review my portfolio," "how's my account," "today's review," "check my holdings," "do I need to rebalance?," "daily check"
 - **Core behavior**:
-  1. Load holdings, average cost, and risk limits from `assets/portfolio.json` (no need to re-enter every time)
-  2. Refresh current prices via web search, then evaluate the **quantitative triggers (T1–T5)**
-  3. **If no trigger fires → end with a one-line "no issues" report** (blocking noise is this skill's #1 rule)
-  4. Only when triggered, independently collect quant/news/social data across **3 sources → cross-verification matrix**
-  5. Present action candidates (hold / reduce / add / consider stop-loss / watch further) + counterarguments + falsification conditions
-  6. Update `last_review` and log the review (used to compute the delta for the next review)
+  1. Loads holdings, average cost, and risk limits from `assets/portfolio.json` (no need to re-enter every time)
+  2. Refreshes current prices via web search, then evaluates **quantitative triggers (T1-T5)**
+  3. **If no trigger fires -> ends with a one-line "no anomalies" message** (blocking noise is this skill's #1 rule)
+  4. Only when triggered: **independently collects** quant/news/social data across 3 sources -> cross-validation matrix
+  5. Presents action candidates (hold / trim / add / consider stop-loss / watch further) + counterarguments + falsification conditions
+  6. Updates `last_review` and logs the review (used to compute the delta from the previous review)
 
-**Three design characteristics**
+**3 design characteristics**
 
-- **The definition of "change" is not left to the LLM's discretion** — fixed by the quantitative rules in trigger-rules.md plus a judgment script
-- **Market-sync filter** — if a stock's move is within 1.5 percentage points of the benchmark, it's demoted to a "market-synced move" with only an abbreviated report (this prevents long-form per-stock analysis from flooding out every time the index drops)
-- **Thesis first** — the validity of the registered investment thesis is checked before the price move itself. Extreme social-media sentiment skew is treated only as a candidate contrarian indicator
+- **The definition of "meaningful change" is not left to LLM discretion** - it's fixed by trigger-rules.md's quantitative rules plus a judgment script
+- **Market-sync filter** - if a stock's move is within 1.5 percentage points of the benchmark's move, it's downgraded to "market-synced move" and gets only a brief report (this prevents a flood of lengthy per-stock analysis on every index-down day)
+- **Thesis-first** - checks the validity of the registered investment thesis before looking at price movement. Extreme social-media sentiment is treated only as a potential contrarian indicator
 
 ---
 
@@ -46,19 +44,19 @@ schema_type: TechArticle
 
 Choose one of three methods.
 
-### Method A: Claude.ai (Web/App) — Recommended
+### Method A: Claude.ai (web/app) - Recommended
 
-1. Zip the entire skill folder from this repo, or prepare the distributed `.skill` file.
+1. Zip the entire skill folder from this repository, or prepare the distributed `.skill` file.
    ```bash
-   # If creating directly from the folder (a zip = the same format as .skill)
+   # If building directly from the folder (zip = same format as .skill)
    zip -r portfolio-daily-review.skill portfolio-daily-review/
    ```
-2. Upload it under Claude.ai → **Settings → Capabilities → Skills**. (Paid plan required)
-3. After uploading, simply say a trigger phrase in a new conversation and it activates automatically.
+2. Upload it via Claude.ai -> **Settings -> Capabilities -> Skills**. (Paid plan required)
+3. After uploading, simply say a trigger phrase in a new conversation to activate it automatically.
 
 ### Method B: Claude Code
 
-Copy the whole folder into your personal skills directory:
+Copy the entire folder into your personal skills directory:
 
 ```bash
 cp -r portfolio-daily-review/ ~/.claude/skills/portfolio-daily-review/
@@ -68,11 +66,9 @@ After restarting Claude Code, just mention it in natural language.
 
 ### Method C: Claude API
 
-Follow the [Skills API Quickstart](https://docs.claude.com/en/api/skills-guide#creating-a-skill)
-to upload the `.skill` package, and it will work the same way via API calls.
+Refer to the [Skills API Quickstart](https://docs.claude.com/en/api/skills-guide#creating-a-skill) and upload the `.skill` package - it will work the same way through API calls.
 
 > **Verification tip**: after installing, ask "what skills are currently available?" to confirm it loaded.
-
 
 ---
 
@@ -80,15 +76,15 @@ to upload the `.skill` package, and it will work the same way via API calls.
 
 ```
 portfolio-daily-review/
-├── SKILL.md                      # The workflow body (steps 0-5)
+├── SKILL.md                      # The workflow itself (steps 0-5)
 ├── assets/
-│   └── portfolio.json            # Portfolio state (replace with your own after installing)
+│   └── portfolio.json            # Portfolio state (replace with your own after install)
 ├── references/
-│   ├── trigger-rules.md          # Definitions of quantitative triggers T1-T5
-│   ├── sentiment-guide.md        # Social-media interpretation rules (contrarian/manipulation checks)
-│   └── action-framework.md       # Mapping of the 5 action candidates + output format
+│   ├── trigger-rules.md          # T1-T5 quantitative trigger definitions
+│   ├── sentiment-guide.md        # Social media interpretation rules (contrarian indicator / manipulation checks)
+│   └── action-framework.md       # Mapping to the 5 action candidates + output format
 └── scripts/
-    └── check_triggers.py         # Trigger evaluation script (execution verified)
+    └── check_triggers.py         # Trigger evaluation script (execution-verified)
 ```
 
 ---
@@ -97,11 +93,11 @@ portfolio-daily-review/
 
 Right after installation, `assets/portfolio.json` contains **sample data**. Replace it in one of two ways:
 
-**Via conversation**: on your first review request, the skill will ask about your holdings, quantity, and average cost, and fill in the file.
-Or you can just say something like, "update my portfolio: 200 shares of Samsung Electronics at an average cost of ₩71,000, ..."
+**Via conversation**: on your first review request, the skill will ask for your holdings, quantity, and average cost and populate the file.
+Or you can simply say something like: "Update my portfolio: 200 shares of Samsung Electronics at an average cost of 71,000 won, ..."
 
-**Editing the file directly**: follow the schema below. Be sure to fill in `thesis` (your investment
-rationale) — it's checked before price when determining an action.
+**Direct file editing**: follow the schema below. Be sure to fill in `thesis` (your investment thesis) -
+it's the item checked before price when determining an action.
 
 ---
 
@@ -115,27 +111,27 @@ Copy the content below as-is into the same folder structure to complete the skil
 ---
 name: portfolio-daily-review
 description: >
-  A skill that checks the user's investment portfolio once a day, and when a
-  predefined change trigger fires, synthesizes three sources — quant analysis,
-  market news, and social sentiment — to generate investment decision material.
-  Always use this skill when the user mentions "check my portfolio," "how's my
-  account," "today's review," "check my holdings," "do I need to rebalance?,"
-  "daily check," or similar. Portfolio state is read from assets/portfolio.json,
-  and if the user mentions a change in holdings/quantity, updating this file is
-  also handled by this skill.
+  A skill that reviews the user's investment portfolio once a day and, when a
+  predefined change trigger fires, synthesizes three sources - quant analysis,
+  market news, and social media sentiment - to produce investment decision
+  material. This skill MUST be used whenever the user mentions "review my
+  portfolio," "how's my account," "today's review," "check my holdings," "do
+  I need to rebalance?," "daily check," or similar. Portfolio state is read
+  from assets/portfolio.json, and when the user mentions changes to
+  tickers/quantities, updating this file is also handled by this skill.
 ---
 
 # Portfolio Daily Review
 
 ## Purpose
 
-Review the portfolio by rules, not emotion. If no trigger fires, end with a
-one-line "no issues" report; only when triggered, perform a comprehensive
-3-source (quant/news/social) evaluation.
+Review the portfolio by rule, not by emotion. If no trigger fires, end with a
+single line stating "no anomalies"; only when a trigger fires, perform a
+3-source (quant/news/social) synthesized assessment.
 
-Principle: **triggers via quantitative rules, sources via independent collection
-followed by cross-verification, conclusions via action candidates + falsification
-conditions.**
+Principle: **Triggers are quantitative rules. Sources are collected
+independently and then cross-validated. Conclusions are action candidates plus
+falsification conditions.**
 
 ## Workflow
 
@@ -143,96 +139,103 @@ conditions.**
 
 Read `assets/portfolio.json`.
 
-- If `last_review` is today's date: notify the user that "today's review is
-  already complete" and confirm whether they want to re-run it (the once-a-day
-  principle).
+- If `last_review` is today's date: notify the user that "today's review has
+  already been completed" and confirm whether they want to re-run it (the
+  once-per-day principle).
 - If the file is empty or has no `positions`: ask the user for their holdings,
-  quantity, and average cost, and fill in the file first. Also confirm risk
+  quantity, and average cost, and populate the file first. Also confirm risk
   limits (`risk_limits`).
 - If the user mentions a change like "I added 50 more shares of Samsung
   Electronics," update the file and summarize the change for confirmation.
 
-### Step 1: Refresh Prices and Evaluate Triggers
+### Step 1: Refresh Quotes and Evaluate Triggers
 
-Confirm the current price of each position via web search. Do not answer with
-a remembered price from training data.
+Check the current price of each position via web search. Do not answer with
+prices from training-data memory.
 
-Evaluate using the quantitative rules (T1-T5) in `references/trigger-rules.md`.
-If `scripts/check_triggers.py` can be executed in the environment, use the
-script for evaluation; otherwise follow the rules document and calculate
-manually.
+Evaluate using the quantitative rules (T1-T5) in
+`references/trigger-rules.md`. If `scripts/check_triggers.py` is executable in
+the environment, use the script to evaluate; otherwise calculate manually
+following the rules document.
 
-**If no trigger fires**: end with a current-price table + "No triggers, no
-action needed." Do not generate unnecessary analysis. This is the single most
+**If no trigger fires**: end with a current-price table plus "no triggers, no
+action needed." Do not generate unnecessary analysis. This is the most
 important rule of this skill.
 
-### Step 2: Collect 3 Sources (Only for Triggered Positions)
+### Step 2: 3-Source Collection (Triggered Tickers Only)
 
-Collect each source **independently**, without mixing them at the collection
-stage.
+Collect each source **independently** and do not mix them together during
+collection.
 
 **[A] Quant perspective**
-- Factor state for the position: 1M/3M momentum, sector relative strength,
+- The factor state of the ticker: 1M/3M momentum, sector relative strength,
   volatility change
-- Alignment with the market regime — if the `quant-market-brief` skill is
-  installed and today's briefing is already in the conversation, reuse that
-  regime determination. Otherwise, determine an abbreviated regime using only
+- Consistency with the market regime - if the `quant-market-brief` skill is
+  installed and today's briefing is present in the conversation, reuse that
+  regime determination. If not, determine an abbreviated regime using only
   VIX/rates/index and mark it as "abbreviated."
 
 **[B] Market news**
 - Identify the news causing the trigger via web search.
-- Prioritize primary sources (filings, earnings releases, regulatory
+- Prioritize primary sources (disclosures, earnings releases, regulator
   announcements). Clearly distinguish speculative articles from facts. If the
   causal news cannot be identified, record it as "price movement of unknown
-  cause" — this itself is important information.
+  cause" - this itself is important information.
 
 **[C] Social media sentiment**
 - Determine the direction and intensity of reactions on X (Twitter), Reddit,
-  and domestic communities via web search.
-- Always read `references/sentiment-guide.md` first. The key point: social
-  media can be a contrarian indicator. Extreme skew (fear/euphoria) is itself
-  a signal, and should not be used directly as a directional signal.
-- Do not quote individual accounts by name; discuss only aggregated
+  and local communities via web search.
+- Always read `references/sentiment-guide.md` first. Key point: social media
+  can be a contrarian indicator. Extreme skew (panic/euphoria) is itself a
+  signal, and should not be used as a directional signal as-is.
+- Do not cite specific individual accounts - only discuss aggregated
   direction/intensity.
 
-### Step 3: Cross-Verification and Comprehensive Evaluation
+### Step 3: Cross-Validation and Synthesized Assessment
 
-Summarize whether the three sources agree in direction, in a matrix:
+Organize whether the three sources' directions agree into a matrix:
 
-| Source | Direction | Intensity | Key rationale |
+| Source | Direction | Intensity | Key Basis |
 |---|---|---|---|
 | Quant | Positive/Neutral/Negative | Strong/Medium/Weak | |
 | News | | | Note whether primary source |
 | Social | | | Note contrarian-indicator possibility if extreme skew |
 
-- **All 3 agree** → mark as high confidence
-- **2:1 split** → the minority view's rationale must be documented in the body
-- **News (fact) conflicts with quant (price action)** → emphasize that fact
-  itself. It means either the price already priced in the news, or the news
-  hasn't been priced in yet
+- **All 3 agree** -> mark as high confidence
+- **2:1 split** -> the minority view's basis must be included in the body
+- **News (fact) conflicts with quant (price action)** -> emphasize that fact
+  itself. Either the price has already priced in the news, or the news
+  hasn't been priced in yet.
 
 ### Step 4: Present Action Candidates
 
 Follow this format per `references/action-framework.md`:
 
-- **Action candidates**: 1-2 of hold / reduce / add / consider stop-loss / watch further
-- State **both** the rationale and the counterargument for every candidate
-- Must include a **falsification condition**: "if X is observed, this evaluation is void"
-- Note that the final decision rests with the user. Do not use buy/sell directives
+- **Action candidates**: 1-2 of hold / trim / add / consider stop-loss / watch
+  further
+- Explicitly state **both the basis and the counterargument** for each
+  candidate
+- **Falsification condition**: must include "this assessment is invalidated
+  if X is observed"
+- State explicitly that the final decision belongs to the user. Do not use
+  buy/sell directives.
 
 ### Step 5: Update State
 
 Update `last_review` in `assets/portfolio.json` to today's date, and append a
-one-line summary to the `review_log` array (used to compute "the delta since
+one-line summary to the `review_log` array (used to compute the "delta from
 yesterday" in the next review). Keep only the most recent 10 log entries.
 
 ## Guidelines
 
-- Stay silent if no trigger fires. Producing a long-form analysis every day is noise.
-- Do not arbitrarily assign weights to the three sources. Report disagreement as disagreement.
-- Note the lookup time for every figure.
-- Report a violation of risk limits (T3) prominently, before any other trigger.
-- State on the last line that this skill's output is decision-support material, not investment advice.
+- Stay silent if there's no trigger. Producing a lengthy analysis every day is
+  noise.
+- Do not arbitrarily assign weights to the three sources. Report
+  disagreements as disagreements.
+- Note the retrieval timestamp for every figure.
+- Report risk-limit (T3) violations before any other trigger, prominently.
+- State on the last line that this skill's output is decision material, not
+  investment advice.
 ```
 
 ### 5.2 assets/portfolio.json (sample)
@@ -269,7 +272,7 @@ yesterday" in the next review). Keep only the most recent 10 log entries.
       "asset_class": "crypto",
       "qty": 0.5,
       "avg_price": 61000000,
-      "thesis": "macro hedge"
+      "thesis": "Macro hedge"
     }
   ],
   "review_log": []
@@ -279,36 +282,41 @@ yesterday" in the next review). Keep only the most recent 10 log entries.
 ### 5.3 references/trigger-rules.md
 
 ```markdown
-# Definition of Change Triggers
+# Change Trigger Definitions
 
-"A change has occurred" means **at least one** of the following quantitative
-conditions is met. Do not use the LLM's subjective judgment ("it seems to have
-dropped quite a bit") as a trigger.
+"A meaningful change has occurred" means **at least one** of the quantitative
+conditions below is met. A subjective LLM judgment ("that looks like a fairly
+big drop") is never used as a trigger.
 
 | Trigger | Condition | Priority |
 |---|---|---|
-| **T1** Individual sharp move | Absolute daily change ≥ 3% (≥ 7% for crypto) | Medium |
-| **T2** Portfolio move | Absolute daily change in total valuation ≥ 2% | High |
-| **T3** Risk limit | A `risk_limits` item is violated (weight exceeded, loss limit reached) | **Highest** |
-| **T4** Event | Major primary-source news about a held position (earnings release/guidance change, regulation, security incident/hack, delisting/trading halt issue, large-scale rights offering/CB) | High |
-| **T5** Volatility jump | 20-day historical volatility up 50%+ versus the prior day | Medium |
+| **T1** Individual sharp move | Absolute daily change of a ticker ≥ 3% (≥ 7% for crypto) | Medium |
+| **T2** Portfolio-level move | Absolute daily change in total portfolio value ≥ 2% | High |
+| **T3** Risk limit | A `risk_limits` entry is violated (weight exceeded, loss limit reached) | **Highest** |
+| **T4** Event | Major primary-source news related to a held ticker (earnings release/guidance change, regulatory action, security incident/hack, delisting/trading halt, large-scale rights offering/convertible bond) | High |
+| **T5** Volatility jump | Ticker's historical volatility (20-day) up ≥ 50% vs. the prior day | Medium |
 
 ## Evaluation Rules
 
-- If multiple triggers fire simultaneously, report the **highest priority first**.
-- T3 (risk limit) must be reported before any other analysis, as a separate warning block.
-- Differentiated thresholds by asset class: crypto's baseline volatility is
-  higher, so raise the T1 threshold to 7%. If the user adds
-  `trigger_overrides` to `portfolio.json`, that value takes priority.
-- Always record the current price and lookup time used for the trigger determination.
-- If checked intraday: compute the daily change versus the prior close and mark it "intraday basis."
+- When multiple triggers fire simultaneously, report **highest priority
+  first**.
+- T3 (risk limit) is reported before any other analysis, in a separate
+  warning block.
+- Differentiated thresholds by asset class: crypto has inherently higher
+  volatility, so the T1 threshold is raised to 7%. If the user adds
+  `trigger_overrides` to `portfolio.json`, that value takes precedence.
+- Always record the current price and retrieval timestamp used for the
+  trigger evaluation.
+- When checked intraday: calculate the daily change relative to the previous
+  close and mark it as "intraday basis."
 
 ## Non-Triggers (Cases Not Analyzed)
 
-- When the entire index moves in the same direction and an individual stock
-  simply moves in sync (if |stock change − benchmark change| < 1.5pp, demote
-  even a fired T1 to a "market-synced move" with only an abbreviated report)
-- A minor move on volume less than 50% of the 20-day average
+- When the entire index moves in the same direction and an individual ticker
+  simply moves in sync with it (if the absolute value of ticker change minus
+  benchmark change is < 1.5 percentage points, downgrade even a fired T1 to
+  "market-synced move" and give only a brief report)
+- A small move with trading volume below 50% of the 20-day average
 ```
 
 ### 5.4 references/sentiment-guide.md
@@ -316,54 +324,56 @@ dropped quite a bit") as a trigger.
 ```markdown
 # Social Media Sentiment Interpretation Guide
 
-Social media is both a source of information and a **thermometer of crowd
-psychology**. It should not be used directly as a directional signal — interpret
+Social media is both an information source and a **thermometer of crowd
+psychology**. It should not be used as a directional signal as-is; interpret
 it using the rules below.
 
 ## What to Collect
 
 - X (Twitter): mention volume and tone for the ticker/keyword
-- Reddit: r/stocks, r/wallstreetbets, ticker-specific subreddits (US stocks)
-- Domestic: sentiment on stock discussion boards, major investment communities (Korean stocks)
+- Reddit: r/stocks, r/wallstreetbets, and ticker-specific subreddits (US
+  equities)
+- Local communities: sentiment in stock discussion boards, major investment
+  communities (Korean equities)
 - Crypto: X + Telegram channel sentiment
 
-Collect only what can be confirmed via web search. Mark inaccessible sources as
-"unable to confirm" rather than guessing.
+Collect only what can be determined via web search. Mark inaccessible
+sources as "unable to confirm" rather than estimating.
 
 ## Interpretation Rules
 
-### 1. Separate direction from intensity
+### 1. Separate Direction From Intensity
 
 - Direction: positive / neutral / negative
-- Intensity: weak (normal level) / medium (increased mentions) / strong (sharp
-  mention spike + tone skew)
+- Intensity: weak (normal level) / medium (increased mentions) / strong
+  (mention volume spike + skewed tone)
 
-### 2. Extreme skew is a candidate contrarian indicator
+### 2. Extreme Skew Is a Potential Contrarian Indicator
 
-- **Extreme fear** (panic-sell mentions, "it's over" tone dominates): may
-  signal a short-term bottom
-- **Extreme euphoria** (surge in profit screenshots, "guaranteed moon" tone
-  dominates): may signal short-term overheating
-- In both cases, always note "extreme skew — possible contrarian indicator"
-  alongside the matrix
+- **Extreme fear** (panic-sell mentions, "it's over" tone dominating): may be
+  a short-term bottom signal
+- **Extreme euphoria** (profit-screenshot posts surging, "guaranteed to go up"
+  tone dominating): may be a short-term overheating signal
+- In both cases, always note "extreme skew - possible contrarian indicator"
+  in the matrix
 
-### 3. A mention-volume spike is itself a signal
+### 3. A Spike in Mention Volume Itself Is a Signal
 
 Regardless of tone, if mention volume spikes to several times the normal
-level, note it separately as a signal of expanding volatility.
+level, flag it separately as a volatility-expansion signal.
 
-### 4. Check for manipulation possibility
+### 4. Check for Possible Manipulation
 
-- A sudden surge in one-directional posts from new/bot-pattern accounts →
-  note "possible pump/FUD campaign"
-- For small caps and crypto especially, unattributed rumors of good/bad news
+- A surge of one-directional posts from new accounts/bot-like patterns ->
+  flag as "possible pump/FUD campaign"
+- Especially for small-caps and crypto, unsourced rumors of good/bad news
   should be classified only as social media ([C] source), not news ([B]
   source), until confirmed by a primary source
 
-### 5. Citation principle
+### 5. Citation Principle
 
-- Do not quote or identify individual accounts/users
-- Report only aggregated changes in direction/intensity/mention volume
+- Do not cite specific individual accounts/users
+- Report only aggregated direction/intensity/change in mention volume
 ```
 
 ### 5.5 references/action-framework.md
@@ -371,56 +381,59 @@ level, note it separately as a signal of expanding volatility.
 ````markdown
 # Action Framework
 
-The criteria for mapping evaluation results to action candidates. **Only
-present candidates** — the final decision rests with the user. Do not use
+Criteria for mapping an assessment result to an action candidate. **Only
+present candidates** - the final decision belongs to the user. Do not use
 buy/sell directives.
 
 ## 5 Action Candidates
 
-| Candidate | Presentation condition (example) |
+| Candidate | Presentation Condition (Example) |
 |---|---|
-| **Hold** | 3 sources neutral-to-positive, no damage to the thesis |
-| **Watch further** | 2:1 split among sources, or a move of unknown cause |
-| **Reduce** | 3 sources agree negative + partial damage to the thesis, or T3 weight limit exceeded |
-| **Add** | 3 sources agree positive + price fell (unwinding of a prior pricing-in) + room under limits |
-| **Consider stop-loss** | A primary-source fact emerges that invalidates the thesis itself (e.g., core business regulation confirmed) |
+| **Hold** | 3 sources neutral-to-positive, thesis intact |
+| **Watch further** | 2:1 split among sources, or cause-unknown movement |
+| **Trim** | 3 sources agree negative + thesis partially damaged, or T3 weight limit exceeded |
+| **Add** | 3 sources agree positive + price has fallen (unwinding of pre-pricing) + limit headroom available |
+| **Consider stop-loss** | A primary-source fact has occurred that invalidates the thesis itself (e.g., core business regulation confirmed) |
 
 ## Output Format (Required)
 
-For every triggered position:
+For each triggered ticker:
 
 ```
-### {Stock name} ({ticker}) — Trigger: {T1-T5}
+### {Ticker name} ({Ticker}) — Trigger: {T1-T5}
 
-**Cross-verification matrix**
-| Source | Direction | Intensity | Key rationale |
+**Cross-validation matrix**
+| Source | Direction | Intensity | Key basis |
 |---|---|---|---|
 | Quant | | | |
 | News | | | |
 | Social | | | |
 
-**Agreement**: {3-source agreement / 2:1 split / full disagreement}
+**Agreement**: {3 sources agree / 2:1 split / total disagreement}
 
 **Action candidates**: {1-2}
-- Rationale:
+- Basis:
 - Counterargument:
 
-**Falsification condition**: {if X is observed, this evaluation is void}
+**Falsification condition**: {This assessment is invalidated if X is observed}
 
-**Thesis check**: the registered thesis "{thesis}" is {valid / partially damaged / invalidated}
+**Thesis check**: registered investment thesis "{thesis}" is {intact / partially damaged / invalidated}
 ```
 
 ## Core Principles
 
-1. **Thesis first**: check the validity of the investment thesis before the
-   price move. If the price falls but the thesis remains valid, "hold +
+1. **Thesis first**: check the validity of the investment thesis before price
+   movement. If the price has fallen but the thesis remains intact, "hold +
    watch" is the default.
-2. **Counterargument required**: never present any candidate without a counterargument.
-3. **Falsification condition required**: an evaluation that cannot be falsified is not an evaluation.
-4. **The limit is king**: if T3 (risk limit) is violated, always include a
-   limit-compliance candidate (reduce), no matter how positive the other
+2. **Counterargument required**: never present any candidate without a
+   counterargument.
+3. **Falsification condition required**: an assessment that cannot be
+   falsified is not an assessment.
+4. **Limits rule**: when T3 (risk limit) is violated, always include a
+   limit-compliance candidate (trim) regardless of how positive the other
    sources are.
-5. State on the last line: "This review is decision-support material, not investment advice."
+5. State on the last line: "This review is decision material, not investment
+   advice."
 ````
 
 ### 5.6 scripts/check_triggers.py
@@ -434,7 +447,7 @@ Trigger definitions must stay in sync with references/trigger-rules.md.
 Usage:
     python check_triggers.py --portfolio ../assets/portfolio.json --prices prices.json
 
-prices.json format (current prices collected by Claude via web search go here):
+prices.json format (populate with current prices collected by Claude via web search):
 {
   "005930.KS": {"price": 74500, "prev_close": 76900, "benchmark_change_pct": -0.8},
   "NVDA":      {"price": 121.2, "prev_close": 126.5, "benchmark_change_pct": -1.1},
@@ -449,7 +462,7 @@ from datetime import date
 
 T1_EQUITY_PCT = 3.0     # Individual sharp move (equities)
 T1_CRYPTO_PCT = 7.0     # Individual sharp move (crypto)
-T2_PORTFOLIO_PCT = 2.0  # Overall portfolio move
+T2_PORTFOLIO_PCT = 2.0  # Overall portfolio-level move
 MARKET_SYNC_BAND = 1.5  # Market-sync determination band (percentage points)
 
 
@@ -468,7 +481,7 @@ def check(portfolio: dict, prices: dict) -> dict:
         t = p["ticker"]
         if t not in prices:
             triggers.append({"type": "DATA_MISSING", "ticker": t,
-                             "msg": "Current price not confirmed — needs web search"})
+                             "msg": "Current price unconfirmed — needs to be collected via web search"})
             continue
         now = p["qty"] * prices[t]["price"]
         prev = p["qty"] * prices[t]["prev_close"]
@@ -476,7 +489,7 @@ def check(portfolio: dict, prices: dict) -> dict:
         total_now += now
         total_prev += prev
 
-    # T1 / T5 individual positions
+    # T1 / T5 individual tickers
     for p in portfolio.get("positions", []):
         t = p["ticker"]
         if t not in prices:
@@ -491,7 +504,7 @@ def check(portfolio: dict, prices: dict) -> dict:
                 "change_pct": round(d, 2),
                 "market_sync": sync,
                 "msg": f"{p['name']} daily {d:+.2f}%"
-                       + (" (market-synced — abbreviated report)" if sync else ""),
+                       + (" (market-synced — brief report)" if sync else ""),
             })
 
     # T2 portfolio
@@ -500,7 +513,7 @@ def check(portfolio: dict, prices: dict) -> dict:
         if abs(pd) >= T2_PORTFOLIO_PCT:
             triggers.append({"type": "T2", "priority": "HIGH",
                              "change_pct": round(pd, 2),
-                             "msg": f"Portfolio valuation daily {pd:+.2f}%"})
+                             "msg": f"Portfolio value daily {pd:+.2f}%"})
 
     # T3 risk limits
     max_pct = limits.get("single_position_max_pct")
@@ -517,7 +530,7 @@ def check(portfolio: dict, prices: dict) -> dict:
         pd = pct(total_now, total_prev)
         if pd <= dd:
             triggers.append({"type": "T3", "priority": "CRITICAL",
-                             "msg": f"Portfolio daily {pd:+.2f}% <= loss limit {dd}%"})
+                             "msg": f"Portfolio daily {pd:+.2f}% ≤ loss limit {dd}%"})
 
     order = {"CRITICAL": 0, "HIGH": 1, "MID": 2}
     triggers.sort(key=lambda x: order.get(x.get("priority", "MID"), 3))
@@ -553,9 +566,9 @@ if __name__ == "__main__":
 
 ---
 
-## 6. Testing the Script Standalone
+## 6. Testing the Script on Its Own
 
-You can verify the trigger evaluation logic even without Claude:
+You can validate the trigger-evaluation logic even without Claude:
 
 ```bash
 cat > prices.json << 'EOF'
@@ -568,9 +581,9 @@ EOF
 python3 scripts/check_triggers.py --portfolio assets/portfolio.json --prices prices.json
 ```
 
-Sample execution result: BTC weight 86.4% > limit 20% → **T3 (CRITICAL) sorted
-first**, Samsung Electronics -3.12% / NVDA -4.19% → T1 fires. Confirmed that
-the priority ordering (CRITICAL > HIGH > MID) works correctly.
+Sample run result: BTC weight 86.4% > limit 20% -> **T3 (CRITICAL) sorted
+first**; Samsung Electronics -3.12% / NVDA -4.19% -> T1 fires. This confirms
+priority sorting (CRITICAL > HIGH > MID) works correctly.
 
 ---
 
@@ -579,20 +592,20 @@ the priority ordering (CRITICAL > HIGH > MID) works correctly.
 ```
 > Review my portfolio today
 
-[portfolio-daily-review triggered]
+[portfolio-daily-review activates]
 1. Load portfolio.json → 3 positions, check last_review
-2. Web search for prices → NVDA -4.2% (T1), no other triggers
-3. Collect 3 sources for NVDA only: quant (momentum/sector relative strength) / news (primary source) / social (direction·intensity)
-4. Cross-verification matrix → agreement determination → action candidates + falsification condition
-5. Check validity of the thesis "AI infrastructure capex"
-6. Update last_review + log review_log
+2. Web search for quotes → NVDA -4.2% (T1), no other triggers
+3. Collect 3 sources for NVDA only: quant (momentum/sector relative strength) / news (primary source) / social (direction/intensity)
+4. Cross-validation matrix → agreement determination → action candidates + falsification conditions
+5. Check validity of the "AI infrastructure capex" thesis
+6. Update last_review + log to review_log
 ```
 
-On a day with no trigger:
+On a day with no triggers:
 
 ```
 > Review my portfolio today
-Current price table + "No triggers, no action needed." (End)
+Current-price table + "No triggers, no action needed." (End)
 ```
 
 ---
@@ -601,40 +614,42 @@ Current price table + "No triggers, no action needed." (End)
 
 | Item | Location | Default | Notes |
 |---|---|---|---|
-| Individual sharp-move threshold (T1) | trigger-rules.md, check_triggers.py | Equity ±3% / Crypto ±7% | Must be kept in sync in both places |
-| Portfolio move threshold (T2) | Same | ±2% | |
-| Risk limits (T3) | portfolio.json `risk_limits` | Weight 20% / daily -3% / total -5% | Just edit the file |
+| Individual sharp-move threshold (T1) | trigger-rules.md, check_triggers.py | Equities ±3% / Crypto ±7% | Must be kept in sync across both files |
+| Portfolio-level move threshold (T2) | Same as above | ±2% | |
+| Risk limits (T3) | portfolio.json `risk_limits` | 20% weight / -3% daily / -5% overall | Only the file needs editing |
 | Market-sync band | check_triggers.py `MARKET_SYNC_BAND` | 1.5pp | |
-| Number of review log entries retained | SKILL.md Step 5 | 10 | |
+| Number of review-log entries retained | SKILL.md Step 5 | 10 | |
 
-> **Caution**: when changing thresholds, be sure to update both
+> **Note**: when changing a threshold, be sure to update both
 > `trigger-rules.md` (the rules Claude reads) and `check_triggers.py` (the
-> script constants). If they diverge, the determination will differ between
-> the environment where the script runs and where it doesn't.
+> script constants) together. If they diverge, the evaluation will differ
+> between the scripted and non-scripted environments.
 
 ---
 
-## 9. Using It Together With quant-market-brief
+## 9. Using Together With quant-market-brief
 
 ```
 Morning routine:
-1. "Summarize today's market"        → quant-market-brief: regime determination
-2. "Review my portfolio"             → portfolio-daily-review: reuses the same
-                                        conversation's regime determination in
-                                        Step 2 [A] quant source
+1. "Summarize today's market"      → quant-market-brief: regime determination
+2. "Review my portfolio"           → portfolio-daily-review: reuses the regime
+                                       determination from the same conversation
+                                       in Step 2 [A] quant source
 ```
 
-Running them in order in the same conversation automatically links the regime
-context. If there's no briefing, the skill falls back to an abbreviated regime
-determination and marks it as "abbreviated."
+If run in this order within the same conversation, the regime context connects
+automatically. If no briefing is present, the skill falls back to an
+abbreviated regime determination and marks it as "abbreviated."
 
 ---
 
-## 10. Cautions
+## 10. Precautions
 
-- The output of this skill is **decision-support material and not investment advice.** The final decision rests with the user.
-- Do not put sensitive information such as actual account numbers or brokerage
-  authentication credentials into `portfolio.json`. Ticker, quantity, and
-  average cost are sufficient. If committing to a public repo, it's
+- This skill's output is **decision material, not investment advice.** The
+  final decision belongs to the user.
+- Do not put sensitive information such as actual account numbers or
+  brokerage credentials into `portfolio.json`. Ticker, quantity, and average
+  cost alone are sufficient. If committing to a public repository, it's
   recommended to `.gitignore` your actual portfolio file.
-- This skill is for demo/educational purposes; test it thoroughly in your own environment before real use.
+- This skill is for demo/educational purposes; test it thoroughly in your own
+  environment before actual use.

@@ -4,10 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Qwen本地安装指南与注意事项(修订版) — VibeQuant</title>
-  <meta name="description" content="通过Ollama、LM Studio和Hugging Face Transformers在本地安装Qwen的事实核查指南,包含Qwen3/Qwen3.5/Qwen3.6系列的硬件配置对照表。" />
+  <meta name="description" content="Qwen本地部署最新指南:模型阵容(Qwen3 / 3.5 / 3.6 / 3.7-Max)、Ollama/LM Studio/Transformers安装方法、按VRAM选择硬件、量化、Thinking Mode及故障排查,附完整引用来源。" />
   <link rel="canonical" href="https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde-cn/" />
   <meta property="og:title" content="Qwen本地安装指南与注意事项(修订版)" />
-  <meta property="og:description" content="通过Ollama、LM Studio和Hugging Face Transformers在本地安装Qwen的事实核查指南,包含Qwen3/Qwen3.5/Qwen3.6系列的硬件配置对照表。" />
+  <meta property="og:description" content="Qwen本地部署最新指南:模型阵容(Qwen3 / 3.5 / 3.6 / 3.7-Max)、Ollama/LM Studio/Transformers安装方法、按VRAM选择硬件、量化、Thinking Mode及故障排查,附完整引用来源。" />
   <meta property="og:url" content="https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde-cn/" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="VibeQuant" />
@@ -26,7 +26,7 @@
   <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde-ja/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde-cn/" />
   <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde/" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Qwen本地安装指南与注意事项(修订版)","description":"通过Ollama、LM Studio和Hugging Face Transformers在本地安装Qwen的事实核查指南,包含Qwen3/Qwen3.5/Qwen3.6系列的硬件配置对照表。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Local_LLM/Qwen_Local_Install_guilde_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-30","dateModified":"2026-06-30","inLanguage":"zh-Hans","keywords":"LLM · 에이전트, Local_LLM"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Qwen本地安装指南与注意事项(修订版)","description":"Qwen本地部署最新指南:模型阵容(Qwen3 / 3.5 / 3.6 / 3.7-Max)、Ollama/LM Studio/Transformers安装方法、按VRAM选择硬件、量化、Thinking Mode及故障排查,附完整引用来源。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/local-llm-qwen-local-install-guilde-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Local_LLM/Qwen_Local_Install_guilde_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"zh-Hans","keywords":"Qwen, Qwen3 本地部署, Ollama Qwen, LM Studio, 量化 Q4_K_M, VRAM 选型"}</script>
 </head>
 <body class="content-body">
   <header class="site-top">
@@ -50,91 +50,79 @@
       <header class="article-head">
         <p class="eyebrow">LLM · 에이전트</p>
         <h1>Qwen本地安装指南与注意事项(修订版)</h1>
-        <p class="article-dates"><time datetime="2026-06-30">발행 2026.06.30</time> · 주제 LLM · 에이전트 · Local_LLM</p>
+        <p class="article-dates"><time datetime="2026-07-25">발행 2026.07.25</time> · 주제 Qwen · Qwen3 本地部署 · Ollama Qwen · LM Studio · 量化 Q4_K_M · VRAM 选型</p>
         <div class="lang-switch" role="navigation" aria-label="Language">
       <a class="lang-btn" href="../../tech/local-llm-qwen-local-install-guilde/" data-lang="KR">🇰🇷 한국어</a>
       <a class="lang-btn" href="../../tech/local-llm-qwen-local-install-guilde-en/" data-lang="EN">English</a>
       <a class="lang-btn" href="../../tech/local-llm-qwen-local-install-guilde-ja/" data-lang="JP">日本語</a>
       <a class="lang-btn is-active" href="../../tech/local-llm-qwen-local-install-guilde-cn/" data-lang="CN" aria-current="true">中文</a>
     </div>
-        <p class="lede">通过Ollama、LM Studio和Hugging Face Transformers在本地安装Qwen的事实核查指南,包含Qwen3/Qwen3.5/Qwen3.6系列的硬件配置对照表。</p>
+        <p class="lede">Qwen本地部署最新指南:模型阵容(Qwen3 / 3.5 / 3.6 / 3.7-Max)、Ollama/LM Studio/Transformers安装方法、按VRAM选择硬件、量化、Thinking Mode及故障排查,附完整引用来源。</p>
         
       </header>
-      <div class="article-body prose"><h2>Qwen概述</h2>
-<p>Qwen(中文:千问)是阿里巴巴集团开发的大语言模型(LLM)及大型多模态模型系列。首个版本于2023年4月以测试版形式发布,如今已成长为全球最大的开源AI生态系统之一。2026年3月,阿里巴巴将AI品牌统一为&quot;Qwen大模型&quot;,消除了此前的命名混乱。</p>
+      <div class="article-body prose"><h2>Qwen(千问)概述</h2>
+<p>Qwen(千问)是阿里巴巴集团开发的大语言模型(LLM)及大规模多模态模型系列。首个版本于2023年4月以Beta形式发布,目前已发展为全球最大的开源AI生态之一。2026年3月,阿里巴巴将AI品牌统一为&quot;Qwen千问大模型&quot;,消除了此前的命名混乱。</p>
 <h2>主要功能</h2>
-<p>Qwen可以执行多种多模态及语言任务。</p>
+<p>Qwen可执行多种多模态与语言任务。</p>
 <p>自然语言理解与文本生成</p>
 <p>视觉理解(图像、视频)</p>
 <p>音频理解与处理</p>
-<p>工具调用及AI代理(Agent)功能</p>
-<p>角色扮演及多轮对话</p>
-<p>模型基于大规模多语言、多模态数据进行预训练,并通过高质量数据微调,使其符合人类偏好。</p>
-<h2>技术架构与特点</h2>
+<p>工具调用与AI智能体功能</p>
+<p>角色扮演与多轮对话</p>
+<p>模型基于大规模多语言、多模态数据进行预训练,并通过高质量数据微调,以符合人类偏好。</p>
+<h2>技术架构与特性</h2>
 <p>双模式架构(思考模式/非思考模式)
-Qwen3的核心创新在于将&quot;思考模式&quot;和&quot;非思考模式&quot;同时集成到一个模型中,从而提升效率。</p>
-<table>
-<thead>
-<tr>
-<th>模式</th>
-<th>适用情况</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>思考模式</td>
-<td>需要深入思考的任务,如复杂逻辑推理、数学、编程</td>
-</tr>
-<tr>
-<td>非思考模式</td>
-<td>需要快速响应的普通对话</td>
-</tr>
-</tbody></table>
-<p>模型通过&quot;思考预算(thinking budget)&quot;机制动态评估问题复杂度,并自动分配计算资源。</p>
-<p>模型架构
-Dense模型与MoE(专家混合)模型并存,提供从0.6B到235B的多种规模。</p>
+Qwen3的核心创新在于在单一模型中同时搭载&quot;思考模式&quot;与&quot;非思考模式&quot;,以提升效率。</p>
+<p>模式 | 适用场景
+思考模式 | 需要深度思考的复杂逻辑推理、数学、编程等任务
+非思考模式 | 需要快速响应的一般对话
+模型通过&quot;思考预算(thinking budget)&quot;机制动态评估问题复杂度,自动分配计算资源。</p>
+<p>模型结构
+Dense模型与MoE(混合专家)模型并存:提供从0.6B到235B的多种规模。</p>
 <p>Qwen3-Next采用高稀疏度MoE架构:总参数800亿,推理时仅激活约30亿参数(约3.75%),大幅提升效率。</p>
-<p>Qwen3-Max总参数超过1万亿(1T),预训练使用了36T token。</p>
+<p>Qwen3-Max总参数超过1万亿(1T),预训练使用了36T tokens。</p>
 <p>训练策略
-三阶段预训练:构建语言基础 → 强化推理能力 → 扩展长文本能力</p>
-<p>四阶段后训练:包括长思维链冷启动、推理强化学习、模式融合等</p>
-<p>&quot;大模型培育小模型&quot;的蒸馏方式:用大模型生成的数据训练小模型</p>
+三阶段预训练:构建语言基础→强化推理能力→扩展长文本能力。</p>
+<p>四阶段后训练:包括长链思维冷启动、推理强化学习、模式融合等。</p>
+<p>&quot;大模型培养小模型&quot;的蒸馏方式:用大模型生成的数据训练小模型。</p>
 <h2>主要版本与模型</h2>
 <p>Qwen 3.5
-2026年2月 - 旗舰模型
+2026年2月——旗舰模型
 总参数397B(激活17B)
 262K原生上下文(可扩展至1M)
 支持201种语言,Apache 2.0开源</p>
 <p>Qwen3.7-Max
-2026年5月 - 代理专用
-可完全自主执行35小时以上的超长复杂任务</p>
+2026年5月——智能体专用
+可完全自主完成长达35小时以上的超长复杂任务</p>
 <p>Qwen3-Max
-2025年9月 - 总参数超过1T,LMArena排名全球第3</p>
-<p>开源模型包括Qwen、Qwen1.5、Qwen2、Qwen2.5系列等,参数范围从0.5B到110B;此外还有专用的视觉语言模型(Qwen-VL)、音频模型(Qwen-Audio)、代码模型(Qwen-Coder)、推理模型(QwQ)等。</p>
+2025年9月——总参数超过1T,LMArena排名全球第3</p>
+<p>开源模型包括Qwen、Qwen1.5、Qwen2、Qwen2.5系列等,规模从0.5B到110B不等。
+此外还有专用视觉语言模型(Qwen-VL)、音频模型(Qwen-Audio)、代码模型(Qwen-Coder)、推理模型(QwQ)等。</p>
 <h1>应用领域</h1>
-<p>Qwen可应用于多个领域。</p>
-<p>软件开发:代码生成、调试、代码审查,支持50余种编程语言</p>
+<p>Qwen可应用于多种领域。</p>
+<p>软件开发:代码生成、调试、审查,支持50多种编程语言</p>
 <p>内容创作:长文写作、SEO、社交媒体、翻译(201种语言)</p>
-<p>研究与数据分析:文献综述、图表解读、科学推理、医疗分析</p>
+<p>科研与数据分析:文献综述、图表解读、科学推理、医学分析</p>
 <p>企业业务:客服聊天机器人、文档处理、知识库问答</p>
-<p>在基准测试中,Qwen 3.5在SWE-Bench Verified上取得76.4分,与GPT-5.2和Claude Opus 4.5处于同等水平。</p>
-<h2>使用方式</h2>
-<p>开源模型:采用Apache 2.0许可证可免费使用,支持通过Ollama、llama.cpp、LM Studio等在本地运行</p>
+<p>在基准测试中,Qwen 3.5在SWE-Bench Verified上取得76.4分,与GPT-5.2及Claude Opus 4.5处于同一水平。</p>
+<h2>使用方法</h2>
+<p>开源模型:采用Apache 2.0许可证,可免费使用,支持通过Ollama、llama.cpp、LM Studio等本地运行</p>
 <p>API服务:通过阿里云DashScope API调用</p>
 <p>免费体验:可在Qwen Chat官方网站(chat.qwen.ai)进行对话</p>
-<p>企业服务:已服务全球29万余家企业客户</p>
+<p>企业服务:已服务全球29万多家企业客户</p>
 <hr>
-<h2>0. 首先应了解的版本梳理(文档更新)</h2>
-<p>原文仅涉及<code>qwen2.5</code>/<code>qwen3</code>及零散提到的<code>qwen3.5:4b</code>,但截至2026年6月,产品线已扩展如下。</p>
+<h2>0. 首先需要了解的版本梳理(文档更新说明)</h2>
+<p>原文档仅涉及<code>qwen2.5</code>/<code>qwen3</code>/零星提及的<code>qwen3.5:4b</code>,但截至2026年6月,产品阵容已扩展如下。</p>
 <table>
 <thead>
 <tr>
 <th>代际</th>
 <th>发布时间</th>
-<th>构成</th>
+<th>组成</th>
 <th>多模态</th>
 <th>支持语言</th>
 <th>许可证</th>
-<th>可否本地运行</th>
+<th>是否可本地运行</th>
 </tr>
 </thead>
 <tbody><tr>
@@ -158,46 +146,46 @@ Dense模型与MoE(专家混合)模型并存,提供从0.6B到235B的多种规模�
 <tr>
 <td>Qwen3.6</td>
 <td>2026-04~05</td>
-<td>27B(dense) / 35B-A3B(MoE),强化编程与代理能力</td>
+<td>27B(dense) / 35B-A3B(MoE),强化编程与智能体能力</td>
 <td>视觉</td>
-<td>-</td>
+<td>—</td>
 <td>Apache-2.0</td>
 <td>可 [R11][R12]</td>
 </tr>
 <tr>
 <td>Qwen3.7-Max</td>
 <td>2026-05-20</td>
-<td>仅限专有API,未公开开源权重</td>
-<td>-</td>
-<td>-</td>
-<td>未公开</td>
-<td><strong>不可(无法本地运行)</strong> [R7]</td>
+<td>仅限专有API,未公开开放权重</td>
+<td>—</td>
+<td>—</td>
+<td>闭源</td>
+<td><strong>不可(无法本地部署)</strong> [R7]</td>
 </tr>
 </tbody></table>
 <p>注意:</p>
 <ul>
-<li>本指南仅面向<strong>开源权重模型</strong>。<code>*-Max</code>、<code>*-Plus</code>等仅提供API的模型不属于本地安装对象。[R7][R12]</li>
-<li>在2025年7~8月的&quot;2507&quot;更新中,Qwen3从混合(开关)方式转变为<strong>thinking/instruct分离检查点</strong>。下载前请确认所选变体。[R7]</li>
+<li>本指南仅涉及<strong>开放权重模型</strong>。<code>*-Max</code>、<code>*-Plus</code>等仅限API使用的模型不是本地安装对象。[R7][R12]</li>
+<li>在2025年7~8月的&quot;2507&quot;刷新中,Qwen3从混合(切换)方式拆分为<strong>独立的thinking/instruct检查点</strong>。下载时请确认具体是哪个变体。[R7]</li>
 </ul>
 <hr>
 <h2>1. 选择安装方式</h2>
 <table>
 <thead>
 <tr>
-<th>方法</th>
+<th>方式</th>
 <th>特点</th>
 <th>推荐对象</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>Ollama</td>
-<td>一条命令即可安装/运行,最为简便</td>
+<td>一条命令即可安装/运行,最简单</td>
 <td>LLM新手、快速测试</td>
 </tr>
 <tr>
 <td>LM Studio</td>
-<td>基于GUI,点击几次即可完成。支持MLX·GGUF</td>
-<td>不想编写代码的用户</td>
+<td>基于GUI,点击几次即可。支持MLX·GGUF</td>
+<td>不想写代码的用户</td>
 </tr>
 <tr>
 <td>Hugging Face Transformers</td>
@@ -206,12 +194,12 @@ Dense模型与MoE(专家混合)模型并存,提供从0.6B到235B的多种规模�
 </tr>
 </tbody></table>
 <hr>
-<h2>2. 安装Ollama(最简便)</h2>
+<h2>2. 安装Ollama(最简单)</h2>
 <h3>2.1 安装Ollama [R8]</h3>
 <p>Windows</p>
 <pre><code class="language-powershell">irm https://ollama.com/install.ps1 | iex
 </code></pre>
-<p>或从官方网站(ollama.com)下载安装文件。</p>
+<p>或从官网(ollama.com)下载安装包。</p>
 <p>macOS</p>
 <pre><code class="language-bash">brew install ollama
 </code></pre>
@@ -219,28 +207,28 @@ Dense模型与MoE(专家混合)模型并存,提供从0.6B到235B的多种规模�
 <pre><code class="language-bash">curl -fsSL https://ollama.com/install.sh | sh
 </code></pre>
 <h3>2.2 运行</h3>
-<pre><code class="language-bash">ollama serve   # 手动启动(安装后通常会自动运行)
+<pre><code class="language-bash">ollama serve   # 手动启动(通常安装后会自动运行)
 </code></pre>
 <h3>2.3 下载并运行模型 [R8][R16]</h3>
-<pre><code class="language-bash"># 当前推荐 - Qwen3系列
+<pre><code class="language-bash"># 当前推荐——Qwen3系列
 ollama run qwen3:8b            # 基础/入门,约5GB
 ollama run qwen3:4b            # 轻量级
 ollama run qwen3:14b           # 约9GB
-ollama run qwen3:32b           # dense高端型号
-ollama run qwen3:30b-a3b       # MoE:30B级质量、8B级速度(仍需全部显存)
+ollama run qwen3:32b           # dense高配版
+ollama run qwen3:30b-a3b       # MoE:30B质量、8B级速度(仍需完整VRAM)
 
 # Qwen3.5系列(多模态)
-ollama run qwen3.5:9b          # 8GB显卡推荐的默认选项,约6.6GB
+ollama run qwen3.5:9b          # 8GB显卡推荐的基础配置,约6.6GB
 ollama run qwen3.5:4b          # 轻量级,约3.4GB(文件大小)
 
 # 旧版本
 ollama run qwen2.5:7b
 </code></pre>
-<p>可用大小(示例):qwen2.5 0.5/1.5/3/7/14/32/72B;qwen3 0.6~32B + 30B-A3B/235B-A22B;qwen3.5 0.8/2/4/9/27/35/122/397B系列。[R1][R2][R10]</p>
+<p>可用规格示例:qwen2.5 0.5/1.5/3/7/14/32/72B,qwen3 0.6~32B + 30B-A3B/235B-A22B,qwen3.5 0.8/2/4/9/27/35/122/397B系列。[R1][R2][R10]</p>
 <p>注意:</p>
 <ul>
-<li>Ollama标签中即使没有<code>instruct</code>,通常也是可对话的模型,但自Qwen3 2507版本起,thinking/instruct变体分别单独发布,因此需要<strong>自行确认标签</strong>。(原文&quot;全部为Instruct&quot;的断言在当前标准下已不准确) [R7]</li>
-<li><code>qwen3.5:4b</code>的&quot;3.4GB&quot;是<strong>GGUF文件大小</strong>,并非运行时内存。实际使用时还需加上KV缓存和上下文开销。[R7][R14]</li>
+<li>Ollama标签中即便没有<code>instruct</code>,大多也是对话模型,但自Qwen3 2507起,thinking/instruct变体已分开发布,<strong>请直接确认标签</strong>。(原文档中&quot;全部为Instruct&quot;的断言在当前阵容下并不准确)[R7]</li>
+<li><code>qwen3.5:4b</code>的&quot;3.4GB&quot;是<strong>GGUF文件大小</strong>,并非运行时RAM占用。实际使用时还需加上KV cache与context开销。[R7][R14]</li>
 </ul>
 <h3>2.4 使用自有GGUF文件(Modelfile) [R8]</h3>
 <pre><code class="language-text">FROM qwen2.5-7b-instruct-q5_0.gguf
@@ -252,22 +240,22 @@ PARAMETER top_k 20
 <pre><code class="language-bash">ollama create my-qwen -f Modelfile
 ollama run my-qwen
 </code></pre>
-<p>注意:像Qwen3.5这样的<strong>多模态GGUF</strong>由于视觉(mmproj)文件分离的问题,在Ollama中直接导入可能受限。此时建议使用llama.cpp系后端或LM Studio。(通过Ollama库标签获取则可正常运行。) [R9]</p>
+<p>注意:像Qwen3.5这类<strong>多模态GGUF</strong>,由于视觉(mmproj)文件分离问题,直接导入Ollama可能受限。此时建议使用llama.cpp系后端或LM Studio。(通过Ollama库标签拉取的方式可正常使用)[R9]</p>
 <hr>
 <h2>3. 安装LM Studio(GUI)</h2>
 <ol>
-<li>从官方网站下载并安装macOS/Windows/Linux版安装文件。</li>
-<li>启动应用 → 使用<code>Cmd+Shift+M</code>(Mac)/<code>Ctrl+Shift+M</code>(PC)搜索模型。</li>
-<li>搜索&quot;Qwen&quot; → 下载适合自己硬件的模型。</li>
-<li>也可以通过Hugging Face模型卡片上的&quot;Use this model → LM Studio&quot;直接跳转。</li>
-<li>多模态/思考模式的切换可能需要针对每个模型进行yaml配置,并支持通过CLI使用<code>lms import &lt;路径&gt;</code>手动导入。[R9]</li>
+<li>从官网下载macOS/Windows/Linux安装包并安装。</li>
+<li>启动应用→按<code>Cmd+Shift+M</code>(Mac)/<code>Ctrl+Shift+M</code>(PC)搜索模型。</li>
+<li>搜索&quot;Qwen&quot;→下载适合硬件配置的模型。</li>
+<li>也可通过Hugging Face模型卡上的&quot;Use this model → LM Studio&quot;直接连接。</li>
+<li>多模态/Thinking开关可能需要针对具体模型的YAML配置,CLI也支持通过<code>lms import &lt;路径&gt;</code>手动导入。[R9]</li>
 </ol>
-<p>在Apple Silicon上,使用支持<strong>MLX格式</strong>的LM Studio可获得明显的性能优势。[R9][R11]</p>
+<p>在Apple Silicon上,使用支持<strong>MLX格式</strong>的LM Studio可获得显著的性能优势。[R9][R11]</p>
 <hr>
-<h2>4. Hugging Face Transformers(开发者专用)</h2>
-<h3>4.1 前期准备</h3>
+<h2>4. Hugging Face Transformers(面向开发者)</h2>
+<h3>4.1 准备工作</h3>
 <pre><code class="language-bash">pip install transformers torch accelerate
-pip install modelscope   # 在中国境内下载更快
+pip install modelscope   # 在中国境内下载速度更快
 </code></pre>
 <h3>4.2 加载与运行</h3>
 <pre><code class="language-python">from transformers import AutoModelForCausalLM, AutoTokenizer
@@ -278,10 +266,10 @@ tokenizer = AutoTokenizer.from_pretrained(model_name)
 model = AutoModelForCausalLM.from_pretrained(
     model_name,
     torch_dtype=&quot;auto&quot;,
-    device_map=&quot;auto&quot;,   # 自动分配GPU/CPU,不足时使用CPU offload
+    device_map=&quot;auto&quot;,   # 自动分配GPU/CPU,不足时自动卸载到CPU
 )
 
-messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Qwen,请用中文自我介绍一下。&quot;}]
+messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Qwen,请用韩语做一下自我介绍。&quot;}]
 text = tokenizer.apply_chat_template(
     messages,
     tokenize=False,
@@ -295,111 +283,111 @@ outputs = model.generate(
 )
 print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 </code></pre>
-<p><code>enable_thinking=True</code>有利于复杂推理,但会使响应变慢。日常对话建议设为<code>False</code>。[R2][R8]</p>
-<p>安装前检查VRAM是否合适的技巧——无需下载,仅读取文件头即可估算内存占用: [R18]</p>
+<p><code>enable_thinking=True</code>有利于复杂推理,但会拖慢响应速度。日常对话建议设为<code>False</code>。[R2][R8]</p>
+<p>安装前检查VRAM适配性的小技巧——无需下载,仅读取文件头即可估算内存占用: [R18]</p>
 <pre><code class="language-bash">uvx hf-mem --model-id Qwen/Qwen3-8B --experimental --max-model-len 8192
 </code></pre>
 <hr>
-<h2>5. 模型选择指南(按硬件·以Q4_K_M为基准)</h2>
-<p>VRAM数值以Q4_K_M GGUF量化为基准,需为4K上下文的KV缓存额外增加<strong>1<del>2GB</strong>。当显存不足时,Ollama/llama.cpp会自动offload到系统内存,但速度会大幅下降(内存带宽慢10</del>20倍)。[R13][R18]</p>
+<h2>5. 模型选择指南(按硬件配置,以Q4_K_M为基准)</h2>
+<p>VRAM数值以Q4_K_M GGUF为基准,4K上下文的KV cache需额外预留<strong>1<del>2GB</strong>。VRAM不足时,Ollama/llama.cpp会自动卸载到系统RAM,但速度会大幅下降(内存带宽慢10</del>20倍)。[R13][R18]</p>
 <table>
 <thead>
 <tr>
-<th>硬件</th>
+<th>硬件配置</th>
 <th>推荐模型</th>
 <th>大致VRAM/RAM</th>
 <th>备注</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>老款笔记本(内存4~8GB)</td>
+<td>旧款笔记本(RAM 4~8GB)</td>
 <td>qwen3.5:4b / qwen2.5:3b</td>
 <td>3~4GB(文件)</td>
 <td>可纯CPU运行,速度较慢</td>
 </tr>
 <tr>
-<td>普通台式机(内存16GB)</td>
+<td>普通台式机(RAM 16GB)</td>
 <td>qwen3:8b / qwen3.5:9b</td>
 <td>约5~6.6GB</td>
 <td>可纯CPU运行 [R13][R14]</td>
 </tr>
 <tr>
-<td>显存8GB</td>
+<td>GPU VRAM 8GB</td>
 <td>qwen3.5:9b(Q4) / qwen3:7~8b</td>
 <td>约5.5~6.6GB</td>
 <td>RTX 3060/4060级别 [R13][R14]</td>
 </tr>
 <tr>
-<td>显存12GB</td>
+<td>GPU VRAM 12GB</td>
 <td>qwen3:14b(Q4)</td>
 <td>约9~9.5GB</td>
 <td>Q6_K有余量 [R13][R14]</td>
 </tr>
 <tr>
-<td>显存16~24GB</td>
+<td>GPU VRAM 16~24GB</td>
 <td>qwen3:32b / qwen3.6:27b(约17GB)</td>
 <td>17~20GB</td>
-<td>24GB下Q4_K_M运行流畅 [R12][R14]</td>
+<td>24GB下运行Q4_K_M较为流畅 [R12][R14]</td>
 </tr>
 <tr>
-<td>显存24GB</td>
+<td>GPU VRAM 24GB</td>
 <td>qwen3.6:35b-a3b(UD-Q4约22GB)</td>
 <td>约22GB</td>
-<td>上下文不要设置过高 [R12][R14]</td>
+<td>上下文不宜设置过大 [R12][R14]</td>
 </tr>
 <tr>
 <td>多GPU/服务器</td>
 <td>qwen2.5:72b / 235B-A22B / 397B-A17B</td>
-<td>数十~数百GB</td>
+<td>数十至数百GB</td>
 <td>需要tensor-parallel [R16][R19]</td>
 </tr>
 </tbody></table>
-<p>MoE陷阱:<code>30B-A3B</code>、<code>35B-A3B</code>、<code>80B-A3B</code>等模型即便<strong>激活参数仅为3B,也必须将全部权重加载到显存</strong>中。&quot;激活3B&quot;不等于&quot;内存需求3B&quot;。例如:Qwen3-Next-80B-A3B在未量化状态下大约需要160GB显存。[R14][R19]</p>
+<p>MoE陷阱:<code>30B-A3B</code>、<code>35B-A3B</code>、<code>80B-A3B</code>等模型<strong>即便激活参数只有3B,也必须将全部权重加载到VRAM中</strong>。&quot;激活3B&quot;不等于&quot;占用3B内存&quot;。例如:Qwen3-Next-80B-A3B在不量化的情况下约需160GB VRAM。[R14][R19]</p>
 <hr>
 <h2>6. 注意事项与技巧</h2>
 <h3>6.1 存储空间</h3>
 <ul>
-<li>7B ≈ 5GB、14B ≈ 9GB、27B ≈ 17GB、32B ≈ 20GB、35B-A3B ≈ 22GB(以Q4为基准)。[R13][R14]</li>
+<li>7B≈5GB、14B≈9GB、27B≈17GB、32B≈20GB、35B-A3B≈22GB(Q4基准)。[R13][R14]</li>
 <li>Ollama默认存储路径:<code>~/.ollama/models</code>。请确保有足够的空闲空间。[R8]</li>
 </ul>
 <h3>6.2 量化(Quantization) [R13][R16][R18]</h3>
 <ul>
-<li>Q4_K_M:大多数情况下的默认选择。可节省约75%显存,质量损失极小。</li>
-<li>Q5_K_M:节省约60%,质量略高于Q4。</li>
-<li>Q8_0:最高质量的量化。适用于显存充裕的情况。</li>
+<li>Q4_K_M:大多数场景下的默认选择。VRAM节省约75%,质量损失最小。</li>
+<li>Q5_K_M:节省约60%,质量略优于Q4。</li>
+<li>Q8_0:最高质量的量化方案。适用于VRAM充裕的情况。</li>
 <li>NVFP4:Blackwell(RTX 5060 Ti/5090)原生支持,比Q4更高效。</li>
-<li>显式指定示例:<code>ollama run qwen3:8b-q4_K_M</code></li>
-<li>警告:<strong>Q2_K会明显降低中文/日语/韩语等CJK输出质量。</strong> 处理CJK任务时,请至少使用Q4_K_M。[R13]</li>
+<li>明确指定示例:<code>ollama run qwen3:8b-q4_K_M</code></li>
+<li>警告:<strong>Q2_K会显著降低韩语/中文等CJK语言的输出质量</strong>。处理CJK任务时,请至少使用Q4_K_M。[R13]</li>
 </ul>
-<h3>6.3 使用GPU</h3>
+<h3>6.3 GPU使用</h3>
 <ul>
 <li>NVIDIA:需要CUDA驱动。</li>
-<li>Apple Silicon(M1~M4):统一内存架构对大型模型有利。建议使用MLX格式+LM Studio。(例如:64GB的M3 Max可运行qwen3:32b,速度约22 tok/s。) [R13]</li>
-<li>显存不足时,<code>device_map=&quot;auto&quot;</code>会offload到CPU,但一旦offload比例超过10~20%,感知速度会急剧下降——建议改用更小的模型。[R18]</li>
+<li>Apple Silicon(M1~M4):统一内存架构对大模型更有利。建议使用MLX格式+LM Studio。(例如M3 Max 64GB运行qwen3:32b可达约22 tok/s)[R13]</li>
+<li>VRAM不足时,<code>device_map=&quot;auto&quot;</code>会自动卸载到CPU,但一旦卸载比例超过10~20%,实际速度会急剧下降——建议改用更小的模型。[R18]</li>
 </ul>
-<h3>6.4 中文使用</h3>
+<h3>6.4 中文/韩语等语言的使用</h3>
 <ul>
-<li>Qwen3系列支持119种语言,Qwen3.5起支持201种语言。中文性能出色,可直接使用中文提示词。[R2][R9]</li>
+<li>Qwen3系列支持119种语言,Qwen3.5及以后支持201种语言。韩语等CJK语言性能优秀,可直接使用相应语言的提示词。[R2][R9]</li>
 </ul>
-<h3>6.5 思考模式(Qwen3及以上)</h3>
+<h3>6.5 Thinking Mode(Qwen3及以上)</h3>
 <ul>
 <li>CLI:<code>ollama run qwen3 --think</code> / <code>--no-think</code> [R8]</li>
 <li>API:<code>{&quot;model&quot;:&quot;qwen3&quot;,&quot;think&quot;:false,...}</code>或通过<code>{&quot;thinking&quot;:{&quot;budget_tokens&quot;:1024}}</code>设置推理预算上限 [R8]</li>
 <li>部分变体也支持在提示词中使用<code>/think</code>、<code>/no_think</code>开关。</li>
-<li>建议:摘要·草稿使用no-think,代码调试·数学·逻辑使用think。</li>
+<li>建议:摘要、草稿使用no-think,代码调试、数学、逻辑推理使用think。</li>
 </ul>
-<h3>6.6 上下文/KV缓存注意事项(原文缺失部分补充)</h3>
+<h3>6.6 上下文/KV cache注意事项(原文未涉及的补充内容)</h3>
 <ul>
 <li>Qwen3.5/3.6原生支持256K(262,144)上下文,通过YaRN可扩展至约1M。[R12][R17]</li>
-<li>上下文设置越长,KV缓存占用的显存就越多。上文&quot;最低VRAM&quot;表格是以短·中上下文为基准的,若实际要使用128K~256K,需预留大量余量。[R12]</li>
+<li>上下文设置越长,KV cache对VRAM的占用就越大。上文的&quot;最低VRAM&quot;表格是基于短/中等上下文的基准,若要实际使用128K~256K,须预留更充裕的余量。[R12]</li>
 </ul>
 <h3>6.7 网络</h3>
 <ul>
-<li>首次下载需要联网(数GB至数十GB)。此后可完全离线使用。[R8]</li>
+<li>首次下载需要联网(数GB至数十GB)。之后可完全离线使用。[R8]</li>
 </ul>
 <h3>6.8 许可证</h3>
 <ul>
-<li>Qwen3/3.5/3.6的开源权重采用Apache-2.0许可证,可用于商业用途。(但<code>*-Max</code> API模型有单独条款) [R7]</li>
+<li>Qwen3/3.5/3.6的开放权重采用Apache-2.0许可证——可用于商业用途。(但<code>*-Max</code>API模型另有单独条款)[R7]</li>
 </ul>
 <hr>
 <h2>7. 故障排查</h2>
@@ -412,7 +400,7 @@ print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 </thead>
 <tbody><tr>
 <td>&quot;CUDA out of memory&quot;</td>
-<td>使用更小的模型、更低的量化(Q4→Q3),或缩减上下文 [R12][R14]</td>
+<td>使用更小的模型或更低的量化等级(Q4→Q3)/缩小上下文 [R12][R14]</td>
 </tr>
 <tr>
 <td>Ollama找不到模型</td>
@@ -420,41 +408,41 @@ print(tokenizer.decode(outputs[0], skip_special_tokens=True))
 </tr>
 <tr>
 <td>响应速度过慢</td>
-<td>若为纯CPU,使用小型模型(0.6<del>4B);或检查offload比例(超过10</del>20%说明显存不足) [R18]</td>
+<td>若为纯CPU运行,改用小模型(0.6<del>4B),或检查卸载比例(超过10</del>20%说明GPU不足) [R18]</td>
 </tr>
 <tr>
-<td>LM Studio中看不到模型</td>
+<td>LM Studio中模型不显示</td>
 <td>使用<code>lms import &lt;模型路径&gt;</code>手动导入 [R9]</td>
 </tr>
 <tr>
-<td>多模态GGUF在Ollama中出错</td>
-<td>mmproj分离问题——使用llama.cpp/LM Studio [R9]</td>
+<td>多模态GGUF在Ollama中出现异常</td>
+<td>mmproj分离问题——请使用llama.cpp/LM Studio [R9]</td>
 </tr>
 <tr>
-<td>下载前确认显存是否合适</td>
+<td>下载前检查VRAM适配性</td>
 <td><code>uvx hf-mem --model-id &lt;repo&gt; --experimental</code> [R18]</td>
 </tr>
 </tbody></table>
 <hr>
 <h2>参考文献(References)</h2>
 <ul>
-<li>[R1] Ollama Library - qwen3.5(标签、大小/多模态/256K上下文)。<a href="https://ollama.com/library/qwen3.5">https://ollama.com/library/qwen3.5</a></li>
-<li>[R2] Ollama Library - qwen3(dense+MoE、thinking框架)。<a href="https://ollama.com/library/qwen3">https://ollama.com/library/qwen3</a></li>
-<li>[R7] Local AI Master, &quot;How to Run Qwen3 Locally (2026): Setup Guide&quot; - 8种模型配置、119种语言、2507分离、明确标注Qwen3.7-Max仅限API。<a href="https://localaimaster.com/blog/qwen-3-local-setup-guide">https://localaimaster.com/blog/qwen-3-local-setup-guide</a></li>
-<li>[R8] Serverman, &quot;Run Qwen3 on Ollama: All Sizes and Hardware Guide&quot; - 安装/运行、--think开关、KV/预算。<a href="https://www.serverman.co.uk/ai/ollama/how-to-run-qwen3-on-ollama/">https://www.serverman.co.uk/ai/ollama/how-to-run-qwen3-on-ollama/</a></li>
-<li>[R9] Unsloth Docs, &quot;Qwen3.5 - How to Run Locally&quot; - Small/大型配置、Ollama GGUF mmproj限制、LM Studio yaml开关。<a href="https://unsloth.ai/docs/models/qwen3.5">https://unsloth.ai/docs/models/qwen3.5</a></li>
-<li>[R10] Ollama Library - qwen3.5 Tags(0.8b~122b大小/容量)。<a href="https://ollama.com/library/qwen3.5/tags">https://ollama.com/library/qwen3.5/tags</a></li>
-<li>[R11] Ollama Library - qwen3.6(27B/35B、MLX、编程能力强化)。<a href="https://ollama.com/library/qwen3.6">https://ollama.com/library/qwen3.6</a></li>
-<li>[R12] knightli, &quot;Qwen3.6 VRAM Table&quot; - 27B≈17GB、35B-A3B≈22GB(UD-Q4)、上下文/KV注意事项。<a href="https://knightli.com/en/2026/05/01/qwen3-6-local-vram-quantization-table/">https://knightli.com/en/2026/05/01/qwen3-6-local-vram-quantization-table/</a></li>
-<li>[R13] PromptQuorum, &quot;Qwen Local Deployment Guide 2026&quot; - Q4_K_M VRAM表、Q2_K CJK质量下降警告、Apple Silicon tok/s。<a href="https://www.promptquorum.com/local-llms/qwen-local-deployment-guide-2026">https://www.promptquorum.com/local-llms/qwen-local-deployment-guide-2026</a></li>
-<li>[R14] InsiderLLM, &quot;VRAM Cheat Sheet for Local LLMs&quot; - qwen3.5 9B 6.6GB、视觉开销、MoE全部权重加载。<a href="https://insiderllm.com/guides/vram-requirements-local-llms/">https://insiderllm.com/guides/vram-requirements-local-llms/</a></li>
-<li>[R16] Compute Market, &quot;Qwen 3 Hardware Guide 0.8B~72B&quot; - 硬件层级/价格、量化格式。<a href="https://www.compute-market.com/blog/qwen-3-local-hardware-guide-2026">https://www.compute-market.com/blog/qwen-3-local-hardware-guide-2026</a></li>
-<li>[R17] M. Chen (Medium), &quot;Run Qwen3.6-35B-A3B on 6GB VRAM Using Llama.cpp&quot; - 低配置offload案例。<a href="https://mychen76.medium.com/run-qwen3-6-35b-a3b-on-6gb-vram-using-llama-cpp-30-tps-a89032e5a60c">https://mychen76.medium.com/run-qwen3-6-35b-a3b-on-6gb-vram-using-llama-cpp-30-tps-a89032e5a60c</a></li>
-<li>[R18] ai.rs, &quot;Will This LLM Fit My GPU?&quot; - hf-mem预检查、offload性能损失。<a href="https://ai.rs/ai-developer/will-llm-fit-my-gpu-vram-requirements">https://ai.rs/ai-developer/will-llm-fit-my-gpu-vram-requirements</a></li>
-<li>[R19] Hugging Face Discussion - Qwen3-Next-80B-A3B内存(未量化≈160GB、MoE全部权重加载)。<a href="https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct/discussions/7">https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct/discussions/7</a></li>
+<li>[R1] Ollama Library — qwen3.5(标签、规格/多模态/256K上下文)。<a href="https://ollama.com/library/qwen3.5">https://ollama.com/library/qwen3.5</a></li>
+<li>[R2] Ollama Library — qwen3(dense+MoE、thinking框架)。<a href="https://ollama.com/library/qwen3">https://ollama.com/library/qwen3</a></li>
+<li>[R7] Local AI Master,《How to Run Qwen3 Locally (2026): Setup Guide》——8种模型配置、119种语言、2507分离、Qwen3.7-Max仅限API说明。<a href="https://localaimaster.com/blog/qwen-3-local-setup-guide">https://localaimaster.com/blog/qwen-3-local-setup-guide</a></li>
+<li>[R8] Serverman,《Run Qwen3 on Ollama: All Sizes and Hardware Guide》——安装/运行、--think开关、KV/预算。<a href="https://www.serverman.co.uk/ai/ollama/how-to-run-qwen3-on-ollama/">https://www.serverman.co.uk/ai/ollama/how-to-run-qwen3-on-ollama/</a></li>
+<li>[R9] Unsloth Docs,《Qwen3.5 - How to Run Locally》——Small/大型配置、Ollama GGUF mmproj限制、LM Studio yaml开关。<a href="https://unsloth.ai/docs/models/qwen3.5">https://unsloth.ai/docs/models/qwen3.5</a></li>
+<li>[R10] Ollama Library — qwen3.5 Tags(0.8b~122b规格/容量)。<a href="https://ollama.com/library/qwen3.5/tags">https://ollama.com/library/qwen3.5/tags</a></li>
+<li>[R11] Ollama Library — qwen3.6(27B/35B、MLX、编程能力增强)。<a href="https://ollama.com/library/qwen3.6">https://ollama.com/library/qwen3.6</a></li>
+<li>[R12] knightli,《Qwen3.6 VRAM Table》——27B≈17GB、35B-A3B≈22GB(UD-Q4)、上下文/KV注意事项。<a href="https://knightli.com/en/2026/05/01/qwen3-6-local-vram-quantization-table/">https://knightli.com/en/2026/05/01/qwen3-6-local-vram-quantization-table/</a></li>
+<li>[R13] PromptQuorum,《Qwen Local Deployment Guide 2026》——Q4_K_M VRAM表、Q2_K CJK质量下降警告、Apple Silicon tok/s。<a href="https://www.promptquorum.com/local-llms/qwen-local-deployment-guide-2026">https://www.promptquorum.com/local-llms/qwen-local-deployment-guide-2026</a></li>
+<li>[R14] InsiderLLM,《VRAM Cheat Sheet for Local LLMs》——qwen3.5 9B占用6.6GB、视觉开销、MoE全权重加载。<a href="https://insiderllm.com/guides/vram-requirements-local-llms/">https://insiderllm.com/guides/vram-requirements-local-llms/</a></li>
+<li>[R16] Compute Market,《Qwen 3 Hardware Guide 0.8B~72B》——硬件档位/价格、量化格式。<a href="https://www.compute-market.com/blog/qwen-3-local-hardware-guide-2026">https://www.compute-market.com/blog/qwen-3-local-hardware-guide-2026</a></li>
+<li>[R17] M. Chen(Medium),《Run Qwen3.6-35B-A3B on 6GB VRAM Using Llama.cpp》——低配置卸载案例。<a href="https://mychen76.medium.com/run-qwen3-6-35b-a3b-on-6gb-vram-using-llama-cpp-30-tps-a89032e5a60c">https://mychen76.medium.com/run-qwen3-6-35b-a3b-on-6gb-vram-using-llama-cpp-30-tps-a89032e5a60c</a></li>
+<li>[R18] ai.rs,《Will This LLM Fit My GPU?》——hf-mem预检查、卸载性能损失。<a href="https://ai.rs/ai-developer/will-llm-fit-my-gpu-vram-requirements">https://ai.rs/ai-developer/will-llm-fit-my-gpu-vram-requirements</a></li>
+<li>[R19] Hugging Face Discussion — Qwen3-Next-80B-A3B内存占用(不量化约160GB、MoE全权重加载)。<a href="https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct/discussions/7">https://huggingface.co/Qwen/Qwen3-Next-80B-A3B-Instruct/discussions/7</a></li>
 </ul>
 <blockquote>
-<p>免责声明:模型产品线·标签·容量会在上游(Ollama/HF/Unsloth)随时更新。实际安装前请在相应库页面重新确认最新标签与文件大小。</p>
+<p>免责声明:模型阵容、标签、文件大小会在上游(Ollama/HF/Unsloth)随时更新。实际安装前请到相应的库页面重新确认最新的标签与文件大小。</p>
 </blockquote>
 </div>
       <aside class="author-box">

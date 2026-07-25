@@ -1,57 +1,101 @@
 ---
 title: "Quivr: Open Source Second Brain Powered by Generative AI"
-description: "An overview of Quivr, an open-source RAG platform that turns personal and enterprise data into an intelligent AI assistant."
+description: "A complete guide to Quivr, the open-source RAG platform with 38,000+ GitHub stars — features, tech stack, installation, custom RAG workflows, and the 'Brain' concept."
+abstract: |
+  Quivr is an open-source RAG (Retrieval-Augmented Generation) platform, a "second brain" that turns personal or
+  enterprise data into an intelligent AI assistant. Users can simply upload documents and ask questions in natural
+  language to easily search and use vast amounts of information. This guide covers why Quivr exists, its core
+  features (opinionated RAG workflows, support for all file formats, multi-LLM support, customizable RAG via YAML,
+  tool integration and web search, Megaparse integration, privacy/self-hosting, tech stack), developer benefits,
+  installation and usage (Python package, Docker self-hosted deployment, custom RAG configuration, Chainlit chat UI,
+  API key usage), the "Brain" concept, and reference links.
+summary_for_ai: |
+  Complete guide to Quivr, an open-source RAG platform with 38,000+ GitHub stars, 50,000+ users, and 6,000+ companies
+  using it, backed by Y Combinator and founded by three lifelong French friends.
+  Problem it solves: roughly 20% of work time in enterprises is spent simply searching for information (asking
+  colleagues who are on vacation, repeatedly answering the same questions, not knowing where or whether information
+  exists). Quivr connects all of a company's tools, documents, APIs, and databases into a conversational AI platform,
+  automating document summarization, extracting actionable info from databases, and context-aware email drafting.
+  Core features: opinionated (pre-optimized) RAG workflows requiring no pipeline built from scratch; support for
+  all file formats (txt, PDF, markdown, PPT, CSV/XLSX, Word, audio/video) with custom parser support; multi-LLM
+  support (OpenAI, Anthropic Claude, Mistral, Google Gemma, Groq, local models via Ollama for full data privacy);
+  YAML-configurable RAG tuning (reranker model/settings, conversation history depth, LLM temperature, max input
+  tokens, chunk size/count); tool integration and web search beyond static documents; Megaparse integration for
+  efficient large-scale document parsing; privacy/self-hosting support for full on-premises operation without
+  external API calls.
+  Tech stack: Next.js + Vercel frontend, FastAPI backend, Celery + queue for async embedding/indexing, PGVector/FAISS
+  vector store, Supabase for auth/DB.
+  Developer benefits: quick start (`pip install quivr-core`, a full RAG system in 5 lines of code), rich RESTful API
+  with Swagger docs and API-key auth, extensible architecture (custom parsers, RAG workflow nodes, swappable vector
+  stores, LangChain-integrated embedding models), an active open-source community, and productivity gains from
+  abstracting RAG complexity while allowing YAML-based experimentation without code changes.
+  Installation/usage covers: Python quick start via pip, a full basic usage code example (Brain.from_files, brain.ask,
+  an interactive loop), Docker-based self-hosted deployment (clone, .env setup, docker compose up, web UI at
+  localhost:3000, API docs at localhost:5050/docs), custom RAG workflow configuration via YAML (reranker, history
+  depth, temperature, max tokens) loaded via RetrievalConfig.from_yaml, building a chat UI with Chainlit, and API key
+  issuance/usage with a curl example.
+  The "Brain" concept: Quivr's core abstraction for storing and processing a user's knowledge — one Brain can link
+  multiple documents, each Brain can have its own RAG config and LLM, supports public/private settings, and can be
+  shared via a Brain Marketplace.
+  Conclusion: Quivr is designed as a developer-friendly AI framework prioritizing simplicity and extensibility, with
+  full transparency as open source, a 30-second install, data privacy via on-premises deployment, no vendor lock-in
+  across major LLMs, and an active community — described as "the idea of Obsidian, supercharged with AI."
+date: 2026-04-10
+author: "Dennis Kim"
 lang: en
-featured: false
-schema_type: TechArticle
-keywords:
-  - Quivr
-  - RAG
-  - second brain
-  - open source AI
-  - retrieval augmented generation
 tags:
+  - Quivr
   - RAG
   - Open Source
   - AI Assistant
   - LLM
+keywords:
+  - Quivr open source RAG
+  - second brain AI
+  - Quivr installation guide
+  - quivr-core Python
+  - self-hosted RAG platform
+  - Brain concept Quivr
+featured: false
+schema_type: TechArticle
+draft: false
 ---
 
 # Quivr: Open Source Second Brain Powered by Generative AI
 
 ## 1. Overview
 
-Quivr is an open-source RAG (Retrieval-Augmented Generation) platform — a "Second Brain" that turns personal or enterprise data into an intelligent AI assistant. Users simply upload documents and ask questions in natural language to easily search and leverage vast amounts of information.
+Quivr is an open-source RAG (Retrieval-Augmented Generation) platform — a "Second Brain" that turns personal or enterprise data into an intelligent AI assistant. Users can simply upload documents and ask questions in natural language to easily search and put vast amounts of information to use.
 
-Quivr has attracted attention from developers worldwide with over 38,000 GitHub stars, and is used by more than 50,000 users and 6,000+ companies. Backed by Y Combinator, the project was founded by three French friends who had known each other for 20 years.
+Quivr has drawn attention from developers worldwide with 38,000+ GitHub stars, and is used by 50,000+ users and 6,000+ companies. Backed by Y Combinator, the project was founded by three lifelong French friends.
 
 ---
 
 ## 2. Why Quivr? (Pain Point & Solution)
 
-In a corporate setting, employees spend roughly 20% of their working hours simply searching for information. Employees repeatedly face difficulties such as:
+In enterprise environments, roughly 20% of work time is spent simply searching for information. Employees repeatedly run into difficulties like these:
 
-- Having to ask an urgent question to a colleague who's on vacation
-- The inefficiency of asking and answering the same question repeatedly
-- Not knowing where the information they need is — or even whether it exists
+- Having to ask a colleague who's on vacation for urgent information
+- The inefficiency of asking and answering the same question over and over
+- Not knowing where the information they need is located, or even whether it exists
 
-Quivr solves these problems by providing an open-source AI platform that connects all of a company's tools, documents, APIs, and databases, letting you converse with them. Quivr automates tasks such as:
+Quivr solves this by providing an open-source AI platform that connects all of a company's tools, documents, APIs, and databases so you can converse with them. Quivr automates tasks such as:
 
-- Summarizing lengthy documents to extract the essentials
+- Summarizing lengthy documents down to their essentials
 - Extracting actionable information from databases
-- Auto-drafting context-aware emails
+- Drafting context-aware emails automatically
 
 ---
 
-## 3. Key Features
+## 3. Core Features
 
 ### 3.1 Opinionated RAG (Optimized RAG Workflow)
 
-Quivr provides a pre-designed, optimized RAG workflow so developers don't need to build a RAG pipeline from scratch. Designed around speed and efficiency, it's ready for immediate production use.
+Quivr provides a pre-designed, optimized RAG workflow, so developers don't need to build a RAG pipeline from scratch. Designed with speed and efficiency at its core, it's ready for immediate use in production.
 
 ### 3.2 Support for All File Formats
 
-Supports a wide range of file formats, and custom parsers can be added as needed:
+Quivr supports a wide range of file formats, with the option to add custom parsers as needed:
 
 - Text files (.txt)
 - PDF documents
@@ -63,90 +107,90 @@ Supports a wide range of file formats, and custom parsers can be added as needed
 
 ### 3.3 Multi-LLM Support
 
-Quivr supports a variety of LLMs (Large Language Models) to avoid vendor lock-in:
+Quivr supports a wide range of LLMs (Large Language Models) to avoid vendor lock-in:
 
 - OpenAI (GPT-4, GPT-3.5)
 - Anthropic (Claude)
 - Mistral
 - Google (Gemma)
 - Groq
-- Local models (Ollama) — complete data privacy guaranteed
+- Local models (Ollama) — guarantees full data privacy
 
 ### 3.4 Customizable RAG Workflow
 
-A YAML config file lets you fine-tune elements such as:
+You can fine-tune the following elements through YAML configuration files:
 
 - Reranker model and settings
-- History depth (how much conversational context is retained)
+- History depth (how much conversation context is factored in)
 - LLM temperature and max input tokens
 - Retrieval chunk size and count
 
-### 3.5 Tool Integration and Internet Search
+### 3.5 Tool Integration and Web Search
 
-Beyond static document knowledge, Quivr can connect to internet search and external tools/APIs to enable dynamic information gathering and real-time intelligence.
+Beyond static document knowledge, Quivr can connect to web search and external tools/APIs to enable dynamic information gathering and real-time intelligence.
 
 ### 3.6 Megaparse Integration
 
-Megaparse, developed by the same team (QuivrHQ), is a tool for efficiently parsing large-scale documents, letting you preprocess thousands of files and connect them directly to a Quivr "Brain."
+Megaparse, developed by the same team at QuivrHQ, is a tool for efficiently parsing large-scale documents, preprocessing thousands of files and connecting them directly to a Quivr "Brain."
 
 ### 3.7 Privacy and Self-Hosting
 
-For companies and developers where data privacy matters, Quivr supports local deployment and self-hosting. Data stays under the user's control and can operate in a fully on-premises environment with no external API calls.
+For companies and developers where data privacy matters, Quivr supports local deployment and self-hosting. Data stays under the user's control and can run entirely on-premises without any external API calls.
 
 ### 3.8 Tech Stack
 
 | Layer | Technology | Characteristics |
 |------|------|------|
-| Frontend | Next.js + Vercel | SSR-based, automated deployment |
-| Backend API | FastAPI | High-performance Python-based API framework |
-| Async tasks | Celery + Queue | Handles large-file embedding and indexing |
+| Frontend | Next.js + Vercel | SSR-based, automatic deployment |
+| Backend API | FastAPI | Python-based high-performance API framework |
+| Async jobs | Celery + Queue | Handles large-file embedding and indexing |
 | Vector store | PGVector / FAISS | High-performance semantic search |
 | Auth/DB | Supabase | Open-source Firebase alternative |
 
 ---
 
-## 4. Advantages for Developers
+## 4. Benefits for Developers
 
-### 4.1 Fast Start (Ready in 30 Seconds)
+### 4.1 Quick Start (Under 30 Seconds)
 
 ```bash
 pip install quivr-core
-# A complete RAG system built with just 5 lines of code
+# A full RAG system built in just 5 lines of code
 ```
 
 ### 4.2 Rich API Support
 
-Quivr provides a RESTful API, easily explorable and testable via Swagger docs. API-key-based authentication makes it easy to integrate into applications.
+Quivr provides a RESTful API that's easy to explore and test via Swagger docs. It supports API-key-based authentication, making it easy to integrate into applications.
 
 ### 4.3 Extensible Architecture
 
-- Add custom file parsers
-- Extend RAG workflow nodes
-- Swap out vector stores
-- Support for various embedding models (LangChain integration)
+- Custom file parsers can be added
+- RAG workflow nodes can be extended
+- Vector stores can be swapped out
+- Supports a variety of embedding models (via LangChain integration)
 
-### 4.4 Active Open-Source Community
+### 4.4 An Active Open-Source Community
 
-- 38k+ stars on GitHub, active contributions
+- 38k+ GitHub stars, active contributions
 - Regular updates and feature improvements
-- Active issue response and PR review
+- Active issue triage and PR review
 
 ### 4.5 Improved Development Productivity
 
 - Abstracts RAG's complex internals so you can focus on business logic
-- YAML-based config lets you experiment with RAG strategies without code changes
-- Various example code provided (Chainlit, Streamlit integration)
+- YAML-based configuration lets you experiment with RAG strategies without code changes
+- A variety of example code provided (Chainlit, Streamlit integrations)
 
 ---
 
 ## 5. Installation and Usage
 
-### 5.1 Python Package Installation (Quick Start)
+### 5.1 Installing the Python Package (Quick Start)
 
-For the fastest start, install the quivr-core package.
+For the fastest way to get started, install the quivr-core package.
 
 ```bash
-# Step 1: install the package
+# Step 1: Install the package
 pip install quivr-core
 
 # Verify installation
@@ -179,28 +223,28 @@ while True:
 
 ### 5.3 Docker-Based Local Deployment (Self-Hosted)
 
-If data privacy matters or you want full functionality:
+If data privacy matters, or you want to use the full feature set:
 
 ```bash
-# Step 1: clone the repository
+# Step 1: Clone the repository
 git clone https://github.com/quivrhq/quivr.git && cd quivr
 
-# Step 2: configure the environment
+# Step 2: Set up the environment
 cp .env.example .env
-# enter OPENAI_API_KEY in the .env file
+# Enter your OPENAI_API_KEY in the .env file
 
-# Step 3: run with Docker
+# Step 3: Run with Docker
 docker compose pull
 docker compose up
 
-# Step 4: access
+# Step 4: Access it
 # Web UI: http://localhost:3000
 # API docs: http://localhost:5050/docs
 ```
 
 ### 5.4 Setting Up a Custom RAG Workflow
 
-You can customize your RAG strategy via a YAML file:
+You can customize your RAG strategy with a YAML file:
 
 ```yaml
 # custom_rag.yaml
@@ -226,10 +270,10 @@ brain = Brain.from_files(
 )
 
 config = RetrievalConfig.from_yaml("./custom_rag.yaml")
-answer = brain.ask("your question", retrieval_config=config)
+answer = brain.ask("question", retrieval_config=config)
 ```
 
-### 5.5 Building a Chat UI with Chainlit
+### 5.5 Building a Chat UI With Chainlit
 
 ```bash
 cd examples/chatbot
@@ -240,7 +284,7 @@ rye run chainlit run chainlit.py
 ### 5.6 Issuing and Using an API Key
 
 ```bash
-# 1. Log into the Quivr web app
+# 1. Log in to the Quivr web app
 # 2. Generate an API key on the /user page
 # 3. Use the Bearer token when calling the API
 
@@ -250,13 +294,13 @@ curl -X GET https://api.quivr.app/brains/ \
 
 ---
 
-## 6. Understanding the 'Brain' Concept
+## 6. Understanding the "Brain" Concept
 
 Quivr's core concept is the "Brain." A Brain is the fundamental component that stores and processes a user's knowledge.
 
-- A single Brain can have multiple documents attached
-- Each Brain can have its own RAG configuration and LLM
-- Can be set to Public/Private (shared or private)
+- A single Brain can have multiple documents linked to it
+- Each Brain can have its own unique RAG configuration and LLM
+- Can be set to public or private (shared or not)
 - Other users' Brains can also be used via the Brain Marketplace
 
 ---
@@ -277,8 +321,8 @@ Quivr's core concept is the "Brain." A Brain is the fundamental component that s
 ### Quick Links
 
 - Quick Start: https://core.quivr.com/en/stable/
-- Brain API guide: create a Brain via the POST /brains/ endpoint
-- Chat API: retrieve conversation history via GET /chat/{chat_id}/history
+- Brain API guide: Create a Brain via the POST /brains/ endpoint
+- Chat API: Look up conversation history via GET /chat/{chat_id}/history
 
 ### Community
 
@@ -289,14 +333,14 @@ Quivr's core concept is the "Brain." A Brain is the fundamental component that s
 
 ## 8. Conclusion
 
-Quivr is designed to be more than a simple RAG tool — it's a developer-friendly AI framework. Prioritizing simplicity and extensibility above all, it contributes to productivity gains for everyone from individual developers to large AI teams.
+Quivr is designed to be more than just a RAG tool — it's a developer-friendly AI framework. Prioritizing simplicity and extensibility above all, it's helping boost productivity for everyone from individual developers to large AI teams.
 
 Reasons to choose Quivr:
 
-- Open source for complete transparency and free customization
-- Up and running in 30 seconds, usable in just 5 lines of code
+- Fully transparent and freely customizable as open source
+- 30-second install, ready to use with 5 lines of code
 - Data privacy — supports on-premises deployment
 - No vendor lock-in — compatible with all major LLMs
-- Active community and continuous updates
+- An active community with continuous updates
 
-As one description puts it, "the idea is like Obsidian, but supercharged with AI features" — Quivr presents a new paradigm for knowledge management. Build your own "second brain" with Quivr today.
+As one description puts it, "the idea of Obsidian, but supercharged with AI capabilities" — Quivr offers a new paradigm for knowledge management. Go build your own "second brain" with Quivr today.
