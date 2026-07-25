@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>caveman + rtk：AI 编码助手 Token 优化完全指南 — VibeQuant</title>
-  <meta name="description" content="caveman 与 rtk 两个开源项目如何组合使用，将 AI 编码助手的 token 用量合计削减 80-95%" />
+  <title>caveman + rtk:AI 编程助手 Token 优化完整指南 — VibeQuant</title>
+  <meta name="description" content="压缩输出 token 的 caveman 与压缩输入 token(CLI 输出)的 rtk——这两款开源工具组合使用可将 AI 编程助手的 API 成本削减 80%~95%，本指南详细介绍其原理与用法。" />
   <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-cn/" />
-  <meta property="og:title" content="caveman + rtk：AI 编码助手 Token 优化完全指南" />
-  <meta property="og:description" content="caveman 与 rtk 两个开源项目如何组合使用，将 AI 编码助手的 token 用量合计削减 80-95%" />
+  <meta property="og:title" content="caveman + rtk:AI 编程助手 Token 优化完整指南" />
+  <meta property="og:description" content="压缩输出 token 的 caveman 与压缩输入 token(CLI 输出)的 rtk——这两款开源工具组合使用可将 AI 编程助手的 API 成本削减 80%~95%，本指南详细介绍其原理与用法。" />
   <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-cn/" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="VibeQuant" />
@@ -26,7 +26,7 @@
   <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-ja/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-cn/" />
   <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization/" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"caveman + rtk：AI 编码助手 Token 优化完全指南","description":"caveman 与 rtk 两个开源项目如何组合使用，将 AI 编码助手的 token 用量合计削减 80-95%","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Caveman%20rtk%20token%20optimization_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"zh-Hans","keywords":"LLM, Claude Code, 成本优化, CLI 工具"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"caveman + rtk:AI 编程助手 Token 优化完整指南","description":"压缩输出 token 的 caveman 与压缩输入 token(CLI 输出)的 rtk——这两款开源工具组合使用可将 AI 编程助手的 API 成本削减 80%~95%，本指南详细介绍其原理与用法。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Caveman%20rtk%20token%20optimization_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-20","dateModified":"2026-07-25","inLanguage":"zh-Hans","keywords":"LLM, Token 优化, AI 编程助手, Claude Code, 成本优化"}</script>
 </head>
 <body class="content-body">
   <header class="site-top">
@@ -49,31 +49,30 @@
     <article class="article">
       <header class="article-head">
         <p class="eyebrow">LLM · 에이전트</p>
-        <h1>caveman + rtk：AI 编码助手 Token 优化完全指南</h1>
-        <p class="article-dates"><time datetime="2026-07-25">발행 2026.07.25</time> · 주제 LLM · Claude Code · 成本优化 · CLI 工具</p>
+        <h1>caveman + rtk:AI 编程助手 Token 优化完整指南</h1>
+        <p class="article-dates"><time datetime="2026-06-20">발행 2026.06.20</time> · 주제 LLM · Token 优化 · AI 编程助手 · Claude Code · 成本优化 · <time datetime="2026-07-25">수정 2026.07.25</time></p>
         <div class="lang-switch" role="navigation" aria-label="Language">
       <a class="lang-btn" href="../../tech/llm-caveman-rtk-token-optimization/" data-lang="KR">🇰🇷 한국어</a>
       <a class="lang-btn" href="../../tech/llm-caveman-rtk-token-optimization-en/" data-lang="EN">English</a>
       <a class="lang-btn" href="../../tech/llm-caveman-rtk-token-optimization-ja/" data-lang="JP">日本語</a>
       <a class="lang-btn is-active" href="../../tech/llm-caveman-rtk-token-optimization-cn/" data-lang="CN" aria-current="true">中文</a>
     </div>
-        <p class="lede">caveman 与 rtk 两个开源项目如何组合使用，将 AI 编码助手的 token 用量合计削减 80-95%</p>
+        <p class="lede">压缩输出 token 的 caveman 与压缩输入 token(CLI 输出)的 rtk——这两款开源工具组合使用可将 AI 编程助手的 API 成本削减 80%~95%，本指南详细介绍其原理与用法。</p>
         
       </header>
       <div class="article-body prose"><blockquote>
-<p>&quot;Why use many token when few token do trick?&quot; —— caveman 的口号</p>
+<p>&quot;Why use many token when few token do trick?&quot;——caveman 的口号</p>
 </blockquote>
 <hr>
 <h2>1. 概述</h2>
-<p>随着 AI 编码助手的普及,API 费用和上下文 token 消耗对开发者而言正变成越来越沉重的负担。在这一背景下,两个具有创新性的开源项目应运而生。</p>
-<p><strong>caveman</strong> 的出发点是&quot;为什么要用很多 token,少量 token 就能解决问题呢?&quot;它引导 AI 在不使用多余措辞的情况下只传达核心内容,在保持技术准确性 100% 的同时将输出 token 削减约 65-75%。自 2026 年 4 月发布以来,短时间内获得了超过 71,000 个 GitHub star(截至 2026 年 6 月),备受关注。</p>
-<p>rtk(Rust Token Killer)是一款实时过滤并压缩 CLI 命令输出的代理工具,在内容到达 LLM 上下文之前将输入 token 用量减少 60-90%。它是一个无依赖的单一 Rust 二进制文件,开销低于 10 毫秒,拥有超过 42,000 个 GitHub star。</p>
-<p>由于两个工具分别作用于不同的层面(输入/输出),两者结合使用时协同效应会被最大化。</p>
+<p>随着 AI 编程助手的普及，API 成本与上下文 token 消耗正日益成为开发者的沉重负担。在这样的背景下，两个具有创新性的开源项目应运而生。</p>
+<p><strong>caveman</strong>的出发点是&quot;为什么要用很多 token，明明用很少 token 就能解决问题?&quot;。它引导 AI 只传达核心内容而不使用不必要的措辞，在保持 100% 技术准确性的同时，将输出 token 削减约 65%<del>75%。自 2026 年 4 月发布以来，短时间内就获得了 71,000 多个 GitHub 星标(截至 2026 年 6 月)，受到广泛关注。<strong>rtk(Rust Token Killer)</strong> 是一个实时过滤并压缩 CLI 命令输出的代理工具，能在输出到达 LLM 上下文之前，将输入 token 用量削减 60%</del>90%。它以单一的 Rust 二进制文件形式构建，没有依赖项，仅带来不到 10ms 的开销，目前已获得超过 42,000 个 GitHub 星标。</p>
+<p>由于这两款工具分别作用于不同的层面(输入/输出)，组合使用时协同效果将被最大化。</p>
 <hr>
 <h2>2. caveman</h2>
 <h3>2.1 背景</h3>
-<p>caveman 诞生于对 AI 过度话术和不必要措辞如何影响成本与效率的批判性思考。2026 年 3 月发表在 arXiv 上的一篇论文(&quot;Brevity Constraints Reverse Performance Hierarchies in Language Models&quot;,编号 2604.00025)证明,AI 回答越简短精炼,在某些基准测试上的准确率反而可能提升多达 26 个百分点。caveman 正是将这一学术发现付诸实践的工具。</p>
-<p>Claude 默认被训练为以友好、详尽的方式回应。这在日常对话中是优点,但在自动化开发流水线中却是高成本的低效行为。caveman 改变了这一默认设置,在保持代码、URL、文件路径等技术信息 byte-perfect 的同时,去除自然语言的包装。</p>
+<p>caveman 的诞生源于对 AI 过度的表达方式与不必要措辞如何影响成本与效率这一问题的批判性思考。2026 年 3 月发表于 arXiv 的论文(《Brevity Constraints Reverse Performance Hierarchies in Language Models》，编号 2604.00025)证明了 AI 回答越简洁，在某些基准测试上的准确率反而可以提升最多 26 个百分点。caveman 正是将这一学术发现转化为实用工具的产物。</p>
+<p>Claude 默认被训练为以友好且冗长的方式作答，这在普通对话中是一个优点，但在自动化的开发流水线中却是一种高成本的低效行为。caveman 改变了这一默认设置，在保持代码、URL、文件路径等技术信息完全精确(byte-perfect)的同时，去除了自然语言的修饰包装。</p>
 <h3>2.2 效果</h3>
 <table>
 <thead>
@@ -84,7 +83,7 @@
 </thead>
 <tbody><tr>
 <td>输出 token 削减</td>
-<td>平均 65-75%(范围 22-87%)</td>
+<td>平均 65%<del>75%(区间 22%</del>87%)</td>
 </tr>
 <tr>
 <td>响应速度提升</td>
@@ -100,32 +99,32 @@
 </tr>
 <tr>
 <td>API 成本节省示例</td>
-<td>以每日 10,000 次 API 调用为基准,每年约节省 $7,665(以 Claude Sonnet 为准)</td>
+<td>按每日 10,000 次 API 调用计算，每年约节省 7,665 美元(以 Claude Sonnet 为基准)</td>
 </tr>
 </tbody></table>
-<h3>2.3 压缩强度等级</h3>
-<p>caveman 提供 4 个可根据情况调节的强度等级。</p>
+<h3>2.3 压缩强度级别</h3>
+<p>caveman 提供了可根据场景调整的四个强度级别。</p>
 <table>
 <thead>
 <tr>
-<th>等级</th>
+<th>级别</th>
 <th>说明</th>
 <th>示例</th>
 </tr>
 </thead>
 <tbody><tr>
 <td><code>lite</code></td>
-<td>保留语法,去除不必要的修饰语</td>
+<td>保留语法结构，去除不必要的修饰语</td>
 <td>&quot;Your component re-renders because you create a new object reference each render.&quot;</td>
 </tr>
 <tr>
 <td><code>full</code></td>
-<td>去除冠词/问候语,句子简化</td>
+<td>去除冠词、问候语，句子更简洁</td>
 <td>&quot;New object ref each render. Inline object prop = new ref = re-render.&quot;</td>
 </tr>
 <tr>
 <td><code>ultra</code></td>
-<td>最大压缩,保留专业术语</td>
+<td>最大程度压缩，保留专业术语</td>
 <td>&quot;Inline obj prop → new ref → re-render. useMemo.&quot;</td>
 </tr>
 <tr>
@@ -134,18 +133,18 @@
 <td>&quot;物出新參照，致重繪。useMemo Wrap之。&quot;</td>
 </tr>
 </tbody></table>
-<h4>实际对比示例</h4>
-<p>普通响应:</p>
+<h4>真实对比示例</h4>
+<p>普通回复：</p>
 <pre><code>I&#39;ve successfully completed the refactoring of the authentication module.
 The changes include updating the token validation logic to handle edge cases
 more gracefully, adding appropriate error handling, and ensuring backwards
 compatibility with the existing API contracts.
 </code></pre>
-<p>应用 caveman <code>ultra</code> 后:</p>
+<p>应用 caveman <code>ultra</code> 后：</p>
 <pre><code>Auth module refactored. Token validation, error handling, backward compat.
 </code></pre>
-<p>传达相同信息的同时,token 减少了约 75%。</p>
-<h3>2.4 额外的实用命令</h3>
+<p>在传达相同信息的同时，token 数量减少了约 75%。</p>
+<h3>2.4 附加实用命令</h3>
 <table>
 <thead>
 <tr>
@@ -155,11 +154,11 @@ compatibility with the existing API contracts.
 </thead>
 <tbody><tr>
 <td><code>/caveman-commit</code></td>
-<td>生成 50 字以内的简洁提交信息</td>
+<td>生成 50 字符以内的简洁提交信息</td>
 </tr>
 <tr>
 <td><code>/caveman-review</code></td>
-<td>编写一行 PR 评论</td>
+<td>撰写一行 PR 评论</td>
 </tr>
 <tr>
 <td><code>/caveman-stats</code></td>
@@ -170,7 +169,7 @@ compatibility with the existing API contracts.
 <td>压缩 CLAUDE.md 等配置文件</td>
 </tr>
 </tbody></table>
-<h3>2.5 安装与使用</h3>
+<h3>2.5 安装与使用方法</h3>
 <p><strong>macOS / Linux / WSL</strong></p>
 <pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash
 </code></pre>
@@ -187,23 +186,23 @@ claude skills add JuliusBrussee/caveman
 # 指定强度启用
 /caveman ultra
 
-# 关闭
+# 停用
 stop caveman
 </code></pre>
-<p><strong>直接插入到 CLAUDE.md / AGENTS.md 中(system prompt 方式)</strong></p>
+<p><strong>直接插入 CLAUDE.md / AGENTS.md(系统提示词方式)</strong></p>
 <pre><code class="language-text">You are a code assistant. Respond in caveman speak only. No pleasantries.
 No greetings, no sign-offs, no narration. Just the answer.
 </code></pre>
 <blockquote>
-<p>支持平台: Claude Code、Codex、Gemini CLI、Cursor、Windsurf、Cline、GitHub Copilot 等 34 种以上的 AI 编码工具</p>
+<p>支持平台：Claude Code、Codex、Gemini CLI、Cursor、Windsurf、Cline、GitHub Copilot 等 34 种以上的 AI 编程工具</p>
 </blockquote>
 <h3>2.6 注意事项</h3>
-<p>caveman 只对<strong>输出 token</strong> 有效,思考/推理(thinking/reasoning)token 不受影响。&quot;Caveman no make brain smaller. Caveman make mouth smaller.&quot;因此,相比以代码生成为主的任务,其效果在对话、头脑风暴、问答等交互频繁的会话中更为突出。</p>
+<p>caveman 仅对<strong>输出 token</strong> 有效，不影响思考/推理(thinking/reasoning)token。&quot;Caveman no make brain smaller. Caveman make mouth smaller.&quot;因此，相比以代码生成为主要任务的场景，它在对话、头脑风暴、问答等往复交流较多的会话中效果更为显著。</p>
 <hr>
 <h2>3. rtk(Rust Token Killer)</h2>
 <h3>3.1 背景</h3>
-<p>AI 编码代理在执行测试、代码检查(lint)、git 命令等操作时产生的大量日志和控制台输出会消耗巨量的输入 token。例如,仅一次 <code>git status</code> 就可能产生 2,000 个 token,而运行 <code>cargo test</code> 会将 200 多行原始输出直接注入上下文窗口,代理会读取其中每一行。</p>
-<p>rtk 在命令输出到达 LLM 上下文之前的阶段进行过滤和压缩,以此解决该问题,并且在不改变工作流的前提下透明运行。</p>
+<p>当 AI 编程智能体执行测试、代码检查、git 命令等操作时，产生的大量日志和控制台输出会消耗巨量的输入 token。举例来说，仅一次 <code>git status</code> 就可能产生 2,000 个 token，而运行 <code>cargo test</code> 会将 200 多行输出原样注入上下文窗口。智能体会读取其中的每一行内容。</p>
+<p>rtk 通过在命令输出到达 LLM 上下文之前的阶段进行过滤和压缩来解决这一问题，且在不改变工作流程的前提下透明运行。</p>
 <h3>3.2 效果</h3>
 <table>
 <thead>
@@ -214,23 +213,23 @@ No greetings, no sign-offs, no narration. Just the answer.
 </thead>
 <tbody><tr>
 <td>Token 削减率</td>
-<td>60-90%</td>
+<td>60%~90%</td>
 </tr>
 <tr>
-<td>支持命令数</td>
-<td>100+</td>
+<td>支持的命令数</td>
+<td>100 个以上</td>
 </tr>
 <tr>
-<td>开销</td>
-<td>低于 10 毫秒</td>
+<td>额外开销</td>
+<td>低于 10ms</td>
 </tr>
 <tr>
 <td>依赖项</td>
 <td>无(单一 Rust 二进制文件)</td>
 </tr>
 <tr>
-<td>GitHub star</td>
-<td>42,000+(2026 年 6 月)</td>
+<td>GitHub 星标</td>
+<td>42,000+(截至 2026 年 6 月)</td>
 </tr>
 <tr>
 <td>许可证</td>
@@ -238,15 +237,15 @@ No greetings, no sign-offs, no narration. Just the answer.
 </tr>
 </tbody></table>
 <h3>3.3 核心压缩策略</h3>
-<p>rtk 通过四种策略压缩输出:</p>
+<p>rtk 通过四种策略压缩输出：</p>
 <ol>
-<li><strong>智能过滤(Smart Filtering)</strong>: 去除 ANSI 代码、进度条、注释、多余空白和样板内容</li>
-<li><strong>分组聚合(Group Aggregation)</strong>: 归并相似项目(按目录分类的文件、按类型分类的错误等)</li>
-<li><strong>智能截断(Intelligent Truncation)</strong>: 保留相关上下文,去除重复</li>
-<li><strong>去重(Deduplication)</strong>: 将重复出现的行折算为计数</li>
+<li><strong>智能过滤(Smart Filtering)</strong>：去除 ANSI 代码、进度条、注释、多余空白和样板内容</li>
+<li><strong>分组聚合(Group Aggregation)</strong>：将相似项目归类(按目录归类文件、按类型归类错误等)</li>
+<li><strong>智能截断(Intelligent Truncation)</strong>：保留相关上下文、去除冗余</li>
+<li><strong>去重(Deduplication)</strong>：将重复出现的行压缩为计数形式</li>
 </ol>
-<h4>压缩前后对比: <code>git status</code></h4>
-<p>普通输出(约 2,000 token):</p>
+<h4>压缩前后对比：<code>git status</code></h4>
+<p>普通输出(约 2,000 token)：</p>
 <pre><code>On branch main
 Your branch is ahead of &#39;origin/main&#39; by 1 commit.
   (use &quot;git push&quot; to publish your local commits)
@@ -258,18 +257,18 @@ Changes not staged for commit:
 
 no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&quot;)
 </code></pre>
-<p>应用 rtk 后(约 400 token):</p>
+<p>应用 rtk 后(约 400 token)：</p>
 <pre><code>main...origin/main ~ Modified: 1 files src/auth/token.ts
 </code></pre>
-<p>只保留 LLM 实际需要的信息(分支、变更文件),其余全部移除。</p>
-<h3>3.4 各命令的削减效果(以 30 分钟会话为基准)</h3>
+<p>只保留 LLM 真正需要的信息(分支、变更文件)，其余内容全部去除。</p>
+<h3>3.4 按命令统计的削减效果(以 30 分钟会话为基准)</h3>
 <table>
 <thead>
 <tr>
 <th>命令</th>
 <th>执行次数</th>
-<th>普通 token</th>
-<th>应用 rtk</th>
+<th>原始 token</th>
+<th>使用 rtk 后</th>
 <th>削减率</th>
 </tr>
 </thead>
@@ -351,8 +350,8 @@ no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&q
 <td><strong>80%</strong></td>
 </tr>
 </tbody></table>
-<h3>3.5 安装与使用</h3>
-<p><strong>Homebrew(macOS,推荐)</strong></p>
+<h3>3.5 安装与使用方法</h3>
+<p><strong>Homebrew(macOS，推荐)</strong></p>
 <pre><code class="language-bash">brew install rtk
 </code></pre>
 <p><strong>Linux / macOS 直接安装</strong></p>
@@ -365,8 +364,8 @@ source ~/.zshrc
 <p><strong>通过 Cargo 安装</strong></p>
 <pre><code class="language-bash">cargo install --git https://github.com/rtk-ai/rtk
 </code></pre>
-<p><strong>Windows</strong>: 从发布页面下载 <code>rtk-x86_64-pc-windows-msvc.zip</code>,并将 <code>rtk.exe</code> 添加到 PATH。</p>
-<p><strong>与 Claude Code 集成(自动钩子)</strong></p>
+<p><strong>Windows</strong>：从发布页面下载 <code>rtk-x86_64-pc-windows-msvc.zip</code>，解压后将 <code>rtk.exe</code> 注册到 PATH 中。</p>
+<p><strong>与 Claude Code 集成(自动挂钩)</strong></p>
 <pre><code class="language-bash"># 自动安装 Claude Code 的 PreToolUse 钩子
 rtk init -g --claude-md
 
@@ -376,15 +375,15 @@ rtk --version
 # 测试运行
 rtk git status
 </code></pre>
-<p>执行 <code>rtk init -g</code> 后会自动在 <code>~/.claude/settings.json</code> 中添加 <code>PreToolUse</code> 钩子,使所有 Bash 命令都通过 rtk 路由,无需手动在命令前加上 <code>rtk</code>。</p>
+<p>执行 <code>rtk init -g</code> 后，会自动在 <code>~/.claude/settings.json</code> 中添加 <code>PreToolUse</code> 钩子，使所有 Bash 命令都通过 rtk 路由，无需手动在命令前加上 <code>rtk</code>。</p>
 <p><strong>查看节省统计</strong></p>
-<pre><code class="language-bash"># 查看累计节省统计与 ASCII 图表
+<pre><code class="language-bash"># 查看累计节省统计及 ASCII 图表
 rtk gain
 
-# 按日期导出 JSON
+# 按日导出 JSON 数据
 rtk gain --json
 
-# 发现被遗漏的节省机会
+# 探索被遗漏的节省机会
 rtk discover
 </code></pre>
 <p><strong>自定义配置(<code>~/.config/rtk/config.toml</code>)</strong></p>
@@ -396,18 +395,18 @@ tee_mode = true   # 失败时恢复原始输出
 extra_filters = [&quot;*.lock&quot;]
 </code></pre>
 <h3>3.6 注意事项</h3>
-<p>对于很短的命令,经过 rtk 处理后 token 反而可能略有增加(rtk 头部开销)。已经结构化的短输出会原样通过。使用 <code>rtk gain</code> 确认实际节省量,若一周后节省幅度仍低于 10%,可考虑使用 <code>rtk init -g --uninstall</code> 卸载。</p>
+<p>对于较短的命令，经过 rtk 处理后 token 数量反而可能略微增加(源于 rtk 自身的头部开销)。已经结构化的短输出会被原样通过。请使用 <code>rtk gain</code> 查看实际的节省量，如果一周后节省率仍不足 10%，可以考虑用 <code>rtk init -g --uninstall</code> 卸载它。</p>
 <hr>
 <h2>4. caveman + rtk 综合优化指南</h2>
-<h3>4.1 组合理念: 输入 + 输出双向优化</h3>
-<p>由于两个工具作用于不同层面,组合使用时效果会被最大化。</p>
+<h3>4.1 综合理念:输入+输出双向优化</h3>
+<p>由于两款工具作用于不同的层面，组合使用时效果会被最大化。</p>
 <pre><code>[开发者命令]
      |
      v
-[rtk CLI 代理]  &lt;-- 过滤/压缩命令输出(削减 60-90%)[输入优化]
+[rtk CLI 代理]  &lt;-- 过滤/压缩命令输出(削减 60%~90%)[输入优化]
      |
      v
-[发送给 LLM]   (输入 token 已优化完成)
+[发送至 LLM]   (输入 token 优化完成)
      |
      v
 [LLM 处理]
@@ -416,12 +415,12 @@ extra_filters = [&quot;*.lock&quot;]
 [LLM 响应]
      |
      v
-[caveman 转换]   &lt;-- 将响应转换为简洁形式(削减 65-75%)[输出优化]
+[caveman 转换]   &lt;-- 将响应转换为简洁形式(削减 65%~75%)[输出优化]
      |
      v
 [最终压缩响应]
 
-整体削减率: 80-95%
+综合削减率:80%~95%
 </code></pre>
 <table>
 <thead>
@@ -433,7 +432,7 @@ extra_filters = [&quot;*.lock&quot;]
 </thead>
 <tbody><tr>
 <td>rtk</td>
-<td>在 CLI 输出送入 LLM 前进行压缩</td>
+<td>在进入 LLM 之前压缩 CLI 输出</td>
 <td>输入 token</td>
 </tr>
 <tr>
@@ -442,16 +441,16 @@ extra_filters = [&quot;*.lock&quot;]
 <td>输出 token</td>
 </tr>
 </tbody></table>
-<h3>4.2 组合配置方法</h3>
-<p><strong>步骤 1: 安装 caveman 并注册技能</strong></p>
+<h3>4.2 综合配置方法</h3>
+<p><strong>第一步:安装 caveman 并注册技能</strong></p>
 <pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash
 claude skills add JuliusBrussee/caveman
 </code></pre>
-<p><strong>步骤 2: 安装 rtk 并与 Claude Code 集成</strong></p>
+<p><strong>第二步:安装 rtk 并与 Claude Code 集成</strong></p>
 <pre><code class="language-bash">brew install rtk          # macOS
 rtk init -g --claude-md   # 自动安装 Claude Code 的 PreToolUse 钩子
 </code></pre>
-<p><strong>步骤 3: 在 <code>~/.claude/settings.json</code> 中添加会话启动钩子</strong></p>
+<p><strong>第三步:在 <code>~/.claude/settings.json</code> 中添加会话启动钩子</strong></p>
 <pre><code class="language-json">{
   &quot;hooks&quot;: {
     &quot;SessionStart&quot;: [
@@ -462,19 +461,19 @@ rtk init -g --claude-md   # 自动安装 Claude Code 的 PreToolUse 钩子
   }
 }
 </code></pre>
-<p><strong>步骤 4: 注册 shell 别名(可选,<code>~/.zshrc</code> 或 <code>~/.bashrc</code>)</strong></p>
+<p><strong>第四步:注册 shell 别名(可选，在 <code>~/.zshrc</code> 或 <code>~/.bashrc</code> 中)</strong></p>
 <pre><code class="language-bash"># 自动应用 rtk 代理
 for cmd in git ls cat grep rg cargo npm pytest go docker kubectl; do
   alias $cmd=&quot;rtk $cmd&quot;
 done
 </code></pre>
-<p><strong>步骤 5: caveman 配置文件(在项目根目录创建 <code>.caveman.config</code>)</strong></p>
+<p><strong>第五步:caveman 配置文件(在项目根目录创建 <code>.caveman.config</code>)</strong></p>
 <pre><code class="language-text">mode=ultra
 exclude_files=Dockerfile,*.log
 always_compress_tokens=true
 </code></pre>
-<h3>4.3 进阶: OmniRoute 堆叠(Stacked)模式</h3>
-<p>OmniRoute 是一个将多个 LLM 优化引擎整合为统一流水线的工具。以 Stacked 模式连接 caveman + rtk 后,只需一份配置即可让两个工具按顺序自动运行。</p>
+<h3>4.3 进阶:OmniRoute Stacked 模式</h3>
+<p>OmniRoute 是一个可以将多个 LLM 优化引擎串联成统一流水线的工具。将 caveman + rtk 以 Stacked 模式连接后，仅需一份配置，两款工具便会自动按顺序依次运行。</p>
 <pre><code class="language-json">{
   &quot;compression&quot;: {
     &quot;mode&quot;: &quot;stacked&quot;,
@@ -484,100 +483,100 @@ always_compress_tokens=true
   }
 }
 </code></pre>
-<h3>4.4 节省效果汇总</h3>
+<h3>4.4 削减效果汇总</h3>
 <table>
 <thead>
 <tr>
-<th>组合</th>
+<th>配置</th>
 <th>削减率</th>
 <th>削减对象</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>仅 rtk</td>
-<td>60-90%</td>
+<td>仅使用 rtk</td>
+<td>60%~90%</td>
 <td>命令输出(输入 token)</td>
 </tr>
 <tr>
-<td>仅 caveman</td>
-<td>65-75%</td>
+<td>仅使用 caveman</td>
+<td>65%~75%</td>
 <td>LLM 响应(输出 token)</td>
 </tr>
 <tr>
-<td>rtk + caveman 组合</td>
-<td><strong>80-95%</strong></td>
-<td>输入 + 输出整体</td>
+<td>rtk + caveman 组合使用</td>
+<td><strong>80%~95%</strong></td>
+<td>输入与输出整体</td>
 </tr>
 </tbody></table>
 <h3>4.5 按实际使用场景的命令示例</h3>
-<p><strong>场景 1: 调试测试失败</strong></p>
-<pre><code class="language-bash"># rtk 只提取失败的测试,caveman 简洁地返回分析结果
+<p><strong>场景 1:调试测试失败</strong></p>
+<pre><code class="language-bash"># rtk 只提取失败的测试，caveman 简洁地返回分析结果
 rtk cargo test
-# caveman 响应示例: &quot;3 tests fail: auth::token_expired, db::conn_timeout, api::rate_limit. See logs.&quot;
+# caveman 响应示例:&quot;3 tests fail: auth::token_expired, db::conn_timeout, api::rate_limit. See logs.&quot;
 </code></pre>
-<p><strong>场景 2: 请求代码审查</strong></p>
-<pre><code class="language-bash"># rtk 压缩 diff,caveman 用一行返回审查结果
+<p><strong>场景 2:请求代码审查</strong></p>
+<pre><code class="language-bash"># rtk 压缩 diff，caveman 用一行返回审查意见
 rtk git diff HEAD~1
 /caveman-review
-# 响应示例: &quot;Missing null check in token.ts:42. Add early return.&quot;
+# 响应示例:&quot;Missing null check in token.ts:42. Add early return.&quot;
 </code></pre>
-<p><strong>场景 3: 生成提交信息</strong></p>
+<p><strong>场景 3:生成提交信息</strong></p>
 <pre><code class="language-bash">rtk git status
 /caveman-commit
-# 响应示例: &quot;fix: null check in token validation&quot;
+# 响应示例:&quot;fix: null check in token validation&quot;
 </code></pre>
-<p><strong>场景 4: 总结长日志</strong></p>
+<p><strong>场景 4:总结长日志</strong></p>
 <pre><code class="language-bash">rtk grep &quot;ERROR&quot; app.log
-# caveman ultra 响应示例: &quot;14 errors: 11x DB timeout, 3x auth fail. Peak 14:30-15:00.&quot;
+# caveman ultra 响应示例:&quot;14 errors: 11x DB timeout, 3x auth fail. Peak 14:30-15:00.&quot;
 </code></pre>
-<p><strong>场景 5: 检查依赖项</strong></p>
+<p><strong>场景 5:检查依赖关系</strong></p>
 <pre><code class="language-bash">rtk npm list --depth=0
-# rtk 去除重复及不必要的信息,只传递核心包列表
+# rtk 去除重复及不必要的信息，只传递核心的包列表
 </code></pre>
 <h3>4.6 真实用户体验</h3>
-<p>组合使用两个工具的用户报告了一致的效果。原本在 30 分钟会话中就会耗尽的 Claude Code 上下文延长到了 3 小时以上,在重复 CLI 操作较多的环境(测试驱动开发、大规模 git 历史检索等)中效果尤为明显。</p>
+<p>同时使用这两款工具的用户报告了一致的效果。原本 30 分钟会话就会耗尽的 Claude Code 上下文，被延长到了 3 小时以上，在重复性 CLI 操作较多的环境(如测试驱动开发、大规模 git 历史检索等)中效果尤为显著。</p>
 <hr>
-<h2>5. 成本节省计算器(快速估算)</h2>
-<p>以 Claude Sonnet 为基准(2026 年初标准,输入 $3/百万 token,输出 $15/百万 token):</p>
+<h2>5. 成本节省计算器(粗略估算)</h2>
+<p>以 Claude Sonnet 的定价为基准(2026 年初，输入每百万 token 3 美元，输出每百万 token 15 美元):</p>
 <table>
 <thead>
 <tr>
-<th>条件</th>
-<th>优化前月费用</th>
-<th>应用 caveman 后</th>
-<th>应用 rtk 后</th>
-<th>两者组合</th>
+<th>场景</th>
+<th>优化前月度成本</th>
+<th>使用 caveman 后</th>
+<th>使用 rtk 后</th>
+<th>两者组合使用</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>个人开发者(小规模)</td>
-<td>$50</td>
-<td>~$17</td>
-<td>~$15</td>
-<td>~$5-10</td>
+<td>50 美元</td>
+<td>约 17 美元</td>
+<td>约 15 美元</td>
+<td>约 5~10 美元</td>
 </tr>
 <tr>
 <td>10 人团队(中等规模)</td>
-<td>$2,500</td>
-<td>~$800</td>
-<td>~$500</td>
-<td>~$125-250</td>
+<td>2,500 美元</td>
+<td>约 800 美元</td>
+<td>约 500 美元</td>
+<td>约 125~250 美元</td>
 </tr>
 <tr>
-<td>企业流水线</td>
-<td>$10,000+</td>
-<td>~$3,000</td>
-<td>~$2,000</td>
-<td>~$500-1,000</td>
+<td>企业级流水线</td>
+<td>10,000 美元以上</td>
+<td>约 3,000 美元</td>
+<td>约 2,000 美元</td>
+<td>约 500~1,000 美元</td>
 </tr>
 </tbody></table>
 <blockquote>
-<p>实际节省金额因任务类型、LLM 模型、使用模式而异。请通过 <code>rtk gain</code> 和 <code>/caveman-stats</code> 确认实测数据。</p>
+<p>实际节省金额会因任务类型、LLM 模型及使用模式而有所不同，请通过 <code>rtk gain</code> 和 <code>/caveman-stats</code> 确认实测数据。</p>
 </blockquote>
 <hr>
 <h2>6. 结语</h2>
-<p>caveman 与 rtk 各自以独特的方式应对 LLM 成本优化问题。caveman 专注于<strong>输出优化</strong>,rtk 专注于<strong>输入优化</strong>,两者完美互补。</p>
-<p>核心原则很简单: LLM 的默认设置并非为成本效率而优化,而是为<strong>人类友好的响应</strong>而优化。caveman 改变响应风格,rtk 去除上下文噪声。借助这两个工具,可以让 AI 编码助手的使用变得更便宜、更快速、更专注。</p>
+<p>caveman 和 rtk 分别以各自独特的方式实现 LLM 成本优化。caveman 专注于<strong>输出优化</strong>，rtk 专注于<strong>输入优化</strong>，两者形成完美的互补关系。</p>
+<p>其核心原则很简单:LLM 的默认设置优化的是<strong>对人类友好的响应方式</strong>，而非成本效率。caveman 改变了响应的风格，rtk 则去除了上下文中的噪音。借助这两款工具，可以让 AI 编程助手的使用变得更便宜、更快速，也更聚焦。</p>
 <hr>
 <h2>7. 参考资料</h2>
 <table>
@@ -609,7 +608,7 @@ rtk git diff HEAD~1
 </tr>
 </tbody></table>
 <blockquote>
-<p>GitHub star 数及相关数据以 2026 年 6 月为准,项目仍在持续发展。最新信息请参考各仓库的官方文档。</p>
+<p>GitHub 星标数量及相关数据截至 2026 年 6 月，相关项目仍在持续发展中。最新信息请参阅各自仓库的官方文档。</p>
 </blockquote>
 </div>
       <aside class="author-box">

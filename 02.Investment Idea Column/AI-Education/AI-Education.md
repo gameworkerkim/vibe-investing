@@ -1,3 +1,38 @@
+---
+title: "인공지능 시대, 가르칠 것인가 적발할 것인가?"
+subtitle: "마다가스카르 사건이 드러낸 것은 부정행위가 아니라, 검증하지 않는 습관이다"
+description: "앨콘주립대 ‘마다가스카르’ 과제 사건으로 AI 부정행위를 넘어서, 검증 습관·평가 설계·학년별 AI 허용 순서를 제안한다."
+abstract: |
+  2026년 7월 앨콘주립대에서 과제 지시문에 숨긴 ‘마다가스카르’ 단어로 챗봇 복붙이 적발됐다.
+  핵심은 AI 성능이 아니라 출력을 검산하지 않는 습관이며, 적발 경쟁보다 평가 재설계와 학년별 단계적 허용이 답이다.
+  MIT·Microsoft/CMU 연구와 이탈리아·프랑스·중국·한국·EU 규제 사례를 바탕으로 ‘검증 역량 이후 사용’ 순서를 제안한다.
+summary_for_ai: |
+  Opinion column on AI in education (not investment advice). Fact base as of 2026-07-25: Alcorn State / Jason Gibson Madagascar invisible-text assignment; MIT Media Lab Your Brain on ChatGPT (2025); Microsoft Research–CMU CHI 2025 knowledge-worker study; Italy Legge 132/2025; France AI education framework 2025; China May 2025 student AI guides; Korea AIDT legal downgrade 2025; EU AI Act literacy vs Digital Omnibus Annex III delay to 2027-12-02.
+date: 2026-07-25
+updated: 2026-07-26
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - AI
+  - 교육
+  - AI리터러시
+  - 평가설계
+  - 인지부채
+keywords:
+  - "마다가스카르 AI 과제"
+  - "앨콘주립대 Jason Gibson"
+  - "AI 교육 정책"
+  - "인지 부채 cognitive debt"
+  - "생성형 AI 부정행위"
+  - "AI 리터러시"
+group: ai-llm
+featured: true
+featured_rank: 1
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 인공지능 시대, 가르칠 것인가 적발할 것인가?
 
 **마다가스카르 사건이 드러낸 것은 부정행위가 아니라, 검증하지 않는 습관이다**

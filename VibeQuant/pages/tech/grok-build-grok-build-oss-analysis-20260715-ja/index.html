@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>xAI Grok Buildオープンソース発表分析(2026-07-15) — VibeQuant</title>
-  <meta name="description" content="xAIがGrok Buildのコーディングエージェントハーネスをローカル実行向けにオープンソース化。Claude Code・Codex CLIに続く端末ネイティブエージェントだが、透明性と過去のプライバシー問題を両立する。" />
+  <title>分析:xAI Grok Buildオープンソース発表(2026-07-15) — VibeQuant</title>
+  <meta name="description" content="xAIのGrok Buildオープンソース公開の分析——公開されたもの(モデルではなくコーディングエージェントのハーネス)、長所と限界、Claude Code・Codex CLI・OpenCode・Aider・Cursorとの詳細比較。" />
   <link rel="canonical" href="https://tech.vibequant.cc/tech/grok-build-grok-build-oss-analysis-20260715-ja/" />
-  <meta property="og:title" content="xAI Grok Buildオープンソース発表分析(2026-07-15)" />
-  <meta property="og:description" content="xAIがGrok Buildのコーディングエージェントハーネスをローカル実行向けにオープンソース化。Claude Code・Codex CLIに続く端末ネイティブエージェントだが、透明性と過去のプライバシー問題を両立する。" />
+  <meta property="og:title" content="分析:xAI Grok Buildオープンソース発表(2026-07-15)" />
+  <meta property="og:description" content="xAIのGrok Buildオープンソース公開の分析——公開されたもの(モデルではなくコーディングエージェントのハーネス)、長所と限界、Claude Code・Codex CLI・OpenCode・Aider・Cursorとの詳細比較。" />
   <meta property="og:url" content="https://tech.vibequant.cc/tech/grok-build-grok-build-oss-analysis-20260715-ja/" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="VibeQuant" />
@@ -26,7 +26,7 @@
   <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/grok-build-grok-build-oss-analysis-20260715-ja/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/grok-build-grok-build-oss-analysis-20260715-cn/" />
   <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/grok-build-grok-build-oss-analysis-20260715/" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"xAI Grok Buildオープンソース発表分析(2026-07-15)","description":"xAIがGrok Buildのコーディングエージェントハーネスをローカル実行向けにオープンソース化。Claude Code・Codex CLIに続く端末ネイティブエージェントだが、透明性と過去のプライバシー問題を両立する。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/grok-build-grok-build-oss-analysis-20260715-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Grok_Build/Grok_build_oss_analysis_20260715_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-15","dateModified":"2026-07-25","inLanguage":"ja","keywords":"LLM · 에이전트, Grok_Build"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"分析:xAI Grok Buildオープンソース発表(2026-07-15)","description":"xAIのGrok Buildオープンソース公開の分析——公開されたもの(モデルではなくコーディングエージェントのハーネス)、長所と限界、Claude Code・Codex CLI・OpenCode・Aider・Cursorとの詳細比較。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/grok-build-grok-build-oss-analysis-20260715-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Grok_Build/Grok_build_oss_analysis_20260715_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-15","dateModified":"2026-07-25","inLanguage":"ja","keywords":"xAI, Grok, コーディングエージェント, オープンソース, 開発者ツール"}</script>
 </head>
 <body class="content-body">
   <header class="site-top">
@@ -49,23 +49,23 @@
     <article class="article">
       <header class="article-head">
         <p class="eyebrow">LLM · 에이전트</p>
-        <h1>xAI Grok Buildオープンソース発表分析(2026-07-15)</h1>
-        <p class="article-dates"><time datetime="2026-07-15">발행 2026.07.15</time> · 주제 LLM · 에이전트 · Grok_Build · <time datetime="2026-07-25">수정 2026.07.25</time></p>
+        <h1>分析:xAI Grok Buildオープンソース発表(2026-07-15)</h1>
+        <p class="article-dates"><time datetime="2026-07-15">발행 2026.07.15</time> · 주제 xAI · Grok · コーディングエージェント · オープンソース · 開発者ツール · <time datetime="2026-07-25">수정 2026.07.25</time></p>
         <div class="lang-switch" role="navigation" aria-label="Language">
       <a class="lang-btn" href="../../tech/grok-build-grok-build-oss-analysis-20260715/" data-lang="KR">🇰🇷 한국어</a>
       <a class="lang-btn" href="../../tech/grok-build-grok-build-oss-analysis-20260715-en/" data-lang="EN">English</a>
       <a class="lang-btn is-active" href="../../tech/grok-build-grok-build-oss-analysis-20260715-ja/" data-lang="JP" aria-current="true">日本語</a>
       <a class="lang-btn" href="../../tech/grok-build-grok-build-oss-analysis-20260715-cn/" data-lang="CN">中文</a>
     </div>
-        <p class="lede">xAIがGrok Buildのコーディングエージェントハーネスをローカル実行向けにオープンソース化。Claude Code・Codex CLIに続く端末ネイティブエージェントだが、透明性と過去のプライバシー問題を両立する。</p>
+        <p class="lede">xAIのGrok Buildオープンソース公開の分析——公開されたもの(モデルではなくコーディングエージェントのハーネス)、長所と限界、Claude Code・Codex CLI・OpenCode・Aider・Cursorとの詳細比較。</p>
         
       </header>
-      <div class="article-body prose"><p><a href="https://x.ai/news/grok-build-open-source">xAIのGrok Buildオープンソース発表</a>(2026-07-15)は、<strong>コーディングエージェント「ハーネス(harness)」を公開し、ローカル・自前推論で動かせるようにしたこと</strong>が核心です。公開対象はモデル(Grok 4.5)ではなく、<strong>エージェントループ・ツール・TUI・拡張システム</strong>です。</p>
+      <div class="article-body prose"><p><a href="https://x.ai/news/grok-build-open-source">xAIのGrok Buildオープンソース発表</a>(2026-07-15)の核心は、<strong>コーディングエージェントの「ハーネス(harness)」を公開し、ローカル・自前推論で動かせるようにしたこと</strong>である。公開対象はモデル(Grok 4.5)ではなく、<strong>エージェントループ・ツール・TUI・拡張システム</strong>である。</p>
 <hr>
-<h2>一言要約</h2>
-<p>Grok Buildは、Claude Code / Codex CLIと同じ<strong>端末ネイティブのコーディングエージェント</strong>陣営に加わり、オープンソースにより<strong>透明性・ローカル実行・拡張性</strong>を打ち出しています。ただしリリースが短期間で、直前に<strong>コードアップロードのプライバシー問題</strong>があったため、信頼回復が課題として残っています。</p>
+<h2>一言まとめ</h2>
+<p>Grok BuildはClaude Code / Codex CLIと同じ<strong>ターミナルネイティブコーディングエージェント</strong>陣営に加わり、オープンソースによって<strong>透明性・ローカル実行・拡張性</strong>を打ち出している。ただしリリースからまだ間もなく、直前の<strong>コードアップロードのプライバシー問題</strong>があったため、信頼回復が課題として残っている。</p>
 <hr>
-<h2>発表内容(何を公開したか)</h2>
+<h2>発表内容(何が公開されたか)</h2>
 <p>公開範囲(<a href="https://x.ai/news/grok-build-open-source">公式ニュース</a> · <a href="https://docs.x.ai/build/overview">ドキュメント</a> · <a href="https://github.com/xai-org/grok-build">GitHub: xai-org/grok-build</a>):</p>
 <table>
 <thead>
@@ -76,7 +76,7 @@
 </thead>
 <tbody><tr>
 <td>Agent loop</td>
-<td>コンテキスト構成、応答解析、tool-callディスパッチ</td>
+<td>コンテキスト組み立て、応答パース、tool-callディスパッチ</td>
 </tr>
 <tr>
 <td>Tools</td>
@@ -92,7 +92,7 @@
 </tr>
 <tr>
 <td>実行モード</td>
-<td>対話型TUI / headless / ACP(他アプリ連携)</td>
+<td>インタラクティブTUI / headless / ACP(他アプリ連携)</td>
 </tr>
 <tr>
 <td>設定</td>
@@ -103,20 +103,20 @@
 <td>Apache 2.0(first-partyコード基準)</td>
 </tr>
 </tbody></table>
-<p>Rustベースで、<code>curl … | bash</code>でインストールし、Grok 4.5(2026-07-08リリース)APIと連携します。コミュニティ報道によれば、サーバー使用量上限のリセットとローカル実行によりクラウドキャップを回避できるようになったとのことです。</p>
-<p><strong>レビューで確認された追加事実:</strong>- リポジトリはxAIモノレポから<strong>定期的に同期(sync)</strong>されるミラー構造であり、<code>CONTRIBUTING.md</code>に<strong>外部コントリビュートを受け付けない</strong>と明記されています。つまり「読んでフォークできる」オープンソースであり、「共に開発する」オープンガバナンスではありません。</p>
+<p>Rustベース、<code>curl … | bash</code>でインストール、Grok 4.5(2026-07-08リリース)APIと連携。コミュニティ報道によれば、サーバー使用量制限のリセットとローカル実行によりクラウドキャップを回避できるようになった。</p>
+<p><strong>レビュー時に確認された追加事実:</strong>- リポジトリはxAIのモノレポから<strong>定期的に同期(sync)</strong>されるミラー構造であり、<code>CONTRIBUTING.md</code>には<strong>外部からのコントリビューションを受け付けない</strong>と明記されている。つまり「読んでフォークできる」オープンソースであり、「共に開発する」オープンガバナンスではない。</p>
 <ul>
-<li><code>THIRD-PARTY-NOTICES</code>に<strong>openai/codexとsst/opencodeのツール実装をポーティングした</strong>という開示が含まれています。ハーネスの一部が競合OSSのコード系譜の上に成り立っています。</li>
+<li><code>THIRD-PARTY-NOTICES</code>には<strong>openai/codexとsst/opencodeのツール実装をポーティングした</strong>という開示が含まれる。ハーネスの一部は競合OSSのコード系譜の上に成り立っている。</li>
 </ul>
 <hr>
 <h2>長所</h2>
 <ol>
-<li><strong>ハーネス全体の公開</strong> — コンテキスト・ツールディスパッチまでソースで検証可能。「ブラックボックスCLI」ではない。</li>
-<li><strong>Local-first</strong> — 自前ビルド + ローカル推論 + <code>config.toml</code>でベンダークラウド依存を減らせる。</li>
-<li><strong>拡張スタックが現代的</strong> — skills / plugins / hooks / MCP / subagentsはClaude Code・OpenCodeと同じ2026年標準の軸。</li>
-<li><strong>TUI品質のポイント</strong> — plan review + inline diffは「エージェントが作成した後に人間が承認する」ワークフローに合う。</li>
-<li><strong>マルチサーフェス</strong> — TUIだけでなくheadless・ACPでCI・ボット・他のIDE/アプリに接続しやすい。</li>
-<li><strong>モデル交換可能</strong> — ドキュメント上、custom model / ローカルエンドポイント対応(OpenCode・Aider系と同じBYOM方向)。</li>
+<li><strong>ハーネス全体の公開</strong> —— コンテキスト・ツールディスパッチまでソースで検証可能。「ブラックボックスCLI」ではない。</li>
+<li><strong>Local-first</strong> —— 自前ビルド+ローカルinference+<code>config.toml</code>によりベンダークラウド依存を減らせる。</li>
+<li><strong>拡張スタックがモダン</strong> —— skills / plugins / hooks / MCP / subagentsはClaude Code・OpenCodeと同じ2026年標準軸。</li>
+<li><strong>TUIの品質ポイント</strong> —— plan review+inline diffは「エージェントが作成し人間が承認する」ワークフローに適合。</li>
+<li><strong>マルチサーフェス</strong> —— TUIだけでなくheadless・ACPによりCI・ボット・他のIDE/アプリへの統合が容易。</li>
+<li><strong>モデル交換可能</strong> —— ドキュメント上、カスタムモデル・ローカルエンドポイントをサポート(OpenCode・Aider系列と同じBYOM方向)。</li>
 </ol>
 <hr>
 <h2>意義</h2>
@@ -129,7 +129,7 @@
 </thead>
 <tbody><tr>
 <td>産業</td>
-<td>コーディングエージェント競争が<strong>モデルスコア</strong>から<strong>オープンハーネス・監査可能性</strong>へ移動していることを示す(Codex CLI・OpenCodeと同じ軸)。</td>
+<td>コーディングエージェント競争が<strong>モデルスコア</strong>から<strong>オープンハーネス・検証可能性</strong>へ移行していることを示す(Codex CLI・OpenCodeと同じ軸)。</td>
 </tr>
 <tr>
 <td>xAI</td>
@@ -137,29 +137,29 @@
 </tr>
 <tr>
 <td>プライバシー</td>
-<td>直前の<strong>全レポクラウドアップロード</strong>論争の後、OSS + ローカル実行は<strong>構造的な信頼回復</strong>の試みとして読める。</td>
+<td>直前の<strong>全レポクラウドアップロード</strong>論争の後、OSS+ローカル実行は<strong>構造的信頼回復</strong>の試みとして読める。</td>
 </tr>
 <tr>
 <td>エコシステム</td>
 <td>MCP・skillsなど共通プロトコルに乗ることで、Cursor/IDEプラグインエコシステムとの相互運用の余地が生まれる。</td>
 </tr>
 </tbody></table>
-<p>つまり、「新モデル発表」よりも<strong>エージェントランタイムをコミュニティ・企業がフォーク・監査・組み込めるように開いたこと</strong>が核心的意義です。</p>
+<p>つまり、「新モデルのリリース」よりも<strong>エージェントランタイムをコミュニティ・企業がフォーク・監査・組み込みできるように開いたこと</strong>が核心的な意義である。</p>
 <hr>
-<h2>限界点</h2>
+<h2>限界</h2>
 <ol>
-<li><strong>信頼の負債</strong> — オープンソース直前(2026-07-14)、プライバシー設定に関わらずレポがクラウド(報道によればGoogle Cloud)に同期されていたという指摘がありました。xAIは既存アップロードデータの削除を発表しましたが、OSSは解決策であり過去の事故の無効化ではありません。</li>
-<li><strong>製品成熟度</strong> — 2026年5月ベータ → 7月オープンソース。Claude Code・Codex・OpenCode対比、コミュニティ・プラグイン・長期セッション運用の実績が薄い。</li>
-<li><strong>モデル依存</strong>— ハーネスが開かれても<strong>基本の知能はGrok 4.5</strong>。Claude Opus / GPT系対比、長期自律セッション・アーキテクチャ判断での優位が実証された状態ではない。</li>
-<li><strong>価格・アクセス履歴</strong> — 初期のSuperGrok Heavy($300/mo)中心のベータは「開かれたツール」イメージと温度差が大きい。OSS化後もAPI/サブスクリプションコストは残る。</li>
-<li><strong>エコシステムの深さ</strong>— OpenCodeの75以上のプロバイダー、Aiderのgit-first規律、Codexのsandbox/ChatGPT Cloud連携など<strong>各自が積み上げてきた差別点</strong>にまだ追いついていない。</li>
-<li><strong>ハーネス ≠ 結果品質</strong>— 業界共通: 出力品質は概ね<strong>モデル</strong>に大きく左右される。オープンソースが即SWE-bench首位を意味するわけではない。</li>
-<li><strong>閉じたガバナンス</strong> — 外部コントリビュート未受容 + モノレポの一方向同期構造。「コミュニティがフォーク・プラグインを付けなければ成功しない」というシナリオと構造的に矛盾し、コミュニティの改善はupstream反映なしにフォークとしてのみ存在することになる。</li>
-<li><strong>ハーネスの独自性</strong> — codex・opencodeのツール実装ポーティングが開示されており、「xAI独自のハーネス」というより既存OSS系譜の再構成に近い部分がある。</li>
+<li><strong>信頼負債</strong> —— オープンソース化直前(2026-07-14)、プライバシー設定に関わらずレポがクラウド(報道によればGoogle Cloud)に同期されていたという指摘があった。xAIは既存のアップロードデータの削除を発表したが、OSSは今後の解決策であって過去の事件を無効化するものではない。</li>
+<li><strong>製品の成熟度</strong> —— 2026年5月ベータ→7月オープンソース化。Claude Code・Codex・OpenCodeと比較してコミュニティ・プラグイン・長期セッション運用実績が薄い。</li>
+<li><strong>モデル依存</strong>—— ハーネスが開かれていても<strong>基盤知能はGrok 4.5</strong>。Claude Opus/GPT系列と比較した長期自律セッション・アーキテクチャ判断における優位性が実証された状態ではない。</li>
+<li><strong>価格・アクセス履歴</strong> —— 当初のSuperGrok Heavy(月300ドル)中心のベータは「オープンツール」イメージと温度差が大きい。OSS後もAPI/サブスクリプションコストは残る。</li>
+<li><strong>エコシステムの深さ</strong>—— OpenCodeの75以上のプロバイダー、Aiderのgit-first規律、Codexのsandbox/ChatGPT Cloud連携など、<strong>各自が積み上げてきた差別化点</strong>にまだ追いついていない。</li>
+<li><strong>ハーネス≠結果品質</strong>—— 業界共通認識:出力品質は概ね<strong>モデル</strong>により大きく左右される。オープンソース化がそのままSWE-bench1位を意味するわけではない。</li>
+<li><strong>閉じたガバナンス</strong> —— 外部コントリビューション未受理+モノレポの一方向同期構造。「コミュニティがフォーク・プラグインを付けることで成功する」というシナリオと構造的に衝突し、コミュニティの改善はアップストリームに反映されずフォークとしてのみ存在することになる。</li>
+<li><strong>ハーネスの独自性</strong> —— codex・opencodeのツール実装のポーティングが開示されており、「xAI独自のハーネス」というよりは既存OSS系譜の再構成に近い部分がある。</li>
 </ol>
 <hr>
-<h2>競合製品比較</h2>
-<p>同カテゴリー = <strong>端末/CLIコーディングエージェント</strong>。Cursorは IDEのため隣接競合。</p>
+<h2>競合製品との比較</h2>
+<p>同一カテゴリー=<strong>ターミナル/CLIコーディングエージェント</strong>。CursorはIDEであるため隣接競合。</p>
 <table>
 <thead>
 <tr>
@@ -175,18 +175,18 @@
 <tbody><tr>
 <td><strong>形態</strong></td>
 <td>TUI + headless + ACP</td>
-<td>端末エージェント</td>
+<td>ターミナルエージェント</td>
 <td>CLI(Rust)</td>
 <td>TUI(Go)</td>
 <td>Git-first CLI</td>
-<td>AI-native IDE</td>
+<td>AIネイティブIDE</td>
 </tr>
 <tr>
 <td><strong>オープンソース</strong></td>
-<td>(2026-07、Apache 2.0 / 外部コントリビュート未受容)</td>
-<td>製品クローズド</td>
+<td>(2026-07、Apache 2.0/外部コントリビューション未受理)</td>
+<td>製品は閉鎖</td>
 <td>OK</td>
-<td>OK(MITなど)</td>
+<td>OK(MIT等)</td>
 <td>OK</td>
 <td>NO</td>
 </tr>
@@ -195,15 +195,15 @@
 <td>Grok 4.5</td>
 <td>Claude(Opus/Fable系列)</td>
 <td>GPT(ChatGPT同梱)</td>
-<td>BYO 75+</td>
+<td>BYO 75以上</td>
 <td>BYO</td>
-<td>多数(Grok含む)</td>
+<td>複数(Grok含む)</td>
 </tr>
 <tr>
 <td><strong>ローカル/BYOM</strong></td>
-<td>OK config.toml</td>
-<td>限定的・ルーター</td>
-<td>可能(<code>--oss</code>など)</td>
+<td>OK、config.toml</td>
+<td>限定的・ルーター経由</td>
+<td>可能(<code>--oss</code>等)</td>
 <td>強み</td>
 <td>強み</td>
 <td>クラウド中心</td>
@@ -215,37 +215,37 @@
 <td>ツール・sandbox・クラウド連携</td>
 <td>LSP・SDK・plan/build</td>
 <td>repomap・コミット</td>
-<td>Cloud Agents・エディタ</td>
+<td>Cloud Agents・エディター</td>
 </tr>
 <tr>
 <td><strong>差別点</strong></td>
-<td>ハーネス公開 + plan/diff TUI</td>
-<td>長期自律・アーキテクチャ</td>
-<td>速度・トークン・sandbox</td>
+<td>ハーネス公開+plan/diff TUI</td>
+<td>長期自律・アーキテクチャ判断</td>
+<td>速度・トークン効率・sandbox</td>
 <td>プロバイダー自由</td>
 <td>コミット規律</td>
 <td>IDE一体型UX</td>
 </tr>
 <tr>
-<td><strong>弱み</strong></td>
-<td>新興 + プライバシー事故 + 閉じたガバナンス</td>
+<td><strong>弱点</strong></td>
+<td>新興+プライバシー事件+閉じたガバナンス</td>
 <td>コスト・ベンダーロック</td>
-<td>Anthropicほどの「深い推論」評判は状況により差がある</td>
+<td>Anthropicほどの「深い推論」評価は状況次第</td>
 <td>長期自律はClaudeに劣る</td>
-<td>マルチエージェント・大規模オーケストレーションに弱い</td>
-<td>端末専用ワークフローには重い</td>
+<td>マルチエージェント・大規模オーケストレーションが弱い</td>
+<td>ターミナルのみのワークフローには重い</td>
 </tr>
 </tbody></table>
 <h3>ポジションで見ると</h3>
 <ul>
-<li><strong>Claude Code</strong> — 「一晩放置しても大丈夫な」自律・マルチファイル推論。Grok Buildが今すぐ勝つのが難しい軸。</li>
-<li><strong>Codex CLI</strong>— 同じRust・OSS・端末軸の<strong>最も直接的な競合</strong>。sandbox・ChatGPT連携・トークン効率が強い。</li>
-<li><strong>OpenCode</strong>— 「完全オープン + モデル自由」ではすでに成熟。Grok Buildは<strong>xAI公式ハーネス + Grok最適化</strong>で差別化する必要がある。</li>
-<li><strong>Aider</strong>— 一作業 → レビュー → コミット。Grok Buildのplan/diffと重なるが、Aiderは<strong>git規律</strong>が製品のDNA。</li>
-<li><strong>Cursor</strong>— 同じGrokモデルを使えても<strong>表面がIDE vs TUI</strong>。補完関係に近く、「どちらがより良いエージェントループか」で重なる。</li>
+<li><strong>Claude Code</strong> —— 「一晩動かしても大丈夫な」自律・マルチファイル推論。Grok Buildがすぐには勝ちにくい軸。</li>
+<li><strong>Codex CLI</strong>—— 同じRust・OSS・ターミナル軸の<strong>最も直接的な競合</strong>。sandbox・ChatGPT連携・トークン効率が強い。</li>
+<li><strong>OpenCode</strong>—— 「完全オープン+モデル自由」ではすでに成熟している。Grok Buildは<strong>xAI公式ハーネス+Grok最適化</strong>で差別化する必要がある。</li>
+<li><strong>Aider</strong>—— 1つのタスク→レビュー→コミット。Grok Buildのplan/diffと重なるが、Aiderは<strong>gitの規律</strong>が製品DNA。</li>
+<li><strong>Cursor</strong>—— 同じGrokモデルを使えても<strong>表面がIDE vs TUI</strong>。補完関係に近く、「どちらがより良いエージェントループか」で重なる。</li>
 </ul>
 <hr>
-<h2>実務的な選び方</h2>
+<h2>実務的な選定</h2>
 <table>
 <thead>
 <tr>
@@ -258,7 +258,7 @@
 <td>Claude Code</td>
 </tr>
 <tr>
-<td>速い日常作業・CI・トークン効率</td>
+<td>日常的な速いタスク・CI・トークン効率</td>
 <td>Codex CLI</td>
 </tr>
 <tr>
@@ -266,7 +266,7 @@
 <td>OpenCode(またはAider+ローカル)</td>
 </tr>
 <tr>
-<td>Git履歴を綺麗に保ちながらペア作業</td>
+<td>Gitの履歴をきれいに保ちながらペア作業</td>
 <td>Aider</td>
 </tr>
 <tr>
@@ -274,16 +274,16 @@
 <td>Cursor</td>
 </tr>
 <tr>
-<td>Grokモデル + 監査可能な公式ハーネス・ローカル</td>
+<td>Grokモデル+検証可能な公式ハーネス・ローカル</td>
 <td><strong>Grok Build</strong></td>
 </tr>
 </tbody></table>
 <hr>
 <h2>総合評価</h2>
-<p>Grok Build OSSは「<strong>xAIもコーディングエージェントのレースにハーネスを賭けて参入した</strong>」という信号です。長所は<strong>透明なエージェントループ・ローカル実行・MCP級の拡張性</strong>であり、意義は<strong>モデル戦争 → オープンハーネス・信頼競争</strong>への移行を加速した点にあります。限界は<strong>新興製品 + プライバシー事故の余波 + まだ検証されていない長期エージェント品質</strong>、そして<strong>外部コントリビュートを受け付けない一方向オープンソース構造</strong>です。</p>
-<p>競合構図では、Codex CLI / OpenCodeと<strong>同じオープンハーネスリーグ</strong>、Claude Codeとは<strong>自律・推論の深さ</strong>、Cursorとは<strong>表面(IDE vs TUI)</strong>で分かれます。成功の可否は、オープンソースそれ自体よりも、<strong>コミュニティが実際にフォーク・プラグインを付け、ローカル実行が実務上本当に安全であると証明されるか</strong>に懸かっています — ただし外部コントリビュート未受容政策が維持される限り、これは「コミュニティと共に」ではなく「コミュニティが各自」検証する構造になる可能性が高いです。</p>
+<p>Grok Build OSSは「<strong>xAIもハーネスを賭けてコーディングエージェント競争に参入した</strong>」という信号である。長所は<strong>透明なエージェントループ・ローカル実行・MCP級の拡張性</strong>であり、意義は<strong>モデル戦争からオープンハーネス・信頼競争への移行</strong>を加速させた点にある。限界は<strong>新興製品+プライバシー事件の余波+まだ検証されていない長期エージェント品質</strong>、そして<strong>外部コントリビューションを受け付けない一方向のオープンソース構造</strong>である。</p>
+<p>競合構図では、Codex CLI/OpenCodeと<strong>同じオープンハーネスリーグ</strong>に、Claude Codeとは<strong>自律性・推論の深さ</strong>で、Cursorとは<strong>表面(IDE vs TUI)</strong>で分かれる。成功の可否はオープンソースそのものよりも、<strong>コミュニティが実際にフォーク・プラグインを付け、ローカル実行が実際に安全だと証明されるか</strong>にかかっている——ただし外部コントリビューション未受理のポリシーが維持される限り、これは「コミュニティと共に」ではなく「コミュニティが各自」検証する構造になる可能性が高い。</p>
 <hr>
-<p><em>作成: 2026-07-15発表基準 / レビュー・補強: 2026-07-16</em></p>
+<p><em>作成:2026-07-15発表基準/レビュー・補強:2026-07-16</em></p>
 </div>
       <aside class="author-box">
         <h2>작성자 / Source</h2>

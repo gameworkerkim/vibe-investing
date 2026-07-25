@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Open Code Review (OCR) 完全指南 — VibeQuant</title>
-  <meta name="description" content="阿里巴巴集团经过两年内部验证后开源的混合式 AI 代码审查 CLI 工具" />
+  <title>Open Code Review(OCR)完整指南 — VibeQuant</title>
+  <meta name="description" content="阿里巴巴集团经过两年内部验证后开源的混合式 AI 代码审查 CLI 工具完整指南。" />
   <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-open-code-review-guide-cn/" />
-  <meta property="og:title" content="Open Code Review (OCR) 完全指南" />
-  <meta property="og:description" content="阿里巴巴集团经过两年内部验证后开源的混合式 AI 代码审查 CLI 工具" />
+  <meta property="og:title" content="Open Code Review(OCR)完整指南" />
+  <meta property="og:description" content="阿里巴巴集团经过两年内部验证后开源的混合式 AI 代码审查 CLI 工具完整指南。" />
   <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-open-code-review-guide-cn/" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="VibeQuant" />
@@ -26,7 +26,7 @@
   <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-open-code-review-guide-ja/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-open-code-review-guide-cn/" />
   <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-open-code-review-guide/" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Open Code Review (OCR) 完全指南","description":"阿里巴巴集团经过两年内部验证后开源的混合式 AI 代码审查 CLI 工具","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-open-code-review-guide-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Open%20code%20review%20guide_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"zh-Hans","keywords":"代码审查, AI 工具, CI/CD, LLM"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Open Code Review(OCR)完整指南","description":"阿里巴巴集团经过两年内部验证后开源的混合式 AI 代码审查 CLI 工具完整指南。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-open-code-review-guide-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Open%20code%20review%20guide_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"zh-Hans","keywords":"代码审查, AI 工具, CI/CD, LLM"}</script>
 </head>
 <body class="content-body">
   <header class="site-top">
@@ -49,7 +49,7 @@
     <article class="article">
       <header class="article-head">
         <p class="eyebrow">LLM · 에이전트</p>
-        <h1>Open Code Review (OCR) 完全指南</h1>
+        <h1>Open Code Review(OCR)完整指南</h1>
         <p class="article-dates"><time datetime="2026-07-25">발행 2026.07.25</time> · 주제 代码审查 · AI 工具 · CI/CD · LLM</p>
         <div class="lang-switch" role="navigation" aria-label="Language">
       <a class="lang-btn" href="../../tech/llm-open-code-review-guide/" data-lang="KR">🇰🇷 한국어</a>
@@ -57,7 +57,7 @@
       <a class="lang-btn" href="../../tech/llm-open-code-review-guide-ja/" data-lang="JP">日本語</a>
       <a class="lang-btn is-active" href="../../tech/llm-open-code-review-guide-cn/" data-lang="CN" aria-current="true">中文</a>
     </div>
-        <p class="lede">阿里巴巴集团经过两年内部验证后开源的混合式 AI 代码审查 CLI 工具</p>
+        <p class="lede">阿里巴巴集团经过两年内部验证后开源的混合式 AI 代码审查 CLI 工具完整指南。</p>
         
       </header>
       <div class="article-body prose"><blockquote>
@@ -67,24 +67,24 @@ Apache 2.0 | GitHub: <a href="https://github.com/alibaba/open-code-review">aliba
 <hr>
 <h2>目录</h2>
 <ol>
-<li><a href="#1-%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%A7%88">项目概览</a></li>
+<li><a href="#1-%E9%A1%B9%E7%9B%AE%E6%A6%82%E8%BF%B0">项目概述</a></li>
 <li><a href="#2-%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3">架构详解</a></li>
 <li><a href="#3-%E5%AE%89%E8%A3%85">安装</a></li>
-<li><a href="#4-llm-%E9%85%8D%E7%BD%AE--%E4%BA%91%E7%AB%AF-api">LLM 配置 —— 云端 API</a></li>
-<li><a href="#5-llm-%E9%85%8D%E7%BD%AE--%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%9E%8Bdeepseek--qwen--ollama">LLM 配置 —— 本地模型(DeepSeek / Qwen / Ollama)</a></li>
+<li><a href="#4-llm-%E9%85%8D%E7%BD%AE%E4%BA%91%E7%AB%AF-api">LLM 配置——云端 API</a></li>
+<li><a href="#5-llm-%E9%85%8D%E7%BD%AE%E6%9C%AC%E5%9C%B0%E6%A8%A1%E5%9E%8Bdeepseek--qwen--ollama">LLM 配置——本地模型(DeepSeek / Qwen / Ollama)</a></li>
 <li><a href="#6-%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95%E4%B8%8E%E5%91%BD%E4%BB%A4%E5%8F%82%E8%80%83">基本用法与命令参考</a></li>
 <li><a href="#7-%E8%87%AA%E5%AE%9A%E4%B9%89%E5%AE%A1%E6%9F%A5%E8%A7%84%E5%88%99">自定义审查规则</a></li>
 <li><a href="#8-cicd-%E9%9B%86%E6%88%90">CI/CD 集成</a></li>
-<li><a href="#9-ai-%E4%BB%A3%E7%90%86%E9%9B%86%E6%88%90claude-code--codex">AI 代理集成(Claude Code / Codex)</a></li>
+<li><a href="#9-ai-%E6%99%BA%E8%83%BD%E4%BD%93%E9%9B%86%E6%88%90claude-code--codex">AI 智能体集成(Claude Code / Codex)</a></li>
 <li><a href="#10-%E5%AE%8C%E6%95%B4%E9%85%8D%E7%BD%AE%E5%8F%82%E8%80%83">完整配置参考</a></li>
 <li><a href="#11-%E4%BC%98%E7%BC%BA%E7%82%B9%E5%88%86%E6%9E%90">优缺点分析</a></li>
-<li><a href="#12-%E6%A8%A1%E5%9E%8B%E9%80%89%E6%8B%A9%E6%8C%87%E5%8D%97">模型选择指南</a></li>
-<li><a href="#13-%E9%80%82%E5%90%88%E7%9A%84%E5%9B%A2%E9%98%9F%E7%B1%BB%E5%9E%8B">适合的团队类型</a></li>
+<li><a href="#12-%E6%A8%A1%E5%9E%8B%E9%80%89%E5%9E%8B%E6%8C%87%E5%8D%97">模型选型指南</a></li>
+<li><a href="#13-%E9%80%82%E7%94%A8%E5%9B%A2%E9%98%9F%E7%B1%BB%E5%9E%8B">适用团队类型</a></li>
 </ol>
 <hr>
-<h2>1. 项目概览</h2>
-<p>Open Code Review(以下简称 OCR)是阿里巴巴集团将其内部运行并验证了两年的 AI 代码审查工具开源后形成的 CLI 项目。在内部运行期间,超过 2 万名开发者使用了该工具,累计检测出超过 100 万个代码缺陷。它通过读取 Git diff,将变更的文件传递给配置好的 LLM,生成行级精准的审查评论。</p>
-<p>其核心设计理念是&quot;确定性工程(Deterministic Engineering)+ LLM 代理&quot;的混合架构。必须保证准确性的处理阶段由工程逻辑负责,只有需要动态判断的部分才委托给 LLM 代理。</p>
+<h2>1. 项目概述</h2>
+<p>Open Code Review(以下简称 OCR)是阿里巴巴集团将其内部运行验证两年的 AI 代码审查工具开源后形成的 CLI 项目。在内部运营期间，超过 2 万名开发者使用了该工具，累计检测出 100 多万个代码缺陷。它通过读取 Git diff，将变更文件传递给配置好的 LLM，生成精确到行级别的审查评论。</p>
+<p>其核心设计理念是&quot;确定性工程(Deterministic Engineering)+ LLM 智能体&quot;的混合架构。必须保证准确性的处理环节由工程逻辑负责，只有需要动态判断的部分才委托给 LLM 智能体处理。</p>
 <table>
 <thead>
 <tr>
@@ -98,14 +98,14 @@ Apache 2.0 | GitHub: <a href="https://github.com/alibaba/open-code-review">aliba
 </tr>
 <tr>
 <td>累计使用开发者</td>
-<td>2 万人以上</td>
+<td>超过 2 万人</td>
 </tr>
 <tr>
-<td>累计检测缺陷</td>
-<td>100 万个以上</td>
+<td>累计检测缺陷数</td>
+<td>超过 100 万个</td>
 </tr>
 <tr>
-<td>相对纯 LLM 的 token 节省</td>
+<td>相较纯 LLM 方案的 token 节省</td>
 <td>约 80%</td>
 </tr>
 <tr>
@@ -119,16 +119,16 @@ Apache 2.0 | GitHub: <a href="https://github.com/alibaba/open-code-review">aliba
 </tbody></table>
 <hr>
 <h2>2. 架构详解</h2>
-<h3>通用 AI 代理的局限性</h3>
-<p>直接使用 Claude Code 或通用代理进行代码审查时,会反复出现以下问题:</p>
+<h3>通用 AI 智能体的局限性</h3>
+<p>直接将 Claude Code 或通用型智能体用于代码审查时，会反复出现以下问题:</p>
 <ul>
-<li><strong>覆盖不完整</strong>: 在变更文件较多的 PR 中,部分文件会被随意忽略。</li>
-<li><strong>位置偏移(Position Drift)</strong>: 报告的问题所在的行号或文件引用与实际情况不符。</li>
-<li><strong>质量不稳定</strong>: 提示词的细微变动会导致审查质量大幅波动。</li>
+<li><strong>覆盖不完整</strong>：在变更文件较多的 PR 中，会随意遗漏部分文件。</li>
+<li><strong>位置漂移(Position Drift)</strong>：报告的问题所在的行号或文件引用与实际情况不符。</li>
+<li><strong>质量不稳定</strong>：提示词的细微变化会导致审查质量出现较大波动。</li>
 </ul>
 <p>OCR 在架构层面解决了这三个问题。</p>
 <h3>确定性工程层(Deterministic Engineering)</h3>
-<p>必须保证准确的步骤由工程逻辑而非 LLM 来保证。</p>
+<p>必须保证准确性的环节由工程逻辑而非 LLM 来保障。</p>
 <table>
 <thead>
 <tr>
@@ -138,67 +138,67 @@ Apache 2.0 | GitHub: <a href="https://github.com/alibaba/open-code-review">aliba
 </thead>
 <tbody><tr>
 <td>精确文件选择</td>
-<td>精确确定审查目标文件并过滤不必要的文件,防止重要变更被遗漏</td>
+<td>精确确定需要审查的文件，过滤不必要的文件，防止重要变更被遗漏</td>
 </tr>
 <tr>
 <td>智能文件打包</td>
-<td>将相关文件合并为一个审查单元(例如 <code>message_en.properties</code> + <code>message_zh.properties</code>)。每个打包单元作为独立上下文的子代理运行</td>
+<td>将相关文件归入同一审查单元(例如 <code>message_en.properties</code> + <code>message_zh.properties</code>)。每个包在独立上下文的子智能体中执行</td>
 </tr>
 <tr>
-<td>精细规则匹配</td>
-<td>根据每个文件的特性匹配审查规则,去除信息噪声,提升模型专注度</td>
+<td>细粒度规则匹配</td>
+<td>为每个文件的特性匹配相应的审查规则，去除信息噪音，提升模型专注度</td>
 </tr>
 <tr>
 <td>位置校正模块</td>
-<td>独立的评论定位与反思(reflection)模块,系统性地提升 AI 反馈的位置准确性和内容准确性</td>
+<td>通过独立的评论定位与反思(reflection)模块，系统性地改进 AI 反馈的位置准确性和内容准确性</td>
 </tr>
 </tbody></table>
-<h3>LLM 代理层</h3>
+<h3>LLM 智能体层</h3>
 <p>负责需要动态判断和上下文检索的部分。</p>
 <ul>
-<li>针对代码审查场景优化的提示词模板</li>
-<li>基于大规模生产数据的工具调用轨迹分析构建的专业化工具集</li>
-<li>实时代码库搜索、读取文件完整内容、与其他变更文件交叉引用</li>
+<li>针对代码审查优化的场景化提示词模板</li>
+<li>基于大规模生产数据的工具调用轨迹分析构建的专业工具集</li>
+<li>实时代码库检索、读取文件全文、交叉引用其他变更文件</li>
 </ul>
 <hr>
 <h2>3. 安装</h2>
 <h3>NPM(推荐)</h3>
 <pre><code class="language-bash">npm install -g @alibaba-group/open-code-review
 </code></pre>
-<p>安装后,<code>ocr</code> 命令即可全局使用。</p>
+<p>安装完成后，<code>ocr</code> 命令即可全局使用。</p>
 <h3>直接下载二进制文件</h3>
-<pre><code class="language-bash"># macOS (Apple Silicon / M1~M4)
+<pre><code class="language-bash"># macOS(Apple Silicon / M1~M4)
 curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-darwin-arm64
 chmod +x ocr &amp;&amp; sudo mv ocr /usr/local/bin/ocr
 
-# macOS (Intel)
+# macOS(Intel)
 curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-darwin-amd64
 chmod +x ocr &amp;&amp; sudo mv ocr /usr/local/bin/ocr
 
-# Linux (x86_64)
+# Linux(x86_64)
 curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-linux-amd64
 chmod +x ocr &amp;&amp; sudo mv ocr /usr/local/bin/ocr
 
-# Linux (ARM64)
+# Linux(ARM64)
 curl -Lo ocr https://github.com/alibaba/open-code-review/releases/latest/download/opencodereview-linux-arm64
 chmod +x ocr &amp;&amp; sudo mv ocr /usr/local/bin/ocr
 </code></pre>
-<h3>源码构建</h3>
+<h3>从源码构建</h3>
 <pre><code class="language-bash">git clone https://github.com/alibaba/open-code-review.git
 cd open-code-review
 make build
 sudo cp dist/opencodereview /usr/local/bin/ocr
 </code></pre>
 <hr>
-<h2>4. LLM 配置 —— 云端 API</h2>
-<p>OCR 同时支持 OpenAI 兼容端点和 Anthropic 原生 API。配置文件保存在 <code>~/.opencodereview/config.json</code>。环境变量的优先级高于配置文件。</p>
+<h2>4. LLM 配置——云端 API</h2>
+<p>OCR 同时支持 OpenAI 兼容端点和 Anthropic 原生 API。配置文件保存在 <code>~/.opencodereview/config.json</code> 中。环境变量的优先级高于配置文件。</p>
 <h3>Anthropic(Claude)</h3>
 <pre><code class="language-bash">ocr config set llm.url https://api.anthropic.com/v1/messages
 ocr config set llm.auth_token sk-ant-xxxxxxx
 ocr config set llm.model claude-opus-4-6
 ocr config set llm.use_anthropic true
 </code></pre>
-<p>如果是 Claude Code 用户,会自动从 <code>~/.zshrc</code> 或 <code>~/.bashrc</code> 中识别 <code>ANTHROPIC_BASE_URL</code>、<code>ANTHROPIC_AUTH_TOKEN</code>、<code>ANTHROPIC_MODEL</code> 环境变量,无需额外配置。</p>
+<p>如果你是 Claude Code 用户，<code>~/.zshrc</code> 或 <code>~/.bashrc</code> 中的 <code>ANTHROPIC_BASE_URL</code>、<code>ANTHROPIC_AUTH_TOKEN</code>、<code>ANTHROPIC_MODEL</code> 环境变量会被自动识别，无需额外配置。</p>
 <p>推荐模型:</p>
 <table>
 <thead>
@@ -209,11 +209,11 @@ ocr config set llm.use_anthropic true
 </thead>
 <tbody><tr>
 <td><code>claude-opus-4-6</code></td>
-<td>最高质量审查,复杂架构分析</td>
+<td>最高质量审查，复杂架构分析</td>
 </tr>
 <tr>
 <td><code>claude-sonnet-4-6</code></td>
-<td>成本与性能平衡,日常 PR 审查</td>
+<td>成本与性能平衡，日常 PR 审查</td>
 </tr>
 </tbody></table>
 <h3>OpenAI(ChatGPT)</h3>
@@ -232,7 +232,7 @@ ocr config set llm.use_anthropic false
 </thead>
 <tbody><tr>
 <td><code>gpt-4o</code></td>
-<td>代码审查的基础推荐</td>
+<td>代码审查的基本推荐选择</td>
 </tr>
 <tr>
 <td><code>o3</code></td>
@@ -244,7 +244,7 @@ ocr config set llm.use_anthropic false
 </tr>
 </tbody></table>
 <h3>DeepSeek 云端 API</h3>
-<p>由于 DeepSeek 提供 OpenAI 兼容 API,应将 <code>use_anthropic</code> 设为 false。</p>
+<p>DeepSeek 提供 OpenAI 兼容 API，因此需将 <code>use_anthropic</code> 设为 <code>false</code>。</p>
 <pre><code class="language-bash">ocr config set llm.url https://api.deepseek.com/v1/chat/completions
 ocr config set llm.auth_token sk-xxxxxxx
 ocr config set llm.model deepseek-coder
@@ -260,31 +260,31 @@ ocr config set llm.use_anthropic false
 </thead>
 <tbody><tr>
 <td><code>deepseek-coder</code></td>
-<td>代码专用,成本效益优秀</td>
+<td>代码专用，成本效益出色</td>
 </tr>
 <tr>
 <td><code>deepseek-reasoner</code></td>
 <td>复杂逻辑分析与推理能力强</td>
 </tr>
 </tbody></table>
-<h3>阿里巴巴 DashScope(Qwen Cloud)</h3>
+<h3>阿里云 DashScope(Qwen Cloud)</h3>
 <pre><code class="language-bash">ocr config set llm.url https://dashscope.aliyuncs.com/compatible-mode/v1/chat/completions
 ocr config set llm.auth_token sk-xxxxxxx
 ocr config set llm.model qwen-coder-turbo
 ocr config set llm.use_anthropic false
 </code></pre>
 <hr>
-<h2>5. LLM 配置 —— 本地模型(DeepSeek / Qwen / Ollama)</h2>
-<p>使用本地 LLM 可确保代码不会发送到外部 API,从而保证完全的数据隐私。OCR 支持任何在本地暴露 OpenAI 兼容端点的运行时(Ollama、LM Studio、vLLM 等)。</p>
+<h2>5. LLM 配置——本地模型(DeepSeek / Qwen / Ollama)</h2>
+<p>使用本地 LLM 意味着代码不会发送到外部 API，可确保完全的数据隐私。OCR 支持任何在本地暴露 OpenAI 兼容端点的运行时环境(Ollama、LM Studio、vLLM 等)。</p>
 <h3>5-1. 基于 Ollama 的配置(通用)</h3>
-<p>Ollama 是运行本地 LLM 最简单的方式。安装后会自动在 <code>http://localhost:11434</code> 暴露 OpenAI 兼容端点。</p>
-<pre><code class="language-bash"># 安装 Ollama (macOS)
+<p>Ollama 是运行本地 LLM 最简单的方式。安装完成后会自动在 <code>http://localhost:11434</code> 暴露 OpenAI 兼容端点。</p>
+<pre><code class="language-bash"># 安装 Ollama(macOS)
 brew install ollama
 
-# 安装 Ollama (Linux)
+# 安装 Ollama(Linux)
 curl -fsSL https://ollama.com/install.sh | sh
 
-# 后台启动服务器
+# 后台启动服务
 ollama serve &amp;
 </code></pre>
 <p>将 OCR 连接到 Ollama:</p>
@@ -294,20 +294,20 @@ ocr config set llm.model qwen2.5-coder:32b
 ocr config set llm.use_anthropic false
 </code></pre>
 <blockquote>
-<p><code>auth_token</code> 的值可以是任意字符串,Ollama 在本地不会验证 token。</p>
+<p>auth_token 的值可以设置为任意字符串。Ollama 在本地不会进行 token 验证。</p>
 </blockquote>
 <h3>5-2. 本地运行 DeepSeek</h3>
 <h4>通过 Ollama 运行 DeepSeek</h4>
-<pre><code class="language-bash"># DeepSeek-R1(推理特化,适合代码审查)
+<pre><code class="language-bash"># DeepSeek-R1(推理专精，适合代码审查)
 ollama pull deepseek-r1:14b    # 约需 9GB 显存
 ollama pull deepseek-r1:32b    # 约需 20GB 显存
-ollama pull deepseek-r1:70b    # 约需 48GB 以上显存
+ollama pull deepseek-r1:70b    # 需要 48GB 以上显存
 
 # DeepSeek Coder V2(代码专用)
 ollama pull deepseek-coder-v2:16b    # 约需 10GB 显存
-ollama pull deepseek-coder-v2:236b   # 约需 130GB 显存,最高质量
+ollama pull deepseek-coder-v2:236b   # 约需 130GB 显存，质量最高
 
-# 扩展上下文窗口(agentic 工作流必需)
+# 扩展上下文窗口(智能体工作流所必需)
 ollama run deepseek-r1:14b
 &gt;&gt;&gt; /set parameter num_ctx 32768
 &gt;&gt;&gt; /save deepseek-r1-14b-32k
@@ -321,7 +321,7 @@ ocr config set llm.use_anthropic false
 <h4>通过 vLLM 运行 DeepSeek(高性能 GPU 服务器环境)</h4>
 <pre><code class="language-bash">docker pull vllm/vllm-openai:latest
 
-# DeepSeek-R1 14B(需要约 30GB 显存)
+# DeepSeek-R1 14B(约需 30GB 显存)
 docker run --runtime nvidia --gpus all \
   -v ~/.cache/huggingface:/root/.cache/huggingface \
   -p 8000:8000 \
@@ -335,11 +335,11 @@ ocr config set llm.auth_token vllm
 ocr config set llm.model deepseek-ai/DeepSeek-R1-Distill-Qwen-14B
 ocr config set llm.use_anthropic false
 </code></pre>
-<h4>通过 LM Studio 运行 DeepSeek(GUI 环境)</h4>
+<h4>通过 LM Studio 运行 DeepSeek(图形界面环境)</h4>
 <ol>
 <li>从 <a href="https://lmstudio.ai">lmstudio.ai</a> 安装 LM Studio</li>
-<li>在 &quot;Discover&quot; 标签中搜索 <code>deepseek-r1</code> 并下载所需大小的版本</li>
-<li>在 &quot;Local Server&quot; 标签中启动服务器(默认端口: 1234)</li>
+<li>在&quot;Discover&quot;标签页搜索 <code>deepseek-r1</code>，下载所需大小的版本</li>
+<li>在&quot;Local Server&quot;标签页启动服务(默认端口:1234)</li>
 </ol>
 <p>OCR 配置:</p>
 <pre><code class="language-bash">ocr config set llm.url http://localhost:1234/v1/chat/completions
@@ -347,18 +347,18 @@ ocr config set llm.auth_token lm-studio
 ocr config set llm.model deepseek-r1-distill-qwen-14b
 ocr config set llm.use_anthropic false
 </code></pre>
-<h3>5-3. 本地运行 Qwen(Qwen2.5-Coder / Qwen3)</h3>
-<p>Qwen 系列在代码生成和审查方面展现出同级别中最强的开源性能。特别是 Qwen2.5-Coder 32B 在 HumanEval 上达到 92.1%,超过了 Claude Sonnet 4.6(89.4%)。</p>
-<pre><code class="language-bash"># Qwen2.5-Coder(代码专用 —— 代码审查首选)
-ollama pull qwen2.5-coder:7b     # 约需 5GB 显存,响应快速
-ollama pull qwen2.5-coder:14b    # 约需 9GB 显存,均衡
-ollama pull qwen2.5-coder:32b    # 约需 20GB 显存,最高质量
+<h3>5-3. Qwen(Qwen2.5-Coder / Qwen3)本地运行</h3>
+<p>Qwen 系列在代码生成和审查方面展现出同级别开源模型中最强的性能。尤其是 Qwen2.5-Coder 32B 在 HumanEval 基准上达到 92.1%，超过了 Claude Sonnet 4.6(89.4%)。</p>
+<pre><code class="language-bash"># Qwen2.5-Coder(代码专用——代码审查首选推荐)
+ollama pull qwen2.5-coder:7b     # 约需 5GB 显存，响应速度快
+ollama pull qwen2.5-coder:14b    # 约需 9GB 显存，均衡之选
+ollama pull qwen2.5-coder:32b    # 约需 20GB 显存，质量最高
 
-# Qwen3(2026 年 2 月发布的最新通用模型)
+# Qwen3(通用最新模型，2026 年 2 月发布)
 ollama pull qwen3:8b
 ollama pull qwen3:32b
 
-# 扩展上下文窗口(以支持 256K 的模型为准)
+# 扩展上下文窗口(以支持 256K 的模型为基准)
 ollama run qwen2.5-coder:32b
 &gt;&gt;&gt; /set parameter num_ctx 32768
 &gt;&gt;&gt; /save qwen2.5-coder-32b-32k
@@ -369,7 +369,7 @@ ocr config set llm.auth_token ollama
 ocr config set llm.model qwen2.5-coder:32b
 ocr config set llm.use_anthropic false
 </code></pre>
-<h3>5-4. 本地 LLM 硬件要求</h3>
+<h3>5-4. 本地 LLM 硬件需求</h3>
 <table>
 <thead>
 <tr>
@@ -382,51 +382,51 @@ ocr config set llm.use_anthropic false
 <tbody><tr>
 <td>DeepSeek-R1 14B</td>
 <td>9GB</td>
-<td>25-40</td>
-<td>个人开发者笔记本电脑,推理能力强</td>
+<td>25~40</td>
+<td>个人开发者笔记本，推理能力强</td>
 </tr>
 <tr>
 <td>Qwen2.5-Coder 7B</td>
 <td>5GB</td>
-<td>40-60</td>
-<td>轻量环境,快速 PR 审查</td>
+<td>40~60</td>
+<td>轻量环境，快速 PR 审查</td>
 </tr>
 <tr>
 <td>Qwen2.5-Coder 14B</td>
 <td>9GB</td>
-<td>25-35</td>
+<td>25~35</td>
 <td>均衡推荐</td>
 </tr>
 <tr>
 <td>Qwen2.5-Coder 32B</td>
 <td>20GB</td>
-<td>15-25</td>
-<td>高质量代码审查,企业级</td>
+<td>15~25</td>
+<td>高质量代码审查，企业级</td>
 </tr>
 <tr>
 <td>DeepSeek-R1 32B</td>
 <td>20GB</td>
-<td>10-18</td>
+<td>10~18</td>
 <td>复杂安全分析</td>
 </tr>
 <tr>
 <td>DeepSeek Coder V2 236B</td>
-<td>130GB 以上</td>
-<td>8-12</td>
-<td>最高质量,仅限 GPU 服务器</td>
+<td>130GB+</td>
+<td>8~12</td>
+<td>最高质量，专用 GPU 服务器</td>
 </tr>
 </tbody></table>
 <blockquote>
-<p>使用 Q4 量化可将显存占用降低约 60%,质量损失约为 2%。Ollama 在拉取模型时会自动应用量化。</p>
+<p>使用 Q4 量化可将显存占用降低约 60%，质量损失约在 2% 左右。Ollama 在拉取模型时会自动应用量化。</p>
 </blockquote>
 <h3>5-5. 连接测试</h3>
-<pre><code class="language-bash"># 验证 LLM 连接(云端与本地通用)
+<pre><code class="language-bash"># 检查 LLM 连接(云端与本地通用)
 ocr llm test
 </code></pre>
 <hr>
 <h2>6. 基本用法与命令参考</h2>
 <h3>主要审查命令</h3>
-<pre><code class="language-bash"># 审查当前的所有变更(staged + unstaged + untracked)
+<pre><code class="language-bash"># 审查当前变更(staged + unstaged + untracked 全部)
 ocr review
 
 # 分支间对比审查
@@ -435,7 +435,7 @@ ocr review --from main --to feature-auth
 # 审查特定提交
 ocr review --commit abc123
 
-# 不调用 LLM,仅预览待审查文件
+# 不调用 LLM，仅预览将被审查的文件
 ocr review --preview
 ocr review --commit abc123 --preview
 
@@ -465,12 +465,12 @@ ocr review --from main --to my-feature --concurrency 4
 <tr>
 <td><code>ocr rules check &lt;file&gt;</code></td>
 <td>—</td>
-<td>预览适用于该文件的规则</td>
+<td>预览应用于该文件的规则</td>
 </tr>
 <tr>
 <td><code>ocr config set &lt;key&gt; &lt;value&gt;</code></td>
 <td>—</td>
-<td>更改配置值</td>
+<td>修改配置值</td>
 </tr>
 <tr>
 <td><code>ocr llm test</code></td>
@@ -488,7 +488,7 @@ ocr review --from main --to my-feature --concurrency 4
 <td>输出版本信息</td>
 </tr>
 </tbody></table>
-<h3><code>ocr review</code> 的主要参数</h3>
+<h3><code>ocr review</code> 主要参数</h3>
 <table>
 <thead>
 <tr>
@@ -500,17 +500,17 @@ ocr review --from main --to my-feature --concurrency 4
 <tbody><tr>
 <td><code>--repo</code></td>
 <td>当前目录</td>
-<td>Git 仓库根路径</td>
+<td>Git 仓库根目录路径</td>
 </tr>
 <tr>
 <td><code>--from</code></td>
 <td>—</td>
-<td>对比基准 ref(例如 <code>main</code>)</td>
+<td>比较基准 ref(例如 <code>main</code>)</td>
 </tr>
 <tr>
 <td><code>--to</code></td>
 <td>—</td>
-<td>对比目标 ref(例如 <code>feature-branch</code>)</td>
+<td>比较目标 ref(例如 <code>feature-branch</code>)</td>
 </tr>
 <tr>
 <td><code>--commit</code>, <code>-c</code></td>
@@ -520,12 +520,12 @@ ocr review --from main --to my-feature --concurrency 4
 <tr>
 <td><code>--preview</code>, <code>-p</code></td>
 <td><code>false</code></td>
-<td>不调用 LLM,仅确认待审查文件</td>
+<td>不调用 LLM，仅确认待审查文件</td>
 </tr>
 <tr>
 <td><code>--format</code>, <code>-f</code></td>
 <td><code>text</code></td>
-<td>输出格式: <code>text</code> 或 <code>json</code></td>
+<td>输出格式:<code>text</code> 或 <code>json</code></td>
 </tr>
 <tr>
 <td><code>--concurrency</code></td>
@@ -560,7 +560,7 @@ ocr review --from main --to my-feature --concurrency 4
 </tbody></table>
 <hr>
 <h2>7. 自定义审查规则</h2>
-<p>OCR 采用四级优先级体系应用规则。在每一级中,文件路径首次匹配到某个模式时即应用该规则,若未匹配则进入下一级。</p>
+<p>OCR 采用四级优先级体系应用规则。在每一级中，文件路径一旦首次匹配某个模式，就会应用该规则；若未匹配，则进入下一级。</p>
 <table>
 <thead>
 <tr>
@@ -574,13 +574,13 @@ ocr review --from main --to my-feature --concurrency 4
 <td>1(最高)</td>
 <td><code>--rule</code> 参数</td>
 <td>用户指定路径</td>
-<td>CLI 显式覆盖</td>
+<td>命令行显式覆盖</td>
 </tr>
 <tr>
 <td>2</td>
 <td>项目配置</td>
 <td><code>&lt;repoDir&gt;/.opencodereview/rule.json</code></td>
-<td>项目专属规则,可提交到 git</td>
+<td>项目级规则，可提交至 git</td>
 </tr>
 <tr>
 <td>3</td>
@@ -590,9 +590,9 @@ ocr review --from main --to my-feature --concurrency 4
 </tr>
 <tr>
 <td>4(最低)</td>
-<td>系统默认</td>
+<td>系统默认值</td>
 <td>内置 <code>system_rules.json</code></td>
-<td>NPE、XSS、SQL Injection 等通用规则</td>
+<td>NPE、XSS、SQL 注入等通用规则</td>
 </tr>
 </tbody></table>
 <h3>规则文件格式</h3>
@@ -600,25 +600,25 @@ ocr review --from main --to my-feature --concurrency 4
   &quot;rules&quot;: [
     {
       &quot;path&quot;: &quot;src/main/java/**/*.java&quot;,
-      &quot;rule&quot;: &quot;所有新方法的必填参数必须校验 null 值&quot;
+      &quot;rule&quot;: &quot;所有新增方法的必填参数都必须校验 null 值&quot;
     },
     {
       &quot;path&quot;: &quot;**/*mapper*.xml&quot;,
-      &quot;rule&quot;: &quot;检查 SQL Injection 风险、参数错误以及闭合标签缺失&quot;
+      &quot;rule&quot;: &quot;检查 SQL 注入风险、参数错误以及标签未闭合的问题&quot;
     },
     {
       &quot;path&quot;: &quot;src/**/*.{ts,tsx}&quot;,
-      &quot;rule&quot;: &quot;检查异步函数的错误处理与 Promise 链是否遗漏&quot;
+      &quot;rule&quot;: &quot;检查异步函数的错误处理以及 Promise 链是否遗漏处理&quot;
     }
   ]
 }
 </code></pre>
 <ul>
-<li><code>path</code> 支持 <code>**</code> 递归匹配以及 <code>{java,kt}</code> 大括号展开。</li>
-<li>每一层内按声明顺序进行评估,首个匹配项生效。</li>
-<li>若规则文件不存在,则会静默跳过。</li>
+<li><code>path</code> 支持 <code>**</code> 递归匹配以及 <code>{java,kt}</code> 花括号扩展语法。</li>
+<li>在每一层内部按声明顺序依次评估，命中第一个匹配项即生效。</li>
+<li>若规则文件不存在，则会静默跳过。</li>
 </ul>
-<p>预先确认特定文件适用的规则:</p>
+<p>预先确认某个特定文件将应用哪些规则:</p>
 <pre><code class="language-bash">ocr rules check src/main/java/com/example/UserService.java
 ocr rules check --rule custom.json src/main/resources/mapper/UserMapper.xml
 </code></pre>
@@ -684,23 +684,23 @@ code-review:
   --format json \
   --audience agent
 </code></pre>
-<p><code>--format json</code> + <code>--audience agent</code> 组合会返回可在 CI 脚本中解析的结构化输出。该工具也已作为 Action 发布到 GitHub Marketplace。</p>
+<p><code>--format json</code> + <code>--audience agent</code> 的组合会返回可在 CI 脚本中解析的结构化输出。该工具也已作为 Actions 发布在 GitHub Marketplace 上。</p>
 <hr>
-<h2>9. AI 代理集成(Claude Code / Codex)</h2>
-<p>将 OCR 集成为 AI 编码代理的斜杠命令后,可以在代理的工作流中直接执行代码审查。</p>
-<h3>方法一: 作为技能(Skill)安装</h3>
+<h2>9. AI 智能体集成(Claude Code / Codex)</h2>
+<p>将 OCR 集成为 AI 编码智能体的斜杠命令后，即可在智能体工作流中直接执行代码审查。</p>
+<h3>方法 1:以 Skill 形式安装</h3>
 <pre><code class="language-bash">npx skills add alibaba/open-code-review --skill open-code-review
 </code></pre>
-<p>编码代理会学习如何调用 <code>ocr</code>、如何对问题进行优先级分类,以及自动修复选项。</p>
-<h3>方法二: 作为 Claude Code 插件安装</h3>
+<p>编码智能体会学习如何调用 <code>ocr</code>、如何对问题进行优先级分类，以及自动修复选项。</p>
+<h3>方法 2:安装 Claude Code 插件</h3>
 <p>在 Claude Code 中执行以下命令:</p>
 <pre><code>/plugin marketplace add alibaba/open-code-review
 /plugin install open-code-review@open-code-review
 </code></pre>
-<p>安装后,可通过 <code>/open-code-review:review</code> 斜杠命令运行 OCR,并处理问题的自动过滤及修复。</p>
-<h3>方法三: 直接复制命令文件</h3>
+<p>安装完成后，可通过 <code>/open-code-review:review</code> 斜杠命令运行 OCR，并自动处理问题过滤与修复。</p>
+<h3>方法 3:直接复制命令文件</h3>
 <p>无需包管理器即可快速配置的方法。</p>
-<pre><code class="language-bash"># 项目级(团队共享,可提交到 git)
+<pre><code class="language-bash"># 项目级(团队共享，可提交至 git)
 mkdir -p .claude/commands
 curl -o .claude/commands/open-code-review.md \
   https://raw.githubusercontent.com/alibaba/open-code-review/main/plugins/open-code-review/commands/review.md
@@ -715,18 +715,18 @@ curl -o ~/.claude/commands/open-code-review.md \
 codex plugin marketplace add alibaba/open-code-review
 codex /plugins
 </code></pre>
-<p>安装后,在 Codex 中可以这样使用:</p>
+<p>安装完成后，可在 Codex 中如下使用:</p>
 <pre><code>@Open Code Review review my current changes
 @Open Code Review review this branch against main
 @Open Code Review review and fix high-confidence issues
 </code></pre>
 <blockquote>
-<p>所有集成方式的前提条件: 必须安装 <code>ocr</code> CLI 并完成 LLM 配置。OCR 内部的 LLM 后端与代理集成方式无关,独立运行。</p>
+<p>所有集成方式的前提条件:必须先安装 <code>ocr</code> CLI 并完成 LLM 配置。OCR 内部的 LLM 后端与具体的智能体集成方式无关，独立运行。</p>
 </blockquote>
 <hr>
 <h2>10. 完整配置参考</h2>
-<p>配置文件路径: <code>~/.opencodereview/config.json</code></p>
-<h3>配置项列表</h3>
+<p>配置文件路径:<code>~/.opencodereview/config.json</code></p>
+<h3>配置键列表</h3>
 <table>
 <thead>
 <tr>
@@ -746,7 +746,7 @@ codex /plugins
 <td><code>llm.auth_token</code></td>
 <td>string</td>
 <td><code>sk-xxxxxxx</code></td>
-<td>API 密钥 / 认证令牌</td>
+<td>API 密钥/认证 token</td>
 </tr>
 <tr>
 <td><code>llm.model</code></td>
@@ -764,7 +764,7 @@ codex /plugins
 <td><code>language</code></td>
 <td>string</td>
 <td><code>English</code> / <code>Chinese</code></td>
-<td>审查输出语言(默认: 中文)</td>
+<td>审查输出语言(默认值:Chinese)</td>
 </tr>
 <tr>
 <td><code>telemetry.enabled</code></td>
@@ -782,7 +782,7 @@ codex /plugins
 <td><code>telemetry.otlp_endpoint</code></td>
 <td>string</td>
 <td><code>localhost:4317</code></td>
-<td>OTLP 收集器地址</td>
+<td>OTLP 采集器地址</td>
 </tr>
 <tr>
 <td><code>telemetry.content_logging</code></td>
@@ -806,7 +806,7 @@ codex /plugins
 </tr>
 <tr>
 <td><code>OCR_LLM_TOKEN</code></td>
-<td>API 密钥 / 认证令牌</td>
+<td>API 密钥/认证 token</td>
 </tr>
 <tr>
 <td><code>OCR_LLM_MODEL</code></td>
@@ -814,12 +814,12 @@ codex /plugins
 </tr>
 <tr>
 <td><code>OCR_USE_ANTHROPIC</code></td>
-<td><code>true</code> = Anthropic,<code>false</code> = OpenAI 兼容</td>
+<td><code>true</code> = Anthropic，<code>false</code> = OpenAI 兼容</td>
 </tr>
 </tbody></table>
-<p>同时也会自动识别 Claude Code 的环境变量(<code>ANTHROPIC_BASE_URL</code>、<code>ANTHROPIC_AUTH_TOKEN</code>、<code>ANTHROPIC_MODEL</code>)。</p>
-<h3>更改审查输出语言</h3>
-<p>默认输出语言为中文。若要更改为韩语或英语:</p>
+<p>同时会自动识别 Claude Code 的环境变量(<code>ANTHROPIC_BASE_URL</code>、<code>ANTHROPIC_AUTH_TOKEN</code>、<code>ANTHROPIC_MODEL</code>)。</p>
+<h3>修改审查输出语言</h3>
+<p>默认输出语言为中文。若要修改为英文或韩语:</p>
 <pre><code class="language-bash">ocr config set language English
 # 或
 ocr config set language Korean
@@ -829,54 +829,54 @@ ocr config set language Korean
 ocr config set telemetry.exporter otlp
 ocr config set telemetry.otlp_endpoint localhost:4317
 </code></pre>
-<p>启用 <code>telemetry.content_logging</code> 后,导出数据中会包含 LLM 的提示词与响应内容。默认为关闭状态。</p>
+<p>启用 <code>telemetry.content_logging</code> 后，导出数据中会包含 LLM 的提示词和响应内容。默认值为关闭。</p>
 <hr>
 <h2>11. 优缺点分析</h2>
 <h3>优点</h3>
-<p><strong>大规模实战验证(Battle-tested)</strong>超过 2 万名阿里巴巴内部开发者使用了两年,累计检测出超过 100 万个缺陷。由于是 CLI 工具而非 SaaS,代码和数据不会流向外部,满足企业级安全要求。结合本地 LLM,还可以构建完全气隙(air-gap)环境。<strong>经济性与混合式设计</strong>相比纯 LLM 代理,可将 token 使用量降低 80%。它在确定性工程层面结构性地解决了通用 AI 代码审查的三大顽疾(覆盖不完整、位置偏移、质量不稳定)。<strong>灵活的模型支持</strong>支持 OpenAI、Anthropic、DeepSeek、DashScope(Qwen)、Ollama 等所有暴露 OpenAI 兼容端点的运行时,可以自由切换云端与本地 LLM。<strong>CI/CD 与代理生态集成</strong></p>
-<p>官方提供了 GitHub Actions、GitLab CI 的示例,并通过插件/技能/命令方式与 Claude Code、Codex 等主流 AI 编码代理集成。</p>
-<h3>缺点及注意事项</h3>
-<p><strong>LLM API 费用</strong>工具本身基于 Apache 2.0 免费,但后端 LLM 的 API 费用需用户自行承担。使用本地 LLM 可消除此费用,但会带来硬件方面的要求。<strong>初期环境配置</strong>现有 Claude Code 用户由于自动识别环境变量,无需额外配置。但新用户需要经过设置 LLM API 密钥、端点、模型的过程。使用本地 LLM 时,还需要额外安装 Ollama 并下载模型(数 GB)。<strong>业务逻辑的局限性</strong>内置规则与自定义规则可以弥补相当一部分需求,但无法完全理解团队特有的业务逻辑或领域特定惯例。需要持续在规则文件中补充团队专属的指导原则。<strong>AI 的根本局限</strong></p>
-<p>高层次的架构设计合理性以及与业务需求的完全契合度,难以用 AI 替代人的判断。OCR 是减轻审查者负担的辅助工具,而非完全的替代品。</p>
+<p><strong>大规模验证(Battle-tested)</strong>超过 2 万名阿里巴巴内部开发者使用了两年，累计检测出 100 多万个缺陷。由于是 CLI 工具而非 SaaS 服务，代码和数据不会外泄，满足企业级安全要求。结合本地 LLM 使用，还可以构建完全的隔离(Air-gap)环境。<strong>经济性与混合式设计</strong>相较纯 LLM 智能体方案，token 使用量削减 80%。通用 AI 代码审查中三个长期存在的顽疾(覆盖不完整、位置漂移、质量不稳定)都在确定性工程层得到了结构性的解决。<strong>灵活的模型支持</strong>支持 OpenAI、Anthropic、DeepSeek、DashScope(Qwen)、Ollama 等任何暴露 OpenAI 兼容端点的运行时环境，可以自由切换云端与本地 LLM。<strong>CI/CD 与智能体生态集成</strong></p>
+<p>官方提供 GitHub Actions、GitLab CI 示例，并通过插件/技能/命令等方式与 Claude Code、Codex 等主流 AI 编码智能体集成。</p>
+<h3>缺点与注意事项</h3>
+<p><strong>LLM API 成本</strong>工具本身以 Apache 2.0 免费提供，但后端 LLM API 的调用成本需由用户自行承担。使用本地 LLM 可以消除这部分成本，但会带来相应的硬件要求。<strong>初始环境配置</strong>已经在使用 Claude Code 的用户由于环境变量会被自动识别，无需额外配置；但新用户需要经历配置 LLM API 密钥、端点、模型的过程。使用本地 LLM 时，还需额外安装 Ollama 并下载模型(数 GB)。<strong>业务逻辑的局限性</strong>尽管内置规则和自定义规则可以弥补相当一部分需求，但无法完全理解团队特有的业务逻辑或领域特定的约定。需要持续在规则文件中补充团队专属的指引才能保证效果。<strong>AI 的根本性局限</strong></p>
+<p>高层次的架构设计合理性以及是否完全契合业务需求，仍难以用 AI 判断取代人工判断。OCR 是减轻审查人员负担的辅助工具，而非完全的替代品。</p>
 <hr>
-<h2>12. 模型选择指南</h2>
+<h2>12. 模型选型指南</h2>
 <table>
 <thead>
 <tr>
 <th>场景</th>
 <th>推荐模型</th>
-<th>原因</th>
+<th>理由</th>
 </tr>
 </thead>
 <tbody><tr>
-<td>最高质量审查,预算充足</td>
+<td>最高质量审查，成本充裕</td>
 <td>Claude Opus 4.6(云端)</td>
-<td>复杂上下文理解与架构分析能力强</td>
+<td>复杂上下文理解及架构分析能力强</td>
 </tr>
 <tr>
-<td>日常 PR 审查,成本均衡</td>
+<td>日常 PR 审查，成本均衡</td>
 <td>Claude Sonnet 4.6 或 GPT-4o</td>
 <td>性能与成本的平衡</td>
 </tr>
 <tr>
 <td>代码完全不能外泄</td>
 <td>Qwen2.5-Coder 32B(Ollama)</td>
-<td>本地运行,HumanEval 达 92.1%</td>
+<td>本地运行，HumanEval 92.1%</td>
 </tr>
 <tr>
 <td>复杂安全漏洞分析</td>
 <td>DeepSeek-R1(本地或云端)</td>
-<td>推理特化架构</td>
+<td>推理专精架构</td>
 </tr>
 <tr>
-<td>最小化成本(云端)</td>
+<td>成本最小化(云端)</td>
 <td>DeepSeek Coder API</td>
 <td>代码专用 + API 单价低</td>
 </tr>
 <tr>
-<td>轻量本地环境(显存 8GB 以下)</td>
+<td>轻量本地环境(8GB 显存以下)</td>
 <td>Qwen2.5-Coder 7B</td>
-<td>响应快速,硬件要求低</td>
+<td>响应快速，硬件需求低</td>
 </tr>
 <tr>
 <td>GPU 服务器最高质量</td>
@@ -885,17 +885,17 @@ ocr config set telemetry.otlp_endpoint localhost:4317
 </tr>
 </tbody></table>
 <hr>
-<h2>13. 适合的团队类型</h2>
-<p><strong>运营大规模代码库的组织</strong>即使在同时变更大量文件的 PR 中,智能打包与文件选择逻辑也能无遗漏地覆盖全部内容。相比通用代理,遗漏率在结构上更低。<strong>重视安全漏洞应对的团队</strong>在审查早期阶段拦截 NPE、SQL Injection、XSS、线程安全等高风险缺陷。结合本地 LLM,可以构建代码完全不外泄的私有环境。<strong>对 AI 采用成本敏感的团队</strong>80% 的 token 节省意味着同样的预算可以覆盖 5 倍的审查规模。使用 DeepSeek 云端 API 或本地 Qwen 模型可以进一步降低成本。<strong>希望将 AI 与现有审查流程相结合的团队</strong></p>
-<p>在 OCR 对 NPE、安全漏洞、编码规范违规进行初步筛选后,人工审查者可以专注于架构设计与业务逻辑审查。</p>
+<h2>13. 适用团队类型</h2>
+<p><strong>运营大规模代码库的组织</strong>即便在同时变更大量文件的 PR 中，智能打包与文件选择逻辑也能做到无遗漏的全面覆盖。相较通用智能体，其遗漏率在结构上更低。<strong>重视安全漏洞应对的团队</strong>能在审查初期阶段拦截 NPE、SQL 注入、XSS、线程安全等高风险缺陷。结合本地 LLM 使用，还可以构建代码完全不外泄的私有化环境。<strong>对 AI 引入成本敏感的团队</strong>节省 80% 的 token，相当于用同等预算将可覆盖的审查规模扩大 5 倍。使用 DeepSeek 云端 API 或 Qwen 本地模型，还能进一步降低成本。<strong>希望将 AI 融入现有审查流程的团队</strong></p>
+<p>OCR 作为第一道过滤，先处理 NPE、安全漏洞、编码规范违规等问题，人工审查者便可以专注于架构设计和业务逻辑的审查。</p>
 <hr>
 <h2>参考资料</h2>
 <ul>
 <li><a href="https://github.com/alibaba/open-code-review">GitHub 仓库</a></li>
 <li><a href="https://alibaba.github.io/open-code-review/">官方文档网站</a></li>
 <li><a href="https://github.com/marketplace?q=open-code-review">GitHub Marketplace(Actions)</a></li>
-<li><a href="https://digitaltoday.co.kr">Digital Today —— token 用量降低 80% 相关报道</a>(2026.6.8)</li>
-<li><a href="https://gigazine.net">Gigazine —— 内部性能基准测试结果报道</a>(2026.6.7)</li>
+<li><a href="https://digitaltoday.co.kr">数字今日(디지털투데이)——token 用量削减 80% 的介绍报道</a>(2026.6.8)</li>
+<li><a href="https://gigazine.net">Gigazine——内部性能基准测试结果报道</a>(2026.6.7)</li>
 </ul>
 </div>
       <aside class="author-box">

@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>caveman + rtk — AIコーディングアシスタント トークン最適化完全ガイド — VibeQuant</title>
-  <meta name="description" content="cavemanとrtkという2つのオープンソースプロジェクトを組み合わせ、AIコーディングアシスタントのトークン使用量を最大80〜95%削減する方法" />
+  <title>caveman + rtk——AIコーディングアシスタントのトークン最適化完全ガイド — VibeQuant</title>
+  <meta name="description" content="出力トークンを圧縮するcavemanと入力トークン(CLI出力)を圧縮するrtk——2つを組み合わせることでAIコーディングアシスタントのAPIコストを80~95%削減できるオープンソースツールの完全ガイド。" />
   <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-ja/" />
-  <meta property="og:title" content="caveman + rtk — AIコーディングアシスタント トークン最適化完全ガイド" />
-  <meta property="og:description" content="cavemanとrtkという2つのオープンソースプロジェクトを組み合わせ、AIコーディングアシスタントのトークン使用量を最大80〜95%削減する方法" />
+  <meta property="og:title" content="caveman + rtk——AIコーディングアシスタントのトークン最適化完全ガイド" />
+  <meta property="og:description" content="出力トークンを圧縮するcavemanと入力トークン(CLI出力)を圧縮するrtk——2つを組み合わせることでAIコーディングアシスタントのAPIコストを80~95%削減できるオープンソースツールの完全ガイド。" />
   <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-ja/" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="VibeQuant" />
@@ -26,7 +26,7 @@
   <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-ja/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-cn/" />
   <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization/" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"caveman + rtk — AIコーディングアシスタント トークン最適化完全ガイド","description":"cavemanとrtkという2つのオープンソースプロジェクトを組み合わせ、AIコーディングアシスタントのトークン使用量を最大80〜95%削減する方法","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Caveman%20rtk%20token%20optimization_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"ja","keywords":"LLM, Claude Code, コスト最適化, CLIツール"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"caveman + rtk——AIコーディングアシスタントのトークン最適化完全ガイド","description":"出力トークンを圧縮するcavemanと入力トークン(CLI出力)を圧縮するrtk——2つを組み合わせることでAIコーディングアシスタントのAPIコストを80~95%削減できるオープンソースツールの完全ガイド。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-caveman-rtk-token-optimization-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Caveman%20rtk%20token%20optimization_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-20","dateModified":"2026-07-25","inLanguage":"ja","keywords":"LLM, トークン最適化, AIコーディングアシスタント, Claude Code, コスト最適化"}</script>
 </head>
 <body class="content-body">
   <header class="site-top">
@@ -49,31 +49,31 @@
     <article class="article">
       <header class="article-head">
         <p class="eyebrow">LLM · 에이전트</p>
-        <h1>caveman + rtk — AIコーディングアシスタント トークン最適化完全ガイド</h1>
-        <p class="article-dates"><time datetime="2026-07-25">발행 2026.07.25</time> · 주제 LLM · Claude Code · コスト最適化 · CLIツール</p>
+        <h1>caveman + rtk——AIコーディングアシスタントのトークン最適化完全ガイド</h1>
+        <p class="article-dates"><time datetime="2026-06-20">발행 2026.06.20</time> · 주제 LLM · トークン最適化 · AIコーディングアシスタント · Claude Code · コスト最適化 · <time datetime="2026-07-25">수정 2026.07.25</time></p>
         <div class="lang-switch" role="navigation" aria-label="Language">
       <a class="lang-btn" href="../../tech/llm-caveman-rtk-token-optimization/" data-lang="KR">🇰🇷 한국어</a>
       <a class="lang-btn" href="../../tech/llm-caveman-rtk-token-optimization-en/" data-lang="EN">English</a>
       <a class="lang-btn is-active" href="../../tech/llm-caveman-rtk-token-optimization-ja/" data-lang="JP" aria-current="true">日本語</a>
       <a class="lang-btn" href="../../tech/llm-caveman-rtk-token-optimization-cn/" data-lang="CN">中文</a>
     </div>
-        <p class="lede">cavemanとrtkという2つのオープンソースプロジェクトを組み合わせ、AIコーディングアシスタントのトークン使用量を最大80〜95%削減する方法</p>
+        <p class="lede">出力トークンを圧縮するcavemanと入力トークン(CLI出力)を圧縮するrtk——2つを組み合わせることでAIコーディングアシスタントのAPIコストを80~95%削減できるオープンソースツールの完全ガイド。</p>
         
       </header>
       <div class="article-body prose"><blockquote>
-<p>&quot;Why use many token when few token do trick?&quot; — cavemanのスローガン</p>
+<p>&quot;Why use many token when few token do trick?&quot; —— cavemanのスローガン</p>
 </blockquote>
 <hr>
 <h2>1. 概要</h2>
-<p>AIコーディングアシスタントの利用が普及するにつれ、API費用とコンテキストトークンの消耗は開発者にとってますます大きな負担となっている。こうした背景の中、2つの革新的なオープンソースプロジェクトが登場した。</p>
-<p><strong>caveman</strong>は「多くのトークンを使う理由があるのか、少ないトークンで解決できるのに」という発想から出発した。AIが不要な言い回しなしで核心だけを伝えるよう誘導し、技術的な正確性を100%維持しながら出力トークンを約65〜75%削減する。2026年4月のリリース以降、短期間でGitHubスター71,000個以上(2026年6月基準)を獲得し、大きな注目を集めた。</p>
-<p>rtk(Rust Token Killer)はCLIコマンドの出力をリアルタイムでフィルタリング・圧縮するプロキシツールで、LLMのコンテキストに到達する前に入力トークン使用量を60〜90%削減する。単一のRustバイナリで製作され依存関係がなく、10ミリ秒未満のオーバーヘッドしか発生させず、GitHubスター42,000個以上を保有している。</p>
-<p>両ツールは異なるレイヤー(入力/出力)を担当するため、併用時にシナジーが最大化される。</p>
+<p>AIコーディングアシスタントの利用が一般化するにつれ、APIコストとコンテキストトークンの消費は開発者にとってますます大きな負担になっている。こうした背景の中、2つの革新的なオープンソースプロジェクトが登場した。</p>
+<p><strong>caveman</strong>は「多くのトークンを使う理由は何か、少ないトークンでも用が済むのに」という発想から出発している。AIが不要な言い回しなしで核心だけを伝えるよう誘導し、技術的正確性を100%維持しながら出力トークンを約65~75%削減する。2026年4月のリリース以降、短期間でGitHubスター71,000以上(2026年6月時点)を獲得し、大きな注目を集めた。</p>
+<p><strong>rtk(Rust Token Killer)</strong>はCLIコマンドの出力をリアルタイムでフィルタリング・圧縮するプロキシツールで、LLMコンテキストに到達する前に入力トークンの使用量を60~90%削減する。単一のRustバイナリとして作られており依存関係がなく、10ms未満のオーバーヘッドしか発生させず、GitHubスター42,000以上を保有している。</p>
+<p>2つのツールは異なるレイヤー(入力/出力)を担当するため、共に使用すると相乗効果が最大化される。</p>
 <hr>
 <h2>2. caveman</h2>
 <h3>2.1 背景</h3>
-<p>cavemanはAIの過度な話法と不要な言い回しがコストと効率性に及ぼす影響を批判的に見つめて生まれた。2026年3月にarXivで発表された論文(&quot;Brevity Constraints Reverse Performance Hierarchies in Language Models&quot;、番号2604.00025)は、AIが短く簡潔に答えるほど特定のベンチマークで精度がむしろ26ポイント向上する可能性を証明した。cavemanはこの学術的発見を実用的なツールとして実装したものである。</p>
-<p>Claudeは基本的に親切で長々と応答するよう訓練されている。これは一般的な会話では長所だが、自動化された開発パイプラインでは高コストの非効率である。cavemanはこのデフォルトを変え、コード・URL・ファイルパスなどの技術的情報はbyte-perfectに維持しながら自然言語の包装だけを取り除く。</p>
+<p>cavemanは、AIの過度な話法と不要な言い回しがコストと効率性に与える影響を批判的に見る視点から生まれた。2026年3月にarXivで発表された論文(「Brevity Constraints Reverse Performance Hierarchies in Language Models」、番号2604.00025)は、AIが短く簡潔に答えるほど特定のベンチマークで精度がむしろ最大26ポイント向上し得ることを証明した。cavemanはこの学術的発見を実用的なツールとして実装したものである。</p>
+<p>Claudeは基本的に親切かつ冗長に応答するよう訓練されている。これは一般的な対話では利点だが、自動化された開発パイプラインにおいては高コストな非効率である。cavemanはこのデフォルトを変え、コード・URL・ファイルパスなどの技術的情報はbyte-perfectに保ちながら自然言語の装飾だけを取り除く。</p>
 <h3>2.2 効果</h3>
 <table>
 <thead>
@@ -84,27 +84,27 @@
 </thead>
 <tbody><tr>
 <td>出力トークン削減</td>
-<td>平均65〜75%(範囲22〜87%)</td>
+<td>平均65<del>75%(範囲22</del>87%)</td>
 </tr>
 <tr>
 <td>応答速度向上</td>
-<td>約3倍高速化</td>
+<td>約3倍速く</td>
 </tr>
 <tr>
-<td>技術的精度</td>
+<td>技術的正確性</td>
 <td>100%維持</td>
 </tr>
 <tr>
 <td>入力トークン削減</td>
-<td>CLAUDE.mdなどの設定ファイル圧縮時約46%削減</td>
+<td>CLAUDE.mdなどの設定ファイル圧縮時に約46%削減</td>
 </tr>
 <tr>
-<td>API費用削減例</td>
+<td>API コスト削減例</td>
 <td>1日10,000回のAPI呼び出し基準で年間約$7,665節約(Claude Sonnet基準)</td>
 </tr>
 </tbody></table>
 <h3>2.3 圧縮強度レベル</h3>
-<p>cavemanは状況に応じて調整できる4段階の強度レベルを提供する。</p>
+<p>cavemanは状況に応じて調整可能な4段階の強度レベルを提供する。</p>
 <table>
 <thead>
 <tr>
@@ -120,7 +120,7 @@
 </tr>
 <tr>
 <td><code>full</code></td>
-<td>冠詞・挨拶を除去、文章を簡潔化</td>
+<td>冠詞・挨拶を除去、文を簡潔化</td>
 <td>&quot;New object ref each render. Inline object prop = new ref = re-render.&quot;</td>
 </tr>
 <tr>
@@ -144,7 +144,7 @@ compatibility with the existing API contracts.
 <p>caveman <code>ultra</code>適用後:</p>
 <pre><code>Auth module refactored. Token validation, error handling, backward compat.
 </code></pre>
-<p>同じ情報を伝えながらトークンが約75%減少する。</p>
+<p>同じ情報を伝えながらトークンが約75%削減される。</p>
 <h3>2.4 追加ユーティリティコマンド</h3>
 <table>
 <thead>
@@ -155,19 +155,19 @@ compatibility with the existing API contracts.
 </thead>
 <tbody><tr>
 <td><code>/caveman-commit</code></td>
-<td>50文字以内の簡潔なコミットメッセージ生成</td>
+<td>50文字以内の簡潔なコミットメッセージを生成</td>
 </tr>
 <tr>
 <td><code>/caveman-review</code></td>
-<td>一行のPRコメント作成</td>
+<td>1行のPRコメントを作成</td>
 </tr>
 <tr>
 <td><code>/caveman-stats</code></td>
-<td>リアルタイムトークン統計と費用表示</td>
+<td>リアルタイムのトークン統計とコストを表示</td>
 </tr>
 <tr>
 <td><code>/caveman-compress</code></td>
-<td>CLAUDE.mdなどの設定ファイル圧縮</td>
+<td>CLAUDE.mdなどの設定ファイルを圧縮</td>
 </tr>
 </tbody></table>
 <h3>2.5 インストールと使用法</h3>
@@ -177,33 +177,33 @@ compatibility with the existing API contracts.
 <p><strong>Windows(PowerShell)</strong></p>
 <pre><code class="language-powershell">irm https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.ps1 | iex
 </code></pre>
-<p><strong>Claude Codeでの有効化</strong></p>
-<pre><code class="language-bash"># スキル登録
+<p><strong>Claude Codeで有効化</strong></p>
+<pre><code class="language-bash"># スキルを登録
 claude skills add JuliusBrussee/caveman
 
 # 基本有効化
 /caveman
 
-# 強度指定有効化
+# 強度を指定して有効化
 /caveman ultra
 
 # 無効化
 stop caveman
 </code></pre>
-<p><strong>CLAUDE.md / AGENTS.mdへの直接挿入(system prompt方式)</strong></p>
+<p><strong>CLAUDE.md / AGENTS.mdに直接挿入(システムプロンプト方式)</strong></p>
 <pre><code class="language-text">You are a code assistant. Respond in caveman speak only. No pleasantries.
 No greetings, no sign-offs, no narration. Just the answer.
 </code></pre>
 <blockquote>
-<p>サポートプラットフォーム: Claude Code、Codex、Gemini CLI、Cursor、Windsurf、Cline、GitHub Copilotなど34以上のAIコーディングツール</p>
+<p>サポートプラットフォーム:Claude Code、Codex、Gemini CLI、Cursor、Windsurf、Cline、GitHub Copilotなど34以上のAIコーディングツール</p>
 </blockquote>
 <h3>2.6 注意事項</h3>
-<p>cavemanは<strong>出力トークン</strong>にのみ効果がある。思考・推論(thinking/reasoning)トークンは影響を受けない。「Caveman no make brain smaller. Caveman make mouth smaller.」したがって、コード生成が主な作業である場合よりも、会話・ブレインストーミング・Q&amp;Aのように対話の往来が多いセッションで効果が際立つ。</p>
+<p>cavemanは<strong>出力トークン</strong>にのみ効果がある。思考・推論(thinking/reasoning)トークンは影響を受けない。「Caveman no make brain smaller. Caveman make mouth smaller.」したがって、コード生成が主な作業である場合よりも、対話・ブレインストーミング・Q&amp;Aのようにやり取りの多いセッションで効果が顕著になる。</p>
 <hr>
 <h2>3. rtk(Rust Token Killer)</h2>
 <h3>3.1 背景</h3>
-<p>AIコーディングエージェントがテスト実行、リンティング、gitコマンドなどを実行する際に生成される大量のログとコンソール出力は膨大な入力トークンを消費する。例えば<code>git status</code>一つだけでも2,000トークンが発生し、<code>cargo test</code>を実行すると200行以上の出力がそのままコンテキストウィンドウに注入される。エージェントはそのすべての行を読む。</p>
-<p>rtkはコマンド出力がLLMのコンテキストに到達する前の段階でフィルタリングと圧縮を適用してこの問題を解決する。ワークフローの変更なしに透過的に動作する。</p>
+<p>AIコーディングエージェントがテスト実行、リンティング、gitコマンドなどを実行する際に生成される大量のログとコンソール出力は、莫大な入力トークンを消費する。例えば<code>git status</code>一つだけで2,000トークンが発生し、<code>cargo test</code>を実行すると200行以上の出力がそのままコンテキストウィンドウに注入される。エージェントはそのすべての行を読む。</p>
+<p>rtkはコマンド出力がLLMコンテキストに到達する前の段階でフィルタリングと圧縮を適用し、この問題を解決する。ワークフローの変更なしに透過的に動作する。</p>
 <h3>3.2 効果</h3>
 <table>
 <thead>
@@ -214,7 +214,7 @@ No greetings, no sign-offs, no narration. Just the answer.
 </thead>
 <tbody><tr>
 <td>トークン削減率</td>
-<td>60〜90%</td>
+<td>60~90%</td>
 </tr>
 <tr>
 <td>サポートコマンド</td>
@@ -222,7 +222,7 @@ No greetings, no sign-offs, no narration. Just the answer.
 </tr>
 <tr>
 <td>オーバーヘッド</td>
-<td>10ミリ秒未満</td>
+<td>10ms未満</td>
 </tr>
 <tr>
 <td>依存関係</td>
@@ -237,15 +237,15 @@ No greetings, no sign-offs, no narration. Just the answer.
 <td>Apache-2.0</td>
 </tr>
 </tbody></table>
-<h3>3.3 中核圧縮戦略</h3>
+<h3>3.3 核心的な圧縮戦略</h3>
 <p>rtkは4つの戦略で出力を圧縮する:</p>
 <ol>
-<li><strong>Smart Filtering</strong>: ANSIコード、プログレスバー、コメント、過度な空白、ボイラープレートを除去</li>
-<li><strong>Group Aggregation</strong>: 似た項目をまとめる(ディレクトリ別ファイル、種類別エラーなど)</li>
-<li><strong>Intelligent Truncation</strong>: 関連コンテキストを維持、重複を除去</li>
-<li><strong>Deduplication</strong>: 繰り返される行をカウントに縮約</li>
+<li><strong>Smart Filtering</strong>:ANSIコード、プログレスバー、コメント、過度な空白、ボイラープレートを除去</li>
+<li><strong>Group Aggregation</strong>:似た項目をまとめる(ディレクター別ファイル、種類別エラーなど)</li>
+<li><strong>Intelligent Truncation</strong>:関連コンテキストを維持、重複を除去</li>
+<li><strong>Deduplication</strong>:繰り返される行をカウントに縮約</li>
 </ol>
-<h4>圧縮前後の比較: <code>git status</code></h4>
+<h4>圧縮前後の比較:<code>git status</code></h4>
 <p>通常の出力(約2,000トークン):</p>
 <pre><code>On branch main
 Your branch is ahead of &#39;origin/main&#39; by 1 commit.
@@ -261,7 +261,7 @@ no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&q
 <p>rtk適用後(約400トークン):</p>
 <pre><code>main...origin/main ~ Modified: 1 files src/auth/token.ts
 </code></pre>
-<p>LLMが必要とする情報(ブランチ、変更ファイル)だけを残し、残りを除去する。</p>
+<p>LLMが必要とする情報(ブランチ、変更されたファイル)だけを残し、残りを除去する。</p>
 <h3>3.4 コマンド別削減効果(30分セッション基準)</h3>
 <table>
 <thead>
@@ -269,7 +269,7 @@ no changes added to commit (use &quot;git add&quot; and/or &quot;git commit -a&q
 <th>コマンド</th>
 <th>実行回数</th>
 <th>通常トークン</th>
-<th>rtk適用</th>
+<th>rtk適用後</th>
 <th>削減率</th>
 </tr>
 </thead>
@@ -365,9 +365,9 @@ source ~/.zshrc
 <p><strong>Cargoでインストール</strong></p>
 <pre><code class="language-bash">cargo install --git https://github.com/rtk-ai/rtk
 </code></pre>
-<p><strong>Windows</strong>: リリースページから<code>rtk-x86_64-pc-windows-msvc.zip</code>をダウンロード後、<code>rtk.exe</code>をPATHに登録。</p>
+<p><strong>Windows</strong>:リリースページから<code>rtk-x86_64-pc-windows-msvc.zip</code>をダウンロード後、<code>rtk.exe</code>をPATHに登録。</p>
 <p><strong>Claude Code連携(自動フッキング)</strong></p>
-<pre><code class="language-bash"># Claude CodeのPreToolUseフック自動インストール
+<pre><code class="language-bash"># Claude CodeのPreToolUseフックを自動インストール
 rtk init -g --claude-md
 
 # インストール確認
@@ -376,18 +376,18 @@ rtk --version
 # 動作テスト
 rtk git status
 </code></pre>
-<p><code>rtk init -g</code>実行時に<code>~/.claude/settings.json</code>に<code>PreToolUse</code>フックが自動追加され、すべてのBashコマンドがrtkを経由してルーティングされる。手動でコマンドの前に<code>rtk</code>を付ける必要はない。</p>
+<p><code>rtk init -g</code>実行時、<code>~/.claude/settings.json</code>に<code>PreToolUse</code>フックが自動追加され、すべてのBashコマンドがrtkを経由してルーティングされる。手動でコマンドの前に<code>rtk</code>を付ける必要はない。</p>
 <p><strong>削減統計の確認</strong></p>
-<pre><code class="language-bash"># 累積削減統計とASCIIグラフの確認
+<pre><code class="language-bash"># 累積削減統計とASCIIグラフを確認
 rtk gain
 
-# 日付別JSON書き出し
+# 日別JSON書き出し
 rtk gain --json
 
-# 見逃した削減機会の探索
+# 見逃している削減機会を探索
 rtk discover
 </code></pre>
-<p><strong>設定カスタマイズ(<code>~/.config/rtk/config.toml</code>)</strong></p>
+<p><strong>設定のカスタマイズ(<code>~/.config/rtk/config.toml</code>)</strong></p>
 <pre><code class="language-toml">[filters]
 exclude_commands = [&quot;echo&quot;, &quot;pwd&quot;]
 tee_mode = true   # 失敗時に元の出力を復元
@@ -396,15 +396,15 @@ tee_mode = true   # 失敗時に元の出力を復元
 extra_filters = [&quot;*.lock&quot;]
 </code></pre>
 <h3>3.6 注意事項</h3>
-<p>短いコマンドはrtkを経てもトークンがむしろ少し増加する可能性がある(rtkヘッダーのオーバーヘッド)。既に構造化された短い出力はそのまま通過させる。<code>rtk gain</code>で実際の削減量を確認し、1週間後も10%以上の削減がなければ<code>rtk init -g --uninstall</code>での削除を検討すること。</p>
+<p>短いコマンドはrtkを経由してもトークンがむしろわずかに増加する可能性がある(rtkヘッダーのオーバーヘッド)。すでに構造化された短い出力はそのまま通過させる。<code>rtk gain</code>で実際の削減量を確認し、1週間後も10%以上の削減がない場合は<code>rtk init -g --uninstall</code>での削除を検討すること。</p>
 <hr>
-<h2>4. caveman + rtk 統合最適化ガイド</h2>
-<h3>4.1 統合コンセプト: 入力+出力の両方向最適化</h3>
-<p>両ツールは異なるレイヤーで動作するため、併用時に効果が最大化される。</p>
+<h2>4. caveman + rtk統合最適化ガイド</h2>
+<h3>4.1 統合コンセプト:入力+出力の双方向最適化</h3>
+<p>2つのツールは異なるレイヤーで動作するため、共に使用すると効果が最大化される。</p>
 <pre><code>[開発者コマンド]
      |
      v
-[rtk CLI Proxy]  &lt;-- コマンド出力のフィルタリング/圧縮(60〜90%削減)[入力最適化]
+[rtk CLIプロキシ]  &lt;-- コマンド出力をフィルタリング/圧縮(60~90%削減)[入力最適化]
      |
      v
 [LLMへ送信]   (入力トークン最適化完了)
@@ -416,12 +416,12 @@ extra_filters = [&quot;*.lock&quot;]
 [LLM応答]
      |
      v
-[caveman変換]   &lt;-- 応答を簡潔に変換(65〜75%削減)[出力最適化]
+[caveman変換]   &lt;-- 応答を簡潔に変換(65~75%削減)[出力最適化]
      |
      v
 [最終圧縮応答]
 
-全体削減率: 80〜95%
+全体削減率:80~95%
 </code></pre>
 <table>
 <thead>
@@ -443,15 +443,15 @@ extra_filters = [&quot;*.lock&quot;]
 </tr>
 </tbody></table>
 <h3>4.2 統合設定方法</h3>
-<p><strong>Step 1: cavemanインストールとスキル登録</strong></p>
+<p><strong>ステップ1:cavemanのインストールとスキル登録</strong></p>
 <pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/JuliusBrussee/caveman/main/install.sh | bash
 claude skills add JuliusBrussee/caveman
 </code></pre>
-<p><strong>Step 2: rtkインストールとClaude Code連携</strong></p>
+<p><strong>ステップ2:rtkのインストールとClaude Code連携</strong></p>
 <pre><code class="language-bash">brew install rtk          # macOS
-rtk init -g --claude-md   # Claude Code PreToolUseフック自動インストール
+rtk init -g --claude-md   # Claude CodeのPreToolUseフックを自動インストール
 </code></pre>
-<p><strong>Step 3: <code>~/.claude/settings.json</code>にセッション開始フックを追加</strong></p>
+<p><strong>ステップ3:<code>~/.claude/settings.json</code>にセション開始フックを追加</strong></p>
 <pre><code class="language-json">{
   &quot;hooks&quot;: {
     &quot;SessionStart&quot;: [
@@ -462,19 +462,19 @@ rtk init -g --claude-md   # Claude Code PreToolUseフック自動インストー
   }
 }
 </code></pre>
-<p><strong>Step 4: シェルエイリアス登録(任意、<code>~/.zshrc</code>または<code>~/.bashrc</code>)</strong></p>
-<pre><code class="language-bash"># rtkプロキシ自動適用
+<p><strong>ステップ4:シェルエイリアスの登録(任意、<code>~/.zshrc</code>または<code>~/.bashrc</code>)</strong></p>
+<pre><code class="language-bash"># rtkプロキシを自動適用
 for cmd in git ls cat grep rg cargo npm pytest go docker kubectl; do
   alias $cmd=&quot;rtk $cmd&quot;
 done
 </code></pre>
-<p><strong>Step 5: caveman設定ファイル(プロジェクトルートに<code>.caveman.config</code>作成)</strong></p>
+<p><strong>ステップ5:caveman設定ファイル(プロジェクトルートに<code>.caveman.config</code>を作成)</strong></p>
 <pre><code class="language-text">mode=ultra
 exclude_files=Dockerfile,*.log
 always_compress_tokens=true
 </code></pre>
-<h3>4.3 応用: OmniRoute Stackedモード</h3>
-<p>OmniRouteは複数のLLM最適化エンジンを統合パイプラインにまとめるツールである。caveman + rtkをStackedモードで連結すると、設定一つで両ツールが自動的に順番に動作する。</p>
+<h3>4.3 応用:OmniRoute Stackedモード</h3>
+<p>OmniRoudeは複数のLLM最適化エンジンを統合パイプラインにまとめるツールである。caveman + rtkをStackedモードで連結すると、1つの設定で2つのツールが自動的に順序どおり動作する。</p>
 <pre><code class="language-json">{
   &quot;compression&quot;: {
     &quot;mode&quot;: &quot;stacked&quot;,
@@ -495,58 +495,58 @@ always_compress_tokens=true
 </thead>
 <tbody><tr>
 <td>rtk単独</td>
-<td>60〜90%</td>
+<td>60~90%</td>
 <td>コマンド出力(入力トークン)</td>
 </tr>
 <tr>
 <td>caveman単独</td>
-<td>65〜75%</td>
+<td>65~75%</td>
 <td>LLM応答(出力トークン)</td>
 </tr>
 <tr>
-<td>rtk + caveman併用</td>
-<td><strong>80〜95%</strong></td>
+<td>rtk + caveman組み合わせ</td>
+<td><strong>80~95%</strong></td>
 <td>入力+出力全体</td>
 </tr>
 </tbody></table>
 <h3>4.5 実際の使用シナリオ別コマンド例</h3>
-<p><strong>シナリオ1: テスト失敗のデバッグ</strong></p>
-<pre><code class="language-bash"># rtkが失敗したテストのみ抽出し、cavemanが分析を簡潔に返す
+<p><strong>シナリオ1:テスト失敗のデバッグ</strong></p>
+<pre><code class="language-bash"># rtkが失敗したテストのみを抽出し、cavemanが分析を簡潔に返す
 rtk cargo test
-# caveman応答例: &quot;3 tests fail: auth::token_expired, db::conn_timeout, api::rate_limit. See logs.&quot;
+# caveman応答例:&quot;3 tests fail: auth::token_expired, db::conn_timeout, api::rate_limit. See logs.&quot;
 </code></pre>
-<p><strong>シナリオ2: コードレビュー依頼</strong></p>
-<pre><code class="language-bash"># rtkがdiffを圧縮し、cavemanがレビューを一行で返す
+<p><strong>シナリオ2:コードレビューの依頼</strong></p>
+<pre><code class="language-bash"># rtkがdiffを圧縮し、cavemanがレビューを1行で返す
 rtk git diff HEAD~1
 /caveman-review
-# 応答例: &quot;Missing null check in token.ts:42. Add early return.&quot;
+# 応答例:&quot;Missing null check in token.ts:42. Add early return.&quot;
 </code></pre>
-<p><strong>シナリオ3: コミットメッセージ生成</strong></p>
+<p><strong>シナリオ3:コミットメッセージの生成</strong></p>
 <pre><code class="language-bash">rtk git status
 /caveman-commit
-# 応答例: &quot;fix: null check in token validation&quot;
+# 応答例:&quot;fix: null check in token validation&quot;
 </code></pre>
-<p><strong>シナリオ4: 長いログの要約</strong></p>
+<p><strong>シナリオ4:長いログの要約</strong></p>
 <pre><code class="language-bash">rtk grep &quot;ERROR&quot; app.log
-# caveman ultra応答例: &quot;14 errors: 11x DB timeout, 3x auth fail. Peak 14:30-15:00.&quot;
+# caveman ultra応答例:&quot;14 errors: 11x DB timeout, 3x auth fail. Peak 14:30-15:00.&quot;
 </code></pre>
-<p><strong>シナリオ5: 依存関係の点検</strong></p>
+<p><strong>シナリオ5:依存関係の点検</strong></p>
 <pre><code class="language-bash">rtk npm list --depth=0
-# rtkが重複・不要な情報を除去し、核心パッケージリストのみ伝達
+# rtkが重複・不要な情報を除去し、核心的なパッケージリストのみを伝達
 </code></pre>
-<h3>4.6 実使用者の経験</h3>
-<p>両ツールを組み合わせたユーザーは一貫した効果を報告している。30分セッションで消耗していたClaude Codeのコンテキストが3時間以上に延長され、繰り返しCLI作業が多い環境(テスト駆動開発、大規模gitヒストリー探索など)で効果が特に際立つ。</p>
+<h3>4.6 実利用者の経験</h3>
+<p>2つのツールを組み合わせた利用者は一貫した効果を報告している。30分のセッションで枯渇していたClaude Codeのコンテキストが3時間以上に延長され、反復的なCLI作業が多い環境(テスト駆動開発、大規模git履歴の探索など)で効果が特に顕著である。</p>
 <hr>
-<h2>5. 費用削減計算機(簡易推算)</h2>
-<p>Claude Sonnet基準(2026年初頭基準、入力$3/百万トークン、出力$15/百万トークン):</p>
+<h2>5. コスト削減計算機(簡易推算)</h2>
+<p>Claude Sonnet基準(2026年初め時点、入力$3/百万トークン、出力$15/百万トークン):</p>
 <table>
 <thead>
 <tr>
 <th>条件</th>
-<th>月額費用(最適化前)</th>
+<th>月間コスト(最適化前)</th>
 <th>caveman適用後</th>
 <th>rtk適用後</th>
-<th>両ツール併用</th>
+<th>両ツール組み合わせ</th>
 </tr>
 </thead>
 <tbody><tr>
@@ -554,30 +554,30 @@ rtk git diff HEAD~1
 <td>$50</td>
 <td>~$17</td>
 <td>~$15</td>
-<td>~$5〜10</td>
+<td><del>$5</del>10</td>
 </tr>
 <tr>
-<td>チーム10人(中規模)</td>
+<td>10人チーム(中規模)</td>
 <td>$2,500</td>
 <td>~$800</td>
 <td>~$500</td>
-<td>~$125〜250</td>
+<td><del>$125</del>250</td>
 </tr>
 <tr>
 <td>エンタープライズパイプライン</td>
 <td>$10,000+</td>
 <td>~$3,000</td>
 <td>~$2,000</td>
-<td>~$500〜1,000</td>
+<td><del>$500</del>1,000</td>
 </tr>
 </tbody></table>
 <blockquote>
-<p>実際の削減額は作業タイプ、LLMモデル、使用パターンによって異なる。<code>rtk gain</code>と<code>/caveman-stats</code>で実測値を確認すること。</p>
+<p>実際の削減額は作業種類、LLMモデル、使用パターンによって異なる。<code>rtk gain</code>と<code>/caveman-stats</code>で実測値を確認すること。</p>
 </blockquote>
 <hr>
 <h2>6. おわりに</h2>
-<p>cavemanとrtkはそれぞれ独特な方式でLLM費用最適化にアプローチしている。cavemanは<strong>出力最適化</strong>、rtkは<strong>入力最適化</strong>に特化しており、両ツールが完璧に相互補完的である。</p>
-<p>中核原則は単純である。LLMのデフォルトはコスト効率ではなく<strong>人間に親切な応答</strong>に最適化されている。cavemanは応答スタイルを変え、rtkはコンテキストノイズを除去する。両ツールを通じてAIコーディングアシスタントをより安く、より速く、より集中した方式で活用できる。</p>
+<p>cavemanとrtkはそれぞれ独自の方式でLLMコスト最適化にアプローチしている。cavemanは<strong>出力最適化</strong>、rtkは<strong>入力最適化</strong>に特化しており、2つのツールは完全に相互補完的である。</p>
+<p>核心的な原則は単純だ。LLMのデフォルトはコスト効率ではなく<strong>人間に親しみやすい応答</strong>に最適化されている。cavemanは応答のスタイルを変え、rtkはコンテキストのノイズを除去する。この2つのツールを通じて、AIコーディングアシスタントをより安く、より速く、より集中した方法で活用できる。</p>
 <hr>
 <h2>7. 参考資料</h2>
 <table>
@@ -609,7 +609,7 @@ rtk git diff HEAD~1
 </tr>
 </tbody></table>
 <blockquote>
-<p>GitHubスター数および数値データは2026年6月基準であり、プロジェクトは継続的に発展している。最新情報は各リポジトリの公式ドキュメントを参照すること。</p>
+<p>GitHubスター数および数値データは2026年6月時点であり、プロジェクトは継続的に発展している。最新情報は各リポジトリの公式ドキュメントを参照すること。</p>
 </blockquote>
 </div>
       <aside class="author-box">

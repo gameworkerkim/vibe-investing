@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Quivr: 生成AIが動かすオープンソース Second Brain — VibeQuant</title>
-  <meta name="description" content="個人・企業のデータを知的なAIアシスタントに変換するオープンソースRAGプラットフォーム、Quivrの紹介" />
+  <title>Quivr: 生成AIによるオープンソースの「第二の脳」 — VibeQuant</title>
+  <meta name="description" content="GitHubスター38,000以上のオープンソースRAGプラットフォームQuivrの完全ガイド——機能、技術スタック、インストール方法、カスタムRAGワークフロー、「Brain」コンセプトを解説。" />
   <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-quivr-guide-ja/" />
-  <meta property="og:title" content="Quivr: 生成AIが動かすオープンソース Second Brain" />
-  <meta property="og:description" content="個人・企業のデータを知的なAIアシスタントに変換するオープンソースRAGプラットフォーム、Quivrの紹介" />
+  <meta property="og:title" content="Quivr: 生成AIによるオープンソースの「第二の脳」" />
+  <meta property="og:description" content="GitHubスター38,000以上のオープンソースRAGプラットフォームQuivrの完全ガイド——機能、技術スタック、インストール方法、カスタムRAGワークフロー、「Brain」コンセプトを解説。" />
   <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-quivr-guide-ja/" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="VibeQuant" />
@@ -26,7 +26,7 @@
   <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-quivr-guide-ja/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-quivr-guide-cn/" />
   <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-quivr-guide/" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Quivr: 生成AIが動かすオープンソース Second Brain","description":"個人・企業のデータを知的なAIアシスタントに変換するオープンソースRAGプラットフォーム、Quivrの紹介","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-quivr-guide-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Quivr_guide_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"ja","keywords":"RAG, オープンソース, AIアシスタント, LLM"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Quivr: 生成AIによるオープンソースの「第二の脳」","description":"GitHubスター38,000以上のオープンソースRAGプラットフォームQuivrの完全ガイド——機能、技術スタック、インストール方法、カスタムRAGワークフロー、「Brain」コンセプトを解説。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-quivr-guide-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM/Quivr_guide_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-04-10","dateModified":"2026-07-25","inLanguage":"ja","keywords":"Quivr, RAG, オープンソース, AIアシスタント, LLM"}</script>
 </head>
 <body class="content-body">
   <header class="site-top">
@@ -49,73 +49,73 @@
     <article class="article">
       <header class="article-head">
         <p class="eyebrow">LLM · 에이전트</p>
-        <h1>Quivr: 生成AIが動かすオープンソース Second Brain</h1>
-        <p class="article-dates"><time datetime="2026-07-25">발행 2026.07.25</time> · 주제 RAG · オープンソース · AIアシスタント · LLM</p>
+        <h1>Quivr: 生成AIによるオープンソースの「第二の脳」</h1>
+        <p class="article-dates"><time datetime="2026-04-10">발행 2026.04.10</time> · 주제 Quivr · RAG · オープンソース · AIアシスタント · LLM · <time datetime="2026-07-25">수정 2026.07.25</time></p>
         <div class="lang-switch" role="navigation" aria-label="Language">
       <a class="lang-btn" href="../../tech/llm-quivr-guide/" data-lang="KR">🇰🇷 한국어</a>
       <a class="lang-btn" href="../../tech/llm-quivr-guide-en/" data-lang="EN">English</a>
       <a class="lang-btn is-active" href="../../tech/llm-quivr-guide-ja/" data-lang="JP" aria-current="true">日本語</a>
       <a class="lang-btn" href="../../tech/llm-quivr-guide-cn/" data-lang="CN">中文</a>
     </div>
-        <p class="lede">個人・企業のデータを知的なAIアシスタントに変換するオープンソースRAGプラットフォーム、Quivrの紹介</p>
+        <p class="lede">GitHubスター38,000以上のオープンソースRAGプラットフォームQuivrの完全ガイド——機能、技術スタック、インストール方法、カスタムRAGワークフロー、「Brain」コンセプトを解説。</p>
         
       </header>
       <div class="article-body prose"><h2>1. 概要</h2>
-<p>Quivrはオープンソースの RAG(Retrieval-Augmented Generation)プラットフォームであり、個人または企業のデータを知的なAIアシスタントに変換する「第二の脳(Second Brain)」である。ユーザーは単に文書をアップロードし、自然言語で質問するだけで、膨大な情報を簡単に検索・活用できる。</p>
-<p>Quivrは38,000以上のGitHubスターを保有し、全世界の開発者から注目を集めており、50,000人以上のユーザーと6,000以上の企業がQuivrを活用している。Y Combinatorの支援を受けるこのプロジェクトは、20年来のフランス人の友人3人が設立した。</p>
+<p>Quivrはオープンソースの RAG(Retrieval-Augmented Generation)プラットフォームであり、個人または企業のデータをインテリジェントなAIアシスタントに変える「第二の脳(Second Brain)」である。ユーザーは単に文書をアップロードして自然言語で質問するだけで、膨大な情報を簡単に検索・活用できる。</p>
+<p>QuivrはGitHubスター38,000以上を保有し、全世界の開発者から注目を集めている。50,000人以上のユーザーと6,000社以上の企業がQuivrを活用中である。Y Combinatorの支援を受けるこのプロジェクトは、20年来の友人であるフランス人3人によって設立された。</p>
 <hr>
 <h2>2. なぜQuivrなのか?(Pain Point &amp; Solution)</h2>
-<p>企業環境において、業務時間の約20%は単に情報を探すことに消費される。従業員は次のような困難を繰り返し経験する。</p>
+<p>企業環境において、業務時間の約20%は単に情報を探すことに消費される。従業員は以下のような困難を繰り返し経験している。</p>
 <ul>
-<li>休暇中の同僚に緊急の情報を依頼しなければならない状況</li>
-<li>同じ情報を繰り返し尋ね、答える非効率</li>
+<li>休暇中の同僚に緊急の情報を求めなければならない状況</li>
+<li>同じ情報を繰り返し尋ね、答えるという非効率</li>
 <li>必要な情報がどこにあるのか、あるいは存在するのかさえ分からない</li>
 </ul>
-<p>Quivrはこうした問題を解決するため、企業のすべてのツール・文書・API・データベースを接続し、それらと対話できるAIオープンソースプラットフォームを提供する。Quivrは次のような作業を自動化する。</p>
+<p>Quivrはこうした問題を解決するため、企業のすべてのツール・文書・API・データベースを接続し、それらと対話できるAIオープンソースプラットフォームを提供する。Quivrは以下のような作業を自動化する。</p>
 <ul>
-<li>膨大な文書を要約して核心のみ抽出</li>
+<li>膨大な文書を要約し核心のみを抽出</li>
 <li>データベースから実行可能な情報を抽出</li>
 <li>文脈を考慮したメールの自動作成</li>
 </ul>
 <hr>
-<h2>3. 主な特徴</h2>
+<h2>3. 核心機能</h2>
 <h3>3.1 Opinionated RAG(最適化されたRAGワークフロー)</h3>
-<p>Quivrは事前に設計された最適化されたRAGワークフローを提供し、開発者がRAGパイプラインを最初から構築する必要がないようにする。速度と効率性を核心に設計されており、プロダクション環境で即座に使用可能である。</p>
-<h3>3.2 すべてのファイル形式のサポート</h3>
+<p>Quivrは事前設計された最適化済みRAGワークフローを提供し、開発者がRAGパイプラインをゼロから構築する必要をなくす。速度と効率性を核心に設計され、プロダクション環境で即座に使用可能である。</p>
+<h3>3.2 全ファイル形式のサポート</h3>
 <p>多様なファイル形式をサポートし、必要に応じてカスタムパーサーを追加できる。</p>
 <ul>
 <li>テキストファイル(.txt)</li>
 <li>PDF文書</li>
-<li>マークダウン(.md)</li>
+<li>Markdown(.md)</li>
 <li>プレゼンテーション(.ppt、.pptx)</li>
 <li>スプレッドシート(.csv、.xlsx)</li>
 <li>Word文書</li>
 <li>音声・動画ファイル</li>
 </ul>
 <h3>3.3 マルチLLMサポート</h3>
-<p>Quivrは多様なLLM(大規模言語モデル)をサポートし、ベンダー依存を防ぐ。</p>
+<p>Quivrはベンダー依存を防ぐため、多様なLLM(大規模言語モデル)をサポートする。</p>
 <ul>
 <li>OpenAI(GPT-4、GPT-3.5)</li>
 <li>Anthropic(Claude)</li>
 <li>Mistral</li>
 <li>Google(Gemma)</li>
 <li>Groq</li>
-<li>ローカルモデル(Ollama) — 完全なデータプライバシーを保証</li>
+<li>ローカルモデル(Ollama)——完全なデータプライバシーを保証</li>
 </ul>
 <h3>3.4 カスタマイズ可能なRAGワークフロー</h3>
-<p>YAML設定ファイルを通じて次のような要素を細かく調整できる。</p>
+<p>YAML設定ファイルを通じて以下の要素を細かく調整できる。</p>
 <ul>
 <li>リランカー(reranker)モデルおよび設定</li>
-<li>履歴の深さ(対話コンテキストの反映範囲)</li>
-<li>LLM温度(temperature)および最大入力トークン数</li>
-<li>検索チャンク(chunk)のサイズと個数</li>
+<li>履歴の深さ(会話コンテキストの反映範囲)</li>
+<li>LLMの温度(temperature)および最大入力トークン数</li>
+<li>検索チャンク(chunk)のサイズおよび個数</li>
 </ul>
-<h3>3.5 ツール統合とインターネット検索</h3>
-<p>Quivrは静的な文書知識を超え、インターネット検索および外部ツール/APIと連携して動的な情報収集とリアルタイムインテリジェンスを実現できる。</p>
+<h3>3.5 ツール統合とWeb検索</h3>
+<p>Quivrは静的な文書知識を超えて、インターネット検索や外部ツール・APIと連携し、動的な情報収集とリアルタイムインテリジェンスを実現できる。</p>
 <h3>3.6 Megaparse統合</h3>
-<p>同じQuivrHQが開発したMegaparseは大規模文書を効率的にパースするツールであり、数千のファイルを前処理してQuivrの「Brain」に直接接続できる。</p>
+<p>同じQuivrHQが開発したMegaparseは、大規模文書を効率的にパースするツールで、数千個のファイルを前処理してQuivrの「Brain」に直接接続できる。</p>
 <h3>3.7 プライバシーとセルフホスティング</h3>
-<p>データプライバシーが重要な企業・開発者のために、ローカル展開およびセルフホスティングをサポートする。データはユーザーの管理下に保たれ、外部API呼び出しなしで完全なオンプレミス環境で動作可能である。</p>
+<p>データプライバシーが重要な企業・開発者向けに、ローカル配備とセルフホスティングをサポートする。データはユーザーの管理下に維持され、外部API呼び出しなしで完全なオンプレミス環境でも動作可能である。</p>
 <h3>3.8 技術スタック</h3>
 <table>
 <thead>
@@ -136,26 +136,26 @@
 <td>Pythonベースの高性能APIフレームワーク</td>
 </tr>
 <tr>
-<td>非同期タスク</td>
+<td>非同期処理</td>
 <td>Celery + Queue</td>
-<td>大容量ファイルの埋め込みおよびインデックス処理</td>
+<td>大容量ファイルの埋め込み・インデックス処理</td>
 </tr>
 <tr>
 <td>ベクトルストア</td>
 <td>PGVector / FAISS</td>
-<td>高性能セマンティック検索</td>
+<td>高性能な意味検索</td>
 </tr>
 <tr>
 <td>認証/DB</td>
 <td>Supabase</td>
-<td>オープンソースFirebase代替品</td>
+<td>オープンソースのFirebase代替</td>
 </tr>
 </tbody></table>
 <hr>
 <h2>4. 開発者にとっての利点</h2>
 <h3>4.1 クイックスタート(30秒でOK)</h3>
 <pre><code class="language-bash">pip install quivr-core
-# たった5行のコードでRAGシステム構築完了
+# わずか5行のコードでRAGシステム構築完了
 </code></pre>
 <h3>4.2 豊富なAPIサポート</h3>
 <p>QuivrはRESTful APIを提供し、Swaggerドキュメントを通じて簡単に探索・テストできる。APIキーベースの認証をサポートし、アプリケーションへの統合が容易である。</p>
@@ -168,21 +168,21 @@
 </ul>
 <h3>4.4 活発なオープンソースコミュニティ</h3>
 <ul>
-<li>GitHubで38k+スター、活発な貢献</li>
+<li>GitHubで38k+のスター、活発な貢献</li>
 <li>定期的な更新および機能改善</li>
 <li>イシュー対応およびPRレビューが活発</li>
 </ul>
 <h3>4.5 開発生産性の向上</h3>
 <ul>
-<li>RAGの複雑な内部構造を抽象化してビジネスロジックに集中可能</li>
-<li>YAMLベースの設定でコード変更なしにRAG戦略を実験可能</li>
-<li>多様なサンプルコード提供(Chainlit、Streamlit統合)</li>
+<li>RAGの複雑な内部構造を抽象化し、ビジネスロジックに集中可能</li>
+<li>YAMLベースの設定によりコード変更なしでRAG戦略を実験可能</li>
+<li>多様な例コードを提供(Chainlit、Streamlit統合)</li>
 </ul>
 <hr>
 <h2>5. インストールと使用方法</h2>
-<h3>5.1 Pythonパッケージのインストール(Quick Start)</h3>
-<p>最も早く始めるにはquivr-coreパッケージをインストールする。</p>
-<pre><code class="language-bash"># Step 1: パッケージインストール
+<h3>5.1 Pythonパッケージのインストール(クイックスタート)</h3>
+<p>最も速く始めるには、quivr-coreパッケージをインストールする。</p>
+<pre><code class="language-bash"># ステップ1:パッケージのインストール
 pip install quivr-core
 
 # インストール確認
@@ -191,17 +191,17 @@ python -c &quot;import quivr_core; print(&#39;Quivr installed!&#39;)&quot;
 <h3>5.2 基本的な使用例</h3>
 <pre><code class="language-python">from quivr_core import Brain
 
-# 1. 文書からBrainを作成
+# 1. 文書からBrainを作成する
 brain = Brain.from_files(
     name=&quot;my_smart_brain&quot;,
     file_paths=[&quot;./my_document.pdf&quot;, &quot;./my_notes.txt&quot;]
 )
 
 # 2. Brainに質問する
-answer = brain.ask(&quot;この文書の核心内容を要約して&quot;)
+answer = brain.ask(&quot;この文書の核心内容を要約してください&quot;)
 print(answer.answer)
 
-# 3. 対話型インターフェースを実行
+# 3. 対話型インターフェースを実行する
 while True:
     question = input(&quot;質問: &quot;)
     if question.lower() == &quot;exit&quot;:
@@ -209,20 +209,20 @@ while True:
     response = brain.ask(question)
     print(f&quot;回答: {response.answer}&quot;)
 </code></pre>
-<h3>5.3 Dockerベースのローカルデプロイ(Self-Hosted)</h3>
-<p>データプライバシーが重要な場合、または完全な機能を活用したい場合:</p>
-<pre><code class="language-bash"># Step 1: リポジトリのクローン
+<h3>5.3 Dockerベースのローカル配備(Self-Hosted)</h3>
+<p>データプライバシーが重要、または完全な機能を活用したい場合:</p>
+<pre><code class="language-bash"># ステップ1:リポジトリのクローン
 git clone https://github.com/quivrhq/quivr.git &amp;&amp; cd quivr
 
-# Step 2: 環境設定
+# ステップ2:環境設定
 cp .env.example .env
 # .envファイルにOPENAI_API_KEYを入力
 
-# Step 3: Dockerで実行
+# ステップ3:Dockerで実行
 docker compose pull
 docker compose up
 
-# Step 4: アクセス
+# ステップ4:アクセス
 # Web UI: http://localhost:3000
 # APIドキュメント: http://localhost:5050/docs
 </code></pre>
@@ -251,26 +251,26 @@ brain = Brain.from_files(
 config = RetrievalConfig.from_yaml(&quot;./custom_rag.yaml&quot;)
 answer = brain.ask(&quot;質問&quot;, retrieval_config=config)
 </code></pre>
-<h3>5.5 Chainlitでチャットuiを作成する</h3>
+<h3>5.5 ChainlitでチャットUIを作る</h3>
 <pre><code class="language-bash">cd examples/chatbot
 rye sync
 rye run chainlit run chainlit.py
 </code></pre>
 <h3>5.6 APIキーの発行と使用</h3>
-<pre><code class="language-bash"># 1. Quivr Webアプリにログイン
-# 2. /userページでAPIキー生成
-# 3. API呼び出し時にBearerトークン使用
+<pre><code class="language-bash"># 1. QuivrのWebアプリにログイン
+# 2. /userページでAPIキーを生成
+# 3. API呼び出し時にBearerトークンを使用
 
 curl -X GET https://api.quivr.app/brains/ \
   -H &quot;Authorization: Bearer YOUR_API_KEY&quot;
 </code></pre>
 <hr>
-<h2>6. 「Brain」概念の理解</h2>
-<p>Quivrの中核概念は「Brain」(脳)である。Brainはユーザーの知識を保存・処理する基本コンポーネントである。</p>
+<h2>6. 「Brain」コンセプトを理解する</h2>
+<p>Quivrの核心コンセプトは「Brain」(脳)である。Brainはユーザーの知識を保存・処理する基本コンポーネントである。</p>
 <ul>
-<li>一つのBrainには複数の文書を接続可能</li>
-<li>各Brainは固有のRAG設定とLLMを持てる</li>
-<li>Public/Private設定が可能(共有または非公開)</li>
+<li>1つのBrainに複数の文書を紐付け可能</li>
+<li>各BrainごとにRAG設定とLLMを個別に持てる</li>
+<li>公開/非公開設定が可能(共有または非公開)</li>
 <li>Brain Marketplaceを通じて他のユーザーのBrainも活用可能</li>
 </ul>
 <hr>
@@ -290,7 +290,7 @@ curl -X GET https://api.quivr.app/brains/ \
 <ul>
 <li>Quick Start: <a href="https://core.quivr.com/en/stable/">https://core.quivr.com/en/stable/</a></li>
 <li>Brain APIガイド: POST /brains/ エンドポイントでBrainを作成可能</li>
-<li>チャットAPI: GET /chat/{chat_id}/history で対話履歴を照会可能</li>
+<li>チャットAPI: GET /chat/{chat_id}/history で会話履歴を照会可能</li>
 </ul>
 <h3>コミュニティ</h3>
 <ul>
@@ -299,16 +299,16 @@ curl -X GET https://api.quivr.app/brains/ \
 </ul>
 <hr>
 <h2>8. 結論</h2>
-<p>Quivrは単純なRAGツールを超え、開発者に親和的なAIフレームワークとして設計されている。簡潔さ(simplicity)と拡張性(extensibility)を最優先とし、個人開発者から大規模AIチームまで生産性向上に貢献している。</p>
+<p>Quivrは単純なRAGツールを超え、開発者フレンドリーなAIフレームワークとして設計されている。簡潔さ(simplicity)と拡張性(extensibility)を最優先とし、個人開発者から大規模AIチームまで、生産性向上に貢献している。</p>
 <p>Quivrを選ぶべき理由:</p>
 <ul>
 <li>オープンソースによる完全な透明性と自由なカスタマイズ</li>
 <li>30秒のインストール、5行のコードで即座に使用可能</li>
-<li>データプライバシー — オンプレミス展開をサポート</li>
-<li>ベンダー依存なし — 主要なすべてのLLMと互換</li>
+<li>データプライバシー——オンプレミス配備をサポート</li>
+<li>ベンダー依存なし——主要なすべてのLLMと互換</li>
 <li>活発なコミュニティと継続的な更新</li>
 </ul>
-<p>「アイデアはObsidianと似ているが、AI機能でさらに強化された」という表現の通り、Quivrは知識管理の新しいパラダイムを提示する。今すぐQuivrで自分だけの「第二の脳」を構築してみよう。</p>
+<p>「アイデアはObsidianと同じだが、AI機能でさらに強化されたもの」という表現の通り、Quivrは知識管理の新しいパラダイムを提示している。今すぐQuivrで自分だけの「第二の脳」を構築してみよう。</p>
 </div>
       <aside class="author-box">
         <h2>작성자 / Source</h2>

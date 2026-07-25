@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Headroom 完全指南 — VibeQuant</title>
-  <meta name="description" content="开源上下文压缩工具 Headroom 的说明、安装、配置及与 DeepSeek V4 Pro / Open Code 的集成" />
+  <title>Headroom 完整指南 — VibeQuant</title>
+  <meta name="description" content="开源 LLM 上下文压缩代理 Headroom 的完整指南——简介、安装、AI 工具集成、DeepSeek V4 Pro / Open Code 配置以及故障排查。" />
   <link rel="canonical" href="https://tech.vibequant.cc/tech/headroom-headroom-complete-guide-cn/" />
-  <meta property="og:title" content="Headroom 完全指南" />
-  <meta property="og:description" content="开源上下文压缩工具 Headroom 的说明、安装、配置及与 DeepSeek V4 Pro / Open Code 的集成" />
+  <meta property="og:title" content="Headroom 完整指南" />
+  <meta property="og:description" content="开源 LLM 上下文压缩代理 Headroom 的完整指南——简介、安装、AI 工具集成、DeepSeek V4 Pro / Open Code 配置以及故障排查。" />
   <meta property="og:url" content="https://tech.vibequant.cc/tech/headroom-headroom-complete-guide-cn/" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="VibeQuant" />
@@ -26,7 +26,7 @@
   <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/headroom-headroom-complete-guide-ja/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/headroom-headroom-complete-guide-cn/" />
   <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/headroom-headroom-complete-guide/" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Headroom 完全指南","description":"开源上下文压缩工具 Headroom 的说明、安装、配置及与 DeepSeek V4 Pro / Open Code 的集成","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/headroom-headroom-complete-guide-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Headroom/Headroom%20complete%20guide_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"zh-Hans","keywords":"LLM, 成本优化, 代理, CLI 工具"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Headroom 完整指南","description":"开源 LLM 上下文压缩代理 Headroom 的完整指南——简介、安装、AI 工具集成、DeepSeek V4 Pro / Open Code 配置以及故障排查。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/headroom-headroom-complete-guide-cn/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Headroom/Headroom%20complete%20guide_CN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-15","dateModified":"2026-07-25","inLanguage":"zh-Hans","keywords":"Headroom, LLM, 上下文压缩, AI 智能体, 成本优化"}</script>
 </head>
 <body class="content-body">
   <header class="site-top">
@@ -49,52 +49,52 @@
     <article class="article">
       <header class="article-head">
         <p class="eyebrow">LLM · 에이전트</p>
-        <h1>Headroom 完全指南</h1>
-        <p class="article-dates"><time datetime="2026-07-25">발행 2026.07.25</time> · 주제 LLM · 成本优化 · 代理 · CLI 工具</p>
+        <h1>Headroom 完整指南</h1>
+        <p class="article-dates"><time datetime="2026-06-15">발행 2026.06.15</time> · 주제 Headroom · LLM · 上下文压缩 · AI 智能体 · 成本优化 · <time datetime="2026-07-25">수정 2026.07.25</time></p>
         <div class="lang-switch" role="navigation" aria-label="Language">
       <a class="lang-btn" href="../../tech/headroom-headroom-complete-guide/" data-lang="KR">🇰🇷 한국어</a>
       <a class="lang-btn" href="../../tech/headroom-headroom-complete-guide-en/" data-lang="EN">English</a>
       <a class="lang-btn" href="../../tech/headroom-headroom-complete-guide-ja/" data-lang="JP">日本語</a>
       <a class="lang-btn is-active" href="../../tech/headroom-headroom-complete-guide-cn/" data-lang="CN" aria-current="true">中文</a>
     </div>
-        <p class="lede">开源上下文压缩工具 Headroom 的说明、安装、配置及与 DeepSeek V4 Pro / Open Code 的集成</p>
+        <p class="lede">开源 LLM 上下文压缩代理 Headroom 的完整指南——简介、安装、AI 工具集成、DeepSeek V4 Pro / Open Code 配置以及故障排查。</p>
         
       </header>
       <div class="article-body prose"><blockquote>
-<p>说明、安装、配置及与 DeepSeek V4 Pro / Open Code 的集成</p>
+<p>简介、安装、配置，以及与 DeepSeek V4 Pro / Open Code 的集成</p>
 </blockquote>
 <hr>
 <h2>目录</h2>
 <ol>
-<li><a href="#1-headroom-%E6%98%AF%E4%BB%80%E4%B9%88">Headroom 是什么?</a></li>
-<li><a href="#2-%E5%AE%89%E8%A3%85%E6%8E%A8%E8%8D%90-proxy-%E6%A8%A1%E5%BC%8F">安装(推荐 Proxy 模式)</a></li>
-<li><a href="#3-%E9%9B%86%E6%88%90-ai-%E5%B7%A5%E5%85%B7proxy-%E6%A8%A1%E5%BC%8F">集成 AI 工具</a></li>
+<li><a href="#1-headroom-%E6%98%AF%E4%BB%80%E4%B9%88">Headroom 是什么？</a></li>
+<li><a href="#2-%E5%AE%89%E8%A3%85%E6%8E%A8%E8%8D%90%E4%BD%BF%E7%94%A8%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F">安装(推荐使用代理模式)</a></li>
+<li><a href="#3-%E4%B8%8E-ai-%E5%B7%A5%E5%85%B7%E9%9B%86%E6%88%90%E4%BB%A3%E7%90%86%E6%A8%A1%E5%BC%8F">与 AI 工具集成</a></li>
 <li><a href="#4-%E5%9C%A8-deepseek-v4-pro--open-code-%E7%8E%AF%E5%A2%83%E4%B8%AD%E4%BD%BF%E7%94%A8">在 DeepSeek V4 Pro + Open Code 环境中使用</a></li>
 <li><a href="#5-headroom-%E7%9A%84%E5%85%B6%E4%BB%96%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F">Headroom 的其他使用方式</a></li>
 <li><a href="#6-%E5%AE%9E%E7%94%A8%E5%91%BD%E4%BB%A4%E4%B8%8E%E6%8A%80%E5%B7%A7">实用命令与技巧</a></li>
 <li><a href="#7-%E6%95%85%E9%9A%9C%E6%8E%92%E6%9F%A5troubleshooting">故障排查(Troubleshooting)</a></li>
-<li><a href="#8-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%E5%8F%8A%E4%B8%BB%E8%A6%81%E9%93%BE%E6%8E%A5">参考资料及主要链接</a></li>
+<li><a href="#8-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%E4%B8%8E%E4%B8%BB%E8%A6%81%E9%93%BE%E6%8E%A5">参考资料与主要链接</a></li>
 </ol>
 <hr>
-<h2>1. Headroom 是什么?</h2>
-<p><strong>Headroom</strong>是一个开源项目,能够智能压缩 AI 代理(尤其是编码类 AI 模型)通信过程中产生的海量上下文(代码、日志、搜索结果等),<strong>在保持响应质量的同时最多削减 95% 的成本</strong>。</p>
+<h2>1. Headroom 是什么？</h2>
+<p><strong>Headroom</strong>是一个开源项目，能够智能压缩 AI 智能体(尤其是编码类 AI 模型)通信过程中产生的大量上下文(代码、日志、搜索结果等)，<strong>在保持响应质量的同时，最高可将成本降低 95%</strong>。</p>
 <blockquote>
-<p>由 Netflix 高级工程师 Tejas Chopra 开发,于 2026 年 1 月开源。Apache 2.0 许可证。</p>
+<p>由 Netflix 高级工程师 Tejas Chopra 开发，于 2026 年 1 月开源发布，采用 Apache 2.0 许可。</p>
 </blockquote>
-<h3>为什么需要它?</h3>
-<p>AI 执行任务时,每次请求都会发送如下大量上下文:</p>
+<h3>为什么需要它？</h3>
+<p>AI 执行任务时，每次请求都会附带发送大量如下内容的上下文：</p>
 <ul>
 <li>代码搜索结果</li>
-<li>日志文件</li>
+<li>日志文件内容</li>
 <li>API 响应</li>
-<li>之前的对话记录</li>
+<li>此前的对话记录</li>
 </ul>
-<p>这会导致<strong>成本增加</strong>和<strong>信息过载</strong>,使 AI 遗漏重要内容。</p>
-<h3>运行方式</h3>
-<pre><code>[AI 代理] --请求--&gt; [Headroom Proxy] --压缩后的请求--&gt; [LLM API]
-                              |
-                         智能压缩
-                    (去除重复及不必要信息)
+<p>这会导致<strong>成本上升</strong>和<strong>信息过载</strong>，使 AI 容易忽略重要的部分。</p>
+<h3>工作原理</h3>
+<pre><code>[AI 智能体] ──请求──▶ [Headroom 代理] ──压缩后的请求──▶ [LLM API]
+                              │
+                          智能压缩
+                    (去除重复及冗余信息)
                     应用 CacheAligner
 </code></pre>
 <table>
@@ -106,18 +106,18 @@
 </thead>
 <tbody><tr>
 <td><strong>请求拦截</strong></td>
-<td>位于 AI 代理与 API 之间,拦截每一次请求</td>
+<td>位于 AI 智能体与 API 之间，拦截所有中间请求</td>
 </tr>
 <tr>
 <td><strong>智能压缩</strong></td>
-<td>将重复或不太重要的信息替换为引用链接,或直接进行压缩</td>
+<td>将重复或不太重要的信息替换为引用链接或直接压缩</td>
 </tr>
 <tr>
 <td><strong>缓存对齐</strong></td>
-<td>通过 CacheAligner 技术解决提示词缓存被破坏的问题,最大化成本节省</td>
+<td>通过 CacheAligner 技术解决提示词缓存被破坏的问题，最大化节省成本</td>
 </tr>
 </tbody></table>
-<h3>核心压缩引擎</h3>
+<h3>主要压缩引擎</h3>
 <table>
 <thead>
 <tr>
@@ -131,11 +131,11 @@
 </tr>
 <tr>
 <td><code>CodeCompressor</code></td>
-<td>对 Python、JS、Go、Rust、Java、C++ 进行 AST-aware 压缩</td>
+<td>针对 Python、JS、Go、Rust、Java、C++ 的 AST 感知压缩</td>
 </tr>
 <tr>
 <td><code>Kompress-base</code></td>
-<td>基于 HuggingFace 训练模型的代理轨迹压缩</td>
+<td>基于 HuggingFace 训练模型的智能体轨迹压缩</td>
 </tr>
 <tr>
 <td><code>CacheAligner</code></td>
@@ -147,24 +147,24 @@
 </tr>
 <tr>
 <td><code>CCR</code></td>
-<td>可逆压缩(LLM 需要时可检索原始内容)</td>
+<td>可逆压缩(LLM 可在需要时检索原文)</td>
 </tr>
 </tbody></table>
 <h3>主要效果</h3>
 <table>
 <thead>
 <tr>
-<th>类别</th>
-<th>削减效果</th>
+<th>指标</th>
+<th>节省效果</th>
 </tr>
 </thead>
 <tbody><tr>
 <td>Token 削减</td>
-<td><strong>60% ~ 95%</strong></td>
+<td><strong>60%~95%</strong></td>
 </tr>
 <tr>
 <td>成本削减</td>
-<td><strong>最多约 50%</strong>(相同预算下可用量约提升 2 倍)</td>
+<td><strong>最高约 50%</strong>(相同预算下用量约可翻倍)</td>
 </tr>
 <tr>
 <td>质量</td>
@@ -172,31 +172,31 @@
 </tr>
 </tbody></table>
 <hr>
-<h2>2. 安装(推荐 Proxy 模式)</h2>
-<p>Proxy 模式是无需修改现有代码即可最简单使用 Headroom 的方式。
-它可与 DeepSeek V4 Pro、Open Code 等所有 LLM 和工具配合使用。</p>
+<h2>2. 安装(推荐使用代理模式)</h2>
+<p>代理模式是在不改动现有代码的前提下使用 Headroom 最简单的方法，
+适用于 DeepSeek V4 Pro、Open Code 等所有 LLM 与工具。</p>
 <h3>2.1 安装 Headroom</h3>
 <pre><code class="language-bash">pip install &quot;headroom-ai[proxy]&quot;
 </code></pre>
 <blockquote>
-<p>安装全部功能: <code>pip install &quot;headroom-ai[all]&quot;</code></p>
+<p>安装全部功能：<code>pip install &quot;headroom-ai[all]&quot;</code></p>
 </blockquote>
-<h3>2.2 运行代理服务器</h3>
+<h3>2.2 启动代理服务器</h3>
 <pre><code class="language-bash">headroom proxy --port 8787
 </code></pre>
 <ul>
-<li><code>--port 8787</code>：指定代理服务器使用的端口(也可使用其他端口)</li>
-<li>正常运行时会输出 <code>Listening on http://localhost:8787</code> 信息</li>
+<li><code>--port 8787</code>：指定代理服务器使用的端口(也可以使用其他端口)</li>
+<li>正常启动后会显示 <code>Listening on http://localhost:8787</code> 的提示信息</li>
 </ul>
-<h3>2.3 验证是否正常运行</h3>
+<h3>2.3 确认正常运行</h3>
 <pre><code class="language-bash">curl http://localhost:8787/health
 </code></pre>
-<p>成功响应:</p>
+<p>成功响应：</p>
 <pre><code class="language-json">{&quot;status&quot;: &quot;healthy&quot;, &quot;version&quot;: &quot;x.x.x&quot;}
 </code></pre>
 <hr>
-<h2>3. 集成 AI 工具(Proxy 模式)</h2>
-<p>在代理服务器运行的状态下,配置各个 AI 工具通过该代理调用 API。</p>
+<h2>3. 与 AI 工具集成(代理模式)</h2>
+<p>在代理服务器运行的状态下，配置各个 AI 工具通过该代理调用 API。</p>
 <h3>基本原理</h3>
 <table>
 <thead>
@@ -256,46 +256,46 @@
 </tr>
 </tbody></table>
 <blockquote>
-<p><strong>永久配置技巧：</strong> 在 <code>~/.bashrc</code> 或 <code>~/.zshrc</code> 中添加以下内容</p>
+<p><strong>💡 永久配置小技巧：</strong> 在 <code>~/.bashrc</code> 或 <code>~/.zshrc</code> 中添加以下这一行</p>
 <pre><code class="language-bash">export OPENAI_BASE_URL=http://localhost:8787/v1
 </code></pre>
 </blockquote>
 <hr>
 <h2>4. 在 DeepSeek V4 Pro + Open Code 环境中使用</h2>
 <h3>分步操作</h3>
-<p><strong>第一步：运行 Headroom 代理</strong></p>
+<p><strong>第一步：启动 Headroom 代理</strong></p>
 <pre><code class="language-bash">headroom proxy --port 8787
 </code></pre>
 <p><strong>第二步：通过代理运行 Open Code</strong></p>
 <pre><code class="language-bash">OPENAI_BASE_URL=http://localhost:8787/v1 openclaude
 </code></pre>
-<p>若直接调用 DeepSeek V4 Pro:</p>
+<p>如果直接调用 DeepSeek V4 Pro：</p>
 <pre><code class="language-bash">OPENAI_BASE_URL=http://localhost:8787/v1 deepseek-v4-pro --model deepseek-v4-pro
 </code></pre>
-<p><strong>第三步：验证是否正常运行</strong></p>
+<p><strong>第三步：确认正常运行</strong></p>
 <ul>
-<li>在 Open Code 中输入一个普通的编码问题</li>
-<li>Headroom 代理终端会显示压缩统计信息(减少的 token 数)</li>
+<li>在 Open Code 中输入一个普通的编程问题</li>
+<li>Headroom 代理的终端会显示压缩统计信息(减少的 token 数量)</li>
 <li>可通过 <code>headroom stats</code> 命令查看累计节省量</li>
 </ul>
 <blockquote>
-<p><strong>兼容性保证：</strong> 由于 Headroom 在代理层运行,完全不会干扰 DeepSeek V4 Pro 独有的 API 格式或 Open Code 的通信方式。</p>
+<p><strong>✅ 兼容性保证：</strong> 由于 Headroom 运行在代理层，完全不会干扰 DeepSeek V4 Pro 特有的 API 格式或 Open Code 的通信方式。</p>
 </blockquote>
 <hr>
 <h2>5. Headroom 的其他使用方式</h2>
-<h3>5.1 Agent Wrap(代理包装) —— 最简便</h3>
+<h3>5.1 Agent Wrap(智能体包装)——最简便的方式</h3>
 <pre><code class="language-bash">headroom wrap openclaude
 headroom wrap cursor
 </code></pre>
-<p>此后运行 <code>openclaude</code> 时会自动应用 Headroom。</p>
+<p>之后运行 <code>openclaude</code> 时会自动应用 Headroom。</p>
 <blockquote>
-<p>快速上手: 执行 <code>pip install &quot;headroom-ai[all]&quot;</code> 后运行 <code>headroom wrap claude</code></p>
+<p>快速上手：先 <code>pip install &quot;headroom-ai[all]&quot;</code>，再执行 <code>headroom wrap claude</code></p>
 </blockquote>
 <h3>5.2 MCP 服务器(Model Context Protocol)</h3>
-<p>如果同时使用多个 MCP 客户端,这种方式更高效。</p>
+<p>如果你使用多个 MCP 客户端，这种方式会更高效。</p>
 <pre><code class="language-bash">headroom mcp install
 </code></pre>
-<p>提供的 MCP 工具:</p>
+<p>提供的 MCP 工具：</p>
 <table>
 <thead>
 <tr>
@@ -309,7 +309,7 @@ headroom wrap cursor
 </tr>
 <tr>
 <td><code>headroom_retrieve</code></td>
-<td>检索压缩后的上下文</td>
+<td>检索已压缩的上下文</td>
 </tr>
 <tr>
 <td><code>headroom_stats</code></td>
@@ -320,12 +320,12 @@ headroom wrap cursor
 <pre><code class="language-python">from headroom import compress
 
 compressed = compress(
-    text=&quot;非常长的日志文件内容...&quot;,
+    text=&quot;非常长的日志文件内容……&quot;,
     model=&quot;deepseek-v4-pro&quot;  # 可指定模型
 )
 </code></pre>
-<h3>5.4 多代理环境</h3>
-<p>在并行运行 Claude + Codex 的场景中,可以通过 SharedContext 共享自动去重后的公共压缩上下文存储。</p>
+<h3>5.4 多智能体环境</h3>
+<p>如果并行运行 Claude 和 Codex，可以通过 SharedContext 共享一个自动去重的公共压缩上下文存储。</p>
 <hr>
 <h2>6. 实用命令与技巧</h2>
 <table>
@@ -337,11 +337,11 @@ compressed = compress(
 </thead>
 <tbody><tr>
 <td><code>headroom stats</code></td>
-<td>输出目前累计节省的 token/成本统计</td>
+<td>输出到目前为止节省的 token/成本统计信息</td>
 </tr>
 <tr>
 <td><code>headroom reset</code></td>
-<td>重置统计数据</td>
+<td>重置统计信息</td>
 </tr>
 <tr>
 <td><code>headroom proxy --help</code></td>
@@ -358,7 +358,7 @@ compressed = compress(
   cache_alignment: true
 </code></pre>
 <h3>快速开始(一行命令)</h3>
-<pre><code class="language-bash"># 安装 + 运行代理
+<pre><code class="language-bash"># 安装 + 启动代理
 pip install &quot;headroom-ai[proxy]&quot; &amp;&amp; headroom proxy --port 8787
 
 # 在另一个终端中
@@ -368,26 +368,26 @@ OPENAI_BASE_URL=http://localhost:8787/v1 openclaude
 <h2>7. 故障排查(Troubleshooting)</h2>
 <p><strong>问：代理服务器无法启动。</strong></p>
 <ul>
-<li>检查端口冲突: <code>lsof -i :8787</code> → 若被占用,可更改为 <code>--port 8788</code> 等其他端口</li>
-<li>重新安装 Headroom: <code>pip install --upgrade &quot;headroom-ai[proxy]&quot;</code></li>
+<li>检查端口冲突：<code>lsof -i :8787</code> → 如需使用其他端口，改为 <code>--port 8788</code> 等</li>
+<li>重新安装 Headroom：<code>pip install --upgrade &quot;headroom-ai[proxy]&quot;</code></li>
 </ul>
-<p><strong>问：工具中出现&quot;Connection refused&quot;错误。</strong></p>
+<p><strong>问：工具报出&quot;Connection refused&quot;错误。</strong></p>
 <ul>
 <li>确认代理服务器是否已先启动</li>
-<li>确认环境变量中的端口号是否一致(<code>http://localhost:8787</code>)</li>
+<li>检查环境变量中的端口号是否一致(<code>http://localhost:8787</code>)</li>
 </ul>
-<p><strong>问：DeepSeek V4 Pro 的某个特定参数不生效。</strong></p>
+<p><strong>问：DeepSeek V4 Pro 某个特定参数不起作用。</strong></p>
 <ul>
-<li>Headroom 会无条件透传参数,因此更可能是工具本身的问题</li>
-<li>先在不使用 Headroom 的情况下测试并进行对比</li>
+<li>Headroom 会无条件透传参数，因此很可能是工具本身的问题</li>
+<li>先在不使用 Headroom 的情况下测试，再进行对比</li>
 </ul>
 <p><strong>问：几乎没有看到节省效果。</strong></p>
 <ul>
-<li>使用 <code>headroom stats</code> 确认实际压缩率</li>
-<li>如果上下文本身已经很小,压缩效果可能微乎其微</li>
+<li>用 <code>headroom stats</code> 查看实际压缩率</li>
+<li>如果上下文本身已经很小，压缩效果可能并不明显</li>
 </ul>
 <hr>
-<h2>8. 参考资料及主要链接</h2>
+<h2>8. 参考资料与主要链接</h2>
 <h3>官方资源</h3>
 <table>
 <thead>
@@ -443,15 +443,15 @@ OPENAI_BASE_URL=http://localhost:8787/v1 openclaude
 </tr>
 </thead>
 <tbody><tr>
-<td>Building Cost-Efficient Agents with Headroom (Medium)</td>
+<td>Building Cost-Efficient Agents with Headroom(Medium)</td>
 <td><a href="https://subratpati.medium.com/building-cost-efficient-agents-with-headroom-context-compression-for-llm-applications-b665128153b6">subratpati.medium.com</a></td>
 </tr>
 <tr>
-<td>Headroom: Cut LLM Token Usage by Up to 95% (DEV.to)</td>
+<td>Headroom: Cut LLM Token Usage by Up to 95%(DEV.to)</td>
 <td><a href="https://dev.to/arshtechpro/headroom-cut-your-llm-token-usage-by-up-to-95-without-changing-your-answers-5g06">dev.to/arshtechpro</a></td>
 </tr>
 <tr>
-<td>Headroom Token Compression 实战指南 (Build This Now)</td>
+<td>Headroom Token Compression 实战指南(Build This Now)</td>
 <td><a href="https://www.buildthisnow.com/blog/tools/extensions/headroom-token-compression">buildthisnow.com</a></td>
 </tr>
 </tbody></table>
@@ -464,22 +464,22 @@ OPENAI_BASE_URL=http://localhost:8787/v1 openclaude
 </tr>
 </thead>
 <tbody><tr>
-<td>Phil Schmid —— Context Engineering 原则</td>
-<td>Headroom 理念的基础：&quot;Raw &gt; Compaction &gt; Summarization&quot; 的优先顺序</td>
+<td>Phil Schmid——Context Engineering 原则</td>
+<td>Headroom 理念的基础：&quot;Raw &gt; Compaction &gt; Summarization&quot; 的优先级顺序</td>
 </tr>
 <tr>
 <td>Anthropic Prompt Caching 文档</td>
-<td>理解 CacheAligner 的背景知识</td>
+<td>理解 CacheAligner 所需的背景知识</td>
 </tr>
 <tr>
 <td>OpenAI Compatible API 规范</td>
-<td>Proxy 模式 BASE_URL 集成的基础</td>
+<td>代理模式 BASE_URL 集成的基础</td>
 </tr>
 </tbody></table>
 <hr>
 <blockquote>
-<p><strong>版本信息：</strong> 本文档基于 Headroom v0.22 撰写(截至 2026 年 6 月)。
-Apache 2.0 License | 开发者: Tejas Chopra(Netflix 高级工程师)</p>
+<p><strong>版本信息：</strong> 本文档基于 Headroom v0.22 编写(截至 2026 年 6 月)。
+Apache 2.0 License | 开发者：Tejas Chopra(Netflix 高级工程师)</p>
 </blockquote>
 </div>
       <aside class="author-box">

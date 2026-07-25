@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>MiniCPM5-1B-Claude-Opus-Fable5-Thinking (GGUF) — Getting Started — VibeQuant</title>
-  <meta name="description" content="超軽量1BローカルLLM MiniCPM5-1B-Fable5-ThinkingのGetting Startedガイド。GGUF量子化の選び方、ランタイム設定、ツール呼び出しベンチマークを解説。" />
+  <title>MiniCPM5-1B-Claude-Opus-Fable5-Thinking(GGUF)——Getting Started — VibeQuant</title>
+  <meta name="description" content="超軽量1BパラメータのローカルLLM MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUFの入門ガイド——量子化オプション、llama.cpp/Ollama/LM Studio/vLLMでの設定、サンプリングパラメータ、ベンチマーク、活用シナリオ別推奨設定。" />
   <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-ja/" />
-  <meta property="og:title" content="MiniCPM5-1B-Claude-Opus-Fable5-Thinking (GGUF) — Getting Started" />
-  <meta property="og:description" content="超軽量1BローカルLLM MiniCPM5-1B-Fable5-ThinkingのGetting Startedガイド。GGUF量子化の選び方、ランタイム設定、ツール呼び出しベンチマークを解説。" />
+  <meta property="og:title" content="MiniCPM5-1B-Claude-Opus-Fable5-Thinking(GGUF)——Getting Started" />
+  <meta property="og:description" content="超軽量1BパラメータのローカルLLM MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUFの入門ガイド——量子化オプション、llama.cpp/Ollama/LM Studio/vLLMでの設定、サンプリングパラメータ、ベンチマーク、活用シナリオ別推奨設定。" />
   <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-ja/" />
   <meta property="og:type" content="article" />
   <meta property="og:site_name" content="VibeQuant" />
@@ -26,7 +26,7 @@
   <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-ja/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-cn/" />
   <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started/" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MiniCPM5-1B-Claude-Opus-Fable5-Thinking (GGUF) — Getting Started","description":"超軽量1BローカルLLM MiniCPM5-1B-Fable5-ThinkingのGetting Startedガイド。GGUF量子化の選び方、ランタイム設定、ツール呼び出しベンチマークを解説。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_%20Minicpm5/Minicpm5%201b%20fable5%20thinking%20getting%20started_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-17","dateModified":"2026-07-25","inLanguage":"ja","keywords":"LLM · 에이전트, LLM_ Minicpm5"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MiniCPM5-1B-Claude-Opus-Fable5-Thinking(GGUF)——Getting Started","description":"超軽量1BパラメータのローカルLLM MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUFの入門ガイド——量子化オプション、llama.cpp/Ollama/LM Studio/vLLMでの設定、サンプリングパラメータ、ベンチマーク、活用シナリオ別推奨設定。","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-ja/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_%20Minicpm5/Minicpm5%201b%20fable5%20thinking%20getting%20started_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-17","dateModified":"2026-07-25","inLanguage":"ja","keywords":"MiniCPM5, GGUF, ローカルLLM, llama.cpp, Ollama"}</script>
 </head>
 <body class="content-body">
   <header class="site-top">
@@ -49,19 +49,19 @@
     <article class="article">
       <header class="article-head">
         <p class="eyebrow">LLM · 에이전트</p>
-        <h1>MiniCPM5-1B-Claude-Opus-Fable5-Thinking (GGUF) — Getting Started</h1>
-        <p class="article-dates"><time datetime="2026-07-17">발행 2026.07.17</time> · 주제 LLM · 에이전트 · LLM_ Minicpm5 · <time datetime="2026-07-25">수정 2026.07.25</time></p>
+        <h1>MiniCPM5-1B-Claude-Opus-Fable5-Thinking(GGUF)——Getting Started</h1>
+        <p class="article-dates"><time datetime="2026-07-17">발행 2026.07.17</time> · 주제 MiniCPM5 · GGUF · ローカルLLM · llama.cpp · Ollama · <time datetime="2026-07-25">수정 2026.07.25</time></p>
         <div class="lang-switch" role="navigation" aria-label="Language">
       <a class="lang-btn" href="../../tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started/" data-lang="KR">🇰🇷 한국어</a>
       <a class="lang-btn" href="../../tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-en/" data-lang="EN">English</a>
       <a class="lang-btn is-active" href="../../tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-ja/" data-lang="JP" aria-current="true">日本語</a>
       <a class="lang-btn" href="../../tech/llm-minicpm5-minicpm5-1b-fable5-thinking-getting-started-cn/" data-lang="CN">中文</a>
     </div>
-        <p class="lede">超軽量1BローカルLLM MiniCPM5-1B-Fable5-ThinkingのGetting Startedガイド。GGUF量子化の選び方、ランタイム設定、ツール呼び出しベンチマークを解説。</p>
+        <p class="lede">超軽量1BパラメータのローカルLLM MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUFの入門ガイド——量子化オプション、llama.cpp/Ollama/LM Studio/vLLMでの設定、サンプリングパラメータ、ベンチマーク、活用シナリオ別推奨設定。</p>
         
       </header>
       <div class="article-body prose"><blockquote>
-<p>超軽量1BパラメータローカルLLMの始め方ガイド
+<p>超軽量1BパラメータローカルLLM入門ガイド
 モデルページ: <a href="https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF">https://huggingface.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF</a>
 ライセンス: Apache-2.0(ベースモデルMiniCPM5-1Bから継承)</p>
 </blockquote>
@@ -83,16 +83,16 @@
 <td align="left"><code>openbmb/MiniCPM5-1B</code></td>
 </tr>
 <tr>
-<td align="left">微調整データ</td>
+<td align="left">ファインチューニングデータ</td>
 <td align="left">Fable 5データ(post-training)</td>
 </tr>
 <tr>
 <td align="left">配布フォーマット</td>
-<td align="left">GGUF(llama.cpp系ランタイム用量子化ビルド)</td>
+<td align="left">GGUF(llama.cpp系ランタイム向け量子化ビルド)</td>
 </tr>
 <tr>
 <td align="left">最大コンテキスト</td>
-<td align="left">128Kトークン(131,072 / upstream <code>config.json</code>基準)</td>
+<td align="left">128Kトークン(131,072/upstream <code>config.json</code>基準)</td>
 </tr>
 <tr>
 <td align="left">アーキテクチャ</td>
@@ -103,16 +103,16 @@
 <td align="left">MiniCPM5ネイティブテンプレートがGGUFメタデータに内蔵</td>
 </tr>
 <tr>
-<td align="left">対応言語</td>
+<td align="left">サポート言語</td>
 <td align="left">英語、中国語</td>
 </tr>
 <tr>
 <td align="left">特化領域</td>
-<td align="left">コード生成/デバッグ、指示追従(Instruction Following)、ツール呼び出し(Tool Calling)</td>
+<td align="left">コード生成・デバッグ、命令追従(Instruction Following)、ツール呼び出し(Tool Calling)</td>
 </tr>
 </tbody></table>
-<p>このモデルはCPU単独または低スペックGPU環境でも駆動可能な超軽量モデルで、llama.cpp、Ollama、LM Studio、jan、KoboldCppなどGGUF互換ランタイム全般で使用できます。「Thinking」モード(Chain-of-Thought推論)と「No Think」モード(高速応答)を切り替えられるハイブリッド推論構造が特徴です。</p>
-<p>参考: 名前に含まれる「Fable 5」は学習データの出典を示す表記であり、Anthropicの商用クローズドモデル「Claude Fable 5」とは別のオープンソースコミュニティモデルです。</p>
+<p>このモデルはCPU単独または低スペックGPU環境でも動作可能な超軽量モデルで、llama.cpp、Ollama、LM Studio、jan、KoboldCppなどGGUF互換ランタイム全般で使用できる。「Thinking」モード(Chain-of-Thought推論)と「No Think」モード(高速応答)を切り替えられるハイブリッド推論構造が特徴である。</p>
+<p>参考:名称に含まれる「Fable 5」は学習データの出典を指す表記であり、Anthropicの商用クローズドモデル「Claude Fable 5」とは無関係な独立したオープンソースコミュニティモデルである。</p>
 <hr>
 <h2>2. 提供ファイル(量子化バージョンの選択)</h2>
 <table>
@@ -134,7 +134,7 @@
 <td align="left"><code>...-Q5_K_M.gguf</code></td>
 <td align="left">Q5_K_M</td>
 <td align="left">約751 MB</td>
-<td align="left">品質/容量バランス</td>
+<td align="left">品質・容量バランス型</td>
 </tr>
 <tr>
 <td align="left"><code>...-Q8_0.gguf</code></td>
@@ -146,12 +146,12 @@
 <td align="left"><code>...-F16.gguf</code></td>
 <td align="left">F16</td>
 <td align="left">約2.1 GB</td>
-<td align="left">フルプレシジョン変換元</td>
+<td align="left">フルプレシジョン変換オリジナル</td>
 </tr>
 </tbody></table>
-<p><strong>選択ガイド</strong>: 1Bモデルは量子化損失に比較的敏感なため、メモリに余裕があれば<strong>Q8_0</strong>をデフォルトとして使用することを推奨します。RAM 2GB未満の極端な制約環境でのみQ4_K_Mを検討してください。</p>
+<p><strong>選択ガイド</strong>:1Bモデルは量子化損失に比較的敏感なため、メモリに余裕があれば<strong>Q8_0</strong>をデフォルトとして使用することを推奨する。RAM 2GB未満の極端な制約環境でのみQ4_K_Mを検討すること。</p>
 <hr>
-<h2>3. インストールおよび実行方法</h2>
+<h2>3. インストールと実行方法</h2>
 <h3>3.1 llama.cpp(CLI)</h3>
 <p>macOS / Linuxインストール:</p>
 <pre><code class="language-bash">curl -LsSf https://llama.app/install.sh | sh
@@ -159,7 +159,7 @@
 <p>Windows(WinGet):</p>
 <pre><code class="language-bash">winget install llama.cpp
 </code></pre>
-<p>ターミナルで直接推論:</p>
+<p>ターミナルから直接推論:</p>
 <pre><code class="language-bash">llama cli -hf GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF:Q4_K_M
 </code></pre>
 <p>ローカルファイルで直接実行(Q8_0基準):</p>
@@ -170,21 +170,21 @@
   --temp 0.9 --top-p 0.95 \
   -c 8192
 </code></pre>
-<p>コンテキスト長(<code>-c</code>)は最大131,072まで対応しますが、実際に使用可能な長さはVRAM/RAMに応じて調整する必要があります。</p>
+<p>コンテキスト長(<code>-c</code>)は最大131,072までサポートするが、実際に使用可能な長さはVRAM/RAMに応じて調整する必要がある。</p>
 <h3>3.2 llama.cppサーバー(OpenAI互換API)</h3>
 <pre><code class="language-bash">llama-server \
   -m MiniCPM5-1B-Claude-Opus-Fable5-Thinking-Q8_0.gguf \
   -c 8192 --port 8080
 </code></pre>
-<p>サーバー起動後、<code>http://localhost:8080</code>でWeb UIおよびOpenAI互換<code>/v1/chat/completions</code>エンドポイントを使用できます。既存のOpenAI SDKベースのコードで<code>base_url</code>のみ変更すればそのまま連携できます。</p>
+<p>サーバー起動後、<code>http://localhost:8080</code>でWeb UIおよびOpenAI互換の<code>/v1/chat/completions</code>エンドポイントを使用できる。既存のOpenAI SDKベースのコードは<code>base_url</code>だけ変更すればそのまま連携できる。</p>
 <h3>3.3 Ollama</h3>
 <pre><code class="language-bash">ollama run hf.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF:Q4_K_M
 </code></pre>
-<p>HuggingFaceリポジトリから直接pullして実行する方式で、別途Modelfileの作成が不要です。</p>
+<p>HuggingFaceリポジトリから直接pullして実行する方式で、別途Modelfileの作成は不要である。</p>
 <h3>3.4 LM Studio / jan / KoboldCpp</h3>
-<p>リポジトリの<code>.gguf</code>ファイルをダウンロードしてロードするだけです。MiniCPM5チャットテンプレートがGGUFメタデータに内蔵されているため、テンプレートを手動設定する必要はありません。</p>
+<p>リポジトリの<code>.gguf</code>ファイルをダウンロードして読み込むだけで良い。MiniCPM5のチャットテンプレートがGGUFメタデータに内蔵されているため、テンプレートを手動設定する必要はない。</p>
 <ul>
-<li>LM Studio: 検索バーに<code>GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF</code>を入力し、希望する量子化バージョンをダウンロード</li>
+<li>LM Studio: 検索ボックスに<code>GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF</code>を入力し、希望する量子化バージョンをダウンロード</li>
 </ul>
 <h3>3.5 llama-cpp-python(Python連携)</h3>
 <pre><code class="language-bash">pip install llama-cpp-python
@@ -198,7 +198,7 @@ llm = Llama.from_pretrained(
 
 response = llm.create_chat_completion(
     messages=[
-        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;二つのソート済みリストを結合するPython関数を書いてください。&quot;}
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;2つのソート済みリストを結合するPython関数を書いてください。&quot;}
     ]
 )
 print(response[&quot;choices&quot;][0][&quot;message&quot;][&quot;content&quot;])
@@ -219,10 +219,10 @@ vllm serve &quot;GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF&quot;
 <pre><code class="language-bash">docker model run hf.co/GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF:Q4_K_M
 </code></pre>
 <h3>3.8 コーディングエージェント連携(Pi / Hermes / OpenClaw)</h3>
-<p>llama.cppサーバーをバックエンドとして立ち上げた後、OpenAI互換エンドポイント(<code>http://localhost:8080/v1</code>)を各エージェントのカスタムプロバイダーとして登録する方式です。ローカルコーディングエージェントの実験用に有用です。</p>
+<p>llama.cppサーバーをバックエンドとして起動し、OpenAI互換エンドポイント(<code>http://localhost:8080/v1</code>)を各エージェントのカスタムプロバイダーとして登録する方式である。ローカルコーディングエージェント実験用に有用である。</p>
 <hr>
-<h2>4. サンプリングパラメータ推奨値</h2>
-<p>ベースモデル(MiniCPM5-1B)の生成デフォルト値を継承します。</p>
+<h2>4. サンプリングパラメータの推奨値</h2>
+<p>ベースモデル(MiniCPM5-1B)の生成デフォルト値を継承する。</p>
 <table>
 <thead>
 <tr>
@@ -232,26 +232,26 @@ vllm serve &quot;GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF&quot;
 </thead>
 <tbody><tr>
 <td align="left"><strong>Think</strong>(デフォルト)</td>
-<td align="left"><code>temperature=0.9</code>、<code>top_p=0.95</code></td>
+<td align="left"><code>temperature=0.9</code>, <code>top_p=0.95</code></td>
 </tr>
 <tr>
 <td align="left"><strong>No Think</strong></td>
-<td align="left"><code>temperature=0.7</code>、<code>top_p=0.95</code>、<code>enable_thinking=False</code></td>
+<td align="left"><code>temperature=0.7</code>, <code>top_p=0.95</code>, <code>enable_thinking=False</code></td>
 </tr>
 </tbody></table>
 <ul>
-<li><strong>Thinkモード</strong>: 最終回答の前に内部推論(reasoning)ブロックを出力します。複雑なコーディング/推論作業に適していますが、パイプラインに連携する際は推論ブロックを解析・除去する後処理ロジックが必要です。</li>
-<li><strong>No Thinkモード</strong>: 推論過程なしに即答します。レイテンシが重要なチャットボット/分類作業に適しています。</li>
+<li><strong>Thinkモード</strong>:最終回答の前に内部推論(reasoning)ブロックを出力する。複雑なコーディング・推論作業に適しているが、パイプラインに連携する際には推論ブロックをパース・除去する後処理ロジックが必要。</li>
+<li><strong>No Thinkモード</strong>:推論過程なしで即答する。遅延が重要なチャットボット・分類作業に適している。</li>
 </ul>
 <hr>
 <h2>5. 性能ベンチマーク</h2>
-<p>V2バージョンでツール呼び出し(Tool Calling)性能が大幅に改善されました。(モデル作成者公開数値基準)</p>
+<p>V2バージョンでツール呼び出し(Tool Calling)性能が大幅に改善された(モデル制作者公開数値基準)。</p>
 <table>
 <thead>
 <tr>
 <th align="left">モデル</th>
-<th align="left">BFCL (non_live)</th>
-<th align="left">BFCL (live)</th>
+<th align="left">BFCL(non_live)</th>
+<th align="left">BFCL(live)</th>
 <th align="left">API-Bank</th>
 </tr>
 </thead>
@@ -268,27 +268,27 @@ vllm serve &quot;GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF&quot;
 <td align="left"><strong>22.10%</strong></td>
 </tr>
 </tbody></table>
-<p>特にAPI-Bankスコアが7.30% → 22.10%と約3倍に上昇した点は、ツール呼び出し特化学習の効果を示しています。ツール使用にさらに特化した派生モデル<code>MiniCPM5-Claude-Toolusage</code>も別途提供されています。</p>
+<p>特にAPI-Bankのスコアが7.30%→22.10%と約3倍に上昇した点が、ツール呼び出し特化学習の効果を示している。ツール利用にさらに特化した派生モデル<code>MiniCPM5-Claude-Toolusage</code>も別途提供されている。</p>
 <hr>
 <h2>6. 長所</h2>
 <ul>
-<li><strong>超軽量ローカル駆動</strong>: 最小657MB(Q4_K_M)でCPU単独、ラズベリーパイ級SBC、旧型ノートPCでも実行可能</li>
-<li><strong>128K長文コンテキスト</strong>: 1B級モデルとしては異例の長いコンテキスト対応。大規模コードベース・長文文書分析に活用可能</li>
-<li><strong>ハイブリッド推論</strong>: Think/No Thinkモード切替で品質と速度をタスク別に選択</li>
-<li><strong>ツール呼び出し強化</strong>: 同級1Bオープンソースモデル対比、Tool Calling性能でSOTAを目指して設計</li>
-<li><strong>広いランタイム互換性</strong>: llama.cpp、Ollama、LM Studio、vLLM、Dockerなど事実上すべてのGGUFエコシステムに対応</li>
-<li><strong>Apache-2.0ライセンス</strong>: 商業利用および再配布への制約が少ない</li>
-<li><strong>テンプレート内蔵</strong>: チャットテンプレートがGGUFに含まれているため、別途設定なしに即座に使用可能</li>
+<li><strong>超軽量ローカル実行</strong>:最小657MB(Q4_K_M)でCPU単独、ラズベリーパイ級SBC、旧型ノートPCでも実行可能</li>
+<li><strong>128K長文コンテキスト</strong>:1B級モデルとしては異例な長いコンテキストをサポート。大規模コードベース・長文文書分析に活用可能</li>
+<li><strong>ハイブリッド推論</strong>:Think/No Thinkモード切り替えにより品質と速度を作業別に選択</li>
+<li><strong>ツール呼び出し強化</strong>:同級1Bオープンソースモデル比でTool Calling性能のSOTAを目指して設計</li>
+<li><strong>広いランタイム互換性</strong>:llama.cpp、Ollama、LM Studio、vLLM、Dockerなど事実上すべてのGGUFエコシステムをサポート</li>
+<li><strong>Apache-2.0ライセンス</strong>:商用利用および再配布への制約が少ない</li>
+<li><strong>テンプレート内蔵</strong>:チャットテンプレートがGGUFに含まれているため、別途設定なしで即座に使用可能</li>
 </ul>
 <hr>
-<h2>7. 短所および限界</h2>
+<h2>7. 短所と限界</h2>
 <ul>
-<li><strong>1B規模の根本的限界</strong>: 複雑な一般推論、多段階論理、幅広い世界知識でフロンティア級モデル(GPT-4、Claudeなど)との差が大きい。汎用アシスタントより特定タスク(コーディング補助、ツール呼び出しルーティング、分類)に限定して使用するのが現実的</li>
-<li><strong>Thinkingモードの付加出力</strong>: 推論ブロックが最終回答に先立って出力されるため、アプリケーション連携時に解析ロジックが追加で必要。推論ブロックの分だけトークン消費とレイテンシも増加</li>
-<li><strong>実効コンテキスト制約</strong>: 128Kは理論上の最大値であり、実際に使用可能な長さはランタイムとハードウェア(RAM/VRAM)に左右される。低スペック環境では8K前後の設定が現実的</li>
-<li><strong>量子化敏感度</strong>: 小型モデルの特性上、Q4以下の量子化で品質低下が比較的目立つ可能性がある(Q8_0推奨の理由)</li>
-<li><strong>言語カバレッジ</strong>: 公式対応言語は英語・中国語中心。韓国語性能は別途検証が必要</li>
-<li><strong>推論プロバイダー未対応</strong>: 現在HuggingFace Inference Providersにデプロイされていないため、クラウドAPI形式では使用不可(ローカル駆動専用)</li>
+<li><strong>1B規模の根本的な限界</strong>:複雑な一般推論、多段階論理、広範な世界知識においてフロンティア級モデル(GPT-4、Claudeなど)との差が大きい。汎用アシスタントよりも特定タスク(コーディング補助、ツール呼び出しルーティング、分類)に限定して使用するのが現実的</li>
+<li><strong>Thinkingモードの付加出力</strong>:推論ブロックが最終回答に先立って出力されるため、アプリケーション連携時にパースロジックが追加で必要。推論ブロック分だけトークン消費と遅延時間も増加する</li>
+<li><strong>実効コンテキストの制約</strong>:128Kは理論上の最大値であり、実際に使用可能な長さはランタイムとハードウェア(RAM/VRAM)に左右される。低スペック環境では8K前後の設定が現実的</li>
+<li><strong>量子化への敏感さ</strong>:小型モデルの特性上、Q4以下の量子化で品質低下が比較的目立つ可能性がある(Q8_0推奨の理由)</li>
+<li><strong>言語カバレッジ</strong>:公式サポート言語は英語・中国語が中心。日本語性能は別途検証が必要</li>
+<li><strong>推論プロバイダー未対応</strong>:現在HuggingFace Inference Providersにデプロイされておらず、クラウドAPI形式では利用不可(ローカル実行専用)</li>
 </ul>
 <hr>
 <h2>8. 活用シナリオの提案</h2>
@@ -301,19 +301,19 @@ vllm serve &quot;GnLOLot/MiniCPM5-1B-Claude-Opus-Fable5-Thinking-GGUF&quot;
 </thead>
 <tbody><tr>
 <td align="left">ローカルコーディングアシスタント(オフライン)</td>
-<td align="left">Q8_0 + Thinkモード、llama-server + エディタ連携</td>
+<td align="left">Q8_0 + Thinkモード、llama-server + エディター連携</td>
 </tr>
 <tr>
 <td align="left">オンデバイスツール呼び出しルーター</td>
 <td align="left">Q8_0 + Thinkモード(BFCL/API-Bankの強みを活用)</td>
 </tr>
 <tr>
-<td align="left">低レイテンシチャットボット/分類器</td>
+<td align="left">低遅延チャットボット / 分類器</td>
 <td align="left">Q5_K_M + No Thinkモード</td>
 </tr>
 <tr>
-<td align="left">大規模文書/コードベース要約</td>
-<td align="left">F16またはQ8_0 + 長い<code>-c</code>設定(RAM確保必須)</td>
+<td align="left">大規模文書・コードベースの要約</td>
+<td align="left">F16またはQ8_0 + 長い<code>-c</code>設定(RAM確保が必須)</td>
 </tr>
 <tr>
 <td align="left">エッジデバイス実験</td>
