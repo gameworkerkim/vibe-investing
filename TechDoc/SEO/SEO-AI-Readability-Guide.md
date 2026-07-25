@@ -1,3 +1,44 @@
+---
+title: "vibequant.cc SEO·AI 가독성 실무 가이드"
+subtitle: "검색엔진 최적화와 AI 검색·에이전트가 같은 기반으로 잘 읽는 사이트를 만드는 절차"
+description: "Cloudflare Pages 다중 서브도메인에서 GSC·네이버·IndexNow·AI Overviews까지 점검하는 SEO·AI 가독성 실무 가이드. Phase 1~7 체크리스트 포함."
+abstract: |
+  vibequant.cc 최적화 과정에서 정리한 SEO·AI 가독성 실무 절차다.
+  AI 검색용 별도 인덱스는 없으며, 인프라 점검 후 등록·색인·온페이지·AI 구조·국내 채널·측정의 순서가 핵심이다.
+  Google Search Central·네이버·IndexNow·Cloudflare 공식 근거를 기준으로 2026년 7월 시점의 체크리스트와 오해 정리를 담았다.
+summary_for_ai: |
+  Practical SEO and AI-readability runbook for vibequant.cc (Cloudflare Pages, multi-subdomain, KO/EN/JA/ZH).
+  Key claims: no separate AI index/submission; fix infra before GSC submit; cover Naver/Bing/IndexNow for Korean sites;
+  eight document-structure rules; Google-Extended does not remove AI Overviews; llms.txt is for agents not Google ranking.
+  Phases 1–7 plus P0–P3 checklist. Reference date: July 2026.
+date: 2026-07-25
+author: "Dennis Kim"
+lang: ko
+tags:
+  - SEO
+  - AI-Readability
+  - Google-Search-Console
+  - Cloudflare
+  - IndexNow
+  - hreflang
+  - Schema.org
+keywords:
+  - SEO
+  - AI Overviews
+  - Google Search Console
+  - IndexNow
+  - Cloudflare Pages
+  - robots.txt
+  - sitemap
+  - 네이버 서치어드바이저
+  - AI 가독성
+group: cloud-free
+featured: true
+featured_rank: 1
+schema_type: TechArticle
+draft: false
+---
+
 # vibequant.cc 검색엔진 최적화(SEO)를 진행하면서 알게된 노하우 — 검색엔진 최적화(SEO) 실무 가이드
 
 내가 만든 사이트에서 콘텐츠가 사람들에게 잘 도달하는 일은 중요하다. 특히 검색 엔진 최적화가 중요하다. 네이버 블로그, 네이버 카페의 경우 네이버 가두리이기 때문에 글로벌 도달과 검색에서 문제가 된다.
