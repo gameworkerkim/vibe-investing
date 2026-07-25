@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vercel Security Breach Analysis — VibeQuant</title>
+  <meta name="description" content="1. Executive Summary 2. Incident Overview 3. Incident Timeline 4. Attack Vector and Technical Analysis 5. Threat Actor Analysis: ShinyHunters 6.…" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0420-vercel-en/" />
+  <meta property="og:title" content="Vercel Security Breach Analysis" />
+  <meta property="og:description" content="1. Executive Summary 2. Incident Overview 3. Incident Timeline 4. Attack Vector and Technical Analysis 5. Threat Actor Analysis: ShinyHunters 6.…" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0420-vercel-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0420-vercel-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0420-vercel-en/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0420-vercel-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Vercel Security Breach Analysis","description":"1. Executive Summary 2. Incident Overview 3. Incident Timeline 4. Attack Vector and Technical Analysis 5. Threat Actor Analysis: ShinyHunters 6.…","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0420-vercel-en/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0420-VERCEL_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-04-20","dateModified":"2026-04-20","inLanguage":"en","keywords":"클라우드 · SaaS, EN, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 클라우드 · SaaS</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · SaaS</p>
+        <h1>Vercel Security Breach Analysis</h1>
+        <p class="article-dates"><time datetime="2026-04-20">발행 2026.04.20</time> · 주제 클라우드 · SaaS · EN · CTI</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0420-vercel-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0420-vercel-en/" data-lang="EN" aria-current="true">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">1. Executive Summary 2. Incident Overview 3. Incident Timeline 4. Attack Vector and Technical Analysis 5. Threat Actor Analysis: ShinyHunters 6.…</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>AI SaaS Supply Chain Attack and ShinyHunters Threat Assessment</strong>
+<em>Google Workspace OAuth Takeover via Context.ai and Potential NPM/GitHub Software Supply Chain Risk</em></p>
+</blockquote>
+<hr>
+<h2>Document Metadata</h2>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Report ID</strong></td>
+<td>CTI-2026-0420-VERCEL</td>
+</tr>
+<tr>
+<td><strong>Classification</strong></td>
+<td>TLP:GREEN — Cleared for external sharing</td>
+</tr>
+<tr>
+<td><strong>Severity</strong></td>
+<td><strong>HIGH</strong> — Supply-chain attack potential · broad impact on the developer ecosystem</td>
+</tr>
+<tr>
+<td><strong>Target Sector</strong></td>
+<td>Cloud development platforms · SaaS · Web3/blockchain projects</td>
+</tr>
+<tr>
+<td><strong>Incident Date</strong></td>
+<td>April 18–19, 2026 (public disclosure: 2026-04-19)</td>
+</tr>
+<tr>
+<td><strong>Threat Actor</strong></td>
+<td>Self-proclaimed ShinyHunters (possible UNC6240/UNC6661 linkage)</td>
+</tr>
+<tr>
+<td><strong>Publication Date</strong></td>
+<td>April 20, 2026</td>
+</tr>
+<tr>
+<td><strong>Publisher</strong></td>
+<td>Dennis Kim — <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">CYBER-THREAT-INTELLIGENCE-REPORT</a></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li><a href="#1-executive-summary">Executive Summary</a></li>
+<li><a href="#2-incident-overview">Incident Overview</a></li>
+<li><a href="#3-incident-timeline">Incident Timeline</a></li>
+<li><a href="#4-attack-vector-and-technical-analysis">Attack Vector and Technical Analysis</a></li>
+<li><a href="#5-threat-actor-analysis-shinyhunters">Threat Actor Analysis: ShinyHunters</a></li>
+<li><a href="#6-indicators-of-compromise-ioc">Indicators of Compromise (IoC)</a></li>
+<li><a href="#7-response-actions-and-security-recommendations">Response Actions and Security Recommendations</a></li>
+<li><a href="#8-implications-for-the-web3-and-crypto-industry">Implications for the Web3 and Crypto Industry</a></li>
+<li><a href="#9-conclusion-and-strategic-implications">Conclusion and Strategic Implications</a></li>
+<li><a href="#10-references-and-sources">References and Sources</a></li>
+<li><a href="#appendix-a-glossary">Appendix A. Glossary</a></li>
+</ol>
+<hr>
+<h2>1. Executive Summary</h2>
+<p>On April 19, 2026, <strong>Vercel Inc.</strong>, one of the leading frontend cloud development platforms, formally confirmed unauthorized access to its internal systems. The breach did not stem from a vulnerability in Vercel&#39;s own product; instead, it originated from a compromise of <strong>Context.ai</strong>, an AI-agent platform used by a Vercel employee. The resulting chain — <strong>Google Workspace OAuth token theft → environment variable enumeration → internal lateral movement</strong> — represents a textbook third-party SaaS supply chain attack.</p>
+<p>A threat actor self-identifying as ShinyHunters posted on BreachForums offering Vercel&#39;s internal database, access keys, source code, NPM tokens, GitHub tokens, and employee credentials <strong>for USD 2 million (≈ KRW 2.9 billion)</strong>. Vercel CEO Guillermo Rauch publicly assessed that, given the attacker&#39;s operational velocity and deep understanding of Vercel&#39;s internal systems, the intrusion was <strong>very likely significantly accelerated by AI.</strong>&gt; ⚠<strong>Core Risk</strong>: If NPM and GitHub tokens were in fact exfiltrated, the attacker could inject malicious code into the deployment pipeline of the entire Next.js-based ecosystem — extending far beyond Vercel itself. This holds the potential to escalate into a global software supply chain incident comparable to SolarWinds or Salesloft-Drift. Vercel has officially stated that Next.js, Turbopack, and its open-source supply chain remain safe, but the impact investigation is still ongoing.</p>
+<h3>Key Judgments</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Judgment</th>
+<th>Basis and Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>KJ-1</strong></td>
+<td>Initial access originated from the Context.ai compromise; there is no evidence of a vulnerability in Vercel&#39;s own product.</td>
+<td>Explicitly stated in Vercel&#39;s official security bulletin and CEO statement.<strong>Confidence: High</strong></td>
+</tr>
+<tr>
+<td><strong>KJ-2</strong></td>
+<td>Environment variables classified as &quot;non-sensitive&quot; served as the decisive pivot for privilege escalation.</td>
+<td>Publicly acknowledged by the CEO on X (Twitter). &quot;Non-sensitive&quot; variables are not encrypted at rest and are therefore readable.<strong>Confidence: High</strong></td>
+</tr>
+<tr>
+<td><strong>KJ-3</strong></td>
+<td>If NPM/GitHub token theft is confirmed, a secondary supply-chain attack against the global JavaScript ecosystem becomes a realistic scenario.</td>
+<td>Based on claims in the BreachForums listing. Vercel&#39;s supply chain audit found Next.js and Turbopack safe.<strong>Confidence: Medium</strong></td>
+</tr>
+<tr>
+<td><strong>KJ-4</strong></td>
+<td>The seller&#39;s &quot;ShinyHunters&quot; self-identification may be brand hijacking, but the TTPs are consistent with the 2025–2026 campaigns.</td>
+<td>Actors linked to recent ShinyHunters operations denied involvement to BleepingComputer. Mandiant clusters activity as UNC6240, UNC6661, and UNC6671.<strong>Confidence: Medium</strong></td>
+</tr>
+<tr>
+<td><strong>KJ-5</strong></td>
+<td>This incident will become a reference case for the emerging attack pattern: &quot;AI SaaS → identity plane → development ecosystem.&quot;</td>
+<td>A chain of structurally identical incidents exists, including Salesloft-Drift (Aug 2025), Gainsight, Mixpanel, and Anodot.<strong>Confidence: High</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Incident Overview</h2>
+<h3>2.1 Victim Profile</h3>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Company</strong></td>
+<td>Vercel Inc.</td>
+</tr>
+<tr>
+<td><strong>Core Business</strong></td>
+<td>Cloud hosting and deployment infrastructure centered on JavaScript frameworks (the developer of Next.js)</td>
+</tr>
+<tr>
+<td><strong>Flagship Products</strong></td>
+<td>Next.js · Turbopack · Serverless Functions · Edge Computing · CI/CD Pipeline</td>
+</tr>
+<tr>
+<td><strong>IPO Status</strong></td>
+<td>Preparing for a 2026 IPO (days after reporting a 240% revenue surge)</td>
+</tr>
+<tr>
+<td><strong>Disclosure Channels</strong></td>
+<td>Official security bulletin (vercel.com) + CEO statement on X (Twitter) · BreachForums listing</td>
+</tr>
+<tr>
+<td><strong>Response Partners</strong></td>
+<td>Google Mandiant (incident response) · additional security firms · law enforcement notification</td>
+</tr>
+</tbody></table>
+<h3>2.2 Attack Chain Summary</h3>
+<p>The attack unfolded in five distinct stages. Each stage is grounded in Vercel&#39;s official security bulletin and in CEO Guillermo Rauch&#39;s public account of the incident.</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Label</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Step 1</strong></td>
+<td>Third-Party Compromise</td>
+<td>The AI-agent platform Context.ai was breached first, placing its Google Workspace OAuth application permissions under attacker control.</td>
+</tr>
+<tr>
+<td><strong>Step 2</strong></td>
+<td>Account Takeover (ATO)</td>
+<td>Through the OAuth integration, the attacker hijacked the Google Workspace account of a Vercel employee who used Context.ai.</td>
+</tr>
+<tr>
+<td><strong>Step 3</strong></td>
+<td>Lateral Movement</td>
+<td>Using the compromised employee&#39;s Google Workspace identity, the attacker accessed Vercel&#39;s internal environments (dashboards and management surfaces).</td>
+</tr>
+<tr>
+<td><strong>Step 4</strong></td>
+<td>Env Var Enumeration</td>
+<td>The attacker enumerated and read environment variables marked as &quot;non-sensitive&quot; by developers — stored in plaintext.</td>
+</tr>
+<tr>
+<td><strong>Step 5</strong></td>
+<td>Privilege Escalation + Exfil</td>
+<td>Secrets and tokens harvested from enumerated variables were used to escalate privileges and exfiltrate data. The stolen data was subsequently listed for sale on BreachForums.</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>📌 The defining feature of this attack chain is that <strong>identity</strong> has become the new center of the attack surface. The attacker did not breach Vercel&#39;s network perimeter. A single OAuth-connected SaaS compromise became the bridge from Google Workspace into Vercel&#39;s management console — structurally identical to the Salesloft-Drift incident of August 2025.</p>
+</blockquote>
+<hr>
+<h2>3. Incident Timeline</h2>
+<p>The following table summarizes the publicly disclosed key events in chronological order. All times are based on media reporting and the CEO&#39;s public statements.</p>
+<table>
+<thead>
+<tr>
+<th>Timestamp (UTC / ET)</th>
+<th>Event</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Undisclosed (pre-event)</strong></td>
+<td>Context.ai compromise occurs. A security researcher notifies Vercel; Vercel launches an internal investigation immediately.</td>
+</tr>
+<tr>
+<td><strong>2026-04-19 02:02 ET</strong></td>
+<td>A BreachForums administrator account posts a listing titled <em>&quot;Vercel Database Access Key &amp; Source Code - 19 Apr&quot;</em>. Asking price: USD 2 million (flexible from USD 500k in BTC), with a &quot;first come, single buyer&quot; condition.</td>
+</tr>
+<tr>
+<td><strong>2026-04-19 (afternoon)</strong></td>
+<td>Vercel publishes an official security bulletin titled <em>&quot;Vercel April 2026 security incident,&quot;</em> acknowledging an incident &quot;affecting a limited subset of customers&quot; and beginning direct notification of affected customers.</td>
+</tr>
+<tr>
+<td><strong>2026-04-19 18:14 ET</strong></td>
+<td>Vercel publishes an IoC: Context.ai&#39;s Google Workspace OAuth App ID is formally identified — <code>110671459871-30f1spbu0hptbs60cb4vsmv79i7bbvqj.apps.googleusercontent.com</code>.</td>
+</tr>
+<tr>
+<td><strong>2026-04-19 19:21 ET</strong></td>
+<td>CEO Guillermo Rauch publishes a detailed incident rundown on X, explicitly naming the Context.ai → Google Workspace → Vercel environment variable path.</td>
+</tr>
+<tr>
+<td><strong>2026-04-20 04:08 UTC</strong></td>
+<td>The CEO confirms supply-chain audit results: Next.js, Turbopack, and open-source projects remain safe — directly rebutting the BreachForums framing of a &quot;Next.js supply-chain risk.&quot;</td>
+</tr>
+<tr>
+<td><strong>2026-04-20 (this report)</strong></td>
+<td>Mandiant-led incident response is ongoing. Claims circulate on Telegram that the seller directly demanded ransom from Vercel. Vercel has not publicly confirmed any negotiation.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Attack Vector and Technical Analysis</h2>
+<h3>4.1 The Role of Context.ai and OAuth Delegation Abuse</h3>
+<p>Context.ai is an AI-agent platform for enterprise workflow automation. It integrates with Google Workspace via OAuth and obtains delegated scopes across users&#39; mail, calendar, and drive data. In this incident, by compromising either Context.ai&#39;s own systems or its OAuth application credentials, the attacker reached a position from which <strong>tokens belonging to every Google Workspace user who had consented to the app</strong>could be indirectly obtained.<strong>Intrinsic risks of this architecture:</strong></p>
+<table>
+<thead>
+<tr>
+<th>Risk Factor</th>
+<th>Technical Explanation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Longevity of OAuth tokens</strong></td>
+<td>Refresh tokens are not automatically invalidated by user logout or password changes. Once stolen, they grant persistent access that effectively bypasses MFA.</td>
+</tr>
+<tr>
+<td><strong>Secondary SaaS lateral spread</strong></td>
+<td>A Google Workspace account takeover cascades into ATOs on every SaaS tied to &quot;Sign in with Google&quot; — Vercel, Slack, Figma, and beyond.</td>
+</tr>
+<tr>
+<td><strong>&quot;Invisible&quot; attack surface</strong></td>
+<td>OAuth app usage has low administrative visibility, and post-consent logging is limited. This compounds the Shadow IT problem created when users connect AI tools autonomously.</td>
+</tr>
+<tr>
+<td><strong>AI agent permission amplification</strong></td>
+<td>AI platforms tend to request broad scopes (<code>gmail.readonly</code>, <code>drive</code>, etc.) in the name of efficiency, giving a single compromise an outsized blast radius.</td>
+</tr>
+</tbody></table>
+<h3>4.2 The Weakness of &quot;Non-Sensitive&quot; Environment Variables</h3>
+<p>Vercel maintains a principle that all customer environment variables are encrypted at rest. However, for developer convenience, Vercel offers two classes — &quot;sensitive&quot; and &quot;non-sensitive&quot; — and variables marked as the latter are <strong>readable in plaintext</strong>, not encrypted. The CEO publicly acknowledged that this &quot;non-sensitive&quot; classification was abused as the attacker&#39;s pivot for privilege escalation.</p>
+<blockquote>
+<p>🔑 <strong>Practical implication</strong>: Many developers classify RPC endpoints, internal API URLs, external service IDs, and analytics keys as &quot;non-sensitive.&quot; Yet such values provide attackers with a map of the internal architecture, and some grant a level of access that permits data retrieval from downstream services without additional secrets. <strong>In Web3 projects especially, RPC endpoints and Graph API keys are frequently — and incorrectly — classified as non-sensitive.</strong></p>
+</blockquote>
+<h3>4.3 Claimed Data Types and Supply-Chain Blast Radius</h3>
+<p>According to the evidence and claims put forward by the BreachForums seller, the exfiltrated data is said to include the items below. Note that Vercel has not officially confirmed source-code theft, and the attacker&#39;s screenshot more closely resembles an internal IDP (Identity Provider) user schema.</p>
+<table>
+<thead>
+<tr>
+<th>Data Type</th>
+<th>Attacker&#39;s Claim</th>
+<th>Vercel&#39;s Official Position</th>
+<th>Supply-Chain Risk</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Employee account data (580 records)</td>
+<td>Publicly posted (names, emails, activity timestamps)</td>
+<td>Partial exposure acknowledged</td>
+<td>🟡 <strong>Medium</strong></td>
+</tr>
+<tr>
+<td>Internal database schema</td>
+<td>Screenshot provided</td>
+<td>Not confirmed</td>
+<td>🟡 <strong>Medium</strong></td>
+</tr>
+<tr>
+<td>Environment variables (non-sensitive)</td>
+<td>Access claimed</td>
+<td>Officially acknowledged</td>
+<td>🔴 <strong>High</strong></td>
+</tr>
+<tr>
+<td>NPM tokens</td>
+<td>Offered for sale</td>
+<td>Not confirmed · audit result &quot;safe&quot;</td>
+<td>🔴 <strong>Very High</strong></td>
+</tr>
+<tr>
+<td>GitHub tokens</td>
+<td>Offered for sale</td>
+<td>Not confirmed · audit result &quot;safe&quot;</td>
+<td>🔴 <strong>Very High</strong></td>
+</tr>
+<tr>
+<td>Source code</td>
+<td>Offered for sale</td>
+<td>Denied (unconfirmed)</td>
+<td>🟠 <strong>High</strong></td>
+</tr>
+<tr>
+<td>Customer API keys</td>
+<td>Offered for sale</td>
+<td>Partial credential exposure notified</td>
+<td>🔴 <strong>High</strong></td>
+</tr>
+<tr>
+<td>Sensitive environment variables (encrypted)</td>
+<td>No claim of access</td>
+<td>No evidence of access</td>
+<td>🟢 <strong>Low</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Threat Actor Analysis: ShinyHunters</h2>
+<h3>5.1 Overview and 2026 Activity</h3>
+<p>ShinyHunters is a cybercriminal brand that emerged around 2020, originally centered on bulk data theft and sale via BreachForums. Beginning in 2024, the group pivoted toward cloud-SaaS-based extortion and is today regarded as one of the most active corporate data-theft operations. Google Mandiant (GTIG) tracks activity self-attributed to ShinyHunters not as a single organization but as several clusters — <strong>UNC6040, UNC6240, UNC6661, and UNC6671</strong>.</p>
+<h3>5.2 Major 2025–2026 Campaigns</h3>
+<table>
+<thead>
+<tr>
+<th>Period</th>
+<th>Campaign</th>
+<th>Core TTPs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>2024 (Snowflake)</strong></td>
+<td>AT&amp;T, Ticketmaster, Santander, and 100+ others</td>
+<td>Credential stuffing against Snowflake customer accounts; systematic targeting of non-MFA accounts.</td>
+</tr>
+<tr>
+<td><strong>2025.08 (Drift)</strong></td>
+<td>Salesloft Drift → 760+ Salesforce instances</td>
+<td>Theft of Drift OAuth tokens → broad access to connected Salesforce and Google Workspace accounts. Cloudflare, Palo Alto, Zscaler, and Proofpoint were among the victims.</td>
+</tr>
+<tr>
+<td><strong>2025.11 (Mixpanel)</strong></td>
+<td>Analytics data exfiltration affecting PornHub, OpenAI, and others</td>
+<td>Smishing against Mixpanel employees to exfiltrate analytics datasets.</td>
+</tr>
+<tr>
+<td><strong>2026.01 (Vishing)</strong></td>
+<td>Vishing against Okta and enterprise SSO</td>
+<td>IT-support impersonation over voice calls to harvest SSO + MFA codes, followed by attacker device MFA enrollment.</td>
+</tr>
+<tr>
+<td><strong>2026.03 (Salesforce)</strong></td>
+<td>300–400 Salesforce Experience Cloud customers</td>
+<td>Weaponization of Mandiant&#39;s open-source AuraInspector audit tool. Unauthenticated queries against <code>/s/sfsites/aura</code> endpoints to exfiltrate CRM data.</td>
+</tr>
+<tr>
+<td><strong>2026.03 (TELUS)</strong></td>
+<td>TELUS Digital, 1 PB data theft</td>
+<td>Telco/BPO data, including FBI background check records. Ransom demand of USD 65 million.</td>
+</tr>
+<tr>
+<td><strong>2026.04 (Anodot)</strong></td>
+<td>Rockstar Games Snowflake (via Anodot)</td>
+<td>Customer Snowflake access via the Anodot SaaS analytics platform — the same &quot;third-party SaaS → core data&quot; pattern.</td>
+</tr>
+<tr>
+<td><strong>2026.04.19 (Vercel)</strong></td>
+<td><strong>Vercel (via Context.ai) — this incident</strong></td>
+<td><strong>AI-agent platform OAuth compromise → Google Workspace → Vercel environment variables. The AI-era evolution of the 2025–2026 pattern.</strong></td>
+</tr>
+</tbody></table>
+<h3>5.3 Shared Attack Pattern Elements</h3>
+<p>ShinyHunters-branded campaigns in 2025–2026 repeatedly exhibit the following common elements. The Vercel incident is a natural evolution of this pattern.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Common TTP</th>
+<th>Application in Vercel Incident</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Third-party SaaS as the initial contact point</td>
+<td>✅ Context.ai</td>
+</tr>
+<tr>
+<td>2</td>
+<td>OAuth/SSO token abuse to bypass MFA</td>
+<td>✅ Google Workspace OAuth</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Cloud-to-cloud lateral movement between SaaS</td>
+<td>✅ Workspace → Vercel management surface</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Ransom demand within 72 hours of data theft</td>
+<td>✅ BreachForums USD 2M sale and extortion</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Simultaneous exposure via DLS and forums</td>
+<td>✅ BreachForums + Telegram in parallel</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Leverage of reputational damage against the victim</td>
+<td>✅ Timing aligned with Vercel&#39;s imminent IPO</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>⚠ According to BleepingComputer (April 19, 2026), actors linked to recent ShinyHunters operations have denied involvement in the Vercel incident. This suggests that the &quot;ShinyHunters&quot; brand no longer refers to a single organization, and that unrelated threat actors increasingly borrow it for credibility. <strong>A definitive attribution judgment should await Mandiant&#39;s final analysis.</strong></p>
+</blockquote>
+<hr>
+<h2>6. Indicators of Compromise (IoC)</h2>
+<p>The following IoC was confirmed in Vercel&#39;s official security bulletin (2026-04-19) and in related reporting. Google Workspace administrators should audit the OAuth App ID below immediately.</p>
+<h3>6.1 Google Workspace OAuth Application (Primary IoC)</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>OAuth Client ID</strong></td>
+<td><code>110671459871-30f1spbu0hptbs60cb4vsmv79i7bbvqj.apps.googleusercontent.com</code></td>
+</tr>
+<tr>
+<td><strong>Associated Service</strong></td>
+<td>Context.ai (AI-agent platform)</td>
+</tr>
+<tr>
+<td><strong>Risk</strong></td>
+<td>If a user consented to this app, the attacker can access Google Workspace APIs in that user&#39;s context.</td>
+</tr>
+</tbody></table>
+<h3>6.2 Observed TTPs (MITRE ATT&amp;CK Mapping)</h3>
+<table>
+<thead>
+<tr>
+<th>ATT&amp;CK ID</th>
+<th>Tactic / Technique</th>
+<th>Application in This Incident</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>T1199</code></td>
+<td>Trusted Relationship</td>
+<td>Abuse of the Context.ai trust relationship</td>
+</tr>
+<tr>
+<td><code>T1528</code></td>
+<td>Steal Application Access Token</td>
+<td>Theft of Google Workspace OAuth tokens</td>
+</tr>
+<tr>
+<td><code>T1550.001</code></td>
+<td>Use Alternate Authentication: App Token</td>
+<td>Impersonation of the Vercel employee via OAuth token</td>
+</tr>
+<tr>
+<td><code>T1078.004</code></td>
+<td>Valid Accounts: Cloud Accounts</td>
+<td>Internal access using a legitimate employee Vercel account</td>
+</tr>
+<tr>
+<td><code>T1580</code></td>
+<td>Cloud Infrastructure Discovery</td>
+<td>Enumeration of Vercel&#39;s internal environment variables</td>
+</tr>
+<tr>
+<td><code>T1552.001</code></td>
+<td>Credentials in Files</td>
+<td>Harvesting of secrets from &quot;non-sensitive&quot; environment variables</td>
+</tr>
+<tr>
+<td><code>T1567</code></td>
+<td>Exfiltration Over Web Service</td>
+<td>Data exfiltration and listing on BreachForums</td>
+</tr>
+<tr>
+<td><code>T1657</code></td>
+<td>Financial Theft / Extortion</td>
+<td>USD 2M ransom demand and Telegram-based extortion</td>
+</tr>
+</tbody></table>
+<h3>6.3 Recommended Audit Queries</h3>
+<p>Google Workspace administrators should verify the usage history of the OAuth app at the following locations:</p>
+<ul>
+<li>Admin Console → Security → API controls → Domain-wide delegation</li>
+<li>Admin Console → Security → API controls → Manage Third-Party App Access</li>
+<li>Admin Console → Reports → Audit log → OAuth Log Events</li>
+<li>Users Report → Security → Connected Applications (per-user)</li>
+</ul>
+<hr>
+<h2>7. Response Actions and Security Recommendations</h2>
+<p>The recommendations below are grounded in Vercel&#39;s official response, the CEO&#39;s public statements, Mandiant guidance, and <strong>industry best practices (NIST SP 800-61 and 800-207)</strong>. They are prioritized as P0 (immediate), P1 (within 24 hours), and P2 (within 7 days).</p>
+<h3>7.1 P0 — Immediate Actions for Vercel Customers</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Action</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>P0-1</strong></td>
+<td>Secret rotation</td>
+<td>Immediately rotate all API keys, tokens, DB credentials, and passwords registered on the Vercel dashboard. NPM and GitHub tokens are the top priority.</td>
+</tr>
+<tr>
+<td><strong>P0-2</strong></td>
+<td>Environment variable reclassification</td>
+<td>Audit every &quot;non-sensitive&quot; environment variable and reclassify any that contain secrets as &quot;Sensitive.&quot;</td>
+</tr>
+<tr>
+<td><strong>P0-3</strong></td>
+<td>OAuth app audit</td>
+<td>Verify and remove usage history of Client ID <code>110671459871-30f1spbu0hptbs60cb4vsmv79i7bbvqj...</code> within Google Workspace.</td>
+</tr>
+<tr>
+<td><strong>P0-4</strong></td>
+<td>Deployment log review</td>
+<td>Review Vercel deployment pipeline logs for the past 14 days for abnormal deployments, newly added environments, and permission changes.</td>
+</tr>
+<tr>
+<td><strong>P0-5</strong></td>
+<td>Strengthen Deployment Protection</td>
+<td>Set Deployment Protection to Standard or higher. Immediately rotate any existing bypass tokens.</td>
+</tr>
+</tbody></table>
+<h3>7.2 P1 — Within 24 Hours (For All SaaS-Dependent Organizations)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Action</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>P1-1</strong></td>
+<td>Revisit OAuth app allowlist policy</td>
+<td>Switch Google Workspace / Microsoft 365 &quot;App access control&quot; to allowlist mode. Bulk-revoke unnecessary AI-agent OAuth permissions.</td>
+</tr>
+<tr>
+<td><strong>P1-2</strong></td>
+<td>Enforce MFA everywhere</td>
+<td>Apply hardware-key (FIDO2) based MFA across all Vercel, GitHub, NPM, and Google Workspace accounts.</td>
+</tr>
+<tr>
+<td><strong>P1-3</strong></td>
+<td>AI tooling inventory</td>
+<td>Conduct a full census of approved and unapproved AI-agent tools. Tier risk by data access scope.</td>
+</tr>
+<tr>
+<td><strong>P1-4</strong></td>
+<td>Enable secret scanning</td>
+<td>Scan all repositories with GitHub Advanced Security or TruffleHog/Gitleaks. Enforce Push Protection.</td>
+</tr>
+<tr>
+<td><strong>P1-5</strong></td>
+<td>Minimize NPM/GitHub token scope</td>
+<td>Move from classic PATs to fine-grained PATs, GitHub Apps, and OIDC federation. Use granular publish-only tokens for NPM.</td>
+</tr>
+</tbody></table>
+<h3>7.3 P2 — Strategic (Within 7 Days, Structural Change)</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Action</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>P2-1</strong></td>
+<td>Adopt Zero Trust architecture</td>
+<td>Require Identity + Device + Context verification for all SaaS access. Implement re-authentication based on session risk.</td>
+</tr>
+<tr>
+<td><strong>P2-2</strong></td>
+<td>Supply chain due diligence</td>
+<td>Require SOC 2 Type II, ISO 27001, and evidence of OAuth scope minimization from AI SaaS vendors.</td>
+</tr>
+<tr>
+<td><strong>P2-3</strong></td>
+<td>Isolate CI/CD pipelines</td>
+<td>Migrate build environments to independent OIDC-federation-based environments, separated from individual developer accounts.</td>
+</tr>
+<tr>
+<td><strong>P2-4</strong></td>
+<td>Incident tabletop exercises</td>
+<td>Run Vercel-scenario tabletop exercises. Validate the integrated legal, PR, and technical response workflow.</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. Implications for the Web3 and Crypto Industry</h2>
+<p>Vercel has become the de facto standard for frontend deployment infrastructure across the global Web3 and DeFi ecosystem. Many DeFi protocols, NFT marketplaces, and stablecoin project web interfaces run on top of Vercel hosting. This incident raises distinctive risks for the crypto ecosystem, summarized below.</p>
+<h3>8.1 Risks Specific to Crypto Projects</h3>
+<table>
+<thead>
+<tr>
+<th>Risk Type</th>
+<th>Concrete Scenario</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Frontend hijack</strong></td>
+<td>If an attacker obtains deployment tokens, they can modify a DApp&#39;s frontend JavaScript to redirect user signature requests to attacker-controlled wallets — a potential replay of the BadgerDAO incident (2021, USD 120M loss).</td>
+</tr>
+<tr>
+<td><strong>RPC endpoint exposure</strong></td>
+<td>If Alchemy/Infura/QuickNode RPC URLs are misclassified as &quot;non-sensitive&quot; environment variables, attackers can monitor traffic, intercept MEV, and conduct denial-of-service attacks.</td>
+</tr>
+<tr>
+<td><strong>Admin wallet address leakage</strong></td>
+<td>If admin address lists for multisig or timelock contracts are stored in environment variables, attackers can leverage them for targeted social engineering.</td>
+</tr>
+<tr>
+<td><strong>Price oracle API keys</strong></td>
+<td>Theft of Chainlink Data Feeds, CoinGecko Pro, or CoinMarketCap API keys can enable price manipulation or DoS-induced liquidation triggers.</td>
+</tr>
+<tr>
+<td><strong>Subgraph access permissions</strong></td>
+<td>Exposure of access keys for The Graph-based indexers can inflate query costs and facilitate data integrity attacks.</td>
+</tr>
+<tr>
+<td><strong>KYC/AML data</strong></td>
+<td>Exposure of credentials to KYC vendors used by CEXs, RWA projects, and stablecoin issuers can cause secondary PII leakage.</td>
+</tr>
+</tbody></table>
+<h3>8.2 Perspective of the Korean Web3 Ecosystem</h3>
+<p>A substantial portion of Korean Web3 projects rely on Vercel-based hosting. This includes the frontends of tokens listed on DAXA member exchanges and the official websites of token issuers. The following actions are particularly recommended in connection with this incident:</p>
+<table>
+<thead>
+<tr>
+<th>Stakeholder</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>DAXA member exchanges</strong></td>
+<td>Consider adding &quot;deployment infrastructure SaaS dependency and supply-chain incident response capability&quot; to the listing review security checklist.</td>
+</tr>
+<tr>
+<td><strong>Domestic Web3 issuers</strong></td>
+<td>Re-examine reliance on frontend deployment SaaS such as Vercel, Cloudflare Pages, and Netlify. Re-audit environment variable classifications and rotate deployment tokens.</td>
+</tr>
+<tr>
+<td><strong>Stablecoin projects</strong></td>
+<td>For Proof of Reserves (PoR) dashboards hosted on Vercel, audit data feed integrity and verify WAF / SRI enforcement.</td>
+</tr>
+<tr>
+<td><strong>Legal and compliance</strong></td>
+<td>Reassess PIPC and KoFIU notification triggers from a supply-chain compromise perspective. Reevaluate possible designation as a substantive custodian under the Specific Financial Information Act (특금법).</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>💡 <strong>Recommendation</strong>: This incident reaffirms that &quot;infrastructure supply chain&quot; requires the same level of continuous security validation as protocol auditing. <strong>Risk modeling for Web3 projects must extend beyond smart contract audits to cover the full chain — hosting, deployment, CDN, DNS, and wallet-integration SDKs.</strong></p>
+</blockquote>
+<hr>
+<h2>9. Conclusion and Strategic Implications</h2>
+<p>The Vercel incident is more than a single corporate breach; it exposes a <strong>structural inflection point in enterprise security in the age of AI</strong>. Three strategic lessons emerge.</p>
+<h3>Lesson 1 — &quot;AI agent = supreme-privilege insider&quot;</h3>
+<p>AI workflow tools demand broad OAuth access to email, files, calendars, and CRM in the name of productivity. In effect, this is equivalent to leasing a &quot;virtual employee with top-tier privileges&quot; from an external vendor. When that vendor is breached, the blast radius instantly expands across the organization. Any AI adoption decision must be accompanied by a threat model that explicitly includes a &quot;third-party SaaS compromise&quot; scenario.</p>
+<h3>Lesson 2 — There is no such thing as &quot;non-sensitive&quot;</h3>
+<p>As publicly acknowledged by the CEO, &quot;non-sensitive&quot; environment variables were the decisive pivot for privilege escalation. Attackers assemble an attack-surface map by aggregating &quot;non-sensitive&quot; fragments. From a Zero Trust perspective, every environment variable, every log, and every piece of metadata must be treated as a potential secret.</p>
+<h3>Lesson 3 — Supply chain attacks target the &quot;apex of the pyramid&quot;</h3>
+<p>Throughout 2025–2026, ShinyHunters has repeatedly struck SaaS &quot;hubs&quot; — Salesloft, Gainsight, Mixpanel, Anodot, and now Context.ai — producing cascading effects across hundreds to thousands of downstream organizations. This is economically rational from the attacker&#39;s standpoint. Defenders, in turn, must move beyond perimeter defense and maintain a Third-Party Risk Management (TPRM) program that continuously evaluates &quot;the security posture of the entire trusted vendor ecosystem.&quot;</p>
+<blockquote>
+<p>📍 <strong>Final judgment</strong>: The officially disclosed impact is limited to &quot;a limited subset of customers,&quot; yet depending on whether NPM/GitHub tokens were exfiltrated, a broader reassessment of deployment pipeline trustworthiness across the global Next.js application base may be warranted. <strong>Continued monitoring of Vercel- and Context.ai-related disclosures is recommended for at least the next 30 days.</strong> This report will be updated as additional information becomes available.</p>
+</blockquote>
+<hr>
+<h2>10. References and Sources</h2>
+<p>This report was produced by cross-referencing primary materials disclosed on April 19–20, 2026 with secondary reporting from dedicated security outlets.</p>
+<h3>10.1 Vercel Official Materials and Primary Reporting</h3>
+<ol>
+<li><em>BleepingComputer</em>, &quot;Vercel confirms breach as hackers claim to be selling stolen data.&quot; <a href="https://www.bleepingcomputer.com/news/security/vercel-confirms-breach-as-hackers-claim-to-be-selling-stolen-data/">https://www.bleepingcomputer.com/news/security/vercel-confirms-breach-as-hackers-claim-to-be-selling-stolen-data/</a></li>
+<li><em>The Hacker News</em>, &quot;Vercel Breach Tied to Context AI Hack Exposes Limited Customer Credentials.&quot; <a href="https://thehackernews.com/2026/04/vercel-breach-tied-to-context-ai-hack.html">https://thehackernews.com/2026/04/vercel-breach-tied-to-context-ai-hack.html</a></li>
+<li><em>CCLeaks</em> (Detailed Incident Rundown), &quot;Vercel Discloses April 2026 Breach of Internal Systems.&quot; <a href="https://ccleaks.com/news/vercel-april-2026-internal-systems-security-incident">https://ccleaks.com/news/vercel-april-2026-internal-systems-security-incident</a></li>
+<li><em>Cryptika Cybersecurity</em>, &quot;Vercel Confirms Data Breach — Hackers Claim Access to Internal Systems.&quot; <a href="https://www.cryptika.com/vercel-confirms-data-breach-hackers-claim-access-to-internal-systems/">https://www.cryptika.com/vercel-confirms-data-breach-hackers-claim-access-to-internal-systems/</a></li>
+<li><em>The Information</em>, &quot;Vercel Confirms Breach After Hackers List Stolen Data for $2M.&quot; <a href="https://www.theinformation.com/briefings/vercel-confirms-breach-hackers-list-stolen-data-2m">https://www.theinformation.com/briefings/vercel-confirms-breach-hackers-list-stolen-data-2m</a></li>
+<li><em>The Block</em>, &quot;Web3 hosting backbone Vercel confirms breach as supposed hacker demands $2M ransom.&quot; <a href="https://www.theblock.co/post/398010/web3-hosting-backbone-vercel-confirms-breach-as-supposed-hacker-demands-2-million-ransom">https://www.theblock.co/post/398010/web3-hosting-backbone-vercel-confirms-breach-as-supposed-hacker-demands-2-million-ransom</a></li>
+<li><em>Cryptopolitan</em>, &quot;Cloud Dev platform breach tied to compromised AI tool raises alarm.&quot; <a href="https://www.cryptopolitan.com/vercel-breach-tied-to-compromised-ai-tool/">https://www.cryptopolitan.com/vercel-breach-tied-to-compromised-ai-tool/</a></li>
+<li><em>Startup Fortune</em>, &quot;Vercel Breach Exposes AI Tool Supply Chain Risk Ahead of IPO.&quot; <a href="https://startupfortune.com/vercel-breach-exposes-ai-tool-supply-chain-risk-ahead-of-ipo/">https://startupfortune.com/vercel-breach-exposes-ai-tool-supply-chain-risk-ahead-of-ipo/</a></li>
+<li><em>Phemex News</em>, &quot;Vercel Breach Tied to Compromised AI Tool OAuth App.&quot; <a href="https://phemex.com/news/article/vercel-security-breach-linked-to-compromised-thirdparty-ai-tool-74421">https://phemex.com/news/article/vercel-security-breach-linked-to-compromised-thirdparty-ai-tool-74421</a></li>
+<li><em>MEXC News</em>, &quot;Vercel Security Breach Raises Concerns for Crypto Projects.&quot; <a href="https://www.mexc.co/news/1038486">https://www.mexc.co/news/1038486</a></li>
+</ol>
+<h3>10.2 ShinyHunters Threat Actor Analysis</h3>
+<ol start="11">
+<li><em>Wikipedia</em> (latest revision), &quot;ShinyHunters.&quot; <a href="https://en.wikipedia.org/wiki/ShinyHunters">https://en.wikipedia.org/wiki/ShinyHunters</a></li>
+<li><em>Google Cloud Blog / Mandiant Threat Intelligence Group</em>, &quot;Tracking the Expansion of ShinyHunters-Branded SaaS Data Theft.&quot; <a href="https://cloud.google.com/blog/topics/threat-intelligence/expansion-shinyhunters-saas-data-theft">https://cloud.google.com/blog/topics/threat-intelligence/expansion-shinyhunters-saas-data-theft</a></li>
+<li><em>Salesforce Ben</em>, &quot;ShinyHunters &#39;Breach 400 Companies&#39; via Salesforce Experience Cloud.&quot; <a href="https://www.salesforceben.com/shinyhunters-breach-400-companies-via-salesforce-experience-cloud/">https://www.salesforceben.com/shinyhunters-breach-400-companies-via-salesforce-experience-cloud/</a></li>
+<li><em>Computer Weekly</em>, &quot;ShinyHunters Salesforce cyber attacks explained.&quot; <a href="https://www.computerweekly.com/feature/ShinyHunters-Salesforce-cyber-attacks-explained-What-you-need-to-know">https://www.computerweekly.com/feature/ShinyHunters-Salesforce-cyber-attacks-explained-What-you-need-to-know</a></li>
+<li><em>Help Net Security</em>, &quot;ShinyHunters claims new campaign targeting Salesforce Experience Cloud sites.&quot; <a href="https://www.helpnetsecurity.com/2026/03/11/shinyhunters-salesforce-aura-data-breach/">https://www.helpnetsecurity.com/2026/03/11/shinyhunters-salesforce-aura-data-breach/</a></li>
+<li><em>Varonis</em>, &quot;What Salesforce Organizations Need to Know About ShinyHunters and Vishing.&quot; <a href="https://www.varonis.com/blog/salesforce-vishing-threat-unc604">https://www.varonis.com/blog/salesforce-vishing-threat-unc604</a></li>
+<li><em>State of Surveillance</em>, &quot;ShinyHunters Weaponized a Security Tool to Breach 400 Companies via Salesforce.&quot; <a href="https://stateofsurveillance.org/news/shinyhunters-salesforce-aura-400-companies-security-tool-weaponized-2026/">https://stateofsurveillance.org/news/shinyhunters-salesforce-aura-400-companies-security-tool-weaponized-2026/</a></li>
+<li><em>Hackread</em>, &quot;ShinyHunters Claims Rockstar Games Snowflake Breach via Anodot.&quot; <a href="https://hackread.com/shinyhunters-rockstar-games-snowflake-breach-anodot/">https://hackread.com/shinyhunters-rockstar-games-snowflake-breach-anodot/</a></li>
+<li><em>Cybernews</em>, &quot;Hackers threaten to leak over 9M Amtrak records via Salesforce.&quot; <a href="https://cybernews.com/security/hackers-threaten-amtrak-data-leak/">https://cybernews.com/security/hackers-threaten-amtrak-data-leak/</a></li>
+<li><em>Mayhem Code</em>, &quot;ShinyHunters Hacking Group Explained: 400 Companies Breached.&quot; <a href="https://www.mayhemcode.com/2026/03/shinyhunters-hacking-group-explained.html">https://www.mayhemcode.com/2026/03/shinyhunters-hacking-group-explained.html</a></li>
+</ol>
+<h3>10.3 OAuth and Google Workspace Supply-Chain Attack Context</h3>
+<ol start="21">
+<li><em>Red Canary</em>, &quot;Breaking down a supply chain attack leveraging a malicious Google Workspace OAuth app.&quot; <a href="https://redcanary.com/blog/threat-detection/google-workspace-oauth-attack/">https://redcanary.com/blog/threat-detection/google-workspace-oauth-attack/</a></li>
+<li><em>IronCore Labs</em>, &quot;The Terrifying Takeaways from the Massive OAuth Breach (Salesloft Drift).&quot; <a href="https://ironcorelabs.com/blog/2025/oath-token-tragedy/">https://ironcorelabs.com/blog/2025/oath-token-tragedy/</a></li>
+<li><em>The Hacker News</em>, &quot;Google OAuth Vulnerability Exposes Millions via Failed Startup Domains.&quot; <a href="https://thehackernews.com/2025/01/google-oauth-vulnerability-exposes.html">https://thehackernews.com/2025/01/google-oauth-vulnerability-exposes.html</a></li>
+<li><em>Truffle Security</em>, &quot;Millions of Accounts Vulnerable due to Google&#39;s OAuth Flaw.&quot; <a href="https://trufflesecurity.com/blog/millions-at-risk-due-to-google-s-oauth-flaw">https://trufflesecurity.com/blog/millions-at-risk-due-to-google-s-oauth-flaw</a></li>
+<li><em>Google Cloud Documentation</em>, &quot;Best practices for mitigating compromised OAuth tokens for Google Cloud CLI.&quot; <a href="https://cloud.google.com/architecture/bps-for-mitigating-gcloud-oauth-tokens">https://cloud.google.com/architecture/bps-for-mitigating-gcloud-oauth-tokens</a></li>
+<li><em>Material Security</em>, &quot;How Hackers Exploit Google Workspace Security.&quot; <a href="https://material.security/workspace-resources/google-workspace-security-gaps-hackers-exploit-and-how-to-patch-them-today">https://material.security/workspace-resources/google-workspace-security-gaps-hackers-exploit-and-how-to-patch-them-today</a></li>
+<li><em>Kaspersky Daily</em>, &quot;Why using Google OAuth in work applications is unsafe.&quot; <a href="https://www.kaspersky.com/blog/vulnerability-in-google-oauth/50286/">https://www.kaspersky.com/blog/vulnerability-in-google-oauth/50286/</a></li>
+</ol>
+<hr>
+<h2>Appendix A. Glossary</h2>
+<table>
+<thead>
+<tr>
+<th>Term</th>
+<th>Definition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>OAuth 2.0</strong></td>
+<td>A delegated-authorization standard that lets a third-party application access resources on a user&#39;s behalf without requiring the user&#39;s password.</td>
+</tr>
+<tr>
+<td><strong>Refresh Token</strong></td>
+<td>A long-lived token used to obtain new access tokens after expiry. If stolen, it enables MFA-bypassing persistent access.</td>
+</tr>
+<tr>
+<td><strong>Environment Variable</strong></td>
+<td>A configuration value injected at application runtime, commonly used to store secrets such as API keys and database credentials.</td>
+</tr>
+<tr>
+<td><strong>Supply Chain Attack</strong></td>
+<td>An attack that first compromises a trusted third-party vendor to indirectly reach the final target, rather than attacking the target directly.</td>
+</tr>
+<tr>
+<td><strong>BreachForums</strong></td>
+<td>A major English-language cybercrime forum widely regarded as the successor to RaidForums, hosting numerous data leak listings.</td>
+</tr>
+<tr>
+<td><strong>DLS (Data Leak Site)</strong></td>
+<td>A dark web site where threat actors publish samples of stolen data to apply public extortion pressure on victims.</td>
+</tr>
+<tr>
+<td><strong>Non-sensitive Variable</strong></td>
+<td>A Vercel environment variable classification that is not encrypted at rest and is therefore readable — the decisive pivot in this incident.</td>
+</tr>
+<tr>
+<td><strong>NPM/GitHub Token</strong></td>
+<td>Personal access tokens for the Node.js package manager (NPM) and GitHub APIs, respectively. If stolen, they enable malicious code distribution.</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>— End of Report —</em></p>
+<p><strong>© 2026 Dennis Kim · Cyber Threat Intelligence Division</strong>
+<a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+<p><em>This report is an independent analysis based on publicly available information and does not represent the official position of any organization referenced herein.</em></p>
+<p><code>TLP:GREEN</code> · <code>CTI-2026-0420-VERCEL</code> · Published: 2026-04-20</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0420-VERCEL_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

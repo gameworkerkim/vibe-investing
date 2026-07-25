@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Third Shadow of CitrixBleed — Large-Scale Exploitation of a NetScaler Memory Overread Reignites — VibeQuant</title>
+  <meta name="description" content="CVE 2026 3055: a March disclosed SAML IdP information disclosure flaw escalates in June — the gap between the &quot;RCE&quot; label and the real impact" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0603-netscaler-en/" />
+  <meta property="og:title" content="The Third Shadow of CitrixBleed — Large-Scale Exploitation of a NetScaler Memory Overread Reignites" />
+  <meta property="og:description" content="CVE 2026 3055: a March disclosed SAML IdP information disclosure flaw escalates in June — the gap between the &quot;RCE&quot; label and the real impact" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0603-netscaler-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0603-netscaler-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0603-netscaler-en/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0603-netscaler-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"The Third Shadow of CitrixBleed — Large-Scale Exploitation of a NetScaler Memory Overread Reignites","description":"CVE 2026 3055: a March disclosed SAML IdP information disclosure flaw escalates in June — the gap between the \"RCE\" label and the real impact","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0603-netscaler-en/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0603-NETSCALER_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-03","dateModified":"2026-06-03","inLanguage":"en","keywords":"취약점 · 패치, EN, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 취약점 · 패치</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">취약점 · 패치</p>
+        <h1>The Third Shadow of CitrixBleed — Large-Scale Exploitation of a NetScaler Memory Overread Reignites</h1>
+        <p class="article-dates"><time datetime="2026-06-03">발행 2026.06.03</time> · 주제 취약점 · 패치 · EN · CTI</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0603-netscaler-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0603-netscaler-en/" data-lang="EN" aria-current="true">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">CVE-2026-3055: a March-disclosed SAML IdP information-disclosure flaw escalates in June — the gap between the &quot;RCE&quot; label and the real impact</p>
+        <p class="article-byline">Dennis Kim (김호광 / HoKwang Kim) · 2026-06-03</p>
+      </header>
+      <div class="article-body prose"><blockquote>
+<h2>🚨 Heads-up: this is a VPN/remote-access issue — check your company&#39;s appliances now.</h2>
+<p>If your organization runs <strong>Citrix NetScaler Gateway</strong>(the VPN / remote-access front door) or<strong>NetScaler ADC</strong>with<strong>SAML SSO</strong>enabled, you may be directly exposed to active, large-scale exploitation. Don&#39;t wait for a formal advisory to land in your inbox —<strong>inventory your internet-facing NetScaler appliances today</strong>, confirm patch level, and (critically) <strong>invalidate active sessions after patching</strong>. The details below explain why patching alone is not enough.</p>
+</blockquote>
+<h1>The Third Shadow of CitrixBleed — Large-Scale Exploitation of a NetScaler Memory Overread Reignites</h1>
+<blockquote>
+<p><strong>Report ID</strong><code>CTI-2026-0603-NETSCALER</code> ·<strong>Published</strong>2026-06-03 ·<strong>Classification</strong><code>TLP:GREEN</code> ·<strong>Severity</strong> 🔴 CRITICAL
+<strong>Author</strong> Dennis Kim (김호광) · <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · <a href="https://github.com/gameworkerkim">@gameworkerkim</a></p>
+</blockquote>
+<p><em>CVE-2026-3055: a March-disclosed SAML IdP information-disclosure flaw escalates in June — the gap between the &quot;RCE&quot; label and the real impact</em></p>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li>Executive Summary (TL;DR)</li>
+<li>Opening — &quot;An edge device, once it leaks, keeps leaking&quot;</li>
+<li>Vulnerability Analysis — CVE-2026-3055 Memory Overread</li>
+<li>&quot;RCE&quot; or &quot;Information Disclosure&quot;? — Decomposing the Real Impact</li>
+<li>Timeline — From March Disclosure to June Mass Exploitation</li>
+<li>Attack Scenario — From Token Theft to SSO/VPN Takeover</li>
+<li>Korea Perspective — The Edge-Gateway Exposure</li>
+<li>Detection &amp; Mitigation — Patching Is Not the End</li>
+<li>Conclusion</li>
+<li>References</li>
+</ol>
+<hr>
+<h2>Executive Summary (TL;DR)</h2>
+<p>A pre-authentication memory overread vulnerability in Citrix NetScaler ADC/Gateway, <code>CVE-2026-3055</code>, has entered large-scale active exploitation in early June 2026. Fortinet&#39;s threat intelligence team confirmed that attack attempts targeting internet-facing NetScaler SAML endpoints worldwide are being detected and blocked at a rate of <strong>thousands per day</strong>.</p>
+<p>Two points matter most. <strong>First, this is not a new 0-day.</strong>Citrix already disclosed and patched it on<strong>March 23</strong>(advisory CTX696300); reconnaissance and exploitation began in late March, and it was added to the CISA KEV catalog. The June event is not &quot;a new vulnerability emerging&quot; — it is<strong>exploitation scaling to an industrial level against unpatched assets</strong>. <strong>Second, the impact label diverges across sources.</strong>Some threat feeds tag this as &quot;RCE (CVSS 9.8),&quot; but primary sources — Citrix, Rapid7, Horizon3 — characterize it as<strong>information disclosure via a memory overread (CVSS 9.3, CVSS v4.0)</strong>. This report makes that distinction its central analytical axis: the precise impact is <em>leakage of session tokens and credentials from process memory</em>, which maps directly to <strong>CitrixBleed-class (CVE-2023-4966) session hijacking</strong>.</p>
+<p>Why does the distinction decide everything in practice? Because the remediation procedure changes. An information-disclosure flaw <strong>does not end with a patch.</strong> Session tokens that leaked from memory <em>before</em> patching remain valid <em>after</em> patching — so, exactly as CitrixBleed taught, <strong>forced invalidation of active sessions</strong> is a mandatory step on par with the patch itself.</p>
+<blockquote>
+<p>⚠️ <strong>Verify KISA/KrCERT advisory status</strong> — This report is compiled from global sources (Citrix, CISA KEV, Fortinet, Rapid7). There may be a gap relative to when Korean national advisories are published or updated; cross-check against KISA bulletins before operational application.</p>
+</blockquote>
+<h3>Key Judgments</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Judgment</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KJ-1</td>
+<td>The June event around <code>CVE-2026-3055</code> is not a new vulnerability but a <strong>large-scale escalation</strong>of the March disclosure. Fortinet confirms attacks at a scale of thousands per day.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-2</td>
+<td>Per primary sources, the precise impact is <strong>information disclosure via memory overread</strong>(CWE-125); the &quot;RCE&quot; tag in some feeds is likely an overstatement. The real threat is leakage of session tokens and credentials.</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+<tr>
+<td>KJ-3</td>
+<td>Leaked session tokens remain valid after patching. Therefore <strong>patch + full active-session invalidation</strong>must go together. Organizations that only patched remain exposed to hijacking (the direct lesson of CitrixBleed).</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-4</td>
+<td>NetScaler terminates SSO as a SAML IdP. Compromising the IdP collapses the entire SSO trust chain, so a single point of failure fans out into access across many backend applications.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-5</td>
+<td>Historically (CitrixBleed, CVE-2023-3519), NetScaler flaws have been weaponized within days by both ransomware and state-sponsored actors. Internet-facing NetScaler appliances at Korean financial firms, large enterprises, and the public sector are immediate inspection targets.</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. Opening — &quot;An edge device, once it leaks, keeps leaking&quot;</h2>
+<p>A remote-access gateway is one of the most valuable targets an attacker can find, because a single appliance simultaneously underpins VPN termination, load balancing, and SAML-based SSO. When the perimeter point where authentication traffic converges is breached, the attacker gains a pass to the entire line of internal applications standing behind it.</p>
+<p>NetScaler&#39;s track record has proven this proposition repeatedly. In 2023, CitrixBleed (<code>CVE-2023-4966</code>) and <code>CVE-2023-3519</code> were weaponized <strong>within days</strong> of disclosure and used in ransomware and data-theft campaigns against thousands of organizations worldwide. What both incidents shared was that &quot;something leaks out of memory&quot; — CitrixBleed leaked session tokens, and the stolen tokens bypassed MFA to hijack sessions.</p>
+<p><code>CVE-2026-3055</code> is the continuation of that lineage. It was disclosed in March, complete with a patch, yet by June exploitation against unpatched assets had scaled to industrial proportions. This report separates two things: first, <strong>what actually leaks</strong>(a precise decomposition of impact); second,<strong>why patching alone is insufficient</strong> (the persistence of leaked tokens).</p>
+<hr>
+<h2>2. Vulnerability Analysis — CVE-2026-3055 Memory Overread</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CVE</td>
+<td><code>CVE-2026-3055</code></td>
+</tr>
+<tr>
+<td>CVSS</td>
+<td>9.3 (Critical, CVSS v4.0 · per Citrix/Rapid7) — some feeds list 9.8</td>
+</tr>
+<tr>
+<td>CWE</td>
+<td>CWE-125 (Out-of-Bounds Read · memory overread)</td>
+</tr>
+<tr>
+<td>Root cause</td>
+<td>Insufficient input validation</td>
+</tr>
+<tr>
+<td>Precondition</td>
+<td>Only when NetScaler ADC/Gateway is configured as a <strong>SAML Identity Provider (IdP)</strong></td>
+</tr>
+<tr>
+<td>Authentication</td>
+<td>None (pre-auth) · no user interaction</td>
+</tr>
+<tr>
+<td>Affected builds</td>
+<td>Below 13.1-62.23 (standard), below 13.1-37.262 (FIPS/NDcPP), below 14.1-60.58 (standard)</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>Found internally by Citrix</td>
+</tr>
+<tr>
+<td>Related flaw</td>
+<td><code>CVE-2026-4368</code> (CVSS 7.7, race condition → session mix-up), fixed in the same advisory CTX696300</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>Added to CISA KEV · 2026-06 large-scale exploitation confirmed by Fortinet</td>
+</tr>
+</tbody></table>
+<p>When NetScaler operates as a SAML IdP, an attacker sends a specially crafted SAML-related request to trigger a memory overread (a read beyond the boundary). No authentication, login, or user interaction is required. Through this read, the attacker can extract <strong>sensitive information</strong>such as session data and other credentials from the appliance&#39;s process memory. A key constraint is configuration dependence —<strong>default configurations are unaffected; only systems set up as a SAML IdP are vulnerable.</strong> That said, SAML IdP configuration is very common in organizations running SSO, so &quot;default configurations are safe&quot; does not translate to &quot;most deployments are safe.&quot; Whether SAML IdP is in use must be confirmed explicitly, as it may be enabled inadvertently.</p>
+<hr>
+<h2>3. &quot;RCE&quot; or &quot;Information Disclosure&quot;? — Decomposing the Real Impact</h2>
+<p>This is the point this report stresses most. The label for the same CVE diverges between sources.</p>
+<table>
+<thead>
+<tr>
+<th>Source family</th>
+<th>Impact label</th>
+<th>CVSS</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Citrix (CTX696300) · Rapid7 · Horizon3 · Arctic Wolf · Security Affairs</td>
+<td><strong>Memory overread → information disclosure</strong></td>
+<td>9.3 (v4.0)</td>
+</tr>
+<tr>
+<td>Some threat-intel feeds</td>
+<td>&quot;Remote Code Execution (RCE)&quot;</td>
+<td>9.8 (varies)</td>
+</tr>
+</tbody></table>
+<p>Analytically, the primary vendor technical description (Citrix) and the major vulnerability research labs (Rapid7, Horizon3) are more reliable. They consistently describe this as <strong>information disclosure via an out-of-bounds read.</strong> The &quot;RCE&quot; tag appears to have propagated together with (1) some aggregators scoring the CVSS at 9.8, and (2) a worst-case over-generalization driven by the appliance&#39;s perimeter location.</p>
+<p>So is it &quot;information disclosure, therefore lighter than RCE&quot;? <strong>No.</strong>The real threat of this flaw is not direct code execution but the<strong>leakage of session tokens and credentials</strong>from process memory — precisely the way CitrixBleed operated. Leaked session tokens are used to bypass authentication and MFA and to<strong>hijack valid sessions</strong>, and from there the pivot into the SSO trust chain and the internal network begins. In other words, the impact <em>type</em> is not &quot;RCE&quot; but &quot;<strong>credential/session leakage → identity theft</strong>,&quot; and getting this classification right determines the remediation procedure in the next section (patching alone is insufficient; session invalidation is mandatory).</p>
+<blockquote>
+<p>Practical implication: misclassifying the <em>type</em> of a CVE&#39;s impact derails the response. Seen as &quot;RCE,&quot; it is easy to assume &quot;patch and you&#39;re done&quot;; seen accurately as &quot;information disclosure (token leakage),&quot; it becomes self-evident that the leaked tokens persisting after the patch must be invalidated.</p>
+</blockquote>
+<hr>
+<h2>4. Timeline — From March Disclosure to June Mass Exploitation</h2>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Event</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2026-03-23</td>
+<td>Citrix publishes CTX696300, releasing patches for <code>CVE-2026-3055</code> and <code>CVE-2026-4368</code></td>
+</tr>
+<tr>
+<td>2026-03-27</td>
+<td>Researchers observe active reconnaissance against vulnerable NetScaler instances</td>
+</tr>
+<tr>
+<td>2026-03-30</td>
+<td>Public reporting confirms active exploitation has begun</td>
+</tr>
+<tr>
+<td>~2026-03-31</td>
+<td>CISA adds the flaw to the KEV catalog</td>
+</tr>
+<tr>
+<td>2026-06-02</td>
+<td><strong>Fortinet confirms large-scale active exploitation</strong> — thousands of daily attacks against exposed SAML endpoints detected and blocked</td>
+</tr>
+</tbody></table>
+<p>This curve is the essence of the incident: disclosure/patch (March) → reconnaissance (late March) → initial exploitation (late March onward) → <strong>large-scale escalation (June)</strong>. Two months after the patch shipped, the population of unpatched assets remained large enough that attackers shifted to mass automated scanning and exploitation. The gap between &quot;a patch is available&quot; and &quot;the organization has patched&quot; remained, intact, as the attack surface.</p>
+<hr>
+<h2>5. Attack Scenario — From Token Theft to SSO/VPN Takeover</h2>
+<p>Projecting the CitrixBleed pattern onto this case yields the following chain.</p>
+<ol>
+<li><strong>Pre-auth memory leak</strong>— Send a crafted request to an exposed SAML IdP endpoint to extract session tokens and credentials from process memory. (ATT&amp;CK<strong>T1190</strong>)</li>
+<li><strong>Session hijacking</strong>— Use the stolen session token to bypass authentication and MFA and seize a valid session. (<strong>T1539</strong>Steal Web Session Cookie,<strong>T1550.004</strong> Use Alternate Authentication Material)</li>
+<li><strong>Collapse of SSO trust</strong>— Because NetScaler is the SAML IdP, compromising the IdP means the collapse of the identity assurance it provided to many backend applications. It expands via SAML assertion manipulation and abuse of IdP-initiated logins. (<strong>T1078</strong> Valid Accounts)</li>
+<li><strong>Persistence &amp; pivot</strong>— Persist perimeter VPN access and move into the internal network. (<strong>T1133</strong> External Remote Services, followed by lateral movement)</li>
+</ol>
+<p>In this chain, NetScaler functions as a single point of failure: a memory leak at one perimeter device spreads into the entire SSO trust and access to internal resources. Historically, this surface has been among the most aggressively targeted by <strong>both ransomware groups and state-sponsored espionage actors</strong>.</p>
+<hr>
+<h2>6. Korea Perspective — The Edge-Gateway Exposure</h2>
+<ul>
+<li><strong>Remote access at financial firms and large enterprises</strong> — A significant share of Korean financial institutions and large enterprises run NetScaler as their VPN-termination, application-delivery, and SSO gateway. These appliances are, by definition, internet-facing, so when configured as a SAML IdP they become a direct target surface for this flaw.</li>
+<li><strong>Concentration risk of SSO trust</strong> — A SAML IdP consolidates authentication for many in-house systems in one place. The price of that convenience is that a memory leak in a single IdP translates directly into the collapse of identity assurance for many business systems.</li>
+<li><strong>The patch-lag population</strong> — The very fact that large-scale exploitation succeeded in June despite a March patch shows that — globally and domestically alike — edge-device patch adoption rates do not keep pace with threat velocity. The operational inertia of &quot;it&#39;s an appliance, so it&#39;s risky to touch&quot; becomes, directly, the exposure window.</li>
+<li><strong>Regulatory &amp; notification angle</strong> — If session or credential leakage actually occurred, it can lead to a breach of personal or authentication data, so any confirmed indication of compromise should be reviewed alongside the relevant reporting and notification obligations.</li>
+</ul>
+<hr>
+<h2>7. Detection &amp; Mitigation — Patching Is Not the End</h2>
+<ol>
+<li><strong>Patch immediately</strong> — Update NetScaler ADC/Gateway to 13.1-62.23 / 14.1-60.58 (standard) or 13.1-37.262 (FIPS/NDcPP) or later. Verify the applied build via the management interface or CLI.</li>
+<li><strong>Invalidate all active sessions (mandatory)</strong> — <em>After</em> patching, forcibly terminate all active ICA/PCoIP and authentication sessions. Session tokens that leaked before the patch remain valid afterward, so a patch without session invalidation leaves hijacking exposure intact. (The direct lesson of CitrixBleed.)</li>
+<li><strong>Confirm &amp; reduce SAML IdP configuration</strong> — Explicitly confirm whether the appliance is configured as a SAML IdP. If the IdP function is unnecessary, disable it to reduce the attack surface, and check that it is not inadvertently enabled.</li>
+<li><strong>Hunt for indicators of compromise</strong> — Using the IoCs published by Fortinet, examine logs for abnormal SAML assertion activity, unexpected IdP-initiated logins, and connections from unrecognized IP ranges. Include retrospective review of the exposure window prior to patching.</li>
+<li><strong>Rotate credentials</strong> — If compromise is suspected, rotate sessions and credentials that may have transited the appliance, and review backend applications for anomalous authentication.</li>
+<li><strong>Maintain a standing edge-asset inventory</strong> — Inventory all internet-facing NetScaler appliances, and for KEV-listed edge devices, fix &quot;patch, then invalidate sessions&quot; as a standard runbook.</li>
+</ol>
+<hr>
+<h2>8. Conclusion</h2>
+<p><code>CVE-2026-3055</code> teaches two things at once. First, <strong>the clock of a threat stops not on the disclosure date but on the patch-application date.</strong>Even with a patch available in March, assets that did not apply it stood fully exposed before the large-scale exploitation of June. Second,<strong>the precise classification of impact type determines the response.</strong> Lean on the overblown &quot;RCE&quot; label and you mistake the situation for &quot;patch and you&#39;re done&quot;; see accurately that the essence is <em>session-token leakage</em> and post-patch session invalidation becomes a self-evidently mandatory step.</p>
+<p>This is another facet of the thesis from the previous report (<code>CTI-2026-0602-FAULTLINE</code>) — <em>that vendor and aggregator labels fail to predict real risk.</em> There, &quot;exploitation less likely&quot; detonated first; here, the difference between &quot;RCE&quot; and &quot;information disclosure&quot; decides the remediation procedure. The baseline for edge-device defense is simple: <em>a patch only closes the entrance; it cannot recover what has already leaked out.</em> Patch and session invalidation are therefore an inseparable pair.</p>
+<hr>
+<h2>9. References</h2>
+<p>[1] Citrix, &quot;NetScaler ADC and NetScaler Gateway Security Bulletin for CVE-2026-3055 and CVE-2026-4368 (CTX696300)&quot;, 2026-03-23. <a href="https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX696300">https://support.citrix.com/support-home/kbsearch/article?articleNumber=CTX696300</a></p>
+<p>[2] Threat-Modeling.com, &quot;Citrix NetScaler SAML IDP Vulnerability (CVE-2026-3055): Large-Scale Exploitation Confirmed by Fortinet&quot;, 2026-06-02. <a href="https://threat-modeling.com/citrix-netscaler-saml-idp-cve-2026-3055/">https://threat-modeling.com/citrix-netscaler-saml-idp-cve-2026-3055/</a></p>
+<p>[3] FortiGuard Labs, &quot;FortiGuard Outbreak Alert: Citrix NetScaler Memory Overread Vulnerability (CVE-2026-3055)&quot;, 2026-06. <a href="https://video.fortinet.com/latest/fortiguard-outbreak-alert-short-citrix-netscaler-memory-overread-vulnerability">https://video.fortinet.com/latest/fortiguard-outbreak-alert-short-citrix-netscaler-memory-overread-vulnerability</a></p>
+<p>[4] Horizon3.ai, &quot;CVE-2026-3055 Citrix NetScaler Memory Overread&quot;, 2026-03-31. <a href="https://horizon3.ai/attack-research/vulnerabilities/cve-2026-3055/">https://horizon3.ai/attack-research/vulnerabilities/cve-2026-3055/</a></p>
+<p>[5] Pierluigi Paganini, &quot;U.S. CISA adds a flaw in Citrix NetScaler to its Known Exploited Vulnerabilities catalog&quot;, Security Affairs, 2026-03-31. <a href="https://securityaffairs.com/190197/security/u-s-cisa-adds-a-flaw-in-citrix-netscaler-to-its-known-exploited-vulnerabilities-catalog.html">https://securityaffairs.com/190197/security/u-s-cisa-adds-a-flaw-in-citrix-netscaler-to-its-known-exploited-vulnerabilities-catalog.html</a></p>
+<p>[6] Pierluigi Paganini, &quot;Citrix NetScaler critical flaw could leak data, update now&quot;, Security Affairs, 2026-03-24. <a href="https://securityaffairs.com/189908/security/citrix-netscaler-critical-flaw-could-leak-data-update-now.html">https://securityaffairs.com/189908/security/citrix-netscaler-critical-flaw-could-leak-data-update-now.html</a></p>
+<p>[7] Arctic Wolf, &quot;CVE-2026-3055: Citrix NetScaler ADC and NetScaler Gateway Out-of-Bounds Read&quot;, 2026-03-23. <a href="https://arcticwolf.com/resources/blog/cve-2026-3055/">https://arcticwolf.com/resources/blog/cve-2026-3055/</a></p>
+<p>[8] CERT-EU, &quot;Security Advisory 2026-003: Multiple Vulnerabilities in Citrix NetScaler and Citrix ADC&quot;, 2026. <a href="https://cert.europa.eu/publications/security-advisories/2026">https://cert.europa.eu/publications/security-advisories/2026</a></p>
+<p>[9] CISA, &quot;Known Exploited Vulnerabilities Catalog — CVE-2026-3055&quot;. <a href="https://www.cisa.gov/known-exploited-vulnerabilities-catalog">https://www.cisa.gov/known-exploited-vulnerabilities-catalog</a></p>
+<hr>
+<p>© 2026 Dennis Kim (김호광) · This document is published as part of an independent CTI archive (TLP:GREEN).
+Contact: <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · GitHub: <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0603-NETSCALER_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

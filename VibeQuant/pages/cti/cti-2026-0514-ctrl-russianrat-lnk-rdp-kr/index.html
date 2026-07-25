@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTI-2026-0514-CTRLRussianRATLNKRDPKO — VibeQuant</title>
+  <meta name="description" content="1. 개요 2. 툴킷 구성 요소 3. 초기 침투 — LNK 기반 드로퍼 4. 크리덴셜 피싱 — Windows Hello 위장 UI 5. 키로거 6. RDP 하이재킹 및 FRP 역방향 터널링 7. 러시아 기원 귀속 증거 8. 침해 지표 (IoCs) 9. 탐지 시그니처 10.…" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0514-ctrl-russianrat-lnk-rdp-kr/" />
+  <meta property="og:title" content="CTI-2026-0514-CTRLRussianRATLNKRDPKO" />
+  <meta property="og:description" content="1. 개요 2. 툴킷 구성 요소 3. 초기 침투 — LNK 기반 드로퍼 4. 크리덴셜 피싱 — Windows Hello 위장 UI 5. 키로거 6. RDP 하이재킹 및 FRP 역방향 터널링 7. 러시아 기원 귀속 증거 8. 침해 지표 (IoCs) 9. 탐지 시그니처 10.…" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0514-ctrl-russianrat-lnk-rdp-kr/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"CTI-2026-0514-CTRLRussianRATLNKRDPKO","description":"1. 개요 2. 툴킷 구성 요소 3. 초기 침투 — LNK 기반 드로퍼 4. 크리덴셜 피싱 — Windows Hello 위장 UI 5. 키로거 6. RDP 하이재킹 및 FRP 역방향 터널링 7. 러시아 기원 귀속 증거 8. 침해 지표 (IoCs) 9. 탐지 시그니처 10.…","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0514-ctrl-russianrat-lnk-rdp-kr/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0514-CTRL_RussianRAT_LNK_RDP_KR.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-05-14","dateModified":"2026-07-11","inLanguage":"ko","keywords":"APT · 글로벌 위협, KR, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · APT · 글로벌 위협</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">APT · 글로벌 위협</p>
+        <h1>CTI-2026-0514-CTRLRussianRATLNKRDPKO</h1>
+        <p class="article-dates"><time datetime="2026-05-14">발행 2026.05.14</time> · 주제 APT · 글로벌 위협 · KR · CTI · <time datetime="2026-07-11">수정 2026.07.11</time></p>
+        
+        <p class="lede">1. 개요 2. 툴킷 구성 요소 3. 초기 침투 — LNK 기반 드로퍼 4. 크리덴셜 피싱 — Windows Hello 위장 UI 5. 키로거 6. RDP 하이재킹 및 FRP 역방향 터널링 7. 러시아 기원 귀속 증거 8. 침해 지표 (IoCs) 9. 탐지 시그니처 10.…</p>
+        
+      </header>
+      <div class="article-body prose"><h2>리포트 메타데이터</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>리포트 ID</strong></td>
+<td>CTI-2026-0514-CTRL_RussianRAT_LNK_RDP_KO</td>
+</tr>
+<tr>
+<td><strong>발행일</strong></td>
+<td>2026-05-14</td>
+</tr>
+<tr>
+<td><strong>심각도</strong></td>
+<td>CRITICAL</td>
+</tr>
+<tr>
+<td><strong>상태</strong></td>
+<td>활성 위협 (Active Threat)</td>
+</tr>
+<tr>
+<td><strong>발견 기관</strong></td>
+<td>Censys Attack Research Center (ARC) — Andrew Northern</td>
+</tr>
+<tr>
+<td><strong>최초 탐지</strong></td>
+<td>2026년 2월</td>
+</tr>
+<tr>
+<td><strong>공개일</strong></td>
+<td>2026-03-30</td>
+</tr>
+<tr>
+<td><strong>위협 행위자</strong></td>
+<td>러시아어권 단일 운영자 (귀속 HIGH confidence)</td>
+</tr>
+<tr>
+<td><strong>플랫폼</strong></td>
+<td>Windows (x86/x64)</td>
+</tr>
+<tr>
+<td><strong>언어</strong></td>
+<td>한국어 (KO)</td>
+</tr>
+<tr>
+<td><strong>분류</strong></td>
+<td>RAT / 크리덴셜 탈취 / 횡적 이동 / 지속성</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>목차</h2>
+<ol>
+<li><a href="#1-%EA%B0%9C%EC%9A%94">개요</a></li>
+<li><a href="#2-%ED%88%B4%ED%82%B7-%EA%B5%AC%EC%84%B1-%EC%9A%94%EC%86%8C">툴킷 구성 요소</a></li>
+<li><a href="#3-%EC%B4%88%EA%B8%B0-%EC%B9%A8%ED%88%AC--lnk-%EA%B8%B0%EB%B0%98-%EB%8B%A4%EB%8B%A8%EA%B3%84-%EB%93%9C%EB%A1%9C%ED%8D%BC">초기 침투 — LNK 기반 드로퍼</a></li>
+<li><a href="#4-%ED%81%AC%EB%A6%AC%EB%8D%B4%EC%85%9C-%ED%94%BC%EC%8B%B1--windows-hello-%EC%9C%84%EC%9E%A5-ui">크리덴셜 피싱 — Windows Hello 위장 UI</a></li>
+<li><a href="#5-%ED%82%A4%EB%A1%9C%EA%B1%B0">키로거</a></li>
+<li><a href="#6-rdp-%ED%95%98%EC%9D%B4%EC%9E%AC%ED%82%B9-%EB%B0%8F-frp-%EC%97%AD%EB%B0%A9%ED%96%A5-%ED%84%B0%EB%84%90%EB%A7%81">RDP 하이재킹 및 FRP 역방향 터널링</a></li>
+<li><a href="#7-%EB%9F%AC%EC%8B%9C%EC%95%84-%EA%B8%B0%EC%9B%90-%EA%B7%80%EC%86%8D-%EC%A6%9D%EA%B1%B0-attribution">러시아 기원 귀속 증거</a></li>
+<li><a href="#8-%EC%B9%A8%ED%95%B4-%EC%A7%80%ED%91%9C-iocs">침해 지표 (IoCs)</a></li>
+<li><a href="#9-%ED%83%90%EC%A7%80-%EC%8B%9C%EA%B7%B8%EB%8B%88%EC%B2%98">탐지 시그니처</a></li>
+<li><a href="#10-%EB%8C%80%EC%9D%91-%EC%A1%B0%EC%B9%98">대응 조치</a></li>
+<li><a href="#11-%EC%B0%B8%EA%B3%A0">참고</a></li>
+</ol>
+<hr>
+<h2>1. 개요</h2>
+<blockquote>
+<p><strong>[CRITICAL]</strong>Censys ARC 연구원 Andrew Northern이 사전에 기록되지 않은 러시아 기원의 원격접근 툴킷<strong>CTRL</strong>을 발견했습니다. .NET 기반으로 제작된 이 툴킷은 폴더 아이콘으로 위장한 <strong>단일 LNK 파일 하나</strong>로 전체 침해를 시작하며, Windows Hello 피싱 UI를 통한 크리덴셜 탈취, 지속적 키로깅, RDP 세션 하이재킹, FRP 기반 역방향 터널링을 하나의 통합 프레임워크로 결합합니다.</p>
+</blockquote>
+<p>공개적인 위협 인텔리전스 피드 및 VirusTotal에서 <strong>전혀 탐지되지 않은</strong> 상태입니다.</p>
+<p>Censys 평가: <em>&quot;CTRL 툴킷은 기능 범위보다 운영 보안(OPSEC)을 우선시하는 목적 특화 단일 운영자 툴킷의 트렌드를 보여줍니다. FRP 역방향 터널을 통해 모든 상호작용을 RDP 세션으로 라우팅함으로써, 범용 RAT의 특징인 네트워크 탐지 가능한 비콘 패턴을 완전히 회피합니다.&quot;</em></p>
+<hr>
+<h2>2. 툴킷 구성 요소</h2>
+<p>세 개의 .NET 실행 파일로 구성. 공통 개발 환경: <code>C:\Users\Admin\repos\repos\</code> / .NET Framework 4.7.2 / AES-256-CBC 암호화.</p>
+<table>
+<thead>
+<tr>
+<th>구성 요소</th>
+<th>파일명</th>
+<th>기능</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>핵심 제어 모듈</strong></td>
+<td><code>ctrl.exe</code></td>
+<td>암호화 페이로드 로딩 · 네임드 파이프(<code>ctrlPipe</code>) C2 에이전트 · Windows Hello 피싱 · RDP 하이재킹 · 키로그 추출</td>
+</tr>
+<tr>
+<td><strong>FRP 래퍼</strong></td>
+<td><code>FRPWrapper.exe</code></td>
+<td>Go DLL(FRP v0.65.0) 메모리 로딩 · RDP(3389) 및 TCP 셸(5267) 역방향 터널 수립</td>
+</tr>
+<tr>
+<td><strong>RDP 래퍼</strong></td>
+<td><code>RDPWrapper.exe</code></td>
+<td><code>termsrv.dll</code> 패치 · 무제한 동시 RDP 세션 활성화 · Windows Defender 제외 목록 자동 추가</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. 초기 침투 — LNK 기반 다단계 드로퍼</h2>
+<h3>악성 파일</h3>
+<pre><code>파일명: Private Key #kfxm7p9q_yek.lnk
+아이콘: 폴더 (위장)
+타임스탬프: 제로화 (포렌식 분석 회피)
+</code></pre>
+<h3>다단계 실행 체인</h3>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>방법</th>
+<th>상세</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>①</strong></td>
+<td>PowerShell 은닉 실행</td>
+<td>LNK가 숨겨진 창으로 PowerShell 실행 → Base64 블롭 디코딩 및 인메모리 실행</td>
+</tr>
+<tr>
+<td><strong>②</strong></td>
+<td>UAC 우회</td>
+<td><code>fodhelper.exe</code> 기반 UAC 바이패스로 권한 상승</td>
+</tr>
+<tr>
+<td><strong>③</strong></td>
+<td>C2 연결 확인</td>
+<td><code>hui228[.]ru:7000</code>에 연결 확인 후 3개 페이로드 다운로드</td>
+</tr>
+<tr>
+<td><strong>④</strong></td>
+<td>레지스트리 지속성</td>
+<td>정상 Explorer 키 하위에 바이너리 값으로 페이로드 저장 (디스크 PE 파일 없음)</td>
+</tr>
+<tr>
+<td><strong>⑤</strong></td>
+<td>스케줄 태스크 등록</td>
+<td>인코딩된 PowerShell로 예약 작업 생성 → 재부팅 후에도 복원</td>
+</tr>
+</tbody></table>
+<h3>레지스트리 지속성 키 (탐지 대상)</h3>
+<pre><code>HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ShellStateVersion1
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\IconSizeVersion1
+HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\IconUnderlineVersion1
+</code></pre>
+<blockquote>
+<p>정상 Explorer 하위 키처럼 위장하여 탐지 회피. 해당 키에 <strong>바이너리 데이터 쓰기</strong> 이벤트 모니터링 권고.</p>
+</blockquote>
+<hr>
+<h2>4. 크리덴셜 피싱 — Windows Hello 위장 UI</h2>
+<p>WPF(Windows Presentation Foundation) 기반으로 제작된 <strong>실제 Windows Hello PIN 인증 화면과 구별 불가능한</strong> 피싱 UI.</p>
+<table>
+<thead>
+<tr>
+<th>기능</th>
+<th>구현 방식</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>실사용자 정보 표시</strong></td>
+<td>피해자의 실제 표시 이름, 계정 사진, Windows 테마 자동 감지·반영</td>
+</tr>
+<tr>
+<td><strong>Lottie 애니메이션</strong></td>
+<td>실제 Windows 애셋에서 추출한 Lottie 애니메이션 사용으로 완벽한 UI 재현</td>
+</tr>
+<tr>
+<td><strong>탈출 방지</strong></td>
+<td>Alt+Tab, Alt+F4, Win 키 차단 — 키보드로 창 닫기 불가</td>
+</tr>
+<tr>
+<td><strong>실제 인증 연동</strong></td>
+<td>입력된 PIN을 실제 Windows 크리덴셜 프롬프트(UI Automation)에 자동 전달하여 유효성 검증</td>
+</tr>
+<tr>
+<td><strong>성공 시 동작</strong></td>
+<td>PIN 인증 성공 후에도 피싱 창 유지 — 사용자에게 비정상적 동작 전혀 없음</td>
+</tr>
+<tr>
+<td><strong>로그 기록</strong></td>
+<td><code>C:\Temp\keylog.txt</code>에 <code>[STEALUSER PIN CAPTURED]</code> 접두사와 함께 저장</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. 키로거</h2>
+<p>배경 서비스로 실행되는 키보드 후킹 기반 키로거. 모든 키 입력이 지속적으로 기록되며, 크리덴셜 피싱으로 탈취된 PIN도 동일 파일에 통합 저장됩니다.</p>
+<pre><code>키로그 저장 경로: C:\Temp\keylog.txt
+</code></pre>
+<hr>
+<h2>6. RDP 하이재킹 및 FRP 역방향 터널링</h2>
+<table>
+<thead>
+<tr>
+<th>구성 요소</th>
+<th>동작</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>RDP 세션 하이재킹</strong></td>
+<td><code>termsrv.dll</code> 패치 + RDP Wrapper로 무제한 동시 RDP 세션 활성화 → 운영자가 피해자 데스크톱 동시 쉐도우/제어 가능</td>
+</tr>
+<tr>
+<td><strong>FRP 역방향 터널</strong></td>
+<td>Go DLL을 인메모리 PE 수동 매핑으로 로드 → RDP(3389) 및 TCP 셸(5267)을 운영자 FRP 서버로 역방향 터널링</td>
+</tr>
+<tr>
+<td><strong>C2 통신 은닉</strong></td>
+<td>모든 C2 명령 트래픽이 피해자 로컬 네임드 파이프(<code>ctrlPipe</code>)를 통해 처리 → 네트워크 비콘 패턴 없음</td>
+</tr>
+<tr>
+<td><strong>이중 모드 설계</strong></td>
+<td>운영자가 피해자에 <code>ctrl.exe</code>를 최초 1회 배포 → 이후 FRP 터널링된 RDP 세션을 통해 <code>ctrl.exe client</code>로 상호작용</td>
+</tr>
+<tr>
+<td><strong>하드코딩 C2 없음</strong></td>
+<td>바이너리에 C2 주소 미포함 → <code>frpc.toml</code>이 런타임에 <code>C:\ProgramData\frp\</code> 경로에 생성되어 기록</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. 러시아 기원 귀속 증거 (Attribution)</h2>
+<table>
+<thead>
+<tr>
+<th>증거 유형</th>
+<th>세부 내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>러시아어 오류 문자열</strong></td>
+<td>FRP 래퍼에 <code>&quot;Не найдена функция GoMain&quot;</code> (GoMain 함수를 찾을 수 없습니다) 포함</td>
+</tr>
+<tr>
+<td><strong>러시아 도메인</strong></td>
+<td>C2 도메인: <code>hui228[.]ru</code> (러시아 최상위 도메인 <code>.ru</code>)</td>
+</tr>
+<tr>
+<td><strong>개발자 SID 노출</strong></td>
+<td>LNK 메타데이터에 Windows SID <code>S-1-5-21-445479930-4070444189-1846254649-1001</code> 포함</td>
+</tr>
+<tr>
+<td><strong>개발 경로</strong></td>
+<td>PDB 경로: <code>C:\Users\Admin\repos\repos\</code> — 단일 개발자 환경</td>
+</tr>
+<tr>
+<td><strong>타임스탬프 위조</strong></td>
+<td>모든 PE 타임스탬프 2044~2103년으로 위조 → 포렌식 타임라인 분석 방해</td>
+</tr>
+<tr>
+<td><strong>호스팅 인프라</strong></td>
+<td>C2 서버 <code>194.33.61[.]36</code>, <code>109.107.168[.]18</code>: Partner Hosting LTD (AS215826, 프랑크푸르트)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. 침해 지표 (IoCs)</h2>
+<h3>네트워크</h3>
+<pre><code>C2 도메인: hui228[.]ru
+C2 포트: hui228[.]ru:7000 (FRP 서버)
+TCP 셸 포트: 5267
+RDP 포트: 3389 (역방향 터널링)
+FRP 릴레이 IP: 194.33.61[.]36 (2026년 1~2월 활성)
+FRP 릴레이 IP: 109.107.168[.]18 (2026-02-27 DNS 전환)
+페이로드 호스트: 146.19.213[.]155 (오픈 디렉토리, 2026년 2월)
+ASN: AS215826 (Partner Hosting LTD, 프랑크푸르트)
+</code></pre>
+<h3>파일 시스템</h3>
+<pre><code>악성 LNK: Private Key #kfxm7p9q_yek.lnk
+키로그: C:\Temp\keylog.txt
+FRP 설정: C:\ProgramData\frp\frpc.toml
+레지스트리: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\ShellStateVersion1
+레지스트리: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\IconSizeVersion1
+레지스트리: HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\IconUnderlineVersion1
+</code></pre>
+<h3>개발자 흔적</h3>
+<pre><code>Windows SID: S-1-5-21-445479930-4070444189-1846254649-1001
+PDB 경로: C:\Users\Admin\repos\repos\
+오류 문자열: &quot;Не найдена функция GoMain&quot;
+.NET 버전: 4.7.2
+암호화: AES-256-CBC
+</code></pre>
+<hr>
+<h2>9. 탐지 시그니처</h2>
+<pre><code># Censys 핑거프린트
+host.services.protocol: FRPS within PARTNER-HOSTING-LTD ASN (AS215826)
+
+# 탐지 항목 (SOC/EDR)
+- ctrlPipe 네임드 파이프 생성 이벤트
+- termsrv.dll 비정상 수정 (RDP Wrapper 설치 감지)
+- C:\Temp\keylog.txt 파일 생성 알림
+- fodhelper.exe 기반 UAC 바이패스 탐지
+- Explorer 레지스트리 키에 바이너리 데이터 쓰기
+- 인코딩된 PowerShell이 포함된 예약 작업 생성
+- 비표준 포트(5267, 7000) 아웃바운드 연결
+</code></pre>
+<h3>YARA 탐지 포인트 (수동 작성 참고)</h3>
+<pre><code class="language-yara">rule CTRL_RAT_Indicators {
+strings:
+$ru_str = &quot;Не найдена функция GoMain&quot; wide
+$pipe = &quot;ctrlPipe&quot; wide
+$pdb = &quot;C:\\Users\\Admin\\repos\\repos\\&quot; ascii
+$keylog = &quot;STEALUSER PIN CAPTURED&quot; wide
+$frp = &quot;frpc.toml&quot; wide
+condition:
+2 of them
+}
+</code></pre>
+<hr>
+<h2>10. 대응 조치</h2>
+<h3>즉각 탐지</h3>
+<pre><code class="language-bash"># 키로그 파일 존재 확인
+Get-ChildItem -Path &quot;C:\Temp\keylog.txt&quot; -ErrorAction SilentlyContinue
+
+# FRP 설정 파일 확인
+Get-ChildItem -Path &quot;C:\ProgramData\frp\frpc.toml&quot; -ErrorAction SilentlyContinue
+
+# 레지스트리 이상 키 확인
+Get-ItemProperty &quot;HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer&quot; | 
+Select-Object ShellStateVersion1, IconSizeVersion1, IconUnderlineVersion1
+
+# 비정상 예약 작업 확인 (인코딩된 PowerShell 포함)
+Get-ScheduledTask | Where-Object { $_.Actions.Execute -match &quot;powershell&quot; } | 
+Select-Object TaskName, TaskPath
+</code></pre>
+<h3>차단 및 격리</h3>
+<ul>
+<li>침해 확인 시스템 즉시 네트워크 격리</li>
+<li><code>hui228[.]ru</code>, <code>194.33.61[.]36</code>, <code>109.107.168[.]18</code> 방화벽/DNS 차단 등재</li>
+<li>AS215826 발 FRP 서버 프로토콜(포트 7000) 트래픽 차단</li>
+<li><code>termsrv.dll</code> 무결성 검사 및 비정상 수정 복원</li>
+</ul>
+<h3>중장기 예방</h3>
+<ul>
+<li>EDR에 <code>fodhelper.exe</code> 기반 UAC 바이패스 탐지 규칙 추가</li>
+<li>네트워크 아웃바운드 FRP(포트 7000) 접속 화이트리스트 기반 제어</li>
+<li><strong>LNK 파일 실행 정책 강화</strong> — 이메일·다운로드 경유 LNK 격리 또는 차단</li>
+<li>Windows Hello PIN 입력 요청 창 외부 출현 시 사용자 주의 훈련</li>
+<li>RDP Wrapper 무단 설치 탐지 — <code>termsrv.dll</code> 변경 모니터링</li>
+<li>정기적 Threat Hunting — 비표준 네임드 파이프(<code>ctrlPipe</code> 등) 생성 조회</li>
+</ul>
+<hr>
+<h2>11. 참고</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>출처</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>원본 연구</td>
+<td><a href="https://censys.com/research">Censys ARC — Under CTRL: Dissecting a Previously Undocumented Russian .Net Access Framework (2026.03.30)</a></td>
+</tr>
+<tr>
+<td>보도</td>
+<td><a href="https://thehackernews.com">The Hacker News — Russian CTRL Toolkit Delivered via Malicious LNK Files Hijacks RDP via FRP Tunnels (2026.03.30)</a></td>
+</tr>
+<tr>
+<td>보도</td>
+<td><a href="https://gbhackers.com">GBHackers — Russian Hackers Deploy CTRL for RDP Hijacking (2026.03.30)</a></td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>본 리포트는 공개된 보안 인텔리전스를 기반으로 작성되었습니다.</em> 
+<em>발행: 2026-05-14 | 저자: Dennis Kim (<a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a>) | github.com/gameworkerkim</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0514-CTRL_RussianRAT_LNK_RDP_KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

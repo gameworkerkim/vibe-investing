@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Microsoft Qlib Getting Started — Complete Guide for Korean Developers (Toss Open API Integration Testing) — VibeQuant</title>
+  <meta name="description" content="Qlib is an AI oriented Quantitative Investment Platform open sourced by Microsoft Research (MSRA) in September 2020. It covers the full ML pipeline — data…" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/quant-qlib-qlib-getting-started-en/" />
+  <meta property="og:title" content="Microsoft Qlib Getting Started — Complete Guide for Korean Developers (Toss Open API Integration Testing)" />
+  <meta property="og:description" content="Qlib is an AI oriented Quantitative Investment Platform open sourced by Microsoft Research (MSRA) in September 2020. It covers the full ML pipeline — data…" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/quant-qlib-qlib-getting-started-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/quant-qlib-qlib-getting-started-kr/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/quant-qlib-qlib-getting-started-en/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/quant-qlib-qlib-getting-started-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Microsoft Qlib Getting Started — Complete Guide for Korean Developers (Toss Open API Integration Testing)","description":"Qlib is an AI oriented Quantitative Investment Platform open sourced by Microsoft Research (MSRA) in September 2020. It covers the full ML pipeline — data…","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/quant-qlib-qlib-getting-started-en/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Quant_Qlib/Qlib-getting-started-EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-20","dateModified":"2026-07-20","inLanguage":"en","keywords":"퀀트 · 데이터, Quant_Qlib"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 퀀트 · 데이터</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">퀀트 · 데이터</p>
+        <h1>Microsoft Qlib Getting Started — Complete Guide for Korean Developers (Toss Open API Integration Testing)</h1>
+        <p class="article-dates"><time datetime="2026-07-20">발행 2026.07.20</time> · 주제 퀀트 · 데이터 · Quant_Qlib</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/quant-qlib-qlib-getting-started-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/quant-qlib-qlib-getting-started-en/" data-lang="EN" aria-current="true">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">Qlib is an AI oriented Quantitative Investment Platform open sourced by Microsoft Research (MSRA) in September 2020. It covers the full ML pipeline — data…</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. Qlib Project Overview</h2>
+<p><strong>Qlib</strong>is an<strong>AI-oriented Quantitative Investment Platform</strong> open-sourced by Microsoft Research (MSRA) in September 2020. It covers the full ML pipeline — data processing, model training, and backtesting — spanning the entire quant investing workflow from alpha discovery → risk modeling → portfolio optimization → order execution.</p>
+<p>It supports three learning paradigms:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Paradigm</th>
+<th align="left">Purpose</th>
+<th align="left">Representative Implementation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Supervised Learning</td>
+<td align="left">Discovering complex nonlinear market patterns</td>
+<td align="left">LightGBM, GRU, Transformer (25+ models)</td>
+</tr>
+<tr>
+<td align="left">Market Dynamics</td>
+<td align="left">Adapting to concept drift, non-stationarity</td>
+<td align="left">DDG-DA, Rolling Retraining</td>
+</tr>
+<tr>
+<td align="left">Reinforcement Learning</td>
+<td align="left">Continuous trading decisions, order execution optimization</td>
+<td align="left">PPO, OPDS</td>
+</tr>
+</tbody></table>
+<p><strong>RD-Agent</strong> (LLM-based autonomous R&amp;D agent) extends this toward automated factor discovery and model optimization. See the paper: &quot;R&amp;D-Agent-Quant: A Multi-Agent Framework for Data-Centric Factors and Model Joint Optimization&quot; (arXiv:2505.15155).</p>
+<p>Project scale: ~40,000 GitHub Stars, 6,000+ Forks (as of 2026). Top-tier Python quant open source.</p>
+<hr>
+<h2>2. Key Advantages</h2>
+<h3>2.1 All-in-One Pipeline</h3>
+<p>Data processing → factor computation → model training → backtest → report analysis → online serving — all in one framework. Drastically reduces integration costs compared to cobbling together zipline (backtest only), backtrader (strategy only), and separate factor libraries.</p>
+<h3>2.2 Proven High-Performance Data Infrastructure</h3>
+<p>Qlib designed its own financial time-series binary storage format with a 2-tier cache (ExpressionCache, DatasetCache). Official benchmark (800 stocks × 14 factors, 2007–2020 daily, 1 CPU):</p>
+<table>
+<thead>
+<tr>
+<th align="left">Storage</th>
+<th align="right">Time (sec)</th>
+<th align="right">vs Qlib Full Cache</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">MySQL</td>
+<td align="right">365.3 ± 7.5</td>
+<td align="right">~49x slower</td>
+</tr>
+<tr>
+<td align="left">InfluxDB</td>
+<td align="right">368.2 ± 3.6</td>
+<td align="right">~50x slower</td>
+</tr>
+<tr>
+<td align="left">MongoDB</td>
+<td align="right">253.6 ± 6.7</td>
+<td align="right">~34x slower</td>
+</tr>
+<tr>
+<td align="left">HDF5</td>
+<td align="right">184.4 ± 3.7</td>
+<td align="right">~25x slower</td>
+</tr>
+<tr>
+<td align="left">Qlib (no cache)</td>
+<td align="right">147.0 ± 8.8</td>
+<td align="right">~20x slower</td>
+</tr>
+<tr>
+<td align="left">Qlib (+ExpressionCache)</td>
+<td align="right">47.6 ± 1.0</td>
+<td align="right">~6x slower</td>
+</tr>
+<tr>
+<td align="left"><strong>Qlib (+Expression +Dataset cache)</strong></td>
+<td align="right"><strong>7.4 ± 0.3</strong></td>
+<td align="right">baseline</td>
+</tr>
+</tbody></table>
+<p>On 64 CPUs, uncached drops to 8.8s, ExpressionCache-only to 4.2s. General-purpose databases are structurally disadvantaged for financial data loading due to multi-layer interfaces and unnecessary format conversions.</p>
+<h3>2.3 Expression-Based Factor Engine</h3>
+<p>Define factors as string expressions like <code>Ref($close, 1)/$close - 1</code> and the engine automatically handles vectorized computation and caching. Much shorter code than pandas rolling/shift combinations; especially fast in iterative experiments thanks to cache reuse.</p>
+<h3>2.4 Reproducible Model Zoo</h3>
+<p>From GBDT family (LightGBM, XGBoost, CatBoost) to deep learning (LSTM, GRU, ALSTM, GATs, Transformer, Localformer, TRA, TCN, ADARNN, ADD, IGMTF, HIST, KRNN, Sandwich, TabNet, DoubleEnsemble, TCTS, SFM, TFT) — 25+ SOTA models comparable under identical datasets (Alpha158/Alpha360) and backtest conditions. It&#39;s no exaggeration to call it &quot;the only quant framework where you can directly reproduce paper numbers.&quot;</p>
+<h3>2.5 Built-In Non-Stationarity Tools</h3>
+<p>Rolling Retraining and meta-learning-based DDG-DA address market regime changes with benchmarks included. This is Qlib&#39;s unique territory — almost no other open-source backtester has it.</p>
+<h3>2.6 Automated R&amp;D via RD-Agent</h3>
+<p>LLMs autonomously run factor hypothesis → code → backtest → evaluate → improve loops. Also supports extracting factors from research reports (PDF). Demo: rdagent.azurewebsites.net</p>
+<hr>
+<h2>3. Comparison with Similar Projects</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Project</th>
+<th align="left">Nature</th>
+<th align="left">Position vs Qlib</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>zipline / zipline-reloaded</strong></td>
+<td align="left">Event-based backtester</td>
+<td align="left">Backtest only. No ML pipeline or factor engine. Community-maintained after Quantopian shutdown</td>
+</tr>
+<tr>
+<td align="left"><strong>backtrader</strong></td>
+<td align="left">Event-based backtester</td>
+<td align="left">Strong for strategy logic; ML integration is manual. Many Korean users</td>
+</tr>
+<tr>
+<td align="left"><strong>vectorbt</strong></td>
+<td align="left">Vectorized backtester</td>
+<td align="left">Very fast but not a factor research/model training framework</td>
+</tr>
+<tr>
+<td align="left"><strong>QuantConnect (LEAN)</strong></td>
+<td align="left">Cloud quant platform</td>
+<td align="left">Strong in live trading integration, C#/Python. Qlib wins on open research reproducibility</td>
+</tr>
+<tr>
+<td align="left"><strong>Qbot / QuantMind / qlib-learning</strong></td>
+<td align="left">Qlib-based higher-level apps</td>
+<td align="left">Use Qlib as core engine. Quick exploration</td>
+</tr>
+</tbody></table>
+<p>In summary: Qlib occupies a position with virtually no competitor — <strong>AI model research + backtest integration.</strong>However,<strong>live order execution</strong> (broker API) is out of scope, so you must build your own execution layer for real trading.</p>
+<hr>
+<h2>4. Installation</h2>
+<h3>4.1 Requirements</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Item</th>
+<th align="left">Details</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">OS</td>
+<td align="left">Linux, Windows, macOS (Linux recommended — some scripts like <code>run_all_model.py</code> are Linux-only)</td>
+</tr>
+<tr>
+<td align="left">Python</td>
+<td align="left"><strong>3.8 ~ 3.12</strong> officially supported</td>
+</tr>
+<tr>
+<td align="left">Package Manager</td>
+<td align="left">Conda strongly recommended (system Python may miss header files causing build failures)</td>
+</tr>
+<tr>
+<td align="left">Required Dependencies</td>
+<td align="left">numpy, cython, lightgbm, pytorch (for deep learning models)</td>
+</tr>
+</tbody></table>
+<pre><code class="language-bash">conda create -n qlib python=3.10
+conda activate qlib
+</code></pre>
+<h3>4.2 Three Installation Methods</h3>
+<p><strong>Method 1: pip (stable, recommended)</strong></p>
+<pre><code class="language-bash">pip install pyqlib
+</code></pre>
+<p><strong>Method 2: Source install (for latest main branch features)</strong></p>
+<pre><code class="language-bash">pip install numpy
+pip install --upgrade cython
+
+git clone https://github.com/microsoft/qlib.git &amp;&amp; cd qlib
+pip install .            # For development: pip install -e &quot;.[dev]&quot;
+</code></pre>
+<blockquote>
+<p>Note: The old <code>python setup.py install</code> is deprecated. Always use <code>pip install .</code></p>
+</blockquote>
+<p><strong>Method 3: Docker (isolated environment)</strong></p>
+<pre><code class="language-bash">docker pull pyqlib/qlib_image_stable:stable
+docker run -it --name qlib -v &lt;local_dir&gt;:/app pyqlib/qlib_image_stable:stable
+</code></pre>
+<p><strong>Apple Silicon (M1/M2/M3) Mac users</strong>: LightGBM build may fail due to missing OpenMP. Run <code>brew install libomp</code> first.</p>
+<p><strong>Verify installation</strong>:</p>
+<pre><code class="language-python">import qlib
+print(qlib.__version__)   # 0.9.x
+</code></pre>
+<h3>4.3 Data Preparation — Important Changes</h3>
+<blockquote>
+<p><strong>[As of 2026]</strong>Official data download scripts are temporarily suspended due to tightened data security policies. The official README recommends the community-maintained investment_data repository by chenditc. Old docs&#39; <code>python scripts/get_data.py qlib_data_cn ...</code> commands no longer work.<strong>Recommended: Community dataset (China A-shares, TuShare-based, daily updates)</strong></p>
+</blockquote>
+<pre><code class="language-bash">wget https://github.com/chenditc/investment_data/releases/latest/download/qlib_bin.tar.gz
+mkdir -p ~/.qlib/qlib_data/cn_data
+tar -zxvf qlib_bin.tar.gz -C ~/.qlib/qlib_data/cn_data --strip-components=1
+rm -f qlib_bin.tar.gz
+</code></pre>
+<p><strong>Official script (when restored, Yahoo Finance crawler-based)</strong></p>
+<pre><code class="language-bash"># Daily
+python -m qlib.cli.data qlib_data --target_dir ~/.qlib/qlib_data/cn_data --region cn
+# 1-minute
+python -m qlib.cli.data qlib_data --target_dir ~/.qlib/qlib_data/cn_data_1min --region cn --interval 1min
+</code></pre>
+<p><strong>Data integrity check</strong> (recommended habit):</p>
+<pre><code class="language-bash">python scripts/check_data_health.py check_data --qlib_dir ~/.qlib/qlib_data/cn_data
+</code></pre>
+<h3>4.4 Initialization</h3>
+<pre><code class="language-python">import qlib
+from qlib.constant import REG_CN
+
+provider_uri = &quot;~/.qlib/qlib_data/cn_data&quot;
+qlib.init(provider_uri=provider_uri, region=REG_CN)
+</code></pre>
+<p><code>region</code> supports <code>REG_CN</code> (China), <code>REG_US</code> (US), <code>REG_TW</code> (Taiwan). Region affects data paths <strong>and trading constraint rules</strong> (China&#39;s price limits, T+1, minimum trading units), so when using custom market data, separately review trading rules in backtest configuration.</p>
+<hr>
+<h2>5. First Workflow Execution</h2>
+<h3>5.1 Automated via qrun (config file-based)</h3>
+<p><code>qrun</code> automates dataset construction → model training → signal generation → backtest → evaluation with a single YAML.</p>
+<pre><code class="language-bash">cd examples    # Important: running from qlib repo root causes import conflicts
+qrun benchmarks/LightGBM/workflow_config_lightgbm_Alpha158.yaml
+</code></pre>
+<p>Example output (CSI300 + Alpha158 + LightGBM, from official README):</p>
+<pre><code>&#39;The following are analysis results of the excess return without cost.&#39;
+annualized_return   0.178316    # 17.83% annual excess return
+information_ratio   1.996555
+max_drawdown       -0.081806
+
+&#39;The following are analysis results of the excess return with cost.&#39;
+annualized_return   0.128982    # 12.90% with costs
+information_ratio   1.444287
+max_drawdown       -0.091078
+</code></pre>
+<p>Note the ~5%p gap between cost-free and cost-included returns. The framework shows by default <strong>why you shouldn&#39;t trust cost-free backtest numbers.</strong></p>
+<h3>5.2 Code-Based Custom Workflow</h3>
+<p>If qrun&#39;s auto workflow doesn&#39;t fit, assemble modules directly:</p>
+<pre><code class="language-python">import qlib
+from qlib.constant import REG_CN
+from qlib.utils import init_instance_by_config
+from qlib.workflow import R
+from qlib.workflow.record_temp import SignalRecord, PortAnaRecord
+
+qlib.init(provider_uri=&quot;~/.qlib/qlib_data/cn_data&quot;, region=REG_CN)
+
+market = &quot;csi300&quot;
+benchmark = &quot;SH000300&quot;
+
+data_handler_config = {
+    &quot;start_time&quot;: &quot;2008-01-01&quot;,
+    &quot;end_time&quot;: &quot;2020-08-01&quot;,
+    &quot;fit_start_time&quot;: &quot;2008-01-01&quot;,
+    &quot;fit_end_time&quot;: &quot;2014-12-31&quot;,
+    &quot;instruments&quot;: market,
+}
+
+task = {
+    &quot;model&quot;: {
+        &quot;class&quot;: &quot;LGBModel&quot;,
+        &quot;module_path&quot;: &quot;qlib.contrib.model.gbdt&quot;,
+        &quot;kwargs&quot;: {&quot;loss&quot;: &quot;mse&quot;, &quot;num_leaves&quot;: 210, &quot;learning_rate&quot;: 0.05},
+    },
+    &quot;dataset&quot;: {
+        &quot;class&quot;: &quot;DatasetH&quot;,
+        &quot;module_path&quot;: &quot;qlib.data.dataset&quot;,
+        &quot;kwargs&quot;: {
+            &quot;handler&quot;: {
+                &quot;class&quot;: &quot;Alpha158&quot;,
+                &quot;module_path&quot;: &quot;qlib.contrib.data.handler&quot;,
+                &quot;kwargs&quot;: data_handler_config,
+            },
+            &quot;segments&quot;: {
+                &quot;train&quot;: (&quot;2008-01-01&quot;, &quot;2014-12-31&quot;),
+                &quot;valid&quot;: (&quot;2015-01-01&quot;, &quot;2016-12-31&quot;),
+                &quot;test&quot;:  (&quot;2017-01-01&quot;, &quot;2020-08-01&quot;),
+            },
+        },
+    },
+}
+
+model = init_instance_by_config(task[&quot;model&quot;])
+dataset = init_instance_by_config(task[&quot;dataset&quot;])
+
+with R.start(experiment_name=&quot;my_first_workflow&quot;):
+    model.fit(dataset)
+    R.save_objects(trained_model=model)
+    rec = R.get_recorder()
+    SignalRecord(model, dataset, rec).generate()
+</code></pre>
+<h3>5.3 Direct Data Query via Expression Engine</h3>
+<pre><code class="language-python">from qlib.data import D
+
+# Simple query
+df = D.features(
+    [&quot;SH600000&quot;],
+    [&quot;$close&quot;, &quot;$volume&quot;],
+    start_time=&quot;2020-01-01&quot;, end_time=&quot;2020-12-31&quot;, freq=&quot;day&quot;,
+)
+
+# Define factors on the fly: 5-day momentum, 20-day volatility
+df = D.features(
+    D.instruments(&quot;csi300&quot;),
+    [&quot;Ref($close, 5)/$close - 1&quot;, &quot;Std($close/Ref($close,1)-1, 20)&quot;],
+    start_time=&quot;2019-01-01&quot;, end_time=&quot;2020-12-31&quot;,
+)
+</code></pre>
+<p>Expression strings ARE factor definitions; results are cached in ExpressionCache for dramatic speed on subsequent calls.</p>
+<h3>5.4 Graphical Reports</h3>
+<pre><code class="language-bash">python -m pip install &quot;.[analysis]&quot;
+jupyter notebook examples/workflow_by_code.ipynb
+</code></pre>
+<p>Reports available: group cumulative returns, long-short return distribution, IC/monthly IC, signal autocorrelation, portfolio backtest return curves.</p>
+<hr>
+<h2>6. Benchmarks — Model Performance Comparison</h2>
+<h3>6.1 Understanding Datasets: Alpha158 vs Alpha360</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Dataset</th>
+<th align="left">Characteristics</th>
+<th align="left">Best Model Type</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Alpha158</strong></td>
+<td align="left">158 human-designed factors (typical feature engineering). Weak spatial relationships between features</td>
+<td align="left">GBDT family (LightGBM, CatBoost, etc.)</td>
+</tr>
+<tr>
+<td align="left"><strong>Alpha360</strong></td>
+<td align="left">Raw price/volume over last 60 days (minimal feature engineering). Strong temporal spatial relationships</td>
+<td align="left">Deep learning (GRU, ALSTM, TRA, etc.)</td>
+</tr>
+</tbody></table>
+<p>This distinction matters because <strong>the general ML rule that GBDT wins on tabular data and neural nets win on raw time series is faithfully reproduced in Qlib benchmarks.</strong> Choose your model family based on your factor characteristics — blindly using the &quot;hottest model&quot; is inefficient.</p>
+<h3>6.2 Market Dynamic Adaptation Benchmark (CSI500, Alpha158, 2017.01–2020.08 rolling)</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Model</th>
+<th align="right">IC</th>
+<th align="right">ICIR</th>
+<th align="right">Rank IC</th>
+<th align="right">Annual Return</th>
+<th align="right">IR</th>
+<th align="right">MDD</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">RR[Linear]</td>
+<td align="right">0.0945</td>
+<td align="right">0.5989</td>
+<td align="right">0.1069</td>
+<td align="right">8.57%</td>
+<td align="right">1.368</td>
+<td align="right">-9.86%</td>
+</tr>
+<tr>
+<td align="left">DDG-DA[Linear]</td>
+<td align="right">0.0983</td>
+<td align="right">0.6157</td>
+<td align="right">0.1108</td>
+<td align="right">7.64%</td>
+<td align="right">1.190</td>
+<td align="right">-7.69%</td>
+</tr>
+<tr>
+<td align="left">RR[LightGBM]</td>
+<td align="right">0.0816</td>
+<td align="right">0.5887</td>
+<td align="right">0.0912</td>
+<td align="right">7.71%</td>
+<td align="right">1.320</td>
+<td align="right">-9.09%</td>
+</tr>
+<tr>
+<td align="left"><strong>DDG-DA[LightGBM]</strong></td>
+<td align="right"><strong>0.0878</strong></td>
+<td align="right"><strong>0.6185</strong></td>
+<td align="right"><strong>0.0975</strong></td>
+<td align="right"><strong>12.61%</strong></td>
+<td align="right"><strong>2.010</strong></td>
+<td align="right"><strong>-7.44%</strong></td>
+</tr>
+</tbody></table>
+<p>Key takeaway: Combining DDG-DA (meta-learning distribution adaptation) with LightGBM improves annual return by +4.9%p and IR from 1.32 to 2.01 over simple rolling retraining. <strong>Same model, dramatically different results depending on market change adaptation strategy.</strong></p>
+<h3>6.3 Full Model Comparison Table</h3>
+<p>Performance comparison for 25+ models is maintained at:
+<code>https://github.com/microsoft/qlib/blob/main/examples/benchmarks/README.md</code></p>
+<p>To run multiple models yourself (Linux only):</p>
+<pre><code class="language-bash">python run_all_model.py run 10          # all models, 10 iterations
+python run_all_model.py run 3 lightgbm Alpha158 csi500   # specific model/dataset/universe
+</code></pre>
+<p>Official docs recommend 20+ iterations for deep learning models with randomness. <strong>Judging model superiority from a single run is statistically meaningless.</strong></p>
+<hr>
+<h2>7. Practical Section for Korean Developers: KRX Data Integration</h2>
+<p>Qlib doesn&#39;t officially support the Korean market (regions: CN/US/TW only). However, the CSV → Qlib binary conversion tool (<code>dump_bin.py</code>) exists, making KOSPI/KOSDAQ data integration straightforward.</p>
+<h3>7.1 Data Collection via pykrx → CSV Generation</h3>
+<pre><code class="language-python"># pip install pykrx
+from pykrx import stock
+import pandas as pd, os
+
+os.makedirs(&quot;csv_kr&quot;, exist_ok=True)
+tickers = stock.get_market_ticker_list(market=&quot;KOSPI&quot;)
+
+for t in tickers[:50]:   # example: top 50 stocks
+    df = stock.get_market_ohlcv(&quot;20180101&quot;, &quot;20260630&quot;, t)
+    df = df.reset_index().rename(columns={
+        &quot;날짜&quot;: &quot;date&quot;, &quot;시가&quot;: &quot;open&quot;, &quot;고가&quot;: &quot;high&quot;,
+        &quot;저가&quot;: &quot;low&quot;, &quot;종가&quot;: &quot;close&quot;, &quot;거래량&quot;: &quot;volume&quot;,
+    })
+    df[&quot;symbol&quot;] = t
+    # Qlib convention: factor column for adjusted price calculation (1.0 for unadjusted)
+    df[&quot;factor&quot;] = 1.0
+    df.to_csv(f&quot;csv_kr/{t}.csv&quot;, index=False)
+</code></pre>
+<h3>7.2 Convert to Qlib Binary</h3>
+<pre><code class="language-bash">python scripts/dump_bin.py dump_all \
+    --csv_path ./csv_kr \
+    --qlib_dir ~/.qlib/qlib_data/kr_data \
+    --include_fields open,close,high,low,volume,factor \
+    --date_field_name date --symbol_field_name symbol
+</code></pre>
+<h3>7.3 Essential Checklist for Korean Market Data</h3>
+<table>
+<thead>
+<tr>
+<th align="left">Item</th>
+<th align="left">Details</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Adjusted prices (factor)</strong></td>
+<td align="left">Verify pykrx OHLCV reflects adjusted prices. Backtesting without adjustment for splits/dividends distorts returns</td>
+</tr>
+<tr>
+<td align="left"><strong>Trading rules</strong></td>
+<td align="left">Using <code>region=REG_CN</code> applies Chinese ±10% price limits and T+1. Customize backtest executor for Korean rules (±30% limits, T+0 rotation)</td>
+</tr>
+<tr>
+<td align="left"><strong>Trading halts/delistings</strong></td>
+<td align="left">Include delisted stocks to prevent survivorship bias. pykrx is current-listing-centric — know this limitation</td>
+</tr>
+<tr>
+<td align="left"><strong>Calendar</strong></td>
+<td align="left">Check <code>~/.qlib/qlib_data/kr_data/calendars/day.txt</code> for Korean holiday calendar auto-generation</td>
+</tr>
+<tr>
+<td align="left"><strong>Benchmark index</strong></td>
+<td align="left">Add KOSPI200 as a separate symbol for backtest benchmarking</td>
+</tr>
+<tr>
+<td align="left"><strong>Alpha158 factors</strong></td>
+<td align="left">Factor definitions are market-neutral and applicable to Korean data. But validation must be redone — CSI300 IC may not reproduce in the Korean market</td>
+</tr>
+</tbody></table>
+<h3>7.4 Toss Open API ↔ Qlib Middleware (Node.js/TypeScript + Redis)</h3>
+<p>Qlib is a Python framework, but what Qlib actually needs is &quot;data in its format.&quot; The data pipeline can be in any language. This section describes a middleware that fetches prices from the Toss Securities Open API, normalizes them to Qlib CSV format (<code>date,open,high,low,close,volume,symbol,factor</code>), and feeds them to <code>dump_bin.py</code>.</p>
+<p><strong>Scope: authentication and market/instrument data queries only. Order creation/modification/cancellation (trading) is intentionally excluded.</strong> See section 7.4.6 for rationale.</p>
+<p>Code is at <a href="./toss-qlib-middleware"><code>TechDoc/Quant_Qlib/toss-qlib-middleware/</code></a> (<a href="./toss-qlib-middleware/README.md">Korean README</a> / <a href="./toss-qlib-middleware/README_EN.md">English README</a> / <a href="./toss-qlib-middleware/llms.txt">llms.txt</a>). Toss Open API auth/endpoint specs were aligned with the existing <a href="../../Toss"><code>Toss/</code></a> project in this repo.</p>
+<h4>7.4.1 Why a Middleware?</h4>
+<p>Qlib&#39;s <code>dump_bin.py</code> only needs to understand CSV; the Qlib engine only cares about the subsequent binary format and cache. Toss Open API has OAuth2 auth, token expiry, rate limits, pagination — &quot;API client problems.&quot; Separating auth/call management from factor/modeling keeps both clean.</p>
+<pre><code>TOSS Open API  --OAuth2--&gt;  [Node.js/TS Middleware]  --CSV(csv_kr/*.csv)--&gt;  scripts/dump_bin.py  --&gt;  ~/.qlib/qlib_data/kr_data
+                                   |
+                                 Redis (token cache + price cache)
+</code></pre>
+<h4>7.4.2 Authentication (OAuth2 Client Credentials)</h4>
+<p>Toss Securities Open API uses <strong>OAuth2 Client Credentials Grant</strong> (no user login). Specs verified from <code>Toss/src/toss.js</code> and <code>Toss/docs/Toss_OpenAPI_Guide.md</code>:</p>
+<ol>
+<li>Login to Toss WTS → Settings → Open API menu → issue <code>client_id</code> / <code>client_secret</code></li>
+<li><code>POST {baseUrl}/oauth2/token</code> with <code>grant_type=client_credentials</code>, <code>client_id</code>, <code>client_secret</code> as <strong>form-urlencoded body</strong> (not Basic Auth header) → returns <code>access_token</code>, <code>expires_in</code></li>
+<li>Validity is <strong>86,400 seconds (24 hours) with no refresh token</strong> — implement proactive re-issuance before expiry</li>
+<li>All subsequent calls use <code>Authorization: Bearer {access_token}</code> header</li>
+<li>Account-level APIs require additional <code>X-Tossinvest-Account</code> header (not implemented — middleware doesn&#39;t call account/order APIs)</li>
+</ol>
+<blockquote>
+<p><strong>Verification status</strong>: Official docs (<code>developers.tossinvest.com/docs</code>) use JavaScript rendering, but sending the above form-body request to <code>POST /oauth2/token</code> returns (even with wrong credentials) <code>{&quot;error&quot;:&quot;invalid_client&quot;, ...}</code> — confirming the endpoint path and request format via live testing. Exact candle/price response field schemas are unconfirmed, so the middleware defensively accepts multiple candidate keys. Note that the service itself is in a pre-registration phase as of June 2026 with no confirmed launch date.</p>
+</blockquote>
+<h4>7.4.3 Redis Caching Strategy</h4>
+<table>
+<thead>
+<tr>
+<th align="left">Cache Target</th>
+<th align="left">Key</th>
+<th align="left">TTL</th>
+<th align="left">Rationale</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Access Token</td>
+<td align="left"><code>toss:access_token</code></td>
+<td align="left"><code>86400 - safety_margin (default 1hr)</code></td>
+<td align="left">No refresh token — must proactively re-issue well before expiration</td>
+</tr>
+<tr>
+<td align="left">Token Reissuance Lock</td>
+<td align="left"><code>toss:access_token:lock</code></td>
+<td align="left">10s (<code>SET NX</code>)</td>
+<td align="left">Prevent thundering herd when multiple requests detect expiration simultaneously</td>
+</tr>
+<tr>
+<td align="left">Settled Historical Candles</td>
+<td align="left"><code>toss:candles:{symbol}:{interval}:{start}:{end}</code></td>
+<td align="left">1 day (<code>CANDLE_TTL_HISTORICAL_SEC</code>)</td>
+<td align="left">Closed candles won&#39;t change — long cache</td>
+</tr>
+<tr>
+<td align="left">Intraday (Unsettled) Candles</td>
+<td align="left">Same key</td>
+<td align="left">Short (<code>CANDLE_TTL_TODAY_SEC</code>, default 30s)</td>
+<td align="left">During market hours, current candle keeps updating</td>
+</tr>
+<tr>
+<td align="left">Current Price</td>
+<td align="left"><code>toss:price:{symbol}</code></td>
+<td align="left">Short (<code>PRICE_TTL_SEC</code>, default 5s)</td>
+<td align="left">Per-instrument cache enables cross-batch reuse</td>
+</tr>
+</tbody></table>
+<p>401 (token expired/invalid) → immediately clear cache and retry once. 429 (rate limit) → check <code>Retry-After</code> header and backoff. Candle API returns max 200 per request with no <code>start</code>/<code>end</code> filter, so paginate backwards from latest via <code>before</code> cursor then sort ascending (same strategy as <code>Toss/src/toss.js</code>).</p>
+<h4>7.4.4 Installation &amp; Execution</h4>
+<pre><code class="language-bash">cd TechDoc/Quant_Qlib/toss-qlib-middleware
+npm install
+npm run setup       # Interactive .env generation + optional live token issuance test
+npm run typecheck
+npm test            # Passes without Redis server (in-memory adapter for logic verification)
+npm run dev         # http://localhost:4000, requires actual Redis
+</code></pre>
+<p>Core <code>.env</code> entries (same key names as <code>Toss/.env.example</code>):</p>
+<pre><code>TOSS_BASE_URL=https://openapi.tossinvest.com
+TOSS_TOKEN_PATH=/oauth2/token
+TOSS_CANDLES_PATH=/api/v1/candles
+TOSS_PRICES_PATH=/api/v1/prices
+REDIS_URL=redis://127.0.0.1:6379
+QLIB_CSV_EXPORT_DIR=./csv_kr
+</code></pre>
+<p>All endpoint paths are environment variables — change <code>.env</code> without touching code.</p>
+<h4>7.4.5 API &amp; Qlib Pipeline Integration</h4>
+<p>Middleware endpoints:</p>
+<table>
+<thead>
+<tr>
+<th align="left">Method</th>
+<th align="left">Path</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">GET</td>
+<td align="left"><code>/health</code></td>
+<td align="left">Health check</td>
+</tr>
+<tr>
+<td align="left">GET</td>
+<td align="left"><code>/api/candles/:symbol?start=&amp;end=&amp;interval=day</code></td>
+<td align="left">Normalized candle JSON (via Redis cache, built-in <code>before</code> pagination)</td>
+</tr>
+<tr>
+<td align="left">GET</td>
+<td align="left"><code>/api/prices?symbols=005930,000660</code></td>
+<td align="left">Batch current prices (comma-separated, chunked at 200)</td>
+</tr>
+<tr>
+<td align="left">POST</td>
+<td align="left"><code>/api/export/qlib</code> <code>{symbols, start, end, outDir?}</code></td>
+<td align="left">Fetch multiple symbols → CSV in <code>csv_kr/{symbol}.csv</code> (section 7.1 format)</td>
+</tr>
+</tbody></table>
+<p>CLI for CSV-only without running the server:</p>
+<pre><code class="language-bash">npm run export:qlib -- --symbols 005930,000660 --start 2020-01-01 --end 2026-07-01
+</code></pre>
+<p>Generated CSVs feed directly into the section 7.2 conversion command.</p>
+<h4>7.4.6 Why Trading (Order Execution) Is Not Included</h4>
+<p>This middleware is a <strong>data pipeline</strong>, not an <strong>order execution system</strong>. Qlib itself (section 3) excludes live order integration, and section 8.3 warns that backtest performance doesn&#39;t guarantee live results. Auth and price queries are common ground worth standardizing as middleware, but order logic (state management, idempotency/duplicate prevention, risk limits, fill confirmation) varies so radically by strategy and risk tolerance that a generic implementation would be dangerous.</p>
+<p>To extend: see <a href="./toss-qlib-middleware/src/trading/README.md"><code>src/trading/README.md</code></a>. Reuse <code>TossAuthService</code> (token caching) and <code>TossApiClient</code> (HTTP patterns), but <strong>always validate real order code in small-amount/paper environments first.</strong></p>
+<hr>
+<h2>8. Pitfalls — Real-World Issues You Will Encounter</h2>
+<h3>8.1 Environment/Installation</h3>
+<ol>
+<li><strong>Don&#39;t import from repo root</strong>: Running <code>import qlib</code> from the qlib repo root causes <code>ModuleNotFoundError: No module named &#39;qlib.data._libs.rolling&#39;</code> (local folder shadows the package). Always <code>cd examples</code> first.</li>
+<li><strong>pandas 2.x compatibility</strong>: pandas 1.5→2.0 changed <code>groupby</code>&#39;s <code>group_key</code> default, potentially breaking TRA dataset, TFT, and RL order execution scripts. Pinning <code>pandas&lt;2.0</code> is the quickest workaround.</li>
+<li><strong>TFT model requires Python 3.6–3.7 + tensorflow 1.15</strong>: Won&#39;t run on modern environments. Check per-model requirements.txt.</li>
+<li><strong>Works without Redis</strong>: Core functions work fine without Redis; only cache portions are disabled. If Redis is used and locks get stuck, <code>QlibCacheException</code> is thrown — delete the Redis key.</li>
+<li><strong>multiprocessing on Windows</strong>: <code>RuntimeError: An attempt has been made to start a new process...</code> — classic Windows issue when running without <code>if __name__ == &quot;__main__&quot;:</code> guard.</li>
+</ol>
+<h3>8.2 Data Quality</h3>
+<ol start="6">
+<li><strong>Yahoo Finance data limitations</strong>: The official crawler uses Yahoo Finance data, which the docs themselves acknowledge has gaps/errors. Using your own high-quality data is the official recommendation. Include <code>check_data_health.py</code> in your pipeline permanently.</li>
+<li><strong>Offline data can&#39;t be incrementally updated</strong>: Official distribution data removes some fields for size reduction, preventing incremental updates. If you need ongoing updates, build your own collector from scratch with an incremental update system.</li>
+</ol>
+<h3>8.3 Methodology — Most Important</h3>
+<ol start="8">
+<li><strong>Look-ahead bias</strong>: Custom factors using negative <code>Ref</code> (e.g., <code>Ref($close, -1)</code>) reference future data. This is needed for label definition, but if it leaks into features, the backtest becomes meaningless.</li>
+<li><strong>Trading costs &amp; slippage</strong>: As shown in section 5.1, costs change annual return from 17.8% to 12.9%. For Korean market, reflect transaction tax (0.18%~), commissions, and bid-ask slippage in executor settings.</li>
+<li><strong>Overfitting</strong>: Iteratively tuning hyperparameters on the validation set inevitably inflates test performance. Rolling validation (benchmarks_dynamic approach) is more reliable than single train/valid/test splits.</li>
+<li><strong>IC of 0.05 is not &quot;good&quot; — it&#39;s a starting point</strong>: Daily IC of 0.03–0.05 level signals usually can&#39;t overcome trading costs and capacity constraints. Look at ICIR (stability) and cost-adjusted IR, not just IC.</li>
+<li><strong>Backtest is not execution</strong>: Qlib backtest performance does not guarantee live results. Order book depth, fill delay, and market impact are separate issues. Qlib&#39;s RL order execution module partially addresses the gap but isn&#39;t complete.</li>
+</ol>
+<blockquote>
+<p>One-line summary: <strong>Qlib is a calculator, not an oracle.</strong> No matter how sophisticated the framework, input data quality and methodological discipline determine the outcome.</p>
+</blockquote>
+<hr>
+<h2>9. RD-Agent Integration (Optional)</h2>
+<pre><code class="language-bash">pip install rdagent
+# After setting LLM API keys:
+rdagent fin_factor    # Factor discovery loop
+rdagent fin_model     # Model optimization loop
+rdagent fin_factor_report --report_folder=&lt;PDF folder&gt;   # Report-based factor extraction
+</code></pre>
+<p>Caution: RD-Agent incurs significant LLM API costs (dozens to hundreds of calls per factor loop), and generated factors require independent statistical validation. Automation does not replace verification.</p>
+<hr>
+<h2>10. Recommended Learning Path</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Stage</th>
+<th align="left">Task</th>
+<th align="left">Estimated Time</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">Install + download community data + run <code>qrun</code> LightGBM benchmark once</td>
+<td align="left">Half day</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left">Interpret reports via <code>workflow_by_code.ipynb</code> (IC, group returns, backtest curves)</td>
+<td align="left">1 day</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">Define 3 custom factors via expression engine → add to Alpha158 → compare performance</td>
+<td align="left">2–3 days</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">KRX data conversion + Korean market backtest pipeline</td>
+<td align="left">1 week</td>
+</tr>
+<tr>
+<td align="left">4.5</td>
+<td align="left">(Optional) Automate step 4 CSV generation via Toss Open API middleware (section 7.4)</td>
+<td align="left">2–3 days</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">Adopt rolling retraining (benchmarks_dynamic) → compare with single split</td>
+<td align="left">1 week</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">(Optional) RL order execution / RD-Agent experiments — live order integration is DIY (section 7.4.6)</td>
+<td align="left">Beyond</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>11. References</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Resource</th>
+<th align="left">Link</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">GitHub Repository</td>
+<td align="left"><a href="https://github.com/microsoft/qlib">https://github.com/microsoft/qlib</a></td>
+</tr>
+<tr>
+<td align="left">Official Documentation</td>
+<td align="left"><a href="https://qlib.readthedocs.io">https://qlib.readthedocs.io</a></td>
+</tr>
+<tr>
+<td align="left">Model Benchmark Table</td>
+<td align="left"><a href="https://github.com/microsoft/qlib/blob/main/examples/benchmarks/README.md">https://github.com/microsoft/qlib/blob/main/examples/benchmarks/README.md</a></td>
+</tr>
+<tr>
+<td align="left">Dynamic Adaptation Benchmarks</td>
+<td align="left"><a href="https://github.com/microsoft/qlib/tree/main/examples/benchmarks_dynamic">https://github.com/microsoft/qlib/tree/main/examples/benchmarks_dynamic</a></td>
+</tr>
+<tr>
+<td align="left">Community Data (CN)</td>
+<td align="left"><a href="https://github.com/chenditc/investment_data/releases">https://github.com/chenditc/investment_data/releases</a></td>
+</tr>
+<tr>
+<td align="left">RD-Agent</td>
+<td align="left"><a href="https://github.com/microsoft/RD-Agent">https://github.com/microsoft/RD-Agent</a></td>
+</tr>
+<tr>
+<td align="left">Qlib Paper</td>
+<td align="left"><a href="https://arxiv.org/abs/2009.11189">https://arxiv.org/abs/2009.11189</a></td>
+</tr>
+<tr>
+<td align="left">R&amp;D-Agent-Quant Paper</td>
+<td align="left"><a href="https://arxiv.org/abs/2505.15155">https://arxiv.org/abs/2505.15155</a></td>
+</tr>
+<tr>
+<td align="left">Qlib-Server (Online Mode)</td>
+<td align="left"><a href="https://github.com/microsoft/qlib-server">https://github.com/microsoft/qlib-server</a></td>
+</tr>
+<tr>
+<td align="left">Toss Securities Open API Docs</td>
+<td align="left"><a href="https://developers.tossinvest.com/docs">https://developers.tossinvest.com/docs</a></td>
+</tr>
+<tr>
+<td align="left">Toss ↔ Qlib Middleware (this repo)</td>
+<td align="left"><a href="./toss-qlib-middleware"><code>TechDoc/Quant_Qlib/toss-qlib-middleware</code></a></td>
+</tr>
+<tr>
+<td align="left">Toss API Reference Project (this repo)</td>
+<td align="left"><a href="../../Toss"><code>Toss/</code></a> — working dashboard, includes GUIDE.md and docs/Toss_OpenAPI_Guide.md</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>This document was written on 2026-07-05 based on cross-validation against the microsoft/qlib main branch and official documentation. All metrics (benchmarks, performance comparisons) are sourced from the official repository&#39;s public materials; reproduction results may vary by execution environment. Section 7.4 Toss Open API middleware was aligned with authentication specs based on this repo&#39;s <code>Toss/</code> project sources and docs, and logic was verified via own unit tests (<code>npm test</code>, 10 passing). <code>POST /oauth2/token</code> received <code>invalid_client</code> response (even with wrong credentials), confirming the endpoint path and request format via live testing, though exact candle/price response field schemas require re-verification after real account issuance.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Quant_Qlib/Qlib-getting-started-EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

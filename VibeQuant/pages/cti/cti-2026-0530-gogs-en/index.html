@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Unpatched Critical RCE — Gogs git rebase Argument Injection — VibeQuant</title>
+  <meta name="description" content="A 9.4 flaw letting any authenticated user seize a self hosted Git server, plus cross tenant compromise" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-en/" />
+  <meta property="og:title" content="Unpatched Critical RCE — Gogs git rebase Argument Injection" />
+  <meta property="og:description" content="A 9.4 flaw letting any authenticated user seize a self hosted Git server, plus cross tenant compromise" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-jp/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Unpatched Critical RCE — Gogs git rebase Argument Injection","description":"A 9.4 flaw letting any authenticated user seize a self hosted Git server, plus cross tenant compromise","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0530-gogs-en/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0530-GOGS_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-05-30","dateModified":"2026-05-30","inLanguage":"en","keywords":"취약점 · 패치, EN, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 취약점 · 패치</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">취약점 · 패치</p>
+        <h1>Unpatched Critical RCE — Gogs git rebase Argument Injection</h1>
+        <p class="article-dates"><time datetime="2026-05-30">발행 2026.05.30</time> · 주제 취약점 · 패치 · EN · CTI</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0530-gogs-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0530-gogs-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0530-gogs-jp/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0530-gogs-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">A 9.4 flaw letting any authenticated user seize a self-hosted Git server, plus cross-tenant compromise</p>
+        <p class="article-byline">Dennis Kim (김호광 / HoKwang Kim) · 2026-05-30</p>
+      </header>
+      <div class="article-body prose"><p><em>A 9.4 flaw letting any authenticated user seize a self-hosted Git server, plus cross-tenant compromise</em></p>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li>Executive Summary (TL;DR)</li>
+<li>Vulnerability Analysis — <code>--exec</code> argument injection</li>
+<li>Attack Scenarios — from a no-privilege account to server takeover</li>
+<li>Impact and Exposure</li>
+<li>Forensic Traces and Detection</li>
+<li>Mitigation (in the absence of a patch)</li>
+<li>Korea Perspective — the blind spot of self-hosted Git</li>
+<li>Conclusion</li>
+<li>References</li>
+</ol>
+<hr>
+<h2>Executive Summary (TL;DR)</h2>
+<p>On May 28, 2026, Rapid7 disclosed a critical vulnerability in <strong>Gogs</strong>, a popular self-hosted Git service, that lets <strong>any authenticated user execute arbitrary code on the server</strong>. No CVE identifier has yet been assigned, but Rapid7 rated it CVSS 9.4.</p>
+<p>The flaw arises in Gogs&#39; <em>&quot;Rebase before merging&quot;</em> operation. When an attacker creates a pull request with a <strong>malicious branch name</strong>, that branch name is injected into the <code>--exec</code> flag of <code>git rebase</code>, causing an arbitrary shell command to run after each commit is replayed. No admin privileges and no interaction with other users are required.</p>
+<p>More serious: the flaw was <strong>reported to the maintainer on March 17, 2026, yet remains unpatched</strong>as of publication, and Rapid7 has published a<strong>Metasploit module</strong> that automates the full chain against both Linux and Windows. In short, the weapon is public and there is no patch.</p>
+<h3>Key Judgments</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Judgment</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KJ-1</td>
+<td>This is a textbook <strong>argument injection</strong>: user input (the branch name) is passed straight into a shell-command argument, with essentially no precondition beyond authentication.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-2</td>
+<td>The combination of <strong>unpatched + public Metasploit module</strong>all but removes the barrier to real-world exploitation. Exposed instances are at immediate risk.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-3</td>
+<td>In shared-server environments, <strong>cross-tenant compromise</strong>is possible — one user can read another user&#39;s private repositories.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-4</td>
+<td>Default-configured instances (registration and repo creation enabled) are the most exposed. Mitigation is possible but does not replace a root patch.</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+<tr>
+<td>KJ-5</td>
+<td>Self-hosted Git is the single trust anchor for source code, credentials, and CI pipelines, so this flaw can be a <strong>bridgehead for supply chain compromise</strong>.</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. Vulnerability Analysis — <code>--exec</code> argument injection</h2>
+<p>Gogs is a lightweight self-hosted Git service written in Go, widely used as a self-hosted alternative to GitHub. This flaw occurs in the <em>&quot;Rebase before merging&quot;</em> option, which uses <code>git rebase</code> to merge a PR.</p>
+<p><code>git rebase</code> replays a branch&#39;s commit sequence onto another base branch to create linear history. It can take a <strong><code>--exec</code> flag that runs a shell command after each replayed commit</strong>. Gogs passes the user-controlled <strong>branch name</strong> into the <code>git rebase</code> invocation without sufficient sanitization. So if an attacker embeds an <code>--exec</code>-style payload in the branch name, that command executes on the server host during merge.</p>
+<blockquote>
+<p>Researcher Jonah Burgess (Rapid7): &quot;The vulnerability allows any authenticated user to achieve RCE on the server by creating a pull request with a malicious branch name that injects the <code>--exec</code> flag into <code>git rebase</code> during the &#39;Rebase before merging&#39; merge operation.&quot;</p>
+</blockquote>
+<p>The affected platforms are <strong>all supported platforms</strong> — Windows, Linux, and macOS.</p>
+<hr>
+<h2>2. Attack Scenarios — from a no-privilege account to server takeover</h2>
+<p>The danger lies in the <strong>near-total absence of preconditions</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Precondition</th>
+<th>Attack path</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>① Default-config instance</td>
+<td>Registration &amp; repo creation enabled (default)</td>
+<td>Create account → create repo (auto-owner) → toggle rebase merging in settings → run the full chain solo</td>
+</tr>
+<tr>
+<td>② User with write access</td>
+<td>Write access to a repo where rebase merging is already enabled</td>
+<td>Exploit directly</td>
+</tr>
+<tr>
+<td>③ Repo-creation-restricted env</td>
+<td>Write access to any repo with rebase merging enabled</td>
+<td>Exploit via that repo</td>
+</tr>
+</tbody></table>
+<p>Scenario ① is especially severe: <em>&quot;any registered user who creates a repo is automatically its owner, enabling rebase merging is a single settings toggle, and the entire exploit chain can be operated without interaction from any other user.&quot;</em></p>
+<p>On success, the attacker can breach the server, access every repository on the instance, dump credentials, move to other network-accessible systems, and tamper with hosted repository code. Above all, it leads to a <strong>cross-tenant data breach</strong>, reading other users&#39; private repositories on the same shared server.</p>
+<hr>
+<h2>3. Impact and Exposure</h2>
+<ul>
+<li><strong>Estimated exposed instances</strong>: about 1,141 internet-facing Gogs instances. The actual figure is expected to be higher, since most deployments sit behind VPNs or internal networks.</li>
+<li><strong>Weaponization level</strong>: Rapid7 published a Metasploit module that automates the full chain against Linux and Windows targets. It supports two modes — (a) a default mode that creates, exploits, and deletes a temporary repo under the attacker&#39;s account, and (b) a mode targeting a repo where the attacker already has write/merge access.</li>
+<li><strong>Patch status</strong>: despite being reported to the maintainer on 2026-03-17, <strong>unpatched</strong> as of publication.</li>
+</ul>
+<hr>
+<h2>4. Forensic Traces and Detection</h2>
+<p>Per Rapid7, traces differ by mode.</p>
+<ul>
+<li><strong>Self-created-and-deleted-repo mode</strong>: the only trace in server logs is essentially a <strong>single HTTP 500 error</strong> — hard to distinguish from a normal error in post-incident analysis.</li>
+<li><strong>Existing-repo mode</strong>: additional artifacts remain, giving relatively higher detectability.</li>
+</ul>
+<p>Detection recommendations:</p>
+<ol>
+<li>Monitor anomalous HTTP 500 patterns tied to PR merge events.</li>
+<li>Alert on creation of abnormal branch names (containing special characters or <code>--exec</code>-like tokens).</li>
+<li>Detect unexpected shell/child processes spawned by the Gogs process.</li>
+<li>Track short-window chains of new account → repo creation → rebase toggle → merge.</li>
+</ol>
+<hr>
+<h2>5. Mitigation (in the absence of a patch)</h2>
+<p>Rapid7&#39;s interim mitigations, given no root patch:</p>
+<ol>
+<li><strong>Restrict registration</strong> — set <code>DISABLE_REGISTRATION = true</code> in <code>app.ini</code> to block untrusted account creation.</li>
+<li><strong>Restrict repo creation</strong> — set <code>MAX_CREATION_LIMIT = 0</code> in <code>app.ini</code> to prevent users from creating their own repos.</li>
+<li><strong>Audit rebase merge settings</strong> — review all repos with rebase merging enabled and disable where unnecessary.</li>
+<li><strong>Network isolation</strong> — remove direct internet exposure; move behind VPN/internal network/access controls.</li>
+<li><strong>Consider alternatives</strong> — if patch availability is uncertain, evaluate mid-term migration to actively maintained alternatives such as Forgejo/Gitea (but verify versions, as Gitea-family software has its own vulnerability history).</li>
+</ol>
+<hr>
+<h2>6. Korea Perspective — the blind spot of self-hosted Git</h2>
+<p>In Korean startups, research labs, and small SI shops, self-hosted Git like Gogs/Gitea is widely used because it is <em>&quot;lightweight and free,&quot;</em> but the following blind spots exist.</p>
+<ul>
+<li><strong>Asset-inventory gaps</strong> — the &quot;internal-only Git&quot; mindset often leaves it out of security asset lists and vulnerability-scan scope.</li>
+<li><strong>CI/CD trust chain</strong> — the Git server is the trust anchor not only for source code but for deploy keys, webhooks, and CI runner tokens. Server takeover can spread to build-pipeline poisoning.</li>
+<li><strong>Cross-tenant risk</strong> — on shared instances hosting multiple teams/projects, this flaw becomes a path for one team to exfiltrate another&#39;s private code.</li>
+</ul>
+<p>Recommendation: regardless of internet exposure, Korean operators should <strong>immediately add their Gogs instances to inventory</strong>, apply the §5 mitigations, and track patch developments.</p>
+<hr>
+<h2>7. Conclusion</h2>
+<p>This is not a new technique but a classic mistake — <strong>trusting user input in a shell argument</strong>. Yet the triple condition — (1) no precondition beyond authentication, (2) a public Metasploit module, and (3) no root patch — makes the real-world risk very high.</p>
+<p>Self-hosted Git is the single trust anchor for an organization&#39;s most sensitive assets — source code, credentials, deployment pipelines. The greatest risk is leaving such systems unattended under the assumption that &quot;it&#39;s internal, so it&#39;s fine.&quot; Until a patch arrives, removing exposure and hardening configuration is not optional but mandatory.</p>
+<hr>
+<h2>References</h2>
+<p>[1] Ravie Lakshmanan, &quot;Critical Gogs RCE Vulnerability Lets Any Authenticated User Execute Arbitrary Code&quot;, The Hacker News, 2026-05-28. <a href="https://thehackernews.com/2026/05/critical-gogs-rce-vulnerability-lets.html">https://thehackernews.com/2026/05/critical-gogs-rce-vulnerability-lets.html</a></p>
+<p>[2] Jonah Burgess, &quot;Authenticated RCE via Argument Injection in Gogs (Unfixed)&quot;, Rapid7, 2026-05. <a href="https://www.rapid7.com/blog/post/ve-authenticated-rce-via-argument-injection-gogs-unfixed/">https://www.rapid7.com/blog/post/ve-authenticated-rce-via-argument-injection-gogs-unfixed/</a></p>
+<p>[3] Rapid7, &quot;Metasploit module — Gogs git rebase argument injection RCE&quot;, GitHub PR #21515. <a href="https://github.com/rapid7/metasploit-framework/pull/21515">https://github.com/rapid7/metasploit-framework/pull/21515</a></p>
+<p>[4] Atlassian, &quot;Merging vs. Rebasing&quot;, Git Tutorials. <a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">https://www.atlassian.com/git/tutorials/merging-vs-rebasing</a></p>
+<p>[5] Git Documentation, &quot;git-rebase — <code>--exec</code> option&quot;. <a href="https://git-scm.com/docs/git-rebase#Documentation/git-rebase.txt---execltcmdgt">https://git-scm.com/docs/git-rebase#Documentation/git-rebase.txt---execltcmdgt</a></p>
+<hr>
+<p>© 2026 Dennis Kim (김호광) · This document is published as part of an independent CTI archive (TLP:GREEN).
+Contact: <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · GitHub: <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0530-GOGS_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

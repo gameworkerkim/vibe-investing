@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>IronWorm — Analysis of a Rust/eBPF-Based Self-Replicating npm Supply Chain Worm — VibeQuant</title>
+  <meta name="description" content="A new self replicating supply chain attack named &quot;IronWorm&quot; has been confirmed in the wild. It is a heavyweight infostealer written in Rust and concealed…" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0605-ironworm-en/" />
+  <meta property="og:title" content="IronWorm — Analysis of a Rust/eBPF-Based Self-Replicating npm Supply Chain Worm" />
+  <meta property="og:description" content="A new self replicating supply chain attack named &quot;IronWorm&quot; has been confirmed in the wild. It is a heavyweight infostealer written in Rust and concealed…" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0605-ironworm-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0605-ironworm-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0605-ironworm-en/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0605-ironworm-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"IronWorm — Analysis of a Rust/eBPF-Based Self-Replicating npm Supply Chain Worm","description":"A new self replicating supply chain attack named \"IronWorm\" has been confirmed in the wild. It is a heavyweight infostealer written in Rust and concealed…","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0605-ironworm-en/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0605-IRONWORM_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-05","dateModified":"2026-06-05","inLanguage":"en","keywords":"APT · 글로벌 위협, EN, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · APT · 글로벌 위협</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">APT · 글로벌 위협</p>
+        <h1>IronWorm — Analysis of a Rust/eBPF-Based Self-Replicating npm Supply Chain Worm</h1>
+        <p class="article-dates"><time datetime="2026-06-05">발행 2026.06.05</time> · 주제 APT · 글로벌 위협 · EN · CTI</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0605-ironworm-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0605-ironworm-en/" data-lang="EN" aria-current="true">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">A new self replicating supply chain attack named &quot;IronWorm&quot; has been confirmed in the wild. It is a heavyweight infostealer written in Rust and concealed…</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>A self-propagating infostealer targeting Web3 and cryptocurrency developers</strong>
+<em>Rust ELF Payload × eBPF Rootkit × npm preinstall Self-Replication</em></p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Report ID</strong></td>
+<td><code>CTI-2026-0605-IRONWORM</code></td>
+</tr>
+<tr>
+<td><strong>Publication Date</strong></td>
+<td>2026-06-05</td>
+</tr>
+<tr>
+<td><strong>Severity</strong></td>
+<td>🔴 HIGH — Self-propagating supply chain compromise and developer credential theft</td>
+</tr>
+<tr>
+<td><strong>Classification</strong></td>
+<td><code>TLP:GREEN</code></td>
+</tr>
+<tr>
+<td><strong>Threat Type</strong></td>
+<td>Self-Propagating Supply Chain Worm / Credential &amp; Crypto Stealer</td>
+</tr>
+<tr>
+<td><strong>Target</strong></td>
+<td>Software developers, especially in the cryptocurrency and Web3 sectors</td>
+</tr>
+<tr>
+<td><strong>First Observed</strong></td>
+<td>2026-06-04 (suspicious republication of packages in the Arweave/WeaveDB ecosystem)</td>
+</tr>
+<tr>
+<td><strong>Attribution</strong></td>
+<td>Unconfirmed — partial overlap hypothesis with DPRK TTPs (Low)</td>
+</tr>
+<tr>
+<td><strong>Korea Coverage</strong></td>
+<td>No KISA or security press coverage as of publication</td>
+</tr>
+<tr>
+<td><strong>Confidence</strong></td>
+<td>High (tradecraft) / Low (attribution)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. Executive Summary</h2>
+<p>A new self-replicating supply chain attack named &quot;IronWorm&quot; has been confirmed in the wild. It is a heavyweight infostealer <strong>written in Rust</strong>and concealed behind an<strong>eBPF rootkit</strong>, targeting software developers, especially the <strong>cryptocurrency and Web3 ecosystem</strong>, where exposed secrets can be monetized immediately. Its operating model mirrors the Shai-Hulud lineage that emerged in September 2025 and reshaped the npm threat landscape in 2026. IronWorm weaponizes stolen credentials to inject itself into victims’ GitHub repositories and directly publishes trojanized packages to the npm registry, enabling <strong>propagation without human intervention</strong>.</p>
+<p>Initial detection originated from multiple npm packages in the Arweave/WeaveDB ecosystem being suspiciously republished within a short time window. Packages published by the compromised account <code>asteroiddao</code> appeared normal on the surface, but contained an approximately <strong>976KB Linux ELF binary</strong>hidden inside the <code>tools/</code> directory. The binary was designed to execute silently during installation through an<strong>npm <code>preinstall</code> hook</strong>.</p>
+<p>This incident occurred in the <strong>same week</strong>as a sequence of related supply chain events: the Miasma worm compromised the Red Hat npm scope on June 1, 2026, and the Phantom Gyp campaign struck 57 packages, including @vapi-ai/server-sdk, on June 3. The npm ecosystem is therefore no longer facing isolated events, but has entered a persistent threat phase of<strong>multiple self-propagating worms operating concurrently</strong>.</p>
+<hr>
+<h2>2. Key Judgments</h2>
+<ul>
+<li><strong>KJ-1 (High):</strong>IronWorm inherits the Shai-Hulud formula of &quot;compromised trusted maintainer privileges → automated republication,&quot; but significantly increases detection and analysis difficulty through a<strong>Rust native binary plus eBPF rootkit</strong>. Compared with earlier script-based worms, it has stronger EDR evasion and persistence characteristics.</li>
+<li><strong>KJ-2 (High):</strong>Because it uses a<strong><code>preinstall</code> hook execution</strong> model, the payload runs at <code>npm install</code> time, before application code execution and without warning. Both CI/CD pipelines and developer workstations are primary infection surfaces.</li>
+<li><strong>KJ-3 (Medium):</strong>Because the targeting is concentrated on cryptocurrency and Web3 and focuses on credentials, API keys, and wallets, compromise can produce<strong>immediate fund theft and secondary supply chain propagation</strong> at the same time.</li>
+<li><strong>KJ-4 (Low):</strong>The focus on crypto and Web3 developers overlaps with typical motivations of DPRK-linked actors, but<strong>attribution cannot be concluded</strong> from currently public evidence. The possibility of copycat actors reusing public worm source code cannot be excluded.</li>
+</ul>
+<hr>
+<h2>3. Technical Analysis</h2>
+<ul>
+<li><strong>Language / Form:</strong> Rust-compiled ELF, approximately 976KB, hidden in the <code>tools/</code> directory.</li>
+<li><strong>Execution Trigger:</strong> npm <code>preinstall</code> lifecycle hook; runs immediately during installation and does not require import.</li>
+<li><strong>Concealment:</strong> eBPF rootkit-based stealth, blocking process and network visibility to evade user and EDR observation.</li>
+<li><strong>Collection Targets:</strong> Developer and CI credentials, API keys, cryptocurrency wallets and keys.</li>
+<li><strong>Propagation:</strong> Injects into victim GitHub repositories using stolen credentials, then publishes trojanized packages to npm for self-replication.</li>
+<li><strong>Observed Entry Point:</strong> Republication cluster involving Arweave/WeaveDB-related packages and publisher account <code>asteroiddao</code>.</li>
+</ul>
+<blockquote>
+<p>Comparison: Miasma (Phantom Gyp) used a <code>binding.gyp</code>-based bypass that avoided <code>preinstall</code> and <code>postinstall</code>, whereas IronWorm takes the opposite approach by using <code>preinstall</code> directly while strengthening post-execution stealth through a <strong>native binary plus rootkit</strong>.</p>
+</blockquote>
+<hr>
+<h2>4. MITRE ATT&amp;CK Mapping</h2>
+<table>
+<thead>
+<tr>
+<th>Tactic</th>
+<th>Technique</th>
+<th>ID</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Initial Access</td>
+<td>Supply Chain Compromise: SW Dependencies</td>
+<td>T1195.002</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>User Execution: Malicious Package (preinstall)</td>
+<td>T1204.003</td>
+</tr>
+<tr>
+<td>Persistence / Evasion</td>
+<td>Rootkit (eBPF)</td>
+<td>T1014</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>Unsecured Credentials / Cloud &amp; npm Tokens</td>
+<td>T1552</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>Data from Local System (wallet/keys)</td>
+<td>T1005</td>
+</tr>
+<tr>
+<td>Lateral / Propagation</td>
+<td>Compromise Software Supply Chain (self-replication)</td>
+<td>T1195</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Korea Impact and Response</h2>
+<h3>5.1 Domestic Exposure Assessment</h3>
+<ul>
+<li><strong>Direct impact on Korean Web3 and blockchain developers.</strong> Korean Web3 development organizations, including Kaia (formerly Klaytn), DeSci, NFT, DeFi, and game token projects, depend heavily on npm, and many store cryptocurrency wallets and exchange API keys in development environments. This aligns precisely with IronWorm’s target profile.</li>
+<li><strong>Exchange and fintech CI/CD risk.</strong>If build pipelines at DAXA member exchanges or fintech firms pull infected npm packages, the impact can expand beyond simple information leakage into<strong>operational credential and signing-key theft, creating fund and smart contract threats</strong>.</li>
+<li><strong>Targeting of solo and small developers.</strong> One-person studios and researchers with limited staffing often have weak token rotation and isolated build systems, making them likely footholds for self-propagating worms.</li>
+</ul>
+<h3>5.2 Korean Government and Institutional Response Perspective</h3>
+<ul>
+<li><strong>KISA / KrCERT:</strong>A<strong>consolidated security notice and IoC distribution</strong> is needed for the sequence of npm supply chain worms from Shai-Hulud to Miasma to IronWorm. An &quot;open-source registry install-hook threats&quot; section should be added as an annex to KISA’s software supply chain security guide.</li>
+<li><strong>Ministry of Science and ICT (MSIT):</strong>SBOM and software supply chain security mandate policies should explicitly include<strong>registry install-time threats</strong>. Public and private development standards should incorporate a recommended &quot;new package cooldown&quot; block.</li>
+<li><strong>Financial Security Institute (FSI) and the financial sector:</strong> Financial build pipelines should control direct installation of external npm packages through private registry mirrors and approved version pinning, and CI secrets should be made short-lived.</li>
+<li><strong>National Intelligence Service (NIS) / National Cyber Security Center (NCSC):</strong>Given the cryptocurrency and Web3 targeting, DPRK linkage should be monitored<strong>with attribution still unconfirmed</strong>, and threat intelligence sharing with virtual asset service providers (VASPs) should be strengthened.</li>
+<li><strong>DAXA / KoFIU:</strong> Under the Act on Reporting and Using Specified Financial Transaction Information framework, VASP development and operations security reviews should consider adding a &quot;supply chain install-time compromise&quot; scenario.</li>
+</ul>
+<h3>5.3 Immediate Checklist for Korean Organizations</h3>
+<ol>
+<li>Introduce a <strong>private npm registry or proxy mirror</strong>, block direct external installation, and pin versions.</li>
+<li>Apply a <strong>cooldown block policy</strong> for new or recently published packages, such as delaying installation for N hours after publication.</li>
+<li>Disable <strong>lifecycle script execution</strong> such as <code>preinstall</code> and <code>postinstall</code> with <code>--ignore-scripts</code>, and operate an exception allowlist.</li>
+<li>Isolate <strong>cryptocurrency wallets and exchange API keys</strong> from developer and CI environments; avoid local storage and use short-lived tokens.</li>
+<li>If suspicious installation history exists, <strong>rotate all GitHub PATs, npm tokens, and cloud keys</strong>, and review GitHub Actions secrets.</li>
+<li>Consider applying <strong>kernel and runtime visibility tooling</strong>, including eBPF monitoring and runtime EDR, to address eBPF-based stealth.</li>
+<li>Retrospectively review installation history for packages published by <code>asteroiddao</code> and Arweave/WeaveDB-related packages.</li>
+</ol>
+<hr>
+<h2>6. Analytic Outlook</h2>
+<p>IronWorm shows that npm supply chain worms are <strong>evolving and specializing</strong>across three axes: (1) scripts to native binaries, (2) visible execution to rootkit concealment, and (3) broad targeting to sector-specific targeting of Web3 and crypto. Its occurrence in the same week as Miasma and Phantom Gyp is circumstantial evidence that public worm frameworks are being copied and improved by multiple actors. Defensive focus must shift from &quot;malicious package detection&quot; to<strong>install-time trust controls + short-lived credentials + self-propagation containment.</strong> The Korean Web3 and game token ecosystem is a highly suitable target profile and therefore requires proactive controls.</p>
+<hr>
+<h2>7. References</h2>
+<ul>
+<li>Cyberpress — &quot;IronWorm Campaign Targets Developers Through Malicious npm Packages&quot; (2026-06-04)</li>
+<li>GBHackers — &quot;IronWorm npm Attack Steals Developer Secrets&quot; (2026-06-04)</li>
+<li>StepSecurity — &quot;Miasma npm Supply Chain Attack: Self-Spreading Worm via Phantom Gyp&quot;</li>
+<li>Unit 42 (Palo Alto Networks) — &quot;The npm Threat Landscape&quot; (Updated 2026-06-02)</li>
+<li>The CyberSec Guru — &quot;Red Hat npm Packages Compromised: Technical Analysis of Miasma Worm&quot;</li>
+</ul>
+<hr>
+<h2>⚖️ Disclaimer</h2>
+<p>This report is an independent defensive and research-oriented analysis based on public OSINT sources and media reporting. It does not represent the official position of any organization. Attribution remains unconfirmed, and assessed attribution is marked with Low confidence. IoCs are current as of publication and should be revalidated before operational use. The author assumes no liability for damages arising from direct or indirect use of this material.</p>
+<hr>
+<p><strong>© 2026 Dennis Kim (김호광)</strong> · Cyber Threat Intelligence Division
+<a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · github.com/gameworkerkim</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0605-IRONWORM_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>quant-market-brief 설치 및 사용 가이드 — VibeQuant</title>
+  <meta name="description" content="&quot;오늘 시황 요약해줘&quot; 한 마디로 뉴스 나열이 아닌 구조화된 레짐 브리핑 을 생성합니다." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/claude-skill-quant-market-brief-guide/" />
+  <meta property="og:title" content="quant-market-brief 설치 및 사용 가이드" />
+  <meta property="og:description" content="&quot;오늘 시황 요약해줘&quot; 한 마디로 뉴스 나열이 아닌 구조화된 레짐 브리핑 을 생성합니다." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/claude-skill-quant-market-brief-guide/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"quant-market-brief 설치 및 사용 가이드","description":"\"오늘 시황 요약해줘\" 한 마디로 뉴스 나열이 아닌 구조화된 레짐 브리핑 을 생성합니다.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/claude-skill-quant-market-brief-guide/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/claude_skill/quant-market-brief_guide.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-05","dateModified":"2026-07-05","inLanguage":"ko","keywords":"LLM · 에이전트, claude_skill"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>quant-market-brief 설치 및 사용 가이드</h1>
+        <p class="article-dates"><time datetime="2026-07-05">발행 2026.07.05</time> · 주제 LLM · 에이전트 · claude_skill</p>
+        
+        <p class="lede">&quot;오늘 시황 요약해줘&quot; 한 마디로 뉴스 나열이 아닌 구조화된 레짐 브리핑 을 생성합니다.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>오늘의 주식 시황을 퀀트 관점(팩터·변동성·수급·레짐)으로 요약하는 Claude Skill
+개념·설계 배경은 <a href="./Claude_skill_guide.md">Claude_skill_guide.md</a> 5장 참조</p>
+</blockquote>
+<hr>
+<h2>1. 이 스킬이 하는 일</h2>
+<p>&quot;오늘 시황 요약해줘&quot; 한 마디로 뉴스 나열이 아닌 <strong>구조화된 레짐 브리핑</strong>을 생성합니다.</p>
+<ul>
+<li><strong>트리거 문구</strong>: &quot;시황&quot;, &quot;오늘 장&quot;, &quot;마켓 브리핑&quot;, &quot;장 요약&quot;, &quot;오늘 코스피/나스닥 어때&quot; 등</li>
+<li><strong>출력 구조</strong> (고정):<ol>
+<li>한 줄 레짐 판정 — <code>레짐: Risk-On|Risk-Off|Rotation|Chop (확신도: 상|중|하) — 근거</code></li>
+<li>숫자 테이블 (지수/변동성/금리/환율/수급, 출처·기준시각 명기)</li>
+<li>팩터 스코어카드 (모멘텀·성장/가치·대형/소형·퀄리티 4축)</li>
+<li>&quot;어제와 달라진 것&quot; — 델타만 서술</li>
+<li>반증 조건 — 판정이 틀렸다면 내일 관측될 지표</li>
+</ol>
+</li>
+<li><strong>설계 원칙</strong>: 웹 검색 강제(기억으로 답하지 않음), 예측 금지(조건부 시나리오만), 매매지시 금지</li>
+</ul>
+<p>레짐 판정 줄은 고정 형식이므로 <code>portfolio-daily-review</code> 등 다른 스킬이 파싱해 재사용할 수 있습니다.</p>
+<hr>
+<h2>2. 설치 방법</h2>
+<p>세 가지 방법 중 하나를 선택하세요.</p>
+<h3>방법 A: Claude.ai (웹/앱) — 권장</h3>
+<ol>
+<li>이 저장소의 스킬 폴더 전체를 zip으로 압축하거나, 배포된 <code>.skill</code> 파일을 준비합니다.<pre><code class="language-bash"># 폴더에서 직접 만들 경우 (zip = .skill과 동일 포맷)
+zip -r quant-market-brief.skill quant-market-brief/
+</code></pre>
+</li>
+<li>Claude.ai → <strong>Settings → Capabilities → Skills</strong> 에서 업로드합니다. (유료 플랜)</li>
+<li>업로드 후 새 대화에서 트리거 문구를 말하면 자동 발동됩니다.</li>
+</ol>
+<h3>방법 B: Claude Code</h3>
+<p>개인 스킬 디렉토리에 폴더째 복사합니다:</p>
+<pre><code class="language-bash">cp -r quant-market-brief/ ~/.claude/skills/quant-market-brief/
+</code></pre>
+<p>Claude Code 재시작 후 자연어로 언급만 하면 됩니다.</p>
+<h3>방법 C: Claude API</h3>
+<p><a href="https://docs.claude.com/en/api/skills-guide#creating-a-skill">Skills API Quickstart</a>를 참고해
+<code>.skill</code> 패키지를 업로드하면 API 호출에서도 동일하게 작동합니다.</p>
+<blockquote>
+<p><strong>검증 팁</strong>: 설치 후 &quot;지금 사용 가능한 스킬 알려줘&quot;라고 물으면 로드 여부를 확인할 수 있습니다.</p>
+</blockquote>
+<hr>
+<h2>3. 폴더 구조</h2>
+<pre><code>quant-market-brief/
+├── SKILL.md                      # 워크플로우 본체 (4단계)
+└── references/
+    ├── factor-checklist.md       # 4개 팩터 축 판정 기준 + VIX 레짐 테이블
+    └── output-template.md        # 고정 출력 템플릿
+</code></pre>
+<hr>
+<h2>4. 파일 전문</h2>
+<p>아래 내용을 그대로 복사해 동일한 폴더 구조로 저장하면 스킬이 완성됩니다.</p>
+<h3>4.1 SKILL.md</h3>
+<pre><code class="language-markdown">---
+name: quant-market-brief
+description: &gt;
+  오늘의 주식 시황을 퀀트 관점에서 요약하는 스킬. 사용자가 &quot;시황&quot;, &quot;오늘 장&quot;,
+  &quot;마켓 브리핑&quot;, &quot;장 요약&quot;, &quot;오늘 코스피 어때&quot;, &quot;나스닥 어땠어&quot;, &quot;시장 정리해줘&quot;
+  등을 언급하면 &quot;퀀트&quot;라는 단어가 명시적으로 없어도 반드시 이 스킬을 사용하라.
+  단순 뉴스 나열이 아니라 팩터·변동성·수급 프레임으로 구조화된 레짐 판정
+  브리핑을 생성한다. 매일 아침/저녁 데일리 마켓 체크 요청에도 사용한다.
+---
+
+# Quant Market Brief
+
+## 목적
+
+개별 뉴스가 아닌 시장 구조(레짐)를 읽는다. &quot;무슨 일이 있었나&quot;가 아니라
+&quot;팩터·변동성·수급 관점에서 시장이 어느 레짐에 있고, 어제와 무엇이 바뀌었나&quot;에
+답한다.
+
+원칙: <strong>관측된 사실 → 팩터 해석 → 조건부 시나리오</strong>. 예측하지 않는다.
+
+## 워크플로우
+
+### 1단계: 데이터 수집 (웹 검색 필수)
+
+다음을 반드시 웹 검색으로 확인한다. 학습 데이터의 기억으로 답하지 않는다.
+모든 수치에 출처와 기준 시각을 명기한다.
+
+- <strong>주요 지수</strong>: KOSPI, KOSDAQ, S&amp;P 500, NASDAQ, 필라델피아 반도체지수(SOX)
+  — 종가/등락률
+- <strong>변동성</strong>: VIX 레벨과 전일 대비 변화율, VKOSPI
+- <strong>금리/환율</strong>: 미국 10년물 국채금리, 원/달러 환율, 달러인덱스(DXY)
+- <strong>수급</strong>: KRX 외국인/기관 순매수, 주요 섹터 ETF 자금 흐름
+- <strong>크립토(선택)</strong>: BTC 가격, 김치프리미엄 — 위험선호 프록시로만 사용하고
+  방향 신호로 직접 쓰지 않는다
+
+사용자가 특정 시장(한국만, 미국만)을 지정하면 그 시장에 집중하되
+글로벌 리스크 지표(VIX, 금리, 달러)는 항상 포함한다.
+
+### 2단계: 팩터 렌즈 적용
+
+`references/factor-checklist.md` 를 읽고 다음 4개 축을 판정한다:
+
+1. <strong>모멘텀 vs 리버설</strong>: 최근 주도주가 계속 가는가, 꺾이는가
+2. <strong>성장 vs 가치</strong>: 금리 방향과 스타일 로테이션의 정합성
+3. <strong>대형 vs 소형</strong>: 위험선호가 소형주까지 확산되는가
+4. <strong>퀄리티/로우볼</strong>: 방어 팩터로의 자금 이동 여부
+
+각 축은 강세/중립/약세 + 근거 1줄로 판정한다.
+
+### 3단계: 레짐 판정
+
+아래 넷 중 하나로 명시적으로 분류하고 근거를 한 줄로 단다:
+
+- <strong>Risk-On</strong>: 위험자산 광범위 상승, 변동성 하락, 소형주/크립토 동반 강세
+- <strong>Risk-Off</strong>: 방어자산 선호, 변동성 급등, 안전통화 강세
+- <strong>Rotation</strong>: 지수는 정체하나 섹터/스타일 간 자금 이동 뚜렷
+- <strong>Chop</strong>: 방향성 부재, 낮은 거래대금, 팩터 신호 엇갈림
+
+판정 확신도를 상/중/하로 표기한다. 데이터가 엇갈리면 &quot;엇갈림&quot;이라고
+그대로 쓴다. 억지로 하나의 내러티브를 만들지 않는다.
+
+### 4단계: 출력
+
+`references/output-template.md` 의 템플릿을 따른다. 필수 포함 요소:
+
+1. <strong>한 줄 레짐 판정</strong> (맨 위, 확신도 포함)
+2. <strong>숫자 테이블</strong> (지수/변동성/금리/환율/수급)
+3. <strong>팩터 스코어카드</strong> (4개 축, 각각 판정 + 근거 1줄)
+4. <strong>어제와 달라진 것</strong> — 델타에 집중. 어제와 같은 얘기는 반복하지 않는다
+5. <strong>반증 조건</strong> — 오늘 판정이 틀렸다면 내일 무엇이 관측될 것인가
+
+## 가이드라인
+
+- 예측하지 않는다. 조건부 시나리오(&quot;X가 유지되면 Y 레짐 지속&quot;)로만 서술한다.
+- 모든 수치에 출처와 기준 시각을 명기한다.
+- 투자 권유 표현(&quot;사라/팔아라/비중을 늘려라&quot;)을 쓰지 않는다. 판단 재료만 제공한다.
+- 뉴스 헤드라인은 팩터 해석에 필요한 것만 인용한다. 헤드라인 나열은 금지.
+- 장 마감 전 요청이면 &quot;장중 데이터, 마감 후 변동 가능&quot;을 명시한다.
+- 다른 스킬(예: portfolio-daily-review)이 이 브리핑의 레짐 판정을 재사용할 수
+  있으므로, 레짐 판정 줄은 항상 동일한 형식을 유지한다:
+  `레짐: {Risk-On|Risk-Off|Rotation|Chop} (확신도: {상|중|하}) — {근거 1줄}`
+</code></pre>
+<h3>4.2 references/factor-checklist.md</h3>
+<pre><code class="language-markdown"># 팩터 점검 체크리스트
+
+각 팩터는 <strong>강세 / 중립 / 약세</strong> 로 판정하고 근거를 1줄로 남긴다.
+신호가 엇갈리면 &quot;엇갈림&quot;으로 표기하고 어떤 지표끼리 충돌하는지 쓴다.
+
+## 1. 모멘텀 vs 리버설
+
+- <strong>점검 지표</strong>: 최근 1개월 상위 수익률 섹터의 당일 상대수익률, 주도주 거래대금
+- <strong>모멘텀 강세</strong>: 주도 섹터 상대수익률 &gt; 시장 &amp;&amp; 거래대금 유지 이상
+- <strong>모멘텀 붕괴 신호</strong>: 주도주 급락 + 거래량 급증 (분산 매도 패턴)
+- <strong>리버설 신호</strong>: 최근 낙폭과대 종목군의 광범위 반등 + 공매도 잔고 감소
+
+## 2. 성장 vs 가치
+
+- <strong>점검 지표</strong>: 미국 10년물 금리 방향, 성장주 지수(NASDAQ) vs 가치주 상대성과
+- <strong>정합성 체크</strong>: 금리 상승 + 성장주 강세 같은 &#39;비정합&#39; 조합이 나타나면
+  반드시 별도 표기 — 비정합은 레짐 전환의 조기 신호일 수 있다
+- <strong>주의</strong>: 하루 데이터로 스타일 로테이션을 단정하지 않는다. 3~5거래일
+  누적 방향을 함께 언급한다
+
+## 3. 대형 vs 소형
+
+- <strong>점검 지표</strong>: KOSPI vs KOSDAQ 상대성과, Russell 2000 vs S&amp;P 500
+- <strong>위험선호 확산</strong>: 소형주 지수가 대형주를 아웃퍼폼 + 거래대금 증가
+- <strong>위험선호 위축</strong>: 대형주 쏠림 심화 (지수 상승이 소수 종목에 집중)
+  — 상승장이어도 breadth 악화는 약세 신호로 별도 표기
+
+## 4. 퀄리티 / 로우볼 (방어 팩터)
+
+- <strong>점검 지표</strong>: 필수소비재/유틸리티/헬스케어 상대성과, 배당주 ETF 자금 유입
+- <strong>방어 이동 신호</strong>: 지수 보합~상승인데 방어 섹터가 아웃퍼폼하면
+  스마트머니의 선제 방어 가능성 표기
+
+## 변동성 레짐 (모든 팩터 판정의 배경)
+
+| VIX 레벨 | 레짐 | 함의 |
+|---|---|---|
+| &lt; 15 | 저변동성 | 캐리/모멘텀 전략 유리, 단 급반전 취약 |
+| 15–25 | 중립 | 팩터 신호 그대로 해석 |
+| &gt; 25 | 고변동성 | 로우볼/퀄리티 우위, 포지션 축소 검토 구간 |
+
+<strong>주의</strong>: VIX &#39;레벨&#39;보다 &#39;변화율&#39;이 단기 신호로 유효하다.
+전일 대비 +20% 이상 점프는 레벨과 무관하게 별도 경고로 표기한다.
+
+## 수급 해석 원칙
+
+- 외국인 순매수는 원/달러 방향과 함께 읽는다 (환헤지 플로우 구분)
+- 기관 순매수는 프로그램/비프로그램을 가능하면 구분한다
+- 하루 수급으로 추세를 말하지 않는다. 5거래일 누적과 함께 표기한다
+</code></pre>
+<h3>4.3 references/output-template.md</h3>
+<pre><code class="language-markdown"># 브리핑 출력 템플릿
+
+아래 구조와 순서를 그대로 따른다. 섹션을 생략하거나 순서를 바꾸지 않는다.
+
+---
+
+## 📊 퀀트 마켓 브리핑 — {YYYY-MM-DD}
+
+<strong>레짐: {Risk-On|Risk-Off|Rotation|Chop} (확신도: {상|중|하}) — {근거 1줄}</strong>
+
+### 시장 지표
+
+| 구분 | 지표 | 종가/레벨 | 등락 | 비고 |
+|---|---|---|---|---|
+| 지수 | KOSPI | | | |
+| 지수 | KOSDAQ | | | |
+| 지수 | S&amp;P 500 | | | |
+| 지수 | NASDAQ | | | |
+| 지수 | SOX | | | |
+| 변동성 | VIX | | 전일比 % | 변화율 ±20% 시 ⚠ |
+| 금리 | 美 10Y | | bp | |
+| 환율 | USD/KRW | | | |
+| 환율 | DXY | | | |
+| 수급 | 외국인(KRX) | 순매수 억원 | | 5일 누적 병기 |
+| 수급 | 기관(KRX) | 순매수 억원 | | 5일 누적 병기 |
+
+*기준 시각: {시각}, 출처: {출처}*
+
+### 팩터 스코어카드
+
+| 팩터 축 | 판정 | 근거 (1줄) |
+|---|---|---|
+| 모멘텀 vs 리버설 | 강세/중립/약세/엇갈림 | |
+| 성장 vs 가치 | | |
+| 대형 vs 소형 | | |
+| 퀄리티/로우볼 | | |
+
+### 어제와 달라진 것
+
+- (델타만 서술. 어제와 동일한 상태는 쓰지 않는다. 최대 3개)
+
+### 반증 조건
+
+- 오늘의 레짐 판정이 틀렸다면 내일 관측될 것: {구체적 지표와 임계값}
+
+---
+
+*본 브리핑은 판단 재료이며 투자 자문이 아닙니다. 데이터는 조회 시점 기준입니다.*
+</code></pre>
+<hr>
+<h2>5. 사용 예시</h2>
+<pre><code>&gt; 오늘 장 어땠어?
+
+[quant-market-brief 발동]
+1. 웹 검색: KOSPI/NASDAQ/VIX/10Y/환율/KRX 수급
+2. factor-checklist.md 로 4축 판정
+3. 레짐 분류 + 확신도
+4. output-template.md 형식으로 브리핑 출력
+</code></pre>
+<p>특정 시장만 원하면: &quot;미국 시장만 시황 정리해줘&quot; — 글로벌 리스크 지표(VIX·금리·달러)는 항상 포함됩니다.</p>
+<hr>
+<h2>6. 커스터마이징 포인트</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>위치</th>
+<th>방법</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>추적 지수 추가/제거</td>
+<td>SKILL.md 1단계</td>
+<td>지수 목록 수정 (예: 니케이, 항셍 추가)</td>
+</tr>
+<tr>
+<td>VIX 레짐 임계값</td>
+<td>factor-checklist.md</td>
+<td>15/25 경계값 조정</td>
+</tr>
+<tr>
+<td>팩터 축 추가</td>
+<td>factor-checklist.md + SKILL.md 2단계</td>
+<td>예: 배당·사이즈 팩터 추가</td>
+</tr>
+<tr>
+<td>출력 언어/형식</td>
+<td>output-template.md</td>
+<td>템플릿 직접 수정</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. 주의사항</h2>
+<ul>
+<li>본 스킬의 출력은 <strong>판단 재료이며 투자 자문이 아닙니다.</strong></li>
+<li>데이터는 웹 검색 시점 기준이며, 장중 조회 시 마감 후 변동될 수 있습니다.</li>
+<li>스킬은 데모/교육 목적이며 실제 사용 전 자신의 환경에서 충분히 테스트하세요.</li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/claude_skill/quant-market-brief_guide.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

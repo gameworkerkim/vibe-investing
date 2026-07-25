@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>未パッチのCritical RCE — Gogs git rebase 引数インジェクション脆弱性 — VibeQuant</title>
+  <meta name="description" content="認証された一般ユーザがセルフホスト型Gitサーバを掌握する9.4点の欠陥、そしてクロステナント侵害" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-jp/" />
+  <meta property="og:title" content="未パッチのCritical RCE — Gogs git rebase 引数インジェクション脆弱性" />
+  <meta property="og:description" content="認証された一般ユーザがセルフホスト型Gitサーバを掌握する9.4点の欠陥、そしてクロステナント侵害" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-jp/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-jp/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"未パッチのCritical RCE — Gogs git rebase 引数インジェクション脆弱性","description":"認証された一般ユーザがセルフホスト型Gitサーバを掌握する9.4点の欠陥、そしてクロステナント侵害","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0530-gogs-jp/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0530-GOGS_JP.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-05-30","dateModified":"2026-05-30","inLanguage":"ja","keywords":"취약점 · 패치, JP, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 취약점 · 패치</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">취약점 · 패치</p>
+        <h1>未パッチのCritical RCE — Gogs git rebase 引数インジェクション脆弱性</h1>
+        <p class="article-dates"><time datetime="2026-05-30">발행 2026.05.30</time> · 주제 취약점 · 패치 · JP · CTI</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0530-gogs-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0530-gogs-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0530-gogs-jp/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0530-gogs-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">認証された一般ユーザがセルフホスト型Gitサーバを掌握する9.4点の欠陥、そしてクロステナント侵害</p>
+        <p class="article-byline">Dennis Kim (김호광 / HoKwang Kim) · 2026-05-30</p>
+      </header>
+      <div class="article-body prose"><p><em>認証された一般ユーザがセルフホスト型Gitサーバを掌握する9.4点の欠陥、そしてクロステナント侵害</em></p>
+<hr>
+<h2>目次</h2>
+<ol>
+<li>要約 (TL;DR)</li>
+<li>脆弱性分析 — <code>--exec</code> 引数インジェクション</li>
+<li>攻撃シナリオ — 無権限アカウントからサーバ掌握まで</li>
+<li>影響範囲と露出規模</li>
+<li>フォレンジック痕跡と検知</li>
+<li>緩和の推奨（パッチ不在の状況）</li>
+<li>韓国の視点 — セルフホスト型Gitの死角</li>
+<li>結論</li>
+<li>参考文献</li>
+</ol>
+<hr>
+<h2>要約 (TL;DR)</h2>
+<p>2026年5月28日、Rapid7は人気のセルフホスト型Gitサービス<strong>Gogs</strong>において、<strong>認証された一般ユーザがサーバ上で任意コードを実行</strong>できるCritical脆弱性を公開した。CVE識別子は未付与だが、Rapid7はCVSS 9.4と算定した。</p>
+<p>核心はGogsの*「Rebase before merging」*マージ動作で発生する。攻撃者が<strong>悪性ブランチ名</strong>でプルリクエストを作成すると、そのブランチ名が<code>git rebase</code>コマンドの<code>--exec</code>フラグに注入され、各コミットの再生後に任意のシェルコマンドが実行される。管理者権限も、他ユーザとの相互作用も不要である。</p>
+<p>さらに深刻なのは、本脆弱性が<strong>2026年3月17日にメンテナへ報告されたにもかかわらず発行時点で未パッチ</strong>であり、Rapid7がLinux・Windows両方を自動攻撃する<strong>Metasploitモジュールまで公開</strong>したことだ。つまり、武器は公開され、パッチはない。</p>
+<h3>Key Judgments</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>判断</th>
+<th>信頼度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KJ-1</td>
+<td>本欠陥はユーザ入力（ブランチ名）がシェルコマンド引数にそのまま渡される<strong>典型的な引数インジェクション（argument injection）</strong>であり、認証以外の前提条件が事実上ない。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-2</td>
+<td><strong>未パッチ + 公開Metasploitモジュール</strong>の組み合わせは、実戦的悪用の障壁をほぼ取り除く。露出インスタンスは即座にリスクに晒される。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-3</td>
+<td>単一サーバを共有する環境で<strong>クロステナント（cross-tenant）侵害</strong>が可能だ — あるユーザが他人の非公開リポジトリを読める。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-4</td>
+<td>デフォルト設定（登録・リポジトリ作成許可）のインスタンスが最も危険だ。緩和は可能だが根本パッチを代替しない。</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+<tr>
+<td>KJ-5</td>
+<td>セルフホスト型Gitはソースコード・認証情報・CIパイプラインの単一信頼点であるため、本欠陥は<strong>サプライチェーン侵害の橋頭堡</strong>になり得る。</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. 脆弱性分析 — <code>--exec</code> 引数インジェクション</h2>
+<p>GogsはGoで書かれた軽量なセルフホスト型Gitサービスで、GitHubの自己ホスト代替として広く使われる。本脆弱性はPRをマージする際に<code>git rebase</code>を使う*「Rebase before merging」*オプションで発生する。</p>
+<p><code>git rebase</code>はあるブランチのコミット列を別のベースブランチ上に再生して線形履歴を作る動作だ。この際<code>git rebase</code>は<strong>各コミット再生後にシェルコマンドを実行する<code>--exec</code>フラグ</strong>を引数として受け取れる。Gogsはマージ時にユーザが制御する<strong>ブランチ名</strong>を十分なサニタイズなしに<code>git rebase</code>呼び出しに渡す。よって攻撃者がブランチ名に<code>--exec</code>形式のペイロードを挿入すると、マージ過程でそのコマンドがサーバホスト上で実行される。</p>
+<blockquote>
+<p>研究者Jonah Burgess（Rapid7）：「任意の認証ユーザが悪性ブランチ名でPRを作成し、『Rebase before merging』時に<code>--exec</code>フラグを<code>git rebase</code>に注入することでサーバ上のRCEを達成できる。」</p>
+</blockquote>
+<p>影響プラットフォームはWindows・Linux・macOS等<strong>サポートされる全プラットフォーム</strong>である。</p>
+<hr>
+<h2>2. 攻撃シナリオ — 無権限アカウントからサーバ掌握まで</h2>
+<p>本脆弱性の危険性は<strong>前提条件がほぼない</strong>点にある。</p>
+<table>
+<thead>
+<tr>
+<th>シナリオ</th>
+<th>前提</th>
+<th>攻撃経路</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>① デフォルト設定インスタンス</td>
+<td>登録・リポジトリ作成許可（デフォルト）</td>
+<td>アカウント作成 → リポジトリ作成（自動オーナー） → 設定でrebaseマージをトグル → エクスプロイトチェーンを単独実行</td>
+</tr>
+<tr>
+<td>② 書き込み権限保持者</td>
+<td>rebaseマージが既に有効なリポジトリにwrite権限</td>
+<td>直接エクスプロイト</td>
+</tr>
+<tr>
+<td>③ リポジトリ作成制限環境</td>
+<td>rebaseマージが有効な任意のリポジトリにwrite権限</td>
+<td>当該リポジトリ経由で実行</td>
+</tr>
+</tbody></table>
+<p>特に①は*「登録ユーザがリポジトリを作ると自動でオーナーになり、rebaseマージの有効化は設定のトグル一つ」*という点で、<strong>他ユーザとの相互作用なしに全エクスプロイトチェーンを単独運用</strong>できる。</p>
+<p>成功時、攻撃者はサーバ侵害、インスタンス内の全リポジトリへのアクセス、認証情報のダンプ、ネットワーク内の他システムへの移動、ホストされたリポジトリコードの改ざんが可能となる。とりわけ、<strong>同一共有サーバにホストされた他ユーザの非公開リポジトリを読むクロステナントデータ侵害</strong>につながる。</p>
+<hr>
+<h2>3. 影響範囲と露出規模</h2>
+<ul>
+<li><strong>推定露出インスタンス</strong>：インターネットに直接露出したGogsインスタンスは約1,141台と推定される。ただし大半の配備がVPN・内部網の背後にあるため、<strong>実際の規模はより大きい</strong>と評価される。</li>
+<li><strong>武器化レベル</strong>：Rapid7はLinux・Windows標的に対し全エクスプロイトチェーンを自動化するMetasploitモジュールを公開した。モジュールは2モードを支援する — (a) 攻撃者アカウントに一時リポジトリを作成・実行・削除するデフォルトモード、(b) 既にwrite・merge権限を持つリポジトリを標的とするモード。</li>
+<li><strong>パッチ状態</strong>：2026-03-17のメンテナ報告にもかかわらず発行時点で<strong>未パッチ</strong>。</li>
+</ul>
+<hr>
+<h2>4. フォレンジック痕跡と検知</h2>
+<p>Rapid7によれば、攻撃痕跡はモードによって異なる。</p>
+<ul>
+<li><strong>自己リポジトリ作成・削除モード</strong>：サーバログに残る痕跡は事実上<strong>HTTP 500エラー1件</strong>のみ。事後分析でも正常エラーと区別が困難。</li>
+<li><strong>既存リポジトリ悪用モード</strong>：追加のアーティファクトが残り、相対的に検知可能性が高い。</li>
+</ul>
+<p>検知の推奨：</p>
+<ol>
+<li>PRマージイベントに連動した異常なHTTP 500パターンの監視</li>
+<li>異常なブランチ名（特殊文字・<code>--exec</code>類似トークンを含む）作成イベントへの警報</li>
+<li>Gogsプロセスから派生した予期せぬシェル・子プロセスの行為検知</li>
+<li>新規アカウント → リポジトリ作成 → rebaseトグル → マージへと続く短時間連鎖行為の追跡</li>
+</ol>
+<hr>
+<h2>5. 緩和の推奨（パッチ不在の状況）</h2>
+<p>根本パッチがない状況でRapid7が推奨した暫定緩和は次の通り。</p>
+<ol>
+<li><strong>登録制限</strong> — <code>app.ini</code>で<code>DISABLE_REGISTRATION = true</code>に設定し、未信頼ユーザのアカウント作成を遮断する。</li>
+<li><strong>リポジトリ作成制限</strong> — <code>app.ini</code>で<code>MAX_CREATION_LIMIT = 0</code>に設定し、ユーザの自己リポジトリ作成を防ぐ。</li>
+<li><strong>rebaseマージ設定の監査</strong> — rebaseマージが有効なリポジトリを全数点検し、不要な有効化を解除する。</li>
+<li><strong>ネットワーク隔離</strong> — インターネット直接露出を除去し、VPN・内部網・アクセス制御の背後へ移す。</li>
+<li><strong>代替の検討</strong> — パッチ提供が不確実な場合、保守が活発なForgejo・Gitea等への移行を中長期課題として検討する（ただしGitea系も別途脆弱性履歴があるためバージョン点検必須）。</li>
+</ol>
+<hr>
+<h2>6. 韓国の視点 — セルフホスト型Gitの死角</h2>
+<p>韓国のスタートアップ・研究室・中小SI環境でGogs・Gitea系のセルフホスト型Gitは*「軽量で無料だから」*広く使われるが、次の死角が存在する。</p>
+<ul>
+<li><strong>資産インベントリの欠落</strong> — 「内部用Git」という認識ゆえ、セキュリティ資産リスト・脆弱性スキャン対象から漏れる場合が多い。</li>
+<li><strong>CI/CDの信頼連鎖</strong> — Gitサーバはソースコードだけでなくデプロイキー・Webhook・CIランナートークンの信頼起点だ。サーバ掌握はビルドパイプライン汚染へ波及し得る。</li>
+<li><strong>クロステナントリスク</strong> — 一つのサーバに複数チーム・プロジェクトが共存する共用インスタンスで、本欠陥は一チームが他チームの非公開コードを窃取する経路となる。</li>
+</ul>
+<p>推奨：韓国の運用主体はインターネット露出の有無に関わらず自社Gogsインスタンスを<strong>直ちにインベントリに含め</strong>、§5の緩和策を適用したうえでパッチ動向を追跡すること。</p>
+<hr>
+<h2>7. 結論</h2>
+<p>本脆弱性は新しい攻撃手法ではなく、<strong>ユーザ入力をシェル引数で信頼した</strong>古典的なミスだ。しかし(1)認証以外の前提条件がなく、(2)公開Metasploitモジュールが存在し、(3)根本パッチがないという三重条件が重なり、実戦的危険度は非常に高い。</p>
+<p>セルフホスト型Gitは組織の最も機微な資産 — ソースコード、認証情報、デプロイパイプライン — の単一信頼点だ。こうしたシステムを「内部用だから大丈夫」という前提で放置することが最大のリスクである。パッチが出るまで、露出の除去と設定強化は選択ではなく必須だ。</p>
+<hr>
+<h2>参考文献 (References)</h2>
+<p>[1] Ravie Lakshmanan, &quot;Critical Gogs RCE Vulnerability Lets Any Authenticated User Execute Arbitrary Code&quot;, The Hacker News, 2026-05-28. <a href="https://thehackernews.com/2026/05/critical-gogs-rce-vulnerability-lets.html">https://thehackernews.com/2026/05/critical-gogs-rce-vulnerability-lets.html</a></p>
+<p>[2] Jonah Burgess, &quot;Authenticated RCE via Argument Injection in Gogs (Unfixed)&quot;, Rapid7, 2026-05. <a href="https://www.rapid7.com/blog/post/ve-authenticated-rce-via-argument-injection-gogs-unfixed/">https://www.rapid7.com/blog/post/ve-authenticated-rce-via-argument-injection-gogs-unfixed/</a></p>
+<p>[3] Rapid7, &quot;Metasploit module — Gogs git rebase argument injection RCE&quot;, GitHub PR #21515. <a href="https://github.com/rapid7/metasploit-framework/pull/21515">https://github.com/rapid7/metasploit-framework/pull/21515</a></p>
+<p>[4] Atlassian, &quot;Merging vs. Rebasing&quot;, Git Tutorials. <a href="https://www.atlassian.com/git/tutorials/merging-vs-rebasing">https://www.atlassian.com/git/tutorials/merging-vs-rebasing</a></p>
+<p>[5] Git Documentation, &quot;git-rebase — <code>--exec</code> option&quot;. <a href="https://git-scm.com/docs/git-rebase#Documentation/git-rebase.txt---execltcmdgt">https://git-scm.com/docs/git-rebase#Documentation/git-rebase.txt---execltcmdgt</a></p>
+<hr>
+<p>© 2026 Dennis Kim (김호광) · 本文書は独立CTIアーカイブ（TLP:GREEN）の公開を目的として作成された。
+連絡先: <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · GitHub: <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0530-GOGS_JP.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

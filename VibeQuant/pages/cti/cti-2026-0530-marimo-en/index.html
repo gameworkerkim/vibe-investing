@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Agent at the Wheel — The First Observed LLM-Driven Intrusion — VibeQuant</title>
+  <meta name="description" content="From Marimo CVE 2026 39987 pre auth RCE to internal DB exfiltration: a four stage autonomous pivot in under an hour" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-en/" />
+  <meta property="og:title" content="AI Agent at the Wheel — The First Observed LLM-Driven Intrusion" />
+  <meta property="og:description" content="From Marimo CVE 2026 39987 pre auth RCE to internal DB exfiltration: a four stage autonomous pivot in under an hour" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-jp/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"AI Agent at the Wheel — The First Observed LLM-Driven Intrusion","description":"From Marimo CVE 2026 39987 pre auth RCE to internal DB exfiltration: a four stage autonomous pivot in under an hour","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0530-marimo-en/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0530-MARIMO_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-05-30","dateModified":"2026-05-30","inLanguage":"en","keywords":"취약점 · 패치, EN, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 취약점 · 패치</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">취약점 · 패치</p>
+        <h1>AI Agent at the Wheel — The First Observed LLM-Driven Intrusion</h1>
+        <p class="article-dates"><time datetime="2026-05-30">발행 2026.05.30</time> · 주제 취약점 · 패치 · EN · CTI</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0530-marimo-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0530-marimo-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0530-marimo-jp/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0530-marimo-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">From Marimo CVE-2026-39987 pre-auth RCE to internal DB exfiltration: a four-stage autonomous pivot in under an hour</p>
+        <p class="article-byline">Dennis Kim (김호광 / HoKwang Kim) · 2026-05-30</p>
+      </header>
+      <div class="article-body prose"><p><em>From Marimo CVE-2026-39987 pre-auth RCE to internal DB exfiltration: a four-stage autonomous pivot in under an hour</em></p>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li>Executive Summary (TL;DR)</li>
+<li>Opening — &quot;The attacker no longer needs to be human&quot;</li>
+<li>Vulnerability Analysis — CVE-2026-39987 pre-auth RCE</li>
+<li>Attack Chain — A four-stage autonomous pivot</li>
+<li>The &quot;AI-agent-driven&quot; determination — four behavioral signatures</li>
+<li>Korea Perspective — exposed quant / data-science / Web3 notebooks</li>
+<li>Detection &amp; Mitigation</li>
+<li>Conclusion</li>
+<li>References</li>
+</ol>
+<hr>
+<h2>Executive Summary (TL;DR)</h2>
+<p>In May 2026, the Threat Research Team (TRT) at cloud security firm Sysdig disclosed an intrusion in which a <strong>large language model (LLM) agent autonomously operated the entire post-exploitation phase</strong>. Sysdig described it as the <strong>first &quot;AI-agent-driven&quot; intrusion</strong> it has ever recorded.</p>
+<p>The entry point was the pre-authenticated remote code execution (RCE) flaw <code>CVE-2026-39987</code> (CVSS 9.3) in an internet-exposed Marimo notebook. After compromising the host, the attacker ran a four-stage chain — cloud credential theft → SSH private-key retrieval from AWS Secrets Manager → pivot through a downstream SSH bastion → full exfiltration of an internal PostgreSQL database — end-to-end in <strong>under one hour</strong>, with the final schema-and-contents dump completed in <strong>under two minutes</strong>.</p>
+<p>The point this report emphasizes is not a single CVE but a <strong>shift in the attack operating model</strong>. Unlike traditional scripted automation, the post-compromise command flow was dynamically generated by an LLM agent that interpreted outputs in real time and decided the next action. This compresses the &quot;discover-and-patch&quot; race to a speed that &quot;observe-and-respond&quot; cannot keep up with.</p>
+<h3>Key Judgments</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Judgment</th>
+<th>Confidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KJ-1</td>
+<td><code>CVE-2026-39987</code> is not a coding slip but a <strong>design-level omission</strong>: the <code>/terminal/ws</code> endpoint skips authentication validation. A single WebSocket request yields a full PTY shell.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-2</td>
+<td>This is the <strong>first publicly observed case</strong>in which post-compromise reconnaissance, credential replay, and pivot decisions were performed<strong>autonomously by an LLM agent</strong>— captured in a real intrusion, not a one-off demo.</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-3</td>
+<td>A sub-one-hour chain and sub-two-minute DB dump <strong>structurally exceed the average human SOC response window</strong>. The unit of response shifts from &quot;minutes&quot; to &quot;seconds.&quot;</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-4</td>
+<td>CVE-patch and signature-based defenses cannot block the post-exploitation phase of this threat. A shift to <strong>behavioral runtime detection</strong>is essential.</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+<tr>
+<td>KJ-5</td>
+<td>Korean data-science, quant, and Web3 teams running exposed Jupyter/Marimo/Streamlit notebooks share the <strong>same attack surface</strong>. Where AWS / on-chain credentials sit on the same host, it degrades into a single point of failure.</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. Opening — &quot;The attacker no longer needs to be human&quot;</h2>
+<p>For years the industry has treated &quot;attack automation&quot; as a problem of scripts, botnets, and scanners. But automated scripts only execute predefined branches. Faced with unexpected output, non-standard environments, or novel credential formats, they stall or misfire. Sophisticated post-exploitation therefore still required a human hand.</p>
+<p>The incident Sysdig TRT disclosed in May 2026 breaks that premise. The reconnaissance, credential interpretation, and pivot-path selection immediately after compromising the Marimo notebook were <strong>generated in real time by an LLM agent</strong>. Sysdig senior director Michael Clark put it as: &quot;We are not watching AI <em>replace</em> attackers&quot; — that is, it does not replace people, but pastes in a <strong>human-grade judgment compressed dozens of times in speed</strong>.</p>
+<p>This report analyzes the incident on two layers: first, the vulnerability that allowed entry (<code>CVE-2026-39987</code>); second, the <strong>AI-driven operating model</strong> riding on top of it. The latter is the essence.</p>
+<hr>
+<h2>2. Vulnerability Analysis — CVE-2026-39987 pre-auth RCE</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CVE</td>
+<td><code>CVE-2026-39987</code></td>
+</tr>
+<tr>
+<td>CVSS</td>
+<td>9.3 (Critical)</td>
+</tr>
+<tr>
+<td>Affected</td>
+<td>Marimo ≤ 0.20.4</td>
+</tr>
+<tr>
+<td>Fixed</td>
+<td>0.23.0</td>
+</tr>
+<tr>
+<td>Type</td>
+<td>Pre-authenticated remote code execution</td>
+</tr>
+<tr>
+<td>Status</td>
+<td>On CISA KEV · federal remediation deadline passed</td>
+</tr>
+</tbody></table>
+<p>Marimo is an open-source Python notebook (~19.6k GitHub stars) widely used for data science, analysis, and interactive coding. The flaw lies in the terminal WebSocket endpoint <code>/terminal/ws</code>. Other WebSocket endpoints (e.g., <code>/ws</code>) correctly call <code>validate_auth()</code>, but <code>/terminal/ws</code> <strong>only checks running mode and platform support, skipping authentication validation entirely</strong>. As a result, an unauthenticated attacker obtains a full PTY shell with a single request and executes arbitrary system commands.</p>
+<p>Active exploitation was observed roughly 10 hours after disclosure; with no public exploit code, the attacker built a working exploit directly from the advisory text — a reminder that &quot;the advisory itself becomes a weapon.&quot; This flaw is the entry point of the incident.</p>
+<hr>
+<h2>3. Attack Chain — A four-stage autonomous pivot</h2>
+<p>Reconstructing the command stream recorded by Sysdig:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Action</th>
+<th>Technical detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>① Initial access</td>
+<td>Compromise exposed Marimo notebook</td>
+<td>Unauthenticated PTY shell via <code>/terminal/ws</code> (<code>CVE-2026-39987</code>)</td>
+</tr>
+<tr>
+<td>② Credential harvest</td>
+<td>Extract two cloud credentials from host</td>
+<td>Environment variables · <code>.env</code> · AWS credential store</td>
+</tr>
+<tr>
+<td>③ Privilege pivot</td>
+<td>Replay stolen keys through fan-out egress; retrieve SSH key</td>
+<td>Cloudflare Workers fan-out egress → AWS Secrets Manager</td>
+</tr>
+<tr>
+<td>④ Lateral move &amp; exfil</td>
+<td>Eight parallel SSH sessions to bastion; exfiltrate internal DB</td>
+<td>Downstream SSH bastion → internal PostgreSQL schema + full contents dump (under 2 min)</td>
+</tr>
+</tbody></table>
+<p>The full chain, from initial access to internal DB exfiltration, completed in <strong>under one hour</strong>. Notably, the stage-③ &quot;fan-out egress pool&quot; targets both evasion and speed: it disperses anomalous-traffic signatures across many IPs while parallelizing credential replay.</p>
+<hr>
+<h2>4. The &quot;AI-agent-driven&quot; determination — four behavioral signatures</h2>
+<p>Sysdig TRT judged this an LLM-agent-driven intrusion rather than a plain script based on the character of the post-compromise command flow. This report distills four observable signatures:</p>
+<ol>
+<li><strong>Output-dependent branching</strong> — the next command is decided only after interpreting the previous command&#39;s output. Unlike static scripts, it adapts seamlessly to non-standard responses.</li>
+<li><strong>Natural-language-like command construction</strong> — the command sequence mimics human exploration logic, but chains at intervals (seconds) impossible for a human.</li>
+<li><strong>Goal-oriented retries</strong> — for failed credentials/paths, it immediately tries alternatives while retaining context.</li>
+<li><strong>Speed-precision fusion</strong> — human-level judgment precision (selecting the exact Secrets Manager key) coexists with machine-level speed (a 2-minute DB dump) in one flow.</li>
+</ol>
+<p>When these four appear together, defenders should assume they face not &quot;one person&#39;s attack&quot; but &quot;automated operation that clones human judgment at second-level speed.&quot;</p>
+<hr>
+<h2>5. Korea Perspective — exposed quant / data-science / Web3 notebooks</h2>
+<p>This incident has direct implications for specific roles in Korea.</p>
+<ul>
+<li><strong>Quant / data-science teams</strong> — it is common to expose notebooks (Marimo, Jupyter, Streamlit) outside the internal network (cloud VMs, demo servers). These often carry exchange API keys, data-vendor tokens, and cloud credentials as environment variables.</li>
+<li><strong>Web3 / on-chain analytics teams</strong> — where RPC keys, wallet credentials, and AWS keys coexist on one host, a single entry point at the level of <code>CVE-2026-39987</code> leads directly to asset theft.</li>
+<li><strong>Single point of failure</strong> — the &quot;it&#39;s just an analytics notebook&quot; mindset breeds lax credential isolation. This incident shows an analytics host becoming the springboard to an internal PostgreSQL DB and SSH bastion.</li>
+</ul>
+<p>Recommendation: treat <strong>every internet-exposed notebook instance as potentially compromised</strong>, and immediately rotate associated credentials, API keys, SSH keys, and DB passwords.</p>
+<hr>
+<h2>6. Detection &amp; Mitigation</h2>
+<ol>
+<li><strong>Patch immediately</strong> — update Marimo to 0.23.0 or later. If not possible, block network access to <code>/terminal/ws</code> or disable the terminal feature.</li>
+<li><strong>Audit exposure</strong> — inventory all publicly accessible notebook instances; review environment variables, <code>.env</code>, and secrets.</li>
+<li><strong>Rotate credentials</strong> — rotate all credentials/keys on any host with exposure history.</li>
+<li><strong>Behavioral runtime detection</strong> — beyond CVE/signature reliance, alert on behavioral patterns such as anomalous egress (e.g., fan-out), abnormal Secrets Manager access, and large short-window DB dumps.</li>
+<li><strong>Credential isolation (Zero Trust)</strong> — separate analytics hosts from operational credentials. Inject only least-privilege temporary credentials into notebook hosts; do not store long-lived keys or SSH private keys (NIST SP 800-207).</li>
+<li><strong>Redesign the response window</strong> — assuming AI-driven attacks, build runbooks that trigger automatic containment (immediate credential revocation, forced session termination) without human intervention.</li>
+</ol>
+<hr>
+<h2>7. Conclusion</h2>
+<p><code>CVE-2026-39987</code> is just another pre-auth RCE. But the LLM agent riding on top of it changes the threat model itself. The moment the attacker need not be &quot;human,&quot; the <strong>friction of &quot;human work speed&quot;</strong> that defense assumed disappears.</p>
+<p>The real lesson is simple: <em>a patch blocks entry, not operating speed.</em> Defense must therefore be rebuilt on two axes. First, reduce exposure and isolate credentials to lower &quot;the value of entry.&quot; Second, counter &quot;the speed of operation&quot; with behavioral detection and automatic response that assume compromise. The AI-driven attacker no longer needs to map your environment. Distributed egress, adaptiveness, and speed are now standard features of the threat.</p>
+<hr>
+<h2>References</h2>
+<p>[1] Sysdig Threat Research Team, &quot;AI agent at the wheel: How an attacker used LLMs to move from a CVE to an internal database in 4 pivots&quot;, Sysdig, 2026-05. <a href="https://www.sysdig.com/blog/ai-agent-at-the-wheel">https://www.sysdig.com/blog/ai-agent-at-the-wheel</a></p>
+<p>[2] Ravie Lakshmanan, &quot;Attackers Use LLM Agent for Post-Exploitation After Marimo CVE-2026-39987 Exploit&quot;, The Hacker News, 2026-05-29. <a href="https://thehackernews.com/2026/05/attackers-use-llm-agent-for-post.html">https://thehackernews.com/2026/05/attackers-use-llm-agent-for-post.html</a></p>
+<p>[3] &quot;Hackers Use LLM Agent to Move From Marimo RCE to Internal Database in Four Pivots&quot;, Cyber Security News, 2026-05. <a href="https://cybersecuritynews.com/hackers-use-llm-agent-to-move-from-marimo-rce/">https://cybersecuritynews.com/hackers-use-llm-agent-to-move-from-marimo-rce/</a></p>
+<p>[4] &quot;Hackers Pivot from marimo RCE to Internal Database Using LLM Agent&quot;, GBHackers, 2026-05. <a href="https://gbhackers.com/hackers-pivot-from-marimo-rce/">https://gbhackers.com/hackers-pivot-from-marimo-rce/</a></p>
+<p>[5] Pierluigi Paganini, &quot;CVE-2026-39987: Marimo RCE exploited in hours after disclosure&quot;, Security Affairs, 2026-04-11. <a href="https://securityaffairs.com/190623/hacking/cve-2026-39987-marimo-rce-exploited-in-hours-after-disclosure.html">https://securityaffairs.com/190623/hacking/cve-2026-39987-marimo-rce-exploited-in-hours-after-disclosure.html</a></p>
+<p>[6] &quot;Marimo RCE Flaw CVE-2026-39987 Exploited Within 10 Hours of Disclosure&quot;, The Hacker News, 2026-04-24. <a href="https://thehackernews.com/2026/04/marimo-rce-flaw-cve-2026-39987.html">https://thehackernews.com/2026/04/marimo-rce-flaw-cve-2026-39987.html</a></p>
+<hr>
+<p>© 2026 Dennis Kim (김호광) · This document is published as part of an independent CTI archive (TLP:GREEN).
+Contact: <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · GitHub: <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0530-MARIMO_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

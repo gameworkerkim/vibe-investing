@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>从身份冒充到代码执行的一揽子风险 — IBM WebSphere 同日披露三大漏洞的链式威胁 — VibeQuant</title>
+  <meta name="description" content="CVE 2026 8644 / 9311 / 9319（CVSS 9.0–9.1）：Java 中间件反序列化 RCE、身份验证绕过，以及&quot;正式 Fix Pack 尚未发布&quot;的陷阱" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0604-websphere-zh/" />
+  <meta property="og:title" content="从身份冒充到代码执行的一揽子风险 — IBM WebSphere 同日披露三大漏洞的链式威胁" />
+  <meta property="og:description" content="CVE 2026 8644 / 9311 / 9319（CVSS 9.0–9.1）：Java 中间件反序列化 RCE、身份验证绕过，以及&quot;正式 Fix Pack 尚未发布&quot;的陷阱" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0604-websphere-zh/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0604-websphere-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0604-websphere-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0604-websphere-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0604-websphere-zh/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0604-websphere-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"从身份冒充到代码执行的一揽子风险 — IBM WebSphere 同日披露三大漏洞的链式威胁","description":"CVE 2026 8644 / 9311 / 9319（CVSS 9.0–9.1）：Java 中间件反序列化 RCE、身份验证绕过，以及\"正式 Fix Pack 尚未发布\"的陷阱","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0604-websphere-zh/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0604-WEBSPHERE_ZH.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-03","dateModified":"2026-07-11","inLanguage":"zh-Hans","keywords":"취약점 · 패치, CN, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 취약점 · 패치</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">취약점 · 패치</p>
+        <h1>从身份冒充到代码执行的一揽子风险 — IBM WebSphere 同日披露三大漏洞的链式威胁</h1>
+        <p class="article-dates"><time datetime="2026-06-03">발행 2026.06.03</time> · 주제 취약점 · 패치 · CN · CTI · <time datetime="2026-07-11">수정 2026.07.11</time></p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0604-websphere-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0604-websphere-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0604-websphere-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0604-websphere-zh/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">CVE-2026-8644 / 9311 / 9319（CVSS 9.0–9.1）：Java 中间件反序列化 RCE、身份验证绕过，以及&quot;正式 Fix Pack 尚未发布&quot;的陷阱</p>
+        <p class="article-byline">Dennis Kim (김호광 / HoKwang Kim) · 2026-06-04</p>
+      </header>
+      <div class="article-body prose"><p><em>CVE-2026-8644 / 9311 / 9319（CVSS 9.0–9.1）：Java 中间件反序列化 RCE、身份验证绕过，以及&quot;正式 Fix Pack 尚未发布&quot;的陷阱</em></p>
+<hr>
+<h2>目录</h2>
+<ol>
+<li>摘要 (TL;DR)</li>
+<li>前言 — &quot;中间件层最安静，也最致命&quot;</li>
+<li>漏洞分析 — 三者拆解</li>
+<li>链式风险 — 冒充（8644）与 RCE（9311·9319）的交汇点</li>
+<li>反序列化这一风险等级 — 从 Equifax 到 WebSphere</li>
+<li>补丁陷阱 — 正式 Fix Pack 在 3Q2026，目前只有临时修复</li>
+<li>韩国视角 — 银行、保险与公共部门的 Java EE 核心</li>
+<li>检测与缓解建议</li>
+<li>结论</li>
+<li>参考文献</li>
+</ol>
+<hr>
+<h2>摘要 (TL;DR)</h2>
+<p>2026 年 6 月 1 日，IBM <strong>同时披露</strong>了影响 WebSphere Application Server 8.5 与 9.0 的三个严重漏洞。三者性质不同，但共享同一产品、同一版本区间，IBM 及多家分析机构将其定性为应在单一维护窗口内一并处置的 <strong>协同补丁套件（coordinated patch bundle）</strong>。</p>
+<ul>
+<li><strong>CVE-2026-8644 (CVSS 9.1)</strong> — 身份冒充 / 身份验证绕过。攻击者冒充合法用户，使身份验证机制本身失效。（CWE-290）</li>
+<li><strong>CVE-2026-9311 (CVSS 9.0)</strong> — 通过绕过安全控制实现的远程代码执行（RCE）。恶意输入绕过校验/净化路径，抵达代码执行汇聚点。（CWE-94）</li>
+<li><strong>CVE-2026-9319 (CVSS 9.0)</strong>— 在启用 WS-Security 的 JAX-WS 端点上，对<strong>不可信数据进行反序列化</strong>导致的 RCE。（CWE-502）</li>
+</ul>
+<p>该套件危险的原因有三。<strong>其一，可链接性。</strong>8644（冒充）提供&quot;接入&quot;，9311 与 9319（RCE）提供&quot;执行&quot;——同一产品同时暴露了入侵链的不同阶段。<strong>其二，风险等级。</strong>Java 应用服务器的反序列化漏洞历来属于最危险、被利用最广泛的漏洞类别（2017 年 Equifax 入侵即为 Apache Struts 的反序列化漏洞）。<strong>其三，补丁陷阱。</strong>正式 Fix Pack（9.0.5.29 / 8.5.5.30）<strong>目标为 3Q2026，尚未发布</strong>；当前唯一可用路径是 <strong>临时修复（Interim Fix，APAR PH71422、PH71454 等）</strong>。&quot;等待 Fix Pack&quot;等同于延长暴露期。</p>
+<p>截至目前尚未确认在野利用（in-the-wild）。但反序列化 RCE 是一类在 PoC 出现后会被迅速武器化的漏洞，而当下——刚披露之际——正是<em>在 PoC 成熟之前完成修补的窗口</em>。</p>
+<blockquote>
+<p>⚠️ <strong>请核实 KISA/KrCERT 公告状态</strong> — 本报告依据全球来源（IBM 安全公告、GHSA、EUVD、分析机构）整理。与韩国官方公告的收录时点可能存在差异，组织内部应用前请与 KISA 安全公告交叉核对。</p>
+</blockquote>
+<h3>关键判断（Key Judgments）</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>判断</th>
+<th>置信度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KJ-1</td>
+<td>三个 CVE 并非独立事项，而是共享同一产品与版本区间的<strong>可链接套件</strong>。冒充（8644）提供身份，RCE（9311·9319）提供执行——因此在单一维护窗口内一并修补才是正解。</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>KJ-2</td>
+<td><code>CVE-2026-9319</code>（JAX-WS 反序列化）攻击复杂度较高（AC:H），但无需权限（PR:N）且作用域已变更（S:C）。对熟练攻击者而言仍是可行目标。</td>
+<td><strong>中高</strong></td>
+</tr>
+<tr>
+<td>KJ-3</td>
+<td>正式 Fix Pack 目标为 3Q2026，<strong>尚未发布</strong>。因此现实的即时应对是应用临时修复或补偿性控制（端点网络隔离、反序列化过滤）；&quot;等待 Fix Pack&quot;即为延长暴露。</td>
+<td><strong>高</strong></td>
+</tr>
+<tr>
+<td>KJ-4</td>
+<td>WebSphere 作为业务核心的 Java EE 中间件，深嵌于韩国银行、保险、公共部门与电信环境。暴露面大，且因可用性顾虑而补丁延迟的惯性强，实际暴露窗口很可能较长。</td>
+<td><strong>中高</strong></td>
+</tr>
+<tr>
+<td>KJ-5</td>
+<td>目前尚无确认的在野利用，但反序列化 RCE 是一类在 PoC 成熟后被迅速武器化的漏洞。当下刚披露之际正是<em>先发修补的窗口</em>；错过此窗口，应对将转为事后 IR。</td>
+<td><strong>中高</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. 前言 — &quot;中间件层最安静，也最致命&quot;</h2>
+<p>安全讨论往往集中于边界设备（防火墙、VPN）与终端。然而夹在两者之间的<strong>应用中间件层</strong>，才是最安静却最致命的目标。像 WebSphere 这样的 Java EE 应用服务器，将身份验证、会话、业务逻辑与后端数据库连接汇于一处处理。该层上的代码执行，意味着站在业务数据与认证流的正中央。</p>
+<p>这三件套是中间件层风险的教科书式范例。一者<strong>伪造身份</strong>（8644），二者<strong>执行代码</strong>（9311·9319）。从攻击者角度看，这一组合意味着可从单一产品同时拿下入侵链的两个核心阶段——接入与执行。而其中之一（9319）属于 Java 安全史上最臭名昭著的漏洞类别——<strong>反序列化</strong>。</p>
+<p>这与本系列一以贯之的命题相连。若 <code>CTI-2026-0602-FAULTLINE</code> 是&quot;标签无法预测风险&quot;，<code>CTI-2026-0603-NETSCALER</code> 是&quot;威胁之钟停在补丁应用之日&quot;，那么本报告的命题是：<em>&quot;在刚披露、正式补丁尚不存在的窗口里，临时该堵住什么？&quot;</em></p>
+<hr>
+<h2>2. 漏洞分析 — 三者拆解</h2>
+<table>
+<thead>
+<tr>
+<th>CVE</th>
+<th>类型</th>
+<th>CWE</th>
+<th>CVSS</th>
+<th>关键向量 / 备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>CVE-2026-8644</code></td>
+<td>身份冒充 / 身份验证绕过</td>
+<td>CWE-290</td>
+<td>9.1</td>
+<td>AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:H · 低复杂度、无需权限</td>
+</tr>
+<tr>
+<td><code>CVE-2026-9311</code></td>
+<td>通过绕过安全控制的 RCE</td>
+<td>CWE-94</td>
+<td>9.0</td>
+<td>绕过校验/净化 → 抵达代码执行汇聚点</td>
+</tr>
+<tr>
+<td><code>CVE-2026-9319</code></td>
+<td>JAX-WS（WS-Security）反序列化 RCE</td>
+<td>CWE-502</td>
+<td>9.0</td>
+<td>AV:N/AC:H/PR:N/UI:N/S:C/C:H/I:H/A:H · 高复杂度、作用域变更</td>
+</tr>
+</tbody></table>
+<p><strong>共同影响范围：</strong> IBM WebSphere Application Server 8.5（8.5.0.0–8.5.5.29）与 9.0（9.0.0.0–9.0.5.28）——修复这些 CVE 之前的全部版本。三者均于 2026-06-01 同时披露。</p>
+<h3>2.1 CVE-2026-8644 — 身份冒充（Identity Spoofing）</h3>
+<p>通过冒充绕过身份验证、从而<strong>冒充合法用户</strong>的漏洞。由于它使应用服务器核心的身份验证机制失效，攻击者可冒充任意用户（包括管理员）。其向量为 <strong>低复杂度（AC:L）、无需权限（PR:N）、无需交互（UI:N）</strong>，准入门槛低；机密性无影响（C:N），但完整性与可用性影响高（I:H/A:H）——也就是说，与其说是&quot;窃取数据&quot;的漏洞，不如说是&quot;伪造合法身份以执行特权操作&quot;的漏洞。APAR <strong>PH71422</strong>。</p>
+<h3>2.2 CVE-2026-9311 — 通过绕过安全控制的 RCE</h3>
+<p>绕过既有安全控制（输入校验 / 净化例程），经由非预期路径执行代码的 RCE（CWE-94 代码注入）。其形式为：本应阻止恶意输入抵达敏感代码执行汇聚点的机制被规避；一旦成功，即交出受影响 WebSphere 实例的控制权。IBM 安全公告 node/7274733。</p>
+<h3>2.3 CVE-2026-9319 — JAX-WS 反序列化 RCE</h3>
+<p>在<strong>启用 WS-Security 的 JAX-WS（SOAP Web 服务）端点</strong>上，因对不可信数据进行反序列化而产生的 RCE（CWE-502）。从向量看，其 <strong>攻击复杂度较高（AC:H）</strong>，但无需权限（PR:N）且 <strong>作用域已变更（S:C）</strong>——意味着影响可越出脆弱组件、波及其他安全权限范围。复杂度高不应成为安慰，因为反序列化 gadget 链一旦公开便会被复用与自动化。APAR <strong>PH71454</strong>，GHSA-rqhj-2grh-m6c2。</p>
+<hr>
+<h2>3. 链式风险 — 冒充（8644）与 RCE（9311·9319）的交汇点</h2>
+<p>单独看，三者各自都是严重的独立漏洞；合在一起看，便构成一条<strong>完整的入侵链</strong>。</p>
+<ol>
+<li><strong>取得接入</strong>— 利用 <code>CVE-2026-8644</code> 冒充合法用户（或管理员），绕过身份验证。（ATT&amp;CK<strong>T1078</strong>Valid Accounts、<strong>T1556</strong> Modify Authentication Process）</li>
+<li><strong>执行代码</strong>— 利用 <code>CVE-2026-9311</code>（控制绕过）或 <code>CVE-2026-9319</code>（反序列化）在中间件上执行任意代码。（<strong>T1190</strong>Exploit Public-Facing Application、<strong>T1059</strong> Command and Scripting Interpreter）</li>
+<li><strong>接管、持久化、横向移动</strong> — 取得 WebSphere 实例控制权，并向其下的业务逻辑、会话与后端数据库连接扩展。</li>
+</ol>
+<p>关键在于它们<strong>共享同一产品与版本区间</strong>。若一处脆弱，三者很可能皆脆弱。因此正解不是&quot;先修最严重的一个&quot;，而是<strong>将三者作为一个套件</strong>一并封堵。部分修补只切断链条的一环，留下其余环节。</p>
+<hr>
+<h2>4. 反序列化这一风险等级 — 从 Equifax 到 WebSphere</h2>
+<p><code>CVE-2026-9319</code> 所属的<strong>不可信数据反序列化（CWE-502）</strong>，被视为 Java 安全史上最具破坏力的漏洞类别。Java 的对象反序列化在将字节流还原为对象的过程中，攻击者可控的数据可经由 gadget 链导致任意代码执行。</p>
+<p>该类别的标志性案例是 2017 年 <strong>Equifax 入侵</strong>：Apache Struts 的反序列化 / 远程代码执行漏洞，导致逾 1.4 亿人的个人信息泄露。WebSphere 自身亦有多次反序列化 RCE 的报告史，因此该类别对应用服务器的破坏力已被充分印证。要点很清楚——反序列化 RCE 不是&quot;理论风险&quot;，而是&quot;被反复现实化的风险&quot;；即便攻击复杂度高，一旦 gadget 链公开，准入门槛便会骤降。</p>
+<hr>
+<h2>5. 补丁陷阱 — 正式 Fix Pack 在 3Q2026，目前只有临时修复</h2>
+<p>这是从运维角度最易被忽视的事实。<strong>正式 Fix Pack（9.0.5.29 / 8.5.5.30）目标为 3Q2026，截至本报告尚未发布。</strong> 因此当前可立即采用的路径如下：</p>
+<ul>
+<li><strong>临时修复（Interim Fix）</strong>— 应用解决各 APAR 的 Interim Fix（8644：PH71422，9319：PH71454，9311：对应 APAR）。为此可能需先<strong>前置升级至 Interim Fix 所要求的最低 Fix Pack 级别</strong>。</li>
+<li><strong>补偿性控制（在临时修复之前 / 无法应用时）</strong> — 将启用 WS-Security 的 JAX-WS 端点的网络访问限制在可信范围，对反序列化对象实施输入校验 / 过滤，并监控指向 WS-Security 端点的可疑序列化对象流量。</li>
+</ul>
+<p>&quot;等待 3Q2026 的 Fix Pack&quot;等同于数月的暴露延长。运维环境的变更管理负担越重，越应先以&quot;临时修复 + 补偿性控制&quot;的组合收窄暴露窗口。</p>
+<hr>
+<h2>6. 韩国视角 — 银行、保险与公共部门的 Java EE 核心</h2>
+<ul>
+<li><strong>中间件暴露面</strong> — WebSphere 作为业务核心中间件，深嵌于韩国银行、保险、证券、公共部门与电信环境。当对外的 SOAP/JAX-WS Web 服务端点暴露于互联网或合作伙伴网络时，便成为 9319 的直接目标面。</li>
+<li><strong>可用性优先的文化与补丁延迟</strong> — 金融与公共部门的中间件以不中断的可用性为首要，因此变更窗口紧张，&quot;在跑的系统不要动&quot;的惯性强。该惯性直接转化为暴露期，再叠加正式 Fix Pack 尚未发布，风险窗口将更长。</li>
+<li><strong>遗留版本群</strong> — 8.5 系列存在大量长期运行的遗留系统，可能与最新 fix-pack 级别相距甚远。应事先核查应用 Interim Fix 所需的前置升级条件，以免实际应用被拖延。</li>
+<li><strong>监管与通报视角</strong> — 中间件被接管将触及认证流与个人数据处理的核心。一旦确认入侵迹象，应一并审视相关的金融与个人信息上报、通报义务。</li>
+</ul>
+<hr>
+<h2>7. 检测与缓解建议</h2>
+<ol>
+<li><strong>三者一并修补（单一维护窗口）</strong> — 将三个 CVE 视为一个补丁套件，对所有受影响的 WebSphere 8.5 与 9.0 实例一并应用 Interim Fix（PH71422、PH71454 及 9311 的 APAR）。先确认 Interim Fix 所要求的最低 Fix Pack 级别前置条件。</li>
+<li><strong>收窄 JAX-WS/WS-Security 端点暴露</strong> — 将启用 WS-Security 的 JAX-WS 端点的网络访问限制在可信主机 / 范围。阻断不必要的 SOAP Web 服务暴露。</li>
+<li><strong>反序列化防御的补偿性控制</strong> — 对反序列化对象引入输入校验 / 过滤（如类白名单），并监控指向 WS-Security 端点的可疑序列化负载流量。</li>
+<li><strong>认证异常检测</strong> — 针对 8644（冒充），在日志中检测异常认证、权限提升及未识别身份的特权操作。</li>
+<li><strong>资产清点与版本识别</strong> — 全面识别在运的 WebSphere 实例及其确切的 fix-pack 级别。优先归类面向互联网 / 合作伙伴网络的端点。</li>
+<li><strong>先发 IR 准备</strong> — 虽尚无确认的在野利用，但鉴于反序列化 RCE 在 PoC 公开后被迅速武器化的特性，应事先演练中间件层的事件响应手册。</li>
+</ol>
+<hr>
+<h2>8. 结论</h2>
+<p>IBM WebSphere 三件套是中间件层风险的浓缩范例。一者伪造身份（8644），二者执行代码（9311·9319），其中之一更是 Java 安全史上最臭名昭著的类别——反序列化（9319）。由于它们共享同一产品与版本区间，部分修补只切断链条的一环——<strong>三者必须作为一个套件一并封堵。</strong></p>
+<p>而本案独有的陷阱在于时机。正式 Fix Pack 目标为 3Q2026、当前尚不存在；现在可用的是临时修复与补偿性控制。为本系列的命题再添一句：<em>威胁之钟停在补丁应用之日，但当正式补丁尚不存在时，&quot;临时堵住它&quot;本身即是让钟停摆之举。</em> 刚披露的当下，正是在 PoC 成熟之前收窄暴露窗口的最后一段平静期。</p>
+<hr>
+<h2>9. 参考文献（References）</h2>
+<p>[1] IBM, &quot;Security Bulletin: IBM WebSphere Application Server is affected by a remote code execution vulnerability (CVE-2026-9319)&quot;, 2026-06-01. <a href="https://www.ibm.com/support/pages/security-bulletin-ibm-websphere-application-server-affected-remote-code-execution-vulnerability-cve-2026-9319">https://www.ibm.com/support/pages/security-bulletin-ibm-websphere-application-server-affected-remote-code-execution-vulnerability-cve-2026-9319</a></p>
+<p>[2] IBM, &quot;Security Bulletin: IBM WebSphere Application Server is affected by an identity spoofing vulnerability (CVE-2026-8644)&quot;, 2026-06-01. <a href="https://www.ibm.com/support/pages/node/7274740">https://www.ibm.com/support/pages/node/7274740</a></p>
+<p>[3] IBM, &quot;Security Bulletin: IBM WebSphere Application Server RCE via security control bypass (CVE-2026-9311)&quot;, 2026-06-01. <a href="https://www.ibm.com/support/pages/node/7274733">https://www.ibm.com/support/pages/node/7274733</a></p>
+<p>[4] Threat-Modeling.com, &quot;IBM WebSphere Application Server Vulnerabilities (CVE-2026-8644, CVE-2026-9311, CVE-2026-9319): Identity Spoofing and Remote Code Execution&quot;, 2026-06. <a href="https://threat-modeling.com/ibm-websphere-spoofing-rce-cve-2026-8644-9311-9319/">https://threat-modeling.com/ibm-websphere-spoofing-rce-cve-2026-8644-9311-9319/</a></p>
+<p>[5] Threat-Modeling.com, &quot;Vulnerability Intelligence Report — June 2, 2026&quot;. <a href="https://threat-modeling.com/vulnerability-intelligence-report-june-2-2026/">https://threat-modeling.com/vulnerability-intelligence-report-june-2-2026/</a></p>
+<p>[6] TheHackerWire, &quot;IBM WebSphere RCE via Security Control Bypass (CVE-2026-9311)&quot;, 2026-06. <a href="https://www.thehackerwire.com/ibm-websphere-rce-via-security-control-bypass-cve-2026-9311/">https://www.thehackerwire.com/ibm-websphere-rce-via-security-control-bypass-cve-2026-9311/</a></p>
+<p>[7] GitHub Advisory Database, &quot;GHSA-rqhj-2grh-m6c2 — IBM WebSphere Application Server deserialization RCE (CVE-2026-9319)&quot;, 2026-06-01.</p>
+<p>[8] Akaoma, &quot;CVE-2026-9319 Security Vulnerability Analysis &amp; Exploit Details&quot;. <a href="https://cve.akaoma.com/cve-2026-9319">https://cve.akaoma.com/cve-2026-9319</a></p>
+<hr>
+<p>© 2026 Dennis Kim (김호광) · 本文档作为独立 CTI 档案（TLP:GREEN）公开发布。
+联系方式：<a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · GitHub：<a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0604-WEBSPHERE_ZH.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

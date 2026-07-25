@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloudflare 웹 분석 솔루션 가이드 — Web Analytics·Zaraz·Umami 비교 — VibeQuant</title>
+  <meta name="description" content="Cloudflare Web Analytics·Zaraz·Workers Analytics Engine과 Umami·Plausible·GoatCounter·GA4의 장단점, 적합 사례, 단계별 선택 가이드를 정리했다." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-cloudeflare-web-analytics-guide/" />
+  <meta property="og:title" content="Cloudflare 웹 분석 솔루션 가이드 — Web Analytics·Zaraz·Umami 비교" />
+  <meta property="og:description" content="Cloudflare Web Analytics·Zaraz·Workers Analytics Engine과 Umami·Plausible·GoatCounter·GA4의 장단점, 적합 사례, 단계별 선택 가이드를 정리했다." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-cloudeflare-web-analytics-guide/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Cloudflare 웹 분석 솔루션 가이드 — Web Analytics·Zaraz·Umami 비교","description":"Cloudflare Web Analytics·Zaraz·Workers Analytics Engine과 Umami·Plausible·GoatCounter·GA4의 장단점, 적합 사례, 단계별 선택 가이드를 정리했다.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/cloudeflare-web-analytics-cloudeflare-web-analytics-guide/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudeFlare-Web-Analytics/CloudeFlare-Web-Analytics-Guide.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"ko","keywords":"Cloudflare, Web Analytics, Umami, Zaraz, Privacy, Observability"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 클라우드 · Free tier</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">클라우드 · Free tier</p>
+        <h1>Cloudflare 웹 분석 솔루션 가이드 — Web Analytics·Zaraz·Umami 비교</h1>
+        <p class="article-dates"><time datetime="2026-07-25">발행 2026.07.25</time> · 주제 Cloudflare · Web Analytics · Umami · Zaraz · Privacy · Observability</p>
+        
+        <p class="lede">Cloudflare Web Analytics·Zaraz·Workers Analytics Engine과 Umami·Plausible·GoatCounter·GA4의 장단점, 적합 사례, 단계별 선택 가이드를 정리했다.</p>
+        
+      </header>
+      <div class="article-body prose"><p>Cloudflare 위에 사이트를 올려두고 &quot;내 글은 누가, 어디서 읽고 있을까?&quot;라는 궁금증이 생긴다면, 지표를 보기 위한 선택지는 생각보다 다양합니다. 단순히 PV만 확인할 것인지, 스크롤 깊이나 커스텀 이벤트까지 추적할 것인지, 데이터를 내 손에 온전히 갖고 싶은지에 따라 방향이 완전히 달라집니다. 이 글에서는 Cloudflare 네이티브 솔루션부터 서드파티·오픈소스 도구까지, 각각의 장단점과 적합한 사용 사례를 정리합니다.</p>
+<hr>
+<h2>1. Cloudflare 네이티브 솔루션</h2>
+<h3>1.1 Web Analytics (추천 1순위 · 시작용)</h3>
+<p>Cloudflare Web Analytics는 <strong>무료·프라이버시 우선</strong>이라는 가장 강력한 무기를 가진 도구입니다. 쿠키나 브라우저 지문을 사용하지 않으며, Cloudflare Pages와 동일한 계정에서 바로 활성화할 수 있습니다. 사이트별 Top Pages, Referrer, 국가별 트래픽을 기본으로 제공하며, 사이트에 배너를 추가할 부담도 거의 없습니다. docs/tech/cti 호스트마다 사이트만 추가하면 바로 지표를 확인할 수 있어 <strong>&quot;글별 PV + 유입 경로&quot;를 주간 단위로 점검</strong>하거나 SNS 트래픽을 끄는 실험을 할 때 최적입니다.</p>
+<p>2025년 10월 15일부터 Cloudflare는 모든 무료 도메인에 Web Analytics를 기본적으로 활성화하기 시작했으며, 2026년에는 RUM(Real User Monitoring) 도구와 네트워크 수준 인사이트를 결합한 대규모 업그레이드가 진행 중입니다. 또한 2026년 4월 업데이트를 통해 <strong>Navigation Type 필터링 및 보고</strong>기능이 추가되어, 사용자가 링크 클릭으로 이동했는지, 뒤로가기/앞으로가기로 이동했는지, 캐시 적중 여부까지 확인할 수 있게 되었습니다. 대규모 계정(사이트 100개 이상)을 위한 대시보드 안정성도 개선되어, 최대 1,000개 사이트까지 계정 전체 집계 조회가 가능해졌습니다.<strong>단점</strong>은 분명합니다. 스크롤 깊이·체류 시간·커스텀 이벤트·퍼널 분석이 매우 약하고, UI가 얕으며, 장기 원시 데이터 내보내기와 SQL 질의 기능이 빈약합니다. 서브도메인마다 설정을 별도로 해줘야 하는 번거로움도 있습니다.</p>
+<blockquote>
+<p><strong>적합:</strong> &quot;글별 PV + 유입 경로&quot; 주간 점검, SNS 효과 측정, 라이트한 시작용.</p>
+</blockquote>
+<h3>1.2 Zaraz</h3>
+<p>Zaraz는 <strong>엣지에서 태그를 중계</strong>해주는 도구로, 성능 저하 없이 제3자 스크립트를 통제할 수 있습니다. GA나 광고 픽셀을 브라우저에 직접 심지 않고 Cloudflare 엣지에서 처리하기 때문에, 페이지 로딩 성능을 크게 개선할 수 있습니다.</p>
+<p>하지만 Zaraz 자체는 &quot;논문급 리포트&quot;를 제공하는 분석 도구가 아니라 <strong>태그 매니저</strong>에 가깝습니다. GA를 붙이면 복잡도와 동의 이슈가 다시 발생하고, 콘텐츠 아카이브 용도로는 과한 경우가 많습니다.</p>
+<blockquote>
+<p><strong>적합:</strong> 나중에 GA/광고 픽셀을 꼭 써야 할 때만. 지금 당장은 필요 없다면 넘어가도 좋습니다.</p>
+</blockquote>
+<h3>1.3 Workers Analytics Engine / Logpush + R2</h3>
+<p>이 조합은 <strong>데이터 소유권을 100% 확보</strong>하고 싶은 개발자를 위한 솔루션입니다. Workers의 <code>_middleware</code>나 Pages Function에서 path별 카운트, 스크롤 비콘 등을 직접 쌓을 수 있으며, Workers Analytics Engine은 <strong>무제한 카디널리티(unlimited-cardinality) 시계열 분석</strong>을 SQL API로 질의할 수 있게 해줍니다.</p>
+<p>Logpush는 Cloudflare의 로그를 R2, S3, Splunk, Datadog 등 외부 저장소나 분석 도구로 자동 전송하는 기능입니다. 2026년에는 <strong>Pipelines</strong>기능이 추가되어, Logpush 데이터를 SQL로 변환한 뒤 R2에 Parquet이나 Apache Iceberg 테이블 형태로 저장할 수 있게 되었습니다. 이를 통해 원시 로그를 장기 보관하면서도 빠르게 질의할 수 있는 인프라를 구성할 수 있습니다.<strong>단점</strong>은 대시보드·데이터 리텐션·쿼리를 <strong>직접 만들어야 한다</strong>는 점입니다. 운영 비용과 개발 시간이 상당히 큽니다.</p>
+<blockquote>
+<p><strong>적합:</strong> Umami도 싫고 &quot;완전 내 인프라&quot;만 원할 때. 데이터 엔지니어링 역량이 갖춰진 팀에게 추천.</p>
+</blockquote>
+<hr>
+<h2>2. 서드파티 · 오픈소스</h2>
+<h3>2.1 Umami (OSS, 자주 추천)</h3>
+<p>Umami는 MIT 라이선스의 오픈소스 분석 도구로, <strong>셀프호스트(또는 클라우드)</strong> 가 가능합니다. 페이지뷰·Referrer·커스텀 이벤트·다중 사이트를 지원하며, 스크립트 크기가 2KB 미만으로 가볍습니다. Cloudflare Workers 및 Pages와 D1/PostgreSQL 등을 조합한 사례가 많아 Cloudflare 생태계와 궁합이 좋습니다.</p>
+<p>Cloudflare Web Analytics 다음 단계로, <strong>글별 + 이벤트</strong>까지 추적하고 싶을 때 자연스러운 선택지입니다. 실제로 Cloudflare Web Analytics에서 Umami로 전환한 블로거들의 후기도 긍정적입니다.<strong>단점</strong>은 호스팅·백업·업데이트를 직접 관리해야 하며, 스크롤 깊이는 직접 이벤트를 정의해야 합니다. Umami는 PostgreSQL 또는 MySQL만 공식 지원하며, Cloudflare D1이나 SQLite는 공식 지원하지 않는다는 점도 유의해야 합니다.</p>
+<blockquote>
+<p><strong>적합:</strong> CF Web Analytics 다음 단계, &quot;글별 + 이벤트&quot;까지 원할 때.</p>
+</blockquote>
+<h3>2.2 Plausible (오픈코어 / 유료 SaaS)</h3>
+<p>Plausible은 <strong>UX가 깔끔하고 프라이버시를 중시</strong>하는 도구로, 목표/커스텀 이벤트 설정과 공유 대시보드 기능이 뛰어납니다. Cloudflare Workers를 통해 Plausible 요청을 프록시하여 자사 도메인으로 보낼 수도 있어 애드블록 회피에도 유리합니다.</p>
+<p><strong>단점</strong>은 SaaS가 유료라는 점입니다. 셀프호스트도 가능하지만 운영 부담은 Umami와 비슷합니다.</p>
+<blockquote>
+<p><strong>적합:</strong> 돈을 내고 UI와 조회 속도만 챙기고 싶을 때.</p>
+</blockquote>
+<h3>2.3 GoatCounter (OSS)</h3>
+<p>GoatCounter는 <strong>매우 가벼운</strong>오픈소스 도구로, 무료 티어와 셀프호스트를 모두 지원합니다. 페이지뷰와 Referrer 중심의 단순한 지표를 제공합니다. Cloudflare R2와 조합하여 리디렉션 추적용으로 활용하는 사례도 있습니다.<strong>단점</strong>은 이벤트 추적과 세분화 기능이 약해 &quot;읽음 깊이&quot; 분석에는 부족합니다.</p>
+<blockquote>
+<p><strong>적합:</strong> PV만 초경량으로 확인하고 싶을 때.</p>
+</blockquote>
+<h3>2.4 Matomo (OSS)</h3>
+<p>Matomo는 <strong>GA급 기능</strong>(히트맵·세션·목표)을 온프레미스에서 제공하는 강력한 도구입니다. 하지만 <strong>무겁고 서버·DB 부담</strong>이 크며, 정적 Pages 아키텍처와는 잘 맞지 않습니다.</p>
+<blockquote>
+<p><strong>적합:</strong>현재 규모에서는<strong>비추천</strong>.</p>
+</blockquote>
+<h3>2.5 GA4 (+ Zaraz 가능)</h3>
+<p>GA4는 스크롤·참여 시간·탐색 경로 등이 <strong>풍부</strong>합니다. Zaraz와 함께 사용하면 성능 저하 없이 GA4 데이터를 수집할 수도 있습니다.</p>
+<p><strong>단점</strong>은 쿠키/동의·프라이버시 부담이 크고, 콘텐츠 사이트의 이미지와 잘 맞지 않으며, 샘플링과 학습 곡선이 존재합니다.</p>
+<blockquote>
+<p><strong>적합:</strong> 광고·퍼널 분석이 필요할 때만.</p>
+</blockquote>
+<h3>2.6 PostHog / Clarity 등</h3>
+<p>세션 리플레이·히트맵 등 <strong>어디까지 읽었나</strong>에 가까운 인사이트를 제공합니다. 하지만<strong>무겁고 PII·동의 이슈</strong>가 있으며, CTI/칼럼 아카이브에는 과한 도구입니다.</p>
+<blockquote>
+<p><strong>적합:</strong> 제품 SaaS용이지, 공개 아카이브의 1순위는 아닙니다.</p>
+</blockquote>
+<hr>
+<h2>3. 추가로 살펴볼 만한 도구들</h2>
+<table>
+<thead>
+<tr>
+<th>도구</th>
+<th>유형</th>
+<th>특징</th>
+<th>적합</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Fathom</strong></td>
+<td>유료 SaaS</td>
+<td>Plausible과 유사한 프라이버시 중심. 타이트한 단일 페이지 UI와 엄격한 프라이버시 정책</td>
+<td>Plausible과 비슷한 포지션. UI 취향에 따라 선택</td>
+</tr>
+<tr>
+<td><strong>Simple Analytics</strong></td>
+<td>유료 SaaS</td>
+<td>Cloudflare 앱으로 제공되어 설치가 간편. 쿠키 미사용</td>
+<td>Cloudflare 대시보드와 통합된 경험을 원할 때</td>
+</tr>
+<tr>
+<td><strong>Ackee</strong></td>
+<td>OSS · 자체호스트</td>
+<td>Node.js 기반. GraphQL API로 커스텀 데이터 질의 가능</td>
+<td>Node.js 환경에 익숙하고 GraphQL을 선호할 때</td>
+</tr>
+<tr>
+<td><strong>Pirsch</strong></td>
+<td>유료 SaaS</td>
+<td>월 6달러부터 시작하는 저렴한 프라이버시 중심 도구</td>
+<td>예산이 제한된 스타트업, 가성비 있는 유료 옵션</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 총정리: 단계별 선택 가이드</h2>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>추천 도구</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>1단계: 시작</strong></td>
+<td>Cloudflare Web Analytics</td>
+<td>무료·설정 0초·프라이버시 안전. &quot;PV+유입경로&quot; 확인에 최적</td>
+</tr>
+<tr>
+<td><strong>2단계: 확장</strong></td>
+<td>Umami (셀프호스트)</td>
+<td>커스텀 이벤트·다중 사이트·데이터 소유권 확보</td>
+</tr>
+<tr>
+<td><strong>3단계: 고급</strong></td>
+<td>Plausible (유료) / Workers Analytics Engine</td>
+<td>UI/속도 중시 or 완전 커스텀 인프라 원할 때</td>
+</tr>
+<tr>
+<td><strong>특수 목적</strong></td>
+<td>Zaraz + GA4</td>
+<td>광고·퍼널 분석이 반드시 필요할 때만</td>
+</tr>
+<tr>
+<td><strong>비추천</strong></td>
+<td>Matomo / PostHog / Clarity</td>
+<td>현재 콘텐츠 아카이브 규모에는 과함</td>
+</tr>
+</tbody></table>
+<p>Cloudflare 생태계 안에서 가장 현명한 전략은 <strong>Web Analytics로 시작하고, 필요해지면 Umami로 확장</strong> 하는 것입니다. 둘은 충돌하지 않으므로 함께 돌려가며 비교해보는 것도 좋은 방법입니다. 데이터를 온전히 내 것으로 만들고 싶다면 Workers Analytics Engine + Logpush + R2 조합을 고민해볼 만하지만, 그 전에 Umami로도 충분하지 않을까 한 번쯤 생각해보시길 권합니다.</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudeFlare-Web-Analytics/CloudeFlare-Web-Analytics-Guide.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

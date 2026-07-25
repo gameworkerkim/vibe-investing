@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>fast16 — 比 Stuxnet 早 5 年的核武器仿真破坏框架 — VibeQuant</title>
+  <meta name="description" content="文档 ID: CTI 2026 0520 FAST16 发布日期: 2026年5月20日 分析师: Dennis Kim (HoKwang Kim, 김호광) — CEO, Betalabs Inc. / Independent CTI Analyst / Microsoft Azure MVP TLP:…" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-zh/" />
+  <meta property="og:title" content="fast16 — 比 Stuxnet 早 5 年的核武器仿真破坏框架" />
+  <meta property="og:description" content="文档 ID: CTI 2026 0520 FAST16 发布日期: 2026年5月20日 分析师: Dennis Kim (HoKwang Kim, 김호광) — CEO, Betalabs Inc. / Independent CTI Analyst / Microsoft Azure MVP TLP:…" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-zh/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-zh/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"fast16 — 比 Stuxnet 早 5 年的核武器仿真破坏框架","description":"文档 ID: CTI 2026 0520 FAST16 发布日期: 2026年5月20日 分析师: Dennis Kim (HoKwang Kim, 김호광) — CEO, Betalabs Inc. / Independent CTI Analyst / Microsoft Azure MVP TLP:…","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0520-fast16-zh/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0520-FAST16_ZH.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-05-20","dateModified":"2026-07-11","inLanguage":"zh-Hans","keywords":"취약점 · 패치, CN, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 취약점 · 패치</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">취약점 · 패치</p>
+        <h1>fast16 — 比 Stuxnet 早 5 年的核武器仿真破坏框架</h1>
+        <p class="article-dates"><time datetime="2026-05-20">발행 2026.05.20</time> · 주제 취약점 · 패치 · CN · CTI · <time datetime="2026-07-11">수정 2026.07.11</time></p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0520-fast16-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0520-fast16-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0520-fast16-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0520-fast16-zh/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">比 Stuxnet 早 5 年的核武器仿真破坏框架</p>
+        
+      </header>
+      <div class="article-body prose"><p><strong>文档 ID:</strong>CTI-2026-0520-FAST16<strong>发布日期:</strong>2026年5月20日<strong>分析师:</strong>Dennis Kim (HoKwang Kim, 김호광) — CEO, Betalabs Inc. / Independent CTI Analyst / Microsoft Azure MVP<strong>TLP:</strong> CLEAR</p>
+<hr>
+<h2>执行摘要</h2>
+<p>本报告是对 <strong>fast16</strong>破坏框架的综合分析。SentinelLABS 于 2026 年 4 月首次公开披露,Broadcom Symantec Threat Hunter Team 于 2026 年 5 月发布了后续分析。fast16 的代码库经确认编译于 2005 年前后,这表明<strong>比 Stuxnet 至少早 5 年</strong>,国家级网络破坏能力就已建成并投入运行。</p>
+<p>Symantec 的后续分析为 SentinelLABS 未能解决的核心问题 — <strong>攻击者究竟想要篡改什么</strong>— 提供了决定性答案。fast16 的钩子引擎以高精度爆炸仿真软件<strong>LS-DYNA</strong>和<strong>AUTODYN</strong>为目标,其内部逻辑仅在铀达到 30 g/cm³ 以上密度时才触发 — 也就是<strong>只有在内爆型(implosion-type)核武器中才能达到的冲击压缩条件</strong>。</p>
+<h3>主要结论 (Key Findings)</h3>
+<ul>
+<li>fast16 旨在隐秘篡改核武器设计核心步骤——高爆药内爆(implosion)仿真的输出值。</li>
+<li>以铀密度 30 g/cm³ 作为触发阈值,该值在自然界中无法达到,仅在核武器内爆压缩中可观测。</li>
+<li>钩子规则针对多达 10 种不同的 LS-DYNA/AUTODYN 构建版本进行了精细调优,表明这是一项跟踪目标组织软件更新长达数年的行动。</li>
+<li>由内嵌 Lua 5.0 虚拟机的载体、引导启动文件系统驱动程序、基于规则的代码补丁引擎构成的模块化架构,比 Flame、Project Sauron 等后期高端植入体早 3~5 年。</li>
+<li>自传播(蠕虫)机制被设计为仅限于同一子网内部,展现出不让其泄漏到目标网络之外的作战纪律。</li>
+<li>在 Shadow Brokers 泄露的 NSA &quot;Territorial Dispute&quot; 组件中,&quot;fast16&quot; 这一名称与 &quot;Nothing to see here – carry on&quot; 的规避签名一同出现,表明美国情报机构至少自 2017 年以前就已知晓该框架的存在。</li>
+</ul>
+<h3>威胁评估 (Threat Assessment)</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>评估</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>归属推定</strong></td>
+<td>国家级行为者(Nation-State)。多项情境证据指向与美国情报机构相关的可能性,但官方上尚未归属。</td>
+</tr>
+<tr>
+<td><strong>行动期间</strong></td>
+<td>至少 2005 年前后 ~ 2010 年代中期(多构建版本追踪情境证据)。</td>
+</tr>
+<tr>
+<td><strong>目标行业</strong></td>
+<td>核武器研发、高爆药仿真、爆炸动力学研究机构。</td>
+</tr>
+<tr>
+<td><strong>技术精细度</strong></td>
+<td>顶级(Apex)。结合领域专业知识、编译器构件识别、多构建版本追踪的行动案例在同期没有可比对象。</td>
+</tr>
+<tr>
+<td><strong>运行影响</strong></td>
+<td>延迟并干扰目标核开发计划的设计验证。证明 Stuxnet 之前&quot;物理过程破坏&quot;的范式已经确立。</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. 发现的背景与意义</h2>
+<h3>1.1 两个分析团队的协同发现</h3>
+<p>fast16 的公开经过两个阶段。2026 年 4 月 23 日,SentinelLABS 的 Vitaly Kamluk 和 Juan Andrés Guerrero-Saade 在追踪&quot;使用嵌入式 Lua 虚拟机的最早精巧 Windows 恶意软件&quot;的过程中,偶然发现 <code>svcmgmt.exe</code> 作为起点的分析公之于众。该分析识别了 fast16 的架构、自传播机制和基于 FPU 的补丁引擎的存在,但<em>目标软件的确切身份和篡改的最终目的仍未得到阐明。</em></p>
+<p>2026 年 5 月 16 日,Broadcom Symantec Threat Hunter Team 公布后续分析填补了这一空白。Symantec 分析了 SentinelLABS 提取的 101 条字节模式规则,确认 <strong>LS-DYNA 和 AUTODYN</strong>即为目标。更进一步地,通过对钩子代码的语义分析,Symantec 阐明了篡改机制<strong>仅在核武器内爆仿真的特定物理阶段才被激活</strong>这一决定性事实。</p>
+<blockquote>
+<p><strong>以阻挠核武器仿真过程为目的的国家级黑客行动计划。</strong></p>
+</blockquote>
+<h3>1.2 Shadow Brokers 与 &quot;Territorial Dispute&quot; 的阴影</h3>
+<p>2017 年 4 月,Shadow Brokers 泄露的 NSA 工具组中的 <strong>Territorial Dispute (TeDi)</strong> 组件包含一份签名列表,用于识别 NSA 操作员在目标系统中可能遇到的&quot;敌对&quot;或&quot;友好&quot;植入体。该列表中的 &quot;fast16&quot; 条目附有以下指令:</p>
+<pre><code>fast16 *<strong>Nothing to see here – carry on</strong>*
+</code></pre>
+<p>这短短一行对分析师而言成为长达 9 年的未解之谜。&quot;无需查看,继续行进&quot;这一表达被解释为指示 NSA 操作员在遇到 fast16 时应予以回避,避免冲突和暴露。这表明 fast16 的运营者与 NSA 处于&quot;去冲突化(deconfliction)关系&quot; — 也就是说,是友好国家或同一阵营的行为者。SentinelLABS 的分析通过 <code>svcmgmt.exe</code> 内部的 PDB 路径 <code>C:\buildy\driver\fd\i386\fast16.pdb</code>,决定性地将 2005 年的二进制文件与 2017 年的泄露文档联系起来。</p>
+<h3>1.3 &quot;Stuxnet 之前&quot;意味着什么</h3>
+<p>Stuxnet 长期被视为&quot;针对物理过程的首个网络破坏武器&quot;。2010 年公开的 Stuxnet 以伊朗纳坦兹的铀浓缩离心机为目标,以在 PLC 固件层面精微操纵转速的精度,被认为开启了网络攻击的新时代。</p>
+<p>fast16 的发现从根本上修正了这一历史叙述。fast16 与 Stuxnet 属于<strong>同一概念谱系</strong>— 不是针对厂商产品本身,而是针对该产品所仿真或控制的特定物理过程量身定制的恶意软件 — 但在时间上早约 5 年。这不仅是简单的优先级问题,而是确立了<strong>国家级物理过程破坏能力在 2005 年前后就已达到完成阶段</strong>这一事实,同时也提出了同期其他精巧植入体(Flame、Duqu、Equation 等)并非该谱系的&quot;早期作品&quot;,而是已经成熟的开发计划之后期产物的可能性。</p>
+<hr>
+<h2>2. 技术架构</h2>
+<h3>2.1 三组件模块化结构</h3>
+<p>fast16 框架由三个明确分离的组件构成:</p>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>作用</th>
+<th>主要特征</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>svcmgmt.exe</code></strong></td>
+<td>载体 / 传播模块</td>
+<td>内嵌 Lua 5.0 VM。通过加密的 Lua 字节码执行传播逻辑、持久化、安装决策。约 315 KB。2005 年 8 月 30 日编译。</td>
+</tr>
+<tr>
+<td><strong><code>fast16.sys</code></strong></td>
+<td>内核驱动 / 补丁引擎</td>
+<td>引导启动文件系统过滤驱动程序。注册到 SCSI 类组中,附加在 NTFS、FAT、MRxSMB 之上。EXPLORER.EXE 启动后激活。约 44 KB。</td>
+</tr>
+<tr>
+<td><strong><code>svcmgmt.dll</code></strong></td>
+<td>报告 / 遥测</td>
+<td>注册为 MPR 网络提供者通知接收者。调用 WNetAddConnection 时被加载,通过 <code>\\.\pipe\p577</code> 命名管道报告新的共享连接信息。</td>
+</tr>
+</tbody></table>
+<h3>2.2 <code>svcmgmt.exe</code>:基于 Lua VM 的载体</h3>
+<p><code>svcmgmt.exe</code> 被伪装成 Windows 2000/XP 时代普通的控制台模式服务包装程序。然而其内部嵌入了 <strong>Lua 5.0 虚拟机</strong>,并施加了以下定制:</p>
+<ul>
+<li><code>wstring</code> 模块:原生 Unicode 处理</li>
+<li>符号加密模块 &#39;b&#39;:嵌入式数据解密</li>
+<li>多个直接绑定到 Windows NT 文件系统、注册表、服务控制和网络 API 的模块</li>
+</ul>
+<p>发现的线索来自于追踪 Lua 字节码魔术字节 <code>1B 4C 75 61 (\x1bLua)</code>,这一点意义深远。Flame、Animal Farm 的 Bunny、PlexingEagle、Project Sauron 等后期顶级植入体都将 Lua VM 作为模块化的核心,而 fast16 作为其中最早的案例,比它们早约 3 年。</p>
+<h4>执行模式(命令行参数)</h4>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>行为</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>(无)</code></td>
+<td>作为 Windows 服务运行</td>
+</tr>
+<tr>
+<td><code>-p</code></td>
+<td>设置 InstallFlag=1 后作为服务运行 (Propagate/Install &amp; Run)</td>
+</tr>
+<tr>
+<td><code>-i</code></td>
+<td>设置 InstallFlag=1 后执行 Lua 代码 (Install &amp; Execute Lua)</td>
+</tr>
+<tr>
+<td><code>-r</code></td>
+<td>不设置 InstallFlag,直接执行 Lua 代码 (Execute Lua)</td>
+</tr>
+<tr>
+<td><code>&lt;filename&gt;</code></td>
+<td>IFEO 持久化模式。作为劫持合法程序的包装器/代理运行</td>
+</tr>
+</tbody></table>
+<h3>2.3 <code>fast16.sys</code>:内核级精密破坏驱动</h3>
+<p>该框架最强大的组件 <code>fast16.sys</code> 配置为 <code>Start=0</code>(引导)、<code>Type=2</code>(文件系统驱动程序),注册到 SCSI 类组中,与磁盘设备驱动程序同时在极早阶段加载。加载后立即执行以下操作:</p>
+<ul>
+<li>禁用 Windows Prefetcher(<code>EnablePrefetcher=0</code>):强制后续代码页请求通过完整的文件系统栈进行路由</li>
+<li>通过基于 XOR 的字符串加密和扫描 <code>ntoskrnl.exe</code> 动态解析内核 API</li>
+<li>暴露 <code>\Device\fast16</code> 和 <code>\??\fast16</code>(DeviceType <code>0xA57C</code> — 次要取证标记)</li>
+<li>通过 <code>IoRegisterFsRegistrationChange</code> 在现有及新增的文件系统设备上附加工作设备对象</li>
+<li>通过工作设备路由所有相关 I/O Request Packet,包括 <code>IRP_MJ_CREATE</code>、<code>IRP_MJ_READ</code>、<code>IRP_MJ_CLOSE</code> 等</li>
+</ul>
+<p>虽然驱动程序在引导时加载,但内核级代码注入引擎<strong>仅在 EXPLORER.EXE 打开后才被激活</strong>。这是为了最小化对引导性能的影响(因为启动慢会引起调查),并将监控和打补丁推迟到桌面环境可用之后才执行的设计。</p>
+<h4>目标识别:Intel 编译器构件</h4>
+<p>驱动程序不会不加区分地篡改所有可执行文件。目标资格由两个条件的结合决定:</p>
+<ul>
+<li>文件扩展名为 <strong><code>.EXE</code></strong>- 在最后一个 PE 段头之后立即存在以 &quot;<strong><code>Intel</code></strong>&quot; 开头的可打印 ASCII 字符串(Intel C/C++ 编译器元数据)</li>
+</ul>
+<p>这种筛选逻辑表明攻击者知道目标软件是用哪种工具链构建的。LS-DYNA 和 AUTODYN 均按行业惯例采用 <strong>Intel Fortran/C++</strong> 编译器进行精密浮点运算的构建。</p>
+<blockquote>
+<p>这是对高精度运算进行精巧的目标锁定。考虑到攻击者对高精度运算群体及行业惯例理解之深,绝非个人所能企及的水平。</p>
+</blockquote>
+<hr>
+<h2>3. 核心:破坏机制的语义分析</h2>
+<p>Symantec 后续分析的最决定性贡献,在于阐明了 fast16 在 LS-DYNA 和 AUTODYN 内部*<strong>究竟篡改了什么</strong>*。钩子引擎拥有 101 条字节模式规则,这些规则又可分为 9~10 个&quot;钩子组&quot;。每个组对应 LS-DYNA 或 AUTODYN 的某个特定构建版本。篡改逻辑分为三种机制。</p>
+<h3>3.1 机制 A:首次屏蔽后的输出缩放</h3>
+<p>当机制 A 的钩点<strong>第 1 次和第 16 次</strong>被命中时,fast16 仅返回控制(什么都不做)。之后,若仿真输入值介于 30 和 65 之间,则将输出值<strong>缩小至正常值的 10%</strong>,并继续保持在 10% 水平。</p>
+<p>在初次两次调用时屏蔽篡改,被解释为<strong>为通过冷启动测试的反规避</strong>设计。也就是说,当用户在新环境中首次执行验证测试时,返回正常结果以避免怀疑;只有在实际运营仿真中才显现篡改。</p>
+<blockquote>
+<p>在新的开发仿真环境中,运行已知可验证的数据值是实验的一般流程。因此在设计过程中精心实现,使其从一开始就不返回错误。</p>
+</blockquote>
+<h3>3.2 机制 B:LS-DYNA — 篡改铀压缩仿真</h3>
+<p>机制 B 以 LS-DYNA 为目标。钩点首先确认 <strong>EOS(状态方程,Equation of State)选择值</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>EOS 编号</th>
+<th>模型名称</th>
+<th>物理含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>2</strong></td>
+<td>Jones-Wilkins-Lee (JWL)</td>
+<td>高爆药爆炸产物的压力-体积关系标准模型</td>
+</tr>
+<tr>
+<td><strong>3</strong></td>
+<td>Sack Tuesday</td>
+<td>高压冲击波压缩建模</td>
+</tr>
+<tr>
+<td><strong>7</strong></td>
+<td>Ignition and Growth of Reaction in High Explosives</td>
+<td>高爆药反应生长模型(点火后传播仿真)</td>
+</tr>
+</tbody></table>
+<p>这三种模型都有一个共同特点:<strong>仅用于高爆药行为仿真</strong>。当 EOS 条件满足时,篡改例程会等到仿真的特定属性达到初始值的 5 倍。然后篡改 <strong>Cauchy 应力张量输出值(<code>sig_xx</code>、<code>sig_yy</code>、<code>sig_zz</code>)</strong>。</p>
+<p>篡改的触发条件十分明确。当仿真材料的密度达到 <strong>30 g/cm³</strong>时,将 Cauchy 应力张量值减小至实际值的 1%。但并非立即降至 1%,而是按照在密度达到 60 g/cm³ 时变为 1% 的<strong>自然</strong>斜率减小。仿真并不需要实际达到 60 g/cm³,60 仅是用于计算斜率的基准点。</p>
+<p>Cauchy 应力张量表示决定材料可压缩性的热力学压力。在 Symantec 的测试中,这种篡改在仿真模拟压缩至 33 g/cm³ 时,产生了比实际<strong>更高压缩率</strong>的结果。也就是说,仿真用户会判断已达到实际上无法达到的压缩水平。</p>
+<h3>3.3 机制 C:AUTODYN — 可变终端密度缩放</h3>
+<p>机制 C 以 AUTODYN 为目标,确认 EOS 编号 3 (Ideal Gas)、5 (JWL)、11 (Lee-Tarver)。此外还检查内存中是否存在 <code>&quot;$Loading co&quot;</code> 字符串(AUTODYN 特有标记)。</p>
+<p>当仿真属性达到初始值的 5 倍且铀密度达到 30 g/cm³ 的压缩状态时,篡改开始。输出缩放根据软件版本如下不同:</p>
+<table>
+<thead>
+<tr>
+<th>起始密度</th>
+<th>终端密度(斜率基准)</th>
+<th>最终篡改率(相对实际值)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>30 g/cm³</td>
+<td>60 g/cm³</td>
+<td><strong>42%</strong></td>
+</tr>
+<tr>
+<td>30 g/cm³</td>
+<td>40 g/cm³</td>
+<td><strong>10%</strong></td>
+</tr>
+<tr>
+<td>30 g/cm³</td>
+<td>47 g/cm³</td>
+<td><strong>10%</strong></td>
+</tr>
+<tr>
+<td>30 g/cm³</td>
+<td>48 g/cm³</td>
+<td><strong>8%</strong></td>
+</tr>
+</tbody></table>
+<p>使用不同的终端密度表明*<strong>目标组织的设计阶段随时间演变</strong>*。每当目标使用的仿真版本发生变化,攻击者就设计新的篡改方法。101 条钩子规则被分为 9~10 个组这一事实,印证了这是一项<strong>跨越多达 10 个 LS-DYNA/AUTODYN 构建版本、持续多年的追踪行动</strong>。</p>
+<blockquote>
+<p>由此可见,为阻挠核计划,对各个实验室的针对性攻击持续了多么长的时间。</p>
+</blockquote>
+<hr>
+<h2>4. 为什么是 30 g/cm³?— 与核武器设计的结合</h2>
+<p>fast16 的阈值 30 g/cm³ 并非任意选择的数字。这个值是<strong>自然界物质任何稳定状态都无法达到、仅在核武器内爆设计的冲击压缩条件下才被观测到的铀压缩密度</strong>。</p>
+<h3>4.1 内爆型(implosion-type)核武器的物理学</h3>
+<p>纯铀的常温密度约为 <strong>19.1 g/cm³</strong>。在该密度下,铀的临界质量过大,难以实现实用的武器设计。内爆型核武器的核心思想是用高爆药的精确同时爆炸将铀(或钚)核心包围起来,通过<strong>超高密度压缩</strong>降低临界质量,达到超临界状态。</p>
+<p>随着压缩进行,铀原子核之间的距离减小,核裂变时释放的中子撞击其他铀核的概率呈指数增长。当这种链式反应超过临界水平时,核爆炸发生。fast16 的 30 g/cm³ 阈值<strong>相当于正常密度的约 1.57 倍,是仅在内爆压缩下才有可能达到的范围</strong>。</p>
+<h3>4.2 篡改的战略效应</h3>
+<p>fast16 的篡改可从两个方向同时摧毁核开发计划:</p>
+<ul>
+<li><strong>假阳性 (False Positive):</strong> 使实际上未达到超临界的设计被错误判定为&quot;成功&quot;,导致实际制造时无法工作的武器被生产出来。</li>
+<li><strong>假阴性 (False Negative):</strong> 使可工作的设计被判定为&quot;失败&quot;,让开发团队不断修改和重新仿真本应已经达到的设计,浪费时间和资源。</li>
+<li><strong>阻断交叉验证:</strong> 由于自传播机制对同一网络的所有仿真系统一致地应用相同的篡改,通过在其他系统上重新运行相同仿真进行验证的&quot;算术验证&quot;防御被消除。</li>
+</ul>
+<h3>4.3 关于运行效果的情境证据</h3>
+<p>Symantec 提出了两项情境证据,表明目标组织可能已经察觉到 fast16 的影响:</p>
+<ul>
+<li><strong>钩子组的时间倒序:</strong> 部分钩子规则组,在为更新版本添加的组之后,才为更早版本添加。这表明仿真用户在察觉结果异常并退回到更早版本时,攻击者随后将该更早版本作为新目标。</li>
+<li><strong>频繁的版本更新:</strong> 存在针对 10 个不同构建版本的钩子组这一事实,意味着目标用户相对频繁地更新仿真软件,这可能是为应对结果异常的尝试。一般已安装的仿真软件,通常只在 PC 出故障时才会更新。</li>
+</ul>
+<blockquote>
+<p>存在响应异常目标版本回滚的代码以及频繁的构建版本,这是核计划运营者已察觉异常现象的间接证据。</p>
+</blockquote>
+<h3>4.4 SentinelLABS 的补充目标假设</h3>
+<p>SentinelLABS 的初步分析通过模式匹配,除 LS-DYNA 970 之外,还识别出以下两种软件作为候选:</p>
+<ul>
+<li><strong>PKPM:</strong> 在中国广泛使用的结构工程 CAD 软件套件。用于建筑设计、抗震/风荷载分析。与核仿真没有直接关联,可能只是相同的钩子模式恰巧匹配。</li>
+<li><strong>MOHID:</strong> 葡萄牙里斯本理工大学开发的海洋/沿海水文动力学建模系统。用于水质、沉积物输送、油污泄漏建模。</li>
+</ul>
+<p>Symantec 的后续分析通过钩子引擎的语义分析,确认了<strong>真正活跃的目标是 LS-DYNA 和 AUTODYN 的高爆药仿真</strong>。PKPM 和 MOHID 仅在钩子模式上部分匹配,由于 EOS 条件和密度阈值不满足,实际上篡改触发不会被激发。</p>
+<p>SentinelLABS 报告引用的情境中值得注意的是,LS-DYNA 在与<strong>伊朗 AMAD 计划的高爆药载荷研究</strong>以及 JCPOA 第 T 节违规嫌疑相关的公开报告中被提及。Symantec 在分析中明确感谢 &quot;Institute for Science and International Security&quot; 的协助,这也强烈暗示 fast16 的推定目标是<strong>伊朗核开发计划</strong>(但两份报告均未做明确归属)。</p>
+<hr>
+<h2>5. 传播、持久化与运作纪律</h2>
+<h3>5.1 安装前检查(Pre-installation Kill-Switch)</h3>
+<p>fast16 的运营者为避免暴露风险,构建了精巧的环境感知机制。安装前的 <code>ok_to_install()</code> 例程会检查以下内容:</p>
+<ul>
+<li>通过 <code>NtfsMetaDataMutex</code> 检查<strong>确保单一实例</strong>- 扫描共<strong>18 个安全产品注册表键</strong>,若任一存在则拒绝传播</li>
+</ul>
+<p>被扫描的安全产品列表反映了 2005 年时&quot;目标网络中预计会存在&quot;的产品组合:</p>
+<pre><code>HKLM\SOFTWARE\Symantec\InstalledApps
+HKLM\SOFTWARE\Sygate Technologies\Sygate Personal Firewall
+HKLM\SOFTWARE\TrendMicro\PFW
+HKLM\SOFTWARE\Zone Labs\TrueVector
+HKLM\SOFTWARE\F-Secure
+HKLM\SOFTWARE\Network Ice\BlackIce
+HKLM\SOFTWARE\McAfee.com\Personal Firewall
+HKLM\SOFTWARE\ComputerAssociates\eTrust EZ Armor
+HKLM\SOFTWARE\Kerio\Personal Firewall 4
+HKLM\SOFTWARE\KasperskyLab\InstalledProducts\Kaspersky Anti-Hacker
+HKLM\SOFTWARE\Agnitum\Outpost Firewall
+HKLM\SOFTWARE\Panda Software\Firewall
+... (共 18 个)
+</code></pre>
+<h3>5.2 持久化:滥用 Image File Execution Options (IFEO)</h3>
+<p>fast16 滥用 Windows 的 <strong>Image File Execution Options</strong> 功能建立持久化。它将自己的路径写入以下位置的 Debugger 值:</p>
+<pre><code>HKLM\Software\Microsoft\Windows NT\CurrentVersion\
+  Image File Execution Options\&lt;target&gt;
+</code></pre>
+<p>由此,当用户运行目标应用程序时,Windows 会代为运行 fast16。fast16 执行以下序列:</p>
+<ul>
+<li>删除该注册表键</li>
+<li>运行原始应用程序</li>
+<li>为维持持久化,重新添加注册表键</li>
+<li>用 <code>-r</code> 参数将自己以正常执行模式重新运行</li>
+</ul>
+<p>用户看到正常运行的应用程序,但劫持<strong>每次执行后都立即恢复</strong>。即便分析师发现注册表键,下次执行时也会自动复原,因此静态删除无效。(即使重新安装该仿真软件也无济于事。)</p>
+<h3>5.3 自传播:MPR + 管理共享</h3>
+<p>fast16 的传播机制分为两个阶段:</p>
+<ul>
+<li>提取 <strong><code>svcmgmt.dll</code></strong>并注册为<strong>MPR (Multiple Provider Router)</strong> 网络提供者通知接收者。该 DLL 加载到调用 <code>WNetAddConnection</code> 的所有进程中,通过命名管道 <code>\\.\pipe\p577</code> 报告新的共享连接。</li>
+<li>枚举所有域、服务器、共享以发现远程主机。将每个候选主机名解析为 IP,并按<strong>本地网络范围(10.x.x.x、172.16.x.x、192.168.x.x)和相同子网规则</strong>进行验证。</li>
+<li>对符合资格的机器,<strong>冒用本地登录用户凭据(impersonation)</strong>,将自己复制到 <code>\\&lt;remote&gt;\admin$\system32\svcmgmt.exe</code>,创建远程 SvcMgmt 服务并启动执行。</li>
+</ul>
+<h4>&quot;不向目标网络外泄漏&quot;的有意限制</h4>
+<p>fast16 的传播机制被<strong>有意限制</strong>在同一子网和 RFC 1918 私有 IP 范围内,显示出作战纪律的强度。2000 年代中期的一般蠕虫试图无差别扩散到整个互联网,而 fast16 被设计为<strong>仅在目标设施隔离的研究网络内部运行</strong>。这意味着:</p>
+<ul>
+<li>核研究设施的气隙(air-gapped)或部分隔离网络是明确的目标环境</li>
+<li>偶然外部暴露风险最小化 — 运作安全(OPSEC)最优先</li>
+<li>初始渗透通过另外的手段(USB、供应链等)进行,fast16 是渗透后的内部扩散载荷</li>
+</ul>
+<blockquote>
+<p>人力情报(HUMINT)—— 由人手将其引入实验室的封闭网络,然后以最小动作仅在封闭网络内部传播的结构,检测极为困难。</p>
+</blockquote>
+<hr>
+<h2>6. 关于国家规模网络攻击计划归属的情境分析</h2>
+<p>两份报告均未明示国家归属,但累积的情境证据有力地勾勒出行为者的轮廓。</p>
+<h3>6.1 Shadow Brokers 的 &#39;Territorial Dispute&#39; 签名</h3>
+<p>NSA 的 Territorial Dispute 组件是一个签名数据库,用于将 NSA 操作员在目标盒上可能遇到的其他植入体分类为&quot;友好&quot;或&quot;敌对&quot;。针对 fast16 的 &quot;Nothing to see here – carry on&quot; 指令被解释为<strong>指示 NSA 操作员遇到 fast16 时予以回避并去冲突化</strong>。</p>
+<p>在 Crysys Lab 的 Boldizsár Bencsáth 博士的分析中,与其他签名相比,这一条目显得异常突出。这容许两种解读:</p>
+<ul>
+<li><strong>五眼联盟或盟国行动:</strong> fast16 可能是与 NSA 处于去冲突化关系的盟友情报机构(GCHQ、ASIS、CSE、GCSB 或以色列 8200 部队等)的资产</li>
+<li><strong>NSA 自身行动的孤立分支:</strong> 同一机构内不同部门运作的行动,用作防止偶然冲突的内部去冲突化标记</li>
+</ul>
+<h3>6.2 领域专业知识的深度</h3>
+<p>fast16 的钩子规则所展示的领域知识水平,在 2005 年时难以找到可比对象:</p>
+<ul>
+<li>准确识别哪些 EOS 形式与高爆药建模相关</li>
+<li>事先了解 Intel Fortran 编译器在单精度显式动力学求解器中生成的调用约定</li>
+<li>理解 Cauchy 应力张量输出值的含义及其对仿真结果的影响</li>
+<li>准确预测哪类仿真会触发篡改门</li>
+<li>关于铀压缩临界密度区间(30~60 g/cm³)的核物理学知识</li>
+</ul>
+<p>这些知识的结合意味着<strong>核武器设计经验者、爆炸动力学仿真专家、逆向工程师、系统程序员组成的跨学科团队</strong>进行了多年的合作。2005 年时能够调动这些资源的行为者极其有限。</p>
+<h3>6.3 编译器足迹和开发文化</h3>
+<p>SentinelLABS 在 fast16 二进制文件内部发现了形如 <code>@(#)par.h $Revision: 1.3 $</code> 的字符串。这个 <code>@(#)</code> 前缀是 1970~80 年代 Unix SCCS (Source Code Control System) 和 RCS (Revision Control System) 工具的特征。</p>
+<p>在 2005 年的 Windows 内核驱动程序中出现这种标记极为罕见,表明开发者并非&quot;仅 Windows 开发者&quot;,而是<strong>有长期资历的高安全 Unix 环境出身的工程师</strong> — 通常与政府或军事级工作相关联的开发者才能产生的开发风格。</p>
+<blockquote>
+<p>代码是诚实的。是 Unix 系出身的开发者开发了 Windows 用的网络武器。</p>
+</blockquote>
+<h3>6.4 综合评估</h3>
+<p>综合这些情境,fast16 的运营者被推定为具有以下特征的行为者:</p>
+<ul>
+<li>国家情报机构或拥有相当资源和权限的组织</li>
+<li>与 NSA 处于足以去冲突化的&quot;同阵营&quot;或&quot;友好&quot;关系</li>
+<li>自有或可协作核武器设计与爆炸动力学领域的领域专家</li>
+<li>拥有基于 Unix 的长期运营开发文化、出身于军事/政府安全环境的开发团队</li>
+<li>对目标核计划(多数情境指向伊朗)具有多年持续的监视和访问能力</li>
+</ul>
+<hr>
+<h2>7. 失陷指标 (Indicators of Compromise)</h2>
+<h3>7.1 文件哈希</h3>
+<table>
+<thead>
+<tr>
+<th>文件名</th>
+<th>哈希类型</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong><code>fast16.sys</code></strong></td>
+<td>MD5</td>
+<td><code>0ff6abe0252d4f37a196a1231fae5f26</code></td>
+</tr>
+<tr>
+<td><strong><code>fast16.sys</code></strong></td>
+<td>SHA1</td>
+<td><code>92e9dcaf7249110047ef121b7586c81d4b8cb4e5</code></td>
+</tr>
+<tr>
+<td><strong><code>fast16.sys</code></strong></td>
+<td>SHA256</td>
+<td><code>07c69fc33271cf5a2ce03ac1fed7a3b16357aec093c5bf9ef61fbfa4348d0529</code></td>
+</tr>
+<tr>
+<td><strong><code>connotify.dll</code></strong></td>
+<td>MD5</td>
+<td><code>410eddfc19de44249897986ecc8ac449</code></td>
+</tr>
+<tr>
+<td><strong><code>connotify.dll</code></strong></td>
+<td>SHA256</td>
+<td><code>8fcb4d3d4df61719ee3da98241393779290e0efcd88a49e363e2a2dfbc04dae9</code></td>
+</tr>
+<tr>
+<td><strong><code>svcmgmt.exe</code></strong></td>
+<td>MD5</td>
+<td><code>dbe51eabebf9d4ef9581ef99844a2944</code></td>
+</tr>
+<tr>
+<td><strong><code>svcmgmt.exe</code></strong></td>
+<td>SHA256</td>
+<td><code>9a10e1faa86a5d39417cae44da5adf38824dfb9a16432e34df766aa1dc9e3525</code></td>
+</tr>
+</tbody></table>
+<h3>7.2 基于主机的指标</h3>
+<ul>
+<li>设备对象:<code>\Device\fast16</code>、<code>\??\fast16</code></li>
+<li>DeviceType 值:<code>0xA57C</code></li>
+<li>服务名:<code>SvcMgmt</code></li>
+<li>安装路径:<code>%windir%\system32\svcmgmt.exe</code>、<code>%windir%\system32\drivers\fast16.sys</code></li>
+<li>命名管道:<code>\\.\pipe\p577</code></li>
+<li>PDB 路径字符串:<code>C:\buildy\driver\fd\i386\fast16.pdb</code></li>
+<li>Prefetcher 禁用:<code>HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management\PrefetchParameters\EnablePrefetcher = 0</code></li>
+<li>注册在 SCSI 类组中的未签名/未识别引导启动文件系统驱动</li>
+</ul>
+<h3>7.3 基于行为的检测</h3>
+<ul>
+<li>动态地添加、删除、重新添加 Image File Execution Options 键 Debugger 值的模式</li>
+<li>在 MPR (Multiple Provider Router) NetworkProvider 键中注册新的通知接收 DLL</li>
+<li>通过 WNetAddConnection 回调进行非标准 DLL 注入</li>
+<li>通过本地 <code>admin$</code> 共享复制 <code>svcmgmt.exe</code> 并尝试创建远程服务</li>
+<li>由 Intel C/C++ 编译器构建的 LS-DYNA/AUTODYN <code>.EXE</code> 文件在磁盘读取时,以添加了 <code>.xdata</code>、<code>.pdata</code> 节的形式加载到内存的现象</li>
+</ul>
+<h3>7.4 YARA 规则 (SentinelLABS 提供,节选)</h3>
+<p>SentinelLABS 在 GitHub 上公开了 <code>apt_fast16_carrier</code>、<code>apt_fast16_driver</code>、<code>clean_fast16_patchtarget</code>、<code>apt_fast16_patch</code> 共 4 条 YARA 规则。</p>
+<p>核心签名:</p>
+<pre><code class="language-yara">// Lua 字节码魔术(载体识别)
+$lua_magic = { 1B 4C 75 61 }
+
+// 驱动 PDB 路径
+$pdb1 = &quot;C:\\buildy\\&quot;
+$pdb2 = &quot;driver\\fd\\i386\\fast16.pdb&quot;
+
+// fast16 DeviceType (push 0A57Ch)
+$devtype = { 68 7C A5 00 00 }
+
+// SCCS/RCS 足迹
+$a1 = &quot;@(#)foo.c : &quot;
+$a2 = &quot;@(#)par.h : &quot;
+</code></pre>
+<hr>
+<h2>8. 防御与响应建议</h2>
+<h3>8.1 立即检查事项</h3>
+<p>本报告涉及 2005 年前后的代码库,在现代 Windows(Vista/7 及之后)上无法直接运行。但从两个角度需要进行检查:</p>
+<ul>
+<li><strong>&quot;考古&quot;检查:</strong> 如果有基于 Windows XP 或 Windows 2000 的遗留仿真工作站留存在隔离环境中,建议依据本 IoC 进行检查。</li>
+<li><strong>现代化变种的可能性:</strong> Symantec 明确表示&quot;现代化的 fast16 是否存在尚不清楚&quot;。同一运营者将相同概念(高爆药 EOS 触发器、密度阈值篡改)移植到现代仿真软件(LS-DYNA R12、AUTODYN 2024 等)的后续行动,其存在的可能性不能排除。</li>
+</ul>
+<h3>8.2 一般建议 (Symantec)</h3>
+<ul>
+<li>定期检查端点上加载的驱动程序清单,标记任何未签名或未识别的驱动</li>
+<li>部署应用程序控制,并精细调优以阻止未经批准的可执行文件和 DLL 运行</li>
+<li>启用 Symantec Endpoint Security 的 Adaptive Protection 功能,阻止环境中通常不使用的 dual-use 工具的使用</li>
+</ul>
+<h3>8.3 针对高精度计算环境的特化建议</h3>
+<p>针对核、航空航天、国防、先进物理仿真等运行高精度计算工作负载的组织的额外建议:</p>
+<ul>
+<li><strong>结果完整性验证:</strong>在<strong>架构不同的另一系统(例如:x86 工作站 ↔ ARM/PowerPC HPC 节点)</strong>上交叉运行同一仿真,验证结果一致性。像 fast16 这样的 x86 特化篡改在其他架构上不会起作用。</li>
+<li><strong>二进制完整性监控:</strong> 定期验证 LS-DYNA、AUTODYN、ANSYS、ABAQUS 等仿真可执行文件的 SHA256 哈希,并检查内存加载后是否添加了 <code>.xdata</code>、<code>.pdata</code> 等异常节。</li>
+<li><strong>认识基于 Intel 编译器元数据的目标锁定:</strong> 考虑到目标锁定逻辑依赖于 PE 头部的 &quot;Intel&quot; 字符串,可能存在使用相同模式的其他破坏工具。在构建流水线中移除或更改此元数据可能是一种规避策略。</li>
+<li><strong>&quot;异常结果&quot;报告文化:</strong> 建立研究人员可以报告仿真结果细微异常的渠道。fast16 不会完全破坏结果,而是生成&quot;看似合理的虚假&quot;,因此领域专家的直觉是第一道防线。</li>
+<li><strong>阻断气隙环境中的横向移动:</strong> 最小化研究网络内所有 <code>admin$</code> 共享、SMB 自动发现、自动凭据委派。</li>
+</ul>
+<h3>8.4 政策意涵</h3>
+<p>fast16 的发现表明网络破坏威胁<strong>比此前所知渗透得更早、更深</strong>。从东亚视角(尤其是中国、韩国、日本)看,以下政策意涵很重要:</p>
+<ul>
+<li>国家核心研究基础设施(中国科学院、清华大学、中国工程物理研究院等;韩国 KAIST、KAERI、KARI;日本 JAEA、JAXA 等)的仿真环境完整性审计体制需要审视</li>
+<li>在半导体、显示器、二次电池等东亚战略产业中使用的高精度仿真软件(TCAD、MEMS、流体力学、结构分析)同样存在类似破坏范式被应用的可能性</li>
+<li>超越以&quot;数据窃取&quot;为中心的既有安全范式,需要对&quot;结果篡改&quot;破坏建立专门的威胁建模</li>
+<li>将研究结果的可复现性和交叉验证基础设施重新认知为安全控制的方法</li>
+</ul>
+<hr>
+<h2>9. 结语 — 看不见的战争</h2>
+<p>fast16 的发现迫使我们重写网络破坏的历史叙述。2005 年前后,在 Stuxnet 出现的 5 年前,国家级行为者已经拥有:</p>
+<ul>
+<li>通过嵌入式脚本引擎的模块化植入体架构</li>
+<li>内核级文件系统过滤和内存补丁能力</li>
+<li>通过编译器构件的精密目标锁定</li>
+<li>跟踪多达 10 个软件构建版本、多年运营的行动基础设施</li>
+<li>准确认知核武器设计物理临界点的领域专业知识</li>
+</ul>
+<p>借用 Symantec 的表述,fast16 <strong>属于与 Stuxnet 相同的概念谱系 — 不是针对厂商产品本身,而是针对该产品所仿真或控制的特定物理过程量身定制的恶意软件</strong>。决定性的一点在于时间上早 5 年。</p>
+<p>SentinelLABS 的表述更令人印象深刻 — <em>&quot;fast16 是理解国家通过软件重塑物理世界的能力的一个参考点。它是一种新形态治国方略的沉默先声,直到今天仍在隐秘之中取得成功。&quot;</em></p>
+<p>几乎没有留下任何内部品牌信息的 fast16 运营者所留下的少数人类可读文本,以讽刺性的平淡凝结了该行动的特性:</p>
+<blockquote>
+<p><em><strong>*<strong> Nothing to see here – carry on </strong>*</strong></em></p>
+</blockquote>
+<p>我们过去 20 年究竟&quot;未能看见&quot;什么,以及至今仍未能看见什么——这一问题,才是 fast16 留下的真正遗产。</p>
+<hr>
+<h2>附录 A:参考资料和来源</h2>
+<ul>
+<li><strong>SentinelLABS (2026.04.23,2026.05.07 更新):</strong> Vitaly Kamluk &amp; Juan Andrés Guerrero-Saade, &quot;fast16 | Mystery Shadow Brokers Reference Reveals High-Precision Software Sabotage 5 Years Before Stuxnet&quot;<ul>
+<li>URL: <a href="https://www.sentinelone.com/labs/fast16-mystery-shadowbrokers-reference-reveals-high-precision-software-sabotage-5-years-before-stuxnet/">https://www.sentinelone.com/labs/fast16-mystery-shadowbrokers-reference-reveals-high-precision-software-sabotage-5-years-before-stuxnet/</a></li>
+</ul>
+</li>
+<li><strong>Broadcom Symantec Threat Hunter Team (2026.05.16):</strong> &quot;Fast16: Pre-Stuxnet Sabotage Tool Was Built to Subvert Nuclear Weapons Simulations&quot;<ul>
+<li>URL: <a href="https://www.security.com/threat-intelligence/fast16-nuclear-sabotage">https://www.security.com/threat-intelligence/fast16-nuclear-sabotage</a></li>
+</ul>
+</li>
+<li><strong>Crysys Lab:</strong> Boldizsár Bencsáth, &quot;Territorial Dispute — NSA&#39;s perspective on APT landscape&quot;</li>
+<li><strong>Institute for Science and International Security:</strong> 对 Symantec 分析提供咨询协助(涉及伊朗 AMAD 计划相关 LS-DYNA 使用情况)</li>
+</ul>
+<hr>
+<h2>附录 B:分析师信息与分发</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>分析师</strong></td>
+<td>Dennis Kim (HoKwang Kim, 김호광)</td>
+</tr>
+<tr>
+<td><strong>隶属</strong></td>
+<td>CEO, Betalabs Inc. (首尔) / Independent CTI Analyst / Microsoft Azure MVP</td>
+</tr>
+<tr>
+<td><strong>邮箱</strong></td>
+<td><a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a></td>
+</tr>
+<tr>
+<td><strong>GitHub</strong></td>
+<td>github.com/gameworkerkim</td>
+</tr>
+<tr>
+<td><strong>Web3Paper</strong></td>
+<td>web3paper.net/ko</td>
+</tr>
+<tr>
+<td><strong>文档 ID</strong></td>
+<td>CTI-2026-0520-FAST16</td>
+</tr>
+<tr>
+<td><strong>TLP</strong></td>
+<td>CLEAR — 自由分发(建议注明来源)</td>
+</tr>
+<tr>
+<td><strong>分发语言</strong></td>
+<td>韩语(原版)、英语、简体中文、日语</td>
+</tr>
+</tbody></table>
+<p>本报告将 SentinelLABS 和 Broadcom Symantec 的公开分析,从韩国网络威胁情报社区的视角进行了整合与重构。所有技术事实均基于原报告;解读和政策意涵为本分析师之观点。</p>
+<hr>
+<p><em>文档结束</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0520-FAST16_ZH.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

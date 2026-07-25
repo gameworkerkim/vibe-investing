@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTI-2026-0603-ANDROID-EOPKR — VibeQuant</title>
+  <meta name="description" content="구글이 2026년 6월 안드로이드 보안 게시판을 통해 안드로이드 프레임워크(Android Framework)의 권한 상승(Elevation of Privilege, EoP) 제로데이 취약점인 CVE 2025 48595를 공개했다." />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0603-android-eop-kr/" />
+  <meta property="og:title" content="CTI-2026-0603-ANDROID-EOPKR" />
+  <meta property="og:description" content="구글이 2026년 6월 안드로이드 보안 게시판을 통해 안드로이드 프레임워크(Android Framework)의 권한 상승(Elevation of Privilege, EoP) 제로데이 취약점인 CVE 2025 48595를 공개했다." />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0603-android-eop-kr/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"CTI-2026-0603-ANDROID-EOPKR","description":"구글이 2026년 6월 안드로이드 보안 게시판을 통해 안드로이드 프레임워크(Android Framework)의 권한 상승(Elevation of Privilege, EoP) 제로데이 취약점인 CVE 2025 48595를 공개했다.","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0603-android-eop-kr/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0603-ANDROID-EOP_KR.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-06-03","dateModified":"2026-06-08","inLanguage":"ko","keywords":"취약점 · 패치, KR, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 취약점 · 패치</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">취약점 · 패치</p>
+        <h1>CTI-2026-0603-ANDROID-EOPKR</h1>
+        <p class="article-dates"><time datetime="2026-06-03">발행 2026.06.03</time> · 주제 취약점 · 패치 · KR · CTI · <time datetime="2026-06-08">수정 2026.06.08</time></p>
+        
+        <p class="lede">구글이 2026년 6월 안드로이드 보안 게시판을 통해 안드로이드 프레임워크(Android Framework)의 권한 상승(Elevation of Privilege, EoP) 제로데이 취약점인 CVE 2025 48595를 공개했다.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>사용자 상호작용 없이도 악성 앱이 시스템 권한 탈취 → 제한적 표적 공격에 악용 중. 북한 라자루스 사용중 하...</p>
+</blockquote>
+<hr>
+<h2>Executive Summary</h2>
+<p>구글이 2026년 6월 안드로이드 보안 게시판을 통해 안드로이드 프레임워크(Android Framework)의 권한 상승(Elevation of Privilege, EoP) 제로데이 취약점인 CVE-2025-48595를 공개했다.</p>
+<p>해당 취약점은 정수 오버플로우(Integer Overflow)로 인해 발생하며, 추가 권한이나 사용자 상호작용 없이도 공격자가 로컬 환경에서 권한을 상승시킬 수 있다. 구글은 해당 취약점이 실제 제한적 표적 공격(Targeted Attack)에 악용되고 있음을 공식 확인하였다.</p>
+<p>미국 CISA는 본 취약점을 Known Exploited Vulnerabilities (KEV) 카탈로그에 추가했으며, 연방 민간 기관(FCEB)에 대해 2026년 6월 5일까지 패치 적용을 의무화하였다.</p>
+<hr>
+<h2>Incident Overview</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Report ID</td>
+<td>CTI-2026-0603-ANDROID-EOP</td>
+</tr>
+<tr>
+<td>발행일</td>
+<td>2026-06-03</td>
+</tr>
+<tr>
+<td>심각도</td>
+<td>HIGH</td>
+</tr>
+<tr>
+<td>분류</td>
+<td>TLP:GREEN</td>
+</tr>
+<tr>
+<td>CVE</td>
+<td>CVE-2025-48595</td>
+</tr>
+<tr>
+<td>CVSS</td>
+<td>8.4 (High)</td>
+</tr>
+<tr>
+<td>위협 유형</td>
+<td>Local Privilege Escalation Zero-Day</td>
+</tr>
+<tr>
+<td>영향 버전</td>
+<td>Android 14, 15, 16, 16-QPR2</td>
+</tr>
+<tr>
+<td>분석 출처</td>
+<td>Google Android Security Bulletin, CISA KEV, SOCRadar</td>
+</tr>
+<tr>
+<td>국내 보도</td>
+<td>확인되지 않음</td>
+</tr>
+<tr>
+<td>신뢰도</td>
+<td>High</td>
+</tr>
+</tbody></table>
+<hr>
+<h1>1. 핵심 요약</h1>
+<p>안드로이드 프레임워크 내부 다수 위치에서 발생하는 정수 오버플로우 취약점(CWE-190)을 통해 공격자가 권한 상승을 수행할 수 있는 제로데이 취약점이 공개되었다.</p>
+<p>본 취약점은 다음 특징을 가진다.</p>
+<ul>
+<li>사용자 상호작용 불필요</li>
+<li>추가 권한 불필요</li>
+<li>로컬 환경에서 악용 가능</li>
+<li>실제 표적 공격에서 악용 확인</li>
+<li>Android Framework 계층 영향</li>
+</ul>
+<p>권한 상승 취약점은 일반적으로 초기 침투 이후 공격자의 권한을 확장하여 데이터 탈취, 감시, 지속성 확보, 추가 악성 행위 수행을 가능하게 하는 핵심 공격 요소로 활용된다.</p>
+<hr>
+<h1>2. Vulnerability Details</h1>
+<h2>취약점 개요</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CVE</td>
+<td>CVE-2025-48595</td>
+</tr>
+<tr>
+<td>CWE</td>
+<td>CWE-190</td>
+</tr>
+<tr>
+<td>유형</td>
+<td>Integer Overflow</td>
+</tr>
+<tr>
+<td>영향 영역</td>
+<td>Android Framework</td>
+</tr>
+<tr>
+<td>공격 벡터</td>
+<td>Local</td>
+</tr>
+<tr>
+<td>공격 복잡도</td>
+<td>Low</td>
+</tr>
+<tr>
+<td>필요 권한</td>
+<td>None</td>
+</tr>
+<tr>
+<td>사용자 상호작용</td>
+<td>None</td>
+</tr>
+<tr>
+<td>CVSS</td>
+<td>8.4</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>기술적 원인</h2>
+<p>취약점은 Android Framework 내부 여러 구성 요소에서 발생하는 정수 오버플로우(Integer Overflow) 문제에 기인한다.</p>
+<p>정수 오버플로우는 계산 결과가 자료형의 최대 범위를 초과할 경우 예상치 못한 값으로 변환되는 현상이다.</p>
+<p>공격자는 이를 악용하여:</p>
+<ul>
+<li>메모리 손상</li>
+<li>경계 우회</li>
+<li>코드 실행</li>
+<li>권한 상승</li>
+</ul>
+<p>등을 유도할 수 있다.</p>
+<hr>
+<h2>기술적 영향</h2>
+<p>성공적으로 악용될 경우 공격자는 다음 권한을 획득할 수 있다.</p>
+<ul>
+<li>애플리케이션 샌드박스 탈출</li>
+<li>시스템 권한 확보</li>
+<li>민감 데이터 접근</li>
+<li>지속성 확보</li>
+<li>추가 악성 코드 설치</li>
+</ul>
+<p>Framework 계층에서 발생하는 취약점 특성상 악용 범위가 매우 넓다.</p>
+<hr>
+<h1>3. Impact Analysis</h1>
+<h2>영향 받는 버전</h2>
+<p>Patch Level 2026-06-01 이전 버전 기준</p>
+<ul>
+<li>Android 14</li>
+<li>Android 15</li>
+<li>Android 16</li>
+<li>Android 16-QPR2</li>
+</ul>
+<hr>
+<h2>공격 시나리오</h2>
+<h3>시나리오 1 — 악성 애플리케이션</h3>
+<p>공격자는 정상 앱으로 위장한 악성 애플리케이션을 배포한다.</p>
+<p>사용자가 앱을 설치하면 추가 상호작용 없이 권한 상승이 수행될 수 있다.</p>
+<hr>
+<h3>시나리오 2 — 익스플로잇 체인</h3>
+<p>초기 코드 실행 취약점과 결합하여 사용된다.</p>
+<p>일반적인 공격 흐름:</p>
+<ol>
+<li>원격 코드 실행(RCE)</li>
+<li>로컬 권한 상승(EoP)</li>
+<li>시스템 권한 확보</li>
+<li>데이터 탈취</li>
+</ol>
+<hr>
+<h3>시나리오 3 — 권한 있는 구성 요소 악용</h3>
+<p>사전 설치된 애플리케이션 또는 시스템 구성 요소를 악용하여 공격 성공 가능성을 높일 수 있다.</p>
+<hr>
+<h2>실제 악용 현황</h2>
+<p>구글은 본 취약점이 제한적이고 표적화된 환경에서 실제 악용되고 있음을 공식 확인했다.</p>
+<p>현재까지 공개되지 않은 정보는 다음과 같다.</p>
+<ul>
+<li>공격 주체</li>
+<li>피해 조직</li>
+<li>피해 국가</li>
+<li>악용 규모</li>
+</ul>
+<p>가능한 위협 행위자 유형:</p>
+<ul>
+<li>국가 지원 공격 그룹(APT)</li>
+<li>상업 스파이웨어 운영자</li>
+<li>범죄 조직</li>
+<li>정보 수집 목적 공격자</li>
+</ul>
+<p>현재까지 특정 공격 그룹과의 연관성은 확인되지 않았다.</p>
+<hr>
+<h1>4. Mitigation</h1>
+<h2>패치 적용 (최우선)</h2>
+<p>즉시 보안 업데이트 적용 권고</p>
+<h3>확인 경로</h3>
+<p>text 설정  → 휴대전화 정보  → Android 버전  → 보안 업데이트 </p>
+<p>권장 보안 패치 수준</p>
+<p>text 2026-06-05 이상 </p>
+<hr>
+<h2>조직 대상 권고</h2>
+<h3>Android Fleet 관리</h3>
+<ul>
+<li>중앙 패치 적용 현황 점검</li>
+<li>미패치 단말 식별</li>
+<li>강제 업데이트 정책 적용</li>
+</ul>
+<hr>
+<h3>모바일 위협 탐지 강화</h3>
+<p>다음 행위에 대한 모니터링 강화</p>
+<ul>
+<li>비정상 권한 상승</li>
+<li>루트 권한 획득 시도</li>
+<li>시스템 프로세스 변조</li>
+<li>비인가 코드 실행</li>
+</ul>
+<hr>
+<h3>MDM 정책 강화</h3>
+<ul>
+<li>Play Store 외 설치 차단</li>
+<li>USB 디버깅 제한</li>
+<li>개발자 모드 사용 제한</li>
+</ul>
+<hr>
+<h2>개인 사용자 권고</h2>
+<h3>앱 설치 제한</h3>
+<p>다음 원칙 준수</p>
+<ul>
+<li>Play Store 이용</li>
+<li>출처 불명 APK 설치 금지</li>
+<li>사이드로딩 최소화</li>
+</ul>
+<hr>
+<h3>업데이트 유지</h3>
+<p>OEM 제조사 업데이트 일정 지속 모니터링</p>
+<p>특히 다음 제조사 사용자는 주의 필요</p>
+<ul>
+<li>Samsung</li>
+<li>Google Pixel</li>
+<li>Xiaomi</li>
+<li>OPPO</li>
+<li>Vivo</li>
+<li>OnePlus</li>
+</ul>
+<hr>
+<h1>5. Strategic Assessment</h1>
+<p>본 취약점은 단순한 권한 상승 버그 이상의 의미를 가진다.</p>
+<p>실제 악용이 확인된 제로데이이며, Android Framework 계층에 존재한다는 점에서 공격 가치가 매우 높다.</p>
+<p>특히 다음과 같은 환경에서 위험도가 높다.</p>
+<ul>
+<li>정부 기관</li>
+<li>국방 분야</li>
+<li>언론인</li>
+<li>인권 활동가</li>
+<li>금융기관 임직원</li>
+<li>고위 공직자</li>
+</ul>
+<p>권한 상승 취약점은 일반적으로 모바일 스파이웨어 체인의 핵심 구성 요소로 활용된다.</p>
+<p>Pegasus, Predator, Graphite와 같은 상업 스파이웨어 역시 과거 다수의 Android EoP 취약점을 활용해 감염 후 시스템 권한을 확보한 바 있다.</p>
+<p>현재 공개된 정보만으로는 공격 주체를 특정할 수 없으나, 제한적 표적 공격에 사용되고 있다는 점에서 고도화된 위협 행위자가 관여했을 가능성을 배제할 수 없다.</p>
+<hr>
+<h1>6. Additional Notes</h1>
+<p>2026년 6월 Android Security Bulletin에서는 총 124개의 취약점이 수정되었다.</p>
+<p>이 중:</p>
+<ul>
+<li>Critical: 18건</li>
+<li>High: 다수</li>
+<li>실제 악용 확인: CVE-2025-48595</li>
+</ul>
+<p>특히 Android 생태계 특성상 OEM 및 통신사별 패치 적용 시점이 다를 수 있으므로 동일한 Android 버전이라도 실제 위험도는 기기별로 상이할 수 있다.</p>
+<hr>
+<h1>7. References</h1>
+<ol>
+<li><p>CIRCL Vulnerability Lookup</p>
+<ul>
+<li>CVE-2025-48595</li>
+</ul>
+</li>
+<li><p>SOCRadar</p>
+<ul>
+<li>June 2026 Android Security Update Fixes Framework Zero-Day</li>
+</ul>
+</li>
+<li><p>The Hacker News</p>
+<ul>
+<li>Google June 2026 Android Update Patches 124 Flaws, One Actively Exploited</li>
+</ul>
+</li>
+<li><p>CISA KEV Catalog</p>
+<ul>
+<li>Known Exploited Vulnerabilities</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2>Analyst Assessment</h2>
+<p>Severity: HIGH</p>
+<p>Confidence: High</p>
+<p>Primary Risk:</p>
+<ul>
+<li>Privilege Escalation</li>
+<li>Device Compromise</li>
+<li>Spyware Deployment</li>
+<li>Persistent Access</li>
+</ul>
+<p>Affected Sector:</p>
+<ul>
+<li>Government</li>
+<li>Defense</li>
+<li>Finance</li>
+<li>Healthcare</li>
+<li>Enterprise Mobility</li>
+</ul>
+<p>Recommended Priority:
+Immediate Patch Deployment</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0603-ANDROID-EOP_KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Microsoft Qlib 시작 가이드 — 한국 개발자를 위한 완전판 (토스 Open API 연동 테스트 중) — VibeQuant</title>
+  <meta name="description" content="Qlib 는 마이크로소프트 리서치(MSRA)가 2020년 9월 오픈소스로 공개한 AI 지향 퀀트 투자 플랫폼 (AI oriented Quantitative Investment Platform)이다. 데이터 처리, 모델 훈련, 백테스트로 이어지는 전체 ML 파이프라인을…" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/quant-qlib-qlib-getting-started-kr/" />
+  <meta property="og:title" content="Microsoft Qlib 시작 가이드 — 한국 개발자를 위한 완전판 (토스 Open API 연동 테스트 중)" />
+  <meta property="og:description" content="Qlib 는 마이크로소프트 리서치(MSRA)가 2020년 9월 오픈소스로 공개한 AI 지향 퀀트 투자 플랫폼 (AI oriented Quantitative Investment Platform)이다. 데이터 처리, 모델 훈련, 백테스트로 이어지는 전체 ML 파이프라인을…" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/quant-qlib-qlib-getting-started-kr/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/quant-qlib-qlib-getting-started-kr/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/quant-qlib-qlib-getting-started-en/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/quant-qlib-qlib-getting-started-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Microsoft Qlib 시작 가이드 — 한국 개발자를 위한 완전판 (토스 Open API 연동 테스트 중)","description":"Qlib 는 마이크로소프트 리서치(MSRA)가 2020년 9월 오픈소스로 공개한 AI 지향 퀀트 투자 플랫폼 (AI oriented Quantitative Investment Platform)이다. 데이터 처리, 모델 훈련, 백테스트로 이어지는 전체 ML 파이프라인을…","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://tech.vibequant.cc/tech/quant-qlib-qlib-getting-started-kr/","isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Quant_Qlib/Qlib-getting-started-KR.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-07-05","dateModified":"2026-07-05","inLanguage":"ko","keywords":"퀀트 · 데이터, Quant_Qlib"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 퀀트 · 데이터</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">퀀트 · 데이터</p>
+        <h1>Microsoft Qlib 시작 가이드 — 한국 개발자를 위한 완전판 (토스 Open API 연동 테스트 중)</h1>
+        <p class="article-dates"><time datetime="2026-07-05">발행 2026.07.05</time> · 주제 퀀트 · 데이터 · Quant_Qlib</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn is-active" href="../../tech/quant-qlib-qlib-getting-started-kr/" data-lang="KR" aria-current="true">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/quant-qlib-qlib-getting-started-en/" data-lang="EN">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">Qlib 는 마이크로소프트 리서치(MSRA)가 2020년 9월 오픈소스로 공개한 AI 지향 퀀트 투자 플랫폼 (AI oriented Quantitative Investment Platform)이다. 데이터 처리, 모델 훈련, 백테스트로 이어지는 전체 ML 파이프라인을…</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. Qlib 프로젝트 개요</h2>
+<p><strong>Qlib</strong>는 마이크로소프트 리서치(MSRA)가 2020년 9월 오픈소스로 공개한 <strong>AI 지향 퀀트 투자 플랫폼</strong>(AI-oriented Quantitative Investment Platform)이다. 데이터 처리, 모델 훈련, 백테스트로 이어지는 전체 ML 파이프라인을 포함하며, 알파 발굴 → 리스크 모델링 → 포트폴리오 최적화 → 주문 집행에 이르는 퀀트 투자 전 과정을 커버한다.</p>
+<p>지원하는 학습 패러다임은 세 가지로 정의 될 수 있다. 자비로운 마이크로소프트 리서치 팀에서 개발하다가 정말 올인원으로 확장한 케이스이다.</p>
+<table>
+<thead>
+<tr>
+<th align="left">패러다임</th>
+<th align="left">용도</th>
+<th align="left">대표 구현</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">지도 학습 (Supervised Learning)</td>
+<td align="left">복잡한 비선형 시장 패턴 발굴</td>
+<td align="left">LightGBM, GRU, Transformer 등 25종+</td>
+</tr>
+<tr>
+<td align="left">시장 동적 모델링 (Market Dynamics)</td>
+<td align="left">개념 표류(concept drift) 대응, 비정상성 적응</td>
+<td align="left">DDG-DA, Rolling Retraining</td>
+</tr>
+<tr>
+<td align="left">강화 학습 (Reinforcement Learning)</td>
+<td align="left">연속적 매매 의사결정, 주문 집행 최적화</td>
+<td align="left">PPO, OPDS (order execution)</td>
+</tr>
+</tbody></table>
+<p>여기에 <strong>RD-Agent</strong>(LLM 기반 자율 R&amp;D 에이전트)가 결합되어 팩터 발굴과 모델 최적화를 자동화하는 방향으로 진화 중이다. 관련 논문은 &quot;R&amp;D-Agent-Quant: A Multi-Agent Framework for Data-Centric Factors and Model Joint Optimization&quot; (arXiv:2505.15155).</p>
+<p>프로젝트 규모: GitHub Star 약 40,000+, Fork 6,000+ (2026년 기준). Python 퀀트 오픈소스 중 최상위권. 이 이하는 별로 볼 필요가 없다.</p>
+<hr>
+<h2>2. 핵심 장점</h2>
+<h3>2.1 올인원(All-in-One) 파이프라인</h3>
+<p>데이터 처리 → 팩터 연산 → 모델 훈련 → 백테스트 → 리포트 분석 → 온라인 서빙까지 하나의 프레임워크에서 처리한다. zipline(백테스트만), backtrader(전략 실행만), 별도 팩터 라이브러리를 조합하던 기존 워크플로우 대비 통합 비용이 크게 줄어든다.</p>
+<h3>2.2 검증된 고성능 데이터 인프라</h3>
+<p>Qlib는 금융 시계열에 특화된 바이너리 저장 포맷과 2단 캐시(ExpressionCache, DatasetCache)를 자체 설계했다. 공식 벤치마크(800종목 × 14개 팩터, 2007–2020 일봉, 1 CPU 기준)</p>
+<table>
+<thead>
+<tr>
+<th align="left">저장 방식</th>
+<th align="right">소요 시간(초)</th>
+<th align="right">Qlib 풀캐시 대비</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">MySQL</td>
+<td align="right">365.3 ± 7.5</td>
+<td align="right">약 49배 느림</td>
+</tr>
+<tr>
+<td align="left">InfluxDB</td>
+<td align="right">368.2 ± 3.6</td>
+<td align="right">약 50배 느림</td>
+</tr>
+<tr>
+<td align="left">MongoDB</td>
+<td align="right">253.6 ± 6.7</td>
+<td align="right">약 34배 느림</td>
+</tr>
+<tr>
+<td align="left">HDF5</td>
+<td align="right">184.4 ± 3.7</td>
+<td align="right">약 25배 느림</td>
+</tr>
+<tr>
+<td align="left">Qlib (캐시 없음)</td>
+<td align="right">147.0 ± 8.8</td>
+<td align="right">약 20배 느림</td>
+</tr>
+<tr>
+<td align="left">Qlib (+ExpressionCache)</td>
+<td align="right">47.6 ± 1.0</td>
+<td align="right">약 6배 느림</td>
+</tr>
+<tr>
+<td align="left"><strong>Qlib (+Expression +Dataset 캐시)</strong></td>
+<td align="right"><strong>7.4 ± 0.3</strong></td>
+<td align="right">기준</td>
+</tr>
+</tbody></table>
+<p>64 CPU 병렬 환경에서는 캐시 없이도 8.8초, ExpressionCache만으로 4.2초까지 단축된다. 범용 DB는 다층 인터페이스와 불필요한 포맷 변환 때문에 금융 데이터 로딩에서 구조적으로 불리하다는 것이 MSRA의 분석이다.
+이 지점은 나 역시 동의한다. ExpressionCache의 성능은 정말 금융 퀀트에서 압도적이다. </p>
+<h3>2.3 표현식 기반 팩터 엔진</h3>
+<p><code>Ref($close, 1)/$close - 1</code> 같은 문자열 표현식으로 팩터를 정의하면 엔진이 자동으로 벡터화 연산과 캐싱을 처리한다. pandas로 직접 rolling/shift를 조합하는 것보다 코드가 짧고, 캐시 재사용 덕분에 반복 실험에서 특히 빠르다.</p>
+<h3>2.4 논문 재현 가능한 모델 동물원 (Model Zoo)</h3>
+<p>LightGBM, XGBoost, CatBoost 같은 GBDT 계열부터 LSTM, GRU, ALSTM, GATs, Transformer, Localformer, TRA, TCN, ADARNN, ADD, IGMTF, HIST, KRNN, Sandwich, TabNet, DoubleEnsemble, TCTS, SFM, TFT까지 25종 이상의 SOTA 모델이 동일한 데이터셋(Alpha158/Alpha360)과 동일한 백테스트 조건에서 비교 가능한 형태로 구현되어 있다. &quot;논문 수치를 직접 재현해볼 수 있는 유일한 퀀트 프레임워크&quot;라는 평가가 과장이 아니다.</p>
+<h3>2.5 시장 비정상성(Non-stationarity) 대응 도구 내장</h3>
+<p>금융 데이터의 분포 변화(regime change)에 대응하는 Rolling Retraining과 메타러닝 기반 DDG-DA가 벤치마크와 함께 제공된다. 이 부분은 다른 오픈소스 백테스터에는 거의 없는 Qlib 고유 영역이다.</p>
+<h3>2.6 RD-Agent를 통한 자동화 R&amp;D</h3>
+<p>LLM이 팩터 가설 생성 → 코드 구현 → 백테스트 → 결과 평가 → 개선 루프를 자율 수행한다. 리서치 리포트(PDF)에서 팩터를 추출해 구현하는 시나리오도 지원한다. 데모: rdagent.azurewebsites.net</p>
+<hr>
+<h2>3. 유사 프로젝트 비교</h2>
+<table>
+<thead>
+<tr>
+<th align="left">프로젝트</th>
+<th align="left">성격</th>
+<th align="left">Qlib 대비 포지션</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>zipline / zipline-reloaded</strong></td>
+<td align="left">이벤트 기반 백테스터</td>
+<td align="left">백테스트 전용. ML 파이프라인, 팩터 엔진 없음. Quantopian 폐쇄 후 커뮤니티 유지</td>
+</tr>
+<tr>
+<td align="left"><strong>backtrader</strong></td>
+<td align="left">이벤트 기반 백테스터</td>
+<td align="left">전략 로직 구현에 강점, ML 통합은 수작업. 국내 사용자 많음</td>
+</tr>
+<tr>
+<td align="left"><strong>vectorbt</strong></td>
+<td align="left">벡터화 백테스터</td>
+<td align="left">속도는 매우 빠르나 팩터 리서치·모델 훈련 프레임워크 아님</td>
+</tr>
+<tr>
+<td align="left"><strong>QuantConnect (LEAN)</strong></td>
+<td align="left">클라우드 퀀트 플랫폼</td>
+<td align="left">실거래 연동 강점, C#/Python. 오픈 리서치 재현성은 Qlib 우위</td>
+</tr>
+<tr>
+<td align="left"><strong>Qbot / QuantMind / qlib-learning</strong></td>
+<td align="left">Qlib 기반 상위 응용</td>
+<td align="left">Qlib를 코어 엔진으로 쓰는 파생 프로젝트. 빠른 체험용</td>
+</tr>
+</tbody></table>
+<p>정리하면 Qlib는 <strong>AI 모델 리서치 + 백테스트 통합</strong>이라는 포지션에서 사실상 경쟁자가 없다. 반면<strong>실거래 주문 연동</strong>(브로커 API)은 범위 밖이므로, 실전 매매까지 가려면 별도 집행 레이어를 직접 구축해야 한다.</p>
+<hr>
+<h2>4. 설치 (Getting Started)</h2>
+<h3>4.1 환경 요구사항</h3>
+<table>
+<thead>
+<tr>
+<th align="left">항목</th>
+<th align="left">내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">OS</td>
+<td align="left">Linux, Windows, macOS (Linux 권장 — <code>run_all_model.py</code> 등 일부 스크립트는 Linux 전용)</td>
+</tr>
+<tr>
+<td align="left">Python</td>
+<td align="left"><strong>3.8 ~ 3.12</strong> 공식 지원</td>
+</tr>
+<tr>
+<td align="left">패키지 관리</td>
+<td align="left">Conda 강력 권장 (시스템 Python 사용 시 헤더 파일 누락으로 빌드 실패 가능)</td>
+</tr>
+<tr>
+<td align="left">필수 의존성</td>
+<td align="left">numpy, cython, lightgbm, pytorch(딥러닝 모델 사용 시)</td>
+</tr>
+</tbody></table>
+<pre><code class="language-bash">conda create -n qlib python=3.10
+conda activate qlib
+</code></pre>
+<h3>4.2 설치 방법 3가지</h3>
+<p><strong>방법 1: pip (안정 버전, 권장)</strong></p>
+<pre><code class="language-bash">pip install pyqlib
+</code></pre>
+<p><strong>방법 2: 소스 설치 (main 브랜치 최신 기능 필요 시)</strong></p>
+<pre><code class="language-bash">pip install numpy
+pip install --upgrade cython
+
+git clone https://github.com/microsoft/qlib.git &amp;&amp; cd qlib
+pip install .            # 개발 참여 시: pip install -e &quot;.[dev]&quot;
+</code></pre>
+<blockquote>
+<p>주의: 과거 문서의 <code>python setup.py install</code> 방식은 deprecated 되었다. 반드시 <code>pip install .</code>을 사용할 것.</p>
+</blockquote>
+<p><strong>방법 3: Docker (환경 격리)</strong></p>
+<pre><code class="language-bash">docker pull pyqlib/qlib_image_stable:stable
+docker run -it --name qlib -v &lt;로컬 디렉토리&gt;:/app pyqlib/qlib_image_stable:stable
+</code></pre>
+<p><strong>Apple Silicon (M1/M2/M3) Mac 사용자</strong>: LightGBM 빌드가 OpenMP 의존성 누락으로 실패할 수 있다. 먼저 <code>brew install libomp</code> 실행 후 설치할 것.</p>
+<p><strong>설치 확인</strong>:</p>
+<pre><code class="language-python">import qlib
+print(qlib.__version__)   # 0.9.x
+</code></pre>
+<h3>4.3 데이터 준비 — 중요 변경사항</h3>
+<blockquote>
+<p><strong>[2026년 현재 상태]</strong>데이터 보안 정책 강화로<strong>공식 데이터 다운로드 스크립트가 일시 중단</strong>되었다. 공식 README가 안내하는 대체 경로는 커뮤니티(chenditc)가 유지하는 investment_data 저장소이다. 구버전 문서의 <code>python scripts/get_data.py qlib_data_cn ...</code> 명령은 더 이상 작동을 보장하지 않는다.</p>
+</blockquote>
+<p><strong>권장: 커뮤니티 데이터셋 (중국 A주, TuShare 기반, 일 단위 갱신)</strong></p>
+<pre><code class="language-bash">wget https://github.com/chenditc/investment_data/releases/latest/download/qlib_bin.tar.gz
+mkdir -p ~/.qlib/qlib_data/cn_data
+tar -zxvf qlib_bin.tar.gz -C ~/.qlib/qlib_data/cn_data --strip-components=1
+rm -f qlib_bin.tar.gz
+</code></pre>
+<p><strong>공식 스크립트 (복구 시 사용 가능, Yahoo Finance 크롤러 기반)</strong></p>
+<pre><code class="language-bash"># 일봉
+python -m qlib.cli.data qlib_data --target_dir ~/.qlib/qlib_data/cn_data --region cn
+# 1분봉
+python -m qlib.cli.data qlib_data --target_dir ~/.qlib/qlib_data/cn_data_1min --region cn --interval 1min
+</code></pre>
+<p><strong>데이터 무결성 검사</strong> (필수 습관으로 권장):</p>
+<pre><code class="language-bash">python scripts/check_data_health.py check_data --qlib_dir ~/.qlib/qlib_data/cn_data
+</code></pre>
+<h3>4.4 초기화</h3>
+<pre><code class="language-python">import qlib
+from qlib.constant import REG_CN   # 구버전: qlib.config — 현재는 qlib.constant
+
+provider_uri = &quot;~/.qlib/qlib_data/cn_data&quot;
+qlib.init(provider_uri=provider_uri, region=REG_CN)
+</code></pre>
+<p><code>region</code>은 <code>REG_CN</code>(중국), <code>REG_US</code>(미국), <code>REG_TW</code>(대만)를 지원한다. region 설정은 데이터 경로뿐 아니라 <strong>거래 제약 규칙</strong>(중국의 상하한가, T+1, 최소 거래단위 등)에도 영향을 미치므로, 커스텀 시장 데이터를 쓸 때는 백테스트 설정에서 거래 규칙을 반드시 별도 검토해야 한다.</p>
+<hr>
+<h2>5. 첫 번째 워크플로우 실행</h2>
+<h3>5.1 qrun으로 자동 실행 (설정 파일 기반)</h3>
+<p><code>qrun</code>은 데이터셋 구축 → 모델 학습 → 시그널 생성 → 백테스트 → 평가를 YAML 하나로 자동화한다.</p>
+<pre><code class="language-bash">cd examples    # 주의: qlib 소스 루트 디렉토리에서 실행하면 import 충돌 발생
+qrun benchmarks/LightGBM/workflow_config_lightgbm_Alpha158.yaml
+</code></pre>
+<p>실행 결과 예시 (CSI300 + Alpha158 + LightGBM, 공식 README 기준):</p>
+<pre><code>&#39;The following are analysis results of the excess return without cost.&#39;
+annualized_return   0.178316    # 연 환산 초과수익 17.83%
+information_ratio   1.996555
+max_drawdown       -0.081806
+
+&#39;The following are analysis results of the excess return with cost.&#39;
+annualized_return   0.128982    # 거래비용 반영 시 12.90%
+information_ratio   1.444287
+max_drawdown       -0.091078
+</code></pre>
+<p>거래비용 반영 전후로 연 수익률이 약 5%p 차이 나는 것에 주목할 것. <strong>비용 미반영 백테스트 수치를 그대로 믿으면 안 되는 이유</strong>를 프레임워크가 기본 출력으로 보여준다.</p>
+<h3>5.2 코드 기반 커스텀 워크플로우</h3>
+<p>qrun의 자동 워크플로우가 맞지 않으면 모듈 단위로 직접 조립할 수 있다. 최소 예제:</p>
+<pre><code class="language-python">import qlib
+from qlib.constant import REG_CN
+from qlib.utils import init_instance_by_config
+from qlib.workflow import R
+from qlib.workflow.record_temp import SignalRecord, PortAnaRecord
+
+qlib.init(provider_uri=&quot;~/.qlib/qlib_data/cn_data&quot;, region=REG_CN)
+
+market = &quot;csi300&quot;
+benchmark = &quot;SH000300&quot;
+
+data_handler_config = {
+    &quot;start_time&quot;: &quot;2008-01-01&quot;,
+    &quot;end_time&quot;: &quot;2020-08-01&quot;,
+    &quot;fit_start_time&quot;: &quot;2008-01-01&quot;,
+    &quot;fit_end_time&quot;: &quot;2014-12-31&quot;,
+    &quot;instruments&quot;: market,
+}
+
+task = {
+    &quot;model&quot;: {
+        &quot;class&quot;: &quot;LGBModel&quot;,
+        &quot;module_path&quot;: &quot;qlib.contrib.model.gbdt&quot;,
+        &quot;kwargs&quot;: {&quot;loss&quot;: &quot;mse&quot;, &quot;num_leaves&quot;: 210, &quot;learning_rate&quot;: 0.05},
+    },
+    &quot;dataset&quot;: {
+        &quot;class&quot;: &quot;DatasetH&quot;,
+        &quot;module_path&quot;: &quot;qlib.data.dataset&quot;,
+        &quot;kwargs&quot;: {
+            &quot;handler&quot;: {
+                &quot;class&quot;: &quot;Alpha158&quot;,
+                &quot;module_path&quot;: &quot;qlib.contrib.data.handler&quot;,
+                &quot;kwargs&quot;: data_handler_config,
+            },
+            &quot;segments&quot;: {
+                &quot;train&quot;: (&quot;2008-01-01&quot;, &quot;2014-12-31&quot;),
+                &quot;valid&quot;: (&quot;2015-01-01&quot;, &quot;2016-12-31&quot;),
+                &quot;test&quot;:  (&quot;2017-01-01&quot;, &quot;2020-08-01&quot;),
+            },
+        },
+    },
+}
+
+model = init_instance_by_config(task[&quot;model&quot;])
+dataset = init_instance_by_config(task[&quot;dataset&quot;])
+
+with R.start(experiment_name=&quot;my_first_workflow&quot;):
+    model.fit(dataset)
+    R.save_objects(trained_model=model)
+    rec = R.get_recorder()
+    SignalRecord(model, dataset, rec).generate()   # 예측 시그널 저장
+</code></pre>
+<h3>5.3 표현식 엔진으로 데이터 직접 조회</h3>
+<pre><code class="language-python">from qlib.data import D
+
+# 단순 조회
+df = D.features(
+    [&quot;SH600000&quot;],
+    [&quot;$close&quot;, &quot;$volume&quot;],
+    start_time=&quot;2020-01-01&quot;, end_time=&quot;2020-12-31&quot;, freq=&quot;day&quot;,
+)
+
+# 표현식으로 팩터 즉석 정의: 5일 모멘텀, 20일 변동성
+df = D.features(
+    D.instruments(&quot;csi300&quot;),
+    [&quot;Ref($close, 5)/$close - 1&quot;, &quot;Std($close/Ref($close,1)-1, 20)&quot;],
+    start_time=&quot;2019-01-01&quot;, end_time=&quot;2020-12-31&quot;,
+)
+</code></pre>
+<p>이 표현식 문자열이 곧 팩터 정의이며, 결과는 ExpressionCache에 캐시되어 두 번째 호출부터 극적으로 빨라진다.</p>
+<h3>5.4 그래픽 리포트</h3>
+<pre><code class="language-bash">python -m pip install &quot;.[analysis]&quot;
+jupyter notebook examples/workflow_by_code.ipynb
+</code></pre>
+<blockquote>
+<p>구버전 문서의 <code>examples/estimator/analyze_from_estimator.ipynb</code> 경로는 폐기되었다.</p>
+</blockquote>
+<p>노트북에서 확인 가능한 리포트: 그룹별 누적수익, 롱숏 수익 분포, IC/월별 IC, 시그널 자기상관, 포트폴리오 백테스트 수익 곡선.</p>
+<hr>
+<h2>6. 벤치마크 — 모델별 성능 비교</h2>
+<h3>6.1 데이터셋 이해: Alpha158 vs Alpha360</h3>
+<table>
+<thead>
+<tr>
+<th align="left">데이터셋</th>
+<th align="left">특징</th>
+<th align="left">적합 모델</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Alpha158</strong></td>
+<td align="left">사람이 설계한 158개 팩터 (전형적 피처 엔지니어링). 피처 간 공간적 관계 약함</td>
+<td align="left">GBDT 계열 (LightGBM, CatBoost 등)</td>
+</tr>
+<tr>
+<td align="left"><strong>Alpha360</strong></td>
+<td align="left">최근 60일 원시 가격/거래량 그대로 (피처 엔지니어링 최소). 시간축 공간 관계 강함</td>
+<td align="left">딥러닝 계열 (GRU, ALSTM, TRA 등)</td>
+</tr>
+</tbody></table>
+<p>이 구분이 중요한 이유: <strong>테이블 데이터에서는 GBDT가, 원시 시계열에서는 신경망이 유리</strong>하다는 일반 ML 상식이 Qlib 벤치마크에서도 그대로 재현된다. 자신의 팩터 성격에 따라 모델 계열을 골라야지, &quot;요즘 뜨는 모델&quot;을 무조건 쓰는 것은 비효율적이다.</p>
+<h3>6.2 시장 동적 적응 벤치마크 (CSI500, Alpha158, 2017.01–2020.08 롤링)</h3>
+<p>공식 benchmarks_dynamic 수치:</p>
+<table>
+<thead>
+<tr>
+<th align="left">모델</th>
+<th align="right">IC</th>
+<th align="right">ICIR</th>
+<th align="right">Rank IC</th>
+<th align="right">연환산 수익</th>
+<th align="right">IR</th>
+<th align="right">MDD</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">RR[Linear] (롤링 재학습)</td>
+<td align="right">0.0945</td>
+<td align="right">0.5989</td>
+<td align="right">0.1069</td>
+<td align="right">8.57%</td>
+<td align="right">1.368</td>
+<td align="right">-9.86%</td>
+</tr>
+<tr>
+<td align="left">DDG-DA[Linear]</td>
+<td align="right">0.0983</td>
+<td align="right">0.6157</td>
+<td align="right">0.1108</td>
+<td align="right">7.64%</td>
+<td align="right">1.190</td>
+<td align="right">-7.69%</td>
+</tr>
+<tr>
+<td align="left">RR[LightGBM]</td>
+<td align="right">0.0816</td>
+<td align="right">0.5887</td>
+<td align="right">0.0912</td>
+<td align="right">7.71%</td>
+<td align="right">1.320</td>
+<td align="right">-9.09%</td>
+</tr>
+<tr>
+<td align="left"><strong>DDG-DA[LightGBM]</strong></td>
+<td align="right"><strong>0.0878</strong></td>
+<td align="right"><strong>0.6185</strong></td>
+<td align="right"><strong>0.0975</strong></td>
+<td align="right"><strong>12.61%</strong></td>
+<td align="right"><strong>2.010</strong></td>
+<td align="right"><strong>-7.44%</strong></td>
+</tr>
+</tbody></table>
+<p>포인트: DDG-DA(메타러닝 기반 분포 적응)를 LightGBM에 결합하면 단순 롤링 재학습 대비 연 수익 +4.9%p, IR 1.32 → 2.01로 개선된다. <strong>동일 모델이라도 시장 변화 적응 전략에 따라 성과가 크게 갈린다</strong>는 것이 Qlib 벤치마크의 핵심 교훈이다.</p>
+<h3>6.3 전체 모델 비교표</h3>
+<p>25개+ 모델의 Alpha158/Alpha360 성능 비교표는 다음에서 유지·갱신된다:
+<code>https://github.com/microsoft/qlib/blob/main/examples/benchmarks/README.md</code></p>
+<p>여러 모델을 한 번에 돌려 직접 비교하려면 (Linux 전용)</p>
+<pre><code class="language-bash">python run_all_model.py run 10          # 전체 모델 10회 반복
+python run_all_model.py run 3 lightgbm Alpha158 csi500   # 특정 모델/데이터셋/유니버스
+</code></pre>
+<p>랜덤성이 있는 딥러닝 모델은 최소 20회 반복 후 평균을 볼 것을 공식 문서가 권장한다. <strong>단일 실행 결과로 모델 우열을 판단하는 것은 통계적으로 무의미하다.</strong></p>
+<hr>
+<h2>7. 한국 개발자를 위한 실전 섹션: KRX 데이터 연동</h2>
+<p>Qlib는 한국 시장을 공식 지원하지 않는다(region은 CN/US/TW만 존재). 그러나 CSV → Qlib 바이너리 변환 도구(<code>dump_bin.py</code>)가 있어 KOSPI/KOSDAQ 데이터를 붙이는 것은 어렵지 않다.
+토스 Open API를 붙이는 것은 그리 어렵지 않다. </p>
+<h3>7.1 pykrx로 데이터 수집 → CSV 생성</h3>
+<pre><code class="language-python"># pip install pykrx
+from pykrx import stock
+import pandas as pd, os
+
+os.makedirs(&quot;csv_kr&quot;, exist_ok=True)
+tickers = stock.get_market_ticker_list(market=&quot;KOSPI&quot;)
+
+for t in tickers[:50]:   # 예시: 상위 50종목
+    df = stock.get_market_ohlcv(&quot;20180101&quot;, &quot;20260630&quot;, t)
+    df = df.reset_index().rename(columns={
+        &quot;날짜&quot;: &quot;date&quot;, &quot;시가&quot;: &quot;open&quot;, &quot;고가&quot;: &quot;high&quot;,
+        &quot;저가&quot;: &quot;low&quot;, &quot;종가&quot;: &quot;close&quot;, &quot;거래량&quot;: &quot;volume&quot;,
+    })
+    df[&quot;symbol&quot;] = t
+    # Qlib 관례: 수정주가 계산용 factor 컬럼 (미수정 데이터면 1.0)
+    df[&quot;factor&quot;] = 1.0
+    df.to_csv(f&quot;csv_kr/{t}.csv&quot;, index=False)
+</code></pre>
+<h3>7.2 Qlib 바이너리로 변환</h3>
+<pre><code class="language-bash">python scripts/dump_bin.py dump_all \
+    --csv_path ./csv_kr \
+    --qlib_dir ~/.qlib/qlib_data/kr_data \
+    --include_fields open,close,high,low,volume,factor \
+    --date_field_name date --symbol_field_name symbol
+</code></pre>
+<h3>7.3 한국 데이터 사용 시 필수 체크리스트</h3>
+<table>
+<thead>
+<tr>
+<th align="left">항목</th>
+<th align="left">내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>수정주가(factor)</strong></td>
+<td align="left">pykrx 기본 OHLCV는 수정주가 반영 방식 확인 필요. 액면분할/배당락 미반영 데이터로 백테스트하면 수익률이 왜곡된다</td>
+</tr>
+<tr>
+<td align="left"><strong>거래 규칙</strong></td>
+<td align="left">region=REG_CN을 쓰면 중국 상하한가(±10%)와 T+1 규칙이 적용된다. 한국(±30% 가격제한, T+0 회전 가능)과 다르므로 백테스트 executor 설정을 커스터마이즈할 것</td>
+</tr>
+<tr>
+<td align="left"><strong>거래정지/상장폐지</strong></td>
+<td align="left">생존 편향(survivorship bias) 방지를 위해 상장폐지 종목 포함 데이터 확보가 이상적. pykrx는 현재 상장 종목 중심이므로 한계 인지 필요</td>
+</tr>
+<tr>
+<td align="left"><strong>캘린더</strong></td>
+<td align="left">한국 휴장일 캘린더가 자동 생성되는지 <code>~/.qlib/qlib_data/kr_data/calendars/day.txt</code> 확인</td>
+</tr>
+<tr>
+<td align="left"><strong>벤치마크 지수</strong></td>
+<td align="left">KOSPI200 지수를 별도 심볼로 넣어 백테스트 benchmark로 지정</td>
+</tr>
+<tr>
+<td align="left"><strong>Alpha158 팩터</strong></td>
+<td align="left">팩터 정의 자체는 시장 중립적이므로 한국 데이터에도 그대로 적용 가능. 단, 검증은 한국 시장에서 다시 해야 함 (중국 CSI300 IC가 한국에서 재현된다는 보장 없음)</td>
+</tr>
+</tbody></table>
+<h3>7.4 토스 Open API ↔ Qlib 연동 미들웨어 (Node.js/TypeScript + Redis)</h3>
+<p>Qlib는 Python 프레임워크지만 Qlib가 실제로 요구하는 것은 &quot;그 형식에 맞는 데이터&quot;뿐이다. 즉 데이터를 만드는 파이프라인 자체는 어떤 언어로 짜도 상관없다. 이 절에서는 <strong>토스증권 Open API에서 시세를 받아와 위 7.1/7.2절의 CSV 관례(<code>date,open,high,low,close,volume,symbol,factor</code>)로 정규화하고 <code>dump_bin.py</code>에 넘기는 미들웨어</strong>를 Node.js/TypeScript + Redis로 구현한 결과를 정리한다.</p>
+<p><strong>이 미들웨어의 범위는 인증과 시세/종목 데이터 조회까지다. 주문 생성·정정·취소 같은 실거래(트레이딩) 기능은 의도적으로 포함하지 않았다.</strong> 그 부분은 각자 필요에 맞게 확장해야 하는 영역이라고 판단했다 — 자세한 이유와 확장 방법은 7.4.6절 참고.</p>
+<p>코드는 저장소의 <a href="./toss-qlib-middleware"><code>TechDoc/Quant_Qlib/toss-qlib-middleware/</code></a> 아래에 있다 (<a href="./toss-qlib-middleware/README.md">한국어 README</a> / <a href="./toss-qlib-middleware/README_EN.md">English README</a> / <a href="./toss-qlib-middleware/llms.txt">llms.txt</a>). 토스 Open API 자체의 인증·엔드포인트 스펙은 저장소에 이미 있는 <a href="../../Toss"><code>Toss/</code></a> 프로젝트(실제 동작하는 토스 Open API 연동 대시보드)의 <a href="../../Toss/GUIDE.md"><code>GUIDE.md</code></a>, <a href="../../Toss/src/toss.js"><code>src/toss.js</code></a>, <a href="../../Toss/docs/Toss_OpenAPI_Guide.md"><code>docs/Toss_OpenAPI_Guide.md</code></a>를 근거로 맞췄다.</p>
+<h4>7.4.1 왜 미들웨어가 필요한가</h4>
+<p>Qlib의 <code>dump_bin.py</code>는 CSV만 이해하면 되고, Qlib 엔진은 그 이후의 바이너리 포맷/캐시만 신경 쓴다. 반면 토스 Open API는 OAuth2 인증, 토큰 만료, rate limit, 페이지네이션 같은 &quot;API 클라이언트다운&quot; 문제를 갖고 있다. 이 두 관심사(인증·호출 관리 vs 팩터/모델링)를 하나의 Python 코드베이스에 억지로 합치기보다, 별도 미들웨어가 시세를 정규화된 CSV로 떨어뜨려주고 Qlib는 그 결과만 소비하는 구조가 더 깔끔하다.</p>
+<pre><code>TOSS Open API  --OAuth2--&gt;  [Node.js/TS 미들웨어]  --CSV(csv_kr/*.csv)--&gt;  scripts/dump_bin.py  --&gt;  ~/.qlib/qlib_data/kr_data
+                                   |
+                                 Redis (토큰 캐시 + 시세 캐시)
+</code></pre>
+<h4>7.4.2 인증 (OAuth2 Client Credentials — 확인된 사양)</h4>
+<p>토스증권 Open API는 사용자 로그인 단계 없는 <strong>OAuth2 Client Credentials Grant</strong>를 쓴다. <code>Toss/src/toss.js</code>(이 저장소에 이미 있는 실제 동작하는 연동 구현)와 <code>Toss/docs/Toss_OpenAPI_Guide.md</code>(OpenAPI 스펙 v1.0.3 분석 문서) 기준으로 확인한 사양:</p>
+<ol>
+<li>토스증권 WTS 로그인 → 설정 → Open API 메뉴에서 <code>client_id</code> / <code>client_secret</code> 발급</li>
+<li><code>POST {baseUrl}/oauth2/token</code>에 <code>grant_type=client_credentials</code>, <code>client_id</code>, <code>client_secret</code>을 <strong>form-urlencoded 바디</strong>로 전송 (Basic Auth 헤더 아님) → <code>access_token</code>, <code>expires_in</code> 응답</li>
+<li>유효기간은 <strong>86,400초(24시간)이며 refresh token이 없다</strong> — 만료 전에 client_secret으로 직접 재발급하는 로직을 구현해야 한다</li>
+<li>이후 모든 호출에 <code>Authorization: Bearer {access_token}</code> 헤더 부착</li>
+<li>계좌/주문처럼 계좌 단위 API는 <code>X-Tossinvest-Account</code> 헤더가 추가로 필요 (이 미들웨어는 계좌/주문 API를 호출하지 않으므로 구현하지 않음)</li>
+</ol>
+<blockquote>
+<p><strong>검증 상태</strong>: 공식 문서(<code>developers.tossinvest.com/docs</code>)는 JavaScript 렌더링이라 직접 파싱이 안 되지만, <code>POST /oauth2/token</code>에 위 form-body 요청을 실제로 보내면 (자격증명이 틀려도) <code>{&quot;error&quot;:&quot;invalid_client&quot;, ...}</code> 형태의 실제 응답이 온다 — 즉 엔드포인트 경로와 요청 형식 자체는 실동작으로 확인됐다. 캔들/시세 응답의 정확한 필드 스키마는 미확정이라 미들웨어가 여러 후보 키를 방어적으로 허용한다. 서비스 자체가 2026년 6월 기준 사전 신청 단계로 정식 오픈일이 미정이라는 점도 감안할 것 (<code>Toss/docs/Toss_OpenAPI_Guide.md</code> 참고).</p>
+</blockquote>
+<h4>7.4.3 Redis 캐싱 전략</h4>
+<table>
+<thead>
+<tr>
+<th align="left">캐시 대상</th>
+<th align="left">키</th>
+<th align="left">TTL</th>
+<th align="left">이유</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">Access Token</td>
+<td align="left"><code>toss:access_token</code></td>
+<td align="left"><code>86400 - 안전마진(기본 1시간)</code></td>
+<td align="left">refresh token이 없으므로 만료 훨씬 전에 선제 재발급해야 한다</td>
+</tr>
+<tr>
+<td align="left">토큰 재발급 락</td>
+<td align="left"><code>toss:access_token:lock</code></td>
+<td align="left">10초 (<code>SET NX</code>)</td>
+<td align="left">여러 요청이 동시에 토큰 만료를 감지해도 한 요청만 재발급하고 나머지는 캐시를 재확인하게 해 thundering herd를 막는다</td>
+</tr>
+<tr>
+<td align="left">확정된 과거 캔들</td>
+<td align="left"><code>toss:candles:{symbol}:{interval}:{start}:{end}</code></td>
+<td align="left">하루(<code>CANDLE_TTL_HISTORICAL_SEC</code>)</td>
+<td align="left">이미 마감된 캔들은 값이 바뀌지 않으므로 길게 캐시</td>
+</tr>
+<tr>
+<td align="left">당일(미확정) 캔들</td>
+<td align="left">위와 동일 키</td>
+<td align="left">짧게(<code>CANDLE_TTL_TODAY_SEC</code>, 기본 30초)</td>
+<td align="left">장중에는 당일 캔들 값이 계속 갱신되므로 캐시를 오래 두면 안 됨</td>
+</tr>
+<tr>
+<td align="left">현재가</td>
+<td align="left"><code>toss:price:{symbol}</code></td>
+<td align="left">짧게(<code>PRICE_TTL_SEC</code>, 기본 5초)</td>
+<td align="left">종목 단위 캐시라 여러 배치 요청이 캐시를 재사용할 수 있음</td>
+</tr>
+</tbody></table>
+<p>401(토큰 만료/무효) 응답을 받으면 캐시를 즉시 비우고 한 번 재시도하며, 429(rate limit)는 <code>Retry-After</code> 헤더를 보고 backoff 후 재시도한다. 캔들 API는 요청당 최대 200개(<code>count</code>)만 반환하고 <code>start</code>/<code>end</code> 필터가 없어, 최신 캔들부터 <code>before</code> 커서로 역순 페이지네이션한 뒤 오름차순으로 정렬한다 (<code>Toss/src/toss.js</code>의 <code>fetchCandles</code>와 동일한 전략).</p>
+<h4>7.4.4 설치 및 실행</h4>
+<pre><code class="language-bash">cd TechDoc/Quant_Qlib/toss-qlib-middleware
+npm install
+npm run setup       # 대화형으로 .env 생성 + 원하면 실제 토큰 발급 테스트까지 수행
+npm run typecheck
+npm test                # Redis 서버 없이도 통과 (인메모리 어댑터로 로직 검증)
+npm run dev              # http://localhost:4000, 실제 Redis 필요
+</code></pre>
+<p><code>npm run setup</code>(<code>scripts/setup.sh</code>)은 <code>TOSS_CLIENT_ID</code>/<code>SECRET</code> 등 프라이빗 값을 대화형으로 입력받아 <code>.env</code>를 생성(권한 600)하고, 원하면 그 자리에서 실제 <code>/oauth2/token</code> 호출까지 시도해 자격증명이 유효한지 바로 확인해준다.</p>
+<p><code>.env</code>의 핵심 항목 (<code>Toss/.env.example</code>과 동일한 키 이름 사용):</p>
+<pre><code>TOSS_BASE_URL=https://openapi.tossinvest.com
+TOSS_TOKEN_PATH=/oauth2/token
+TOSS_CANDLES_PATH=/api/v1/candles
+TOSS_PRICES_PATH=/api/v1/prices
+REDIS_URL=redis://127.0.0.1:6379
+QLIB_CSV_EXPORT_DIR=./csv_kr
+</code></pre>
+<p>경로가 바뀌면 코드 수정 없이 <code>.env</code>만 고치면 되도록 모든 엔드포인트 경로를 환경변수로 뺐다.</p>
+<h4>7.4.5 API 및 Qlib 파이프라인 연결</h4>
+<p>미들웨어가 노출하는 엔드포인트:</p>
+<table>
+<thead>
+<tr>
+<th align="left">메서드</th>
+<th align="left">경로</th>
+<th align="left">설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">GET</td>
+<td align="left"><code>/health</code></td>
+<td align="left">헬스체크</td>
+</tr>
+<tr>
+<td align="left">GET</td>
+<td align="left"><code>/api/candles/:symbol?start=&amp;end=&amp;interval=day</code></td>
+<td align="left">정규화된 캔들 JSON 조회 (Redis 캐시 경유, <code>before</code> 페이지네이션 내장)</td>
+</tr>
+<tr>
+<td align="left">GET</td>
+<td align="left"><code>/api/prices?symbols=005930,000660</code></td>
+<td align="left">현재가 배치 조회 (콤마 구분, 최대 200개씩 청크)</td>
+</tr>
+<tr>
+<td align="left">POST</td>
+<td align="left"><code>/api/export/qlib</code> <code>{symbols, start, end, outDir?}</code></td>
+<td align="left">여러 종목을 한 번에 조회해 7.1절 CSV 포맷으로 <code>csv_kr/{symbol}.csv</code> 생성</td>
+</tr>
+</tbody></table>
+<p>서버 없이 바로 CSV만 뽑고 싶으면 CLI를 쓴다:</p>
+<pre><code class="language-bash">npm run export:qlib -- --symbols 005930,000660 --start 2020-01-01 --end 2026-07-01
+</code></pre>
+<p>생성된 CSV는 7.2절의 변환 명령에 그대로 넘기면 된다:</p>
+<pre><code class="language-bash">python scripts/dump_bin.py dump_all \
+    --csv_path ./csv_kr \
+    --qlib_dir ~/.qlib/qlib_data/kr_data \
+    --include_fields open,close,high,low,volume,factor \
+    --date_field_name date --symbol_field_name symbol
+</code></pre>
+<h4>7.4.6 트레이딩(주문 실행)은 왜 포함하지 않았는가</h4>
+<p>이 미들웨어는 <strong>데이터 파이프라인</strong>이지 <strong>주문 집행 시스템</strong>이 아니다. Qlib 자체도 3절에서 언급했듯 실거래 주문 연동은 범위 밖이며, 백테스트 성과가 실거래 성과를 보장하지 않는다는 것이 8.3절의 핵심 주의점이다. 인증과 시세 조회는 누구에게나 거의 동일하게 필요한 공통 기반이라 미들웨어로 만들 가치가 있지만, 주문 로직(주문 상태 관리, 재시도 시 중복 주문 방지, 리스크 한도, 체결 확인)은 각자의 전략·리스크 허용도에 따라 완전히 달라지므로 범용으로 만드는 것 자체가 위험하다.</p>
+<p>확장하려면 <a href="./toss-qlib-middleware/src/trading/README.md"><code>src/trading/README.md</code></a>를 참고할 것. 이 미들웨어의 <code>TossAuthService</code>(토큰 캐싱)와 <code>TossApiClient</code>(HTTP 클라이언트 패턴)를 재사용해 주문 엔드포인트만 추가하면 되지만, 실주문 코드는 반드시 소액/모의 환경에서 먼저 검증해야 한다.</p>
+<hr>
+<h2>8. 주의점 (Pitfalls) — 실전에서 반드시 만나는 문제들</h2>
+<h3>8.1 환경/설치 관련</h3>
+<ol>
+<li><strong>소스 루트에서 import 금지</strong>: qlib 저장소 루트 디렉토리에서 <code>import qlib</code>를 실행하면 로컬 폴더가 패키지를 가려 <code>ModuleNotFoundError: No module named &#39;qlib.data._libs.rolling&#39;</code> 오류가 난다. 반드시 <code>cd examples</code> 후 실행하거나 다른 경로에서 작업할 것.</li>
+<li><strong>pandas 2.x 호환성</strong>: pandas 1.5 → 2.0에서 <code>groupby</code>의 <code>group_key</code> 기본값이 변경되어 일부 예제(TRA dataset, TFT, RL order execution 스크립트)가 오류를 낼 수 있다. 공식 대응이 있지만 완전하지 않으므로, 문제가 생기면 pandas 버전을 고정(<code>pandas&lt;2.0</code>)하는 것이 빠른 우회책이다.</li>
+<li><strong>TFT 모델은 Python 3.6~3.7 + tensorflow 1.15 전용</strong>: 최신 환경에서 돌아가지 않는다. 벤치마크별로 requirements.txt가 다르므로 모델마다 확인할 것.</li>
+<li><strong>Redis 없어도 동작</strong>: Redis 미연결 시 캐시 일부가 비활성화될 뿐 핵심 기능은 정상이다. 단, 이미 Redis를 쓰다가 락이 꼬이면 <code>QlibCacheException</code> 발생 — Redis 키 삭제로 해결.</li>
+<li><strong>multiprocessing 오류 (Windows)</strong>: <code>RuntimeError: An attempt has been made to start a new process...</code>는 Windows에서 <code>if __name__ == &quot;__main__&quot;:</code> 가드 없이 실행할 때 발생하는 전형적 문제.</li>
+</ol>
+<h3>8.2 데이터 품질 관련</h3>
+<ol start="6">
+<li><strong>Yahoo Finance 데이터의 한계</strong>: 공식 크롤러 데이터는 Yahoo 소스라 결측/오류가 존재한다는 것을 공식 문서 스스로 명시한다. 고품질 데이터가 있다면 자체 데이터 사용이 공식 권장사항이다. <code>check_data_health.py</code>를 파이프라인에 상시 포함할 것.</li>
+<li><strong>오프라인 데이터의 증분 갱신 불가</strong>: 공식 배포 데이터는 용량 절감을 위해 일부 필드가 제거되어 있어 증분 업데이트가 안 된다. 지속 갱신이 필요하면 collector로 처음부터 수집 후 증분 갱신 체계를 구축해야 한다.</li>
+</ol>
+<h3>8.3 방법론 관련 — 가장 중요</h3>
+<ol start="8">
+<li><strong>미래 참조(look-ahead bias)</strong>: 커스텀 팩터를 만들 때 <code>Ref($close, -1)</code> 같은 음수 Ref는 미래 데이터 참조다. 라벨 정의에는 필요하지만 피처에 들어가면 백테스트가 무의미해진다.</li>
+<li><strong>거래비용·슬리피지</strong>: 위 5.1 예시처럼 비용 반영 여부로 연 수익률이 17.8% → 12.9%로 바뀐다. 한국 시장 적용 시 거래세(0.18%~), 수수료, 호가 슬리피지를 executor 설정에 반드시 반영할 것.</li>
+<li><strong>과최적화(overfitting)</strong>: Alpha158 위에서 하이퍼파라미터를 valid 구간에 맞춰 반복 튜닝하면 test 성과는 필연적으로 부풀려진다. 롤링 검증(benchmarks_dynamic 방식)이 단일 train/valid/test 분할보다 신뢰할 만하다.</li>
+<li><strong>IC 0.05는 &quot;좋은&quot; 수치가 아니라 &quot;출발점&quot;</strong>: 일간 IC 0.03~0.05 수준의 시그널은 거래비용과 용량 제약을 넘지 못하는 경우가 대부분이다. IC보다 ICIR(안정성)과 비용 반영 IR을 보라.</li>
+<li><strong>백테스트는 집행이 아니다</strong>: Qlib의 백테스트 성과가 실거래 성과를 보장하지 않는다. 호가창 깊이, 체결 지연, 시장 충격은 별개 문제이며, Qlib RL order execution 모듈이 이 간극 일부를 다루지만 완전하지 않다.</li>
+</ol>
+<blockquote>
+<p>이 지점에서 한 문장으로 요약하면: <strong>Qlib는 계산기이지 신탁이 아니다.</strong> 프레임워크가 아무리 정교해도 입력 데이터 품질과 방법론 규율이 결과를 결정한다.</p>
+</blockquote>
+<hr>
+<h2>9. RD-Agent 연동 (선택)</h2>
+<pre><code class="language-bash">pip install rdagent
+# LLM API 키 설정 후
+rdagent fin_factor    # 팩터 발굴 루프
+rdagent fin_model     # 모델 최적화 루프
+rdagent fin_factor_report --report_folder=&lt;PDF 폴더&gt;   # 리포트 기반 팩터 추출
+</code></pre>
+<p>주의점: RD-Agent는 LLM API 호출 비용이 상당하고(팩터 루프 1회에 수십~수백 회 호출), 생성된 팩터의 통계적 유의성은 사람이 별도 검증해야 한다. 자동화가 검증을 대체하지 않는다.</p>
+<hr>
+<h2>10. 추천 학습 경로</h2>
+<table>
+<thead>
+<tr>
+<th align="left">단계</th>
+<th align="left">할 일</th>
+<th align="left">예상 소요</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left">설치 + 커뮤니티 데이터 다운로드 + <code>qrun</code> LightGBM 벤치마크 1회 실행</td>
+<td align="left">반나절</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><code>workflow_by_code.ipynb</code>로 리포트 해석 (IC, 그룹 수익, 백테스트 곡선)</td>
+<td align="left">1일</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left">표현식 엔진으로 자기만의 팩터 3개 정의 → Alpha158에 추가 → 성능 비교</td>
+<td align="left">2~3일</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">KRX 데이터 변환 + 한국 시장 백테스트 파이프라인 구축</td>
+<td align="left">1주</td>
+</tr>
+<tr>
+<td align="left">4.5</td>
+<td align="left">(선택) 토스 Open API 미들웨어로 4단계 CSV 생성을 자동화 (7.4절)</td>
+<td align="left">2~3일</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">롤링 재학습(benchmarks_dynamic) 도입 → 단일 분할과 결과 비교</td>
+<td align="left">1주</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">(선택) RL order execution / RD-Agent 실험 — 실거래 주문 연동은 각자 구축 (7.4.6절)</td>
+<td align="left">이후</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>11. 참고 자료</h2>
+<table>
+<thead>
+<tr>
+<th align="left">자료</th>
+<th align="left">링크</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">GitHub 저장소</td>
+<td align="left"><a href="https://github.com/microsoft/qlib">https://github.com/microsoft/qlib</a></td>
+</tr>
+<tr>
+<td align="left">공식 문서</td>
+<td align="left"><a href="https://qlib.readthedocs.io">https://qlib.readthedocs.io</a></td>
+</tr>
+<tr>
+<td align="left">모델 벤치마크 표</td>
+<td align="left"><a href="https://github.com/microsoft/qlib/blob/main/examples/benchmarks/README.md">https://github.com/microsoft/qlib/blob/main/examples/benchmarks/README.md</a></td>
+</tr>
+<tr>
+<td align="left">동적 적응 벤치마크</td>
+<td align="left"><a href="https://github.com/microsoft/qlib/tree/main/examples/benchmarks_dynamic">https://github.com/microsoft/qlib/tree/main/examples/benchmarks_dynamic</a></td>
+</tr>
+<tr>
+<td align="left">커뮤니티 데이터 (CN)</td>
+<td align="left"><a href="https://github.com/chenditc/investment_data/releases">https://github.com/chenditc/investment_data/releases</a></td>
+</tr>
+<tr>
+<td align="left">RD-Agent</td>
+<td align="left"><a href="https://github.com/microsoft/RD-Agent">https://github.com/microsoft/RD-Agent</a></td>
+</tr>
+<tr>
+<td align="left">Qlib 논문</td>
+<td align="left"><a href="https://arxiv.org/abs/2009.11189">https://arxiv.org/abs/2009.11189</a></td>
+</tr>
+<tr>
+<td align="left">R&amp;D-Agent-Quant 논문</td>
+<td align="left"><a href="https://arxiv.org/abs/2505.15155">https://arxiv.org/abs/2505.15155</a></td>
+</tr>
+<tr>
+<td align="left">Qlib-Server (온라인 모드)</td>
+<td align="left"><a href="https://github.com/microsoft/qlib-server">https://github.com/microsoft/qlib-server</a></td>
+</tr>
+<tr>
+<td align="left">토스증권 Open API 공식 문서</td>
+<td align="left"><a href="https://developers.tossinvest.com/docs">https://developers.tossinvest.com/docs</a></td>
+</tr>
+<tr>
+<td align="left">토스 Open API ↔ Qlib 미들웨어 (본 저장소)</td>
+<td align="left"><a href="./toss-qlib-middleware"><code>TechDoc/Quant_Qlib/toss-qlib-middleware</code></a></td>
+</tr>
+<tr>
+<td align="left">토스 Open API 연동 참고 프로젝트 (본 저장소)</td>
+<td align="left"><a href="../../Toss"><code>Toss/</code></a> — 실제 동작하는 대시보드, GUIDE.md·docs/Toss_OpenAPI_Guide.md 포함</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>본 문서는 2026-07-05 기준 microsoft/qlib main 브랜치와 공식 문서를 대조 검증하여 작성되었다. 수치(벤치마크, 성능 비교)는 모두 공식 저장소 공개 자료 출처이며, 실행 환경에 따라 재현 결과는 달라질 수 있다. 7.4절 토스 Open API 미들웨어는 이 저장소의 <code>Toss/</code> 프로젝트(실제 동작하는 연동 대시보드)의 소스·문서를 근거로 인증 사양을 맞췄고, 자체 단위 테스트(<code>npm test</code>, 10건 통과)로 로직을 검증했다. <code>POST /oauth2/token</code>에 실제 요청을 보내 (틀린 자격증명으로도) <code>invalid_client</code> 응답을 받아 엔드포인트 경로와 요청 형식 자체는 실동작 확인이 됐으나, 캔들/시세 응답의 정확한 필드 스키마는 실계정 발급 후 재확인이 필요하다.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Quant_Qlib/Qlib-getting-started-KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

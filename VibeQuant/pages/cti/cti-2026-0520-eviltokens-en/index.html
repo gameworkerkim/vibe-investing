@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CTI-2026-0520-EVILTOKENS — VibeQuant</title>
+  <meta name="description" content="Abuses Microsoft 365 OAuth device flow · Defeats MFA · Token theft type" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0520-eviltokens-en/" />
+  <meta property="og:title" content="CTI-2026-0520-EVILTOKENS" />
+  <meta property="og:description" content="Abuses Microsoft 365 OAuth device flow · Defeats MFA · Token theft type" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0520-eviltokens-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0520-eviltokens-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0520-eviltokens-en/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0520-eviltokens-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"CTI-2026-0520-EVILTOKENS","description":"Abuses Microsoft 365 OAuth device flow · Defeats MFA · Token theft type","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0520-eviltokens-en/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0520-EVILTOKENS_EN.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-05-20","dateModified":"2026-07-11","inLanguage":"en","keywords":"크립토 · Web3, EN, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 크립토 · Web3</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">크립토 · Web3</p>
+        <h1>CTI-2026-0520-EVILTOKENS</h1>
+        <p class="article-dates"><time datetime="2026-05-20">발행 2026.05.20</time> · 주제 크립토 · Web3 · EN · CTI · <time datetime="2026-07-11">수정 2026.07.11</time></p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0520-eviltokens-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0520-eviltokens-en/" data-lang="EN" aria-current="true">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">Abuses Microsoft 365 OAuth device flow · Defeats MFA · Token theft type</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>TLP:AMBER</strong>
+Dennis Kim CTI | 2026-05-20 (KST) | Threat Campaign / PhaaS
+lang: en</p>
+</blockquote>
+<hr>
+<h1>EvilTokens — AI-Generated Device Code Phishing PhaaS</h1>
+<p><em>Abuses Microsoft 365 OAuth device flow · Defeats MFA · Token-theft type</em></p>
+<p>Published: 2026-05-20 (KST) | Category: Threat Campaign / PhaaS | Author: Dennis Kim CTI</p>
+<h3>1. Executive Summary</h3>
+<p>EvilTokens is a <strong>Phishing-as-a-Service (PhaaS) platform</strong>that emerged on Telegram in mid-February 2026. Within five weeks of its appearance it compromised more than 340 Microsoft 365 organizations across five countries, with over 1,000 active phishing domains tracked. The core of this threat is that it<strong>does not steal passwords</strong>.</p>
+<p>The attacker abuses Microsoft&#39;s legitimate OAuth 2.0 device authentication flow (Device Authorization Grant). The victim enters a code on the genuine microsoft.com/devicelogin page and completes MFA as usual, but in reality <strong>hands the attacker a valid refresh token</strong> with access to mail, drive, calendar, and contacts. The attacker needs no password, never touches an MFA prompt, and never generates a login event that looks like an intrusion.</p>
+<blockquote>
+<p><strong>Paradigm Shift</strong> — A move from &quot;credential theft&quot; to &quot;session and token theft.&quot; Password-centric defenses and most MFA implementations are no longer sufficient on their own.</p>
+</blockquote>
+<h4>1.1 Case Overview</h4>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Name</strong></td>
+<td>EvilTokens (PhaaS)</td>
+</tr>
+<tr>
+<td><strong>Type</strong></td>
+<td>Device code phishing / AiTM and BEC support kit</td>
+</tr>
+<tr>
+<td><strong>First Observed</strong></td>
+<td>Mid-February 2026 (Telegram ad), campaigns from 2/18</td>
+</tr>
+<tr>
+<td><strong>Impact Scale</strong></td>
+<td><strong>340+ MS365 orgs in five weeks, 1,000+ phishing domains</strong></td>
+</tr>
+<tr>
+<td><strong>Core Technique</strong></td>
+<td><strong>Abuse of OAuth 2.0 Device Authorization Grant</strong></td>
+</tr>
+<tr>
+<td><strong>MFA Bypass</strong></td>
+<td><strong>Yes — passes through the legitimate auth flow as-is</strong></td>
+</tr>
+<tr>
+<td><strong>Primary Targets</strong></td>
+<td>Finance, HR, logistics, sales roles (BEC-vulnerable functions)</td>
+</tr>
+<tr>
+<td><strong>Build Method</strong></td>
+<td>Presumed AI &quot;vibe coding&quot; generation (Sekoia/Proofpoint assessment)</td>
+</tr>
+<tr>
+<td><strong>Expansion Plans</strong></td>
+<td>Announced support for Gmail and Okta phishing pages</td>
+</tr>
+</tbody></table>
+<h3>2. Attack Mechanism</h3>
+<p>The device code flow is a legitimate authentication method originally designed for input-constrained devices such as smart TVs, IoT, and CLI tools. EvilTokens abuses it by impersonating the &quot;device&quot; role.</p>
+<ol>
+<li>The attacker sends a request to the Microsoft API to generate a real device code tied to their own session</li>
+<li>With a lure such as a shared document, payroll notice, or meeting invite, the victim is instructed to &quot;enter this code at the genuine microsoft.com/devicelogin&quot; (using DocuSign/Adobe/SharePoint impersonation templates)</li>
+<li>The victim enters the code on the real Microsoft page and completes their usual login (plus MFA)</li>
+<li>Microsoft issues access and refresh tokens for the victim&#39;s account to the attacker, securing persistent, authenticated access</li>
+</ol>
+<blockquote>
+<p><strong>Why Detection Is Hard</strong> — The URL is real, the page is real, the MFA prompt is real. Credentials are not intercepted in transit, and because authentication occurs on a legitimate Microsoft domain, it bypasses conventional phishing detection (based on suspicious URLs) and awareness training.</p>
+</blockquote>
+<h3>3. Infrastructure and Operations Analysis</h3>
+<h4>3.1 SaaS-Style Criminal Ecosystem</h4>
+<p>EvilTokens is not a single phishing kit but a structured PhaaS operation with subscription tiers, customer support channels, dashboards, and onboarding. It runs a 24/7 support team and a customer feedback channel, and its product surface resembles a genuine SaaS catalog.</p>
+<ul>
+<li>Bulk sender: sends mail using compromised MS365 accounts with Graph API and bearer tokens; template campaigns, recipient management, real-time tracking</li>
+<li>SMTP infrastructure: DKIM and domain management, parallel sending workers, open/click tracking, IP rotation</li>
+<li>Office 365 capture module: captures post-authentication tokens by abusing the device login flow; backend panel for session retrieval</li>
+<li>Portal Browser: a feature to manage and access multiple compromised accounts simultaneously (scaling BEC and account takeover)</li>
+<li>Email validation service: confirms whether an address exists in an MS365 tenant before a campaign, turning targeting into a data-driven pipeline</li>
+</ul>
+<h4>3.2 Infrastructure Patterns</h4>
+<p>Some campaigns abused Cloudflare Workers redirects and Railway.com (PaaS) to spin up thousands of short-lived polling nodes and deploy Node.js backend logic, evading signature- and pattern-based detection. Evidence of dynamic code generation to evade the standard 15-minute device code expiration window was also observed.</p>
+<h3>4. AI Nexus</h3>
+<p>Multiple research teams (Sekoia, Proofpoint) assess that the EvilTokens kit is <strong>AI-generated based on &quot;vibe coding&quot;</strong> for its build and maintenance. The roughly five-week pace from emergence to 1,000 domains is a level that was previously impossible without a large team, illustrating how AI structurally accelerates a threat actor&#39;s development and iteration speed.</p>
+<p>Proofpoint observed seven nearly identical device code phishing variants within a 10-day window, distinguished by subtle differences in API endpoints and HTML headers. This suggests a parallel AI-driven &quot;secondary production&quot; trend that imitates and mutates EvilTokens. This item is a direct analytical link to Betalabs&#39; cross-LLM output divergence research and AI security track.</p>
+<h3>5. Detection and Hunting</h3>
+<ul>
+<li>Hunt for device code authentication events (authentication method = device code) in Entra ID sign-in logs — especially device code logins on user accounts rather than non-interactive devices</li>
+<li>Detect EvilTokens phishing pages with Sekoia&#39;s published YARA rule; query known URL patterns on urlscan.io and urlquery</li>
+<li>Configure Safe Links in Defender for Office 365 to enable high-confidence device code phishing alerts</li>
+<li>Monitor anomalous redirects via Railway.com/Cloudflare Workers and short-lived polling node traffic</li>
+<li>Focus inspection on DocuSign/SharePoint/payroll-notice lure emails targeting finance, HR, logistics, and sales roles</li>
+</ul>
+<h3>6. Recommendations</h3>
+<h4>6.1 Policy-Based Blocking (Top Priority)</h4>
+<ul>
+<li>Apply an Entra ID Conditional Access policy to block the Device Code Flow — allow exceptions only for groups that genuinely need IoT/CLI</li>
+<li>Enforce phishing-resistant MFA (FIDO2/passkeys) for admin and high-privilege accounts</li>
+</ul>
+<h4>6.2 Containment</h4>
+<ul>
+<li>On suspected compromise, revoke refresh tokens (revokeSignInSessions). Note that standard session revocation only invalidates refresh tokens, and access tokens may persist for up to one hour</li>
+<li>Because actors actively exploit that one-hour window, temporarily disabling the compromised account is recommended for immediate containment</li>
+<li>Inspect and remove malicious mailbox forwarding rules and OAuth consent apps</li>
+</ul>
+<h4>6.3 Awareness Training</h4>
+<ul>
+<li>&quot;A real URL can still be dangerous&quot; — train users to report the abnormal request itself, i.e., being told to enter a code at devicelogin</li>
+</ul>
+<h3>7. Timeline</h3>
+<table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Event</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>~2026-02-15</td>
+<td>EvilTokens Telegram advertising begins (PhaaS sales)</td>
+</tr>
+<tr>
+<td>2026-02-18~19</td>
+<td>First campaigns observed (Huntress, Unit 42)</td>
+</tr>
+<tr>
+<td>2026-03-23</td>
+<td>1,000+ phishing domains tracked (Sekoia)</td>
+</tr>
+<tr>
+<td>2026-03-30~31</td>
+<td>Sekoia detailed analysis published, AI-generation assessment</td>
+</tr>
+<tr>
+<td>2026-04</td>
+<td>Multiple actors including Proofpoint&#39;s TA4903 observed pivoting to device code phishing</td>
+</tr>
+<tr>
+<td>2026-05</td>
+<td>340+ MS365 orgs compromised in five weeks tallied; Gmail/Okta expansion announced</td>
+</tr>
+</tbody></table>
+<h3>8. References</h3>
+<ul>
+<li>Sekoia TDR — &quot;New widespread EvilTokens kit: device code phishing as-a-service&quot;</li>
+<li>Proofpoint — &quot;Device Code Phishing is an Evolution in Identity Takeover&quot; (2026-05)</li>
+<li>Microsoft Security Blog — &quot;Inside an AI-enabled device code phishing campaign&quot; (2026-04)</li>
+<li>Huntress, Bolster AI, CSO Online, eSecurity Planet — analysis 2026-03~05</li>
+</ul>
+<p><em>This document is an OSINT-based threat campaign analysis. For IOCs (domains/YARA), obtaining the latest versions from original sources such as Sekoia is recommended. TLP:AMBER.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0520-EVILTOKENS_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

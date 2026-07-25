@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>GlassWorm C2 インフラの同時テイクダウン —— 開発者を狙う自己増殖型サプライチェーンワームの全貌 — VibeQuant</title>
+  <meta name="description" content="ブロックチェーン・P2P・正規Webサービスを組み合わせた4重C2、そして暗号資産ウォレットへ波及するサプライチェーン脅威" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0527-glassworm-ja/" />
+  <meta property="og:title" content="GlassWorm C2 インフラの同時テイクダウン —— 開発者を狙う自己増殖型サプライチェーンワームの全貌" />
+  <meta property="og:description" content="ブロックチェーン・P2P・正規Webサービスを組み合わせた4重C2、そして暗号資産ウォレットへ波及するサプライチェーン脅威" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0527-glassworm-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0527-glassworm-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0527-glassworm-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0527-glassworm-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0527-glassworm-zh/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0527-glassworm-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"GlassWorm C2 インフラの同時テイクダウン —— 開発者を狙う自己増殖型サプライチェーンワームの全貌","description":"ブロックチェーン・P2P・正規Webサービスを組み合わせた4重C2、そして暗号資産ウォレットへ波及するサプライチェーン脅威","author":{"@type":"Person","name":"Dennis Kim","alternateName":"김호광"},"mainEntityOfPage":"https://cti.vibequant.cc/cti/cti-2026-0527-glassworm-ja/","isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0527-GLASSWORM_JA.md","image":"https://vibequant.cc/og-default.png","datePublished":"2026-05-27","dateModified":"2026-05-28","inLanguage":"ja","keywords":"APT · 글로벌 위협, JP, CTI"}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · APT · 글로벌 위협</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">APT · 글로벌 위협</p>
+        <h1>GlassWorm C2 インフラの同時テイクダウン —— 開発者を狙う自己増殖型サプライチェーンワームの全貌</h1>
+        <p class="article-dates"><time datetime="2026-05-27">발행 2026.05.27</time> · 주제 APT · 글로벌 위협 · JP · CTI · <time datetime="2026-05-28">수정 2026.05.28</time></p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0527-glassworm-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0527-glassworm-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0527-glassworm-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0527-glassworm-zh/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">ブロックチェーン・P2P・正規Webサービスを組み合わせた4重C2、そして暗号資産ウォレットへ波及するサプライチェーン脅威</p>
+        <p class="article-byline">Dennis Kim (김호광 / HoKwang Kim) · 2026-05-27</p>
+      </header>
+      <div class="article-body prose"><p><em>ブロックチェーン・P2P・正規Webサービスを組み合わせた4重C2、そして暗号資産ウォレットへ波及するサプライチェーン脅威</em></p>
+<hr>
+<h2>目次</h2>
+<ol>
+<li>要約 (TL;DR)</li>
+<li>事件概要 —— 何が遮断されたか</li>
+<li>攻撃メカニズム —— 4重C2と自己増殖構造</li>
+<li>ペイロード分析 —— 認証情報と暗号資産ウォレットの窃取</li>
+<li>脅威アクター分析</li>
+<li>韓国への影響</li>
+<li>Web3／暗号資産エコシステムへの影響</li>
+<li>対応策</li>
+<li>IoCと検知指標</li>
+<li>結論と提言</li>
+<li>参考文献</li>
+</ol>
+<hr>
+<h2>要約 (TL;DR)</h2>
+<p>2026年5月27日、CrowdStrike は Google および Shadowserver 財団と連携し、自己増殖型ソフトウェアサプライチェーンキャンペーン <strong>GlassWorm</strong> に関連する4つのコマンド&amp;コントロール（C2）チャネルすべてを同時に遮断したと発表した。少なくとも2025年初頭以降、GlassWorm の運営者は、ソースコードリポジトリ・クラウドプラットフォーム・CI/CDパイプライン・パッケージレジストリへのアクセス権を持つソフトウェア開発者を体系的に標的としてきた。</p>
+<p>このキャンペーンの本質は単なるマルウェアではなく、<strong>開発者のワークステーションを橋頭堡とし、下流の数千の組織やユーザーへ拡散する「戦力増幅装置（force-multiplier）」構造</strong>である。攻撃者は Microsoft VS Code マーケットプレイスと Open VSX の両方にトロイの木馬化された拡張機能を公開し、Cursor・Positron・Windsurf・VSCodium といった VS Code フォークのユーザーにまで到達した。侵害された npm・Python パッケージを介した拡散経路も確認されている。</p>
+<p>特に注目すべきは、<strong>テイクダウン耐性を狙って設計された4重C2アーキテクチャ</strong>である。Solana ブロックチェーン取引の memo フィールドをデッドドロップとして使用し、BitTorrent DHT P2P ネットワークから設定データを照会し、Google Calendar のイベントタイトルをデッドドロップとして悪用し、さらに商用 VPS への直接接続を並行運用していた。今回のテイクダウンは4チャネルを同時に無力化したため、感染ホストはもはや新たな命令やペイロードを受信できない。</p>
+<h3>Key Judgments</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>判断</th>
+<th>確度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KJ-1</td>
+<td>GlassWorm の中核的脅威は、開発者環境を介した<strong>連鎖的増幅（blast radius）</strong>であり、C2 テイクダウンは新規命令の受信を遮断したにすぎず、すでに流出した認証情報やウォレット鍵は回収されていない。侵害アカウントの事後クリーンアップが不可欠である。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-2</td>
+<td><strong>ブロックチェーン（Solana）・P2P（BitTorrent DHT）・正規サービス（Google Calendar）</strong>をデッドドロップとして組み合わせた4重C2設計は、今後のサプライチェーンマルウェアの標準となる可能性が高い。単一ドメイン遮断に基づく従来型対応では無力化できない。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-3</td>
+<td>ペイロードが <strong>GitHub/NPM/OpenVSX トークンと暗号資産ウォレット</strong>を優先的に窃取する点は、Web3／ブロックチェーンチームが一般のソフトウェア企業より直接的に標的とされていることを示唆する。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-4</td>
+<td>マルウェアが CIS（独立国家共同体）地域のホストで実行を終了し、ロシア語のコメントを含む点に基づき、CrowdStrike はロシアを拠点とするサイバー犯罪者を有力視した。ただしコード流出や模倣の可能性を考慮すると、断定は時期尚早である。</td>
+<td><strong>Medium</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. 事件概要 —— 何が遮断されたか</h2>
+<p>CrowdStrike は Google および Shadowserver 財団とともに、2026年5月27日、GlassWorm に関連するすべての C2 チャネルの同時遮断を正式に発表した。GlassWorm は昨年の登場以降「多角的なキャンペーン」を展開しており、窃取した開発者の認証情報を用いて300を超える GitHub リポジトリを汚染したとされる。</p>
+<p>本事件の意義は、個別のマルウェアの撲滅ではなく、<strong>ソフトウェアサプライチェーンそのものが現代コンピューティングにおいて最も影響力の大きい攻撃面の一つであることを再確認した</strong>点にある。CrowdStrike は「パッケージや拡張機能を汚染する障壁は低いが、潜在的な爆発半径は莫大である」と評価した。開発者環境・ビルドパイプライン・コードリポジトリが十分に保護されない限り、ソフトウェアを消費するすべての組織は、それを生産するすべての主体のリスクをそのまま継承する。</p>
+<h2>2. 攻撃メカニズム —— 4重C2と自己増殖構造</h2>
+<h3>2.1 配布経路</h3>
+<p>GlassWorm は2大マーケットプレイス —— Microsoft VS Code マーケットプレイスと Open VSX —— に同時に悪性拡張機能を公開した。この二重公開戦略の鍵は、<strong>VS Code フォークエコシステム全体をカバーする</strong>点にある。Cursor・Positron・Windsurf・VSCodium はいずれも Open VSX を拡張機能のソースとして使用するため、単一の悪性拡張機能が複数の AI コーディング IDE ユーザーに到達する。加えて、侵害された npm・Python パッケージを介した拡散経路も並行していた。</p>
+<h3>2.2 4重C2 —— テイクダウン回避設計</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>チャネル</th>
+<th>メカニズム</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>①</td>
+<td><strong>Solana ブロックチェーン・デッドドロップ</strong></td>
+<td>C2 サーバーアドレスをブロックチェーン取引の memo フィールドに保存。検閲・遮断が事実上不可能</td>
+</tr>
+<tr>
+<td>②</td>
+<td><strong>BitTorrent DHT P2P</strong></td>
+<td>分散ハッシュテーブル P2P ネットワークを照会して設定データを受信</td>
+</tr>
+<tr>
+<td>③</td>
+<td><strong>Google Calendar デッドドロップ</strong></td>
+<td>正規サービスのカレンダーイベントタイトルから C2 サーバーアドレスを抽出（正常トラフィックに偽装）</td>
+</tr>
+<tr>
+<td>④</td>
+<td><strong>商用 VPS 直接接続</strong></td>
+<td>商用 VPS プロバイダにホストされた C2 インフラに直接接続</td>
+</tr>
+</tbody></table>
+<p>CrowdStrike の評価によれば、ブロックチェーン・P2P・正規Webサービスを解決層として組み合わせたこの構造は、テイクダウンに耐えるよう設計されていた —— 複数層の間接参照の背後に実際の C2 サーバーを隠す「動的フロント（dynamic front）」方式である。今回の共同作戦は、全チャネルを同時に無力化することで、この多重防衛線を一挙に崩壊させた。</p>
+<h2>3. ペイロード分析 —— 認証情報と暗号資産ウォレットの窃取</h2>
+<p>GlassWorm 攻撃の最終目標は、認証情報の収集・暗号資産ウォレットの流出・システムプロファイリング機能を備えたデータ窃取フレームワークの投下である。</p>
+<p>後続の亜種は <strong>GlassWormRAT</strong> と呼ばれる WebSocket ベースの JavaScript RAT を展開し、Web ブラウザのデータを窃取し任意コードを実行した。これにはスクリーンショット・キー入力・クリップボード内容などの機微情報を収集する Google Chrome 拡張機能のインストールが含まれる。</p>
+<p>Endor Labs の研究者の分析によれば、マルウェアは活性化すると、ホスト上で開発者の認証情報（GitHub、NPM、OpenVSX トークン、暗号資産ウォレット）を探索し、リポジトリやパッケージアップロード権限をさらに侵害する。すなわち、<strong>1件の感染が新たな悪性パッケージ公開権限につながる自己増殖ループ</strong>が完成する。</p>
+<p>感染ホストは隠密インフラへと転換される —— SOCKS プロキシ、隠蔽 VNC（HVNC）サーバー、そして WebRTC や派生 Node.js プロセスを介したリモート実行ノード。これは攻撃者に、企業・個人ネットワークへの匿名アクセス経路とさらなる拡散プラットフォームを同時に提供する。</p>
+<h2>4. 脅威アクター分析</h2>
+<p>CrowdStrike は GlassWorm の運営者を「潤沢なリソースを持ち、執拗（well-resourced and persistent）」と規定した。帰属の根拠は2つある。第一に、マルウェアが CIS（独立国家共同体）諸国に所在するシステムで実行を終了する点。第二に、コードにロシア語のコメントが含まれる点。これに基づき、ロシアを拠点とするサイバー犯罪者が有力なアクターと特定された。</p>
+<p>ただし本レポートはこの帰属を <strong>Medium 確度</strong>と評価する。CIS 回避ロジックとロシア語コメントは有力な状況証拠だが、脅威アクターが意図的に偽旗（false flag）を仕込んだり、流出コードを模倣したりする事例も存在するためである。</p>
+<h2>5. 韓国への影響</h2>
+<p>GlassWorm は韓国メディアではほとんど報じられなかったが、国内の開発エコシステムに直接的な含意を持つ。</p>
+<p>第一に、<strong>韓国の開発者の VS Code 系 IDE への依存度は非常に高い</strong>。Cursor・Windsurf などの AI コーディング IDE は韓国のスタートアップやブロックチェーンチームで急速に普及しており、いずれも Open VSX 拡張機能エコシステムを共有する。単一の悪性拡張機能が国内の多数のチームに同時到達しうる。</p>
+<p>第二に、<strong>多くの国内企業が公開 npm/PyPI パッケージを無批判に依存している</strong>。GlassWorm が侵害されたパッケージを拡散経路として用いたため、国内の CI/CD パイプラインも間接汚染リスクにさらされている。</p>
+<p>第三に、本アナリストが先の <code>CTI-2026-0422-MCP</code> レポートで指摘した<strong>北朝鮮系 UNC1069（Sapphire Sleet）による Axios npm 侵害</strong>と同一のサプライチェーン攻撃面を共有する。北朝鮮の優先標的国である韓国は、こうした自己増殖型サプライチェーンワームが社会混乱や資金窃取の目的で改造・再利用される可能性を、国家安全保障の次元で扱わねばならない。</p>
+<h2>6. Web3／暗号資産エコシステムへの影響</h2>
+<p>一般のサプライチェーンマルウェアと異なり、GlassWorm は <strong>Web3 を構造的により危険にする</strong>。理由は3つある。</p>
+<p>第一に、ペイロードが<strong>暗号資産ウォレットを明示的な窃取対象</strong>として指定する。ブラウザ拡張型ウォレット（MetaMask、Phantom など）とローカルウォレットファイルが第一の標的である。</p>
+<p>第二に、C2 インフラ自体が <strong>Solana ブロックチェーンをデッドドロップとして活用</strong>する。これは攻撃インフラと Web3 インフラの境界の崩壊を象徴する。オンチェーンデータ照会ツールを使うブロックチェーン開発チームは、正常トラフィックと悪性 C2 トラフィックの区別がいっそう困難になる。</p>
+<p>第三に、本アナリストが <code>CTI-2026-0422-MCP</code> で警告した<strong>「マルチシグだから安全」という錯覚</strong>と正確に噛み合う。マルチシグの署名者が同一ホストで同一の VS Code 系 IDE を使用していれば、GlassWorm 感染1件でマルチシグが単一障害点へと退化する。GitHub/NPM トークンの窃取は、スマートコントラクトのデプロイ権限やフロントエンドのデプロイパイプラインの乗っ取りに直結しうる。</p>
+<h2>7. 対応策</h2>
+<h3>7.1 即時対応（侵害を前提とする）</h3>
+<ol>
+<li><strong>開発者認証情報の全面ローテーション</strong> —— GitHub・NPM・OpenVSX のすべての Personal Access Token を失効・再発行する。C2 テイクダウンは新規命令の受信を遮断したにすぎず、すでに流出したトークンは依然有効である。</li>
+<li><strong>暗号資産ウォレットの移行</strong> —— ウォレットを開発マシンに置いたことがあるなら、新しいシードで生成したウォレットへ資産を直ちに移す。旧ウォレットは侵害済みとみなす。</li>
+<li><strong>VS Code 系拡張機能の監査</strong> —— インストール済みの全拡張機能の公開者・署名・最近の更新を点検し、Open VSX から取得した拡張機能には別途の検証ゲートを適用する。</li>
+<li><strong>ブラウザ拡張機能の点検</strong> —— 無断インストールの Chrome 拡張機能（特にスクリーンショット／キー入力／クリップボード権限を持つもの）を削除する。</li>
+</ol>
+<h3>7.2 構造的対応</h3>
+<ol>
+<li><strong>資産を開発マシンから分離する</strong>。Web3 チームは大口資産をコールドウォレット／HSM ベースのマルチシグに隔離し、実際の署名デバイスには IDE・拡張機能・開発ツールをインストールしない。</li>
+<li><strong>CI/CD シークレットを短期トークン化する</strong>。長期 PAT の代わりに、OIDC ベースの短命トークンと環境ごとの最小権限を適用する。</li>
+<li><strong>依存関係 SBOM と lockfile ピン留め</strong>を義務化し、新規 npm/PyPI 依存関係に自動隔離期間（quarantine）を設ける。</li>
+<li><strong>オンチェーン C2 検知を監視に組み込む</strong>。Solana memo フィールド、BitTorrent DHT 照会、異常な Google Calendar API 呼び出しなどの非伝統的 C2 シグナルを SIEM ルールとして追加する。</li>
+</ol>
+<h2>8. IoCと検知指標</h2>
+<blockquote>
+<p>⚠️ 本節は公開発表時点に基づく。運用適用前に最新の脅威インテリジェンスを再確認すること。</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>種別</th>
+<th>指標／挙動</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>マルウェアファミリー</td>
+<td>GlassWorm、GlassWormRAT（WebSocket ベースの JS RAT）</td>
+</tr>
+<tr>
+<td>窃取対象</td>
+<td>GitHub/NPM/OpenVSX トークン、暗号資産ウォレット、ブラウザデータ、スクリーンショット／キー入力／クリップボード</td>
+</tr>
+<tr>
+<td>C2 チャネル</td>
+<td>Solana 取引 memo フィールド、BitTorrent DHT、Google Calendar イベントタイトル、商用 VPS</td>
+</tr>
+<tr>
+<td>ホスト転換挙動</td>
+<td>SOCKS プロキシ・HVNC サーバー・WebRTC/Node.js リモート実行ノードの作成</td>
+</tr>
+<tr>
+<td>回避特性</td>
+<td>CIS 地域ホストで実行終了、ロシア語コードコメント</td>
+</tr>
+<tr>
+<td>配布チャネル</td>
+<td>VS Code マーケットプレイス／Open VSX 悪性拡張機能、侵害された npm/Python パッケージ</td>
+</tr>
+</tbody></table>
+<h2>9. 結論と提言</h2>
+<p>GlassWorm C2 テイクダウンは明確な防御側の勝利だが、同時に<strong>サプライチェーンマルウェアの進化方向を凝縮して示す警告</strong>でもある。ブロックチェーン・P2P・正規クラウドサービスをデッドドロップとして組み合わせた4重C2は、単一ドメイン遮断に依存する従来型対応がもはや十分でないことを証明している。</p>
+<p>主要な提言は以下のとおりである。</p>
+<ol>
+<li><strong>開発者環境は信頼境界の中核資産</strong>である。開発マシンの侵害は、組織全体および全下流ユーザーの侵害と同義である。</li>
+<li><strong>テイクダウン ≠ 復旧</strong>。すでに流出した認証情報・ウォレット鍵は別途無効化・移行せねばならない。</li>
+<li>Web3 組織は<strong>資産・署名権限・開発環境の三重隔離</strong>を既定とすべきである。</li>
+<li>非伝統的 C2（オンチェーン／P2P／正規サービスのデッドドロップ）の検知能力を SOC に内在化せねばならない。</li>
+</ol>
+<hr>
+<h2>参考文献 (References)</h2>
+<p>[1] Ravie Lakshmanan, &quot;GlassWorm Malware Takedown Disrupts Developer Supply Chain Attack Infrastructure&quot;, The Hacker News, 2026-05-27. <a href="https://thehackernews.com/2026/05/glassworm-malware-takedown-disrupts.html">https://thehackernews.com/2026/05/glassworm-malware-takedown-disrupts.html</a></p>
+<p>[2] CrowdStrike, &quot;Inside CrowdStrike&#39;s Takedown of a Developer-Targeting Botnet&quot;, 2026-05. <a href="https://www.crowdstrike.com/en-us/blog/inside-crowdstrike-takedown-of-a-developer-targeting-botnet/">https://www.crowdstrike.com/en-us/blog/inside-crowdstrike-takedown-of-a-developer-targeting-botnet/</a></p>
+<p>[3] Truesec, &quot;GlassWorm: Self-Propagating VSCode Extension&quot;, 2025. <a href="https://www.truesec.com/hub/blog/glassworm-self-propagating-vscode-extension">https://www.truesec.com/hub/blog/glassworm-self-propagating-vscode-extension</a></p>
+<p>[4] Kiran Raj (Endor Labs), &quot;Invisible Threats: GlassWorm Unicode VSCode&quot;, Endor Labs. <a href="https://www.endorlabs.com/reports/invisible-threats-glassworm-unicode-vscode">https://www.endorlabs.com/reports/invisible-threats-glassworm-unicode-vscode</a></p>
+<p>[5] Dennis Kim, &quot;MCP を狙う高度かつ潜伏型攻撃 —— 構造的問題か&quot;, CTI-2026-0422-MCP, 2026-04-22. <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/Cti%202026%200422%20mcp%20kr.MD">https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/Cti%202026%200422%20mcp%20kr.MD</a></p>
+<hr>
+<p>© 2026 Dennis Kim (김호광) · 本文書は独立した CTI アーカイブ（TLP:GREEN）として公開される。
+連絡先：<a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · GitHub: <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0527-GLASSWORM_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
