@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Toss Open API IP Whitelist Shift — Caution for Indie Developers — VibeQuant</title>
+  <meta name="description" content="How Toss Open API IP allowlisting broke GHA and local OAuth, emptied CASSANDRA KOSDAQ JSON for a month, and forced a Naver Finance rollback." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-en/" />
+  <meta property="og:title" content="Toss Open API IP Whitelist Shift — Caution for Indie Developers" />
+  <meta property="og:description" content="How Toss Open API IP allowlisting broke GHA and local OAuth, emptied CASSANDRA KOSDAQ JSON for a month, and forced a Naver Finance rollback." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-kr/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-en/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Toss Open API IP Whitelist Shift — Caution for Indie Developers","description":"How Toss Open API IP allowlisting broke GHA and local OAuth, emptied CASSANDRA KOSDAQ JSON for a month, and forced a Naver Finance rollback.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-en/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Toss/Toss-OpenAPI-IP-Whitelist-Indie-Caution_EN.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-en/","datePublished":"2026-07-26","dateModified":"2026-07-26","inLanguage":"en","keywords":"Toss, OpenAPI, IP Whitelist, GitHub Actions, Indie Dev, Naver Finance"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"Toss Open API IP Whitelist Shift — Caution for Indie Developers","item":"https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-en/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 퀀트 · 데이터</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">퀀트 · 데이터</p>
+        <h1>Toss Open API IP Whitelist Shift — Caution for Indie Developers</h1>
+        <p class="article-dates"><time datetime="2026-07-26">발행 2026.07.26</time> · 주제 Toss · OpenAPI · IP Whitelist · GitHub Actions · Indie Dev · Naver Finance</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/toss-toss-openapi-ip-whitelist-indie-caution-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/toss-toss-openapi-ip-whitelist-indie-caution-en/" data-lang="EN" aria-current="true">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">OAuth works — until CI and your laptop do not</p>
+        <p class="article-byline">2026.07.26 Dennis Kim / 김호광</p>
+      </header>
+      <div class="article-body prose"><h2>1. Introduction</h2>
+<p>Broker Open APIs look like the clean path for indie developers: official specs plus a key. Toss Securities Open API fit that story — OAuth 2.0 Client Credentials, KR/US quote batching, docs and <code>llms.txt</code>. We moved CASSANDRA AI’s (KOSDAQ DART risk monitor) quote layer from Naver Finance’s unofficial mobile API to Toss.</p>
+<p>A month later the KOSDAQ anomaly report showed <code>totalStocks: 0</code> and every subset JSON was <code>[]</code>. The DART key still worked; GitHub Actions stayed green. The failure was not filings — it was <strong>quote OAuth rejecting callers outside the allowlisted IPs</strong>.</p>
+<p>This is a caution note, not a complaint. IP binding is reasonable for finance. It is a poor fit for indie stacks, side projects, and public CI. Below is what testing and ops actually looked like.</p>
+<p>Korean source / column twin: <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/TOSS/readme.md">02.Investment Idea Column/TOSS/readme.md</a></p>
+<hr>
+<h2>2. What we wired — and what broke</h2>
+<h3>2-1. The 2026-06 migration choice</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Repo</td>
+<td><a href="https://github.com/gameworkerkim/cassandra-ai">cassandra-ai</a> (local: dart-monitor)</td>
+</tr>
+<tr>
+<td>Commit</td>
+<td><code>56056d0</code> — Naver Finance → Toss Open API</td>
+</tr>
+<tr>
+<td>Call sites</td>
+<td><code>extract-kosdaq.ts</code>, <code>naver-crawler.ts</code>, <code>/api/quant-data</code>, <code>backfill-marketcap.ts</code></td>
+</tr>
+<tr>
+<td>Auth</td>
+<td><code>POST /oauth2/token</code> · <code>grant_type=client_credentials</code></td>
+</tr>
+<tr>
+<td>Quotes</td>
+<td><code>GET /api/v1/prices</code>, <code>GET /api/v1/candles</code></td>
+</tr>
+<tr>
+<td>Runtime</td>
+<td>GitHub Actions (daily-sync, 09:00/18:00 KST) + local</td>
+</tr>
+</tbody></table>
+<p>The intent was clear: replace scraping with an official API; inject <code>TOSS_CLIENT_ID</code> / <code>TOSS_CLIENT_SECRET</code> via GHA vars.</p>
+<h3>2-2. Symptoms</h3>
+<ul>
+<li><code>data/kosdaq-anomaly-report.json</code> → <code>totalStocks: 0</code> (from <code>f81e2f3</code> on 2026-06-26 onward)</li>
+<li>All <code>kosdaq-*.json</code> files → <code>[]</code></li>
+<li>Logs: <code>Toss token issue failed</code> → <code>no Toss token — returning empty list</code></li>
+<li>GHA step: <code>continue-on-error: true</code> + script <strong>exit 0</strong> → green workflow + empty JSON auto-commits</li>
+</ul>
+<p>Failures were packaged as success. When security policy changes and monitors still look “healthy,” you burn a month.</p>
+<h3>2-3. Root cause: allowlisted IPs only</h3>
+<p>Toss Open API console/policy tightened so <strong>only registered IPs</strong> may obtain tokens or call the API. Valid client secrets still fail if the source IP is outside the allowlist.</p>
+<table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>IP behavior</th>
+<th>Result</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Home/café laptop</td>
+<td>Variable public IP · CGNAT</td>
+<td>Token failure</td>
+</tr>
+<tr>
+<td>GitHub-hosted runner</td>
+<td>New pool IP per job</td>
+<td>Token failure</td>
+</tr>
+<tr>
+<td>Fixed-IP VPS / office line</td>
+<td>Can be allowlisted</td>
+<td>(In theory) works</td>
+</tr>
+</tbody></table>
+<p>That is exactly the <strong>GHA + laptop</strong> combo most indie builders use.</p>
+<hr>
+<h2>3. Checklist from testing and production use</h2>
+<h3>3-1. Instrument token issuance first</h3>
+<p>Early <code>getTossToken()</code> only warned on <code>!res.ok</code> and omitted HTTP status/body. Without separating 401 (credentials) from 403 (IP/policy), you assume “the key died.”</p>
+<p>Minimal local probe:</p>
+<pre><code class="language-bash">curl -s -w &quot;\nHTTP %{http_code}\n&quot; -X POST \
+  &#39;https://openapi.tossinvest.com/oauth2/token&#39; \
+  -H &#39;Content-Type: application/x-www-form-urlencoded&#39; \
+  -d &quot;grant_type=client_credentials&amp;client_id=...&amp;client_secret=...&quot;
+</code></pre>
+<ul>
+<li><strong>200</strong> + <code>access_token</code> → current IP is allowlisted</li>
+<li><strong>4xx</strong> → log the body; decide key vs IP/policy</li>
+</ul>
+<h3>3-2. “Official API” ≠ “CI-friendly”</h3>
+<table>
+<thead>
+<tr>
+<th>Question</th>
+<th>What indie projects should check</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Is there an IP allowlist?</td>
+<td>If yes, GitHub-hosted runners are nearly a non-starter</td>
+</tr>
+<tr>
+<td>Do you need a self-hosted runner / fixed IP?</td>
+<td>Ops cost can exceed secret management cost</td>
+</tr>
+<tr>
+<td>Is there an unofficial quote fallback?</td>
+<td>Naver mobile API, Yahoo — no SLA, but no IP binding</td>
+</tr>
+<tr>
+<td>Do empty payloads count as success?</td>
+<td><code>totalStocks===0</code> must fail the job</td>
+</tr>
+</tbody></table>
+<h3>3-3. Never put secrets in <code>vars</code></h3>
+<p>We used <code>vars.TOSS_CLIENT_*</code>. Repository variables are broader exposure than secrets (logs/permissions). Independent of IP policy: <strong>credentials always belong in secrets</strong>.</p>
+<h3>3-4. Re-check product universe and units</h3>
+<p>During the Toss migration, dynamic KOSDAQ small-cap screening (under KRW 500bn market cap, SPAC filter) regressed into a hard-coded large-cap-heavy universe. Even with working OAuth, that breaks the original thesis (stressed microcaps). API migrations need regression tests for <strong>universe, filters, and units (억 vs raw KRW)</strong> — not only auth.</p>
+<p>As of 2026-07, Naver’s <code>marketValue</code> API also ignores <code>sortType</code> (change/volume) and returns market-cap order only. On rollback we restored gainer/volume rankings with <strong>client-side sorts</strong>. Query params that “used to work” can break too.</p>
+<hr>
+<h2>4. Decision: roll back to Naver</h2>
+<p>As of 2026-07-26, CASSANDRA batch/quote paths use <strong>Naver Finance mobile API</strong> again.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>After rollback</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>scripts/extract-kosdaq.ts</code></td>
+<td><code>m.stock.naver.com</code> marketValue + SPAC/cap filters</td>
+</tr>
+<tr>
+<td><code>src/lib/naver-crawler.ts</code></td>
+<td>Naver scraping restored</td>
+</tr>
+<tr>
+<td><code>/api/quant-data</code></td>
+<td>KOSDAQ sentiment gauge via Naver</td>
+</tr>
+<tr>
+<td><code>scripts/backfill-marketcap.ts</code></td>
+<td>Naver market-cap map → <code>Corp.marketCap</code></td>
+</tr>
+<tr>
+<td>GHA <code>daily-sync</code></td>
+<td>Drop TOSS env; exit 1 if <code>totalStocks=0</code></td>
+</tr>
+</tbody></table>
+<p>You do not have to delete Toss keys. A <strong>fixed-IP ingest box</strong>(idle iMac / VPS) on the allowlist can use Toss again. For an indie stack that wants<strong>public GHA only at $0/mo</strong>, Naver/Yahoo is operationally simpler.</p>
+<p>Code: <a href="https://github.com/gameworkerkim/cassandra-ai">gameworkerkim/cassandra-ai</a><br>Infra direction (ingest ≠ serve): <code>docs/CLOUDFLARE_MIGRATION.md</code> in that repo</p>
+<hr>
+<h2>5. One-liners for indie developers</h2>
+<ol>
+<li><strong>When picking a broker Open API, read network binding (IP / mTLS / device) before auth docs.</strong>2.<strong>If CI IPs are not fixed, that API becomes a SPOF for batch pipelines.</strong>3.<strong>Never commit empty data as success.</strong> A red X is cheaper than a month of <code>[]</code> history.  </li>
+<li><strong>Official APIs and unofficial quotes have different jobs.</strong> Orders/accounts → official + fixed network; public monitor quotes → fallback-capable sources.  </li>
+<li><strong>Policies change.</strong> A valid key can stop working overnight — put OAuth itself in health checks.</li>
+</ol>
+<hr>
+<h2>6. Closing</h2>
+<p>Toss Open API’s IP whitelist is a natural finance-grade hardening. The clash is with the default indie environment: laptop + GitHub Actions. CASSANDRA lived that clash as a month of silent empty JSON, then rolled KOSDAQ quotes and market-cap backfill back to Naver.</p>
+<p>For anyone wiring a broker API into a side project, the lesson is short: <strong>network boundaries, not keys, decide product lifetime.</strong></p>
+<hr>
+<p><em>For information only — not investment advice. Toss, Naver, and other marks belong to their owners.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Toss/Toss-OpenAPI-IP-Whitelist-Indie-Caution_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

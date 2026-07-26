@@ -47,6 +47,7 @@ LLM Wiki는 AI가 GitHub 코드베이스를 분석해 구조·아키텍처·API�
 
 | 문서 | 설명 | 최종 수정일 |
 |------|------|------------|
+| [Toss Open API IP 화이트리스트 — 인디 주의점 (KR)](Toss/Toss-OpenAPI-IP-Whitelist-Indie-Caution_KR.md) · [EN](Toss/Toss-OpenAPI-IP-Whitelist-Indie-Caution_EN.md) | 지정 IP만 허용하는 Toss OAuth가 GHA·로컬에서 실패한 실전 기록. CASSANDRA Naver 롤백·체크리스트. **NEW** | 2026-07-26 |
 | [Qlib 시작 가이드 (KR)](Quant_Qlib/Qlib-getting-started-KR.md) | Microsoft Qlib 완전 가이드 — 설치·데이터 준비·워크플로우·벤치마크·KRX 데이터 연동·토스 Open API 미들웨어 연결. | 2026-07-18 |
 | [toss-qlib-middleware](Quant_Qlib/toss-qlib-middleware/README.md) · [EN](Quant_Qlib/toss-qlib-middleware/README_EN.md) | 토스증권 Open API ↔ Microsoft Qlib 연동 미들웨어. OAuth2 + market data → CSV 파이프라인 + Redis 캐싱. Node.js/TypeScript. | 2026-07-18 |
 | [GS Quant Getting Started](GS_Quant/GS%20Quant%20Getting%20Started.md) | Goldman Sachs 기관급 퀀트 금융 툴킷 — 장단점·8종 플랫폼 비교·주의사항·설치·사용 케이스. 코어 프라이싱/리스크는 GS 서버에서 처리, Python SDK는 클라이언트. | 2026-07-17 |

@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Toss Open API 보안 정책 변화 — 인디 개발자가 겪는 IP 화이트리스트의 함정 — VibeQuant</title>
+  <meta name="description" content="Toss Open API IP 화이트리스트로 GHA·로컬 OAuth가 실패하고 CASSANDRA KOSDAQ 파이프라인을 Naver Finance로 롤백한 실전 기술 기록." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-kr/" />
+  <meta property="og:title" content="Toss Open API 보안 정책 변화 — 인디 개발자가 겪는 IP 화이트리스트의 함정" />
+  <meta property="og:description" content="Toss Open API IP 화이트리스트로 GHA·로컬 OAuth가 실패하고 CASSANDRA KOSDAQ 파이프라인을 Naver Finance로 롤백한 실전 기술 기록." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-kr/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-kr/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-en/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Toss Open API 보안 정책 변화 — 인디 개발자가 겪는 IP 화이트리스트의 함정","description":"Toss Open API IP 화이트리스트로 GHA·로컬 OAuth가 실패하고 CASSANDRA KOSDAQ 파이프라인을 Naver Finance로 롤백한 실전 기술 기록.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-kr/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Toss/Toss-OpenAPI-IP-Whitelist-Indie-Caution_KR.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-kr/","datePublished":"2026-07-26","dateModified":"2026-07-26","inLanguage":"ko","keywords":"Toss, OpenAPI, IP Whitelist, GitHub Actions, Indie Dev, Naver Finance"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"Toss Open API 보안 정책 변화 — 인디 개발자가 겪는 IP 화이트리스트의 함정","item":"https://tech.vibequant.cc/tech/toss-toss-openapi-ip-whitelist-indie-caution-kr/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 퀀트 · 데이터</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">퀀트 · 데이터</p>
+        <h1>Toss Open API 보안 정책 변화 — 인디 개발자가 겪는 IP 화이트리스트의 함정</h1>
+        <p class="article-dates"><time datetime="2026-07-26">발행 2026.07.26</time> · 주제 Toss · OpenAPI · IP Whitelist · GitHub Actions · Indie Dev · Naver Finance</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn is-active" href="../../tech/toss-toss-openapi-ip-whitelist-indie-caution-kr/" data-lang="KR" aria-current="true">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/toss-toss-openapi-ip-whitelist-indie-caution-en/" data-lang="EN">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">OAuth는 되는데 CI·로컬에서는 안 된다</p>
+        <p class="article-byline">2026.07.26 김호광 / Dennis Kim</p>
+      </header>
+      <div class="article-body prose"><h2>1. 도입</h2>
+<p>증권사 Open API는 인디 개발자에게 “공식 스펙 + 키만 있으면 되는” 길로 보인다. 토스증권 Open API도 예외가 아니었다. OAuth 2.0 Client Credentials, 국내·해외 시세 배치 조회, 문서와 <code>llms.txt</code>까지 갖춰져 있어 CASSANDRA AI(코스닥 DART 리스크 모니터)의 시세 레이어를 Naver Finance 비공식 모바일 API에서 Toss로 옮겼다.</p>
+<p>한 달 뒤 대시보드의 코스닥 이상징후 리포트는 <code>totalStocks: 0</code>, 하위 JSON은 전부 <code>[]</code>였다. DART 키도 살아 있었고, GitHub Actions도 초록불이었다. 원인은 공시가 아니라 <strong>시세 OAuth가 지정 IP 밖에서는 발급되지 않는 보안 정책</strong>이었다.</p>
+<p>이 글은 비난이 아니라 <strong>주의점</strong>이다. 금융 Open API의 IP 바인딩은 합리적 보안이지만, 인디·사이드프로젝트·공개 CI와는 상성이 나쁘다. 테스트와 운영에서 실제로 겪은 패턴을 남긴다.</p>
+<p>칼럼 원문(투자 아이디어 컬럼): <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/TOSS/readme.md">02.Investment Idea Column/TOSS/readme.md</a></p>
+<hr>
+<h2>2. 무엇을 붙였고, 무엇이 깨졌나</h2>
+<h3>2-1. 전환 당시의 선택 (2026-06)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>대상 레포</td>
+<td><a href="https://github.com/gameworkerkim/cassandra-ai">cassandra-ai</a> (로컬: dart-monitor)</td>
+</tr>
+<tr>
+<td>전환 커밋</td>
+<td><code>56056d0</code> — Naver Finance → Toss Open API</td>
+</tr>
+<tr>
+<td>사용처</td>
+<td><code>extract-kosdaq.ts</code>, <code>naver-crawler.ts</code>, <code>/api/quant-data</code>, <code>backfill-marketcap.ts</code></td>
+</tr>
+<tr>
+<td>인증</td>
+<td><code>POST /oauth2/token</code> · <code>grant_type=client_credentials</code></td>
+</tr>
+<tr>
+<td>시세</td>
+<td><code>GET /api/v1/prices</code>, <code>GET /api/v1/candles</code></td>
+</tr>
+<tr>
+<td>실행 환경</td>
+<td>GitHub Actions (daily-sync, KST 09:00/18:00) + 로컬</td>
+</tr>
+</tbody></table>
+<p>의도는 분명했다. 비공식 스크래핑 대신 공식 API, GHA vars에 <code>TOSS_CLIENT_ID</code> / <code>TOSS_CLIENT_SECRET</code>만 넣으면 되는 구조.</p>
+<h3>2-2. 증상</h3>
+<ul>
+<li><code>data/kosdaq-anomaly-report.json</code> → <code>totalStocks: 0</code> (2026-06-26 <code>f81e2f3</code> 이후 연속)</li>
+<li><code>kosdaq-*-.json</code> 전부 <code>[]</code></li>
+<li>스크립트 로그: <code>⚠️ Toss 토큰 발급 실패</code> → <code>⚠️ Toss 토큰 없음 — 빈 목록 반환</code></li>
+<li>GHA 스텝은 <code>continue-on-error: true</code> + 스크립트 <strong>exit 0</strong> → 워크플로 성공 + 빈 JSON 자동 커밋</li>
+</ul>
+<p>즉 <strong>실패가 성공으로 포장</strong>된 파이프라인이었다. 보안 정책이 바뀌어도 모니터링이 “정상”으로 보이면 한 달을 허비한다.</p>
+<h3>2-3. 원인: 지정 IP만 허용</h3>
+<p>토스 Open API 콘솔/정책 측에서 <strong>등록된 IP에서만</strong> 토큰·호출을 허용하도록 강화된 상태였다. 클라이언트 시크릿이 맞아도, 호출 원 IP가 allowlist 밖이면 OAuth가 거절된다.</p>
+<table>
+<thead>
+<tr>
+<th>환경</th>
+<th>IP 특성</th>
+<th>결과</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>집/카페 로컬</td>
+<td>공인 IP 가변 · CGNAT</td>
+<td>토큰 실패</td>
+</tr>
+<tr>
+<td>GitHub-hosted runner</td>
+<td>매 job마다 IP 풀에서 할당</td>
+<td>토큰 실패</td>
+</tr>
+<tr>
+<td>고정 IP VPS / 사무실 회선</td>
+<td>allowlist에 등록 가능</td>
+<td>(이론상) 통과</td>
+</tr>
+</tbody></table>
+<p>인디 개발자가 흔히 쓰는 <strong>GHA + 노트북</strong> 조합이 정확히 막히는 지점이다.</p>
+<hr>
+<h2>3. 테스트·사용 경험에서 얻은 체크리스트</h2>
+<h3>3-1. 토큰 발급을 먼저 계측하라</h3>
+<p>초기에 <code>getTossToken()</code>은 <code>!res.ok</code>일 때 경고만 찍고 HTTP status·body를 남기지 않았다. 401(자격증명)과 403(IP/정책)을 구분할 수 없으면 “키가 죽었다”고만 오해한다.</p>
+<p>로컬에서 최소 검증:</p>
+<pre><code class="language-bash">curl -s -w &quot;\nHTTP %{http_code}\n&quot; -X POST \
+  &#39;https://openapi.tossinvest.com/oauth2/token&#39; \
+  -H &#39;Content-Type: application/x-www-form-urlencoded&#39; \
+  -d &quot;grant_type=client_credentials&amp;client_id=...&amp;client_secret=...&quot;
+</code></pre>
+<ul>
+<li><strong>200</strong> + <code>access_token</code> → 현재 IP는 allowlist 안</li>
+<li><strong>4xx</strong> → 키 문제인지 IP 문제인지 body를 반드시 로그에 남길 것</li>
+</ul>
+<h3>3-2. “공식 API = CI 친화”는 아니다</h3>
+<table>
+<thead>
+<tr>
+<th>질문</th>
+<th>인디 프로젝트에서 볼 것</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IP allowlist가 있는가?</td>
+<td>있으면 GHA hosted는 사실상 탈락에 가깝다</td>
+</tr>
+<tr>
+<td>Self-hosted runner / 고정 IP가 필요한가?</td>
+<td>비용·운영 부담이 시크릿 관리보다 커질 수 있다</td>
+</tr>
+<tr>
+<td>비공식 시세 API 폴백이 있는가?</td>
+<td>Naver mobile API, Yahoo 등 — SLA 없지만 IP 바인딩은 없음</td>
+</tr>
+<tr>
+<td>빈 응답을 성공으로 치는가?</td>
+<td><code>totalStocks===0</code> → fail 게이트가 필수</td>
+</tr>
+</tbody></table>
+<h3>3-3. 시크릿을 <code>vars</code>에 넣지 마라</h3>
+<p>당시 GHA는 <code>vars.TOSS_CLIENT_*</code>를 썼다. repository variables는 로그·권한 측면에서 secrets보다 노출면이 넓다. IP 정책과 별개로, <strong>자격증명은 항상 secrets</strong>.</p>
+<h3>3-4. 제품 목적과 유니버스도 같이 점검</h3>
+<p>Toss 전환 과정에서 코스닥 소형주 동적 스크리닝(시총 5,000억 미만·SPAC 제외)이 깨지고, KOSPI 대형주 위주 하드코딩 유니버스로 바뀐 적도 있다. OAuth가 살아나도 <strong>원래 가설(한계기업 이상징후)</strong>과 어긋날 수 있다. API 마이그레이션은 인증만이 아니라<strong>유니버스·필터·단위(억원 vs 원)</strong> 회귀 테스트가 필요하다.</p>
+<p>추가로 2026-07 기준 Naver <code>marketValue</code> API는 <code>sortType</code>(등락·거래량)을 무시하고 시총순만 반환한다. 롤백 시 <strong>클라이언트 정렬</strong>로 상승/거래량 랭킹을 복구했다. “예전에 되던 쿼리 파라미터”도 깨질 수 있다.</p>
+<hr>
+<h2>4. 우리가 내린 결정: Naver로 롤백</h2>
+<p>2026-07-26 기준 CASSANDRA 배치·시세 경로는 다시 <strong>Naver Finance 모바일 API</strong>를 쓴다.</p>
+<table>
+<thead>
+<tr>
+<th>레이어</th>
+<th>롤백 후</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>scripts/extract-kosdaq.ts</code></td>
+<td><code>m.stock.naver.com</code> marketValue + SPAC/시총 필터 복원</td>
+</tr>
+<tr>
+<td><code>src/lib/naver-crawler.ts</code></td>
+<td>Naver 스크래핑 복원</td>
+</tr>
+<tr>
+<td><code>/api/quant-data</code></td>
+<td>KOSDAQ 심리 게이지 Naver</td>
+</tr>
+<tr>
+<td><code>scripts/backfill-marketcap.ts</code></td>
+<td>Naver 시총 맵 → <code>Corp.marketCap</code></td>
+</tr>
+<tr>
+<td>GHA <code>daily-sync</code></td>
+<td>TOSS env 제거, <code>totalStocks=0</code>이면 exit 1</td>
+</tr>
+</tbody></table>
+<p>Toss 키와 콘솔 설정은 폐기하지 않아도 된다. <strong>고정 IP ingest 머신(유휴 아이맥·VPS)</strong> 을 두고 allowlist에 올리면 다시 쓸 수 있다. 다만 “공개 GHA만으로 $0 운영”을 목표로 하는 인디 스택에서는 Naver/Yahoo 쪽이 운용이 단순하다.</p>
+<p>관련 코드: <a href="https://github.com/gameworkerkim/cassandra-ai">gameworkerkim/cassandra-ai</a><br>인프라 방향(수집=배치, 서빙=Cloudflare): 동 레포 <code>docs/CLOUDFLARE_MIGRATION.md</code></p>
+<hr>
+<h2>5. 인디 개발자를 위한 한 줄 원칙</h2>
+<ol>
+<li><strong>증권 Open API를 고를 때 문서의 “인증”만 보지 말고 “네트워크 바인딩(IP·Mutual TLS·기기)”을 먼저 보라.</strong>2.<strong>CI IP가 고정이 아니면, 그 API는 배치 파이프라인의 SPOF가 된다.</strong>3.<strong>빈 데이터를 성공으로 커밋하지 마라.</strong> 한 달짜리 <code>[]</code> 히스토리보다 빨간 X가 싸다.  </li>
+<li><strong>공식 API와 비공식 시세는 역할이 다르다.</strong> 주문·계좌는 공식+고정망, 공개 모니터 시세는 폴백 가능한 소스.  </li>
+<li><strong>정책은 바뀐다.</strong> 키가 유효해도 어제 되던 호출이 오늘 막힐 수 있다 — health check에 OAuth 자체를 넣어라.</li>
+</ol>
+<hr>
+<h2>6. 정리</h2>
+<p>Toss Open API의 IP 화이트리스트는 금융권에서 자연스러운 보안 강화다. 문제는 인디 개발 기본 환경(노트북 + GitHub Actions)이 그 전제와 충돌한다는 점이다. CASSANDRA는 그 충돌을 “조용한 빈 JSON”으로 한 달간 겪었고, 코스닥 시세·시총 백필을 Naver로 되돌렸다.</p>
+<p>증권 API를 사이드프로젝트에 붙이려는 사람에게 이 경험이 주는 메시지는 단순하다. <strong>키가 아니라 네트워크 경계가 제품의 수명을 가른다.</strong></p>
+<hr>
+<p><em>본 글은 정보 제공 목적이며 투자 권유가 아닙니다. Toss·Naver 등 상표는 각 권리자에게 속합니다.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Toss/Toss-OpenAPI-IP-Whitelist-Indie-Caution_KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
