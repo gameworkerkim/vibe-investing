@@ -83,7 +83,10 @@ export const FEATURED_COLUMN_PATHS = [
 
 /** TechDoc recommended — order = display order */
 export const FEATURED_TECH_PATHS = [
+  "Awesome-Agent/readme.md",
   "Awesome-Agent/Openworker-Review.md",
+  "Awesome-Agent/Goose-Review.md",
+  "Awesome-Agent/OpenHands-Review.md",
   "Toss/Toss-OpenAPI-IP-Whitelist-Indie-Caution_KR.md",
   "SEO/SEO-AI-Readability-Guide.md",
   "CloudFlare/Cloudflare_무료티어_사용법.md",

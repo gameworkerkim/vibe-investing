@@ -1,3 +1,33 @@
+<!--
+---
+title: "OpenHands 리뷰 — 자율 코딩 에이전트에서 에이전트 컨트롤 센터로"
+title_en: "OpenHands Review — From Coding Agent to Agent Control Center"
+subtitle: "Agent Canvas 오케스트레이션. ACP로 Claude Code·Codex를 구동하는 셀프호스팅 센터"
+description: "All Hands AI의 OpenHands(구 OpenDevin) 컨셉 전환, 오픈코어 라이선스, Docker 샌드박스 이탈, goose·OpenWorker 대비 포지셔닝, 설치·도입 체크리스트 TechDoc."
+abstract: |
+  OpenHands는 All Hands AI의 MIT+enterprise 오픈코어 코딩 에이전트에서 에이전트 컨트롤 센터(Agent Canvas)로 전환 중이다.
+  ACP로 Claude Code·Codex·Gemini를 오케스트레이션하고, Automation Server로 스케줄·웹훅을 돌린다.
+  기본 npm 설치 경로에 샌드박스가 없고, enterprise/ 별도 라이선스·저장소 분리 전환기 혼란이 핵심 유의점이다.
+summary_for_ai: |
+  Third-party tech review of github.com/OpenHands/OpenHands (~82.2k stars as of ~2026-07-27).
+  MIT + separate enterprise/ LICENSE (open-core). Transitioning to Agent Canvas + software-agent-sdk + automation repos.
+  Default npm path has no sandbox — Docker recommended. Closest peers: goose (local runtime), OpenWorker (knowledge work artifacts).
+  Not investment advice. Verify LICENSE and install paths before citing.
+date: 2026-07-27
+updated: 2026-07-27
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags: [OpenHands, Agent Canvas, All Hands AI, AI Agent, LLM, ACP, MCP, 코딩에이전트]
+keywords: ["OpenHands", "Agent Canvas", "OpenDevin", "ACP agent", "coding agent control center", "OpenHands vs goose"]
+group: llm-agents
+featured: true
+featured_rank: 7
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+-->
+
 # OpenHands, 자율 코딩 에이전트에서 에이전트 컨트롤 센터로
 
 | 항목 | 내용 |

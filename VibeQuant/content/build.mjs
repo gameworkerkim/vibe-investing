@@ -884,7 +884,10 @@ function shouldSkipColumn(rel) {
 
 function shouldSkipTech(rel) {
   const n = path.basename(rel).toLowerCase();
-  if (n.startsWith("readme")) return true;
+  // Awesome-Agent hub index is intentional content (KO/EN/JA); skip other folder READMEs.
+  if (n.startsWith("readme") && !/Awesome-Agent\//i.test(String(rel).replace(/\\/g, "/"))) {
+    return true;
+  }
   if (n === "llms.txt" || n === "requirements.txt" || n === "contacts.md") return true;
   if (n === "glossary.md" || n === "translation_plan.md") return true;
   if (rel.includes("toss-qlib-middleware/") && !/getting-started|readme/i.test(n)) {

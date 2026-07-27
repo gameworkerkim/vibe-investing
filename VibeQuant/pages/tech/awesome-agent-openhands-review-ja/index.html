@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OpenHands レビュー — 自律コーディングエージェントからエージェントコントロールセンターへ — VibeQuant</title>
+  <meta name="description" content="All Hands AI の OpenHands（旧 OpenDevin）のコンセプト転換、オープンコアライセンス、デフォルト経路のサンドボックス欠如、goose・OpenWorker との位置づけ、導入チェックリストをまとめた TechDoc。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/awesome-agent-openhands-review-ja/" />
+  <meta property="og:title" content="OpenHands レビュー — 自律コーディングエージェントからエージェントコントロールセンターへ" />
+  <meta property="og:description" content="All Hands AI の OpenHands（旧 OpenDevin）のコンセプト転換、オープンコアライセンス、デフォルト経路のサンドボックス欠如、goose・OpenWorker との位置づけ、導入チェックリストをまとめた TechDoc。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/awesome-agent-openhands-review-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/awesome-agent-openhands-review/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/awesome-agent-openhands-review-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/awesome-agent-openhands-review-ja/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/awesome-agent-openhands-review/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"OpenHands レビュー — 自律コーディングエージェントからエージェントコントロールセンターへ","description":"All Hands AI の OpenHands（旧 OpenDevin）のコンセプト転換、オープンコアライセンス、デフォルト経路のサンドボックス欠如、goose・OpenWorker との位置づけ、導入チェックリストをまとめた TechDoc。","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/awesome-agent-openhands-review-ja/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Awesome-Agent/OpenHands-Review_JA.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/awesome-agent-openhands-review-ja/","datePublished":"2026-07-27","dateModified":"2026-07-27","inLanguage":"ja","keywords":"OpenHands, Agent Canvas, All Hands AI, AI Agent, LLM, ACP"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"OpenHands レビュー — 自律コーディングエージェントからエージェントコントロールセンターへ","item":"https://tech.vibequant.cc/tech/awesome-agent-openhands-review-ja/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>OpenHands レビュー — 自律コーディングエージェントからエージェントコントロールセンターへ</h1>
+        <p class="article-dates"><time datetime="2026-07-27">발행 2026.07.27</time> · 주제 OpenHands · Agent Canvas · All Hands AI · AI Agent · LLM · ACP</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/awesome-agent-openhands-review/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/awesome-agent-openhands-review-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/awesome-agent-openhands-review-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">All Hands AI の OpenHands（旧 OpenDevin）のコンセプト転換、オープンコアライセンス、デフォルト経路のサンドボックス欠如、goose・OpenWorker との位置づけ、導入チェックリストをまとめた TechDoc。</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. コンセプト</h2>
+<p>初期の OpenHands の命題は「人間の開発者ができることはすべてエージェントが実行する」だった。Cognition Labs の Devin へのオープンソース対抗として出発し、コード修正・コマンド実行・Web ブラウジング・API 呼び出しを自律実行する単一エージェントを目指した。</p>
+<p>現在は命題が変わった。リポジトリ冒頭は「コーディングエージェントと自動化のためのセルフホスト型開発者コントロールセンター」であり、自社エージェントだけでなく Claude Code、Codex、Gemini など ACP（Agent-Client Protocol）互換エージェントをまとめて動かす <strong>オーケストレーション層</strong> として再定義された。自前エージェントを売るプロジェクトから、他社エージェントまで管理するプラットフォームへ移行した形だ。</p>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>初期 OpenHands（OpenDevin）</th>
+<th>現行 OpenHands</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>アイデンティティ</td>
+<td>自律コーディングエージェント</td>
+<td>エージェントコントロールセンター</td>
+</tr>
+<tr>
+<td>実行主体</td>
+<td>自前 CodeAct エージェント</td>
+<td>OpenHands エージェント + 任意の ACP エージェント</td>
+</tr>
+<tr>
+<td>既定 UI</td>
+<td>ローカル GUI、CLI</td>
+<td>Agent Canvas</td>
+</tr>
+<tr>
+<td>実行場所</td>
+<td>ローカル Docker サンドボックス</td>
+<td>ローカル、Docker、VM、社内インフラ、クラウドから選択</td>
+</tr>
+<tr>
+<td>焦点</td>
+<td>issue 解決</td>
+<td>常時稼働の自動化チーム</td>
+</tr>
+</tbody></table>
+<h3>アーキテクチャ</h3>
+<pre><code>              Agent Canvas（フロントエンド + コントロールセンター）
+                          |
+        +-----------------+------------------+
+        |                 |                  |
+  Agent Server      Agent Server       Agent Server
+  （ローカルノートPC）  （Mac mini/VM）   （OpenHands Cloud）
+        |
+  Automation Server   スケジュール実行、Webhook イベントトリガー
+</code></pre>
+<p>Agent Server は単一ホスト/ポートで複数エージェントを動かす REST API である。Agent Canvas は複数の Agent Server に同時接続して切り替えられるため、コードレビューと依存関係更新用サーバーをチーム共有し、個人作業はノート PC で回すといった分離運用が可能だ。</p>
+<h3>リポジトリ分離の現状</h3>
+<p>メインリポジトリのコードは移行中であり、現行 README は事実上 Agent Canvas のドキュメントである。</p>
+<table>
+<thead>
+<tr>
+<th>コンポーネント</th>
+<th>移行先</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenHands エージェント、Agent Server</td>
+<td>OpenHands/software-agent-sdk</td>
+</tr>
+<tr>
+<td>Agent Canvas</td>
+<td>OpenHands/agent-canvas</td>
+</tr>
+<tr>
+<td>Automation Server</td>
+<td>OpenHands/automation</td>
+</tr>
+<tr>
+<td>クラウド Helm チャート</td>
+<td>OpenHands/openhands-cloud</td>
+</tr>
+</tbody></table>
+<p>移行状況は issue #14841（Agent Canvas transition FAQ）に整理されている。</p>
+<hr>
+<h2>2. 長所</h2>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>コミュニティ規模</td>
+<td>スター 82.2k、フォーク 10.5k、コミット 7,082 件。オープンソースコーディングエージェント最大規模で、goose（51.7k）を上回る</td>
+</tr>
+<tr>
+<td>エージェント非依存</td>
+<td>ACP 対応で Claude Code、Codex、Gemini をそのまま接続可能。既存サブスクリプションを再利用しつつ管理層だけオープンソース化する構成が可能</td>
+</tr>
+<tr>
+<td>バックエンド柔軟性</td>
+<td>ノート PC、専用マシン、VM、社内インフラ、クラウドを同一フロントエンドから切り替え。ノート PC を閉じても動き続ける常時エージェントが公式推奨経路</td>
+</tr>
+<tr>
+<td>モデル非依存</td>
+<td>LiteLLM 規約ベース。Anthropic、OpenAI、Google、Bedrock に加え LM Studio、llama.cpp、Ollama などローカルモデルまで</td>
+</tr>
+<tr>
+<td>サンドボックスオプション</td>
+<td>Docker バックエンド選択時にホストと隔離された実行環境。コンテナイメージを公式配布</td>
+</tr>
+<tr>
+<td>自動化サーバー</td>
+<td>スケジュール実行と Webhook トリガーを別コンポーネントに分離。週次レポートの Slack 投稿、GitHub issue 自動分解など常時ワークフロー</td>
+</tr>
+<tr>
+<td>連携範囲</td>
+<td>GitHub、GitLab、Bitbucket、Slack、Jira、Linear、Notion。MCP サーバー接続と OAuth 対応</td>
+</tr>
+<tr>
+<td>サブエージェント委譲</td>
+<td>TaskToolSet ベースのマルチエージェントワークフロー。専門エージェントが複合タスクを分担</td>
+</tr>
+<tr>
+<td>エンタープライズ機能のリポジトリ内存在</td>
+<td>Agent Profiles、Budgets ダッシュボード、Usage &amp; Monitoring、SAML/SSO、RBAC、BYOR キー管理が実コードとして存在。セルフホスト Kubernetes デプロイ経路あり</td>
+</tr>
+<tr>
+<td>公開 API</td>
+<td>スクリプト、CI ワークフロー、社内アプリから呼び出せる完全公開 API</td>
+</tr>
+<tr>
+<td>脆弱性対応</td>
+<td>依存関係 CVE 対応がリリースノートに明示（例：vite CVE-2026-53571 パッチ）</td>
+</tr>
+<tr>
+<td>成果物の所有権</td>
+<td>利用規約上、エージェント生成結果の権利はユーザーに帰属</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. 短所と注意点</h2>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>純粋なオープンソースではない</td>
+<td>LICENSE が <code>enterprise/</code> を別ライセンスに分けたオープンコア構造。リポジトリを「MIT プロジェクト」と決め打ちして商用利用を設計してはならない。導入前に <code>enterprise/LICENSE</code> 原文確認が必須</td>
+</tr>
+<tr>
+<td>デフォルトインストール経路にサンドボックスなし</td>
+<td>現行 README の Option 1（<code>npm install -g</code>）と Option 3（ソース実行）はエージェントサーバーをホスト上で直接起動する。README 自体が「エージェントはファイルシステム全体にアクセスする」と警告。隔離には Docker バックエンドを明示的に選択すること</td>
+</tr>
+<tr>
+<td>移行期の混乱</td>
+<td>エージェント本体、Agent Canvas、自動化サーバーがそれぞれ別リポジトリへ移行中。既存ドキュメント、ブログ、チュートリアルの半数以上が既に動かないコマンドを含む。旧 <code>ghcr.io/all-hands-ai/openhands</code> イメージとポート 3000 案内は廃止済み</td>
+</tr>
+<tr>
+<td>Beta 状態</td>
+<td>プロジェクト状態バッジは beta。規模は大きいが現形は安定化前</td>
+</tr>
+<tr>
+<td>オープンコアドリフトの監視必要</td>
+<td>クラウド 1.47.0 で Agent Canvas を SaaS 認証の内側に移した変更があった。クラウド限定措置だが、機能がどちらに配置されるか追跡が必要</td>
+</tr>
+<tr>
+<td>重いアーキテクチャ</td>
+<td>イベントループベースの状態保持システムでサーバーレスデプロイに不向き。Node.js 22.12.x 以上、uv、任意の Docker が必要</td>
+</tr>
+<tr>
+<td>ローカル実行の攻撃面</td>
+<td>ファイルシステムとシェルアクセスを持つエージェントを Webhook と Slack トリガーで常時公開する構成。外部 issue 本文やチャンネルメッセージがそのまま指示文になる経路があり、プロンプトインジェクションの標準的入口。公式ドキュメントもセルフホストガイドでセキュリティハードニングを別途強調</td>
+</tr>
+<tr>
+<td>コスト</td>
+<td>BYOK 構造。サブエージェント並列実行と常時自動化はトークン消費が大きい。Budgets ダッシュボードはエンタープライズ系機能</td>
+</tr>
+<tr>
+<td>クラウドデータ条件</td>
+<td>クラウド版利用時、ユーザーデータにサービス運営のための広範なライセンスが付与される。機密コードを扱うなら規約確認が先行</td>
+</tr>
+<tr>
+<td>マルチユーザー</td>
+<td>認証、RBAC、SAML/SSO はエンタープライズ経路。純 OSS 構成でマルチテナントを実装するには別設計が必要</td>
+</tr>
+<tr>
+<td>PR 滞留</td>
+<td>オープン PR 234 件。活発な貢献の指標であると同時にレビューボトルネックの指標</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 類似・競合プロジェクト</h2>
+<table>
+<thead>
+<tr>
+<th>プロジェクト</th>
+<th>ライセンス</th>
+<th>性格</th>
+<th>OpenHands との比較</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>goose（AAIF/Linux Foundation）</td>
+<td>Apache 2.0</td>
+<td>Rust ベース汎用ローカルエージェント。デスクトップ・CLI・API</td>
+<td>ガバナンス中立性とライセンス単純性で優位。オープンコアリスクなし。一方でバックエンド分散実行とエンタープライズ管理機能は OpenHands が先行</td>
+</tr>
+<tr>
+<td>OpenWorker（Andrew Ng、Rohit Prasad）</td>
+<td>MIT</td>
+<td>知識労働者向けローカルデスクトップエージェント</td>
+<td>業務成果物中心、25+ ネイティブコネクタ。規模と成熟度では比較にならないほど劣後</td>
+</tr>
+<tr>
+<td>Devin（Cognition Labs）</td>
+<td>商用</td>
+<td>AI ソフトウェアエンジニア</td>
+<td>OpenHands の当初ベンチマーク。非公開・有料</td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td>商用</td>
+<td>Anthropic 公式 CLI エージェント</td>
+<td>単一モデル最適化の完成度。OpenHands で ACP エージェントとして組み込み可能 — 競合かつ構成要素</td>
+</tr>
+<tr>
+<td>Cline / Kilo Code</td>
+<td>オープンソース</td>
+<td>IDE 組み込みエージェント</td>
+<td>IDE ワークフロー密着。常時自動化とマルチバックエンドは領域外</td>
+</tr>
+<tr>
+<td>Aider</td>
+<td>Apache 2.0</td>
+<td>ターミナル優先、Git コミット直結</td>
+<td>単一目的ツールとして成熟・軽量。管理層なし</td>
+</tr>
+<tr>
+<td>AutoGPT</td>
+<td>オープンソース</td>
+<td>自律エージェントフレームワーク</td>
+<td>サンドボックスと本番運用機能の欠如</td>
+</tr>
+<tr>
+<td>Codex（OpenAI）</td>
+<td>商用</td>
+<td>コーディングアシスタントおよびエージェント</td>
+<td>OpenHands で ACP 経由で駆動可能</td>
+</tr>
+<tr>
+<td>n8n / Dify</td>
+<td>混在</td>
+<td>ワークフローオーケストレーション</td>
+<td>ビジュアル編集で優位。エージェンティック自律性は劣後</td>
+</tr>
+</tbody></table>
+<h3>ポジショニング要約</h3>
+<p>三プロジェクトを一行で分けるとこうなる。<strong>goose はローカルランタイム、OpenWorker は業務成果物、OpenHands は管理層</strong> である。</p>
+<p>OpenHands の転換は賢明な選択に見える。エージェント本体の性能競争はフロンティアモデル提供側が勝つゲームであり、その上で複数エージェントをオーケストレーションする席はまだ空いていた。Claude Code を競合ではなく駆動対象として再配置したのがその判断の結果だ。</p>
+<p>ただしこの転換には代償がある。オープンコアライセンス構造、デフォルト経路でのサンドボックス欠如、リポジトリ分離によるドキュメント断片化が同時進行しており、今導入を検討するなら 6 か月後の構成が大きく変わっている可能性を前提にすべきだ。</p>
+<hr>
+<h2>5. Getting Started</h2>
+<h3>5.1 実行方式の選択</h3>
+<table>
+<thead>
+<tr>
+<th>方式</th>
+<th>説明</th>
+<th>サンドボックス</th>
+<th>推奨対象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>npm グローバルインストール</td>
+<td>Agent Canvas ローカル全スタック起動</td>
+<td>なし</td>
+<td>クイック試行、個人開発環境</td>
+</tr>
+<tr>
+<td>Docker</td>
+<td>コンテナ内実行、プロジェクトディレクトリのみマウント</td>
+<td>あり</td>
+<td>隔離が必要なすべてのケース</td>
+</tr>
+<tr>
+<td>ソースビルド</td>
+<td>agent-canvas リポジトリを直接実行</td>
+<td>なし</td>
+<td>コントリビュータ、カスタマイズ</td>
+</tr>
+<tr>
+<td>VM セルフホスト</td>
+<td>クラウドサーバーで Agent Server を常時稼働</td>
+<td>構成による</td>
+<td>常時自動化、チーム共有</td>
+</tr>
+<tr>
+<td>OpenHands Cloud</td>
+<td>ホスト型。app.all-hands.dev</td>
+<td>提供</td>
+<td>インフラ管理回避</td>
+</tr>
+<tr>
+<td>Kubernetes エンタープライズ</td>
+<td>Helm チャートベースのセルフホスト</td>
+<td>提供</td>
+<td>組織デプロイ、SSO/RBAC 必要</td>
+</tr>
+</tbody></table>
+<h3>5.2 npm インストール（サンドボックスなし）</h3>
+<p>前提：Node.js 22.12.x 以上、<code>uv</code></p>
+<pre><code class="language-bash">npm install -g @openhands/agent-canvas
+agent-canvas
+</code></pre>
+<p>全スタックが起動し、UI は <code>http://localhost:8000</code> でアクセスする。コンポーネントを分離して起動する場合：</p>
+<pre><code class="language-bash">agent-canvas --frontend-only   # 静的フロントエンド + イングレス
+agent-canvas --backend-only    # エージェントサーバー + 自動化バックエンド + イングレス
+</code></pre>
+<p>この経路ではエージェントサーバーがホスト上で直接実行され、ファイルシステム全体が露出する。実験目的以外では非推奨。</p>
+<h3>5.3 Docker インストール（推奨）</h3>
+<p>前提：Docker Desktop または Docker Engine、エージェントに公開するプロジェクトの親ディレクトリ</p>
+<pre><code class="language-bash">export PROJECTS_PATH=&quot;$HOME/projects&quot;
+mkdir -p &quot;$PROJECTS_PATH&quot; &quot;$HOME/.openhands&quot;
+
+docker run -it --rm \
+  -p 8000:8000 \
+  -v &quot;$HOME/.openhands:/home/openhands/.openhands&quot; \
+  -v &quot;${PROJECTS_PATH}:/projects&quot; \
+  ghcr.io/openhands/agent-canvas:1
+</code></pre>
+<p>エージェントは <code>PROJECTS_PATH</code> 配下のプロジェクトにのみアクセスする。マウント範囲がアクセス制御境界なので、ホームディレクトリ全体をマウントしないこと。Windows は agent-canvas リポジトリの <code>README.windows.md</code> を参照。</p>
+<h3>5.4 ソース実行</h3>
+<pre><code class="language-bash">git clone https://github.com/OpenHands/agent-canvas.git
+cd agent-canvas
+npm install
+npm run dev
+</code></pre>
+<p>前提：Node.js 22.12.x 以上、npm、uv（<code>uvx</code> でエージェントサーバー起動）。この経路もサンドボックスなし。</p>
+<p>エージェント本体や Agent Server を直接扱う場合は <code>OpenHands/software-agent-sdk</code> リポジトリを使用する。</p>
+<h3>5.5 モデル設定</h3>
+<p>LiteLLM 規約に従うため、プロバイダー接頭辞表記を使用する。</p>
+<pre><code class="language-bash">export LLM_API_KEY=&quot;your-api-key&quot;
+export LLM_MODEL=&quot;anthropic/&lt;model-id&gt;&quot;
+</code></pre>
+<p>ローカルモデルは LM Studio、llama.cpp、Ollama 経由で接続。設定 UI では LLM プロファイル単位でモデルを保存・切り替え可能。</p>
+<h3>5.6 ACP エージェント接続</h3>
+<p>Agent Canvas は OpenHands エージェントを既定で動かすが、ACP 互換エージェントを代替実行主体として登録できる。</p>
+<table>
+<thead>
+<tr>
+<th>エージェント</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenHands Agent</td>
+<td>既定値、追加設定不要</td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td>既存サブスクリプション再利用可能</td>
+</tr>
+<tr>
+<td>Codex</td>
+<td>既存サブスクリプション再利用可能</td>
+</tr>
+<tr>
+<td>Gemini</td>
+<td>ACP 経由</td>
+</tr>
+<tr>
+<td>その他 ACP 実装</td>
+<td>プロトコル準拠なら接続可能</td>
+</tr>
+</tbody></table>
+<h3>5.7 自動化構成</h3>
+<p>Automation Server でスケジュール実行と Webhook トリガーを設定する。代表パターン：</p>
+<table>
+<thead>
+<tr>
+<th>パターン</th>
+<th>トリガー</th>
+<th>成果物</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>週次レポート</td>
+<td>cron</td>
+<td>Slack チャンネル投稿</td>
+</tr>
+<tr>
+<td>issue 自動分解</td>
+<td>GitHub Webhook</td>
+<td>サブタスク作成</td>
+</tr>
+<tr>
+<td>依存関係更新</td>
+<td>cron</td>
+<td>PR 作成</td>
+</tr>
+<tr>
+<td>アラート対応</td>
+<td>Datadog 等の外部イベント</td>
+<td>調査後スレッド返信</td>
+</tr>
+</tbody></table>
+<p>Webhook とチャンネルメッセージが指示文経路になるため、外部入力を信頼しない前提で対象リポジトリと実行権限を絞ること。</p>
+<h3>5.8 リポジトリ構造</h3>
+<table>
+<thead>
+<tr>
+<th>パス</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>openhands/</code></td>
+<td>Python バックエンドコア</td>
+</tr>
+<tr>
+<td><code>frontend/</code></td>
+<td>Web フロントエンド</td>
+</tr>
+<tr>
+<td><code>openhands-ui/</code></td>
+<td>UI コンポーネント</td>
+</tr>
+<tr>
+<td><code>enterprise/</code></td>
+<td>エンタープライズ機能。別ライセンス適用区間</td>
+</tr>
+<tr>
+<td><code>containers/</code></td>
+<td>コンテナビルド定義</td>
+</tr>
+<tr>
+<td><code>skills/</code>, <code>.agents/skills</code></td>
+<td>エージェントスキル定義</td>
+</tr>
+<tr>
+<td><code>kind/</code></td>
+<td>ローカル Kubernetes 構成</td>
+</tr>
+<tr>
+<td><code>tests/</code></td>
+<td>テストスイート</td>
+</tr>
+<tr>
+<td><code>Development.md</code></td>
+<td>開発環境構築ガイド</td>
+</tr>
+</tbody></table>
+<h3>5.9 導入前チェック項目</h3>
+<table>
+<thead>
+<tr>
+<th>点検</th>
+<th>判断基準</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ライセンス</td>
+<td><code>enterprise/LICENSE</code> 原文を先に確認。利用したい機能が MIT 区間かエンタープライズ区間か特定すること</td>
+</tr>
+<tr>
+<td>実行隔離</td>
+<td>デフォルト npm 経路ではなく Docker バックエンドを標準採用。マウント範囲をプロジェクトディレクトリに限定</td>
+</tr>
+<tr>
+<td>外部トリガー</td>
+<td>Slack、GitHub、Webhook 連携時に信頼境界を設計。外部テキストが指示文として解釈される経路を列挙すること</td>
+</tr>
+<tr>
+<td>資格情報範囲</td>
+<td>リポジトリ書き込み権限、issue 作成権限を最小単位で発行。組織全体トークン使用禁止</td>
+</tr>
+<tr>
+<td>コスト上限</td>
+<td>プロバイダーコンソールで上限を事前設定。常時自動化は消費量が累積する</td>
+</tr>
+<tr>
+<td>クラウド規約</td>
+<td>機密コードを扱うならデータライセンス条項を確認後、セルフホスト可否を決定</td>
+</tr>
+<tr>
+<td>移行期リスク</td>
+<td>リポジトリ分離進行中のため、バージョン固定と移行計画を前提に導入</td>
+</tr>
+<tr>
+<td>代替比較</td>
+<td>単純なローカルエージェントが目的なら goose の方が軽くライセンスも単純</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>参考</h2>
+<ul>
+<li>メインリポジトリ: <a href="https://github.com/OpenHands/OpenHands">https://github.com/OpenHands/OpenHands</a></li>
+<li>Agent Canvas: <a href="https://github.com/OpenHands/agent-canvas">https://github.com/OpenHands/agent-canvas</a></li>
+<li>エージェント SDK: <a href="https://github.com/OpenHands/software-agent-sdk">https://github.com/OpenHands/software-agent-sdk</a></li>
+<li>自動化サーバー: <a href="https://github.com/OpenHands/automation">https://github.com/OpenHands/automation</a></li>
+<li>クラウド Helm チャート: <a href="https://github.com/OpenHands/openhands-cloud">https://github.com/OpenHands/openhands-cloud</a></li>
+<li>ドキュメント: <a href="https://docs.openhands.dev/overview/introduction">https://docs.openhands.dev/overview/introduction</a></li>
+<li>セルフホストガイド: <a href="https://docs.openhands.dev/openhands/usage/agent-canvas/backend-setup/vm">https://docs.openhands.dev/openhands/usage/agent-canvas/backend-setup/vm</a></li>
+<li>移行 FAQ: <a href="https://github.com/OpenHands/OpenHands/issues/14841">https://github.com/OpenHands/OpenHands/issues/14841</a></li>
+<li>開発ガイド: <a href="https://github.com/OpenHands/OpenHands/blob/main/Development.md">https://github.com/OpenHands/OpenHands/blob/main/Development.md</a></li>
+<li>Slack: <a href="https://go.openhands.dev/slack">https://go.openhands.dev/slack</a></li>
+</ul>
+<p>#OpenHands #AgentCanvas #AllHandsAI #AIエージェント #OpenSource #ACP #MCP #コーディングエージェント #LLM</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Awesome-Agent/OpenHands-Review_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

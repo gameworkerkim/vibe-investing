@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Goose 리뷰 — Linux Foundation AAIF 산하 오픈소스 AI 에이전트 — VibeQuant</title>
+  <meta name="description" content="Block에서 시작해 Linux Foundation AAIF로 이관된 goose의 컨셉, 권한 모드, 장단점, OpenWorker·OpenHands 대비 포지셔닝, 설치·도입 체크리스트 TechDoc." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/awesome-agent-goose-review/" />
+  <meta property="og:title" content="Goose 리뷰 — Linux Foundation AAIF 산하 오픈소스 AI 에이전트" />
+  <meta property="og:description" content="Block에서 시작해 Linux Foundation AAIF로 이관된 goose의 컨셉, 권한 모드, 장단점, OpenWorker·OpenHands 대비 포지셔닝, 설치·도입 체크리스트 TechDoc." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/awesome-agent-goose-review/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/awesome-agent-goose-review/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/awesome-agent-goose-review-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/awesome-agent-goose-review-ja/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/awesome-agent-goose-review/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Goose 리뷰 — Linux Foundation AAIF 산하 오픈소스 AI 에이전트","description":"Block에서 시작해 Linux Foundation AAIF로 이관된 goose의 컨셉, 권한 모드, 장단점, OpenWorker·OpenHands 대비 포지셔닝, 설치·도입 체크리스트 TechDoc.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/awesome-agent-goose-review/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Awesome-Agent/Goose-Review.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/awesome-agent-goose-review/","datePublished":"2026-07-27","dateModified":"2026-07-27","inLanguage":"ko","keywords":"LLM · 에이전트, Awesome-Agent"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"Goose 리뷰 — Linux Foundation AAIF 산하 오픈소스 AI 에이전트","item":"https://tech.vibequant.cc/tech/awesome-agent-goose-review/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Goose 리뷰 — Linux Foundation AAIF 산하 오픈소스 AI 에이전트</h1>
+        <p class="article-dates"><time datetime="2026-07-27">발행 2026.07.27</time> · 주제 LLM · 에이전트 · Awesome-Agent</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn is-active" href="../../tech/awesome-agent-goose-review/" data-lang="KR" aria-current="true">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/awesome-agent-goose-review-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/awesome-agent-goose-review-ja/" data-lang="JP">日本語</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">Block에서 시작해 Linux Foundation AAIF로 이관된 goose의 컨셉, 권한 모드, 장단점, OpenWorker·OpenHands 대비 포지셔닝, 설치·도입 체크리스트 TechDoc.</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. 컨셉</h2>
+<p>goose의 명제는 &quot;코드 제안을 넘어서는 범용 로컬 에이전트&quot;다. 코딩 도구로 출발했지만 현재 포지셔닝은 리서치, 문서 작성, 자동화, 데이터 분석까지 포괄하는 general-purpose agent이며, 특정 벤더가 아니라 Linux Foundation 산하 재단이 거버넌스를 쥐고 있다는 점이 다른 모든 경쟁 프로젝트와 갈리는 지점이다.</p>
+<p>동작 흐름은 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>세션 시작 (데스크톱 앱, CLI, 또는 API 임베드)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>자연어 지시 입력. goose가 계획을 세우고 도구 호출로 분해</td>
+</tr>
+<tr>
+<td>3</td>
+<td>모든 도구 호출이 ToolInspectionManager를 통과. Security 인스펙터, Egress 인스펙터가 스택 형태로 검사</td>
+</tr>
+<tr>
+<td>4</td>
+<td>활성 권한 모드에 따라 자동 승인, 사용자 승인 대기, 또는 차단</td>
+</tr>
+<tr>
+<td>5</td>
+<td>필요 시 서브에이전트를 스폰해 병렬 처리 후 결과 수렴</td>
+</tr>
+</tbody></table>
+<h3>아키텍처</h3>
+<pre><code>goose Desktop (Electron/네이티브 셸)  |  goose CLI  |  Embeddable API
+                    |
+              goose-server (goosed)     로컬 백엔드 데몬
+                    |
+                goose (core)            에이전트 루프, 프로바이더, 권한, 세션
+                    |
+        goose-mcp  |  외부 MCP 서버  |  ACP 프로바이더
+                    |
+   로컬 파일 · 셸 · 70+ 확장 · 15+ 모델 프로바이더
+</code></pre>
+<p>Cargo 워크스페이스가 <code>goose</code>(코어), <code>goose-cli</code>, <code>goose-server</code>, <code>goose-mcp</code> 크레이트로 분리돼 있어 CLI와 데스크톱 앱이 동일한 코어를 공유한다. 설정은 <code>~/.config/goose/config.yaml</code> 하나로 CLI와 데스크톱이 공용한다.</p>
+<h3>권한 모델</h3>
+<p>세션 단위 모드(GooseMode)와 도구 단위 권한이 이중으로 걸린다.</p>
+<table>
+<thead>
+<tr>
+<th>모드</th>
+<th>동작</th>
+<th>서브에이전트</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Completely Autonomous</td>
+<td>승인 없이 전량 자동 실행. 기본값</td>
+<td>사용 가능</td>
+</tr>
+<tr>
+<td>Smart Approval</td>
+<td>LLM 기반 PermissionJudge 분류기가 위험도를 판정해 선별 승인</td>
+<td>사용 불가</td>
+</tr>
+<tr>
+<td>Manual Approval</td>
+<td>모든 도구 호출에 사용자 확인</td>
+<td>사용 불가</td>
+</tr>
+<tr>
+<td>Chat Only</td>
+<td>도구 접근 자체를 차단. 시스템 프롬프트에 무도구 상태를 주입</td>
+<td>사용 불가</td>
+</tr>
+</tbody></table>
+<p>Smart Approval은 MCP 표준의 <code>ToolAnnotations.read_only_hint</code> 필드를 읽어 read-only가 아닌 도구를 자동으로 승인 대기 목록에 넣는다. 모드 우선순위는 설정 파일보다 런타임 오버라이드가 높으며, CLI에서는 <code>/mode approve</code> 같은 슬래시 명령, 데스크톱에서는 UI 토글로 즉시 전환된다.</p>
+<h3>AdversaryInspector</h3>
+<p><code>~/.config/goose/adversary.md</code> 파일을 두면 활성화되는 별도 검사 계층이다. 프런트매터로 검사 대상 도구를 지정하고(기본값은 <code>shell</code>과 <code>computercontroller__automation_script</code>), 구분자 아래에 자연어 규칙을 쓰면 LLM이 해당 도구 호출을 실행 직전에 판정한다. 데이터 유출성 명령이나 파괴적 명령을 차단하고 통상적 개발 작업은 통과시키는 식의 정책 서술이 가능하다.</p>
+<hr>
+<h2>2. 장점</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>거버넌스 중립성</td>
+<td>Linux Foundation AAIF 산하. 단일 기업의 상업적 판단에 프로젝트 방향이 좌우되지 않는다. 기업 도입 시 벤더 리스크 평가에서 가장 큰 가산점</td>
+</tr>
+<tr>
+<td>라이선스</td>
+<td>Apache 2.0. AGPL 계열과 달리 소스 공개 의무 없이 임베드·재배포·상용 활용 가능. 자사 제품에 에이전트를 내장하려는 기업에 실질적 차이</td>
+</tr>
+<tr>
+<td>성숙도</td>
+<td>커밋 5,130건, 스타 51.7k, 포크 5.7k, 기여자 수백 명 규모. 초기 프로젝트가 아니라 이미 프로덕션 트랙</td>
+</tr>
+<tr>
+<td>3개 OS 전면 지원</td>
+<td>macOS, Linux, Windows 데스크톱 앱 모두 정식 배포. Linux 지원은 경쟁 제품 대비 희소한 강점</td>
+</tr>
+<tr>
+<td>표면 다양성</td>
+<td>데스크톱 앱, CLI, 임베더블 API 세 가지. 대화형 작업과 CI/CD 무인 실행을 같은 코어로 처리</td>
+</tr>
+<tr>
+<td>ACP 지원</td>
+<td>Agent Client Protocol 구현. Zed, JetBrains, VS Code에서 goose를 ACP 서버로 붙일 수 있고, 반대로 기존 Claude Code나 Codex 구독을 프로바이더로 재활용할 수 있다. 신규 API 과금 없이 보유 구독을 소진하는 경로</td>
+</tr>
+<tr>
+<td>모델 유연성</td>
+<td>15개 이상 프로바이더. Anthropic, OpenAI, Google, Azure, Bedrock, OpenRouter, Ollama 등. 로컬 완전 실행 가능</td>
+</tr>
+<tr>
+<td>확장 생태계</td>
+<td>공식 레지스트리에 70개 이상 MCP 확장. 임의 MCP 서버 연결도 가능</td>
+</tr>
+<tr>
+<td>서브에이전트</td>
+<td>세션당 병렬 서브에이전트 스폰. 각 서브에이전트가 부모와 다른 프로바이더를 쓸 수 있어 저비용 모델로 위임하는 비용 최적화 패턴 구성 가능</td>
+</tr>
+<tr>
+<td>Recipes + Scheduler</td>
+<td>YAML 레시피로 시스템 지시, 확장 목록, 응답 스키마, 재시도 정책을 고정하고 cron 스케줄로 반복 실행. URL 공유와 Recipe Cookbook 제공</td>
+</tr>
+<tr>
+<td>보안 계층의 다층화</td>
+<td>권한 모드, 도구별 권한, 프롬프트 인젝션 탐지, 샌드박스 모드, AdversaryInspector가 각각 독립 계층으로 존재</td>
+</tr>
+<tr>
+<td>Custom Distros</td>
+<td>프로바이더, 확장, 브랜딩을 미리 박은 사내 전용 배포판 빌드를 공식 지원. 조직 배포에 실질적으로 필요한 기능</td>
+</tr>
+<tr>
+<td>Rust 구현</td>
+<td>네이티브 성능, 낮은 리소스 점유, 런타임 의존성 최소화</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. 단점 및 유의점</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>기본값이 자율 모드</td>
+<td>기본 권한 모드가 Completely Autonomous다. 셸과 파일 접근을 가진 에이전트의 안전 기본값으로는 공격적이며, 조직 배포 시 반드시 재설정해야 할 항목</td>
+</tr>
+<tr>
+<td>안전성과 병렬성의 배타적 트레이드오프</td>
+<td>서브에이전트는 자율 모드에서만 동작한다. 즉 병렬 처리 성능을 쓰려면 승인 게이트를 전부 꺼야 한다. 구조적 결함에 가까운 설계이며, 실무에서 사용자가 안전 장치를 끄는 쪽으로 몰릴 유인이 크다</td>
+</tr>
+<tr>
+<td>LLM 의존 방어</td>
+<td>Smart Approval의 PermissionJudge도, AdversaryInspector도 판정 주체가 LLM이다. 방어 계층 자체가 프롬프트 인젝션의 표적이 되며, 결정론적 보증이 없다. 감사 대상 통제로 제출하기 어려운 형태</td>
+</tr>
+<tr>
+<td>read_only_hint 신뢰 문제</td>
+<td>Smart Approval이 참조하는 read-only 여부는 MCP 서버가 자기 자신에 대해 선언하는 값이다. 악의적이거나 부주의한 서버가 쓰기 도구를 read-only로 선언하면 자동 승인 경로로 빠진다. 확장 공급망 검증 책임이 전적으로 사용자에게 있다</td>
+</tr>
+<tr>
+<td>네이티브 커넥터 부재</td>
+<td>Slack, Jira, Gmail 같은 업무 도구는 전부 별도 MCP 서버 설치와 개별 인증을 거쳐야 한다. 70개 확장이라는 숫자는 생태계 규모이지 즉시 사용 가능한 커넥터 수가 아니다. 초기 설정 비용이 상당하다</td>
+</tr>
+<tr>
+<td>개발자 편향</td>
+<td>문서, 퀵스타트, 레시피 예제 대부분이 코딩 시나리오다. 범용 에이전트를 표방하지만 비개발자 온보딩 경로는 약하다</td>
+</tr>
+<tr>
+<td>산출물 지향 아님</td>
+<td>문서나 스프레드시트를 파일로 뱉는 것은 확장과 프롬프트에 달려 있다. 결과물 포맷을 제품 차원에서 보장하지 않는다</td>
+</tr>
+<tr>
+<td>컴플라이언스 미비</td>
+<td>SOC 2, HIPAA 등 인증이 없다. 규제 산업에서 인증 벤더를 요구하는 경우 그 자체로 탈락 조건</td>
+</tr>
+<tr>
+<td>비용 관리</td>
+<td>BYOK 구조라 앱은 무료지만 모델 요금은 전액 사용자 부담. 서브에이전트 병렬 스폰은 토큰 소모를 급격히 늘린다. 프로바이더 콘솔에서 한도 설정이 사실상 필수</td>
+</tr>
+<tr>
+<td>유지보수 적체</td>
+<td>오픈 이슈 225건, 오픈 PR 180건. 활발함의 지표인 동시에 리뷰 병목의 지표이기도 하다</td>
+</tr>
+<tr>
+<td>소스 빌드 부담</td>
+<td>Rust 워크스페이스 전체 빌드는 시간과 디스크를 크게 소모한다. 바이너리 배포 사용이 사실상 기본 경로</td>
+</tr>
+<tr>
+<td>온보딩 경로의 상업적 유인</td>
+<td>퀵스타트가 Tetrate Agent Router를 권장 경로로 안내하고 무료 크레딧을 제시한다. 재단 프로젝트로서 중립성 문제라기보다는, 기본 경로가 특정 라우팅 서비스를 경유한다는 점을 인지하고 시작할 필요가 있다</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 유사 및 경쟁 프로젝트</h2>
+<table>
+<thead>
+<tr>
+<th>프로젝트</th>
+<th>라이선스</th>
+<th>성격</th>
+<th>goose 대비</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenWorker (Andrew Ng, Rohit Prasad)</td>
+<td>MIT</td>
+<td>지식노동자용 로컬 데스크톱 에이전트. 25+ 네이티브 커넥터, 산출물 파일 반환</td>
+<td>업무 도구 즉시 연동과 승인 게이트의 타입화가 강점. 대신 오픈 베타 초기 단계이고 Linux 미지원, 생태계 규모가 goose의 수백분의 일</td>
+</tr>
+<tr>
+<td>OpenHands (All Hands AI)</td>
+<td>MIT</td>
+<td>코딩 자율 에이전트. Docker 샌드박스, SDK·CLI·클라우드, Kubernetes 배포</td>
+<td>격리 실행과 SWE-bench 성능이 강점. 범용 업무보다 이슈 해결 특화. goose보다 무겁고 인프라 요구가 크다</td>
+</tr>
+<tr>
+<td>Claude Code</td>
+<td>상용</td>
+<td>Anthropic 공식 CLI 에이전트</td>
+<td>단일 모델 최적화로 완성도 높음. 모델 선택권과 로컬 데이터 통제가 없음. goose에서 ACP 프로바이더로 역이용 가능</td>
+</tr>
+<tr>
+<td>Cline / Kilo Code</td>
+<td>오픈소스</td>
+<td>VS Code, JetBrains 내장 IDE 에이전트</td>
+<td>IDE 워크플로 밀착. 터미널·자동화·스케줄 영역은 goose 우위</td>
+</tr>
+<tr>
+<td>Aider</td>
+<td>Apache 2.0</td>
+<td>터미널 우선, Git 커밋 직결</td>
+<td>단일 목적 도구로서 성숙. 확장 생태계와 GUI 없음</td>
+</tr>
+<tr>
+<td>OpenCode</td>
+<td>오픈소스</td>
+<td>터미널 우선, 기존 구독 재활용</td>
+<td>경량. 데스크톱 앱과 스케줄러 없음</td>
+</tr>
+<tr>
+<td>Open Interpreter</td>
+<td>Apache 2.0</td>
+<td>CLI 로컬 코드 실행 에이전트</td>
+<td>더 원시적. MCP 생태계와 권한 계층이 없음</td>
+</tr>
+<tr>
+<td>n8n / Dify</td>
+<td>혼합(n8n은 제한적 라이선스)</td>
+<td>워크플로 오케스트레이션</td>
+<td>사전 정의 플로우 실행. goose의 레시피가 더 에이전틱하지만 시각적 편집과 관리 UI는 열세</td>
+</tr>
+<tr>
+<td>Manus</td>
+<td>상용</td>
+<td>크레딧 기반 자율 태스크 에이전트</td>
+<td>완성된 제품 경험과 클라우드 실행. 오픈소스 아님</td>
+</tr>
+</tbody></table>
+<h3>포지셔닝 요약</h3>
+<p>현시점 오픈소스 로컬 에이전트 카테고리의 사실상 기준점이다. 규모, 거버넌스, 라이선스, OS 커버리지, 표면 다양성 어느 축에서도 대안이 뚜렷하지 않다. OpenWorker가 &quot;업무 산출물&quot;이라는 UX 프레이밍으로, OpenHands가 &quot;샌드박스와 벤치마크&quot;로 각각 좁은 우위를 주장하는 구도이며, goose는 그 사이에서 범용 플랫폼 자리를 점유하고 있다.</p>
+<p>다만 플랫폼으로 커진 대가로 안전 기본값이 느슨해졌다. 자율 모드 기본값과 서브에이전트의 모드 제약은 &quot;성능을 쓰려면 방어를 끄라&quot;는 선택을 강요하는 구조이고, 이 지점이 규제 환경 도입에서 가장 먼저 걸린다.</p>
+<hr>
+<h2>5. Getting Started</h2>
+<h3>5.1 데스크톱 앱 설치</h3>
+<table>
+<thead>
+<tr>
+<th>OS</th>
+<th>방법</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>macOS (Apple Silicon)</td>
+<td>릴리스의 <code>Goose.zip</code> 다운로드 후 압축 해제, 실행 파일 구동</td>
+</tr>
+<tr>
+<td>macOS (Intel)</td>
+<td>릴리스의 <code>Goose_intel_mac.zip</code> 동일 절차</td>
+</tr>
+<tr>
+<td>Linux (Debian/Ubuntu 계열)</td>
+<td>DEB 파일 다운로드 후 <code>sudo dpkg -i (filename).deb</code>, 앱 메뉴에서 실행</td>
+</tr>
+<tr>
+<td>Windows</td>
+<td>ZIP 다운로드 후 압축 해제, 실행 파일 구동</td>
+</tr>
+</tbody></table>
+<p>다운로드 경로는 goose-docs.ai/docs/getting-started/installation 에 정리돼 있다.</p>
+<h3>5.2 CLI 설치</h3>
+<pre><code class="language-bash">curl -fsSL https://github.com/aaif-goose/goose/releases/download/stable/download_cli.sh | bash
+</code></pre>
+<p>Windows는 <code>download_cli.ps1</code>을 사용한다. 설치 후 PATH 경고가 나오면 <code>goose configure</code> 실행 전에 PATH 등록이 필요하다. Windows에서 키링 오류가 발생하면 키링 저장을 끄고 진행한다.</p>
+<p>파이프-투-셸 설치가 조직 정책상 부적합하다면 스크립트를 먼저 내려받아 검토한 뒤 실행하는 편이 낫다.</p>
+<h3>5.3 프로바이더 설정</h3>
+<pre><code class="language-bash">goose configure
+</code></pre>
+<p>메뉴 구조:</p>
+<pre><code>◆ What would you like to configure?
+  ● Configure Providers      프로바이더 변경 및 자격증명 갱신
+  ○ Add Extension
+  ○ Toggle Extensions
+  ○ Remove Extension
+  ○ goose settings
+</code></pre>
+<p>프로바이더 목록에는 Amazon Bedrock, Amazon SageMaker TGI, Anthropic, Azure OpenAI, ChatGPT Codex, Claude Code CLI, Tetrate Agent Router 등이 포함된다. GitHub Copilot은 API 키가 아니라 인증 코드 방식으로 붙는다.</p>
+<p>데스크톱 앱은 첫 실행 시 웰컴 화면에서 API 키 직접 입력, ChatGPT 구독 연동, Tetrate Agent Router, OpenRouter 중 선택하게 한다.</p>
+<h3>5.4 완전 로컬 구성 (Ollama)</h3>
+<pre><code class="language-bash">ollama pull qwen3
+
+# ~/.config/goose/config.yaml
+# GOOSE_PROVIDER: ollama
+# GOOSE_API_BASE: http://localhost:11434
+</code></pre>
+<p>외부 전송이 발생하지 않는 유일한 구성이다. 다만 다단계 도구 호출 정확도는 별도 검증이 필요하며, 서브에이전트 병렬 실행 시 로컬 하드웨어가 병목이 된다.</p>
+<h3>5.5 세션과 확장</h3>
+<pre><code class="language-bash">goose                       # 새 세션 시작
+goose session -r            # 직전 세션 이어서 진행
+goose run --no-session -t &quot;&lt;task&gt;&quot;   # 헤드리스 단발 실행 (CI/CD)
+</code></pre>
+<p>확장 추가는 <code>goose configure</code> &gt; <code>Add Extension</code> &gt; <code>Built-in Extension</code> 경로로 진행한다. 예를 들어 웹 스크래핑과 브라우저 제어가 필요하면 <code>Computer Controller</code> 확장을 활성화하고 타임아웃을 300초로 설정한다.</p>
+<h3>5.6 권한 모드 전환</h3>
+<pre><code>/mode auto        완전 자율
+/mode smart       위험도 기반 선별 승인
+/mode approve     전건 수동 승인
+/mode chat        도구 차단
+</code></pre>
+<p>조직 배포 시 기본값을 <code>smart</code> 또는 <code>approve</code>로 강제하는 것을 권장한다. 다만 이 경우 서브에이전트가 비활성화된다는 점을 사전에 공지해야 한다.</p>
+<h3>5.7 컨텍스트와 레시피</h3>
+<table>
+<thead>
+<tr>
+<th>대상</th>
+<th>파일 및 위치</th>
+<th>용도</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>프로젝트 힌트</td>
+<td><code>.goosehints</code></td>
+<td>프로젝트별 컨벤션, 금지사항, 빌드 방법 등을 세션에 상시 주입</td>
+</tr>
+<tr>
+<td>에이전트 지침</td>
+<td><code>AGENTS.md</code></td>
+<td>표준 포맷 기반 에이전트 지시문</td>
+</tr>
+<tr>
+<td>적대적 검사 규칙</td>
+<td><code>~/.config/goose/adversary.md</code></td>
+<td>shell 등 고위험 도구 호출에 대한 LLM 판정 규칙</td>
+</tr>
+<tr>
+<td>레시피</td>
+<td>YAML</td>
+<td>시스템 지시, 태스크 프롬프트, 확장 목록, 응답 스키마, 재시도 정책</td>
+</tr>
+<tr>
+<td>전역 설정</td>
+<td><code>~/.config/goose/config.yaml</code></td>
+<td>프로바이더, 확장, 모드. CLI와 데스크톱 공용</td>
+</tr>
+</tbody></table>
+<p>레시피는 Recipe Cookbook에서 기성품을 가져다 쓸 수 있고, Recipe Generator와 Deeplink Generator로 생성·공유할 수 있다. Scheduler와 결합하면 cron 주기로 무인 실행된다.</p>
+<h3>5.8 소스 빌드</h3>
+<p>사전 요구사항: Rust 툴체인(<code>rust-toolchain.toml</code> 고정), Node (UI 빌드), Just</p>
+<pre><code class="language-bash">git clone https://github.com/aaif-goose/goose
+cd goose
+
+just                # Justfile 태스크 목록 확인
+cargo build          # 워크스페이스 빌드
+</code></pre>
+<p>기존 클론이 <code>block/goose</code>를 가리키고 있다면 리모트를 갱신해야 한다.</p>
+<pre><code class="language-bash">git remote set-url origin git@github.com:aaif-goose/goose.git
+</code></pre>
+<p>Docker 빌드는 <code>BUILDING_DOCKER.md</code>, Linux 빌드는 <code>BUILDING_LINUX.md</code>, Nix 사용자는 <code>flake.nix</code>를 참조한다.</p>
+<h3>5.9 저장소 구조</h3>
+<table>
+<thead>
+<tr>
+<th>경로</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>crates/goose</code></td>
+<td>코어 에이전트 로직, 프로바이더, 권한, 세션, 서브에이전트</td>
+</tr>
+<tr>
+<td><code>crates/goose-cli</code></td>
+<td>커맨드라인 인터페이스</td>
+</tr>
+<tr>
+<td><code>crates/goose-server</code></td>
+<td>데스크톱 앱 백엔드 데몬 (goosed)</td>
+</tr>
+<tr>
+<td><code>crates/goose-mcp</code></td>
+<td>내장 MCP 서버 구현체</td>
+</tr>
+<tr>
+<td><code>ui/</code></td>
+<td>데스크톱 앱 프런트엔드</td>
+</tr>
+<tr>
+<td><code>documentation/</code></td>
+<td>공식 문서 소스</td>
+</tr>
+<tr>
+<td><code>evals/harbor</code></td>
+<td>평가 하네스</td>
+</tr>
+<tr>
+<td><code>recipe-scanner/</code></td>
+<td>레시피 정적 검사 도구</td>
+</tr>
+<tr>
+<td><code>oidc-proxy/</code></td>
+<td>OIDC 프록시</td>
+</tr>
+<tr>
+<td><code>workflow_recipes/</code></td>
+<td>릴리스 리스크 체크 등 워크플로 레시피 예시</td>
+</tr>
+</tbody></table>
+<h3>5.10 도입 전 점검 항목</h3>
+<table>
+<thead>
+<tr>
+<th>점검</th>
+<th>판단 기준</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>기본 권한 모드</td>
+<td>배포 이미지에서 반드시 autonomous 이외 값으로 고정. Custom Distros 기능으로 강제 가능</td>
+</tr>
+<tr>
+<td>서브에이전트 정책</td>
+<td>병렬 처리 필요 여부와 승인 게이트 유지 중 무엇이 우선인지 사전 결정</td>
+</tr>
+<tr>
+<td>확장 화이트리스트</td>
+<td>사용 가능한 MCP 서버 목록을 조직 차원에서 고정. read_only_hint를 신뢰 근거로 삼지 말 것</td>
+</tr>
+<tr>
+<td>AdversaryInspector 규칙</td>
+<td>데이터 유출성 명령 차단 규칙을 표준 템플릿으로 배포. 단, LLM 판정이므로 최종 방어선으로 간주하지 말 것</td>
+</tr>
+<tr>
+<td>셸 접근 범위</td>
+<td>개발자 확장의 접근 통제 설정으로 작업 디렉터리를 제한</td>
+</tr>
+<tr>
+<td>비용 상한</td>
+<td>프로바이더 콘솔에서 한도 선설정. 서브에이전트 병렬 스폰 시 소모량이 비선형으로 증가</td>
+</tr>
+<tr>
+<td>컴플라이언스</td>
+<td>인증 벤더가 요구되는 환경이라면 도입 불가. 자체 감사 체계로 대체 가능한지 먼저 확인</td>
+</tr>
+<tr>
+<td>로그와 감사</td>
+<td>세션 트랜스크립트 보관 정책과 민감정보 마스킹 방안을 별도 설계</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>참고</h2>
+<ul>
+<li>저장소: <a href="https://github.com/aaif-goose/goose">https://github.com/aaif-goose/goose</a></li>
+<li>문서: <a href="https://goose-docs.ai/">https://goose-docs.ai/</a></li>
+<li>퀵스타트: <a href="https://goose-docs.ai/docs/quickstart">https://goose-docs.ai/docs/quickstart</a></li>
+<li>AAIF 이관 공지: <a href="https://goose-docs.ai/blog/2026/04/07/goose-moves-to-aaif/">https://goose-docs.ai/blog/2026/04/07/goose-moves-to-aaif/</a></li>
+<li>재단: <a href="https://aaif.io/projects/goose">https://aaif.io/projects/goose</a></li>
+<li>거버넌스: <a href="https://github.com/aaif-goose/goose/blob/main/GOVERNANCE.md">https://github.com/aaif-goose/goose/blob/main/GOVERNANCE.md</a></li>
+<li>커스텀 배포판: <a href="https://github.com/aaif-goose/goose/blob/main/CUSTOM_DISTROS.md">https://github.com/aaif-goose/goose/blob/main/CUSTOM_DISTROS.md</a></li>
+</ul>
+<p>#goose #AAIF #LinuxFoundation #AI에이전트 #OpenSource #MCP #ACP #업무자동화 #LLM</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Awesome-Agent/Goose-Review.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

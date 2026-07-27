@@ -1,9 +1,59 @@
+<!--
+---
+title: "Awesome Agent — 오픈소스 AI 에이전트 실측 비교 (OpenWorker · goose · OpenHands)"
+title_en: "Awesome Agent — Hands-On Comparison of Open-Source AI Agents (OpenWorker · goose · OpenHands)"
+subtitle: "지식노동 산출물 · 로컬 런타임 · 오케스트레이션 계층. MCP·ACP 중첩과 CTI 관점 도입 검토"
+description: "OpenWorker, goose, OpenHands 세 오픈소스 AI 에이전트를 실측 기준으로 비교한 Awesome Agent 허브. 프로젝트별 리뷰(KO/EN/JA), 비교표, 도구 난립·공급망·ATT&CK 위협 매핑 등 CTI 프레임 포함."
+abstract: |
+  OpenWorker, goose, OpenHands 세 오픈소스 AI 에이전트를 저장소 직접 조회 기준으로 비교한 Awesome Agent 허브 문서다.
+  OpenWorker는 지식노동 산출물 지향 데스크톱 에이전트, goose는 AAIF 산하 범용 로컬 런타임, OpenHands는 ACP 기반 에이전트 오케스트레이션 컨트롤 센터로 포지셔닝된다.
+  MCP·ACP 중첩 구조, 승인 피로, LLM 판정의 한계, 공급망·자격증명 집중, ATT&CK 위협 매핑 등 CTI 관점의 도입 검토 프레임을 함께 제시한다.
+summary_for_ai: |
+  Hub index for three hands-on TechDoc reviews: OpenWorker (Andrew Ng, knowledge-work artifacts), goose (AAIF local runtime), OpenHands (agent control center / orchestration).
+  Includes comparison tables, landscape map, tool proliferation analysis, and CTI section with ATT&CK mapping.
+  Not investment advice. Verify repo metrics and install paths at citation time (measured 2026-07-27).
+date: 2026-07-27
+updated: 2026-07-27
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - Awesome Agent
+  - OpenWorker
+  - goose
+  - OpenHands
+  - AI Agent
+  - LLM
+  - MCP
+  - ACP
+  - CTI
+  - 오픈소스
+keywords:
+  - "Awesome Agent"
+  - "OpenWorker"
+  - "goose AI agent"
+  - "OpenHands"
+  - "MCP"
+  - "ACP"
+  - "오픈소스 AI 에이전트 비교"
+  - "에이전트 보안"
+  - "Agent Canvas"
+group: llm-agents
+featured: true
+featured_rank: 1
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+-->
+
 # Awesome Agent
 
 오픈소스 AI 에이전트 프로젝트에 대한 실측 기반 기술 검토 후 Awesome Agent로 정리했습니다. Agent의 난립으로 인해 보안 취약점과 도리어 성능이 하락하는 일, 너무 무거워 도입 후 효과를 발휘하지 못하는 일들이 생겨남에 따라 내게 맞는 Agent를 고르기 위한 큐레이션입니다.
-더구나 다양한 오픈소스 도구들이 상호 참조를 하여 공격의 한 포인트가 될 수 있다. 나라면 Agent에 들어가는 필수 도구 한 두개를 기여하면서 잠재된 취약점을 통해 대량의 판데믹 공격을 만들 것이다. 
+더구나 다양한 오픈소스 도구들이 상호 참조를 하여 공격의 한 포인트가 될 수 있다. 나라면 Agent에 들어가는 필수 도구 한 두개를 기여하면서 잠재된 취약점을 통해 대량의 판데믹 공격을 만들 것이다.
 
 지금 인공지능 기반의 오픈소스들은 무절제한 상호 참조를 거치고 있다. 서로 격리되어 있지 않기 때문에 큰 사고를 낼 가능성이 높다.
+
+**언어.** 각 리뷰와 이 허브 문서는 한국어·영어·일본어로 제공됩니다 (`readme.md` / `readme_EN.md` / `readme_JA.md`).
 
 <!--
 | 항목 | 내용 |
@@ -25,11 +75,11 @@
 
 ## 1. 수록 문서
 
-| 문서 | 프로젝트 | 핵심 포지션 |
-| --- | --- | --- |
-| [OpenWorker_review.md](./OpenWorker_review.md) | OpenWorker (Andrew Ng, Rohit Prasad) | 지식노동자용 로컬 데스크톱 에이전트. 산출물 지향 |
-| [Goose_review.md](./Goose_review.md) | goose (Agentic AI Foundation) | 범용 로컬 에이전트 런타임. 거버넌스 중립 |
-| [OpenHands_review.md](./OpenHands_review.md) | OpenHands (All Hands AI) | 에이전트 오케스트레이션 컨트롤 센터 |
+| 문서 | 프로젝트 | 핵심 포지션 | 한국어 | English | 日本語 |
+| --- | --- | --- | --- | --- | --- |
+| OpenWorker | OpenWorker (Andrew Ng, Rohit Prasad) | 지식노동자용 로컬 데스크톱 에이전트. 산출물 지향 | [KO](./Openworker-Review.md) | [EN](./Openworker-Review_EN.md) | [JA](./Openworker-Review_JA.md) |
+| goose | goose (Agentic AI Foundation) | 범용 로컬 에이전트 런타임. 거버넌스 중립 | [KO](./Goose-Review.md) | [EN](./Goose-Review_EN.md) | [JA](./Goose-Review_JA.md) |
+| OpenHands | OpenHands (All Hands AI) | 에이전트 오케스트레이션 컨트롤 센터 | [KO](./OpenHands-Review.md) | [EN](./OpenHands-Review_EN.md) | [JA](./OpenHands-Review_JA.md) |
 
 각 문서는 동일 포맷을 따른다. 메타데이터 표, 컨셉, 장점, 단점 및 유의점, 유사 경쟁 프로젝트, Getting Started, 도입 전 점검 항목.
 
@@ -184,8 +234,8 @@ MCP와 ACP는 파편화를 해결하려고 만들어졌다. 실제로는 연결 
 ### 5.3 정보 부패
 
 저장소가 이전되고, 라이선스가 분화되고, 기본 설치 경로가 바뀌는 속도를 문서화가 따라가지 못한다. 그 공백을 AI가 생성한 리뷰 콘텐츠가 메우고, 그 콘텐츠가 다시 학습 데이터가 되고 있다.
-누군가의 오류 포스팅, LLM이 오독한 정보가 유통되면서 정보가 오염되고 증폭되어 재인용되는 현상이 발견되고 있다. 
-의도된 오류, 경쟁자의 의도적 오염, 사람의 실수, LLM의 재학습 인용까지 다양한 케이스가 만들어질 수 있다. 정보의 유통에서 LLM의 개입은 앞으로 인공지능이 만든 문서, 포스팅으로 피로감을 증폭 시키고 있다.
+누군가의 오류 포스팅, LLM이 오독한 정보가 유통되면서 정보가 오염되고 증폭되어 재인용되는 현상이 발견되고 있다.
+의도된 오류, 경쟁자의 의도적 오염, 사람의 실수, LLM의 재학습 인용까지 다양한 케이스가 만들어질 수 있다. 정보의 유통에서 LLM의 개입은 앞으로 인공지능이 만든 문서, 포스팅으로 피로감을 증폭시키고 있다.
 
 **실무 규칙 하나면 충분하다. README와 LICENSE를 직접 열어라.** 이 문서가 실측 기준일을 명시하는 이유도 같다.
 
@@ -217,7 +267,7 @@ LLM이 블랙박스라는 지적은 오래됐다. 에이전트는 여기에 두 
 | 모델 | 왜 그 출력을 냈는지 설명 불가 |
 | 오케스트레이션 | 어떤 도구를, 어떤 순서로, 어떤 권한으로 호출했는지 사후 재구성 곤란 |
 
-두 번째 레어어가 더 위험하다. 첫 번째 층의 오류는 잘못된 문장을 낳지만, 두 번째 층의 오류는 **실행된 명령**을 낳는다. 그리고 실행은 되돌릴 수 없다.
+두 번째 레이어가 더 위험하다. 첫 번째 층의 오류는 잘못된 문장을 낳지만, 두 번째 층의 오류는 **실행된 명령**을 낳는다. 그리고 실행은 되돌릴 수 없다.
 
 ### 6.2 LLM은 엑셀이지 오라클이 아니다
 

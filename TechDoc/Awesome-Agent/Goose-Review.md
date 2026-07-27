@@ -1,3 +1,33 @@
+<!--
+---
+title: "Goose 리뷰 — Linux Foundation AAIF 산하 오픈소스 AI 에이전트"
+title_en: "Goose Review — Open-Source AI Agent under Linux Foundation AAIF"
+subtitle: "범용 로컬 에이전트 런타임. 거버넌스 중립, Apache 2.0, 데스크톱·CLI·API"
+description: "Block에서 시작해 Linux Foundation AAIF로 이관된 goose의 컨셉, 권한 모드, 장단점, OpenWorker·OpenHands 대비 포지셔닝, 설치·도입 체크리스트 TechDoc."
+abstract: |
+  goose는 Block에서 시작해 2026-04-07 Linux Foundation Agentic AI Foundation에 기증된 Apache 2.0 로컬 AI 에이전트다.
+  Rust 구현, 데스크톱·CLI·임베더블 API, 70+ MCP 확장, ACP 지원이 핵심이다.
+  기본 권한 모드가 Completely Autonomous이며 서브에이전트는 자율 모드에서만 동작한다 — 성능을 쓰려면 승인 게이트를 꺼야 하는 구조적 트레이드오프가 가장 큰 유의점이다.
+summary_for_ai: |
+  Third-party tech review of github.com/aaif-goose/goose (51.7k stars, ~5130 commits as of ~2026-07-27).
+  Apache 2.0, AAIF/Linux Foundation governance. Rust Cargo workspace. Modes: Completely Autonomous (default), Smart Approval, Manual Approval, Chat Only.
+  Subagents only in autonomous mode. Closest peers: OpenWorker (knowledge work), OpenHands (orchestration).
+  Not investment advice. Verify current stars and install paths before citing.
+date: 2026-07-27
+updated: 2026-07-27
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags: [goose, AAIF, Linux Foundation, AI Agent, LLM, MCP, ACP, 오픈소스]
+keywords: ["goose AI agent", "AAIF goose", "Linux Foundation agent", "local AI agent", "MCP extensions", "Goose vs OpenWorker"]
+group: llm-agents
+featured: true
+featured_rank: 6
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+-->
+
 # Goose, Linux Foundation 산하로 이관된 오픈소스 AI 에이전트
 
 | 항목 | 내용 |
@@ -96,7 +126,7 @@ Smart Approval은 MCP 표준의 `ToolAnnotations.read_only_hint` 필드를 읽�
 | 개발자 편향 | 문서, 퀵스타트, 레시피 예제 대부분이 코딩 시나리오다. 범용 에이전트를 표방하지만 비개발자 온보딩 경로는 약하다 |
 | 산출물 지향 아님 | 문서나 스프레드시트를 파일로 뱉는 것은 확장과 프롬프트에 달려 있다. 결과물 포맷을 제품 차원에서 보장하지 않는다 |
 | 컴플라이언스 미비 | SOC 2, HIPAA 등 인증이 없다. 규제 산업에서 인증 벤더를 요구하는 경우 그 자체로 탈락 조건 |
-| 비용 관리 | BYOK 구조라 앱은 무료지만 모델 요금은 전액 사용자 부담. 서브에이전트 병렬 스폰은 토큰 소모를 급격히 늘린다. 프로바이더 측 한도 설정이 사실상 필수 |
+| 비용 관리 | BYOK 구조라 앱은 무료지만 모델 요금은 전액 사용자 부담. 서브에이전트 병렬 스폰은 토큰 소모를 급격히 늘린다. 프로바이더 콘솔에서 한도 설정이 사실상 필수 |
 | 유지보수 적체 | 오픈 이슈 225건, 오픈 PR 180건. 활발함의 지표인 동시에 리뷰 병목의 지표이기도 하다 |
 | 소스 빌드 부담 | Rust 워크스페이스 전체 빌드는 시간과 디스크를 크게 소모한다. 바이너리 배포 사용이 사실상 기본 경로 |
 | 온보딩 경로의 상업적 유인 | 퀵스타트가 Tetrate Agent Router를 권장 경로로 안내하고 무료 크레딧을 제시한다. 재단 프로젝트로서 중립성 문제라기보다는, 기본 경로가 특정 라우팅 서비스를 경유한다는 점을 인지하고 시작할 필요가 있다 |
