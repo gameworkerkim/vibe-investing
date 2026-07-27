@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MyIP 프로젝트 기술 분석 — VibeQuant</title>
+  <meta name="description" content="MyIP는 IP 주소 조회를 비롯한 여러 네트워크 진단 도구를 하나의 웹 애플리케이션으로 묶은 오픈소스 프로젝트다. 유사한 도구를 개별적으로 설치·운영해야 하는 번거로움을 줄이는 것이 핵심 가치 제안이다." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/my-ip-my-ip/" />
+  <meta property="og:title" content="MyIP 프로젝트 기술 분석" />
+  <meta property="og:description" content="MyIP는 IP 주소 조회를 비롯한 여러 네트워크 진단 도구를 하나의 웹 애플리케이션으로 묶은 오픈소스 프로젝트다. 유사한 도구를 개별적으로 설치·운영해야 하는 번거로움을 줄이는 것이 핵심 가치 제안이다." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/my-ip-my-ip/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MyIP 프로젝트 기술 분석","description":"MyIP는 IP 주소 조회를 비롯한 여러 네트워크 진단 도구를 하나의 웹 애플리케이션으로 묶은 오픈소스 프로젝트다. 유사한 도구를 개별적으로 설치·운영해야 하는 번거로움을 줄이는 것이 핵심 가치 제안이다.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/my-ip-my-ip/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MY-IP/MY-IP.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/my-ip-my-ip/","datePublished":"2026-07-27","dateModified":"2026-07-27","inLanguage":"ko","keywords":"기타 기술문서, MY-IP"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"MyIP 프로젝트 기술 분석","item":"https://tech.vibequant.cc/tech/my-ip-my-ip/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 기타 기술문서</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 기술문서</p>
+        <h1>MyIP 프로젝트 기술 분석</h1>
+        <p class="article-dates"><time datetime="2026-07-27">발행 2026.07.27</time> · 주제 기타 기술문서 · MY-IP</p>
+        
+        <p class="lede">MyIP는 IP 주소 조회를 비롯한 여러 네트워크 진단 도구를 하나의 웹 애플리케이션으로 묶은 오픈소스 프로젝트다. 유사한 도구를 개별적으로 설치·운영해야 하는 번거로움을 줄이는 것이 핵심 가치 제안이다.</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. 개요</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>프로젝트명</td>
+<td>MyIP</td>
+</tr>
+<tr>
+<td>개발자</td>
+<td>jason5ng32</td>
+</tr>
+<tr>
+<td>저장소</td>
+<td>github.com/jason5ng32/MyIP</td>
+</tr>
+<tr>
+<td>기술 스택</td>
+<td>Node.js 기반 웹 애플리케이션</td>
+</tr>
+<tr>
+<td>목적</td>
+<td>IP 분석, 네트워크 진단, 프라이버시 테스트, 연결성 분석 등 다수의 네트워크·보안 유틸리티를 단일 웹 인터페이스로 통합</td>
+</tr>
+<tr>
+<td>GitHub Star</td>
+<td>10.1k</td>
+</tr>
+</tbody></table>
+<p>MyIP는 IP 주소 조회를 비롯한 여러 네트워크 진단 도구를 하나의 웹 애플리케이션으로 묶은 오픈소스 프로젝트다. 유사한 도구를 개별적으로 설치·운영해야 하는 번거로움을 줄이는 것이 핵심 가치 제안이다.</p>
+<hr>
+<h2>2. 주요 기능</h2>
+<p>MyIP는 다음과 같은 10여 종의 네트워크 도구를 단일 인터페이스에서 제공한다.</p>
+<ul>
+<li>IP 주소 조회</li>
+<li>지리정보(Geolocation) 확인</li>
+<li>DNS 누출(Leak) 테스트</li>
+<li>WebRTC 연결 검사</li>
+<li>속도 테스트(Speed Test)</li>
+<li>MTR 테스트</li>
+<li>WHOIS 검색</li>
+<li>MAC 주소 조회</li>
+<li>브라우저 핑거프린트 확인</li>
+<li>검열(Censorship) 차단 확인</li>
+</ul>
+<hr>
+<h2>3. 장점</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>기능 통합성</td>
+<td>10여 가지 네트워크 도구를 단일 인터페이스에서 제공하여 개별 도구 설치 부담을 줄임</td>
+</tr>
+<tr>
+<td>배포 방식 다양성</td>
+<td>Node.js 네이티브 환경과 Docker 배포를 모두 지원</td>
+</tr>
+<tr>
+<td>PWA 및 다크 모드</td>
+<td>프로그레시브 웹 앱(PWA) 설치 지원, 시스템 설정 연동 다크/라이트 모드 자동 전환</td>
+</tr>
+<tr>
+<td>다국어 지원</td>
+<td>한국어, 영어, 중국어, 프랑스어, 터키어 지원</td>
+</tr>
+<tr>
+<td>경량 리소스 사용</td>
+<td>낮은 메모리 점유율로 노후 하드웨어에서도 구동 가능</td>
+</tr>
+<tr>
+<td>커뮤니티 활성도</td>
+<td>GitHub 10.1k 스타 보유, 지속적 업데이트 진행 중</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 단점</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MaxMind DB 의존성</td>
+<td>IP 지리정보 및 ASN 조회에 MaxMind GeoLite2 데이터베이스가 필수. 라이선스 문제로 저장소에 미포함되어 있어 별도 준비 및 환경 변수 설정 필요</td>
+</tr>
+<tr>
+<td>트래픽 증가 시 성능 저하</td>
+<td>공개 데모 서버(ipcheck.ing)는 사용자 증가 시 응답 지연 발생 가능. 개발자도 이를 인지하고 자체 배포를 권장</td>
+</tr>
+<tr>
+<td>AI 생성 코드 비중</td>
+<td>개발자가 코드의 약 70퍼센트를 ChatGPT로 작성했다고 공개. 코드 품질 및 유지보수 측면에서 검토 필요</td>
+</tr>
+<tr>
+<td>초기 설정 복잡성</td>
+<td>MaxMind 계정 생성, API 키 발급, 환경 변수 설정 등 초기 구성 과정이 다소 복잡</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. 리스크 요인</h2>
+<table>
+<thead>
+<tr>
+<th>리스크</th>
+<th>상세 내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>데이터 프라이버시</td>
+<td>자체 호스팅 없이 공개 데모 사용 시 사용자의 IP 및 네트워크 정보가 제3자 서버를 경유해 처리됨</td>
+</tr>
+<tr>
+<td>외부 서비스 의존성</td>
+<td>IPInfo.io, Google Maps, Cloudflare 등 외부 API에 의존하여 해당 서비스 장애 또는 정책 변경 시 기능 영향 가능</td>
+</tr>
+<tr>
+<td>MaxMind 정책 변경 가능성</td>
+<td>GeoLite2는 무료 제공되나 상업적 사용 제한 또는 향후 정책 변경 가능성 존재</td>
+</tr>
+<tr>
+<td>보안 설정 미흡 위험</td>
+<td>자체 호스팅 시 레이트 리미팅, 도메인 제한, 로깅 등 보안 설정을 적절히 구성하지 않을 경우 취약점 발생 가능</td>
+</tr>
+<tr>
+<td>개인 프로젝트로서의 한계</td>
+<td>개발자가 일반 제품 매니저 출신이며 Vue.js를 처음 학습하며 개발한 프로젝트임을 공개. 엔터프라이즈급 지원 및 장기 유지보수 보장 부족 가능성</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. 유사 프로젝트 비교</h2>
+<table>
+<thead>
+<tr>
+<th>프로젝트</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ip.skk.moe</td>
+<td>MyIP의 영감이 된 원본 IP 정보 조회 서비스. 더 단순한 기능 제공</td>
+</tr>
+<tr>
+<td>N28</td>
+<td>미니멀리스트·프라이버시 중심 네트워크 대시보드. IP 확인, 속도 테스트, WebRTC 누출 감지 등 제공</td>
+</tr>
+<tr>
+<td>ip.me / whatismyip.cc</td>
+<td>IP 주소 확인에 특화된 단순 웹 서비스</td>
+</tr>
+<tr>
+<td>aixiao0621/MyIP, rongzhiy/MyIP</td>
+<td>동일 명칭의 포크(fork) 프로젝트. 기본 IP 확인, DNS 누출, WebRTC 검사 기능 제공</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. Getting Started</h2>
+<h3>7.1 Node.js 환경 배포</h3>
+<pre><code class="language-bash"># 1. Node.js 설치 확인
+
+# 2. 저장소 클론
+git clone https://github.com/jason5ng32/MyIP.git
+
+# 3. pnpm 설치 및 빌드
+npm install -g pnpm
+pnpm install &amp;&amp; pnpm run build
+
+# 4. 실행 (기본 포트: 18966)
+pnpm start
+</code></pre>
+<h3>7.2 Docker 배포</h3>
+<pre><code class="language-bash">docker run -d -p 18966:18966 --name myip --restart always jason5ng32/myip:latest
+</code></pre>
+<h3>7.3 필수 환경 변수 (MaxMind 설정)</h3>
+<table>
+<thead>
+<tr>
+<th>환경 변수</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>MAXMIND_ACCOUNT_ID</code></td>
+<td>MaxMind 계정 ID</td>
+</tr>
+<tr>
+<td><code>MAXMIND_LICENSE_KEY</code></td>
+<td>MaxMind 라이선스 키</td>
+</tr>
+<tr>
+<td><code>MAXMIND_CITY_DB_PATH</code></td>
+<td>City DB 파일 경로</td>
+</tr>
+<tr>
+<td><code>MAXMIND_ASN_DB_PATH</code></td>
+<td>ASN DB 파일 경로</td>
+</tr>
+</tbody></table>
+<p>MaxMind GeoLite2 데이터베이스는 라이선스 문제로 저장소에 포함되어 있지 않으므로, MaxMind 사이트에서 직접 다운로드하거나 환경 변수를 통해 API로 자동 다운로드하도록 구성해야 한다.</p>
+<h3>7.4 온라인 데모</h3>
+<ul>
+<li>URL: <a href="https://ipcheck.ing">https://ipcheck.ing</a></li>
+<li>별도 설치 없이 전체 기능 테스트 가능</li>
+</ul>
+<hr>
+<h2>8. 종합 평가</h2>
+<p>MyIP는 기능 통합성과 배포 편의성이 뛰어난 오픈소스 네트워크 진단 도구다. 다만 MaxMind DB 의존성으로 인한 초기 설정 복잡성, 코드의 상당 부분이 AI로 생성되었다는 점, 개인 프로젝트로서의 장기 유지보수 불확실성은 도입 전 고려해야 할 요소다. 프라이버시가 중요한 용도라면 공개 데모보다 자체 호스팅이 권장된다.</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/MY-IP/MY-IP.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
