@@ -42,7 +42,7 @@ export const COLUMN_GROUP_FALLBACK = { id: "other", title_ko: "기타", title_en
 
 export const TECH_GROUP_RULES = [
   { id: "cloud-free", title_ko: "클라우드 · Free tier", title_en: "Cloud · Free tier", match: [/cloudflare/i, /cloudeflare/i, /web-analytics/i, /free_hosting/i, /freeemail/i, /oraclecloud/i, /vercel/i, /neon/i, /turso/i, /sqlite/i, /upstash/i, /serverless_redis/i, /paas_railway/i, /aws\//i, /github_cdn/i, /python_saas/i, /\/seo\//i, /seo-ai-readability/i] },
-  { id: "llm-agents", title_ko: "LLM · 에이전트", title_en: "LLM · Agents", match: [/llm/i, /claude/i, /grok/i, /minimax/i, /minicpm/i, /bonsai/i, /tencent/i, /local_llm/i, /ollama/i, /qwen/i, /effective_llm/i, /agent-friendly/i, /ai-agent-framework/i, /awesome-llm-apps/i, /awesome-agent/i, /openworker/i, /opencodemcp/i, /opencodex/i, /llm_proxy/i, /mcp/i, /deepwiki/i, /openwiki/i, /google_code_wiki/i, /zcode/i, /headroom/i, /caveman/i, /quivr/i] },
+  { id: "llm-agents", title_ko: "LLM · 에이전트", title_en: "LLM · Agents", match: [/llm/i, /claude/i, /grok/i, /minimax/i, /minicpm/i, /bonsai/i, /tencent/i, /local_llm/i, /ollama/i, /qwen/i, /effective_llm/i, /agent-friendly/i, /ai-agent-framework/i, /awesome-llm-apps/i, /awesome-agent/i, /openworker/i, /ai-open-weights/i, /solar-open/i, /solar open/i, /opencodemcp/i, /opencodex/i, /llm_proxy/i, /mcp/i, /deepwiki/i, /openwiki/i, /google_code_wiki/i, /zcode/i, /headroom/i, /caveman/i, /quivr/i] },
   { id: "quant-data", title_ko: "퀀트 · 데이터", title_en: "Quant · Data", match: [/qlib/i, /gs_quant/i, /timesfm/i, /pyodide/i, /python_pyodide/i, /robinhood/i, /\/toss\//i, /toss-openapi/i] },
   { id: "security", title_ko: "보안", title_en: "Security", match: [/security/i, /claw/i, /secret scanning/i] },
   { id: "ui-tools", title_ko: "UI · 개발도구", title_en: "UI · Dev tools", match: [/niceui/i, /nicegui/i, /ui_opensource/i, /astryx/i, /bigfive/i, /orca/i, /loop/i, /china-physical/i] },
@@ -83,6 +83,9 @@ export const FEATURED_COLUMN_PATHS = [
 
 /** TechDoc recommended — order = display order */
 export const FEATURED_TECH_PATHS = [
+  "AI-Open-Weights-Model/KIMI-K3-GettingStart.md",
+  "AI-Open-Weights-Model/DeepSeek-GettingStart.md",
+  "AI-Open-Weights-Model/Solar-Open2-Getting-Start.md",
   "Awesome-Agent/readme.md",
   "Awesome-Agent/Openworker-Review.md",
   "Awesome-Agent/Goose-Review.md",

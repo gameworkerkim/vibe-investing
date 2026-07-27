@@ -1,3 +1,32 @@
+<!--
+---
+title: "DeepSeek-V4 (Pro/Flash) Getting Started — 오픈 웨이트 가이드"
+title_en: "DeepSeek-V4 (Pro/Flash) Getting Started — Open-Weight Guide"
+subtitle: "1M 컨텍스트 MoE · MIT 라이선스 · Think High/Max · vLLM/SGLang 배포"
+description: "DeepSeek-V4 Pro(1.6T-A49B)·Flash(284B-A13B) 공식 스펙·벤치마크·encoding_dsv4·vLLM/DSpark·Claude Code 연동·한국어 제3자 평가·도입 체크리스트 TechDoc."
+abstract: |
+  DeepSeek-V4는 2026년 4월 말 공개된 오픈 웨이트 MoE 패밀리(Pro 1.6T/Flash 284B, 1M context, MIT).
+  CSA+HCA 하이브리드 어텐션으로 KV 캐시 10%. Non-think/Think High/Think Max 3단 추론 모드.
+  본 문서는 v1 정정, Flash 2×H200·Pro 8×H200 하드웨어, API·자체 호스팅, 한·일 사업 시나리오를 정리한다.
+summary_for_ai: |
+  Hands-on TechDoc for DeepSeek-V4 Pro and Flash open-weight MoE models.
+  MIT license, 1M context, encoding_dsv4 (no Jinja template), vLLM v0.23+, DSpark serving.
+  Third-party Korean benchmarks avg 84.9. Preview status — verify GA checkpoints.
+date: 2026-07-27
+updated: 2026-07-27
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags: [DeepSeek V4, DeepSeek, Open Weight, MoE, LLM, vLLM, 한국어]
+keywords: ["DeepSeek V4", "DeepSeek-V4-Flash", "DeepSeek-V4-Pro", "오픈 웨이트", "1M context", "MIT license", "CSA HCA", "Agentic LLM"]
+group: llm-agents
+featured: true
+featured_rank: 2
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+-->
+
 # DeepSeek-V4 (Pro 1.6T-A49B / Flash 284B-A13B) 프로젝트 가이드 — 최종 검증판
 
 > **문서 버전** v2.0 (2026-07-27) · **검증 기준** DeepSeek 공식 HF 모델 카드 / DeepSeek API Docs / 기술 보고서(arXiv 2606.19348)

@@ -1,3 +1,33 @@
+<!--
+---
+title: "Solar Open 2 (250B-A15B) Getting Started — 업스테이지 오픈 웨이트 가이드"
+title_en: "Solar Open 2 (250B-A15B) Getting Started — Upstage Open-Weight Guide"
+subtitle: "Agent용 Hybrid MoE · 1M 컨텍스트 · H200 온프레미스 배포"
+description: "업스테이지 Solar Open 2(250B-A15B) 공식 스펙·벤치마크·Docker/vLLM 설치·양자화·에이전트 도입 체크리스트를 정리한 TechDoc. Chat이 아닌 Agent 설계 전제와 검증판 정정 사항 포함."
+abstract: |
+  Solar Open 2는 업스테이지가 2026-07-22 공개한 Hybrid-Attention MoE 오픈 웨이트 모델(총 250B, 활성 15B/토큰, 1M 컨텍스트)이다.
+  Agentic Use(롱호라이즌·롱컨텍스트·도구 호출)와 온프레미스 추론 비용(H200×4 BF16 / 양자화 시 ×2)을 동시에 겨냥한다.
+  본 문서는 v1 오류 정정, 아키텍처·벤치마크·경쟁 모델(MiMo-V2.5 등), Docker/Transformers 실행, 도입 전 점검 항목을 공식 모델 카드·기술 블로그 기준으로 정리한다.
+summary_for_ai: |
+  Hands-on TechDoc for Upstage Solar Open 2 (250B-A15B), released 2026-07-22.
+  Hybrid-Attention MoE, NoPE + linear attention, 1M context, Upstage Solar License.
+  Benchmarks are vendor-reported; third-party verification still thin. Not investment advice.
+  Verify current HF card, Docker flags, and quantization notes before citing.
+date: 2026-07-27
+updated: 2026-07-27
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags: [Solar Open 2, Upstage, Open Weight, MoE, LLM, Agent, vLLM, 한국어]
+keywords: ["Solar Open 2", "250B-A15B", "업스테이지", "오픈 웨이트", "Hybrid Attention MoE", "1M context", "H200", "Agentic LLM"]
+group: llm-agents
+featured: true
+featured_rank: 3
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+-->
+
 # Solar Open 2 (250B-A15B) 프로젝트 가이드 — 최종 검증판
 
 > **문서 버전** v2.0 (2026-07-27) · **검증 기준** Upstage 공식 모델 카드 / 기술 블로그(2026-07-22) / 국내외 보도

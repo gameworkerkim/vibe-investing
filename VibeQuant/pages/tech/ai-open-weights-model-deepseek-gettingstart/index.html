@@ -1,0 +1,2169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>DeepSeek-V4 (Pro/Flash) Getting Started — 오픈 웨이트 가이드 — VibeQuant</title>
+  <meta name="description" content="DeepSeek-V4 Pro(1.6T-A49B)·Flash(284B-A13B) 공식 스펙·벤치마크·encoding_dsv4·vLLM/DSpark·Claude Code 연동·한국어 제3자 평가·도입 체크리스트 TechDoc." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/ai-open-weights-model-deepseek-gettingstart/" />
+  <meta property="og:title" content="DeepSeek-V4 (Pro/Flash) Getting Started — 오픈 웨이트 가이드" />
+  <meta property="og:description" content="DeepSeek-V4 Pro(1.6T-A49B)·Flash(284B-A13B) 공식 스펙·벤치마크·encoding_dsv4·vLLM/DSpark·Claude Code 연동·한국어 제3자 평가·도입 체크리스트 TechDoc." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/ai-open-weights-model-deepseek-gettingstart/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/ai-open-weights-model-deepseek-gettingstart/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/ai-open-weights-model-deepseek-gettingstart-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/ai-open-weights-model-deepseek-gettingstart-ja/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/ai-open-weights-model-deepseek-gettingstart/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"DeepSeek-V4 (Pro/Flash) Getting Started — 오픈 웨이트 가이드","description":"DeepSeek-V4 Pro(1.6T-A49B)·Flash(284B-A13B) 공식 스펙·벤치마크·encoding_dsv4·vLLM/DSpark·Claude Code 연동·한국어 제3자 평가·도입 체크리스트 TechDoc.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/ai-open-weights-model-deepseek-gettingstart/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AI-Open-Weights-Model/DeepSeek-GettingStart.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/ai-open-weights-model-deepseek-gettingstart/","datePublished":"2026-07-27","dateModified":"2026-07-27","inLanguage":"ko","keywords":"LLM · 에이전트, AI-Open-Weights-Model"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"DeepSeek-V4 (Pro/Flash) Getting Started — 오픈 웨이트 가이드","item":"https://tech.vibequant.cc/tech/ai-open-weights-model-deepseek-gettingstart/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>DeepSeek-V4 (Pro/Flash) Getting Started — 오픈 웨이트 가이드</h1>
+        <p class="article-dates"><time datetime="2026-07-27">발행 2026.07.27</time> · 주제 LLM · 에이전트 · AI-Open-Weights-Model</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn is-active" href="../../tech/ai-open-weights-model-deepseek-gettingstart/" data-lang="KR" aria-current="true">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/ai-open-weights-model-deepseek-gettingstart-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/ai-open-weights-model-deepseek-gettingstart-ja/" data-lang="JP">日本語</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">DeepSeek-V4 Pro(1.6T-A49B)·Flash(284B-A13B) 공식 스펙·벤치마크·encoding_dsv4·vLLM/DSpark·Claude Code 연동·한국어 제3자 평가·도입 체크리스트 TechDoc.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>문서 버전</strong>v2.0 (2026-07-27) ·<strong>검증 기준</strong> DeepSeek 공식 HF 모델 카드 / DeepSeek API Docs / 기술 보고서(arXiv 2606.19348)
+<strong>범위 변경</strong>v1은 Flash 단독 문서였으나, V4는<strong>Pro/Flash 2종 패밀리 릴리스</strong>이므로 양쪽을 함께 다룬다. 아키텍처가 동일해 분리 서술이 오히려 오해를 만든다.
+<strong>상태</strong>공식 모델 카드는 스스로를<strong>preview version</strong>으로 표기한다. GA 체크포인트는 별도다.</p>
+</blockquote>
+<hr>
+<h2>0. v1 대비 주요 수정 사항</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>항목</th>
+<th>v1 기술</th>
+<th>정정 내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Expert 구성</td>
+<td>&quot;256 routed + 1 shared&quot;</td>
+<td><strong>공식 모델 카드에 expert 수 미공개.</strong> 출처 불명 수치이므로 삭제</td>
+</tr>
+<tr>
+<td>2</td>
+<td>아키텍처</td>
+<td>&quot;정적 토큰ID→전문가ID 해시 테이블&quot;</td>
+<td><strong>공식 3대 업그레이드에 없음</strong> (Hybrid Attention / mHC / Muon). 사전 유출 정보로 추정, 삭제</td>
+</tr>
+<tr>
+<td>3</td>
+<td>어텐션</td>
+<td>&quot;하이브리드 로컬 + 장거리&quot;</td>
+<td>정확히는 <strong>CSA(Compressed Sparse Attention) + HCA(Heavily Compressed Attention)</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td>Flash 하드웨어</td>
+<td>&quot;FP8 H100 2장 / INT4 H100 1장&quot;</td>
+<td><strong>틀림.</strong>Instruct는 FP4+FP8 혼합 약 158GB. 1M 컨텍스트 포함 약 170~175GB →<strong>2×H200 또는 4×A100</strong>. 2×H100(160GB)은 부족</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Flash 메모리</td>
+<td>&quot;FP8 약 500GB, INT4 후 141~155GB&quot;</td>
+<td>Flash에 해당하지 않는 수치. §2.1과 자기모순</td>
+</tr>
+<tr>
+<td>6</td>
+<td>권장 구성</td>
+<td>&quot;16GPU 머신&quot;</td>
+<td>Flash 기준으로 과대. 16GPU는 <strong>Pro 멀티노드</strong> 조건</td>
+</tr>
+<tr>
+<td>7</td>
+<td>코딩 성능</td>
+<td>&quot;Flash가 코딩 최상위&quot;</td>
+<td>모델 카드가 그 표현을 붙인 대상은 <strong>V4-Pro-Max</strong>. Flash-Max는 LiveCodeBench 91.6(Pro-Max 93.5)</td>
+</tr>
+<tr>
+<td>8</td>
+<td>채팅 템플릿</td>
+<td><code>apply_chat_template</code> 예제</td>
+<td><strong>모델 카드가 Jinja 템플릿 미제공을 명시.</strong> <code>encoding_dsv4</code> 사용 필수 — v1 코드는 동작하지 않음</td>
+</tr>
+<tr>
+<td>9</td>
+<td>샘플링</td>
+<td>temperature 0.7 / top_p 0.9</td>
+<td>공식 권장은 <strong>1.0 / 1.0</strong></td>
+</tr>
+<tr>
+<td>10</td>
+<td>vLLM</td>
+<td><code>--enforce-eager</code></td>
+<td>CUDA 그래프를 끄므로 프로덕션 처리량이 크게 떨어짐. 제거</td>
+</tr>
+<tr>
+<td>11</td>
+<td>추론 모드</td>
+<td>미기재</td>
+<td><strong>Non-think / Think High / Think Max 3단 모드</strong>가 V4 사용의 핵심. 완전 누락</td>
+</tr>
+<tr>
+<td>12</td>
+<td>DSpark</td>
+<td>미기재</td>
+<td>2026-06-27 공개. MTP-1 대비 사용자당 생성속도 <strong>60~85% 향상</strong>, 무손실</td>
+</tr>
+<tr>
+<td>13</td>
+<td>Claude Code</td>
+<td><code>api.deepseek.com/v1</code></td>
+<td>오류. Anthropic 호환 엔드포인트는 <strong><code>/anthropic</code></strong>, 모델 ID는 <code>deepseek-v4-pro[1m]</code></td>
+</tr>
+<tr>
+<td>14</td>
+<td>레거시 API</td>
+<td>미기재</td>
+<td><code>deepseek-chat</code>/<code>deepseek-reasoner</code>는 <strong>2026-07-24 15:59 UTC 종료</strong> (이미 경과)</td>
+</tr>
+<tr>
+<td>15</td>
+<td>한국어</td>
+<td>&quot;벤치마크 미공개&quot;</td>
+<td>DeepSeek 자체 공개는 없으나 <strong>제3자(업스테이지) 평가에서 한국어 평균 84.9</strong> — 한국 사업 판단을 바꾸는 수치</td>
+</tr>
+<tr>
+<td>16</td>
+<td>GGUF</td>
+<td>표를 확정 정보처럼 기술</td>
+<td>커뮤니티 빌드이며 공식 체크포인트 대비 <strong>미검증</strong>. 단정 표현 완화</td>
+</tr>
+<tr>
+<td>17</td>
+<td>학습 스펙</td>
+<td>부분 기재</td>
+<td>32T 토큰 / Muon optimizer / 2단계 post-training(도메인 전문가 개별 육성 → on-policy distillation 통합)</td>
+</tr>
+<tr>
+<td>18</td>
+<td>출력 한도</td>
+<td>미기재</td>
+<td>최대 출력 <strong>384K 토큰</strong>. Think Max는 컨텍스트 창 <strong>384K 이상</strong> 권장</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. 프로젝트 배경</h2>
+<p><strong>DeepSeek-V4</strong>는 중국 DeepSeek가 2026년 4월 말 공개한 오픈 웨이트 MoE 모델 패밀리다. 기술 보고서 제목이 설계 의도를 그대로 드러낸다 — <em>Towards Highly Efficient Million-Token Context Intelligence</em>. <strong>1M 토큰 컨텍스트를 경제적으로 만드는 것</strong>이 목표다.</p>
+<blockquote>
+<p><strong>공개일 주의</strong>: 소스마다 4월 22·23·24·27일로 엇갈린다. HF 논문 게재는 4월 26일. 문서에서는 &quot;2026년 4월 말&quot;로 통일하고, 정확한 날짜가 필요하면 DeepSeek 공식 채널을 확인할 것.</p>
+</blockquote>
+<h3>1.1 3대 아키텍처 업그레이드 (공식)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Hybrid Attention</strong></td>
+<td>CSA(Compressed Sparse Attention) + HCA(Heavily Compressed Attention) 결합. 1M 컨텍스트에서 V4-Pro는<strong>V3.2 대비 단일 토큰 추론 FLOPs 27%, KV 캐시 10%</strong></td>
+</tr>
+<tr>
+<td><strong>mHC</strong></td>
+<td>Manifold-Constrained Hyper-Connections. 잔차 연결을 강화해 층간 신호 전파 안정성을 높이면서 표현력 유지</td>
+</tr>
+<tr>
+<td><strong>Muon Optimizer</strong></td>
+<td>수렴 속도와 학습 안정성 개선</td>
+</tr>
+</tbody></table>
+<p>V3.2의 MLA(Multi-head Latent Attention)를 대체한 것이 CSA+HCA다. 어텐션이 시퀀스 길이에 제곱으로 증가하는 문제를 압축으로 우회한다는 발상이며, <strong>KV 캐시를 10분의 1로 줄인 것이 이 모델의 경제성 전부</strong>라고 봐도 무방하다.</p>
+<h3>1.2 학습 파이프라인</h3>
+<ul>
+<li>사전학습: <strong>32T 이상</strong>의 고품질 토큰</li>
+<li>사후학습 2단계:<ol>
+<li>도메인별 전문가 모델을 <strong>개별 육성</strong> (SFT + GRPO 기반 RL)</li>
+<li><strong>on-policy distillation</strong>으로 단일 모델에 통합</li>
+</ol>
+</li>
+</ul>
+<p>이 &quot;개별 육성 후 통합&quot; 구조가 V4의 도메인 편차가 작은 이유로 보인다.</p>
+<h3>1.3 모델 라인업</h3>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>총 파라미터</th>
+<th>활성</th>
+<th>컨텍스트</th>
+<th>정밀도</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek-V4-Flash-Base</td>
+<td>284B</td>
+<td>13B</td>
+<td>1M</td>
+<td>FP8 Mixed</td>
+</tr>
+<tr>
+<td>DeepSeek-V4-Flash</td>
+<td>284B</td>
+<td>13B</td>
+<td>1M</td>
+<td>FP4 + FP8 Mixed*</td>
+</tr>
+<tr>
+<td>DeepSeek-V4-Pro-Base</td>
+<td>1.6T</td>
+<td>49B</td>
+<td>1M</td>
+<td>FP8 Mixed</td>
+</tr>
+<tr>
+<td>DeepSeek-V4-Pro</td>
+<td>1.6T</td>
+<td>49B</td>
+<td>1M</td>
+<td>FP4 + FP8 Mixed*</td>
+</tr>
+</tbody></table>
+<p>* MoE expert 파라미터는 FP4, 나머지 대부분은 FP8</p>
+<p>파생 체크포인트: <code>DeepSeek-V4-Pro-DSpark</code>, <code>DeepSeek-V4-Flash-DSpark</code> (§2.5), <code>nvidia/DeepSeek-V4-Pro-NVFP4</code></p>
+<h3>1.4 추론 모드 (V4 사용의 핵심)</h3>
+<table>
+<thead>
+<tr>
+<th>모드</th>
+<th>특성</th>
+<th>용도</th>
+<th>응답 형식</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Non-think</strong></td>
+<td>빠른 직관적 응답</td>
+<td>일상 업무, 저위험 판단</td>
+<td><code>&lt;/think&gt;</code> 요약</td>
+</tr>
+<tr>
+<td><strong>Think High</strong></td>
+<td>의식적 논리 분석, 느리지만 정확</td>
+<td>복잡한 문제 해결, 계획 수립</td>
+<td><code>&lt;think&gt;</code> 사고 <code>&lt;/think&gt;</code> 요약</td>
+</tr>
+<tr>
+<td><strong>Think Max</strong></td>
+<td>추론을 최대한 확장</td>
+<td>모델 추론 한계 탐색</td>
+<td>특수 시스템 프롬프트 + <code>&lt;think&gt;</code> 사고 <code>&lt;/think&gt;</code> 요약</td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>벤치마크</th>
+<th>Flash Non-Think</th>
+<th>Flash Max</th>
+<th>Pro Non-Think</th>
+<th>Pro Max</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>HLE</td>
+<td>8.1</td>
+<td>34.8</td>
+<td>7.7</td>
+<td><strong>37.7</strong></td>
+</tr>
+<tr>
+<td>LiveCodeBench</td>
+<td>55.2</td>
+<td>91.6</td>
+<td>56.8</td>
+<td><strong>93.5</strong></td>
+</tr>
+<tr>
+<td>Apex</td>
+<td>1.0</td>
+<td>33.0</td>
+<td>0.4</td>
+<td><strong>38.3</strong></td>
+</tr>
+<tr>
+<td>MRCR 1M</td>
+<td>37.5</td>
+<td>78.7</td>
+<td>44.7</td>
+<td><strong>83.5</strong></td>
+</tr>
+<tr>
+<td>BrowseComp</td>
+<td>–</td>
+<td>73.2</td>
+<td>–</td>
+<td><strong>83.4</strong></td>
+</tr>
+</tbody></table>
+<p>Non-think와 Max의 격차가 LiveCodeBench에서 36점, Apex에서 32점이다. <strong>모드를 잘못 잡으면 모델을 바꾼 것보다 큰 손실이 난다.</strong></p>
+<hr>
+<h2>2. 장점 (Strengths)</h2>
+<h3>2.1 롱컨텍스트 경제성 — 이 모델의 본질</h3>
+<p>V3.2 대비 KV 캐시 10%, 추론 FLOPs 27%. 1M 컨텍스트를 &quot;지원한다&quot;가 아니라 <strong>감당 가능한 비용으로 지원한다</strong>가 차별점이다. Flash의 1M 전체 KV 캐시가 약 10GB 수준으로, 158GB 가중치 위에 얹어도 2×H200에 들어간다.</p>
+<h3>2.2 MIT 라이선스 — 실질적으로 가장 큰 강점</h3>
+<p>가중치, 파생 모델, 재배포, 상업적 사용 모두 제약이 없다. 모델명 접두사도, 표기 의무도 없다. Upstage Solar License(네이밍·표기 의무)나 Llama 계열 라이선스와 비교하면 <strong>자체 브랜드 제품에 임베딩할 때의 마찰이 0</strong>이다.</p>
+<p>기업 관점에서 이것은 성능 지표보다 중요할 수 있다. 법무 검토가 사실상 필요 없는 유일한 준-프런티어급 모델군이다.</p>
+<h3>2.3 Flash의 자체 호스팅 적합성</h3>
+<p>Flash 284B-A13B는 <strong>FP4+FP8 약 158GB</strong>로, 1M 컨텍스트 KV와 런타임 오버헤드를 더해도 약 170<del>175GB다. 2×H200(282GB)이면 여유 있게 들어간다. Pro 대비 85</del>95% 품질을 훨씬 낮은 인프라로 얻는다는 것이 실무자들의 대체적 평가다.</p>
+<h3>2.4 압도적인 API 가격</h3>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>입력(캐시 미스)</th>
+<th>출력</th>
+<th>입력(캐시 히트)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek-V4-Pro</td>
+<td>$0.435 / 1M</td>
+<td>$0.87 / 1M</td>
+<td>$0.003625 / 1M</td>
+</tr>
+<tr>
+<td>DeepSeek-V4-Flash</td>
+<td>$0.14 / 1M</td>
+<td>$0.28 / 1M</td>
+<td>$0.0028 / 1M</td>
+</tr>
+</tbody></table>
+<p>2026년 5월 22일부로 V4-Pro의 75% 할인이 상시 가격으로 전환됐다. <strong>캐시 히트 입력이 $0.003625/1M</strong>라는 점이 특히 중요하다. 동일 시스템 프롬프트를 반복 사용하는 에이전트 워크로드에서 입력 비용이 사실상 사라진다.</p>
+<h3>2.5 DSpark — 서빙 최적화 (2026-06-27)</h3>
+<p>새 모델이 아니라 <strong>기존 V4 가중치에 draft 모듈을 붙인 것</strong>이다. 공식 카드도 &quot;not a new model&quot;이라고 명시한다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>방식</td>
+<td>병렬 draft backbone + 소형 순차 head, confidence head와 부하 인지 스케줄러</td>
+</tr>
+<tr>
+<td>효과</td>
+<td>MTP-1 대비 <strong>사용자당 생성 속도 60~85% 향상</strong>, 출력 무손실</td>
+</tr>
+<tr>
+<td>처리량</td>
+<td>80 tok/s/user(Flash)·35 tok/s/user(Pro) 조건에서 총 처리량 +51%·+52%</td>
+</tr>
+<tr>
+<td>고속 조건</td>
+<td>120 tok/s/user·50 tok/s/user 조건에서 +661%·+406%</td>
+</tr>
+<tr>
+<td>체크포인트</td>
+<td><code>DeepSeek-V4-Pro-DSpark</code>, <code>DeepSeek-V4-Flash-DSpark</code> (MIT)</td>
+</tr>
+<tr>
+<td>코드</td>
+<td>DeepSpec (github.com/deepseek-ai/DeepSpec, MIT)</td>
+</tr>
+</tbody></table>
+<p><strong>주의</strong>: 60~85%는 naive 디코딩이 아니라 <strong>DeepSeek 자체 MTP-1 대비</strong> 수치다. 다른 서빙 스택에 그대로 이식했을 때 재현된다는 보장은 없고, 2026년 7월 초 기준 독립 재현 보고도 아직 없다.</p>
+<h3>2.6 에이전트 도구 생태계 통합</h3>
+<p>Anthropic 호환 엔드포인트를 공식 제공하므로 Claude Code, OpenCode, Copilot Chat, Cline 등에 프록시 없이 연결된다. <code>awesome-deepseek-agent</code> 저장소에 20종 코딩 도구별 공식 설정이 정리돼 있다.</p>
+<h3>2.7 Base 모델 공개</h3>
+<p><code>V4-Pro-Base</code>, <code>V4-Flash-Base</code>가 함께 공개돼 <strong>continued pretraining이 가능하다.</strong> Instruct만 공개하는 모델과 결정적으로 다른 지점이며, 도메인 특화 모델을 진지하게 만들 계획이라면 이것이 선택 이유가 된다.</p>
+<hr>
+<h2>3. 단점 및 한계 (Weaknesses)</h2>
+<h3>3.1 Pro는 사실상 클러스터 전용</h3>
+<table>
+<thead>
+<tr>
+<th>구성</th>
+<th>요건</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V4-Pro 가중치</td>
+<td>약 862GB (HF 표기 기준) / vLLM 권장 레시피 약 960GB 풋프린트</td>
+</tr>
+<tr>
+<td>단일 노드</td>
+<td><strong>8×H200 141GB (1,128GB)</strong> 또는 B300 8-GPU 노드</td>
+</tr>
+<tr>
+<td>멀티노드</td>
+<td>16×H100 80GB 2노드 + NVLink/InfiniBand</td>
+</tr>
+<tr>
+<td>8×H100 80GB</td>
+<td><strong>불가</strong> (640GB로 부족)</td>
+</tr>
+</tbody></table>
+<p>양자화로 해결되지 않는다. Q4 수준으로 낮춰도 약 430GB이고 1M KV를 더하면 다시 8×H100을 넘는다. <strong>Pro를 워크스테이션 모델로 만드는 양자화 수준은 존재하지 않으며, 조금 작은 클러스터 모델이 될 뿐이다.</strong></p>
+<h3>3.2 채팅 템플릿 부재 — 통합 시 최대 함정</h3>
+<p>모델 카드가 명시한다: <strong>이번 릴리스는 Jinja 형식 채팅 템플릿을 포함하지 않는다.</strong> 대신 <code>encoding</code> 폴더의 Python 스크립트(<code>encoding_dsv4</code>)로 메시지를 인코딩하고 출력을 파싱해야 한다.</p>
+<p>기존 파이프라인이 <code>tokenizer.apply_chat_template()</code>에 의존한다면 그 코드는 동작하지 않는다. vLLM/SGLang은 이를 내부 처리하지만, Transformers 직접 사용이나 커스텀 서빙에서는 <strong>인코딩 레이어를 직접 구현해야 한다.</strong></p>
+<h3>3.3 공식 다국어 정보의 비대칭</h3>
+<p>DeepSeek 공식 벤치마크는 영어·중국어 중심이다(C-Eval, CMMLU, Chinese-SimpleQA). 한국어·일본어 전용 벤치마크는 공개되지 않았다. Base 모델의 MultiLoKo(다국어)가 V3.2 38.7 → Flash 42.2 → Pro 51.1로 개선됐다는 정도가 간접 근거다.</p>
+<p><strong>단, 이것이 &quot;한국어를 못한다&quot;는 뜻은 아니다.</strong> §5 참조.</p>
+<h3>3.4 서빙 스택 제약</h3>
+<table>
+<thead>
+<tr>
+<th>스택</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>vLLM</td>
+<td>네이티브 지원 v0.22.0, 프로덕션 하드닝 v0.23.0</td>
+</tr>
+<tr>
+<td>SGLang</td>
+<td>Day-0 공식 지원. MegaMoE는 <strong>Blackwell(B200/B300/GB200/GB300) 전용</strong></td>
+</tr>
+<tr>
+<td>TGI</td>
+<td>preview 시점 미지원</td>
+</tr>
+<tr>
+<td>Ollama / llama.cpp</td>
+<td><strong>커뮤니티 GGUF만 존재하며 공식 체크포인트 대비 미검증</strong></td>
+</tr>
+</tbody></table>
+<p>또한 2026년 5월 기준 <strong>RTX Pro 6000 Blackwell에서 vLLM Inductor 컴파일 경로 크래시</strong> 보고가 다수 있다. 메모리는 충분해도 소프트웨어 경로가 불안정하므로, 이 카드로 장비를 구성하기 전에 현재 vLLM/드라이버 상태를 반드시 확인할 것.</p>
+<h3>3.5 Flash의 성능 한계 구간</h3>
+<p>Flash-Max는 큰 thinking budget을 주면 Pro에 준하는 추론 성능을 내지만, <strong>순수 지식 작업과 가장 복잡한 에이전트 워크플로우에서는 Pro에 뒤진다.</strong> 모델 카드가 직접 인정하는 부분이다.</p>
+<p>구체적으로 SimpleQA-Verified가 Flash-Max 34.1 vs Pro-Max 57.9로 23.8점 차다. <strong>사실 정확성이 중요한 용도에서 Flash는 위험하다.</strong></p>
+<h3>3.6 지정학·규제 리스크 (호스팅 API 한정)</h3>
+<p>DeepSeek <strong>호스팅 서비스/앱/API</strong>는 다수 국가에서 정부기기 사용이 금지되거나 제한된다. 한국은 2025년 개인정보보호위원회가 국외 이전 문제로 앱 서비스를 일시 중단시키고 시정 권고했으며, 다수 부처·공공기관·금융권이 접속을 차단했다. 미국은 연방 일부 기관과 다수 주정부가 정부기기 사용을 금지했고 관련 법안이 발의됐다. 일본·호주·대만·이탈리아 등도 유사 조치를 취했다.</p>
+<p><strong>핵심 구분</strong>: 이 규제들은 <strong>데이터가 중국으로 전송되는 호스팅 서비스</strong>를 겨냥한 것이지, MIT 라이선스로 배포된 <strong>가중치를 자체 인프라에서 구동하는 행위</strong>를 금지하는 것이 아니다. 이 구분이 §9~11 사업 시나리오 전체의 전제다.</p>
+<p>다만 조직에 따라 &quot;중국산 모델&quot; 자체를 배제하는 조달 정책이 존재할 수 있으므로, 사전 확인이 필요하다.</p>
+<h3>3.7 Preview 상태</h3>
+<p>모델 카드가 스스로를 preview로 표기한다. GA 체크포인트에서 품질 변경 가능성이 있으므로, preview로 확립한 베이스라인은 <strong>평가 기준선으로 쓰되 최종 산출물 품질 보증의 근거로 쓰지 않는 것</strong>이 안전하다.</p>
+<hr>
+<h2>4. 벤치마크 (공식 모델 카드)</h2>
+<h3>4.1 V4-Pro-Max vs 프런티어 모델</h3>
+<table>
+<thead>
+<tr>
+<th>벤치마크</th>
+<th>Opus-4.6 Max</th>
+<th>GPT-5.4 xHigh</th>
+<th>Gemini-3.1-Pro High</th>
+<th>K2.6 Thinking</th>
+<th>GLM-5.1 Thinking</th>
+<th><strong>DS-V4-Pro Max</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>지식·추론</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MMLU-Pro</td>
+<td>89.1</td>
+<td>87.5</td>
+<td><strong>91.0</strong></td>
+<td>87.1</td>
+<td>86.0</td>
+<td>87.5</td>
+</tr>
+<tr>
+<td>SimpleQA-Verified</td>
+<td>46.2</td>
+<td>45.3</td>
+<td><strong>75.6</strong></td>
+<td>36.9</td>
+<td>38.1</td>
+<td>57.9</td>
+</tr>
+<tr>
+<td>Chinese-SimpleQA</td>
+<td>76.4</td>
+<td>76.8</td>
+<td><strong>85.9</strong></td>
+<td>75.9</td>
+<td>75.0</td>
+<td>84.4</td>
+</tr>
+<tr>
+<td>GPQA Diamond</td>
+<td>91.3</td>
+<td>93.0</td>
+<td><strong>94.3</strong></td>
+<td>90.5</td>
+<td>86.2</td>
+<td>90.1</td>
+</tr>
+<tr>
+<td>HLE</td>
+<td>40.0</td>
+<td>39.8</td>
+<td><strong>44.4</strong></td>
+<td>36.4</td>
+<td>34.7</td>
+<td>37.7</td>
+</tr>
+<tr>
+<td>LiveCodeBench</td>
+<td>88.8</td>
+<td>–</td>
+<td>91.7</td>
+<td>89.6</td>
+<td>–</td>
+<td><strong>93.5</strong></td>
+</tr>
+<tr>
+<td>Codeforces (Rating)</td>
+<td>–</td>
+<td>3168</td>
+<td>3052</td>
+<td>–</td>
+<td>–</td>
+<td><strong>3206</strong></td>
+</tr>
+<tr>
+<td>HMMT 2026 Feb</td>
+<td>96.2</td>
+<td><strong>97.7</strong></td>
+<td>94.7</td>
+<td>92.7</td>
+<td>89.4</td>
+<td>95.2</td>
+</tr>
+<tr>
+<td>IMOAnswerBench</td>
+<td>75.3</td>
+<td><strong>91.4</strong></td>
+<td>81.0</td>
+<td>86.0</td>
+<td>83.8</td>
+<td>89.8</td>
+</tr>
+<tr>
+<td>Apex</td>
+<td>34.5</td>
+<td>54.1</td>
+<td><strong>60.9</strong></td>
+<td>24.0</td>
+<td>11.5</td>
+<td>38.3</td>
+</tr>
+<tr>
+<td>Apex Shortlist</td>
+<td>85.9</td>
+<td>78.1</td>
+<td>89.1</td>
+<td>75.5</td>
+<td>72.4</td>
+<td><strong>90.2</strong></td>
+</tr>
+<tr>
+<td><strong>롱컨텍스트</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MRCR 1M</td>
+<td><strong>92.9</strong></td>
+<td>–</td>
+<td>76.3</td>
+<td>–</td>
+<td>–</td>
+<td>83.5</td>
+</tr>
+<tr>
+<td>CorpusQA 1M</td>
+<td><strong>71.7</strong></td>
+<td>–</td>
+<td>53.8</td>
+<td>–</td>
+<td>–</td>
+<td>62.0</td>
+</tr>
+<tr>
+<td><strong>에이전트</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Terminal Bench 2.0</td>
+<td>65.4</td>
+<td><strong>75.1</strong></td>
+<td>68.5</td>
+<td>66.7</td>
+<td>63.5</td>
+<td>67.9</td>
+</tr>
+<tr>
+<td>SWE Verified</td>
+<td><strong>80.8</strong></td>
+<td>–</td>
+<td>80.6</td>
+<td>80.2</td>
+<td>–</td>
+<td>80.6</td>
+</tr>
+<tr>
+<td>SWE Pro</td>
+<td>57.3</td>
+<td>57.7</td>
+<td>54.2</td>
+<td><strong>58.6</strong></td>
+<td>58.4</td>
+<td>55.4</td>
+</tr>
+<tr>
+<td>SWE Multilingual</td>
+<td><strong>77.5</strong></td>
+<td>–</td>
+<td>–</td>
+<td>76.7</td>
+<td>73.3</td>
+<td>76.2</td>
+</tr>
+<tr>
+<td>BrowseComp</td>
+<td>83.7</td>
+<td>82.7</td>
+<td><strong>85.9</strong></td>
+<td>83.2</td>
+<td>79.3</td>
+<td>83.4</td>
+</tr>
+<tr>
+<td>HLE w/ tools</td>
+<td>53.1</td>
+<td>52.0</td>
+<td>51.6</td>
+<td><strong>54.0</strong></td>
+<td>50.4</td>
+<td>48.2</td>
+</tr>
+<tr>
+<td>GDPval-AA (Elo)</td>
+<td>1619</td>
+<td><strong>1674</strong></td>
+<td>1314</td>
+<td>1482</td>
+<td>1535</td>
+<td>1554</td>
+</tr>
+<tr>
+<td>MCPAtlas Public</td>
+<td><strong>73.8</strong></td>
+<td>67.2</td>
+<td>69.2</td>
+<td>66.6</td>
+<td>71.8</td>
+<td>73.6</td>
+</tr>
+<tr>
+<td>Toolathlon</td>
+<td>47.2</td>
+<td><strong>54.6</strong></td>
+<td>48.8</td>
+<td>50.0</td>
+<td>40.7</td>
+<td>51.8</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>MCPAtlas 73.6은 Opus-4.6(73.8)과 사실상 동률</strong>이다. MCP 기반 에이전트에서 오픈 웨이트가 폐쇄형과 붙는 드문 사례다.</li>
+<li><strong>SimpleQA-Verified 57.9는 Gemini(75.6)에 크게 뒤진다.</strong> 사실 조회형 워크로드에는 부적합하며, RAG 없이 쓰면 안 된다.</li>
+<li><strong>롱컨텍스트 실측은 기대에 못 미친다.</strong>1M을 지원하지만 MRCR 1M 83.5, CorpusQA 1M 62.0으로 Opus-4.6(92.9 / 71.7)에 밀린다.<strong>1M을 &quot;넣을 수 있다&quot;와 &quot;정확히 읽는다&quot;는 다르다.</strong></li>
+<li>Apex 38.3은 Gemini(60.9)·GPT-5.4(54.1)와 격차가 크다.</li>
+</ul>
+<h3>4.2 모드별 비교 (Flash vs Pro)</h3>
+<table>
+<thead>
+<tr>
+<th>벤치마크</th>
+<th>Flash Non-Think</th>
+<th>Flash High</th>
+<th>Flash Max</th>
+<th>Pro Non-Think</th>
+<th>Pro High</th>
+<th>Pro Max</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MMLU-Pro</td>
+<td>83.0</td>
+<td>86.4</td>
+<td>86.2</td>
+<td>82.9</td>
+<td>87.1</td>
+<td><strong>87.5</strong></td>
+</tr>
+<tr>
+<td>SimpleQA-Verified</td>
+<td>23.1</td>
+<td>28.9</td>
+<td>34.1</td>
+<td>45.0</td>
+<td>46.2</td>
+<td><strong>57.9</strong></td>
+</tr>
+<tr>
+<td>Chinese-SimpleQA</td>
+<td>71.5</td>
+<td>73.2</td>
+<td>78.9</td>
+<td>75.8</td>
+<td>77.7</td>
+<td><strong>84.4</strong></td>
+</tr>
+<tr>
+<td>GPQA Diamond</td>
+<td>71.2</td>
+<td>87.4</td>
+<td>88.1</td>
+<td>72.9</td>
+<td>89.1</td>
+<td><strong>90.1</strong></td>
+</tr>
+<tr>
+<td>HLE</td>
+<td>8.1</td>
+<td>29.4</td>
+<td>34.8</td>
+<td>7.7</td>
+<td>34.5</td>
+<td><strong>37.7</strong></td>
+</tr>
+<tr>
+<td>LiveCodeBench</td>
+<td>55.2</td>
+<td>88.4</td>
+<td>91.6</td>
+<td>56.8</td>
+<td>89.8</td>
+<td><strong>93.5</strong></td>
+</tr>
+<tr>
+<td>Codeforces</td>
+<td>–</td>
+<td>2816</td>
+<td>3052</td>
+<td>–</td>
+<td>2919</td>
+<td><strong>3206</strong></td>
+</tr>
+<tr>
+<td>HMMT 2026 Feb</td>
+<td>40.8</td>
+<td>91.9</td>
+<td>94.8</td>
+<td>31.7</td>
+<td>94.0</td>
+<td><strong>95.2</strong></td>
+</tr>
+<tr>
+<td>Apex</td>
+<td>1.0</td>
+<td>19.1</td>
+<td>33.0</td>
+<td>0.4</td>
+<td>27.4</td>
+<td><strong>38.3</strong></td>
+</tr>
+<tr>
+<td>MRCR 1M</td>
+<td>37.5</td>
+<td>76.9</td>
+<td>78.7</td>
+<td>44.7</td>
+<td>83.3</td>
+<td><strong>83.5</strong></td>
+</tr>
+<tr>
+<td>CorpusQA 1M</td>
+<td>15.5</td>
+<td>59.3</td>
+<td>60.5</td>
+<td>35.6</td>
+<td>56.5</td>
+<td><strong>62.0</strong></td>
+</tr>
+<tr>
+<td>Terminal Bench 2.0</td>
+<td>49.1</td>
+<td>56.6</td>
+<td>56.9</td>
+<td>59.1</td>
+<td>63.3</td>
+<td><strong>67.9</strong></td>
+</tr>
+<tr>
+<td>SWE Verified</td>
+<td>73.7</td>
+<td>78.6</td>
+<td>79.0</td>
+<td>73.6</td>
+<td>79.4</td>
+<td><strong>80.6</strong></td>
+</tr>
+<tr>
+<td>SWE Pro</td>
+<td>49.1</td>
+<td>52.3</td>
+<td>52.6</td>
+<td>52.1</td>
+<td>54.4</td>
+<td><strong>55.4</strong></td>
+</tr>
+<tr>
+<td>BrowseComp</td>
+<td>–</td>
+<td>53.5</td>
+<td>73.2</td>
+<td>–</td>
+<td>80.4</td>
+<td><strong>83.4</strong></td>
+</tr>
+<tr>
+<td>MCPAtlas</td>
+<td>64.0</td>
+<td>67.4</td>
+<td>69.0</td>
+<td>69.4</td>
+<td><strong>74.2</strong></td>
+<td>73.6</td>
+</tr>
+<tr>
+<td>Toolathlon</td>
+<td>40.7</td>
+<td>43.5</td>
+<td>47.8</td>
+<td>46.3</td>
+<td>49.0</td>
+<td><strong>51.8</strong></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>MCPAtlas는 Pro High(74.2)가 Pro Max(73.6)보다 높다.</strong>도구 호출에서는 과도한 추론이 오히려 해롭다.<strong>에이전트 오케스트레이션은 High로 고정할 것.</strong>-<strong>Non-think는 코딩·수학·에이전트에 쓰면 안 된다.</strong> LiveCodeBench 55.2, Apex 1.0, HLE 8.1로 사실상 무력하다. Non-think는 분류·요약·라우팅 전용이다.</li>
+<li><strong>SWE Verified는 Flash High 78.6 vs Pro Max 80.6으로 2점 차</strong>다. 코드 수정 작업이라면 Flash로 충분하다.</li>
+</ul>
+<h3>4.3 Base 모델 (사전학습 품질)</h3>
+<table>
+<thead>
+<tr>
+<th>벤치마크</th>
+<th>V3.2-Base</th>
+<th>V4-Flash-Base</th>
+<th>V4-Pro-Base</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MMLU (5-shot)</td>
+<td>87.8</td>
+<td>88.7</td>
+<td><strong>90.1</strong></td>
+</tr>
+<tr>
+<td>MMLU-Pro (5-shot)</td>
+<td>65.5</td>
+<td>68.3</td>
+<td><strong>73.5</strong></td>
+</tr>
+<tr>
+<td>MMMLU (5-shot)</td>
+<td>87.9</td>
+<td>88.8</td>
+<td><strong>90.3</strong></td>
+</tr>
+<tr>
+<td>C-Eval (5-shot)</td>
+<td>90.4</td>
+<td>92.1</td>
+<td><strong>93.1</strong></td>
+</tr>
+<tr>
+<td>CMMLU (5-shot)</td>
+<td>88.9</td>
+<td>90.4</td>
+<td><strong>90.8</strong></td>
+</tr>
+<tr>
+<td><strong>MultiLoKo (다국어)</strong></td>
+<td>38.7</td>
+<td>42.2</td>
+<td><strong>51.1</strong></td>
+</tr>
+<tr>
+<td>Simple-QA verified</td>
+<td>28.3</td>
+<td>30.1</td>
+<td><strong>55.2</strong></td>
+</tr>
+<tr>
+<td>FACTS Parametric</td>
+<td>27.1</td>
+<td>33.9</td>
+<td><strong>62.6</strong></td>
+</tr>
+<tr>
+<td>SuperGPQA</td>
+<td>45.0</td>
+<td>46.5</td>
+<td><strong>53.9</strong></td>
+</tr>
+<tr>
+<td>HumanEval</td>
+<td>62.8</td>
+<td>69.5</td>
+<td><strong>76.8</strong></td>
+</tr>
+<tr>
+<td>BigCodeBench</td>
+<td><strong>63.9</strong></td>
+<td>56.8</td>
+<td>59.2</td>
+</tr>
+<tr>
+<td>MATH</td>
+<td>60.5</td>
+<td>57.4</td>
+<td><strong>64.5</strong></td>
+</tr>
+<tr>
+<td>LongBench-V2</td>
+<td>40.2</td>
+<td>44.7</td>
+<td><strong>51.5</strong></td>
+</tr>
+</tbody></table>
+<p>주의할 점: <strong>BigCodeBench와 MATH에서 V4-Flash-Base가 V3.2-Base보다 낮다.</strong> 활성 파라미터가 37B → 13B로 줄어든 대가이며, Flash를 V3.2 대체재로 무비판적으로 채택하면 회귀가 발생할 수 있다.</p>
+<hr>
+<h2>5. 한국어·일본어 성능 — 공식 정보 없음, 제3자 데이터 있음</h2>
+<p>DeepSeek는 한국어 벤치마크를 공개하지 않았다. 그러나 <strong>업스테이지가 Solar Open 2 발표(2026-07-22) 시 DeepSeek-V4-Flash를 비교군으로 평가한 데이터</strong>가 있다. 경쟁사가 자사 모델을 돋보이게 하려고 만든 표라는 점에서, 오히려 V4-Flash에 유리하게 조작될 유인이 없는 데이터다.</p>
+<table>
+<thead>
+<tr>
+<th>한국어 벤치마크</th>
+<th>DeepSeek-V4-Flash</th>
+<th>Solar Open 2</th>
+<th>GPT-5.4 mini</th>
+<th>Claude Haiku 4.5</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KMMLU-Pro</td>
+<td><strong>78.9</strong></td>
+<td>78.4</td>
+<td>78.1</td>
+<td>67.9</td>
+</tr>
+<tr>
+<td>CLIcK</td>
+<td>89.2</td>
+<td><strong>90.7</strong></td>
+<td>89.6</td>
+<td>53.5</td>
+</tr>
+<tr>
+<td>HAE-RAE v1.1</td>
+<td>73.1</td>
+<td><strong>73.8</strong></td>
+<td>69.4</td>
+<td>38.5</td>
+</tr>
+<tr>
+<td>Ko-AIME&#39;25</td>
+<td><strong>98.0</strong></td>
+<td>97.7</td>
+<td>90.7</td>
+<td>81.7</td>
+</tr>
+<tr>
+<td>HRM8K</td>
+<td><strong>93.4</strong></td>
+<td>92.2</td>
+<td>91.3</td>
+<td>90.6</td>
+</tr>
+<tr>
+<td>KBank-MMLU (금융)</td>
+<td>79.5</td>
+<td><strong>80.8</strong></td>
+<td>79.0</td>
+<td>68.9</td>
+</tr>
+<tr>
+<td>KBL (법률)</td>
+<td>72.8</td>
+<td><strong>75.5</strong></td>
+<td>75.3</td>
+<td>69.9</td>
+</tr>
+<tr>
+<td>KorMedMCQA</td>
+<td>94.1</td>
+<td>93.0</td>
+<td><strong>94.2</strong></td>
+<td>87.0</td>
+</tr>
+<tr>
+<td>Ko-GDPval</td>
+<td>85.0</td>
+<td><strong>86.8</strong></td>
+<td>59.4</td>
+<td>68.3</td>
+</tr>
+<tr>
+<td><strong>한국어 평균</strong></td>
+<td>84.9</td>
+<td><strong>85.4</strong></td>
+<td>80.8</td>
+<td>69.6</td>
+</tr>
+</tbody></table>
+<p>또한 Ko-GDPval에서 <strong>DeepSeek-V4-Pro(1.6T)는 86.91점</strong>으로 Solar Open 2(86.75)를 근소하게 앞섰다.</p>
+<p><strong>결론이 뒤집힌다.</strong>v1 문서의 &quot;한국어 성능 정보 부족 → 한국 도입 시 추가 파인튜닝 필요&quot;라는 진단은 사실과 다르다.<strong>DeepSeek-V4-Flash는 한국어 전용 최적화 모델과 0.5점 차이의 한국어 성능을 낸다.</strong>한국어 수학(Ko-AIME 98.0, HRM8K 93.4)과 종합지식(KMMLU-Pro 78.9)은 오히려 앞선다.<strong>일본어</strong>는 여전히 공개 데이터가 없다. Nejumi 리더보드나 JMMLU 자체 측정이 필요하다.</p>
+<p><strong>한국어 사용 시 실무 유의점</strong>- 토크나이저가 한국어 최적화되지 않아<strong>토큰 소모가 한국어 특화 모델보다 많다.</strong> 성능은 대등해도 비용은 불리할 수 있으므로 실측 필요</p>
+<ul>
+<li>한국 특유의 문서 서식·행정 관용 표현은 학습되지 않았을 가능성이 높다. Ko-GDPval 85.0은 그럼에도 상당히 높은 수치이나, 사내 서식 few-shot 주입은 필수</li>
+<li>중국어 정치·역사 관련 주제에서 응답 편향이 보고되어 왔다. 해당 도메인을 다룬다면 사전 검증할 것</li>
+</ul>
+<hr>
+<h2>6. 경쟁 프로젝트 비교</h2>
+<h3>6.1 Solar Open 2 (Upstage, 250B-A15B)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th><strong>DeepSeek-V4-Flash</strong></th>
+<th><strong>Solar Open 2</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>개발사</td>
+<td>DeepSeek (중국)</td>
+<td>Upstage (한국)</td>
+</tr>
+<tr>
+<td>총 / 활성</td>
+<td>284B / 13B</td>
+<td>250B / 15B</td>
+</tr>
+<tr>
+<td>공개</td>
+<td>2026년 4월 말</td>
+<td>2026-07-22</td>
+</tr>
+<tr>
+<td>컨텍스트</td>
+<td>1M</td>
+<td>1M</td>
+</tr>
+<tr>
+<td><strong>라이선스</strong></td>
+<td><strong>MIT (무제약)</strong></td>
+<td>Upstage Solar License (네이밍·표기 의무)</td>
+</tr>
+<tr>
+<td>Base 공개</td>
+<td><strong>있음</strong></td>
+<td>없음</td>
+</tr>
+<tr>
+<td>하드웨어</td>
+<td>2×H200 (FP4+FP8)</td>
+<td>4×H200 (BF16) / 2×H200 (양자화)</td>
+</tr>
+<tr>
+<td>한국어 평균</td>
+<td>84.9</td>
+<td><strong>85.4</strong></td>
+</tr>
+<tr>
+<td>MMLU-Pro</td>
+<td>85.9</td>
+<td><strong>86.2</strong></td>
+</tr>
+<tr>
+<td>LiveCodeBench</td>
+<td>92.3</td>
+<td><strong>92.4</strong></td>
+</tr>
+<tr>
+<td>SWE-Bench Verified</td>
+<td><strong>73.8</strong></td>
+<td>70.4</td>
+</tr>
+<tr>
+<td>MCP-Atlas</td>
+<td>58.2</td>
+<td>58.2</td>
+</tr>
+<tr>
+<td>Terminal Bench Hard</td>
+<td><strong>34.1</strong></td>
+<td>28.3</td>
+</tr>
+<tr>
+<td>τ³ (banking)</td>
+<td><strong>22.3</strong></td>
+<td>19.6</td>
+</tr>
+<tr>
+<td>APEX-Agents</td>
+<td>13.2</td>
+<td><strong>16.6</strong></td>
+</tr>
+</tbody></table>
+<p>한국 기업의 선택 기준은 성능이 아니라 다른 축에서 갈린다 — <strong>국산 조달 요건이 있으면 Solar, 라이선스 자유도와 파인튜닝 유연성이 중요하면 DeepSeek, 중국산 배제 정책이 있으면 Solar.</strong></p>
+<h3>6.2 Kimi K3 (Moonshot AI, 2.8T)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>DeepSeek-V4-Pro</th>
+<th>Kimi K3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>총 파라미터</td>
+<td>1.6T</td>
+<td><strong>2.8T</strong></td>
+</tr>
+<tr>
+<td>활성</td>
+<td>49B</td>
+<td>16 experts 활성 (896 중)</td>
+</tr>
+<tr>
+<td>공개</td>
+<td>2026년 4월 말</td>
+<td>API 7/16, 가중치 <strong>2026-07-27</strong></td>
+</tr>
+<tr>
+<td>라이선스</td>
+<td>MIT</td>
+<td>Modified MIT</td>
+</tr>
+<tr>
+<td>멀티모달</td>
+<td>텍스트</td>
+<td><strong>네이티브 비전</strong></td>
+</tr>
+<tr>
+<td>컨텍스트</td>
+<td>1M</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>API 가격</td>
+<td>$0.435 / $0.87</td>
+<td>$3 / $15</td>
+</tr>
+<tr>
+<td>추론 모드</td>
+<td>3단 선택</td>
+<td>thinking 상시</td>
+</tr>
+</tbody></table>
+<p>모델 카드 기준 K2.6 Thinking과의 비교에서 V4-Pro-Max는 LiveCodeBench(93.5 vs 89.6), MCPAtlas(73.6 vs 66.6)에서 앞서고, SWE Pro(55.4 vs 58.6), HLE w/tools(48.2 vs 54.0)에서 뒤진다. K3는 세대가 하나 더 진행된 모델이므로 직접 비교는 가중치 공개 후 재평가가 필요하다.</p>
+<p><strong>가격 차이가 결정적이다.</strong> V4-Pro는 K3의 약 1/7 ~ 1/17 수준이다. 프런티어 최상단이 필요하지 않은 대부분의 프로덕션 워크로드에서 V4-Pro의 경제성이 압도한다.</p>
+<h3>6.3 V4-Pro vs V4-Flash 선택 기준</h3>
+<table>
+<thead>
+<tr>
+<th>조건</th>
+<th>권장</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>사실 정확성이 중요 (SimpleQA 57.9 vs 34.1)</td>
+<td><strong>Pro</strong></td>
+</tr>
+<tr>
+<td>코드 수정·테스트 통과 (SWE 80.6 vs 79.0)</td>
+<td><strong>Flash</strong> — 1.6점 차에 인프라 5배</td>
+</tr>
+<tr>
+<td>롱컨텍스트 정확도 (MRCR 83.5 vs 78.7)</td>
+<td>Pro</td>
+</tr>
+<tr>
+<td>MCP 도구 호출 (74.2 vs 69.0)</td>
+<td>Pro High</td>
+</tr>
+<tr>
+<td>브라우징 에이전트 (83.4 vs 73.2)</td>
+<td><strong>Pro</strong> — 10점 차</td>
+</tr>
+<tr>
+<td>자체 호스팅 예산 제약</td>
+<td><strong>Flash</strong></td>
+</tr>
+<tr>
+<td>분류·라우팅·요약</td>
+<td>Flash Non-think</td>
+</tr>
+</tbody></table>
+<p>일반 원칙: <strong>Flash High를 기본값으로 두고, SimpleQA·BrowseComp 유형의 작업만 Pro로 라우팅</strong>하는 하이브리드가 비용 대비 최적이다. DeepSeek 공식 Claude Code 레시피도 정확히 이 구조다(메인 Pro, 서브에이전트 Flash).</p>
+<hr>
+<h2>7. Getting Started</h2>
+<h3>7.1 하드웨어 요건</h3>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>정밀도</th>
+<th>가중치</th>
+<th>총 VRAM 예산</th>
+<th>구성</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>V4-Flash</strong></td>
+<td>FP4+FP8</td>
+<td>~158GB</td>
+<td>~170–175GB</td>
+<td><strong>2×H200</strong> 또는 4×A100 80GB</td>
+</tr>
+<tr>
+<td>V4-Flash</td>
+<td>커뮤니티 INT4</td>
+<td>~90GB</td>
+<td>–</td>
+<td>4×RTX 4090 (미검증)</td>
+</tr>
+<tr>
+<td><strong>V4-Pro</strong></td>
+<td>FP4+FP8</td>
+<td>~862GB</td>
+<td>~960GB</td>
+<td><strong>8×H200 141GB 단일 노드</strong> 또는 B300 8-GPU</td>
+</tr>
+<tr>
+<td>V4-Pro</td>
+<td>멀티노드</td>
+<td>–</td>
+<td>–</td>
+<td>16×H100 80GB 2노드 + IB</td>
+</tr>
+</tbody></table>
+<ul>
+<li>시스템 RAM: Flash 기준 256GB 이상, 스토리지 NVMe 500GB 이상</li>
+<li>vLLM 텐서 병렬은 2의 거듭제곱(1/2/4/8)에서 최적. 2×A100(160GB)은 1M 컨텍스트 예산에 미달하므로 4×A100 권장</li>
+<li><strong>V4-Pro는 8×H100 80GB(640GB)에 들어가지 않는다</strong>### 7.2 채팅 인코딩 (필수 선행 이해)<strong>이 릴리스에는 Jinja 채팅 템플릿이 없다.</strong> <code>encoding</code> 폴더의 스크립트를 사용한다.</li>
+</ul>
+<pre><code class="language-python">from encoding_dsv4 import encode_messages, parse_message_from_completion_text
+import transformers
+
+messages = [
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;hello&quot;},
+    {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;Hello! I am DeepSeek.&quot;, &quot;reasoning_content&quot;: &quot;thinking...&quot;},
+    {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;1+1=?&quot;},
+]
+
+# messages -&gt; string
+prompt = encode_messages(messages, thinking_mode=&quot;thinking&quot;)
+
+# string -&gt; tokens
+tokenizer = transformers.AutoTokenizer.from_pretrained(&quot;deepseek-ai/DeepSeek-V4-Pro&quot;)
+tokens = tokenizer.encode(prompt)
+</code></pre>
+<p>멀티턴에서 이전 턴의 <code>reasoning_content</code>를 유지해야 한다는 점에 주의할 것.</p>
+<h3>7.3 vLLM 서빙 (권장)</h3>
+<pre><code class="language-bash"># vLLM v0.23.0 이상 권장 (네이티브 지원은 v0.22.0부터)
+pip install -U vllm
+
+# V4-Flash: 2×H200, 1M 컨텍스트
+vllm serve deepseek-ai/DeepSeek-V4-Flash \
+  --served-model-name deepseek-v4-flash \
+  --tensor-parallel-size 2 \
+  --max-model-len 1048576 \
+  --enable-expert-parallel
+
+# 보수적 시작 (4×A100, 128K 컨텍스트)
+vllm serve deepseek-ai/DeepSeek-V4-Flash \
+  --tensor-parallel-size 4 \
+  --max-model-len 131072
+</code></pre>
+<pre><code class="language-bash"># V4-Pro: 8×H200
+vllm serve deepseek-ai/DeepSeek-V4-Pro \
+  --served-model-name deepseek-v4-pro \
+  --tensor-parallel-size 8 \
+  --enable-expert-parallel \
+  --max-model-len 393216   # Think Max는 384K 이상 권장
+</code></pre>
+<blockquote>
+<p>v1의 <code>--enforce-eager</code>는 제거했다. CUDA 그래프를 비활성화해 프로덕션 처리량을 크게 떨어뜨린다.</p>
+</blockquote>
+<h3>7.4 SGLang 서빙</h3>
+<pre><code class="language-bash">pip install sglang
+
+python3 -m sglang.launch_server \
+    --model-path deepseek-ai/DeepSeek-V4-Flash \
+    --host 0.0.0.0 --port 30000 \
+    --tp 2 \
+    --context-length 1048576
+</code></pre>
+<p>MegaMoE 백엔드(정확도 손실 거의 없이 처리량 향상, Pro 기준 GPQA ~89.5)는 <strong>Blackwell 계열(B200/B300/GB200/GB300) 전용</strong>이다. Hopper(H100/H200)에서는 사용할 수 없다.</p>
+<h3>7.5 DSpark 적용</h3>
+<pre><code class="language-bash"># 기존 가중치 + draft 모듈. 별도 모델이 아님
+vllm serve deepseek-ai/DeepSeek-V4-Flash-DSpark \
+  --tensor-parallel-size 2 \
+  --max-model-len 1048576 \
+  --enable-expert-parallel
+</code></pre>
+<p>동일 출력 분포를 보장하므로 품질 회귀 없이 처리량만 오른다. 다만 자체 스택에서 60~85%가 그대로 재현되는지는 실측할 것.</p>
+<h3>7.6 샘플링 파라미터</h3>
+<table>
+<thead>
+<tr>
+<th>파라미터</th>
+<th>공식 권장</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>temperature</td>
+<td><strong>1.0</strong></td>
+<td>v1의 0.7은 오류</td>
+</tr>
+<tr>
+<td>top_p</td>
+<td><strong>1.0</strong></td>
+<td>v1의 0.9는 오류</td>
+</tr>
+<tr>
+<td>max output</td>
+<td>최대 384K</td>
+<td></td>
+</tr>
+<tr>
+<td>컨텍스트 (Think Max)</td>
+<td><strong>384K 이상</strong></td>
+<td>미달 시 추론 도중 잘림</td>
+</tr>
+</tbody></table>
+<h3>7.7 API 사용 (자체 호스팅 없이)</h3>
+<pre><code class="language-bash">curl https://api.deepseek.com/v1/chat/completions \
+  -H &quot;Content-Type: application/json&quot; \
+  -H &quot;Authorization: Bearer $DEEPSEEK_API_KEY&quot; \
+  -d &#39;{
+    &quot;model&quot;: &quot;deepseek-v4-flash&quot;,
+    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;설명해줘&quot;}],
+    &quot;thinking&quot;: true
+  }&#39;
+</code></pre>
+<ul>
+<li>OpenAI ChatCompletions 형식과 Anthropic 형식 <strong>양쪽 지원</strong></li>
+<li>thinking 모드는 모델 ID가 아니라 <code>thinking</code> 파라미터로 제어</li>
+<li><strong>레거시 <code>deepseek-chat</code> / <code>deepseek-reasoner</code>는 2026-07-24 15:59 UTC부로 종료</strong>되어 HTTP 400을 반환한다. <code>deepseek-v4-flash</code> / <code>deepseek-v4-pro</code>로 교체할 것</li>
+<li><strong>호스팅 API는 데이터가 중국으로 전송된다.</strong> 민감 정보에는 사용하지 말 것 (§3.6)</li>
+</ul>
+<h3>7.8 Claude Code 연동 (공식 설정)</h3>
+<pre><code class="language-bash">export ANTHROPIC_BASE_URL=https://api.deepseek.com/anthropic
+export ANTHROPIC_AUTH_TOKEN=&lt;your DeepSeek API Key&gt;
+export ANTHROPIC_MODEL=deepseek-v4-pro[1m]
+export ANTHROPIC_DEFAULT_OPUS_MODEL=deepseek-v4-pro[1m]
+export ANTHROPIC_DEFAULT_SONNET_MODEL=deepseek-v4-pro[1m]
+export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek-v4-flash
+export CLAUDE_CODE_SUBAGENT_MODEL=deepseek-v4-flash
+export CLAUDE_CODE_EFFORT_LEVEL=max
+cd /path/to/project &amp;&amp; claude
+</code></pre>
+<blockquote>
+<p>v1의 <code>api.deepseek.com/v1</code>은 오류다. Anthropic 호환 경로는 <strong><code>/anthropic</code></strong>이며, <code>[1m]</code> 접미사는 1M 컨텍스트를 지정하는 DeepSeek 고유 modifier이므로 문서 그대로 유지해야 한다. 게이트웨이를 경유한다면 과금 정산 시 이 접미사 정규화가 필요할 수 있다.</p>
+</blockquote>
+<p><strong>자체 호스팅 vLLM에 연결하는 경우</strong>는 위 URL을 내부 엔드포인트로 바꾸면 된다. 이것이 규제 환경에서의 표준 경로다.</p>
+<h3>7.9 GGUF / 로컬 실행 (미검증)</h3>
+<p>llama.cpp·Ollama용 커뮤니티 GGUF가 존재하나 <strong>공식 체크포인트 대비 검증되지 않았다.</strong> 실험 용도로만 사용하고, 프로덕션에는 vLLM 또는 SGLang을 쓸 것. 메인라인 지원 여부는 시점에 따라 달라지므로 도입 전 현재 상태를 직접 확인해야 한다.</p>
+<hr>
+<h2>8. 중요 사용 예 (Key Use Cases)</h2>
+<h3>8.1 전체 리포지토리 코드 에이전트 — 최강 영역</h3>
+<p>LiveCodeBench 93.5, Codeforces 3206은 폐쇄형 프런티어를 앞선 수치다. 여기에 1M 컨텍스트가 붙으면 <strong>모놀리식 레거시 코드베이스를 통째로 넣고 리팩터링</strong>하는 시나리오가 성립한다.</p>
+<pre><code class="language-bash"># 사내 vLLM에 Claude Code 연결
+export ANTHROPIC_BASE_URL=http://gpu-node.internal:8000
+export ANTHROPIC_AUTH_TOKEN=dummy
+export ANTHROPIC_MODEL=deepseek-v4-pro
+export ANTHROPIC_DEFAULT_HAIKU_MODEL=deepseek-v4-flash
+export CLAUDE_CODE_SUBAGENT_MODEL=deepseek-v4-flash
+cd ~/legacy-erp &amp;&amp; claude
+</code></pre>
+<p><strong>비용 설계가 핵심이다.</strong> 오케스트레이션은 Pro, 서브에이전트는 Flash로 분리하면 품질 손실 거의 없이 비용이 크게 떨어진다. SWE Verified가 Flash High 78.6 vs Pro Max 80.6이므로 서브에이전트에 Pro를 쓸 이유가 없다.</p>
+<h3>8.2 1M 컨텍스트 문서 분석 — 단, 검증 후</h3>
+<pre><code class="language-python">from openai import OpenAI
+client = OpenAI(api_key=&quot;EMPTY&quot;, base_url=&quot;http://localhost:8000/v1&quot;)
+
+resp = client.chat.completions.create(
+    model=&quot;deepseek-v4-pro&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: f&quot;&quot;&quot;
+아래는 본계약서, 부속합의서 3건, 사내 표준계약 가이드라인 전문이다.
+
+{full_documents}
+
+1. 문서 간 상충 조항을 조항 번호와 함께 전부 적출
+2. 표준 가이드라인 위반 조항과 위반 사유
+3. 조항별 리스크 등급과 협상 우선순위
+
+근거 없는 추정은 금지하고, 원문 조항을 인용해 제시하라.
+&quot;&quot;&quot;}],
+    temperature=1.0, top_p=1.0, max_tokens=131072,
+)
+</code></pre>
+<p><strong>반드시 짚어야 할 한계</strong>: MRCR 1M 83.5, CorpusQA 1M 62.0이다. Opus-4.6(92.9 / 71.7)에 비해 낮다. <strong>컨텍스트에 넣었다고 정확히 읽는다는 보장이 없다.</strong></p>
+<p>실무 권고:</p>
+<ul>
+<li>100만 토큰을 다 채우지 말고 <strong>200~400K 수준에서 운용</strong>- 중요 조항은<strong>2회 독립 질의로 교차 검증</strong></li>
+<li>자체 needle-in-haystack 테스트로 실전 임계점을 먼저 측정할 것</li>
+</ul>
+<h3>8.3 MCP 기반 에이전트 오케스트레이션</h3>
+<p>MCPAtlas Public 73.6은 Opus-4.6(73.8)과 사실상 동률로, 오픈 웨이트 중 최상위다.</p>
+<pre><code class="language-python">resp = client.chat.completions.create(
+    model=&quot;deepseek-v4-pro&quot;,
+    messages=[...],
+    tools=mcp_tools,
+    extra_body={&quot;thinking&quot;: True},   # Think High
+)
+</code></pre>
+<p><strong>Think High를 쓸 것.</strong> MCPAtlas가 Pro High 74.2 &gt; Pro Max 73.6으로, 최대 추론이 오히려 손해다. 도구 호출에서는 과도한 숙고가 오작동을 늘린다.</p>
+<h3>8.4 사실 조회형 워크로드 — 사용 금지 또는 RAG 필수</h3>
+<p>SimpleQA-Verified가 Pro-Max 57.9, Flash-Max 34.1이다. Gemini-3.1-Pro(75.6)와 격차가 크다.</p>
+<p><strong>Flash로 사실 질의를 처리하면 3분의 2가 틀릴 수 있다.</strong> 사내 지식 Q&amp;A, 규정 조회, 고객 문의 응대 같은 용도는 반드시 RAG로 근거를 주입하고, 근거 없는 답변을 거부하도록 시스템 프롬프트를 설계해야 한다.</p>
+<pre><code class="language-python">SYSTEM = &quot;&quot;&quot;제공된 문서에 근거가 없는 내용은 절대 답하지 마라.
+근거가 없으면 &#39;해당 정보를 찾을 수 없습니다&#39;로 답하고,
+답변한 모든 사실에 대해 출처 문서명과 페이지를 명시하라.&quot;&quot;&quot;
+</code></pre>
+<h3>8.5 도메인 특화 continued pretraining</h3>
+<p><strong>Base 모델이 공개된 것이 이 시나리오를 가능하게 한다.</strong> MIT 라이선스이므로 파생 모델 네이밍·표기 의무도 없다.</p>
+<pre><code>V4-Flash-Base → 국내 금융 규정·약관 continued pretraining → 자체 브랜드 모델
+V4-Flash-Base → 일본어 코퍼스 continued pretraining → 일본어 특화 모델
+V4-Flash-Base → 사내 코드베이스 + 기술문서 → 조직 전용 코딩 모델
+</code></pre>
+<p>284B-A13B는 continued pretraining이 현실적인 최대 규모에 가깝다. 1.6T Pro-Base는 학습 인프라 요건이 사실상 국가급이다.</p>
+<h3>8.6 비용 최적화 라우팅</h3>
+<pre><code class="language-python">def route(task_type: str) -&gt; dict:
+    return {
+        &quot;classify&quot;:   {&quot;model&quot;: &quot;deepseek-v4-flash&quot;, &quot;thinking&quot;: False},
+        &quot;summarize&quot;:  {&quot;model&quot;: &quot;deepseek-v4-flash&quot;, &quot;thinking&quot;: False},
+        &quot;code_fix&quot;:   {&quot;model&quot;: &quot;deepseek-v4-flash&quot;, &quot;thinking&quot;: True},
+        &quot;code_arch&quot;:  {&quot;model&quot;: &quot;deepseek-v4-pro&quot;,   &quot;thinking&quot;: True},
+        &quot;tool_agent&quot;: {&quot;model&quot;: &quot;deepseek-v4-pro&quot;,   &quot;thinking&quot;: True},   # Max 아님
+        &quot;fact_query&quot;: {&quot;model&quot;: &quot;deepseek-v4-pro&quot;,   &quot;thinking&quot;: True},   # + RAG
+        &quot;browse&quot;:     {&quot;model&quot;: &quot;deepseek-v4-pro&quot;,   &quot;thinking&quot;: True},
+    }[task_type]
+</code></pre>
+<p>캐시 히트 입력이 $0.003625/1M이므로 <strong>시스템 프롬프트를 고정하고 prefix caching을 최대한 활용</strong>하면 입력 비용이 거의 사라진다. 에이전트 워크로드에서 이 효과가 가장 크다.</p>
+<hr>
+<h2>9. 한국 시장 사업 도입 시나리오</h2>
+<h3>9.0 전제: 규제의 정확한 범위를 이해할 것</h3>
+<p>한국은 2025년 개인정보보호위원회가 DeepSeek 앱의 국외 이전 문제로 국내 서비스를 일시 중단시키고 시정 권고했으며, 외교부·국방부·산업통상자원부 등 다수 부처와 한수원·한전KPS 등 공공기관, 주요 금융권이 접속을 차단했다. 카카오·라인야후 등 민간 IT 기업도 업무 목적 사용을 금지했다.</p>
+<p><strong>그러나 이 조치들의 대상은 호스팅 서비스다.</strong>MIT 라이선스 가중치를 사내 GPU에서 구동하는 것은 데이터가 어디로도 나가지 않으므로 규제 논리 자체가 성립하지 않는다.<strong>따라서 한국에서 DeepSeek-V4의 유일한 정당한 도입 경로는 자체 호스팅이다.</strong> API 사용은 논외로 두는 것이 안전하다.</p>
+<p>동시에 현실적 제약도 인정해야 한다. 조달·심사 과정에서 &quot;중국산 모델&quot;이라는 사실 자체가 감점 요인이 되는 조직이 있다. 특히 공공·방산·금융 일부는 모델 출처를 기술적 검증과 무관하게 배제한다. <strong>이 경우 Solar Open 2가 대안이며, 성능 차이가 0.5점 수준이므로 실질 손실이 거의 없다.</strong></p>
+<h3>9.1 소프트웨어 개발 조직 — 1순위</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>대상</td>
+<td>게임사, SI, 플랫폼, 스타트업 개발팀</td>
+</tr>
+<tr>
+<td>근거</td>
+<td>LiveCodeBench 93.5(1위), Codeforces 3206, SWE Verified 80.6, MIT 라이선스</td>
+</tr>
+<tr>
+<td>문제</td>
+<td>소스코드 외부 반출 금지, 상용 코딩 어시스턴트 라이선스 비용, 레거시 코드 문서화 부재</td>
+</tr>
+<tr>
+<td>구성</td>
+<td>사내 2×H200에 Flash + Claude Code/OpenCode 연결. Pro는 클라우드 GPU로 필요 시</td>
+</tr>
+<tr>
+<td>KPI</td>
+<td>PR 리드타임, 리뷰 지적 건수, 테스트 커버리지</td>
+</tr>
+<tr>
+<td>강점</td>
+<td><strong>규제 회색지대가 없다.</strong> 코드에는 개인정보가 없고, 자체 호스팅이며, 라이선스가 MIT다</td>
+</tr>
+</tbody></table>
+<p>한국에서 DeepSeek-V4를 도입할 때 정치적 마찰이 가장 적으면서 효과가 가장 확실한 영역이다.</p>
+<h3>9.2 금융권 — 자체 호스팅 백오피스</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>근거</td>
+<td>KBank-MMLU 79.5, KBL 72.8, τ³ banking 22.3(Solar 19.6 대비 우위), 망분리 대응</td>
+</tr>
+<tr>
+<td>구성</td>
+<td>내부망 2×H200 Flash. 외부 통신 완전 차단</td>
+</tr>
+<tr>
+<td>산출</td>
+<td>규정 Q&amp;A(RAG 필수), 심사 보고서 초안, 코드 리뷰</td>
+</tr>
+<tr>
+<td>리스크</td>
+<td><strong>SimpleQA 34.1(Flash).</strong> 금융 규정 질의를 RAG 없이 처리하면 안 된다</td>
+</tr>
+<tr>
+<td>현실</td>
+<td>다수 금융사가 이미 DeepSeek 접속을 차단한 상태다. 자체 호스팅이라도 <strong>내부 승인 난이도가 높다.</strong> 사전에 정보보호 부서와 &quot;가중치 자체 구동은 데이터 이전이 아니다&quot;라는 논점을 정리할 것</td>
+</tr>
+</tbody></table>
+<h3>9.3 제조·물류 — 온프레미스 문서·코드</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>근거</td>
+<td>1M 컨텍스트, MIT 라이선스로 자체 브랜드 임베딩 자유</td>
+</tr>
+<tr>
+<td>용도</td>
+<td>PLC/MES 레거시 코드 분석, 기술문서 다국어화(한·영·중), 사양서 교차 검증</td>
+</tr>
+<tr>
+<td>특기</td>
+<td><strong>중국 현지 법인·협력사가 있는 기업에서 중국어 능력(C-Eval 93.1, CMMLU 90.8)이 실질 자산이 된다.</strong> Solar Open 2는 중국어 미지원</td>
+</tr>
+<tr>
+<td>리스크</td>
+<td>기술 노하우 유출 우려가 큰 업종이므로 완전 폐쇄망 필수</td>
+</tr>
+</tbody></table>
+<h3>9.4 공공·방산 — 권장하지 않음</h3>
+<p>기술적으로는 자체 호스팅으로 해결되지만, <strong>조달 정책과 국정원 보안 심사에서 중국산 모델은 통과가 사실상 어렵다.</strong> 정부가 공공 IT 사업의 AI 기술에 대해 국가정보원 보안 심사를 요구하고 있는 상황이다.</p>
+<p>이 영역은 Solar Open 2 또는 다른 국산 모델로 접근하는 것이 현실적이다.</p>
+<h3>9.5 한국 시나리오 우선순위</h3>
+<table>
+<thead>
+<tr>
+<th>순위</th>
+<th>세그먼트</th>
+<th>성능 근거</th>
+<th>규제 마찰</th>
+<th>종합</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>개발 조직 코딩 에이전트</td>
+<td>매우 높음</td>
+<td>낮음</td>
+<td><strong>적극 권장</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>제조 온프레미스 (중국 연계)</td>
+<td>높음</td>
+<td>중</td>
+<td>권장</td>
+</tr>
+<tr>
+<td>3</td>
+<td>도메인 특화 파생 모델 개발</td>
+<td>높음 (Base 공개)</td>
+<td>낮음</td>
+<td>권장</td>
+</tr>
+<tr>
+<td>4</td>
+<td>금융 백오피스</td>
+<td>중</td>
+<td>높음</td>
+<td>조건부</td>
+</tr>
+<tr>
+<td>5</td>
+<td>공공·방산</td>
+<td>–</td>
+<td>매우 높음</td>
+<td>비권장</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>10. 일본 시장 사업 도입 시나리오</h2>
+<h3>10.0 전제: 검증되지 않은 일본어 + 온프레미스 선호</h3>
+<p>일본은 온프레미스 선호가 구조적으로 강한 시장이라 MIT 라이선스 오픈 웨이트가 원리적으로 잘 맞는다. 반면 <strong>일본어 성능에 대한 공개 근거가 전혀 없다.</strong> MultiLoKo 51.1(Pro Base)이 간접 신호일 뿐이다.</p>
+<p>일본 정부도 DeepSeek 관련 규제를 검토해 온 국가 중 하나로 언급되며, 라인야후는 임직원 업무 사용을 금지한 바 있다.</p>
+<p><strong>필수 선행 작업</strong></p>
+<ol>
+<li>W&amp;B Nejumi 리더보드 기준 자체 측정</li>
+<li>JMMLU / JCommonsenseQA 자체 측정</li>
+<li>일본어 토큰 효율 실측 (중국어 최적화 토크나이저가 일본어 한자 처리에 유리할 가능성과 가나 처리에 불리할 가능성이 공존)</li>
+<li>경어체·비즈니스 관용 표현 정확도 PoC</li>
+</ol>
+<p>이 검증 없이 일본 고객사에 제안하면 안 된다.</p>
+<h3>10.1 일본 IT·SIer 코딩 에이전트 — 1순위</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>근거</td>
+<td>코드는 언어 중립적이다. <strong>일본어 검증 문제를 우회하는 유일한 용도</strong></td>
+</tr>
+<tr>
+<td>대상</td>
+<td>SIer, 사내 정보시스템 부문, SaaS 개발사</td>
+</tr>
+<tr>
+<td>문제</td>
+<td>COBOL·레거시 자산의 현대화, 개발 인력 부족, 코드 외부 반출 금지</td>
+</tr>
+<tr>
+<td>구성</td>
+<td>온프레미스 2×H200 Flash + Claude Code</td>
+</tr>
+<tr>
+<td>강점</td>
+<td>SWE Multilingual 76.2로 다국어 코드베이스(일본어 주석 포함)에 강함</td>
+</tr>
+</tbody></table>
+<p>일본 시장에서 즉시 착수 가능한 유일한 시나리오다.</p>
+<h3>10.2 일본어 특화 파생 모델 개발 — 중장기 전략</h3>
+<p><strong>Base 모델 공개 + MIT 라이선스가 만드는 기회다.</strong>업스테이지가 Solar 기반으로 일본 카라쿠리와 Syn Pro(31B)를 만들어 Nejumi 1위를 기록한 것과 같은 전략을, DeepSeek-V4-Flash-Base 위에서<strong>라이선스 제약 없이</strong> 실행할 수 있다. Solar License는 &quot;Solar&quot; 접두사와 &quot;Built with Solar&quot; 표기를 요구하지만, MIT는 아무것도 요구하지 않는다.</p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>V4-Flash-Base에 일본어 코퍼스 continued pretraining</td>
+</tr>
+<tr>
+<td>2</td>
+<td>일본 비즈니스 문서·경어체 SFT</td>
+</tr>
+<tr>
+<td>3</td>
+<td>자체 브랜드로 배포 (네이밍 자유)</td>
+</tr>
+<tr>
+<td>조건</td>
+<td>284B 규모 CPT는 상당한 컴퓨트가 필요. 일본 파트너 또는 소프트뱅크 AI 클라우드 등 활용 검토</td>
+</tr>
+</tbody></table>
+<h3>10.3 일본 제조업 — 조건부</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>근거</td>
+<td>온프레미스 적합, 1M 컨텍스트, 중국 현지 공장 대응 시 중국어 능력</td>
+</tr>
+<tr>
+<td>리스크</td>
+<td>일본 제조업은 문서 형식 준수 요구가 극도로 엄격하다. 일본어 검증 미완 상태로는 위험</td>
+</tr>
+<tr>
+<td>접근</td>
+<td>코드·설계 데이터 분석부터 시작하고, 일본어 문서 생성은 검증 후</td>
+</tr>
+</tbody></table>
+<h3>10.4 일본 금융·공공 — 비권장</h3>
+<p>중국산 모델에 대한 경계가 강하고 계약 사이클이 길다. 일본 파트너와의 공동 개발 파생 모델 형태(§10.2)로 접근하는 것 외에는 현실성이 낮다.</p>
+<h3>10.5 일본 시나리오 우선순위</h3>
+<table>
+<thead>
+<tr>
+<th>순위</th>
+<th>세그먼트</th>
+<th>일본어 의존도</th>
+<th>종합</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>코딩 에이전트</td>
+<td>낮음</td>
+<td><strong>즉시 착수 가능</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>일본어 파생 모델 개발</td>
+<td>– (직접 개선)</td>
+<td>중장기 최대 기회</td>
+</tr>
+<tr>
+<td>3</td>
+<td>제조 설계·코드 분석</td>
+<td>낮음</td>
+<td>권장</td>
+</tr>
+<tr>
+<td>4</td>
+<td>일본어 문서 업무</td>
+<td>높음</td>
+<td>검증 후</td>
+</tr>
+<tr>
+<td>5</td>
+<td>금융·공공</td>
+<td>높음</td>
+<td>비권장</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>11. 미국 시장 사업 도입 시나리오</h2>
+<h3>11.0 전제: 규제 지형이 가장 복잡한 시장</h3>
+<p>미국은 세 개의 층위를 구분해야 한다.</p>
+<table>
+<thead>
+<tr>
+<th>층위</th>
+<th>상태</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>일반 소비자</td>
+<td>전국적 금지 없음</td>
+</tr>
+<tr>
+<td>연방·주정부·국방·정보기관</td>
+<td><strong>정부 기기·시스템에서 금지.</strong> Commerce, Navy, NASA 등 다수 기관, 텍사스·뉴욕·버지니아·테네시 등 다수 주</td>
+</tr>
+<tr>
+<td>정부 계약자</td>
+<td>계약 조건에 따라 구속될 수 있음</td>
+</tr>
+<tr>
+<td>민간 기업</td>
+<td>자체 정책에 따름</td>
+</tr>
+</tbody></table>
+<p><code>No DeepSeek on Government Devices Act</code>(H.R.1121) 등 연방 차원 입법이 진행됐다.</p>
+<p><strong>결정적 구분</strong>: 이 규제들은 &quot;DeepSeek 애플리케이션 또는 그 후속 애플리케이션·서비스&quot;를 대상으로 하며, 근거는 <strong>데이터가 중국 서버로 전송된다</strong>는 점이다. <strong>미국 인프라에서 MIT 가중치를 자체 구동하는 것은 데이터 전송이 발생하지 않는다.</strong>실제로 NVIDIA가 <code>nvidia/DeepSeek-V4-Pro-NVFP4</code> 양자화 모델을 배포하고 build.nvidia.com에 모델 카드를 게시했으며, Runpod·Spheron 등 미국 GPU 클라우드들이 배포 가이드를 제공하고 있다.<strong>미국 인프라 위에서 V4를 구동하는 것은 이미 표준 관행이다.</strong></p>
+<h3>11.1 AI 스타트업 — 비용 구조 자체를 바꾸는 선택</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>대상</td>
+<td>시드~시리즈A, 프런티어 API 비용이 번레이트를 압박하는 단계</td>
+</tr>
+<tr>
+<td>근거</td>
+<td>V4-Pro가 Opus 대비 입력 약 34배, 출력 약 86배 저렴. MIT 라이선스</td>
+</tr>
+<tr>
+<td>구성</td>
+<td>초기 API → PMF 확인 후 자체 호스팅 전환</td>
+</tr>
+<tr>
+<td>주의</td>
+<td><strong>엔터프라이즈 고객 실사에서 &quot;중국 모델&quot; 질문이 반드시 나온다.</strong> 자체 호스팅 아키텍처 다이어그램을 미리 준비할 것</td>
+</tr>
+<tr>
+<td>강점</td>
+<td>MIT라서 파인튜닝·재배포·자체 브랜드화에 법적 마찰이 없다</td>
+</tr>
+</tbody></table>
+<h3>11.2 개발자 도구 / 코딩 SaaS</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>근거</td>
+<td>LiveCodeBench 93.5, Codeforces 3206, SWE Verified 80.6</td>
+</tr>
+<tr>
+<td>경제성</td>
+<td>코딩 에이전트는 토큰 소모가 극심하다. <strong>여기서 34~86배 가격차가 마진을 만든다</strong></td>
+</tr>
+<tr>
+<td>구성</td>
+<td>자사 VPC 내 8×H200(Pro) 또는 2×H200(Flash) 클러스터</td>
+</tr>
+<tr>
+<td>사례</td>
+<td>Morph 등이 이미 V4-Flash를 bf16 무양자화로 서빙 중</td>
+</tr>
+<tr>
+<td>리스크</td>
+<td>서버리스 호스트 다수가 활성값을 fp8로 양자화해 참조 가중치와 출력이 달라진다. <strong>품질 일관성이 중요하면 직접 서빙할 것</strong></td>
+</tr>
+</tbody></table>
+<h3>11.3 규제 산업 (헬스케어·금융) — VPC 배포</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>근거</td>
+<td>HIPAA·SOC2·GLBA 준수를 위해 어차피 데이터가 외부로 나갈 수 없다</td>
+</tr>
+<tr>
+<td>구성</td>
+<td>AWS/Azure/GCP VPC 내 자체 배포. 외부 egress 차단</td>
+</tr>
+<tr>
+<td>경제성</td>
+<td>p5.48xlarge 온디맨드 약 $55/h, 1년 예약 약 $33/h</td>
+</tr>
+<tr>
+<td><strong>냉정한 계산</strong></td>
+<td>API 요율($0.14/$0.28) 기준 손익분기는<strong>일 30~40억 토큰</strong> 수준이다. 8×H100 단일 노드로는 물리적으로 소화할 수 없는 양이다</td>
+</tr>
+<tr>
+<td>결론</td>
+<td><strong>비용 절감이 아니라 데이터 주권·규제 준수·파인튜닝이 자체 호스팅의 이유다.</strong> 비용 논리로 자체 호스팅을 정당화하려 하면 실사에서 무너진다</td>
+</tr>
+</tbody></table>
+<h3>11.4 연방 계약자 / 공공 — 계약서 확인 필수</h3>
+<p>기술적으로는 자체 호스팅이 가능하나, <strong>계약 조항에 중국 기원 소프트웨어 배제 조항이 있을 수 있다.</strong> 가중치가 소프트웨어에 해당하는지에 대한 해석이 계약마다 다르다.</p>
+<p>법무 검토 없이 진행하면 안 되는 영역이다. 진행한다면:</p>
+<ul>
+<li>계약 담당관(CO)에게 사전 서면 조회</li>
+<li>모델 출처, 배포 아키텍처, 데이터 흐름을 문서화</li>
+<li>대안 모델(Llama, Mistral, GPT-OSS 등) 병행 검토</li>
+</ul>
+<h3>11.5 미국 시나리오 우선순위</h3>
+<table>
+<thead>
+<tr>
+<th>순위</th>
+<th>세그먼트</th>
+<th>경제성</th>
+<th>규제 마찰</th>
+<th>종합</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>코딩 SaaS / 개발자 도구</td>
+<td>매우 높음</td>
+<td>낮음</td>
+<td><strong>적극 권장</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td>AI 스타트업 백엔드</td>
+<td>매우 높음</td>
+<td>중 (실사 대응)</td>
+<td>권장</td>
+</tr>
+<tr>
+<td>3</td>
+<td>규제 산업 VPC 배포</td>
+<td>낮음 (주권이 목적)</td>
+<td>중</td>
+<td>조건부</td>
+</tr>
+<tr>
+<td>4</td>
+<td>연방 계약자</td>
+<td>–</td>
+<td>높음</td>
+<td>법무 검토 필수</td>
+</tr>
+<tr>
+<td>5</td>
+<td>정부기관 직접</td>
+<td>–</td>
+<td>금지</td>
+<td>불가</td>
+</tr>
+</tbody></table>
+<h3>11.6 3개국 비교 요약</h3>
+<table>
+<thead>
+<tr>
+<th>축</th>
+<th>한국</th>
+<th>일본</th>
+<th>미국</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>규제 성격</td>
+<td>개인정보 국외이전 + 공공 차단</td>
+<td>검토 단계 + 민간 자율 금지</td>
+<td>정부·계약자 명시 금지</td>
+</tr>
+<tr>
+<td>자체 호스팅 정당성</td>
+<td>성립</td>
+<td>성립</td>
+<td>성립 (관행 확립)</td>
+</tr>
+<tr>
+<td>언어 근거</td>
+<td><strong>제3자 데이터 충분 (84.9)</strong></td>
+<td><strong>없음 (검증 필수)</strong></td>
+<td>문제 없음</td>
+</tr>
+<tr>
+<td>최적 진입점</td>
+<td>개발 조직 코딩</td>
+<td>코딩 + 파생 모델 개발</td>
+<td>코딩 SaaS</td>
+</tr>
+<tr>
+<td>최대 장애물</td>
+<td>중국산 배제 정서</td>
+<td>일본어 미검증</td>
+<td>엔터프라이즈 실사</td>
+</tr>
+<tr>
+<td>대안 모델</td>
+<td>Solar Open 2 (성능 대등)</td>
+<td>Syn Pro 등 현지 모델</td>
+<td>Llama, Mistral, GPT-OSS</td>
+</tr>
+</tbody></table>
+<p><strong>세 시장 모두에서 코딩 에이전트가 1순위다.</strong> 언어 검증이 불필요하고, 성능 근거가 가장 확실하며(LiveCodeBench 1위), 개인정보가 개입하지 않아 규제 마찰이 최소이기 때문이다.</p>
+<hr>
+<h2>12. 도입 판단 체크리스트</h2>
+<h3>12.1 기술 검증</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Flash vs Pro 실제 태스크 품질 격차 측정 — 대부분 Flash로 충분하다는 가설을 먼저 반증할 것</li>
+<li><input disabled="" type="checkbox"> <strong>모드별(Non-think / High / Max) 품질·비용·지연 3축 측정</strong> — 이것이 가장 큰 레버다</li>
+<li><input disabled="" type="checkbox"> 1M 컨텍스트 needle-in-haystack 자체 측정 (MRCR 83.5 / CorpusQA 62.0의 실전 의미)</li>
+<li><input disabled="" type="checkbox"> SimpleQA 취약성 대응: RAG 파이프라인 구축 및 근거 없는 답변 거부 검증</li>
+<li><input disabled="" type="checkbox"> <code>encoding_dsv4</code> 통합 — 기존 <code>apply_chat_template</code> 의존 코드 전수 점검</li>
+<li><input disabled="" type="checkbox"> 한국어 토큰 효율 실측 (성능은 대등해도 비용은 다를 수 있음)</li>
+<li><input disabled="" type="checkbox"> 일본어 사용 시 Nejumi / JMMLU 자체 평가 (필수)</li>
+<li><input disabled="" type="checkbox"> DSpark 적용 전후 처리량 실측</li>
+<li><input disabled="" type="checkbox"> 중국어 정치·역사 도메인 응답 편향 점검 (해당 시)</li>
+</ul>
+<h3>12.2 인프라</h3>
+<ul>
+<li><input disabled="" type="checkbox"> vLLM v0.23.0 이상 확인. SGLang MegaMoE는 Blackwell 전용</li>
+<li><input disabled="" type="checkbox"> RTX Pro 6000 Blackwell 사용 시 Inductor 컴파일 이슈 현재 상태 확인</li>
+<li><input disabled="" type="checkbox"> Pro 도입 시 8×H200 단일 노드 확보 가능성 (8×H100으로는 불가)</li>
+<li><input disabled="" type="checkbox"> 서버리스 호스트 사용 시 fp8 활성값 양자화 여부 확인 — 참조 가중치와 출력이 달라짐</li>
+<li><input disabled="" type="checkbox"> Preview → GA 전환 시 재평가 계획</li>
+<li><input disabled="" type="checkbox"> 캐시 히트 최적화 설계 (prefix caching)</li>
+</ul>
+<h3>12.3 거버넌스·법무</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>호스팅 API 사용 금지 여부 결정</strong> — 민감 데이터는 자체 호스팅 외 선택지 없음</li>
+<li><input disabled="" type="checkbox"> 조직 조달 정책의 중국산 소프트웨어 배제 조항 확인</li>
+<li><input disabled="" type="checkbox"> (미국) 연방 계약 조항 검토, CO 사전 조회</li>
+<li><input disabled="" type="checkbox"> (한국) 정보보호 부서와 &quot;가중치 자체 구동 ≠ 데이터 국외이전&quot; 논점 사전 정리</li>
+<li><input disabled="" type="checkbox"> 엔터프라이즈 고객 실사 대응 자료 준비 (배포 아키텍처, 데이터 흐름도)</li>
+<li><input disabled="" type="checkbox"> MIT 라이선스 사본 포함 (유일한 의무)</li>
+</ul>
+<h3>12.4 비용</h3>
+<ul>
+<li><input disabled="" type="checkbox"> <strong>자체 호스팅 손익분기 실계산</strong> — API 대비 일 30~40억 토큰이 손익분기다. 대부분 조직은 이를 넘지 못한다</li>
+<li><input disabled="" type="checkbox"> 자체 호스팅의 진짜 이유를 명문화: 데이터 주권 / 규제 준수 / 파인튜닝 / 지연시간 중 무엇인가</li>
+<li><input disabled="" type="checkbox"> 모드별 토큰 소모 측정 후 라우팅 정책 수립</li>
+</ul>
+<hr>
+<h2>13. 라이선스</h2>
+<p><strong>MIT License.</strong> 저장소와 모델 가중치 모두 해당한다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>상업적 사용</td>
+<td>자유</td>
+</tr>
+<tr>
+<td>수정·파인튜닝</td>
+<td>자유</td>
+</tr>
+<tr>
+<td>재배포</td>
+<td>자유</td>
+</tr>
+<tr>
+<td>파생 모델 네이밍</td>
+<td><strong>제약 없음</strong></td>
+</tr>
+<tr>
+<td>표기 의무</td>
+<td><strong>없음</strong></td>
+</tr>
+<tr>
+<td>유일한 의무</td>
+<td>라이선스·저작권 고지 사본 포함</td>
+</tr>
+</tbody></table>
+<p>Upstage Solar License(접두사·표기 의무), Llama Community License(사용자 수 제한·표기), Modified MIT(Kimi K3) 대비 가장 자유롭다. <strong>자체 브랜드 제품에 임베딩할 계획이라면 이 항목만으로도 선택 근거가 된다.</strong></p>
+<hr>
+<h2>14. 인용</h2>
+<pre><code class="language-bibtex">@misc{deepseekai2026deepseekv4,
+      title={DeepSeek-V4: Towards Highly Efficient Million-Token Context Intelligence},
+      author={DeepSeek-AI},
+      year={2026},
+}
+</code></pre>
+<hr>
+<h2>15. 참고 자료</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>링크</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>V4-Pro 모델 카드</td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro">https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro</a></td>
+</tr>
+<tr>
+<td>V4-Flash 모델 카드</td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash">https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash</a></td>
+</tr>
+<tr>
+<td>V4-Pro-Base</td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-Base">https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-Base</a></td>
+</tr>
+<tr>
+<td>V4-Flash-Base</td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Base">https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-Base</a></td>
+</tr>
+<tr>
+<td>DSpark 체크포인트</td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-DSpark">https://huggingface.co/deepseek-ai/DeepSeek-V4-Pro-DSpark</a></td>
+</tr>
+<tr>
+<td>DSpark (Flash)</td>
+<td><a href="https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-DSpark">https://huggingface.co/deepseek-ai/DeepSeek-V4-Flash-DSpark</a></td>
+</tr>
+<tr>
+<td>NVIDIA NVFP4 양자화</td>
+<td><a href="https://huggingface.co/nvidia/DeepSeek-V4-Pro-NVFP4">https://huggingface.co/nvidia/DeepSeek-V4-Pro-NVFP4</a></td>
+</tr>
+<tr>
+<td>기술 보고서</td>
+<td><a href="https://arxiv.org/abs/2606.19348">https://arxiv.org/abs/2606.19348</a></td>
+</tr>
+<tr>
+<td>API 문서</td>
+<td><a href="https://api-docs.deepseek.com/">https://api-docs.deepseek.com/</a></td>
+</tr>
+<tr>
+<td>Claude Code 연동 (공식)</td>
+<td><a href="https://api-docs.deepseek.com/quick_start/agent_integrations/claude_code/">https://api-docs.deepseek.com/quick_start/agent_integrations/claude_code/</a></td>
+</tr>
+<tr>
+<td>코딩 에이전트 통합 (공식)</td>
+<td><a href="https://api-docs.deepseek.com/guides/coding_agents/">https://api-docs.deepseek.com/guides/coding_agents/</a></td>
+</tr>
+<tr>
+<td>SGLang 배포 가이드</td>
+<td><a href="https://lmsysorg.mintlify.app/cookbook/autoregressive/DeepSeek/DeepSeek-V4">https://lmsysorg.mintlify.app/cookbook/autoregressive/DeepSeek/DeepSeek-V4</a></td>
+</tr>
+<tr>
+<td>DeepSpec (spec decoding)</td>
+<td><a href="https://github.com/deepseek-ai/DeepSpec">https://github.com/deepseek-ai/DeepSpec</a></td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>벤치마크 수치는 DeepSeek 공식 모델 카드 기준이다. 한국어 데이터는 업스테이지가 Solar Open 2 발표 시 공개한 제3자 평가 결과이며 DeepSeek 공식 수치가 아니다. 모델 카드 자체가 preview 상태를 명시하므로, 도입 판단은 자체 데이터 재현 평가를 전제로 할 것.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AI-Open-Weights-Model/DeepSeek-GettingStart.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

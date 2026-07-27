@@ -1,0 +1,1746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Solar Open 2 (250B-A15B) Getting Started — Upstage Open-Weight Guide — VibeQuant</title>
+  <meta name="description" content="A TechDoc covering Upstage Solar Open 2 (250B-A15B) official specs, benchmarks, Docker/vLLM setup, quantization, and agent adoption checklists — including Agent-first design assumptions and v1 correction notes." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start-en/" />
+  <meta property="og:title" content="Solar Open 2 (250B-A15B) Getting Started — Upstage Open-Weight Guide" />
+  <meta property="og:description" content="A TechDoc covering Upstage Solar Open 2 (250B-A15B) official specs, benchmarks, Docker/vLLM setup, quantization, and agent adoption checklists — including Agent-first design assumptions and v1 correction notes." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start-ja/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Solar Open 2 (250B-A15B) Getting Started — Upstage Open-Weight Guide","description":"A TechDoc covering Upstage Solar Open 2 (250B-A15B) official specs, benchmarks, Docker/vLLM setup, quantization, and agent adoption checklists — including Agent-first design assumptions and v1 correction notes.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start-en/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AI-Open-Weights-Model/Solar-Open2-Getting-Start_EN.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start-en/","datePublished":"2026-07-27","dateModified":"2026-07-27","inLanguage":"en","keywords":"Solar Open 2, Upstage, Open Weight, MoE, LLM, Agent"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"Solar Open 2 (250B-A15B) Getting Started — Upstage Open-Weight Guide","item":"https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start-en/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Solar Open 2 (250B-A15B) Getting Started — Upstage Open-Weight Guide</h1>
+        <p class="article-dates"><time datetime="2026-07-27">발행 2026.07.27</time> · 주제 Solar Open 2 · Upstage · Open Weight · MoE · LLM · Agent</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/ai-open-weights-model-solar-open2-getting-start/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/ai-open-weights-model-solar-open2-getting-start-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/ai-open-weights-model-solar-open2-getting-start-ja/" data-lang="JP">日本語</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">A TechDoc covering Upstage Solar Open 2 (250B-A15B) official specs, benchmarks, Docker/vLLM setup, quantization, and agent adoption checklists — including Agent-first design assumptions and v1 correction notes.</p>
+        
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>Document version</strong>v2.0 (2026-07-27) ·<strong>Verification basis</strong> Upstage official model card / technical blog (2026-07-22) / domestic and international press
+<strong>Note</strong> Benchmark figures are based on Upstage&#39;s own announcements; independent third-party verification (e.g., Artificial Analysis) has not yet accumulated. Read with the assumption that internal data reproduction evaluation is required for adoption decisions.</p>
+</blockquote>
+<hr>
+<h2>0. Major Corrections vs v1</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Item</th>
+<th>v1 claim</th>
+<th>Correction</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Tokenizer</td>
+<td>&quot;Korean-only tokenizer&quot;</td>
+<td>Korean-<strong>optimized</strong> tokenizer. The model itself is multilingual (Korean, English, Japanese). Ranked #1 among 12 tokenizers on Korean office text; ~24% advantage over leading global models</td>
+</tr>
+<tr>
+<td>2</td>
+<td>NoPE</td>
+<td>&quot;NoPE enables 1M support&quot;</td>
+<td>NoPE is a design that <strong>does not apply positional encoding to softmax attention layers</strong>. 1M context is the result of Hybrid Attention (fixed-size state) + NoPE combined</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Mistral comparison</td>
+<td>&quot;Overwhelming advantage on all major benchmarks&quot;</td>
+<td><strong>Inaccurate</strong>. SWE-Bench is narrow (70.4 vs 69.6); Terminal Bench Hard favors Mistral (33.3) over Solar (28.3)</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Competitor table</td>
+<td>MiMo-V2.5 omitted</td>
+<td><strong>MiMo-V2.5 (310B-A15B)</strong> is the most direct competitor with identical active parameters. Must be included</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Ko-GDPval</td>
+<td>86.8 (vs V4-Flash 85.0)</td>
+<td>Correct but incomplete. Per the blog, <strong>86.75 points — 0.16 points behind 1.6T DeepSeek-V4-Pro (86.91)</strong> — that is the key message</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Kimi K3</td>
+<td>&quot;Active parameters undisclosed&quot;</td>
+<td>Per press reports: <strong>16 active among 896 experts</strong>, Modified MIT, multimodal, weights released 2026-07-27</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Docker execution</td>
+<td><code>--logits-processors</code> omitted</td>
+<td>Required flag in the official recommended configuration. Omitting it changes template processing behavior</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Reasoning parsing</td>
+<td>Not documented</td>
+<td>When using Transformers directly, manual separation at the `&lt;</td>
+</tr>
+<tr>
+<td>9</td>
+<td>Training specs</td>
+<td>Not documented</td>
+<td>12T tokens / NVIDIA B200 / 2M GPU-hours / vocab 196,608</td>
+</tr>
+<tr>
+<td>10</td>
+<td>Quantization</td>
+<td>&quot;2× H200&quot;</td>
+<td>Official blog cites 2× H200. However, the Nota INT4-GlobalPruned card explicitly states <strong>2× H100</strong> serving — varies by configuration</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. Project Background</h2>
+<p><strong>Solar Open 2</strong> is an open-weight foundation model released by Upstage at the developer event &quot;Solar Open Weight Day&quot; on July 22, 2026. It is the second public release in the context of the government&#39;s sovereign AI foundation model initiative, distributed on Hugging Face under a license permitting commercial use.</p>
+<p>The core design goal is <strong>Agent, not Chat</strong>. CEO Kim Sung-hoon explained the focus is not on models that converse well, but on the ability to complete assigned tasks end-to-end. Upstage defines three requirements for Agentic Use:</p>
+<ol>
+<li><strong>Long-horizon task</strong> — Complete work through dozens of reasoning and tool-call cycles</li>
+<li><strong>Long-context</strong> — Retain long documents and task history</li>
+<li><strong>Instruction following &amp; tool calling</strong> — Follow instructions precisely and invoke tools reliably</li>
+</ol>
+<p>A fourth practical requirement is added: <strong>inference cost</strong>. Agents repeat plan→execute→verify→revise cycles, consuming far more tokens than Chat. For enterprises deploying on their own infrastructure, the model must not be excessively large or slow — that is a design premise.</p>
+<h3>1.1 Architecture Specs (Official Model Card)</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Model name</td>
+<td>Solar Open 2 (250B-A15B)</td>
+</tr>
+<tr>
+<td>Architecture</td>
+<td>Hybrid-Attention Mixture-of-Experts</td>
+</tr>
+<tr>
+<td>Total parameters</td>
+<td>250B (250,287,794,944)</td>
+</tr>
+<tr>
+<td>Active parameters</td>
+<td>15B / token</td>
+</tr>
+<tr>
+<td>Layers</td>
+<td>48</td>
+</tr>
+<tr>
+<td>Hidden size</td>
+<td>4,096</td>
+</tr>
+<tr>
+<td>Attention pattern</td>
+<td><code>[Softmax, Linear×3] × 12</code> (75% of 48 layers are linear)</td>
+</tr>
+<tr>
+<td>Attention heads</td>
+<td>Softmax: 64 query / 8 KV (GQA), Linear: 64 query</td>
+</tr>
+<tr>
+<td>Positional encoding</td>
+<td>NoPE (no RoPE)</td>
+</tr>
+<tr>
+<td>Expert count</td>
+<td>321 (routed 320 + shared 1)</td>
+</tr>
+<tr>
+<td>Active experts</td>
+<td>routed top-8 + shared 1</td>
+</tr>
+<tr>
+<td>Vocabulary</td>
+<td>196,608</td>
+</tr>
+<tr>
+<td>Context</td>
+<td>1M tokens</td>
+</tr>
+<tr>
+<td>Pre-training tokens</td>
+<td>~12T</td>
+</tr>
+<tr>
+<td>Training hardware</td>
+<td>NVIDIA B200</td>
+</tr>
+<tr>
+<td>Training GPU hours</td>
+<td>2M GPU-hours</td>
+</tr>
+<tr>
+<td>Official languages</td>
+<td>Korean · English · Japanese</td>
+</tr>
+<tr>
+<td>License</td>
+<td>Upstage Solar License</td>
+</tr>
+<tr>
+<td>Hardware requirements</td>
+<td>Minimum H200 ×4 / Recommended H200 ×8</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. Strengths</h2>
+<h3>2.1 Inference Efficiency — This Model&#39;s Practical Value Proposition</h3>
+<p>Of 250B total parameters, only 15B activate per token. More importantly, <strong>only 12 of 48 layers (25%) maintain a KV cache</strong>. Linear attention layers manage sequence information in a fixed-size state, so context length growth does not increase KV cache proportionally across all layers. Long-context memory is roughly 1/4 that of an equivalent all-softmax model.</p>
+<p>As a result, BF16 runs on 4× H200, and quantization enables 2× H200. <strong>The only near-frontier open-weight model where on-premises self-hosted deployment is realistically feasible</strong> — that is the primary differentiator.</p>
+<h3>2.2 Training Efficiency — Selective Weight Transfer</h3>
+<p>Weights from the prior Solar Open 100B were selectively transferred where compatible with the new architecture for initialization. Per the model card, <strong>transferred weights account for only 2.3%</strong> of the total; the remainder was randomly initialized.</p>
+<ul>
+<li>200B-A15B proxy experiment: tokens required to reach the same loss — random init <del>22B → SWT ~12B (<strong></del>58% level</strong>)</li>
+<li>Architecture validation: Solar Open 100B&#39;s all-softmax structure reached its MMLU performance with 671B tokens; Solar Open 2 architecture reached it with <strong>210B tokens</strong></li>
+</ul>
+<h3>2.3 Agentic Use Optimization — Training Data Design</h3>
+<p>Rather than simple scenario generation, the distinguishing feature is training only on data that passed <strong>verifiable environments</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Domain</th>
+<th>Verification method</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Search</td>
+<td>Multi-stage validation of questions for structure, self-evidence, searchability, solvability, and source grounding</td>
+</tr>
+<tr>
+<td>Tool calling</td>
+<td>Not just appropriate tool selection — <strong>verify results by reading state after actual environment changes</strong></td>
+</tr>
+<tr>
+<td>Coding</td>
+<td>After terminal tasks, self-generate and run tests; include fix-and-reverify loops in training data on failure</td>
+</tr>
+<tr>
+<td>Office</td>
+<td>Cross-check multiple documents and spreadsheets; recalculate after changing inputs on formula-bearing sheets — practical tasks. <strong>Korean business-environment document scenarios reflected separately</strong></td>
+</tr>
+</tbody></table>
+<p>The last item is practically important. The goal is not &quot;generate Korean well&quot; but &quot;actually perform Korean-language business tasks.&quot;</p>
+<h3>2.4 Korean Token Efficiency</h3>
+<p>The same Korean text is processed in <strong>~50–80% of the tokens</strong> compared to global models. Ranked #1 among 12 tokenizers on Korean office business text; ~24% ahead of leading global models.</p>
+<p>This is not a benchmark score but a <strong>direct cost item</strong>. If token consumption drops 30% for the same task, operating costs in Agent repeat-call environments drop 30% proportionally, and effective context lengthens accordingly.</p>
+<h3>2.5 Practical Deliverable Capability — Ko-GDPval</h3>
+<p>Ko-GDPval evaluates models by having them directly produce documents such as reports, plans, and presentations across <strong>58 occupations and 170 real business scenarios</strong> — lawyers, accountants, infection-control specialists, etc.</p>
+<ul>
+<li>Solar Open 2: <strong>86.75</strong>- DeepSeek-V4-Pro (1.6T): 86.91 —<strong>0.16-point gap</strong></li>
+<li>MiMo-V2.5-Pro (1T): 84.62</li>
+</ul>
+<p>By active parameters, Solar Open 2 uses roughly 1/3 of DeepSeek-V4-Pro (15B). Published output examples include FATF mutual evaluation pre-response materials (regulatory submission PDF + 55-case monitoring workbook xlsx with mutual consistency), medical device PMS periodic reports, and law firm advertising self-audit results (with citation tables and statute indexes).</p>
+<h3>2.6 Commercial Use License</h3>
+<p>Under the Upstage Solar License, commercial use, fine-tuning, and derivative model development via distillation are all permitted.</p>
+<hr>
+<h2>3. Weaknesses and Limitations</h2>
+<h3>3.1 Hardware Entry Barrier</h3>
+<p>BF16 requires 4× H200 (minimum) · 8× H200 (recommended). Official examples assume <strong>8 GPUs with 141GB+ memory each</strong>. Quantization can reduce to 2 GPUs, but this remains unrealistic for individuals or small teams. Practical adopters are limited to large enterprises, financial institutions, public sector, and GPU cloud users.</p>
+<h3>3.2 Three Officially Supported Languages</h3>
+<p>Limited to Korean, English, and Japanese. Chinese and European language groups are not officially supported; global multilingual services require additional validation and cost. Position as Asia-Pacific Korean/Japanese market focused.</p>
+<h3>3.3 No Japanese Performance Evidence</h3>
+<p>Japanese is listed as an official language, but <strong>the model card publishes no Japanese benchmarks</strong>. Contrast with 9 publicly released Korean benchmarks. Self-evaluation is mandatory when considering Japan market entry.</p>
+<h3>3.4 Serving Environment Dependency</h3>
+<p>Linear attention kernel optimization requires <code>fla-core</code> (KDA kernel) installation. <strong>Without it, Transformers falls back to a significantly slower PyTorch path</strong>. Production is effectively vLLM-only, and even then the Upstage fork (v0.22.0-solar-open2). Reasoning and tool-call parsers do not work on upstream vLLM/SGLang generic builds.</p>
+<h3>3.5 Reasoning Token Cost</h3>
+<p>With <code>reasoning_effort=&quot;high&quot;</code>, the reasoning block cap is 131,072 tokens. Even with small active parameters, <strong>high output token volume can offset savings</strong>. End-to-end task cost comparison with actual measurements is required.</p>
+<h3>3.6 Immature Ecosystem</h3>
+<p>As a model released in July 2026, fine-tuning recipes, community tuned models, and llama.cpp/Ollama support remain shallow. License requirements for &quot;Solar&quot; prefix and &quot;Built with Solar&quot; attribution are cited as friction for Western open-source adoption.</p>
+<h3>3.7 Reliance on Self-Reported Benchmarks</h3>
+<p>All figures at present are Upstage announcements; some are in-house benchmarks (Ko-AIME&#39;25, KBank-MMLU, Ko-GDPval). Treat as reference values until independent verification accumulates.</p>
+<hr>
+<h2>4. Benchmarks (Full Official Model Card)</h2>
+<h3>4.1 English Benchmarks</h3>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th><strong>Solar Open 2</strong><br>250B-A15B</th>
+<th>Solar Open 100B<br>102B-A12B</th>
+<th>Command A+<br>218B-A25B</th>
+<th>Mistral Medium 3.5<br>128B dense</th>
+<th>MiMo-V2.5<br>310B-A15B</th>
+<th>DeepSeek-V4-Flash<br>284B-A13B</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Knowledge &amp; reasoning</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MMLU-Pro</td>
+<td><strong>86.2</strong></td>
+<td>80.4</td>
+<td>79.0</td>
+<td>81.2</td>
+<td>84.6</td>
+<td>85.9</td>
+</tr>
+<tr>
+<td>GPQA-Diamond</td>
+<td>86.3</td>
+<td>66.2</td>
+<td>75.6</td>
+<td>77.5</td>
+<td>83.0</td>
+<td><strong>88.9</strong></td>
+</tr>
+<tr>
+<td>HLE (w/o tools)</td>
+<td>28.8</td>
+<td>11.5</td>
+<td>11.4</td>
+<td>12.8</td>
+<td>24.3</td>
+<td><strong>32.3</strong></td>
+</tr>
+<tr>
+<td>LiveCodeBench (v6)</td>
+<td><strong>92.4</strong></td>
+<td>56.5</td>
+<td>86.1</td>
+<td>84.9</td>
+<td>89.1</td>
+<td>92.3</td>
+</tr>
+<tr>
+<td>ArtifactsBench</td>
+<td>55.9</td>
+<td>43.4</td>
+<td>42.8</td>
+<td>49.8</td>
+<td>59.3</td>
+<td><strong>61.0</strong></td>
+</tr>
+<tr>
+<td>HMMT2602</td>
+<td>93.9</td>
+<td>68.9</td>
+<td>73.5</td>
+<td>62.9</td>
+<td>61.4</td>
+<td><strong>94.7</strong></td>
+</tr>
+<tr>
+<td>AIME2026</td>
+<td>95.7</td>
+<td>87.7</td>
+<td>96.0</td>
+<td>89.0</td>
+<td>92.3</td>
+<td><strong>97.0</strong></td>
+</tr>
+<tr>
+<td><strong>Instruction following &amp; long context</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Multi-Challenge</td>
+<td>61.0</td>
+<td>40.5</td>
+<td>45.8</td>
+<td>49.8</td>
+<td>39.0</td>
+<td><strong>62.0</strong></td>
+</tr>
+<tr>
+<td>IFBench</td>
+<td>80.0</td>
+<td>57.7</td>
+<td>73.9</td>
+<td>69.0</td>
+<td>67.1</td>
+<td><strong>80.3</strong></td>
+</tr>
+<tr>
+<td>AA-LCR</td>
+<td>62.3</td>
+<td>36.0</td>
+<td>46.0</td>
+<td>61.0</td>
+<td>62.7</td>
+<td><strong>63.7</strong></td>
+</tr>
+<tr>
+<td><strong>Agent</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>SWE-Bench Verified</td>
+<td>70.4</td>
+<td>15.4</td>
+<td>14.4</td>
+<td>69.6</td>
+<td>73.0</td>
+<td><strong>73.8</strong></td>
+</tr>
+<tr>
+<td>Terminal Bench Hard</td>
+<td>28.3</td>
+<td>2.3</td>
+<td>25.0</td>
+<td>33.3</td>
+<td><strong>41.7</strong></td>
+<td>34.1</td>
+</tr>
+<tr>
+<td>APEX-Agents</td>
+<td><strong>16.6</strong></td>
+<td>2.4</td>
+<td>1.6</td>
+<td>6.1</td>
+<td>13.4</td>
+<td>13.2</td>
+</tr>
+<tr>
+<td>MCP-Atlas</td>
+<td>58.2</td>
+<td>34.4</td>
+<td>27.2</td>
+<td>30.7</td>
+<td><strong>63.9</strong></td>
+<td>58.2</td>
+</tr>
+<tr>
+<td>τ³ (banking)</td>
+<td>19.6</td>
+<td>7.4</td>
+<td>5.8</td>
+<td>5.8</td>
+<td>8.7</td>
+<td><strong>22.3</strong></td>
+</tr>
+<tr>
+<td>GDPval-AA v2 (ELO)</td>
+<td>1128</td>
+<td>–</td>
+<td>712</td>
+<td>929</td>
+<td>1145</td>
+<td><strong>1187</strong></td>
+</tr>
+</tbody></table>
+<ul>
+<li>First place on MMLU-Pro, LiveCodeBench, and APEX-Agents (3 items). Most others show narrow leads for DeepSeek-V4-Flash or MiMo-V2.5.</li>
+<li><strong>APEX-Agents 16.6 is meaningful.</strong> Clear gap from #2 (MiMo 13.4) on real business-style agent evaluation.</li>
+<li><strong>Terminal Bench Hard 28.3 is a weakness.</strong> For long terminal-based tasks, it trails MiMo-V2.5 (41.7), DeepSeek (34.1), and Mistral (33.3). Reconsider if CLI automation agents are the primary use case.</li>
+<li>τ³ banking 19.6 is also low for conversational financial agents.</li>
+</ul>
+<h3>4.2 Korean Benchmarks</h3>
+<table>
+<thead>
+<tr>
+<th>Benchmark</th>
+<th><strong>Solar Open 2</strong></th>
+<th>Solar Open 100B</th>
+<th>MiMo-V2.5</th>
+<th>DeepSeek-V4-Flash</th>
+<th>Claude Haiku 4.5</th>
+<th>GPT-5.4 mini</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KMMLU-Pro</td>
+<td>78.4</td>
+<td>64.0</td>
+<td>69.1</td>
+<td><strong>78.9</strong></td>
+<td>67.9</td>
+<td>78.1</td>
+</tr>
+<tr>
+<td>CLIcK</td>
+<td><strong>90.7</strong></td>
+<td>78.9</td>
+<td>78.4</td>
+<td>89.2</td>
+<td>53.5</td>
+<td>89.6</td>
+</tr>
+<tr>
+<td>HAE-RAE v1.1</td>
+<td><strong>73.8</strong></td>
+<td>73.3</td>
+<td>61.7</td>
+<td>73.1</td>
+<td>38.5</td>
+<td>69.4</td>
+</tr>
+<tr>
+<td>Ko-AIME&#39;25†</td>
+<td>97.7</td>
+<td>80.0</td>
+<td>88.0</td>
+<td><strong>98.0</strong></td>
+<td>81.7</td>
+<td>90.7</td>
+</tr>
+<tr>
+<td>HRM8K</td>
+<td>92.2</td>
+<td>87.6</td>
+<td>90.7</td>
+<td><strong>93.4</strong></td>
+<td>90.6</td>
+<td>91.3</td>
+</tr>
+<tr>
+<td>KBank-MMLU†</td>
+<td><strong>80.8</strong></td>
+<td>65.5</td>
+<td>71.0</td>
+<td>79.5</td>
+<td>68.9</td>
+<td>79.0</td>
+</tr>
+<tr>
+<td>KBL (legal)</td>
+<td><strong>75.5</strong></td>
+<td>65.5</td>
+<td>69.8</td>
+<td>72.8</td>
+<td>69.9</td>
+<td>75.3</td>
+</tr>
+<tr>
+<td>KorMedMCQA</td>
+<td>93.0</td>
+<td>84.4</td>
+<td>87.7</td>
+<td>94.1</td>
+<td>87.0</td>
+<td><strong>94.2</strong></td>
+</tr>
+<tr>
+<td>Ko-GDPval†</td>
+<td><strong>86.8</strong></td>
+<td>3.4</td>
+<td>81.0</td>
+<td>85.0</td>
+<td>68.3</td>
+<td>59.4</td>
+</tr>
+<tr>
+<td><strong>Korean average</strong></td>
+<td><strong>85.4</strong></td>
+<td>66.95</td>
+<td>–</td>
+<td>84.9</td>
+<td>69.6</td>
+<td>80.8</td>
+</tr>
+</tbody></table>
+<p>† Upstage in-house benchmark</p>
+<p><strong>Interpretation points</strong>-<strong>KBank-MMLU (finance) 80.8, KBL (legal) 75.5 — #1</strong> provides direct rationale for domestic finance and legal domain adoption.</p>
+<ul>
+<li>KorMedMCQA is 3rd. Medical domain favors GPT-5.4 mini (94.2) and DeepSeek (94.1).</li>
+<li>The gap vs the prior generation on Ko-GDPval (3.4) is abnormally large — meaning the predecessor could not produce document deliverables at all; this generation&#39;s core improvement is here.</li>
+</ul>
+<h3>4.3 Improvement vs Prior Generation</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Benchmark</th>
+<th>Solar Open 2</th>
+<th>Solar Open 100B</th>
+<th>Gain</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Knowledge &amp; science reasoning</td>
+<td>GPQA-Diamond</td>
+<td>86.26</td>
+<td>66.16</td>
+<td>+20.10p</td>
+</tr>
+<tr>
+<td>Math</td>
+<td>HMMT</td>
+<td>93.94</td>
+<td>68.94</td>
+<td>+25.00p</td>
+</tr>
+<tr>
+<td>Coding</td>
+<td>LiveCodeBench</td>
+<td>92.42</td>
+<td>56.49</td>
+<td>+35.93p</td>
+</tr>
+<tr>
+<td>Instruction following</td>
+<td>IFBench</td>
+<td>80.00</td>
+<td>57.70</td>
+<td>+22.30p</td>
+</tr>
+<tr>
+<td>Korean overall</td>
+<td>Korean average</td>
+<td>85.43</td>
+<td>66.95</td>
+<td>+18.48p</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Competing Project Comparison</h2>
+<h3>5.1 Kimi K3 (Moonshot AI) — Opposite Extreme of Scale</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th><strong>Solar Open 2</strong></th>
+<th><strong>Kimi K3</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Developer</td>
+<td>Upstage (Korea)</td>
+<td>Moonshot AI (China)</td>
+</tr>
+<tr>
+<td>Total parameters</td>
+<td>250B</td>
+<td><strong>2.8T</strong></td>
+</tr>
+<tr>
+<td>Expert configuration</td>
+<td>320 routed + 1 shared, top-8 active</td>
+<td>896 experts, 16 active (per press)</td>
+</tr>
+<tr>
+<td>Release date</td>
+<td>2026-07-22</td>
+<td>API 2026-07-16 / weights 2026-07-27</td>
+</tr>
+<tr>
+<td>Context</td>
+<td>1M</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>Multimodal</td>
+<td>Text only</td>
+<td><strong>Native vision support</strong></td>
+</tr>
+<tr>
+<td>Reasoning mode</td>
+<td><code>none</code> / <code>high</code> selectable</td>
+<td>Thinking mode always active</td>
+</tr>
+<tr>
+<td>License</td>
+<td>Upstage Solar License</td>
+<td>Modified MIT</td>
+</tr>
+<tr>
+<td>Official languages</td>
+<td>Korean · English · Japanese</td>
+<td>Chinese · English centric</td>
+</tr>
+<tr>
+<td>API pricing</td>
+<td>Self-hosted</td>
+<td>$3 / $15 per 1M tokens</td>
+</tr>
+<tr>
+<td>Hardware</td>
+<td>H200 2~4 GPUs</td>
+<td>Terabyte-scale storage + distributed cluster</td>
+</tr>
+</tbody></table>
+<p>Kimi K3 is the largest open-weight model released to date, ranking #1 on Arena Frontend Code Arena (1,679 points), ahead of Claude Fable 5 and GPT-5.6 Sol. Artificial Analysis composite ELO 1,547 — up 732 points from K2.6.</p>
+<p><strong>The two models are not competitors — they target different markets.</strong>Kimi K3 aims to bring frontier performance to open weights; Solar Open 2 targets a<strong>performance/cost point you can actually deploy on your own infrastructure</strong>. A 2.8T model is not an option for on-premises adoption in Korean finance and public sector where it is required.</p>
+<p>However, Kimi K3&#39;s self-reported benchmarks were API-based before weight release, and it is noted to be slow with high reasoning token consumption — both should be considered together.</p>
+<h3>5.2 MiMo-V2.5 (310B-A15B) — Most Direct Competitor</h3>
+<p>The <strong>only comparison target with identical 15B active parameters</strong> — i.e., nearly the same inference cost structure.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Solar Open 2 advantage</th>
+<th>MiMo-V2.5 advantage</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Knowledge</td>
+<td>MMLU-Pro 86.2 vs 84.6, GPQA 86.3 vs 83.0</td>
+<td>–</td>
+</tr>
+<tr>
+<td>Coding</td>
+<td>LiveCodeBench 92.4 vs 89.1</td>
+<td>SWE-Bench 70.4 vs <strong>73.0</strong></td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>APEX-Agents 16.6 vs 13.4</td>
+<td>Terminal Bench Hard 28.3 vs <strong>41.7</strong>, MCP-Atlas 58.2 vs <strong>63.9</strong></td>
+</tr>
+<tr>
+<td>Instruction following</td>
+<td>Multi-Challenge 61.0 vs 39.0, IFBench 80.0 vs 67.1</td>
+<td>–</td>
+</tr>
+<tr>
+<td>Korean</td>
+<td>Advantage on all items (avg 85.4 vs undisclosed)</td>
+<td>–</td>
+</tr>
+<tr>
+<td>Total parameters</td>
+<td>250B (memory favorable)</td>
+<td>310B</td>
+</tr>
+</tbody></table>
+<p><strong>Conclusion</strong>: Korean and instruction following favor Solar; <strong>MCP tool calling and long terminal tasks favor MiMo</strong>. MCP-Atlas 58.2 vs 63.9 is a gap organizations with MCP-based agents as primary use cannot ignore.</p>
+<h3>5.3 DeepSeek-V4-Flash (284B-A13B)</h3>
+<p>The most balanced competitor — #1 on 9 of 16 English benchmarks. Solar Open 2 leads on MMLU-Pro (86.2 vs 85.9), LiveCodeBench (92.4 vs 92.3), and APEX-Agents (16.6 vs 13.2); the first two are within margin of error.</p>
+<p>In Korean, Solar leads overall (85.4 vs 84.9), but DeepSeek leads on KMMLU-Pro, Ko-AIME, HRM8K, and KorMedMCQA. <strong>DeepSeek achieving this level of Korean performance significantly weakens Solar Open 2&#39;s Korean superiority narrative.</strong> Practical differentiation lies in token efficiency, on-premises fit, and data sovereignty rather than Korean performance alone.</p>
+<h3>5.4 Mistral Medium 3.5 (128B dense)</h3>
+<p>Solar Open 2 clearly leads on knowledge, coding, and Korean (MMLU-Pro 86.2 vs 81.2). However, <strong>agent domain is equal or weaker</strong> — SWE-Bench 70.4 vs 69.6 (narrow), Terminal Bench Hard 28.3 vs 33.3 (weaker), AA-LCR 62.3 vs 61.0. Apache 2.0 license is Mistral&#39;s clear strength.</p>
+<h3>5.5 Command A+ (218B-A25B)</h3>
+<p>Solar Open 2 leads substantially overall (MMLU-Pro 86.2 vs 79.0, GPQA 86.3 vs 75.6). Especially <strong>SWE-Bench 70.4 vs 14.4</strong> — not really comparable for agent coding. Active parameters are also larger at 25B vs Solar.</p>
+<h3>5.6 Selection Guide</h3>
+<table>
+<thead>
+<tr>
+<th>Requirement</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Korean document work + on-premises</td>
+<td><strong>Solar Open 2</strong></td>
+</tr>
+<tr>
+<td>Finance &amp; legal domain Korean</td>
+<td><strong>Solar Open 2</strong> (KBank-MMLU · KBL #1)</td>
+</tr>
+<tr>
+<td>MCP-intensive tool-calling agents</td>
+<td>Consider MiMo-V2.5</td>
+</tr>
+<tr>
+<td>Terminal/CLI long automation</td>
+<td>MiMo-V2.5, DeepSeek-V4-Flash</td>
+</tr>
+<tr>
+<td>Peak performance, no infra constraints</td>
+<td>Kimi K3, DeepSeek-V4-Pro</td>
+</tr>
+<tr>
+<td>License freedom priority</td>
+<td>Mistral (Apache 2.0), Kimi K3 (Modified MIT)</td>
+</tr>
+<tr>
+<td>Multilingual (Chinese · European) required</td>
+<td>DeepSeek family</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Getting Started</h2>
+<h3>6.1 System Requirements</h3>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>Hardware</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BF16 minimum</td>
+<td>NVIDIA H200 ×4</td>
+<td>Official minimum spec</td>
+</tr>
+<tr>
+<td>BF16 recommended</td>
+<td>NVIDIA H200 ×8</td>
+<td>Official examples assume 8× 141GB-class GPUs</td>
+</tr>
+<tr>
+<td>Quantization (official blog)</td>
+<td>H200 ×2</td>
+<td>NotaAI quantized model</td>
+</tr>
+<tr>
+<td>INT4 + Expert Pruning</td>
+<td>H100 ×2</td>
+<td>Per Nota INT4-GlobalPruned card</td>
+</tr>
+</tbody></table>
+<p>Actual memory requirements vary with context length and serving configuration.</p>
+<h3>6.2 Transformers (Local Experimentation)</h3>
+<p>You must use the Upstage Transformers branch.</p>
+<pre><code class="language-bash"># Install CUDA-enabled PyTorch first
+python -m pip install -U \
+  &quot;git+https://github.com/upstageAI/transformers.git@v5.14.1-solar-open2&quot; \
+  &quot;fla-core[cuda]&gt;=0.5.1&quot; \
+  accelerate einops
+</code></pre>
+<blockquote>
+<p>Without <code>fla-core</code>, it falls back to a significantly slower PyTorch path instead of the optimized KDA kernel. Install it.</p>
+</blockquote>
+<pre><code class="language-python">import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model_id = &quot;upstage/Solar-Open2-250B&quot;
+
+tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=False)
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    device_map=&quot;auto&quot;,
+    dtype=torch.bfloat16,
+    trust_remote_code=False,
+)
+model.eval()
+
+messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is Upstage?&quot;}]
+prompt = tokenizer.apply_chat_template(
+    messages,
+    tokenize=False,
+    add_generation_prompt=True,
+    reasoning_effort=&quot;high&quot;,
+    think_render_option=&quot;preserved&quot;,
+)
+
+input_device = model.get_input_embeddings().weight.device
+model_inputs = tokenizer(prompt, return_tensors=&quot;pt&quot;).to(input_device)
+
+generated_ids = model.generate(
+    **model_inputs,
+    max_new_tokens=32768,
+    do_sample=True,
+    temperature=1.0,
+    top_p=1.0,
+)
+
+# Separate reasoning trace and final answer (required when using Transformers directly)
+new_token_ids = generated_ids[0, model_inputs.input_ids.shape[-1]:].tolist()
+think_end_id = tokenizer.convert_tokens_to_ids(&quot;&lt;|think:end|&gt;&quot;)
+
+if think_end_id in new_token_ids:
+    answer_start = len(new_token_ids) - new_token_ids[::-1].index(think_end_id)
+else:
+    # No end marker — reasoning hit max_new_tokens before completion
+    answer_start = len(new_token_ids)
+
+reasoning = tokenizer.decode(new_token_ids[:answer_start], skip_special_tokens=True).strip()
+answer = tokenizer.decode(new_token_ids[answer_start:], skip_special_tokens=True).strip()
+
+print(&quot;[reasoning]&quot;, reasoning)
+print(&quot;[answer]&quot;, answer)
+</code></pre>
+<p><strong>If the answer is empty</strong>, the reasoning block reached <code>max_new_tokens</code> before finishing. Increase the value and retry.</p>
+<h3>6.3 vLLM Production Serving (Recommended)</h3>
+<h4>Option 1: Docker</h4>
+<pre><code class="language-bash"># Image basis: vLLM v0.22.0 / CUDA 12.9
+docker run --rm --gpus all --ipc=host \
+  -p 8000:8000 \
+  -v &quot;${HF_HOME:-$HOME/.cache/huggingface}:/root/.cache/huggingface&quot; \
+  upstage/vllm-solar-open2 \
+  upstage/Solar-Open2-250B \
+  --served-model-name solar-open2-250b \
+  --tensor-parallel-size 8 \
+  --enable-expert-parallel \
+  --moe-backend triton \
+  --default-chat-template-kwargs &#39;{&quot;think_render_option&quot;:&quot;preserved&quot;}&#39; \
+  --reasoning-parser solar_open2 \
+  --tool-call-parser solar_open2 \
+  --enable-auto-tool-choice \
+  --logits-processors vllm.v1.sample.logits_processor.solar_open2:SolarOpen2TemplateLogitsProcessor
+</code></pre>
+<blockquote>
+<p><strong><code>--logits-processors</code> is a required item in the official recommended configuration.</strong> It was omitted in the v1 document.</p>
+</blockquote>
+<h4>Option 2: Source Install</h4>
+<pre><code class="language-bash">pip install -U uv
+
+VLLM_PRECOMPILED_WHEEL_LOCATION=&quot;https://github.com/vllm-project/vllm/releases/download/v0.22.0/vllm-0.22.0%2Bcu129-cp38-abi3-manylinux_2_28_x86_64.whl&quot; \
+VLLM_USE_PRECOMPILED=1 \
+uv pip install --reinstall-package vllm --torch-backend=cu129 \
+  &quot;git+https://github.com/UpstageAI/vllm.git@v0.22.0-solar-open2&quot;
+</code></pre>
+<pre><code class="language-bash">vllm serve upstage/Solar-Open2-250B \
+  --served-model-name solar-open2-250b \
+  --tensor-parallel-size 8 \
+  --enable-expert-parallel \
+  --moe-backend triton \
+  --default-chat-template-kwargs &#39;{&quot;think_render_option&quot;:&quot;preserved&quot;}&#39; \
+  --reasoning-parser solar_open2 \
+  --tool-call-parser solar_open2 \
+  --enable-auto-tool-choice \
+  --logits-processors vllm.v1.sample.logits_processor.solar_open2:SolarOpen2TemplateLogitsProcessor
+</code></pre>
+<h4>API Call</h4>
+<pre><code class="language-bash">curl http://localhost:8000/v1/chat/completions \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{
+    &quot;model&quot;: &quot;solar-open2-250b&quot;,
+    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is Upstage?&quot;}],
+    &quot;max_tokens&quot;: 131584,
+    &quot;temperature&quot;: 1.0,
+    &quot;top_p&quot;: 1.0,
+    &quot;reasoning_effort&quot;: &quot;high&quot;
+  }&#39;
+</code></pre>
+<blockquote>
+<p><code>max_tokens</code> includes <strong>both</strong> the reasoning trace and the final answer. With a reasoning cap of 131,072, allow headroom above that so the answer is not truncated.</p>
+</blockquote>
+<h3>6.4 Official Quantized Models (NotaAI)</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Method</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>nota-ai/Solar-Open2-250B-Nota-INT4-GlobalPruned</code></td>
+<td>W4A16 INT4 + global expert pruning</td>
+<td>Variable experts per layer, 2×H100 serving</td>
+</tr>
+<tr>
+<td><code>nota-ai/Solar-Open2-250B-Nota-NVFP4</code></td>
+<td>NVFP4</td>
+<td>Optimal for Blackwell-class</td>
+</tr>
+<tr>
+<td><code>nota-ai/Solar-Open2-250B-Nota-INT4</code></td>
+<td>W4A16 INT4</td>
+<td>No pruning applied</td>
+</tr>
+</tbody></table>
+<p>The GlobalPruned version measures expert importance network-wide and varies retained expert count per layer. Better accuracy preservation vs uniform pruning.</p>
+<h3>6.5 Reasoning Mode Configuration</h3>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th><code>reasoning_effort</code></th>
+<th>temperature</th>
+<th>top_p</th>
+<th>max_tokens</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Direct response</td>
+<td><code>&quot;none&quot;</code></td>
+<td>1.0</td>
+<td>1.0</td>
+<td>Max 128K</td>
+</tr>
+<tr>
+<td>Advanced reasoning</td>
+<td><code>&quot;high&quot;</code></td>
+<td>1.0</td>
+<td>1.0</td>
+<td>Max 256K</td>
+</tr>
+</tbody></table>
+<p><strong>Multi-turn note</strong>: Do not remove prior-turn reasoning traces from conversation history. <code>think_render_option=preserved</code> (default) handles this automatically.</p>
+<pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI(api_key=&quot;EMPTY&quot;, base_url=&quot;http://localhost:8000/v1&quot;)
+
+response = client.chat.completions.create(
+    model=&quot;solar-open2-250b&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Prove that √2 is irrational.&quot;}],
+    reasoning_effort=&quot;high&quot;,
+    temperature=1.0,
+    top_p=1.0,
+    max_tokens=131584,
+)
+
+print(response.choices[0].message.reasoning)  # Reasoning trace (separate field)
+print(response.choices[0].message.content)    # Final answer
+</code></pre>
+<h3>6.6 Tool Calling</h3>
+<p>Start the server with <code>--tool-call-parser solar_open2 --enable-auto-tool-choice</code>. After that, the standard OpenAI function calling interface applies.</p>
+<pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI(api_key=&quot;EMPTY&quot;, base_url=&quot;http://localhost:8000/v1&quot;)
+
+tools = [{
+    &quot;type&quot;: &quot;function&quot;,
+    &quot;function&quot;: {
+        &quot;name&quot;: &quot;get_weather&quot;,
+        &quot;description&quot;: &quot;Get current weather for a location&quot;,
+        &quot;parameters&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;properties&quot;: {&quot;location&quot;: {&quot;type&quot;: &quot;string&quot;}},
+            &quot;required&quot;: [&quot;location&quot;],
+        },
+    },
+}]
+
+response = client.chat.completions.create(
+    model=&quot;solar-open2-250b&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What&#39;s the weather in Seoul?&quot;}],
+    tools=tools,
+)
+print(response.choices[0].message.tool_calls)
+</code></pre>
+<h3>6.7 Claude Code / Hermes Agent Integration</h3>
+<p>A single vLLM server exposes both interfaces simultaneously. Claude Code uses Anthropic-compatible <code>/v1/messages</code>; Hermes Agent uses OpenAI-compatible <code>/v1</code>. MCP-exposed tools reach the model through the same tool-calling interface; both agents natively support MCP.</p>
+<p><strong>Claude Code — Environment variables</strong></p>
+<pre><code class="language-bash">export ANTHROPIC_BASE_URL=http://localhost:8000
+export ANTHROPIC_AUTH_TOKEN=dummy   # Any non-empty arbitrary value
+export ANTHROPIC_MODEL=solar-open2-250b
+export ANTHROPIC_SMALL_FAST_MODEL=solar-open2-250b
+claude
+</code></pre>
+<p>Model name must exactly match the server&#39;s <code>--served-model-name</code>.</p>
+<p><strong>Claude Code — Upstage-provided script</strong></p>
+<pre><code class="language-bash">curl -fsSL https://console.upstage.ai/claude-upstage.sh | bash
+</code></pre>
+<p><strong>Hermes Agent</strong> — Solar Open 2 is a Hermes Official model. <code>~/.hermes/config.yaml</code>:</p>
+<pre><code class="language-yaml">model:
+  provider: custom
+  default: solar-open2-250b
+  base_url: http://localhost:8000/v1
+  api_key: dummy
+</code></pre>
+<h3>6.8 Playground</h3>
+<p>Try it on Upstage Playground with no separate setup. <strong>Available through July 31, 2026.</strong></p>
+<hr>
+<h2>7. Key Use Cases</h2>
+<h3>7.1 Regulatory Response Document Generation — Mutually Consistent Multi-Deliverables</h3>
+<p>Upstage&#39;s representative Ko-GDPval output case and this model&#39;s most distinctive capability: <strong>generating two or more deliverables in different formats from the same data with matching numbers</strong>.</p>
+<ul>
+<li>Regulatory submission summary report (PDF) — exposure by risk tier and country</li>
+<li>Operational monitoring workbook (xlsx) — line-item detail for every rule-triggered transaction</li>
+</ul>
+<p>Where typical LLMs fail is total mismatch between the two deliverables.</p>
+<pre><code class="language-python">prompt = &quot;&quot;&quot;Generate two deliverables for the attached transaction log.
+
+[Deliverable 1] Regulatory submission response report
+- Transaction count and amount totals by risk tier (high/medium/low)
+- Top 10 countries by exposure
+- Summary by triggered rule (R1~R4)
+
+[Deliverable 2] Internal monitoring workbook (xlsx)
+- Full detail of flagged transactions (transaction ID, datetime, amount, currency, counterparty country, rule, risk tier)
+- Structure where all aggregates in Deliverable 1 are verifiable via SUMIF
+
+Constraint: Every figure in Deliverable 1 must be recalculable from Deliverable 2.
+If mismatch occurs, revise Deliverable 1 based on Deliverable 2.&quot;&quot;&quot;
+</code></pre>
+<p><strong>Applicable domains</strong>: FATF/AML response, financial supervisory reports, medical device PMS periodic reports, advertising review self-audits, disclosure document drafting.</p>
+<h3>7.2 1M Context Contract &amp; Regulation Cross-Review</h3>
+<p>With 1M context, <strong>entire documents can be loaded at once without RAG chunking</strong>. For documents where cross-clause references matter, chunking structurally breaks answers.</p>
+<pre><code class="language-python">messages = [{
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;content&quot;: f&quot;&quot;&quot;Below are the full text of the main contract, three supplementary agreements, and our company&#39;s standard contract guidelines.
+
+{full_documents}   # ~400K tokens
+
+Perform the following:
+1. List all conflicting clauses between the main contract and each supplementary agreement (cite clause numbers)
+2. Clauses violating standard guidelines and reasons for violation
+3. Proposed revision text for each violating clause
+4. Risk rating (high/medium/low) and negotiation priority
+
+Do not speculate without basis; cite original clause text.&quot;&quot;&quot;
+}]
+</code></pre>
+<p><strong>Note</strong>: Long-context benchmark AA-LCR is 62.3 — close to top (DeepSeek 63.7) but the absolute value is not high. Validate retrieval accuracy when actually filling 1M context with your own needle-in-haystack tests.</p>
+<h3>7.3 Spreadsheet Recalculation Agent</h3>
+<p>Explicitly included in training data: change inputs on formula-bearing sheets and recalculate results.</p>
+<pre><code class="language-python">tools = [
+    {&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {
+        &quot;name&quot;: &quot;read_sheet&quot;,
+        &quot;description&quot;: &quot;Read sheet range and return values and formulas&quot;,
+        &quot;parameters&quot;: {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {
+            &quot;path&quot;: {&quot;type&quot;: &quot;string&quot;}, &quot;sheet&quot;: {&quot;type&quot;: &quot;string&quot;}, &quot;range&quot;: {&quot;type&quot;: &quot;string&quot;}
+        }, &quot;required&quot;: [&quot;path&quot;, &quot;sheet&quot;, &quot;range&quot;]}}},
+    {&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {
+        &quot;name&quot;: &quot;write_cells&quot;,
+        &quot;description&quot;: &quot;Write values or formulas to cells&quot;,
+        &quot;parameters&quot;: {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {
+            &quot;path&quot;: {&quot;type&quot;: &quot;string&quot;}, &quot;updates&quot;: {&quot;type&quot;: &quot;array&quot;, &quot;items&quot;: {&quot;type&quot;: &quot;object&quot;}}
+        }, &quot;required&quot;: [&quot;path&quot;, &quot;updates&quot;]}}},
+    {&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {
+        &quot;name&quot;: &quot;recalculate&quot;,
+        &quot;description&quot;: &quot;Recalculate entire workbook and return specified cell results&quot;,
+        &quot;parameters&quot;: {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {
+            &quot;path&quot;: {&quot;type&quot;: &quot;string&quot;}, &quot;check_cells&quot;: {&quot;type&quot;: &quot;array&quot;, &quot;items&quot;: {&quot;type&quot;: &quot;string&quot;}}
+        }, &quot;required&quot;: [&quot;path&quot;]}}},
+]
+
+# &quot;Change the FX assumption from 1,340 KRW to 1,420 KRW, recalculate operating profit
+#  by affected division, and write commentary on the top 3 divisions by variance&quot;
+</code></pre>
+<p>The key is the model was trained to <strong>write then read back to verify results</strong>. You must provide a <code>recalculate</code> tool to activate this loop.</p>
+<h3>7.4 Internal Codebase Agent (Claude Code Integration)</h3>
+<p>SWE-Bench Verified 70.4 is top-tier among models you can run on your own infrastructure. Direct answer for organizations where source code must not leave the premises.</p>
+<pre><code class="language-bash"># 1. Start vLLM on internal GPU node (Section 6.3)
+# 2. Developer workstation
+export ANTHROPIC_BASE_URL=http://gpu-node.internal:8000
+export ANTHROPIC_AUTH_TOKEN=dummy
+export ANTHROPIC_MODEL=solar-open2-250b
+export ANTHROPIC_SMALL_FAST_MODEL=solar-open2-250b
+cd ~/legacy-erp &amp;&amp; claude
+</code></pre>
+<p><strong>However, Terminal Bench Hard 28.3 must be noted.</strong> Strong on file-level edits and test-pass tasks (SWE-Bench), but relatively weak on long autonomous terminal environment manipulation. Keep autonomous scope narrow and maintain human-in-the-loop.</p>
+<h3>7.5 MCP-Based Internal System Orchestration</h3>
+<pre><code class="language-yaml"># Example internal MCP server configuration
+servers:
+  - name: erp-mcp          # Voucher inquiry/posting
+  - name: groupware-mcp    # Approval submission, document box
+  - name: dw-mcp           # Data warehouse queries
+  - name: hr-mcp           # HR master (read-only)
+</code></pre>
+<pre><code>&quot;Look up this quarter&#39;s SG&amp;A execution rate by department, find departments exceeding 90% of budget,
+ and draft an approval request to each department head for execution summary and remaining budget plan.&quot;
+</code></pre>
+<p><strong>MCP-Atlas 58.2 trails the top tier (MiMo 63.9).</strong> More tools and complex schemas increase mis-call risk. Practical design recommendations:</p>
+<ul>
+<li>Limit exposed tools to 15 or fewer per session</li>
+<li>Write (write) tools must pass an approval gate</li>
+<li>Write tool descriptions clearly in Korean (leverage Korean comprehension strength)</li>
+</ul>
+<h3>7.6 Domain-Specific Derivative Model Development</h3>
+<p>The license permits fine-tuning and distillation. Base performance of KBank-MMLU 80.8 · KBL 75.5 is a favorable starting point for finance and legal specialized derivatives.</p>
+<pre><code>Solar-KFinance-v1   # Domestic finance regulation · product terms specialized
+Solar-KLegal-v1     # Case law · statute specialized
+Solar-Med-PMS-v1    # Medical device post-market surveillance document specialized
+</code></pre>
+<blockquote>
+<p>&quot;Solar&quot; prefix in model name required; &quot;Built with Solar&quot; on promotional materials; license copy must accompany distribution.</p>
+</blockquote>
+<hr>
+<h2>8. Korea Market Business Adoption Scenarios</h2>
+<h3>8.0 Premise: Why It Is Valid in Korea Now</h3>
+<p>Three conditions hold simultaneously.</p>
+<ol>
+<li><strong>Network isolation &amp; data sovereignty regulation</strong> — Financial network isolation, public cloud CSAP certification, and cross-border personal data transfer restrictions make foreign APIs structurally difficult.</li>
+<li><strong>On-premises-feasible hardware requirements</strong> — H200 2~4 GPUs is manageable even for mid-size enterprises. Virtually the only frontier-class open model meeting this condition.</li>
+<li><strong>Korean business context training</strong> — Korean business-environment document scenarios reflected in training.</li>
+</ol>
+<p>Upstage references include: #1 supplier for Public Procurement Service generative AI business support (2025-12), planned Daum portal integration, and agent platform &quot;Timely&quot; supply to local governments, public institutions, and educational organizations.</p>
+<h3>8.1 Financial Sector — Compliance &amp; AML Agents</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Target</td>
+<td>Banks, securities, insurance, VASPs</td>
+</tr>
+<tr>
+<td>Rationale</td>
+<td>KBank-MMLU 80.8 (#1), Ko-GDPval 86.8, multi-deliverable regulatory document capability</td>
+</tr>
+<tr>
+<td>Problem</td>
+<td>AML/CFT monitoring alert surge, FATF mutual evaluation document overload, network isolation blocks external LLMs</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>Internal H200 ×4 + vLLM + MCP (core banking read-only, AML rule engine, document management)</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>STR drafts, supervisory submission reports + verification workbooks simultaneously, internal control checklists</td>
+</tr>
+<tr>
+<td>KPI</td>
+<td>Review time per alert, STR draft rejection rate, report drafting lead time</td>
+</tr>
+<tr>
+<td>Risk</td>
+<td>τ³ banking 19.6 is low for conversational financial agents → <strong>Limit scope to back-office document work, not customer-facing</strong></td>
+</tr>
+</tbody></table>
+<h3>8.2 Legal Services — Contract Review &amp; Self-Audit</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Target</td>
+<td>Law firms, in-house legal, compliance</td>
+</tr>
+<tr>
+<td>Rationale</td>
+<td>KBL 75.5 (#1), 1M context, citation table · statute index output examples</td>
+</tr>
+<tr>
+<td>Problem</td>
+<td>Contract review concentrated on junior staff, missed cross-clause conflicts, delayed statute updates</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>On-premises (client info must not leave) + internal case · contract DB MCP</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Clause-level risk tables, standard contract deviation reports, negotiation point summaries, advertising review self-audit results</td>
+</tr>
+<tr>
+<td>KPI</td>
+<td>Review time per contract, conflict detection rate vs humans, re-review issue count</td>
+</tr>
+<tr>
+<td>Risk</td>
+<td>Legal judgment ultimately rests with attorneys. <strong>Position as draft-generation tool only; mandatory review watermark on outputs</strong></td>
+</tr>
+</tbody></table>
+<h3>8.3 Large Manufacturing — Technical &amp; Quality Document Automation</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Target</td>
+<td>Semiconductor, automotive, chemical, shipbuilding</td>
+</tr>
+<tr>
+<td>Rationale</td>
+<td>1M context, spreadsheet recalculation training, on-premises</td>
+</tr>
+<tr>
+<td>Problem</td>
+<td>Manual update of dozens of linked documents on design changes, repetitive certification documents, drawing · spec vs document mismatch</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>Closed network + PLM/MES MCP + Document Parse (document → LLM-readable format)</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>ECN drafts, nonconformance reports, 8D reports, certification submission documents in Korean · English · Japanese</td>
+</tr>
+<tr>
+<td>KPI</td>
+<td>ECN issuance lead time, cross-document mismatch issue count</td>
+</tr>
+<tr>
+<td>Note</td>
+<td><strong>Korean · English · Japanese support aligns precisely with Japanese customer response scenarios.</strong> Especially suitable for domestic parts suppliers serving Japanese OEMs and electronics customers</td>
+</tr>
+</tbody></table>
+<h3>8.4 Public Sector &amp; Local Government — Civil Complaint Response &amp; Administrative Documents</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Target</td>
+<td>Central ministries, metropolitan · local governments, public institutions, schools</td>
+</tr>
+<tr>
+<td>Rationale</td>
+<td>Sovereign AI alignment, procurement track record, CLIcK 90.7 (Korean culture · common sense)</td>
+</tr>
+<tr>
+<td>Problem</td>
+<td>Civil complaint staffing shortage, linked document updates on ordinance revisions, data that cannot leave the country</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>Public cloud or own IDC; quantized model (H200 ×2) to minimize budget</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Complaint response drafts, ordinance revision comparison tables, business plans · settlement reports, meeting minutes summaries</td>
+</tr>
+<tr>
+<td>KPI</td>
+<td>Complaint processing days, repeat complaint auto-response rate</td>
+</tr>
+<tr>
+<td>Procurement angle</td>
+<td>Open weight + domestic = <strong>Simultaneously satisfies domestic AI adoption metrics and data sovereignty requirements</strong>. Strong differentiator in proposals</td>
+</tr>
+</tbody></table>
+<h3>8.5 Mid-Size Enterprise — Back-Office Agent (Low-Cost Quantized Entry)</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Target</td>
+<td>Revenue 100B–1T KRW scale, 1–3 dedicated AI staff</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td><strong>H200 ×2 (Nota INT4-GlobalPruned)</strong> or H100 ×2. Minimize initial CAPEX</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>First-pass contract review, quote · proposal drafts, accounting voucher classification, internal policy Q&amp;A</td>
+</tr>
+<tr>
+<td>Approach</td>
+<td>3-month PoC on cloud GPU → on-premises transition after validation</td>
+</tr>
+<tr>
+<td>Failure factor</td>
+<td>Deploying model alone without tool (MCP) readiness fails. <strong>ERP/groupware API readiness is a prerequisite</strong></td>
+</tr>
+</tbody></table>
+<h3>8.6 Korea Scenario Overall Priority</h3>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Segment</th>
+<th>Evidence strength</th>
+<th>Adoption difficulty</th>
+<th>Expected ROI</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Finance back-office documents</td>
+<td>High (KBank #1)</td>
+<td>Medium</td>
+<td>High</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Public administrative documents</td>
+<td>High (procurement track record)</td>
+<td>Low</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Legal contract review</td>
+<td>High (KBL #1)</td>
+<td>Medium</td>
+<td>High</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Manufacturing technical documents</td>
+<td>Medium</td>
+<td>High</td>
+<td>High</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Internal code agent</td>
+<td>Medium (SWE 70.4 / Terminal 28.3)</td>
+<td>Medium</td>
+<td>Medium</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. Japan Market Business Adoption Scenarios</h2>
+<h3>9.0 Premise: Structural Characteristics of the Japan Market</h3>
+<p>Japan is a market with <strong>structurally strong on-premises preference</strong>. Locally deployable models have lower adoption barriers than cloud-based US/Chinese models. Upstage already operates a Japan entity and holds W&amp;B Nejumi leaderboard #1 with <strong>Syn Pro (31B)</strong>, a Japanese-specialized model co-developed with Japanese AI company Karakuri.</p>
+<p><strong>Core strategy: Two-tier configuration of Syn Pro and Solar Open 2.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Aspect</th>
+<th>Syn Pro (31B)</th>
+<th>Solar Open 2 (250B-A15B)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Strength</td>
+<td>Japanese · cultural context fine-tuning, verified Japanese performance</td>
+<td>Agentic execution, 1M context, document deliverables</td>
+</tr>
+<tr>
+<td>Hardware</td>
+<td>Small on-premises</td>
+<td>H200 2~4 GPUs</td>
+</tr>
+<tr>
+<td>Role</td>
+<td>Lightweight tasks: dialogue, summarization, classification</td>
+<td>Multi-step business execution, complex document generation</td>
+</tr>
+</tbody></table>
+<h3>9.1 Critical Caveat — No Japanese Performance Evidence</h3>
+<p><strong>The Solar Open 2 model card publishes no Japanese benchmarks.</strong>Contrast with 9 publicly released Korean benchmarks. Proposing to Japanese customers based on official language support alone is risky.<strong>Mandatory pre-work</strong>:</p>
+<ol>
+<li>Self-evaluation against W&amp;B Nejumi leaderboard</li>
+<li>Self-measurement on public Japanese benchmarks (JMMLU, JCommonsenseQA, etc.)</li>
+<li>Actual Japanese token efficiency measurement (unlike Korean, optimization evidence is not public)</li>
+<li>PoC with customer actual documents — especially keigo (honorific) · business idiom accuracy</li>
+</ol>
+<p>Entering without this validation loses trust at the first PoC.</p>
+<h3>9.2 Korea-Japan Cross-Border Document Work — Strongest Entry Point</h3>
+<p>In Japan, Solar Open 2&#39;s <strong>true differentiator is not standalone Japanese performance but simultaneous Korean · English · Japanese support</strong>. Virtually no open-weight model offers this combination.</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Target</td>
+<td>Korea-Japan joint ventures, Korean companies in Japan, Japanese companies in Korea, trading companies</td>
+</tr>
+<tr>
+<td>Problem</td>
+<td>Maintaining contracts · specs · quality documents in 3 languages, translation outsourcing cost and lead time, consistency collapse vs originals after translation</td>
+</tr>
+<tr>
+<td>Solution</td>
+<td>Not simple translation but <strong>simultaneous multilingual deliverable generation from the same facts</strong> (Section 7.1 capability applied directly)</td>
+</tr>
+<tr>
+<td>Output</td>
+<td>Korean-Japanese counterpart contracts, trilingual nonconformance reports, HQ report (KO) + local submission (JA) consistent sets</td>
+</tr>
+<tr>
+<td>KPI</td>
+<td>Translation outsourcing cost, multilingual document lead time, cross-language mismatch issue count</td>
+</tr>
+</tbody></table>
+<pre><code class="language-python">prompt = &quot;&quot;&quot;Generate three deliverables from the following quality nonconformance case data.
+
+[1] 8D report for Japanese customer submission (Japanese, keigo, manufacturing standard style)
+[2] HQ summary report for Korea (Korean, root cause · recurrence prevention focus)
+[3] Global quality DB registration summary in English (within 200 words)
+
+Constraints:
+- Numerical values (defect rate, lots detected, quantity affected) must match exactly across all three
+- [1] must be in a format the Japanese customer can accept as-is
+- Mark items with unclear root cause as &#39;under investigation&#39; rather than guessing&quot;&quot;&quot;
+</code></pre>
+<h3>9.3 Japanese Manufacturing — On-Premises Quality &amp; Design Documents</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Target</td>
+<td>Auto parts, electronics components, precision machinery, materials</td>
+</tr>
+<tr>
+<td>Rationale</td>
+<td>On-premises market preference + 1M context + spreadsheet recalculation</td>
+</tr>
+<tr>
+<td>Problem</td>
+<td>Extreme aversion to technical know-how leakage, voluminous drawings · specs, tacit knowledge loss from aging skilled workforce</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>Fully closed network H200 ×2~4, PLM integration, Syn Pro in parallel</td>
+</tr>
+<tr>
+<td>Note</td>
+<td>Japanese manufacturing has <strong>very strict document format compliance</strong>. Must inject internal standard templates via few-shot or fine-tuning</td>
+</tr>
+<tr>
+<td>Entry strategy</td>
+<td>&quot;Formalizing veteran tacit knowledge&quot; (ベテランの暗黙知の形式知化) framing has higher acceptance than full automation</td>
+</tr>
+</tbody></table>
+<h3>9.4 Japanese Finance &amp; Insurance — Regulatory Response Documents</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Target</td>
+<td>Regional banks, non-life insurance, life insurance</td>
+</tr>
+<tr>
+<td>Rationale</td>
+<td>Multi-deliverable regulatory document generation, on-premises</td>
+</tr>
+<tr>
+<td>Problem</td>
+<td>Financial Services Agency report burden, regional bank IT staffing shortage, no external data export</td>
+</tr>
+<tr>
+<td>Setup</td>
+<td>Quantized model (H200 ×2) to suppress initial investment</td>
+</tr>
+<tr>
+<td>Caution</td>
+<td><strong>Korean finance regulation training does not transfer to Japanese finance regulation.</strong> Do not cite KBank-MMLU #1 for Japan market. FSA regulation · industry template RAG is mandatory prerequisite</td>
+</tr>
+</tbody></table>
+<h3>9.5 Japanese Public &amp; Local Government — Cautious Approach Recommended</h3>
+<p>Japanese local government market has long contract cycles and strong domestic · quasi-domestic preference. <strong>Standalone proposal of a Korean model is realistically difficult.</strong>
+Realistic paths:</p>
+<ul>
+<li>Indirect entry via Japanese SIers · telecom (NTT, SoftBank, etc.)</li>
+<li>Approach as <strong>joint development · derivative model with Japanese companies</strong> like Syn Pro</li>
+<li>License requires &quot;Solar&quot; prefix — <code>Solar-&lt;Partner&gt;-JP-v1</code> naming inevitable; coordinate with partner in advance</li>
+</ul>
+<h3>9.6 Japan Scenario Overall Priority</h3>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Segment</th>
+<th>Evidence strength</th>
+<th>Entry difficulty</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Korea-Japan cross-border documents</td>
+<td>High (structural differentiator)</td>
+<td>Low</td>
+<td>Can start immediately</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Internal adoption by Korean companies in Japan</td>
+<td>High</td>
+<td>Low</td>
+<td>Decision authority at Korea HQ</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Japanese manufacturing on-premises</td>
+<td>Medium (Japanese validation needed)</td>
+<td>Medium</td>
+<td>Syn Pro parallel required</td>
+</tr>
+<tr>
+<td>4</td>
+<td>Japanese finance</td>
+<td>Medium</td>
+<td>High</td>
+<td>Regulation RAG prerequisite</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Japanese public</td>
+<td>Low</td>
+<td>Very high</td>
+<td>Partner route only realistic</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>10. Adoption Decision Checklist</h2>
+<h3>10.1 Technical Validation (Before PoC)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Reproduce benchmarks on your own data — public figures are reference only</li>
+<li><input disabled="" type="checkbox"> Self-measure 1M context needle-in-haystack (validate practical meaning of AA-LCR 62.3)</li>
+<li><input disabled="" type="checkbox"> Measure mis-call rate in environments with 15+ MCP tools (MCP-Atlas 58.2 risk)</li>
+<li><input disabled="" type="checkbox"> Measure actual output token volume with <code>reasoning_effort=&quot;high&quot;</code> → net vs active parameter savings</li>
+<li><input disabled="" type="checkbox"> Self-evaluate Japanese with Nejumi/JMMLU if using Japanese (mandatory)</li>
+<li><input disabled="" type="checkbox"> Measure throughput difference with/without <code>fla-core</code> installation</li>
+</ul>
+<h3>10.2 Infrastructure</h3>
+<ul>
+<li><input disabled="" type="checkbox"> TCO comparison: BF16 (H200 ×4~8) vs quantization (×2)</li>
+<li><input disabled="" type="checkbox"> Upstage vLLM fork dependency — confirm upstream vLLM upgrade path</li>
+<li><input disabled="" type="checkbox"> Throughput estimate by concurrent users (Agents consume large tokens per session)</li>
+<li><input disabled="" type="checkbox"> Fallback path on failure (Solar Pro 3 API, etc.)</li>
+</ul>
+<h3>10.3 Governance &amp; Legal</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Review full Upstage Solar License — derivative model definition scope</li>
+<li><input disabled="" type="checkbox"> Plan &quot;Solar&quot; prefix · &quot;Built with Solar&quot; attribution for derivative development</li>
+<li><input disabled="" type="checkbox"> License copy distribution process</li>
+<li><input disabled="" type="checkbox"> Approval gate design for write-permission tools</li>
+<li><input disabled="" type="checkbox"> Clarify output review responsibility (mandatory for legal · medical · finance)</li>
+</ul>
+<h3>10.4 Organization</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Internal system API readiness for MCP targets — <strong>this is the bottleneck, not the model</strong></li>
+<li><input disabled="" type="checkbox"> Collect internal document standard templates (few-shot / fine-tuning material)</li>
+<li><input disabled="" type="checkbox"> Redefine reviewer role — from author to verifier</li>
+</ul>
+<hr>
+<h2>11. License</h2>
+<p>Distributed under the Upstage Solar License; <strong>commercial use, fine-tuning, and derivative model development via distillation are permitted</strong>.</p>
+<p>Obligations when creating derivative AI models:</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Requirement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Naming</td>
+<td>&quot;Solar&quot; prefix in model name (e.g., <code>Solar-MyModel-v1</code>)</td>
+</tr>
+<tr>
+<td>Attribution</td>
+<td>&quot;Built with Solar&quot; on related public materials</td>
+</tr>
+<tr>
+<td>Notice</td>
+<td>Include copy of Upstage Solar License</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>More restrictive than Apache 2.0 (Mistral) or Modified MIT (Kimi K3). Naming obligation can be a marketing constraint when embedding in your own brand products — review in advance.</p>
+</blockquote>
+<hr>
+<h2>12. Citation</h2>
+<pre><code class="language-bibtex">@misc{solar-open-2-2026,
+    title={Solar Open 2 Technical Report},
+    author={Upstage AI},
+    year={2026},
+    url={https://huggingface.co/upstage/Solar-Open2-250B}
+}
+</code></pre>
+<hr>
+<h2>13. References</h2>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Link</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Model card</td>
+<td><a href="https://huggingface.co/upstage/Solar-Open2-250B">https://huggingface.co/upstage/Solar-Open2-250B</a></td>
+</tr>
+<tr>
+<td>Technical Report</td>
+<td><a href="https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf">https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf</a></td>
+</tr>
+<tr>
+<td>License</td>
+<td><a href="https://huggingface.co/upstage/Solar-Open2-250B/blob/main/LICENSE">https://huggingface.co/upstage/Solar-Open2-250B/blob/main/LICENSE</a></td>
+</tr>
+<tr>
+<td>Technical blog (KO)</td>
+<td><a href="https://www.upstage.ai/blog/ko/solar-open-2">https://www.upstage.ai/blog/ko/solar-open-2</a></td>
+</tr>
+<tr>
+<td>Technical blog (EN)</td>
+<td><a href="https://www.upstage.ai/blog/en/solar-open-2">https://www.upstage.ai/blog/en/solar-open-2</a></td>
+</tr>
+<tr>
+<td>Transformers branch</td>
+<td><a href="https://github.com/upstageAI/transformers/tree/v5.14.1-solar-open2">https://github.com/upstageAI/transformers/tree/v5.14.1-solar-open2</a></td>
+</tr>
+<tr>
+<td>vLLM fork</td>
+<td><a href="https://github.com/UpstageAI/vllm/tree/v0.22.0-solar-open2">https://github.com/UpstageAI/vllm/tree/v0.22.0-solar-open2</a></td>
+</tr>
+<tr>
+<td>Quantized models</td>
+<td><a href="https://huggingface.co/nota-ai">https://huggingface.co/nota-ai</a></td>
+</tr>
+<tr>
+<td>Syn Pro (Japanese specialized)</td>
+<td><a href="https://www.upstage.ai/blog/en/upstage-ai-jp-syn-pro">https://www.upstage.ai/blog/en/upstage-ai-jp-syn-pro</a></td>
+</tr>
+<tr>
+<td>Demo (~2026-07-31)</td>
+<td><a href="https://open2-beta.upstage.ai/">https://open2-beta.upstage.ai/</a></td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>Benchmark figures in this document are based on Upstage official announcements. Until independent third-party verification accumulates, use with the assumption of self-reproduction evaluation.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AI-Open-Weights-Model/Solar-Open2-Getting-Start_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

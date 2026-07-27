@@ -1,3 +1,32 @@
+<!--
+---
+title: "Kimi K3 Open-Weight Technical Brief v2.0 — Moonshot AI 가이드"
+title_en: "Kimi K3 Open-Weight Technical Brief v2.0 — Moonshot AI Guide"
+subtitle: "2.8T 오픈 프론티어 모델의 실체, 리스크, 한·일 사업 도입 판단 프레임"
+description: "Moonshot AI Kimi K3(2.8T MoE) 오픈웨이트 기술 브리프 v2.0. 아키텍처(KDA·Stable LatentMoE), 벤치마크·환각률 51%, 지정학 리스크, API/자체 배포 Getting Started, 한·일 규제·도입 시나리오."
+abstract: |
+  Kimi K3는 Moonshot AI가 2026-07-16 공개한 2.8T 파라미터 오픈 프론티어 MoE 모델이다.
+  Frontend Code Arena 1위, 1M 컨텍스트, 네이티브 비전. 가중치 공개 2026-07-27.
+  본 문서는 v1 정정, 배포 장벽(64+ GPU), 환각률·비용 구조, 미·중 지정학 리스크, API/자체 호스팅 실무 가이드를 정리한다.
+summary_for_ai: |
+  TechDoc for Moonshot AI Kimi K3 open-weight model (2.8T, 896 experts, 16 active).
+  Covers architecture, benchmarks, hallucination rate 51%, geopolitical risk, API vs self-host, Korea/Japan adoption.
+  Verify HF repo, license file, and weight size at release. Not legal advice.
+date: 2026-07-27
+updated: 2026-07-27
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags: [Kimi K3, Moonshot AI, Open Weight, MoE, LLM, Agent, 한국어]
+keywords: ["Kimi K3", "Moonshot AI", "오픈 웨이트", "2.8T", "KDA", "Frontend Code Arena", "오픈 프론티어", "Agentic LLM"]
+group: llm-agents
+featured: true
+featured_rank: 1
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+-->
+
 # Kimi K3 오픈웨이트 기술 브리프 v2.0
 
 **부제: 2.8조 파라미터 오픈 프론티어 모델의 실체, 리스크, 그리고 한·일 사업 도입 판단 프레임**

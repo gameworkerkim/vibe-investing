@@ -1,0 +1,1741 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Solar Open 2 (250B-A15B) Getting Started — 업스테이지 오픈 웨이트 가이드 — VibeQuant</title>
+  <meta name="description" content="업스테이지 Solar Open 2(250B-A15B) 공식 스펙·벤치마크·Docker/vLLM 설치·양자화·에이전트 도입 체크리스트를 정리한 TechDoc. Chat이 아닌 Agent 설계 전제와 검증판 정정 사항 포함." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start/" />
+  <meta property="og:title" content="Solar Open 2 (250B-A15B) Getting Started — 업스테이지 오픈 웨이트 가이드" />
+  <meta property="og:description" content="업스테이지 Solar Open 2(250B-A15B) 공식 스펙·벤치마크·Docker/vLLM 설치·양자화·에이전트 도입 체크리스트를 정리한 TechDoc. Chat이 아닌 Agent 설계 전제와 검증판 정정 사항 포함." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start-ja/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Solar Open 2 (250B-A15B) Getting Started — 업스테이지 오픈 웨이트 가이드","description":"업스테이지 Solar Open 2(250B-A15B) 공식 스펙·벤치마크·Docker/vLLM 설치·양자화·에이전트 도입 체크리스트를 정리한 TechDoc. Chat이 아닌 Agent 설계 전제와 검증판 정정 사항 포함.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AI-Open-Weights-Model/Solar-Open2-Getting-Start.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start/","datePublished":"2026-07-27","dateModified":"2026-07-27","inLanguage":"ko","keywords":"LLM · 에이전트, AI-Open-Weights-Model"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"Solar Open 2 (250B-A15B) Getting Started — 업스테이지 오픈 웨이트 가이드","item":"https://tech.vibequant.cc/tech/ai-open-weights-model-solar-open2-getting-start/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Solar Open 2 (250B-A15B) Getting Started — 업스테이지 오픈 웨이트 가이드</h1>
+        <p class="article-dates"><time datetime="2026-07-27">발행 2026.07.27</time> · 주제 LLM · 에이전트 · AI-Open-Weights-Model</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn is-active" href="../../tech/ai-open-weights-model-solar-open2-getting-start/" data-lang="KR" aria-current="true">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/ai-open-weights-model-solar-open2-getting-start-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/ai-open-weights-model-solar-open2-getting-start-ja/" data-lang="JP">日本語</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">업스테이지 Solar Open 2(250B-A15B) 공식 스펙·벤치마크·Docker/vLLM 설치·양자화·에이전트 도입 체크리스트를 정리한 TechDoc. Chat이 아닌 Agent 설계 전제와 검증판 정정 사항 포함.</p>
+        
+      </header>
+      <div class="article-body prose"><h2>0. v1 대비 주요 수정 사항</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>항목</th>
+<th>v1 기술</th>
+<th>정정 내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>토크나이저</td>
+<td>&quot;한국어 전용 토크나이저&quot;</td>
+<td>한국어 <strong>최적화</strong> 토크나이저. 모델 자체는 한·영·일 다국어. 한국어 오피스 텍스트 기준 비교 12종 중 1위, 차점 글로벌 모델 대비 약 24% 우위</td>
+</tr>
+<tr>
+<td>2</td>
+<td>NoPE</td>
+<td>&quot;NoPE로 1M 지원&quot;</td>
+<td>NoPE는 <strong>softmax attention 층에 위치 인코딩을 적용하지 않는 설계</strong>. 1M은 Hybrid Attention(고정 크기 state) + NoPE 조합의 결과</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Mistral 비교</td>
+<td>&quot;모든 주요 벤치마크에서 압도적 우위&quot;</td>
+<td><strong>부정확</strong>. SWE-Bench는 70.4 vs 69.6으로 근소, Terminal Bench Hard는 Mistral(33.3)이 Solar(28.3)보다 우위</td>
+</tr>
+<tr>
+<td>4</td>
+<td>경쟁 모델 표</td>
+<td>MiMo-V2.5 누락</td>
+<td><strong>MiMo-V2.5(310B-A15B)</strong> 는 활성 파라미터가 동일한 최직접 경쟁자. 반드시 포함</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Ko-GDPval</td>
+<td>86.8 (vs V4-Flash 85.0)</td>
+<td>맞으나 불완전. 블로그 기준 <strong>86.75점으로 1.6T급 DeepSeek-V4-Pro(86.91)와 0.16점 차</strong> — 이쪽이 핵심 메시지</td>
+</tr>
+<tr>
+<td>6</td>
+<td>Kimi K3</td>
+<td>&quot;활성 파라미터 미공개&quot;</td>
+<td>보도 기준 <strong>896 experts 중 16개 활성</strong>, Modified MIT, 멀티모달, 가중치 공개 2026-07-27</td>
+</tr>
+<tr>
+<td>7</td>
+<td>Docker 실행</td>
+<td><code>--logits-processors</code> 누락</td>
+<td>공식 권장 구성에 포함된 필수 플래그. 누락 시 템플릿 처리 동작이 달라짐</td>
+</tr>
+<tr>
+<td>8</td>
+<td>추론 파싱</td>
+<td>미기재</td>
+<td>Transformers 직접 사용 시 `&lt;</td>
+</tr>
+<tr>
+<td>9</td>
+<td>학습 스펙</td>
+<td>미기재</td>
+<td>12T 토큰 / NVIDIA B200 / 2M GPU-hours / vocab 196,608</td>
+</tr>
+<tr>
+<td>10</td>
+<td>양자화</td>
+<td>&quot;H200 2장&quot;</td>
+<td>공식 블로그는 H200 2장. 단 Nota INT4-GlobalPruned 카드는 <strong>2×H100</strong> 서빙 기준 명시 — 구성별로 다름</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. 프로젝트 배경</h2>
+<p><strong>Solar Open 2</strong>는 업스테이지가 2026년 7월 22일 개발자 행사 &#39;솔라 오픈 웨이트 데이&#39;에서 공개한 오픈 웨이트 파운데이션 모델이다. 정부의 독자 AI 파운데이션 모델(독파모) 사업 맥락에서 나온 2차 공개 모델이며, Hugging Face에 상업적 이용이 가능한 라이선스로 배포됐다.</p>
+<p>핵심 설계 목표는 <strong>Chat이 아니라 Agent</strong>다. 김성훈 대표는 대화만 잘하는 모델이 아니라 지시받은 일을 끝까지 수행하는 능력에 집중했다고 설명했다. 업스테이지가 정의한 Agentic Use의 세 요건은 다음과 같다.</p>
+<ol>
+<li><strong>Long-horizon task</strong> — 수십 회의 추론·도구 호출을 거쳐 작업을 완결</li>
+<li><strong>Long-context</strong> — 긴 문서와 작업 이력을 유지</li>
+<li><strong>Instruction following &amp; tool calling</strong> — 지시를 정확히 따르고 도구를 안정적으로 호출</li>
+</ol>
+<p>여기에 네 번째 실무 요건인 <strong>추론 비용</strong>이 붙는다. Agent는 계획→실행→검증→수정을 반복하므로 Chat 대비 토큰 소모가 훨씬 크고, 기업이 자체 인프라에 올리려면 모델이 지나치게 크거나 느려서는 안 된다는 것이 설계 전제다.</p>
+<h3>1.1 아키텍처 스펙 (공식 모델 카드 기준)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>모델명</td>
+<td>Solar Open 2 (250B-A15B)</td>
+</tr>
+<tr>
+<td>아키텍처</td>
+<td>Hybrid-Attention Mixture-of-Experts</td>
+</tr>
+<tr>
+<td>총 파라미터</td>
+<td>250B (250,287,794,944)</td>
+</tr>
+<tr>
+<td>활성 파라미터</td>
+<td>15B / 토큰</td>
+</tr>
+<tr>
+<td>레이어</td>
+<td>48</td>
+</tr>
+<tr>
+<td>Hidden size</td>
+<td>4,096</td>
+</tr>
+<tr>
+<td>어텐션 패턴</td>
+<td><code>[Softmax, Linear×3] × 12</code> (전체 48층 중 75%가 linear)</td>
+</tr>
+<tr>
+<td>어텐션 헤드</td>
+<td>Softmax: 64 query / 8 KV (GQA), Linear: 64 query</td>
+</tr>
+<tr>
+<td>위치 인코딩</td>
+<td>NoPE (RoPE 미사용)</td>
+</tr>
+<tr>
+<td>Expert 수</td>
+<td>321개 (routed 320 + shared 1)</td>
+</tr>
+<tr>
+<td>활성 Expert</td>
+<td>routed top-8 + shared 1</td>
+</tr>
+<tr>
+<td>Vocabulary</td>
+<td>196,608</td>
+</tr>
+<tr>
+<td>컨텍스트</td>
+<td>1M 토큰</td>
+</tr>
+<tr>
+<td>사전학습 토큰</td>
+<td>약 12T</td>
+</tr>
+<tr>
+<td>학습 하드웨어</td>
+<td>NVIDIA B200</td>
+</tr>
+<tr>
+<td>학습 GPU 시간</td>
+<td>2M GPU-hours</td>
+</tr>
+<tr>
+<td>공식 언어</td>
+<td>한국어 · 영어 · 일본어</td>
+</tr>
+<tr>
+<td>라이선스</td>
+<td>Upstage Solar License</td>
+</tr>
+<tr>
+<td>하드웨어 요건</td>
+<td>최소 H200 ×4 / 권장 H200 ×8</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. 장점 (Strengths)</h2>
+<h3>2.1 추론 효율성 — 이 모델의 실질적 상품성</h3>
+<p>250B 총 파라미터 중 토큰당 15B만 활성화한다. 더 중요한 것은 <strong>KV 캐시를 유지하는 층이 48층 중 12층(25%)</strong> 뿐이라는 점이다. Linear attention 층은 시퀀스 정보를 고정 크기 state로 관리하므로 컨텍스트가 길어져도 모든 층의 KV 캐시가 동일 비율로 증가하지 않는다. 동형 all-softmax 모델 대비 롱컨텍스트 메모리가 약 1/4 수준이다.</p>
+<p>결과적으로 BF16은 H200 4장, 양자화 시 H200 2장에서 구동된다. <strong>자체 인프라 온프레미스 배포가 현실적으로 가능한 유일한 준-프런티어 오픈 웨이트 모델</strong>이라는 점이 최대 차별점이다.</p>
+<h3>2.2 학습 효율 — Selective Weight Transfer</h3>
+<p>전작 Solar Open 100B의 가중치 중 새 아키텍처에서도 쓸 수 있는 부분만 선별 전이해 초기화했다. 모델 카드 기준 <strong>전이된 가중치는 전체의 2.3%</strong> 에 불과하고 나머지는 무작위 초기화다.</p>
+<ul>
+<li>200B-A15B proxy 실험: 동일 loss 도달에 필요한 토큰이 random init 약 22B → SWT 약 12B (<strong>약 58% 수준</strong>)</li>
+<li>아키텍처 효과 검증: Solar Open 100B의 all-softmax 구조가 671B 토큰으로 도달한 MMLU 성능을, Solar Open 2 아키텍처는 <strong>210B 토큰</strong>으로 도달</li>
+</ul>
+<h3>2.3 Agentic Use 최적화 — 학습 데이터 설계</h3>
+<p>단순 시나리오 생성이 아니라 <strong>검증 가능한 환경</strong>을 만들어 통과한 데이터만 학습에 썼다는 점이 특징이다.</p>
+<table>
+<thead>
+<tr>
+<th>도메인</th>
+<th>검증 방식</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>검색</td>
+<td>질문을 구조·자명성·검색 가능성·해결 가능성·출처 근거 다단계로 검증</td>
+</tr>
+<tr>
+<td>도구 호출</td>
+<td>도구 선택 적절성이 아니라 <strong>실제 환경 변경 후 상태를 다시 읽어 결과 검증</strong></td>
+</tr>
+<tr>
+<td>코딩</td>
+<td>터미널 작업 후 스스로 테스트 생성·실행, 실패 시 수정·재검증 루프를 데이터에 포함</td>
+</tr>
+<tr>
+<td>오피스</td>
+<td>여러 문서·스프레드시트 교차 확인, 수식 포함 시트 입력 변경 후 재계산 등 실무형 태스크. <strong>한국 업무 환경 특유의 문서 처리 시나리오를 별도 반영</strong></td>
+</tr>
+</tbody></table>
+<p>마지막 항목이 실무적으로 중요하다. &quot;한국어를 잘 생성한다&quot;가 아니라 &quot;한국어로 주어진 업무를 실제로 수행한다&quot;를 목표로 설계했다는 의미다.</p>
+<h3>2.4 한국어 토큰 효율</h3>
+<p>같은 한국어 텍스트를 글로벌 모델 대비 <strong>약 50~80% 수준의 토큰</strong>으로 처리한다. 한국어 오피스 업무 텍스트 기준 비교 대상 12개 토크나이저 중 1위이며, 차점 글로벌 모델 대비 약 24% 앞선다.</p>
+<p>이는 벤치마크 점수가 아니라 <strong>직접적인 비용 항목</strong>이다. 동일 업무에서 토큰 소모가 30% 줄면 Agent 반복 호출 환경에서 운영비가 그대로 30% 줄고, 유효 컨텍스트는 그만큼 길어진다.</p>
+<h3>2.5 실무형 산출물 능력 — Ko-GDPval</h3>
+<p>Ko-GDPval은 변호사·회계사·감염관리 전문가 등 <strong>58개 직군, 170개 실제 업무 시나리오</strong>에서 모델이 보고서·계획서·발표자료 같은 문서 산출물을 직접 만들어 평가받는 벤치마크다.</p>
+<ul>
+<li>Solar Open 2: <strong>86.75</strong>- DeepSeek-V4-Pro (1.6T): 86.91 —<strong>0.16점 차</strong></li>
+<li>MiMo-V2.5-Pro (1T): 84.62</li>
+</ul>
+<p>활성 파라미터 기준으로 Solar Open 2는 DeepSeek-V4-Pro의 약 1/3(15B)을 쓴다. 공개된 산출물 예시에는 FATF 상호평가 사전 대응 자료(규제기관 제출용 PDF + 55건 모니터링 워크북 xlsx 상호 정합), 의료기기 PMS 정기 보고서, 법무법인 광고 자체 점검 결과(인용 판례표·법령 색인 포함) 등이 포함된다.</p>
+<h3>2.6 상업적 활용 가능 라이선스</h3>
+<p>Upstage Solar License로 상업적 사용, fine-tuning, distillation을 통한 파생 모델 개발이 모두 허용된다.</p>
+<hr>
+<h2>3. 단점 및 한계 (Weaknesses)</h2>
+<h3>3.1 하드웨어 진입 장벽</h3>
+<p>BF16 기준 H200 4장(최소)·8장(권장). 공식 예제는 <strong>141GB 이상 메모리를 가진 GPU 8장</strong>을 가정한다. 양자화로 2장까지 낮출 수 있으나, 개인 환경이나 소규모 팀에는 여전히 비현실적이다. 실질 도입 주체는 대기업·금융권·공공기관·GPU 클라우드 사용자로 한정된다.</p>
+<h3>3.2 공식 지원 언어 3개</h3>
+<p>한·영·일에 국한된다. 중국어·유럽어군은 공식 미지원이며, 글로벌 다국어 서비스에는 추가 검증·비용이 발생한다. 아시아-태평양 한·일 시장에 집중된 포지셔닝으로 봐야 한다.</p>
+<h3>3.3 일본어 성능 근거 부재</h3>
+<p>공식 언어에 일본어가 포함돼 있으나 <strong>모델 카드에 일본어 벤치마크가 게재되지 않았다</strong>. 한국어는 9개 벤치마크가 공개된 것과 대비된다. 일본 시장 도입 검토 시 자체 평가가 필수다.</p>
+<h3>3.4 서빙 환경 의존성</h3>
+<p>Linear attention 커널 최적화에 <code>fla-core</code>(KDA 커널) 설치가 전제된다. <strong>미설치 시 Transformers가 현저히 느린 PyTorch fallback으로 동작</strong>한다. 프로덕션은 사실상 vLLM 전용이며, 그것도 업스테이지 포크(v0.22.0-solar-open2) 기준이다. 업스트림 vLLM/SGLang 일반 빌드로는 reasoning·tool-call 파서가 동작하지 않는다.</p>
+<h3>3.5 추론 토큰 비용</h3>
+<p><code>reasoning_effort=&quot;high&quot;</code> 사용 시 reasoning 블록 상한이 131,072 토큰이다. 활성 파라미터가 작아도 <strong>출력 토큰량 자체가 많으면 절감분이 상쇄</strong>될 수 있다. 실측 기준 end-to-end 태스크 비용 비교가 필요하다.</p>
+<h3>3.6 생태계 미성숙</h3>
+<p>2026년 7월 공개된 신규 모델로 파인튜닝 레시피, 커뮤니티 튜닝 모델, llama.cpp/Ollama 계열 지원이 아직 얕다. 라이선스의 &quot;Solar&quot; 접두사·&quot;Built with Solar&quot; 표기 의무도 서구권 오픈소스 채택에는 마찰 요인으로 지적된다.</p>
+<h3>3.7 자체 발표 벤치마크 의존</h3>
+<p>현시점 모든 수치는 업스테이지 발표 기준이며 일부는 in-house 벤치마크(Ko-AIME&#39;25, KBank-MMLU, Ko-GDPval)다. 독립 검증 전까지는 참고치로 다뤄야 한다.</p>
+<hr>
+<h2>4. 벤치마크 (공식 모델 카드 전문)</h2>
+<h3>4.1 영어 벤치마크</h3>
+<table>
+<thead>
+<tr>
+<th>벤치마크</th>
+<th><strong>Solar Open 2</strong><br>250B-A15B</th>
+<th>Solar Open 100B<br>102B-A12B</th>
+<th>Command A+<br>218B-A25B</th>
+<th>Mistral Medium 3.5<br>128B dense</th>
+<th>MiMo-V2.5<br>310B-A15B</th>
+<th>DeepSeek-V4-Flash<br>284B-A13B</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>지식·추론</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>MMLU-Pro</td>
+<td><strong>86.2</strong></td>
+<td>80.4</td>
+<td>79.0</td>
+<td>81.2</td>
+<td>84.6</td>
+<td>85.9</td>
+</tr>
+<tr>
+<td>GPQA-Diamond</td>
+<td>86.3</td>
+<td>66.2</td>
+<td>75.6</td>
+<td>77.5</td>
+<td>83.0</td>
+<td><strong>88.9</strong></td>
+</tr>
+<tr>
+<td>HLE (w/o tools)</td>
+<td>28.8</td>
+<td>11.5</td>
+<td>11.4</td>
+<td>12.8</td>
+<td>24.3</td>
+<td><strong>32.3</strong></td>
+</tr>
+<tr>
+<td>LiveCodeBench (v6)</td>
+<td><strong>92.4</strong></td>
+<td>56.5</td>
+<td>86.1</td>
+<td>84.9</td>
+<td>89.1</td>
+<td>92.3</td>
+</tr>
+<tr>
+<td>ArtifactsBench</td>
+<td>55.9</td>
+<td>43.4</td>
+<td>42.8</td>
+<td>49.8</td>
+<td>59.3</td>
+<td><strong>61.0</strong></td>
+</tr>
+<tr>
+<td>HMMT2602</td>
+<td>93.9</td>
+<td>68.9</td>
+<td>73.5</td>
+<td>62.9</td>
+<td>61.4</td>
+<td><strong>94.7</strong></td>
+</tr>
+<tr>
+<td>AIME2026</td>
+<td>95.7</td>
+<td>87.7</td>
+<td>96.0</td>
+<td>89.0</td>
+<td>92.3</td>
+<td><strong>97.0</strong></td>
+</tr>
+<tr>
+<td><strong>지시이행·롱컨텍스트</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>Multi-Challenge</td>
+<td>61.0</td>
+<td>40.5</td>
+<td>45.8</td>
+<td>49.8</td>
+<td>39.0</td>
+<td><strong>62.0</strong></td>
+</tr>
+<tr>
+<td>IFBench</td>
+<td>80.0</td>
+<td>57.7</td>
+<td>73.9</td>
+<td>69.0</td>
+<td>67.1</td>
+<td><strong>80.3</strong></td>
+</tr>
+<tr>
+<td>AA-LCR</td>
+<td>62.3</td>
+<td>36.0</td>
+<td>46.0</td>
+<td>61.0</td>
+<td>62.7</td>
+<td><strong>63.7</strong></td>
+</tr>
+<tr>
+<td><strong>에이전트</strong></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td>SWE-Bench Verified</td>
+<td>70.4</td>
+<td>15.4</td>
+<td>14.4</td>
+<td>69.6</td>
+<td>73.0</td>
+<td><strong>73.8</strong></td>
+</tr>
+<tr>
+<td>Terminal Bench Hard</td>
+<td>28.3</td>
+<td>2.3</td>
+<td>25.0</td>
+<td>33.3</td>
+<td><strong>41.7</strong></td>
+<td>34.1</td>
+</tr>
+<tr>
+<td>APEX-Agents</td>
+<td><strong>16.6</strong></td>
+<td>2.4</td>
+<td>1.6</td>
+<td>6.1</td>
+<td>13.4</td>
+<td>13.2</td>
+</tr>
+<tr>
+<td>MCP-Atlas</td>
+<td>58.2</td>
+<td>34.4</td>
+<td>27.2</td>
+<td>30.7</td>
+<td><strong>63.9</strong></td>
+<td>58.2</td>
+</tr>
+<tr>
+<td>τ³ (banking)</td>
+<td>19.6</td>
+<td>7.4</td>
+<td>5.8</td>
+<td>5.8</td>
+<td>8.7</td>
+<td><strong>22.3</strong></td>
+</tr>
+<tr>
+<td>GDPval-AA v2 (ELO)</td>
+<td>1128</td>
+<td>–</td>
+<td>712</td>
+<td>929</td>
+<td>1145</td>
+<td><strong>1187</strong></td>
+</tr>
+</tbody></table>
+<ul>
+<li>1위 항목은 MMLU-Pro, LiveCodeBench, APEX-Agents 3개. 나머지 다수는 DeepSeek-V4-Flash·MiMo-V2.5가 근소 우위다.</li>
+<li><strong>APEX-Agents 16.6은 유의미하다.</strong> 실제 업무형 Agent 능력 평가에서 2위(MiMo 13.4)와 격차가 있다.</li>
+<li><strong>Terminal Bench Hard 28.3은 약점</strong>이다. 터미널 기반 장기 작업에서는 MiMo-V2.5(41.7), DeepSeek(34.1), Mistral(33.3)에 밀린다. CLI 자동화 에이전트가 주 용도라면 재검토가 필요하다.</li>
+<li>τ³ banking 19.6도 금융 도메인 대화형 에이전트로는 낮은 편이다.</li>
+</ul>
+<h3>4.2 한국어 벤치마크</h3>
+<table>
+<thead>
+<tr>
+<th>벤치마크</th>
+<th><strong>Solar Open 2</strong></th>
+<th>Solar Open 100B</th>
+<th>MiMo-V2.5</th>
+<th>DeepSeek-V4-Flash</th>
+<th>Claude Haiku 4.5</th>
+<th>GPT-5.4 mini</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KMMLU-Pro</td>
+<td>78.4</td>
+<td>64.0</td>
+<td>69.1</td>
+<td><strong>78.9</strong></td>
+<td>67.9</td>
+<td>78.1</td>
+</tr>
+<tr>
+<td>CLIcK</td>
+<td><strong>90.7</strong></td>
+<td>78.9</td>
+<td>78.4</td>
+<td>89.2</td>
+<td>53.5</td>
+<td>89.6</td>
+</tr>
+<tr>
+<td>HAE-RAE v1.1</td>
+<td><strong>73.8</strong></td>
+<td>73.3</td>
+<td>61.7</td>
+<td>73.1</td>
+<td>38.5</td>
+<td>69.4</td>
+</tr>
+<tr>
+<td>Ko-AIME&#39;25†</td>
+<td>97.7</td>
+<td>80.0</td>
+<td>88.0</td>
+<td><strong>98.0</strong></td>
+<td>81.7</td>
+<td>90.7</td>
+</tr>
+<tr>
+<td>HRM8K</td>
+<td>92.2</td>
+<td>87.6</td>
+<td>90.7</td>
+<td><strong>93.4</strong></td>
+<td>90.6</td>
+<td>91.3</td>
+</tr>
+<tr>
+<td>KBank-MMLU†</td>
+<td><strong>80.8</strong></td>
+<td>65.5</td>
+<td>71.0</td>
+<td>79.5</td>
+<td>68.9</td>
+<td>79.0</td>
+</tr>
+<tr>
+<td>KBL (법률)</td>
+<td><strong>75.5</strong></td>
+<td>65.5</td>
+<td>69.8</td>
+<td>72.8</td>
+<td>69.9</td>
+<td>75.3</td>
+</tr>
+<tr>
+<td>KorMedMCQA</td>
+<td>93.0</td>
+<td>84.4</td>
+<td>87.7</td>
+<td>94.1</td>
+<td>87.0</td>
+<td><strong>94.2</strong></td>
+</tr>
+<tr>
+<td>Ko-GDPval†</td>
+<td><strong>86.8</strong></td>
+<td>3.4</td>
+<td>81.0</td>
+<td>85.0</td>
+<td>68.3</td>
+<td>59.4</td>
+</tr>
+<tr>
+<td><strong>한국어 평균</strong></td>
+<td><strong>85.4</strong></td>
+<td>66.95</td>
+<td>–</td>
+<td>84.9</td>
+<td>69.6</td>
+<td>80.8</td>
+</tr>
+</tbody></table>
+<p>† 업스테이지 in-house 벤치마크</p>
+<p><strong>해석 포인트</strong>-<strong>KBank-MMLU(금융) 80.8, KBL(법률) 75.5 1위</strong>는 국내 금융·법률 도메인 도입에 직접적인 근거다.</p>
+<ul>
+<li>KorMedMCQA는 3위. 의료 도메인은 GPT-5.4 mini(94.2)·DeepSeek(94.1)이 우위다.</li>
+<li>Ko-GDPval에서 전작(3.4)과의 격차가 비정상적으로 크다. 전작이 문서 산출물 생성 자체를 못했다는 뜻이며, 이번 세대의 핵심 개선점이 여기임을 보여준다.</li>
+</ul>
+<h3>4.3 전작 대비 개선폭</h3>
+<table>
+<thead>
+<tr>
+<th>카테고리</th>
+<th>벤치마크</th>
+<th>Solar Open 2</th>
+<th>Solar Open 100B</th>
+<th>상승폭</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>지식·과학 추론</td>
+<td>GPQA-Diamond</td>
+<td>86.26</td>
+<td>66.16</td>
+<td>+20.10p</td>
+</tr>
+<tr>
+<td>수학</td>
+<td>HMMT</td>
+<td>93.94</td>
+<td>68.94</td>
+<td>+25.00p</td>
+</tr>
+<tr>
+<td>코딩</td>
+<td>LiveCodeBench</td>
+<td>92.42</td>
+<td>56.49</td>
+<td>+35.93p</td>
+</tr>
+<tr>
+<td>지시 이행</td>
+<td>IFBench</td>
+<td>80.00</td>
+<td>57.70</td>
+<td>+22.30p</td>
+</tr>
+<tr>
+<td>한국어 종합</td>
+<td>한국어 평균</td>
+<td>85.43</td>
+<td>66.95</td>
+<td>+18.48p</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. 경쟁 프로젝트 비교</h2>
+<h3>5.1 Kimi K3 (Moonshot AI) — 규모 극단의 반대편</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th><strong>Solar Open 2</strong></th>
+<th><strong>Kimi K3</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>개발사</td>
+<td>Upstage (한국)</td>
+<td>Moonshot AI (중국)</td>
+</tr>
+<tr>
+<td>총 파라미터</td>
+<td>250B</td>
+<td><strong>2.8T</strong></td>
+</tr>
+<tr>
+<td>Expert 구성</td>
+<td>320 routed + 1 shared, top-8 활성</td>
+<td>896 experts, 16개 활성 (보도 기준)</td>
+</tr>
+<tr>
+<td>공개일</td>
+<td>2026-07-22</td>
+<td>API 2026-07-16 / 가중치 2026-07-27</td>
+</tr>
+<tr>
+<td>컨텍스트</td>
+<td>1M</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>멀티모달</td>
+<td>텍스트 전용</td>
+<td><strong>네이티브 비전 지원</strong></td>
+</tr>
+<tr>
+<td>추론 모드</td>
+<td><code>none</code> / <code>high</code> 선택</td>
+<td>thinking mode 상시 활성</td>
+</tr>
+<tr>
+<td>라이선스</td>
+<td>Upstage Solar License</td>
+<td>Modified MIT</td>
+</tr>
+<tr>
+<td>공식 언어</td>
+<td>한 · 영 · 일</td>
+<td>중 · 영 중심</td>
+</tr>
+<tr>
+<td>API 가격</td>
+<td>자체 서빙</td>
+<td>$3 / $15 per 1M tokens</td>
+</tr>
+<tr>
+<td>하드웨어</td>
+<td>H200 2~4장</td>
+<td>테라바이트급 스토리지 + 분산 클러스터</td>
+</tr>
+</tbody></table>
+<p>Kimi K3는 현재까지 공개된 최대 규모 오픈 웨이트 모델로, Arena Frontend Code Arena에서 1위(1,679점)를 기록하며 Claude Fable 5, GPT-5.6 Sol을 앞섰다. Artificial Analysis 종합 ELO 1,547로 K2.6 대비 732점 상승했다.</p>
+<p><strong>두 모델은 경쟁 관계가 아니라 다른 시장에 있다.</strong>Kimi K3는 프런티어 성능을 오픈 웨이트로 가져오는 것이 목적이고, Solar Open 2는<strong>자체 인프라에 실제로 올릴 수 있는 성능/비용 지점</strong>을 노린다. 온프레미스가 요구되는 국내 금융·공공 도입에서 2.8T 모델은 애초에 선택지가 아니다.</p>
+<p>다만 K3의 자체 발표 벤치마크는 가중치 공개 전 API 기준이었고, 추론이 느리고 reasoning 토큰 소모가 크다는 지적이 있다는 점은 함께 봐야 한다.</p>
+<h3>5.2 MiMo-V2.5 (310B-A15B) — 가장 직접적인 경쟁자</h3>
+<p><strong>활성 파라미터가 15B로 동일</strong>한 유일한 비교 대상이다. 즉 추론 비용 구조가 거의 같다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Solar Open 2 우위</th>
+<th>MiMo-V2.5 우위</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>지식</td>
+<td>MMLU-Pro 86.2 vs 84.6, GPQA 86.3 vs 83.0</td>
+<td>–</td>
+</tr>
+<tr>
+<td>코딩</td>
+<td>LiveCodeBench 92.4 vs 89.1</td>
+<td>SWE-Bench 70.4 vs <strong>73.0</strong></td>
+</tr>
+<tr>
+<td>에이전트</td>
+<td>APEX-Agents 16.6 vs 13.4</td>
+<td>Terminal Bench Hard 28.3 vs <strong>41.7</strong>, MCP-Atlas 58.2 vs <strong>63.9</strong></td>
+</tr>
+<tr>
+<td>지시이행</td>
+<td>Multi-Challenge 61.0 vs 39.0, IFBench 80.0 vs 67.1</td>
+<td>–</td>
+</tr>
+<tr>
+<td>한국어</td>
+<td>전 항목 우위 (평균 85.4 vs 미공개)</td>
+<td>–</td>
+</tr>
+<tr>
+<td>총 파라미터</td>
+<td>250B (메모리 유리)</td>
+<td>310B</td>
+</tr>
+</tbody></table>
+<p><strong>결론</strong>: 한국어·지시이행은 Solar, <strong>MCP 도구 호출과 터미널 장기 작업은 MiMo가 우위</strong>다. MCP-Atlas 58.2 vs 63.9는 MCP 기반 에이전트를 주 용도로 하는 조직에게는 무시하기 어려운 격차다.</p>
+<h3>5.3 DeepSeek-V4-Flash (284B-A13B)</h3>
+<p>가장 균형 잡힌 경쟁자로, 16개 영어 벤치마크 중 9개에서 1위다. Solar Open 2가 앞서는 것은 MMLU-Pro(86.2 vs 85.9), LiveCodeBench(92.4 vs 92.3), APEX-Agents(16.6 vs 13.2) 정도이며 앞의 둘은 오차 범위다.</p>
+<p>한국어에서는 종합 평균 85.4 vs 84.9로 Solar가 앞서지만, KMMLU-Pro·Ko-AIME·HRM8K·KorMedMCQA는 DeepSeek이 우위다. <strong>DeepSeek이 이 정도 한국어 성능을 낸다는 사실 자체가 Solar Open 2의 한국어 우위 서사를 상당히 약화시킨다.</strong> 실질 차별점은 한국어 성능 자체보다 토큰 효율·온프레미스 적합성·데이터 주권 쪽에 있다.</p>
+<h3>5.4 Mistral Medium 3.5 (128B dense)</h3>
+<p>Solar Open 2가 지식·코딩·한국어에서 명확히 앞선다(MMLU-Pro 86.2 vs 81.2). 단 <strong>에이전트 영역은 대등하거나 열세</strong>다 — SWE-Bench 70.4 vs 69.6(근소), Terminal Bench Hard 28.3 vs 33.3(열세), AA-LCR 62.3 vs 61.0. Apache 2.0 라이선스라는 점은 Mistral의 확실한 강점이다.</p>
+<h3>5.5 Command A+ (218B-A25B)</h3>
+<p>Solar Open 2가 전반적으로 크게 앞선다(MMLU-Pro 86.2 vs 79.0, GPQA 86.3 vs 75.6). 특히 <strong>SWE-Bench 70.4 vs 14.4</strong>로 에이전트 코딩에서는 사실상 비교 대상이 아니다. 활성 파라미터도 25B로 Solar보다 크다.</p>
+<h3>5.6 선택 가이드</h3>
+<table>
+<thead>
+<tr>
+<th>요구 조건</th>
+<th>권장</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>한국어 문서 업무 + 온프레미스</td>
+<td><strong>Solar Open 2</strong></td>
+</tr>
+<tr>
+<td>금융·법률 도메인 한국어</td>
+<td><strong>Solar Open 2</strong> (KBank-MMLU·KBL 1위)</td>
+</tr>
+<tr>
+<td>MCP 기반 도구 호출 집약형 에이전트</td>
+<td>MiMo-V2.5 검토</td>
+</tr>
+<tr>
+<td>터미널/CLI 장기 자동화</td>
+<td>MiMo-V2.5, DeepSeek-V4-Flash</td>
+</tr>
+<tr>
+<td>최고 성능, 인프라 제약 없음</td>
+<td>Kimi K3, DeepSeek-V4-Pro</td>
+</tr>
+<tr>
+<td>라이선스 자유도 최우선</td>
+<td>Mistral (Apache 2.0), Kimi K3 (Modified MIT)</td>
+</tr>
+<tr>
+<td>다국어(중·유럽어) 필수</td>
+<td>DeepSeek 계열</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Getting Started</h2>
+<h3>6.1 시스템 요구사항</h3>
+<table>
+<thead>
+<tr>
+<th>구성</th>
+<th>하드웨어</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BF16 최소</td>
+<td>NVIDIA H200 ×4</td>
+<td>공식 최소 사양</td>
+</tr>
+<tr>
+<td>BF16 권장</td>
+<td>NVIDIA H200 ×8</td>
+<td>공식 예제는 141GB급 GPU 8장 가정</td>
+</tr>
+<tr>
+<td>양자화 (공식 블로그)</td>
+<td>H200 ×2</td>
+<td>NotaAI 양자화 모델</td>
+</tr>
+<tr>
+<td>INT4 + Expert Pruning</td>
+<td>H100 ×2</td>
+<td>Nota INT4-GlobalPruned 카드 기준</td>
+</tr>
+</tbody></table>
+<p>실제 메모리 요구량은 컨텍스트 길이와 서빙 설정에 따라 달라진다.</p>
+<h3>6.2 Transformers (로컬 실험용)</h3>
+<p>업스테이지 Transformers 브랜치를 사용해야 한다.</p>
+<pre><code class="language-bash"># CUDA 지원 PyTorch를 먼저 설치할 것
+python -m pip install -U \
+  &quot;git+https://github.com/upstageAI/transformers.git@v5.14.1-solar-open2&quot; \
+  &quot;fla-core[cuda]&gt;=0.5.1&quot; \
+  accelerate einops
+</code></pre>
+<blockquote>
+<p><code>fla-core</code>가 없으면 최적화된 KDA 커널 대신 현저히 느린 PyTorch fallback으로 동작한다. 반드시 설치할 것.</p>
+</blockquote>
+<pre><code class="language-python">import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+model_id = &quot;upstage/Solar-Open2-250B&quot;
+
+tokenizer = AutoTokenizer.from_pretrained(model_id, trust_remote_code=False)
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    device_map=&quot;auto&quot;,
+    dtype=torch.bfloat16,
+    trust_remote_code=False,
+)
+model.eval()
+
+messages = [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;업스테이지가 무엇인가요?&quot;}]
+prompt = tokenizer.apply_chat_template(
+    messages,
+    tokenize=False,
+    add_generation_prompt=True,
+    reasoning_effort=&quot;high&quot;,
+    think_render_option=&quot;preserved&quot;,
+)
+
+input_device = model.get_input_embeddings().weight.device
+model_inputs = tokenizer(prompt, return_tensors=&quot;pt&quot;).to(input_device)
+
+generated_ids = model.generate(
+    **model_inputs,
+    max_new_tokens=32768,
+    do_sample=True,
+    temperature=1.0,
+    top_p=1.0,
+)
+
+# 추론 트레이스와 최종 답변 분리 (Transformers 직접 사용 시 필수)
+new_token_ids = generated_ids[0, model_inputs.input_ids.shape[-1]:].tolist()
+think_end_id = tokenizer.convert_tokens_to_ids(&quot;&lt;|think:end|&gt;&quot;)
+
+if think_end_id in new_token_ids:
+    answer_start = len(new_token_ids) - new_token_ids[::-1].index(think_end_id)
+else:
+    # 종료 마커가 없으면 추론 도중 max_new_tokens에 도달한 것
+    answer_start = len(new_token_ids)
+
+reasoning = tokenizer.decode(new_token_ids[:answer_start], skip_special_tokens=True).strip()
+answer = tokenizer.decode(new_token_ids[answer_start:], skip_special_tokens=True).strip()
+
+print(&quot;[reasoning]&quot;, reasoning)
+print(&quot;[answer]&quot;, answer)
+</code></pre>
+<p><strong>답변이 비어 있다면</strong> 추론 블록이 끝나기 전에 <code>max_new_tokens</code>에 도달한 것이다. 값을 늘려 재시도한다.</p>
+<h3>6.3 vLLM 프로덕션 서빙 (권장)</h3>
+<h4>옵션 1: Docker</h4>
+<pre><code class="language-bash"># 이미지 기준: vLLM v0.22.0 / CUDA 12.9
+docker run --rm --gpus all --ipc=host \
+  -p 8000:8000 \
+  -v &quot;${HF_HOME:-$HOME/.cache/huggingface}:/root/.cache/huggingface&quot; \
+  upstage/vllm-solar-open2 \
+  upstage/Solar-Open2-250B \
+  --served-model-name solar-open2-250b \
+  --tensor-parallel-size 8 \
+  --enable-expert-parallel \
+  --moe-backend triton \
+  --default-chat-template-kwargs &#39;{&quot;think_render_option&quot;:&quot;preserved&quot;}&#39; \
+  --reasoning-parser solar_open2 \
+  --tool-call-parser solar_open2 \
+  --enable-auto-tool-choice \
+  --logits-processors vllm.v1.sample.logits_processor.solar_open2:SolarOpen2TemplateLogitsProcessor
+</code></pre>
+<blockquote>
+<p><strong><code>--logits-processors</code>는 공식 권장 구성의 필수 항목이다.</strong> v1 문서에서 누락돼 있었다.</p>
+</blockquote>
+<h4>옵션 2: 소스 설치</h4>
+<pre><code class="language-bash">pip install -U uv
+
+VLLM_PRECOMPILED_WHEEL_LOCATION=&quot;https://github.com/vllm-project/vllm/releases/download/v0.22.0/vllm-0.22.0%2Bcu129-cp38-abi3-manylinux_2_28_x86_64.whl&quot; \
+VLLM_USE_PRECOMPILED=1 \
+uv pip install --reinstall-package vllm --torch-backend=cu129 \
+  &quot;git+https://github.com/UpstageAI/vllm.git@v0.22.0-solar-open2&quot;
+</code></pre>
+<pre><code class="language-bash">vllm serve upstage/Solar-Open2-250B \
+  --served-model-name solar-open2-250b \
+  --tensor-parallel-size 8 \
+  --enable-expert-parallel \
+  --moe-backend triton \
+  --default-chat-template-kwargs &#39;{&quot;think_render_option&quot;:&quot;preserved&quot;}&#39; \
+  --reasoning-parser solar_open2 \
+  --tool-call-parser solar_open2 \
+  --enable-auto-tool-choice \
+  --logits-processors vllm.v1.sample.logits_processor.solar_open2:SolarOpen2TemplateLogitsProcessor
+</code></pre>
+<h4>API 호출</h4>
+<pre><code class="language-bash">curl http://localhost:8000/v1/chat/completions \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{
+    &quot;model&quot;: &quot;solar-open2-250b&quot;,
+    &quot;messages&quot;: [{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is Upstage?&quot;}],
+    &quot;max_tokens&quot;: 131584,
+    &quot;temperature&quot;: 1.0,
+    &quot;top_p&quot;: 1.0,
+    &quot;reasoning_effort&quot;: &quot;high&quot;
+  }&#39;
+</code></pre>
+<blockquote>
+<p><code>max_tokens</code>는 추론 트레이스와 최종 답변을 <strong>모두 포함</strong>한다. reasoning 상한이 131,072이므로 그 이상의 여유를 둬야 답변이 잘리지 않는다.</p>
+</blockquote>
+<h3>6.4 공식 양자화 모델 (NotaAI)</h3>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>방식</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>nota-ai/Solar-Open2-250B-Nota-INT4-GlobalPruned</code></td>
+<td>W4A16 INT4 + 글로벌 expert pruning</td>
+<td>층별 expert 수 가변, 2×H100 서빙</td>
+</tr>
+<tr>
+<td><code>nota-ai/Solar-Open2-250B-Nota-NVFP4</code></td>
+<td>NVFP4</td>
+<td>Blackwell 계열 최적</td>
+</tr>
+<tr>
+<td><code>nota-ai/Solar-Open2-250B-Nota-INT4</code></td>
+<td>W4A16 INT4</td>
+<td>pruning 미적용</td>
+</tr>
+</tbody></table>
+<p>GlobalPruned 버전은 전체 네트워크 관점에서 expert 중요도를 측정해 층별로 남길 expert 수를 다르게 가져간다. 균일 pruning 대비 정확도 보존이 낫다.</p>
+<h3>6.5 추론 모드 설정</h3>
+<table>
+<thead>
+<tr>
+<th>모드</th>
+<th><code>reasoning_effort</code></th>
+<th>temperature</th>
+<th>top_p</th>
+<th>max_tokens</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>직접 응답</td>
+<td><code>&quot;none&quot;</code></td>
+<td>1.0</td>
+<td>1.0</td>
+<td>최대 128K</td>
+</tr>
+<tr>
+<td>고급 추론</td>
+<td><code>&quot;high&quot;</code></td>
+<td>1.0</td>
+<td>1.0</td>
+<td>최대 256K</td>
+</tr>
+</tbody></table>
+<p><strong>멀티턴 주의</strong>: 이전 턴의 추론 트레이스를 대화 이력에서 제거하면 안 된다. <code>think_render_option=preserved</code>(기본값)가 자동 처리한다.</p>
+<pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI(api_key=&quot;EMPTY&quot;, base_url=&quot;http://localhost:8000/v1&quot;)
+
+response = client.chat.completions.create(
+    model=&quot;solar-open2-250b&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;√2가 무리수임을 증명하라.&quot;}],
+    reasoning_effort=&quot;high&quot;,
+    temperature=1.0,
+    top_p=1.0,
+    max_tokens=131584,
+)
+
+print(response.choices[0].message.reasoning)  # 추론 트레이스 (별도 필드)
+print(response.choices[0].message.content)    # 최종 답변
+</code></pre>
+<h3>6.6 도구 호출 (Tool Calling)</h3>
+<p>서버를 <code>--tool-call-parser solar_open2 --enable-auto-tool-choice</code>로 기동해야 한다. 이후는 표준 OpenAI function calling 인터페이스와 동일하다.</p>
+<pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI(api_key=&quot;EMPTY&quot;, base_url=&quot;http://localhost:8000/v1&quot;)
+
+tools = [{
+    &quot;type&quot;: &quot;function&quot;,
+    &quot;function&quot;: {
+        &quot;name&quot;: &quot;get_weather&quot;,
+        &quot;description&quot;: &quot;Get current weather for a location&quot;,
+        &quot;parameters&quot;: {
+            &quot;type&quot;: &quot;object&quot;,
+            &quot;properties&quot;: {&quot;location&quot;: {&quot;type&quot;: &quot;string&quot;}},
+            &quot;required&quot;: [&quot;location&quot;],
+        },
+    },
+}]
+
+response = client.chat.completions.create(
+    model=&quot;solar-open2-250b&quot;,
+    messages=[{&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;서울 날씨가 어때?&quot;}],
+    tools=tools,
+)
+print(response.choices[0].message.tool_calls)
+</code></pre>
+<h3>6.7 Claude Code / Hermes Agent 연동</h3>
+<p>단일 vLLM 서버가 두 인터페이스를 동시에 노출한다. Claude Code는 Anthropic 호환 <code>/v1/messages</code>, Hermes Agent는 OpenAI 호환 <code>/v1</code>을 사용한다. MCP로 노출된 도구는 동일한 tool-calling 인터페이스를 통해 모델에 전달되며, 두 에이전트 모두 MCP를 네이티브 지원한다.</p>
+<p><strong>Claude Code — 환경변수 방식</strong></p>
+<pre><code class="language-bash">export ANTHROPIC_BASE_URL=http://localhost:8000
+export ANTHROPIC_AUTH_TOKEN=dummy   # 비어 있지 않은 임의 값
+export ANTHROPIC_MODEL=solar-open2-250b
+export ANTHROPIC_SMALL_FAST_MODEL=solar-open2-250b
+claude
+</code></pre>
+<p>모델명은 서버의 <code>--served-model-name</code>과 정확히 일치해야 한다.</p>
+<p><strong>Claude Code — 업스테이지 제공 스크립트</strong></p>
+<pre><code class="language-bash">curl -fsSL https://console.upstage.ai/claude-upstage.sh | bash
+</code></pre>
+<p><strong>Hermes Agent</strong> — Solar Open 2는 Hermes Official 모델이다. <code>~/.hermes/config.yaml</code>:</p>
+<pre><code class="language-yaml">model:
+  provider: custom
+  default: solar-open2-250b
+  base_url: http://localhost:8000/v1
+  api_key: dummy
+</code></pre>
+<h3>6.8 플레이그라운드</h3>
+<p>별도 설정 없이 Upstage Playground에서 체험 가능하다. <strong>제공 기간은 2026년 7월 31일까지</strong>다.</p>
+<hr>
+<h2>7. 중요 사용 예 (Key Use Cases)</h2>
+<h3>7.1 규제 대응 문서 자동 생성 — 상호 정합 다중 산출물</h3>
+<p>업스테이지가 Ko-GDPval 산출물로 공개한 대표 사례이자 이 모델의 가장 차별적인 능력이다. <strong>동일 데이터로부터 형식이 다른 두 개 이상의 산출물을 서로 숫자가 맞도록 생성</strong>한다.</p>
+<ul>
+<li>규제기관 제출용 요약 보고서(PDF) — 위험 등급별·국가별 익스포저</li>
+<li>실무 모니터링 워크북(xlsx) — 룰에 적발된 개별 거래 전건 명세</li>
+</ul>
+<p>일반적인 LLM이 실패하는 지점이 바로 두 산출물 간 합계 불일치다.</p>
+<pre><code class="language-python">prompt = &quot;&quot;&quot;다음 거래 로그(첨부)에 대해 두 개의 산출물을 생성하라.
+
+[산출물 1] 규제기관 제출용 대응 보고서
+- 위험 등급(고/중/저)별 거래 건수 및 금액 합계
+- 국가별 익스포저 상위 10개국
+- 적발 룰(R1~R4)별 요약
+
+[산출물 2] 내부 모니터링 워크북 (xlsx)
+- 적발 거래 전건 명세 (거래ID, 일시, 금액, 통화, 상대국, 적발룰, 위험등급)
+- 산출물 1의 모든 집계값과 SUMIF로 검증 가능한 구조
+
+제약: 산출물 1의 모든 수치는 산출물 2에서 재계산 가능해야 한다.
+불일치가 발생하면 산출물 2를 기준으로 산출물 1을 수정하라.&quot;&quot;&quot;
+</code></pre>
+<p><strong>적용 영역</strong>: FATF/AML 대응, 금융감독원 보고, 의료기기 PMS 정기보고, 광고 심의 자체점검, 공시자료 작성.</p>
+<h3>7.2 1M 컨텍스트 계약서·규정 교차 검토</h3>
+<p>컨텍스트가 1M이면 <strong>RAG 청킹 없이 문서 전체를 한 번에 넣을 수 있다</strong>. 조항 간 상호 참조가 중요한 문서에서 청킹은 구조적으로 답을 망친다.</p>
+<pre><code class="language-python">messages = [{
+    &quot;role&quot;: &quot;user&quot;,
+    &quot;content&quot;: f&quot;&quot;&quot;아래는 본계약서, 부속합의서 3건, 우리 회사 표준계약 가이드라인 전문이다.
+
+{full_documents}   # 약 400K 토큰
+
+다음을 수행하라:
+1. 본계약과 각 부속합의서 간 상충 조항 전부 적출 (조항 번호 명시)
+2. 표준 가이드라인 위반 조항과 위반 사유
+3. 위반 조항별 수정 제안 문구
+4. 리스크 등급(상/중/하) 및 협상 우선순위
+
+근거 없는 추정은 하지 말고, 원문 조항을 인용해 제시하라.&quot;&quot;&quot;
+}]
+</code></pre>
+<p><strong>주의</strong>: 롱컨텍스트 벤치마크 AA-LCR은 62.3으로 최상위(DeepSeek 63.7)와 근소하지만 절대값 자체가 높지 않다. 1M을 실제로 채워 쓸 때의 검색 정확도는 자체 needle-in-haystack 테스트로 검증할 것.</p>
+<h3>7.3 스프레드시트 재계산형 에이전트</h3>
+<p>학습 데이터에 명시적으로 포함된 시나리오다. 수식이 있는 시트의 입력값을 바꾸고 결과를 다시 계산하는 작업이다.</p>
+<pre><code class="language-python">tools = [
+    {&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {
+        &quot;name&quot;: &quot;read_sheet&quot;,
+        &quot;description&quot;: &quot;시트 범위를 읽어 값과 수식을 반환&quot;,
+        &quot;parameters&quot;: {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {
+            &quot;path&quot;: {&quot;type&quot;: &quot;string&quot;}, &quot;sheet&quot;: {&quot;type&quot;: &quot;string&quot;}, &quot;range&quot;: {&quot;type&quot;: &quot;string&quot;}
+        }, &quot;required&quot;: [&quot;path&quot;, &quot;sheet&quot;, &quot;range&quot;]}}},
+    {&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {
+        &quot;name&quot;: &quot;write_cells&quot;,
+        &quot;description&quot;: &quot;셀에 값 또는 수식을 기록&quot;,
+        &quot;parameters&quot;: {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {
+            &quot;path&quot;: {&quot;type&quot;: &quot;string&quot;}, &quot;updates&quot;: {&quot;type&quot;: &quot;array&quot;, &quot;items&quot;: {&quot;type&quot;: &quot;object&quot;}}
+        }, &quot;required&quot;: [&quot;path&quot;, &quot;updates&quot;]}}},
+    {&quot;type&quot;: &quot;function&quot;, &quot;function&quot;: {
+        &quot;name&quot;: &quot;recalculate&quot;,
+        &quot;description&quot;: &quot;워크북 전체 재계산 후 지정 셀 결과 반환&quot;,
+        &quot;parameters&quot;: {&quot;type&quot;: &quot;object&quot;, &quot;properties&quot;: {
+            &quot;path&quot;: {&quot;type&quot;: &quot;string&quot;}, &quot;check_cells&quot;: {&quot;type&quot;: &quot;array&quot;, &quot;items&quot;: {&quot;type&quot;: &quot;string&quot;}}
+        }, &quot;required&quot;: [&quot;path&quot;]}}},
+]
+
+# &quot;환율 가정을 1,340원에서 1,420원으로 변경하고, 영향받는 부문별 영업이익을
+#  재계산한 뒤 변동폭 상위 3개 부문에 대한 코멘트를 작성하라&quot;
+</code></pre>
+<p>핵심은 모델이 <strong>쓰기 후 다시 읽어 결과를 검증</strong>하도록 학습됐다는 점이다. <code>recalculate</code> 도구를 반드시 제공해 이 루프를 활성화해야 한다.</p>
+<h3>7.4 사내 코드베이스 에이전트 (Claude Code 연동)</h3>
+<p>SWE-Bench Verified 70.4는 자체 인프라에서 돌릴 수 있는 모델로는 최상위권이다. 소스코드 외부 유출이 금지된 조직에 직접적인 답이 된다.</p>
+<pre><code class="language-bash"># 1. 사내 GPU 노드에서 vLLM 기동 (6.3절)
+# 2. 개발자 워크스테이션
+export ANTHROPIC_BASE_URL=http://gpu-node.internal:8000
+export ANTHROPIC_AUTH_TOKEN=dummy
+export ANTHROPIC_MODEL=solar-open2-250b
+export ANTHROPIC_SMALL_FAST_MODEL=solar-open2-250b
+cd ~/legacy-erp &amp;&amp; claude
+</code></pre>
+<p><strong>단, Terminal Bench Hard 28.3은 짚고 넘어가야 한다.</strong> 파일 단위 수정·테스트 통과형 작업(SWE-Bench)은 강하지만, 터미널에서 장기간 자율적으로 환경을 조작하는 작업은 상대적으로 약하다. 자율 실행 범위를 좁게 잡고 human-in-the-loop을 유지하는 편이 안전하다.</p>
+<h3>7.5 MCP 기반 사내 시스템 오케스트레이션</h3>
+<pre><code class="language-yaml"># 사내 MCP 서버 구성 예
+servers:
+  - name: erp-mcp          # 전표 조회/기표
+  - name: groupware-mcp    # 결재 상신, 문서함
+  - name: dw-mcp           # 데이터웨어하우스 쿼리
+  - name: hr-mcp           # 인사 마스터 (읽기 전용)
+</code></pre>
+<pre><code>&quot;이번 분기 부서별 판관비 집행률을 조회해서 예산 대비 90% 초과 부서를
+찾고, 해당 부서장 앞으로 집행 현황 요약과 잔여 예산 계획 요청 공문을
+기안 상신해줘.&quot;
+</code></pre>
+<p><strong>MCP-Atlas 58.2는 최상위권(MiMo 63.9)과 격차가 있다.</strong> 도구 개수가 많고 스키마가 복잡할수록 오호출 가능성이 올라간다. 실무 권장 설계:</p>
+<ul>
+<li>세션당 노출 도구를 15개 이하로 제한</li>
+<li>쓰기(write) 도구는 반드시 승인 게이트를 통과시킬 것</li>
+<li>도구 description을 한국어로 명확하게 작성 (한국어 이해도가 강점이므로 활용)</li>
+</ul>
+<h3>7.6 도메인 특화 파생 모델 개발</h3>
+<p>라이선스가 fine-tuning·distillation을 허용한다. KBank-MMLU 80.8·KBL 75.5라는 베이스 성능은 금융·법률 특화 파생 모델의 출발점으로 유리하다.</p>
+<pre><code>Solar-KFinance-v1   # 국내 금융 규정·상품 약관 특화
+Solar-KLegal-v1     # 판례·법령 특화
+Solar-Med-PMS-v1    # 의료기기 시판후조사 문서 특화
+</code></pre>
+<blockquote>
+<p>모델명 접두사 &quot;Solar&quot; 필수, 홍보물에 &quot;Built with Solar&quot; 표기, 라이선스 사본 동봉 의무.</p>
+</blockquote>
+<hr>
+<h2>8. 한국 시장 사업 도입 시나리오</h2>
+<h3>8.0 전제: 왜 지금 한국에서 유효한가</h3>
+<p>세 가지 조건이 동시에 성립한다.</p>
+<ol>
+<li><strong>망분리·데이터 주권 규제</strong> — 금융권 망분리, 공공 클라우드 보안인증(CSAP), 개인정보 국외이전 제한으로 해외 API 사용이 구조적으로 어렵다.</li>
+<li><strong>온프레미스 가능한 하드웨어 요건</strong> — H200 2~4장은 중견기업도 감당 가능한 수준이다. 프런티어급 오픈 모델 중 이 조건을 만족하는 사실상 유일한 선택지다.</li>
+<li><strong>한국어 업무 문맥 학습</strong> — 한국 업무 환경 특유의 문서 처리 시나리오가 학습에 반영됐다.</li>
+</ol>
+<p>업스테이지 측 레퍼런스로는 조달청 생성형 AI 업무지원 서비스 1호 공급사 선정(2025-12), 포털 &#39;다음&#39; 적용 계획, 지자체·공공·교육기관 대상 에이전트 플랫폼 &#39;타임리&#39; 공급이 언급된다.</p>
+<h3>8.1 금융권 — 준법감시·AML 에이전트</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>대상</td>
+<td>은행, 증권, 보험, 가상자산사업자(VASP)</td>
+</tr>
+<tr>
+<td>근거</td>
+<td>KBank-MMLU 80.8(1위), Ko-GDPval 86.8, 규제 문서 다중 산출물 능력</td>
+</tr>
+<tr>
+<td>문제</td>
+<td>AML/CFT 모니터링 알람 폭증, FATF 상호평가 대응 문서 작업 과중, 망분리로 외부 LLM 사용 불가</td>
+</tr>
+<tr>
+<td>구성</td>
+<td>내부망 H200 ×4 + vLLM + MCP(코어뱅킹 읽기전용, AML 룰엔진, 문서관리)</td>
+</tr>
+<tr>
+<td>산출</td>
+<td>의심거래보고(STR) 초안, 감독기관 제출 보고서 + 검증용 워크북 동시 생성, 내부통제 점검조서</td>
+</tr>
+<tr>
+<td>KPI</td>
+<td>알람 1건당 심사 소요시간, STR 초안 반려율, 보고서 작성 리드타임</td>
+</tr>
+<tr>
+<td>리스크</td>
+<td>τ³ banking 19.6은 대화형 금융 에이전트로는 낮음 → <strong>고객 응대가 아닌 백오피스 문서 업무로 범위를 한정할 것</strong></td>
+</tr>
+</tbody></table>
+<h3>8.2 법무·법률 서비스 — 계약 검토 및 자체점검</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>대상</td>
+<td>로펌, 대기업 법무팀, 사내 컴플라이언스</td>
+</tr>
+<tr>
+<td>근거</td>
+<td>KBL 75.5(1위), 1M 컨텍스트, 인용 판례표·법령 색인 산출 사례</td>
+</tr>
+<tr>
+<td>문제</td>
+<td>계약서 검토가 주니어 인력에 집중, 조항 간 상충 누락, 개정 법령 반영 지연</td>
+</tr>
+<tr>
+<td>구성</td>
+<td>온프레미스(수임 정보 외부 유출 절대 불가) + 사내 판례·계약 DB MCP 연동</td>
+</tr>
+<tr>
+<td>산출</td>
+<td>조항별 리스크 등급표, 표준계약 대비 편차 리포트, 협상 포인트 요약, 광고 심의 자체점검 결과</td>
+</tr>
+<tr>
+<td>KPI</td>
+<td>계약 1건당 검토 시간, 상충 조항 적출률(사람 대비), 재검토 지적 건수</td>
+</tr>
+<tr>
+<td>리스크</td>
+<td>법률 판단은 최종 책임이 변호사에게 있음. <strong>초안 생성 도구로만 포지셔닝하고 결과물에 검토 필수 워터마크 삽입</strong></td>
+</tr>
+</tbody></table>
+<h3>8.3 제조 대기업 — 기술문서·품질 문서 자동화</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>대상</td>
+<td>반도체·자동차·화학·조선</td>
+</tr>
+<tr>
+<td>근거</td>
+<td>1M 컨텍스트, 스프레드시트 재계산 학습, 온프레미스</td>
+</tr>
+<tr>
+<td>문제</td>
+<td>설계 변경 시 연관 문서 수십 종 수동 갱신, 해외 인증 대응 문서 반복 작성, 도면·사양서와 문서 불일치</td>
+</tr>
+<tr>
+<td>구성</td>
+<td>폐쇄망 + PLM/MES MCP 연동 + Document Parse 결합(문서 → LLM 가독 포맷 변환)</td>
+</tr>
+<tr>
+<td>산출</td>
+<td>설계 변경 통지서(ECN) 초안, 품질 부적합 보고서, 8D 리포트, 해외 인증 제출 문서 다국어(한·영·일)</td>
+</tr>
+<tr>
+<td>KPI</td>
+<td>ECN 발행 리드타임, 문서 간 불일치 지적 건수</td>
+</tr>
+<tr>
+<td>특기</td>
+<td><strong>한·영·일 3개 언어 지원이 정확히 일본 고객사 대응 시나리오와 맞는다.</strong> 일본 완성차·전자 고객사를 둔 국내 부품사에 특히 적합</td>
+</tr>
+</tbody></table>
+<h3>8.4 공공·지자체 — 민원 응대 및 행정문서</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>대상</td>
+<td>중앙부처, 광역·기초지자체, 공공기관, 교육기관</td>
+</tr>
+<tr>
+<td>근거</td>
+<td>Sovereign AI 정합, 조달청 공급 실적, CLIcK 90.7(한국 문화·상식 이해)</td>
+</tr>
+<tr>
+<td>문제</td>
+<td>민원 응대 인력 부족, 조례·규정 개정 시 연관 문서 갱신, 국외 이전 불가 데이터</td>
+</tr>
+<tr>
+<td>구성</td>
+<td>공공 클라우드 또는 자체 IDC, 양자화 모델(H200 ×2)로 예산 최소화</td>
+</tr>
+<tr>
+<td>산출</td>
+<td>민원 답변 초안, 조례 개정 대비표, 사업계획서·정산보고서, 회의록 요약</td>
+</tr>
+<tr>
+<td>KPI</td>
+<td>민원 처리 소요일, 반복 민원 자동응답률</td>
+</tr>
+<tr>
+<td>조달 관점</td>
+<td>오픈 웨이트 + 국산 = <strong>국산 AI 도입 실적 및 정보주권 요건을 동시 충족</strong>. 사업 제안서에서 강력한 차별화 요소</td>
+</tr>
+</tbody></table>
+<h3>8.5 중견기업 — 백오피스 에이전트 (양자화 저비용 진입)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>대상</td>
+<td>매출 1천억<del>1조 규모, 전담 AI 인력 1</del>3명</td>
+</tr>
+<tr>
+<td>구성</td>
+<td><strong>H200 ×2 (Nota INT4-GlobalPruned)</strong> 또는 H100 ×2. 초기 CAPEX 최소화</td>
+</tr>
+<tr>
+<td>산출</td>
+<td>계약 검토 1차, 견적·제안서 초안, 회계 전표 분류, 사내 규정 Q&amp;A</td>
+</tr>
+<tr>
+<td>접근</td>
+<td>클라우드 GPU로 3개월 PoC → 효과 확인 후 온프레미스 전환</td>
+</tr>
+<tr>
+<td>실패 요인</td>
+<td>도구(MCP) 정비 없이 모델만 도입하면 실패한다. <strong>ERP/그룹웨어 API 정비가 선행 과제</strong></td>
+</tr>
+</tbody></table>
+<h3>8.6 한국 시나리오 종합 우선순위</h3>
+<table>
+<thead>
+<tr>
+<th>우선순위</th>
+<th>세그먼트</th>
+<th>근거 강도</th>
+<th>도입 난이도</th>
+<th>예상 ROI</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>금융 백오피스 문서</td>
+<td>높음 (KBank 1위)</td>
+<td>중</td>
+<td>높음</td>
+</tr>
+<tr>
+<td>2</td>
+<td>공공 행정문서</td>
+<td>높음 (조달 실적)</td>
+<td>낮음</td>
+<td>중</td>
+</tr>
+<tr>
+<td>3</td>
+<td>법무 계약 검토</td>
+<td>높음 (KBL 1위)</td>
+<td>중</td>
+<td>높음</td>
+</tr>
+<tr>
+<td>4</td>
+<td>제조 기술문서</td>
+<td>중</td>
+<td>높음</td>
+<td>높음</td>
+</tr>
+<tr>
+<td>5</td>
+<td>사내 코드 에이전트</td>
+<td>중 (SWE 70.4 / Terminal 28.3)</td>
+<td>중</td>
+<td>중</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. 일본 시장 사업 도입 시나리오</h2>
+<h3>9.0 전제: 일본 시장의 구조적 특성</h3>
+<p>일본은 <strong>온프레미스 선호가 구조적으로 강한 시장</strong>이다. 클라우드 기반 미국·중국 모델보다 로컬 배포 가능한 모델이 도입 문턱에서 유리하다. 업스테이지는 이미 일본 법인을 운영하며, 일본 AI 기업 카라쿠리와 공동 개발한 일본어 특화 모델 <strong>Syn Pro(31B)</strong>로 W&amp;B Nejumi 리더보드 1위 실적을 보유하고 있다.<strong>핵심 전략: Syn Pro와 Solar Open 2의 2단 구성.</strong></p>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>Syn Pro (31B)</th>
+<th>Solar Open 2 (250B-A15B)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>강점</td>
+<td>일본어·문화 문맥 파인튜닝, 검증된 일본어 성능</td>
+<td>Agentic 실행력, 1M 컨텍스트, 문서 산출물</td>
+</tr>
+<tr>
+<td>하드웨어</td>
+<td>소규모 온프레미스</td>
+<td>H200 2~4장</td>
+</tr>
+<tr>
+<td>역할</td>
+<td>대화·요약·분류 등 경량 태스크</td>
+<td>다단계 업무 실행, 복합 문서 생성</td>
+</tr>
+</tbody></table>
+<h3>9.1 중대 유의사항 — 일본어 성능 근거 부재</h3>
+<p><strong>Solar Open 2 모델 카드에는 일본어 벤치마크가 게재돼 있지 않다.</strong>한국어는 9개 벤치마크가 공개된 것과 대조적이다. 공식 지원 언어에 포함돼 있다는 사실만으로 일본 고객사에 제안하는 것은 위험하다.<strong>필수 선행 작업</strong>:</p>
+<ol>
+<li>W&amp;B Nejumi 리더보드 기준 자체 평가 실시</li>
+<li>JMMLU, JCommonsenseQA 등 공개 일본어 벤치마크 자체 측정</li>
+<li>일본어 토큰 효율 실측 (한국어와 달리 최적화 근거가 공개되지 않음)</li>
+<li>고객사 실제 문서로 PoC — 특히 경어체(敬語)·비즈니스 관용 표현 정확도</li>
+</ol>
+<p>이 검증 없이 진입하면 첫 PoC에서 신뢰를 잃는다.</p>
+<h3>9.2 한일 크로스보더 문서 업무 — 가장 강력한 진입점</h3>
+<p>일본 시장에서 Solar Open 2의 <strong>진짜 차별점은 일본어 단독 성능이 아니라 한·영·일 동시 지원</strong>이다. 이 조합을 제공하는 오픈 웨이트 모델은 사실상 없다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>대상</td>
+<td>한일 합작법인, 일본 진출 한국 기업, 한국 진출 일본 기업, 상사</td>
+</tr>
+<tr>
+<td>문제</td>
+<td>계약서·사양서·품질문서를 3개 언어로 동시 유지, 번역 외주 비용과 리드타임, 번역 후 원문 대비 정합성 붕괴</td>
+</tr>
+<tr>
+<td>해법</td>
+<td>단순 번역이 아닌 <strong>동일 사실 기반 다국어 산출물 동시 생성</strong> (7.1절 능력 그대로 적용)</td>
+</tr>
+<tr>
+<td>산출</td>
+<td>한·일 대역 계약서, 품질 부적합 보고서 3개국어판, 본사 보고자료(한) + 현지 제출자료(일) 정합 세트</td>
+</tr>
+<tr>
+<td>KPI</td>
+<td>번역 외주비, 다국어 문서 리드타임, 언어판 간 불일치 지적 건수</td>
+</tr>
+</tbody></table>
+<pre><code class="language-python">prompt = &quot;&quot;&quot;다음 품질 부적합 사례 데이터로 세 개의 산출물을 생성하라.
+
+[1] 일본 고객사 제출용 8D 리포트 (일본어, 경어체, 제조업 표준 문체)
+[2] 한국 본사 보고용 요약 (한국어, 원인분석·재발방지 중심)
+[3] 글로벌 품질 DB 등록용 영문 요약 (영어, 200 words 이내)
+
+제약:
+- 세 산출물의 수치(불량률, 검출 로트 수, 대상 수량)는 완전히 일치할 것
+- [1]은 일본 고객사가 그대로 접수 가능한 형식일 것
+- 원인이 불명확한 항목은 추정하지 말고 &#39;조사 중&#39;으로 표기할 것&quot;&quot;&quot;
+</code></pre>
+<h3>9.3 일본 제조업 — 온프레미스 품질·설계 문서</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>대상</td>
+<td>자동차 부품, 전자부품, 정밀기계, 소재</td>
+</tr>
+<tr>
+<td>근거</td>
+<td>온프레미스 선호 시장 특성 + 1M 컨텍스트 + 스프레드시트 재계산</td>
+</tr>
+<tr>
+<td>문제</td>
+<td>기술 노하우 외부 유출 극도로 기피, 도면·사양서 방대, 숙련 인력 고령화로 문서화 지식 소실</td>
+</tr>
+<tr>
+<td>구성</td>
+<td>완전 폐쇄망 H200 ×2~4, PLM 연동, Syn Pro 병행</td>
+</tr>
+<tr>
+<td>특기</td>
+<td>일본 제조업은 <strong>문서 형식 준수 요구가 매우 엄격</strong>하다. 사내 표준 서식을 few-shot 또는 파인튜닝으로 반드시 주입할 것</td>
+</tr>
+<tr>
+<td>진입 전략</td>
+<td>완전 자동화가 아닌 &quot;ベテランの暗黙知の形式知化&quot;(숙련자 암묵지의 형식지화) 프레이밍이 수용도가 높다</td>
+</tr>
+</tbody></table>
+<h3>9.4 일본 금융·보험 — 규제 대응 문서</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>대상</td>
+<td>지방은행, 손해보험, 생명보험</td>
+</tr>
+<tr>
+<td>근거</td>
+<td>규제 문서 다중 산출물 생성, 온프레미스</td>
+</tr>
+<tr>
+<td>문제</td>
+<td>금융청 보고 문서 작성 부담, 지방은행의 IT 인력 부족, 데이터 외부 반출 불가</td>
+</tr>
+<tr>
+<td>구성</td>
+<td>양자화 모델(H200 ×2)로 초기 투자 억제</td>
+</tr>
+<tr>
+<td>유의</td>
+<td><strong>한국 금융 규정 학습이 일본 금융 규정에 전이되지 않는다.</strong> KBank-MMLU 1위를 일본 시장 근거로 쓰면 안 된다. 금융청 규정·업계 서식 RAG 구축이 필수 선행</td>
+</tr>
+</tbody></table>
+<h3>9.5 일본 공공·자치체 — 신중 접근 권고</h3>
+<p>일본 자치체 시장은 계약 사이클이 길고 국산·준국산 선호가 강하다. <strong>한국산 모델 단독 제안은 현실적으로 어렵다.</strong> 
+현실적 경로:</p>
+<ul>
+<li>일본 SIer·통신사(NTT, SoftBank 등)를 통한 간접 진입</li>
+<li>Syn Pro처럼 <strong>일본 기업과의 공동 개발·파생 모델 형태</strong>로 접근</li>
+<li>라이선스상 &quot;Solar&quot; 접두사 의무가 있으므로 <code>Solar-&lt;파트너명&gt;-JP-v1</code> 형태 네이밍이 불가피 — 사전에 파트너와 협의 필요</li>
+</ul>
+<h3>9.6 일본 시나리오 종합 우선순위</h3>
+<table>
+<thead>
+<tr>
+<th>우선순위</th>
+<th>세그먼트</th>
+<th>근거 강도</th>
+<th>진입 난이도</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>한일 크로스보더 문서</td>
+<td>높음 (구조적 차별점)</td>
+<td>낮음</td>
+<td>즉시 착수 가능</td>
+</tr>
+<tr>
+<td>2</td>
+<td>일본 진출 한국 기업 사내 도입</td>
+<td>높음</td>
+<td>낮음</td>
+<td>의사결정권이 한국 본사에 있음</td>
+</tr>
+<tr>
+<td>3</td>
+<td>일본 제조업 온프레미스</td>
+<td>중 (일본어 검증 필요)</td>
+<td>중</td>
+<td>Syn Pro 병행 필수</td>
+</tr>
+<tr>
+<td>4</td>
+<td>일본 금융</td>
+<td>중</td>
+<td>높음</td>
+<td>규정 RAG 선행</td>
+</tr>
+<tr>
+<td>5</td>
+<td>일본 공공</td>
+<td>낮음</td>
+<td>매우 높음</td>
+<td>파트너 경유만 현실적</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>10. 도입 판단 체크리스트</h2>
+<h3>10.1 기술 검증 (PoC 이전)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 자체 데이터로 벤치마크 재현 — 공개 수치는 참고치일 뿐</li>
+<li><input disabled="" type="checkbox"> 1M 컨텍스트 needle-in-haystack 자체 측정 (AA-LCR 62.3의 실전 의미 확인)</li>
+<li><input disabled="" type="checkbox"> MCP 도구 15개 이상 환경에서 오호출률 측정 (MCP-Atlas 58.2 리스크)</li>
+<li><input disabled="" type="checkbox"> <code>reasoning_effort=&quot;high&quot;</code> 시 실제 출력 토큰량 측정 → 활성 파라미터 절감분과 상계</li>
+<li><input disabled="" type="checkbox"> 일본어 사용 시 Nejumi/JMMLU 자체 평가 (필수)</li>
+<li><input disabled="" type="checkbox"> <code>fla-core</code> 설치 여부에 따른 처리량 차이 실측</li>
+</ul>
+<h3>10.2 인프라</h3>
+<ul>
+<li><input disabled="" type="checkbox"> BF16(H200 ×4~8) vs 양자화(×2) TCO 비교</li>
+<li><input disabled="" type="checkbox"> 업스테이지 vLLM 포크 의존성 — 업스트림 vLLM 업그레이드 경로 확인</li>
+<li><input disabled="" type="checkbox"> 동시 사용자 수 기준 처리량 산정 (Agent는 세션당 토큰 소모가 큼)</li>
+<li><input disabled="" type="checkbox"> 장애 시 폴백 경로 (Solar Pro 3 API 등)</li>
+</ul>
+<h3>10.3 거버넌스·법무</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Upstage Solar License 전문 검토 — 파생 모델 정의 범위</li>
+<li><input disabled="" type="checkbox"> 파생 모델 개발 시 &quot;Solar&quot; 접두사·&quot;Built with Solar&quot; 표기 계획</li>
+<li><input disabled="" type="checkbox"> 라이선스 사본 배포 프로세스</li>
+<li><input disabled="" type="checkbox"> 쓰기 권한 도구에 대한 승인 게이트 설계</li>
+<li><input disabled="" type="checkbox"> 산출물 검토 책임 소재 명문화 (법률·의료·금융 영역 필수)</li>
+</ul>
+<h3>10.4 조직</h3>
+<ul>
+<li><input disabled="" type="checkbox"> MCP 대상 사내 시스템 API 정비 상태 — <strong>모델보다 이쪽이 병목</strong></li>
+<li><input disabled="" type="checkbox"> 사내 문서 표준 서식 수집 (few-shot / 파인튜닝 재료)</li>
+<li><input disabled="" type="checkbox"> 검토자 역할 재정의 — 작성자에서 검증자로</li>
+</ul>
+<hr>
+<h2>11. 라이선스</h2>
+<p>Upstage Solar License로 배포되며 <strong>상업적 사용, fine-tuning, distillation을 통한 파생 모델 개발이 허용</strong>된다.</p>
+<p>파생 AI 모델 생성 시 의무사항:</p>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>네이밍</td>
+<td>모델명에 &quot;Solar&quot; 접두사 (예: <code>Solar-MyModel-v1</code>)</td>
+</tr>
+<tr>
+<td>표시</td>
+<td>관련 공개 자료에 &quot;Built with Solar&quot; 명시</td>
+</tr>
+<tr>
+<td>고지</td>
+<td>Upstage Solar License 사본 포함</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Apache 2.0(Mistral)이나 Modified MIT(Kimi K3) 대비 제약이 있다. 자체 브랜드 제품에 임베딩할 경우 네이밍 의무가 마케팅 제약이 될 수 있으므로 사전 검토가 필요하다.</p>
+</blockquote>
+<hr>
+<h2>12. 인용</h2>
+<pre><code class="language-bibtex">@misc{solar-open-2-2026,
+    title={Solar Open 2 Technical Report},
+    author={Upstage AI},
+    year={2026},
+    url={https://huggingface.co/upstage/Solar-Open2-250B}
+}
+</code></pre>
+<hr>
+<h2>13. 참고 자료</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>링크</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>모델 카드</td>
+<td><a href="https://huggingface.co/upstage/Solar-Open2-250B">https://huggingface.co/upstage/Solar-Open2-250B</a></td>
+</tr>
+<tr>
+<td>Technical Report</td>
+<td><a href="https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf">https://huggingface.co/upstage/Solar-Open2-250B/blob/main/Solar_Open_2_Tech_Report.pdf</a></td>
+</tr>
+<tr>
+<td>라이선스</td>
+<td><a href="https://huggingface.co/upstage/Solar-Open2-250B/blob/main/LICENSE">https://huggingface.co/upstage/Solar-Open2-250B/blob/main/LICENSE</a></td>
+</tr>
+<tr>
+<td>기술 블로그 (KO)</td>
+<td><a href="https://www.upstage.ai/blog/ko/solar-open-2">https://www.upstage.ai/blog/ko/solar-open-2</a></td>
+</tr>
+<tr>
+<td>기술 블로그 (EN)</td>
+<td><a href="https://www.upstage.ai/blog/en/solar-open-2">https://www.upstage.ai/blog/en/solar-open-2</a></td>
+</tr>
+<tr>
+<td>Transformers 브랜치</td>
+<td><a href="https://github.com/upstageAI/transformers/tree/v5.14.1-solar-open2">https://github.com/upstageAI/transformers/tree/v5.14.1-solar-open2</a></td>
+</tr>
+<tr>
+<td>vLLM 포크</td>
+<td><a href="https://github.com/UpstageAI/vllm/tree/v0.22.0-solar-open2">https://github.com/UpstageAI/vllm/tree/v0.22.0-solar-open2</a></td>
+</tr>
+<tr>
+<td>양자화 모델</td>
+<td><a href="https://huggingface.co/nota-ai">https://huggingface.co/nota-ai</a></td>
+</tr>
+<tr>
+<td>Syn Pro (일본어 특화)</td>
+<td><a href="https://www.upstage.ai/blog/en/upstage-ai-jp-syn-pro">https://www.upstage.ai/blog/en/upstage-ai-jp-syn-pro</a></td>
+</tr>
+<tr>
+<td>데모 (~2026-07-31)</td>
+<td><a href="https://open2-beta.upstage.ai/">https://open2-beta.upstage.ai/</a></td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>본 문서의 벤치마크 수치는 업스테이지 공식 발표 기준이며, 독립 제3자 검증이 축적되기 전까지는 자체 재현 평가를 전제로 활용할 것을 권장한다.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AI-Open-Weights-Model/Solar-Open2-Getting-Start.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

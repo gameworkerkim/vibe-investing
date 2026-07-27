@@ -884,8 +884,11 @@ function shouldSkipColumn(rel) {
 
 function shouldSkipTech(rel) {
   const n = path.basename(rel).toLowerCase();
+  const p = String(rel).replace(/\\/g, "/");
+  // Stub placeholder — not published on tech.vibequant.cc
+  if (/AI-Open-Weights-Model\/Awesome-Open-Weight/i.test(p)) return true;
   // Awesome-Agent hub index is intentional content (KO/EN/JA); skip other folder READMEs.
-  if (n.startsWith("readme") && !/Awesome-Agent\//i.test(String(rel).replace(/\\/g, "/"))) {
+  if (n.startsWith("readme") && !/Awesome-Agent\//i.test(p)) {
     return true;
   }
   if (n === "llms.txt" || n === "requirements.txt" || n === "contacts.md") return true;
