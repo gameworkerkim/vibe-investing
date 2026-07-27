@@ -1,8 +1,8 @@
 # vibequant.cc Lab 통합 로드맵 — MY-IP + LAON VaultGuard
 
-> **버전**: v1.0 (2026-07-27)
+> **버전**: v1.1 (2026-07-27)
 > **목표**: vibequant.cc/lab에 네트워크 진단 도구(MY-IP) + 시크릿 스캐너(LAON VaultGuard) 통합
-> **인프라**: Cloudflare Pages (정적) + Vercel (API/백엔드) + Neon (PostgreSQL) + Upstash Redis
+> **인프라**: Cloudflare Pages (정적) + Cloudflare CDN (API 응답 캐시) + Vercel (API/백엔드) + Neon (PostgreSQL) + Upstash Redis (Rate limit/Job queue)
 
 ---
 
@@ -31,7 +31,7 @@
 | Workers에 MTR/속도 테스트 | Workers는 TCP 소켓 열기 제한으로 MTR 불가 | **Phase 2 이후** 전용 VPS 고려 또는 제한적 기능만 제공 |
 | Cloudflare KV에 MaxMind DB | KV value limit 25MB, MaxMind DB 100MB+ | **Neon Postgres**에 MaxMind 데이터 적재 (IP range 검색 인덱스) |
 
-**최종 아키텍처 결정**: 사용자의 의도대로 **Vercel(기존 CASSANDRA AI 계정) + Neon + Upstash Redis**를 백엔드로, **Cloudflare Pages**(기존 vibequant.cc/lab)를 프론트엔드로 하는 하이브리드 구조.
+**최종 아키텍처 결정**: **Vercel(기존 CASSANDRA AI 계정) + Neon**을 백엔드로, **Cloudflare Pages + CDN**(기존 vibequant.cc/lab)을 프론트엔드 및 API 캐시로, **Upstash Redis**는 Rate limit·Job queue 전용으로 최소화하는 하이브리드 구조. IP 조회 결과 캐싱은 Cloudflare CDN(`Cache-Control`)이 Upstash Redis(일 10,000 커맨드 제한)보다 무제한에 가까워 단일 장애점을 제거한다.
 
 ### 0.3 LAON VaultGuard Demo 전략 수정
 
@@ -66,7 +66,13 @@
 │  └────────┬─────────┘  └────────┬─────────┘  └────────┬─────────┘  │
 └───────────┼─────────────────────┼─────────────────────┼────────────┘
             │                     │                     │
-            ▼                     ▼                     ▼
+     ┌──────┴──────┐              │                     │
+     │ Cloudflare  │  Cache hit: < 5ms (edge), Cache-Control: max-age=3600
+     │  CDN Cache  │  IP lookup result → stale-while-revalidate=86400
+     │ (무제한·무료) │
+     └──────┬──────┘
+            │ cache miss
+            ▼
 ┌─────────────────────────────────────────────────────────────────────┐
 │                   Vercel API (기존 CASSANDRA AI 계정)               │
 │  ┌──────────────────┐  ┌──────────────────┐  ┌──────────────────┐  │
@@ -76,12 +82,12 @@
 └───────────┼─────────────────────┼─────────────────────┼────────────┘
             │                     │                     │
             ▼                     ▼                     ▼
-┌──────────────────────┐  ┌──────────────────────┐
-│  Neon (PostgreSQL)   │  │  Upstash Redis       │
-│  ├── MaxMind IP DB   │  │  ├── API 캐시 (60s)  │
-│  ├── 스캔 결과 저장   │  │  ├── Rate limit      │
-│  └── CTI 피드 메타    │  │  └── Job queue       │
-└──────────────────────┘  └──────────────────────┘
+┌──────────────────────┐  ┌──────────────────────────┐
+│  Neon (PostgreSQL)   │  │  Upstash Redis           │
+│  ├── MaxMind IP DB   │  │  ├── Rate limit 전용      │
+│  ├── 스캔 결과 저장   │  │  └── Job queue (스캔 대기) │
+│  └── CTI 피드 메타    │  │                          │
+└──────────────────────┘  └──────────────────────────┘
 ```
 
 ### 1.2 기술 스택 매핑
@@ -89,13 +95,73 @@
 | 계층 | 기술 | 무료 티어 한도 |
 |------|------|--------------|
 | **정적 프론트엔드** | Cloudflare Pages (기존 vibequant.cc/lab) | 무제한 대역폭 |
+| **API 응답 캐시** | Cloudflare CDN (`Cache-Control` + `stale-while-revalidate`) | **무제한** (Free Tier) |
 | **API 서버** | Vercel Serverless (Next.js 15 — CASSANDRA AI와 동일 스택) | 월 100GB 대역폭, 60s 실행 |
 | **데이터베이스** | Neon (PostgreSQL) | 월 10GB 스토리지, 100시간 컴퓨팅 |
-| **캐시/큐** | Upstash Redis | 일 10,000 커맨드 |
+| **Rate limit / Job queue** | Upstash Redis | 일 10,000 커맨드 (Rate limit 전용으로 충분) |
 | **모니터링** | Umami (기존 vibequant.cc 자체 호스팅) | — |
 | **LLM API** | DeepSeek (기본), Claude/GPT (선택) | 종량제 |
 
 > **핵심 원칙**: CASSANDRA AI(`dart-monitor-pi.vercel.app`)와 동일한 Next.js 15 + Prisma + Neon + Upstash Redis 스택을 재사용한다. 새 프로젝트가 아닌 **기존 Vercel 팀에 새 Next.js 앱을 추가**하거나 **API Route**로 통합한다.
+
+### 1.3 Cloudflare CDN 캐시 전략 — Redis 없이 IP 조회 무제한 캐싱
+
+**왜 Cloudflare CDN인가?**
+
+Upstash Redis 프리 티어는 **일 10,000 커맨드** 제한이 있어 IP 조회 캐시 용도로는 취약하다. IP 조회 한 번에 `GET`+`SETEX` 2커맨드 → 하루 5,000명이면 한도 소진. Cloudflare CDN은 **무제한**이며 이미 vibequant.cc가 Cloudflare 위에 있다.
+
+**구현**:
+
+```
+Client → GET /api/myip?ip=8.8.8.8
+  → Cloudflare Edge (api.vibequant.cc, orange cloud proxied)
+    → 캐시 HIT  → < 5ms 응답 (Vercel까지 요청 안 감)
+    → 캐시 MISS → Vercel Origin → Neon 조회
+                 → Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+                 → Cloudflare Edge에 자동 캐싱
+```
+
+**Vercel API 응답 헤더 설정**:
+
+```typescript
+// Next.js API Route
+export async function GET(request: Request) {
+  const { searchParams } = new URL(request.url);
+  const ip = searchParams.get('ip');
+
+  const data = await queryNeon(ip);
+
+  return Response.json(data, {
+    headers: {
+      'Cache-Control': 'public, max-age=3600, stale-while-revalidate=86400',
+      'Vary': 'Accept-Encoding',
+      // IP별 캐시 분리: Cloudflare는 기본적으로 query string을 cache key에 포함
+    },
+  });
+}
+```
+
+**캐시 정책**:
+
+| 데이터 유형 | TTL | stale-while-revalidate | 이유 |
+|------------|-----|----------------------|------|
+| IP 지리정보 조회 | 1시간 (3600s) | 24시간 (86400s) | GeoIP DB는 월 1회 갱신, IP-위치 매핑은 거의 불변 |
+| CTI 피드 요약 | 10분 (600s) | 1시간 (3600s) | 보안 위협 인텔리전스는 변동 가능 |
+| 서비스 상태 체크 | 5분 (300s) | 15분 (900s) | 실시간성 요구 |
+| 스캔 결과 | 캐시 안 함 | — | 사용자별 고유 데이터 |
+
+**Upstash Redis 역할 축소**:
+
+| 용도 | Redis → Cloudflare CDN 전환 | 남은 Redis 사용량 |
+|------|---------------------------|------------------|
+| IP 조회 캐시 | ❌ 제거 → Cloudflare CDN | — |
+| Rate limit | ✅ Redis 유지 (INCR + EXPIRE) | IP당 2커맨드/요청 |
+| Scan job queue | ✅ Redis 유지 (LPUSH/BRPOP) | 스캔 건당 4커맨드 |
+| **예상 Redis 사용량** | | **월 3,000커맨드 미만** (Rate limit + Job queue만) |
+
+> **결론**: IP 조회 캐시를 Cloudflare CDN으로 이전하면 Redis 한도(일 10,000cmd)는 Rate limit 전용으로도 넉넉해지고, CDN이 전 세계 330+ 엣지에서 응답하므로 지연시간도 개선된다.
+
+
 
 ---
 
@@ -120,6 +186,7 @@
 **MaxMind DB 처리 방안**:
 - GeoLite2-City.mmdb + GeoLite2-ASN.mmdb → 약 100MB
 - Neon에 IP range 테이블(Appropriate IP range lookup)로 변환 적재
+- API 응답에 `Cache-Control: public, max-age=3600` → Cloudflare CDN이 자동 캐싱
 - `npm run update-geoip` → cron job (Vercel Cron Jobs / GitHub Actions)으로 월 1회 갱신
 
 ### 2.2 LAON VaultGuard Demo (시크릿 스캐너)
@@ -152,7 +219,7 @@
 - Clone 크기: 50MB 제한
 - 파일 수: 최대 500개까지만 스캔
 - 스캔 결과: 24시간 후 자동 삭제 (Neon 용량 관리)
-- Rate limit: IP당 5회/시간 (Upstash Redis)
+- Rate limit: IP당 5회/시간 (Upstash Redis INCR + EXPIRE)
 
 ### 2.3 CTI ↔ Lab 연계
 
@@ -262,7 +329,7 @@ GitHub Star → Lab 방문 → 무료 스캔 → VS Code 확장 설치 → Pre-c
 | **Lab 페이지 기본 UI** | `pages-lab/index.html` → 대시보드 레이아웃 (3패널: MY-IP / VaultGuard / CTI) | FE |
 | **Vercel 프로젝트 생성** | `vibequant-lab` Next.js 앱 생성 (CASSANDRA AI와 동일 팀) | Infra |
 | **Neon DB 스키마** | MaxMind IP table + scan_results table + cti_feed cache | Backend |
-| **Redis 설정** | Rate limit key + scan job queue (Upstash, 기존 계정에 DB 추가) | Infra |
+| **Redis 설정** | Rate limit + scan job queue 전용 (IP 캐시는 Cloudflare CDN이 담당) | Infra |
 | **CI/CD** | GitHub Actions → Vercel 자동 배포 (CASSANDRA AI 패턴 복사) | DevOps |
 
 ### Phase 1 — MY-IP Light (1~2주, 8/4~8/17)
@@ -313,9 +380,9 @@ GitHub Star → Lab 방문 → 무료 스캔 → VS Code 확장 설치 → Pre-c
 
 | 리스크 | 가능성 | 영향 | 대응 |
 |--------|--------|------|------|
-| Neon 100h 컴퓨팅 초과 | 중 | 서비스 중단 | 쿼리 최적화 + Redis 캐시 적극 활용 |
+| Neon 100h 컴퓨팅 초과 | 중 | 서비스 중단 | Cloudflare CDN 캐시 적극 활용 (max-age=3600) → Neon 쿼리 최소화 |
 | Vercel 60s timeout (스캔) | 상 | 대형 레포 스캔 실패 | 스캔 크기 제한 (50MB, 500파일) + chunked 응답 |
-| Upstash 10k cmd 초과 | 중 | Rate limit 불가 | Umami 모니터링 → 초과 시 경고 |
+| Upstash 10k cmd 초과 | 하 (↓) | Rate limit 일시 해제 | IP 캐시는 Cloudflare CDN으로 이전 → 남은 커맨드는 Rate limit·Job queue 전용 (월 3,000 미만) |
 | MaxMind 라이선스 변경 | 저 | GeoIP 기능 중단 | IPAPI.is / IP2Location fallback |
 | DeepSeek API 중단/가격 인상 | 중 | LLM 스캔 불가 | Ollama fallback (단, Serverless에서는 Ollama 실행 불가 → Claude로 전환) |
 | "AI 코드 70%" 신뢰도 이슈 | 저 | 채택률 저하 | LAON VaultGuard는 0.5까지 안정화, 자체 백테스트 54건 통과 |
