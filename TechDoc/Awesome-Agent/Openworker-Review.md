@@ -1,3 +1,48 @@
+<!--
+---
+title: "Andrew Ng OpenWorker 리뷰 — 로컬 우선 오픈소스 AI 업무 에이전트"
+title_en: "Andrew Ng OpenWorker Review — Local-First Open-Source AI Work Agent"
+subtitle: "대화가 아니라 결과물. BYOK·승인 게이트·25+ 커넥터를 갖춘 데스크톱 에이전트"
+description: "Andrew Ng가 공개한 MIT 라이선스 로컬 우선 AI 업무 에이전트 OpenWorker의 컨셉, 장단점, Goose·OpenHands 등 경쟁 포지셔닝, 설치·도입 체크리스트를 정리한 TechDoc."
+abstract: |
+  OpenWorker는 Andrew Ng와 Rohit Prasad가 공개한 MIT 라이선스 데스크톱 AI 에이전트다.
+  챗봇이 아니라 결과물(outcome)을 지시하면 로컬 파일·커넥터를 오가며 산출물을 만든다.
+  aisuite 기반 BYOK, 위험 등급 타입의 승인 게이트, 25개 이상 네이티브 커넥터, Ollama 완전 로컬 경로가 핵심이다.
+  로컬 우선이 곧 로컬 완결은 아니며, 오픈 베타·Windows 미서명·승인 피로·프롬프트 인젝션 공격면을 함께 봐야 한다.
+summary_for_ai: |
+  Third-party tech review of github.com/andrewyng/openworker (v0.1.6 open beta, released 2026-07-23).
+  Local-first Tauri 2 + React 18 UI, Python FastAPI agent on 127.0.0.1:8765 via aisuite.
+  Tool risk classes: read / write_local / exec / external. Closest OSS peer: Goose (Agentic AI Foundation).
+  Not investment advice. Verify current stars, signing status, and model list before citing.
+date: 2026-07-23
+updated: 2026-07-27
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - OpenWorker
+  - Andrew Ng
+  - AI Agent
+  - LLM
+  - 오픈소스
+  - 업무자동화
+  - local-first
+keywords:
+  - "OpenWorker"
+  - "Andrew Ng AI agent"
+  - "로컬 AI 에이전트"
+  - "aisuite BYOK"
+  - "Goose vs OpenWorker"
+  - "데스크톱 AI 에이전트"
+  - "MCP 커넥터"
+group: llm-agents
+featured: true
+featured_rank: 5
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+-->
+
 # Andrew Ng, 오픈소스 AI 업무 에이전트 'OpenWorker' 공개
 
 | 항목 | 내용 |
