@@ -3,7 +3,27 @@
  * docs → /columns · tech → /tech · cti → /cti · play → /play · essays → /essays
  * research → static /research/* + /api/research/* (no login)
  * lab → coming-soon until content exists
+ *
+ * SEO: Google requires same-host URLs in each sitemap. Per-host files live under
+ * /sitemaps/*; this middleware serves them as /sitemap.xml and /robots.txt.
  */
+const HOST_SEO = {
+  "docs.vibequant.cc": { sitemap: "/sitemaps/docs.xml", robots: "/sitemaps/robots-docs.txt" },
+  "tech.vibequant.cc": { sitemap: "/sitemaps/tech.xml", robots: "/sitemaps/robots-tech.txt" },
+  "cti.vibequant.cc": { sitemap: "/sitemaps/cti.xml", robots: "/sitemaps/robots-cti.txt" },
+  "play.vibequant.cc": { sitemap: "/sitemaps/play.xml", robots: "/sitemaps/robots-play.txt" },
+};
+
+async function serveAsset(context, assetPath, contentType, cacheControl) {
+  const assetUrl = new URL(assetPath, context.request.url);
+  const res = await context.env.ASSETS.fetch(assetUrl);
+  if (!res.ok) return null;
+  const headers = new Headers(res.headers);
+  headers.set("content-type", contentType);
+  if (cacheControl) headers.set("cache-control", cacheControl);
+  return new Response(res.body, { status: 200, headers });
+}
+
 function comingSoonHtml(title) {
   return `<!DOCTYPE html>
 <html lang="ko">
@@ -40,6 +60,28 @@ export async function onRequest(context) {
   if (host === "www.vibequant.cc") {
     url.hostname = "vibequant.cc";
     return Response.redirect(url.toString(), 301);
+  }
+
+  const hostSeo = HOST_SEO[host];
+  if (hostSeo) {
+    if (path === "/sitemap.xml") {
+      const res = await serveAsset(
+        context,
+        hostSeo.sitemap,
+        "application/xml; charset=utf-8",
+        "public, max-age=3600"
+      );
+      if (res) return res;
+    }
+    if (path === "/robots.txt") {
+      const res = await serveAsset(
+        context,
+        hostSeo.robots,
+        "text/plain; charset=utf-8",
+        "public, max-age=300, must-revalidate"
+      );
+      if (res) return res;
+    }
   }
 
   if (host === "lab.vibequant.cc") {

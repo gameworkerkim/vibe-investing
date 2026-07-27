@@ -2115,31 +2115,9 @@ ${links.join("\n")}
   </url>`;
 }
 
-function buildSeo(columns, tech, cti = [], essays = []) {
-  const entry = (loc, lastmod) =>
-    `  <url><loc>${loc}</loc><lastmod>${lastmod || new Date().toISOString().slice(0, 10)}</lastmod></url>`;
-  const today = new Date().toISOString().slice(0, 10);
-  const researchPages = ["", "paper", "quant", "spacex", "trump"];
-  const urls = [
-    entry(absoluteSitePath(SITE), today),
-    entry(absoluteSitePath(`${SITE}/about`), today),
-    entry(absoluteSitePath(`${SITE_PLAY}/play`), today),
-    entry(absoluteSitePath(SITE_LAB), today),
-    entry(absoluteSitePath(SITE_RESEARCH), today),
-    ...researchPages
-      .filter(Boolean)
-      .map((slug) => entry(absoluteSitePath(`${SITE}/research/${slug}`), today)),
-    entry(absoluteSitePath(`${SITE_DOCS}/columns`), today),
-    entry(absoluteSitePath(`${SITE_TECH}/tech`), today),
-    entry(absoluteSitePath(`${SITE_CTI}/cti`), today),
-    entry(absoluteSitePath(`${SITE_ESSAY}/essays`), today),
-    ...columns.map((c) => sitemapEntryWithAlternates(c, "columns", SITE_DOCS, today)),
-    ...tech.map((t) => sitemapEntryWithAlternates(t, "tech", SITE_TECH, today)),
-    ...cti.map((r) => sitemapEntryWithAlternates(r, "cti", SITE_CTI, today)),
-    ...essays.map((e) => entry(`${SITE_ESSAY}/essays/${e.slug}/`, e.dateModified || e.datePublished || today)),
-  ];
+function writeUrlset(filePath, urls) {
   fs.writeFileSync(
-    path.join(PAGES, "sitemap.xml"),
+    filePath,
     `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
@@ -2147,9 +2125,16 @@ ${urls.join("\n")}
 </urlset>
 `
   );
-  fs.writeFileSync(
-    path.join(PAGES, "robots.txt"),
-    `User-agent: *
+}
+
+function robotsTxtFor(sitemapUrl, extraComments = []) {
+  const comments = [
+    `# LLM: ${SITE}/llms.txt`,
+    ...extraComments,
+  ]
+    .filter(Boolean)
+    .join("\n");
+  return `User-agent: *
 Allow: /
 
 # Naver
@@ -2172,13 +2157,91 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
-Sitemap: ${SITE}/sitemap.xml
-# LLM: ${SITE}/llms.txt
-# Columns (docs host): ${SITE_DOCS}/columns/
-# Tech: ${SITE_TECH}/tech/
-# CTI: ${SITE_CTI}/cti/
-# Essays: ${SITE_ESSAY}/essays/
-`
+Sitemap: ${sitemapUrl}
+${comments}
+`;
+}
+
+function buildSeo(columns, tech, cti = [], essays = []) {
+  // Google requires same-host URLs in each sitemap. Split by host (single Pages
+  // project serves docs/tech/cti/play via custom domains — see pages/functions).
+  const entry = (loc, lastmod) =>
+    `  <url><loc>${loc}</loc><lastmod>${lastmod || new Date().toISOString().slice(0, 10)}</lastmod></url>`;
+  const today = new Date().toISOString().slice(0, 10);
+  const researchPages = ["", "paper", "quant", "spacex", "trump"];
+  const sitemapsDir = path.join(PAGES, "sitemaps");
+  ensureDir(sitemapsDir);
+
+  const apexUrls = [
+    entry(absoluteSitePath(SITE), today),
+    entry(absoluteSitePath(`${SITE}/about`), today),
+    entry(absoluteSitePath(SITE_RESEARCH), today),
+    ...researchPages
+      .filter(Boolean)
+      .map((slug) => entry(absoluteSitePath(`${SITE}/research/${slug}`), today)),
+    entry(absoluteSitePath(`${SITE_ESSAY}/essays`), today),
+    ...essays.map((e) =>
+      entry(`${SITE_ESSAY}/essays/${e.slug}/`, e.dateModified || e.datePublished || today)
+    ),
+  ];
+  const docsUrls = [
+    entry(absoluteSitePath(`${SITE_DOCS}/columns`), today),
+    ...columns.map((c) => sitemapEntryWithAlternates(c, "columns", SITE_DOCS, today)),
+  ];
+  const techUrls = [
+    entry(absoluteSitePath(`${SITE_TECH}/tech`), today),
+    ...tech.map((t) => sitemapEntryWithAlternates(t, "tech", SITE_TECH, today)),
+  ];
+  const ctiUrls = [
+    entry(absoluteSitePath(`${SITE_CTI}/cti`), today),
+    ...cti.map((r) => sitemapEntryWithAlternates(r, "cti", SITE_CTI, today)),
+  ];
+  const playUrls = [entry(absoluteSitePath(`${SITE_PLAY}/play`), today)];
+
+  writeUrlset(path.join(PAGES, "sitemap.xml"), apexUrls);
+  writeUrlset(path.join(sitemapsDir, "docs.xml"), docsUrls);
+  writeUrlset(path.join(sitemapsDir, "tech.xml"), techUrls);
+  writeUrlset(path.join(sitemapsDir, "cti.xml"), ctiUrls);
+  writeUrlset(path.join(sitemapsDir, "play.xml"), playUrls);
+
+  // Combined URL list for humans/tools (not submitted to GSC).
+  const allLocs = [...apexUrls, ...docsUrls, ...techUrls, ...ctiUrls, ...playUrls]
+    .map((row) => {
+      const m = row.match(/<loc>([^<]+)<\/loc>/);
+      return m ? m[1] : null;
+    })
+    .filter(Boolean);
+  fs.writeFileSync(path.join(PAGES, "sitemap-urls.txt"), `${allLocs.join("\n")}\n`);
+
+  fs.writeFileSync(
+    path.join(PAGES, "robots.txt"),
+    robotsTxtFor(`${SITE}/sitemap.xml`, [
+      `# Per-host sitemaps (submit each in Search Console):`,
+      `# ${SITE_DOCS}/sitemap.xml`,
+      `# ${SITE_TECH}/sitemap.xml`,
+      `# ${SITE_CTI}/sitemap.xml`,
+      `# ${SITE_PLAY}/sitemap.xml`,
+      `# Columns: ${SITE_DOCS}/columns/`,
+      `# Tech: ${SITE_TECH}/tech/`,
+      `# CTI: ${SITE_CTI}/cti/`,
+      `# Essays: ${SITE_ESSAY}/essays/`,
+    ])
+  );
+  fs.writeFileSync(
+    path.join(sitemapsDir, "robots-docs.txt"),
+    robotsTxtFor(`${SITE_DOCS}/sitemap.xml`)
+  );
+  fs.writeFileSync(
+    path.join(sitemapsDir, "robots-tech.txt"),
+    robotsTxtFor(`${SITE_TECH}/sitemap.xml`)
+  );
+  fs.writeFileSync(
+    path.join(sitemapsDir, "robots-cti.txt"),
+    robotsTxtFor(`${SITE_CTI}/sitemap.xml`)
+  );
+  fs.writeFileSync(
+    path.join(sitemapsDir, "robots-play.txt"),
+    robotsTxtFor(`${SITE_PLAY}/sitemap.xml`)
   );
   const dated = (c) => (c.datePublished ? ` (${c.datePublished})` : "");
   const llms = [
