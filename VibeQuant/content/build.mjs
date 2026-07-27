@@ -2116,11 +2116,17 @@ ${links.join("\n")}
 }
 
 function writeUrlset(filePath, urls) {
+  // Only declare xhtml when hreflang alternates are present — unused xmlns can
+  // confuse strict sitemap consumers.
+  const needsXhtml = urls.some((u) => u.includes("xhtml:link"));
+  const ns = needsXhtml
+    ? `xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml"`
+    : `xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"`;
   fs.writeFileSync(
     filePath,
     `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<urlset ${ns}>
 ${urls.join("\n")}
 </urlset>
 `
@@ -2199,6 +2205,7 @@ function buildSeo(columns, tech, cti = [], essays = []) {
   const playUrls = [entry(absoluteSitePath(`${SITE_PLAY}/play`), today)];
 
   writeUrlset(path.join(PAGES, "sitemap.xml"), apexUrls);
+  writeUrlset(path.join(sitemapsDir, "apex.xml"), apexUrls);
   writeUrlset(path.join(sitemapsDir, "docs.xml"), docsUrls);
   writeUrlset(path.join(sitemapsDir, "tech.xml"), techUrls);
   writeUrlset(path.join(sitemapsDir, "cti.xml"), ctiUrls);

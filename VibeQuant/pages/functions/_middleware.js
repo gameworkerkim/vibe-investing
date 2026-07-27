@@ -9,6 +9,7 @@
  * (Static /sitemap.xml would otherwise be served to every custom domain.)
  */
 const HOST_SEO = {
+  "vibequant.cc": { sitemap: "/sitemaps/apex.xml", robots: "/robots.txt" },
   "docs.vibequant.cc": { sitemap: "/sitemaps/docs.xml", robots: "/sitemaps/robots-docs.txt" },
   "tech.vibequant.cc": { sitemap: "/sitemaps/tech.xml", robots: "/sitemaps/robots-tech.txt" },
   "cti.vibequant.cc": { sitemap: "/sitemaps/cti.xml", robots: "/sitemaps/robots-cti.txt" },
@@ -19,10 +20,16 @@ async function serveAsset(context, assetPath, contentType, cacheControl) {
   const assetUrl = new URL(assetPath, context.request.url);
   const res = await context.env.ASSETS.fetch(assetUrl);
   if (!res.ok) return null;
-  const headers = new Headers(res.headers);
-  headers.set("content-type", contentType);
-  if (cacheControl) headers.set("cache-control", cacheControl);
-  return new Response(res.body, { status: 200, headers });
+  // Buffer + minimal headers so GSC gets clean XML (no inherited CORS / dup headers).
+  const body = await res.arrayBuffer();
+  return new Response(body, {
+    status: 200,
+    headers: {
+      "content-type": contentType,
+      "cache-control": cacheControl,
+      "x-content-type-options": "nosniff",
+    },
+  });
 }
 
 function comingSoonHtml(title) {
@@ -69,7 +76,7 @@ export async function onRequest(context) {
       const res = await serveAsset(
         context,
         hostSeo.sitemap,
-        "application/xml; charset=utf-8",
+        "text/xml; charset=utf-8",
         "public, max-age=3600, no-transform"
       );
       if (res) return res;
