@@ -195,8 +195,8 @@ def main() -> int:
                 failures.append(f"hreflang-target:{code} {t}")
 
     # reciprocal: if A→B then B→A
-    for a, targets in page_alts.items():
-        for b in targets:
+    for a, targets in list(page_alts.items()):
+        for b in list(targets):
             if b == a:
                 continue
             back = page_alts.get(b)
