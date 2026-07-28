@@ -2088,45 +2088,18 @@ function buildAbout() {
 }
 
 function sitemapEntryWithAlternates(item, section, host, today) {
+  // Keep sitemap entries simple (loc + lastmod). Hreflang lives in HTML <link>
+  // tags — GSC is picky about urlset namespaces / xhtml:link in sitemaps.
   const loc = `${host}/${section}/${item.slug}/`;
   const lastmod = item.dateModified || item.datePublished || today;
-  const langs = item.langs || {};
-  const altIds = Object.keys(langs);
-  if (altIds.length < 2) {
-    return `  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod></url>`;
-  }
-  const links = [];
-  for (const L of CTI_LANG_ORDER) {
-    const slug = langs[L.id];
-    const hl = langToHreflang(L.id);
-    if (!slug || !hl) continue;
-    links.push(
-      `    <xhtml:link rel="alternate" hreflang="${hl}" href="${host}/${section}/${slug}/" />`
-    );
-  }
-  const defSlug = langs.KR || langs.EN || item.slug;
-  links.push(
-    `    <xhtml:link rel="alternate" hreflang="x-default" href="${host}/${section}/${defSlug}/" />`
-  );
-  return `  <url>
-    <loc>${loc}</loc>
-    <lastmod>${lastmod}</lastmod>
-${links.join("\n")}
-  </url>`;
+  return `  <url><loc>${loc}</loc><lastmod>${lastmod}</lastmod></url>`;
 }
 
 function writeUrlset(filePath, urls) {
-  // Only declare xhtml when hreflang alternates are present — unused xmlns can
-  // confuse strict sitemap consumers.
-  const needsXhtml = urls.some((u) => u.includes("xhtml:link"));
-  const ns = needsXhtml
-    ? `xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml"`
-    : `xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"`;
   fs.writeFileSync(
     filePath,
     `<?xml version="1.0" encoding="UTF-8"?>
-<urlset ${ns}>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 ${urls.join("\n")}
 </urlset>
 `
