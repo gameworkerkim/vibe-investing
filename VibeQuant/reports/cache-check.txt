@@ -1,0 +1,97 @@
+# cache-check before (middleware probes every article path)
+# 2026-07-28T02:48:10Z
+
+--- https://cti.vibequant.cc/cti/cti-2026-0526-uk-russia-crypto-sanctions-ja/
+HTTP/2 200 
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=0, must-revalidate
+x-content-type-options: nosniff
+cf-cache-status: DYNAMIC
+cf-ray: a220903bccf62f20-LAX
+
+--- https://tech.vibequant.cc/tech/gs-quant-gs-quant-getting-started-en/
+HTTP/2 200 
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=3600, stale-while-revalidate=86400
+x-content-type-options: nosniff
+cf-cache-status: DYNAMIC
+cf-ray: a220903fdf6527d8-LAX
+
+--- https://docs.vibequant.cc/columns/
+HTTP/2 200 
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=3600, stale-while-revalidate=86400
+x-content-type-options: nosniff
+cf-cache-status: DYNAMIC
+cf-ray: a2209043aea5c69d-LAX
+
+
+# cache-check after (_routes.json excludes article paths from Functions)
+# 2026-07-28T02:52:12Z
+
+--- https://cti.vibequant.cc/cti/cti-2026-0526-uk-russia-crypto-sanctions-ja/
+HTTP/2 200 
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=0, must-revalidate
+x-content-type-options: nosniff
+cf-cache-status: DYNAMIC
+
+--- https://tech.vibequant.cc/tech/gs-quant-gs-quant-getting-started-en/
+HTTP/2 200 
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=3600, stale-while-revalidate=86400
+x-content-type-options: nosniff
+cf-cache-status: DYNAMIC
+
+--- https://docs.vibequant.cc/columns/
+HTTP/2 200 
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=3600, stale-while-revalidate=86400
+x-content-type-options: nosniff
+cf-cache-status: DYNAMIC
+
+
+# cache-check after include-only _routes.json deploy 6fde6458
+# 2026-07-28T03:03:17Z
+
+--- https://cti.vibequant.cc/cti/cti-2026-0526-uk-russia-crypto-sanctions-ja/
+HTTP/2 200 
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=3600, stale-while-revalidate=86400
+x-content-type-options: nosniff
+cf-cache-status: DYNAMIC
+
+--- https://tech.vibequant.cc/tech/gs-quant-gs-quant-getting-started-en/
+HTTP/2 200 
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=3600, stale-while-revalidate=86400
+x-content-type-options: nosniff
+cf-cache-status: DYNAMIC
+
+--- https://docs.vibequant.cc/columns/
+HTTP/2 200 
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=3600, stale-while-revalidate=86400
+x-content-type-options: nosniff
+cf-cache-status: DYNAMIC
+
+--- https://6fde6458.vibequant-web.pages.dev/tech/gs-quant-gs-quant-getting-started-en/
+HTTP/2 200 
+content-type: text/html; charset=utf-8
+cache-control: public, max-age=3600, stale-while-revalidate=86400
+x-content-type-options: nosniff
+
+
+# analysis
+# BEFORE: article pages cf-cache-status=DYNAMIC (Functions middleware on /*).
+# AFTER include-only _routes.json: article paths no longer invoke Functions
+#   (verified: 404.html works for missing slugs; sitemap.xml still host-specific via middleware).
+# HTML remains DYNAMIC on custom domains because Cloudflare zone default does NOT cache HTML
+#   (only extension-based assets). CSS on same host returns MISS — CDN works for eligible types.
+# CDN-Cache-Control headers added on /columns|tech|cti|essays|play|about/* but eligibility
+#   still requires a Cache Rule: Eligible for cache matching those hosts/paths.
+# REQUIRED FOLLOW-UP (dashboard, Zone Cache Rules):
+#   If hostname in {docs,tech,cti,play}.vibequant.cc OR vibequant.cc
+#   AND URI Path starts with /columns/ OR /tech/ OR /cti/ OR /essays/ OR /play/ OR /about/
+#   Then: Cache eligibility = Eligible for cache; Edge TTL = ignore / use origin.
+# Until that rule exists, HIT/MISS on HTML cannot appear — not a middleware regression.

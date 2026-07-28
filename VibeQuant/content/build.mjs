@@ -598,9 +598,20 @@ const SLUG_OVERRIDES = {
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
+/** Permanent alias→canon redirects discovered during slug allocation (-jp→-ja, -zh→-cn). */
+const langSuffixRedirects = []; // { section, fromSlug, toSlug }
 
 function resetSlugRegistry() {
   slugRegistry.clear();
+  langSuffixRedirects.length = 0;
+}
+
+/** Canon lang URL suffixes: -jp→-ja, -zh→-cn (tech convention). */
+function canonicalizeLangSlug(slug) {
+  const s = String(slug || "");
+  if (/-jp$/i.test(s)) return s.replace(/-jp$/i, "-ja");
+  if (/-zh$/i.test(s)) return s.replace(/-zh$/i, "-cn");
+  return s;
 }
 
 function slugifyPath(relPath) {
@@ -618,13 +629,20 @@ function slugifyPath(relPath) {
 function allocateSlug(section, relPath) {
   if (!slugRegistry.has(section)) slugRegistry.set(section, new Set());
   const used = slugRegistry.get(section);
-  const base = slugifyPath(relPath);
-  let slug = base;
+  const natural = slugifyPath(relPath);
+  const preferred = canonicalizeLangSlug(natural);
+  let slug = preferred;
   let n = 2;
   while (used.has(slug)) {
-    slug = `${base}-${n++}`;
+    slug = `${preferred}-${n++}`;
   }
   used.add(slug);
+  if (natural !== slug && natural !== preferred) {
+    // preferred collided and we used preferred-2; still redirect natural → slug
+    langSuffixRedirects.push({ section, fromSlug: natural, toSlug: slug });
+  } else if (natural !== slug) {
+    langSuffixRedirects.push({ section, fromSlug: natural, toSlug: slug });
+  }
   return slug;
 }
 
@@ -669,7 +687,7 @@ function loadLegacySlugIndex() {
       } catch {
         continue;
       }
-      if (/http-equiv="refresh"/i.test(html) && /Moved to/i.test(html)) continue;
+      if (isRedirectStubHtml(html)) continue;
       const key = contentKeyFromArticleHtml(html, section);
       if (!key) continue;
       byKey.set(`${section}::${key}`, { section, oldSlug: ent.name });
@@ -738,17 +756,116 @@ function loadSlugHistory() {
   }
 }
 
+function loadRedirectsMap() {
+  const mapPath = path.join(__dirname, "redirects.map");
+  /** @type {{ section: string, fromSlug: string, toSlug: string }[]} */
+  const out = [];
+  if (!fs.existsSync(mapPath)) return out;
+  for (const line of fs.readFileSync(mapPath, "utf8").split("\n")) {
+    const t = line.trim();
+    if (!t || t.startsWith("#")) continue;
+    const parts = t.split(/\t+/);
+    if (parts.length < 2) continue;
+    const from = parts[0].trim();
+    const to = parts[1].trim();
+    const fm = from.match(/^\/(columns|tech|cti|essays)\/([^/]+)\/?$/);
+    const tm = to.match(/^\/(columns|tech|cti|essays)\/([^/]+)\/?$/);
+    if (!fm || !tm || fm[1] !== tm[1]) continue;
+    out.push({ section: fm[1], fromSlug: fm[2], toSlug: tm[2] });
+  }
+  return out;
+}
+
+function appendRedirectsMap(entries) {
+  const mapPath = path.join(__dirname, "redirects.map");
+  const existing = new Set();
+  if (fs.existsSync(mapPath)) {
+    for (const line of fs.readFileSync(mapPath, "utf8").split("\n")) {
+      const t = line.trim();
+      if (!t || t.startsWith("#")) continue;
+      existing.add(t.split(/\t+/)[0].trim());
+    }
+  }
+  const lines = [];
+  for (const e of entries) {
+    const from = `/${e.section}/${e.fromSlug}/`;
+    const to = `/${e.section}/${e.toSlug}/`;
+    if (existing.has(from) || e.fromSlug === e.toSlug) continue;
+    // Never rewrite media-column archive URLs.
+    if (e.section === "columns" && /^media-/i.test(e.fromSlug)) continue;
+    lines.push(`${from}\t${to}`);
+    existing.add(from);
+  }
+  if (!lines.length) return;
+  const stamp = `\n# --- auto lang-suffix ${new Date().toISOString().slice(0, 10)} ---\n`;
+  fs.appendFileSync(mapPath, stamp + lines.join("\n") + "\n");
+}
+
+function isRedirectStubHtml(html) {
+  return (
+    /http-equiv=["']refresh["']/i.test(html) &&
+    (/Moved to/i.test(html) || /<title>\s*Moved\s*<\/title>/i.test(html))
+  );
+}
+
+/** Remove legacy redirect stub pages so _redirects 301s are never shadowed by static 200s. */
+function purgeRedirectStubDirs() {
+  let removed = 0;
+  for (const section of ["columns", "tech", "cti", "essays"]) {
+    const dir = path.join(PAGES, section);
+    if (!fs.existsSync(dir)) continue;
+    for (const ent of fs.readdirSync(dir, { withFileTypes: true })) {
+      if (!ent.isDirectory()) continue;
+      const indexPath = path.join(dir, ent.name, "index.html");
+      if (!fs.existsSync(indexPath)) continue;
+      let html = "";
+      try {
+        html = fs.readFileSync(indexPath, "utf8");
+      } catch {
+        continue;
+      }
+      if (!isRedirectStubHtml(html)) continue;
+      fs.rmSync(path.join(dir, ent.name), { recursive: true, force: true });
+      removed += 1;
+    }
+  }
+  return removed;
+}
+
 function writeSlugRedirects(legacyIndex, sections) {
   /** @type {Record<string, { current: string, previous: string[] }>} */
   const history = loadSlugHistory();
   const seed = loadLegacySlugSeed();
   const rules = [];
-  const stubs = [];
+  let moveCount = 0;
   const seenRule = new Set();
   /** @type {Map<string, string>} section/oldSlug -> newSlug (first claim wins) */
   const claimedOld = new Map();
 
-  for (const { section, items, host } of sections) {
+  // Merge permanent redirects.map + lang-suffix redirects from this build.
+  appendRedirectsMap(langSuffixRedirects);
+  const mapEntries = [...loadRedirectsMap(), ...langSuffixRedirects];
+  for (const e of mapEntries) {
+    const claimKey = `${e.section}/${e.fromSlug}`;
+    if (claimedOld.has(claimKey)) continue;
+    if (e.fromSlug === e.toSlug) continue;
+    claimedOld.set(claimKey, e.toSlug);
+    const toPath = `/${e.section}/${e.toSlug}/`;
+    const fromPath = `/${e.section}/${e.fromSlug}/`;
+    const pathRule = `${fromPath}  ${toPath}  301`;
+    const bareRule = `/${e.section}/${e.fromSlug}  ${toPath}  301`;
+    if (!seenRule.has(pathRule)) {
+      rules.push(pathRule);
+      seenRule.add(pathRule);
+    }
+    if (!seenRule.has(bareRule)) {
+      rules.push(bareRule);
+      seenRule.add(bareRule);
+    }
+    moveCount += 1;
+  }
+
+  for (const { section, items } of sections) {
     for (const item of items) {
       const key = `${section}::${contentKeyForItem(item, section)}`;
       const entry = history[key] || { current: "", previous: [] };
@@ -793,7 +910,7 @@ function writeSlugRedirects(legacyIndex, sections) {
           rules.push(bareRule);
           seenRule.add(bareRule);
         }
-        stubs.push({ section, oldSlug, newSlug: item.slug, host });
+        moveCount += 1;
       }
     }
   }
@@ -816,35 +933,15 @@ function writeSlugRedirects(legacyIndex, sections) {
   const block = [
     "",
     REDIRECT_BEGIN,
-    `# ${rules.length} rules · ${stubs.length} stub pages`,
+    `# ${rules.length} rules · stub HTML disabled (rely on _redirects 301)`,
     ...rules,
     REDIRECT_END,
     "",
   ].join("\n");
   fs.writeFileSync(redirectsPath, base + "\n" + block);
 
-  for (const s of stubs) {
-    const dir = path.join(PAGES, s.section, s.oldSlug);
-    ensureDir(dir);
-    const abs = s.host
-      ? `${s.host}/${s.section}/${s.newSlug}/`
-      : `${siteForSection(s.section)}/${s.section}/${s.newSlug}/`;
-    fs.writeFileSync(
-      path.join(dir, "index.html"),
-      `<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8" />
-  <title>Moved</title>
-  <link rel="canonical" href="${esc(abs)}" />
-  <meta http-equiv="refresh" content="0;url=${esc(abs)}" />
-  <script>location.replace(${JSON.stringify(abs)});</script>
-</head>
-<body><p>Moved to <a href="${esc(abs)}">${esc(abs)}</a></p></body>
-</html>
-`
-    );
-  }
+  // Never write stub index.html — static assets can shadow _redirects and reintroduce soft-404s.
+  const purged = purgeRedirectStubDirs();
 
   const mapPath = path.join(PAGES, "slug-map.json");
   const map = {};
@@ -856,7 +953,7 @@ function writeSlugRedirects(legacyIndex, sections) {
   }
   fs.writeFileSync(mapPath, JSON.stringify(map, null, 2));
   fs.writeFileSync(path.join(PAGES, "slug-history.json"), JSON.stringify(history, null, 2));
-  console.log(`  slug redirects: ${stubs.length} moves (${rules.length} rules)`);
+  console.log(`  slug redirects: ${moveCount} moves (${rules.length} rules); purged ${purged} stub dirs`);
 }
 
 function githubUrl(base, relPath) {

@@ -60,6 +60,20 @@ function comingSoonHtml(title) {
 </html>`;
 }
 
+async function serveNotFound(context) {
+  const assetUrl = new URL("/404.html", context.request.url);
+  const res = await context.env.ASSETS.fetch(assetUrl);
+  const body = res.ok ? await res.arrayBuffer() : new TextEncoder().encode("Not Found");
+  return new Response(body, {
+    status: 404,
+    headers: {
+      "content-type": "text/html; charset=utf-8",
+      "cache-control": "public, max-age=60",
+      "x-content-type-options": "nosniff",
+    },
+  });
+}
+
 export async function onRequest(context) {
   const url = new URL(context.request.url);
   const host = url.hostname.toLowerCase();
@@ -149,25 +163,12 @@ export async function onRequest(context) {
       });
     }
     // /research/* served from pages/research (static) + /api/research/* Functions
-
-    if (path === "/columns" || path.startsWith("/columns/")) {
-      url.hostname = "docs.vibequant.cc";
-      return Response.redirect(url.toString(), 301);
-    }
-    if (path === "/tech" || path.startsWith("/tech/")) {
-      url.hostname = "tech.vibequant.cc";
-      return Response.redirect(url.toString(), 301);
-    }
-    if (path === "/cti" || path.startsWith("/cti/")) {
-      url.hostname = "cti.vibequant.cc";
-      return Response.redirect(url.toString(), 301);
-    }
-    if (path === "/play" || path.startsWith("/play/")) {
-      url.hostname = "play.vibequant.cc";
-      return Response.redirect(url.toString(), 301);
-    }
-    // essays stay on apex (vibequant.cc/essays/) until essays.vibequant.cc is attached
+    // Apex → subdomain canonical redirects live in _redirects (so article paths can stay CDN-cacheable).
   }
+
+  // Article soft-404 prevention: rely on pages/404.html + _routes.json excluding
+  // /columns|tech|cti|essays/* from Functions (CDN cache). Do not ASSETS.probe here —
+  // that forced DYNAMIC on every document page.
 
   return context.next();
 }
