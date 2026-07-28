@@ -637,10 +637,9 @@ function allocateSlug(section, relPath) {
     slug = `${preferred}-${n++}`;
   }
   used.add(slug);
-  if (natural !== slug && natural !== preferred) {
-    // preferred collided and we used preferred-2; still redirect natural → slug
-    langSuffixRedirects.push({ section, fromSlug: natural, toSlug: slug });
-  } else if (natural !== slug) {
+  // Only permanent-map true lang alias remaps (-jp→-ja / -zh→-cn).
+  // Never redirect preferred → preferred-2 on collisions — that steals the first owner's URL.
+  if (natural !== preferred) {
     langSuffixRedirects.push({ section, fromSlug: natural, toSlug: slug });
   }
   return slug;
