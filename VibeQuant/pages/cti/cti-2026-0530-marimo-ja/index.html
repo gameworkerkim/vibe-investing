@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AIエージェントがハンドルを握る — LLM主導型侵入の初観測事例 — VibeQuant</title>
+  <meta name="description" content="Marimo CVE 2026 39987 事前認証RCEから内部DB窃取まで、1時間未満の4段階自律ピボット" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-ja/" />
+  <meta property="og:title" content="AIエージェントがハンドルを握る — LLM主導型侵入の初観測事例" />
+  <meta property="og:description" content="Marimo CVE 2026 39987 事前認証RCEから内部DB窃取まで、1時間未満の4段階自律ピボット" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0530-marimo-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"AIエージェントがハンドルを握る — LLM主導型侵入の初観測事例","description":"Marimo CVE 2026 39987 事前認証RCEから内部DB窃取まで、1時間未満の4段階自律ピボット","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/cti-2026-0530-marimo-ja/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0530-MARIMO_JP.md","image":"https://vibequant.cc/og-default.png","url":"https://cti.vibequant.cc/cti/cti-2026-0530-marimo-ja/","datePublished":"2026-05-30","dateModified":"2026-05-30","inLanguage":"ja","keywords":"취약점 · 패치, JP, CTI"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"AIエージェントがハンドルを握る — LLM主導型侵入の初観測事例","item":"https://cti.vibequant.cc/cti/cti-2026-0530-marimo-ja/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 취약점 · 패치</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">취약점 · 패치</p>
+        <h1>AIエージェントがハンドルを握る — LLM主導型侵入の初観測事例</h1>
+        <p class="article-dates"><time datetime="2026-05-30">발행 2026.05.30</time> · 주제 취약점 · 패치 · JP · CTI</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0530-marimo-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0530-marimo-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0530-marimo-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0530-marimo-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Marimo CVE-2026-39987 事前認証RCEから内部DB窃取まで、1時間未満の4段階自律ピボット</p>
+        <p class="article-byline">Dennis Kim (김호광 / HoKwang Kim) · 2026-05-30</p>
+      </header>
+      <div class="article-body prose"><p><em>Marimo CVE-2026-39987 事前認証RCEから内部DB窃取まで、1時間未満の4段階自律ピボット</em></p>
+<hr>
+<h2>目次</h2>
+<ol>
+<li>要約 (TL;DR)</li>
+<li>はじめに — 「攻撃者が人間である必要がなくなった」</li>
+<li>脆弱性分析 — CVE-2026-39987 事前認証RCE</li>
+<li>攻撃チェーン — 4段階の自律ピボット</li>
+<li>「AIエージェント主導」の判定 — 4つの行動シグネチャ</li>
+<li>韓国の視点 — クオンツ・データサイエンス・Web3ノートブックの露出</li>
+<li>検知・緩和の推奨</li>
+<li>結論</li>
+<li>参考文献</li>
+</ol>
+<hr>
+<h2>要約 (TL;DR)</h2>
+<p>2026年5月、クラウドセキュリティ企業Sysdigの脅威研究チーム（TRT）は、侵入後（post-exploitation）フェーズ全体を<strong>大規模言語モデル（LLM）エージェントが自律的に運用した</strong>侵害事案を公開した。Sysdigはこれを、同社が記録した<strong>初の「AIエージェント主導型（AI-agent-driven）侵入」</strong>と位置づけた。</p>
+<p>攻撃の入口は、インターネットに露出したMarimoノートブックの事前認証リモートコード実行（RCE）脆弱性<code>CVE-2026-39987</code>（CVSS 9.3）である。攻撃者はこれによりホストを掌握した後、クラウド認証情報の窃取 → AWS Secrets ManagerからのSSH秘密鍵取得 → 下流のSSH踏み台経由 → 内部PostgreSQL DB全体の窃取という4段階のチェーンを<strong>1時間未満</strong>で完走し、最後のスキーマ・全データのダンプは<strong>2分未満</strong>で行われた。</p>
+<p>本レポートが注目するのは単一のCVEではなく、<strong>攻撃運用モデルの転換</strong>である。従来のスクリプトベースの自動化と異なり、侵入後のコマンドフローは出力値をリアルタイムに解釈し次の行動を決定するLLMエージェントによって動的に生成された。これは「発見-パッチ」の競争を、「観測-対応」が追いつけない速度へ引き上げる。</p>
+<h3>Key Judgments</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>判断</th>
+<th>信頼度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KJ-1</td>
+<td><code>CVE-2026-39987</code>はコーディングミスではなく、<code>/terminal/ws</code>エンドポイントが認証検証を省く<strong>設計レベルの欠落</strong>である。単一のWebSocketリクエストで完全なPTYシェルを得る。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-2</td>
+<td>侵入後の偵察・認証情報の再生・ピボット判断を<strong>LLMエージェントが自律的に実行</strong>した初の公開観測事例。これは一回限りのデモではなく、実際の侵害環境で捕捉された運用である。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-3</td>
+<td>1時間未満のチェーン、2分未満のDBダンプという速度は、<strong>人間のSOCの平均対応ウィンドウを構造的に超える</strong>。対応の単位は「分」から「秒」へ移行する。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-4</td>
+<td>CVEパッチ・シグネチャベースの防御では、この脅威の後段（post-exploitation）を阻止できない。<strong>行動ベース（behavioral）のランタイム検知</strong>への移行が必須である。</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+<tr>
+<td>KJ-5</td>
+<td>韓国のデータサイエンス・クオンツ・Web3チームが運用する露出型のJupyter/Marimo/Streamlitノートブックは<strong>同一の攻撃面</strong>を共有する。AWS・オンチェーン認証情報が同一ホストに置かれている場合、単一障害点へ縮退する。</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. はじめに — 「攻撃者が人間である必要がなくなった」</h2>
+<p>長年、業界は「攻撃の自動化」をスクリプト・ボットネット・スキャナの問題として扱ってきた。しかし自動化スクリプトは事前定義された分岐のみを実行する。予期せぬ出力、非定型環境、新しい認証情報の形態に直面すると停止または誤作動する。そのため精緻な侵入後作業は、依然として人手を要した。</p>
+<p>Sysdig TRTが2026年5月に公開した事案は、この前提を覆す。Marimoノートブックを掌握した直後の偵察、認証情報の解釈、ピボット経路の選択が、<strong>LLMエージェントによってリアルタイムに生成</strong>された。Sysdigのシニアディレクターであるマイケル・クラーク氏はこう述べた——「我々はAIが攻撃者を<em>置き換える</em>のを見ているのではない」。すなわち人を置き換えるのではなく、人の判断を<strong>速度において数十倍に圧縮</strong>して貼り付けたのである。</p>
+<p>本レポートはこの事案を2つの層で分析する。第一に侵入を許した脆弱性自体（<code>CVE-2026-39987</code>）、第二にその上に乗った<strong>AI主導の運用モデル</strong>である。後者が本質だ。</p>
+<hr>
+<h2>2. 脆弱性分析 — CVE-2026-39987 事前認証RCE</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CVE</td>
+<td><code>CVE-2026-39987</code></td>
+</tr>
+<tr>
+<td>CVSS</td>
+<td>9.3 (Critical)</td>
+</tr>
+<tr>
+<td>影響バージョン</td>
+<td>Marimo ≤ 0.20.4</td>
+</tr>
+<tr>
+<td>修正バージョン</td>
+<td>0.23.0</td>
+</tr>
+<tr>
+<td>種別</td>
+<td>事前認証（pre-auth）リモートコード実行</td>
+</tr>
+<tr>
+<td>状態</td>
+<td>CISA KEV登録 · 連邦パッチ期限経過</td>
+</tr>
+</tbody></table>
+<p>Marimoはデータサイエンス・分析・対話型コーディングに広く使われるオープンソースのPythonノートブック（約1.9万GitHubスター）である。脆弱性の核心はターミナルWebSocketエンドポイント<code>/terminal/ws</code>にある。他のWebSocketエンドポイント（例：<code>/ws</code>）は正しく<code>validate_auth()</code>を呼び出すが、<code>/terminal/ws</code>は<strong>実行モードとプラットフォーム対応の有無のみを確認し、認証検証を完全に省く</strong>。その結果、認証されていない攻撃者が単一のリクエストで完全なPTYシェルを取得し、任意のシステムコマンドを実行できる。</p>
+<p>この脆弱性は公開後約10時間で実際の悪用が観測され、公開エクスプロイトコードなしに攻撃者が勧告文の説明のみで動作するエクスプロイトを直接構成したことから、「勧告文自体が武器化される」という教訓を残した。本事案の入口がこの欠陥である。</p>
+<hr>
+<h2>3. 攻撃チェーン — 4段階の自律ピボット</h2>
+<p>Sysdigが記録したコマンドストリームを再構成すると次の通り。</p>
+<table>
+<thead>
+<tr>
+<th>段階</th>
+<th>行為</th>
+<th>技術的詳細</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>① 初期アクセス</td>
+<td>露出したMarimoノートブックの掌握</td>
+<td><code>/terminal/ws</code>の無認証PTYシェル（<code>CVE-2026-39987</code>）</td>
+</tr>
+<tr>
+<td>② 認証情報収集</td>
+<td>ホストからクラウド認証情報2件を抽出</td>
+<td>環境変数・<code>.env</code>・AWS認証情報ストア</td>
+</tr>
+<tr>
+<td>③ 権限ピボット</td>
+<td>窃取鍵をfan-out egressで再生、SSH秘密鍵を取得</td>
+<td>Cloudflare Workersベースのfan-out egress → AWS Secrets Manager</td>
+</tr>
+<tr>
+<td>④ 横移動・窃取</td>
+<td>SSH踏み台へ8並列セッション、内部DBを窃取</td>
+<td>下流SSH踏み台 → 内部PostgreSQLスキーマ・全内容ダンプ（2分未満）</td>
+</tr>
+</tbody></table>
+<p>全チェーンは初期アクセスから内部DB窃取まで<strong>1時間未満</strong>で完了した。特に③段階の「fan-out egressプール」は検知回避と速度を同時に狙ったもので、単一IPの異常トラフィックシグネチャを分散させつつ、認証情報の再生を並列化する。</p>
+<hr>
+<h2>4. 「AIエージェント主導」の判定 — 4つの行動シグネチャ</h2>
+<p>Sysdig TRTは、この侵害を単なるスクリプトではなくLLMエージェント主導と判定した根拠として、侵入後のコマンドフローの特性を提示した。本レポートはこれを次の4つの観測可能なシグネチャに整理する。</p>
+<ol>
+<li><strong>出力依存の分岐</strong> — 直前のコマンドの出力を解釈した後にのみ次のコマンドが決定される。静的スクリプトと異なり、非定型応答にも途切れなく適応する。</li>
+<li><strong>自然言語的なコマンド構成</strong> — コマンド列が人間の探索論理を模倣しつつ、人間には不可能な間隔（秒単位）で連鎖する。</li>
+<li><strong>目標指向の再試行</strong> — 失敗した認証情報・経路に対し、文脈を維持したまま代替を即座に試みる。</li>
+<li><strong>速度-精度の融合</strong> — 人間レベルの判断精度（正確なSecrets Managerキー選択）と機械レベルの速度（2分のDBダンプ）が一つの流れに共存する。</li>
+</ol>
+<p>この4つが同時に現れるとき、防御側は「人間一人の攻撃」ではなく「人間の判断を秒単位で複製した自動運用」を相手にしていると見なすべきである。</p>
+<hr>
+<h2>5. 韓国の視点 — クオンツ・データサイエンス・Web3ノートブックの露出</h2>
+<p>本事案は韓国の特定職種に直接的な含意を持つ。</p>
+<ul>
+<li><strong>クオンツ・データサイエンスチーム</strong> — Marimo・Jupyter・Streamlit等のノートブックを内部網の外（クラウドVM、デモサーバ）に露出する慣行が一般的だ。これらには取引所APIキー、データベンダートークン、クラウド認証情報が環境変数として置かれる場合が多い。</li>
+<li><strong>Web3・オンチェーン分析チーム</strong> — 同一ホストにRPCキー・ウォレット認証情報・AWSキーが共存すると、<code>CVE-2026-39987</code>レベルの入口一つが資産窃取に直結する。</li>
+<li><strong>単一障害点構造</strong> — 「ノートブックは分析用に過ぎない」という認識が認証情報の隔離を疎かにする。本事案は分析用ホストが内部PostgreSQLとSSH踏み台への足場になったことを示す。</li>
+</ul>
+<p>推奨：インターネットに露出した全てのノートブックインスタンスを<strong>潜在的な侵害状態とみなし</strong>、関連する認証情報・APIキー・SSHキー・DBパスワードを直ちにローテーションすること。</p>
+<hr>
+<h2>6. 検知・緩和の推奨</h2>
+<ol>
+<li><strong>即時パッチ</strong> — Marimoを0.23.0以上に更新する。不可の場合、<code>/terminal/ws</code>エンドポイントのネットワークアクセスを遮断するか、ターミナル機能を無効化する。</li>
+<li><strong>露出面の監査</strong> — 公開アクセス可能なノートブックインスタンスを全数調査し、環境変数・<code>.env</code>・シークレットを点検する。</li>
+<li><strong>認証情報のローテーション</strong> — 露出履歴のあるホストの全認証情報・キーをローテーションする。</li>
+<li><strong>行動ベースのランタイム検知</strong>— CVE・シグネチャ依存を超え、異常なegress（例：fan-out送出）、Secrets Managerへの異常アクセス、短時間の大量DBダンプといった<strong>行動パターン</strong>に警報を設定する。</li>
+<li><strong>認証情報の隔離（Zero Trust）</strong> — 分析用ホストと運用認証情報を分離する。ノートブックホストには最小権限の一時認証情報のみを注入し、長期キー・SSH秘密鍵を置かない（NIST SP 800-207）。</li>
+<li><strong>対応ウィンドウの再設計</strong> — AI主導攻撃を前提に、人間の介入なしに自動遮断（認証情報の即時無効化、セッションの強制終了）をトリガーするランブックを用意する。</li>
+</ol>
+<hr>
+<h2>7. 結論</h2>
+<p><code>CVE-2026-39987</code>は、もう一つの事前認証RCEに過ぎない。しかしその上に乗ったLLMエージェントは脅威モデル自体を変える。攻撃者が「人間」である必要がなくなった瞬間、防御の前提だった<strong>「人間の作業速度」という摩擦（friction）</strong>が消える。</p>
+<p>この事案の真の教訓は単純だ。<em>パッチは侵入を阻むが、運用速度を阻まない。</em> したがって防御は2つの軸で再編されねばならない。第一に、露出を減らし認証情報を隔離して「侵入の価値」を下げる。第二に、侵害を前提とした行動ベースの検知と自動対応で「運用の速度」に対抗する。AI主導の攻撃者は、もはやあなたの環境を地図化する必要がない。分散送出、適応性、速度は、いまや脅威の基本仕様である。</p>
+<hr>
+<h2>参考文献 (References)</h2>
+<p>[1] Sysdig Threat Research Team, &quot;AI agent at the wheel: How an attacker used LLMs to move from a CVE to an internal database in 4 pivots&quot;, Sysdig, 2026-05. <a href="https://www.sysdig.com/blog/ai-agent-at-the-wheel">https://www.sysdig.com/blog/ai-agent-at-the-wheel</a></p>
+<p>[2] Ravie Lakshmanan, &quot;Attackers Use LLM Agent for Post-Exploitation After Marimo CVE-2026-39987 Exploit&quot;, The Hacker News, 2026-05-29. <a href="https://thehackernews.com/2026/05/attackers-use-llm-agent-for-post.html">https://thehackernews.com/2026/05/attackers-use-llm-agent-for-post.html</a></p>
+<p>[3] &quot;Hackers Use LLM Agent to Move From Marimo RCE to Internal Database in Four Pivots&quot;, Cyber Security News, 2026-05. <a href="https://cybersecuritynews.com/hackers-use-llm-agent-to-move-from-marimo-rce/">https://cybersecuritynews.com/hackers-use-llm-agent-to-move-from-marimo-rce/</a></p>
+<p>[4] &quot;Hackers Pivot from marimo RCE to Internal Database Using LLM Agent&quot;, GBHackers, 2026-05. <a href="https://gbhackers.com/hackers-pivot-from-marimo-rce/">https://gbhackers.com/hackers-pivot-from-marimo-rce/</a></p>
+<p>[5] Pierluigi Paganini, &quot;CVE-2026-39987: Marimo RCE exploited in hours after disclosure&quot;, Security Affairs, 2026-04-11. <a href="https://securityaffairs.com/190623/hacking/cve-2026-39987-marimo-rce-exploited-in-hours-after-disclosure.html">https://securityaffairs.com/190623/hacking/cve-2026-39987-marimo-rce-exploited-in-hours-after-disclosure.html</a></p>
+<p>[6] &quot;Marimo RCE Flaw CVE-2026-39987 Exploited Within 10 Hours of Disclosure&quot;, The Hacker News, 2026-04-24. <a href="https://thehackernews.com/2026/04/marimo-rce-flaw-cve-2026-39987.html">https://thehackernews.com/2026/04/marimo-rce-flaw-cve-2026-39987.html</a></p>
+<hr>
+<p>© 2026 Dennis Kim (김호광) · 本文書は独立CTIアーカイブ（TLP:GREEN）の公開を目的として作成された。
+連絡先: <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · GitHub: <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0530-MARIMO_JP.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

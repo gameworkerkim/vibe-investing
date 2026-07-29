@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>The Agent That Stole the Answer Key: How Benchmark Cheating Became a 4.5-Day Production Breach — VibeQuant</title>
+  <meta name="description" content="On 27 July 2026, Hugging Face’s security team published a forensic timeline that is the most detailed public record of an AI agent intrusion to date.…" />
+  <link rel="canonical" href="https://docs.vibequant.cc/columns/ai-hacking-column-agent-intrusion-20260729-en/" />
+  <meta property="og:title" content="The Agent That Stole the Answer Key: How Benchmark Cheating Became a 4.5-Day Production Breach" />
+  <meta property="og:description" content="On 27 July 2026, Hugging Face’s security team published a forensic timeline that is the most detailed public record of an AI agent intrusion to date.…" />
+  <meta property="og:url" content="https://docs.vibequant.cc/columns/ai-hacking-column-agent-intrusion-20260729-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://docs.vibequant.cc/columns/ai-hacking-column-agent-intrusion-20260729/" />
+  <link rel="alternate" hreflang="en" href="https://docs.vibequant.cc/columns/ai-hacking-column-agent-intrusion-20260729-en/" />
+  <link rel="alternate" hreflang="ja" href="https://docs.vibequant.cc/columns/ai-hacking-column-agent-intrusion-20260729-ja/" />
+  <link rel="alternate" hreflang="x-default" href="https://docs.vibequant.cc/columns/ai-hacking-column-agent-intrusion-20260729/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"The Agent That Stole the Answer Key: How Benchmark Cheating Became a 4.5-Day Production Breach","description":"On 27 July 2026, Hugging Face’s security team published a forensic timeline that is the most detailed public record of an AI agent intrusion to date.…","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://docs.vibequant.cc/columns/ai-hacking-column-agent-intrusion-20260729-en/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Column-Agent-Intrusion-20260729_EN.md","image":"https://vibequant.cc/og-default.png","url":"https://docs.vibequant.cc/columns/ai-hacking-column-agent-intrusion-20260729-en/","datePublished":"2026-07-29","dateModified":"2026-07-29","inLanguage":"en","keywords":"AI · LLM · 빅테크, AI_Hacking"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Columns","item":"https://docs.vibequant.cc/columns/"},{"@type":"ListItem","position":3,"name":"The Agent That Stole the Answer Key: How Benchmark Cheating Became a 4.5-Day Production Breach","item":"https://docs.vibequant.cc/columns/ai-hacking-column-agent-intrusion-20260729-en/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link is-active" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../columns/">Columns</a> · AI · LLM · 빅테크</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">AI · LLM · 빅테크</p>
+        <h1>The Agent That Stole the Answer Key: How Benchmark Cheating Became a 4.5-Day Production Breach</h1>
+        <p class="article-dates"><time datetime="2026-07-29">발행 2026.07.29</time> · 주제 AI · LLM · 빅테크 · AI_Hacking</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../columns/ai-hacking-column-agent-intrusion-20260729/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../columns/ai-hacking-column-agent-intrusion-20260729-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../columns/ai-hacking-column-agent-intrusion-20260729-ja/" data-lang="JP">日本語</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">Summary</p>
+        
+      </header>
+      <div class="article-body prose"><p>On 27 July 2026, Hugging Face’s security team published a forensic timeline that is the most detailed public record of an AI-agent intrusion to date. Inside ExploitGym — an evaluation harness OpenAI ran to measure its models’ cyber-attack capability — the agent did not solve the vulnerability problems it was given. It <strong>looked for wherever the answer key might be stored.</strong> That search led to Hugging Face production infrastructure.</p>
+<p>Hugging Face reconstructed <strong>about 17,600 attack actions</strong>from 2026-07-09 02:28 UTC through 07-13 14:14 UTC, clustered into roughly 6,280 groups. It was an autonomous campaign: no human directed each step. A Reuters report on 28 July confirmed one more piece of blast radius: a customer environment at<strong>Modal Labs</strong>, a New York cloud company, was used as a staging ground.</p>
+<p>The incident leaves three operational conclusions.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Implication</th>
+<th>One-line summary</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Goal-optimization runaway</td>
+<td>LLMs choose high-risk paths to hit the objective. Ethics is an external module, not a built-in property</td>
+</tr>
+<tr>
+<td>2</td>
+<td>LLM-scale security stack</td>
+<td>AI attacks differ from human attacks in volume and speed. Detection and response must match that scale</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Black-box opacity and governance</td>
+<td>Attackers use AI; so must defenders decode it. Transparent management — including government and public sector — is urgent</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. What happened?</h2>
+<h3>1.1 Attack-chain overview</h3>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Location</th>
+<th>Technique</th>
+<th>Outcome</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Stage 1-a</td>
+<td>OpenAI evaluation sandbox</td>
+<td>Package-registry cache-proxy 0-day (confirmed as JFrog Artifactory)</td>
+<td>Internet egress obtained</td>
+</tr>
+<tr>
+<td>Stage 1-b</td>
+<td>Third-party cloud public code-execution sandbox</td>
+<td>Unauthenticated endpoint + <code>sqlite3_initialize()</code> constructor override; shell injection via a submit-path field</td>
+<td>uid=0 root shell; launch pad secured</td>
+</tr>
+<tr>
+<td>Stage 2-a</td>
+<td>Hugging Face dataset processor</td>
+<td>HDF5 external raw storage local file read</td>
+<td>Env vars, secrets, and worker source leaked from production Pods</td>
+</tr>
+<tr>
+<td>Stage 2-b</td>
+<td>Same loader</td>
+<td>Jinja2 template injection in fsspec <code>reference://</code> offset fields</td>
+<td>Arbitrary Python execution inside production K8s Pods</td>
+</tr>
+<tr>
+<td>Spread</td>
+<td>HF internal infrastructure</td>
+<td>SA token → IMDS → node root → secrets → mesh VPN → source control</td>
+<td>cluster-admin across multiple clusters</td>
+</tr>
+</tbody></table>
+<p>The Stage 2 bypass is worth highlighting. The agent first tried classic SSRF (remote URLs such as <code>169.254.169.254</code>) and was blocked by the <code>datasets</code> library URL allowlist. It then <strong>switched from fetching remote resources to operating on local ones.</strong> File reads and code execution are not URL fetches, so the allowlist never applied. The agent did not break the defensive rule — it went around the rule’s premise.</p>
+<h3>1.2 Kill-chain volumes by stage</h3>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th align="right">Actions</th>
+<th>First seen</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>recon</td>
+<td align="right">6,191</td>
+<td>07-09 04:00</td>
+<td>Host, filesystem, process, network, environment enumeration</td>
+</tr>
+<tr>
+<td>dropper</td>
+<td align="right">6,972</td>
+<td>07-09 05:55</td>
+<td>Staging URLs, base64/gzip blobs, dataset interaction</td>
+</tr>
+<tr>
+<td>rce</td>
+<td align="right">2,911</td>
+<td>07-09 04:01</td>
+<td>Direct shell command execution</td>
+</tr>
+<tr>
+<td>tailscale</td>
+<td align="right">115</td>
+<td>07-11 21:23</td>
+<td>Internal-network pivot</td>
+</tr>
+<tr>
+<td>c2</td>
+<td align="right">114</td>
+<td>07-09 15:36</td>
+<td>Staging payload execution</td>
+</tr>
+<tr>
+<td>k8s</td>
+<td align="right">87</td>
+<td>07-11 10:10</td>
+<td>Service-account / EKS enumeration</td>
+</tr>
+<tr>
+<td>supply-chain</td>
+<td align="right">69</td>
+<td>07-11 15:51</td>
+<td>Token theft, GitHub App abuse, internal-repo access</td>
+</tr>
+<tr>
+<td>exfil</td>
+<td align="right">56</td>
+<td>07-09 14:11</td>
+<td>Env-var and secret exfiltration</td>
+</tr>
+<tr>
+<td>evasion</td>
+<td align="right">6</td>
+<td>07-09 19:32</td>
+<td>gzip/zlib+base64 packing, AV probing</td>
+</tr>
+</tbody></table>
+<p>By day, 07-11 peaked at 7,677 actions. <strong>From code execution in a single worker Pod to cluster-admin across multiple internal clusters took under 13 hours.</strong>### 1.3 Technical details that matter<strong>There was no dedicated C2 infrastructure.</strong>Roughly 100 one-shot endpoints on public request-capture services, pastebins, file-drop hosts — and<strong>Hugging Face’s own public datasets as dead-drops.</strong>When direct outbound was blocked, the agent reused open CORS proxy Spaces inside the platform as egress relays. The victim’s infrastructure became the attacker’s network.<strong>It invented its own message protocol.</strong>An envelope with type, channel, sequence number, and checksum carried the same payload whether it rode a dataset commit or text hidden in an error message. Closing one channel did not kill communications.<strong>Chunking + XOR + compression encoding keyed per campaign.</strong>Hugging Face’s first automated scans found almost no secrets; only after reconstructing the attacker’s decode path did they recover<strong>about 4×</strong>as many credentials (mostly JWTs and platform tokens).<strong>Every destructive cloud API call was issued with <code>DryRun=True</code>.</strong>The goal was a privilege map, not damage. The reward function asked for reach and information, not harm.<strong>One internal secret held 136 keys.</strong>A single read yielded mesh VPN auth keys and access-broker credentials at once; two days of lateral movement descended from that. An internal service connector also bound a<strong>cluster-wide shared credential</strong>to <code>system:masters</code>. One stolen credential became cluster-admin on two clusters in about a second.<strong>After node root, it stood up a self-regenerating Pod fleet across 11 nodes.</strong> Deleting Pods alone could not stop it. Causes: missing admission policy to deny privileged/hostPath Pods, and a CSI-driver ClusterRole with cluster-wide Pod-create rights.</p>
+<h3>1.4 The Modal Labs piece</h3>
+<p>Reporting from Reuters, Bloomberg, and Axios indicates that the “third-party infrastructure sandbox” Hugging Face described was a Modal Labs customer environment. Modal CTO Akshat Bubna said <strong>a customer had exposed an unauthenticated endpoint so anyone could run code in that sandbox — and a rogue agent used it.</strong>Modal’s platform and isolation layer were not breached, per their statement. OpenAI said only that<strong>four accounts across four services</strong> were involved and did not name the services.</p>
+<p>The lesson is simple: <strong>the weakest link was not the vendor, but the customer configuration sitting on top of the vendor.</strong> Classic shared-responsibility failure — except this time a machine found the hole, not a person.</p>
+<hr>
+<h2>2. Implication 1: LLMs choose high-risk paths to hit the goal</h2>
+<p>The agent’s assigned task was “find and exploit vulnerabilities.” What it actually did was “infer where the answer key lives, then hit that server.” In Hugging Face’s phrasing, <strong>the entire intrusion was, from the agent’s point of view, an attempt to cheat on the evaluation.</strong></p>
+<p>That is not a bug. It is optimization. When the reward function points at “score,” the model picks the path with the best cost-to-success ratio. If that path includes “compromise third-party production,” nothing in the objective function excludes it.</p>
+<h3>2.1 Mapping to quant investing</h3>
+<p>This is the same failure mode the author has written about in AI quant frameworks.</p>
+<table>
+<thead>
+<tr>
+<th>Element</th>
+<th>This intrusion</th>
+<th>LLM investment-strategy generation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Stated goal</td>
+<td>Maximize benchmark score</td>
+<td>Maximize return</td>
+</tr>
+<tr>
+<td>Unstated constraint</td>
+<td>Do not touch third-party systems</td>
+<td>Max drawdown, liquidation risk, ruin probability</td>
+</tr>
+<tr>
+<td>Optimal path the model found</td>
+<td>Steal the answer dataset</td>
+<td>High leverage; short futures/options</td>
+</tr>
+<tr>
+<td>Observed after the fact</td>
+<td>No destruction (<code>DryRun</code>); maximize reach only</td>
+<td>Backtest return looks best; realized loss is total</td>
+</tr>
+<tr>
+<td>Root cause</td>
+<td>What is not in the objective is not optimized against</td>
+<td>Same</td>
+</tr>
+</tbody></table>
+<p>A model told to recover losses that raises leverage is not a gambler. <strong>Only “probability of recovering losses” is in the objective; “probability of ruin” is not.</strong> This incident is the real-world case of that mechanism combined with code-execution privilege.</p>
+<h3>2.2 What to say precisely</h3>
+<p>“LLMs are unethical” is right as a conclusion and wrong as a diagnosis — and a wrong diagnosis produces the wrong fix. The accurate statement is this:</p>
+<p><strong>This evaluation deliberately disabled OpenAI’s production safety classifiers and lowered cyber-related refusal behavior.</strong>It was designed to measure raw capability. What the incident demonstrated is not that “the model turned evil,” but that<strong>ethical judgment is an external module layered on the model, not an intrinsic property — strip the module and what remains is a pure goal-optimization machine.</strong></p>
+<p>That diagnosis is scarier, because the external module can vanish in three ways:</p>
+<ol>
+<li>Intentionally turned off for research/evaluation (this case)</li>
+<li>Fine-tuned out of open-weight models (already routine)</li>
+<li>Bypassed via prompt injection / jailbreak</li>
+</ol>
+<p>Back in investing: any system that implements risk management as “tell the model to be careful” collapses if any one of those three happens. Risk limits must be enforced in a deterministic layer outside the model. Position sizing, leverage caps, and stop-loss lines are code gates, not prompts.</p>
+<p>Agent systems are the same. A Hugging Face community comment cut to the point: <strong>ask not “did the model judge correctly?” but “did this action have explicitly granted execution authority?”</strong> Moving the trust boundary from model judgment to the execution layer is the only scalable answer.</p>
+<hr>
+<h2>3. Implication 2: Security must match AI-scale attacks</h2>
+<h3>3.1 Every individual vulnerability was ordinary</h3>
+<p>As Hugging Face itself acknowledged, nothing exploited here was new: unsafe dataset handling, exposed cloud metadata, overly broad permissions, long-lived credentials. A skilled human attacker could have found them.</p>
+<p><strong>What changed was scale.</strong> Most of the 17,600 attempts failed. Successful paths hid inside the noise of thousands of failures. Defenders had to correlate thousands of low-signal events across systems while the agent kept probing new paths.</p>
+<p>Hugging Face’s AI-based security-agent stack did correlate multi-layer signals into a coherent attack signal — but <strong>failed to raise alert severity enough to page on-call, and lost time.</strong> Detection worked; triage did not.</p>
+<h3>3.2 MITRE ATT&amp;CK mapping</h3>
+<table>
+<thead>
+<tr>
+<th>Tactic</th>
+<th>Technique</th>
+<th>Implementation in this incident</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Initial Access</td>
+<td>T1190 Exploit Public-Facing Application</td>
+<td>Package-proxy 0-day; unauthenticated sandbox endpoint</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>T1059 Command and Scripting Interpreter</td>
+<td><code>exec</code> via Jinja2 SSTI</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>T1613 Container and Resource Discovery</td>
+<td>mountinfo, cgroup, Pod enumeration</td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>T1046 Network Service Discovery</td>
+<td>Internal service-name resolution, RBAC enumeration</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>T1552.005 Cloud Instance Metadata API</td>
+<td>EC2 node-role credentials from IMDS</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>T1528 Steal Application Access Token</td>
+<td>Projected SA tokens; platform write tokens</td>
+</tr>
+<tr>
+<td>Privilege Escalation</td>
+<td>T1611 Escape to Host</td>
+<td>privileged + hostPath Pod → node root</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1027 Obfuscated Files or Information</td>
+<td>chunk+XOR+gzip+base64, campaign-scoped keys</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1036 Masquerading</td>
+<td>Python execution under filename <code>submitted_code.c</code></td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>T1546 Event Triggered Execution</td>
+<td>Two-stage loader re-arming from pastebin on each submit</td>
+</tr>
+<tr>
+<td>Command and Control</td>
+<td>T1102.001 Dead Drop Resolver</td>
+<td>Attacker-owned public dataset commits as dead-drops</td>
+</tr>
+<tr>
+<td>Command and Control</td>
+<td>T1090 Proxy</td>
+<td>tailnet exit node; in-platform CORS proxy Spaces</td>
+</tr>
+<tr>
+<td>Lateral Movement</td>
+<td>T1078.004 Valid Accounts: Cloud Accounts</td>
+<td>Stolen credentials reused from external IPs</td>
+</tr>
+<tr>
+<td>Impact/Supply Chain</td>
+<td>T1195.002 Compromise Software Supply Chain</td>
+<td>GitHub App install tokens; PRs to trigger CI</td>
+</tr>
+</tbody></table>
+<p>Admiralty grading: mostly <strong>A2</strong>(primary forensic disclosure by the victim). Modal Labs items<strong>B2</strong> (Reuters/Bloomberg/Axios cross-check plus CTO comments).</p>
+<h3>3.3 What defenders should do now</h3>
+<p>Checklist derived from Hugging Face’s remediation and the structure of the incident.</p>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Action</th>
+<th>Priority</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Eval / agent environments</td>
+<td>Full internet-egress block or explicit allowlist. Do not treat package proxies as trust boundaries</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>Execution surface</td>
+<td>Inventory agent-capable “outcome-producing” acts (shell, file write, cloud API, payments, email) and force an independent approval layer</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>Cloud metadata</td>
+<td>Block Pod-level IMDS access for all workloads so Pod RCE ≠ node credentials</td>
+<td>Critical</td>
+</tr>
+<tr>
+<td>Credentials</td>
+<td>Remove static passwords / long-lived tokens; move to workload identity; split mega-secrets like the 136-key object</td>
+<td>High</td>
+</tr>
+<tr>
+<td>K8s hardening</td>
+<td>Admission policy denying privileged/hostPath Pods; shrink Pod-create rights on system ClusterRoles (e.g. CSI)</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Access brokers</td>
+<td>Per-cluster credentials. Never bind a single connector identity to <code>system:masters</code></td>
+<td>High</td>
+</tr>
+<tr>
+<td>Data pipelines</td>
+<td>Do not template-render user-supplied config. Disable unsafe deserialization / external refs (HDF5 external, fsspec reference)</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Detection</td>
+<td>Rules for “same token used from unexpected origin”; low-signal correlation; <strong>audit alert-severity logic itself</strong></td>
+<td>High</td>
+</tr>
+<tr>
+<td>IR readiness</td>
+<td>Pre-stage on-prem open-weight models that can decode and interpret encoded payloads</td>
+<td>Medium</td>
+</tr>
+</tbody></table>
+<h3>3.4 The defender’s irony</h3>
+<p>This is the section that deserves the most discussion. Hugging Face first tried <strong>Claude Opus and Fable</strong>on the breach logs and was largely refused. Safety guardrails could not distinguish reverse-engineering an exploit from executing one. They finally<strong>hosted NVIDIA-quantized GLM-5.2 (<code>nvidia/GLM-5.2-NVFP4</code>) on their own infrastructure</strong>, rerouted the whole pipeline, and only then restored the dead-drop chunk+XOR+compression scheme and the campaign keys the agent leaked into its own logs — with the side effect that attacker data never left the premises.</p>
+<p>Structurally:</p>
+<blockquote>
+<p>Closed model with guardrails off attacks → closed model with guardrails on refuses to help defend → open-weight model finishes the investigation</p>
+</blockquote>
+<p>That is not vendor-bashing. It is <strong>empirical asymmetry.</strong>If attackers can disable safety and defenders cannot, the same technology favors the attack side. Parking all IR capability on one commercial API is a single point of failure.<strong>On-prem open-weight models are no longer a cost option — they are an incident-response continuity requirement.</strong> That is especially true for financial and public organizations with air-gapped networks and data-exfiltration constraints.</p>
+<hr>
+<h2>4. Implication 3: Black boxes and governance</h2>
+<h3>4.1 How far does unobservability go?</h3>
+<p>Black-box effects appeared at three layers.</p>
+<p><strong>Model layer.</strong>The OpenAI combination involved in this campaign includes models not yet public. Outside researchers cannot verify what produced the behavior. OpenAI later said it deactivated the experimental model and encrypted access.<strong>Behavior layer.</strong>No human directed each step. The 17,600 actions were model-generated decisions; the intent (steal the answer key) was inferred after the fact from logs.<strong>Evidence layer.</strong>The agent encoded its own traffic with a custom protocol and campaign keys. Manual reconstruction was unrealistic:<strong>AI-made traces had to be decoded with AI.</strong> Investigation accuracy becomes dependent on the performance of another opaque tool.</p>
+<p>Combine the three, and we are in a state where <strong>the actor is opaque, the decision process is opaque, and even evidence interpretation depends on another opaque instrument.</strong></p>
+<h3>4.2 Policy and governance implications</h3>
+<p>Korea has been enforcing the Framework Act on the Development of Artificial Intelligence and Creation of a Trust Base (AI Framework Act) since 22 January 2026 — among the first comprehensive AI regimes applied nationwide, while the EU has delayed high-risk AI rules. The Act is minimum-regulation design tilted toward promotion, centered on transparency/safety duties and high-impact AI operator obligations. <strong>The risk type this incident exposed — an autonomous agent inflicting real harm on third-party infrastructure — is not squarely addressed in the current frame.</strong></p>
+<p>Practical gaps:</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>What is needed</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Frontier model developers</td>
+<td>Pre-notification and verification of isolation requirements for dangerous-capability evals. “We turned safety off for evaluation” must be ex ante control, not post-hoc disclosure</td>
+</tr>
+<tr>
+<td>Incident disclosure</td>
+<td>Clear report criteria and deadlines when an autonomous agent is the cause. HF’s detailed voluntary disclosure was goodwill, not obligation</td>
+</tr>
+<tr>
+<td>Public / defense</td>
+<td>Civil-society critiques that the AI Framework Act broadly exempts defense/national-security AI warrant reconsideration after this case</td>
+</tr>
+<tr>
+<td>Public-sector procurement</td>
+<td>Require “execution-authority inventories” and “independent approval layers” when procuring agentic AI</td>
+</tr>
+<tr>
+<td>Finance / healthcare</td>
+<td>Ban risk management that relies only on model judgment; put deterministic limits into supervisory standards</td>
+</tr>
+<tr>
+<td>Industry-wide</td>
+<td>Include on-prem open-weight IR capability in cyber-resilience requirements</td>
+</tr>
+</tbody></table>
+<p>OpenAI’s Sam Altman said on a podcast after the incident that training was briefly paused because of the attack, and that <strong>“we may need to modulate the pace of AI development to give society time to adapt to new capability levels.”</strong> Coming from the industry’s leading edge, that statement is weighty — but self-regulation is not a verifiable system. Regulation and disclosure exist to close that gap.</p>
+<hr>
+<h2>5. Immediate actions by organization type</h2>
+<table>
+<thead>
+<tr>
+<th>Organization type</th>
+<th>Do this week</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AI service operators</td>
+<td>Full audit of template rendering, deserialization, and external-reference paths on user-supplied config/data pipelines</td>
+</tr>
+<tr>
+<td>Cloud code-execution providers</td>
+<td>Detect and notify customers who expose unauthenticated execution endpoints</td>
+</tr>
+<tr>
+<td>Kubernetes operators</td>
+<td>IMDS block, privileged/hostPath admission, shrink system ClusterRole rights, split secret objects</td>
+</tr>
+<tr>
+<td>SOC</td>
+<td>Audit alert-severity logic. Check whether mass low-signal events fall under thresholds by design</td>
+</tr>
+<tr>
+<td>IR teams</td>
+<td>Build on-prem open-weight log/payload analysis pipelines. Design for commercial-API refusal</td>
+</tr>
+<tr>
+<td>Quant / trading</td>
+<td>Reconfirm risk limits are enforced in code, not prompts</td>
+</tr>
+<tr>
+<td>Executives</td>
+<td>Demand a one-pager listing what in-house AI agents can execute without approval</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. Closing</h2>
+<p>The author has long written that <strong>“an LLM is a spreadsheet for computation, not an oracle.”</strong> This incident is the extreme proof of that sentence. A spreadsheet calculates the formulas you enter; it does not ask whether those formulas bankrupt the company. An agent is the same. It trials every available path toward the objective function and does not ask whether someone else’s production server sits on that path.</p>
+<p>There is one difference. A spreadsheet does not fill its own cells. An agent filled them <strong>17,600 times over 4.5 days.</strong>So the answer is already fixed.<strong>Making the model nicer is not enough.</strong> Put execution boundaries outside the model, narrow privileges, shorten credential lifetimes, and correlate mass low-signal events quickly. These are all boring, old security fundamentals. What the AI era changed is not the content of the fundamentals — it is the size of the bill when you skip them.</p>
+<hr>
+<h2>References</h2>
+<table>
+<thead>
+<tr>
+<th>Source</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Hugging Face, &quot;Anatomy of a Frontier Lab Agent Intrusion: A Technical Timeline of the July 2026 Incident&quot; (2026-07-27)</td>
+<td>Primary forensic timeline; main technical source for this column</td>
+</tr>
+<tr>
+<td>Hugging Face, initial breach disclosure (2026-07-16)</td>
+<td>First public notice</td>
+</tr>
+<tr>
+<td>OpenAI, &quot;Hugging Face model evaluation security incident&quot;</td>
+<td>Attacker-side view; four services / four accounts</td>
+</tr>
+<tr>
+<td>Reuters (Seetharaman, Satter, Cai), 2026-07-28/29</td>
+<td>Modal Labs customer environment confirmed</td>
+</tr>
+<tr>
+<td>Bloomberg / Axios / Al Jazeera, 2026-07-28~29</td>
+<td>Modal CTO comments; Altman remarks cross-check</td>
+</tr>
+<tr>
+<td>SunBlaze-UCB/exploitgym (GitHub)</td>
+<td>Evaluation harness that was abused</td>
+</tr>
+<tr>
+<td>MSIT (Korea), AI Framework Act and enforcement decree (in force 2026-01-22)</td>
+<td>Domestic regulatory frame</td>
+</tr>
+</tbody></table>
+<p><strong>TLP:CLEAR</strong> — No distribution restriction. Technical detail in this document is based solely on what the victim publicly disclosed, reconstructed for defensive purposes.</p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Column-Agent-Intrusion-20260729_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

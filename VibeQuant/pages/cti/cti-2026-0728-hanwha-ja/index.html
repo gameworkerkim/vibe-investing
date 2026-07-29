@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>カメラファームウェアの中の管理者の鍵 — ハンファビジョンGitHubトークン漏洩とCIパイプラインの崩壊 — VibeQuant</title>
+  <meta name="description" content="多層暗号化で隠したファームウェアもLLMの前では紙箱にすぎない — process.env 一行が招いた国防総省IPと組織全体adminトークンの露出" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-ja/" />
+  <meta property="og:title" content="カメラファームウェアの中の管理者の鍵 — ハンファビジョンGitHubトークン漏洩とCIパイプラインの崩壊" />
+  <meta property="og:description" content="多層暗号化で隠したファームウェアもLLMの前では紙箱にすぎない — process.env 一行が招いた国防総省IPと組織全体adminトークンの露出" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"カメラファームウェアの中の管理者の鍵 — ハンファビジョンGitHubトークン漏洩とCIパイプラインの崩壊","description":"多層暗号化で隠したファームウェアもLLMの前では紙箱にすぎない — process.env 一行が招いた国防総省IPと組織全体adminトークンの露出","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-ja/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0728-HANWHA_JP.md","image":"https://vibequant.cc/og-default.png","url":"https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-ja/","datePublished":"2026-07-28","dateModified":"2026-07-28","inLanguage":"ja","keywords":"기타 CTI, JP, CTI"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"カメラファームウェアの中の管理者の鍵 — ハンファビジョンGitHubトークン漏洩とCIパイプラインの崩壊","item":"https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-ja/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 기타 CTI</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 CTI</p>
+        <h1>カメラファームウェアの中の管理者の鍵 — ハンファビジョンGitHubトークン漏洩とCIパイプラインの崩壊</h1>
+        <p class="article-dates"><time datetime="2026-07-28">발행 2026.07.28</time> · 주제 기타 CTI · JP · CTI</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0728-hanwha-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0728-hanwha-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0728-hanwha-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0728-hanwha-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">多層暗号化で隠したファームウェアもLLMの前では紙箱にすぎない — process.env 一行が招いた国防総省IPと組織全体adminトークンの露出</p>
+        <p class="article-byline">Dennis Kim / HoKwang Kim · 2026-07-28</p>
+      </header>
+      <div class="article-body prose"><p><em>多層暗号化で隠したファームウェアもLLMの前では紙箱にすぎない — <code>process.env</code> 一行が招いた国防総省IPと組織全体adminトークンの露出</em></p>
+<hr>
+<h2>目次</h2>
+<ol>
+<li>要約（TL;DR）</li>
+<li>Key Judgments</li>
+<li>はじめに — 「難読化は退屈させることにしか効かなかった」</li>
+<li>事件タイムライン</li>
+<li>技術分析 — 二重暗号化レイヤーとLLM支援リバースエンジニアリング</li>
+<li>根本原因 — <code>process.env</code> 一行がCI全体を成果物に刻み込む</li>
+<li>MITRE ATT&amp;CK / CWEマッピング</li>
+<li>露出資産リスク評価 — トークンと国防総省IP</li>
+<li>全数調査結果 — 約500件のファームウェア、3件の同一トークン</li>
+<li>報告・対応評価 — 12時間の迅速な対応と訂正報道</li>
+<li>韓国の視点 — 国内防衛産業系列会社とCTIへの示唆</li>
+<li>検知・緩和・対応の推奨事項</li>
+<li>結論</li>
+<li>参考文献</li>
+</ol>
+<hr>
+<h2>1. 要約（TL;DR）</h2>
+<p>2026年7月24日、あるセキュリティ研究者（ブログ名hhh.hn、筆名Austin）が、ハンファビジョン（Hanwha Vision、旧サムスンテックウィン）のネットワークカメラのファームウェアを分析し、Web管理UIのビルド成果物約30ファイルから同一の<strong>GitHub個人アクセストークン</strong>を発見したと公表した。このトークンは、ハンファのGitHub組織内の<strong>数百のリポジトリに対する管理者（admin）権限</strong>を保有していた。原因は単純だった — カメラ管理UIをビルドするVite設定において、ある環境変数が<code>process.env</code>全体として指定されていたため、CI/CDジョブの全環境変数（ビルドシステムのアドレス、社内インフラのIP、GitHubトークンを含む）がそのままクライアント側の成果物に書き込まれていた。</p>
+<p>研究者によれば、ファームウェア自体も二重に暗号化されていたが、<code>fwupgrader</code>バイナリをGhidraと<strong>Claude Code</strong>で分析することで、XORで難読化されたAES-256-CBCの鍵・IV復元ロジックを数時間で解除できたという。これは「コード難読化が予算ではなく時間しか稼げなかった時代が終わった」ことを示す事例である。</p>
+<p>漏洩したCI環境変数には、米国防総省（DoD）割り当て帯域に見えるIPアドレスが3件含まれていたことも議論を呼んだが、ハンファ側は確認の上で<strong>「サムスンテックウィン時代から社内アドレス体系として慣行的に使用してきたものであり、DoD割り当ての事実を認識していなかった」</strong>と公式に回答し、研究者はこの部分の推測的な記述を撤回・訂正した（2026-07-27）。実際の攻撃によるものではなく、<strong>レガシーな社内アドレス体系の誤用</strong>であったことが確認された事案である。</p>
+<p>ハンファは報告受領後<strong>12時間以内</strong>にトークンを失効させ、迅速な対応事例として評価されるが、根本原因である「ビルド時にCI環境変数全体をクライアント成果物に埋め込む構成」が是正されたかどうかは公開されていない。</p>
+<blockquote>
+<p>⚠️ <strong>調査範囲の限界</strong> — 本レポートは研究者個人のブログ（一次情報源）とGeekNewsの要約報道に基づく分析である。ハンファビジョンの公式セキュリティ告知は確認されておらず、実際のカメラ管理UIでトークンがネットワーク経由で送信されていたか（攻撃対象として露出していたか）については、研究者自身も実機を保有していなかったため検証できなかったと明記している。</p>
+</blockquote>
+<hr>
+<h2>Key Judgments</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>判断</th>
+<th>確信度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KJ-1</td>
+<td>露出の原因は攻撃ではなく<strong>ビルド設定の欠陥</strong>（Vite環境変数が<code>process.env</code>全体にバインドされていた）であり、CIジョブの全環境が副次的にクライアント成果物へ露出した。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-2</td>
+<td>漏洩したGitHubトークンは<strong>組織admin権限</strong>を持つ単一の認証情報であり、たった一つのビルド設定ミスが組織全体のコード資産の機密性・完全性リスクに直結する<strong>単一障害点（SPOF）</strong>構造を露呈させた。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-3</td>
+<td>ファームウェアの二重暗号化（1段目：モデル名ベースのパスフレーズ、2段目：バイナリ内XOR難読化されたAES鍵）はかつては有意な防御線だったが、<strong>LLM支援リバースエンジニアリング（Claude Code + Ghidra）</strong>により人間が数時間で解除できるようになり、防御効果は事実上消滅した。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-4</td>
+<td>漏洩したCI環境変数における国防総省（DoD）割り当てIP帯域の使用は、<strong>ハンファと米国防総省の実質的な関係ではなく、サムスンテックウィン時代から続く社内アドレス体系慣行との偶然の衝突</strong>であることが、ハンファ側の回答と研究者の訂正を通じて確認された。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-5</td>
+<td>約500件中62%のファームウェアで同一手法による解読が成功し、トークンが発見された3件のファームウェアはすべて<strong>同一のトークン</strong>を含んでいた — 一つのCIパイプラインの成果物が複数のモデルラインで再利用される構造であることを示唆する。</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+<tr>
+<td>KJ-6</td>
+<td>報告後12時間以内のトークン失効は迅速だったが、公開情報のみでは<strong>根本原因（ビルドスクリプトによる<code>process.env</code>全体の露出）が是正されたかどうかは確認できない</strong>— 再発の可能性は残っている。</td>
+<td><strong>Medium</strong></td>
+</tr>
+<tr>
+<td>KJ-7</td>
+<td>ハンファビジョンは監視カメラ以外にも、自走砲・装甲車サブシステム・警戒ロボットなどを生産してきたハンファグループの系列会社であり、今回の事案は単一のIoTベンダーのリスクにとどまらず、<strong>防衛産業関連企業のソフトウェアサプライチェーンセキュリティの成熟度</strong>という問題に拡張して捉える余地がある。</td>
+<td><strong>Medium</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. はじめに — 「難読化は退屈させることにしか効かなかった」</h2>
+<p>この事件がCTIの観点から興味深いのは、漏洩そのものよりも<strong>漏洩に至る経路が崩壊した速度</strong>である。ハンファはファームウェア保護のために少なくとも二重の暗号化を施していた — モデル名ベースのパスフレーズで外側のtarballを包み、内部の<code>fwimage.tgz</code>は別途AES-256-CBCで再度包んでいた。鍵とIVはバイナリ内に平文で置かれるのではなく、静的テーブルとのXOR演算によって分散させられていた。2023年時点であれば、個人研究者の時間と忍耐力を消耗させるには十分な壁であった。</p>
+<p>しかし研究者は、この難読化解除の作業を人間がGhidraで直接追うのではなく、<strong>Claude Codeにバイナリ解析を任せてその場を離れた</strong>と述べている。夕食を終えて戻ったときには、すでに復号ロジックの説明と完全なルートファイルシステムが用意されていた。これはGeekNewsのコメントスレッドでも中心的な論点となった — 「難読化は攻撃者を止めるものではなく、退屈させて諦めさせるための仕掛けにすぎなかった。国家背景組織や専門的な犯罪集団は最初からその手間を惜しまなかった。今やLLMがその退屈さえも代わりに耐えてくれる」。</p>
+<p><strong>ファームウェア難読化の経済学が変わった。</strong> 防御側が難読化に投じるエンジニアリングコストに対し、攻撃者（あるいは研究者）がそれを解除するコストは、LLM支援リバースエンジニアリングによって構造的に低下した。これは今回の一件に限った教訓ではなく、ハードコードされた認証情報や鍵の隠蔽に依存するあらゆる組み込み/IoTベンダーに当てはまる脅威モデルの変化である。</p>
+<hr>
+<h2>3. 事件タイムライン</h2>
+<table>
+<thead>
+<tr>
+<th>日時（2026年）</th>
+<th>出来事</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>（不明、7月中）</td>
+<td>研究者、ハンファビジョンのウェブサイトで公開されているカメラモデル別ファームウェアイメージをダウンロードし分析に着手</td>
+<td>AXISのLinuxアプリケーション対応拡大の議論をきっかけに関心を転換</td>
+</tr>
+<tr>
+<td>（不明）</td>
+<td><code>binwalk</code>でイメージを分析 → 1段目暗号化された<code>fwimage.tgz</code>を確認、Matt Brownの既公開分析（モデル名ベースのパスフレーズ）で1段目を解除</td>
+<td><code>HTWXNP-9300RW</code>のパスフレーズで成功</td>
+</tr>
+<tr>
+<td>（不明）</td>
+<td>内部に存在する2段目暗号化された<code>fwimage.tgz</code>を発見 — 既存の手法は再利用不可</td>
+<td></td>
+</tr>
+<tr>
+<td>（不明）</td>
+<td><code>fwupgrader</code>バイナリをGhidra + <strong>Claude Code</strong>で分析、XOR難読化を解除 → AES-256-CBCの鍵・IVを復元しルートFSを取得</td>
+<td>夕方の時間帯に完了（研究者の記述による）</td>
+</tr>
+<tr>
+<td>（不明）</td>
+<td><code>trufflehog</code>でルートFSをスキャン → 約30ファイルで同一GitHubトークンの重複を発見、組織admin権限を確認</td>
+<td></td>
+</tr>
+<tr>
+<td>（不明）</td>
+<td>原因分析 — Viteのビルド変数が<code>process.env</code>全体に設定されており、CI環境全体が成果物に書き込まれていることを確認</td>
+<td><code>GITHUB_NPM_TOKEN</code>など多数の変数を含む</td>
+</tr>
+<tr>
+<td>（不明）</td>
+<td>約500件のカメラモデルのファームウェアを全数収集・解読試行 — 62%で抽出成功、そのうち3件で同一トークンを再確認</td>
+<td></td>
+</tr>
+<tr>
+<td>（不明）</td>
+<td>ハンファの公開セキュリティ報告チャネルへ最小限の情報のみを記載したメールを送付</td>
+<td></td>
+</tr>
+<tr>
+<td>（不明、報告後12時間以内）</td>
+<td>ハンファ、トークン失効完了の返信</td>
+<td>迅速な対応事例として評価</td>
+</tr>
+<tr>
+<td>2026-07-24</td>
+<td>研究者、hhh.hnブログで分析全体を公開（&quot;My security camera shipped a GitHub admin token…&quot;）</td>
+<td>国防総省IPに関する推測を含む（原文）</td>
+</tr>
+<tr>
+<td>2026-07-25</td>
+<td>GeekNews、国内向け要約報道（xguru）</td>
+<td>国内開発者コミュニティで拡散</td>
+</tr>
+<tr>
+<td>2026-07-27</td>
+<td>ハンファ、DoD IPに関する問い合わせに公式回答 — 「サムスンテックウィン時代からの社内アドレス体系であり、DoD割り当ての事実は認識していなかった、アドレス体系変更を計画」</td>
+<td>研究者、原文の推測的な記述に取り消し線を引いて訂正</td>
+</tr>
+</tbody></table>
+<p><strong>タイムラインに関する注記</strong>: 原文には各技術的段階の正確な日付は明示されていない。ただし、報告<del>失効（12時間）と公開</del>訂正（約3日間）という二つの対応サイクルの双方でハンファ側が実質的に応答しているという点で、他事例で扱われたTVING事例（報告期限の1分前に消火型対応）とは異なる質のインシデント対応文化として評価できる。</p>
+<hr>
+<h2>4. 技術分析 — 二重暗号化レイヤーとLLM支援リバースエンジニアリング</h2>
+<h3>4.1 1段目暗号化 — モデル名ベースのパスフレーズ</h3>
+<p>ハンファビジョンのウェブサイトはモデル別ファームウェアイメージを公開ダウンロードとして提供している。<code>binwalk</code>による分析の結果、内部にAIコンポーネントのtarballと暗号化された<code>fwimage.tgz</code>が確認された。既公開の第三者分析（Matt Brown）によれば、パスワードは<code>HTW</code> + モデル番号の組み合わせであり、対象モデル（<code>HTWXNP-9300RW</code>）で実際に機能した。これは<strong>パスフレーズの構成規則そのものがすでに公開情報として知られていた</strong>ことを意味し、このレイヤーは事実上防御力を失っていた状態だった。</p>
+<h3>4.2 2段目暗号化 — バイナリ内のXOR難読化</h3>
+<p>1段目の解除後も、内部にはさらにもう一つの<code>fwimage.tgz</code>が存在しており、今回は別の方式で暗号化されていた。<code>fwupgrader</code>バイナリの分析結果:</p>
+<ul>
+<li>AES鍵はバイナリ内の<strong>小さな静的鍵テーブルとのXOR</strong>演算を経て実行時に再構成される</li>
+<li><strong>IVはバイナリに平文</strong>として保存</li>
+<li>復号は<code>fwupgrader</code>が<code>openssl</code>のCLIをシェルアウト（shell-out）する方式で行われ、このコマンド文字列の断片も同様にXOR難読化されている</li>
+<li>復元されたコマンドの形式:<pre><code class="language-sh">openssl enc -md sha256 -aes-256-cbc -d \
+  -K &lt;KEY&gt; -iv &lt;IV&gt; -in &lt;INPUT&gt; -out &lt;OUTPUT&gt;
+</code></pre>
+</li>
+<li>実際の鍵/IV（研究者が公開したもの、同一モデルライン内で共通使用）:<pre><code class="language-text">KEY = dfa049bb922e63e2decc764af5628068e5b7a2662e479a615b14643e567579b0
+IV  = 53f926801b81454a4f889c9a390db6e6
+</code></pre>
+</li>
+</ul>
+<h3>4.3 LLM支援リバースエンジニアリングの含意</h3>
+<p>研究者は、この難読化解除作業をGhidraの静的解析と<strong>Claude Code</strong>を組み合わせて実施したと明記しており、結果として人間が従来手法であれば数日を要していた作業を大幅に短縮した。CTIの観点からは、これは以下を示唆する:</p>
+<ul>
+<li><strong>防御コストの非対称性の逆転</strong>: ハードコードされた鍵をコード/バイナリ内部に「隠す」というアプローチは、リバースエンジニアリングのコストを引き上げることで遅延させる効果に依存してきた。LLM支援ツールはこのコストを大幅に引き下げ、難読化だけではもはや有意な時間稼ぎの効果を期待することが難しくなった。</li>
+<li><strong>国家背景組織や専門集団にとってはもともと低い壁</strong>だったという点で、今回の事件の本当のニュースは「専門性の低い個人研究者でさえ一晩で到達できる難易度まで防御線が下がった」ことにある。</li>
+<li>対策は難読化の強化ではなく、<strong>そもそも長期的な認証情報をクライアント/ファームウェアに組み込まないアーキテクチャ</strong>への移行であるべきだ（§12の推奨事項を参照）。</li>
+</ul>
+<hr>
+<h2>5. 根本原因 — <code>process.env</code> 一行がCI全体を成果物に刻み込む</h2>
+<p>トークン露出の実際の原因は、暗号化レイヤーとは無関係な、はるかに平凡なビルド設定の欠陥だった。カメラ管理UIは<strong>Vite</strong>でビルドされており、あるビルド変数が<code>process.env</code>オブジェクト全体に設定されていた。その結果、CIジョブが保持する全環境変数がそのままクライアントバンドルにハードコードされた:</p>
+<pre><code class="language-js">var W = {
+  DATAPORT: &quot;9090&quot;,
+  GIT_LFS_SKIP_SMUDGE: &quot;1&quot;,
+  npm_command: &quot;run-script&quot;,
+  KUBERNETES_SERVICE_PORT_HTTPS: &quot;443&quot;,
+  GITHUB_NPM_TOKEN: &quot;&lt;snip&gt;:ghp_…REDACTED…&quot;,
+  npm_config_userconfig: &quot;/home/docker/.npmrc&quot;,
+  // etc
+}
+</code></pre>
+<p>このパターンはCWE-798（Use of Hard-coded Credentials）の典型例だが、発生箇所がアプリケーションコードではなく<strong>ビルドツールの設定（Viteのdefine/env処理）</strong>であるという点で、一般的なシークレットスキャンの慣行が見落としやすい領域である。ソースリポジトリ自体にはトークンが存在しなかった可能性が高く（CIジョブ環境に注入された値）、問題は「ビルド成果物」というシークレットスキャンの死角で発生した。</p>
+<p>同じ環境変数群には、社内インフラの識別情報（例：<code>SWARM_MASTER_NFS_ADDRESS</code>、<code>OTEL_ELASTIC_URL</code>、<code>CIMIP</code>など社内ネットワークアドレス）も含まれていた。つまり今回の事案は、GitHubトークン単体の問題ではなく、<strong>CI/CDパイプライン全体の内部構成情報が大量にクライアント製品へ漏洩した事件</strong>として捉えるべきである。</p>
+<hr>
+<h2>6. MITRE ATT&amp;CK / CWEマッピング</h2>
+<table>
+<thead>
+<tr>
+<th>カテゴリ</th>
+<th>マッピング</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>脆弱性の種類</td>
+<td><strong>CWE-798</strong> Use of Hard-coded Credentials</td>
+<td>ビルド成果物（クライアントUI）にCIシークレットがハードコード</td>
+</tr>
+<tr>
+<td>脆弱性の種類</td>
+<td><strong>CWE-312</strong> Cleartext Storage of Sensitive Information</td>
+<td>バイナリ内の平文IV、暗号化されずに保存された露出トークン</td>
+</tr>
+<tr>
+<td>潜在的な攻撃手法</td>
+<td><strong>T1552.001</strong> Unsecured Credentials: Credentials In Files</td>
+<td>カメラUIファイル約30件で繰り返し発見されたトークン</td>
+</tr>
+<tr>
+<td>潜在的な攻撃手法</td>
+<td><strong>T1078.004</strong> Valid Accounts: Cloud/SaaS Accounts (GitHub)</td>
+<td>トークンが窃取された場合、組織のリポジトリ全体にadmin権限でアクセス可能</td>
+</tr>
+<tr>
+<td>潜在的な後続手法</td>
+<td><strong>T1195.002</strong> Supply Chain Compromise: Compromised Software Dependencies</td>
+<td>adminトークンの悪用によりコードリポジトリの改ざんを通じたサプライチェーン汚染の可能性（発生はしていない理論上のリスク）</td>
+</tr>
+<tr>
+<td>防御失敗のポイント</td>
+<td>シークレットスキャンの対象範囲 — ソースリポジトリは対象、<strong>CIビルド成果物（クライアントバンドル）は対象外</strong>と推定</td>
+<td>根本原因§5を参照</td>
+</tr>
+</tbody></table>
+<p>本事件は<strong>実際に侵害が発生したインシデント（incident）ではなく、事前露出脆弱性の発見・報告（vulnerability disclosure）</strong>の事例である。したがって、攻撃者の実際のTTPが観測されたわけではなく、「もし悪用されていたら」可能であった潜在的な経路をマッピングしたものであることに留意が必要である。</p>
+<hr>
+<h2>7. 露出資産リスク評価 — トークンと国防総省IP</h2>
+<table>
+<thead>
+<tr>
+<th>露出資産</th>
+<th>性質</th>
+<th>悪用時の影響範囲</th>
+<th>実際の確認状況</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GitHubトークン（<code>GITHUB_NPM_TOKEN</code>）</td>
+<td>長期PAT（個人アクセストークン）と推定</td>
+<td>組織内<strong>数百のリポジトリへのadmin権限</strong> — コード漏洩、バックドア埋め込み、リリース改ざんなどサプライチェーン攻撃が可能</td>
+<td>報告後12時間以内に失効を確認。実際の悪用の痕跡は報告されていない</td>
+</tr>
+<tr>
+<td>社内インフラ変数（<code>SWARM_MASTER_NFS_ADDRESS</code>など）</td>
+<td>社内ネットワーク識別情報</td>
+<td>社内インフラのマッピング（偵察）資料として活用される可能性</td>
+<td>公開の有無・対応措置は不明</td>
+</tr>
+<tr>
+<td>DoD割り当てIP帯域3件</td>
+<td>社内アドレス体系の再利用の状況</td>
+<td>当初の推測：ハンファと米国防総省の実質的な関係 → <strong>ハンファの公式回答により反証、レガシーアドレス慣行として確認</strong></td>
+<td>ハンファの回答および研究者の訂正により<strong>説明完了</strong></td>
+</tr>
+<tr>
+<td>管理UI自体の露出範囲</td>
+<td>検証不可</td>
+<td>管理UIへのアクセス時にトークンが実際にネットワークへ送信されていたかは未確認</td>
+<td>研究者が実機を保有していなかったため検証不可（ブログ原文に明記）</td>
+</tr>
+</tbody></table>
+<p><strong>DoD IP項目に対する評価</strong>: 当初のブログ原文は、これらのアドレスが米国防総省の割り当て帯域であることを根拠に「ハンファは米国防総省と直接的な関係があるのか」という推測を提起し、GeekNewsのコメント欄でも「韓国製セキュリティ製品の回避」といった過剰な解釈が続いた。しかしハンファ側の公式回答によれば、これは<strong>サムスンテックウィン時代から続く社内アドレス体系の慣行</strong>であり、自社が使用中の帯域が公式にDoDへ割り当てられている事実自体を認識していなかったことが実際の原因である。研究者はこれを確認した上で、原文の推測部分に取り消し線を引き、訂正文を追加した（2026-07-27）。CTIレポート作成にあたっては、こうした<strong>説明後の事実関係の更新を必ず元の記述と分離して明示する</strong>必要があり、本レポートはこの原則に基づき訂正された事実をKJ-4に反映している。</p>
+<p>ただし、「国防総省に割り当てられたIP帯域を社内アドレスとして無断で再利用する」という慣行自体は、それ自体が<strong>IPアドレスの衝突・ルーティング誤動作のリスクをはらんだ誤ったネットワーク設計の慣行</strong>であり、ハンファもこれを認めアドレス体系の変更計画を明らかにした点は、別途記録しておく価値がある。</p>
+<hr>
+<h2>8. 全数調査結果 — 約500件のファームウェア、3件の同一トークン</h2>
+<p>研究者は、これが偶然の単発事例であるかを確認するため、ハンファビジョンのウェブサイトで公開されている約600のカメラモデルのうち、ファームウェアが提供されている約500件を全量収集し、同一の方法で解読を試みた。</p>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>収集対象モデル数</td>
+<td>約600件（ファームウェア提供モデル基準で約500件）</td>
+</tr>
+<tr>
+<td>解読成功率</td>
+<td>約62%</td>
+</tr>
+<tr>
+<td>GitHubトークンが発見されたファームウェア数</td>
+<td>3件</td>
+</tr>
+<tr>
+<td>発見されたトークンの同一性</td>
+<td><strong>3件すべて同一トークン</strong></td>
+</tr>
+</tbody></table>
+<p>この結果は二つのことを示唆する。第一に、解読失敗（38%）の原因は明示されていないが、これはモデル世代ごとに暗号化方式が異なる可能性を示唆しており、調査されていない他のモデル群に別途の露出が存在する可能性を排除できない。第二に、トークンが発見された3件のモデルすべてが同一のトークンであるという点は、<strong>一つのCIパイプライン/ビルドスクリプトが複数のモデルラインのUIビルドに再利用されている</strong>構造を裏付けており、これは一つの設定欠陥が製品ライン全体に波及する典型的なサプライチェーン型リスクのパターンである。</p>
+<hr>
+<h2>9. 報告・対応評価 — 12時間の迅速な対応と訂正報道</h2>
+<p>研究者はトークンの所在を特定できる最小限の情報のみを記載し、ハンファの公開セキュリティ報告チャネルへメールを送付した。ハンファは<strong>12時間以内</strong>に応答し、トークンの失効を完了した。研究者自身も「このようなミスはあってはならないが、これほど迅速な対応・解決は稀だった」と評価している。</p>
+<p>その後のDoD IPに関する問い合わせに対しても、ハンファは具体的な根拠（サムスンテックウィン時代からの社内アドレス体系、認識していなかった事実の認定、今後の変更計画）を添えて回答し、研究者はこれを根拠に原文の推測的な記述を公に撤回した。<strong>脆弱性報告への対応、および事後の対外的なコミュニケーションの両方において実質的かつ透明な姿勢が観測された事例</strong>であり、これは他事例で扱われたTVING事例（報告期限の1分前に消火型対応、通知のダークパターン）と対照的な参考事例として記録する価値がある。</p>
+<p>ただし、以下の二点は未確認のまま残る。</p>
+<ol>
+<li>根本原因であるViteビルド設定（<code>process.env</code>全体の露出）が実際に修正されたかどうか</li>
+<li>すでに出荷され現場に設置されているカメラのファームウェアに残存する旧バージョンのUI成果物への対応（再配布・強制アップデート）の有無</li>
+</ol>
+<hr>
+<h2>10. 韓国の視点 — 国内防衛産業系列会社とCTIへの示唆</h2>
+<ul>
+<li><strong>監視機器・防衛産業系列会社という構造。</strong>ハンファビジョンはサムスンテックウィンを起源としハンファグループに編入された映像監視企業であり、過去にK9自走砲、K10弾薬運搬装甲車、K2戦車のサブシステム、SGR-A1警戒ロボットなどを生産してきた実績がある。今回の事案自体は防衛製品ではなく民生用CCTVのウェブUIで発生したものだが、ハンファグループ傘下にHanwha Aerospace・Hanwha Defense USAなど防衛産業系列会社が存在することを踏まえると、<strong>グループ共用のCIインフラを利用する系列会社間のソフトウェアサプライチェーンセキュリティの境界設計</strong>が今後の点検対象になり得る。</li>
+<li><strong>国内IoT/組み込みベンダー共通のリスク。</strong> GeekNewsのコメント欄でも指摘されているように、ハードコードされた認証情報や危険なデフォルト設定は国内外を問わずIoT業界の慢性的な問題である。ただし今回の事例は「報告後12時間で対応」という比較的良好なベンチマークを提供しており、国内ベンダーのセキュリティ報告対応プロセス設計の参考になり得る。</li>
+<li><strong>監視カメラのエンタープライズ資産化。</strong> 原文でも言及されているように、AXISなど業界がカメラを「Linuxを稼働させるエンタープライズネットワーク資産」として再定義する流れの中で、国内CCTVベンダーも認証情報のライフサイクル管理・SBOM（ソフトウェア部品表）・シークレットスキャンをビルドパイプラインの標準項目として採用する必要性が高まっている。</li>
+</ul>
+<hr>
+<h2>11. 検知・緩和・対応の推奨事項</h2>
+<h3>製造業者/組み込み-IoTベンダー全般</h3>
+<ol>
+<li><strong>ビルド成果物へのシークレットスキャンの拡大</strong>— ソースリポジトリだけでなく、<strong>ビルド成果物（クライアントバンドル、ファームウェアイメージ、コンテナイメージ）</strong>に対してもtrufflehog系のシークレットスキャナーをCIパイプラインの最終段階で強制実行する。ソースにシークレットが存在しなくても、ビルドツールの設定欠陥によって成果物に混入し得ることを今回の事件が示している。</li>
+<li><strong>ビルド変数のホワイトリスト化</strong>— Vite/Webpackなどバンドラーの<code>define</code>/<code>env</code>関連設定において、<code>process.env</code><strong>全体</strong>をクライアントに露出させるパターンを禁止し、明示的に必要な変数のみを個別のホワイトリストとして注入する。</li>
+<li><strong>長期認証情報の排除</strong> — GitHub PATなど長期（long-lived）トークンをCI環境に常設せず、GitHub Actions OIDC/Fine-grained PAT/短TTLトークンへ移行する。組織admin権限を持つ単一のトークンが複数のCIジョブで共有される構造自体を排除する。</li>
+<li><strong>ファームウェア暗号化の再設計</strong> — バイナリ内でXOR難読化された鍵再構成方式を、もはや有効な防御線とみなさない。ハードウェアセキュリティモジュール（HSM/TPM/Secure Element）ベースの鍵導出、デバイスごとの固有鍵発行へ移行する。</li>
+<li><strong>社内アドレス体系の監査</strong> — 社内インフラにおいて公的IP帯域（特に政府・防衛機関割り当て帯域）を社内アドレスとして無断で再利用するレガシーな慣行を全数点検し、RFC 1918のプライベート帯域へ移行する。</li>
+<li><strong>LLM支援リバースエンジニアリングを脅威モデルに反映</strong> — コード/バイナリの難読化を「時間稼ぎ」ではなく防御対策として設計する慣行を再検討する。脅威モデリングにおいて「熟練した個人がLLM支援ツールを用いて一晩で難読化を解除できる」という前提をデフォルトとして採用する。</li>
+</ol>
+<h3>セキュリティ報告プロセス（参考事例として）</h3>
+<ol start="7">
+<li>今回の事件における<strong>12時間以内のトークン失効対応</strong>と<strong>公開問い合わせに対する具体的根拠を伴う回答</strong>は、他社の脆弱性報告対応プロセスのベンチマークとして参考にする価値がある。</li>
+</ol>
+<h3>カメラ購入・運用企業（エンタープライズ）</h3>
+<ol start="8">
+<li><strong>ネットワーク分離</strong> — IoT/CCTV機器は専用VLANに隔離し、インターネットへのアウトバウンドアクセスを原則として遮断する。</li>
+<li><strong>管理UIへのアクセス制御</strong> — カメラ管理ウェブUIへのアクセスを社内ネットワークに限定し、可能であればONVIFなど標準プロトコルに基づく別途のNVR経由での運用を検討する。</li>
+<li><strong>ファームウェア更新の追跡</strong> — ベンダーのセキュリティ告知を購読し、今回の事件に関連するファームウェアパッチが公開されるかを継続的に確認する。</li>
+</ol>
+<hr>
+<h2>12. 結論</h2>
+<p>今回の事件の本質は「巧妙な攻撃」ではなく、<strong>ありふれたビルド設定ミス（<code>process.env</code>全体の露出）と、時代遅れの防御前提（ファームウェア難読化が時間を稼いでくれるという想定）が同時に崩壊した</strong>ことにある。二重の暗号化で包まれたファームウェアは、LLM支援リバースエンジニアリングの前ではひと晩の障壁にすぎず、その中から発見されたのは組織全体に対するadmin権限を持つ単一のGitHubトークンだった。国防総省割り当てIPという刺激的なサブプロットは、実際にはレガシーな社内アドレス体系との偶然の衝突であったことが説明されたが、その説明のプロセス自体 — 報告後12時間以内の対応、公開問い合わせに対する根拠ある回答、原著者による迅速な訂正 — が、今回の事件で最も印象的な要素として残る。</p>
+<p>CTIの観点から残る問いは二つである。あなたのビルドパイプラインがクライアント成果物に何を刻み込んでいるか、実際に確認したことがあるだろうか。そしてあなたの難読化は、人間を止めるために設計されているのか、それともLLMを止めるために設計されているのか。</p>
+<hr>
+<h2>13. 参考文献</h2>
+<ol>
+<li>hhh.hn（Austin）— &quot;My security camera shipped a GitHub admin token in its login page&quot;（2026-07-24、2026-07-27訂正）— <a href="https://hhh.hn/hanwha-github-token/">https://hhh.hn/hanwha-github-token/</a></li>
+<li>GeekNews — 「ハンファビジョンのセキュリティカメラのウェブUIログインページにGitHub管理者トークンが含まれた状態で出荷」（2026-07-25、xguruによる要約）— <a href="https://news.hada.io/topic?id=31784">https://news.hada.io/topic?id=31784</a></li>
+<li>Matt Brown — &quot;Hanwha firmware file decryption&quot;（1段目暗号化レイヤーの分析、原文参照）— <a href="https://brownfinesecurity.com/blog/hanwha-firmware-file-decryption">https://brownfinesecurity.com/blog/hanwha-firmware-file-decryption</a></li>
+<li>Wikipedia — &quot;Hanwha Vision&quot;（沿革、旧サムスンテックウィン、防衛産業系列会社の情報）— <a href="https://en.wikipedia.org/wiki/Hanwha_Vision">https://en.wikipedia.org/wiki/Hanwha_Vision</a></li>
+<li>NBC News — &quot;Future Tech: Autonomous killer robots are already here&quot;（SGR-A1関連、原文引用）— <a href="https://www.nbcnews.com/tech/security/future-tech-autonomous-killer-robots-are-already-here-n105656">https://www.nbcnews.com/tech/security/future-tech-autonomous-killer-robots-are-already-here-n105656</a></li>
+<li>CWE-798: Use of Hard-coded Credentials — MITRE CWE</li>
+<li>CWE-312: Cleartext Storage of Sensitive Information — MITRE CWE</li>
+<li>MITRE ATT&amp;CK — T1552.001, T1078.004, T1195.002</li>
+</ol>
+<hr>
+<h2>変更履歴</h2>
+<table>
+<thead>
+<tr>
+<th>バージョン</th>
+<th>日付</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v1.0</td>
+<td>2026-07-28</td>
+<td>初版発行 — 原文およびGeekNews要約に基づく技術分析、DoD IPの訂正を反映</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>© 2026 Dennis Kim（キム・ホグァン）· Cyber Threat Intelligence Division</strong> <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · <a href="https://github.com/gameworkerkim/">github.com/gameworkerkim</a></p>
+<p><em>本レポートは公開OSINT資料（研究者個人のブログ、GeekNewsの要約報道）に基づく独立分析であり、ハンファビジョンまたは関連機関の公式見解を代弁するものではありません。本事件は実際の侵害（breach）ではなく、研究者による責任ある脆弱性公開（responsible disclosure）の事例であり、ハンファ側は報告受領後に迅速に対応したことを明記します。教育・防御・研究目的でのみ使用してください。TLP:GREEN — コミュニティ内での共有・対外公開が可能です。</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0728-HANWHA_JP.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>藏在摄像头固件里的管理员钥匙 — 韩华Vision GitHub令牌泄露与CI流水线的崩溃 — VibeQuant</title>
+  <meta name="description" content="用多层加密隐藏的固件,在LLM面前也不过是个纸箱 — 一行 process.env 导致国防部IP与组织级admin令牌的曝光" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-cn/" />
+  <meta property="og:title" content="藏在摄像头固件里的管理员钥匙 — 韩华Vision GitHub令牌泄露与CI流水线的崩溃" />
+  <meta property="og:description" content="用多层加密隐藏的固件,在LLM面前也不过是个纸箱 — 一行 process.env 导致国防部IP与组织级admin令牌的曝光" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"藏在摄像头固件里的管理员钥匙 — 韩华Vision GitHub令牌泄露与CI流水线的崩溃","description":"用多层加密隐藏的固件,在LLM面前也不过是个纸箱 — 一行 process.env 导致国防部IP与组织级admin令牌的曝光","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-cn/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0728-HANWHA_CN.md","image":"https://vibequant.cc/og-default.png","url":"https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-cn/","datePublished":"2026-07-28","dateModified":"2026-07-28","inLanguage":"zh-Hans","keywords":"기타 CTI, CN, CTI"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"藏在摄像头固件里的管理员钥匙 — 韩华Vision GitHub令牌泄露与CI流水线的崩溃","item":"https://cti.vibequant.cc/cti/cti-2026-0728-hanwha-cn/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 기타 CTI</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 CTI</p>
+        <h1>藏在摄像头固件里的管理员钥匙 — 韩华Vision GitHub令牌泄露与CI流水线的崩溃</h1>
+        <p class="article-dates"><time datetime="2026-07-28">발행 2026.07.28</time> · 주제 기타 CTI · CN · CTI</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0728-hanwha-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0728-hanwha-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0728-hanwha-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0728-hanwha-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">用多层加密隐藏的固件,在LLM面前也不过是个纸箱 — 一行process.env导致国防部IP与组织级admin令牌的曝光</p>
+        <p class="article-byline">Dennis Kim / HoKwang Kim · 2026-07-28</p>
+      </header>
+      <div class="article-body prose"><p><em>用多层加密隐藏的固件,在LLM面前也不过是个纸箱 — 一行<code>process.env</code>导致国防部IP与组织级admin令牌的曝光</em></p>
+<hr>
+<h2>目录</h2>
+<ol>
+<li>摘要（TL;DR）</li>
+<li>关键判断（Key Judgments）</li>
+<li>引言 — &quot;混淆代码只能换来枯燥&quot;</li>
+<li>事件时间线</li>
+<li>技术分析 — 双层加密与LLM辅助逆向工程</li>
+<li>根本原因 — 一行<code>process.env</code>把整个CI环境刻进了构建产物</li>
+<li>MITRE ATT&amp;CK / CWE映射</li>
+<li>泄露资产风险评估 — 令牌与国防部IP</li>
+<li>全量排查结果 — 约500个固件,3个相同令牌</li>
+<li>报告与响应评估 — 12小时的快速响应与更正报道</li>
+<li>韩国视角 — 国内防务系企业与CTI启示</li>
+<li>检测、缓解与应对建议</li>
+<li>结论</li>
+<li>参考文献</li>
+</ol>
+<hr>
+<h2>1. 摘要（TL;DR）</h2>
+<p>2026年7月24日,一位安全研究者（博客名hhh.hn,笔名Austin）公开披露称,其在分析韩华Vision（Hanwha Vision,原三星泰科威）网络摄像头固件时,在Web管理界面的约30个构建产物文件中发现了相同的<strong>GitHub个人访问令牌</strong>。该令牌在韩华的GitHub组织内拥有<strong>对数百个仓库的管理员（admin）权限</strong>。原因很简单——在用于构建摄像头管理界面的Vite配置中,某个环境变量被设置为整个<code>process.env</code>对象,导致CI/CD任务的全部环境变量（包括构建系统地址、内部基础设施IP、GitHub令牌）被原样写入了客户端构建产物。</p>
+<p>研究者指出,固件本身也经过双重加密,但通过将<code>fwupgrader</code>二进制文件交给Ghidra和<strong>Claude Code</strong>分析,他在数小时内就解开了经XOR混淆的AES-256-CBC密钥/IV恢复逻辑。这个案例表明,&quot;代码混淆能换来的只是时间而非安全预算的时代已经结束&quot;。</p>
+<p>泄露的CI环境变量中还包含3个疑似属于美国国防部（DoD）分配网段的IP地址,一度引发争议。经核实后,韩华方面正式回应称<strong>这是自三星泰科威时代以来一直沿用的内部地址体系惯例,我们此前并未意识到该网段已被正式分配给国防部</strong>,研究者随后撤回并更正了原文中的推测性表述（2026-07-27）。经确认,这并非实际攻击所致,而是<strong>遗留内部地址体系的误用</strong>。</p>
+<p>韩华在收到报告后<strong>12小时内</strong>便撤销了该令牌,可评价为快速响应案例,但导致问题的根本原因——&quot;构建时将整个CI环境变量嵌入客户端产物&quot;的配置——是否已被修正,目前尚未公开。</p>
+<blockquote>
+<p>⚠️ <strong>调查范围的局限性</strong> — 本报告基于研究者个人博客（一手信源）及GeekNews的摘要报道进行分析。目前未发现韩华Vision的官方安全公告。至于实际的摄像头管理界面中该令牌是否曾通过网络传输（即是否曾构成可被利用的攻击面）,研究者本人也因缺乏实体设备而明确表示无法验证。</p>
+</blockquote>
+<hr>
+<h2>关键判断（Key Judgments）</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>判断</th>
+<th>置信度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>KJ-1</td>
+<td>泄露的原因并非攻击,而是<strong>构建配置缺陷</strong>（Vite环境变量被绑定为整个<code>process.env</code>）,导致CI任务的完整环境被附带性地暴露在客户端构建产物中。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-2</td>
+<td>泄露的GitHub令牌是拥有<strong>组织级admin权限</strong>的单一凭证,暴露出一个构建配置失误即可直接演变为整个组织代码资产机密性与完整性风险的<strong>单点故障（SPOF）</strong>结构。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-3</td>
+<td>固件的双层加密（第一层:基于型号名的口令；第二层:二进制内经XOR混淆的AES密钥）曾经是有意义的防线,但<strong>LLM辅助逆向工程（Claude Code + Ghidra）</strong>使一个人能在数小时内将其破解,防御效果已基本消失。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-4</td>
+<td>泄露的CI环境变量中出现国防部（DoD）分配IP网段的问题,经韩华官方回应及研究者的更正确认,这<strong>并非韩华与美国国防部之间存在实质关联,而是与三星泰科威时代延续下来的内部地址体系惯例发生的偶然冲突</strong>。</td>
+<td><strong>High</strong></td>
+</tr>
+<tr>
+<td>KJ-5</td>
+<td>在约500个固件中,62%成功以相同方式解密,而发现令牌的3个固件中<strong>全部包含相同令牌</strong>——这表明单一CI流水线的产物被复用于多条产品线。</td>
+<td><strong>Medium-High</strong></td>
+</tr>
+<tr>
+<td>KJ-6</td>
+<td>报告后12小时内撤销令牌的响应速度很快,但仅凭公开信息<strong>无法确认根本原因（构建脚本导致整个<code>process.env</code>被暴露）是否已被修复</strong>——复发的可能性依然存在。</td>
+<td><strong>Medium</strong></td>
+</tr>
+<tr>
+<td>KJ-7</td>
+<td>韩华Vision除监控摄像头业务外,还是韩华集团旗下曾生产自行火炮、装甲车子系统、警戒机器人等产品的系企业,这意味着本事件不应仅被视为单一物联网供应商的风险,而可延伸为<strong>与防务产业相关企业的软件供应链安全成熟度</strong>问题。</td>
+<td><strong>Medium</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. 引言 — &quot;混淆代码只能换来枯燥&quot;</h2>
+<p>从CTI角度看,这起事件真正有趣的地方不在于泄露本身,而在于<strong>通向泄露的路径崩溃的速度</strong>。韩华为保护固件至少应用了两层加密——用基于型号名的口令包裹外层tarball,内部的<code>fwimage.tgz</code>又单独用AES-256-CBC重新包裹了一次。密钥和IV并非以明文形式留在二进制文件中,而是通过与静态表进行XOR运算分散开来。若放在2023年,这样的壁垒足以耗尽个人研究者的时间与耐心。</p>
+<p>但研究者描述称,他并未亲自在Ghidra中逐步追踪这套混淆逻辑,而是<strong>把二进制分析工作交给了Claude Code,自己则离开了电脑</strong>。等他吃完晚饭回来时,解密逻辑的说明和完整的根文件系统已经准备就绪。这一点也成为GeekNews评论区的核心争论焦点——&quot;混淆从来都不是为了阻止攻击者,而只是为了让他们感到枯燥而放弃;国家背景组织或专业犯罪团伙本来就愿意花这个功夫。而现在,连这份枯燥都可以交给LLM来承受了。&quot;</p>
+<p><strong>固件混淆的经济学已经变了。</strong> 相对于防御方投入混淆所花费的工程成本,攻击者（或研究者）破解混淆所需付出的成本,已因LLM辅助逆向工程而发生结构性下降。这并非仅局限于本次事件的教训,而是适用于所有依赖硬编码凭证、隐藏密钥的嵌入式/物联网厂商的威胁模型变化。</p>
+<hr>
+<h2>3. 事件时间线</h2>
+<table>
+<thead>
+<tr>
+<th>时间（2026年）</th>
+<th>事件</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>（日期不详,7月上中旬）</td>
+<td>研究者下载韩华Vision网站上公开的各型号摄像头固件镜像,开始分析</td>
+<td>因关于AXIS扩大Linux应用支持的讨论而转移兴趣</td>
+</tr>
+<tr>
+<td>（日期不详）</td>
+<td>用<code>binwalk</code>分析镜像 → 确认第一层加密的<code>fwimage.tgz</code>,借助Matt Brown此前公开的分析（基于型号名的口令）成功解开第一层</td>
+<td>以<code>HTWXNP-9300RW</code>口令解密成功</td>
+</tr>
+<tr>
+<td>（日期不详）</td>
+<td>发现内部还存在第二层加密的<code>fwimage.tgz</code> — 原有方法不再适用</td>
+<td></td>
+</tr>
+<tr>
+<td>（日期不详）</td>
+<td>用Ghidra + <strong>Claude Code</strong>分析<code>fwupgrader</code>二进制文件,破解XOR混淆 → 恢复AES-256-CBC密钥/IV并获取根文件系统</td>
+<td>于当晚完成（据研究者所述）</td>
+</tr>
+<tr>
+<td>（日期不详）</td>
+<td>用<code>trufflehog</code>扫描根文件系统 → 在约30个文件中发现重复出现的相同GitHub令牌,确认拥有组织admin权限</td>
+<td></td>
+</tr>
+<tr>
+<td>（日期不详）</td>
+<td>原因分析 — 确认Vite构建变量被设为整个<code>process.env</code>,导致整个CI环境被写入构建产物</td>
+<td>包含<code>GITHUB_NPM_TOKEN</code>等大量变量</td>
+</tr>
+<tr>
+<td>（日期不详）</td>
+<td>对约500个摄像头型号固件进行全量采集与解密尝试 — 62%提取成功,其中3个再次确认相同令牌</td>
+<td></td>
+</tr>
+<tr>
+<td>（日期不详）</td>
+<td>通过韩华的公开安全报告渠道发送仅包含最少信息的邮件</td>
+<td></td>
+</tr>
+<tr>
+<td>（日期不详,报告后12小时内）</td>
+<td>韩华回复确认已完成令牌撤销</td>
+<td>被评价为快速响应案例</td>
+</tr>
+<tr>
+<td>2026-07-24</td>
+<td>研究者在hhh.hn博客上公开完整分析（&quot;My security camera shipped a GitHub admin token…&quot;）</td>
+<td>原文中包含关于国防部IP的推测</td>
+</tr>
+<tr>
+<td>2026-07-25</td>
+<td>GeekNews发布韩国国内摘要报道（xguru）</td>
+<td>在韩国开发者社区中扩散</td>
+</tr>
+<tr>
+<td>2026-07-27</td>
+<td>韩华就DoD IP问题发布官方回应 — &quot;这是自三星泰科威时代延续下来的内部地址体系,此前并未意识到该网段已被分配给DoD,计划变更地址体系&quot;</td>
+<td>研究者对原文中的推测性表述加上删除线并进行更正</td>
+</tr>
+</tbody></table>
+<p><strong>关于时间线的说明</strong>:原文并未明确各技术环节的具体日期。但从&quot;报告到撤销&quot;（12小时）与&quot;披露到更正&quot;（约3天）这两个响应周期来看,韩华方面都做出了实质性回应,这与其他案例中提到的TVING事件（在报告期限截止前1分钟才应付了事）呈现出截然不同的事件响应文化。</p>
+<hr>
+<h2>4. 技术分析 — 双层加密与LLM辅助逆向工程</h2>
+<h3>4.1 第一层加密 — 基于型号名的口令</h3>
+<p>韩华Vision的网站提供各型号固件镜像的公开下载。<code>binwalk</code>分析结果显示,内部存在一个AI组件tarball以及一个加密的<code>fwimage.tgz</code>。根据此前公开的第三方分析（Matt Brown）,密码由<code>HTW</code> + 型号编号组成,并在该型号（<code>HTWXNP-9300RW</code>）上实际验证有效。这意味着<strong>口令的构造规则本身已经属于公开信息</strong>,该层加密事实上已丧失防御力。</p>
+<h3>4.2 第二层加密 — 二进制内的XOR混淆</h3>
+<p>解开第一层之后,内部仍存在另一个<code>fwimage.tgz</code>,这次采用了不同的加密方式。对<code>fwupgrader</code>二进制文件的分析显示:</p>
+<ul>
+<li>AES密钥通过与二进制文件内<strong>一张较小的静态密钥表进行XOR</strong>运算后在运行时重新组装</li>
+<li><strong>IV以明文形式</strong>存储在二进制文件中</li>
+<li>解密由<code>fwupgrader</code>通过shell调用<code>openssl</code>命令行工具完成,该命令字符串的各个片段同样经过XOR混淆</li>
+<li>还原出的命令形式如下:<pre><code class="language-sh">openssl enc -md sha256 -aes-256-cbc -d \
+  -K &lt;KEY&gt; -iv &lt;IV&gt; -in &lt;INPUT&gt; -out &lt;OUTPUT&gt;
+</code></pre>
+</li>
+<li>实际的密钥/IV（研究者公开,同一型号系列通用）:<pre><code class="language-text">KEY = dfa049bb922e63e2decc764af5628068e5b7a2662e479a615b14643e567579b0
+IV  = 53f926801b81454a4f889c9a390db6e6
+</code></pre>
+</li>
+</ul>
+<h3>4.3 LLM辅助逆向工程的启示</h3>
+<p>研究者明确表示,这项混淆破解工作是结合Ghidra静态分析与<strong>Claude Code</strong>完成的,结果大幅缩短了人工使用传统方式可能需要数天才能完成的工作。从CTI角度看,这说明了以下几点:</p>
+<ul>
+<li><strong>防御成本不对称性的逆转</strong>:将硬编码密钥&quot;隐藏&quot;在代码/二进制文件内部这一做法,历来依赖于提高逆向工程成本以达到延迟攻击者的效果。LLM辅助工具大幅降低了这一成本,意味着仅靠混淆已难以再指望获得有意义的时间延迟效果。</li>
+<li>鉴于<strong>这道壁垒对国家背景组织或专业团伙而言本来就不高</strong>,本次事件真正值得关注的新闻点在于——&quot;防线已经降低到即便是专业程度不高的个人研究者,也能在一个晚上之内突破&quot;。</li>
+<li>应对之道不应是加强混淆,而应转向<strong>从一开始就不在客户端/固件中内嵌长期凭证的架构</strong>（参见第12节的建议）。</li>
+</ul>
+<hr>
+<h2>5. 根本原因 — 一行<code>process.env</code>把整个CI环境刻进了构建产物</h2>
+<p>令牌泄露的真正原因与加密层无关,而是一个平凡得多的构建配置缺陷。摄像头管理界面使用<strong>Vite</strong>构建,其中一个构建变量被设置为整个<code>process.env</code>对象。结果,CI任务所持有的全部环境变量被原封不动地硬编码进了客户端构建包中:</p>
+<pre><code class="language-js">var W = {
+  DATAPORT: &quot;9090&quot;,
+  GIT_LFS_SKIP_SMUDGE: &quot;1&quot;,
+  npm_command: &quot;run-script&quot;,
+  KUBERNETES_SERVICE_PORT_HTTPS: &quot;443&quot;,
+  GITHUB_NPM_TOKEN: &quot;&lt;snip&gt;:ghp_…REDACTED…&quot;,
+  npm_config_userconfig: &quot;/home/docker/.npmrc&quot;,
+  // etc
+}
+</code></pre>
+<p>这一模式是CWE-798（Use of Hard-coded Credentials,硬编码凭证使用）的典型案例,但由于其发生位置并非应用代码,而是<strong>构建工具配置（Vite的define/env处理）</strong>,因此属于常规密钥扫描实践容易忽略的区域。源代码仓库本身很可能并不包含该令牌（该值是被注入到CI任务环境中的）,问题恰恰发生在&quot;构建产物&quot;这一密钥扫描的盲区。</p>
+<p>同一批环境变量中还包含内部基础设施标识信息（例如<code>SWARM_MASTER_NFS_ADDRESS</code>、<code>OTEL_ELASTIC_URL</code>、<code>CIMIP</code>等内部网络地址）。也就是说,本次事件不应仅被视为单一GitHub令牌的泄露,而应被理解为<strong>整个CI/CD流水线内部配置信息大规模泄露到客户端产品中</strong>的事件。</p>
+<hr>
+<h2>6. MITRE ATT&amp;CK / CWE映射</h2>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>映射</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>漏洞类型</td>
+<td><strong>CWE-798</strong> Use of Hard-coded Credentials</td>
+<td>CI密钥被硬编码进构建产物（客户端UI）</td>
+</tr>
+<tr>
+<td>漏洞类型</td>
+<td><strong>CWE-312</strong> Cleartext Storage of Sensitive Information</td>
+<td>二进制内明文IV,泄露的令牌未加密存储</td>
+</tr>
+<tr>
+<td>潜在攻击技术</td>
+<td><strong>T1552.001</strong> Unsecured Credentials: Credentials In Files</td>
+<td>在约30个摄像头UI文件中反复发现该令牌</td>
+</tr>
+<tr>
+<td>潜在攻击技术</td>
+<td><strong>T1078.004</strong> Valid Accounts: Cloud/SaaS Accounts (GitHub)</td>
+<td>令牌一旦被盗,可用admin权限访问组织的全部仓库</td>
+</tr>
+<tr>
+<td>潜在后续技术</td>
+<td><strong>T1195.002</strong> Supply Chain Compromise: Compromised Software Dependencies</td>
+<td>滥用admin令牌可能通过篡改代码仓库造成供应链污染（尚未发生,属理论风险）</td>
+</tr>
+<tr>
+<td>防御失效点</td>
+<td>密钥扫描覆盖范围 — 源代码仓库在覆盖范围内,<strong>CI构建产物（客户端bundle）推测不在覆盖范围内</strong></td>
+<td>参见第5节根本原因</td>
+</tr>
+</tbody></table>
+<p>本事件应定性为<strong>漏洞披露（vulnerability disclosure）——对预先存在的泄露的发现与报告——而非实际发生的入侵事件（incident）</strong>。因此需要注意,上述内容并非观测到攻击者的真实TTP,而是对&quot;若被利用将可能出现&quot;的潜在路径进行的映射。</p>
+<hr>
+<h2>7. 泄露资产风险评估 — 令牌与国防部IP</h2>
+<table>
+<thead>
+<tr>
+<th>泄露资产</th>
+<th>性质</th>
+<th>被利用时的潜在影响</th>
+<th>实际确认状态</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GitHub令牌（<code>GITHUB_NPM_TOKEN</code>）</td>
+<td>推测为长期PAT（个人访问令牌）</td>
+<td>对组织内<strong>数百个仓库拥有admin权限</strong>——可能导致代码泄露、植入后门、篡改发布版本等供应链攻击</td>
+<td>已确认在报告后12小时内撤销。尚无实际被滥用的迹象报告</td>
+</tr>
+<tr>
+<td>内部基础设施变量（<code>SWARM_MASTER_NFS_ADDRESS</code>等）</td>
+<td>内部网络标识信息</td>
+<td>可能被用作内部基础设施测绘（侦察）资料</td>
+<td>是否公开、是否已处置尚不明确</td>
+</tr>
+<tr>
+<td>3个DoD分配IP网段</td>
+<td>内部地址体系复用情况</td>
+<td>最初的推测:韩华与美国国防部存在实质关联 → <strong>经韩华官方回应反驳,确认为遗留地址惯例</strong></td>
+<td>经韩华回应及研究者更正,<strong>已完成说明澄清</strong></td>
+</tr>
+<tr>
+<td>管理界面自身的泄露范围</td>
+<td>无法验证</td>
+<td>访问管理界面时该令牌是否实际通过网络传输,目前未确认</td>
+<td>因研究者未持有实体设备而无法验证（博客原文明确说明）</td>
+</tr>
+</tbody></table>
+<p><strong>对DoD IP事项的评估</strong>:博客原文最初以这些地址属于美国国防部分配网段为依据,提出了&quot;韩华是否与美国国防部存在直接关联&quot;的推测,GeekNews评论区也随之出现了诸如&quot;规避韩国产安全产品&quot;等过度解读。然而根据韩华官方回应,实际原因是<strong>沿袭自三星泰科威时代的内部地址体系惯例</strong>,该公司此前并未意识到自己使用的网段已被正式分配给国防部。研究者在确认这一情况后,对原文中的推测段落加上了删除线并附上更正说明（2026-07-27）。在撰写CTI报告时,必须<strong>将此类经澄清后更新的事实与原始表述明确分开呈现</strong>,本报告依此原则将更正后的事实反映在了KJ-4中。</p>
+<p>不过,&quot;擅自将国防部分配的IP网段挪作内部地址复用&quot;这一做法本身,仍然是一种<strong>潜藏IP地址冲突、路由故障风险的错误网络设计惯例</strong>,值得单独记录的是,韩华方面也承认了这一点,并公布了变更地址体系的计划。</p>
+<hr>
+<h2>8. 全量排查结果 — 约500个固件,3个相同令牌</h2>
+<p>为确认这是否只是偶然的单一案例,研究者对韩华Vision网站公开的约600款摄像头型号中、提供固件下载的约500款进行了全量采集,并以相同方法尝试解密。</p>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>采集目标型号数量</td>
+<td>约600款（其中提供固件的约500款）</td>
+</tr>
+<tr>
+<td>解密成功率</td>
+<td>约62%</td>
+</tr>
+<tr>
+<td>发现GitHub令牌的固件数量</td>
+<td>3个</td>
+</tr>
+<tr>
+<td>所发现令牌的一致性</td>
+<td><strong>3个全部相同</strong></td>
+</tr>
+</tbody></table>
+<p>这一结果说明了两点。第一,解密失败（38%）的原因未被说明,但这可能意味着不同世代型号采用了不同的加密方式,因此不能排除在未被调查的其他型号系列中存在独立泄露的可能性。第二,发现令牌的3款型号全部使用相同令牌这一事实,佐证了<strong>单一CI流水线/构建脚本被复用于多条型号产品线的UI构建</strong>这一结构,这是一种典型的供应链型风险模式——单一配置缺陷蔓延至整条产品线。</p>
+<hr>
+<h2>9. 报告与响应评估 — 12小时的快速响应与更正报道</h2>
+<p>研究者仅在邮件中提供了足以定位该令牌的最少信息,并发送至韩华的公开安全报告渠道,韩华在<strong>12小时内</strong>做出回应,并完成了令牌撤销。研究者本人也评价道:&quot;这样的失误本不应发生,但如此迅速的响应与解决十分罕见。&quot;</p>
+<p>此后,针对DoD IP的问询,韩华同样给出了带有具体依据的回复（自三星泰科威时代延续的内部地址体系、承认此前未意识到该情况、以及未来的变更计划）,研究者据此公开撤回了原文中的推测性表述。这是一起<strong>在漏洞披露响应与事后对外沟通两方面都表现出实质性、透明沟通</strong>的案例,与其他案例中提到的TVING事件（在报告期限前1分钟才敷衍应付、采用通知暗黑模式）形成鲜明对比,值得作为参考案例记录下来。</p>
+<p>不过,以下两点仍然未被确认:</p>
+<ol>
+<li>导致问题的根本原因——Vite构建配置暴露整个<code>process.env</code>——是否已被实际修复</li>
+<li>对于已出厂并部署在现场的摄像头中,其固件内仍残留的旧版UI构建产物,是否采取了相应措施（重新分发、强制更新）</li>
+</ol>
+<hr>
+<h2>10. 韩国视角 — 国内防务系企业与CTI启示</h2>
+<ul>
+<li><strong>监控设备与防务系企业的结构。</strong>韩华Vision起源于三星泰科威,后并入韩华集团,是一家影像监控企业,历史上曾生产K9自行火炮、K10弹药补给装甲车、K2坦克子系统、SGR-A1警戒机器人等产品。本次事件本身发生在民用CCTV的Web界面,而非防务产品,但鉴于韩华集团旗下还包括Hanwha Aerospace、Hanwha Defense USA等防务系企业,<strong>使用集团共用CI基础设施的各系企业之间的软件供应链安全边界设计</strong>,可能成为今后需要审查的对象。</li>
+<li><strong>国内物联网/嵌入式厂商的共通风险。</strong> 正如GeekNews评论区所指出的,硬编码凭证、危险的默认设置,是国内外物联网行业普遍存在的顽疾。不过本案例提供了一个相对良好的基准——&quot;披露后12小时内响应&quot;——可供国内厂商在设计自身的漏洞报告响应流程时参考。</li>
+<li><strong>监控摄像头的企业级资产化。</strong> 正如原文所提到的,在以AXIS为代表的行业将摄像头重新定义为&quot;运行Linux的企业网络资产&quot;这一趋势下,国内CCTV厂商也日益需要将凭证生命周期管理、SBOM（软件物料清单）、密钥扫描纳入构建流水线的标准配置项。</li>
+</ul>
+<hr>
+<h2>11. 检测、缓解与应对建议</h2>
+<h3>面向制造商/嵌入式-物联网厂商的通用建议</h3>
+<ol>
+<li><strong>将密钥扫描范围扩展至构建产物</strong>— 不仅是源代码仓库,还应对<strong>构建产物（客户端bundle、固件镜像、容器镜像）</strong>在CI流水线最后一步强制运行trufflehog类密钥扫描工具。本次事件表明,即便源代码中不含密钥,构建工具的配置缺陷仍可能导致密钥混入产物中。</li>
+<li><strong>构建变量白名单化</strong>— 在Vite/Webpack等打包工具的<code>define</code>/<code>env</code>相关配置中,禁止将<strong>整个</strong><code>process.env</code>暴露给客户端的模式,改为仅按需将明确所需的变量逐一列入白名单后注入。</li>
+<li><strong>消除长期凭证</strong> — 不再让GitHub PAT等长期（long-lived）令牌常驻CI环境,转而采用GitHub Actions OIDC、细粒度PAT或短TTL令牌。彻底消除一个拥有组织admin权限的单一令牌被多个CI任务共享的结构。</li>
+<li><strong>重新设计固件加密方案</strong> — 不再将二进制内经XOR混淆的密钥重组方式视为有效防线,转向基于硬件安全模块（HSM/TPM/Secure Element）的密钥派生,并为每台设备签发唯一密钥。</li>
+<li><strong>审计内部地址体系</strong> — 全面排查将公有IP网段（尤其是政府、国防机构分配的网段）擅自挪作内部地址复用的遗留惯例,并迁移至RFC 1918私有网段。</li>
+<li><strong>将LLM辅助逆向纳入威胁模型</strong> — 重新审视将代码/二进制混淆当作&quot;争取时间&quot;而非真正防御手段来设计的做法。威胁建模时应默认采纳&quot;一名熟练的个人借助LLM辅助工具可在一夜之间破解混淆&quot;这一前提。</li>
+</ol>
+<h3>安全报告流程（作为参考案例）</h3>
+<ol start="7">
+<li>本次事件中<strong>12小时内撤销令牌的响应</strong>以及<strong>对公开问询给出具体依据的回复</strong>,值得作为其他企业设计自身漏洞报告响应流程的基准参考。</li>
+</ol>
+<h3>面向摄像头采购与运维企业（企业用户）</h3>
+<ol start="8">
+<li><strong>网络隔离</strong> — 将物联网/CCTV设备隔离在独立VLAN中,原则上阻断其对互联网的出站访问。</li>
+<li><strong>管理界面访问控制</strong> — 将摄像头管理Web界面的访问限制在内部网络中,并在可行的情况下,考虑通过ONVIF等标准协议经由独立NVR进行运维。</li>
+<li><strong>跟踪固件更新</strong> — 订阅厂商的安全公告,持续关注是否发布了与本次事件相关的固件补丁。</li>
+</ol>
+<hr>
+<h2>12. 结论</h2>
+<p>本次事件的本质并非&quot;精密的攻击&quot;,而是<strong>一个平凡的构建配置失误（整个<code>process.env</code>被暴露）与一个过时的防御假设（认为固件混淆能够争取时间）同时崩溃</strong>的结果。用双层加密包裹的固件,在LLM辅助逆向工程面前不过是一晚就能突破的障碍,而在其内部发现的,是一个对整个组织拥有admin权限的单一GitHub令牌。国防部分配IP这一颇具爆点的支线剧情,最终被证明只是与遗留内部地址体系发生的偶然冲突,但澄清这一情况的过程本身——报告后12小时内的响应、对公开问询给出有依据的回复、原作者迅速做出更正——才是本次事件中最令人印象深刻的部分。</p>
+<p>从CTI角度看,留下的问题有两个。你是否真正核查过,自己的构建流水线究竟把什么信息刻进了客户端产物?你的混淆设计,究竟是为了阻挡人类,还是为了阻挡LLM?</p>
+<hr>
+<h2>13. 参考文献</h2>
+<ol>
+<li>hhh.hn（Austin）——《My security camera shipped a GitHub admin token in its login page》（2026-07-24发布,2026-07-27更正）—— <a href="https://hhh.hn/hanwha-github-token/">https://hhh.hn/hanwha-github-token/</a></li>
+<li>GeekNews ——《韩华Vision安全摄像头Web界面登录页面中夹带GitHub管理员令牌出厂》（2026-07-25,xguru摘要）—— <a href="https://news.hada.io/topic?id=31784">https://news.hada.io/topic?id=31784</a></li>
+<li>Matt Brown ——《Hanwha firmware file decryption》（第一层加密分析,详见原文）—— <a href="https://brownfinesecurity.com/blog/hanwha-firmware-file-decryption">https://brownfinesecurity.com/blog/hanwha-firmware-file-decryption</a></li>
+<li>Wikipedia ——《Hanwha Vision》（沿革、原三星泰科威、防务系企业信息）—— <a href="https://en.wikipedia.org/wiki/Hanwha_Vision">https://en.wikipedia.org/wiki/Hanwha_Vision</a></li>
+<li>NBC News ——《Future Tech: Autonomous killer robots are already here》（SGR-A1相关,原文引用）—— <a href="https://www.nbcnews.com/tech/security/future-tech-autonomous-killer-robots-are-already-here-n105656">https://www.nbcnews.com/tech/security/future-tech-autonomous-killer-robots-are-already-here-n105656</a></li>
+<li>CWE-798: Use of Hard-coded Credentials — MITRE CWE</li>
+<li>CWE-312: Cleartext Storage of Sensitive Information — MITRE CWE</li>
+<li>MITRE ATT&amp;CK — T1552.001, T1078.004, T1195.002</li>
+</ol>
+<hr>
+<h2>修订历史</h2>
+<table>
+<thead>
+<tr>
+<th>版本</th>
+<th>日期</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v1.0</td>
+<td>2026-07-28</td>
+<td>首次发布 — 基于原文及GeekNews摘要的技术分析,并反映DoD IP更正内容</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>© 2026 Dennis Kim（金浩光）· Cyber Threat Intelligence Division</strong> <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · <a href="https://github.com/gameworkerkim/">github.com/gameworkerkim</a></p>
+<p><em>本报告基于公开OSINT资料（研究者个人博客、GeekNews摘要报道）进行独立分析,不代表韩华Vision或相关机构的官方立场。本事件属于研究者负责任的漏洞披露（responsible disclosure）案例,而非实际发生的入侵事件（breach）,特此说明韩华方面在收到报告后已迅速做出响应。本报告仅供教育、防御与研究目的使用。TLP:GREEN——可在社区内共享并对外公开。</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0728-HANWHA_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
