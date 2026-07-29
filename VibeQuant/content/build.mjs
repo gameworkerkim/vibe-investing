@@ -595,6 +595,9 @@ function descriptionFromMd(md, fallback) {
 const SLUG_OVERRIDES = {
   "Cyworld/The-Pros-and-Cons-of-VC-Investment-as-Seen-Through-the-Cyworld-RCPS-Contract.md":
     "cyworld-rcps-vc-investment-pros-cons",
+  "News Letter/vibe-quant-insight-001.md": "vibe-quant-insight-001",
+  "News Letter/vibe-quant-insight-001-en.md": "vibe-quant-insight-001-en",
+  "News Letter/vibe-quant-insight-001-ja.md": "vibe-quant-insight-001-ja",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
