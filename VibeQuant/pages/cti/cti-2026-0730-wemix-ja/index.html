@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ウィミックス(WEMIX)連続ハッキング事案分析：スマートコントラクト権限侵害、監査の構造的限界、そして対応フレームワーク — VibeQuant</title>
+  <meta name="description" content="1. 核心判断サマリー 2. 統合タイムライン 3. 脆弱性技術分析 4. 監査(Audit)はなぜこれを防げなかったのか 5. 対応フレームワーク 6. 類似事故比較 — これはWEMIXだけの問題ではない 7. 政策・規制への示唆 8. おわりに 付録 A. 検証ノート (Admiralty Code)…" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-ja/" />
+  <meta property="og:title" content="ウィミックス(WEMIX)連続ハッキング事案分析：スマートコントラクト権限侵害、監査の構造的限界、そして対応フレームワーク" />
+  <meta property="og:description" content="1. 核心判断サマリー 2. 統合タイムライン 3. 脆弱性技術分析 4. 監査(Audit)はなぜこれを防げなかったのか 5. 対応フレームワーク 6. 類似事故比較 — これはWEMIXだけの問題ではない 7. 政策・規制への示唆 8. おわりに 付録 A. 検証ノート (Admiralty Code)…" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"ウィミックス(WEMIX)連続ハッキング事案分析：スマートコントラクト権限侵害、監査の構造的限界、そして対応フレームワーク","description":"1. 核心判断サマリー 2. 統合タイムライン 3. 脆弱性技術分析 4. 監査(Audit)はなぜこれを防げなかったのか 5. 対応フレームワーク 6. 類似事故比較 — これはWEMIXだけの問題ではない 7. 政策・規制への示唆 8. おわりに 付録 A. 検証ノート (Admiralty Code)…","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/cti-2026-0730-wemix-ja/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0730-WEMIX_JP.md","image":"https://vibequant.cc/og-default.png","url":"https://cti.vibequant.cc/cti/cti-2026-0730-wemix-ja/","datePublished":"2026-07-30","dateModified":"2026-07-30","inLanguage":"ja","keywords":"기타 CTI, JP, CTI"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"ウィミックス(WEMIX)連続ハッキング事案分析：スマートコントラクト権限侵害、監査の構造的限界、そして対応フレームワーク","item":"https://cti.vibequant.cc/cti/cti-2026-0730-wemix-ja/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 기타 CTI</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 CTI</p>
+        <h1>ウィミックス(WEMIX)連続ハッキング事案分析：スマートコントラクト権限侵害、監査の構造的限界、そして対応フレームワーク</h1>
+        <p class="article-dates"><time datetime="2026-07-30">발행 2026.07.30</time> · 주제 기타 CTI · JP · CTI</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/cti-2026-0730-wemix-kr/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0730-wemix-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0730-wemix-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0730-wemix-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">監査報告書はエクセルであってオラクルではない。</p>
+        <p class="article-byline">Dennis Kim / HoKwang Kim · 2026-07-30</p>
+      </header>
+      <div class="article-body prose"><p><em>監査報告書はエクセルであってオラクルではない。</em></p>
+<hr>
+<h2>目次</h2>
+<ol>
+<li>核心判断サマリー</li>
+<li>統合タイムライン</li>
+<li>脆弱性技術分析</li>
+<li>監査(Audit)はなぜこれを防げなかったのか</li>
+<li>対応フレームワーク</li>
+<li>類似事故比較 — これはWEMIXだけの問題ではない</li>
+<li>政策・規制への示唆</li>
+<li>おわりに
+付録 A. 検証ノート (Admiralty Code)
+付録 B. 主要参考ソース</li>
+</ol>
+<hr>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>文書分類</td>
+<td>TLP:CLEAR（公開配布可能）</td>
+</tr>
+<tr>
+<td>作成日</td>
+<td>2026-07-30</td>
+</tr>
+<tr>
+<td>対象事案</td>
+<td>WEMIX$ コントラクトオーナー権限奪取（2026-07-26）、Play Bridge Vault 侵害（2025-02-28）</td>
+</tr>
+<tr>
+<td>文書性質</td>
+<td>事故分析 + 監査産業批判 + 実務対応フレームワーク</td>
+</tr>
+<tr>
+<td>総合信頼度</td>
+<td>B2（通常信頼できる出典 / 事実である可能性が高い）— 根本原因は発行体未公開のため、一部判断は推定</td>
+</tr>
+<tr>
+<td>注意</td>
+<td>本書の「原因判断」項目の一部は公開情報に基づく推論であり、WEMIX財団の公式事後報告書(RCA)が公開されれば更新が必要</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. 核心判断サマリー</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>判断</th>
+<th>確信度</th>
+<th>根拠</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>今回の事故はコントラクトロジックのバグではなく<strong>権限（資格情報）侵害</strong>である。つまり「コードが誤作動した」のではなく「コードが設計どおり正確に作動した」事故である</td>
+<td>高</td>
+<td>発行体公告自体が「オーナー権限奪取」を原因と明記</td>
+</tr>
+<tr>
+<td>2</td>
+<td>発行権限が単一オーナーアカウントに集中した構造が被害規模を無制限に拡大させた。キー1個 = 無限ミント</td>
+<td>高</td>
+<td>522万個の単一トランザクション級発行が阻止されなかった</td>
+</tr>
+<tr>
+<td>3</td>
+<td>監査(Audit)120回以上、CertiK AAA等級は今回の類型の事故を防げなかった。監査範囲と事故発生地点は当初から重ならない</td>
+<td>高</td>
+<td>監査範囲はオンチェーンコード、事故地点はオフチェーンキー管理</td>
+</tr>
+<tr>
+<td>4</td>
+<td>検知失敗が被害を拡大させた。外部オンチェーン分析者が先に発見、発行体の公式認定まで約4時間</td>
+<td>高</td>
+<td>多数の報道が一致</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2025年事故（認証キー漏洩）と2026年事故（オーナー権限奪取）は<strong>同一の失敗系列</strong>である。両方とも「コードではなく資格情報」が突破された</td>
+<td>中〜高</td>
+<td>2026年事故の正確な侵害経路は未公開</td>
+</tr>
+<tr>
+<td>6</td>
+<td>担保型ステーブルコインにおける無断ミントは単純な盗難ではなく、<strong>ペッグ信頼そのものへの攻撃</strong>である</td>
+<td>高</td>
+<td>WEMIX$はUSDC.e担保ベース</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>一行サマリー：<strong>監査報告書はエクセルであってオラクルではない。</strong> 計算を助けるツールにすぎず、未来の安全を宣言してくれる神託ではない。</p>
+</blockquote>
+<hr>
+<h2>2. 統合タイムライン</h2>
+<h3>2.1 2026年7月の事案</h3>
+<table>
+<thead>
+<tr>
+<th>時刻(KST)</th>
+<th>イベント</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2026-07-08</td>
+<td>WEMIX、米国取引所Kraken上場。グローバル流動性拡大を発表</td>
+</tr>
+<tr>
+<td>2026-07-08前後</td>
+<td>Wemade、ウォン建てステーブルコイン専用レイヤー1「StableNet」を公開</td>
+</tr>
+<tr>
+<td>2026-07-26 18:17~18:18</td>
+<td>WEMIX$関連スマートコントラクトのオーナー権限奪取、無断発行トランザクション発生</td>
+</tr>
+<tr>
+<td>同一時刻以降</td>
+<td>5,225,525 WEMIX$ 無断発行 → 30,736 WEMIX + 724,198.27 USDC.e に換金</td>
+</tr>
+<tr>
+<td>以降</td>
+<td>Chainlink CCIP · PLAY Bridge経由、Ethereum / BNB Smart Chainへ移動 → ETH、USDTに再スワップ後、多数ウォレットに分散、一部CEX流入</td>
+</tr>
+<tr>
+<td>2026-07-26 夕方</td>
+<td>オンチェーン分析者SpecterがXで疑わしいトランザクションを初公開</td>
+</tr>
+<tr>
+<td>2026-07-26 22:00頃</td>
+<td>WEMIX、公式サイトでセキュリティ事故を公式認定（外部初指摘から約4時間後）</td>
+</tr>
+<tr>
+<td>2026-07-27</td>
+<td>ブリッジ全面停止（CCIP停止、PLAY Bridge一時停止）、流動性プール取引停止および財団流動性回収、WEMIX$モジュール・PNIX DEX停止、一部ゲームブロックチェーン/NFT機能制限</td>
+</tr>
+<tr>
+<td>2026-07-27</td>
+<td>取引所およびステーブルコイン発行体へ資産凍結協力要請、攻撃者ウォレット追跡開始</td>
+</tr>
+<tr>
+<td>2026-07-27（事故後約23時間）</td>
+<td>権限奪取の経緯は<strong>未確認</strong>のまま公開。外部専門家と関連コントラクトの全数点検を実施</td>
+</tr>
+</tbody></table>
+<p>被害規模：約76~77億ウォン（発行体・報道推計）。流出確定ステーブルコイン基準で約72万4千ドル相当のUSDC.e。</p>
+<h3>2.2 2025年2月の事案（先行事案）</h3>
+<table>
+<thead>
+<tr>
+<th>時刻</th>
+<th>イベント</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2024年末~2025年初</td>
+<td>開発者がNILE NFTプラットフォーム監視用認証キーをセキュリティが脆弱な共用ストレージにアップロード</td>
+</tr>
+<tr>
+<td>以降約2ヶ月</td>
+<td>攻撃者が潜伏。正常トラフィックの中で権限確認および準備</td>
+</tr>
+<tr>
+<td>2025-02-28</td>
+<td>Play Bridge Vaultから8,654,860 WEMIXの異常出金（当時約90億ウォン）— 計15回の引き出し</td>
+</tr>
+<tr>
+<td>2025-03初（事故約4日後）</td>
+<td>WEMIX、事故事実を公告</td>
+</tr>
+<tr>
+<td>2025-06</td>
+<td>DAXA所属国内ウォンマーケット取引所で取引支援終了（上場廃止）</td>
+</tr>
+</tbody></table>
+<p>2つの事案の間隔は約1年5ヶ月。WEMIXはその間、認証キー交換とセキュリティ体制再整備を発表した。</p>
+<hr>
+<h2>3. 脆弱性技術分析</h2>
+<h3>3.1 失敗地点の正確な位置</h3>
+<p>ブロックチェーンセキュリティ事故を以下4層に分解すると、WEMIXの2つの事案の位置が明確になる。</p>
+<table>
+<thead>
+<tr>
+<th>層</th>
+<th>内容</th>
+<th>代表的事故類型</th>
+<th>WEMIX事案該当</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>L1 プロトコル</td>
+<td>コンセンサス、ノード、PoAバリデータ</td>
+<td>51%攻撃、バリデータ共謀</td>
+<td>該当なし</td>
+</tr>
+<tr>
+<td>L2 コントラクトロジック</td>
+<td>再入、オーバーフロー、価格オラクル操作</td>
+<td>Cream、Euler類型</td>
+<td>該当なし</td>
+</tr>
+<tr>
+<td><strong>L3 権限・資格情報</strong></td>
+<td><strong>オーナーキー、マルチシグ構成、認証キー、デプロイパイプライン</strong></td>
+<td><strong>Ronin、Harmony、Orbit Bridge類型</strong></td>
+<td><strong>2025・2026両事案に該当</strong></td>
+</tr>
+<tr>
+<td>L4 運用・ガバナンス</td>
+<td>検知、開示、対応手順、内部統制</td>
+<td>遅延開示、対応失敗</td>
+<td>両事案に該当</td>
+</tr>
+</tbody></table>
+<p>要点：業界の監査予算とマーケティング文言の大半はL2に集中しているが、実際の大規模資金流出事故は圧倒的にL3で発生する。</p>
+<h3>3.2 3つの構造的欠陥</h3>
+<p><strong>① 単一オーナー権限(Single Owner Privilege)</strong><code>onlyOwner</code>修飾子が付いた<code>mint()</code>関数は、コードの観点から完全に正常である。問題はそのオーナーが単一EOA（または単一キーで制御されるアカウント）である点だ。この構造で攻撃者が得るのは「関数呼び出し権限」ではなく、<strong>通貨発行権そのもの</strong>である。</p>
+<pre><code>危険関数 = f(権限強度, 権限保有者数, 時間遅延, 金額上限)
+
+WEMIX$ mint()  = f(無制限発行, 事実上1, 0秒, なし)
+安全な設計      = f(制限発行, m-of-nマルチシグ, 24~48時間タイムロック, 日次上限)
+</code></pre>
+<p><strong>② 権限階層分離の欠如</strong>発行(mint)、焼却(burn)、一時停止(pause)、オーナー移譲(transferOwnership)、アップグレード(upgradeTo)は、危険等級が全く異なる関数である。これらを1つのオーナー権限に束ねると、侵害時の被害は乗算で増大する。特に<code>transferOwnership</code>がタイムロックなしで即時実行可能な場合、攻撃者は侵害直後に<strong>正当な運用者を排除</strong>できる。</p>
+<p><strong>③ 検知・遮断(Circuit Breaker)の欠如</strong></p>
+<p>522万個の無断発行がリアルタイムで阻止されず、外部分析者が先に発見した。以下3つのうち1つだけでもあれば、被害は大幅に減少したはずである。</p>
+<ul>
+<li>発行量異常検知アラート → オンコール対応（分単位）</li>
+<li>発行日次上限(rate limit)をコントラクトレベルで強制 → 超過分は自動revert</li>
+<li>ガーディアン(guardian)権限による即時pause → ブリッジ・プール同時凍結</li>
+</ul>
+<h3>3.3 ステーブルコイン特有の増幅効果</h3>
+<p>一般ユーティリティトークン窃取と担保型ステーブルコイン無断発行は性質が異なる。</p>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>一般トークン窃取</th>
+<th>担保型ステーブルコイン無断発行</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1次被害</td>
+<td>窃取金額</td>
+<td>窃取金額</td>
+</tr>
+<tr>
+<td>2次被害</td>
+<td>市場価格下落</td>
+<td><strong>担保対発行量の崩壊 → ペッグ乖離</strong></td>
+</tr>
+<tr>
+<td>3次被害</td>
+<td>ホルダー損失</td>
+<td>決済・精算手段として使う全サービスの停止</td>
+</tr>
+<tr>
+<td>回復難度</td>
+<td>補償・焼却</td>
+<td>準備金再確認、発行量再算定、ペッグ信頼再構築</td>
+</tr>
+<tr>
+<td>規制リスク</td>
+<td>開示違反</td>
+<td><strong>発行準備金規制そのものの正当性論争へ拡大</strong></td>
+</tr>
+</tbody></table>
+<p>WEMIX$はUSDC.eを担保に価値を維持する構造だった。攻撃者が無断発行分を担保資産(USDC.e)に換金して持ち出した瞬間、これは盗難ではなく<strong>準備金引き出しによるペッグ破壊</strong>となる。発行量は増え、担保は減った。</p>
+<h3>3.4 MITRE ATT&amp;CK マッピング（推定含む）</h3>
+<table>
+<thead>
+<tr>
+<th>戦術</th>
+<th>技法</th>
+<th>適用</th>
+<th>確信度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Credential Access</td>
+<td>T1552.001 Credentials In Files</td>
+<td>2025事案：共用ストレージ認証キー漏洩</td>
+<td>高（発行体確認）</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>T1078 Valid Accounts</td>
+<td>正当なオーナー資格情報で正常トランザクション実行</td>
+<td>高</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>T1195.002 Supply Chain Compromise: Software</td>
+<td>デプロイパイプライン/依存関係侵害の可能性</td>
+<td>低（未確認仮説）</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>T1566 Phishing</td>
+<td>運用者標的のソーシャルエンジニアリングの可能性</td>
+<td>低（未確認仮説）</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1070 Indicator Removal / 正常関数呼び出し偽装</td>
+<td>監査・モニタリング上は正常トランザクションに見える</td>
+<td>中</td>
+</tr>
+<tr>
+<td>Impact</td>
+<td>T1657 Financial Theft</td>
+<td>無断発行後のクロスチェーン資金洗浄</td>
+<td>高</td>
+</tr>
+<tr>
+<td>Impact</td>
+<td>T1565 Data Manipulation</td>
+<td>総発行量(supply)操作</td>
+<td>高</td>
+</tr>
+</tbody></table>
+<p>2026年事案の初期侵害ベクトル（キー漏洩、内部者、フィッシング、パイプライン侵害のいずれか）は<strong>現時点で未公開</strong>である。上記マッピングの低確信度項目は仮説としてのみ扱うべきである。</p>
+<hr>
+<h2>4. 監査(Audit)はなぜこれを防げなかったのか</h2>
+<p>本章が本書の核心である。WEMIXは監査を受けていないプロジェクトではない。<strong>業界平均を大きく上回って受けた</strong>プロジェクトである点が深刻さを高めている。</p>
+<table>
+<thead>
+<tr>
+<th>事実</th>
+<th>出典</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CertiK CEO公開発言：WEMIXはCertiKと120回以上の監査を実施（業界平均を大きく上回る）</td>
+<td>CertiK公式ブログ、2025 KBW対談</td>
+</tr>
+<tr>
+<td>WEMIXはCertiK Skynet AAA等級を保有、世界で少数のプロジェクトのみが取得</td>
+<td>CertiK公式ブログ</td>
+</tr>
+<tr>
+<td>WEMIXメインネット、2023年基準でCertiKセキュリティスコア90.2点（上位5%）取得後、認証マークを表示</td>
+<td>WEMIXチーム公式技術ブログ</td>
+</tr>
+<tr>
+<td>CertiK-WEMIXパートナーシップ拡大のテーマに「韓国ステーブルコイン革新」を含む</td>
+<td>CertiK公式ブログ（2025-10）</td>
+</tr>
+<tr>
+<td>SkynetリーダーボードでWEMIXはBitcoin・Ethereum等とともに上位に表示</td>
+<td>CertiK Skynetリーダーボード</td>
+</tr>
+</tbody></table>
+<p>つまり<strong>監査数量、等級、モニタリング商品、パートナーシップすべて最上位だったが、事故は2回発生した。</strong> これは特定監査会社の実力問題に還元できない、監査制度自体の構造的問題である。</p>
+<h3>4.1 監査範囲と事故地点の不一致</h3>
+<table>
+<thead>
+<tr>
+<th>監査が実際に検証するもの</th>
+<th>今回の事故が発生した地点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>コントラクトコードに再入・オーバーフロー・ロジックエラーがあるか</td>
+<td>なかった（該当なし）</td>
+</tr>
+<tr>
+<td>権限あるアカウントのみmintを呼び出せるか</td>
+<td>その通り。そして攻撃者がその権限あるアカウントになった</td>
+</tr>
+<tr>
+<td>関数アクセス制御子が正しく付いているか</td>
+<td>付いていた</td>
+</tr>
+<tr>
+<td>オーナーキーがどこにどう保管されているか</td>
+<td><strong>監査範囲外</strong></td>
+</tr>
+<tr>
+<td>開発者が資格情報をリポジトリにコミットしないか</td>
+<td><strong>監査範囲外</strong></td>
+</tr>
+<tr>
+<td>運用者端末・CI/CD・バックオフィスが安全か</td>
+<td><strong>監査範囲外（別途ペンテスト契約が必要）</strong></td>
+</tr>
+<tr>
+<td>事故発生時に数分以内に検知・遮断されるか</td>
+<td><strong>監査範囲外（モニタリング商品の領域）</strong></td>
+</tr>
+</tbody></table>
+<p>監査報告書は通常「オーナーキーは安全に管理されると仮定する(assumption)」という文を含む。今回の事故はまさにその<strong>仮定の中で</strong>起爆した。報告書は間違っていなかった。報告書が答えない質問が事故を生んだだけである。</p>
+<h3>4.2 監査制度の5つの錯覚</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>錯覚</th>
+<th>実際</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>スコープ錯覚：「監査完了 = プロジェクト安全」</td>
+<td>監査完了 = 特定コミットの特定コントラクトで既知パターン未発見</td>
+</tr>
+<tr>
+<td>2</td>
+<td>スナップショット錯覚：監査されたコード = 運用中コード</td>
+<td>アップグレード・マイグレーション・権限移譲後、デプロイバイトコードが監査版と異なる可能性。Skynet方法論でもaudit freshnessとaudit coverageを別指標に置く理由である</td>
+</tr>
+<tr>
+<td>3</td>
+<td>仮定錯覚：オフチェーンは安全と仮定</td>
+<td>実際の大規模流出の多くはその仮定の中で発生</td>
+</tr>
+<tr>
+<td>4</td>
+<td>勧告錯覚：中央集権リスクは指摘される</td>
+<td>指摘は勧告にすぎず、修正義務と決定権はプロジェクトにある。「中央集権リスクを認識した上で受容(acknowledged)」処理で終了するケースが多い</td>
+</tr>
+<tr>
+<td>5</td>
+<td>インセンティブ錯覚：監査は独立検証</td>
+<td>監査費用は被監査プロジェクトが支払う。信用格付け機関モデルと同一の構造的利益相反が存在。等級・スコア・認証マークはマーケティング資産としても消費される</td>
+</tr>
+</tbody></table>
+<h3>4.3 等級体系の逆説：何をスコア化しているのか</h3>
+<p>CertiK Skynetスコアはコードセキュリティ、ファンダメンタル、運用回復力、ガバナンス、市場安定性、コミュニティ信頼など複数カテゴリを総合する。問題はこの総合スコアが以下のように消費される点である。</p>
+<ul>
+<li>プロジェクト：「AAA等級」という単一ラベルでマーケティング</li>
+<li>投資家・利用者：「監査通過 = 元本安全」と誤読</li>
+<li>実際のリスク：総合スコアはコミュニティ投票・市場指標など<strong>セキュリティと無関係な変数</strong>にも影響を受ける</li>
+</ul>
+<p>高い総合スコアは「このプロジェクトがセキュリティに多額を投じた」というシグナルとしては有効である。しかし「このプロジェクトの発行キーがマルチシグで保護されている」というシグナルとしては有効ではない。<strong>投資家が必要とする情報は後者だが、市場に流通する情報は前者である。</strong>興味深い点は、WEMIXチーム自身が2023年技術ブログで、監査がすべての事故を防げないという限界を明示的に記述していた事実である。問題認識がなかったから事故が起きたのではない。<strong>認識と実行の間のギャップ</strong>が事故を生んだ。</p>
+<hr>
+<h2>5. 対応フレームワーク</h2>
+<h3>5.1 層別対応マトリクス</h3>
+<table>
+<thead>
+<tr>
+<th>層</th>
+<th>統制</th>
+<th>具体要件</th>
+<th>優先度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>コントラクト</td>
+<td>権限分散</td>
+<td>mint権限を3-of-5以上マルチシグへ移譲、署名者キーは物理的・組織的に分離</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>コントラクト</td>
+<td>タイムロック</td>
+<td>発行・アップグレード・オーナー移譲に24~48時間遅延。遅延期間に公開イベント発生</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>コントラクト</td>
+<td>発行上限</td>
+<td>日次/ブロックあたり発行上限をハードコード。超過時revert。上限変更自体もタイムロック対象</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>コントラクト</td>
+<td>サーキットブレーカー</td>
+<td>ガーディアン権限（発行不可、pauseのみ）で即時停止。停止は即時、解除はマルチシグ+タイムロック</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>コントラクト</td>
+<td>担保不変式</td>
+<td><code>totalSupply &lt;= collateralBalance * k</code> をオンチェイン検証。違反時は発行自体不可</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>キー管理</td>
+<td>HSM/MPC</td>
+<td>オーナーキーをHSMまたはMPC閾値署名へ移行。平文キーファイル全面禁止</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>キー管理</td>
+<td>ローテーション・監査ログ</td>
+<td>定期ローテーション、署名要求全件ログ、承認者2名以上</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>パイプライン</td>
+<td>シークレットスキャン</td>
+<td>リポジトリpre-commit + push-protection強制、組織全体履歴スキャン、漏洩時自動無効化</td>
+<td>P0（2025事案再発防止に直結）</td>
+</tr>
+<tr>
+<td>パイプライン</td>
+<td>デプロイ検証</td>
+<td>デプロイバイトコードと監査版ハッシュ比較をCIで強制。不一致時デプロイ阻止</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>検知</td>
+<td>オンチェイン異常検知</td>
+<td>supply変動、owner変更、大量発行、ブリッジ異常流出に対するリアルタイムアラート + オンコール</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>検知</td>
+<td>対応SLA</td>
+<td>検知→ガーディアンpause 15分以内、1次開示2時間以内を目標</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>ガバナンス</td>
+<td>権限公開</td>
+<td>オーナーアドレス、マルチシグ構成、タイムロックパラメータ、ガーディアン主体を常時公開文書化</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>ガバナンス</td>
+<td>事故開示ポリシー</td>
+<td>事前定義された開示基準・チャネル・期限。「調査完了後に公告」の慣行を廃止</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>検証</td>
+<td>運用セキュリティ監査</td>
+<td>コード監査と別にキー管理・内部統制・ペンテストを年1回以上。結果サマリーを公開</td>
+<td>P1</td>
+</tr>
+</tbody></table>
+<h3>5.2 参照実装概念（Solidity疑似コード）</h3>
+<pre><code class="language-solidity">// 目的: キー1個奪取が無限発行に至らない最小構造
+// 核心 = マルチシグ + タイムロック + 発行上限 + 即時停止 + 担保不変式
+
+contract GuardedStablecoin is ERC20, AccessControl, Pausable {
+    bytes32 public constant MINTER_ROLE   = keccak256(&quot;MINTER&quot;);   // マルチシグコントラクトのみ保有
+    bytes32 public constant GUARDIAN_ROLE = keccak256(&quot;GUARDIAN&quot;); // 停止権限のみ、発行権限なし
+
+    uint256 public dailyMintCap;        // 変更時タイムロック必須
+    uint256 public mintedToday;
+    uint256 public currentDay;
+    uint256 public constant TIMELOCK = 24 hours;
+
+    IERC20 public immutable collateral;  // 例: USDC.e
+    address public immutable reserve;    // 準備金保管アドレス
+
+    struct MintRequest { uint256 amount; address to; uint256 readyAt; bool executed; }
+    mapping(bytes32 =&gt; MintRequest) public queue;
+
+    // 1段階: 発行予約。即時発行は不可能
+    function requestMint(address to, uint256 amount)
+        external onlyRole(MINTER_ROLE) whenNotPaused returns (bytes32 id)
+    {
+        id = keccak256(abi.encode(to, amount, block.timestamp));
+        queue[id] = MintRequest(amount, to, block.timestamp + TIMELOCK, false);
+        emit MintRequested(id, to, amount, block.timestamp + TIMELOCK); // 公開監視窓口
+    }
+
+    // 2段階: タイムロック経過後実行。上限と担保不変式を同時検証
+    function executeMint(bytes32 id) external onlyRole(MINTER_ROLE) whenNotPaused {
+        MintRequest storage r = queue[id];
+        require(!r.executed &amp;&amp; r.readyAt != 0 &amp;&amp; block.timestamp &gt;= r.readyAt, &quot;not ready&quot;);
+
+        if (block.timestamp / 1 days != currentDay) {
+            currentDay = block.timestamp / 1 days;
+            mintedToday = 0;
+        }
+        require(mintedToday + r.amount &lt;= dailyMintCap, &quot;daily cap&quot;);           // 無限発行阻止
+        require(totalSupply() + r.amount &lt;= collateral.balanceOf(reserve), &quot;undercollateralized&quot;); // ペッグ保護
+
+        mintedToday += r.amount;
+        r.executed = true;
+        _mint(r.to, r.amount);
+    }
+
+    // 即時停止は単独可能、解除はマルチシグ経由
+    function emergencyPause() external onlyRole(GUARDIAN_ROLE) { _pause(); }
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
+}
+</code></pre>
+<p>設計意図サマリー</p>
+<table>
+<thead>
+<tr>
+<th>統制</th>
+<th>侵害シナリオでの効果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MINTER = マルチシグ</td>
+<td>単一キー奪取では発行予約すら不可</td>
+</tr>
+<tr>
+<td>タイムロック + イベント</td>
+<td>予約即時に外部監視者へ露出、24時間の対応窓を確保</td>
+</tr>
+<tr>
+<td>日次上限</td>
+<td>最悪でも損失は有限。522万個の単発発行不可</td>
+</tr>
+<tr>
+<td>担保不変式</td>
+<td>ペッグ崩壊型発行自体をコントラクトが拒否</td>
+</tr>
+<tr>
+<td>ガーディアンpause</td>
+<td>検知後、人的承認手順なしで即時出血阻止</td>
+</tr>
+</tbody></table>
+<h3>5.3 検知ルール例</h3>
+<pre><code>RULE-01  supply_anomaly
+  IF  totalSupply変動率(5分) &gt; 1%  OR  単一tx mint金額 &gt; 日平均発行量 * 3
+  THEN  P1アラート + ガーディアンオンコール + ブリッジ自動rate limit引下げ
+
+RULE-02  privileged_call
+  IF  イベント IN (OwnershipTransferred, RoleGranted, Upgraded, CapChanged)
+  THEN  P0アラート（予想された変更でも必ず通知） + 変更理由チケット照合
+
+RULE-03  reserve_drain
+  IF  reserveアドレスUSDC.e残高減少 AND totalSupply未減少
+  THEN  P0アラート + 発行自動停止
+
+RULE-04  bridge_exfil
+  IF  単一アドレスのブリッジアウト金額(1h) &gt; 閾値 OR 新規アドレスが大量資産をクロスチェーン移動
+  THEN  P1アラート + 当該経路一時停止 + 取引所凍結要請テンプレート自動生成
+</code></pre>
+<p>RULE-03は今回事案の核心パターン（発行量増加 + 担保減少）を直接狙う。</p>
+<h3>5.4 監査を発注する側のチェックリスト</h3>
+<p>監査契約書に以下項目がなければ、その監査は今回の類型の事故を防げない。</p>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>確認質問</th>
+<th>通常監査への包含</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>範囲</td>
+<td>監査対象コミットハッシュと実デプロイバイトコードが一致するか</td>
+<td>部分</td>
+</tr>
+<tr>
+<td>範囲</td>
+<td>プロキシ・アップグレード経路と管理者コントラクトが範囲に含まれるか</td>
+<td>部分</td>
+</tr>
+<tr>
+<td>権限</td>
+<td>特権関数全リストと各関数の保有者・遅延・上限が文書化されているか</td>
+<td>部分</td>
+</tr>
+<tr>
+<td>権限</td>
+<td>オーナーがEOAかマルチシグか、閾値がいくつか報告書に明記されるか</td>
+<td>多数未包含</td>
+</tr>
+<tr>
+<td>キー</td>
+<td>キー保管方式(HSM/MPC/平文)、アクセス人数、ローテーションポリシー実査</td>
+<td><strong>未包含</strong></td>
+</tr>
+<tr>
+<td>パイプライン</td>
+<td>CI/CD、デプロイサーバー、運用者端末へのペンテスト</td>
+<td><strong>別契約</strong></td>
+</tr>
+<tr>
+<td>運用</td>
+<td>検知-対応訓練（テーブルトップ、侵害シミュレーション）実施</td>
+<td><strong>未包含</strong></td>
+</tr>
+<tr>
+<td>事後</td>
+<td>指摘された中央集権リスクの処理状態（修正/受容）とその根拠が公開されるか</td>
+<td>部分</td>
+</tr>
+</tbody></table>
+<h3>5.5 監査産業に求められる変化</h3>
+<table>
+<thead>
+<tr>
+<th>現状</th>
+<th>必要な転換</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>コード監査中心</td>
+<td>コード + キー管理 + 運用セキュリティを束ねた<strong>運用セキュリティ監査(OpSec Audit)</strong>へ拡張</td>
+</tr>
+<tr>
+<td>総合等級ラベル(AAA等)</td>
+<td>項目別分解公開。特に「特権関数の権限構造」を独立指標として常時表示</td>
+</tr>
+<tr>
+<td>時点ベーススナップショット</td>
+<td>デプロイバイトコード継続照合 + 権限変更リアルタイム追跡</td>
+</tr>
+<tr>
+<td>勧告後終了</td>
+<td>未修正高リスク項目の<strong>残余リスク公開義務化</strong></td>
+</tr>
+<tr>
+<td>被監査機関費用負担</td>
+<td>取引所・財団・保険会社等第三者発注監査を並行し利益相反を緩和</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. 類似事故比較 — これはWEMIXだけの問題ではない</h2>
+<table>
+<thead>
+<tr>
+<th>事案</th>
+<th>時点</th>
+<th>規模</th>
+<th>根本原因層</th>
+<th>コードバグの有無</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Orbit Bridge（Oozy）</td>
+<td>2024-01</td>
+<td>約8,150万ドル</td>
+<td>権限・資格情報 (L3)</td>
+<td>いいえ</td>
+</tr>
+<tr>
+<td>WEMIX Play Bridge Vault</td>
+<td>2025-02</td>
+<td>約90億ウォン</td>
+<td>認証キー漏洩 (L3)</td>
+<td>いいえ</td>
+</tr>
+<tr>
+<td>Upbitホットウォレット</td>
+<td>2025-11</td>
+<td>約445億ウォン</td>
+<td>秘密鍵推測可能脆弱性 (L3)</td>
+<td>部分</td>
+</tr>
+<tr>
+<td>WEMIX$ コントラクト</td>
+<td>2026-07</td>
+<td>約77億ウォン</td>
+<td>オーナー権限奪取 (L3)</td>
+<td>いいえ</td>
+</tr>
+</tbody></table>
+<p>2026年上半期の仮想資産ハッキング被害は約1.6兆ウォン規模に集計され、北朝鮮関連脅威グループの活動が目立った。この統計が示すことは明確である。<strong>資金はコントラクトロジックではなく、人とキーを通じて流出する。</strong> 防御予算配分がこの事実と正反対に組まれているのが業界の構造的問題である。</p>
+<p>スマートコントラクトは今やほぼ規格化され、成功したコントラクトは複製される。コントラクトを自ら分析しにくいプロジェクトも多数存在し、これらも危険群と見なせる。</p>
+<p>であれば、コントラクトに基本的なセキュリティガイドがあり、構造的安定性を付与すべきではないか。ERC20 Solidityには構造的限界が内包されている。</p>
+<hr>
+<h2>7. 政策・規制への示唆</h2>
+<p>韓国は仮想資産利用者保護法以降、第2段階立法（ステーブルコイン規制を含む）を推進してきたが、発行主体要件論争と政治日程により議論が遅延している。今回の事案はその空白期間に発生した。</p>
+<table>
+<thead>
+<tr>
+<th>争点</th>
+<th>今回事案が提起した問い</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>発行主体要件</td>
+<td>無断発行をコントラクトレベルで防げない発行構造を許容するのか</td>
+</tr>
+<tr>
+<td>準備金規制</td>
+<td>準備金実査は会計監査だけで十分か。オンチェイン担保不変式強制は不可能か</td>
+</tr>
+<tr>
+<td>技術要件</td>
+<td>発行権限のマルチシグ・タイムロック・発行上限を<strong>認可要件</strong>として明文化するのか</td>
+</tr>
+<tr>
+<td>事故開示</td>
+<td>侵害認知後の開示期限を規範化するのか（2025年4日、2026年4時間）</td>
+</tr>
+<tr>
+<td>監査規制</td>
+<td>「監査完了」表示を広告に使用する際の範囲明示義務を課すのか</td>
+</tr>
+<tr>
+<td>国境を越えた回収</td>
+<td>ブリッジ経由資金の凍結・回収のための国際協調手順の実効性</td>
+</tr>
+</tbody></table>
+<p>特に最後の項目：今回も資金は数時間以内にEthereum・BSCを経由し多数ウォレットへ分散された。発行体の凍結要請は資金が既に移動した後に送られる。<strong>検知遅延はそのまま回収失敗に至る。</strong></p>
+<hr>
+<h2>8. おわりに</h2>
+<p>WEMIXの2つの事案は互いに異なる事故ではない。同一失敗の2回目のデジャヴュである。</p>
+<ul>
+<li>2025年：資格情報が誤った場所に保存された</li>
+<li>2026年：資格情報が奪取され、その資格情報1つが通貨発行権全体を意味した</li>
+</ul>
+<p>両方ともコントラクトコードは設計どおり正確に作動した。120回を超える監査とAAA等級もこれを防げなかったが、それは監査が不十分だったからではなく、<strong>監査が答える質問と事故が発生した地点が当初から別領域だったから</strong>である。</p>
+<p>分散化を標榜するシステムが単一管理者キーに依存するとき、そのキーはシステム全体のアキレス腱となる。それがコントラクトに明示的にコードされていようと、オフチェーンのどこかのファイルに保管されていようと、結果は同じである。</p>
+<p>真のセキュリティは監査報告書のスタンプからではなく、3つから生まれる。<strong>権限の分散、損失の上限、そして分単位の検知。</strong> 前2つはコントラクトにコードとして刻み、最後の1つは組織に手順として刻む。報告書はその次である。</p>
+<hr>
+<h2>付録 A. 検証ノート (Admiralty Code)</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>状態</th>
+<th>確信度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>事故発生時刻 2026-07-26 18:17~18:18 KST</td>
+<td>多数報道一致</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>無断発行量 5,225,525 WEMIX$</td>
+<td>発行体公告</td>
+<td>A1</td>
+</tr>
+<tr>
+<td>換金内訳 30,736 WEMIX / 724,198.27 USDC.e</td>
+<td>発行体公告</td>
+<td>A1</td>
+</tr>
+<tr>
+<td>被害規模 76~77億ウォン</td>
+<td>報道推計、相場変動により変動可能</td>
+<td>B2</td>
+</tr>
+<tr>
+<td>外部初指摘から約4時間後に公式認定</td>
+<td>多数報道一致</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>資金経路：CCIP·PLAY Bridge → Ethereum/BSC → ETH·USDT分散</td>
+<td>発行体および報道</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>事故後約23時間時点で原因未確認</td>
+<td>報道</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>2025-02-28 Play Bridge Vault 8,654,860 WEMIX流出</td>
+<td>発行体公告および報道</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>2025年事案原因：共用ストレージ認証キーアップロード後約2ヶ月潜伏、15回引き出し</td>
+<td>発行体説明</td>
+<td>B2</td>
+</tr>
+<tr>
+<td>2025-06 国内ウォンマーケット取引支援終了</td>
+<td>報道</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>CertiK監査120回以上、AAA Skynet等級</td>
+<td>CertiK公式発表（自社主張）</td>
+<td>B1</td>
+</tr>
+<tr>
+<td>WEMIXメインネットセキュリティスコア90.2（2023）</td>
+<td>WEMIX自社技術ブログ</td>
+<td>B2</td>
+</tr>
+<tr>
+<td><strong>「監査報告書80余り保有」、「最近監査2026-05-27完了」</strong></td>
+<td><strong>原文初稿記載数値。本書では未検証として分類。Skynetプロジェクトページで直接確認が必要</strong></td>
+<td><strong>F（判断保留）</strong></td>
+</tr>
+<tr>
+<td>2026年事案の具体的侵害ベクトル</td>
+<td>発行体未公開</td>
+<td>F（判断保留）</td>
+</tr>
+<tr>
+<td>単一オーナーEOA構造だったという判断</td>
+<td>公開情報に基づく推論。オーナーアドレスがマルチシグだったかコントラクト検証が必要</td>
+<td>C3（推定）</td>
+</tr>
+</tbody></table>
+<p>原文初稿から修正した事項：</p>
+<ol>
+<li>2025年事案を「2025年2月28日」と維持しつつ、一部報道が公告時点基準で「昨年3月」と表記する点を併記</li>
+<li>DAXA取引支援終了時点を2025年6月と特定</li>
+<li>換金数量を「約3万個」から正確数値30,736へ置換</li>
+<li>資金移動経路にChainlink CCIPとPLAY Bridge経由を追加</li>
+<li>オンチェーン分析者表記をSpetorからSpecter（スペクター）へ訂正</li>
+<li>監査報告書件数および最近監査日数値を未検証項目として分離</li>
+<li>単一オーナーEOA構造主張を確定事実から推定へ格下げ</li>
+</ol>
+<h2>付録 B. 主要参考ソース</h2>
+<ul>
+<li>WEMIX財団公式公告（2026-07-27）およびXアカウント</li>
+<li>韓国経済、ヘラルド経済、アジア経済、The Elec、M経済ニュース、NewsPim、財経日報、Dailyian（2026-07-27~28報道）</li>
+<li>Cointelegraph Korea、事故対応およびサービス停止範囲（2026-07-27）</li>
+<li>デジタルタイムズ社説、民間ステーブルコイン構造論点（2026-07-28）</li>
+<li>CertiK公式ブログ：CertiK-WEMIXパートナーシップ拡大（2025-10）</li>
+<li>CertiK Skynet：プロジェクトページ、セキュリティリーダーボード、Skynet Score方法論文書</li>
+<li>WEMIXチーム技術ブログ：ブロックチェーン監査サービス解説（2023）</li>
+<li>法律新聞（Hwawoo）、2026年国内仮想資産10大イシューおよび第2段階立法現状（2026-01）</li>
+<li>Bizwatch、ステーブルコイン法案国会議論遅延（2026-06）</li>
+<li>セキュリティニュース、Upbit侵害事故およびOrbit Bridge事故関連報道</li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0730-WEMIX_JP.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

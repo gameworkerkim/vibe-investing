@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>위믹스(WEMIX) 연속 해킹 사태 분석: 스마트 컨트랙트 취약점, 보안 감사의 구조적 한계, 그리고 해결 프레임워크 — VibeQuant</title>
+  <meta name="description" content="피해 규모: 약 76~77억 원(발행사·언론 추산). 유출 확정 스테이블코인 기준 약 72만 4천 달러 상당의 USDC.e." />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-kr/" />
+  <meta property="og:title" content="위믹스(WEMIX) 연속 해킹 사태 분석: 스마트 컨트랙트 취약점, 보안 감사의 구조적 한계, 그리고 해결 프레임워크" />
+  <meta property="og:description" content="피해 규모: 약 76~77억 원(발행사·언론 추산). 유출 확정 스테이블코인 기준 약 72만 4천 달러 상당의 USDC.e." />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-kr/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-kr/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0730-wemix-kr/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"위믹스(WEMIX) 연속 해킹 사태 분석: 스마트 컨트랙트 취약점, 보안 감사의 구조적 한계, 그리고 해결 프레임워크","description":"피해 규모: 약 76~77억 원(발행사·언론 추산). 유출 확정 스테이블코인 기준 약 72만 4천 달러 상당의 USDC.e.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/cti-2026-0730-wemix-kr/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0730-WEMIX_KR.md","image":"https://vibequant.cc/og-default.png","url":"https://cti.vibequant.cc/cti/cti-2026-0730-wemix-kr/","datePublished":"2026-07-30","dateModified":"2026-07-30","inLanguage":"ko","keywords":"기타 CTI, KR, CTI"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"위믹스(WEMIX) 연속 해킹 사태 분석: 스마트 컨트랙트 취약점, 보안 감사의 구조적 한계, 그리고 해결 프레임워크","item":"https://cti.vibequant.cc/cti/cti-2026-0730-wemix-kr/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 기타 CTI</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 CTI</p>
+        <h1>위믹스(WEMIX) 연속 해킹 사태 분석: 스마트 컨트랙트 취약점, 보안 감사의 구조적 한계, 그리고 해결 프레임워크</h1>
+        <p class="article-dates"><time datetime="2026-07-30">발행 2026.07.30</time> · 주제 기타 CTI · KR · CTI</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn is-active" href="../../cti/cti-2026-0730-wemix-kr/" data-lang="KR" aria-current="true">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0730-wemix-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0730-wemix-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../cti/cti-2026-0730-wemix-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">피해 규모: 약 76~77억 원(발행사·언론 추산). 유출 확정 스테이블코인 기준 약 72만 4천 달러 상당의 USDC.e.</p>
+        
+      </header>
+      <div class="article-body prose"><h2>1. 핵심 판단 요약</h2>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>판단</th>
+<th>확신도</th>
+<th>근거</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>이번 사고는 컨트랙트 로직 버그가 아니라 <strong>권한(자격증명) 침해</strong>다. 즉 &quot;코드가 잘못 작동한 것&quot;이 아니라 &quot;코드가 설계대로 정확히 작동한&quot; 사고다</td>
+<td>높음</td>
+<td>발행사 공지 자체가 &quot;오너 권한 탈취&quot;를 원인으로 명시</td>
+</tr>
+<tr>
+<td>2</td>
+<td>발행 권한이 단일 오너 계정에 집중된 구조가 피해 규모를 무제한으로 확대시켰다. 키 1개 = 무한 민팅</td>
+<td>높음</td>
+<td>522만 개 단일 트랜잭션급 발행이 차단되지 않음</td>
+</tr>
+<tr>
+<td>3</td>
+<td>감사(Audit) 120회 이상, CertiK AAA 등급은 이번 유형의 사고를 막을 수 없었다. 감사 범위와 사고 발생 지점이 애초에 겹치지 않는다</td>
+<td>높음</td>
+<td>감사 범위는 온체인 코드, 사고 지점은 오프체인 키 관리</td>
+</tr>
+<tr>
+<td>4</td>
+<td>탐지 실패가 피해를 키웠다. 외부 온체인 분석가가 먼저 발견, 발행사 공식 인정까지 약 4시간</td>
+<td>높음</td>
+<td>다수 언론 보도 일치</td>
+</tr>
+<tr>
+<td>5</td>
+<td>2025년 사고(인증키 유출)와 2026년 사고(오너 권한 탈취)는 <strong>동일한 실패 계열</strong>이다. 두 번 모두 &quot;코드가 아니라 자격증명&quot;이 뚫렸다</td>
+<td>중간~높음</td>
+<td>2026년 사고의 정확한 침해 경로는 미공개</td>
+</tr>
+<tr>
+<td>6</td>
+<td>담보형 스테이블코인에서 무단 민팅은 단순 도난이 아니라 <strong>페그 신뢰 자체에 대한 공격</strong>이다</td>
+<td>높음</td>
+<td>WEMIX$는 USDC.e 담보 기반</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>한 줄 요약: <strong>감사 보고서는 엑셀이지 오라클이 아니다.</strong> 계산을 도와주는 도구일 뿐, 미래의 안전을 선언해주는 신탁이 아니다.</p>
+</blockquote>
+<hr>
+<h2>2. 통합 타임라인</h2>
+<h3>2.1 2026년 7월 사건</h3>
+<table>
+<thead>
+<tr>
+<th>시각(KST)</th>
+<th>이벤트</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2026-07-08</td>
+<td>WEMIX, 미국 거래소 크라켄(Kraken) 상장. 글로벌 유동성 확대 발표</td>
+</tr>
+<tr>
+<td>2026-07-08 전후</td>
+<td>위메이드, 원화 스테이블코인 전용 레이어1 &#39;스테이블넷&#39; 공개</td>
+</tr>
+<tr>
+<td>2026-07-26 18:17~18:18</td>
+<td>WEMIX$ 관련 스마트 컨트랙트 오너 권한 탈취, 무단 발행 트랜잭션 발생</td>
+</tr>
+<tr>
+<td>동일 시각 이후</td>
+<td>5,225,525 WEMIX$ 무단 발행 → 30,736 WEMIX + 724,198.27 USDC.e로 전환</td>
+</tr>
+<tr>
+<td>이후</td>
+<td>Chainlink CCIP · PLAY Bridge 경유, 이더리움 / BNB 스마트체인으로 이동 → ETH, USDT로 재스왑 후 다수 지갑 분산, 일부 CEX 유입</td>
+</tr>
+<tr>
+<td>2026-07-26 저녁</td>
+<td>온체인 분석가 스펙터(Specter)가 X에서 의심 트랜잭션 최초 공개</td>
+</tr>
+<tr>
+<td>2026-07-26 22:00경</td>
+<td>위믹스, 홈페이지 통해 보안 사고 공식 인정 (외부 최초 지적 후 약 4시간)</td>
+</tr>
+<tr>
+<td>2026-07-27</td>
+<td>브릿지 전면 중단(CCIP 중단, PLAY Bridge 일시정지), 유동성 풀 거래 정지 및 재단 유동성 회수, WEMIX$ 모듈·PNIX DEX 중단, 일부 게임 블록체인/NFT 기능 제한</td>
+</tr>
+<tr>
+<td>2026-07-27</td>
+<td>거래소 및 스테이블코인 발행사에 자산 동결 협조 요청, 공격자 지갑 추적 착수</td>
+</tr>
+<tr>
+<td>2026-07-27 (사고 후 약 23시간)</td>
+<td>권한 탈취 경위 <strong>미확인</strong> 상태로 공개. 외부 전문가와 연관 컨트랙트 전수 점검 진행</td>
+</tr>
+</tbody></table>
+<p>피해 규모: 약 76~77억 원(발행사·언론 추산). 유출 확정 스테이블코인 기준 약 72만 4천 달러 상당의 USDC.e.</p>
+<h3>2.2 2025년 2월 사건 (선행 사건)</h3>
+<table>
+<thead>
+<tr>
+<th>시각</th>
+<th>이벤트</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2024년 말~2025년 초</td>
+<td>개발자가 NILE NFT 플랫폼 모니터링용 인증 키를 보안이 취약한 공용 저장소에 업로드</td>
+</tr>
+<tr>
+<td>이후 약 2개월</td>
+<td>공격자 잠복. 정상 트래픽 속에서 권한 확인 및 준비</td>
+</tr>
+<tr>
+<td>2025-02-28</td>
+<td>Play Bridge Vault에서 8,654,860 WEMIX 비정상 출금 (당시 약 90억 원) — 총 15차례 인출</td>
+</tr>
+<tr>
+<td>2025-03 초 (사고 약 4일 후)</td>
+<td>위믹스, 사고 사실 공지</td>
+</tr>
+<tr>
+<td>2025-06</td>
+<td>DAXA 소속 국내 원화마켓 거래소에서 거래지원 종료(상장폐지)</td>
+</tr>
+</tbody></table>
+<p>두 사건 사이의 간격은 약 1년 5개월이다. 그 사이 위믹스는 인증키 교체와 보안 체계 재정비를 발표했다.</p>
+<hr>
+<h2>3. 취약점 기술 분석</h2>
+<h3>3.1 실패 지점의 정확한 위치</h3>
+<p>블록체인 보안 사고를 다음 4개 계층으로 분해하면 위믹스 두 사건의 위치가 명확해진다.</p>
+<table>
+<thead>
+<tr>
+<th>계층</th>
+<th>내용</th>
+<th>대표 사고 유형</th>
+<th>위믹스 사건 해당 여부</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>L1 프로토콜</td>
+<td>컨센서스, 노드, PoA 검증자</td>
+<td>51% 공격, 검증자 담합</td>
+<td>해당 없음</td>
+</tr>
+<tr>
+<td>L2 컨트랙트 로직</td>
+<td>재진입, 오버플로우, 가격 오라클 조작</td>
+<td>Cream, Euler 유형</td>
+<td>해당 없음</td>
+</tr>
+<tr>
+<td><strong>L3 권한·자격증명</strong></td>
+<td><strong>오너 키, 멀티시그 구성, 인증키, 배포 파이프라인</strong></td>
+<td><strong>Ronin, Harmony, Orbit Bridge 유형</strong></td>
+<td><strong>2025·2026 두 사건 모두 해당</strong></td>
+</tr>
+<tr>
+<td>L4 운영·거버넌스</td>
+<td>탐지, 공시, 대응 절차, 내부통제</td>
+<td>늑장 공시, 대응 실패</td>
+<td>두 사건 모두 해당</td>
+</tr>
+</tbody></table>
+<p>핵심: 업계 감사 예산과 마케팅 문구의 대부분은 L2에 집중되어 있고, 실제 대형 자금 유출 사고는 압도적으로 L3에서 발생한다.</p>
+<h3>3.2 세 가지 구조적 결함</h3>
+<p><strong>① 단일 오너 권한(Single Owner Privilege)</strong><code>onlyOwner</code> 수식어가 붙은 <code>mint()</code> 함수는 코드 관점에서 완전히 정상이다. 문제는 그 오너가 단일 EOA(또는 단일 키로 제어되는 계정)라는 점이다. 이 구조에서 공격자가 얻는 것은 &quot;함수 호출 권한&quot;이 아니라<strong>통화 발행권 그 자체</strong>다.</p>
+<pre><code>위험 함수 = f(권한 강도, 권한 보유자 수, 시간 지연, 금액 상한)
+
+WEMIX$ mint()  = f(무제한 발행, 사실상 1, 0초, 없음)
+안전한 설계      = f(제한 발행, m-of-n 다중서명, 24~48시간 타임락, 일일 상한)
+</code></pre>
+<p><strong>② 권한 계층 분리 부재</strong>발행(mint), 소각(burn), 일시정지(pause), 오너 이전(transferOwnership), 업그레이드(upgradeTo)는 위험 등급이 전혀 다른 함수다. 이를 하나의 오너 권한으로 묶으면 침해 시 피해가 곱셈으로 증가한다. 특히 <code>transferOwnership</code>이 타임락 없이 즉시 실행 가능하면 공격자는 침해 직후<strong>정당한 운영자를 배제</strong>할 수 있다.</p>
+<p><strong>③ 탐지·차단(Circuit Breaker) 부재</strong></p>
+<p>522만 개 무단 발행이 실시간으로 차단되지 않았고, 외부 분석가가 먼저 발견했다. 다음 세 가지 중 하나만 있어도 피해는 크게 줄었을 것이다.</p>
+<ul>
+<li>발행량 이상 탐지 알림 → 온콜 대응 (분 단위)</li>
+<li>발행 일일 상한(rate limit) 컨트랙트 레벨 강제 → 초과분 자동 revert</li>
+<li>가디언(guardian) 권한의 즉시 pause → 브릿지·풀 동시 동결</li>
+</ul>
+<h3>3.3 스테이블코인 특유의 증폭 효과</h3>
+<p>일반 유틸리티 토큰 탈취와 담보형 스테이블코인 무단 발행은 성격이 다르다.</p>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>일반 토큰 탈취</th>
+<th>담보형 스테이블코인 무단 발행</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1차 피해</td>
+<td>탈취 금액</td>
+<td>탈취 금액</td>
+</tr>
+<tr>
+<td>2차 피해</td>
+<td>시장 가격 하락</td>
+<td><strong>담보 대비 발행량 붕괴 → 페그 이탈</strong></td>
+</tr>
+<tr>
+<td>3차 피해</td>
+<td>홀더 손실</td>
+<td>결제·정산 수단으로 쓰는 모든 서비스 정지</td>
+</tr>
+<tr>
+<td>복구 난이도</td>
+<td>보상·소각</td>
+<td>준비금 재확인, 발행량 재산정, 페그 신뢰 재구축</td>
+</tr>
+<tr>
+<td>규제 리스크</td>
+<td>공시 위반</td>
+<td><strong>발행 준비금 규제 자체의 정당성 논쟁으로 확대</strong></td>
+</tr>
+</tbody></table>
+<p>WEMIX$는 USDC.e를 담보로 가치를 유지하는 구조였다. 공격자가 무단 발행분을 담보 자산(USDC.e)으로 교환해 반출한 순간, 이는 도난이 아니라 <strong>준비금 인출을 통한 페그 파괴</strong>가 된다. 발행량은 늘고 담보는 줄었다.</p>
+<h3>3.4 MITRE ATT&amp;CK 매핑 (추정 포함)</h3>
+<table>
+<thead>
+<tr>
+<th>전술</th>
+<th>기법</th>
+<th>적용</th>
+<th>확신도</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Credential Access</td>
+<td>T1552.001 Credentials In Files</td>
+<td>2025 사건: 공용 저장소 인증키 유출</td>
+<td>높음 (발행사 확인)</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>T1078 Valid Accounts</td>
+<td>정당한 오너 자격증명으로 정상 트랜잭션 실행</td>
+<td>높음</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>T1195.002 Supply Chain Compromise: Software</td>
+<td>배포 파이프라인/의존성 침해 가능성</td>
+<td>낮음 (미확인 가설)</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>T1566 Phishing</td>
+<td>운영자 대상 사회공학 가능성</td>
+<td>낮음 (미확인 가설)</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1070 Indicator Removal / 정상 함수 호출 위장</td>
+<td>감사·모니터링상 정상 트랜잭션으로 보임</td>
+<td>중간</td>
+</tr>
+<tr>
+<td>Impact</td>
+<td>T1657 Financial Theft</td>
+<td>무단 발행 후 크로스체인 자금 세탁</td>
+<td>높음</td>
+</tr>
+<tr>
+<td>Impact</td>
+<td>T1565 Data Manipulation</td>
+<td>총 발행량(supply) 조작</td>
+<td>높음</td>
+</tr>
+</tbody></table>
+<p>2026년 사건의 초기 침해 벡터(키 유출, 내부자, 피싱, 파이프라인 침해 중 무엇인가)는 <strong>현재 미공개</strong>다. 위 매핑 중 낮은 확신도 항목은 가설로만 취급해야 한다.</p>
+<hr>
+<h2>4. 감사(Audit)는 왜 이것을 막지 못했는가?</h2>
+<p>이 절이 본 문서의 핵심이다. 위믹스는 감사를 안 받은 프로젝트가 아니다. <strong>업계 평균을 훨씬 초과해서 받은</strong> 프로젝트라는 점이 심각성을 높이고 있다.</p>
+<table>
+<thead>
+<tr>
+<th>사실</th>
+<th>출처</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CertiK CEO 공개 발언: WEMIX는 CertiK와 120회 이상의 감사를 수행 (업계 평균 크게 초과)</td>
+<td>CertiK 공식 블로그, 2025 KBW 대담</td>
+</tr>
+<tr>
+<td>WEMIX는 CertiK Skynet AAA 등급 보유, 전 세계 소수 프로젝트만 획득</td>
+<td>CertiK 공식 블로그</td>
+</tr>
+<tr>
+<td>WEMIX 메인넷, 2023년 기준 CertiK 보안 점수 90.2점(상위 5%) 획득 후 인증 마크 노출</td>
+<td>위믹스 팀 공식 기술 블로그</td>
+</tr>
+<tr>
+<td>CertiK-WEMIX 파트너십 확대 주제에 &quot;한국 스테이블코인 혁신&quot; 포함</td>
+<td>CertiK 공식 블로그 (2025-10)</td>
+</tr>
+<tr>
+<td>Skynet 리더보드에서 WEMIX는 비트코인·이더리움 등과 함께 상위권에 노출</td>
+<td>CertiK Skynet 리더보드</td>
+</tr>
+</tbody></table>
+<p>즉 <strong>감사 수량, 등급, 모니터링 상품, 파트너십 전부 최상위였는데 사고는 두 번 발생했다.</strong> 이것은 특정 감사 업체의 실력 문제로 환원되지 않는, 감사 제도 자체의 구조적 문제다.</p>
+<h3>4.1 감사 범위와 사고 지점의 불일치</h3>
+<table>
+<thead>
+<tr>
+<th>감사가 실제로 검증하는 것</th>
+<th>이번 사고가 발생한 지점</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>컨트랙트 코드에 재진입·오버플로우·로직 오류가 있는가</td>
+<td>없었다 (해당 없음)</td>
+</tr>
+<tr>
+<td>권한 있는 계정만 mint를 호출할 수 있는가</td>
+<td>그렇다. 그리고 공격자가 그 권한 있는 계정이 되었다</td>
+</tr>
+<tr>
+<td>함수 접근 제어자가 올바르게 붙어 있는가</td>
+<td>붙어 있었다</td>
+</tr>
+<tr>
+<td>오너 키가 어디에 어떻게 보관되는가</td>
+<td><strong>감사 범위 밖</strong></td>
+</tr>
+<tr>
+<td>개발자가 자격증명을 저장소에 커밋하지 않는가</td>
+<td><strong>감사 범위 밖</strong></td>
+</tr>
+<tr>
+<td>운영자 단말·CI/CD·백오피스가 안전한가</td>
+<td><strong>감사 범위 밖 (별도 펜테스트 계약 필요)</strong></td>
+</tr>
+<tr>
+<td>사고 발생 시 몇 분 안에 탐지·차단되는가</td>
+<td><strong>감사 범위 밖 (모니터링 상품 영역)</strong></td>
+</tr>
+</tbody></table>
+<p>감사 보고서는 통상 &quot;오너 키는 안전하게 관리된다고 가정한다(assumption)&quot;는 문장을 포함한다. 이번 사고는 바로 그 <strong>가정문 안에서</strong> 터졌다. 보고서는 틀리지 않았다. 보고서가 답하지 않는 질문이 사고를 만들었을 뿐이다.</p>
+<h3>4.2 감사 제도의 다섯 가지 착시</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>착시</th>
+<th>실제</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>스코프 착시: &quot;감사 완료 = 프로젝트 안전&quot;</td>
+<td>감사 완료 = 특정 커밋의 특정 컨트랙트에서 알려진 패턴 미발견</td>
+</tr>
+<tr>
+<td>2</td>
+<td>스냅샷 착시: 감사받은 코드 = 운영 중 코드</td>
+<td>업그레이드·마이그레이션·권한 이전 후 배포 바이트코드가 감사본과 달라질 수 있다. Skynet 방법론조차 audit freshness와 audit coverage를 별도 지표로 두는 이유다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>가정 착시: 오프체인은 안전하다고 가정</td>
+<td>실제 대형 유출의 다수는 그 가정 안에서 발생</td>
+</tr>
+<tr>
+<td>4</td>
+<td>권고 착시: 중앙화 위험은 지적된다</td>
+<td>지적은 권고일 뿐, 수정 의무와 결정권은 프로젝트에 있다. &quot;중앙화 위험 인지 후 수용(acknowledged)&quot; 처리로 종결되는 경우가 흔하다</td>
+</tr>
+<tr>
+<td>5</td>
+<td>유인 착시: 감사는 독립적 검증이다</td>
+<td>감사 비용은 피감 프로젝트가 지불한다. 신용평가사 모델과 동일한 구조적 이해상충이 존재한다. 등급·점수·인증 마크는 마케팅 자산으로도 소비된다</td>
+</tr>
+</tbody></table>
+<h3>4.3 등급 체계의 역설: 무엇을 점수화하고 있는가?</h3>
+<p>CertiK Skynet 점수는 코드 보안, 펀더멘털, 운영 회복력, 거버넌스, 시장 안정성, 커뮤니티 신뢰 등 여러 카테고리를 종합한다. 문제는 이 종합 점수가 다음과 같이 소비된다는 점이다.</p>
+<ul>
+<li>프로젝트: &quot;AAA 등급&quot;이라는 단일 라벨로 마케팅</li>
+<li>투자자·이용자: &quot;감사 통과 = 원금 안전&quot;으로 오독</li>
+<li>실제 위험: 종합 점수는 커뮤니티 투표·시장 지표 등 <strong>보안과 무관한 변수</strong>에도 영향을 받는다</li>
+</ul>
+<p>높은 종합 점수는 &quot;이 프로젝트가 보안에 돈을 많이 썼다&quot;는 신호로는 유효하다. 하지만 &quot;이 프로젝트의 발행 키가 멀티시그로 보호되고 있다&quot;는 신호로는 유효하지 않다. <strong>투자자가 필요한 정보는 후자인데, 시장에 유통되는 정보는 전자다.</strong>흥미로운 점은, 위믹스 팀 자신이 2023년 기술 블로그에서 감사가 모든 사고를 막아주지는 못한다는 한계를 명시적으로 서술했다는 사실이다. 문제 인식이 없어서 사고가 난 것이 아니다.<strong>인식과 실행 사이의 간격</strong>이 사고를 만들었다.</p>
+<hr>
+<h2>5. 해결 프레임워크</h2>
+<h3>5.1 계층별 대응 매트릭스</h3>
+<table>
+<thead>
+<tr>
+<th>계층</th>
+<th>통제</th>
+<th>구체 요구사항</th>
+<th>우선도</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>컨트랙트</td>
+<td>권한 분산</td>
+<td>mint 권한을 3-of-5 이상 멀티시그로 이전, 서명자 키는 물리적·조직적으로 분리</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>컨트랙트</td>
+<td>타임락</td>
+<td>발행·업그레이드·오너 이전에 24~48시간 지연. 지연 구간에 공개 이벤트 발생</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>컨트랙트</td>
+<td>발행 상한</td>
+<td>일일/블록당 발행 한도 하드코딩. 초과 시 revert. 한도 변경 자체도 타임락 대상</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>컨트랙트</td>
+<td>서킷 브레이커</td>
+<td>가디언 권한(발행 불가, pause만 가능)으로 즉시 정지. 정지는 즉시, 해제는 멀티시그+타임락</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>컨트랙트</td>
+<td>담보 불변식</td>
+<td><code>totalSupply &lt;= collateralBalance * k</code> 온체인 검증. 위반 시 발행 자체 불가</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>키 관리</td>
+<td>HSM/MPC</td>
+<td>오너 키를 HSM 또는 MPC 임계서명으로 이관. 평문 키 파일 전면 금지</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>키 관리</td>
+<td>로테이션·감사로그</td>
+<td>정기 로테이션, 서명 요청 전건 로깅, 승인자 2인 이상</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>파이프라인</td>
+<td>시크릿 스캐닝</td>
+<td>저장소 pre-commit + push-protection 강제, 조직 전체 이력 스캔, 유출 시 자동 무효화</td>
+<td>P0 (2025 사건 재발 방지 직결)</td>
+</tr>
+<tr>
+<td>파이프라인</td>
+<td>배포 검증</td>
+<td>배포된 바이트코드와 감사본 해시 비교를 CI에서 강제. 불일치 시 배포 차단</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>탐지</td>
+<td>온체인 이상탐지</td>
+<td>supply 변동, owner 변경, 대량 발행, 브릿지 이례 유출에 대한 실시간 알림 + 온콜</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>탐지</td>
+<td>대응 SLA</td>
+<td>탐지→가디언 pause 15분 이내, 1차 공시 2시간 이내 목표</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>거버넌스</td>
+<td>권한 공개</td>
+<td>오너 주소, 멀티시그 구성, 타임락 파라미터, 가디언 주체를 상시 공개 문서화</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>거버넌스</td>
+<td>사고 공시 정책</td>
+<td>사전 정의된 공시 기준·채널·시한. &quot;조사 완료 후 공지&quot; 관행 폐기</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>검증</td>
+<td>운영 보안 감사</td>
+<td>코드 감사와 별도로 키 관리·내부통제·펜테스트를 연 1회 이상. 결과 요약 공개</td>
+<td>P1</td>
+</tr>
+</tbody></table>
+<h3>5.2 참조 구현 개념 (Solidity 의사코드)</h3>
+<pre><code class="language-solidity">// 목적: 키 1개 탈취가 무한 발행으로 이어지지 않게 하는 최소 구조
+// 핵심 = 다중서명 + 타임락 + 발행 상한 + 즉시 정지 + 담보 불변식
+
+contract GuardedStablecoin is ERC20, AccessControl, Pausable {
+    bytes32 public constant MINTER_ROLE   = keccak256(&quot;MINTER&quot;);   // 멀티시그 컨트랙트만 보유
+    bytes32 public constant GUARDIAN_ROLE = keccak256(&quot;GUARDIAN&quot;); // 정지 권한만, 발행 권한 없음
+
+    uint256 public dailyMintCap;        // 변경 시 타임락 필수
+    uint256 public mintedToday;
+    uint256 public currentDay;
+    uint256 public constant TIMELOCK = 24 hours;
+
+    IERC20 public immutable collateral;  // 예: USDC.e
+    address public immutable reserve;    // 준비금 보관 주소
+
+    struct MintRequest { uint256 amount; address to; uint256 readyAt; bool executed; }
+    mapping(bytes32 =&gt; MintRequest) public queue;
+
+    // 1단계: 발행 예약. 즉시 발행은 불가능하다
+    function requestMint(address to, uint256 amount)
+        external onlyRole(MINTER_ROLE) whenNotPaused returns (bytes32 id)
+    {
+        id = keccak256(abi.encode(to, amount, block.timestamp));
+        queue[id] = MintRequest(amount, to, block.timestamp + TIMELOCK, false);
+        emit MintRequested(id, to, amount, block.timestamp + TIMELOCK); // 공개 감시 창구
+    }
+
+    // 2단계: 타임락 경과 후 실행. 상한과 담보 불변식을 동시에 검증
+    function executeMint(bytes32 id) external onlyRole(MINTER_ROLE) whenNotPaused {
+        MintRequest storage r = queue[id];
+        require(!r.executed &amp;&amp; r.readyAt != 0 &amp;&amp; block.timestamp &gt;= r.readyAt, &quot;not ready&quot;);
+
+        if (block.timestamp / 1 days != currentDay) {
+            currentDay = block.timestamp / 1 days;
+            mintedToday = 0;
+        }
+        require(mintedToday + r.amount &lt;= dailyMintCap, &quot;daily cap&quot;);           // 무한 발행 차단
+        require(totalSupply() + r.amount &lt;= collateral.balanceOf(reserve), &quot;undercollateralized&quot;); // 페그 보호
+
+        mintedToday += r.amount;
+        r.executed = true;
+        _mint(r.to, r.amount);
+    }
+
+    // 즉시 정지는 단독 가능, 해제는 멀티시그 경유
+    function emergencyPause() external onlyRole(GUARDIAN_ROLE) { _pause(); }
+    function unpause() external onlyRole(DEFAULT_ADMIN_ROLE) { _unpause(); }
+}
+</code></pre>
+<p>설계 의도 요약</p>
+<table>
+<thead>
+<tr>
+<th>통제</th>
+<th>침해 시나리오에서의 효과</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MINTER = 멀티시그</td>
+<td>단일 키 탈취로는 발행 예약조차 불가</td>
+</tr>
+<tr>
+<td>타임락 + 이벤트</td>
+<td>예약 즉시 외부 감시자에게 노출, 24시간의 대응 창 확보</td>
+</tr>
+<tr>
+<td>일일 상한</td>
+<td>최악의 경우에도 손실이 유한. 522만 개 단발 발행 불가</td>
+</tr>
+<tr>
+<td>담보 불변식</td>
+<td>페그 붕괴형 발행 자체를 컨트랙트가 거부</td>
+</tr>
+<tr>
+<td>가디언 pause</td>
+<td>탐지 후 인적 승인 절차 없이 즉시 출혈 차단</td>
+</tr>
+</tbody></table>
+<h3>5.3 탐지 규칙 예시</h3>
+<pre><code>RULE-01  supply_anomaly
+  IF  totalSupply 변동률(5분) &gt; 1%  OR  단일 tx mint 금액 &gt; 일평균 발행량 * 3
+  THEN  P1 알림 + 가디언 온콜 호출 + 브릿지 자동 rate limit 하향
+
+RULE-02  privileged_call
+  IF  이벤트 IN (OwnershipTransferred, RoleGranted, Upgraded, CapChanged)
+  THEN  P0 알림 (예상된 변경이라도 무조건 통보) + 변경 사유 티켓 대조
+
+RULE-03  reserve_drain
+  IF  reserve 주소 USDC.e 잔액 감소 AND totalSupply 미감소
+  THEN  P0 알림 + 발행 자동 정지
+
+RULE-04  bridge_exfil
+  IF  단일 주소의 브릿지 아웃 금액(1h) &gt; 임계값 OR 신규 주소가 대량 자산 크로스체인 이동
+  THEN  P1 알림 + 해당 경로 일시 정지 + 거래소 동결 요청 템플릿 자동 생성
+</code></pre>
+<p>RULE-03은 이번 사건의 핵심 패턴(발행량 증가 + 담보 감소)을 직접 겨냥한다.</p>
+<h3>5.4 감사를 발주하는 쪽의 체크리스트</h3>
+<p>감사 계약서에 아래 항목이 없으면, 그 감사는 이번 유형의 사고를 막지 못한다.</p>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>확인 질문</th>
+<th>통상 감사 포함 여부</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>범위</td>
+<td>감사 대상 커밋 해시와 실제 배포 바이트코드가 일치하는가</td>
+<td>부분</td>
+</tr>
+<tr>
+<td>범위</td>
+<td>프록시·업그레이드 경로와 관리자 컨트랙트가 범위에 포함되는가</td>
+<td>부분</td>
+</tr>
+<tr>
+<td>권한</td>
+<td>특권 함수 전체 목록과 각 함수의 보유자·지연·상한이 문서화되었는가</td>
+<td>부분</td>
+</tr>
+<tr>
+<td>권한</td>
+<td>오너가 EOA인지 멀티시그인지, 임계값이 몇인지 보고서에 명시되는가</td>
+<td>미포함 다수</td>
+</tr>
+<tr>
+<td>키</td>
+<td>키 저장 방식(HSM/MPC/평문), 접근 인원, 로테이션 정책 실사</td>
+<td><strong>미포함</strong></td>
+</tr>
+<tr>
+<td>파이프라인</td>
+<td>CI/CD, 배포 서버, 운영자 단말에 대한 펜테스트</td>
+<td><strong>별도 계약</strong></td>
+</tr>
+<tr>
+<td>운영</td>
+<td>탐지-대응 훈련(테이블탑, 침해 시뮬레이션) 수행</td>
+<td><strong>미포함</strong></td>
+</tr>
+<tr>
+<td>사후</td>
+<td>지적된 중앙화 위험의 처리 상태(수정/수용)와 그 근거가 공개되는가</td>
+<td>부분</td>
+</tr>
+</tbody></table>
+<h3>5.5 감사 산업에 요구되는 변화</h3>
+<table>
+<thead>
+<tr>
+<th>현재</th>
+<th>필요한 전환</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>코드 감사 중심</td>
+<td>코드 + 키 관리 + 운영 보안을 묶은 <strong>운영 보안 감사(OpSec Audit)</strong> 로 확장</td>
+</tr>
+<tr>
+<td>종합 등급 라벨(AAA 등)</td>
+<td>항목별 분해 공개. 특히 &quot;특권 함수의 권한 구조&quot;를 독립 지표로 상시 노출</td>
+</tr>
+<tr>
+<td>시점 기반 스냅샷</td>
+<td>배포 바이트코드 지속 대조 + 권한 변경 실시간 추적</td>
+</tr>
+<tr>
+<td>권고 후 종결</td>
+<td>미수정 고위험 항목의 <strong>잔여 위험 공개 의무화</strong></td>
+</tr>
+<tr>
+<td>피감기관 비용 부담</td>
+<td>거래소·재단·보험사 등 제3자 발주 감사 병행으로 이해상충 완화</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. 유사 사고 비교 - 이것은 위믹스만의 문제가 아니다</h2>
+<table>
+<thead>
+<tr>
+<th>사건</th>
+<th>시점</th>
+<th>규모</th>
+<th>근본 원인 계층</th>
+<th>코드 버그 여부</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Orbit Bridge (오지스)</td>
+<td>2024-01</td>
+<td>약 8,150만 달러</td>
+<td>권한·자격증명 (L3)</td>
+<td>아니오</td>
+</tr>
+<tr>
+<td>WEMIX Play Bridge Vault</td>
+<td>2025-02</td>
+<td>약 90억 원</td>
+<td>인증키 유출 (L3)</td>
+<td>아니오</td>
+</tr>
+<tr>
+<td>업비트 핫월렛</td>
+<td>2025-11</td>
+<td>약 445억 원</td>
+<td>개인키 추정 가능 취약점 (L3)</td>
+<td>부분</td>
+</tr>
+<tr>
+<td>WEMIX$ 컨트랙트</td>
+<td>2026-07</td>
+<td>약 77억 원</td>
+<td>오너 권한 탈취 (L3)</td>
+<td>아니오</td>
+</tr>
+</tbody></table>
+<p>2026년 상반기 가상자산 해킹 피해는 약 1.6조 원 규모로 집계되며, 북한 연계 위협 그룹의 활동이 두드러졌다. 이 통계가 시사하는 바는 분명하다. <strong>자금은 컨트랙트 로직이 아니라 사람과 키를 통해 빠져나간다.</strong> 방어 예산 배분이 이 사실과 정반대로 편성되어 있는 것이 업계의 구조적 문제다.</p>
+<p>스마트컨트랙트는 이제 거의 규격화되어 있고 성공적인 컨트랙트는 복제된다. 컨트랙트를 자체 분석하기 힘든 프로젝트들이 다수 있고 이들 역시 위험군으로 볼 수 있다.</p>
+<p>이렇다면 컨트랙트에 기본적인 보안 가이드가 있어야하지 않겠나라는 구조적인 안정성을 부여하는 것이 맞다. ERC20 솔리디티의 구조적인 한계가 내포되어 있다.</p>
+<hr>
+<h2>7. 정책·규제 시사점</h2>
+<p>한국은 가상자산이용자보호법 이후 2단계 입법(스테이블코인 규율 포함)을 추진했으나, 발행 주체 요건 논쟁과 정치 일정으로 논의가 지연된 상태다. 이번 사건은 그 공백 구간에서 발생했다.</p>
+<table>
+<thead>
+<tr>
+<th>쟁점</th>
+<th>이번 사건이 제기한 질문</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>발행 주체 요건</td>
+<td>무단 발행을 컨트랙트 레벨에서 막을 수 없는 발행 구조를 허용할 것인가</td>
+</tr>
+<tr>
+<td>준비금 규제</td>
+<td>준비금 실사가 회계 감사만으로 충분한가. 온체인 담보 불변식 강제는 불가능한가</td>
+</tr>
+<tr>
+<td>기술 요건</td>
+<td>발행 권한의 멀티시그·타임락·발행 상한을 <strong>인가 요건</strong>으로 명문화할 것인가</td>
+</tr>
+<tr>
+<td>사고 공시</td>
+<td>침해 인지 후 공시 시한을 규범화할 것인가 (2025년 4일, 2026년 4시간)</td>
+</tr>
+<tr>
+<td>감사 규율</td>
+<td>&quot;감사 완료&quot; 표시를 광고에 사용할 때의 범위 명시 의무를 부과할 것인가</td>
+</tr>
+<tr>
+<td>국경 간 회수</td>
+<td>브릿지 경유 자금 동결·회수를 위한 국제 공조 절차의 실효성</td>
+</tr>
+</tbody></table>
+<p>특히 마지막 항목: 이번에도 자금은 몇 시간 안에 이더리움·BSC를 거쳐 다수 지갑으로 분산되었다. 발행사의 동결 요청은 자금이 이미 이동한 후에 발송된다. <strong>탐지 지연은 그대로 회수 실패로 이어진다.</strong></p>
+<hr>
+<h2>8. 맺으며</h2>
+<p>위믹스의 두 사건은 서로 다른 사고가 아니다. 같은 실패의 두 번째 데자뷰이다.</p>
+<ul>
+<li>2025년: 자격증명이 잘못된 곳에 저장되었다</li>
+<li>2026년: 자격증명이 탈취되었고, 그 자격증명 하나가 통화 발행권 전체를 의미했다</li>
+</ul>
+<p>두 번 모두 컨트랙트 코드는 설계대로 정확히 작동했다. 120회가 넘는 감사와 AAA 등급도 이를 막지 못했는데, 그것은 감사가 부실했기 때문이 아니라 <strong>감사가 답하는 질문과 사고가 발생한 지점이 애초에 다른 영역이었기 때문이다.</strong></p>
+<p>탈중앙화를 표방하는 시스템이 단일 관리자 키에 의존할 때, 그 키는 시스템 전체의 아킬레스건이 된다. 그것이 컨트랙트에 명시적으로 코딩되어 있든, 오프체인 어딘가의 파일에 보관되어 있든 결과는 같다.</p>
+<p>진정한 보안은 감사 보고서의 스탬프가 아니라 세 가지에서 나온다. <strong>권한의 분산, 손실의 상한, 그리고 분 단위 탐지.</strong> 앞의 두 가지는 컨트랙트에 코드로 새겨야 하고, 마지막 하나는 조직에 절차로 새겨야 한다. 보고서는 그 다음이다.</p>
+<hr>
+<h2>부록 A. 검증 노트 (Admiralty Code)</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>상태</th>
+<th>확신도</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>사고 발생 시각 2026-07-26 18:17~18:18 KST</td>
+<td>다수 언론 일치</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>무단 발행량 5,225,525 WEMIX$</td>
+<td>발행사 공지</td>
+<td>A1</td>
+</tr>
+<tr>
+<td>전환 내역 30,736 WEMIX / 724,198.27 USDC.e</td>
+<td>발행사 공지</td>
+<td>A1</td>
+</tr>
+<tr>
+<td>피해 규모 76~77억 원</td>
+<td>언론 추산, 시세 변동에 따라 변동 가능</td>
+<td>B2</td>
+</tr>
+<tr>
+<td>외부 최초 지적 후 약 4시간 뒤 공식 인정</td>
+<td>다수 언론 일치</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>자금 경로: CCIP·PLAY Bridge → 이더리움/BSC → ETH·USDT 분산</td>
+<td>발행사 및 언론</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>사고 후 약 23시간 시점 원인 미확인</td>
+<td>언론 보도</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>2025-02-28 Play Bridge Vault 8,654,860 WEMIX 유출</td>
+<td>발행사 공지 및 언론</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>2025년 사건 원인: 공용 저장소 인증키 업로드 후 약 2개월 잠복, 15회 인출</td>
+<td>발행사 설명</td>
+<td>B2</td>
+</tr>
+<tr>
+<td>2025-06 국내 원화마켓 거래지원 종료</td>
+<td>언론</td>
+<td>A2</td>
+</tr>
+<tr>
+<td>CertiK 감사 120회 이상, AAA Skynet 등급</td>
+<td>CertiK 공식 발표 (자체 주장)</td>
+<td>B1</td>
+</tr>
+<tr>
+<td>WEMIX 메인넷 보안 점수 90.2 (2023)</td>
+<td>위믹스 자체 기술 블로그</td>
+<td>B2</td>
+</tr>
+<tr>
+<td><strong>감사 보고서 80여 개 보유&quot;, &quot;최근 감사 2026-05-27 완료</strong></td>
+<td><strong>원문 초안 기재 수치. 본 문서에서는 미검증으로 분류. Skynet 프로젝트 페이지에서 직접 확인 필요</strong></td>
+<td><strong>F (판단 보류)</strong></td>
+</tr>
+<tr>
+<td>2026년 사건의 구체적 침해 벡터</td>
+<td>발행사 미공개</td>
+<td>F (판단 보류)</td>
+</tr>
+<tr>
+<td>단일 오너 EOA 구조였다는 판단</td>
+<td>공개 정보 기반 추론. 오너 주소가 멀티시그였는지 컨트랙트 검증 필요</td>
+<td>C3 (추정)</td>
+</tr>
+</tbody></table>
+<p>원문 초안에서 수정한 사항:</p>
+<ol>
+<li>2025년 사건을 &quot;2025년 2월 28일&quot;로 유지하되, 일부 언론이 공지 시점을 기준으로 &quot;지난해 3월&quot;로 표기하는 점을 병기</li>
+<li>DAXA 거래지원 종료 시점을 2025년 6월로 특정</li>
+<li>전환 수량을 &quot;약 3만 개&quot;에서 정확 수치 30,736으로 교체</li>
+<li>자금 이동 경로에 Chainlink CCIP와 PLAY Bridge 경유를 추가</li>
+<li>온체인 분석가 표기를 Spetor에서 Specter(스펙터)로 정정</li>
+<li>감사 보고서 개수 및 최근 감사일 수치를 미검증 항목으로 분리</li>
+<li>단일 오너 EOA 구조 주장을 확정 사실에서 추정으로 하향</li>
+</ol>
+<h2>부록 B. 주요 참고 출처</h2>
+<ul>
+<li>위믹스 재단 공식 공지 (2026-07-27) 및 X 계정</li>
+<li>한국경제, 헤럴드경제, 아시아경제, 디일렉, M이코노미뉴스, 뉴스핌, 재경일보, 데일리안 (2026-07-27~28 보도)</li>
+<li>코인텔레그래프 코리아, 사고 대응 및 서비스 중단 범위 (2026-07-27)</li>
+<li>디지털타임스 사설, 민간 스테이블코인 구조 논점 (2026-07-28)</li>
+<li>CertiK 공식 블로그: CertiK-WEMIX 파트너십 확대 (2025-10)</li>
+<li>CertiK Skynet: 프로젝트 페이지, 보안 리더보드, Skynet Score 방법론 문서</li>
+<li>위믹스 팀 기술 블로그: 블록체인 감사 서비스 해설 (2023)</li>
+<li>법률신문(화우), 2026년 국내 가상자산 10대 이슈 및 2단계 입법 현황 (2026-01)</li>
+<li>비즈워치, 스테이블코인 법안 국회 논의 지연 (2026-06)</li>
+<li>보안뉴스, 업비트 침해 사고 및 오르빗 브릿지 사고 관련 보도</li>
+</ul>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0730-WEMIX_KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
