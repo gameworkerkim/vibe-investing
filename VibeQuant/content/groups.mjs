@@ -17,7 +17,7 @@ export const COLUMN_GROUP_RULES = [
   { id: "macro-geo", title_ko: "매크로 · 지정학", title_en: "Macro · Geopolitics", match: [/pax americana/i, /trump/i, /defense/i, /rome/i, /world_bank/i, /us treasury/i, /japan/i, /china /i, /drone/i, /tobacco/i] },
   { id: "quant-strategy", title_ko: "퀀트 · 투자 전략", title_en: "Quant · Strategy", match: [/momentum/i, /special situations/i, /insider/i, /model vs reality/i, /medbridge/i, /semiconductor ai etf/i, /stock_option/i, /money_game/i] },
   { id: "semi-storage", title_ko: "반도체 · 스토리지", title_en: "Semi · Storage", match: [/storage war/i, /marvell/i, /intel/i, /memory/i, /semi/i] },
-  { id: "industry", title_ko: "산업 · 소비", title_en: "Industry · Consumer", match: [/uber/i, /netflex/i, /netflix/i, /mokrak/i, /luxury/i, /webtoon/i, /kidult/i, /ford/i, /adobe/i, /voce/i, /brain/i, /bouble/i, /cyber wrecker/i, /518/i] },
+  { id: "industry", title_ko: "산업 · 소비", title_en: "Industry · Consumer", match: [/uber/i, /netflex/i, /netflix/i, /mokrak/i, /luxury/i, /webtoon/i, /kidult/i, /ford/i, /adobe/i, /voce/i, /brain/i, /bouble/i, /cyber wrecker/i, /518/i, /startup/i, /shelf-life/i] },
 ];
 
 /** Recommended media columns (relative to 03. Media-Column/) */
@@ -62,7 +62,9 @@ export const ESSAY_GROUP_FALLBACK = { id: "other", title_ko: "기타 에세이",
 
 /** Paths (substring) that should appear in Recommended — order = display order */
 export const FEATURED_COLUMN_PATHS = [
+  "Startup/Shelf-Life-of-Innovation.md",
   "Cyworld/The-Pros-and-Cons-of-VC-Investment-as-Seen-Through-the-Cyworld-RCPS-Contract.md",
+
   "DeepSeek V4/LiangWenfeng-DeepSeek-AGI.md",
   "AI_Hacking/Huggingface-Breach-v2.md",
   "AI_Revolution/China_LLM_Compare.md",
