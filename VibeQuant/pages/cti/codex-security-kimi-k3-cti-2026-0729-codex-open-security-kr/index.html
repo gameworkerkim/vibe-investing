@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Codex Open Security — OpenAI Codex Security의 오픈웨이트 전환 분석 및 포팅 보고서 — VibeQuant</title>
+  <meta name="description" content="GPT 5.6 → DeepSeek V4/Kimi K3/Qwen: 폐쇄형 보안 스캐너를 오픈웨이트로 전환할 때의 아키텍처 결정과 위협 모델 변화" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/codex-security-kimi-k3-cti-2026-0729-codex-open-security-kr/" />
+  <meta property="og:title" content="Codex Open Security — OpenAI Codex Security의 오픈웨이트 전환 분석 및 포팅 보고서" />
+  <meta property="og:description" content="GPT 5.6 → DeepSeek V4/Kimi K3/Qwen: 폐쇄형 보안 스캐너를 오픈웨이트로 전환할 때의 아키텍처 결정과 위협 모델 변화" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/codex-security-kimi-k3-cti-2026-0729-codex-open-security-kr/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Codex Open Security — OpenAI Codex Security의 오픈웨이트 전환 분석 및 포팅 보고서","description":"GPT 5.6 → DeepSeek V4/Kimi K3/Qwen: 폐쇄형 보안 스캐너를 오픈웨이트로 전환할 때의 아키텍처 결정과 위협 모델 변화","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/codex-security-kimi-k3-cti-2026-0729-codex-open-security-kr/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/Codex-Security-KiMI-K3/CTI-2026-0729-CODEX-OPEN-SECURITY_KR.md","image":"https://vibequant.cc/og-default.png","url":"https://cti.vibequant.cc/cti/codex-security-kimi-k3-cti-2026-0729-codex-open-security-kr/","datePublished":"2026-07-29","dateModified":"2026-07-30","inLanguage":"ko","keywords":"기타 CTI, KR, CTI"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"Codex Open Security — OpenAI Codex Security의 오픈웨이트 전환 분석 및 포팅 보고서","item":"https://cti.vibequant.cc/cti/codex-security-kimi-k3-cti-2026-0729-codex-open-security-kr/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 기타 CTI</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 CTI</p>
+        <h1>Codex Open Security — OpenAI Codex Security의 오픈웨이트 전환 분석 및 포팅 보고서</h1>
+        <p class="article-dates"><time datetime="2026-07-29">발행 2026.07.29</time> · 주제 기타 CTI · KR · CTI · <time datetime="2026-07-30">수정 2026.07.30</time></p>
+        
+        <p class="lede">GPT-5.6 → DeepSeek V4/Kimi K3/Qwen: 폐쇄형 보안 스캐너를 오픈웨이트로 전환할 때의 아키텍처 결정과 위협 모델 변화</p>
+        <p class="article-byline">Dennis Kim / HoKwang Kim · 2026-07-29</p>
+        <nav class="share-bar" aria-label="공유" data-url="https://cti.vibequant.cc/cti/codex-security-kimi-k3-cti-2026-0729-codex-open-security-kr/" data-title="Codex Open Security — OpenAI Codex Security의 오픈웨이트 전환 분석 및 포팅 보고서" data-text="GPT 5.6 → DeepSeek V4/Kimi K3/Qwen: 폐쇄형 보안 스캐너를 오픈웨이트로 전환할 때의 아키텍처 결정과 위협 모델 변화" data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcodex-security-kimi-k3-cti-2026-0729-codex-open-security-kr%2F&amp;text=Codex%20Open%20Security%20%E2%80%94%20OpenAI%20Codex%20Security%EC%9D%98%20%EC%98%A4%ED%94%88%EC%9B%A8%EC%9D%B4%ED%8A%B8%20%EC%A0%84%ED%99%98%20%EB%B6%84%EC%84%9D%20%EB%B0%8F%20%ED%8F%AC%ED%8C%85%20%EB%B3%B4%EA%B3%A0%EC%84%9C" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcodex-security-kimi-k3-cti-2026-0729-codex-open-security-kr%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcodex-security-kimi-k3-cti-2026-0729-codex-open-security-kr%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="kakao">KakaoTalk</button>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p><em>GPT-5.6 → DeepSeek V4/Kimi K3/Qwen: 폐쇄형 보안 스캐너를 오픈웨이트로 전환할 때의 아키텍처 결정과 위협 모델 변화</em></p>
+<hr>
+<h2>1. 배경</h2>
+<p>2026년 7월, OpenAI는 <code>@openai/codex-security</code>를 공개했다. 이는 GPT-5.6 계열 모델을 백엔드로 사용하는 CLI + TypeScript SDK 기반의 코드 보안 취약점 스캐너다. 그러나 이 도구는 <code>@openai/codex</code>라는 <strong>폐쇄형 Rust 바이너리</strong>에 의존하며, API 엔드포인트와 모델 선택이 하드코딩되어 있다.</p>
+<p>Vibe Quant Insight #001에서 분석한 바와 같이, 2026년 7월 현재 DeepSeek V4, Kimi K3, Qwen3 등 오픈웨이트 모델이 프론티어 성능에 도달했으며, 코드 분석 태스크에서도 폐쇄형 모델과 동등하거나 우수한 성능을 보인다.</p>
+<p>이 보고서는 OpenAI Codex Security를 오픈웨이트 모델로 전환(<code>@gameworkerkim/codex-open-security</code>)하는 과정의 기술적 분석, 아키텍처 결정, 그리고 남은 과제를 문서화한다.</p>
+<hr>
+<h2>2. 원본 아키텍처 분석 — <code>@openai/codex-security</code></h2>
+<h3>2.1 의존성 체인</h3>
+<pre><code>codex-security CLI (Node.js)
+  ├── @openai/codex-sdk (TypeScript wrapper)
+  │     └── @openai/codex (Rust binary, closed-source)
+  │           ├── Multi-agent orchestration
+  │           ├── Plugin marketplace
+  │           └── Direct OpenAI API calls (hardcoded endpoint)
+  └── _bundled_plugin/ (Python security scanning skills)
+</code></pre>
+<h3>2.2 폐쇄형 의존성이 만드는 위험</h3>
+<table>
+<thead>
+<tr>
+<th>위험</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>API 종속성</strong></td>
+<td>OpenAI API 장애 시 전체 파이프라인 중단</td>
+</tr>
+<tr>
+<td><strong>공급망 단일 장애점</strong></td>
+<td><code>@openai/codex</code> 바이너리 하나가 모든 보안 스캔의 유일 통로</td>
+</tr>
+<tr>
+<td><strong>검증 불가능성</strong></td>
+<td>Rust 바이너리의 내부 로직 감사 불가</td>
+</tr>
+<tr>
+<td><strong>비용 예측 불가</strong></td>
+<td>GPT-5.6 계열의 가격 정책이 벤더에 의해 일방적으로 결정됨</td>
+</tr>
+<tr>
+<td><strong>수출 통제 리스크</strong></td>
+<td>API 접근이 규제 대상이 될 경우 모든 CI 파이프라인이 영향을 받음</td>
+</tr>
+</tbody></table>
+<h3>2.3 포팅 시 핵심 도전 과제</h3>
+<table>
+<thead>
+<tr>
+<th>컴포넌트</th>
+<th>원본</th>
+<th>포팅 접근법</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>모델 호출</td>
+<td><code>@openai/codex</code> Rust 바이너리</td>
+<td><code>openai</code> npm SDK → DeepSeek/Kimi/Qwen API</td>
+</tr>
+<tr>
+<td>인증</td>
+<td>ChatGPT OAuth + API Key</td>
+<td>API Key only (환경변수)</td>
+</tr>
+<tr>
+<td>비용 추적</td>
+<td>세션 JSONL 파일 파싱</td>
+<td>Provider-native pricing 반영</td>
+</tr>
+<tr>
+<td>멀티에이전트</td>
+<td><code>features.multi_agent_v2</code></td>
+<td>미지원 (단일 모델 배치 처리)</td>
+</tr>
+<tr>
+<td>플러그인</td>
+<td>Python <code>_bundled_plugin/</code></td>
+<td>프롬프트 엔지니어링 기반</td>
+</tr>
+<tr>
+<td>구조화 출력</td>
+<td><code>response_format: { type: &quot;json_object&quot; }</code></td>
+<td>OpenAI 호환 포맷 사용</td>
+</tr>
+<tr>
+<td>스캔 이력</td>
+<td><code>~/.codex/sessions/</code> local DB</td>
+<td>미구현 (향후 추가)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. 포팅된 아키텍처 — <code>@gameworkerkim/codex-open-security</code></h2>
+<h3>3.1 의존성 그래프</h3>
+<pre><code>codex-open-security CLI (Node.js, TypeScript)
+  ├── openai npm SDK
+  │     └── OpenAI-compatible REST API
+  │           ├── DeepSeek (api.deepseek.com)
+  │           ├── Kimi K3 (api.moonshot.cn)
+  │           └── Qwen (dashscope-intl.aliyuncs.com)
+  ├── Commander (CLI framework)
+  └── Zero native dependencies
+</code></pre>
+<h3>3.2 설계 원칙</h3>
+<ol>
+<li><strong>Zero native binary dependency</strong> — 순수 TypeScript + npm만으로 동작</li>
+<li><strong>Provider abstraction</strong> — <code>providers.ts</code>에서 제공자 설정을 중앙 관리</li>
+<li><strong>OpenAI-compatible protocol</strong> — OpenAI SDK가 지원하는 모든 호환 API를 provider 추가만으로 지원</li>
+<li><strong>Batch-based scan</strong> — 단일 모델 호출로 5개 파일씩 배치 처리</li>
+</ol>
+<h3>3.3 모델 선택 매트릭스</h3>
+<table>
+<thead>
+<tr>
+<th>사용 사례</th>
+<th>추천 모델</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>일반 코드 보안 스캔</strong></td>
+<td>DeepSeek V4 (<code>deepseek-chat</code>)</td>
+<td>가성비 최상 ($0.27/1M input), SWE-bench 80.6</td>
+</tr>
+<tr>
+<td><strong>딥 다이브 분석</strong></td>
+<td>DeepSeek V4-Pro (<code>deepseek-reasoner</code>)</td>
+<td>Chain-of-thought 추론, 복잡한 취약점 패턴 탐지</td>
+</tr>
+<tr>
+<td><strong>프론트엔드 코드</strong></td>
+<td>Kimi K3 (<code>kimi-k3</code>)</td>
+<td>Frontend Code Arena 1위, JSX/TSX 분석 특화</td>
+</tr>
+<tr>
+<td><strong>멀티랭귀지 대량 스캔</strong></td>
+<td>Qwen3-Max (<code>qwen-max</code>)</td>
+<td>다국어 취약점 패턴 인식 우수</td>
+</tr>
+<tr>
+<td><strong>CI 통합 (비용 제약)</strong></td>
+<td>Qwen3-Plus (<code>qwen-plus</code>)</td>
+<td>$0.80/1M input, 대량 스캔에 적합</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. CTI 함의 — 오픈웨이트 보안 도구의 등장</h2>
+<h3>4.1 위협 모델의 변화</h3>
+<p>이 포크가 단순한 &quot;무료 대체제&quot; 이상인 이유는 세 가지다:</p>
+<ol>
+<li><p><strong>검증 가능한 보안 도구</strong> — 폐쇄형 바이너리가 없는 구조는 도구 자체의 공급망 공격 표면을 줄인다. <code>@openai/codex</code> Rust 바이너리를 신뢰해야 하는 원본과 달리, 이 포크는 모든 코드가 감사 가능하다.</p>
+</li>
+<li><p><strong>다중 제공자 리던던시</strong> — 단일 LLM 제공자의 장애나 정책 변경이 전체 보안 스캔 파이프라인을 중단시키지 않는다. DeepSeek 장애 → Kimi K3 fallback, Kimi K3 비용 급등 → Qwen으로 전환.</p>
+</li>
+<li><p><strong>온프렘 전환 경로</strong> — API 기반이지만, DeepSeek V4와 Qwen3의 오픈웨이트 가중치를 자체 GPU 클러스터에 배포하면 완전한 오프라인 보안 스캔이 가능하다. 이는 망분리 환경(금융·국방)에서 결정적 차이를 만든다.</p>
+</li>
+</ol>
+<h3>4.2 공격자 관점</h3>
+<p>오픈웨이트 모델 기반 보안 도구의 확산은 공격자에게도 동일한 기능을 제공한다:</p>
+<ul>
+<li>악성코드 개발자가 Kimi K3로 자신의 코드를 보안 스캔 → 탐지 회피 최적화</li>
+<li>LLM 보조 리버스 엔지니어링(한화비전 사례 참조)의 경제성이 더욱 개선됨</li>
+</ul>
+<p>이는 보안 도구의 민주화가 <strong>공격과 방어 양측에 대칭적으로 적용된다</strong>는 점을 재확인한다.</p>
+<hr>
+<h2>5. 남은 과제</h2>
+<table>
+<thead>
+<tr>
+<th>과제</th>
+<th>심각도</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Python 플러그인 미지원</td>
+<td>Medium</td>
+<td>원본의 <code>_bundled_plugin/</code> (Python security skills) 없음</td>
+</tr>
+<tr>
+<td>멀티에이전트 미지원</td>
+<td>Low</td>
+<td>단일 모델로도 충분한 정확도 확보 가능</td>
+</tr>
+<tr>
+<td>스캔 이력 관리</td>
+<td>Low</td>
+<td><code>scans list/show/rerun/compare</code> 미구현</td>
+</tr>
+<tr>
+<td>CSV 벌크 스캔</td>
+<td>Low</td>
+<td>다수 레포지토리 일괄 스캔 미지원</td>
+</tr>
+<tr>
+<td>비용 추적 UI</td>
+<td>Low</td>
+<td>Provider-native pricing만 제공</td>
+</tr>
+<tr>
+<td>응답 포맷 호환성</td>
+<td>Medium</td>
+<td>일부 모델(Kimi K3)에서 JSON structured output 미지원 가능성</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>6. 결론</h2>
+<p>OpenAI Codex Security의 오픈웨이트 전환은 기술적으로 실행 가능하며, DeepSeek V4와 Kimi K3의 현재 벤치마크 성능을 고려할 때 실무에서 충분한 정확도를 기대할 수 있다.</p>
+<p>핵심 제약은 <code>@openai/codex</code> Rust 바이너리가 제공하는 멀티에이전트 오케스트레이션과 Python 플러그인 시스템의 부재다. 그러나 단일 모델 + 프롬프트 엔지니어링만으로도 OWASP Top 10 및 CWE Top 25 수준의 취약점 탐지에는 충분한 정확도를 확보할 수 있다.</p>
+<p>오픈웨이트 진영이 프론티어 성능에 도달한 현 시점에서, 보안 도구의 오픈웨이트 전환은 더 이상 &quot;가능한가&quot;의 문제가 아니라 &quot;얼마나 빨리&quot;의 문제다.</p>
+<hr>
+<h2>변경 이력</h2>
+<table>
+<thead>
+<tr>
+<th>버전</th>
+<th>일자</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v1.0</td>
+<td>2026-07-29</td>
+<td>최초 발행 — OpenAI Codex Security 분석 및 오픈웨이트 포팅 보고</td>
+</tr>
+</tbody></table>
+<hr>
+<p><strong>© 2026 Dennis Kim (김호광) · Cyber Threat Intelligence Division</strong> <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · <a href="https://github.com/gameworkerkim/">github.com/gameworkerkim</a></p>
+<p><em>본 리포트는 교육·연구 목적의 기술 분석입니다. TLP:GREEN — 커뮤니티 내 공유 가능.</em></p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://cti.vibequant.cc/cti/codex-security-kimi-k3-cti-2026-0729-codex-open-security-kr/" data-title="Codex Open Security — OpenAI Codex Security의 오픈웨이트 전환 분석 및 포팅 보고서" data-text="GPT 5.6 → DeepSeek V4/Kimi K3/Qwen: 폐쇄형 보안 스캐너를 오픈웨이트로 전환할 때의 아키텍처 결정과 위협 모델 변화" data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcodex-security-kimi-k3-cti-2026-0729-codex-open-security-kr%2F&amp;text=Codex%20Open%20Security%20%E2%80%94%20OpenAI%20Codex%20Security%EC%9D%98%20%EC%98%A4%ED%94%88%EC%9B%A8%EC%9D%B4%ED%8A%B8%20%EC%A0%84%ED%99%98%20%EB%B6%84%EC%84%9D%20%EB%B0%8F%20%ED%8F%AC%ED%8C%85%20%EB%B3%B4%EA%B3%A0%EC%84%9C" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcodex-security-kimi-k3-cti-2026-0729-codex-open-security-kr%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcodex-security-kimi-k3-cti-2026-0729-codex-open-security-kr%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="kakao">KakaoTalk</button>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/Codex-Security-KiMI-K3/CTI-2026-0729-CODEX-OPEN-SECURITY_KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=1" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

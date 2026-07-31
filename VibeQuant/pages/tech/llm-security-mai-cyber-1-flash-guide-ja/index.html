@@ -1,0 +1,1339 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MAI-Cyber-1-Flash 技術ガイド — VibeQuant</title>
+  <meta name="description" content="AIが作った脆弱性をAIが防御する — マイクロソフト初のサイバーセキュリティ専用モデルとその競争環境" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/llm-security-mai-cyber-1-flash-guide-ja/" />
+  <meta property="og:title" content="MAI-Cyber-1-Flash 技術ガイド" />
+  <meta property="og:description" content="AIが作った脆弱性をAIが防御する — マイクロソフト初のサイバーセキュリティ専用モデルとその競争環境" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/llm-security-mai-cyber-1-flash-guide-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/llm-security-mai-cyber-1-flash-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/llm-security-mai-cyber-1-flash-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-security-mai-cyber-1-flash-guide-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-security-mai-cyber-1-flash-guide-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-security-mai-cyber-1-flash-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MAI-Cyber-1-Flash 技術ガイド","description":"AIが作った脆弱性をAIが防御する — マイクロソフト初のサイバーセキュリティ専用モデルとその競争環境","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/llm-security-mai-cyber-1-flash-guide-ja/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Security/MAI-Cyber-1-Flash-Guide_JA.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/llm-security-mai-cyber-1-flash-guide-ja/","datePublished":"2026-07-30","dateModified":"2026-07-31","inLanguage":"ja","keywords":"LLM · 에이전트, LLM_Security"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"MAI-Cyber-1-Flash 技術ガイド","item":"https://tech.vibequant.cc/tech/llm-security-mai-cyber-1-flash-guide-ja/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>MAI-Cyber-1-Flash 技術ガイド</h1>
+        <p class="article-dates"><time datetime="2026-07-30">발행 2026.07.30</time> · 주제 LLM · 에이전트 · LLM_Security · <time datetime="2026-07-31">수정 2026.07.31</time></p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/llm-security-mai-cyber-1-flash-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/llm-security-mai-cyber-1-flash-guide-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../tech/llm-security-mai-cyber-1-flash-guide-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../tech/llm-security-mai-cyber-1-flash-guide-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">AIが作った脆弱性をAIが防御する — マイクロソフト初のサイバーセキュリティ専用モデルとその競争環境</p>
+        
+        <nav class="share-bar" aria-label="共有" data-url="https://tech.vibequant.cc/tech/llm-security-mai-cyber-1-flash-guide-ja/" data-title="MAI-Cyber-1-Flash 技術ガイド" data-text="AIが作った脆弱性をAIが防御する — マイクロソフト初のサイバーセキュリティ専用モデルとその競争環境" data-lang="ja">
+  <span class="share-label">共有</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fllm-security-mai-cyber-1-flash-guide-ja%2F&amp;text=MAI-Cyber-1-Flash%20%E6%8A%80%E8%A1%93%E3%82%AC%E3%82%A4%E3%83%89" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fllm-security-mai-cyber-1-flash-guide-ja%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fllm-security-mai-cyber-1-flash-guide-ja%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="kakao">KakaoTalk</button>
+  <button type="button" class="share-btn" data-share="copy">リンクをコピー</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p>AIが作った脆弱性をAIが防御する — マイクロソフト初のサイバーセキュリティ専用モデルとその競争環境</p>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>作成基準日</td>
+<td>2026年7月30日</td>
+</tr>
+<tr>
+<td>対象モデル</td>
+<td>MAI-Cyber-1-Flash (Microsoft AI)</td>
+</tr>
+<tr>
+<td>発表日</td>
+<td>2026年7月27日（月）、サンフランシスコ</td>
+</tr>
+<tr>
+<td>発表者</td>
+<td>Mustafa Suleyman（CEO, Microsoft AI）、Hayete Gallot（Microsoft Security）</td>
+</tr>
+<tr>
+<td>一次情報源</td>
+<td>Microsoft AI 公式発表文、MAI-Cyber-1-Flash モデルカード、MAI-Thinking-1 技術報告書</td>
+</tr>
+<tr>
+<td>信頼度</td>
+<td>B2（ベンダー自己申告、部分的クロス検証、独立検証未完了）</td>
+</tr>
+<tr>
+<td>対象範囲</td>
+<td>登場背景、開発コンセプト、アーキテクチャ、性能、競合プロジェクト（Codex Open Security 含む）、TCO、導入</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. 登場背景 — なぜ今サイバーセキュリティ専用モデルなのか</h2>
+<h3>1.1 コードをAIが書き、脆弱性もAIが作る</h3>
+<p>2026年にソフトウェアセキュリティの性質が変わった理由は単純である。<strong>コード生産量が人間のレビュー能力を超えた</strong>。そしてその超過分の大半を生成モデルが作っている。</p>
+<table>
+<thead>
+<tr>
+<th>指標</th>
+<th>数値</th>
+<th>出典</th>
+<th>信頼度</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>全コードのうちAI生成・AI補助の比率</td>
+<td><strong>42%</strong>（2027年に50%超の見通し）</td>
+<td>Sonar 開発者調査 2026</td>
+<td>B2</td>
+</tr>
+<tr>
+<td>OWASP Top 10 脆弱性を含むAI生成コードの比率</td>
+<td><strong>45%</strong>（100以上のLLMをテスト）</td>
+<td>Veracode</td>
+<td>B1</td>
+</tr>
+<tr>
+<td>XSS防御に失敗した生成サンプル</td>
+<td><strong>86%</strong></td>
+<td>Veracode</td>
+<td>B1</td>
+</tr>
+<tr>
+<td>ログインジェクションに脆弱な生成サンプル</td>
+<td><strong>88%</strong></td>
+<td>Veracode</td>
+<td>B1</td>
+</tr>
+<tr>
+<td>コードベースあたり平均脆弱性数の前年比増加率</td>
+<td><strong>+107%</strong></td>
+<td>Black Duck OSSRA 2026</td>
+<td>B1</td>
+</tr>
+<tr>
+<td>主要6 LLM・534サンプル中で確認された脆弱性比率</td>
+<td><strong>25%</strong></td>
+<td>独立研究（OWASP Top 10基準）</td>
+<td>C2</td>
+</tr>
+<tr>
+<td>AI生成コードに起因するエンタープライズ侵害の比率</td>
+<td><strong>約5件に1件</strong></td>
+<td>業界集計報道</td>
+<td>C3</td>
+</tr>
+</tbody></table>
+<p>出典も方法論もばらつくが、方向は一つに収束する。<strong>欠陥の生産速度が人間のレビュー処理能力を構造的に追い越した。</strong></p>
+<h3>1.2 攻撃側の探索コストが崩壊した</h3>
+<p>同じモデル能力は攻撃側にも与えられている。Anthropicは2026年4月、Project Glasswing を通じて Claude Mythos Preview を公開し、<strong>モデルが脆弱性の発見・エクスプロイト能力においてごく一部の最上位人間専門家を除く大半を上回った</strong>と評価した。約50のパートナーがこのモデルで、世界的に重要なソフトウェアから <strong>1万件以上のHigh/Critical脆弱性</strong>を発見。6月には15か国150超の組織（電力・水道・医療・通信・ハードウェア）へ拡大した。</p>
+<p>Microsoft公式ブログの診断も同じである。攻撃者は「エクスプロイトをより速く生成し、キャンペーンをより大きく拡張し、前例のない効率で活動する」。つまり <strong>欠陥を見つけるコストが崩壊した以上、断続的にスキャンして後でパッチを当てる従来型のセキュリティ運用モデルはすでに古い。</strong></p>
+<h3>1.3 防御側のボトルネックはモデル可用性ではなく計算コスト</h3>
+<p>防御側が同等のモデルを入手できずに負けているのではない。<strong>エンタープライズのリポジトリ全体をフロンティアモデルで常時スキャンすればトークンコストが爆発する。</strong> カバレッジが単一のフロンティアモデルに依存した瞬間、スキャン頻度と範囲が予算項目となり、その予算上限がそのままセキュリティギャップになる。</p>
+<p>Suleymanの市場診断がこの点を突く。「人々はビジネス全体でトークンを使い切っている。だからどこであれコストを下げようとする巨大な反作用がある。」</p>
+<h3>1.4 ゆえに: AIが作った脆弱性をAIが防ぐ</h3>
+<p>2026年上半期に主要ベンダーが同時に到達した結論は同一である。<strong>人間速度の防御では、機械速度の攻撃と機械速度で生産される欠陥に対応できない。</strong> Hayete Gallot の表現では、防御側は「攻撃者と同じ規模と速度でAIによりAIを防御」しなければならない。</p>
+<pre><code>   ① AIがコードを生産            ② AIが脆弱性を発見
+   (42%+ / 欠陥率45%)   ─────▶  (Glasswing 1万件+, Codex Security 1.1万件+)
+            ▲                              │
+            │                              ▼
+   ④ 検証とパッチがコードへ戻る    ③ AIがパッチし証明する
+      (ライブRLループ)      ◀─────  (MDASH Prove段階 / グリーンチーム)
+</code></pre>
+<p>MAI-Cyber-1-Flash は、この循環の②③段階を <strong>フロンティアモデルより遥かに低い単価で</strong> 常時稼働させるために設計されたモデルである。</p>
+<h3>1.5 発表パッケージ全体</h3>
+<table>
+<thead>
+<tr>
+<th>構成要素</th>
+<th>性格</th>
+<th>状態</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MAI-Cyber-1-Flash</td>
+<td>サイバーセキュリティ専用LLM</td>
+<td>Azure AI Foundry プライベートプレビュー（MDASH承認顧客限定）</td>
+</tr>
+<tr>
+<td>MDASH</td>
+<td>脆弱性識別・修正ハーネス</td>
+<td>2026年5月12日初公開、運用中</td>
+</tr>
+<tr>
+<td>Project Perception</td>
+<td>エージェンティックセキュリティシステム（R/B/Gチーム）</td>
+<td>2026年8月3日 Defender内パブリックプレビュー</td>
+</tr>
+<tr>
+<td>FORGE Lab</td>
+<td>Frontier Offensive Research and Generative Exploration Lab</td>
+<td>新設、Taesoo Kim（元Team Atlantaリーダー）主導</td>
+</tr>
+</tbody></table>
+<p>Suleymanのポジショニングは明確である。<strong>「世界最高水準の性能を半分のコストで。」</strong> この発表の本質は性能そのものよりも、性能対コスト（ルーティング）にある。</p>
+<hr>
+<h2>2. 開発コンセプト</h2>
+<h3>2.1 三つの軸: Model. Data. Harness.</h3>
+<table>
+<thead>
+<tr>
+<th>軸</th>
+<th>Microsoftの主張</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Model</strong></td>
+<td>社内で一から高品質データで学習したコンパクトなコード中心セキュリティモデル。汎用フロンティアモデルの縮小版ではなく、セキュリティ作業向けにキャリブレーションされたワークホース</td>
+</tr>
+<tr>
+<td><strong>Data</strong></td>
+<td>最も深い優位性。アイデンティティ・エンドポイント・クラウド・ネットワーク全体で<strong>毎日100兆以上のセキュリティシグナル</strong>、MSRC脆弱性処理履歴、<strong>160万社の顧客</strong>の運用インサイト。「誰もこの歴史を人工的に作れない」</td>
+</tr>
+<tr>
+<td><strong>Harness</strong></td>
+<td>業界最高のセキュリティ専門家がチューニングした100+エージェントシステム</td>
+</tr>
+</tbody></table>
+<h3>2.2 サイバーセキュリティは「ライブ強化学習ループ」</h3>
+<p>サイバーセキュリティは単にデータが豊富な領域ではなく、<strong>生きたRLループ</strong>である。毎日、防御者が脅威を調査し、アラートをトリアージし、脆弱性を修正し、結果から学習する。Microsoftはこのループを端から端まで観測していると主張する — 何がエクスプロイト可能で、何が封じ込められ、何がブロックされ、何が実際に効いたか。<strong>行動と結果を接続できればデータ以上のものを得る</strong>という論理である。</p>
+<h3>2.3 防御専用（defense-only）設計</h3>
+<p>CTIの観点で最も重要な設計事実。モデルカードは軽量ターミナルハーネス基準の単独性能を次のように報告する。</p>
+<table>
+<thead>
+<tr>
+<th>ベンチマーク</th>
+<th>MAI-Cyber-1-Flash</th>
+<th>測定対象</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CVEBench</td>
+<td>0.314</td>
+<td>CVE関連推論</td>
+</tr>
+<tr>
+<td>CyberSecEval4 — Threat Intelligence</td>
+<td>0.553</td>
+<td>脅威インテリジェンス解釈</td>
+</tr>
+<tr>
+<td>CyberSecEval4 — Malware Analysis</td>
+<td>0.330</td>
+<td>マルウェア解析</td>
+</tr>
+<tr>
+<td>CRSBench</td>
+<td>0.651 (POV=1200)</td>
+<td>サイバー推論システム</td>
+</tr>
+<tr>
+<td><strong>ExploitGym — Kernel</strong></td>
+<td><strong>0</strong></td>
+<td>エクスプロイト生成</td>
+</tr>
+<tr>
+<td><strong>ExploitGym — Userspace</strong></td>
+<td><strong>0</strong></td>
+<td>エクスプロイト生成</td>
+</tr>
+<tr>
+<td><strong>ExploitGym — Browser</strong></td>
+<td><strong>0</strong></td>
+<td>エクスプロイト生成</td>
+</tr>
+</tbody></table>
+<p>全カテゴリ0点は欠陥ではなく<strong>意図された結果</strong>である。Microsoftはモデルが防御作業（バグパッチなど）を学習し、攻撃作業（マルウェア配布など）は学習していないと明示した。</p>
+<p><strong>実務的含意</strong>: エクスプロイトを生成できないまま95.95%の発見パイプラインを駆動する5B-アクティブモデルは、攻撃能力流出リスクをアーキテクチャレベルで低減したディフェンダー専用アーティファクトである。dual-useリスクを学習段階で遮断し、それを<strong>測定可能な形で公開</strong>した点が核心である。</p>
+<p>この選択は競合と正反対でもある。Google CodeMender は逆に <strong>PoCエクスプロイトを自律生成し顧客管理のサンドボックスで実行</strong>して誤検出を減らす。証明能力を取るか、dual-useリスクを遮断するかのトレードオフであり、Microsoftは後者を選んで証明（Prove）をハーネス層で解決した。</p>
+<h3>2.4 「最大のモデルではなく、最も賢くルーティングするシステム」</h3>
+<p>Microsoft副社長 Taesoo Kim の表現が本文書全体の要約でもある。</p>
+<blockquote>
+<p>「モデルは一つの入力であり、それを取り巻くシステムが製品である。」</p>
+</blockquote>
+<p>Microsoftは <strong>モデル可用性ではなく計算コストが防御者のスキャン範囲を制約する</strong> と主張する。答えはより大きなモデルではなく、難易度でモデルを差し替えるルーターである。</p>
+<h3>2.5 事業的背景: OpenAI依存度の縮小</h3>
+<p>MAI-Cyber-1-Flash は Build 2026（6月）で発表された<strong>社内7モデルファミリー</strong>の延長線上にある。ただしヘッドラインスコアを作った構成は依然GPT-5.4に依存する。このモデルはMDASHのOpenAI依存を<strong>除去したのではなく縮小した</strong>。</p>
+<hr>
+<h2>3. アーキテクチャおよびモデルスペック</h2>
+<h3>3.1 モデルカード基準公式スペック</h3>
+<table>
+<thead>
+<tr>
+<th>仕様</th>
+<th>詳細</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>アーキテクチャ</td>
+<td>Self-attention + <strong>Sparse Mixture-of-Experts (MoE)</strong> Transformer</td>
+</tr>
+<tr>
+<td>総パラメータ</td>
+<td><strong>1,370億 (137B)</strong></td>
+</tr>
+<tr>
+<td>アクティブパラメータ</td>
+<td><strong>50億 (5B)</strong> — トークンあたり活性化</td>
+</tr>
+<tr>
+<td>コンテキストウィンドウ</td>
+<td><strong>256,000トークン</strong></td>
+</tr>
+<tr>
+<td>モダリティ</td>
+<td>テキスト専用 (text-in / text-out)</td>
+</tr>
+<tr>
+<td>直接ベースモデル</td>
+<td><strong>MAI-Code-1-Flash</strong>（GitHub Copilot・VS Code内蔵の軽量エージェンティックコーディングモデル）</td>
+</tr>
+<tr>
+<td>系統</td>
+<td>MAI-Base-1 → MAI-Thinking-1（中間学習チェックポイント）→ MAI-Code-1-Flash → MAI-Cyber-1-Flash</td>
+</tr>
+<tr>
+<td>学習データ規模</td>
+<td><strong>非公開</strong></td>
+</tr>
+<tr>
+<td>配布形態</td>
+<td>MDASH内部専用。スタンドアロンAPIなし</td>
+</tr>
+</tbody></table>
+<h3>3.2 系統上の上位モデル（参考）</h3>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>総パラメータ</th>
+<th>アクティブ</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MAI-Base-1</td>
+<td>約1兆</td>
+<td>350億</td>
+<td>事前学習ベース。30兆トークン、合成データ排除、第三者モデル蒸留なし</td>
+</tr>
+<tr>
+<td><strong>MAI-Thinking-1</strong></td>
+<td><strong>約1兆 (~1T)</strong></td>
+<td><strong>350億 (35B)</strong></td>
+<td>Build 2026発表。512エキスパート中トークンあたり8個活性。256kコンテキスト</td>
+</tr>
+<tr>
+<td>MAI-Code-1-Flash</td>
+<td>非公開</td>
+<td>50億 (5B)</td>
+<td>軽量エージェンティックコーディングモデル</td>
+</tr>
+<tr>
+<td><strong>MAI-Cyber-1-Flash</strong></td>
+<td><strong>1,370億 (137B)</strong></td>
+<td><strong>50億 (5B)</strong></td>
+<td>本文書の対象</td>
+</tr>
+</tbody></table>
+<p>アクティブパラメータ5Bのみの<strong>超軽量ルーティングワークホース</strong>として設計されており、これが後述のTCO論理の物理的根拠となる。なお30兆トークンはMAI-Base-1の事前学習規模であり、MAI-Cyber-1-Flash自体の学習トークン数は公開されていない。</p>
+<h3>3.3 MDASHハーネス構造</h3>
+<p><strong>5段階パイプライン</strong></p>
+<table>
+<thead>
+<tr>
+<th>段階</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Prepare</td>
+<td>対象コードベースおよびコンテキストの準備</td>
+</tr>
+<tr>
+<td>Scan</td>
+<td>脆弱性候補の探索</td>
+</tr>
+<tr>
+<td>Validate</td>
+<td>候補検証および誤検出除去</td>
+</tr>
+<tr>
+<td>Dedupe</td>
+<td>重複findingsの統合</td>
+</tr>
+<tr>
+<td>Prove</td>
+<td>実際のトリガー入力実行による証明（C/C++対象はASan使用）</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Auditorエージェント</strong>: findingsのフラグ付け</li>
+<li><strong>Debaterエージェント</strong>: エクスプロイト可能性を議論。<strong>エージェント間の不一致自体をシグナルとして使用</strong>- 合計100以上の特化エージェント、複数のフロンティア・蒸留モデルを混用<strong>開発組織および実績</strong></li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>開発組織</td>
+<td>Microsoft <strong>Autonomous Code Security (ACS)</strong> チーム</td>
+</tr>
+<tr>
+<td>中核人材</td>
+<td>DARPA AI Cyber Challenge (AIxCC) 優勝チーム <strong>Team Atlanta</strong> 出身多数</td>
+</tr>
+<tr>
+<td>2026年5月実績</td>
+<td>Windowsネットワーキング・認証スタックで <strong>16件のCVE発見</strong>（Critical RCE 4件含む）</td>
+</tr>
+<tr>
+<td>回顧検証</td>
+<td>clfs.sys 5年分MSRCケース28件中 <strong>96%再現</strong>、tcpip.sys 7件中 <strong>100%再現</strong></td>
+</tr>
+</tbody></table>
+<h3>3.4 90/10ルーティングアーキテクチャ</h3>
+<pre><code>              ┌─────────────────────────────────────┐
+  セキュリティ │           MDASH ハーネス             │
+   作業  ─────▶│ (ルーター + 100+エージェント + 5段階) │
+              └──────────┬────────────────┬─────────┘
+                         │                │
+                   最大90%              約10%
+                         │                │
+                         ▼                ▼
+            MAI-Cyber-1-Flash        GPT-5.4
+            (137B/5B, 低コスト)     (約10倍規模)
+</code></pre>
+<p>Suleymanの説明（2026年7月27日）: 「MDASH内でMAI-Cyber-1-Flashが最大90%のクエリを処理し、脆弱性を検出・パッチし、修正が実際に動作したかまで確認する。残りの10%はより大きなモデルであるGPT-5.4に渡す。」GPT-5.4はMAI-Cyber-1-Flashより<strong>約10倍大きい</strong>。</p>
+<p>エスカレーション先に最新のGPT-5.6ではなくGPT-5.4を使う理由もコストである。Suleyman:「GPT-5.6は高い。GPT-5.4はコスト対比で非常に良い。」</p>
+<p><strong>用語注意</strong>: 90%と80%は別の指標である。<strong>90%はMAI-Cyber-1-Flashが処理可能な作業比率</strong>（設計目標、&quot;up to 90%&quot;）、<strong>80%はMDASH内で置き換えられた既存モデルの比率</strong>。</p>
+<h3>3.5 安全性およびエンタープライズ統制</h3>
+<table>
+<thead>
+<tr>
+<th>レイヤー</th>
+<th>統制項目</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>モデル学習</td>
+<td>Security-firstキャリブレーション、攻撃作業は未学習</td>
+</tr>
+<tr>
+<td>評価</td>
+<td>Microsoft AI Red Team評価、自動化および専門家主導の敵対的訓練、第三者独立評価（機関非公開）</td>
+</tr>
+<tr>
+<td>配備</td>
+<td>Role-Based Controls、テナント分離、暗号化、監査証跡</td>
+</tr>
+<tr>
+<td>実行環境</td>
+<td><strong>インターネットアクセスのないサンドボックス実行環境</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 性能</h2>
+<h3>4.1 CyberGymが測定するもの・しないもの</h3>
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>タスク数</td>
+<td><strong>1,507件</strong>の実脆弱性再現タスク</td>
+</tr>
+<tr>
+<td>出典プロジェクト</td>
+<td><strong>188の OSS-Fuzz プロジェクト</strong></td>
+</tr>
+<tr>
+<td>Microsoft評価構成</td>
+<td><strong>Level 1（基本設定）</strong></td>
+</tr>
+<tr>
+<td>Level 1定義</td>
+<td>脆弱なソースコードと高レベルの脆弱性説明を与え、動作するPoCを作れるか確認</td>
+</tr>
+<tr>
+<td><strong>測定しないもの</strong></td>
+<td><strong>ブラインド脆弱性発見能力、生成パッチの正確性</strong></td>
+</tr>
+</tbody></table>
+<p>最後の行が核心である。実務で最も重要な二つの能力がヘッドライン数値に含まれていない。</p>
+<h3>4.2 発表時点の比較（2026年7月27日）</h3>
+<table>
+<thead>
+<tr>
+<th>順位</th>
+<th>システム</th>
+<th>CyberGym Level 1</th>
+<th>提供元</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>MDASH + MAI-Cyber-1-Flash + GPT-5.4</strong></td>
+<td><strong>95.95%</strong></td>
+<td>Microsoft</td>
+</tr>
+<tr>
+<td>2</td>
+<td>GPT-5.5 Cyber</td>
+<td>85.6%</td>
+<td>OpenAI</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Mythos 5</td>
+<td>83.8%</td>
+<td>Anthropic</td>
+</tr>
+<tr>
+<td>4</td>
+<td>GPT-5.6 Sol</td>
+<td>83.6%</td>
+<td>OpenAI</td>
+</tr>
+<tr>
+<td>5</td>
+<td>Gemini 3.5 Flash Cyber (CodeMender内)</td>
+<td>83.2%</td>
+<td>Google</td>
+</tr>
+</tbody></table>
+<p><strong>二つの留意点</strong>: ①95.95%は<strong>モデル単独ではなくMDASHシステムのスコア</strong>であり、そのシステムは競合モデル（GPT-5.4）をエスカレーション経路に含む。②表の全数値は<strong>Microsoftが自社インフラで実施した測定</strong>であり、各ベンダーがリーダーボードに提出した値ではない。</p>
+<h3>4.3 MDASHスコアの推移を時系列で読んではいけない理由</h3>
+<table>
+<thead>
+<tr>
+<th>時点</th>
+<th>構成</th>
+<th>スコア</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2026年5月12日</td>
+<td>MDASH、GAモデルのみ</td>
+<td><strong>88.45%</strong></td>
+<td>当時の公開リーダーボード1位</td>
+</tr>
+<tr>
+<td>2026年6月</td>
+<td>MDASH</td>
+<td>96.55%</td>
+<td><strong>全クラッシュを集計した基準</strong>。対象外脆弱性を含む</td>
+</tr>
+<tr>
+<td>2026年7月27日</td>
+<td>MDASH + MAI-Cyber-1-Flash + GPT-5.4</td>
+<td><strong>95.95%</strong></td>
+<td>判定基準の明示なし</td>
+</tr>
+</tbody></table>
+<p>モデルカードが明示した有効な比較は一つだけである — <strong>「既存MDASHモデルの80%を置き換えて88.4% → 95.95%」</strong>。</p>
+<h3>4.4 独立検証の状況</h3>
+<table>
+<thead>
+<tr>
+<th>検証項目</th>
+<th>状態</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CyberGym公開リーダーボード掲載</td>
+<td><strong>未掲載</strong>（2026年7月28日確認時点）。5月12日の88.4%が最新記録</td>
+</tr>
+<tr>
+<td>リリース前の独立評価機関への提供</td>
+<td><strong>未提供</strong>（NYT報道）</td>
+</tr>
+<tr>
+<td>第三者評価</td>
+<td>Microsoftは実施したと主張。<strong>機関名非公開</strong></td>
+</tr>
+<tr>
+<td>コスト削減の再現可能性</td>
+<td><strong>不可能</strong>。トークン使用量、呼出量、レイテンシ、タスクミックス、計算配分すべて非公開</td>
+</tr>
+</tbody></table>
+<h3>4.5 ベンダースコアと独立測定の乖離</h3>
+<p>2026年7月21日、Sakana AIがオーケストレーションモデル <strong>Fugu-Cyber</strong>を公開し CyberGym<strong>86.9%</strong>、CTI-REALM <strong>72.1%</strong> を報告した。Microsoftの比較群4システム（83.2〜85.6%）をすべて上回るが、Microsoftの比較チャートには含まれていない。</p>
+<p>同時に技術メディアは、<strong>CyberGym制作陣がICLR 2026で報告した上位モデル組み合わせの成績が約20%水準</strong>だった点を指摘し、ベンダー自己申告値との乖離を問題視した。評価構成（説明の有無、試行回数、判定基準）が異なれば、同じベンチマーク名の下でまったく異なる数値が出る。</p>
+<p><strong>結論</strong>: このカテゴリではベンダー発表のベンチマークスコアをベンダー間の順位比較に使えない。</p>
+<h3>4.6 ベンチマークより信頼できる証拠</h3>
+<table>
+<thead>
+<tr>
+<th>証拠</th>
+<th>内容</th>
+<th>なぜ強いか</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Windows CVE 16件発見（2026年5月）</td>
+<td>Critical RCE 4件含む</td>
+<td>実プロダクションコードベース、実際のCVE発行</td>
+</tr>
+<tr>
+<td>clfs.sys 回顧検証</td>
+<td>5年分MSRCケース28件中96%再現</td>
+<td>合成タスクではなく実際の事件履歴</td>
+</tr>
+<tr>
+<td>tcpip.sys 回顧検証</td>
+<td>7件中100%</td>
+<td>同上</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Project Perception</h2>
+<h3>5.1 3色エージェント構造</h3>
+<table>
+<thead>
+<tr>
+<th>チーム</th>
+<th>役割</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>レッドチーム</strong></td>
+<td>攻撃者視点での侵害経路探索。偵察、攻撃経路評価、脆弱性スキャン</td>
+</tr>
+<tr>
+<td><strong>ブルーチーム</strong></td>
+<td>シグナル調査、コンテキスト推論、有意なリスク識別と優先順位付け。新規検知ルール生成</td>
+</tr>
+<tr>
+<td><strong>グリーンチーム</strong></td>
+<td>修正措置の実行、パッチ作成、環境ハードニング。GitHub連携PR生成可能</td>
+</tr>
+</tbody></table>
+<p>三チームが閉ループを成し、互いの結果を入力とする構造が §2.2 の「ライブRLループ」主張を製品化した形である。</p>
+<h3>5.2 運用特性</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>提供位置</td>
+<td><strong>Microsoft Defender内部</strong>（現在Defender専用）</td>
+</tr>
+<tr>
+<td>パブリックプレビュー</td>
+<td><strong>2026年8月3日</strong>、全世界</td>
+</tr>
+<tr>
+<td>初期対象</td>
+<td>MDASHをすでにテスト中のビジネス顧客中心</td>
+</tr>
+<tr>
+<td>初期デモ範囲</td>
+<td>Webアプリケーションのハードニング</td>
+</tr>
+<tr>
+<td>インターフェース</td>
+<td>Defenderワークフロー + <strong>MCPサーバー</strong>（CLI実行可能）+ GitHub PR</td>
+</tr>
+<tr>
+<td>ヒューマン・イン・ザ・ループ</td>
+<td><strong>高影響の措置は人間の承認が必須</strong></td>
+</tr>
+<tr>
+<td>課金</td>
+<td>従量制、SCU単位</td>
+</tr>
+</tbody></table>
+<h3>5.3 エージェント・MCP経由の権限昇格リスク</h3>
+<p>MCPは2025〜2026年にプロンプトインジェクション、ツール権限過多、サーバー信頼境界の問題で多数の脆弱性事例が報告されたプロトコルである。<strong>セキュリティ自動化エージェントがMCP経由でCLI実行権限を持つ構造は、それ自体が権限昇格経路になりうる。</strong>これが理論的懸念でないことは競合製品ですでに示された。2026年3月、OpenAI Codexで<strong>悪意ある名前のGitHubブランチがタスクセットアップ中にコマンドを注入し、GitHub認証トークンを窃取できる脆弱性</strong>が発見・修正された。セキュリティエージェント自身がサプライチェーン侵入経路になるシナリオである。</p>
+<p>確認項目: MCPサーバーの認証・認可モデルとトークンスコープ／グリーンチームのコード修正権限範囲と承認ゲートの位置／GitHub PR生成権限が及ぶリポジトリ・ブランチ／エージェントが処理する外部入力（脅威インテリフィード、イシューコメント、ブランチ名等）のインジェクション防御／サンドボックス分離の監査方法。</p>
+<hr>
+<h2>6. 競合プロジェクト</h2>
+<h3>6.1 ゲーティングされた商用サイバー専用モデル</h3>
+<table>
+<thead>
+<tr>
+<th>モデル/システム</th>
+<th>提供元</th>
+<th>CyberGym</th>
+<th>アクセス方式</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>MAI-Cyber-1-Flash (MDASH+GPT-5.4)</strong></td>
+<td>Microsoft</td>
+<td><strong>95.95%</strong></td>
+<td>MDASH承認顧客、Azure AI Foundryプライベートプレビュー</td>
+</tr>
+<tr>
+<td>Fugu-Cyber</td>
+<td>Sakana AI</td>
+<td>86.9%</td>
+<td>オーケストレーションモデル。2026年7月21日公開</td>
+</tr>
+<tr>
+<td>GPT-5.5 Cyber</td>
+<td>OpenAI</td>
+<td>85.6%</td>
+<td>限定提供</td>
+</tr>
+<tr>
+<td>Mythos 5</td>
+<td>Anthropic</td>
+<td>83.8%</td>
+<td><strong>Glasswing</strong>プログラム、信頼パートナー限定</td>
+</tr>
+<tr>
+<td>GPT-5.6 Sol</td>
+<td>OpenAI</td>
+<td>83.6%</td>
+<td><strong>Daybreak</strong>プログラム（2026年5月開始）、政府承認顧客限定</td>
+</tr>
+<tr>
+<td>Gemini 3.5 Flash Cyber</td>
+<td>Google</td>
+<td>83.2%</td>
+<td><strong>CodeMender</strong>内提供、招待制</td>
+</tr>
+</tbody></table>
+<p><strong>主要競合プロジェクト詳細</strong></p>
+<table>
+<thead>
+<tr>
+<th>プロジェクト</th>
+<th>性格</th>
+<th>特徴的な設計</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Anthropic Project Glasswing</strong></td>
+<td>業界共同イニシアチブ</td>
+<td>2026年4月Mythos Preview公開 → 約50パートナーが1万件以上のHigh/Critical発見 → 6月に15か国150超の組織へ拡大。Mythos 5はFable 5と同一の基盤モデルで一部の安全装置を解除したバージョン</td>
+</tr>
+<tr>
+<td><strong>Google CodeMender</strong></td>
+<td>Gemini Enterpriseエージェント</td>
+<td>Gemini 3.5 Flash Cyber基盤。<strong>PoCエクスプロイトを自律生成し顧客管理サンドボックスで実行</strong>して誤検出を除去 → パッチ作成 → model-as-judgeで副作用検証 → diffで開発者承認。C/C++・Go・Java・Python・Ruby・Rust・TypeScript対応</td>
+</tr>
+<tr>
+<td><strong>OpenAI Daybreak</strong></td>
+<td>政府・重要インフラ向けプログラム</td>
+<td>2026年5月開始、GPT-5.6 Sol提供</td>
+</tr>
+<tr>
+<td><strong>OpenAI Codex Security</strong></td>
+<td>開発者向けAppSecエージェント</td>
+<td>§6.2で詳述。<strong>CLI/SDKのオープンソース化（Apache-2.0）</strong> + スキャナーエンジンのゲーティング</td>
+</tr>
+<tr>
+<td><strong>Sakana AI Fugu-Cyber</strong></td>
+<td>オーケストレーションモデル</td>
+<td>単一モデルのように見えるが、実際は特化エージェントプールを動的ルーティングするマルチエージェントシステム。<strong>MDASHと同一の設計思想</strong></td>
+</tr>
+<tr>
+<td><strong>NVIDIA Open Secure AI Alliance</strong></td>
+<td>業界標準イニシアチブ</td>
+<td>Microsoft参加</td>
+</tr>
+</tbody></table>
+<p>上位2システム（MDASH、Fugu-Cyber）が<strong>いずれもオーケストレーションシステム</strong>である点が注目に値する。</p>
+<h3>6.2 Codex Open Security — 逆方向の賭け</h3>
+<p>MAI-Cyber-1-Flash発表の2日後、<strong>2026年7月29日</strong>、OpenAIがCodex SecurityのCLIとTypeScript SDKを <strong>Apache-2.0でオープンソース化</strong>した。同じ問題を正反対の配布戦略で攻略した事例である。</p>
+<p><strong>系譜と実績</strong></p>
+<table>
+<thead>
+<tr>
+<th>時点</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2026年3月</td>
+<td>内部コードネーム <strong>Aardvark</strong> としてリサーチプレビュー開始</td>
+</tr>
+<tr>
+<td>2026年3月</td>
+<td>Codex自体でGitHubブランチ名経由のコマンド注入 → 認証トークン窃取の脆弱性を発見・修正</td>
+</tr>
+<tr>
+<td>2026年4月</td>
+<td>OpenAI、<strong>3,000件以上のCritical脆弱性修正</strong>を報告</td>
+</tr>
+<tr>
+<td>ベータ累計</td>
+<td><strong>Critical 792件 / High 10,561件</strong>発見、<strong>120万件以上のコミット</strong>をスキャン。GnuPG、GnuTLS、GOGS、Thorium、libssh、PHP、Chromium等</td>
+</tr>
+<tr>
+<td>2026年6月</td>
+<td>Codex週間ユーザー500万人到達</td>
+</tr>
+<tr>
+<td><strong>2026年7月29日</strong></td>
+<td><strong>CLI + TypeScript SDK オープンソース公開（Apache-2.0）</strong></td>
+</tr>
+</tbody></table>
+<table>
+<thead>
+<tr>
+<th>構成要素</th>
+<th>状態</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CLI (<code>@openai/codex-security</code>)</td>
+<td><strong>オープンソース、Apache-2.0</strong>。npm配布</td>
+</tr>
+<tr>
+<td>TypeScript SDK</td>
+<td><strong>オープンソース</strong>。プログラマティック統合が可能</td>
+</tr>
+<tr>
+<td>スキャナーエンジン（モデル）</td>
+<td><strong>ゲーティング</strong>。承認顧客向け限定ベータ</td>
+</tr>
+<tr>
+<td>認証</td>
+<td>ChatGPTログインまたはAPIキー（<code>OPENAI_API_KEY</code> / <code>CODEX_API_KEY</code>）。CI環境はAPIキー推奨</td>
+</tr>
+<tr>
+<td>モデル選択</td>
+<td><code>gpt-5.6-terra</code> 等の変種を指定可能、effortレベル調整可</td>
+</tr>
+<tr>
+<td>要求環境</td>
+<td>Node.js 22.13.0+ (22.x/24.x/26.x)、Python 3.10+</td>
+</tr>
+<tr>
+<td>GitHub反応</td>
+<td>公開直後約1.5k stars → 2026年7月30日時点 <strong>5.2k stars / 325 forks</strong></td>
+</tr>
+</tbody></table>
+<p>The Next Web の要約がこの構造を的確に表す — <strong>「開いた配管に閉じたエンジンをボルト留めしたもの」</strong>（open plumbing bolted to a gated engine）。</p>
+<p><strong>動作方式</strong>: Codex Securityは従来型のパターンマッチングスキャナーではなく、<strong>セキュリティ研究者のように動作する</strong>よう設計されている。コードを読み、テストを実行し、現実的な攻撃経路を探索し、チームが通常のワークフローでレビューできる形でパッチを提案する。CLIはリポジトリスキャン、実行間のfindings比較・追跡、修正検証、CI/CD統合、複数リポジトリの一括スキャンをサポートする。</p>
+<p><strong>MAI-Cyber-1-Flashとの対比</strong></p>
+<table>
+<thead>
+<tr>
+<th>軸</th>
+<th>MAI-Cyber-1-Flash</th>
+<th>Codex Security</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>開放範囲</td>
+<td>全面非公開</td>
+<td><strong>CLI・SDKオープンソース（Apache-2.0）</strong>、エンジンはゲーティング</td>
+</tr>
+<tr>
+<td>参入経路</td>
+<td>MDASH承認 → Azure AI Foundryプライベートプレビュー</td>
+<td>npmインストール + アカウント認証（エンジンは承認必要）</td>
+</tr>
+<tr>
+<td>一次ユーザー</td>
+<td>エンタープライズセキュリティ組織（SOC）</td>
+<td><strong>開発者 / AppSecエンジニア</strong></td>
+</tr>
+<tr>
+<td>統合ポイント</td>
+<td>Defenderコンソール、MCP、GitHub PR</td>
+<td>CLI、CI/CD、PRレビュー、TypeScript SDK</td>
+</tr>
+<tr>
+<td>dual-use統制</td>
+<td>学習段階で遮断（ExploitGym 0/0/0）</td>
+<td>エンジンアクセスのゲーティングで統制</td>
+</tr>
+<tr>
+<td>監査可能性</td>
+<td>ベンダー提供の監査ログ</td>
+<td><strong>オーケストレーションコード全体が監査可能</strong>、モデルは不可</td>
+</tr>
+<tr>
+<td>コスト構造</td>
+<td>SCU従量</td>
+<td>APIトークン課金</td>
+</tr>
+<tr>
+<td>競合対象</td>
+<td>Defender・SIEM予算</td>
+<td><strong>Snyk、Semgrep、Veracode、GitHub Advanced Security</strong></td>
+</tr>
+</tbody></table>
+<p><strong>導入検討時</strong>: Codex Securityはオープンソースだが <strong>セルフホスティングの代替ではない。</strong> エンジンアクセスがなければCLIだけではスキャンが成立しない。「Apache-2.0」というラベルをオンプレミス可能性と誤読してはならない。</p>
+<h3>6.3 従来型AppSecツール・オープンウェイト代替との比較</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>MAI-Cyber-1-Flash</th>
+<th>オープンソース・従来型代替（CodeQL、Semgrep、SecBERT系、オープンウェイトコーディングモデル）</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ライセンス</td>
+<td><strong>非公開、オープンウェイトではない</strong></td>
+<td>オープン</td>
+</tr>
+<tr>
+<td>検知方式</td>
+<td>コンテキスト推論 + 実行証明</td>
+<td>主にルール・パターンマッチング</td>
+</tr>
+<tr>
+<td>学習データ</td>
+<td>数十年の実セキュリティ事件・修復記録（複製不可）</td>
+<td>公開データ</td>
+</tr>
+<tr>
+<td>ハーネス</td>
+<td>100+エージェント、5段階、専門家チューニング</td>
+<td>自前構築が必要</td>
+</tr>
+<tr>
+<td>オンプレミス自己ホスティング</td>
+<td>不可</td>
+<td>可能</td>
+</tr>
+<tr>
+<td>監査可能性</td>
+<td>ベンダー提供の監査ログ</td>
+<td>フルスタック監査可能</td>
+</tr>
+<tr>
+<td>コスト構造</td>
+<td>SCU従量（変動）</td>
+<td>インフラコスト（固定）</td>
+</tr>
+<tr>
+<td>dual-useリスク</td>
+<td>攻撃能力を未学習（ExploitGym 0）</td>
+<td>モデルにより異なる、統制困難</td>
+</tr>
+</tbody></table>
+<p><strong>カテゴリ確認</strong>: MAI-Cyber-1-Flashはオープンウェイト生態系の競合ではなく、<strong>エンタープライズ・マネージドセキュリティサービス</strong>カテゴリの製品である。実務ではルールベーススキャナーを一次フィルタに置き、LLMパイプラインを深層分析に配置する組み合わせが現実的である。</p>
+<h3>6.4 業界の同時的動き</h3>
+<table>
+<thead>
+<tr>
+<th>時点</th>
+<th>事業者</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2026年3月</td>
+<td>OpenAI</td>
+<td>Codex Securityリサーチプレビュー（コードネームAardvark）</td>
+</tr>
+<tr>
+<td>2026年4月</td>
+<td>Anthropic</td>
+<td>Project Glasswing開始、Mythos Preview公開</td>
+</tr>
+<tr>
+<td>2026年5月</td>
+<td>OpenAI</td>
+<td>Daybreakプログラム開始</td>
+</tr>
+<tr>
+<td>2026年5月12日</td>
+<td>Microsoft</td>
+<td>MDASH初公開、CyberGym 88.45%でリーダーボード1位</td>
+</tr>
+<tr>
+<td>2026年6月</td>
+<td>Anthropic / Microsoft</td>
+<td>Mythos 5・Fable 5公開、Glasswing拡大 / Build 2026、社内7モデルファミリー</td>
+</tr>
+<tr>
+<td>2026年7月初</td>
+<td>Google Cloud</td>
+<td><strong>CodeMender</strong>リリース</td>
+</tr>
+<tr>
+<td>2026年7月21日</td>
+<td>Google / Sakana AI</td>
+<td>Gemini Flash 3種（Cyber含む）/ Fugu-Cyber公開</td>
+</tr>
+<tr>
+<td>2026年7月27日</td>
+<td>Microsoft</td>
+<td><strong>MAI-Cyber-1-Flash + Project Perception + FORGE Lab</strong></td>
+</tr>
+<tr>
+<td>2026年7月29日</td>
+<td>OpenAI</td>
+<td><strong>Codex Security CLI・SDKオープンソース化（Apache-2.0）</strong></td>
+</tr>
+<tr>
+<td>同時期</td>
+<td>NVIDIA</td>
+<td><strong>Open Secure AI Alliance</strong>発足（Microsoft参加）</td>
+</tr>
+</tbody></table>
+<p>4か月の間に主要フロンティアラボがすべてサイバーセキュリティ専用製品を出した。共通認識は二つ — <strong>サイバーセキュリティはマルチモデル・マルチエージェントの問題であり、コストがカバレッジを決める。</strong></p>
+<hr>
+<h2>7. TCO（総所有コスト）</h2>
+<h3>7.1 コスト構造</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>詳細</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>削減主張</td>
+<td>従来MDASH最高構成（<strong>GPT-5.4 + GPT-5.4 mini + GPT-5.3 Codex</strong>）対比 <strong>約50%削減</strong></td>
+</tr>
+<tr>
+<td>削減メカニズム</td>
+<td>基本ルーティングを低コスト専用モデルに置き、超過難易度のみエスカレーション</td>
+</tr>
+<tr>
+<td>Perception課金</td>
+<td>従量制pay-as-you-go、<strong>Security Compute Unit (SCU)</strong> 単位測定</td>
+</tr>
+<tr>
+<td>SCU単価</td>
+<td><strong>非公開</strong>。エージェント種別でSCU消費率が異なる</td>
+</tr>
+</tbody></table>
+<h3>7.2 TCO上の利点</h3>
+<ol>
+<li><strong>トークンコスト制約の解消</strong>: 5B-アクティブモデルを既定値にすることでスキャン頻度の上限が上がる</li>
+<li><strong>スキャン周期の短縮</strong>: 月次パッチサイクルから常時運用へ</li>
+<li><strong>共有コンテキストレイヤー</strong>: 各エージェントが生シグナルを一から収集しないため、トークンコストとレイテンシが同時に下がる</li>
+<li><strong>人件費削減</strong>: トリアージ・調査・修正ワークフローをエージェントが分担</li>
+</ol>
+<h3>7.3 TCO上のリスク</h3>
+<table>
+<thead>
+<tr>
+<th>リスク</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>検証不可能な削減率</td>
+<td>50%の根拠がすべて非公開。他システム対比で正規化不可</td>
+</tr>
+<tr>
+<td>比較基準が自社構成</td>
+<td>50%は「Microsoftの以前の構成対比」。競合対比の絶対的コスト優位を意味しない</td>
+</tr>
+<tr>
+<td>SCU予算の変動性</td>
+<td>従量制のため<strong>スキャン範囲がそのまま予算項目</strong>になる</td>
+</tr>
+<tr>
+<td>エスカレーション比率の変動</td>
+<td>90/10は設計目標値。実コードベースの難易度分布が悪ければ削減率が損なわれる</td>
+</tr>
+<tr>
+<td>ベンチマークと実環境の乖離</td>
+<td>実コードベースは不完全な文書、古い依存関係、累積したパッチ履歴を持つ</td>
+</tr>
+<tr>
+<td>誤検出処理の人件費</td>
+<td>findings検討の負担はSCU料金に含まれない</td>
+</tr>
+</tbody></table>
+<p><strong>実務推奨</strong>: プレビュー評価ではCyberGymスコアより、<strong>自社の脆弱性バックログに対するR/B/Gループの挙動</strong>と<strong>実際のエスカレーション比率が10%に収束するか</strong>を測定すべきである。後者がTCO全体を決める。</p>
+<hr>
+<h2>8. 導入および開始</h2>
+<h3>8.1 現在のアクセス可能性（2026年7月30日時点）</h3>
+<table>
+<thead>
+<tr>
+<th>対象</th>
+<th>アクセス条件</th>
+<th>状態</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MAI-Cyber-1-Flashモデル</td>
+<td><strong>承認されたMDASH顧客</strong>、Azure AI Foundryプライベートプレビュー</td>
+<td>ゲーティング</td>
+</tr>
+<tr>
+<td>スタンドアロンAPI</td>
+<td><strong>存在しない</strong></td>
+<td>不可</td>
+</tr>
+<tr>
+<td>汎用アプリケーション統合</td>
+<td><strong>不可</strong> — MDASH内部専用</td>
+<td>不可</td>
+</tr>
+<tr>
+<td>MDASH</td>
+<td>Microsoft Security営業チャネル経由</td>
+<td>既存顧客</td>
+</tr>
+<tr>
+<td>Project Perception</td>
+<td>Microsoft Defender内パブリックプレビュー</td>
+<td>2026年8月3日</td>
+</tr>
+</tbody></table>
+<p>Azureサブスクリプションや M365/Defender ライセンスだけでは足りない。実質的な対象は<strong>すでにMicrosoft DefenderおよびMDASHのトラックに入っている組織</strong>である。</p>
+<h3>8.2 パイロットで事前定義すべき指標</h3>
+<table>
+<thead>
+<tr>
+<th>測定項目</th>
+<th>なぜ重要か</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>実際のエスカレーション比率</td>
+<td>90/10が維持されなければ50%削減の論理が崩壊</td>
+</tr>
+<tr>
+<td>SCU消費量対findings数</td>
+<td>単位発見あたりコストの算出</td>
+</tr>
+<tr>
+<td>誤検出率（ブルーチームのトリアージ後）</td>
+<td>ベンチマークが測定しない指標</td>
+</tr>
+<tr>
+<td>グリーンチームのパッチ正確度</td>
+<td>CyberGym Level 1が測定しない指標</td>
+</tr>
+<tr>
+<td>自社バックログ対比のカバレッジ</td>
+<td>合成ベンチマークとライブコードベースの乖離確認</td>
+</tr>
+<tr>
+<td>承認ゲート通過時間</td>
+<td>ヒューマン・イン・ザ・ループが実際のボトルネックになるか</td>
+</tr>
+</tbody></table>
+<p><strong>ガバナンス文書化</strong>: エージェント権限マトリクス（RBACマッピング）、自動修正の許容・禁止範囲、監査ログの保存と検討手順、テナント分離の検証方法、事故時のロールバック手順。</p>
+<h3>8.3 導入判断基準</h3>
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th>推奨</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>すでにDefender中心スタック + 大規模な自社コードベース</td>
+<td>プレビュー評価の価値が高い</td>
+</tr>
+<tr>
+<td>マルチクラウド / 非Microsoftセキュリティスタック</td>
+<td>現段階では実益が低い（Defender専用）。CodeMenderまたはCodex Securityを検討</td>
+</tr>
+<tr>
+<td>開発者ツールチェーン・CI/CDから始めたい</td>
+<td><strong>Codex Security CLI</strong>が最も参入障壁が低い（§6.2）</td>
+</tr>
+<tr>
+<td>オンプレミス自己ホスティング要件</td>
+<td>該当なし。カテゴリ全体が未充足</td>
+</tr>
+<tr>
+<td>規制上のモデル監査可能性要件</td>
+<td>ベンダー提供の監査ログで充足可能か事前検討が必要</td>
+</tr>
+<tr>
+<td>小規模コードベース</td>
+<td>SCU従量課金の利点が限定的</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>9. 総合評価</h2>
+<h3>9.1 信頼度別整理</h3>
+<table>
+<thead>
+<tr>
+<th>信頼度</th>
+<th>項目</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>確認済み（モデルカード・公式文書記載）</strong></td>
+<td>137B/5B/256k MoEスペック、MAI-Code-1-Flashファインチューニング、テキスト専用、MDASH専用配布、ExploitGym 0/0/0、CVEBench等の単独スコア、5段階パイプライン、Perception 8月3日プレビュー、SCU課金方式</td>
+</tr>
+<tr>
+<td><strong>ベンダー主張（部分的クロス検証）</strong></td>
+<td>CyberGym 95.95%、競合83.2〜85.6%、約50%コスト削減、最大90%タスク処理、100兆+日次シグナル、顧客160万社、第三者独立評価の実施</td>
+</tr>
+<tr>
+<td><strong>検証不可 / 非公開</strong></td>
+<td>学習トークン規模、SCU単価、50%削減の算出根拠、第三者評価機関の身元、実環境の誤検出率、パッチ正確度</td>
+</tr>
+<tr>
+<td><strong>反証または不一致</strong></td>
+<td>CyberGym公開リーダーボード未掲載（7/28時点）、リリース前の独立テスター未提供、ベンダー数値とベンチマーク制作陣の測定値との大きな乖離</td>
+</tr>
+</tbody></table>
+<h3>9.2 説得力のある部分</h3>
+<p><strong>ルーティングアーキテクチャは実質的なエンジニアリング上の答えである。</strong>フロンティアモデル単独使用はスキャン頻度をコストで制約し、その制約がそのままセキュリティギャップになるという診断は正確である。Sakana Fugu-Cyberが独立に同じ結論（オーケストレーション優先）へ到達した点がこの方向性の傍証となる。<strong>防御専用設計を測定可能な形で公表した点も評価できる。</strong>ExploitGym全カテゴリ0点は、dual-use問題を学習段階で遮断したという検証可能な主張である。<strong>運用実績がベンチマークより強い。</strong> clfs.sys 28件中96%、tcpip.sys 7件中100%の再現、5月の実CVE 16件発見は合成ベンチマークより実務的に有意である。</p>
+<h3>9.3 受け入れがたい部分</h3>
+<p><strong>95.95%はモデルスコアではなくシステムスコアであり、そのシステムは競合モデル（GPT-5.4）に依存する。</strong>フロンティア競合に勝ったという物語と、その競合のモデルを内部で使っているという事実が同じ発表の中にある。<strong>CyberGym Level 1は「説明が与えられた既知脆弱性の再現」を測定する。</strong>ブラインド発見もパッチ正確性も測定しない。<strong>リーダーボード未掲載とリリース前の独立テスター未提供は、併せて見ると問題である。</strong></p>
+<p><strong>50%削減は再現不可能で、比較対象も自社の以前の構成である。</strong></p>
+<h3>9.4 結論</h3>
+<p>この発表はモデル発表ではなく<strong>システムアーキテクチャ発表</strong>として読むのが正確である。Taesoo Kimの「モデルは一つの入力であり、それを取り巻くシステムが製品である」が発表全体の正直な要約である。</p>
+<p>より広く見れば、2026年上半期4か月の発表ラッシュ全体が一つの命題に収束する。<strong>AIがコードを書く速度で欠陥が生産されるため、防御も同じ速度で自動化されねばならず、その自動化の制約はモデル能力ではなく単価である。</strong>Microsoftは専用小型モデル+ルーティングで、OpenAIは開発者ツールチェーンのオープンソース化で、GoogleはエクスプロイトのDIY検証で、Anthropicは最上位能力の統制された配布でそれぞれ答えた。<strong>導入判断の根拠にできるのは二つである。</strong> 第一にMicrosoftが自社Windowsコードベースで実際にCVEを発見したという運用実績。第二にルーティングでスキャン単価を下げるという構造的論理。この二つはベンチマークなしでも検証可能であり、プレビューのパイロットで自社環境で直接確認できる。</p>
+<hr>
+<h2>10. 参考資料</h2>
+<h3>10.1 一次情報源 — Microsoft</h3>
+<table>
+<thead>
+<tr>
+<th>資料</th>
+<th>リンク</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MAI-Cyber-1-Flash公式発表文</td>
+<td><a href="https://microsoft.ai/news/introducing-mai-cyber-1-flash-inside-mdash/">https://microsoft.ai/news/introducing-mai-cyber-1-flash-inside-mdash/</a></td>
+</tr>
+<tr>
+<td>MAI-Cyber-1-Flashモデルカード (PDF)</td>
+<td><a href="https://microsoft.ai/pdf/MAI-Cyber-1-Flash-Model-Card.pdf">https://microsoft.ai/pdf/MAI-Cyber-1-Flash-Model-Card.pdf</a></td>
+</tr>
+<tr>
+<td>MAI-Thinking-1技術報告書 (PDF)</td>
+<td><a href="https://microsoft.ai/pdf/mai-thinking-1.pdf">https://microsoft.ai/pdf/mai-thinking-1.pdf</a></td>
+</tr>
+<tr>
+<td>Project Perception製品ページ</td>
+<td><a href="https://www.microsoft.com/en-us/security/business/ai-powered-cybersecurity/project-perception-agentic-system">https://www.microsoft.com/en-us/security/business/ai-powered-cybersecurity/project-perception-agentic-system</a></td>
+</tr>
+<tr>
+<td>Rethinking security for the age of AI</td>
+<td><a href="https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/">https://blogs.microsoft.com/blog/2026/07/27/rethinking-security-for-the-age-of-ai/</a></td>
+</tr>
+<tr>
+<td>MDASH初公開 (2026-05-12)</td>
+<td><a href="https://www.microsoft.com/en-us/security/blog/2026/05/12/defense-at-ai-speed-microsofts-new-multi-model-agentic-security-system-tops-leading-industry-benchmark/">https://www.microsoft.com/en-us/security/blog/2026/05/12/defense-at-ai-speed-microsofts-new-multi-model-agentic-security-system-tops-leading-industry-benchmark/</a></td>
+</tr>
+</tbody></table>
+<h3>10.2 一次情報源 — 競合プロジェクト</h3>
+<table>
+<thead>
+<tr>
+<th>資料</th>
+<th>リンク</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OpenAI Codex Security</td>
+<td><a href="https://openai.com/index/codex-security-now-in-research-preview/">https://openai.com/index/codex-security-now-in-research-preview/</a></td>
+</tr>
+<tr>
+<td>openai/codex-security (GitHub, Apache-2.0)</td>
+<td><a href="https://github.com/openai/codex-security">https://github.com/openai/codex-security</a></td>
+</tr>
+<tr>
+<td>Anthropic Project Glasswing</td>
+<td><a href="https://www.anthropic.com/glasswing">https://www.anthropic.com/glasswing</a></td>
+</tr>
+<tr>
+<td>Claude Fable 5 / Mythos 5</td>
+<td><a href="https://www.anthropic.com/news/claude-fable-5-mythos-5">https://www.anthropic.com/news/claude-fable-5-mythos-5</a></td>
+</tr>
+<tr>
+<td>Google CodeMender</td>
+<td><a href="https://cloud.google.com/security/codemender">https://cloud.google.com/security/codemender</a></td>
+</tr>
+<tr>
+<td>CyberGymベンチマーク・リーダーボード</td>
+<td><a href="https://www.cybergym.io/cybergym/">https://www.cybergym.io/cybergym/</a></td>
+</tr>
+<tr>
+<td>ExploitGym</td>
+<td><a href="https://www.cybergym.io/exploitgym/">https://www.cybergym.io/exploitgym/</a></td>
+</tr>
+</tbody></table>
+<h3>10.3 二次情報源（クロス検証用）</h3>
+<p>The Hacker News、MarkTechPost、The Register、VentureBeat、GeekWire、SiliconANGLE、Forrester、Infosecurity Magazine、Directions on Microsoft、Constellation Research、The Next Web、Cyber Security News、Help Net Security、Cybersecurity Dive、TechCrunch、SecurityWeek、Veracode / Black Duck OSSRA 2026 / Sonar、Tech Times</p>
+<h3>10.4 利用上の注意</h3>
+<p>本文書の性能およびコスト数値は<strong>大半がベンダー自己申告に基づく</strong>。MAI-Cyber-1-Flashは独立検証が完了しておらず、CyberGym公開リーダーボードにも未反映である。競合製品の数値も各ベンダーの自社測定であり、同一条件の比較ではない。導入意思決定に引用する際は出典の性格を併記されたい。</p>
+<p>Project Perceptionのパブリックプレビュー（2026年8月3日）以降に実使用データが出れば、性能・TCO項目は再検討が必要である。</p>
+<hr>
+<p>© 2026 Dennis Kim · 本ドキュメントは情報提供目的であり、Microsoftの公式立場を代表するものではありません。</p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="共有" data-url="https://tech.vibequant.cc/tech/llm-security-mai-cyber-1-flash-guide-ja/" data-title="MAI-Cyber-1-Flash 技術ガイド" data-text="AIが作った脆弱性をAIが防御する — マイクロソフト初のサイバーセキュリティ専用モデルとその競争環境" data-lang="ja">
+  <span class="share-label">共有</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fllm-security-mai-cyber-1-flash-guide-ja%2F&amp;text=MAI-Cyber-1-Flash%20%E6%8A%80%E8%A1%93%E3%82%AC%E3%82%A4%E3%83%89" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fllm-security-mai-cyber-1-flash-guide-ja%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fllm-security-mai-cyber-1-flash-guide-ja%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="kakao">KakaoTalk</button>
+  <button type="button" class="share-btn" data-share="copy">リンクをコピー</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Security/MAI-Cyber-1-Flash-Guide_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=1" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

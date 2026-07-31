@@ -1628,7 +1628,7 @@ function layout({
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="${prefix}css/content.css?v=7" />
+  <link rel="stylesheet" href="${prefix}css/content.css?v=8" />
   ${extraHead}
   ${ld}
 </head>
@@ -1647,6 +1647,38 @@ function layout({
 </body>
 </html>
 `;
+}
+
+function shareBarLabels(lang) {
+  const L = String(lang || "KR").toUpperCase();
+  if (L === "EN") return { aria: "Share", label: "Share", copy: "Copy link" };
+  if (L === "JP" || L === "JA") return { aria: "共有", label: "共有", copy: "リンクをコピー" };
+  if (L === "CN" || L === "ZH") return { aria: "分享", label: "分享", copy: "复制链接" };
+  return { aria: "공유", label: "공유", copy: "링크 복사" };
+}
+
+/** Share links for X / Facebook / LinkedIn / KakaoTalk / copy — used on columns, tech, cti articles. */
+function shareBarHtml({ url, title, description = "", lang = "KR", placement = "top" }) {
+  const u = encodeURIComponent(url);
+  const t = encodeURIComponent(title || "");
+  const d = encodeURIComponent(description || "");
+  const labels = shareBarLabels(lang);
+  const htmlLang = langToHreflang(lang) || "ko";
+  const cls = placement === "bottom" ? "share-bar share-bar--bottom" : "share-bar";
+  const xHref = `https://twitter.com/intent/tweet?url=${u}&text=${t}`;
+  const fbHref = `https://www.facebook.com/sharer/sharer.php?u=${u}`;
+  const liHref = `https://www.linkedin.com/sharing/share-offsite/?url=${u}`;
+  return `<nav class="${cls}" aria-label="${esc(labels.aria)}" data-url="${esc(url)}" data-title="${esc(
+    title || ""
+  )}" data-text="${esc(description || "")}" data-lang="${esc(htmlLang)}">
+  <span class="share-label">${esc(labels.label)}</span>
+  <a class="share-btn" data-share="x" href="${esc(xHref)}" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="${esc(fbHref)}" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="${esc(liHref)}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="kakao">KakaoTalk</button>
+  <button type="button" class="share-btn" data-share="copy">${esc(labels.copy)}</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>`;
 }
 
 function buildArticle(item, section) {
@@ -1709,6 +1741,14 @@ function buildArticle(item, section) {
         mediaLabel || "언론사"
       )})</a></p>`
     : "";
+  const shareProps = {
+    url: canonical,
+    title: parsed.title || item.title,
+    description: parsed.description || item.description || "",
+    lang: item.lang || "KR",
+  };
+  const shareTop = shareBarHtml({ ...shareProps, placement: "top" });
+  const shareBottom = shareBarHtml({ ...shareProps, placement: "bottom" });
   const body = `
   <main class="article-wrap">
     <p class="crumb"><a href="${prefix}${section}/">${sectionLabel(section)}</a> · ${esc(item.groupTitle)}</p>
@@ -1720,8 +1760,10 @@ function buildArticle(item, section) {
         ${langSwitch}
         ${ledeHtml}
         ${bylineHtml}
+        ${shareTop}
       </header>
       <div class="article-body prose">${htmlBody}</div>
+      ${shareBottom}
       <aside class="author-box">
         <h2>작성자 / Source</h2>
         <p>${authorBioHtml(section)}</p>
@@ -1732,7 +1774,8 @@ function buildArticle(item, section) {
         </p>
       </aside>
     </article>
-  </main>`;
+  </main>
+  <script src="${prefix}js/share.js?v=1" defer></script>`;
   const outDir = path.join(PAGES, section, item.slug);
   ensureDir(outDir);
   const metaDesc = parsed.description || item.description;
