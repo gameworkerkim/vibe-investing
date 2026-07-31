@@ -1,3 +1,42 @@
+---
+title: "AI — 냉정과 열정 사이"
+subtitle: "레오폴트의 청산, 시타델의 인수, 그리고 산책하는 개"
+description: "시트리니 종말론, 켄 그리핀의 전향, Situational Awareness 강제 청산까지 — 2026년 AI 서사와 레버리지가 만든 공포·열정·반등을 읽는다."
+abstract: |
+  2026년 2월 시트리니의 AI 종말론과 시타델의 반박, 5월 켄 그리핀의 AI 전향, 7월 Situational Awareness의 강제 청산과 시타델의 인수를 시간순으로 정리한다.
+  지금의 반등은 ‘시장이 돌아온 것’이 아니라 ‘강제 매도자가 사라진 것’이며, 서사와 포지션·레버리지 생존 구조를 분리해서 봐야 한다.
+  열정으로 방향을 잡고 냉정으로 크기를 정하라는 실무 원칙을 제시한다.
+summary_for_ai: |
+  Opinion column (not investment advice). Timeline Jan–Jul 2026: Ken Griffin Davos AI skepticism; Citrini ‘2028 Global Intelligence Crisis’ vs Citadel Securities Frank Flight rebuttal (Feb);
+  Griffin Stanford pivot (May); SOX peak/crash; Situational Awareness (Leopold Aschenbrenner) forced liquidation sold to Citadel (Jul 29–30); Nasdaq bounce.
+  Thesis: rebound = forced sellers gone, not conviction return; keep narrative vs position distance; leverage kills time. As of 2026-07-30.
+date: 2026-07-31
+updated: 2026-07-31
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - AI
+  - 시타델
+  - 레버리지
+  - 매크로
+  - Situational-Awareness
+keywords:
+  - "AI 냉정과 열정"
+  - "Situational Awareness 청산"
+  - "레오폴트 아셴브레너"
+  - "켄 그리핀 AI"
+  - "시트리니 2028 글로벌 지능 위기"
+  - "시타델 증권 Frank Flight"
+  - "SOX 반도체 급락"
+  - "강제 매도자"
+group: ai-llm
+featured: true
+featured_rank: 1
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # AI — 냉정과 열정 사이
 
 ## 레오폴트의 청산, 시타델의 인수, 그리고 산책하는 개
@@ -56,7 +95,7 @@
 
 1월 다보스에서 켄 그리핀은 AI 출력물이 첫 몇 문장은 인상적이지만 그 아래로 내려가면 전부 쓰레기라고 말했다. 5월 17일 스탠퍼드 경영대학원 대담에서 그는 "처음으로 AI가 진짜라는 생각이 든다"고 말했다. 넉 달 만의 반전이다.
 
-전향의 근거는 시장 전망이 아니라 자기 회사 내부의 리서치의 변화었다. 금융 석·박사 인력이 수 주에서 수 개월에 걸쳐 하던 리서치를 AI 에이전트가 수 시간에서 수일 만에 처리하는 것을 보았다는 것이다. 그는 소프트웨어 엔지니어링의 생산성 향상은 15~25% 수준으로 비교적 완만하다고 선을 그으면서, 고급 지식노동과 리서치 영역의 변화는 그와 질적으로 다르다고 구분했다. 그리고 그 주말을 "다소 우울한 상태로" 보냈다고 덧붙였다.
+전향의 근거는 시장 전망이 아니라 자기 회사 내부의 리서치의 변화였다. 금융 석·박사 인력이 수 주에서 수 개월에 걸쳐 하던 리서치를 AI 에이전트가 수 시간에서 수일 만에 처리하는 것을 보았다는 것이다. 그는 소프트웨어 엔지니어링의 생산성 향상은 15~25% 수준으로 비교적 완만하다고 선을 그으면서, 고급 지식노동과 리서치 영역의 변화는 그와 질적으로 다르다고 구분했다. 그리고 그 주말을 "다소 우울한 상태로" 보냈다고 덧붙였다.
 
 주목할 점은 그리핀이 2월 시타델 증권 보고서의 AI 투자 관련 논지를 부정하지 않았다는 것이다. 보고서는 확산 속도가 느릴 것이라 했고, 그리핀은 자기 조직 안에서 그 속도가 예상보다 빨랐다고 말했다. 결국 시타델 내부의 생산성 변화와 리서치 관점에서 균열이 일어났다. 
 

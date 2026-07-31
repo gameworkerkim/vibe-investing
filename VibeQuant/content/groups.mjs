@@ -62,6 +62,7 @@ export const ESSAY_GROUP_FALLBACK = { id: "other", title_ko: "기타 에세이",
 
 /** Paths (substring) that should appear in Recommended — order = display order */
 export const FEATURED_COLUMN_PATHS = [
+  "AI_Revolution/AI-Between-Coolness-and-Passion.md",
   "AI_Hacking/Column-Project-Perception-20260729.md",
   "Startup/Shelf-Life-of-Innovation.md",
   "Cyworld/The-Pros-and-Cons-of-VC-Investment-as-Seen-Through-the-Cyworld-RCPS-Contract.md",
