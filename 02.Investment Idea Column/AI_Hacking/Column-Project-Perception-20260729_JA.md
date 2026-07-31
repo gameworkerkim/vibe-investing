@@ -1,3 +1,40 @@
+---
+title: "AIはいまやセキュリティを担う — Microsoft Project Perceptionとエージェンティックセキュリティの転換点"
+subtitle: "Red・Blue・Greenエージェントが支援から実行へ移すセキュリティ運用のパラダイム"
+description: "Microsoft Project PerceptionのRed・Blue・Greenエージェントとエージェンティックセキュリティへの転換を分析し、レガシーベンダー・実行権限・投資示唆を整理する。"
+abstract: |
+  2026年5月、Microsoftがプレビュー公開したProject Perceptionは、Red（攻撃）・Blue（検知）・Green（修正）エージェントが人手の引き継ぎなしにセキュリティワークフローを実行する。
+  Security Copilotが支援ならPerceptionは実行であり、Hugging Faceのエージェント侵入のように攻撃が機械速度で動く環境では防御も同じスタックが必要だ。
+  レガシーSIEM・SOAR代替圧力、承認境界のコード化、エージェンティックセキュリティのメタトレンドを扱う。
+summary_for_ai: |
+  Opinion column (not investment advice) on Microsoft Project Perception (preview May 2026): Red/Blue/Green multi-agent security,
+  vs Security Copilot (assist vs act), MAI-Cyber-1-Flash, Hugging Face agent intrusion Jul 2026 (17,600 actions),
+  competitor agentic SOC (Google/Palo Alto/CrowdStrike/SentinelOne), Korea AI Basic Act context. As of 2026-07-29.
+date: 2026-07-29
+updated: 2026-07-31
+author: "Dennis Kim"
+lang: ja
+tags:
+  - AI
+  - サイバーセキュリティ
+  - エージェンティックセキュリティ
+  - Microsoft
+  - Project-Perception
+keywords:
+  - "Microsoft Project Perception"
+  - "エージェンティックセキュリティ"
+  - "Red Blue Green エージェント"
+  - "Security Copilot"
+  - "MAI-Cyber-1-Flash"
+  - "Hugging Face エージェント侵入"
+  - "SIEM SOAR"
+group: ai-llm
+featured: false
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # AIはいまやセキュリティを担う — Microsoft Project Perceptionとエージェンティックセキュリティの転換点
 
 ## サマリー
@@ -346,3 +383,5 @@ Red Agentがゼロデイを発見し、Blue Agentが誤検知と分類し、Gree
 | 韓国科学技術情報通信部、AI基本法および施行令（2026-01-22施行） | 国内規制フレームワーク |
 
 **TLP:CLEAR** — 配布制限なし。本コラムの技術詳細は公開された一次資料および公示資料に基づく。
+
+*本稿は情報提供を目的としており、投資勧誘ではありません。*

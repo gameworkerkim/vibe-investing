@@ -1,3 +1,40 @@
+---
+title: "AI Now Takes Charge of Security — Microsoft Project Perception and the Inflection Point of Agentic Security"
+subtitle: "How Red, Blue, and Green agents move security ops from assist to act"
+description: "An analysis of Microsoft Project Perception’s Red/Blue/Green agents, the agentic security shift, legacy vendor risk, and execution-authority boundaries."
+abstract: |
+  In May 2026 Microsoft previewed Project Perception: Red, Blue, and Green agents that run security workflows without human handoff.
+  Where Security Copilot assists, Perception acts — matching machine-speed attacks like the Hugging Face agent intrusion.
+  The piece covers SIEM/SOAR displacement pressure, coding approval boundaries, and agentic security as a meta-trend.
+summary_for_ai: |
+  Opinion column (not investment advice) on Microsoft Project Perception (preview May 2026): Red/Blue/Green multi-agent security,
+  vs Security Copilot (assist vs act), MAI-Cyber-1-Flash, Hugging Face agent intrusion Jul 2026 (17,600 actions),
+  competitor agentic SOC (Google/Palo Alto/CrowdStrike/SentinelOne), Korea AI Basic Act context. As of 2026-07-29.
+date: 2026-07-29
+updated: 2026-07-31
+author: "Dennis Kim"
+lang: en
+tags:
+  - AI
+  - Cybersecurity
+  - Agentic-Security
+  - Microsoft
+  - Project-Perception
+keywords:
+  - "Microsoft Project Perception"
+  - "agentic security"
+  - "Red Blue Green agents"
+  - "Security Copilot"
+  - "MAI-Cyber-1-Flash"
+  - "Hugging Face agent intrusion"
+  - "SIEM SOAR"
+group: ai-llm
+featured: false
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # AI Now Takes Charge of Security — Microsoft Project Perception and the Inflection Point of Agentic Security
 
 ## Summary
@@ -346,3 +383,5 @@ From an investor's perspective, agentic security is not a single market but a **
 | South Korea Ministry of Science and ICT, AI Basic Act and Enforcement Decree (effective 2026-01-22) | Domestic regulatory framework |
 
 **TLP:CLEAR** — No distribution restrictions. Technical details in this column are based on publicly disclosed primary sources and official statements.
+
+*This article is for informational purposes only and is not investment advice.*

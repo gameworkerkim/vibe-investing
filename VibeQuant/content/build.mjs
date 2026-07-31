@@ -596,6 +596,10 @@ const SLUG_OVERRIDES = {
   "Cyworld/The-Pros-and-Cons-of-VC-Investment-as-Seen-Through-the-Cyworld-RCPS-Contract.md":
     "cyworld-rcps-vc-investment-pros-cons",
   "Startup/Shelf-Life-of-Innovation.md": "shelf-life-of-innovation",
+  "AI_Hacking/Column-Project-Perception-20260729.md": "project-perception-20260729",
+  "AI_Hacking/Column-Project-Perception-20260729_EN.md": "project-perception-20260729-en",
+  "AI_Hacking/Column-Project-Perception-20260729_JA.md": "project-perception-20260729-ja",
+  "AI_Hacking/Column-Project-Perception-20260729_ZH.md": "project-perception-20260729-cn",
   "News Letter/vibe-quant-insight-001.md": "vibe-quant-insight-001",
   "News Letter/vibe-quant-insight-001-en.md": "vibe-quant-insight-001-en",
   "News Letter/vibe-quant-insight-001-ja.md": "vibe-quant-insight-001-ja",

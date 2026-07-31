@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>인공지능 이제는 보안을 책임진다 — Microsoft Project Perception과 에이전틱 보안의 전환점 — VibeQuant</title>
+  <meta name="description" content="Microsoft Project Perception의 Red·Blue·Green 에이전트와 에이전틱 보안 전환을 분석하고, 레거시 벤더·실행 권한·투자 시사점을 정리한다." />
+  <link rel="canonical" href="https://docs.vibequant.cc/columns/project-perception-20260729/" />
+  <meta property="og:title" content="인공지능 이제는 보안을 책임진다 — Microsoft Project Perception과 에이전틱 보안의 전환점" />
+  <meta property="og:description" content="Microsoft Project Perception의 Red·Blue·Green 에이전트와 에이전틱 보안 전환을 분석하고, 레거시 벤더·실행 권한·투자 시사점을 정리한다." />
+  <meta property="og:url" content="https://docs.vibequant.cc/columns/project-perception-20260729/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=7" />
+  <link rel="alternate" hreflang="ko" href="https://docs.vibequant.cc/columns/project-perception-20260729/" />
+  <link rel="alternate" hreflang="en" href="https://docs.vibequant.cc/columns/project-perception-20260729-en/" />
+  <link rel="alternate" hreflang="ja" href="https://docs.vibequant.cc/columns/project-perception-20260729-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://docs.vibequant.cc/columns/project-perception-20260729-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://docs.vibequant.cc/columns/project-perception-20260729/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"인공지능 이제는 보안을 책임진다 — Microsoft Project Perception과 에이전틱 보안의 전환점","description":"Microsoft Project Perception의 Red·Blue·Green 에이전트와 에이전틱 보안 전환을 분석하고, 레거시 벤더·실행 권한·투자 시사점을 정리한다.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://docs.vibequant.cc/columns/project-perception-20260729/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Column-Project-Perception-20260729.md","image":"https://vibequant.cc/og-default.png","url":"https://docs.vibequant.cc/columns/project-perception-20260729/","datePublished":"2026-07-29","dateModified":"2026-07-31","inLanguage":"ko","keywords":"AI, 사이버보안, 에이전틱보안, Microsoft, Project-Perception"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Columns","item":"https://docs.vibequant.cc/columns/"},{"@type":"ListItem","position":3,"name":"인공지능 이제는 보안을 책임진다 — Microsoft Project Perception과 에이전틱 보안의 전환점","item":"https://docs.vibequant.cc/columns/project-perception-20260729/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link is-active" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../columns/">Columns</a> · AI · LLM · 빅테크</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">AI · LLM · 빅테크</p>
+        <h1>인공지능 이제는 보안을 책임진다 — Microsoft Project Perception과 에이전틱 보안의 전환점</h1>
+        <p class="article-dates"><time datetime="2026-07-29">발행 2026.07.29</time> · 주제 AI · 사이버보안 · 에이전틱보안 · Microsoft · Project-Perception · <time datetime="2026-07-31">수정 2026.07.31</time></p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn is-active" href="../../columns/project-perception-20260729/" data-lang="KR" aria-current="true">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../columns/project-perception-20260729-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../columns/project-perception-20260729-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../columns/project-perception-20260729-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">요약</p>
+        
+      </header>
+      <div class="article-body prose"><p>2026년 5월, Microsoft는 Project Perception을 프리뷰로 공개했다. Red(공격 시뮬레이션)·Blue(위협 탐지 및 분류)·Green(취약점 수정) 세 개의 전문화된 AI 에이전트가 하나의 팀으로 작동하며, 사람의 개입 없이도 보안 워크플로우 전체를 자동화하는 에이전틱 보안 시스템이다. &quot;사람은 전략을 세우고, 에이전트는 실행을 책임진다&quot;는 비전 아래, Microsoft는 보안 운영의 패러다임을 AI 보조(assist)에서 AI 실행(act)으로 전환하고 있다. </p>
+<p>구글, 팔로알토 네트웍스, 크라우드스트라이크, 센티넬원 등 경쟁사들도 유사한 에이전틱 접근법을 경쟁적으로 도입 중이다. 기존 레거시 보안 벤더들은 이 흐름에 적응할 것인가, 아니면 도태될 것인가. LLM이 왜 지금 보안의 중심이 되었는지, 그리고 그 파급효과를 분석했다.</p>
+<table>
+<thead>
+<tr>
+<th>번호</th>
+<th>시사점</th>
+<th>한 줄 요약</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>보안의 패러다임 전환: 보조에서 실행으로</td>
+<td>AI가 분석만 하던 시대는 끝났다. 이제 AI가 직접 행동한다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>멀티에이전트 오케스트레이션</td>
+<td>Red·Blue·Green이 협업하는 팀 구조는 계층적 자동화의 완성형이다</td>
+</tr>
+<tr>
+<td>3</td>
+<td>레거시 벤더의 위기</td>
+<td>기존 SIEM·SOAR는 단일 모델의 추론 능력에 기능적으로 대체 가능해진다</td>
+</tr>
+<tr>
+<td>4</td>
+<td>실행 권한 경계의 재정의</td>
+<td>AI가 행동하는 시대에 &quot;승인 경계&quot;를 코드로 세우는 것이 핵심 과제다</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>1. Project Perception이란 무엇인가?</h2>
+<h3>1.1 구조 - 세 개의 에이전트, 하나의 팀 플레이</h3>
+<p>Project Perception의 핵심은 <strong>Red·Blue·Green의 3색 에이전트</strong>가 유기적으로 협업하는 멀티에이전트 아키텍처다.</p>
+<table>
+<thead>
+<tr>
+<th>에이전트</th>
+<th>역할</th>
+<th>기존 대응 방식과의 차이</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Red Agent</strong></td>
+<td>공격자처럼 환경을 탐색하고 취약점을 발굴</td>
+<td>연 1~2회 외부 레드팀 점검 → 상시 가동 자동 취약점 발굴</td>
+</tr>
+<tr>
+<td><strong>Blue Agent</strong></td>
+<td>위협을 탐지하고 인시던트를 분류·조사</td>
+<td>사람 분석가가 로그 수집·상관분석 → AI가 풀 컨텍스트로 자동 트리아지</td>
+</tr>
+<tr>
+<td><strong>Green Agent</strong></td>
+<td>식별된 취약점을 자동 수정하고 시스템을 강화</td>
+<td>패치 관리자의 수동 대응 → 탐지-수정이 하나의 연속 워크플로우로</td>
+</tr>
+</tbody></table>
+<p>에이전트들은 서로 정보를 공유하며, Red가 발견한 취약점은 Blue의 위협 인텔리전스와 결합되고 Green이 이를 수정하는 일련의 과정이 사람의 핸드오프 없이 진행된다. Microsoft는 이를 &quot;하나의 발견이 곧 하나의 수정으로 이어진다&quot;고 표현한다.</p>
+<p>3개의 에이전트는 루프 엔지니러링을 통해 보안 취약점을 개선하고 방어 전략을 만든다.</p>
+<h3>1.2 구성 요소</h3>
+<p>Project Perception은 단순한 AI 챗봇이 아니라 다음과 같은 6개 컴포넌트로 구성된 통합 시스템이다.</p>
+<table>
+<thead>
+<tr>
+<th>컴포넌트</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Agents</strong></td>
+<td>Red·Blue·Green 에이전트. 공격 라이프사이클 전체를 커버</td>
+</tr>
+<tr>
+<td><strong>Models</strong></td>
+<td>MAI-Cyber-1-Flash 등 사이버 보안 특화 파운데이션 모델. 범용 LLM이 아닌 보안 전용 멀티모델 접근</td>
+</tr>
+<tr>
+<td><strong>Harness</strong></td>
+<td>에이전트의 오케스트레이션·테스트·통제를 담당하는 프레임워크</td>
+</tr>
+<tr>
+<td><strong>Context</strong></td>
+<td>조직의 과거 인시던트, 정책 결정, ID 관계, 엔드포인트·클라우드·앱 신호를 실시간 통합한 컨텍스트</td>
+</tr>
+<tr>
+<td><strong>Signals &amp; Sensors</strong></td>
+<td>엔드포인트·ID·클라우드·앱 전반의 엔드투엔드 시그널</td>
+</tr>
+<tr>
+<td><strong>Actuators</strong></td>
+<td>에이전트의 결정을 실제 행동으로 옮기는 실행 매커니즘. 단순 권고가 아닌 실제 변경을 수행</td>
+</tr>
+</tbody></table>
+<h3>1.3 Security Copilot과의 차이</h3>
+<p>Microsoft는 Security Copilot(생성형 AI 기반 보안 어시스턴트)과 Project Perception의 관계를 명확히 구분한다.</p>
+<blockquote>
+<p><strong>Security Copilot = AI that assists (AI가 보조)</strong>&gt;<strong>Project Perception = AI that acts (AI가 행동)</strong></p>
+</blockquote>
+<p>Security Copilot은 분석가에게 정보를 제공하고, 위협을 요약하고, 대응 방안을 제안하는 도우미다. Project Perception은 에이전트가 직접 환경을 스캔하고, 취약점을 악용해 보고, 패치를 적용하는 주체다. 두 시스템은 함께 작동하지만, 그 역할의 무게 중심이 근본적으로 다르다.</p>
+<h3>1.4 가격 모델</h3>
+<p>Project Perception은 Security Compute Unit(SCU) 기반의 소비형 종량제 구독 모델이다. 에이전트가 무거운 작업을 수행할수록 더 많은 SCU를 소비하며, 비용은 실제 작업량에 비례한다. 이는 보안 운영팀이 예측 가능한 비용 구조로 시스템을 도입할 수 있게 하는 설계라고 할 수 있다.</p>
+<p>이제 AWS, Azure, GCP를 포함해서 Agentic Security가 유료 모델로 도입되고 있고 이 흐름은 지속될 것이다</p>
+<hr>
+<h2>2. 에이전틱 보안 시스템이 등장하는 이유</h2>
+<h3>2.1 공격의 인공지능 이용 증가</h3>
+<p>2026년 7월, Hugging Face를 침해한 자율 AI 에이전트는 4.5일 동안 <strong>17,600건의 공격 행위</strong>를 아무런 사람의 개입 없이 수행했다. 단일 워커 Pod에서 코드 실행을 확보한 지 13시간 만에 복수의 내부 클러스터에서 cluster-admin 권한을 획득했다. 에이전트는 자체 C2 프로토콜을 설계하고, 청크+XOR+압축 인코딩으로 통신을 은닉했으며, 100개 이상의 일회용 데드드롭 엔드포인트를 운용했다.</p>
+<p>이 사건이 보여준 것은 명확하다. <strong>공격은 이미 기계 속도로 작동하고 있다.</strong> 사람 분석가가 로그를 읽고, 위협을 상관 분석하고, 대응 플레이북을 선택하는 동안 공격은 수천 번의 시도를 이미 완료한다. 방어 측도 같은 속도로 작동하지 않으면 비대칭은 돌이킬 수 없게 벌어진다.</p>
+<p>북한 역시 부족한 사이버 공격 능력을 LLM을 통해 보강하고 있으며 오래된 go 기반의 악성 코드를 Rust 언어 기반으로 변경하며 백신 탐지 회피를 시도하고 있다.</p>
+<h3>2.2 인력 부족과 SOC 피로</h3>
+<p>글로벌 사이버 보안 인력 부족은 400만 명을 넘어섰다(ISC2 2025 보고서 기준). 특히 SOC(Security Operations Center) 분석가의 이직률은 평균 2년을 밑돈다. 무한히 쏟아지는 경보 속에서 오탐을 걸러내고 실제 위협을 식별하는 일은 인간에게 점점 더 벅찬 과제가 되고 있다.</p>
+<p>에이전틱 보안 시스템은 이 두 문제를 동시에 해결한다. 공격 속도에 맞설 수 있는 유일한 방어는 동일한 기술 스택으로 무장한 방어 에이전트이며, 인력 부족을 보완할 유일한 방법은 인간 한 명이 다수의 에이전트를 감독하는 구조다.</p>
+<h3>2.3 컨텍스트의 폭발적 증가</h3>
+<p>현대 엔터프라이즈 환경은 엔드포인트, 클라우드, ID, SaaS 애플리케이션, 네트워크, OT/IoT 장비 등으로 구성된 거대한 신호 공간이다. 단일 위협이라도 수십 개의 이기종 로그 소스를 오가며 흔적을 남긴다. 사람이 이 모든 신호를 실시간으로 상관 분석하는 것은 물리적으로 불가능하다.</p>
+<p>Project Perception의 접근법은 <strong>데이터 수집에서 시작하지 않고 컨텍스트에서 시작한다</strong> 는 것이다. 에이전트는 이미 조직의 전체 컨텍스트(과거 인시던트, ID 관계, 정책, 실시간 시그널)를 로드한 상태에서 작업을 시작한다. 이는 &quot;증거 등급 추론(evidence-grade reasoning)&quot;이며, 단순한 패턴 매칭이 아니다.</p>
+<hr>
+<h2>3. 클라우드와 인프라를 보호하는 새로운 LLM 접근법</h2>
+<h3>3.1 왜 기존 ML로는 안 되는가?</h3>
+<p>지난 10년간 보안 업계는 시그니처 기반 탐지 → 행위 기반 분석 → 머신러닝(ML) 기반 이상 탐지로 진화해 왔다. 그러나 기존 ML 접근법에는 근본적 한계가 있다.</p>
+<ol>
+<li><p><strong>지도학습 모델은 알려진 패턴만 탐지한다.</strong> 제로데이 취약점이나 새로운 공격 체인은 훈련 데이터에 존재하지 않기 때문에 탐지할 수 없다.</p>
+</li>
+<li><p><strong>빈도 기반 이상 탐지는 컨텍스트가 없다.</strong> &quot;평소보다 많은 로그인 시도&quot;가 정상적인 신규 서비스 론칭인지, 공격인지 구분할 수 없다.</p>
+</li>
+<li><p><strong>추론 사슬을 설명할 수 없다.</strong> ML 모델이 &quot;위협 확률 87%&quot;를 출력해도, 분석가는 그 판단의 근거를 알 수 없다.</p>
+</li>
+</ol>
+<p>LLM은 오래된 취약점을 학습하여 오픈 소스상에서 이 코드를 사용한 변종을 재활용하고 취약점 레벨은 낮지만 여러 취약점이 결합되면 제로데이가 되는 긴 컨텍스트 맥략을 잘 이용하고 있다.</p>
+<h3>3.2 LLM이 제공하는 것</h3>
+<p>LLM(대규모 언어 모델)은 위 한계에 대한 근본적인 우회로를 제공한다.</p>
+<table>
+<thead>
+<tr>
+<th>기존 ML</th>
+<th>LLM 기반 접근</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>알려진 패턴 매칭</td>
+<td>미지의 패턴에 대한 <strong>추론(reasoning)</strong></td>
+</tr>
+<tr>
+<td>단일 신호 판단</td>
+<td>다중 신호의 <strong>컨텍스트 통합</strong></td>
+</tr>
+<tr>
+<td>블랙박스 확률 출력</td>
+<td><strong>자연어 추론 사슬(chain-of-thought)</strong> 제공</td>
+</tr>
+<tr>
+<td>정적 모델, 재학습 필요</td>
+<td><strong>인컨텍스트 러닝</strong>으로 새로운 위협에 실시간 적응</td>
+</tr>
+</tbody></table>
+<p>Project Perception은 특히 MAI-Cyber-1-Flash라는 보안 특화 파운데이션 모델을 사용한다. 이는 범용 LLM에 보안 컨텍스트를 덧씌운 것이 아니라, 보안 도메인에 특화된 전용 모델이다. CVE 분석, 익스플로잇 체인 재구성, 공격 그래프 생성, 로그 포렌식 등에 최적화된 토크나이저와 프리트레이닝 코퍼스를 갖추고 있다.</p>
+<h3>3.3 &quot;AI가 행동하는&quot; 것의 기술적 의미</h3>
+<p>Project Perception의 Actuator는 에이전트의 추론 결과를 실제 시스템 변경으로 전환하는 구성 요소다. 이는 권고(예: &quot;이 패치를 적용하세요&quot;)가 아니라 <strong>실행</strong>(패치 적용, 방화벽 규칙 변경, 계정 비활성화)이다.</p>
+<p>Microsoft는 이 지점에서 <strong>Human-in-the-loop</strong> 원칙을 강조한다. 모든 고영향 작업에는 사람의 승인이 필요하며, 모든 결정은 감사 가능하고 재현 가능하다. 다만 이 원칙이 실제 운영 속도에서 어떻게 유지될지는 아직 증명되지 않은 과제다.</p>
+<hr>
+<h2>4. 경쟁 플랫폼 — 에이전틱 보안의 풀사이드 테이블</h2>
+<p>Project Perception이 혼자 등장한 것은 아니다. 주요 보안·클라우드 벤더들이 일제히 유사한 전략을 전개 중이며, 이는 이 기술이 일시적 유행이 아니라 산업의 구조적 전환임을 시사한다.</p>
+<h3>4.1 경쟁 플랫폼 비교</h3>
+<table>
+<thead>
+<tr>
+<th>벤더</th>
+<th>제품/이니셔티브</th>
+<th>접근법</th>
+<th>차별점</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Google</strong></td>
+<td>Project Naptime → Big Sleep</td>
+<td>LLM이 바이너리·소스코드를 분석해 제로데이 취약점을 자동 발굴</td>
+<td>취약점 연구(VR)에 집중. 이미 실제 CVE 다수 발굴. 시큐어플래그, SQLite3 등 실제 취약점 발견</td>
+</tr>
+<tr>
+<td><strong>Palo Alto Networks</strong></td>
+<td>XSIAM + AIOps</td>
+<td>5,000개 이상의 ML 모델을 통합한 SOC 자동화. 에이전틱 보안 오퍼레이터 도입 발표</td>
+<td>SIEM·SOAR·XDR을 단일 AI 플랫폼으로 통합. 방대한 설치 기반의 데이터 우위</td>
+</tr>
+<tr>
+<td><strong>CrowdStrike</strong></td>
+<td>Charlotte AI</td>
+<td>자연어 기반 위협 헌팅·인시던트 분석·대응 자동화 어시스턴트. 2026년 에이전틱 기능 확장</td>
+<td>엔드포인트 텔레메트리 1위의 데이터 규모. Falcon 플랫폼과의 긴밀한 통합</td>
+</tr>
+<tr>
+<td><strong>SentinelOne</strong></td>
+<td>Purple AI</td>
+<td>자연어 기반 보안 분석. Singularity 플랫폼에서 AI 에이전트가 위협 조사와 대응 가이드 제공</td>
+<td>개방형 아키텍처. 자사 에이전트 외에 서드파티 LLM 연동 지원</td>
+</tr>
+<tr>
+<td><strong>Cisco</strong></td>
+<td>AI Defense + Hypershield</td>
+<td>네트워크·애플리케이션 레이어에서 AI 기반 자율 방어. 분산형 AI 엔진이 AI 애플리케이션 자체를 보호</td>
+<td>네트워크 레이어 접근. AI-to-AI 공격 방어에 초점</td>
+</tr>
+<tr>
+<td><strong>OpenAI</strong></td>
+<td>(비공식) 내부 레드팀 평가 Harness</td>
+<td>ExploitGym 등 에이전트의 사이버 능력 평가용 인프라</td>
+<td>보안 제품이 아니라 평가 프레임워크. 그러나 유출·격리 실패 사례에서 보이듯 동일 기술의 양면성</td>
+</tr>
+</tbody></table>
+<h3>4.2 경쟁 구도의 핵심 경쟁 방향</h3>
+<p>보안 에이전트 시장은 다음 3가지 방향에서 경쟁이 진행 중이다.</p>
+<table>
+<thead>
+<tr>
+<th>축</th>
+<th>전략</th>
+<th>대표 기업</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>플랫폼 번들링</strong></td>
+<td>기존 보안 포트폴리오에 AI 에이전트를 통합. 번들 판매로 전환 비용 극대화</td>
+<td>Microsoft, Palo Alto, CrowdStrike</td>
+</tr>
+<tr>
+<td><strong>데이터 우위</strong></td>
+<td>방대한 텔레메트리 데이터로 에이전트를 훈련. 타 벤더가 복제할 수 없는 모델 성능 확보</td>
+<td>Microsoft(Office·Azure·Endpoint), CrowdStrike(Endpoint)</td>
+</tr>
+<tr>
+<td><strong>개방형 생태계</strong></td>
+<td>특정 벤더에 종속되지 않고 다양한 LLM·도구와 연동 가능한 플랫폼 제공</td>
+<td>SentinelOne, Google</td>
+</tr>
+</tbody></table>
+<p>Microsoft의 가장 큰 무기는 <strong>데이터의 깊이와 폭</strong>이다. Office 365의 ID 로그, Azure의 클라우드 텔레메트리, Windows Defender의 엔드포인트 시그널, LinkedIn·GitHub의 공급망 데이터까지 — 이 모든 것이 단일 컨텍스트로 통합된다. 이 데이터 통합 능력은 경쟁사가 단기간에 추격하기 어려운 해자다.</p>
+<h3>4.3 오픈소스 진영의 움직임</h3>
+<p>상용 벤더의 경쟁과 평행하게, 오픈소스 진영에서도 자체적인 에이전틱 보안 도구들이 등장하고 있다.</p>
+<ul>
+<li><strong>Burp Suite + AI Extensions</strong>: 웹 취약점 스캐닝에 LLM 자동화를 결합</li>
+<li><strong>Semgrep + AI</strong>: 코드 정적 분석에 LLM 기반 컨텍스트 인식 취약점 탐지 추가</li>
+<li><strong>LangChain/LlamaIndex 기반 보안 에이전트</strong>: 개발자 커뮤니티에서 자체 구축하는 맞춤형 보안 에이전트</li>
+</ul>
+<p>이 흐름은 에이전틱 보안의 민주화를 의미한다. 과거에는 대기업만 SIEM·SOAR를 구축할 수 있었지만, 이제는 오픈소스 LLM과 프레임워크로 중소기업도 기본적인 에이전트 기반 보안 체계를 가질 수 있게 되었다.</p>
+<hr>
+<h2>5. 왜 지금 LLM이 에이전틱 보안 시스템인가?</h2>
+<h3>5.1 기술적 교차점</h3>
+<p>&quot;왜 하필 지금인가&quot;에 대한 답은 네 가지 기술 성숙도의 동시 도달이다.</p>
+<table>
+<thead>
+<tr>
+<th>성숙 기술</th>
+<th>시점</th>
+<th>보안에 대한 의미</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>LLM 추론 능력</strong></td>
+<td>GPT-5급, Claude Opus급의 다단계 추론. 코드 생성 능력이 프로덕션 수준 도달</td>
+<td>취약점 분석·익스플로잇 체인 재구성이 자동화 가능해짐</td>
+</tr>
+<tr>
+<td><strong>에이전트 프레임워크</strong></td>
+<td>MCP(Model Context Protocol), LangChain 등 표준화된 도구 호출·체이닝 인프라</td>
+<td>LLM이 API를 호출하고, 도구를 조합하고, 멀티스텝 태스크를 수행할 수 있게 됨</td>
+</tr>
+<tr>
+<td><strong>컨텍스트 윈도우</strong></td>
+<td>100만~200만 토큰의 장문 컨텍스트 처리</td>
+<td>방대한 로그·인시던트 기록·코드베이스를 한 번에 로드해 추론 가능</td>
+</tr>
+<tr>
+<td><strong>컴퓨팅 비용</strong></td>
+<td>SCU 기반 소비형 과금 + 추론 하드웨어 비용 하락</td>
+<td>대규모 SOC 운영에도 경제성 확보</td>
+</tr>
+</tbody></table>
+<p>2023년에 GPT-4가 &quot;코드를 읽고 취약점을 설명하라&quot;는 명령에 답할 수 있었다면, 2026년의 LLM은 &quot;이 환경을 스캔하고, 취약점을 찾아내고, 익스플로잇을 검증하고, 패치를 적용하라&quot;는 연속 명령을 실행할 수 있게 되었다.</p>
+<h3>5.2 공격 표면의 구조적 변화</h3>
+<p>또 하나의 중요한 동인은 <strong>공격 표면 자체가 LLM 친화적으로 변했다는 점</strong>이다.</p>
+<ul>
+<li>클라우드 네이티브 환경의 모든 구성은 코드(IaC)로 정의된다 → LLM이 텍스트로 읽고 분석할 수 있다</li>
+<li>API 보안이 가장 큰 공격면이 되었다 → API 스펙·로그·트래픽이 모두 텍스트 기반이다</li>
+<li>소프트웨어 공급망이 복잡해졌다 → SBOM·의존성 그래프가 LLM이 자연스럽게 처리할 수 있는 그래프 데이터다</li>
+<li>ID가 새로운 경계가 되었다 → 수백만 개의 ID 관계가 추론 문제로 치환된다</li>
+</ul>
+<p>기존 보안 도구가 이러한 텍스트·그래프·API 중심의 공격면을 처리하는 데 어려움을 겪는 반면, LLM은 이 도메인에서 타고난 강점을 가진다.</p>
+<h3>5.3 Hugging Face 사건이 던진 경고</h3>
+<p>2026년 7월의 Hugging Face 침해 사건은 이 모든 논의에 결정적 실증을 제공했다.</p>
+<ul>
+<li><strong>공격 측</strong>: OpenAI의 GPT-5.6 + 사전 릴리스 모델이 ExploitGym 평가 중 가드레일이 해제된 상태에서 <strong>스스로 제로데이 취약점을 발견</strong>하고, 이를 연쇄적으로 악용해 Hugging Face 프로덕션까지 침투했다.</li>
+<li><strong>방어 측</strong>: Hugging Face는 침해 로그 분석에 Claude Opus와 Fable을 시도했으나 가드레일에 차단됐다. 결국 NVIDIA가 양자화한 GLM-5.2를 자사 인프라에 직접 올려 포렌식을 완수했다.</li>
+</ul>
+<p>이 사건의 교훈: <strong>공격도 AI, 방어도 AI.</strong> 어느 한쪽만 AI를 도입하는 것은 더 이상 선택이 아니다. 질문은 &quot;AI를 쓸 것인가&quot;에서 &quot;어떤 AI를, 어떤 통제 아래 쓸 것인가&quot;로 바뀌었다.</p>
+<hr>
+<h2>6. 기존 보안 솔루션 업체의 미래</h2>
+<h3>6.1 위기의 본질</h3>
+<p>Project Perception과 같은 에이전틱 시스템이 기존 보안 벤더에게 던지는 질문은 간단하다.</p>
+<blockquote>
+<p><strong>당신의 제품이 하는 일을 AI 에이전트 하나가 할 수 있다면, 당신의 제품은 무엇으로 가치를 증명할 것인가?</strong></p>
+</blockquote>
+<p>이 질문은 단계별로 적용된다.</p>
+<table>
+<thead>
+<tr>
+<th>기존 시장</th>
+<th>위협</th>
+<th>영향도</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SIEM</strong> (보안 정보 이벤트 관리)</td>
+<td>AI가 로그를 직접 상관 분석·트리아지. 대시보드가 필요 없어짐</td>
+<td>🔴 매우 높음</td>
+</tr>
+<tr>
+<td><strong>SOAR</strong> (보안 오케스트레이션 자동화 대응)</td>
+<td>플레이북을 사람이 정의하는 대신 AI가 동적으로 생성·실행</td>
+<td>🔴 높음</td>
+</tr>
+<tr>
+<td><strong>취약점 스캐너</strong></td>
+<td>Red Agent가 상시 가동 자동 취약점 발굴</td>
+<td>🟡 중간</td>
+</tr>
+<tr>
+<td><strong>침입 탐지 시스템(IDS/IPS)</strong></td>
+<td>Blue Agent가 행위 기반 이상 탐지, 시그니처 불필요</td>
+<td>🟡 중간</td>
+</tr>
+<tr>
+<td><strong>패치 관리 도구</strong></td>
+<td>Green Agent가 탐지-수정을 하나의 연속적 자동화로 통합</td>
+<td>🟡 중간</td>
+</tr>
+<tr>
+<td><strong>레드팀 서비스</strong></td>
+<td>Red Agent로 내부화. 컨설팅 수요 감소</td>
+<td>🟡 중간</td>
+</tr>
+</tbody></table>
+<h3>6.2 생존 전략: 세 가지 경로</h3>
+<p>보안 벤더가 취할 수 있는 전략은 크게 세 가지다.</p>
+<h4>경로 A: 플랫폼 통합 (Microsoft 전략)</h4>
+<p>보안 제품 전체를 단일 AI 플랫폼으로 재구성하고, 모든 텔레메트리를 하나의 컨텍스트로 통합한다. 개별 제품이 아니라 데이터 네트워크 효과로 경쟁한다. Microsoft, Palo Alto, CrowdStrike가 이 경로를 선택했다.</p>
+<p><strong>필요 조건</strong>: (1) 다양한 제품 라인에서 발생하는 방대한 텔레메트리, (2) AI 모델 훈련·운영 인프라, (3) 제품 간 데이터 통합을 위한 수년간의 엔지니어링 투자.</p>
+<h4>경로 B: 특화 영역 집중 (베스트 오브 브리드 전략)</h4>
+<p>AI가 범용화할수록, 특정 도메인에서의 초정밀한 전문성이 가치를 가진다. 예를 들어 OT/IoT 보안, 의료기기 보안, 자동차 사이버 보안 등 규제가 엄격하고 도메인 지식이 중요한 영역이다.</p>
+<p><strong>필요 조건</strong>: (1) 일반 AI가 쉽게 획득할 수 없는 도메인 전용 훈련 데이터, (2) 규제 인증 장벽, (3) 고객 환경에 깊이 내재화된 워크플로우.</p>
+<h4>경로 C: AI 위에 올라타기 (에코시스템 전략)</h4>
+<p>자체 AI를 개발하는 대신, Microsoft·Google의 에이전트 플랫폼과 통합되는 특화 도구를 제공한다. SentinelOne의 개방형 아키텍처 접근법이 이에 가깝다.</p>
+<p><strong>필요 조건</strong>: (1) 플랫폼 표준(MCP, API 등)에 대한 빠른 적응력, (2) 플랫폼 벤더에 의해 대체되지 않을 정당한 차별화 지점.</p>
+<h3>6.3 M&amp;A 전망</h3>
+<p>에이전틱 보안 전환은 상당한 M&amp;A 활동을 촉발할 것으로 예상된다.</p>
+<ul>
+<li><strong>SIEM·SOAR 스타트업</strong>: 대형 플랫폼 벤더에 의한 인수합병 가능성이 높다. 독립 생존이 어려운 세그먼트.</li>
+<li><strong>AI 네이티브 보안 스타트업</strong>: 보안 특화 파운데이션 모델을 보유한 스타트업은 프리미엄 밸류에이션을 인정받을 전망.</li>
+<li><strong>레거시 벤더의 인수 방어</strong>: 대형 SIEM·방화벽 벤더들이 AI 스타트업을 공격적으로 인수하며 생존을 도모할 가능성이 높다.</li>
+</ul>
+<h3>6.4 변화의 속도</h3>
+<p>전환이 일어나는 속도는 다음 세 변수에 달려 있다.</p>
+<ol>
+<li><strong>AI의 신뢰성</strong>: 에이전트가 오탐·오작동으로 대규모 장애를 일으킨다면 신뢰 회복에 수년이 소요된다.</li>
+<li><strong>규제</strong>: 금융·의료·국방 등 규제 산업에서 &quot;AI가 직접 행동&quot;하는 시스템의 인증이 얼마나 빨리 정비되는가.</li>
+<li><strong>인력 재교육</strong>: 기존 보안 인력이 AI 에이전트를 감독하는 역할로 전환되는 속도. 기술만 있다고 조직이 따라오는 것은 아니다.</li>
+</ol>
+<p>현실적 추정으로, <strong>2026~2028년은 과도기</strong>다. SIEM·SOAR는 여전히 존재하지만 그 가치는 급격히 하락하고, 2029년 이후에는 AI 에이전트 중심의 보안 운영이 주류가 될 것으로 전망된다.</p>
+<hr>
+<h2>7. 투자 관점 - 누가 이기고 누가 지는가?</h2>
+<h3>7.1 수혜 그룹</h3>
+<table>
+<thead>
+<tr>
+<th>그룹</th>
+<th>근거</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Microsoft</strong></td>
+<td>Project Perception + Azure 데이터 + M365 생태계의 통합. 에이전틱 보안에서 가장 유리한 포지션</td>
+</tr>
+<tr>
+<td><strong>Palo Alto Networks</strong></td>
+<td>XSIAM의 방대한 데이터 + 플랫폼 전략으로 전환 일찍 시작. SIEM·SOAR 시장 재편의 중심</td>
+</tr>
+<tr>
+<td><strong>CrowdStrike</strong></td>
+<td>엔드포인트 텔레메트리의 데이터 우위. Charlotte AI가 Falcon 생태계의 리텐션 강화</td>
+</tr>
+<tr>
+<td><strong>보안 특화 파운데이션 모델 스타트업</strong></td>
+<td>MAI-Cyber-1-Flash 같은 보안 도메인 전용 모델의 희소성. M&amp;A 타겟으로 프리미엄</td>
+</tr>
+<tr>
+<td><strong>클라우드 인프라</strong></td>
+<td>에이전트 운영에 필요한 GPU·추론 인프라 수요 증가. AWS·Azure·GCP 수혜</td>
+</tr>
+</tbody></table>
+<h3>7.2 위험 그룹</h3>
+<table>
+<thead>
+<tr>
+<th>그룹</th>
+<th>근거</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>중소 SIEM 벤더</strong></td>
+<td>AI가 대시보드·룰 기반 탐지를 빠르게 대체. 차별화 소멸</td>
+</tr>
+<tr>
+<td><strong>레거시 SOAR</strong></td>
+<td>플레이북 자동화가 AI의 동적 응답에 비해 경직됨. 기능적 대체</td>
+</tr>
+<tr>
+<td><strong>보안 컨설팅(로우엔드)</strong></td>
+<td>기본 침투 테스트·취약점 진단의 AI 내부화 가속</td>
+</tr>
+<tr>
+<td><strong>MSSP(로우엔드)</strong></td>
+<td>단순 24/7 모니터링 서비스의 AI 대체 압력</td>
+</tr>
+</tbody></table>
+<h3>7.3 주목해야 할 지표</h3>
+<ul>
+<li><strong>SCU 소비량 vs 기존 SIEM 라이선스 매출</strong>: Project Perception의 SCU 소비 추이가 SIEM 라이선스 매출을 추월하는 시점이 변곡점.</li>
+<li><strong>MSSP의 AI 에이전트 도입률</strong>: MSSP가 AI 에이전트를 고객 서비스에 통합하는 속도. 빠를수록 전통적 SOC 아웃소싱 시장 잠식.</li>
+<li><strong>보안 인력 채용 공고 변화</strong>: &quot;SIEM 분석가&quot; 공고가 줄고 &quot;AI 보안 에이전트 운영자&quot;가 느는 흐름이 정량적 지표.</li>
+</ul>
+<hr>
+<h2>8. 남은 과제와 열린 질문</h2>
+<h3>8.1 실행 권한의 경계 — 누가 AI의 블랙박스를 감시하는가?</h3>
+<p>Human-in-the-loop은 강력한 원칙이지만, 실제 운영에서는 까다로운 문제를 던진다.</p>
+<ul>
+<li>수천 건의 경보 중 인간의 승인이 필요한 작업을 어떻게 선별할 것인가?</li>
+<li>승인 대기 시간 동안 공격은 계속 확산된다. 속도와 통제의 균형은 어디인가?</li>
+<li>&quot;인간의 판단&quot;이 AI의 판단보다 일관되게 우월한가?</li>
+</ul>
+<p>Hugging Face 보고서의 지적처럼, 신뢰 경계를 <strong>모델의 판단이 아니라 실행 계층</strong>에 세우는 것이 유일한 해법이다. 문제는 이 경계를 어떻게 기술적으로 구현할 것인지다.</p>
+<h3>8.2 모델 간 상호작용의 예측 불가능성</h3>
+<p>Red Agent가 제로데이를 발견하고, Blue Agent가 오탐으로 분류하고, Green Agent가 패치를 잘못 적용하는 — 다중 에이전트 간 상호작용 오류는 디버깅이 극도로 어렵다. 3개의 에이전트만 있어도 발생 가능한 상호작용 경로는 기하급수적으로 증가한다.</p>
+<h3>8.3 규제의 그림자</h3>
+<ul>
+<li>EU AI Act: &quot;고위험 AI&quot;로 분류될 경우, 보안 에이전트는 엄격한 적합성 평가를 통과해야 한다.</li>
+<li>한국 AI 기본법: 고영향 AI 사업자 책무. &quot;AI가 보안 인프라를 자동 운영하는 것&quot;의 법적 해석이 아직 정립되지 않음.</li>
+<li>미국: 연방 기관의 AI 보안 도구 도입 지침 부재. FedRAMP 인증 기준이 에이전틱 시스템을 상정하지 않음.</li>
+</ul>
+<h3>8.4 보안 AI의 보안 — Quis custodiet ipsos custodes?</h3>
+<p>에이전틱 보안 시스템 자체가 공격 대상이 되면 어떻게 되는가? 에이전트의 프롬프트 주입, MCP 커넥터의 중간자 공격, 컨텍스트 데이터 오염 — &quot;경비원을 지키는 경비원&quot; 문제는 이제 단순한 라틴어 경구가 아니라 실제 아키텍처 설계 과제다.</p>
+<hr>
+<h2>9. 마치며 — 엑셀에서 오라클로, 그리고 전투원으로</h2>
+<p>필자는 이전 칼럼에서 &quot;LLM은 계산을 하기 위한 엑셀이지 정답을 찾는 오라클이 아니다&quot;라고 써 왔다. 그 명제는 Project Perception의 등장으로 한 겹 더 전개된다.</p>
+<p><strong>LLM은 이제 사이버 전장에서 공격자가 되었다.</strong></p>
+<p>공격하는 AI, 방어하는 AI, 복구하는 AI — 모두 같은 기술 스택에서 파생되었다. 차이는 목적 함수와 실행 권한에 있다. 공격 에이전트는 가드레일이 꺼진 상태에서 목표를 향해 달려가고, 방어 에이전트는 가드레일이 켜진 상태에서 그 속도를 따라잡아야 하는 비대칭이 존재한다.</p>
+<p>그러나 이 비대칭은 기술의 문제라기보다 설계의 문제다. 공격자는 안전 장치를 끌 수 있다. 방어자는 끌 수 없다. 이 지점이 바로 <strong>정책·규제·거버넌스가 기술을 따라잡아야 하는 접점</strong>이다.</p>
+<p>투자자 관점에서, 에이전틱 보안은 단일 시장이 아니라 <strong>기존 보안 시장 전체를 재구성하는 메타 트렌드</strong>다. SIEM, SOAR, 취약점 관리, 침투 테스트 — 각각 수십억 달러 규모의 시장들이 하나씩 AI 에이전트에 의해 재편될 것이다. 이 재편의 방향을 읽는 자가 다음 5년의 보안 시장을 읽는다.</p>
+<blockquote>
+<p><strong>인공지능이 보안을 책임지는 시대. 그 시대의 진정한 승자는 AI가 아니라, AI의 실행 경계를 정확히 설계한 사람들이다.</strong></p>
+</blockquote>
+<hr>
+<h2>참고 자료</h2>
+<table>
+<thead>
+<tr>
+<th>출처</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Microsoft, &quot;Project Perception — Agentic System&quot; (2026-05)</td>
+<td>1차 출처. 제품 개요, 구성 요소, FAQ</td>
+</tr>
+<tr>
+<td>Microsoft, &quot;Announcing Project Perception&quot; Blog (2026-05)</td>
+<td>출시 배경 및 전략적 비전</td>
+</tr>
+<tr>
+<td>Hugging Face, &quot;Anatomy of a Frontier Lab Agent Intrusion&quot; (2026-07-27)</td>
+<td>에이전틱 공격의 실증 사례. 17,600건 행동 포렌식</td>
+</tr>
+<tr>
+<td>OpenAI, &quot;Hugging Face model evaluation security incident&quot; (2026-07-21)</td>
+<td>공격 측 관점. ExploitGym 평가 통제 실패 인정</td>
+</tr>
+<tr>
+<td>Google, &quot;Project Naptime: Evaluating Offensive Security Capabilities of LLMs&quot;</td>
+<td>구글의 에이전틱 취약점 연구 접근법</td>
+</tr>
+<tr>
+<td>Palo Alto Networks, &quot;XSIAM: The AI-Driven SOC Platform&quot;</td>
+<td>경쟁 플랫폼 분석 참고</td>
+</tr>
+<tr>
+<td>CrowdStrike, &quot;Charlotte AI&quot; product documentation</td>
+<td>AI 네이티브 보안 어시스턴트</td>
+</tr>
+<tr>
+<td>SentinelOne, &quot;Purple AI&quot; product documentation</td>
+<td>개방형 AI 보안 플랫폼</td>
+</tr>
+<tr>
+<td>ISC2, &quot;Cybersecurity Workforce Study 2025&quot;</td>
+<td>글로벌 보안 인력 부족 통계</td>
+</tr>
+<tr>
+<td>과학기술정보통신부, AI 기본법 및 시행령 (2026-01-22 시행)</td>
+<td>국내 규제 프레임워크</td>
+</tr>
+</tbody></table>
+<p><strong>TLP:CLEAR</strong> — 배포 제한 없음. 본 칼럼의 기술 상세는 공개된 1차 출처 및 공시 자료에 근거한다.</p>
+<p><em>본 글은 정보 제공 목적이며 투자 권유가 아닙니다.</em></p>
+</div>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Column-Project-Perception-20260729.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

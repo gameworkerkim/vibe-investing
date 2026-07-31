@@ -1,3 +1,40 @@
+---
+title: "人工智能如今扛起安全大旗 — Microsoft Project Perception与智能体安全的转折点"
+subtitle: "红·蓝·绿智能体将安全运营从辅助推向执行的范式转换"
+description: "分析Microsoft Project Perception的红蓝绿智能体与智能体安全转型，并梳理传统厂商风险、执行权限边界与投资启示。"
+abstract: |
+  2026年5月Microsoft预览发布的Project Perception，由红（攻击）·蓝（检测）·绿（修复）智能体在无人交接的情况下执行安全工作流。
+  Security Copilot是辅助，Perception是执行；面对Hugging Face智能体入侵这类机器速度的攻击，防御也需要同一技术栈。
+  本文讨论传统SIEM/SOAR替代压力、审批边界的代码化，以及智能体安全作为元趋势的含义。
+summary_for_ai: |
+  Opinion column (not investment advice) on Microsoft Project Perception (preview May 2026): Red/Blue/Green multi-agent security,
+  vs Security Copilot (assist vs act), MAI-Cyber-1-Flash, Hugging Face agent intrusion Jul 2026 (17,600 actions),
+  competitor agentic SOC (Google/Palo Alto/CrowdStrike/SentinelOne), Korea AI Basic Act context. As of 2026-07-29.
+date: 2026-07-29
+updated: 2026-07-31
+author: "Dennis Kim"
+lang: zh
+tags:
+  - AI
+  - 网络安全
+  - 智能体安全
+  - Microsoft
+  - Project-Perception
+keywords:
+  - "Microsoft Project Perception"
+  - "智能体安全"
+  - "红蓝绿智能体"
+  - "Security Copilot"
+  - "MAI-Cyber-1-Flash"
+  - "Hugging Face 智能体入侵"
+  - "SIEM SOAR"
+group: ai-llm
+featured: false
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 人工智能如今扛起安全大旗 — Microsoft Project Perception与智能体安全的转折点
 
 ## 摘要
@@ -346,3 +383,5 @@ Human-in-the-loop是强有力的原则，但在实操中提出棘手问题。
 | 韩国科学技术信息通信部, AI基本法及施行令（2026-01-22施行） | 国内监管框架 |
 
 **TLP:CLEAR** — 无分发限制。本专栏技术详情基于公开的一手资料及公示数据。
+
+*本文仅供信息参考，不构成投资建议。*

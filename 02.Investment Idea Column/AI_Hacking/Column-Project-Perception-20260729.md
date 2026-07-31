@@ -1,3 +1,41 @@
+---
+title: "인공지능 이제는 보안을 책임진다 — Microsoft Project Perception과 에이전틱 보안의 전환점"
+subtitle: "Red·Blue·Green 에이전트가 보조에서 실행으로 옮기는 보안 운영의 패러다임"
+description: "Microsoft Project Perception의 Red·Blue·Green 에이전트와 에이전틱 보안 전환을 분석하고, 레거시 벤더·실행 권한·투자 시사점을 정리한다."
+abstract: |
+  2026년 5월 Microsoft가 공개한 Project Perception은 Red(공격)·Blue(탐지)·Green(수정) 에이전트가 사람 핸드오프 없이 보안 워크플로우를 실행한다.
+  Security Copilot이 보조라면 Perception은 실행이며, Hugging Face 에이전트 침해처럼 공격이 기계 속도로 움직이는 환경에서 방어도 같은 스택이 필요하다.
+  레거시 SIEM·SOAR 대체 압력, 승인 경계의 코드화, 에이전틱 보안 메타 트렌드를 다룬다.
+summary_for_ai: |
+  Opinion column (not investment advice) on Microsoft Project Perception (preview May 2026): Red/Blue/Green multi-agent security,
+  vs Security Copilot (assist vs act), MAI-Cyber-1-Flash, Hugging Face agent intrusion Jul 2026 (17,600 actions),
+  competitor agentic SOC (Google/Palo Alto/CrowdStrike/SentinelOne), Korea AI Basic Act context. As of 2026-07-29.
+date: 2026-07-29
+updated: 2026-07-31
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - AI
+  - 사이버보안
+  - 에이전틱보안
+  - Microsoft
+  - Project-Perception
+keywords:
+  - "Microsoft Project Perception"
+  - "에이전틱 보안"
+  - "Red Blue Green 에이전트"
+  - "Security Copilot"
+  - "MAI-Cyber-1-Flash"
+  - "Hugging Face 에이전트 침해"
+  - "SIEM SOAR"
+group: ai-llm
+featured: true
+featured_rank: 1
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 인공지능 이제는 보안을 책임진다 — Microsoft Project Perception과 에이전틱 보안의 전환점
 
 ## 요약
@@ -29,7 +67,7 @@ Project Perception의 핵심은 **Red·Blue·Green의 3색 에이전트**가 유
 
 에이전트들은 서로 정보를 공유하며, Red가 발견한 취약점은 Blue의 위협 인텔리전스와 결합되고 Green이 이를 수정하는 일련의 과정이 사람의 핸드오프 없이 진행된다. Microsoft는 이를 "하나의 발견이 곧 하나의 수정으로 이어진다"고 표현한다.
 
-3개의 에이전트는 루프 엔지니러링을 통해 보안 취약점으 개선하고 방어 전략을 만든다.
+3개의 에이전트는 루프 엔지니러링을 통해 보안 취약점을 개선하고 방어 전략을 만든다.
 
 ### 1.2 구성 요소
 
@@ -346,3 +384,5 @@ Red Agent가 제로데이를 발견하고, Blue Agent가 오탐으로 분류하�
 | 과학기술정보통신부, AI 기본법 및 시행령 (2026-01-22 시행) | 국내 규제 프레임워크 |
 
 **TLP:CLEAR** — 배포 제한 없음. 본 칼럼의 기술 상세는 공개된 1차 출처 및 공시 자료에 근거한다.
+
+*본 글은 정보 제공 목적이며 투자 권유가 아닙니다.*
