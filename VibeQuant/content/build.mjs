@@ -1675,7 +1675,6 @@ function shareBarHtml({ url, title, description = "", lang = "KR", placement = "
   <a class="share-btn" data-share="x" href="${esc(xHref)}" target="_blank" rel="noopener noreferrer">X</a>
   <a class="share-btn" data-share="facebook" href="${esc(fbHref)}" target="_blank" rel="noopener noreferrer">Facebook</a>
   <a class="share-btn" data-share="linkedin" href="${esc(liHref)}" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-  <button type="button" class="share-btn" data-share="kakao">KakaoTalk</button>
   <button type="button" class="share-btn" data-share="copy">${esc(labels.copy)}</button>
   <span class="share-status" data-share-status hidden></span>
 </nav>`;
@@ -1775,7 +1774,7 @@ function buildArticle(item, section) {
       </aside>
     </article>
   </main>
-  <script src="${prefix}js/share.js?v=1" defer></script>`;
+  <script src="${prefix}js/share.js?v=2" defer></script>`;
   const outDir = path.join(PAGES, section, item.slug);
   ensureDir(outDir);
   const metaDesc = parsed.description || item.description;
