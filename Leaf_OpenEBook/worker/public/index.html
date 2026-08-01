@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="robots" content="noindex, nofollow">
+<title>Leaf — 화보집</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #000;
+    overflow: hidden;
+    height: 100dvh;
+    width: 100vw;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+  }
+
+  #viewer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #image-container {
+    position: relative;
+    max-width: 95vw;
+    max-height: 95vh;
+    display: inline-block;
+  }
+
+  #photo {
+    max-width: 95vw;
+    max-height: 95vh;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+  }
+
+  #watermark-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    overflow: hidden;
+  }
+
+  .wm-line {
+    position: absolute;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.09);
+    font-size: 13px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    transform: rotate(-25deg);
+    pointer-events: none;
+  }
+
+  #nav {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    gap: 16px;
+  }
+  #nav button {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 999px;
+    font-size: 16px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #page-indicator {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.5);
+    font-family: monospace;
+    z-index: 100;
+    font-size: 13px;
+  }
+
+  #capture-warning {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    color: #ff4444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    text-align: center;
+    padding: 20px;
+  }
+  #capture-warning.show { opacity: 1; }
+
+  #loading {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.6);
+    font-size: 15px;
+    z-index: 50;
+  }
+</style>
+</head>
+<body>
+
+<div id="loading">불러오는 중…</div>
+<div id="viewer" style="visibility:hidden">
+  <div id="image-container">
+    <img id="photo" src="" alt="화보">
+    <div id="watermark-overlay"></div>
+  </div>
+</div>
+
+<div id="page-indicator"></div>
+<div id="capture-warning">⚠ 캡처가 감지되었습니다.<br>서버에 기록됩니다.</div>
+
+<nav id="nav">
+  <button id="prev-btn">⟨ 이전</button>
+  <button id="next-btn">다음 ⟩</button>
+</nav>
+
+<script>
+// ── 설정 ──
+const ALBUM_ID = 1;             // 현재 화보집 id (추후 목록에서 선택)
+const REPORT_URL = 'api/capture-alert';
+const META_URL = 'api/albums/' + ALBUM_ID + '/meta';
+let pageCount = 0;
+let currentIndex = 0;
+
+// ── 서버 알림 API ──
+async function reportCapture(detail) {
+  try {
+    await fetch(REPORT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        albumId: ALBUM_ID,
+        page: currentIndex + 1,
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        detail: detail,
+      }),
+      keepalive: true,
+    });
+  } catch (_) { /* silent */ }
+}
+
+// ── 워터마크 오버레이 (서버 워터마크와 병행) ──
+function renderWatermark() {
+  const overlay = document.getElementById('watermark-overlay');
+  overlay.innerHTML = '';
+  const container = document.getElementById('image-container');
+  const w = container.offsetWidth;
+  const h = container.offsetHeight;
+  if (!w || !h) return;
+
+  const text = 'Leaf ｜ 개인 열람용 · 무단 전재 금지';
+  const fontSize = Math.max(12, Math.min(w, h) * 0.03);
+  const stepX = fontSize * 12;
+  const stepY = fontSize * 6;
+
+  for (let y = -stepY; y < h + stepY; y += stepY) {
+    for (let x = -stepX; x < w + stepX; x += stepX) {
+      const span = document.createElement('span');
+      span.className = 'wm-line';
+      span.textContent = text;
+      span.style.cssText =
+        'left:' + x + 'px; top:' + y + 'px;' +
+        'font-size:' + fontSize + 'px;' +
+        'opacity:' + (0.05 + Math.random() * 0.04) + ';';
+      overlay.appendChild(span);
+    }
+  }
+}
+
+function loadImage(index) {
+  const img = document.getElementById('photo');
+  img.src = 'api/albums/' + ALBUM_ID + '/pages/' + (index + 1);
+  document.getElementById('page-indicator').textContent =
+    '화보 ' + (index + 1) + ' / ' + pageCount;
+  img.onload = function () {
+    document.getElementById('loading').style.display = 'none';
+    document.getElementById('viewer').style.visibility = 'visible';
+    renderWatermark();
+  };
+}
+
+function next() { currentIndex = (currentIndex + 1) % pageCount; loadImage(currentIndex); }
+function prev() { currentIndex = (currentIndex - 1 + pageCount) % pageCount; loadImage(currentIndex); }
+
+document.getElementById('next-btn').addEventListener('click', next);
+document.getElementById('prev-btn').addEventListener('click', prev);
+
+document.addEventListener('keydown', function (e) {
+  if (e.key === 'ArrowRight') next();
+  if (e.key === 'ArrowLeft') prev();
+});
+
+// ═══════════════════════════════════════════
+// 1. 우클릭 / 인쇄 단축키 차단
+// ═══════════════════════════════════════════
+document.addEventListener('contextmenu', function (e) {
+  e.preventDefault();
+  showWarning('우클릭이 차단되었습니다');
+  reportCapture('contextmenu');
+});
+
+document.addEventListener('keydown', function (e) {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+    e.preventDefault();
+    showWarning('인쇄가 차단되었습니다');
+    reportCapture('print_attempt');
+  }
+});
+
+// ═══════════════════════════════════════════
+// 2. DevTools 감지 (창 크기 변화 — 힌트만)
+// ═══════════════════════════════════════════
+let devtoolsOpen = false;
+const threshold = 160;
+function detectDevTools() {
+  const wDetected = window.outerWidth - window.innerWidth > threshold;
+  const hDetected = window.outerHeight - window.innerHeight > threshold;
+  if ((wDetected || hDetected) && !devtoolsOpen) {
+    devtoolsOpen = true;
+    reportCapture('devtools_open');
+  }
+  if (!(wDetected || hDetected) && devtoolsOpen) {
+    devtoolsOpen = false;
+  }
+}
+setInterval(detectDevTools, 1000);
+
+// ═══════════════════════════════════════════
+// 3. 모바일: visibilitychange 힌트 (오탐 주의)
+// ═══════════════════════════════════════════
+let lastVisibilityChange = 0;
+document.addEventListener('visibilitychange', function () {
+  if (document.hidden) {
+    lastVisibilityChange = Date.now();
+  } else {
+    const hiddenDuration = Date.now() - lastVisibilityChange;
+    if (hiddenDuration > 100 && hiddenDuration < 2500) {
+      reportCapture('mobile_visibility_spike');
+    }
+  }
+});
+
+// ═══════════════════════════════════════════
+// 공통: 경고 표시
+// ═══════════════════════════════════════════
+function showWarning(msg) {
+  const el = document.getElementById('capture-warning');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(function () { el.classList.remove('show'); }, 1500);
+}
+
+// ── 초기화 ──
+(async function init() {
+  try {
+    const res = await fetch(META_URL);
+    const meta = await res.json();
+    pageCount = meta.totalPages || 0;
+    if (!pageCount) throw new Error('empty album');
+    loadImage(0);
+  } catch (err) {
+    document.getElementById('loading').textContent = '화보집을 불러오지 못했습니다.';
+  }
+})();
+
+window.addEventListener('resize', renderWatermark);
+</script>
+</body>
+</html>
