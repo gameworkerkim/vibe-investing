@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
 <meta name="robots" content="noindex, nofollow">
 <title>Leaf — 화보집</title>
 <style>
@@ -26,20 +26,30 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    /* 하단 네비 + safe-area 만큼 확보 — 버튼이 화보 위로 겹치지 않게 */
+    padding: 48px 12px calc(88px + env(safe-area-inset-bottom, 0px));
   }
 
   #image-container {
     position: relative;
-    max-width: 95vw;
-    max-height: 95vh;
+    max-width: 100%;
+    max-height: 100%;
     display: inline-block;
+    line-height: 0;
   }
 
   #photo {
-    max-width: 95vw;
-    max-height: 95vh;
+    max-width: min(95vw, 100%);
+    max-height: calc(100dvh - 48px - 88px - env(safe-area-inset-bottom, 0px));
     object-fit: contain;
     display: block;
+    pointer-events: none;
+  }
+
+  #photo-canvas {
+    max-width: min(95vw, 100%);
+    max-height: calc(100dvh - 48px - 88px - env(safe-area-inset-bottom, 0px));
+    display: none;
     pointer-events: none;
   }
 
@@ -54,44 +64,73 @@
   .wm-line {
     position: absolute;
     white-space: nowrap;
-    color: rgba(255, 255, 255, 0.09);
+    color: rgba(255, 255, 255, 0.11);
     font-size: 13px;
-    font-weight: bold;
-    letter-spacing: 2px;
+    font-weight: 700;
+    letter-spacing: 1px;
     transform: rotate(-25deg);
     pointer-events: none;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   }
 
   #nav {
     position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
+    left: 0;
+    right: 0;
+    bottom: 0;
     z-index: 100;
     display: flex;
-    gap: 16px;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px calc(12px + env(safe-area-inset-bottom, 0px));
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.72) 35%, rgba(0,0,0,0.92) 100%);
   }
   #nav button {
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(8px);
-    border: 1px solid rgba(255,255,255,0.3);
+    flex: 1 1 0;
+    max-width: 148px;
+    min-height: 48px;
+    background: rgba(255,255,255,0.14);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.28);
     color: #fff;
-    padding: 12px 28px;
+    padding: 12px 16px;
     border-radius: 999px;
-    font-size: 16px;
+    font-size: 15px;
+    font-weight: 600;
     cursor: pointer;
     -webkit-tap-highlight-color: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   #page-indicator {
     position: fixed;
-    top: 20px;
+    top: calc(12px + env(safe-area-inset-top, 0px));
     left: 50%;
     transform: translateX(-50%);
-    color: rgba(255,255,255,0.5);
-    font-family: monospace;
+    color: rgba(255,255,255,0.55);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     z-index: 100;
     font-size: 13px;
+  }
+
+  #identity-chip {
+    position: fixed;
+    top: calc(36px + env(safe-area-inset-top, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    color: rgba(255,255,255,0.35);
+    font-size: 10px;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    max-width: 92vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    pointer-events: none;
   }
 
   #capture-warning {
@@ -102,7 +141,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 22px;
     z-index: 9999;
     opacity: 0;
     pointer-events: none;
@@ -129,28 +168,58 @@
 <div id="loading">불러오는 중…</div>
 <div id="viewer" style="visibility:hidden">
   <div id="image-container">
-    <img id="photo" src="" alt="화보">
+    <img id="photo" src="" alt="화보" crossorigin="anonymous">
+    <canvas id="photo-canvas" aria-hidden="true"></canvas>
     <div id="watermark-overlay"></div>
   </div>
 </div>
 
 <div id="page-indicator"></div>
+<div id="identity-chip"></div>
 <div id="capture-warning">⚠ 캡처가 감지되었습니다.<br>서버에 기록됩니다.</div>
 
-<nav id="nav">
-  <button id="prev-btn">⟨ 이전</button>
-  <button id="next-btn">다음 ⟩</button>
+<nav id="nav" aria-label="페이지 이동">
+  <button type="button" id="prev-btn">⟨ 이전</button>
+  <button type="button" id="next-btn">다음 ⟩</button>
 </nav>
 
 <script>
 // ── 설정 ──
-const ALBUM_ID = 1;             // 현재 화보집 id (추후 목록에서 선택)
+const ALBUM_ID = 1;
 const REPORT_URL = 'api/capture-alert';
 const META_URL = 'api/albums/' + ALBUM_ID + '/meta';
+const IDENTITY_URL = 'api/viewer-identity';
+const WM_MAGIC = [0x4c, 0x45, 0x41, 0x46, 0x57, 0x4d, 0x31]; // LEAFWM1
 let pageCount = 0;
 let currentIndex = 0;
+let viewerIdentity = {
+  sessionId: 'pending',
+  ip: 'unknown',
+  email: 'guest@leaf.local',
+  label: 'Leaf | guest',
+};
 
-// ── 서버 알림 API ──
+function identityPayload() {
+  return JSON.stringify({
+    v: 1,
+    sid: viewerIdentity.sessionId,
+    ip: viewerIdentity.ip,
+    email: viewerIdentity.email,
+    album: ALBUM_ID,
+    page: currentIndex + 1,
+    ts: new Date().toISOString(),
+  });
+}
+
+function watermarkText() {
+  return (
+    'Leaf | ' + viewerIdentity.email +
+    ' | ' + viewerIdentity.sessionId.slice(0, 8) +
+    ' | ' + viewerIdentity.ip +
+    ' | 무단전재 금지'
+  );
+}
+
 async function reportCapture(detail) {
   try {
     await fetch(REPORT_URL, {
@@ -162,13 +231,15 @@ async function reportCapture(detail) {
         timestamp: new Date().toISOString(),
         userAgent: navigator.userAgent,
         detail: detail,
+        sessionId: viewerIdentity.sessionId,
+        email: viewerIdentity.email,
       }),
       keepalive: true,
     });
   } catch (_) { /* silent */ }
 }
 
-// ── 워터마크 오버레이 (서버 워터마크와 병행) ──
+// ── 시각적 워터마크 (이메일·세션·IP) ──
 function renderWatermark() {
   const overlay = document.getElementById('watermark-overlay');
   overlay.innerHTML = '';
@@ -177,10 +248,10 @@ function renderWatermark() {
   const h = container.offsetHeight;
   if (!w || !h) return;
 
-  const text = 'Leaf ｜ 개인 열람용 · 무단 전재 금지';
-  const fontSize = Math.max(12, Math.min(w, h) * 0.03);
-  const stepX = fontSize * 12;
-  const stepY = fontSize * 6;
+  const text = watermarkText();
+  const fontSize = Math.max(11, Math.min(w, h) * 0.028);
+  const stepX = fontSize * Math.max(14, text.length * 0.55);
+  const stepY = fontSize * 5.5;
 
   for (let y = -stepY; y < h + stepY; y += stepY) {
     for (let x = -stepX; x < w + stepX; x += stepX) {
@@ -190,20 +261,130 @@ function renderWatermark() {
       span.style.cssText =
         'left:' + x + 'px; top:' + y + 'px;' +
         'font-size:' + fontSize + 'px;' +
-        'opacity:' + (0.05 + Math.random() * 0.04) + ';';
+        'opacity:' + (0.07 + Math.random() * 0.05) + ';';
       overlay.appendChild(span);
     }
+  }
+
+  const chip = document.getElementById('identity-chip');
+  chip.textContent = viewerIdentity.label;
+}
+
+// ── 보이지 않는 워터마크 (LSB, LEAFWM1 페이로드) ──
+function utf8Bytes(str) {
+  return Array.from(new TextEncoder().encode(str));
+}
+
+function buildLeafPayload(str) {
+  const data = utf8Bytes(str);
+  const len = data.length;
+  return WM_MAGIC.concat([
+    (len >>> 24) & 0xff,
+    (len >>> 16) & 0xff,
+    (len >>> 8) & 0xff,
+    len & 0xff,
+  ]).concat(data);
+}
+
+function embedInvisibleWatermark(imageData, payloadStr) {
+  const payload = buildLeafPayload(payloadStr);
+  const bits = [];
+  for (let i = 0; i < payload.length; i++) {
+    for (let b = 7; b >= 0; b--) bits.push((payload[i] >> b) & 1);
+  }
+  const data = imageData.data;
+  const step = 4; // every pixel, blue channel LSB
+  let bitIdx = 0;
+  for (let i = 0; i < data.length && bitIdx < bits.length; i += step) {
+    data[i + 2] = (data[i + 2] & 0xfe) | bits[bitIdx++];
+  }
+  // terminator marker length already in header
+  return imageData;
+}
+
+/** Extract LEAFWM1 payload from ImageData — used by scripts/extract-invisible-wm.html too */
+function extractInvisibleWatermark(imageData) {
+  const data = imageData.data;
+  const bits = [];
+  for (let i = 0; i < data.length; i += 4) {
+    bits.push(data[i + 2] & 1);
+  }
+  const bytes = [];
+  for (let i = 0; i + 7 < bits.length; i += 8) {
+    let v = 0;
+    for (let b = 0; b < 8; b++) v = (v << 1) | bits[i + b];
+    bytes.push(v);
+  }
+  for (let m = 0; m < WM_MAGIC.length; m++) {
+    if (bytes[m] !== WM_MAGIC[m]) return null;
+  }
+  const len = (bytes[7] << 24) | (bytes[8] << 16) | (bytes[9] << 8) | bytes[10];
+  if (len <= 0 || len > 4096) return null;
+  const slice = bytes.slice(11, 11 + len);
+  try {
+    return new TextDecoder().decode(Uint8Array.from(slice));
+  } catch (_) {
+    return null;
+  }
+}
+window.__LEAF_EXTRACT_WM = extractInvisibleWatermark;
+
+function paintWithInvisibleWm(img) {
+  const canvas = document.getElementById('photo-canvas');
+  const photo = document.getElementById('photo');
+  const w = img.naturalWidth;
+  const h = img.naturalHeight;
+  if (!w || !h) return;
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0);
+  try {
+    // 1) 픽셀에 구운 시각적 신원 워터마크 (CSS 제거·OS 스크린샷에도 남음)
+    const text = watermarkText();
+    const fontSize = Math.max(14, Math.round(Math.min(w, h) * 0.028));
+    ctx.save();
+    ctx.font = '700 ' + fontSize + 'px ui-monospace, Menlo, monospace';
+    ctx.fillStyle = 'rgba(255,255,255,0.14)';
+    ctx.translate(w * 0.5, h * 0.5);
+    ctx.rotate(-25 * Math.PI / 180);
+    const stepX = fontSize * Math.max(14, text.length * 0.55);
+    const stepY = fontSize * 5.5;
+    for (let y = -h; y < h; y += stepY) {
+      for (let x = -w; x < w; x += stepX) {
+        ctx.fillText(text, x, y);
+      }
+    }
+    ctx.restore();
+
+    // 2) LSB 비가시 워터마크 (시각 합성 이후 — 최종 픽셀 기준)
+    const imageData = ctx.getImageData(0, 0, w, h);
+    embedInvisibleWatermark(imageData, identityPayload());
+    ctx.putImageData(imageData, 0, 0);
+
+    canvas.style.display = 'block';
+    photo.style.display = 'none';
+    canvas.style.maxWidth = getComputedStyle(photo).maxWidth;
+    canvas.style.maxHeight = getComputedStyle(photo).maxHeight;
+  } catch (err) {
+    canvas.style.display = 'none';
+    photo.style.display = 'block';
+    console.warn('invisible watermark skipped', err);
   }
 }
 
 function loadImage(index) {
   const img = document.getElementById('photo');
-  img.src = 'api/albums/' + ALBUM_ID + '/pages/' + (index + 1);
+  const canvas = document.getElementById('photo-canvas');
+  canvas.style.display = 'none';
+  img.style.display = 'block';
+  img.src = 'api/albums/' + ALBUM_ID + '/pages/' + (index + 1) + '?t=' + Date.now();
   document.getElementById('page-indicator').textContent =
     '화보 ' + (index + 1) + ' / ' + pageCount;
   img.onload = function () {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('viewer').style.visibility = 'visible';
+    paintWithInvisibleWm(img);
     renderWatermark();
   };
 }
@@ -219,9 +400,6 @@ document.addEventListener('keydown', function (e) {
   if (e.key === 'ArrowLeft') prev();
 });
 
-// ═══════════════════════════════════════════
-// 1. 우클릭 / 인쇄 단축키 차단
-// ═══════════════════════════════════════════
 document.addEventListener('contextmenu', function (e) {
   e.preventDefault();
   showWarning('우클릭이 차단되었습니다');
@@ -236,27 +414,6 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-// ═══════════════════════════════════════════
-// 2. DevTools 감지 (창 크기 변화 — 힌트만)
-// ═══════════════════════════════════════════
-let devtoolsOpen = false;
-const threshold = 160;
-function detectDevTools() {
-  const wDetected = window.outerWidth - window.innerWidth > threshold;
-  const hDetected = window.outerHeight - window.innerHeight > threshold;
-  if ((wDetected || hDetected) && !devtoolsOpen) {
-    devtoolsOpen = true;
-    reportCapture('devtools_open');
-  }
-  if (!(wDetected || hDetected) && devtoolsOpen) {
-    devtoolsOpen = false;
-  }
-}
-setInterval(detectDevTools, 1000);
-
-// ═══════════════════════════════════════════
-// 3. 모바일: visibilitychange 힌트 (오탐 주의)
-// ═══════════════════════════════════════════
 let lastVisibilityChange = 0;
 document.addEventListener('visibilitychange', function () {
   if (document.hidden) {
@@ -269,18 +426,30 @@ document.addEventListener('visibilitychange', function () {
   }
 });
 
-// ═══════════════════════════════════════════
-// 공통: 경고 표시
-// ═══════════════════════════════════════════
 function showWarning(msg) {
   const el = document.getElementById('capture-warning');
-  el.textContent = msg;
+  el.innerHTML = msg;
   el.classList.add('show');
   setTimeout(function () { el.classList.remove('show'); }, 1500);
 }
 
-// ── 초기화 ──
+async function loadIdentity() {
+  try {
+    const res = await fetch(IDENTITY_URL, { credentials: 'same-origin' });
+    const data = await res.json();
+    viewerIdentity = {
+      sessionId: data.sessionId || 'anon',
+      ip: data.ip || 'unknown',
+      email: data.email || 'guest@leaf.local',
+      label: data.label || ('Leaf | ' + (data.email || 'guest')),
+    };
+  } catch (_) {
+    viewerIdentity.sessionId = 'local-' + Math.random().toString(36).slice(2, 10);
+  }
+}
+
 (async function init() {
+  await loadIdentity();
   try {
     const res = await fetch(META_URL);
     const meta = await res.json();
@@ -292,7 +461,9 @@ function showWarning(msg) {
   }
 })();
 
-window.addEventListener('resize', renderWatermark);
+window.addEventListener('resize', function () {
+  renderWatermark();
+});
 </script>
 </body>
 </html>

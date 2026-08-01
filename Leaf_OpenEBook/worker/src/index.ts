@@ -44,7 +44,12 @@ async function serveAsset(env: Env, assetPath: string): Promise<Response> {
 
 // ── 이미지 게이트 ──
 // MVP: 인증 없이 전 페이지 열람 (로그인/결제 게이트는 P3/P4에서 추가)
-async function pageHandler(albumId: string, pageNo: string, env: Env): Promise<Response> {
+async function pageHandler(
+  albumId: string,
+  pageNo: string,
+  env: Env,
+  request: Request
+): Promise<Response> {
   const key = `images/${albumId}/${pageNo}.jpg`;
   const object = await env.leaf_images.get(key);
 
@@ -56,6 +61,9 @@ async function pageHandler(albumId: string, pageNo: string, env: Env): Promise<R
   headers.set('Content-Type', object.httpMetadata?.contentType || 'image/jpeg');
   headers.set('Cache-Control', 'private, max-age=3600');
   headers.set('ETag', object.httpEtag || '');
+  // same-origin canvas LSB 워터마크용 (cross-origin 폴백 대비)
+  headers.set('Access-Control-Allow-Origin', new URL(request.url).origin);
+  headers.set('Vary', 'Origin');
   return new Response(object.body, { headers });
 }
 
@@ -76,6 +84,60 @@ async function albumMetaHandler(albumId: string, env: Env): Promise<Response> {
   });
 }
 
+function parseCookies(header: string | null): Record<string, string> {
+  const out: Record<string, string> = {};
+  if (!header) return out;
+  for (const part of header.split(';')) {
+    const i = part.indexOf('=');
+    if (i < 0) continue;
+    const k = part.slice(0, i).trim();
+    const v = part.slice(i + 1).trim();
+    if (k) out[k] = decodeURIComponent(v);
+  }
+  return out;
+}
+
+function newSessionId(): string {
+  const bytes = new Uint8Array(16);
+  crypto.getRandomValues(bytes);
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+}
+
+// ── 뷰어 신원 (시각/비가시 워터마크용) ──
+// 로그인(P3) 전: guest email + 세션 쿠키 + CF IP
+async function viewerIdentity(request: Request): Promise<Response> {
+  const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
+  const cookies = parseCookies(request.headers.get('Cookie'));
+  let sessionId = cookies.leaf_sid || '';
+  const setCookie: string[] = [];
+
+  if (!/^[a-f0-9]{32}$/i.test(sessionId)) {
+    sessionId = newSessionId();
+    setCookie.push(
+      `leaf_sid=${sessionId}; Path=/Leaf; Max-Age=2592000; SameSite=Lax; Secure; HttpOnly`
+    );
+  }
+
+  // 로그인 연동 전: 이메일 자리표시자. 추후 Cookie/Authorization에서 교체.
+  const email = cookies.leaf_email || 'guest@leaf.local';
+  const label = `Leaf | ${email} | ${sessionId.slice(0, 8)} | ${ip}`;
+
+  const headers = securityHeaders(new Headers({ 'Content-Type': 'application/json; charset=utf-8' }));
+  headers.set('Cache-Control', 'no-store');
+  for (const c of setCookie) headers.append('Set-Cookie', c);
+
+  return new Response(
+    JSON.stringify({
+      sessionId,
+      ip,
+      email,
+      label,
+      auth: email !== 'guest@leaf.local',
+    }),
+    { status: 200, headers }
+  );
+}
+
 // ── 캡처 알림 수신 ──
 async function captureAlert(request: Request, env: Env): Promise<Response> {
   try {
@@ -84,7 +146,12 @@ async function captureAlert(request: Request, env: Env): Promise<Response> {
     const userAgent = request.headers.get('User-Agent') || '';
     const albumId = Number(body.albumId) || null;
     const pageNo = Number(body.page) || null;
-    const detail = String(body.detail || '').slice(0, 100);
+    const sessionId = String(body.sessionId || '').slice(0, 64);
+    const email = String(body.email || '').slice(0, 120);
+    const detail = `${String(body.detail || '').slice(0, 80)}|sid=${sessionId}|email=${email}`.slice(
+      0,
+      200
+    );
 
     await env.leaf_db
       .prepare(
@@ -132,6 +199,9 @@ export default {
 
     const p = path.slice(BASE.length);
 
+    if (p === '/api/viewer-identity' && request.method === 'GET') {
+      return viewerIdentity(request);
+    }
     if (p === '/api/capture-alert' && request.method === 'POST') {
       return captureAlert(request, env);
     }
@@ -143,7 +213,7 @@ export default {
     if (meta) return albumMetaHandler(meta[1], env);
 
     const page = p.match(/^\/api\/albums\/([^/]+)\/pages\/(\d+)$/);
-    if (page) return pageHandler(page[1], page[2], env);
+    if (page) return pageHandler(page[1], page[2], env, request);
 
     if (p.startsWith('/api/')) {
       return json({ error: 'not_found' }, 404);

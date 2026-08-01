@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Leaf — 비가시 워터마크 추출</title>
+<style>
+  body { font-family: ui-monospace, Menlo, monospace; max-width: 720px; margin: 40px auto; padding: 0 16px; background: #111; color: #eee; }
+  h1 { font-size: 18px; font-weight: 600; }
+  p { color: #aaa; font-size: 13px; line-height: 1.5; }
+  input[type=file] { margin: 16px 0; }
+  #out { white-space: pre-wrap; background: #1a1a1a; border: 1px solid #333; padding: 16px; border-radius: 8px; min-height: 80px; font-size: 13px; }
+  .ok { color: #7dffa3; }
+  .err { color: #ff7d7d; }
+</style>
+</head>
+<body>
+<h1>Leaf invisible watermark extractor</h1>
+<p>
+  유출된 PNG/JPEG를 올리면 픽셀 LSB에 숨긴 <code>LEAFWM1</code> 페이로드
+  (sessionId, IP, email, album, page, timestamp)를 추출합니다.<br>
+  ※ OS 스크린샷은 재압축·리사이즈로 LSB가 깨질 수 있습니다. 가능하면 뷰어 canvas에서
+  직접 저장한 원본에 가깝게 검증하세요.
+</p>
+<input type="file" id="file" accept="image/*">
+<pre id="out">이미지를 선택하세요.</pre>
+<script>
+const WM_MAGIC = [0x4c, 0x45, 0x41, 0x46, 0x57, 0x4d, 0x31]; // LEAFWM1
+
+function extract(imageData) {
+  const data = imageData.data;
+  const bits = [];
+  for (let i = 0; i < data.length; i += 4) bits.push(data[i + 2] & 1);
+  const bytes = [];
+  for (let i = 0; i + 7 < bits.length; i += 8) {
+    let v = 0;
+    for (let b = 0; b < 8; b++) v = (v << 1) | bits[i + b];
+    bytes.push(v);
+  }
+  for (let m = 0; m < WM_MAGIC.length; m++) {
+    if (bytes[m] !== WM_MAGIC[m]) return null;
+  }
+  const len = (bytes[7] << 24) | (bytes[8] << 16) | (bytes[9] << 8) | bytes[10];
+  if (len <= 0 || len > 4096) return null;
+  return new TextDecoder().decode(Uint8Array.from(bytes.slice(11, 11 + len)));
+}
+
+document.getElementById('file').addEventListener('change', async (e) => {
+  const out = document.getElementById('out');
+  const file = e.target.files[0];
+  if (!file) return;
+  const url = URL.createObjectURL(file);
+  const img = new Image();
+  img.onload = () => {
+    const c = document.createElement('canvas');
+    c.width = img.naturalWidth;
+    c.height = img.naturalHeight;
+    const ctx = c.getContext('2d');
+    ctx.drawImage(img, 0, 0);
+    const payload = extract(ctx.getImageData(0, 0, c.width, c.height));
+    URL.revokeObjectURL(url);
+    if (!payload) {
+      out.className = 'err';
+      out.textContent = 'LEAFWM1 페이로드를 찾지 못했습니다.\n(스크린샷 재압축/크롭으로 LSB가 손상됐을 수 있음)';
+      return;
+    }
+    out.className = 'ok';
+    try {
+      out.textContent = JSON.stringify(JSON.parse(payload), null, 2);
+    } catch (_) {
+      out.textContent = payload;
+    }
+  };
+  img.onerror = () => {
+    out.className = 'err';
+    out.textContent = '이미지를 열 수 없습니다.';
+  };
+  img.src = url;
+});
+</script>
+</body>
+</html>
