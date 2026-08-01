@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>화보집</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #000;
+    overflow: hidden;
+    height: 100dvh;
+    width: 100vw;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+  }
+
+  #viewer {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  #image-container {
+    position: relative;
+    max-width: 95vw;
+    max-height: 95vh;
+    display: inline-block;
+  }
+
+  #photo {
+    max-width: 95vw;
+    max-height: 95vh;
+    object-fit: contain;
+    display: block;
+    pointer-events: none;
+  }
+
+  /* ── 워터마크 오버레이 (CSS만으로는 DevTools로 제거 가능) ── */
+  #watermark-overlay {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 10;
+    overflow: hidden;
+  }
+
+  .wm-line {
+    position: absolute;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.08);
+    font-size: 14px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    transform: rotate(-25deg);
+    pointer-events: none;
+  }
+
+  /* ── nav ── */
+  #nav {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    display: flex;
+    gap: 16px;
+  }
+  #nav button {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.3);
+    color: #fff;
+    padding: 12px 28px;
+    border-radius: 999px;
+    font-size: 16px;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #page-indicator {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: rgba(255,255,255,0.5);
+    font-family: monospace;
+    z-index: 100;
+    font-size: 13px;
+  }
+
+  /* ── 캡처 시도 시 잠깐 보이는 경고 ── */
+  #capture-warning {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    color: #ff4444;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    z-index: 9999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s;
+    text-align: center;
+    padding: 20px;
+  }
+  #capture-warning.show { opacity: 1; }
+</style>
+</head>
+<body>
+
+<div id="viewer">
+  <div id="image-container">
+    <img id="photo" src="" alt="화보">
+    <div id="watermark-overlay"></div>
+  </div>
+</div>
+
+<div id="page-indicator"></div>
+<div id="capture-warning">⚠ 캡처가 감지되었습니다.<br>서버에 기록됩니다.</div>
+
+<nav id="nav">
+  <button id="prev-btn">⟨ 이전</button>
+  <button id="next-btn">다음 ⟩</button>
+</nav>
+
+<script>
+// ── 설정 ──
+const IMAGES = [
+  'photos/01.jpg',
+  'photos/02.jpg',
+  'photos/03.jpg',
+  'photos/04.jpg',
+  'photos/05.jpg',
+];
+let currentIndex = 0;
+let captureBlockerActive = false;
+
+// ── 서버 알림 API (실제 구현은 서버에서) ──
+const REPORT_URL = '/api/capture-alert';  // ← 본인 서버 엔드포인트로 변경
+
+async function reportCapture(detail) {
+  try {
+    await fetch(REPORT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        page: currentIndex,
+        image: IMAGES[currentIndex],
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        detail,
+      }),
+      keepalive: true,           // 페이지 닫혀도 전송
+    });
+  } catch (_) { /* silent */ }
+}
+
+// ── 워터마크 렌더링 (서버 워터마크를 권장하지만, 클라이언트도 병행) ──
+function renderWatermark() {
+  const overlay = document.getElementById('watermark-overlay');
+  overlay.innerHTML = '';
+  const container = document.getElementById('image-container');
+  const w = container.offsetWidth;
+  const h = container.offsetHeight;
+  if (!w || !h) return;
+
+  const text = '© 2026 All Rights Reserved ｜ 유출 금지';
+  const fontSize = Math.max(12, Math.min(w, h) * 0.035);
+  const stepX = fontSize * 12;
+  const stepY = fontSize * 6;
+
+  for (let y = -stepY; y < h + stepY; y += stepY) {
+    for (let x = -stepX; x < w + stepX; x += stepX) {
+      const span = document.createElement('span');
+      span.className = 'wm-line';
+      span.textContent = text;
+      span.style.cssText = `
+        left:${x}px; top:${y}px;
+        font-size:${fontSize}px;
+        opacity:${0.04 + Math.random() * 0.04};
+      `;
+      overlay.appendChild(span);
+    }
+  }
+}
+
+// ── 이미지 로드 ──
+function loadImage(index) {
+  const img = document.getElementById('photo');
+  img.src = IMAGES[index];
+  document.getElementById('page-indicator').textContent =
+    `화보 ${index + 1} / ${IMAGES.length}`;
+
+  img.onload = () => renderWatermark();
+
+  // 서버 워터마크 URL을 사용하면 더 강력함 (서버에서 이미지 합성)
+  // img.src = `/api/watermarked-image?id=${index}&uid=${getFingerprint()}`;
+}
+
+function next() { currentIndex = (currentIndex + 1) % IMAGES.length; loadImage(currentIndex); }
+function prev() { currentIndex = (currentIndex - 1 + IMAGES.length) % IMAGES.length; loadImage(currentIndex); }
+
+document.getElementById('next-btn').addEventListener('click', next);
+document.getElementById('prev-btn').addEventListener('click', prev);
+
+// ── 키보드 네비게이션 (화살표) ──
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') next();
+  if (e.key === 'ArrowLeft') prev();
+});
+
+// ═══════════════════════════════════════════
+// 1. 마우스 우클릭 & 키보드 단축키 차단
+// ═══════════════════════════════════════════
+document.addEventListener('contextmenu', (e) => {
+  e.preventDefault();
+  showWarning('우클릭이 차단되었습니다');
+  reportCapture('contextmenu');
+});
+
+// 인쇄 화면 단축키 (Ctrl+P / Cmd+P)
+document.addEventListener('keydown', (e) => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 'p') {
+    e.preventDefault();
+    showWarning('인쇄가 차단되었습니다');
+    reportCapture('print_attempt');
+  }
+  // macOS 스크린샷 단축키는 브라우저에서 가로챌 수 없음 (OS 레벨)
+  // 다만 Shift+Cmd+3/4 입력 전후를 감지할 순 있음
+});
+
+// ═══════════════════════════════════════════
+// 2. DevTools 감지 (F12, Ctrl+Shift+I 등)
+// ═══════════════════════════════════════════
+let devtoolsOpen = false;
+const threshold = 160;
+
+function detectDevTools() {
+  const widthThreshold = window.outerWidth - window.innerWidth > threshold;
+  const heightThreshold = window.outerHeight - window.innerHeight > threshold;
+  const devtoolsDetected = widthThreshold || heightThreshold;
+
+  if (devtoolsDetected && !devtoolsOpen) {
+    devtoolsOpen = true;
+    showWarning('개발자 도구가 감지되었습니다');
+    reportCapture('devtools_open');
+    // DevTools 켜진 상태에선 DOM 조작 가능 → 서버 워터마크가 핵심
+  }
+  if (!devtoolsDetected && devtoolsOpen) {
+    devtoolsOpen = false;
+  }
+}
+setInterval(detectDevTools, 1000);
+
+// ═══════════════════════════════════════════
+// 3. 모바일: visibilitychange + 미디어 녹화 탐지
+//    (OS 스크린샷을 완전히 막진 못하지만, 가능한 단서 수집)
+// ═══════════════════════════════════════════
+// iOS/Android에서 스크린샷을 찍으면 앱 전환이 일어날 수 있음
+// (100% 신뢰 불가, 하지만 힌트로 활용 가능)
+let lastVisibilityChange = 0;
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) {
+    lastVisibilityChange = Date.now();
+  } else {
+    const hiddenDuration = Date.now() - lastVisibilityChange;
+    // 매우 짧은 숨김(200~2000ms)은 스크린샷/앱전환 징후일 가능성
+    if (hiddenDuration > 100 && hiddenDuration < 2500) {
+      reportCapture('mobile_visibility_spike');
+    }
+  }
+});
+
+// Android: MediaProjection API는 브라우저에서 접근 불가
+// iOS: UIScreen.capturedChangedNotification 역시 Web API 없음
+// ∴ 모바일 100% 감지는 불가능 — 서버 워터마크가 해답
+
+// ═══════════════════════════════════════════
+// 4. CSS isolation (스타일/스크립트로 보호 계층)
+//    — 요점은 '캡처를 어렵게' 하는 것
+// ═══════════════════════════════════════════
+// 이미지 위에 투명 오버레이 + JS로 생성한 워터마크는
+// 일반 캡처 도구도 같이 찍히게 됨 (워터마크 포함)
+
+// ═══════════════════════════════════════════
+// 공통: 경고 표시
+// ═══════════════════════════════════════════
+function showWarning(msg) {
+  const el = document.getElementById('capture-warning');
+  el.textContent = msg;
+  el.classList.add('show');
+  setTimeout(() => el.classList.remove('show'), 1500);
+}
+
+// ── 초기화 ──
+loadImage(0);
+window.addEventListener('resize', renderWatermark);
+</script>
+</body>
+</html>
