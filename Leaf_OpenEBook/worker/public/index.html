@@ -192,6 +192,7 @@ const IDENTITY_URL = 'api/viewer-identity';
 const WM_MAGIC = [0x4c, 0x45, 0x41, 0x46, 0x57, 0x4d, 0x31]; // LEAFWM1
 let pageCount = 0;
 let currentIndex = 0;
+let pageUrls = [];   // meta에서 받은 서명 URL 배열 (index+1 = 페이지번호)
 let viewerIdentity = {
   sessionId: 'pending',
   ip: 'unknown',
@@ -378,15 +379,46 @@ function loadImage(index) {
   const canvas = document.getElementById('photo-canvas');
   canvas.style.display = 'none';
   img.style.display = 'block';
-  img.src = 'api/albums/' + ALBUM_ID + '/pages/' + (index + 1) + '?t=' + Date.now();
   document.getElementById('page-indicator').textContent =
     '화보 ' + (index + 1) + ' / ' + pageCount;
+
+  img._retrying = false;
+  img.src = pageUrls[index] || '';
+
   img.onload = function () {
     document.getElementById('loading').style.display = 'none';
     document.getElementById('viewer').style.visibility = 'visible';
     paintWithInvisibleWm(img);
     renderWatermark();
   };
+
+  img.onerror = function () {
+    // 서명 URL 만료(403)·세션 갱신 필요 시: 메타 재조회 후 1회 재시도
+    if (!img._retrying) {
+      img._retrying = true;
+      loadMeta().then(function () {
+        img.src = pageUrls[currentIndex] || '';
+      }).catch(function () {
+        showWarning('이미지를 불러오지 못했습니다');
+      });
+      return;
+    }
+    showWarning('화보를 불러오지 못했습니다');
+  };
+}
+
+// ── 서명 URL 메타 조회 (만료 시 재조회) ──
+async function loadMeta() {
+  const res = await fetch(META_URL, { credentials: 'same-origin' });
+  if (res.status === 429) {
+    showWarning('요청이 많습니다. 잠시 후 다시 시도하세요');
+    return false;
+  }
+  if (!res.ok) throw new Error('meta ' + res.status);
+  const meta = await res.json();
+  pageCount = meta.totalPages || 0;
+  pageUrls = meta.pages || [];
+  return pageCount > 0;
 }
 
 function next() { currentIndex = (currentIndex + 1) % pageCount; loadImage(currentIndex); }
@@ -451,15 +483,22 @@ async function loadIdentity() {
 (async function init() {
   await loadIdentity();
   try {
-    const res = await fetch(META_URL);
-    const meta = await res.json();
-    pageCount = meta.totalPages || 0;
-    if (!pageCount) throw new Error('empty album');
-    loadImage(0);
+    if (await loadMeta()) {
+      loadImage(0);
+    } else {
+      document.getElementById('loading').textContent = '화보집을 불러오지 못했습니다.';
+    }
   } catch (err) {
     document.getElementById('loading').textContent = '화보집을 불러오지 못했습니다.';
   }
 })();
+
+// 서명 URL TTL(120s)에 대비해 60초마다 사전 갱신 (활성 탭일 때만)
+setInterval(function () {
+  if (!document.hidden) {
+    loadMeta().catch(function () { /* silent */ });
+  }
+}, 60000);
 
 window.addEventListener('resize', function () {
   renderWatermark();
