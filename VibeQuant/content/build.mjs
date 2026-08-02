@@ -607,6 +607,10 @@ const SLUG_OVERRIDES = {
   "News Letter/vibe-quant-insight-001.md": "vibe-quant-insight-001",
   "News Letter/vibe-quant-insight-001-en.md": "vibe-quant-insight-001-en",
   "News Letter/vibe-quant-insight-001-ja.md": "vibe-quant-insight-001-ja",
+  "KIMI-K3/KIMI-K3-Cloud-Install-Guide.md": "kimi-k3-cloud-install-guide",
+  "KIMI-K3/KIMI-K3-Cloud-Install-Guide_EN.md": "kimi-k3-cloud-install-guide-en",
+  "KIMI-K3/KIMI-K3-Cloud-Install-Guide_JA.md": "kimi-k3-cloud-install-guide-ja",
+  "AI-Bottleneck/AI-Bottleneck.md": "ai-bottleneck",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

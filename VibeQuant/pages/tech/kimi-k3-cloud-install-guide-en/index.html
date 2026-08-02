@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kimi K3 Multi-Cloud Deployment Guide — AWS · Azure · GCP · Alibaba Cloud — VibeQuant</title>
+  <meta name="description" content="Deploy Moonshot AI Kimi K3 (2.8T MoE) on AWS SageMaker HyperPod/EKS, Azure ND GB300, GCP A4X Max, and Alibaba Cloud — costs, ARM64 caveats, and tensor-parallel pitfalls." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/kimi-k3-cloud-install-guide-en/" />
+  <meta property="og:title" content="Kimi K3 Multi-Cloud Deployment Guide — AWS · Azure · GCP · Alibaba Cloud" />
+  <meta property="og:description" content="Deploy Moonshot AI Kimi K3 (2.8T MoE) on AWS SageMaker HyperPod/EKS, Azure ND GB300, GCP A4X Max, and Alibaba Cloud — costs, ARM64 caveats, and tensor-parallel pitfalls." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/kimi-k3-cloud-install-guide-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/kimi-k3-cloud-install-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/kimi-k3-cloud-install-guide-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/kimi-k3-cloud-install-guide-ja/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/kimi-k3-cloud-install-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Kimi K3 Multi-Cloud Deployment Guide — AWS · Azure · GCP · Alibaba Cloud","description":"Deploy Moonshot AI Kimi K3 (2.8T MoE) on AWS SageMaker HyperPod/EKS, Azure ND GB300, GCP A4X Max, and Alibaba Cloud — costs, ARM64 caveats, and tensor-parallel pitfalls.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/kimi-k3-cloud-install-guide-en/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/KIMI-K3/KIMI-K3-Cloud-Install-Guide_EN.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/kimi-k3-cloud-install-guide-en/","datePublished":"2026-08-01","dateModified":"2026-08-02","inLanguage":"en","keywords":"Kimi K3, Moonshot AI, AWS, Azure, GCP, Alibaba Cloud"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"Kimi K3 Multi-Cloud Deployment Guide — AWS · Azure · GCP · Alibaba Cloud","item":"https://tech.vibequant.cc/tech/kimi-k3-cloud-install-guide-en/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>Kimi K3 Multi-Cloud Deployment Guide — AWS · Azure · GCP · Alibaba Cloud</h1>
+        <p class="article-dates"><time datetime="2026-08-01">발행 2026.08.01</time> · 주제 Kimi K3 · Moonshot AI · AWS · Azure · GCP · Alibaba Cloud · <time datetime="2026-08-02">수정 2026.08.02</time></p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/kimi-k3-cloud-install-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/kimi-k3-cloud-install-guide-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/kimi-k3-cloud-install-guide-ja/" data-lang="JP">日本語</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">Deploy Moonshot AI Kimi K3 (2.8T MoE) on AWS SageMaker HyperPod/EKS, Azure ND GB300, GCP A4X Max, and Alibaba Cloud — costs, ARM64 caveats, and tensor-parallel pitfalls.</p>
+        
+        <nav class="share-bar" aria-label="Share" data-url="https://tech.vibequant.cc/tech/kimi-k3-cloud-install-guide-en/" data-title="Kimi K3 Multi-Cloud Deployment Guide — AWS · Azure · GCP · Alibaba Cloud" data-text="Deploy Moonshot AI Kimi K3 (2.8T MoE) on AWS SageMaker HyperPod/EKS, Azure ND GB300, GCP A4X Max, and Alibaba Cloud — costs, ARM64 caveats, and tensor-parallel pitfalls." data-lang="en">
+  <span class="share-label">Share</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fkimi-k3-cloud-install-guide-en%2F&amp;text=Kimi%20K3%20Multi-Cloud%20Deployment%20Guide%20%E2%80%94%20AWS%20%C2%B7%20Azure%20%C2%B7%20GCP%20%C2%B7%20Alibaba%20Cloud" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fkimi-k3-cloud-install-guide-en%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fkimi-k3-cloud-install-guide-en%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">Copy link</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>Original Reference</strong>
+<a href="https://aws.amazon.com/ko/blogs/machine-learning/deploying-kimi-k3-on-amazon-sagemaker-hyperpod-and-amazon-eks/">Deploying Kimi K3 on Amazon SageMaker HyperPod and Amazon EKS</a> — AWS Machine Learning Blog, published July 30, 2026 (Vivek Gangasani, Andrew Smith, Erez Zarum)</p>
+<p>This document uses the AWS official blog above as its baseline document, and is an extended edition that adds Getting Started procedures for deploying the same workload to <strong>Microsoft Azure</strong>, <strong>Google Cloud Platform</strong>, and <strong>Alibaba Cloud</strong>.</p>
+</blockquote>
+<p>If possible, deploying KIMI K3 on AWS is the simplest in terms of configuration. Of course, loading and optimizing the entire dataset takes at least a few days. Truly operating an LLM independently requires demonstrating that you have the ability to operate a massive infrastructure. It requires operational know-how comparable to running a blockchain mainnet, and we have excluded separate security configurations.</p>
+<p>If you want to understand why KIMI K3 hasn&#39;t been able to accept its surging user base, you need to look at how terrible and expensive it is to install the infrastructure and keep it running without failures. That is why I created this document.</p>
+<p>If you were to run K3 on your own full infrastructure for a month on a 24/7 basis, an 8× B300 node costs roughly USD 59–142 per hour, or USD 43,000–104,000 per month when running continuously; a 16× H200 configuration runs at roughly USD 46,000–117,000 per month.</p>
+<p>You need to be able to spend around KRW 80 million to 180 million per month to operate KIMI K3. If you include operational monitoring and security operations for this service, the numbers become tough for an individual developer. Using the API is the cheapest option.</p>
+<p>Nevertheless, from an engineer&#39;s perspective, treating operations and security as separate concerns, I have written a basic guide for porting this open-weight model to the cloud.</p>
+<p>Recommended service order
+0. Self-hosted infrastructure (optimal if you have Blackwell hardware)</p>
+<ol>
+<li>AWS</li>
+<li>Azure (installation and operations difficulty rises sharply)</li>
+<li>GCP (hard from resource allocation through operations)</li>
+<li>AliCloud (don&#39;t do it.)</li>
+</ol>
+<hr>
+<h2>Document Usage Guide and Verification Status</h2>
+<p>Each section states its level of evidence. Infrastructure specs are based on vendor official documentation, and the deployment manifests have been ported from the AWS official example into each platform&#39;s standard patterns.</p>
+<table>
+<thead>
+<tr>
+<th>Section</th>
+<th>Evidence</th>
+<th>Verification Level</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Kimi K3 model specs</td>
+<td>AWS official blog, Moonshot AI model card</td>
+<td>A — Primary source</td>
+</tr>
+<tr>
+<td>AWS HyperPod / EKS deployment</td>
+<td>YAML from the original AWS official blog</td>
+<td>A — Primary source</td>
+</tr>
+<tr>
+<td>Azure ND GB300 v6 specs</td>
+<td>Microsoft Learn official documentation</td>
+<td>A — Primary source</td>
+</tr>
+<tr>
+<td>GCP A4X Max specs</td>
+<td>Google Cloud official documentation</td>
+<td>A — Primary source</td>
+</tr>
+<tr>
+<td>Azure / GCP / Alibaba deployment manifests</td>
+<td>AWS original args ported to each platform&#39;s standard patterns</td>
+<td>C — Production verification required</td>
+</tr>
+<tr>
+<td>Memory requirement estimates</td>
+<td>Cross-referenced third-party calculations</td>
+<td>B — Reference only</td>
+</tr>
+</tbody></table>
+<p><strong>Let me first disclose three key caveats.</strong>1.<strong>There is an inconsistency between the AWS original blog&#39;s prose and the actual YAML.</strong>The blog text describes &quot;MXFP4 load format&quot;, but the actual YAML&#39;s <code>--load-format</code> value is <code>fastsafetensors</code>. MXFP4 is a<strong>weight storage format</strong>while <code>fastsafetensors</code> is a<strong>loading method</strong>, which are concepts at different layers. Confusing this distinction when porting to other clouds will cause loading to fail.
+2. <strong>The CPU architecture differs per cloud.</strong>AWS <code>p6-b300.48xlarge</code> is an x86_64 HGX B300 node, but Azure ND GB300 v6 and GCP A4X Max are<strong>ARM64 (aarch64) based on NVIDIA Grace CPUs</strong>. If the <code>vllm/vllm-openai:kimi-k3</code> image does not provide an arm64 manifest, it will not work as-is on Azure/GCP. You must verify this with <code>docker manifest inspect</code> before deployment.
+3. <strong>The number of GPUs per single node differs.</strong>On AWS, one node has 8 GPUs so <code>--tensor-parallel-size 8</code> fits on a single node, but GB300 VMs on Azure/GCP have<strong>4 GPUs per VM</strong>. As a result, Azure/GCP require 2-node distributed serving, and the manifest structure itself differs.</p>
+<hr>
+<h2>1. Kimi K3 Overview</h2>
+<p>Released by Moonshot AI on July 27, 2026, it is a 2.8-trillion-parameter MoE model and the <strong>first open-weight system to reach the 3-trillion-parameter class</strong>. Along with DeepSeek V4, Moonshot AI is truly the best in open weights.</p>
+<table>
+<thead>
+<tr>
+<th>Attribute</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Total parameters</td>
+<td>2.8 trillion</td>
+</tr>
+<tr>
+<td>Active parameters per token</td>
+<td>104 billion</td>
+</tr>
+<tr>
+<td>Architecture</td>
+<td>Mixture of Experts (MoE)</td>
+</tr>
+<tr>
+<td>Number of experts</td>
+<td>896 (16 activated per token)</td>
+</tr>
+<tr>
+<td>Context window</td>
+<td>1 million tokens</td>
+</tr>
+<tr>
+<td>Modality</td>
+<td>Native multimodal (text + vision)</td>
+</tr>
+<tr>
+<td>Weight format</td>
+<td>MXFP4 (Microscaling Floating Point 4-bit)</td>
+</tr>
+<tr>
+<td>Hugging Face ID</td>
+<td><code>moonshotai/Kimi-K3</code></td>
+</tr>
+<tr>
+<td>Release date</td>
+<td>July 27, 2026</td>
+</tr>
+</tbody></table>
+<p>Its architectural highlights are the <strong>Kimi Delta Attention (KDA)</strong>, <strong>Gated Multi-Head Latent Attention (MLA)</strong>, and <strong>Stable LatentMoE</strong> frameworks. Only 16 of the 896 experts are activated per token, computing roughly 104 billion parameters per forward pass, with a 2.5× improvement in scaling efficiency over its predecessor, Kimi K2.</p>
+<p>It supports native tool calling, structured output, and an always-on thinking mode.</p>
+<hr>
+<h2>2. Common Infrastructure Requirements</h2>
+<h3>2.1 Resource Lower Bounds</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Requirement</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPU memory (total)</td>
+<td>approx. 1,680 GB</td>
+<td>weights approx. 1.4 TB + KV cache + overhead</td>
+</tr>
+<tr>
+<td>Weight file size</td>
+<td>approx. 1.56 TB</td>
+<td>MXFP4</td>
+</tr>
+<tr>
+<td>Local storage</td>
+<td>4 TB+ NVMe recommended</td>
+<td>weights + temporary space</td>
+</tr>
+<tr>
+<td>Serving engine</td>
+<td>vLLM day-0 container</td>
+<td><code>vllm/vllm-openai:kimi-k3</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Weight download times vary enormously by network line. On a 100 Gbps line it may take minutes, while on a 100 Mbps line it can take 30+ hours. <strong>We strongly recommend, on every cloud, syncing the weights once to object storage (S3 / Blob / GCS / OSS) and loading them from there.</strong></p>
+</blockquote>
+<h3>2.2 GPU Configuration Lower Bounds</h3>
+<table>
+<thead>
+<tr>
+<th>Configuration</th>
+<th>Total VRAM</th>
+<th>Meets Requirement</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>8× B300 (288GB)</td>
+<td>2,304 GB</td>
+<td>Meets</td>
+</tr>
+<tr>
+<td>8× AMD MI355X</td>
+<td>2,304 GB</td>
+<td>Meets</td>
+</tr>
+<tr>
+<td>16× H200 (141GB)</td>
+<td>2,256 GB</td>
+<td>Meets</td>
+</tr>
+<tr>
+<td>16× B200 (180GB)</td>
+<td>2,880 GB</td>
+<td>Meets</td>
+</tr>
+<tr>
+<td>32× H100 (80GB)</td>
+<td>2,560 GB</td>
+<td>Meets</td>
+</tr>
+<tr>
+<td>8× B200 (180GB)</td>
+<td>1,440 GB</td>
+<td><strong>Below</strong></td>
+</tr>
+<tr>
+<td>8× H200 (141GB)</td>
+<td>1,128 GB</td>
+<td><strong>Below</strong></td>
+</tr>
+</tbody></table>
+<h3>2.3 Per-Cloud Instance Mapping</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>AWS</th>
+<th>Azure</th>
+<th>GCP</th>
+<th>Alibaba Cloud</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Instance/machine type</td>
+<td><code>ml.p6-b300.48xlarge</code></td>
+<td><code>Standard_ND128isr_GB300_v6</code></td>
+<td><code>a4x-maxgpu-4g-metal</code></td>
+<td><code>ecs.ebmgn8v</code> family / 灵骏 (Lingjun)</td>
+</tr>
+<tr>
+<td>GPU</td>
+<td>8× B300</td>
+<td>4× B300 (288GB)</td>
+<td>4× GB300</td>
+<td>8× H200-class (varies by region)</td>
+</tr>
+<tr>
+<td>CPU architecture</td>
+<td>x86_64</td>
+<td>ARM64 (Grace)</td>
+<td>ARM64 (Grace Neoverse V2)</td>
+<td>x86_64</td>
+</tr>
+<tr>
+<td>Minimum Kimi K3 nodes</td>
+<td><strong>1</strong></td>
+<td><strong>2</strong></td>
+<td><strong>2</strong></td>
+<td><strong>2 or more</strong></td>
+</tr>
+<tr>
+<td>Parallelization strategy</td>
+<td>TP=8 (single node)</td>
+<td>TP=8 (2-node distributed) or TP=4/PP=2</td>
+<td>TP=8 (MNNVL) or TP=4/PP=2</td>
+<td>TP=8 + EP/PD separation</td>
+</tr>
+<tr>
+<td>Managed K8s</td>
+<td>EKS / HyperPod</td>
+<td>AKS</td>
+<td>GKE</td>
+<td>ACK</td>
+</tr>
+<tr>
+<td>Managed inference service</td>
+<td>SageMaker HyperPod Inference Operator</td>
+<td>Azure ML Managed Online Endpoint</td>
+<td>Vertex AI Prediction</td>
+<td>PAI-EAS</td>
+</tr>
+<tr>
+<td>Capacity reservation method</td>
+<td>Capacity Blocks / Flexible Training Plan</td>
+<td>Capacity Reservation / quota approval</td>
+<td>Future Reservations (block units)</td>
+<td>灵骏 dedicated resource groups</td>
+</tr>
+<tr>
+<td>Cluster-level constraint</td>
+<td>—</td>
+<td>18 VMs per rack</td>
+<td>max 18 nodes per node pool (rack unit)</td>
+<td>varies by region</td>
+</tr>
+</tbody></table>
+<p><strong>Key takeaway</strong>: Only AWS is self-contained on a single node. On Azure/GCP, the GB300 NVL72 rack architecture exposes 4 GPUs per VM, so a 2-node distributed serving setup (LeaderWorkerSet or Ray) is mandatory. This creates a real difference in operational complexity.</p>
+<hr>
+<h2>3. AWS Deployment</h2>
+<h3>3.1 Option A — Amazon SageMaker HyperPod</h3>
+<p>HyperPod&#39;s Inference Operator is installed automatically at cluster creation and abstracts container orchestration, model loading, and endpoint management.</p>
+<h4>Prerequisite 1: Create an EKS-orchestrated HyperPod cluster</h4>
+<ol>
+<li>In the SageMaker AI console, select <strong>HyperPod Clusters &gt; Cluster Management &gt; Create HyperPod cluster</strong>2. Select<strong>Orchestrated by Amazon EKS</strong>3. Select<strong>Quick setup</strong>(default networking/storage/IAM) or<strong>Custom setup</strong> (integration with existing VPC)</li>
+<li>In <strong>Orchestration</strong>, create a new EKS cluster or connect an existing one. Confirm the <strong>Use default Helm charts and add-ons</strong> option is selected (automatically installs the Inference Operator)</li>
+<li>Add a <code>ml.p6-b300.48xlarge</code> worker group in <strong>Instance groups</strong>6. Review the configuration and click<strong>Submit</strong></li>
+</ol>
+<h4>Prerequisite 2: Secure capacity with a Flexible Training Plan</h4>
+<ol>
+<li>In the instance group configuration, select <strong>Training plan</strong> as the capacity source</li>
+<li>Select an existing plan containing <code>ml.p6-b300.48xlarge</code> capacity or create a new reservation</li>
+<li>Match the <strong>Target Availability Zone</strong> to the zone where the Training Plan capacity is allocated</li>
+</ol>
+<p>Once the cluster is in <code>Active</code> status and the p6-b300 nodes are healthy, you are ready to deploy.</p>
+<h4>Deployment Manifest</h4>
+<pre><code class="language-yaml">apiVersion: inference.sagemaker.aws.amazon.com/v1
+kind: InferenceEndpointConfig
+metadata:
+  name: kimik3
+spec:
+  modelName: Kimi-K3
+  instanceType: ml.p6-b300.48xlarge
+  invocationEndpoint: v1/chat/completions
+  replicas: 1
+  modelSourceConfig:
+    huggingFaceModel:
+      modelId: moonshotai/Kimi-K3
+    modelSourceType: huggingface
+  worker:
+    image: vllm/vllm-openai:kimi-k3
+    modelInvocationPort:
+      containerPort: 8000
+      name: http
+    modelVolumeMount:
+      mountPath: /opt/ml/model
+      name: model-weights
+    resources:
+      limits:
+        nvidia.com/gpu: 8
+      requests:
+        nvidia.com/gpu: 8
+    args:
+      - &quot;--model&quot;
+      - &quot;moonshotai/Kimi-K3&quot;
+      - &quot;--trust-remote-code&quot;
+      - &quot;--load-format&quot;
+      - &quot;fastsafetensors&quot;
+      - &quot;--enable-prefix-caching&quot;
+      - &quot;--enable-auto-tool-choice&quot;
+      - &quot;--tool-call-parser&quot;
+      - &quot;kimi_k3&quot;
+      - &quot;--reasoning-parser&quot;
+      - &quot;kimi_k3&quot;
+      - &quot;--served-model-name&quot;
+      - &quot;Kimi-K3&quot;
+      - &quot;--moe-backend&quot;
+      - &quot;auto&quot;
+      - &quot;--tensor-parallel-size&quot;
+      - &quot;8&quot;
+      - &quot;--no-enable-flashinfer-autotune&quot;
+    environmentVariables:
+      - name: &quot;VLLM_ENABLE_K3_LATENT_MOE_TAIL_FUSION&quot;
+        value: &quot;1&quot;
+</code></pre>
+<pre><code class="language-bash">kubectl apply -f kimi-k3.yaml
+</code></pre>
+<p>The Inference Operator handles Hugging Face download, container scheduling, health checks, and endpoint readiness.</p>
+<p><strong>This vLLM argument set is the canonical version reused in all subsequent cloud sections.</strong> In particular, <code>--tool-call-parser kimi_k3</code>, <code>--reasoning-parser kimi_k3</code>, and <code>VLLM_ENABLE_K3_LATENT_MOE_TAIL_FUSION=1</code> are Kimi K3-specific; if omitted, tool calling and thinking mode will not work correctly.</p>
+<h3>3.2 Option B — Amazon EKS</h3>
+<ol>
+<li><strong>Provision the EKS cluster</strong> — create VPC networking, managed node groups, and IAM roles/policies with Terraform modules</li>
+<li><strong>Reserve GPU capacity with Capacity Blocks</strong> — create a <code>p6-b300.48xlarge</code> Capacity Block reservation in the target AZ. When activated, the instances join as worker nodes</li>
+<li><strong>Install GPU drivers and the device plugin</strong> — NVIDIA device plugin</li>
+<li><strong>Deploy the vLLM inference server</strong> — apply the same argument set above, TP=8</li>
+<li><strong>Expose the endpoint</strong> — expose port 8000 via Service (LoadBalancer) or Ingress</li>
+<li><strong>Verification</strong> — send test requests</li>
+</ol>
+<p>See the <a href="https://github.com/awslabs/ai-on-eks/tree/main/infra/solutions/inference-ready-cluster/recipes/kimi-k3">AI on EKS Kimi K3 recipe</a> for the full Terraform modules and Helm values.</p>
+<hr>
+<h2>4. Microsoft Azure Deployment (Getting Started)</h2>
+<p>From here on, the real grind begins.</p>
+<h3>4.1 Infrastructure Specs</h3>
+<p><code>Standard_ND128isr_GB300_v6</code> (ND GB300 v6 series):</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Spec</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPU</td>
+<td>4× NVIDIA Blackwell Ultra B300 (288 GB HBM3E)</td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>2× NVIDIA Grace (ARM64), 128 vCPU</td>
+</tr>
+<tr>
+<td>System memory</td>
+<td>864 GB LPDDR</td>
+</tr>
+<tr>
+<td>Local storage</td>
+<td>4× NVMe, 16 TB</td>
+</tr>
+<tr>
+<td>GPU interconnect</td>
+<td>5th-gen NVLink, 4× 1.8 TB/s</td>
+</tr>
+<tr>
+<td>Scale-out</td>
+<td>800 Gb/s InfiniBand per GPU (Quantum-X800)</td>
+</tr>
+<tr>
+<td>Rack configuration</td>
+<td>18 VMs per rack = 72 GPUs, in-rack NVLink 130 TB/s</td>
+</tr>
+<tr>
+<td>Rack-level performance</td>
+<td>up to 1.44 exaFLOPS (FP4)</td>
+</tr>
+</tbody></table>
+<p><strong>Kimi K3 requires at least 2 VMs (8 GPUs, 2,304 GB).</strong></p>
+<h3>4.2 Prerequisites</h3>
+<pre><code class="language-bash"># 1. 리소스 그룹 및 AKS 클러스터 생성
+az group create --name rg-kimi-k3 --location &lt;REGION&gt;
+
+az aks create \
+  --resource-group rg-kimi-k3 \
+  --name aks-kimi-k3 \
+  --node-count 2 \
+  --node-vm-size Standard_D8s_v5 \
+  --enable-managed-identity \
+  --generate-ssh-keys
+
+# 2. GB300 GPU 노드풀 추가 (사전에 쿼터 승인 및 용량 예약 필요)
+az aks nodepool add \
+  --resource-group rg-kimi-k3 \
+  --cluster-name aks-kimi-k3 \
+  --name gb300pool \
+  --node-count 2 \
+  --node-vm-size Standard_ND128isr_GB300_v6 \
+  --node-taints nvidia.com/gpu=present:NoSchedule \
+  --skip-gpu-driver-install false
+</code></pre>
+<blockquote>
+<p><strong>Securing capacity</strong>: ND GB300 v6 has a default quota of 0. In the Azure portal, request an increase of <code>Standard NDGB300v6 Family vCPUs</code> for your region under <strong>Quotas &gt; Compute</strong>, and for persistent workloads, create a <strong>Capacity Reservation Group</strong> to pre-empt capacity. Approval takes several business days.</p>
+</blockquote>
+<p>To get on Azure, you must have a long dialogue with your Azure account representative in advance. This part is the most important. The GPU may not be available in your desired region.</p>
+<h3>4.3 Pre-sync Weights to Azure Blob Storage (Strongly Recommended)</h3>
+<pre><code class="language-bash"># Blob 컨테이너 생성 후, 클러스터와 동일 리전의 Job으로 다운로드
+az storage container create --name kimi-k3-weights --account-name &lt;STORAGE_ACCOUNT&gt;
+</code></pre>
+<p>Since vLLM v0.18.0, RunAI Model Streamer natively supports the <code>az://</code> scheme, so with the standard <code>vllm/vllm-openai</code> image you can stream directly from Blob to GPU memory using only environment variables and workload identity binding. Compared to going through local disk, the loading step is greatly shortened, and at the 1.56 TB scale the difference is especially large.</p>
+<h3>4.4 vLLM Multi-Node Deployment (LeaderWorkerSet)</h3>
+<p>With 4 GPUs per VM, a TP=8 configuration spanning 2 nodes is required. Use the Kubernetes <strong>LeaderWorkerSet (LWS)</strong> API.</p>
+<pre><code class="language-bash"># LWS 컨트롤러 설치
+kubectl apply --server-side -f \
+  https://github.com/kubernetes-sigs/lws/releases/latest/download/manifests.yaml
+</code></pre>
+<pre><code class="language-yaml">apiVersion: leaderworkerset.x-k8s.io/v1
+kind: LeaderWorkerSet
+metadata:
+  name: kimi-k3
+spec:
+  replicas: 1
+  leaderWorkerTemplate:
+    size: 2                      # 리더 1 + 워커 1 = 2노드 × 4 GPU = 8 GPU
+    restartPolicy: RecreateGroupOnPodRestart
+    leaderTemplate:
+      metadata:
+        labels:
+          role: leader
+      spec:
+        nodeSelector:
+          agentpool: gb300pool
+        tolerations:
+          - key: nvidia.com/gpu
+            operator: Exists
+            effect: NoSchedule
+        containers:
+          - name: vllm-leader
+            image: vllm/vllm-openai:kimi-k3   # arm64 매니페스트 확인 필수
+            command: [&quot;/bin/bash&quot;, &quot;-c&quot;]
+            args:
+              - |
+                bash /vllm-workspace/examples/online_serving/multi-node-serving.sh \
+                  leader --ray_cluster_size=$(LWS_GROUP_SIZE);
+                vllm serve moonshotai/Kimi-K3 \
+                  --trust-remote-code \
+                  --load-format fastsafetensors \
+                  --enable-prefix-caching \
+                  --enable-auto-tool-choice \
+                  --tool-call-parser kimi_k3 \
+                  --reasoning-parser kimi_k3 \
+                  --served-model-name Kimi-K3 \
+                  --moe-backend auto \
+                  --tensor-parallel-size 8 \
+                  --no-enable-flashinfer-autotune \
+                  --port 8000
+            env:
+              - name: VLLM_ENABLE_K3_LATENT_MOE_TAIL_FUSION
+                value: &quot;1&quot;
+              - name: HF_HOME
+                value: /mnt/models
+            resources:
+              limits:
+                nvidia.com/gpu: &quot;4&quot;
+              requests:
+                nvidia.com/gpu: &quot;4&quot;
+            ports:
+              - containerPort: 8000
+            readinessProbe:
+              httpGet:
+                path: /health
+                port: 8000
+              initialDelaySeconds: 900
+              periodSeconds: 30
+            volumeMounts:
+              - name: model-cache
+                mountPath: /mnt/models
+              - name: dshm
+                mountPath: /dev/shm
+        volumes:
+          - name: model-cache
+            persistentVolumeClaim:
+              claimName: kimi-k3-weights
+          - name: dshm
+            emptyDir:
+              medium: Memory
+              sizeLimit: 64Gi
+    workerTemplate:
+      spec:
+        nodeSelector:
+          agentpool: gb300pool
+        tolerations:
+          - key: nvidia.com/gpu
+            operator: Exists
+            effect: NoSchedule
+        containers:
+          - name: vllm-worker
+            image: vllm/vllm-openai:kimi-k3
+            command: [&quot;/bin/bash&quot;, &quot;-c&quot;]
+            args:
+              - |
+                bash /vllm-workspace/examples/online_serving/multi-node-serving.sh \
+                  worker --ray_address=$(LWS_LEADER_ADDRESS)
+            env:
+              - name: VLLM_ENABLE_K3_LATENT_MOE_TAIL_FUSION
+                value: &quot;1&quot;
+              - name: HF_HOME
+                value: /mnt/models
+            resources:
+              limits:
+                nvidia.com/gpu: &quot;4&quot;
+              requests:
+                nvidia.com/gpu: &quot;4&quot;
+            volumeMounts:
+              - name: model-cache
+                mountPath: /mnt/models
+              - name: dshm
+                mountPath: /dev/shm
+        volumes:
+          - name: model-cache
+            persistentVolumeClaim:
+              claimName: kimi-k3-weights
+          - name: dshm
+            emptyDir:
+              medium: Memory
+              sizeLimit: 64Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kimi-k3-svc
+spec:
+  type: LoadBalancer
+  selector:
+    leaderworkerset.sigs.k8s.io/name: kimi-k3
+    role: leader
+  ports:
+    - port: 8000
+      targetPort: 8000
+</code></pre>
+<pre><code class="language-bash">kubectl apply -f kimi-k3-azure.yaml
+kubectl get svc kimi-k3-svc -w
+</code></pre>
+<blockquote>
+<p><code>initialDelaySeconds: 900</code> accounts for the 1.56 TB weight loading. If you download directly from Hugging Face instead of using Blob streaming, you must set this much higher; otherwise the pod will restart repeatedly due to readiness failures.</p>
+</blockquote>
+<h3>4.5 Alternative — Azure Machine Learning Managed Online Endpoint</h3>
+<p>To reduce the Kubernetes operations burden, you can deploy to an AML managed endpoint as a custom container. However, as of now ND GB300 v6 may not be in the list of SKUs supported by AML managed online endpoints, so you must verify before deploying. As an alternative, using <strong>Azure ML Kubernetes compute (AKS attach)</strong> lets you manage the AKS setup above from an AML workspace.</p>
+<h3>4.6 Azure Cleanup</h3>
+<pre><code class="language-bash">kubectl delete -f kimi-k3-azure.yaml
+az aks nodepool delete --resource-group rg-kimi-k3 --cluster-name aks-kimi-k3 --name gb300pool
+az group delete --name rg-kimi-k3 --yes
+</code></pre>
+<p>You must delete the Capacity Reservation Group separately for billing to stop.</p>
+<hr>
+<h2>5. Google Cloud Platform Deployment (Getting Started)</h2>
+<p>Deploying on GCP has a similar difficulty to Azure. Standing up at least 2 Blackwell nodes is no small task.</p>
+<h3>5.1 Infrastructure Specs</h3>
+<p><code>a4x-maxgpu-4g-metal</code> (A4X Max):</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Spec</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GPU</td>
+<td>4× NVIDIA GB300 Grace Blackwell Ultra Superchip (<code>nvidia-gb300</code>)</td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>2× NVIDIA Grace (ARM Neoverse V2)</td>
+</tr>
+<tr>
+<td>Provisioning type</td>
+<td><strong>bare metal instance</strong></td>
+</tr>
+<tr>
+<td>Interconnect</td>
+<td>NVLink-C2C, rack-scale GB300 NVL72 (72 GPU / 36 Grace CPU)</td>
+</tr>
+<tr>
+<td>Max node pool size</td>
+<td>18 nodes (rack unit)</td>
+</tr>
+<tr>
+<td>Requirement</td>
+<td>capacity Reservation mandatory</td>
+</tr>
+<tr>
+<td>Networking</td>
+<td>GPUDirect RDMA + MNNVL, DRANET required</td>
+</tr>
+</tbody></table>
+<p><strong>Kimi K3 requires at least 2 nodes (8 GPUs, 2,304 GB).</strong></p>
+<h3>5.2 Prerequisites</h3>
+<p>You cannot create instances without a capacity reservation. Secure an A4X Max reservation through your Google Cloud sales representative or via <strong>Compute Engine &gt; Reservations</strong> in the console. Reservations are organized in block / sub-block units.</p>
+<pre><code class="language-bash">export PROJECT_ID=&lt;PROJECT_ID&gt;
+export REGION=&lt;REGION&gt;
+export ZONE=&lt;ZONE&gt;
+export CLUSTER_NAME=gke-kimi-k3
+
+# 1. GKE Standard 클러스터 생성
+gcloud container clusters create ${CLUSTER_NAME} \
+  --project=${PROJECT_ID} \
+  --location=${REGION} \
+  --node-locations=${ZONE} \
+  --num-nodes=2 \
+  --machine-type=e2-standard-8 \
+  --enable-dataplane-v2 \
+  --enable-ip-alias
+
+# 2. A4X Max 노드풀 추가
+gcloud container node-pools create a4x-max-pool \
+  --cluster=${CLUSTER_NAME} \
+  --location=${REGION} \
+  --node-locations=${ZONE} \
+  --num-nodes=2 \
+  --machine-type=a4x-maxgpu-4g-metal \
+  --accelerator=type=nvidia-gb300,count=4,gpu-driver-version=latest \
+  --placement-policy=&lt;WORKLOAD_POLICY_NAME&gt; \
+  --accelerator-network-profile=auto \
+  --node-labels=cloud.google.com/gke-networking-dra-driver=true,cloud.google.com/gke-dpv2-unified-cni=cni-migration \
+  --reservation-affinity=specific \
+  --reservation=&lt;RESERVATION_NAME&gt;/reservationBlocks/&lt;BLOCK_NAME&gt;/reservationSubBlocks/&lt;SUB_BLOCK_NAME&gt;
+</code></pre>
+<p>Key points</p>
+<ul>
+<li><code>a4x-maxgpu-4g-metal</code> does <strong>not support multi-networking</strong>; instead it uses the accelerator network profile and DRANET.</li>
+<li>Due to the rack structure, the node count must be <strong>18 nodes or fewer</strong>.</li>
+<li>The reservation path specifying <code>--reservation-affinity=specific</code> down to the sub-block is mandatory.</li>
+</ul>
+<h3>5.3 Pre-sync Weights to GCS</h3>
+<pre><code class="language-bash">gcloud storage buckets create gs://kimi-k3-weights --location=${REGION}
+</code></pre>
+<p>Loading via the GCS FUSE CSI driver or the <code>gs://</code> path in vLLM&#39;s RunAI Model Streamer greatly reduces startup time compared to downloading directly from Hugging Face.</p>
+<h3>5.4 vLLM Multi-Node Deployment</h3>
+<p>Use the same LeaderWorkerSet pattern as in the Azure section, adjusting only the node selector and resource keys for GKE.</p>
+<pre><code class="language-yaml">apiVersion: leaderworkerset.x-k8s.io/v1
+kind: LeaderWorkerSet
+metadata:
+  name: kimi-k3
+spec:
+  replicas: 1
+  leaderWorkerTemplate:
+    size: 2
+    restartPolicy: RecreateGroupOnPodRestart
+    leaderTemplate:
+      metadata:
+        labels:
+          role: leader
+      spec:
+        nodeSelector:
+          cloud.google.com/gke-accelerator: nvidia-gb300
+        containers:
+          - name: vllm-leader
+            image: vllm/vllm-openai:kimi-k3
+            command: [&quot;/bin/bash&quot;, &quot;-c&quot;]
+            args:
+              - |
+                bash /vllm-workspace/examples/online_serving/multi-node-serving.sh \
+                  leader --ray_cluster_size=$(LWS_GROUP_SIZE);
+                vllm serve moonshotai/Kimi-K3 \
+                  --trust-remote-code \
+                  --load-format fastsafetensors \
+                  --enable-prefix-caching \
+                  --enable-auto-tool-choice \
+                  --tool-call-parser kimi_k3 \
+                  --reasoning-parser kimi_k3 \
+                  --served-model-name Kimi-K3 \
+                  --moe-backend auto \
+                  --tensor-parallel-size 8 \
+                  --no-enable-flashinfer-autotune \
+                  --port 8000
+            env:
+              - name: VLLM_ENABLE_K3_LATENT_MOE_TAIL_FUSION
+                value: &quot;1&quot;
+            resources:
+              limits:
+                nvidia.com/gpu: &quot;4&quot;
+            ports:
+              - containerPort: 8000
+    workerTemplate:
+      spec:
+        nodeSelector:
+          cloud.google.com/gke-accelerator: nvidia-gb300
+        containers:
+          - name: vllm-worker
+            image: vllm/vllm-openai:kimi-k3
+            command: [&quot;/bin/bash&quot;, &quot;-c&quot;]
+            args:
+              - |
+                bash /vllm-workspace/examples/online_serving/multi-node-serving.sh \
+                  worker --ray_address=$(LWS_LEADER_ADDRESS)
+            env:
+              - name: VLLM_ENABLE_K3_LATENT_MOE_TAIL_FUSION
+                value: &quot;1&quot;
+            resources:
+              limits:
+                nvidia.com/gpu: &quot;4&quot;
+</code></pre>
+<h3>5.5 GKE Inference Gateway Integration (Recommended)</h3>
+<p>GKE Inference Gateway provides <strong>prefix-aware load balancing</strong> to improve TTFT (Time to First Token). For workloads like Kimi K3 that combine a 1-million-token context with prefix caching, the perceived benefit is large. It also supports NVIDIA NeMo Guardrails integration.</p>
+<pre><code class="language-bash">kubectl apply -f https://github.com/kubernetes-sigs/gateway-api-inference-extension/releases/latest/download/manifests.yaml
+</code></pre>
+<h3>5.6 Alternative — Vertex AI Prediction</h3>
+<p>You can deploy a custom container to a Vertex AI endpoint. However, <strong>the A4X (<code>a4x-highgpu-4g</code>) family forces a minimum of 18 replicas due to rack-unit purchasing</strong>. In other words, choosing the Vertex AI managed path means you pay for the entire rack even if you only want to serve a single Kimi K3 instance. For small-scale pilots, the GKE path is overwhelmingly more advantageous.</p>
+<h3>5.7 GCP Cleanup</h3>
+<pre><code class="language-bash">kubectl delete -f kimi-k3-gcp.yaml
+gcloud container node-pools delete a4x-max-pool --cluster=${CLUSTER_NAME} --location=${REGION}
+gcloud container clusters delete ${CLUSTER_NAME} --location=${REGION}
+</code></pre>
+<p>You must release the Reservation separately for billing to stop.</p>
+<hr>
+<h2>6. Alibaba Cloud Deployment (Getting Started)</h2>
+<h3>6.1 Considerations for Region and Hardware Selection</h3>
+<p>Alibaba Cloud is a different situation from the previous three clouds. Complexity is high depending on mainland China vs. overseas regions. Getting onto Lingjun is still being tested, but there&#39;s no telling when it will happen.</p>
+<ul>
+<li><strong>Export control impact</strong>: Blackwell Ultra B300-series GPUs cannot be procured in mainland China regions. Therefore, B300-based configurations can only be considered in <strong>regions outside China, such as Singapore</strong>, and even then, individual confirmation via a sales representative is required.</li>
+<li><strong>Realistic configurations</strong>: In mainland regions, a realistic setup is 2 nodes with 8 H200-class GPUs each (16× H200 = 2,256 GB), or a multi-node configuration via 灵骏 (Lingjun) intelligent computing resources.</li>
+<li><strong>gn8v family</strong>: Offers 1/2/4/8-GPU configurations, with 8-GPU supporting NVLink interconnect. <strong>Available only in some regions, and requires contacting a sales representative.</strong></li>
+<li>If you need confidential computing, you can consider <code>gn8v-tee</code> (Intel TDX + NVIDIA CC), but you must separately measure the performance overhead.</li>
+</ul>
+<h3>6.2 Option A — PAI-EAS (Model Gallery / Custom Deployment)</h3>
+<p>PAI-EAS integrates support for vLLM, SGLang, and its in-house BladeLLM engine, and offers one-click <strong>expert parallel (EP) + Prefill-Decode separated deployment for MoE models</strong>. For a model with 896 experts like Kimi K3, EP+PD separation provides meaningful benefits in both throughput and cost.</p>
+<p><strong>Deployment procedure:</strong>1. Log in to the PAI console and select the target region.<strong>Distributed deployment requires 灵骏 intelligent computing resources, and VPC configuration is mandatory.</strong>2. Select<strong>模型在线服务 (EAS) &gt; 部署服务 &gt; 自定义部署</strong>3. In the deployment method, select<strong>镜像部署 (image deployment)</strong> and specify <code>vllm/vllm-openai:kimi-k3</code> (an internal ACR mirror is recommended)
+4. Specify an OSS bucket path as the model source (upload weights in advance)
+5. In the resource configuration, specify the 灵骏 resource quota and multiple nodes (≥2)
+6. Enter the following as the run command:</p>
+<pre><code class="language-bash">vllm serve /mnt/models/Kimi-K3 \
+  --trust-remote-code \
+  --load-format fastsafetensors \
+  --enable-prefix-caching \
+  --enable-auto-tool-choice \
+  --tool-call-parser kimi_k3 \
+  --reasoning-parser kimi_k3 \
+  --served-model-name Kimi-K3 \
+  --moe-backend auto \
+  --tensor-parallel-size 8 \
+  --no-enable-flashinfer-autotune \
+  --port 8000
+</code></pre>
+<ol start="7">
+<li>Add the environment variable <code>VLLM_ENABLE_K3_LATENT_MOE_TAIL_FUSION=1</code></li>
+<li>Set port 8000, and in service features specify autoscaling and the GPU driver version</li>
+<li>After deployment, invoke via the Endpoint and Token</li>
+</ol>
+<p>PAI-EAS supports <strong>autoscaling based on QPS and GPU utilization, as well as scale-to-zero</strong>. For a model like Kimi K3 with extremely high idle cost, this feature is especially valuable. However, a cold start reloads the 1.56 TB weights, so apply scale-to-zero only after measuring your real traffic patterns.</p>
+<h3>6.3 Option B — ACK (Container Service for Kubernetes)</h3>
+<p>To operate Kubernetes directly, use the ACK + <code>ack-kserve</code> + Arena combination.</p>
+<pre><code class="language-bash"># 1. GPU 클러스터 생성 (클러스터 버전 1.22 이상, CUDA 12.0 이상)
+#    콘솔 또는 aliyun CLI 사용
+
+# 2. GPU 노드풀에 드라이버 버전 라벨 지정
+kubectl label node &lt;NODE&gt; ack.aliyun.com/nvidia-driver-version=&lt;VERSION&gt;
+
+# 3. ack-kserve 컴포넌트 설치 (콘솔 &gt; 应用 &gt; 云原生AI套件)
+
+# 4. Arena 클라이언트 구성 (0.9.15 이상)
+arena version
+</code></pre>
+<p>For deployment, use the same LeaderWorkerSet as Azure/GCP or the KServe <code>InferenceService</code> pattern, and mount OSS or NAS as a PVC for storage.</p>
+<pre><code class="language-bash">arena serve custom \
+  --name=kimi-k3 \
+  --version=v1 \
+  --gpus=8 \
+  --replicas=1 \
+  --restful-port=8000 \
+  --image=&lt;ACR_REGISTRY&gt;/vllm-openai:kimi-k3 \
+  --data=kimi-k3-pvc:/mnt/models \
+  &quot;vllm serve /mnt/models/Kimi-K3 --trust-remote-code --load-format fastsafetensors --enable-prefix-caching --enable-auto-tool-choice --tool-call-parser kimi_k3 --reasoning-parser kimi_k3 --served-model-name Kimi-K3 --moe-backend auto --tensor-parallel-size 8 --no-enable-flashinfer-autotune --port 8000&quot;
+</code></pre>
+<h3>6.4 Alibaba Cloud Cleanup</h3>
+<ul>
+<li>EAS services <strong>stop billing immediately upon stop</strong>. They keep billing even while idle, so be sure to stop or delete them after development and testing.</li>
+<li>For ACK, delete the node pool first, then the cluster</li>
+<li>The 灵骏 resource quota must be separately cancelled per the contract terms</li>
+<li>Don&#39;t forget the storage cost of the weights (1.56 TB) left in OSS</li>
+</ul>
+<hr>
+<h2>7. Endpoint Invocation (Common)</h2>
+<p>Regardless of the deployment method, an OpenAI-compatible API is exposed.</p>
+<h3>OpenAI Python SDK</h3>
+<pre><code class="language-python">from openai import OpenAI
+
+client = OpenAI(
+    base_url=&quot;http://&lt;ENDPOINT_URL&gt;:8000/v1&quot;,
+    api_key=&quot;not-needed&quot;   # 관리형 서비스는 발급받은 토큰 입력
+)
+
+response = client.chat.completions.create(
+    model=&quot;Kimi-K3&quot;,
+    messages=[
+        {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain the benefits of mixture of experts architectures.&quot;}
+    ],
+    temperature=0.7,
+    max_tokens=1024
+)
+print(response.choices[0].message.content)
+</code></pre>
+<h3>curl</h3>
+<pre><code class="language-bash">curl -X POST http://&lt;ENDPOINT_URL&gt;:8000/v1/chat/completions \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{
+    &quot;model&quot;: &quot;Kimi-K3&quot;,
+    &quot;messages&quot;: [
+      {&quot;role&quot;: &quot;system&quot;, &quot;content&quot;: &quot;You are a helpful assistant.&quot;},
+      {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;Explain the benefits of mixture of experts architectures.&quot;}
+    ],
+    &quot;temperature&quot;: 0.7,
+    &quot;max_tokens&quot;: 1024
+  }&#39;
+</code></pre>
+<h3>Deployment Verification Checklist</h3>
+<pre><code class="language-bash"># 1. 모델 등록 확인
+curl http://&lt;ENDPOINT_URL&gt;:8000/v1/models
+
+# 2. 헬스 체크
+curl http://&lt;ENDPOINT_URL&gt;:8000/health
+
+# 3. 도구 호출 파서 동작 확인 (tools 파라미터 포함 요청)
+# 4. thinking 모드 출력에 reasoning_content 필드가 포함되는지 확인
+# 5. 장문 컨텍스트 처리 확인 (100만 토큰 상한, prefix caching 적중률 모니터링)
+</code></pre>
+<p>Items 3–5 verify that the Kimi K3-specific arguments were applied correctly. If only items 1–2 pass but 3–5 fail, re-check the <code>--tool-call-parser</code> / <code>--reasoning-parser</code> / environment variable settings.</p>
+<hr>
+<h2>8. Cloud Selection Criteria</h2>
+<table>
+<thead>
+<tr>
+<th>Criterion</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fastest PoC, minimal operations burden</td>
+<td><strong>AWS HyperPod</strong> — self-contained on a single node, the Inference Operator abstracts most of it</td>
+</tr>
+<tr>
+<td>Existing Kubernetes operations capability</td>
+<td>AWS EKS or GKE</td>
+</tr>
+<tr>
+<td>Highest inference throughput, long-context optimization</td>
+<td><strong>GCP A4X Max + Inference Gateway</strong> — MNNVL + prefix-aware routing</td>
+</tr>
+<tr>
+<td>Existing Microsoft stack integration, enterprise governance</td>
+<td><strong>Azure AKS + ND GB300 v6</strong></td>
+</tr>
+<tr>
+<td>Chinese-language services, low idle cost, MoE-specific optimization</td>
+<td><strong>Alibaba PAI-EAS</strong> — EP+PD separation, scale-to-zero</td>
+</tr>
+<tr>
+<td>Minimize small-pilot cost</td>
+<td>Avoid Vertex AI (minimum 18 replicas). GKE direct deployment recommended</td>
+</tr>
+</tbody></table>
+<p><strong>A sober assessment from a cost perspective</strong>: As of July 2026, an 8× B300 node costs roughly USD 59–142 per hour, or USD 43,000–104,000 per month when running continuously. A 16× H200 configuration runs at roughly USD 46,000–117,000 per month. If traffic is concentrated in a few hours a day, or you&#39;re in an experimental phase, it&#39;s more reasonable to use Moonshot&#39;s official API or a third-party router than self-hosting. <strong>The legitimate reasons to self-deploy are usually not throughput but three things: data sovereignty, latency SLAs, and custom fine-tuning.</strong> If none of these apply, even the deployment itself is hard for an individual to bear.</p>
+<p>Moonshot AI, I extend my highest respect and admiration to your outstanding development team.</p>
+<p>Moonshot AI，我向你们卓越的开发团队致以最崇高的敬意与赞叹。</p>
+<p>May you shine as brilliantly as the sun in the sky, hold your dreams close, journey forward riding the starlight, and finally fly to that distant bright moon.</p>
+<p>愿你们如苍穹中的太阳般璀璨耀眼，怀抱梦想，乘着星光一路前行，最终飞向那轮遥远的明月。</p>
+<p>May your light illuminate the future of AI. 🌞🌙🚀</p>
+<p>愿你们的光芒，照亮 AI 的未来。🌞🌙🚀</p>
+<hr>
+<h2>9. References</h2>
+<h3>Original (AWS)</h3>
+<ul>
+<li><a href="https://aws.amazon.com/ko/blogs/machine-learning/deploying-kimi-k3-on-amazon-sagemaker-hyperpod-and-amazon-eks/">Deploying Kimi K3 on Amazon SageMaker HyperPod and Amazon EKS</a></li>
+<li><a href="https://github.com/aws-samples/sagemaker-genai-hosting-examples/blob/main/SageMakerHyperpod/kimi-k3/kimi-k3.yaml">SageMaker HyperPod Kimi K3 example YAML</a></li>
+<li><a href="https://github.com/awslabs/ai-on-eks/tree/main/infra/solutions/inference-ready-cluster/recipes/kimi-k3">AI on EKS Kimi K3 recipe</a></li>
+<li><a href="https://github.com/awslabs/ai-on-eks-charts/blob/main/charts/inference-charts/values-kimi-k3-vllm-b300.yaml">AI on EKS Helm values (vLLM B300)</a></li>
+<li><a href="https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-hyperpod-eks-operate-console-ui-create-cluster.html">SageMaker HyperPod cluster creation documentation</a></li>
+<li><a href="https://aws.amazon.com/ec2/pricing/">Amazon EC2 pricing page</a></li>
+</ul>
+<h3>Microsoft Azure</h3>
+<ul>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/sizes/gpu-accelerated/nd-gb300-v6-series">ND GB300-v6 size series documentation</a></li>
+<li><a href="https://techcommunity.microsoft.com/blog/azurehighperformancecomputingblog/azure-nd-gb300-v6-now-generally-available---hyper-optimized-for-generative-and-a/4469475">Azure ND GB300 v6 general availability announcement</a></li>
+<li><a href="https://azure.microsoft.com/en-us/blog/microsoft-azure-delivers-the-first-large-scale-cluster-with-nvidia-gb300-nvl72-for-openai-workloads/">NVIDIA GB300 NVL72 large-scale cluster announcement</a></li>
+<li><a href="https://blog.aks.azure.com/2026/07/13/runai-streamer-vllm">Streaming Blob weights with RunAI Model Streamer on AKS</a></li>
+<li><a href="https://techcommunity.microsoft.com/blog/azure-ai-foundry-blog/deploying-openai%E2%80%99s-first-open-source-model-on-azure-aks-with-kaito/4444234">Tutorial: deploying open models on Azure AKS with KAITO</a></li>
+<li><a href="https://learn.microsoft.com/en-us/azure/virtual-machines/quotas">Azure VM quota check</a></li>
+</ul>
+<h3>Google Cloud Platform</h3>
+<ul>
+<li><a href="https://docs.cloud.google.com/ai-hypercomputer/docs/create/gke-ai-hypercompute-custom-a4x-max">A4X Max GKE custom cluster creation documentation</a></li>
+<li><a href="https://docs.cloud.google.com/ai-hypercomputer/docs/gpu">AI Hypercomputer GPU machine types</a></li>
+<li><a href="https://docs.cloud.google.com/compute/docs/accelerator-optimized-machines">Accelerator-optimized machine families</a></li>
+<li><a href="https://cloud.google.com/blog/products/compute/now-shipping-a4x-max-vertex-ai-training-and-more/">A4X Max launch and expanded NVIDIA partnership announcement</a></li>
+<li><a href="https://docs.cloud.google.com/vertex-ai/docs/predictions/configure-compute">Vertex AI inference compute resource configuration</a></li>
+<li><a href="https://docs.cloud.google.com/kubernetes-engine/docs/tutorials/serve-gemma-gpu-vllm">Serving open models with vLLM on GKE</a></li>
+</ul>
+<h3>Alibaba Cloud</h3>
+<ul>
+<li><a href="https://help.aliyun.com/zh/pai/deploy-an-llm/">Deploying large language models on PAI-EAS</a></li>
+<li><a href="https://cn.aliyun.com/product/bigdata/learn/eas">PAI-EAS product page</a></li>
+<li><a href="https://help.aliyun.com/zh/pai/user-guide/model-service-deployment-by-using-the-pai-console/">PAI console custom deployment parameter descriptions</a></li>
+<li><a href="https://www.alibabacloud.com/help/zh/ack/cloud-native-ai-suite/user-guide/deploy-a-vllm-inference-application">Deploying a vLLM inference application on ACK</a></li>
+<li><a href="https://www.alibabacloud.com/help/en/egs/gpu-accelerated-compute-optimized-instance-families">GPU-accelerated compute-optimized instance families (gn/ebm/scc)</a></li>
+</ul>
+<h3>Model and Engine</h3>
+<ul>
+<li><a href="https://huggingface.co/moonshotai/Kimi-K3">Kimi K3 on Hugging Face</a></li>
+<li><a href="https://platform.kimi.ai/docs/guide/kimi-k3-quickstart">Kimi K3 Quickstart (Moonshot AI)</a></li>
+<li><a href="https://docs.vllm.ai/">vLLM documentation</a></li>
+<li><a href="https://github.com/kubernetes-sigs/lws">LeaderWorkerSet API</a></li>
+</ul>
+<hr>
+<h2>Appendix: Items to Re-verify When Porting</h2>
+<p>The manifests in the Azure / GCP / Alibaba sections were ported to each platform&#39;s standard deployment pattern while keeping the vLLM arguments from the AWS official example intact. Before applying in a production environment, verify the following:</p>
+<ol>
+<li><strong>Container image architecture</strong> — check arm64 support with <code>docker manifest inspect vllm/vllm-openai:kimi-k3</code>. If unsupported, a source build is required for Grace-based Azure/GCP.</li>
+<li><strong>Validity of multi-node TP=8</strong> — depending on whether NVLink across node boundaries (MNNVL) is exposed in the GB300 NVL72 environment, <code>TP=4 --pipeline-parallel-size 2</code> may be needed instead of <code>TP=8</code>.</li>
+<li><strong>Result of the <code>--moe-backend auto</code> backend selection</strong> — the automatic selection differs by hardware and vLLM commit, so check the actually selected backend in the logs.</li>
+<li><strong><code>fastsafetensors</code> loading path</strong> — support differs when combined with direct object storage streaming.</li>
+<li><strong>readiness probe timeout</strong> — measure the actual 1.56 TB loading time and adjust accordingly. With the default values, it will almost certainly fail.</li>
+<li><strong>Capacity procurement lead time</strong> — Azure quota approval, GCP reservations, and Alibaba 灵骏 contracts all take from several business days to several weeks. The real critical path for your deployment schedule is not technology but capacity procurement.</li>
+</ol>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="Share" data-url="https://tech.vibequant.cc/tech/kimi-k3-cloud-install-guide-en/" data-title="Kimi K3 Multi-Cloud Deployment Guide — AWS · Azure · GCP · Alibaba Cloud" data-text="Deploy Moonshot AI Kimi K3 (2.8T MoE) on AWS SageMaker HyperPod/EKS, Azure ND GB300, GCP A4X Max, and Alibaba Cloud — costs, ARM64 caveats, and tensor-parallel pitfalls." data-lang="en">
+  <span class="share-label">Share</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fkimi-k3-cloud-install-guide-en%2F&amp;text=Kimi%20K3%20Multi-Cloud%20Deployment%20Guide%20%E2%80%94%20AWS%20%C2%B7%20Azure%20%C2%B7%20GCP%20%C2%B7%20Alibaba%20Cloud" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fkimi-k3-cloud-install-guide-en%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fkimi-k3-cloud-install-guide-en%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">Copy link</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/KIMI-K3/KIMI-K3-Cloud-Install-Guide_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

@@ -1,3 +1,46 @@
+---
+title: "[Vibe Quant Insight] 인공지능의 진짜 병목은 무엇인가?"
+subtitle: "규제·데이터·지정학, 그리고 한국이 서야 할 자리"
+description: "AI 병목은 인간이 아니다. EU AI Act·한국 AI기본법 규제, 데이터 고갈·오염, 미중 지정학이 만드는 삼중 구속과 한국이 설 자리를 분석한다."
+abstract: |
+  'AI의 병목은 인간'은 운영상의 병목일 뿐이다. 구조적 병목은 법률·규제, 데이터(고갈·오염·편향), 지정학(미중 분절)이며 서로 강화하는 삼중 구속을 이룬다.
+  2026-08-02 EU AI Act 투명성·GPAI 제재, 한국 AI기본법, 데이터·피지컬 AI·초고령 돌봄 맥락에서 한국의 포지션을 정리한다.
+summary_for_ai: |
+  Opinion column (not investment advice), as of 2026-08-02. Thesis: real AI bottlenecks are regulation, data, geopolitics — not human review speed.
+  EU AI Act: Art.50 transparency + GPAI enforcement 2026-08-02; high-risk Annex III delayed to 2027-12-02.
+  Korea AI Basic Act in force; compliance industry forms. Data exhaustion/pollution and US-China bifurcation as structural binds.
+  Korea angle: physical AI, care robotics, data licensing, compliance stack — not frontier model race alone.
+date: 2026-08-02
+updated: 2026-08-02
+author: "김호광 (Dennis Kim)"
+lang: ko
+series: "Vibe Quant Insight"
+tags:
+  - AI
+  - 규제
+  - EU-AI-Act
+  - 데이터
+  - 지정학
+  - 한국
+  - Vibe-Quant-Insight
+keywords:
+  - "AI 병목"
+  - "EU AI Act"
+  - "AI기본법"
+  - "데이터 고갈"
+  - "미중 지정학"
+  - "컴플라이언스"
+  - "피지컬 AI"
+  - "오픈웨이트"
+  - "Vibe Quant Insight"
+group: ai-llm
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 인공지능의 진짜 병목은 무엇인가?
 
 ## 규제·데이터·지정학, 그리고 한국이 서야 할 자리

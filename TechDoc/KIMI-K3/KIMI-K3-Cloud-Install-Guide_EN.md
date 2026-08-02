@@ -1,3 +1,50 @@
+---
+title: "Kimi K3 Multi-Cloud Deployment Guide — AWS · Azure · GCP · Alibaba Cloud"
+subtitle: "Hands-on Getting Started for SageMaker HyperPod, EKS, AKS, and GKE"
+description: "Deploy Moonshot AI Kimi K3 (2.8T MoE) on AWS SageMaker HyperPod/EKS, Azure ND GB300, GCP A4X Max, and Alibaba Cloud — costs, ARM64 caveats, and tensor-parallel pitfalls."
+abstract: |
+  Extended from the AWS ML Blog (2026-07-30) with Getting Started paths for Azure, GCP, and Alibaba Cloud.
+  Covers USD 43k–117k/mo GPU economics, MXFP4 vs fastsafetensors, Grace ARM64 and per-node GPU count gaps,
+  vLLM day-0 manifests, and a verification checklist.
+summary_for_ai: |
+  TechDoc: deploy Moonshot AI Kimi K3 (2.8T MoE, MXFP4, vLLM kimi-k3 image) on AWS HyperPod/EKS,
+  Azure ND GB300 v6, GCP A4X Max, Alibaba Cloud. Prefer AWS; Azure/GCP need 2-node TP (4 GPU/VM)
+  and may be ARM64. Monthly cost roughly USD 43k–117k. API is cheaper for most teams. Not a security guide.
+date: 2026-08-01
+updated: 2026-08-01
+author: "Dennis Kim"
+lang: en
+tags:
+  - Kimi K3
+  - Moonshot AI
+  - AWS
+  - Azure
+  - GCP
+  - Alibaba Cloud
+  - vLLM
+  - SageMaker HyperPod
+  - EKS
+  - Open Weight
+  - MoE
+keywords:
+  - Kimi K3 deployment
+  - SageMaker HyperPod
+  - Amazon EKS
+  - Azure ND GB300
+  - GCP A4X Max
+  - vLLM kimi-k3
+  - MXFP4
+  - tensor parallel
+  - multi-cloud LLM
+  - B300
+group: llm-agents
+featured: true
+featured_rank: 0
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+
 # Kimi K3 Multi-Cloud Deployment Guide: AWS · Azure · GCP · Alibaba Cloud
 
 > **Original Reference**

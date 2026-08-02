@@ -1,3 +1,50 @@
+---
+title: "Kimi K3 멀티클라우드 배포 가이드 — AWS · Azure · GCP · Alibaba Cloud"
+subtitle: "2.8T MoE를 SageMaker HyperPod·EKS·AKS·GKE에 올리는 실무 Getting Started"
+description: "Moonshot AI Kimi K3(2.8T MoE)를 AWS SageMaker HyperPod/EKS, Azure ND GB300, GCP A4X Max, Alibaba Cloud에 배포하는 멀티클라우드 가이드. 비용·ARM64·텐서병렬 주의점 포함."
+abstract: |
+  AWS 공식 블로그(2026-07-30)를 기준으로 Kimi K3를 Azure·GCP·Alibaba Cloud에 이식하는 확장판이다.
+  월 4.3만~11.7만 달러급 GPU 비용, MXFP4 vs fastsafetensors 구분, Grace ARM64·노드당 GPU 수 차이,
+  vLLM day-0 컨테이너 배포 매니페스트와 검증 체크리스트를 정리한다.
+summary_for_ai: |
+  TechDoc: deploy Moonshot AI Kimi K3 (2.8T MoE, MXFP4, vLLM kimi-k3 image) on AWS HyperPod/EKS,
+  Azure ND GB300 v6, GCP A4X Max, Alibaba Cloud. Prefer AWS; Azure/GCP need 2-node TP because 4 GPU/VM
+  and may be ARM64. Monthly cost roughly USD 43k–117k. API is cheaper for most teams. Not a security guide.
+date: 2026-08-01
+updated: 2026-08-01
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - Kimi K3
+  - Moonshot AI
+  - AWS
+  - Azure
+  - GCP
+  - Alibaba Cloud
+  - vLLM
+  - SageMaker HyperPod
+  - EKS
+  - Open Weight
+  - MoE
+keywords:
+  - Kimi K3 배포
+  - SageMaker HyperPod
+  - Amazon EKS
+  - Azure ND GB300
+  - GCP A4X Max
+  - vLLM kimi-k3
+  - MXFP4
+  - tensor parallel
+  - 멀티클라우드 LLM
+  - B300
+group: llm-agents
+featured: true
+featured_rank: 0
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+
 # Kimi K3 멀티클라우드 배포 가이드: AWS · Azure · GCP · Alibaba Cloud
 
 > **원문 레퍼런스**
