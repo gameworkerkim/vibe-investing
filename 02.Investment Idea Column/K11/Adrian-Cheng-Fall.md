@@ -1,3 +1,47 @@
+---
+title: "부자는 3대를 못 간다 — 에이드리언 청·K11 몰락의 교과서"
+subtitle: "브랜드에 최적화하다 NOI/NLA를 놓친 홍콩 재벌 3세의 구조적 실패"
+description: "K11 창업자 에이드리언 청(鄭志剛) 몰락 분석. 11 SKIES 보증임대, 임대효율 40%, HK$197억 적자·가문 퇴출까지 — 단위 면적당 수익화를 잊은 부동산 개발의 교과서."
+abstract: |
+  홍콩 4대 재벌 정유탁 가문 장손·K11 창업자 에이드리언 청이 2024~2026년 사이 가문 지배구조에서 삭제된 과정을 추적한다.
+  표면은 부동산 침체·금리·레버리지이고, 구조는 브랜드(K11) 최적화가 임대가능면적당 NOI를 잠식한 것, 치명타는 11 SKIES 고정 보증임대다.
+  부동산 개발이 Yield per Square Foot 사업임을 잊을 때 무엇이 일어나는지에 대한 사례 연구다.
+summary_for_ai: |
+  Opinion/case study column (not investment advice), as of 2026-08-02.
+  Subject: Adrian Cheng Chi-kong (K11, New World Development) fall from Hong Kong Cheng Yu-tung family.
+  Thesis: optimized for brand/experience over lettable efficiency (~40% at K11 MUSEA); 11 SKIES fixed guaranteed rent with upside capped; relationship capital failed in crisis.
+  Key facts cited: FY2024 attributable loss HK$19.7B; HK$88.2B refinancing; Blackstone $4B talks collapsed May 2026; ALMAD Group launch.
+date: 2026-08-02
+updated: 2026-08-02
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - K11
+  - Adrian-Cheng
+  - 홍콩
+  - 부동산
+  - New-World-Development
+  - 재벌
+  - 11-SKIES
+keywords:
+  - "에이드리언 청"
+  - "K11"
+  - "New World Development"
+  - "11 SKIES"
+  - "임대효율"
+  - "NOI"
+  - "정유탁"
+  - "홍콩 재벌"
+  - "Yield per Square Foot"
+  - "부자는 3대를 못 간다"
+group: industry
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 부자는 3대를 못간다. 에이드리언 청 몰락의 이야기
 
 한국에서 K11이라는 아트테이먼트 그룹으로 유명했던 에이드리언 청이 몰락했다. 그것도 급격하게 몰락한 것이다. 부동산을 기반으로한 홍콩의 재벌은 쉽사리 무너지지 않는다. 안정적인 부동산 임대 소득을 바탕으로 사업을 전개하기 때문에 홍콩의 부자 순위는 늘 같은 얼굴을 볼 수 있었다. 그러나 이런 순위는 깨졌다.

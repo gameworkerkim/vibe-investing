@@ -611,6 +611,7 @@ const SLUG_OVERRIDES = {
   "KIMI-K3/KIMI-K3-Cloud-Install-Guide_EN.md": "kimi-k3-cloud-install-guide-en",
   "KIMI-K3/KIMI-K3-Cloud-Install-Guide_JA.md": "kimi-k3-cloud-install-guide-ja",
   "AI-Bottleneck/AI-Bottleneck.md": "ai-bottleneck",
+  "K11/Adrian-Cheng-Fall.md": "adrian-cheng-fall",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
