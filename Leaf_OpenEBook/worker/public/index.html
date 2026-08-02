@@ -204,7 +204,6 @@ function identityPayload() {
   return JSON.stringify({
     v: 1,
     sid: viewerIdentity.sessionId,
-    ip: viewerIdentity.ip,
     email: viewerIdentity.email,
     album: ALBUM_ID,
     page: currentIndex + 1,
@@ -216,7 +215,6 @@ function watermarkText() {
   return (
     'Leaf | ' + viewerIdentity.email +
     ' | ' + viewerIdentity.sessionId.slice(0, 8) +
-    ' | ' + viewerIdentity.ip +
     ' | 무단전재 금지'
   );
 }
@@ -240,7 +238,17 @@ async function reportCapture(detail) {
   } catch (_) { /* silent */ }
 }
 
-// ── 시각적 워터마크 (이메일·세션·IP) ──
+// ── 시각적 워터마크 (이메일·세션, IP 제거) — 행별 오프셋 시프트(크롭 내성) ──
+function seedRng(seed) {
+  let a = seed >>> 0;
+  return function () {
+    a |= 0; a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
 function renderWatermark() {
   const overlay = document.getElementById('watermark-overlay');
   overlay.innerHTML = '';
@@ -253,16 +261,18 @@ function renderWatermark() {
   const fontSize = Math.max(11, Math.min(w, h) * 0.028);
   const stepX = fontSize * Math.max(14, text.length * 0.55);
   const stepY = fontSize * 5.5;
+  const rng = seedRng(text.length * 2654435761);
 
   for (let y = -stepY; y < h + stepY; y += stepY) {
-    for (let x = -stepX; x < w + stepX; x += stepX) {
+    const shiftX = Math.floor(rng() * stepX * 0.85); // 행마다 다른 오프셋
+    for (let x = -stepX + shiftX; x < w + stepX; x += stepX) {
       const span = document.createElement('span');
       span.className = 'wm-line';
       span.textContent = text;
       span.style.cssText =
         'left:' + x + 'px; top:' + y + 'px;' +
         'font-size:' + fontSize + 'px;' +
-        'opacity:' + (0.07 + Math.random() * 0.05) + ';';
+        'opacity:' + (0.07 + rng() * 0.05) + ';';
       overlay.appendChild(span);
     }
   }
@@ -342,6 +352,7 @@ function paintWithInvisibleWm(img) {
   ctx.drawImage(img, 0, 0);
   try {
     // 1) 픽셀에 구운 시각적 신원 워터마크 (CSS 제거·OS 스크린샷에도 남음)
+    //    행별 오프셋 시프트 → 세로 크롭 내성 (로드맵 3단계)
     const text = watermarkText();
     const fontSize = Math.max(14, Math.round(Math.min(w, h) * 0.028));
     ctx.save();
@@ -351,8 +362,10 @@ function paintWithInvisibleWm(img) {
     ctx.rotate(-25 * Math.PI / 180);
     const stepX = fontSize * Math.max(14, text.length * 0.55);
     const stepY = fontSize * 5.5;
+    const rng = seedRng(text.length * 2654435761);
     for (let y = -h; y < h; y += stepY) {
-      for (let x = -w; x < w; x += stepX) {
+      const shiftX = Math.floor(rng() * stepX * 0.85);
+      for (let x = -w + shiftX; x < w; x += stepX) {
         ctx.fillText(text, x, y);
       }
     }
@@ -365,8 +378,7 @@ function paintWithInvisibleWm(img) {
 
     canvas.style.display = 'block';
     photo.style.display = 'none';
-    canvas.style.maxWidth = getComputedStyle(photo).maxWidth;
-    canvas.style.maxHeight = getComputedStyle(photo).maxHeight;
+    // 크기 제약은 CSS(#photo-canvas max-width/height)가 담당 — computed style 복사 제거
   } catch (err) {
     canvas.style.display = 'none';
     photo.style.display = 'block';
@@ -446,18 +458,6 @@ document.addEventListener('keydown', function (e) {
   }
 });
 
-let lastVisibilityChange = 0;
-document.addEventListener('visibilitychange', function () {
-  if (document.hidden) {
-    lastVisibilityChange = Date.now();
-  } else {
-    const hiddenDuration = Date.now() - lastVisibilityChange;
-    if (hiddenDuration > 100 && hiddenDuration < 2500) {
-      reportCapture('mobile_visibility_spike');
-    }
-  }
-});
-
 function showWarning(msg) {
   const el = document.getElementById('capture-warning');
   el.innerHTML = msg;
@@ -502,6 +502,9 @@ setInterval(function () {
 
 window.addEventListener('resize', function () {
   renderWatermark();
+});
+window.addEventListener('orientationchange', function () {
+  setTimeout(function () { renderWatermark(); }, 200);
 });
 </script>
 </body>

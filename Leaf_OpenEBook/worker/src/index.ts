@@ -14,6 +14,7 @@ export interface Env {
   LEAF_ADMIN_TOKEN: string;     // 관리자 로그 조회 토큰 (secret)
   LEAF_RATE_LIMIT_PER_MIN?: string; // 세션당 분당 이미지 허용 수 (기본 15)
   LEAF_IP_LIMIT_PER_MIN?: string;   // IP당 분당 이미지 허용 수 (기본 60)
+  LEAF_VARIANT_COUNT?: string;      // 페이지당 워터마크 변형 수 (기본 16)
 }
 
 const BASE = '/Leaf';
@@ -22,7 +23,8 @@ const DEF_RATE_LIMIT = 15;
 const DEF_IP_LIMIT = 60;
 const ALERT_LIMIT_PER_MIN = 5;  // 캡처 알림 쓰기 상한 (세션·분)
 const META_LIMIT_PER_MIN = 10;  // 메타 조회 상한 (세션·분)
-const ALERT_DETAILS = new Set(['contextmenu', 'print_attempt', 'devtools_open', 'mobile_visibility_spike']);
+const DEF_VARIANT_COUNT = 16;   // 페이지당 워터마크 변형 수 (로드맵 2단계)
+const ALERT_DETAILS = new Set(['contextmenu', 'print_attempt', 'devtools_open']);
 
 function json(data: unknown, status = 200): Response {
   return new Response(JSON.stringify(data), {
@@ -91,6 +93,16 @@ async function hmacHex(secret: string, message: string): Promise<string> {
   return Array.from(new Uint8Array(sig), (b) => b.toString(16).padStart(2, '0')).join('');
 }
 
+// FNV-1a 32bit — 세션→변형 결정적 매핑용 (경량·비암호화)
+function fnv1a(str: string): number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < str.length; i++) {
+    h ^= str.charCodeAt(i);
+    h = (h * 0x01000193) >>> 0;
+  }
+  return h >>> 0;
+}
+
 // ── D1 기반 슬라이딩 분당 레이트리밋 (scope: 세션·IP·엔드포인트별) ──
 async function rateLimited(env: Env, scope: string, limit: number): Promise<{ ok: boolean; retryAfter: number }> {
   const now = Math.floor(Date.now() / 1000);
@@ -153,8 +165,20 @@ async function pageHandler(
     if (!rlIp.ok) return json({ error: 'rate_limited', retryAfter: rlIp.retryAfter }, 429);
   }
 
-  // 4) R2 서빙
-  const key = `images/${albumId}/${page}.jpg`;
+  // 4) 워터마크 변형 결정적 선택 (로드맵 2단계) + 할당 기록
+  const variantCount = Number(env.LEAF_VARIANT_COUNT) || DEF_VARIANT_COUNT;
+  const variant = fnv1a(`${sessionId}:${albumId}:${page}`) % variantCount;
+  await env.leaf_db
+    .prepare(
+      `INSERT INTO watermark_assignments (session_id, album_id, page_no, variant) VALUES (?1, ?2, ?3, ?4)
+       ON CONFLICT (session_id, album_id, page_no) DO UPDATE SET
+         variant = excluded.variant, updated_at = datetime('now')`
+    )
+    .bind(sessionId, albumId, page, variant)
+    .run();
+
+  // 5) R2 서빙 (변형)
+  const key = `images/${albumId}/${page}/${variant}.jpg`;
   const object = await env.leaf_images.get(key);
   if (!object) return json({ error: 'page_not_found', albumId, pageNo }, 404);
 
@@ -176,11 +200,15 @@ async function albumMetaHandler(albumId: string, env: Env, request: Request): Pr
   if (!rl.ok) return json({ error: 'rate_limited', retryAfter: rl.retryAfter }, 429);
 
   const listed = await env.leaf_images.list({ prefix: `images/${albumId}/` });
-  const pageNos = listed.objects
-    .map((o) => o.key.replace(`images/${albumId}/`, '').replace(/\.jpg$/, ''))
-    .map(Number)
-    .filter((n) => Number.isInteger(n) && n > 0)
-    .sort((a, b) => a - b);
+  // 키 형식: images/{album}/{page}/{variant}.jpg → 고유 페이지 번호 추출
+  const pageNos = Array.from(
+    new Set(
+      listed.objects
+        .map((o) => o.key.replace(`images/${albumId}/`, '').split('/')[0])
+        .map(Number)
+        .filter((n) => Number.isInteger(n) && n > 0)
+    )
+  ).sort((a, b) => a - b);
 
   const exp = Math.floor(Date.now() / 1000) + SIG_TTL;
   const pages: { page: number; url: string }[] = [];
@@ -198,8 +226,9 @@ async function albumMetaHandler(albumId: string, env: Env, request: Request): Pr
   });
 }
 
-// ── 뷰어 신원 (시각/비가시 워터마크용) — 쿠키 발급 ──
-async function viewerIdentity(request: Request): Promise<Response> {
+// ── 뷰어 신원 (시각/비가시 워터마크용) — 쿠키 발급 + 세션→IP 추적 ──
+// 로드맵 3단계: IP는 표시 워터마크에서 제거, 서버(sessions)에만 보관.
+async function viewerIdentity(request: Request, env: Env): Promise<Response> {
   const ip = request.headers.get('CF-Connecting-IP') || 'unknown';
   const cookies = parseCookies(request.headers.get('Cookie'));
   let sessionId = cookies.leaf_sid || '';
@@ -212,8 +241,20 @@ async function viewerIdentity(request: Request): Promise<Response> {
     );
   }
 
+  // 세션→IP 연결 (사후 유출 조회용)
+  const userAgent = request.headers.get('User-Agent') || '';
+  await env.leaf_db
+    .prepare(
+      `INSERT INTO sessions (session_id, ip, user_agent, first_seen, last_seen)
+       VALUES (?1, ?2, ?3, datetime('now'), datetime('now'))
+       ON CONFLICT (session_id) DO UPDATE SET
+         ip = excluded.ip, user_agent = excluded.user_agent, last_seen = datetime('now')`
+    )
+    .bind(sessionId, ip, userAgent.slice(0, 200))
+    .run();
+
   const email = cookies.leaf_email || 'guest@leaf.local';
-  const label = `Leaf | ${email} | ${sessionId.slice(0, 8)} | ${ip}`;
+  const label = `Leaf | ${email} | ${sessionId.slice(0, 8)} | 무단전재 금지`;
 
   const headers = securityHeaders(new Headers({ 'Content-Type': 'application/json; charset=utf-8' }));
   headers.set('Cache-Control', 'no-store');
@@ -300,7 +341,7 @@ export default {
     }
 
     if (p === '/api/viewer-identity' && request.method === 'GET') {
-      return viewerIdentity(request);
+      return viewerIdentity(request, env);
     }
     if (p === '/api/capture-alert' && request.method === 'POST') {
       return captureAlert(request, env);

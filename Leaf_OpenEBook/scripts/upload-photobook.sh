@@ -10,6 +10,7 @@
 #   ./upload-photobook.sh 2                    # album 2 지정
 #   ./upload-photobook.sh 2 "/path/to/폴더"     # 폴더 지정
 #   ./upload-photobook.sh 1 "$HOME/Downloads/김소희 화보" "Leaf | user@leaf.com"
+#   ./upload-photobook.sh 1 "" "" 32           # 페이지당 변형 32개 (기본 16)
 #
 # 업로드만 하면 페이지 수는 R2에서 자동 집계되어 재배포 불필요.
 # 이후 뷰어에서 album 1이면 https://vibequant.cc/Leaf/ 에 바로 반영됨.
@@ -23,6 +24,7 @@ DEFAULT_WATERMARK="Leaf | 개인 열람용 | 무단전재 금지"
 ALBUM_ID="${1:-1}"
 SOURCE="${2:-$DEFAULT_SOURCE}"
 WATERMARK="${3:-$DEFAULT_WATERMARK}"
+VARIANTS="${4:-0}"
 
 # ── 사전 검사 ──
 if ! command -v node >/dev/null 2>&1; then
@@ -42,14 +44,18 @@ fi
 
 # ── 실행 ──
 COUNT="$(find "$SOURCE" -maxdepth 1 -type f \( -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.png' -o -iname '*.webp' \) | wc -l | tr -d ' ')"
-echo ">>> 업로드 대상: album=${ALBUM_ID}, 이미지 ${COUNT}장"
+echo ">>> 업로드 대상: album=${ALBUM_ID}, 이미지 ${COUNT}장, 변형 ${VARIANTS:-16}/페이지"
 echo ">>> 소스: ${SOURCE}"
 echo ">>> 워터마크: ${WATERMARK}"
+
+VAR_ARGS=()
+if [ "$VARIANTS" -gt 0 ]; then VAR_ARGS=(--variants "$VARIANTS"); fi
 
 (cd "$SCRIPT_DIR" && node prepare-and-upload.js \
   --album "$ALBUM_ID" \
   --source "$SOURCE" \
-  --watermark "$WATERMARK")
+  --watermark "$WATERMARK" \
+  "${VAR_ARGS[@]}")
 
 echo ""
 echo "✔ 완료. 뷰어 확인: https://vibequant.cc/Leaf/  (album ${ALBUM_ID})"
