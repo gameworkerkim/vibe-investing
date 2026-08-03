@@ -223,6 +223,7 @@ Python으로 만든 웹앱을 공짜로 배포하는 방법과 PaaS 플랫폼 �
 | [Qwen 로컬 설치 가이드](Local_LLM/Qwen_Local_Install_guilde.md) | 알리바바 Qwen 시리즈 로컬 설치 및 실행 가이드 — Ollama·vLLM·SGLang 설정. | 2026-07-10 |
 | [Zcode GLM 리뷰](Zcode/GLM_Reveiw.md) | 중국 칭화대 GLM 시리즈 모델 분석 및 평가 — ChatGLM·GLM-4 성능·한국어 지원·라이선스. | 2026-07-14 |
 | [Colibri Getting Started](Colibri-Getting-Started.md) · [EN](Colibri-Getting-Started_EN.md) · [CN](Colibri-Getting-Started_CN.md) · [JA](Colibri-Getting-Started_JA.md) **NEW** | 744B GLM-5.2 MoE 모델을 순수 C로 25GB RAM에서 구동하는 초경량 엔진. NVMe/VRAM/RAM 3계층 스트리밍 아키텍처, 학습형 캐시(사용할수록 빨라짐), Speculative Decoding, 의존성 제로, Apache 2.0. 4개국어. | 2026-07-24 |
+| [MiniMax H3 Getting Started](LLM_MiniMax/MiniMax-H3-GettingStart.md) · [EN](LLM_MiniMax/MiniMax-H3-GettingStart_EN.md) · [CN](LLM_MiniMax/MiniMax-H3-GettingStart_CN.md) · [JA](LLM_MiniMax/MiniMax-H3-GettingStart_JA.md) **NEW** | MiniMax 최초 오픈웨이트 옴니모달 비디오 모델. 텍스트·이미지·비디오·오디오 입력 → 최대 2K·15초·네이티브 스테레오 오디오 영상 생성. 비동기 API·로컬 배포(SGLang·vLLM·diffusers·ComfyUI) Getting Started, T2V/I2V/Ref2V 예제, 영상 제작·편집 산업 파급력. 4개국어. | 2026-08-03 |
 
 ---
 
@@ -325,6 +326,7 @@ AI 코딩 CLI 도구 **OpenCode**의 한국어 번역 및 현지화 프로젝트
 
 | 날짜 | 문서 | 내용 |
 |------|------|------|
+| 2026-08-03 | MiniMax H3 Getting Started | MiniMax 최초 오픈웨이트 옴니모달 비디오 모델 (4개국어) |
 | 2026-07-28 | MCP 서버 개발 Getting Started | MCP 개념 + AMQS 시그널 서버 구현 완전 가이드 |
 | 2026-07-28 | AMQS-AI-Infra MCP Server | MCP 서버 README (4 Tools·1 Resource·1 Prompt) |
 | 2026-07-26 | Claude Security Plugin 가이드 | claude-security + security-guidance 멀티에이전트 보안 플러그인 완전 가이드 (4개국어) |

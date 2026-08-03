@@ -110,6 +110,7 @@ These documents have English translations. Listed by read engagement (highest fi
 | Document | Description |
 |----------|-------------|
 | [Colibri Getting Started (EN)](Colibri-Getting-Started_EN.md) | 744B GLM-5.2 MoE engine in pure C at 25GB RAM — 3-tier streaming (NVMe/VRAM/RAM), learning cache, Speculative Decoding, zero dependencies, Apache 2.0. |
+| [MiniMax H3 Getting Started (EN)](LLM_MiniMax/MiniMax-H3-GettingStart_EN.md) | MiniMax's first open-weight omni-modal video model — text/image/video/audio input to generate up to 2K, 15-second videos with native stereo audio. Async API + local deployment (SGLang/vLLM/diffusers/ComfyUI), T2V/I2V/Ref2V examples, video production & editing industry impact. |
 
 ### AI Agents & Web Standards
 
@@ -326,6 +327,7 @@ Token optimization, local deployment, security, knowledge management, LLM app ve
 | [Qwen Local Installation Guide](Local_LLM/Qwen_Local_Install_guilde.md) | KO | Alibaba Qwen series — Ollama, vLLM, SGLang setup. | 2026-07-10 |
 | [Zcode GLM Review](Zcode/GLM_Reveiw.md) | KO | Tsinghua GLM series — ChatGLM, GLM-4 performance, Korean support, licensing. | 2026-07-14 |
 | [Colibri Getting Started](Colibri-Getting-Started.md) · [EN](Colibri-Getting-Started_EN.md) · [CN](Colibri-Getting-Started_CN.md) · [JA](Colibri-Getting-Started_JA.md) **NEW** | KO·EN·CN·JA | 744B GLM-5.2 MoE engine in pure C at just 25GB RAM — 3-tier streaming (NVMe/VRAM/RAM) architecture, learning cache (gets faster with use), Speculative Decoding, zero dependencies, Apache 2.0. 4 languages. | 2026-07-24 |
+| [MiniMax H3 Getting Started](LLM_MiniMax/MiniMax-H3-GettingStart.md) · [EN](LLM_MiniMax/MiniMax-H3-GettingStart_EN.md) · [CN](LLM_MiniMax/MiniMax-H3-GettingStart_CN.md) · [JA](LLM_MiniMax/MiniMax-H3-GettingStart_JA.md) **NEW** | KO·EN·CN·JA | MiniMax's first open-weight omni-modal video model — text/image/video/audio input to generate up to 2K, 15s videos with native stereo audio. Async API, local deployment (SGLang/vLLM/diffusers/ComfyUI), T2V/I2V/Ref2V examples, video production & editing impact. 4 languages. | 2026-08-03 |
 
 ---
 
