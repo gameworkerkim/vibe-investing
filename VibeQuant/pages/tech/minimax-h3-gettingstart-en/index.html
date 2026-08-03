@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiniMax H3 Open-Weight Guide — Omni-Modal Video Generation Model — VibeQuant</title>
+  <meta name="description" content="MiniMax H3 (2026-07) open-weight omni-modal generation model guide. Accepts text, images, video, and audio to generate up to 2K, 15-second videos with native stereo audio. Getting Started with the async API and local deployment (SGLang, vLLM, diffusers, ComfyUI), T2V/I2V/Ref2V examples, strengths, weaknesses, video production &amp; editing industry impact, and the M1/M3/H3 lineup." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-en/" />
+  <meta property="og:title" content="MiniMax H3 Open-Weight Guide — Omni-Modal Video Generation Model" />
+  <meta property="og:description" content="MiniMax H3 (2026-07) open-weight omni-modal generation model guide. Accepts text, images, video, and audio to generate up to 2K, 15-second videos with native stereo audio. Getting Started with the async API and local deployment (SGLang, vLLM, diffusers, ComfyUI), T2V/I2V/Ref2V examples, strengths, weaknesses, video production &amp; editing industry impact, and the M1/M3/H3 lineup." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MiniMax H3 Open-Weight Guide — Omni-Modal Video Generation Model","description":"MiniMax H3 (2026-07) open-weight omni-modal generation model guide. Accepts text, images, video, and audio to generate up to 2K, 15-second videos with native stereo audio. Getting Started with the async API and local deployment (SGLang, vLLM, diffusers, ComfyUI), T2V/I2V/Ref2V examples, strengths, weaknesses, video production & editing industry impact, and the M1/M3/H3 lineup.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/minimax-h3-gettingstart-en/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_MiniMax/MiniMax-H3-GettingStart_EN.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/minimax-h3-gettingstart-en/","datePublished":"2026-08-03","dateModified":"2026-08-03","inLanguage":"en","keywords":"LLM · 에이전트, LLM_MiniMax"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"MiniMax H3 Open-Weight Guide — Omni-Modal Video Generation Model","item":"https://tech.vibequant.cc/tech/minimax-h3-gettingstart-en/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>MiniMax H3 Open-Weight Guide — Omni-Modal Video Generation Model</h1>
+        <p class="article-dates"><time datetime="2026-08-03">발행 2026.08.03</time> · 주제 LLM · 에이전트 · LLM_MiniMax</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/minimax-h3-gettingstart/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/minimax-h3-gettingstart-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../tech/minimax-h3-gettingstart-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/minimax-h3-gettingstart-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Subtitle: MiniMax's first open-weight video model — usage, pros &amp; cons, and its impact on the video production and editing industry</p>
+        
+        <nav class="share-bar" aria-label="Share" data-url="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-en/" data-title="MiniMax H3 Open-Weight Guide — Omni-Modal Video Generation Model" data-text="MiniMax H3 (2026-07) open-weight omni-modal generation model guide. Accepts text, images, video, and audio to generate up to 2K, 15-second videos with native stereo audio. Getting Started with the async API and local deployment (SGLang, vLLM, diffusers, ComfyUI), T2V/I2V/Ref2V examples, strengths, weaknesses, video production &amp; editing industry impact, and the M1/M3/H3 lineup." data-lang="en">
+  <span class="share-label">Share</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart-en%2F&amp;text=MiniMax%20H3%20Open-Weight%20Guide%20%E2%80%94%20Omni-Modal%20Video%20Generation%20Model" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart-en%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart-en%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">Copy link</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><h2>Table of Contents</h2>
+<ol>
+<li><a href="#1-minimax-open-weight-strategy-overview">MiniMax Open-Weight Strategy Overview</a></li>
+<li><a href="#2-minimax-open-weight-model-lineup">MiniMax Open-Weight Model Lineup (M1 · M3 · H3)</a></li>
+<li><a href="#3-h3-core-technologies">H3 Core Technologies</a></li>
+<li><a href="#4-getting-started--api">Getting Started — API</a></li>
+<li><a href="#5-getting-started--local-deployment-open-weight">Getting Started — Local Deployment (Open Weight)</a></li>
+<li><a href="#6-usage-examples--t2v--i2v--ref2v">Usage Examples — T2V · I2V · Ref2V</a></li>
+<li><a href="#7-strengths">Strengths</a></li>
+<li><a href="#8-weaknesses">Weaknesses</a></li>
+<li><a href="#9-impact-on-the-video-production--editing-industry">Impact on the Video Production &amp; Editing Industry</a></li>
+<li><a href="#10-key-competitors">Key Competitors</a></li>
+<li><a href="#11-summary">Summary</a></li>
+</ol>
+<hr>
+<h2>1. MiniMax Open-Weight Strategy Overview</h2>
+<p>Following its text-centric LLMs (M series), MiniMax announced <strong>H3, its first open-weight video generation model</strong>, in July 2026, extending its open-weight strategy to the full image, audio, and video stack.</p>
+<p>Key strategic directions:</p>
+<ul>
+<li><strong>Modality unification</strong>: A single omni-modal model that understands text, image, video, and audio as one input context and jointly generates video with stereo audio.</li>
+<li><strong>Task unification</strong>: Tasks previously split across specialized models — text-to-video (T2V), image-to-video (I2V), reference-to-video (Ref2V), video editing, and voice/SFX/music generation — are generalized into a single model.</li>
+<li><strong>Open-weight openness</strong>: The latest H3 weights are publicly released, so you can deploy locally or in a private environment, use it without API fees, or fine-tune it for specific domains.</li>
+<li><strong>Price disruption</strong>: Per-second pricing at 2K is less than a third of mainstream competitors; at 768p it is less than half the price of mainstream 720p output.</li>
+</ul>
+<hr>
+<h2>2. MiniMax Open-Weight Model Lineup</h2>
+<table>
+<thead>
+<tr>
+<th align="left">Model</th>
+<th align="left">Released</th>
+<th align="left">Key features &amp; performance</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>MiniMax-M1</strong></td>
+<td align="left">June 2025</td>
+<td align="left">World&#39;s first open-weight hybrid-attention reasoning model<br>- Architecture: hybrid MoE with 456B total parameters and 45.9B active parameters per token<br>- Context: up to 1M tokens (8x DeepSeek-R1)<br>- Efficiency: only 25% of DeepSeek-R1&#39;s FLOPs to generate 100K tokens<br>- Benchmarks: outperforms leading open models including DeepSeek-R1 and Qwen3-235B</td>
+</tr>
+<tr>
+<td align="left"><strong>MiniMax M3</strong></td>
+<td align="left">June 2026</td>
+<td align="left">First open-weight model combining coding, 1M context, and native multimodality<br>- Architecture: MoE with ~428B total parameters and ~23B active parameters per token<br>- Coding: 59.0% on SWE-Bench Pro (beats GPT-5.5 at 58.6%)<br>- Price: API priced at 5-10% of competing closed models ($0.3/M input tokens during promotions)</td>
+</tr>
+<tr>
+<td align="left"><strong>MiniMax H3</strong></td>
+<td align="left">July 2026</td>
+<td align="left">First MiniMax video model released as open weight<br>- Performance: #1 in video editing, #2 in text-to-video<br>- Capability: takes text, images, video, and audio as input, generating up to 2K-resolution, 15-second videos with native stereo audio<br>- License: MiniMax Community License (commercial use permitted for organizations with annual revenue under $20M)<br>- Open weight: HuggingFace <code>MiniMaxAI/MiniMax-H3</code> (33B, BF16)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. H3 Core Technologies</h2>
+<p>H3 consists of three modules. The API provides all three in one integrated call; the open-weight release includes only H3-Base.</p>
+<table>
+<thead>
+<tr>
+<th>Module</th>
+<th>Role</th>
+<th>Availability</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>H3-Context-IR</strong></td>
+<td>Understands and refines multimodal input, converting it into a structured prompt (Intermediate Representation). Uses language as the &quot;bridge for generalization&quot;</td>
+<td>API only</td>
+</tr>
+<tr>
+<td><strong>H3-Base</strong></td>
+<td>Generates video + stereo audio at 768p from the Context-IR output (33B dense Omni-Transformer)</td>
+<td><strong>Open weight</strong></td>
+</tr>
+<tr>
+<td><strong>H3-Regenerate-2K</strong></td>
+<td>Re-injects the original context with the 768p output to regenerate at 2K. Reuses the base model&#39;s generative capability instead of a dedicated super-resolution module</td>
+<td>API only</td>
+</tr>
+</tbody></table>
+<p>Key technical highlights:</p>
+<ul>
+<li><strong>H3-Contextual Omni Representation</strong>: A captioning pipeline covering video, audio, and multi-shot relationships. Most source material is distilled from roughly 100K tokens of inference down to an average of ~4K tokens.</li>
+<li><strong>H3-VAE</strong>: A complete tokenizer overhaul that improves reconstruction quality and learnability at once. Its high compression ratio delivers a 4x gain in effective sequence length — the key technology behind native 2K support.</li>
+<li><strong>H3-Omni Transformer</strong>: A dense Transformer built for task generalization. It separates understanding and generation workloads to optimize hardware utilization, lifting training throughput by nearly 30%. MM-RoPE captures (time, height, width) 3D positional relationships, and native sparse attention is supported.</li>
+<li><strong>In-Context Regeneration</strong>: Instead of a dedicated super-resolution module, H3&#39;s base model regenerates its own low-resolution output together with the original multimodal context, recovering small text and fine details that conventional SR can only &quot;guess.&quot;</li>
+</ul>
+<h3>H3 Input/Output Specification</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Spec</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Output duration</td>
+<td>4-15 seconds</td>
+</tr>
+<tr>
+<td>Output resolution</td>
+<td>768p (default) up to 2K (via H3-Regenerate-2K)</td>
+</tr>
+<tr>
+<td>Output frame rate</td>
+<td>24 FPS</td>
+</tr>
+<tr>
+<td>Output audio</td>
+<td>32 kHz stereo</td>
+</tr>
+<tr>
+<td>Aspect ratios</td>
+<td>21:9, 16:9, 4:3, 1:1, 3:4, 9:16, adaptive</td>
+</tr>
+<tr>
+<td>Dialogue languages</td>
+<td>Stable support for 11 languages incl. Arabic, Chinese, English, French, German, Italian, Japanese, Korean, Portuguese, Russian, Spanish</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Getting Started — API</h2>
+<p>H3 uses an <strong>asynchronous generation flow</strong>. You submit a generation request, receive a <code>task_id</code> immediately, then poll the task status and download the finished video.</p>
+<h3>4.1 Prerequisites</h3>
+<ol>
+<li>Sign up at <a href="https://platform.minimax.io">platform.minimax.io</a></li>
+<li>Create an API key under Account Management &gt; API Keys (used as the <code>Authorization: Bearer &lt;API_KEY&gt;</code> header)</li>
+<li>Top up balance/token plan (2K per-second pricing is under a third of mainstream models)</li>
+</ol>
+<pre><code class="language-bash">export MINIMAX_API_KEY=&quot;&lt;YOUR_API_KEY&gt;&quot;
+export MINIMAX_API_BASE=&quot;https://api.minimax.io&quot;   # Global (CN: https://api.minimaxi.com)
+</code></pre>
+<h3>4.2 Create Task</h3>
+<p><code>POST {MINIMAX_API_BASE}/v2/video_generation</code></p>
+<pre><code class="language-bash">curl -X POST &quot;$MINIMAX_API_BASE/v2/video_generation&quot; \
+  -H &quot;Authorization: Bearer $MINIMAX_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{
+    &quot;model&quot;: &quot;MiniMax-H3&quot;,
+    &quot;content&quot;: [
+      {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;text&quot;: &quot;Epic space-opera theatrical teaser: a female captain stands alone before a massive observation window as the last fleet gathers and jumps away in a blinding flash, the bridge shaking, leaving her behind.&quot;
+      }
+    ],
+    &quot;resolution&quot;: &quot;2K&quot;,
+    &quot;duration&quot;: 5,
+    &quot;ratio&quot;: &quot;16:9&quot;
+  }&#39;
+</code></pre>
+<p>You receive a <code>task_id</code> in the response.</p>
+<pre><code class="language-json">{ &quot;task_id&quot;: &quot;424010985738629&quot; }
+</code></pre>
+<h3>4.3 Query Task</h3>
+<p><code>GET {MINIMAX_API_BASE}/v2/query/video_generation/{task_id}</code></p>
+<pre><code class="language-bash">curl -s &quot;$MINIMAX_API_BASE/v2/query/video_generation/424010985738629&quot; \
+  -H &quot;Authorization: Bearer $MINIMAX_API_KEY&quot;
+</code></pre>
+<p>On success, <code>status</code> becomes <code>succeeded</code> and <code>content.url</code> returns the video download URL.</p>
+<pre><code class="language-json">{
+  &quot;task&quot;: {
+    &quot;id&quot;: &quot;424010985738629&quot;,
+    &quot;model&quot;: &quot;MiniMax-H3&quot;,
+    &quot;status&quot;: &quot;succeeded&quot;,
+    &quot;content&quot;: { &quot;url&quot;: &quot;https://your-cdn.example.com/h3-generated-2k-output.mp4&quot; },
+    &quot;resolution&quot;: &quot;2K&quot;,
+    &quot;duration&quot;: 5,
+    &quot;ratio&quot;: &quot;16:9&quot;
+  }
+}
+</code></pre>
+<ul>
+<li>Statuses: <code>queued</code> → <code>running</code> → <code>succeeded</code> / <code>failed</code> / <code>cancelled</code></li>
+<li>Tasks can only be queried within the last 7 days, and video URLs are time-limited — download and store them promptly.</li>
+<li>On failure, an <code>error</code> field with <code>code</code>/<code>message</code> is returned.</li>
+</ul>
+<h3>4.4 Complete Python Example (create → poll → download)</h3>
+<pre><code class="language-python">import time
+import requests
+
+API_BASE = &quot;https://api.minimax.io&quot;
+API_KEY = &quot;&lt;YOUR_API_KEY&gt;&quot;
+HEADERS = {&quot;Authorization&quot;: f&quot;Bearer {API_KEY}&quot;, &quot;Content-Type&quot;: &quot;application/json&quot;}
+
+def create_video(prompt, resolution=&quot;2K&quot;, duration=5, ratio=&quot;16:9&quot;):
+    resp = requests.post(
+        f&quot;{API_BASE}/v2/video_generation&quot;,
+        headers=HEADERS,
+        json={
+            &quot;model&quot;: &quot;MiniMax-H3&quot;,
+            &quot;content&quot;: [{&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: prompt}],
+            &quot;resolution&quot;: resolution,
+            &quot;duration&quot;: duration,
+            &quot;ratio&quot;: ratio,
+        },
+    )
+    resp.raise_for_status()
+    return resp.json()[&quot;task_id&quot;]
+
+def wait_video(task_id, timeout=600):
+    url = f&quot;{API_BASE}/v2/query/video_generation/{task_id}&quot;
+    deadline = time.time() + timeout
+    while time.time() &lt; deadline:
+        data = requests.get(url, headers=HEADERS).json()[&quot;task&quot;]
+        if data[&quot;status&quot;] in (&quot;succeeded&quot;, &quot;failed&quot;, &quot;cancelled&quot;):
+            return data
+        time.sleep(5)
+    raise TimeoutError(&quot;task did not finish in time&quot;)
+
+task_id = create_video(&quot;A boy playing basketball by the sea, golden hour, cinematic&quot;)
+result = wait_video(task_id)
+if result[&quot;status&quot;] == &quot;succeeded&quot;:
+    video_url = result[&quot;content&quot;][&quot;url&quot;]
+    mp4 = requests.get(video_url).content
+    open(&quot;output.mp4&quot;, &quot;wb&quot;).write(mp4)
+    print(&quot;saved output.mp4&quot;)
+</code></pre>
+<h3>4.5 Request Parameter Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>model</code></td>
+<td>string</td>
+<td>yes</td>
+<td><code>MiniMax-H3</code> (currently the only one)</td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>array</td>
+<td>yes</td>
+<td>Multimodal input array with <code>text</code>/<code>image_url</code>/<code>video_url</code>/<code>audio_url</code> elements. <strong>Every request must include one non-empty <code>text</code> (prompt)</strong> (max 7000 characters)</td>
+</tr>
+<tr>
+<td><code>resolution</code></td>
+<td>string</td>
+<td>yes</td>
+<td><code>768P</code> or <code>2K</code></td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td>int</td>
+<td>yes</td>
+<td><code>4</code>-<code>15</code> (seconds)</td>
+</tr>
+<tr>
+<td><code>ratio</code></td>
+<td>string</td>
+<td>conditional</td>
+<td><code>adaptive</code> (default), <code>21:9</code>, <code>16:9</code>, <code>4:3</code>, <code>1:1</code>, <code>3:4</code>, <code>9:16</code>. <strong>T2V (text only) cannot use <code>adaptive</code> and must specify one; image input is always treated as <code>adaptive</code></strong></td>
+</tr>
+<tr>
+<td><code>callback_url</code></td>
+<td>string</td>
+<td>no</td>
+<td>POST notification on status change. Must answer the <code>challenge</code> verification within 3 seconds</td>
+</tr>
+</tbody></table>
+<p><strong>Input media limits</strong> (total request body ≤ 64MB; use public URLs for large files):</p>
+<table>
+<thead>
+<tr>
+<th>Media</th>
+<th>Limits</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Image (<code>image_url</code>)</td>
+<td>JPG, JPEG, PNG, WEBP, HEIC, HEIF; ≤ 30MB each; [256, 5760]px; aspect ratio [0.4, 2.5]. first frame ≤ 1, last frame ≤ 1, reference images ≤ 9</td>
+</tr>
+<tr>
+<td>Video (<code>video_url</code>, reference scenario)</td>
+<td>MP4, MOV; H.264/H.265, AAC, MP3; ≤ 50MB each; ≤ 3 clips; 2-15s per clip, total ≤ 15s</td>
+</tr>
+<tr>
+<td>Audio (<code>audio_url</code>, reference scenario)</td>
+<td>WAV, MP3; ≤ 15MB each; ≤ 3 clips; 2-15s per clip, total ≤ 15s (audio alone is not allowed)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Getting Started — Local Deployment (Open Weight)</h2>
+<h3>5.1 Download the Model</h3>
+<p>Get <code>MiniMaxAI/MiniMax-H3</code> (33B params, Image-Text-to-Video, BF16) from HuggingFace. It is released as two task-specific checkpoints: <strong>FL2VA</strong>(first/last-frame) and<strong>Ref2VA</strong> (reference-based).</p>
+<pre><code class="language-bash"># Original checkpoints (for SGLang, vLLM) — both task families
+hf download MiniMaxAI/MiniMax-H3 --include &quot;FL2VA/*&quot; &quot;Ref2VA/*&quot; --local-dir MiniMax-H3
+
+# A single task family
+hf download MiniMaxAI/MiniMax-H3 --include &quot;FL2VA/*&quot; --local-dir MiniMax-H3
+</code></pre>
+<p>diffusers users need no manual download: <code>ModularPipeline.from_pretrained(&quot;MiniMaxAI/MiniMax-H3&quot;)</code> fetches exactly the components it needs.</p>
+<h3>5.2 Recommended Inference Frameworks</h3>
+<table>
+<thead>
+<tr>
+<th>Framework</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SGLang</strong></td>
+<td>4-GPU recommended, Ulysses parallelism for high performance. Official cookbook available</td>
+</tr>
+<tr>
+<td><strong>vLLM</strong></td>
+<td>Optimized cache &amp; scheduling; vllm recipes provided</td>
+</tr>
+<tr>
+<td><strong>diffusers</strong></td>
+<td>One-line <code>ModularPipeline.from_pretrained</code> loading, Python pipeline</td>
+</tr>
+<tr>
+<td><strong>ComfyUI</strong></td>
+<td>Comfy-Org/MiniMax-H3 for node-based workflows. T2V/R2V templates provided</td>
+</tr>
+</tbody></table>
+<h3>5.3 SGLang Serving Example</h3>
+<pre><code class="language-bash"># FL2VA (text/first-last frame → video)
+sglang serve \
+  --model-path MiniMaxAI/MiniMax-H3 \
+  --num-gpus 4 \
+  --ulysses-degree 4 \
+  --performance-mode speed \
+  --host 0.0.0.0 \
+  --port 30010 \
+  --model-variant fl2va
+
+# Ref2VA (reference image/video/audio → video)
+sglang serve \
+  --model-path MiniMaxAI/MiniMax-H3 \
+  --num-gpus 4 \
+  --ulysses-degree 4 \
+  --performance-mode speed \
+  --host 0.0.0.0 \
+  --port 30011 \
+  --model-variant ref2va
+</code></pre>
+<h3>5.4 Full 2K Workflow (API + Local Hybrid)</h3>
+<p>The open weights reproduce 768p output locally; 2K quality can be reproduced by combining them with the official API.</p>
+<ol>
+<li><strong>H3-Context-IR</strong> (<code>POST /v2/h3_context_ir</code>): convert input into a structured prompt before local generation. Critical to final quality — strongly recommended.</li>
+<li><strong>H3-Base (local SGLang)</strong>: generate 768p video from the converted prompt.</li>
+<li><strong>H3-Regenerate-2K</strong> (<code>POST /v2/video_regeneration</code>): regenerate 768p output with the original context to 2K.</li>
+</ol>
+<pre><code class="language-bash"># Environment variables
+export SGLANG_DEPLOYMENT_URL=&quot;&lt;sglang-deployment-url&gt;&quot;
+export MINIMAX_API_BASE=&quot;https://api.minimax.io&quot;   # or https://api.minimaxi.com (CN)
+export TOKEN=&quot;&lt;token&gt;&quot;
+</code></pre>
+<h3>5.5 License</h3>
+<p>H3 is distributed under the <strong>MiniMax H3 Community License Agreement</strong>.</p>
+<ul>
+<li>Organizations with annual revenue of <strong>under $20M</strong> may use it commercially.</li>
+<li>Weights can be downloaded, modified, and fine-tuned.</li>
+<li>Organizations above the threshold need a separate commercial license.</li>
+<li>Official license file: <code>LICENSE</code> in <code>huggingface.co/MiniMaxAI/MiniMax-H3</code>.</li>
+</ul>
+<hr>
+<h2>6. Usage Examples — T2V · I2V · Ref2V</h2>
+<p>H3 supports several generation scenarios based on the <code>content</code> array combination.</p>
+<h3>6.1 Text-to-Video (T2V)</h3>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;MiniMax-H3&quot;,
+  &quot;content&quot;: [
+    { &quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;A cinematic product commercial of a luxury watch floating above a city at dawn, dramatic lighting&quot; }
+  ],
+  &quot;resolution&quot;: &quot;2K&quot;,
+  &quot;duration&quot;: 5,
+  &quot;ratio&quot;: &quot;16:9&quot;
+}
+</code></pre>
+<h3>6.2 Image-to-Video (I2V) — First/Last Frame</h3>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;MiniMax-H3&quot;,
+  &quot;content&quot;: [
+    { &quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;Pull focus to the people in the background and add more steam to the ramen bowl.&quot; },
+    { &quot;type&quot;: &quot;image_url&quot;, &quot;image_url&quot;: { &quot;url&quot;: &quot;https://example.com/first_frame.png&quot; }, &quot;role&quot;: &quot;first_frame&quot; },
+    { &quot;type&quot;: &quot;image_url&quot;, &quot;image_url&quot;: { &quot;url&quot;: &quot;https://example.com/last_frame.png&quot; }, &quot;role&quot;: &quot;last_frame&quot; }
+  ],
+  &quot;resolution&quot;: &quot;2K&quot;,
+  &quot;duration&quot;: 5,
+  &quot;ratio&quot;: &quot;adaptive&quot;
+}
+</code></pre>
+<h3>6.3 Reference-to-Video (Ref2V) — Video Editing, Voice &amp; Music</h3>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;MiniMax-H3&quot;,
+  &quot;content&quot;: [
+    {
+      &quot;type&quot;: &quot;text&quot;,
+      &quot;text&quot;: &quot;Character speaks: Follow the wind, live free. Voice timbre follows reference audio 1.&quot;
+    },
+    { &quot;type&quot;: &quot;video_url&quot;, &quot;video_url&quot;: { &quot;url&quot;: &quot;https://example.com/source.mp4&quot; }, &quot;role&quot;: &quot;reference_video&quot; },
+    { &quot;type&quot;: &quot;audio_url&quot;, &quot;audio_url&quot;: { &quot;url&quot;: &quot;https://example.com/voice.mp3&quot; }, &quot;role&quot;: &quot;reference_audio&quot; }
+  ],
+  &quot;resolution&quot;: &quot;2K&quot;,
+  &quot;duration&quot;: 5,
+  &quot;ratio&quot;: &quot;adaptive&quot;
+}
+</code></pre>
+<h3>6.4 Role Combination Rules</h3>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>content composition</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T2V</td>
+<td>text only</td>
+</tr>
+<tr>
+<td>I2V first frame</td>
+<td>text + 1 image (<code>first_frame</code>, or role omitted)</td>
+</tr>
+<tr>
+<td>I2V last frame</td>
+<td>text + 1 image (<code>last_frame</code>)</td>
+</tr>
+<tr>
+<td>I2V first &amp; last frame</td>
+<td>text + 2 images (<code>first_frame</code> + <code>last_frame</code>)</td>
+</tr>
+<tr>
+<td>Ref2V</td>
+<td>text + any combination of reference image (<code>reference_image</code>), video (<code>reference_video</code>), audio (<code>reference_audio</code>); audio alone not allowed, at least one image/video required</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Note: I2V and Ref2V are <strong>mutually exclusive</strong>. If any <code>reference_*</code> role appears, <code>first_frame</code>/<code>last_frame</code> must not be used.</p>
+</blockquote>
+<hr>
+<h2>7. Strengths</h2>
+<ul>
+<li><strong>Open-weight freedom</strong>: Download the weights and deploy in a local or private environment. Strengthen data security, use it without per-call API fees, or fine-tune for specific domains.</li>
+<li><strong>Frontier-level performance</strong>: #1 in video editing, #2 in text-to-video. Mature enough to be put straight into commercial content production (ads, branding, e-commerce, gaming).</li>
+<li><strong>Omni-modal input</strong>: Takes text, images, video, and audio together and executes compound instructions in natural language, e.g. &quot;reference the camera movement of this video, have the character in that image sing with this voice.&quot;</li>
+<li><strong>Native stereo audio</strong>: Generates 32kHz stereo sound along with video — no separate TTS, music, or SFX pipeline. Audio and video are synchronized in one pass.</li>
+<li><strong>Disruptive cost efficiency</strong>: 2K per-second price under a third of mainstream models; 768p under half of mainstream 720p. Consistent with the M3 LLM price strategy (5-10% of closed models).</li>
+<li><strong>Long segments</strong>: Single generation of up to 15 seconds plus multi-clip references enable natural multi-shot direction.</li>
+<li><strong>Fast ecosystem adoption</strong>: Official ComfyUI integration and multiple HuggingFace Spaces demos (multimodal, Ref2VA, FL2VA, etc.) appeared immediately after launch.</li>
+</ul>
+<hr>
+<h2>8. Weaknesses</h2>
+<ul>
+<li><strong>Hardware requirements</strong>: Running the 33B dense model smoothly locally requires expensive infrastructure such as high-end GPUs (recommended 4-GPU setup).</li>
+<li><strong>Some modules are not open</strong>: H3-Context-IR and H3-Regenerate-2K are API-only. To fully reproduce top quality (especially 2K), even local deployments must be combined with the official API.</li>
+<li><strong>License restrictions</strong>: The MiniMax Community License limits commercial use by organizations with annual revenue over $20M.</li>
+<li><strong>Limited independent verification</strong>: Announced benchmarks (e.g., #1 video editing) are MiniMax&#39;s own measurements and need independent verification.</li>
+<li><strong>It&#39;s a Chinese company</strong>: Data security and regulatory concerns may constrain usage in some countries and enterprises.</li>
+<li><strong>Irregular generation quality</strong>: Faces, hands, and fine text still have limits; prompt tuning and multiple regenerations (seeds) are often required.</li>
+<li><strong>Regulatory &amp; copyright risks</strong>: Portrait rights, brand logos, music copyright, and deepfake abuse make H3 subject to generative-media regulations.</li>
+</ul>
+<hr>
+<h2>9. Impact on the Video Production &amp; Editing Industry</h2>
+<p>H3 has the potential to change the <strong>entire video production pipeline</strong>, not just &quot;generate a clip.&quot; The #1 video editing ranking is especially significant.</p>
+<h3>9.1 Collapse in Production Cost</h3>
+<ul>
+<li>2K per-second cost is under a third of mainstream models. The direct generation cost of a 30-second brand video could fall to 1/10 or less of its former level.</li>
+<li>With open weights + local deployment, <strong>per-second billing disappears entirely</strong>. With GPUs, video marginal cost drops to the level of electricity.</li>
+<li>Combined with the M3-style &quot;5-10% of closed-model price&quot; strategy, the price floor of the whole generative media market could be reset.</li>
+</ul>
+<h3>9.2 Editing Paradigm Shift: From &quot;Manipulation&quot; to &quot;Description&quot;</h3>
+<p>Traditional editing means trimming, joining, and applying filters on a timeline. H3 <strong>regenerates video and audio wholesale from a natural-language description</strong> of the desired result.</p>
+<ul>
+<li>V2V editing that only swaps characters, backgrounds, or mood of a scene</li>
+<li>Compound editing that borrows the camera movement of a reference video and applies the voice timbre of a reference audio</li>
+<li>Frame-anchored editing that directs &quot;middle scenes&quot; by specifying first and last frames</li>
+<li>Shot planning that stitches 15-second multi-shots from 4-second audio/video references</li>
+</ul>
+<p>In other words, the paradigm shifts from &quot;cut-based editing&quot; to &quot;intent-based generation.&quot; Traditional NLE tools like Adobe Premiere and DaVinci Resolve face pressure as some of their core value gets absorbed into generation engines.</p>
+<h3>9.3 Democratization of Producers</h3>
+<ul>
+<li>With only a direction/scenario idea, <strong>a solo creator or a small team can produce ad, brand, e-commerce, and product demo videos</strong>.</li>
+<li>Things that previously required outsourcing — moving product-website banners, animated posters, opening titles, UI/UX demos — can be produced instantly from a prompt.</li>
+<li>The language barrier also drops. 11-language dialogue support lets you generate localized videos without separate casting.</li>
+</ul>
+<h3>9.4 Workflow Shift: From &quot;Clip Generation&quot; to &quot;Full Production Participation&quot;</h3>
+<p>As MiniMax&#39;s roadmap states, video models will move beyond single-clip generators to <strong>participate in the entire content production process</strong>.</p>
+<ul>
+<li>Pre-viz: scenario → storyboard video → direction validation before shooting</li>
+<li>Location/background/CG replacement: replace live shoots with generated backgrounds (product videos, interior, architectural presentations)</li>
+<li>Automatic voice/music/SFX: synthesize dialogue, narration, BGM, and SFX in one pass from references</li>
+<li>Versioning &amp; A/B testing: generate dozens of marketing creatives and compare performance</li>
+</ul>
+<h3>9.5 Industry-by-Industry Impact Summary</h3>
+<table>
+<thead>
+<tr>
+<th>Industry</th>
+<th>Impact</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Advertising &amp; marketing</td>
+<td>Creative A/B testing costs collapse; brand consistency becomes easier (brand-rendering accuracy is a strength)</td>
+</tr>
+<tr>
+<td>E-commerce</td>
+<td>Product videos, 360 demos, lifestyle cuts generated from a single photo</td>
+</tr>
+<tr>
+<td>Gaming</td>
+<td>Cinematic trailers, character-motion references, concept videos produced quickly</td>
+</tr>
+<tr>
+<td>Film &amp; TV</td>
+<td>Pre-viz, production design, VFX assistance. Beware legal risks around face/person reproduction</td>
+</tr>
+<tr>
+<td>Broadcasting &amp; YouTube</td>
+<td>Solo media creators produce high-quality backgrounds, motion thumbnails, and openings directly</td>
+</tr>
+<tr>
+<td>Education &amp; research</td>
+<td>Demo/explainer videos generated on the fly for learning and presentations</td>
+</tr>
+</tbody></table>
+<h3>9.6 Risks &amp; Responses</h3>
+<ul>
+<li><strong>Employment shifts</strong>: Automation pressure will start with lower-end editing and motion-graphics jobs. Conversely, new roles emerge for reviewing, curating, and legally validating generated output.</li>
+<li><strong>Deepfakes &amp; fraud</strong>: Reference-based face/voice editing becomes easy, raising the importance of watermarking and detection technologies.</li>
+<li><strong>Copyright &amp; portrait rights</strong>: Rights over reference media and generated output are ambiguous. Contract and license management becomes essential.</li>
+<li><strong>Media literacy</strong>: Labeling regulations for &quot;generated video&quot; are expected to tighten.</li>
+</ul>
+<p>In conclusion, H3-class models lower the cost floor of video production, democratize who can produce, and move the paradigm of editing from &quot;editing&quot; to &quot;generation&quot; — acting as a <strong>catalyst for structural change</strong> in the industry.</p>
+<hr>
+<h2>10. Key Competitors</h2>
+<p>MiniMax H3 competes with the following strong rivals.</p>
+<ul>
+<li><strong>ByteDance (Seedance)</strong>: A direct competitor in the video-AI space.</li>
+<li><strong>Google (Veo · Gemini)</strong>: A major force in text-to-video and multimodal generation. Gemini 3.1 Pro and Gemini Omni Flash are strong rivals to M3 and H3.</li>
+<li><strong>OpenAI (Sora)</strong>: Top tier in text-to-video. Leads the generative media market since Sora 2.</li>
+<li><strong>Runway</strong>: Strengths in cinematic editing and control (Gen-4, etc.).</li>
+<li><strong>Kling (Kuaishou)</strong>: A leading Chinese video generation player.</li>
+<li><strong>Other Chinese open-weight camps</strong>: In text LLMs, DeepSeek (R1, V4-pro), Qwen (Alibaba, Qwen3-235B, Qwen3.7-Max), and Moonshot AI (Kimi) compete with M1/M3; some are expanding into video models.</li>
+</ul>
+<hr>
+<h2>11. Summary</h2>
+<p>MiniMax has extended its open-weight strategy to omni-modal media with <strong>H3 (video generation)</strong>, following M1/M3 (text reasoning and coding). Frontier performance (#1 video editing), generation of up to 2K, 15-second videos with stereo audio, pricing under a third of mainstream rivals, and a community license open to organizations under $20M in annual revenue — H3 is a signal that the open-weight ecosystem is entering a market long dominated by closed video models.</p>
+<p>In the video production and editing industry specifically, H3 (1) lowers production cost from per-second billing down to GPU-level marginal cost, (2) shifts the paradigm toward natural-language, intent-based editing, and (3) accelerates the democratization of solo and small-team production. As long as you account for independent benchmark verification and license/regulatory risks, H3 is a realistic adoption candidate across a wide range of video workflows — advertising, e-commerce, gaming, and broadcasting.</p>
+<hr>
+<h2>References</h2>
+<ul>
+<li>MiniMax H3 official blog: <a href="https://www.minimax.io/blog/minimax-h3">https://www.minimax.io/blog/minimax-h3</a></li>
+<li>HuggingFace model: <a href="https://huggingface.co/MiniMaxAI/MiniMax-H3">https://huggingface.co/MiniMaxAI/MiniMax-H3</a></li>
+<li>API Reference (Video Generation V2): <a href="https://platform.minimax.io/docs/api-reference/video-generation-v2-create">https://platform.minimax.io/docs/api-reference/video-generation-v2-create</a></li>
+<li>Query Task API: <a href="https://platform.minimax.io/docs/api-reference/video-generation-v2-query">https://platform.minimax.io/docs/api-reference/video-generation-v2-query</a></li>
+<li>SGLang cookbook (MiniMax-H3): <a href="https://docs.sglang.io/cookbook/diffusion/MiniMax/MiniMax-H3">https://docs.sglang.io/cookbook/diffusion/MiniMax/MiniMax-H3</a></li>
+<li>vLLM recipes: <a href="https://recipes.vllm.ai/MiniMaxAI/MiniMax-H3">https://recipes.vllm.ai/MiniMaxAI/MiniMax-H3</a></li>
+<li>ComfyUI integration: <a href="https://github.com/Comfy-Org/ComfyUI">https://github.com/Comfy-Org/ComfyUI</a> · <a href="https://docs.comfy.org/tutorials/video/minimax/minimax-h3">https://docs.comfy.org/tutorials/video/minimax/minimax-h3</a></li>
+</ul>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="Share" data-url="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-en/" data-title="MiniMax H3 Open-Weight Guide — Omni-Modal Video Generation Model" data-text="MiniMax H3 (2026-07) open-weight omni-modal generation model guide. Accepts text, images, video, and audio to generate up to 2K, 15-second videos with native stereo audio. Getting Started with the async API and local deployment (SGLang, vLLM, diffusers, ComfyUI), T2V/I2V/Ref2V examples, strengths, weaknesses, video production &amp; editing industry impact, and the M1/M3/H3 lineup." data-lang="en">
+  <span class="share-label">Share</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart-en%2F&amp;text=MiniMax%20H3%20Open-Weight%20Guide%20%E2%80%94%20Omni-Modal%20Video%20Generation%20Model" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart-en%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart-en%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">Copy link</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_MiniMax/MiniMax-H3-GettingStart_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

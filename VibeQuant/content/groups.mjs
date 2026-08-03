@@ -91,6 +91,7 @@ export const FEATURED_COLUMN_PATHS = [
 
 /** TechDoc recommended — order = display order */
 export const FEATURED_TECH_PATHS = [
+  "LLM_MiniMax/MiniMax-H3-GettingStart.md",
   "KIMI-K3/KIMI-K3-Cloud-Install-Guide.md",
   "AI-Open-Weights-Model/KIMI-K3-GettingStart.md",
   "AI-Open-Weights-Model/DeepSeek-GettingStart.md",

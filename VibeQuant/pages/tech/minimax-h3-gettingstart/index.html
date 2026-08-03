@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiniMax H3 오픈웨이트 가이드 — 옴니모달 비디오 생성 모델 — VibeQuant</title>
+  <meta name="description" content="MiniMax H3(2026-07) 오픈웨이트 옴니모달 생성 모델 가이드. 텍스트·이미지·비디오·오디오를 입력받아 2K·15초·스테레오 오디오 영상을 생성. API(비동기 작업)/로컬 배포(SGLang·vLLM·diffusers·ComfyUI) Getting Started, T2V·I2V·Ref2V 예제, 장단점, 영상 제작·편집 산업 파급력, M1·M3·H3 라인업 비교." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart/" />
+  <meta property="og:title" content="MiniMax H3 오픈웨이트 가이드 — 옴니모달 비디오 생성 모델" />
+  <meta property="og:description" content="MiniMax H3(2026-07) 오픈웨이트 옴니모달 생성 모델 가이드. 텍스트·이미지·비디오·오디오를 입력받아 2K·15초·스테레오 오디오 영상을 생성. API(비동기 작업)/로컬 배포(SGLang·vLLM·diffusers·ComfyUI) Getting Started, T2V·I2V·Ref2V 예제, 장단점, 영상 제작·편집 산업 파급력, M1·M3·H3 라인업 비교." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/minimax-h3-gettingstart/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MiniMax H3 오픈웨이트 가이드 — 옴니모달 비디오 생성 모델","description":"MiniMax H3(2026-07) 오픈웨이트 옴니모달 생성 모델 가이드. 텍스트·이미지·비디오·오디오를 입력받아 2K·15초·스테레오 오디오 영상을 생성. API(비동기 작업)/로컬 배포(SGLang·vLLM·diffusers·ComfyUI) Getting Started, T2V·I2V·Ref2V 예제, 장단점, 영상 제작·편집 산업 파급력, M1·M3·H3 라인업 비교.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/minimax-h3-gettingstart/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_MiniMax/MiniMax-H3-GettingStart.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/minimax-h3-gettingstart/","datePublished":"2026-08-03","dateModified":"2026-08-03","inLanguage":"ko","keywords":"LLM · 에이전트, LLM_MiniMax"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"MiniMax H3 오픈웨이트 가이드 — 옴니모달 비디오 생성 모델","item":"https://tech.vibequant.cc/tech/minimax-h3-gettingstart/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>MiniMax H3 오픈웨이트 가이드 — 옴니모달 비디오 생성 모델</h1>
+        <p class="article-dates"><time datetime="2026-08-03">발행 2026.08.03</time> · 주제 LLM · 에이전트 · LLM_MiniMax</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn is-active" href="../../tech/minimax-h3-gettingstart/" data-lang="KR" aria-current="true">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/minimax-h3-gettingstart-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/minimax-h3-gettingstart-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../tech/minimax-h3-gettingstart-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">오픈웨이트 최초의 MiniMax 비디오 모델 — 사용법, 장단점, 그리고 영상 제작·편집 산업의 파급력</p>
+        
+        <nav class="share-bar" aria-label="공유" data-url="https://tech.vibequant.cc/tech/minimax-h3-gettingstart/" data-title="MiniMax H3 오픈웨이트 가이드 — 옴니모달 비디오 생성 모델" data-text="MiniMax H3(2026-07) 오픈웨이트 옴니모달 생성 모델 가이드. 텍스트·이미지·비디오·오디오를 입력받아 2K·15초·스테레오 오디오 영상을 생성. API(비동기 작업)/로컬 배포(SGLang·vLLM·diffusers·ComfyUI) Getting Started, T2V·I2V·Ref2V 예제, 장단점, 영상 제작·편집 산업 파급력, M1·M3·H3 라인업 비교." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart%2F&amp;text=MiniMax%20H3%20%EC%98%A4%ED%94%88%EC%9B%A8%EC%9D%B4%ED%8A%B8%20%EA%B0%80%EC%9D%B4%EB%93%9C%20%E2%80%94%20%EC%98%B4%EB%8B%88%EB%AA%A8%EB%8B%AC%20%EB%B9%84%EB%94%94%EC%98%A4%20%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><h2>목차</h2>
+<ol>
+<li><a href="#1-minimax-%EC%98%A4%ED%94%88%EC%9B%A8%EC%9D%B4%ED%8A%B8-%EC%A0%84%EB%9E%B5-%EA%B0%9C%EC%9A%94">MiniMax 오픈웨이트 전략 개요</a></li>
+<li><a href="#2-minimax-%EC%98%A4%ED%94%88%EC%9B%A8%EC%9D%B4%ED%8A%B8-%EB%AA%A8%EB%8D%B8-%EB%9D%BC%EC%9D%B8%EC%97%85">MiniMax 오픈웨이트 모델 라인업 (M1 · M3 · H3)</a></li>
+<li><a href="#3-h3-%ED%95%B5%EC%8B%AC-%EA%B8%B0%EC%88%A0">H3 핵심 기술</a></li>
+<li><a href="#4-getting-started--api-%EC%8B%9C%EC%9E%91%ED%95%98%EA%B8%B0">Getting Started — API 시작하기</a></li>
+<li><a href="#5-getting-started--%EB%A1%9C%EC%BB%AC-%EB%B0%B0%ED%8F%AC-%EC%98%A4%ED%94%88%EC%9B%A8%EC%9D%B4%ED%8A%B8">Getting Started — 로컬 배포 (오픈웨이트)</a></li>
+<li><a href="#6-%EC%82%AC%EC%9A%A9-%EC%98%88--t2v--i2v--ref2v">사용 예 — T2V · I2V · Ref2V</a></li>
+<li><a href="#7-%EC%9E%A5%EC%A0%90">장점</a></li>
+<li><a href="#8-%EB%8B%A8%EC%A0%90">단점</a></li>
+<li><a href="#9-%EC%98%81%EC%83%81-%EC%A0%9C%EC%9E%91%ED%8E%B8%EC%A7%91-%EC%82%B0%EC%97%85%EC%97%90-%EB%AF%B8%EC%B9%98%EB%8A%94-%ED%8C%8C%EA%B8%89%EB%A0%A5">영상 제작·편집 산업에 미치는 파급력</a></li>
+<li><a href="#10-%EC%A3%BC%EC%9A%94-%EA%B2%BD%EC%9F%81-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8">주요 경쟁 프로젝트</a></li>
+<li><a href="#11-%EC%9A%94%EC%95%BD">요약</a></li>
+</ol>
+<hr>
+<h2>1. MiniMax 오픈웨이트 전략 개요</h2>
+<p>MiniMax는 텍스트 중심의 LLM(M 시리즈)에 이어, 2026년 7월 <strong>오픈웨이트 최초의 비디오 생성 모델인 H3</strong>를 발표하며 오픈웨이트 전략의 범위를 &#39;이미지·오디오·비디오 전반&#39;으로 확장했다.</p>
+<p>핵심 전략 방향은 다음과 같다.</p>
+<ul>
+<li><strong>모달리티 통합</strong>: 텍스트·이미지·비디오·오디오를 하나의 입력 컨텍스트로 이해하고, 비디오와 스테레오 오디오를 함께 생성하는 &#39;옴니모달&#39; 모델.</li>
+<li><strong>과제 통합</strong>: 기존에 분리되어 있던 텍스트-비디오(T2V), 이미지-비디오(I2V), 참조-비디오(Ref2V), 비디오 편집, 음성·음향·음악 생성 등을 하나의 모델로 일반화.</li>
+<li><strong>오픈웨이트로 개방</strong>: 최신 H3는 로컬 또는 프라이빗 환경에 직접 배포할 수 있는 가중치를 공개해, API 비용 없이 사용하거나 특정 도메인에 맞춰 파인튜닝할 수 있다.</li>
+<li><strong>가격 혁신</strong>: 2K 기준 초당 가격이 주류 경쟁 모델 대비 3분의 1 미만, 768p 기준 메인스트림 720p의 절반 미만으로 책정됐다.</li>
+</ul>
+<hr>
+<h2>2. MiniMax 오픈웨이트 모델 라인업</h2>
+<table>
+<thead>
+<tr>
+<th align="left">모델</th>
+<th align="left">발표일</th>
+<th align="left">주요 특징 및 성능</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>MiniMax-M1</strong></td>
+<td align="left">2025년 6월</td>
+<td align="left">세계 최초의 오픈웨이트 하이브리드 어텐션 추론 모델<br>- 아키텍처: 총 4,560억 파라미터, 토큰당 459억 활성 파라미터의 하이브리드 MoE 구조<br>- 컨텍스트: 최대 100만 토큰 지원 (DeepSeek-R1 대비 8배)<br>- 효율성: 10만 토큰 생성 시 DeepSeek-R1 대비 25%의 FLOPs만 사용<br>- 벤치마크: DeepSeek-R1, Qwen3-235B 등 주요 오픈 모델 대비 우수한 성능</td>
+</tr>
+<tr>
+<td align="left"><strong>MiniMax M3</strong></td>
+<td align="left">2026년 6월</td>
+<td align="left">코딩·1M 컨텍스트·네이티브 멀티모달을 결합한 최초의 오픈웨이트 모델<br>- 아키텍처: 약 4,280억 총 파라미터, 토큰당 약 230억 활성 파라미터의 MoE 구조<br>- 코딩 성능: SWE-Bench Pro 59.0% (GPT-5.5 58.6% 상회)<br>- 가격: API 가격이 경쟁 폐쇄형 모델 대비 5~10% 수준 (프로모션 시 $0.3/백만 입력 토큰)</td>
+</tr>
+<tr>
+<td align="left"><strong>MiniMax H3</strong></td>
+<td align="left">2026년 7월</td>
+<td align="left">오픈웨이트로 공개된 최초의 MiniMax 비디오 모델<br>- 성능: 비디오 편집 분야 세계 1위, 텍스트-비디오 분야 2위<br>- 기능: 텍스트·이미지·비디오·오디오 입력 → 최대 2K 해상도, 15초 분량의 스테레오 오디오 포함 비디오 생성<br>- 라이선스: MiniMax 커뮤니티 라이선스 (연매출 2천만 달러 이하 조직은 상업적 사용 가능)<br>- 오픈웨이트: HuggingFace <code>MiniMaxAI/MiniMax-H3</code> (33B, BF16)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. H3 핵심 기술</h2>
+<p>H3는 세 개의 모듈로 구성된다. API는 세 모듈을 통합 제공하고, 오픈웨이트는 중간 단계인 H3-Base만 공개한다.</p>
+<table>
+<thead>
+<tr>
+<th>모듈</th>
+<th>역할</th>
+<th>공개 여부</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>H3-Context-IR</strong></td>
+<td>다중 모달 입력을 이해·정제해 구조화된 프롬프트(Intermediate Representation)로 변환. 언어를 &#39;일반화의 다리&#39;로 사용</td>
+<td>API로만 제공</td>
+</tr>
+<tr>
+<td><strong>H3-Base</strong></td>
+<td>Context-IR 출력을 바탕으로 비디오 + 스테레오 오디오를 768p로 생성 (33B dense Omni-Transformer)</td>
+<td><strong>오픈웨이트 공개</strong></td>
+</tr>
+<tr>
+<td><strong>H3-Regenerate-2K</strong></td>
+<td>768p 결과에 원본 컨텍스트를 다시 주입해 2K로 재생성. 별도 SR 모듈 대신 베이스 모델의 생성 능력을 재사용</td>
+<td>API로만 제공</td>
+</tr>
+</tbody></table>
+<p>주요 기술 포인트:</p>
+<ul>
+<li><strong>H3-Contextual Omni Representation</strong>: 비디오·오디오·복수 컷을 아우르는 캡셔닝 파이프라인. 대부분의 원본 소재는 약 10만 토큰 추론을 거쳐 평균 약 4천 토큰으로 증류된다.</li>
+<li><strong>H3-VAE</strong>: 토크나이저를 전면 재설계해 재구성 품질과 학습성을 동시에 개선. 높은 압축률로 유효 시퀀스 길이를 4배 확보해 2K 네이티브 지원의 핵심이 됐다.</li>
+<li><strong>H3-Omni Transformer</strong>: 작업 일반화에 초점을 맞춘 dense Transformer. 이해(understanding)와 생성(generation) 워크로드를 분리해 하드웨어 활용률을 최적화, 훈련 처리량을 약 30% 끌어올렸다. MM-RoPE로 시간·공간(높이·너비) 3차원 위치 관계를 표현하며, 희소 어텐션도 네이티브 지원한다.</li>
+<li><strong>In-Context Regeneration</strong>: 전용 슈퍼레졸루션 모듈 대신 H3 베이스 모델이 자신의 저해상도 출력을 원본 멀티모달 컨텍스트와 함께 재생성. 작은 텍스트나 미세한 디테일처럼 전통적 SR이 &#39;추측&#39;만 할 수 있는 정보를 복원한다.</li>
+</ul>
+<h3>H3 입력·출력 스펙</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>사양</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>출력 길이</td>
+<td>4~15초</td>
+</tr>
+<tr>
+<td>출력 해상도</td>
+<td>768p(기본) ~ 2K (H3-Regenerate-2K 경유)</td>
+</tr>
+<tr>
+<td>출력 프레임 레이트</td>
+<td>24 FPS</td>
+</tr>
+<tr>
+<td>출력 오디오</td>
+<td>32 kHz 스테레오</td>
+</tr>
+<tr>
+<td>지원 종횡비</td>
+<td>21:9, 16:9, 4:3, 1:1, 3:4, 9:16, adaptive</td>
+</tr>
+<tr>
+<td>지원 대화 언어</td>
+<td>아랍어·중국어·영어·프랑스어·독일어·이탈리아어·일본어·한국어·포르투갈어·러시아어·스페인어 등 11개 언어 안정 지원</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Getting Started — API 시작하기</h2>
+<p>H3는 <strong>비동기(async) 생성 방식</strong>이다. 생성 요청을 보내면 즉시 <code>task_id</code>를 받고, 이후 작업 상태를 폴링해 완료된 영상을 내려받는다.</p>
+<h3>4.1 준비 사항</h3>
+<ol>
+<li><a href="https://platform.minimax.io">platform.minimax.io</a> 회원가입</li>
+<li>Account Management &gt; API Keys 메뉴에서 API Key 발급 (<code>Authorization: Bearer &lt;API_KEY&gt;</code> 헤더로 사용)</li>
+<li>잔액/토큰 플랜 충전 (2K 기준 초당 가격이 주류 모델의 3분의 1 미만)</li>
+</ol>
+<pre><code class="language-bash">export MINIMAX_API_KEY=&quot;&lt;YOUR_API_KEY&gt;&quot;
+export MINIMAX_API_BASE=&quot;https://api.minimax.io&quot;   # 글로벌 (중국: https://api.minimaxi.com)
+</code></pre>
+<h3>4.2 생성 요청 (Create Task)</h3>
+<p><code>POST {MINIMAX_API_BASE}/v2/video_generation</code></p>
+<pre><code class="language-bash">curl -X POST &quot;$MINIMAX_API_BASE/v2/video_generation&quot; \
+  -H &quot;Authorization: Bearer $MINIMAX_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{
+    &quot;model&quot;: &quot;MiniMax-H3&quot;,
+    &quot;content&quot;: [
+      {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;text&quot;: &quot;Epic space-opera theatrical teaser: a female captain stands alone before a massive observation window as the last fleet gathers and jumps away in a blinding flash, the bridge shaking, leaving her behind.&quot;
+      }
+    ],
+    &quot;resolution&quot;: &quot;2K&quot;,
+    &quot;duration&quot;: 5,
+    &quot;ratio&quot;: &quot;16:9&quot;
+  }&#39;
+</code></pre>
+<p>응답에서 <code>task_id</code>를 받는다.</p>
+<pre><code class="language-json">{ &quot;task_id&quot;: &quot;424010985738629&quot; }
+</code></pre>
+<h3>4.3 작업 상태 조회 (Query Task)</h3>
+<p><code>GET {MINIMAX_API_BASE}/v2/query/video_generation/{task_id}</code></p>
+<pre><code class="language-bash">curl -s &quot;$MINIMAX_API_BASE/v2/query/video_generation/424010985738629&quot; \
+  -H &quot;Authorization: Bearer $MINIMAX_API_KEY&quot;
+</code></pre>
+<p>성공 시 <code>status</code>가 <code>succeeded</code>가 되고 <code>content.url</code>에 영상 다운로드 URL이 반환된다.</p>
+<pre><code class="language-json">{
+  &quot;task&quot;: {
+    &quot;id&quot;: &quot;424010985738629&quot;,
+    &quot;model&quot;: &quot;MiniMax-H3&quot;,
+    &quot;status&quot;: &quot;succeeded&quot;,
+    &quot;content&quot;: { &quot;url&quot;: &quot;https://your-cdn.example.com/h3-generated-2k-output.mp4&quot; },
+    &quot;resolution&quot;: &quot;2K&quot;,
+    &quot;duration&quot;: 5,
+    &quot;ratio&quot;: &quot;16:9&quot;
+  }
+}
+</code></pre>
+<ul>
+<li>상태: <code>queued</code> → <code>running</code> → <code>succeeded</code> / <code>failed</code> / <code>cancelled</code></li>
+<li>조회 가능 기간은 <strong>최근 7일</strong>이며, 영상 URL은 시한부이므로 받는 즉시 내려받아 저장한다.</li>
+<li>실패 시 <code>error</code> 필드에 <code>code</code>/<code>message</code>가 내려온다.</li>
+</ul>
+<h3>4.4 Python 완성 예제 (생성 → 폴링 → 다운로드)</h3>
+<pre><code class="language-python">import time
+import requests
+
+API_BASE = &quot;https://api.minimax.io&quot;
+API_KEY = &quot;&lt;YOUR_API_KEY&gt;&quot;
+HEADERS = {&quot;Authorization&quot;: f&quot;Bearer {API_KEY}&quot;, &quot;Content-Type&quot;: &quot;application/json&quot;}
+
+def create_video(prompt, resolution=&quot;2K&quot;, duration=5, ratio=&quot;16:9&quot;):
+    resp = requests.post(
+        f&quot;{API_BASE}/v2/video_generation&quot;,
+        headers=HEADERS,
+        json={
+            &quot;model&quot;: &quot;MiniMax-H3&quot;,
+            &quot;content&quot;: [{&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: prompt}],
+            &quot;resolution&quot;: resolution,
+            &quot;duration&quot;: duration,
+            &quot;ratio&quot;: ratio,
+        },
+    )
+    resp.raise_for_status()
+    return resp.json()[&quot;task_id&quot;]
+
+def wait_video(task_id, timeout=600):
+    url = f&quot;{API_BASE}/v2/query/video_generation/{task_id}&quot;
+    deadline = time.time() + timeout
+    while time.time() &lt; deadline:
+        data = requests.get(url, headers=HEADERS).json()[&quot;task&quot;]
+        if data[&quot;status&quot;] in (&quot;succeeded&quot;, &quot;failed&quot;, &quot;cancelled&quot;):
+            return data
+        time.sleep(5)
+    raise TimeoutError(&quot;task did not finish in time&quot;)
+
+task_id = create_video(&quot;A boy playing basketball by the sea, golden hour, cinematic&quot;)
+result = wait_video(task_id)
+if result[&quot;status&quot;] == &quot;succeeded&quot;:
+    video_url = result[&quot;content&quot;][&quot;url&quot;]
+    mp4 = requests.get(video_url).content
+    open(&quot;output.mp4&quot;, &quot;wb&quot;).write(mp4)
+    print(&quot;saved output.mp4&quot;)
+</code></pre>
+<h3>4.5 요청 파라미터 요약</h3>
+<table>
+<thead>
+<tr>
+<th>파라미터</th>
+<th>타입</th>
+<th>필수</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>model</code></td>
+<td>string</td>
+<td>예</td>
+<td><code>MiniMax-H3</code> (현재 유일)</td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>array</td>
+<td>예</td>
+<td>멀티모달 입력 배열. <code>text</code>/<code>image_url</code>/<code>video_url</code>/<code>audio_url</code> 타입 요소로 구성. <strong>반드시 비어 있지 않은 <code>text</code>(프롬프트) 하나를 포함</strong>해야 함 (최대 7000자)</td>
+</tr>
+<tr>
+<td><code>resolution</code></td>
+<td>string</td>
+<td>예</td>
+<td><code>768P</code> 또는 <code>2K</code></td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td>int</td>
+<td>예</td>
+<td><code>4</code>~`15` (초)</td>
+</tr>
+<tr>
+<td><code>ratio</code></td>
+<td>string</td>
+<td>조건부</td>
+<td><code>adaptive</code>(기본), <code>21:9</code>, <code>16:9</code>, <code>4:3</code>, <code>1:1</code>, <code>3:4</code>, <code>9:16</code>. <strong>텍스트만 입력하는 T2V는 <code>adaptive</code> 불가(명시 필수)</strong>, 이미지 입력은 항상 <code>adaptive</code> 처리됨</td>
+</tr>
+<tr>
+<td><code>callback_url</code></td>
+<td>string</td>
+<td>아니요</td>
+<td>상태 변경 시 POST 알림. <code>challenge</code> 검증 3초 내 응답 필요</td>
+</tr>
+</tbody></table>
+<p><strong>입력 미디어 제한</strong> (요청 본문 총 64MB 이하, 대용량 파일은 공개 URL 권장):</p>
+<table>
+<thead>
+<tr>
+<th>미디어</th>
+<th>제한</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>이미지 (<code>image_url</code>)</td>
+<td>JPG·JPEG·PNG·WEBP·HEIC·HEIF, 파일당 ≤ 30MB, [256, 5760]px, 종횡비 [0.4, 2.5]. first frame ≤ 1, last frame ≤ 1, 참조 이미지 ≤ 9</td>
+</tr>
+<tr>
+<td>비디오 (<code>video_url</code>, 참조 시나리오)</td>
+<td>MP4·MOV, H.264/H.265·AAC·MP3, 파일당 ≤ 50MB, ≤ 3개, 클립당 2~15초·총 ≤ 15초</td>
+</tr>
+<tr>
+<td>오디오 (<code>audio_url</code>, 참조 시나리오)</td>
+<td>WAV·MP3, 파일당 ≤ 15MB, ≤ 3개, 클립당 2~15초·총 ≤ 15초 (이미지·비디오 없이 단독 입력 불가)</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. Getting Started — 로컬 배포 (오픈웨이트)</h2>
+<h3>5.1 모델 내려받기</h3>
+<p>HuggingFace에서 <code>MiniMaxAI/MiniMax-H3</code>(33B 파라미터, Image-Text-to-Video, BF16)을 받는다. <strong>FL2VA</strong>(첫·끝 프레임)와 <strong>Ref2VA</strong>(참조 기반) 두 개의 작업별 체크포인트로 구성된다.</p>
+<pre><code class="language-bash"># 원본 체크포인트 (SGLang, vLLM 사용 시) — 두 작업 계열 모두
+hf download MiniMaxAI/MiniMax-H3 --include &quot;FL2VA/*&quot; &quot;Ref2VA/*&quot; --local-dir MiniMax-H3
+
+# 단일 작업 계열만
+hf download MiniMaxAI/MiniMax-H3 --include &quot;FL2VA/*&quot; --local-dir MiniMax-H3
+</code></pre>
+<p>diffusers 사용자는 수동 다운로드가 필요 없다. <code>ModularPipeline.from_pretrained(&quot;MiniMaxAI/MiniMax-H3&quot;)</code>가 필요한 컴포넌트만 가져온다.</p>
+<h3>5.2 권장 추론 프레임워크</h3>
+<table>
+<thead>
+<tr>
+<th>프레임워크</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SGLang</strong></td>
+<td>4-GPU 추천. Ulysses 병렬로 고성능. 공식 쿡북 존재</td>
+</tr>
+<tr>
+<td><strong>vLLM</strong></td>
+<td>캐시·스케줄링 최적화, vllm recipes 제공</td>
+</tr>
+<tr>
+<td><strong>diffusers</strong></td>
+<td><code>ModularPipeline.from_pretrained</code> 한 줄 로딩, Python 파이프라인</td>
+</tr>
+<tr>
+<td><strong>ComfyUI</strong></td>
+<td>Comfy-Org/MiniMax-H3로 노드 기반 워크플로우. T2V/R2V 템플릿 제공</td>
+</tr>
+</tbody></table>
+<h3>5.3 SGLang 서빙 예제</h3>
+<pre><code class="language-bash"># FL2VA (텍스트/첫·끝 프레임 → 비디오)
+sglang serve \
+  --model-path MiniMaxAI/MiniMax-H3 \
+  --num-gpus 4 \
+  --ulysses-degree 4 \
+  --performance-mode speed \
+  --host 0.0.0.0 \
+  --port 30010 \
+  --model-variant fl2va
+
+# Ref2VA (참조 이미지·비디오·오디오 → 비디오)
+sglang serve \
+  --model-path MiniMaxAI/MiniMax-H3 \
+  --num-gpus 4 \
+  --ulysses-degree 4 \
+  --performance-mode speed \
+  --host 0.0.0.0 \
+  --port 30011 \
+  --model-variant ref2va
+</code></pre>
+<h3>5.4 Full 2K 워크플로우 (API + 로컬 하이브리드)</h3>
+<p>오픈웨이트로는 768p 결과를 로컬에서 재현하고, 2K 품질은 <strong>공식 API와 결합</strong>해 재현할 수 있다.</p>
+<ol>
+<li><strong>H3-Context-IR</strong> (<code>POST /v2/h3_context_ir</code>): 로컬 생성 전에 입력을 구조화 프롬프트로 변환. 품질에 결정적이므로 강력히 권장.</li>
+<li><strong>H3-Base (로컬 SGLang)</strong>: 변환된 프롬프트로 768p 영상 생성.</li>
+<li><strong>H3-Regenerate-2K</strong> (<code>POST /v2/video_regeneration</code>): 768p 결과 + 원본 컨텍스트로 2K 재생성.</li>
+</ol>
+<pre><code class="language-bash"># 환경변수
+export SGLANG_DEPLOYMENT_URL=&quot;&lt;sglang-deployment-url&gt;&quot;
+export MINIMAX_API_BASE=&quot;https://api.minimax.io&quot;   # 또는 https://api.minimaxi.com (CN)
+export TOKEN=&quot;&lt;token&gt;&quot;
+</code></pre>
+<h3>5.5 라이선스</h3>
+<p>H3는 <strong>MiniMax H3 Community License Agreement</strong>로 배포된다.</p>
+<ul>
+<li>연매출 <strong>2천만 달러 이하</strong> 조직은 상업적 사용 가능.</li>
+<li>가중치 다운로드·수정·파인튜닝 가능.</li>
+<li>연매출 초과 시 별도 상업 라이선스 협의 필요.</li>
+<li>공식 라이선스 파일: <code>huggingface.co/MiniMaxAI/MiniMax-H3</code>의 <code>LICENSE</code>.</li>
+</ul>
+<hr>
+<h2>6. 사용 예 — T2V · I2V · Ref2V</h2>
+<p>H3는 <code>content</code> 배열의 조합에 따라 여러 생성 시나리오를 지원한다.</p>
+<h3>6.1 텍스트-비디오 (T2V)</h3>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;MiniMax-H3&quot;,
+  &quot;content&quot;: [
+    { &quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;A cinematic product commercial of a luxury watch floating above a city at dawn, dramatic lighting&quot; }
+  ],
+  &quot;resolution&quot;: &quot;2K&quot;,
+  &quot;duration&quot;: 5,
+  &quot;ratio&quot;: &quot;16:9&quot;
+}
+</code></pre>
+<h3>6.2 이미지-비디오 (I2V) — 첫·끝 프레임</h3>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;MiniMax-H3&quot;,
+  &quot;content&quot;: [
+    { &quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;Pull focus to the people in the background and add more steam to the ramen bowl.&quot; },
+    { &quot;type&quot;: &quot;image_url&quot;, &quot;image_url&quot;: { &quot;url&quot;: &quot;https://example.com/first_frame.png&quot; }, &quot;role&quot;: &quot;first_frame&quot; },
+    { &quot;type&quot;: &quot;image_url&quot;, &quot;image_url&quot;: { &quot;url&quot;: &quot;https://example.com/last_frame.png&quot; }, &quot;role&quot;: &quot;last_frame&quot; }
+  ],
+  &quot;resolution&quot;: &quot;2K&quot;,
+  &quot;duration&quot;: 5,
+  &quot;ratio&quot;: &quot;adaptive&quot;
+}
+</code></pre>
+<h3>6.3 참조-비디오 (Ref2V) — 비디오 편집·음성·음악</h3>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;MiniMax-H3&quot;,
+  &quot;content&quot;: [
+    {
+      &quot;type&quot;: &quot;text&quot;,
+      &quot;text&quot;: &quot;Character speaks: Follow the wind, live free. Voice timbre follows reference audio 1.&quot;
+    },
+    { &quot;type&quot;: &quot;video_url&quot;, &quot;video_url&quot;: { &quot;url&quot;: &quot;https://example.com/source.mp4&quot; }, &quot;role&quot;: &quot;reference_video&quot; },
+    { &quot;type&quot;: &quot;audio_url&quot;, &quot;audio_url&quot;: { &quot;url&quot;: &quot;https://example.com/voice.mp3&quot; }, &quot;role&quot;: &quot;reference_audio&quot; }
+  ],
+  &quot;resolution&quot;: &quot;2K&quot;,
+  &quot;duration&quot;: 5,
+  &quot;ratio&quot;: &quot;adaptive&quot;
+}
+</code></pre>
+<h3>6.4 역할(role) 조합 규칙</h3>
+<table>
+<thead>
+<tr>
+<th>시나리오</th>
+<th>content 구성</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T2V</td>
+<td>text만</td>
+</tr>
+<tr>
+<td>I2V 첫 프레임</td>
+<td>text + image 1개 (<code>first_frame</code> 또는 role 생략)</td>
+</tr>
+<tr>
+<td>I2V 마지막 프레임</td>
+<td>text + image 1개 (<code>last_frame</code>)</td>
+</tr>
+<tr>
+<td>I2V 첫·끝 프레임</td>
+<td>text + image 2개 (<code>first_frame</code> + <code>last_frame</code>)</td>
+</tr>
+<tr>
+<td>Ref2V</td>
+<td>text + 참조 이미지(<code>reference_image</code>)·비디오(<code>reference_video</code>)·오디오(<code>reference_audio</code>) 조합 (오디오 단독 불가, 이미지·비디오 1개 이상 필수)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>참고: I2V와 Ref2V는 <strong>상호 배타적</strong>. <code>reference_*</code>가 등장하면 <code>first_frame</code>/<code>last_frame</code>을 함께 사용할 수 없다.</p>
+</blockquote>
+<hr>
+<h2>7. 장점</h2>
+<ul>
+<li><strong>오픈웨이트의 자유로움</strong>: 가중치를 내려받아 로컬·프라이빗 환경에 직접 배포할 수 있다. 데이터 보안 강화, API 호출 비용 없이 무제한 사용, 특정 도메인에 맞춘 파인튜닝이 가능하다.</li>
+<li><strong>최고 수준의 성능</strong>: 비디오 편집 분야 세계 1위, 텍스트-비디오 2위. 광고·브랜딩·이커머스·게임 등 상업 콘텐츠 제작에 바로 투입 가능한 성숙도.</li>
+<li><strong>옴니모달 입력</strong>: 텍스트·이미지·비디오·오디오를 함께 입력받아 &#39;이 영상의 카메라 움직임을 참조하고, 저 이미지의 캐릭터가 이 목소리로 노래하게&#39; 같은 복합 지시를 자연어로 처리한다.</li>
+<li><strong>네이티브 스테레오 오디오</strong>: 별도 TTS·음악·음향 작업 없이 비디오와 함께 32kHz 스테레오 사운드를 생성한다. 영상과 음성이 한 번에 동기화된다.</li>
+<li><strong>획기적인 가격 효율성</strong>: 2K 기준 초당 가격이 주류 모델의 3분의 1 미만, 768p는 메인스트림 720p의 절반 미만. M3 계열 LLM의 가격 전략(폐쇄형 대비 5~10%)과 같은 기조.</li>
+<li><strong>긴 영상 세그먼트</strong>: 최대 15초 단일 생성 + 복수 클립 참조로 자연스러운 멀티숏 연출이 가능하다.</li>
+<li><strong>생태계 조기 정착</strong>: 출시 직후부터 ComfyUI 공식 통합, HuggingFace Spaces 데모(멀티모달·Ref2VA·FL2VA 등 7개+)가 등장했다.</li>
+</ul>
+<hr>
+<h2>8. 단점</h2>
+<ul>
+<li><strong>하드웨어 요구사항</strong>: 33B dense 모델을 로컬에서 원활히 구동하려면 고성능 GPU(권장 4-GPU 구성) 등 값비싼 인프라가 필요하다.</li>
+<li><strong>일부 모듈 미공개</strong>: H3-Context-IR과 H3-Regenerate-2K는 API로만 제공된다. 최고 품질(특히 2K)을 온전히 재현하려면 로컬 배포라도 공식 API와 결합해야 한다.</li>
+<li><strong>라이선스 제한</strong>: MiniMax 커뮤니티 라이선스는 연매출 2천만 달러가 넘는 대기업의 상업적 사용을 제한한다.</li>
+<li><strong>독립적 검증의 한계</strong>: 발표된 벤치마크(비디오 편집 1위 등)는 MiniMax 자체 측정 수치로, 향후 독립 기관의 검증이 필요하다.</li>
+<li><strong>중국 기업이라는 점</strong>: 데이터 보안 및 규제 이슈로 일부 국가·기업에서는 사용에 제약이 있을 수 있다.</li>
+<li><strong>생성 품질의 불규칙성</strong>: 얼굴·손·세밀한 텍스트 등은 여전히 한계가 있고, 프롬프트 튜닝이나 여러 번의 재생성(seed)이 필요한 경우가 많다.</li>
+<li><strong>규제·저작권 리스크</strong>: 초상권, 브랜드 로고, 음악 저작권, 딥페이크 남용 등 생성형 미디어 전반의 규제 대상이 될 수 있다.</li>
+</ul>
+<hr>
+<h2>9. 영상 제작·편집 산업에 미치는 파급력</h2>
+<p>H3는 단순한 &#39;영상 생성기&#39;를 넘어 <strong>영상 제작 파이프라인 전체</strong>를 바꿀 잠재력을 가진다. 특히 비디오 편집 세계 1위라는 성과가 시사하는 바가 크다.</p>
+<h3>9.1 제작 비용의 급락</h3>
+<ul>
+<li>2K 기준 초당 비용이 주류 모델의 3분의 1 미만이다. 30초짜리 브랜드 영상의 직접 생성 원가가 과거 1/10 이하로 낮아질 수 있다.</li>
+<li>오픈웨이트 + 로컬 배포를 쓰면 <strong>초당 과금 자체가 사라진다</strong>. GPU만 있으면 영상 원가가 전기료 수준으로 떨어진다.</li>
+<li>M3 계열이 보여준 &#39;폐쇄형 대비 5~10% 가격&#39; 전략과 결합해, 전체 생성형 미디어 시장의 가격 하한이 재편될 수 있다.</li>
+</ul>
+<h3>9.2 편집 개념의 변화: &#39;수정&#39;에서 &#39;기술(記述)&#39;로</h3>
+<p>기존 영상 편집은 타임라인에서 클립을 자르고 이어붙이고 필터를 입히는 방식이었다. H3는 <strong>자연어로 원하는 결과를 묘사하면 비디오·오디오가 통째로 재생성</strong>된다.</p>
+<ul>
+<li>장면의 등장인물·배경·분위기만 바꾸는 V2V 편집</li>
+<li>참조 비디오의 카메라 움직임을 가져오고, 참조 오디오의 목소리 톤을 적용하는 복합 편집</li>
+<li>첫·끝 프레임을 지정해 &#39;중간 장면을 연출&#39;하는 프레임 앵커 편집</li>
+<li>4초짜리 오디오·비디오 참조로 15초 멀티숏을 이어 붙이는 샷 플래닝</li>
+</ul>
+<p>즉 &#39;컷 중심 편집&#39;에서 &#39;의도 중심 생성&#39;으로 패러다임이 이동한다. 어도비·다빈치 리졸브 같은 전통 NLE 툴의 핵심 가치 일부가 생성 엔진으로 흡수되는 압력이 생긴다.</p>
+<h3>9.3 제작 주체의 민주화</h3>
+<ul>
+<li>연출·시나리오 아이디어만 있어도 <strong>1인 또는 소규모 팀이 광고·브랜드·이커머스·제품 데모 영상을 제작</strong>할 수 있다.</li>
+<li>기존에 의뢰가 필요했던 것들 — 제품 웹사이트 무빙 배너, 애니메이션 포스터, 오프닝 타이틀, UI/UX 데모 — 을 프롬프트로 즉시 만들어낸다.</li>
+<li>언어 장벽도 낮아진다. 11개 언어 대화 지원으로 현지화 영상을 별도 캐스팅 없이 생성할 수 있다.</li>
+</ul>
+<h3>9.4 워크플로우 변화: &#39;클립 생성&#39;에서 &#39;전체 제작 참여&#39;로</h3>
+<p>MiniMax가 명시한 로드맵대로, 비디오 모델은 단일 클립 생성기를 넘어 <strong>콘텐츠 제작 프로세스 전반에 참여</strong>한다.</p>
+<ul>
+<li>프리비즈: 시나리오 → 스토리보드 영상 → 촬영 전 방향 검증</li>
+<li>로케이션·배경·CG 교체: 실제 촬영 대신 생성 배경으로 대체 (제품 영상·인테리어·건축 프레젠테이션)</li>
+<li>자동 음성·음악·음향: 대사, 내레이션, BGM, SFX를 참조 기반으로 한 번에 합성</li>
+<li>버전·A/B 테스트: 마케팅 크리에이티브를 수십 개 생성해 성과 비교</li>
+</ul>
+<h3>9.5 산업별 영향 요약</h3>
+<table>
+<thead>
+<tr>
+<th>산업</th>
+<th>영향</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>광고·마케팅</td>
+<td>크리에이티브 A/B 테스트 비용 급감, 브랜드 일관성 유지가 쉬워짐 (브랜드 렌더링 정확도 강점)</td>
+</tr>
+<tr>
+<td>이커머스</td>
+<td>상품 영상·360 데모·라이프스타일 컷을 사진 한 장에서 생성</td>
+</tr>
+<tr>
+<td>게임</td>
+<td>시네마틱 트레일러, 캐릭터 모션 참조, 콘셉트 영상 신속 생성</td>
+</tr>
+<tr>
+<td>영화·드라마</td>
+<td>프리비즈·프로덕션 디자인·VFX 보조. 다만 인물·얼굴 재현의 법적 리스크 주의</td>
+</tr>
+<tr>
+<td>방송·유튜브</td>
+<td>1인 미디어가 고품질 배경·썸네일 무빙·오프닝을 직접 제작</td>
+</tr>
+<tr>
+<td>교육·마케팅 리서치</td>
+<td>데모·설명 영상을 즉석 생성해 학습·발표에 활용</td>
+</tr>
+</tbody></table>
+<h3>9.6 위험·대응</h3>
+<ul>
+<li><strong>고용 구조 변화</strong>: 로워엔드 편집·모션그래픽 일자리부터 자동화 압력이 시작될 수 있다. 반대로 생성 결과의 검수·큐레이션·법률 검토 등 신규 역할이 생긴다.</li>
+<li><strong>딥페이크·사기</strong>: 참조 기반 얼굴·음성 편집이 쉬워지므로 검증(Watermarking)과 식별 기술의 중요성이 커진다.</li>
+<li><strong>저작권·초상권</strong>: 참조 영상·오디오의 권리와 생성 결과의 권리 귀속이 모호하다. 계약서·라이선스 관리가 필수다.</li>
+<li><strong>미디어 리터러시</strong>: &#39;생성된 영상&#39;에 대한 라벨링 규제가 강화될 것으로 예상된다.</li>
+</ul>
+<p>결론적으로 H3류 모델은 영상 제작 비용의 하한을 낮추고, 제작 주체를 대중화하며, 편집의 패러다임을 &#39;편집&#39;에서 &#39;생성&#39;으로 옮기는 <strong>산업 구조 전환의 촉매</strong>가 될 가능성이 높다.</p>
+<hr>
+<h2>10. 주요 경쟁 프로젝트</h2>
+<p>MiniMax H3는 다음과 같은 강력한 경쟁자들과 경쟁하고 있다.</p>
+<ul>
+<li><strong>ByteDance (Seedance)</strong>: 비디오 AI 분야에서 H3의 직접적인 경쟁자.</li>
+<li><strong>Google (Veo · Gemini)</strong>: 텍스트-비디오·멀티모달 생성 부문 강자. Gemini 3.1 Pro, Gemini Omni Flash는 M3·H3의 강력한 경쟁자.</li>
+<li><strong>OpenAI (Sora)</strong>: 텍스트-비디오 최상위권. Sora 2 이후 생성 미디어 시장을 주도.</li>
+<li><strong>Runway</strong>: Gen-4 등 영화적 편집·제어 기능에 강점.</li>
+<li><strong>Kling (Kuaishou)</strong>: 중국 내 비디오 생성 선두주자.</li>
+<li><strong>다른 중국 오픈웨이트 진영</strong>: 텍스트 LLM 기준 DeepSeek(R1·V4-pro), Qwen(Alibaba, Qwen3-235B·Qwen3.7-Max), 그리고 Moonshot AI(Kimi) 등이 M1·M3와 경쟁하고, 일부는 비디오 모델로 확장 중.</li>
+</ul>
+<hr>
+<h2>11. 요약</h2>
+<p>MiniMax는 M1·M3(텍스트 추론·코딩)에 이어 <strong>H3(비디오 생성)</strong>로 오픈웨이트 전략을 옴니모달 미디어까지 확장했다. 뛰어난 성능(비디오 편집 1위), 최대 2K·15초·스테레오 오디오 생성, 주류 대비 3분의 1 미만의 가격, 연매출 2천만 달러 이하 조직에 열린 커뮤니티 라이선스까지 — 폐쇄형 비디오 모델이 지배하던 시장에 오픈웨이트 생태계의 진입을 알리는 신호탄이다.</p>
+<p>특히 영상 제작·편집 산업에서 H3는 ① 제작 비용을 초당 과금에서 GPU 원가 수준으로 낮추고, ② 자연어 기반 &#39;의도 중심&#39; 편집으로 패러다임을 전환하며, ③ 1인·소규모 제작 주체의 민주화를 앞당긴다. 독립 벤치마크 검증과 라이선스·규제 리스크를 명확히 인지한다면, 광고·이커머스·게임·방송 등 광범위한 영상 워크플로우의 실질적 도입 후보가 될 수 있다.</p>
+<hr>
+<h2>참고 자료</h2>
+<ul>
+<li>MiniMax H3 공식 블로그: <a href="https://www.minimax.io/blog/minimax-h3">https://www.minimax.io/blog/minimax-h3</a></li>
+<li>HuggingFace 모델: <a href="https://huggingface.co/MiniMaxAI/MiniMax-H3">https://huggingface.co/MiniMaxAI/MiniMax-H3</a></li>
+<li>API Reference (Video Generation V2): <a href="https://platform.minimax.io/docs/api-reference/video-generation-v2-create">https://platform.minimax.io/docs/api-reference/video-generation-v2-create</a></li>
+<li>Query Task API: <a href="https://platform.minimax.io/docs/api-reference/video-generation-v2-query">https://platform.minimax.io/docs/api-reference/video-generation-v2-query</a></li>
+<li>SGLang 쿡북 (MiniMax-H3): <a href="https://docs.sglang.io/cookbook/diffusion/MiniMax/MiniMax-H3">https://docs.sglang.io/cookbook/diffusion/MiniMax/MiniMax-H3</a></li>
+<li>vLLM 레시피: <a href="https://recipes.vllm.ai/MiniMaxAI/MiniMax-H3">https://recipes.vllm.ai/MiniMaxAI/MiniMax-H3</a></li>
+<li>ComfyUI 통합: <a href="https://github.com/Comfy-Org/ComfyUI">https://github.com/Comfy-Org/ComfyUI</a> · <a href="https://docs.comfy.org/tutorials/video/minimax/minimax-h3">https://docs.comfy.org/tutorials/video/minimax/minimax-h3</a></li>
+</ul>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://tech.vibequant.cc/tech/minimax-h3-gettingstart/" data-title="MiniMax H3 오픈웨이트 가이드 — 옴니모달 비디오 생성 모델" data-text="MiniMax H3(2026-07) 오픈웨이트 옴니모달 생성 모델 가이드. 텍스트·이미지·비디오·오디오를 입력받아 2K·15초·스테레오 오디오 영상을 생성. API(비동기 작업)/로컬 배포(SGLang·vLLM·diffusers·ComfyUI) Getting Started, T2V·I2V·Ref2V 예제, 장단점, 영상 제작·편집 산업 파급력, M1·M3·H3 라인업 비교." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart%2F&amp;text=MiniMax%20H3%20%EC%98%A4%ED%94%88%EC%9B%A8%EC%9D%B4%ED%8A%B8%20%EA%B0%80%EC%9D%B4%EB%93%9C%20%E2%80%94%20%EC%98%B4%EB%8B%88%EB%AA%A8%EB%8B%AC%20%EB%B9%84%EB%94%94%EC%98%A4%20%EC%83%9D%EC%84%B1%20%EB%AA%A8%EB%8D%B8" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_MiniMax/MiniMax-H3-GettingStart.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

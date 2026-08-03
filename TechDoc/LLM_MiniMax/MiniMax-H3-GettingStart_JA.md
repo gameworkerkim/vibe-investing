@@ -23,8 +23,9 @@ author: "김호광 (Dennis Kim)"
 lang: ja
 tags: [MiniMax H3, MiniMax, Open Weight, Video Generation, Omni-Modal, T2V, V2V, Video Editing]
 keywords: ["MiniMax H3", "動画生成", "映像編集", "オープンウェイト", "オムニモーダル", "2K", "T2V", "I2V", "Ref2V"]
-group: llm-models
-featured: false
+group: llm-agents
+featured: true
+featured_rank: 0
 schema_type: TechArticle
 draft: false
 robots: index,follow

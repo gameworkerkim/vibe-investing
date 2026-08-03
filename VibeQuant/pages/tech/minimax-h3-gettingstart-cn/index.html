@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>MiniMax H3 开源权重指南 — 全模态视频生成模型 — VibeQuant</title>
+  <meta name="description" content="MiniMax H3（2026年7月）开源权重全模态生成模型指南。接受文本、图像、视频、音频输入，生成最高 2K、15 秒、含原生立体声音频的视频。包含异步 API 与本地部署（SGLang、vLLM、diffusers、ComfyUI）入门、T2V/I2V/Ref2V 示例、优缺点、视频制作与编辑产业影响、M1/M3/H3 产品线对比。" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-cn/" />
+  <meta property="og:title" content="MiniMax H3 开源权重指南 — 全模态视频生成模型" />
+  <meta property="og:description" content="MiniMax H3（2026年7月）开源权重全模态生成模型指南。接受文本、图像、视频、音频输入，生成最高 2K、15 秒、含原生立体声音频的视频。包含异步 API 与本地部署（SGLang、vLLM、diffusers、ComfyUI）入门、T2V/I2V/Ref2V 示例、优缺点、视频制作与编辑产业影响、M1/M3/H3 产品线对比。" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-en/" />
+  <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/minimax-h3-gettingstart/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"MiniMax H3 开源权重指南 — 全模态视频生成模型","description":"MiniMax H3（2026年7月）开源权重全模态生成模型指南。接受文本、图像、视频、音频输入，生成最高 2K、15 秒、含原生立体声音频的视频。包含异步 API 与本地部署（SGLang、vLLM、diffusers、ComfyUI）入门、T2V/I2V/Ref2V 示例、优缺点、视频制作与编辑产业影响、M1/M3/H3 产品线对比。","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/minimax-h3-gettingstart-cn/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_MiniMax/MiniMax-H3-GettingStart_CN.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/minimax-h3-gettingstart-cn/","datePublished":"2026-08-03","dateModified":"2026-08-03","inLanguage":"zh-Hans","keywords":"LLM · 에이전트, LLM_MiniMax"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"MiniMax H3 开源权重指南 — 全模态视频生成模型","item":"https://tech.vibequant.cc/tech/minimax-h3-gettingstart-cn/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · LLM · 에이전트</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">LLM · 에이전트</p>
+        <h1>MiniMax H3 开源权重指南 — 全模态视频生成模型</h1>
+        <p class="article-dates"><time datetime="2026-08-03">발행 2026.08.03</time> · 주제 LLM · 에이전트 · LLM_MiniMax</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/minimax-h3-gettingstart/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/minimax-h3-gettingstart-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../tech/minimax-h3-gettingstart-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../tech/minimax-h3-gettingstart-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">副标题：MiniMax 首个开源权重视频模型 — 使用方法、优缺点与视频制作/编辑产业影响</p>
+        
+        <nav class="share-bar" aria-label="分享" data-url="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-cn/" data-title="MiniMax H3 开源权重指南 — 全模态视频生成模型" data-text="MiniMax H3（2026年7月）开源权重全模态生成模型指南。接受文本、图像、视频、音频输入，生成最高 2K、15 秒、含原生立体声音频的视频。包含异步 API 与本地部署（SGLang、vLLM、diffusers、ComfyUI）入门、T2V/I2V/Ref2V 示例、优缺点、视频制作与编辑产业影响、M1/M3/H3 产品线对比。" data-lang="zh-Hans">
+  <span class="share-label">分享</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart-cn%2F&amp;text=MiniMax%20H3%20%E5%BC%80%E6%BA%90%E6%9D%83%E9%87%8D%E6%8C%87%E5%8D%97%20%E2%80%94%20%E5%85%A8%E6%A8%A1%E6%80%81%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart-cn%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart-cn%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">复制链接</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><h2>目录</h2>
+<ol>
+<li><a href="#1-minimax-%E5%BC%80%E6%BA%90%E6%9D%83%E9%87%8D%E6%88%98%E7%95%A5%E6%A6%82%E8%BF%B0">MiniMax 开源权重战略概述</a></li>
+<li><a href="#2-minimax-%E5%BC%80%E6%BA%90%E6%9D%83%E9%87%8D%E6%A8%A1%E5%9E%8B%E4%BA%A7%E5%93%81%E7%BA%BF">MiniMax 开源权重模型产品线（M1 · M3 · H3）</a></li>
+<li><a href="#3-h3-%E6%A0%B8%E5%BF%83%E6%8A%80%E6%9C%AF">H3 核心技术</a></li>
+<li><a href="#4-%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97--api">入门指南 — API</a></li>
+<li><a href="#5-%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97--%E6%9C%AC%E5%9C%B0%E9%83%A8%E7%BD%B2%E5%BC%80%E6%BA%90%E6%9D%83%E9%87%8D">入门指南 — 本地部署（开源权重）</a></li>
+<li><a href="#6-%E4%BD%BF%E7%94%A8%E7%A4%BA%E4%BE%8B--t2v--i2v--ref2v">使用示例 — T2V · I2V · Ref2V</a></li>
+<li><a href="#7-%E4%BC%98%E7%82%B9">优点</a></li>
+<li><a href="#8-%E7%BC%BA%E7%82%B9">缺点</a></li>
+<li><a href="#9-%E5%AF%B9%E8%A7%86%E9%A2%91%E5%88%B6%E4%BD%9C%E7%BC%96%E8%BE%91%E4%BA%A7%E4%B8%9A%E7%9A%84%E5%BD%B1%E5%93%8D">对视频制作/编辑产业的影响</a></li>
+<li><a href="#10-%E4%B8%BB%E8%A6%81%E7%AB%9E%E4%BA%89%E5%AF%B9%E6%89%8B">主要竞争对手</a></li>
+<li><a href="#11-%E6%80%BB%E7%BB%93">总结</a></li>
+</ol>
+<hr>
+<h2>1. MiniMax 开源权重战略概述</h2>
+<p>在文本为主的 LLM（M 系列）之后，MiniMax 于 2026 年 7 月发布了 <strong>首个开源权重视频生成模型 H3</strong>，将开源权重战略扩展到图像、音频、视频全栈。</p>
+<p>核心战略方向：</p>
+<ul>
+<li><strong>模态统一</strong>：将文本、图像、视频、音频作为统一输入上下文理解，并联合生成视频与立体声音频的&quot;全模态&quot;模型。</li>
+<li><strong>任务统一</strong>：把原本分散在专业模型上的任务 — 文本转视频（T2V）、图像转视频（I2V）、参考转视频（Ref2V）、视频编辑、语音/音效/音乐生成 — 泛化到单一模型。</li>
+<li><strong>开源权重开放</strong>：最新 H3 权重公开，可在本地或私有环境直接部署，无需 API 费用，也可针对特定领域微调。</li>
+<li><strong>价格颠覆</strong>：2K 分辨率每秒价格不足主流竞品的 1/3，768p 不足主流 720p 价格的一半。</li>
+</ul>
+<hr>
+<h2>2. MiniMax 开源权重模型产品线</h2>
+<table>
+<thead>
+<tr>
+<th align="left">模型</th>
+<th align="left">发布时间</th>
+<th align="left">主要特点与性能</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>MiniMax-M1</strong></td>
+<td align="left">2025 年 6 月</td>
+<td align="left">全球首个开源权重混合注意力推理模型<br>- 架构：混合 MoE，总参数 4560 亿，每 token 激活 459 亿<br>- 上下文：最高 100 万 token（DeepSeek-R1 的 8 倍）<br>- 效率：生成 10 万 token 仅需 DeepSeek-R1 的 25% FLOPs<br>- 基准：优于 DeepSeek-R1、Qwen3-235B 等主流开源模型</td>
+</tr>
+<tr>
+<td align="left"><strong>MiniMax M3</strong></td>
+<td align="left">2026 年 6 月</td>
+<td align="left">首个结合编码、1M 上下文、原生多模态的开源权重模型<br>- 架构：MoE，总参数约 4280 亿，每 token 激活约 230 亿<br>- 编码：SWE-Bench Pro 达 59.0%（超过 GPT-5.5 的 58.6%）<br>- 价格：API 价格为竞品闭源模型的 5%~10%（促销期 $0.3/百万输入 token）</td>
+</tr>
+<tr>
+<td align="left"><strong>MiniMax H3</strong></td>
+<td align="left">2026 年 7 月</td>
+<td align="left">MiniMax 首个以开源权重发布的视频模型<br>- 性能：视频编辑领域全球第一，文本转视频第二<br>- 能力：接受文本、图像、视频、音频输入，生成最高 2K、15 秒、带原生立体声音频的视频<br>- 许可证：MiniMax 社区许可证（年收入 2000 万美元以下组织可商用）<br>- 开源权重：HuggingFace <code>MiniMaxAI/MiniMax-H3</code>（33B，BF16）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. H3 核心技术</h2>
+<p>H3 由三个模块组成。API 集成提供三者，开源权重仅包含 H3-Base。</p>
+<table>
+<thead>
+<tr>
+<th>模块</th>
+<th>作用</th>
+<th>开放情况</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>H3-Context-IR</strong></td>
+<td>理解并精炼多模态输入，转换为结构化提示（中间表示）。以语言作为&quot;泛化的桥梁&quot;</td>
+<td>仅 API</td>
+</tr>
+<tr>
+<td><strong>H3-Base</strong></td>
+<td>依据 Context-IR 输出生成 768p 视频 + 立体声音频（33B dense Omni-Transformer）</td>
+<td><strong>开源权重</strong></td>
+</tr>
+<tr>
+<td><strong>H3-Regenerate-2K</strong></td>
+<td>将 768p 结果与原上下文一起重新注入，再生成 2K。复用基础模型生成能力，替代专用超分辨率模块</td>
+<td>仅 API</td>
+</tr>
+</tbody></table>
+<p>关键技术亮点：</p>
+<ul>
+<li><strong>H3-Contextual Omni Representation</strong>：覆盖视频、音频、多镜头关系的字幕化流水线。大部分原始素材经约 10 万 token 推理，蒸馏为平均约 4 千 token。</li>
+<li><strong>H3-VAE</strong>：彻底重新设计分词器，同时提升重建质量与可学习性。高压缩率带来 4 倍有效序列长度，是原生 2K 支持的关键技术。</li>
+<li><strong>H3-Omni Transformer</strong>：面向任务泛化的 dense Transformer。分离理解与生成负载以优化硬件利用率，训练吞吐提升近 30%。MM-RoPE 表达（时间、高度、宽度）三维位置关系，并原生支持稀疏注意力。</li>
+<li><strong>In-Context Regeneration</strong>：不用专用超分模块，由 H3 基础模型将自身低分辨率输出与原多模态上下文一起再生成，可恢复传统 SR 只能&quot;猜测&quot;的小文字、细节等信息。</li>
+</ul>
+<h3>H3 输入/输出规格</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>规格</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>输出时长</td>
+<td>4~15 秒</td>
+</tr>
+<tr>
+<td>输出分辨率</td>
+<td>768p（默认）~ 2K（经 H3-Regenerate-2K）</td>
+</tr>
+<tr>
+<td>输出帧率</td>
+<td>24 FPS</td>
+</tr>
+<tr>
+<td>输出音频</td>
+<td>32 kHz 立体声</td>
+</tr>
+<tr>
+<td>支持纵横比</td>
+<td>21:9、16:9、4:3、1:1、3:4、9:16、adaptive</td>
+</tr>
+<tr>
+<td>对话语言</td>
+<td>稳定支持阿拉伯语、中文、英语、法语、德语、意大利语、日语、韩语、葡萄牙语、俄语、西班牙语等 11 种语言</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 入门指南 — API</h2>
+<p>H3 采用<strong>异步生成流程</strong>。提交生成请求后立即获得 <code>task_id</code>，随后轮询任务状态，下载完成的视频。</p>
+<h3>4.1 准备工作</h3>
+<ol>
+<li>在 <a href="https://platform.minimax.io">platform.minimax.io</a> 注册账号</li>
+<li>在 Account Management &gt; API Keys 创建 API Key（用于 <code>Authorization: Bearer &lt;API_KEY&gt;</code> 请求头）</li>
+<li>充值余额/token 套餐（2K 每秒价格不足主流模型的 1/3）</li>
+</ol>
+<pre><code class="language-bash">export MINIMAX_API_KEY=&quot;&lt;YOUR_API_KEY&gt;&quot;
+export MINIMAX_API_BASE=&quot;https://api.minimax.io&quot;   # 全球（中国：https://api.minimaxi.com）
+</code></pre>
+<h3>4.2 创建任务</h3>
+<p><code>POST {MINIMAX_API_BASE}/v2/video_generation</code></p>
+<pre><code class="language-bash">curl -X POST &quot;$MINIMAX_API_BASE/v2/video_generation&quot; \
+  -H &quot;Authorization: Bearer $MINIMAX_API_KEY&quot; \
+  -H &quot;Content-Type: application/json&quot; \
+  -d &#39;{
+    &quot;model&quot;: &quot;MiniMax-H3&quot;,
+    &quot;content&quot;: [
+      {
+        &quot;type&quot;: &quot;text&quot;,
+        &quot;text&quot;: &quot;Epic space-opera theatrical teaser: a female captain stands alone before a massive observation window as the last fleet gathers and jumps away in a blinding flash, the bridge shaking, leaving her behind.&quot;
+      }
+    ],
+    &quot;resolution&quot;: &quot;2K&quot;,
+    &quot;duration&quot;: 5,
+    &quot;ratio&quot;: &quot;16:9&quot;
+  }&#39;
+</code></pre>
+<p>响应中返回 <code>task_id</code>。</p>
+<pre><code class="language-json">{ &quot;task_id&quot;: &quot;424010985738629&quot; }
+</code></pre>
+<h3>4.3 查询任务</h3>
+<p><code>GET {MINIMAX_API_BASE}/v2/query/video_generation/{task_id}</code></p>
+<pre><code class="language-bash">curl -s &quot;$MINIMAX_API_BASE/v2/query/video_generation/424010985738629&quot; \
+  -H &quot;Authorization: Bearer $MINIMAX_API_KEY&quot;
+</code></pre>
+<p>成功后 <code>status</code> 变为 <code>succeeded</code>，<code>content.url</code> 返回视频下载地址。</p>
+<pre><code class="language-json">{
+  &quot;task&quot;: {
+    &quot;id&quot;: &quot;424010985738629&quot;,
+    &quot;model&quot;: &quot;MiniMax-H3&quot;,
+    &quot;status&quot;: &quot;succeeded&quot;,
+    &quot;content&quot;: { &quot;url&quot;: &quot;https://your-cdn.example.com/h3-generated-2k-output.mp4&quot; },
+    &quot;resolution&quot;: &quot;2K&quot;,
+    &quot;duration&quot;: 5,
+    &quot;ratio&quot;: &quot;16:9&quot;
+  }
+}
+</code></pre>
+<ul>
+<li>状态：<code>queued</code> → <code>running</code> → <code>succeeded</code> / <code>failed</code> / <code>cancelled</code></li>
+<li>仅可查询最近 7 天任务，视频 URL 有时效，请及时下载保存。</li>
+<li>失败时返回 <code>error</code> 字段（含 <code>code</code>/<code>message</code>）。</li>
+</ul>
+<h3>4.4 Python 完整示例（创建 → 轮询 → 下载）</h3>
+<pre><code class="language-python">import time
+import requests
+
+API_BASE = &quot;https://api.minimax.io&quot;
+API_KEY = &quot;&lt;YOUR_API_KEY&gt;&quot;
+HEADERS = {&quot;Authorization&quot;: f&quot;Bearer {API_KEY}&quot;, &quot;Content-Type&quot;: &quot;application/json&quot;}
+
+def create_video(prompt, resolution=&quot;2K&quot;, duration=5, ratio=&quot;16:9&quot;):
+    resp = requests.post(
+        f&quot;{API_BASE}/v2/video_generation&quot;,
+        headers=HEADERS,
+        json={
+            &quot;model&quot;: &quot;MiniMax-H3&quot;,
+            &quot;content&quot;: [{&quot;type&quot;: &quot;text&quot;, &quot;text&quot;: prompt}],
+            &quot;resolution&quot;: resolution,
+            &quot;duration&quot;: duration,
+            &quot;ratio&quot;: ratio,
+        },
+    )
+    resp.raise_for_status()
+    return resp.json()[&quot;task_id&quot;]
+
+def wait_video(task_id, timeout=600):
+    url = f&quot;{API_BASE}/v2/query/video_generation/{task_id}&quot;
+    deadline = time.time() + timeout
+    while time.time() &lt; deadline:
+        data = requests.get(url, headers=HEADERS).json()[&quot;task&quot;]
+        if data[&quot;status&quot;] in (&quot;succeeded&quot;, &quot;failed&quot;, &quot;cancelled&quot;):
+            return data
+        time.sleep(5)
+    raise TimeoutError(&quot;task did not finish in time&quot;)
+
+task_id = create_video(&quot;A boy playing basketball by the sea, golden hour, cinematic&quot;)
+result = wait_video(task_id)
+if result[&quot;status&quot;] == &quot;succeeded&quot;:
+    video_url = result[&quot;content&quot;][&quot;url&quot;]
+    mp4 = requests.get(video_url).content
+    open(&quot;output.mp4&quot;, &quot;wb&quot;).write(mp4)
+    print(&quot;saved output.mp4&quot;)
+</code></pre>
+<h3>4.5 请求参数汇总</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>类型</th>
+<th>必填</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>model</code></td>
+<td>string</td>
+<td>是</td>
+<td><code>MiniMax-H3</code>（当前唯一）</td>
+</tr>
+<tr>
+<td><code>content</code></td>
+<td>array</td>
+<td>是</td>
+<td>多模态输入数组，由 <code>text</code>/<code>image_url</code>/<code>video_url</code>/<code>audio_url</code> 元素构成。<strong>每个请求必须包含一个非空 <code>text</code>（提示词）</strong>（最多 7000 字符）</td>
+</tr>
+<tr>
+<td><code>resolution</code></td>
+<td>string</td>
+<td>是</td>
+<td><code>768P</code> 或 <code>2K</code></td>
+</tr>
+<tr>
+<td><code>duration</code></td>
+<td>int</td>
+<td>是</td>
+<td><code>4</code>~`15`（秒）</td>
+</tr>
+<tr>
+<td><code>ratio</code></td>
+<td>string</td>
+<td>视情况</td>
+<td><code>adaptive</code>（默认）、<code>21:9</code>、<code>16:9</code>、<code>4:3</code>、<code>1:1</code>、<code>3:4</code>、<code>9:16</code>。<strong>纯文本 T2V 不能使用 <code>adaptive</code>，必须显式指定；图像输入一律按 <code>adaptive</code> 处理</strong></td>
+</tr>
+<tr>
+<td><code>callback_url</code></td>
+<td>string</td>
+<td>否</td>
+<td>状态变更时 POST 通知。需在 3 秒内响应 <code>challenge</code> 校验</td>
+</tr>
+</tbody></table>
+<p><strong>输入媒体限制</strong>（请求体总大小 ≤ 64MB；大文件建议使用公开 URL）：</p>
+<table>
+<thead>
+<tr>
+<th>媒体</th>
+<th>限制</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>图像（<code>image_url</code>）</td>
+<td>JPG、JPEG、PNG、WEBP、HEIC、HEIF；单文件 ≤ 30MB；[256, 5760]px；纵横比 [0.4, 2.5]。first frame ≤ 1、last frame ≤ 1、参考图像 ≤ 9</td>
+</tr>
+<tr>
+<td>视频（<code>video_url</code>，参考场景）</td>
+<td>MP4、MOV；H.264/H.265、AAC、MP3；单文件 ≤ 50MB；≤ 3 段；每段 2~15 秒，总计 ≤ 15 秒</td>
+</tr>
+<tr>
+<td>音频（<code>audio_url</code>，参考场景）</td>
+<td>WAV、MP3；单文件 ≤ 15MB；≤ 3 段；每段 2~15 秒，总计 ≤ 15 秒（音频不能单独输入）</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. 入门指南 — 本地部署（开源权重）</h2>
+<h3>5.1 下载模型</h3>
+<p>从 HuggingFace 获取 <code>MiniMaxAI/MiniMax-H3</code>（33B 参数，Image-Text-to-Video，BF16）。分为两个按任务区分的检查点：<strong>FL2VA</strong>（首/末帧）与 <strong>Ref2VA</strong>（参考驱动）。</p>
+<pre><code class="language-bash"># 原始检查点（SGLang、vLLM 使用）— 两个任务族
+hf download MiniMaxAI/MiniMax-H3 --include &quot;FL2VA/*&quot; &quot;Ref2VA/*&quot; --local-dir MiniMax-H3
+
+# 单个任务族
+hf download MiniMaxAI/MiniMax-H3 --include &quot;FL2VA/*&quot; --local-dir MiniMax-H3
+</code></pre>
+<p>diffusers 用户无需手动下载：<code>ModularPipeline.from_pretrained(&quot;MiniMaxAI/MiniMax-H3&quot;)</code> 会自动拉取所需组件。</p>
+<h3>5.2 推荐推理框架</h3>
+<table>
+<thead>
+<tr>
+<th>框架</th>
+<th>特点</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SGLang</strong></td>
+<td>推荐 4 卡，Ulysses 并行高性能，有官方 cookbook</td>
+</tr>
+<tr>
+<td><strong>vLLM</strong></td>
+<td>缓存与调度优化，提供 vllm recipes</td>
+</tr>
+<tr>
+<td><strong>diffusers</strong></td>
+<td>一行 <code>ModularPipeline.from_pretrained</code> 加载，Python 流水线</td>
+</tr>
+<tr>
+<td><strong>ComfyUI</strong></td>
+<td>Comfy-Org/MiniMax-H3 节点化工作流，提供 T2V/R2V 模板</td>
+</tr>
+</tbody></table>
+<h3>5.3 SGLang 服务示例</h3>
+<pre><code class="language-bash"># FL2VA（文本/首末帧 → 视频）
+sglang serve \
+  --model-path MiniMaxAI/MiniMax-H3 \
+  --num-gpus 4 \
+  --ulysses-degree 4 \
+  --performance-mode speed \
+  --host 0.0.0.0 \
+  --port 30010 \
+  --model-variant fl2va
+
+# Ref2VA（参考图像/视频/音频 → 视频）
+sglang serve \
+  --model-path MiniMaxAI/MiniMax-H3 \
+  --num-gpus 4 \
+  --ulysses-degree 4 \
+  --performance-mode speed \
+  --host 0.0.0.0 \
+  --port 30011 \
+  --model-variant ref2va
+</code></pre>
+<h3>5.4 完整 2K 工作流（API + 本地混合）</h3>
+<p>开源权重可在本地复现 768p 输出；结合官方 API 可复现 2K 质量。</p>
+<ol>
+<li><strong>H3-Context-IR</strong>（<code>POST /v2/h3_context_ir</code>）：本地生成前将输入转换为结构化提示，对最终质量至关重要，强烈推荐。</li>
+<li><strong>H3-Base（本地 SGLang）</strong>：基于转换后的提示生成 768p 视频。</li>
+<li><strong>H3-Regenerate-2K</strong>（<code>POST /v2/video_regeneration</code>）：将 768p 结果与原上下文一起再生成至 2K。</li>
+</ol>
+<pre><code class="language-bash"># 环境变量
+export SGLANG_DEPLOYMENT_URL=&quot;&lt;sglang-deployment-url&gt;&quot;
+export MINIMAX_API_BASE=&quot;https://api.minimax.io&quot;   # 或 https://api.minimaxi.com（中国）
+export TOKEN=&quot;&lt;token&gt;&quot;
+</code></pre>
+<h3>5.5 许可证</h3>
+<p>H3 按 <strong>MiniMax H3 Community License Agreement</strong> 分发。</p>
+<ul>
+<li>年收入 <strong>低于 2000 万美元</strong>的组织可商用。</li>
+<li>权重可下载、修改、微调。</li>
+<li>超过该门槛需另行协商商业许可。</li>
+<li>官方许可文件：<code>huggingface.co/MiniMaxAI/MiniMax-H3</code> 中的 <code>LICENSE</code>。</li>
+</ul>
+<hr>
+<h2>6. 使用示例 — T2V · I2V · Ref2V</h2>
+<p>H3 依据 <code>content</code> 数组组合支持多种生成场景。</p>
+<h3>6.1 文本转视频（T2V）</h3>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;MiniMax-H3&quot;,
+  &quot;content&quot;: [
+    { &quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;A cinematic product commercial of a luxury watch floating above a city at dawn, dramatic lighting&quot; }
+  ],
+  &quot;resolution&quot;: &quot;2K&quot;,
+  &quot;duration&quot;: 5,
+  &quot;ratio&quot;: &quot;16:9&quot;
+}
+</code></pre>
+<h3>6.2 图像转视频（I2V）— 首/末帧</h3>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;MiniMax-H3&quot;,
+  &quot;content&quot;: [
+    { &quot;type&quot;: &quot;text&quot;, &quot;text&quot;: &quot;Pull focus to the people in the background and add more steam to the ramen bowl.&quot; },
+    { &quot;type&quot;: &quot;image_url&quot;, &quot;image_url&quot;: { &quot;url&quot;: &quot;https://example.com/first_frame.png&quot; }, &quot;role&quot;: &quot;first_frame&quot; },
+    { &quot;type&quot;: &quot;image_url&quot;, &quot;image_url&quot;: { &quot;url&quot;: &quot;https://example.com/last_frame.png&quot; }, &quot;role&quot;: &quot;last_frame&quot; }
+  ],
+  &quot;resolution&quot;: &quot;2K&quot;,
+  &quot;duration&quot;: 5,
+  &quot;ratio&quot;: &quot;adaptive&quot;
+}
+</code></pre>
+<h3>6.3 参考转视频（Ref2V）— 视频编辑、语音与音乐</h3>
+<pre><code class="language-json">{
+  &quot;model&quot;: &quot;MiniMax-H3&quot;,
+  &quot;content&quot;: [
+    {
+      &quot;type&quot;: &quot;text&quot;,
+      &quot;text&quot;: &quot;Character speaks: Follow the wind, live free. Voice timbre follows reference audio 1.&quot;
+    },
+    { &quot;type&quot;: &quot;video_url&quot;, &quot;video_url&quot;: { &quot;url&quot;: &quot;https://example.com/source.mp4&quot; }, &quot;role&quot;: &quot;reference_video&quot; },
+    { &quot;type&quot;: &quot;audio_url&quot;, &quot;audio_url&quot;: { &quot;url&quot;: &quot;https://example.com/voice.mp3&quot; }, &quot;role&quot;: &quot;reference_audio&quot; }
+  ],
+  &quot;resolution&quot;: &quot;2K&quot;,
+  &quot;duration&quot;: 5,
+  &quot;ratio&quot;: &quot;adaptive&quot;
+}
+</code></pre>
+<h3>6.4 role 组合规则</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>content 组成</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>T2V</td>
+<td>仅 text</td>
+</tr>
+<tr>
+<td>I2V 首帧</td>
+<td>text + 1 张图像（<code>first_frame</code>，或省略 role）</td>
+</tr>
+<tr>
+<td>I2V 末帧</td>
+<td>text + 1 张图像（<code>last_frame</code>）</td>
+</tr>
+<tr>
+<td>I2V 首末帧</td>
+<td>text + 2 张图像（<code>first_frame</code> + <code>last_frame</code>）</td>
+</tr>
+<tr>
+<td>Ref2V</td>
+<td>text + 参考图像（<code>reference_image</code>）/视频（<code>reference_video</code>）/音频（<code>reference_audio</code>）任意组合；音频不能单独输入，至少需要 1 张图像或视频</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>注意：I2V 与 Ref2V <strong>互斥</strong>。只要出现 <code>reference_*</code> role，就不能使用 <code>first_frame</code>/<code>last_frame</code>。</p>
+</blockquote>
+<hr>
+<h2>7. 优点</h2>
+<ul>
+<li><strong>开源权重的自由度</strong>：下载权重即可在本地或私有环境部署，强化数据安全；无需按次 API 费用，可针对特定领域微调。</li>
+<li><strong>顶尖性能</strong>：视频编辑全球第一、文本转视频第二。已成熟到可直接投入广告、品牌、电商、游戏等商业内容制作。</li>
+<li><strong>全模态输入</strong>：可同时输入文本、图像、视频、音频，用自然语言执行复合指令，例如&quot;参考该视频的镜头运动，让那张图片中的人物用这个声音演唱&quot;。</li>
+<li><strong>原生立体声音频</strong>：随视频一并生成 32kHz 立体声，无需单独的 TTS、音乐、音效流程，一次同步完成音视频。</li>
+<li><strong>颠覆性成本效率</strong>：2K 每秒价格不足主流模型 1/3，768p 不足主流 720p 一半。与 M3 LLM 的价格策略（闭源模型 5%~10%）一脉相承。</li>
+<li><strong>长片段</strong>：单次生成最长 15 秒 + 多片段参考，可自然编排多镜头。</li>
+<li><strong>生态快速落地</strong>：发布后立刻出现官方 ComfyUI 集成与多个 HuggingFace Spaces 演示（多模态、Ref2VA、FL2VA 等）。</li>
+</ul>
+<hr>
+<h2>8. 缺点</h2>
+<ul>
+<li><strong>硬件要求</strong>：33B dense 模型要在本地流畅运行，需要高端 GPU（推荐 4 卡）等昂贵基础设施。</li>
+<li><strong>部分模块未开源</strong>：H3-Context-IR 与 H3-Regenerate-2K 仅提供 API。要完整复现最高质量（尤其 2K），即便本地部署也需结合官方 API。</li>
+<li><strong>许可证限制</strong>：MiniMax 社区许可证限制年收入超过 2000 万美元企业商用。</li>
+<li><strong>独立验证有限</strong>：公布的基准（如视频编辑第一）为 MiniMax 自测数据，需独立机构验证。</li>
+<li><strong>中资企业背景</strong>：数据安全与监管顾虑可能使部分国家/企业受限。</li>
+<li><strong>生成质量不稳定</strong>：人脸、手部、精细文字仍有短板，常需提示词调优或多次重新生成（seed）。</li>
+<li><strong>监管与版权风险</strong>：肖像权、品牌标识、音乐版权、深度伪造滥用等使其受到生成式媒体监管约束。</li>
+</ul>
+<hr>
+<h2>9. 对视频制作/编辑产业的影响</h2>
+<p>H3 不只是&quot;生成一段视频&quot;，而可能改变<strong>整个视频制作流水线</strong>。视频编辑第一的成绩尤其值得关注。</p>
+<h3>9.1 制作成本骤降</h3>
+<ul>
+<li>2K 每秒成本不足主流模型的 1/3。一段 30 秒品牌视频的直接生成成本可能降至过去的 1/10 甚至更低。</li>
+<li>使用开源权重 + 本地部署，<strong>每秒计费直接消失</strong>。只要有 GPU，视频边际成本降到电费级别。</li>
+<li>结合 M3 式&quot;闭源模型价格 5%~10%&quot;策略，整个生成式媒体市场的价格下限或被重塑。</li>
+</ul>
+<h3>9.2 编辑范式转变：从&quot;操作&quot;到&quot;描述&quot;</h3>
+<p>传统编辑是在时间线上裁剪、拼接、加滤镜。H3 则是<strong>用自然语言描述期望结果，一次性重新生成视频与音频</strong>。</p>
+<ul>
+<li>只替换场景人物、背景、氛围的 V2V 编辑</li>
+<li>借用参考视频镜头运动、应用参考音频音色的复合编辑</li>
+<li>指定首末帧、导演&quot;中间场景&quot;的帧锚定编辑</li>
+<li>用 4 秒音视频参考拼接 15 秒多镜头的分镜规划</li>
+</ul>
+<p>换言之，范式从&quot;剪辑为中心&quot;转向&quot;意图为中心&quot;。Adobe、达芬奇等传统 NLE 工具的核心价值部分面临被生成引擎吸收的压力。</p>
+<h3>9.3 制作主体的民主化</h3>
+<ul>
+<li>只要有导演/剧本创意，<strong>个人或小团队即可制作广告、品牌、电商、产品演示视频</strong>。</li>
+<li>过去需要外包的东西 — 产品网站动态横幅、动画海报、片头标题、UI/UX 演示 — 现在用一句提示即可产出。</li>
+<li>语言壁垒也降低。支持 11 种语言对话，无需另行选角即可生成本地化视频。</li>
+</ul>
+<h3>9.4 工作流转变：从&quot;片段生成&quot;到&quot;全面参与制作&quot;</h3>
+<p>正如 MiniMax 路线图所述，视频模型将超越单一片段生成器，<strong>参与内容制作的整个流程</strong>。</p>
+<ul>
+<li>预演：剧本 → 分镜视频 → 拍摄前方向验证</li>
+<li>外景/背景/CG 替换：以生成背景替代实拍（产品视频、室内、建筑演示）</li>
+<li>自动语音/音乐/音效：从参考素材一次性合成台词、旁白、BGM、SFX</li>
+<li>版本与 A/B 测试：批量生成营销创意并对比效果</li>
+</ul>
+<h3>9.5 分行业影响汇总</h3>
+<table>
+<thead>
+<tr>
+<th>行业</th>
+<th>影响</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>广告/营销</td>
+<td>创意 A/B 测试成本骤降；品牌一致性更易保持（品牌渲染精度是其强项）</td>
+</tr>
+<tr>
+<td>电商</td>
+<td>由单张照片生成商品视频、360 演示、生活方式镜头</td>
+</tr>
+<tr>
+<td>游戏</td>
+<td>快速生成电影级预告、角色动作参考、概念视频</td>
+</tr>
+<tr>
+<td>影视</td>
+<td>预演、美术设计、VFX 辅助。注意人物/面部再现的法律风险</td>
+</tr>
+<tr>
+<td>广电/YouTube</td>
+<td>个人媒体直接制作高质量背景、动态缩略图、片头</td>
+</tr>
+<tr>
+<td>教育/研究</td>
+<td>即时生成演示与讲解视频，用于学习与汇报</td>
+</tr>
+</tbody></table>
+<h3>9.6 风险与应对</h3>
+<ul>
+<li><strong>就业结构变化</strong>：自动化的压力会从低端剪辑、动态图形岗位开始。同时诞生结果审核、策展、法务校验等新角色。</li>
+<li><strong>深度伪造与欺诈</strong>：参考式人脸/语音编辑变得容易，水印与检测技术的重要性上升。</li>
+<li><strong>版权与肖像权</strong>：参考素材与生成结果的权属模糊，合同与许可管理成为必需。</li>
+<li><strong>媒体素养</strong>：针对&quot;生成视频&quot;的标识监管预计会加强。</li>
+</ul>
+<p>总之，H3 类模型降低了视频制作成本下限、使制作主体大众化，并把编辑范式从&quot;编辑&quot;推向&quot;生成&quot;，可能成为<strong>产业结构性变革的催化剂</strong>。</p>
+<hr>
+<h2>10. 主要竞争对手</h2>
+<p>MiniMax H3 面临以下强劲对手。</p>
+<ul>
+<li><strong>字节跳动（Seedance）</strong>：视频 AI 领域 H3 的直接竞争者。</li>
+<li><strong>Google（Veo · Gemini）</strong>：文本转视频与多模态生成的重要力量。Gemini 3.1 Pro、Gemini Omni Flash 是 M3、H3 的强劲对手。</li>
+<li><strong>OpenAI（Sora）</strong>：文本转视频第一梯队，Sora 2 以来主导生成式媒体市场。</li>
+<li><strong>Runway</strong>：以电影化编辑与控制见长（Gen-4 等）。</li>
+<li><strong>可灵（快手 Kling）</strong>：中国视频生成头部玩家。</li>
+<li><strong>其他中国开源权重阵营</strong>：文本 LLM 方面，DeepSeek（R1、V4-pro）、Qwen（阿里，Qwen3-235B、Qwen3.7-Max）、Moonshot AI（Kimi）与 M1/M3 竞争，部分正扩展视频模型。</li>
+</ul>
+<hr>
+<h2>11. 总结</h2>
+<p>MiniMax 继 M1/M3（文本推理与编码）之后，以 <strong>H3（视频生成）</strong> 将开源权重战略扩展到全模态媒体。顶尖性能（视频编辑第一）、最高 2K、15 秒、带立体声的视频生成、不足主流 1/3 的价格、向年收入 2000 万美元以下组织开放的社区许可证 — H3 是开源权重生态进军长期被闭源视频模型主导市场的信号。</p>
+<p>尤其在视频制作/编辑产业，H3 ① 将制作成本从按秒计费降到 GPU 边际成本；② 转向自然语言、意图为中心的编辑范式；③ 加速个人与小型团队制作的民主化。只要明确识别独立基准验证与许可/监管风险，H3 就是广告、电商、游戏、广电等广泛视频工作流中的现实可落地候选。</p>
+<hr>
+<h2>参考资料</h2>
+<ul>
+<li>MiniMax H3 官方博客：<a href="https://www.minimax.io/blog/minimax-h3">https://www.minimax.io/blog/minimax-h3</a></li>
+<li>HuggingFace 模型：<a href="https://huggingface.co/MiniMaxAI/MiniMax-H3">https://huggingface.co/MiniMaxAI/MiniMax-H3</a></li>
+<li>API Reference（Video Generation V2）：<a href="https://platform.minimax.io/docs/api-reference/video-generation-v2-create">https://platform.minimax.io/docs/api-reference/video-generation-v2-create</a></li>
+<li>Query Task API：<a href="https://platform.minimax.io/docs/api-reference/video-generation-v2-query">https://platform.minimax.io/docs/api-reference/video-generation-v2-query</a></li>
+<li>SGLang cookbook（MiniMax-H3）：<a href="https://docs.sglang.io/cookbook/diffusion/MiniMax/MiniMax-H3">https://docs.sglang.io/cookbook/diffusion/MiniMax/MiniMax-H3</a></li>
+<li>vLLM recipes：<a href="https://recipes.vllm.ai/MiniMaxAI/MiniMax-H3">https://recipes.vllm.ai/MiniMaxAI/MiniMax-H3</a></li>
+<li>ComfyUI 集成：<a href="https://github.com/Comfy-Org/ComfyUI">https://github.com/Comfy-Org/ComfyUI</a> · <a href="https://docs.comfy.org/tutorials/video/minimax/minimax-h3">https://docs.comfy.org/tutorials/video/minimax/minimax-h3</a></li>
+</ul>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="分享" data-url="https://tech.vibequant.cc/tech/minimax-h3-gettingstart-cn/" data-title="MiniMax H3 开源权重指南 — 全模态视频生成模型" data-text="MiniMax H3（2026年7月）开源权重全模态生成模型指南。接受文本、图像、视频、音频输入，生成最高 2K、15 秒、含原生立体声音频的视频。包含异步 API 与本地部署（SGLang、vLLM、diffusers、ComfyUI）入门、T2V/I2V/Ref2V 示例、优缺点、视频制作与编辑产业影响、M1/M3/H3 产品线对比。" data-lang="zh-Hans">
+  <span class="share-label">分享</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart-cn%2F&amp;text=MiniMax%20H3%20%E5%BC%80%E6%BA%90%E6%9D%83%E9%87%8D%E6%8C%87%E5%8D%97%20%E2%80%94%20%E5%85%A8%E6%A8%A1%E6%80%81%E8%A7%86%E9%A2%91%E7%94%9F%E6%88%90%E6%A8%A1%E5%9E%8B" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart-cn%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fminimax-h3-gettingstart-cn%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">复制链接</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_MiniMax/MiniMax-H3-GettingStart_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
