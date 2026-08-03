@@ -612,6 +612,9 @@ const SLUG_OVERRIDES = {
   "KIMI-K3/KIMI-K3-Cloud-Install-Guide_JA.md": "kimi-k3-cloud-install-guide-ja",
   "AI-Bottleneck/AI-Bottleneck.md": "ai-bottleneck",
   "K11/Adrian-Cheng-Fall.md": "adrian-cheng-fall",
+  "Prediction-Market/Prediction-Market-Growth-and-Opportunity.md": "prediction-market-growth-and-opportunity",
+  "Prediction-Market/Prediction-Market-Growth-and-Opportunity_EN.md": "prediction-market-growth-and-opportunity-en",
+  "Prediction-Market/Prediction-Market-Growth-and-Opportunity_JA.md": "prediction-market-growth-and-opportunity-ja",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

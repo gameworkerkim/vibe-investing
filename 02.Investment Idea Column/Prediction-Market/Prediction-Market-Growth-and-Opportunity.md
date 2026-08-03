@@ -1,3 +1,46 @@
+---
+title: "예측시장의 폭발적인 성장과 기회"
+subtitle: "거래량·수수료·Polygon 의존도·관할권 규제, 그리고 한국 블록체인 스타트업의 경로"
+description: "2026년 7월 Kalshi·Polymarket 월 거래량 506억 달러. 밸류에이션·Polygon 의존·미·한·일·홍콩·싱가포르·EU 규제 지도와 한국 스타트업의 현실적 B2B 접근을 정리한다."
+abstract: |
+  2026년 8월 기준 확인된 예측시장 거래량·매출·밸류에이션을 정리한다.
+  폴리마켓의 Polygon 의존도, 수수료 도입, 미국 CFTC·주 도박법 충돌, 한국 형사 수사, 일본 2030 인가 로비, 지브롤터 전용 규제, ESMA 바이너리 옵션 입장을 관할권별로 비교한다.
+  결론: 국내 B2C 예측시장은 불가에 가깝고, 한국 팀은 라이선스 사업자에게 인프라·오라클·데이터·컴플라이언스를 공급하는 쪽이 실현 가능하다.
+summary_for_ai: |
+  Opinion/research column (not investment or legal advice), as of 2026-08-03.
+  July 2026 volume: Kalshi ~$37.7B, Polymarket global $7.9B, Polymarket US $5.0B, total $50.6B.
+  Kalshi valuation $22B Series F; Polymarket ~$9B post-ICE; Bernstein projects $1T volume by 2030.
+  Korea: police investigating domestic Polymarket users for gambling; no license path.
+  Thesis for KR startups: sell to licensed operators (matching, oracle, data, compliance), not run on-chain B2C PMs.
+date: 2026-08-03
+updated: 2026-08-03
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - Prediction-Markets
+  - Polymarket
+  - Kalshi
+  - CFTC
+  - 규제
+  - Polygon
+  - 블록체인
+keywords:
+  - 예측시장
+  - Polymarket
+  - Kalshi
+  - 로빈후드 이벤트 계약
+  - CFTC
+  - Polygon
+  - 도박죄
+  - 지브롤터
+group: crypto-web3
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 예측시장의 폭발적인 성장과 기회
 
 예측시장이란 예측 시장(Prediction Markets)은 선거 결과나 경제 지표 등 미래의 불확실한 사건에 대해, 참가자들이 주식처럼 결과에 대한 지분을 사고파는 플랫폼이다. 
