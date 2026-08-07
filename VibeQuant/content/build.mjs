@@ -624,6 +624,7 @@ const SLUG_OVERRIDES = {
   "CTI-2026-0804-COLDCARD-RNG_JA.md": "coldcard-rng-20260804-ja",
   "CTI-2026-0804-COLDCARD-RNG_CN.md": "coldcard-rng-20260804-cn",
   "USA/Age-of-USD.md": "age-of-usd",
+  "AI-IDC/Why-High-Power-Datacenter.md": "why-high-power-datacenter",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
@@ -1621,12 +1622,13 @@ function layout({
   ogType = "article",
   htmlLang = "ko",
   extraHead = "",
+  ogImage = LOGO_URL,
 }) {
   const ldBlocks = Array.isArray(jsonLd) ? jsonLd.filter(Boolean) : jsonLd ? [jsonLd] : [];
   const ld = ldBlocks
     .map((block) => `<script type="application/ld+json">${JSON.stringify(block)}</script>`)
     .join("\n  ");
-  const ogImage = LOGO_URL;
+  const resolvedOg = String(ogImage || LOGO_URL).trim() || LOGO_URL;
   return `<!DOCTYPE html>
 <html lang="${esc(htmlLang)}">
 <head>
@@ -1640,9 +1642,9 @@ function layout({
   <meta property="og:url" content="${esc(canonical)}" />
   <meta property="og:type" content="${esc(ogType)}" />
   <meta property="og:site_name" content="VibeQuant" />
-  <meta property="og:image" content="${esc(ogImage)}" />
+  <meta property="og:image" content="${esc(resolvedOg)}" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:image" content="${esc(ogImage)}" />
+  <meta name="twitter:image" content="${esc(resolvedOg)}" />
   <link rel="icon" type="image/svg+xml" href="${prefix}favicon.svg" />
   <link rel="icon" type="image/png" sizes="32x32" href="${prefix}favicon-32.png" />
   <link rel="apple-touch-icon" href="${prefix}apple-touch-icon.png" />
@@ -1708,6 +1710,7 @@ function buildArticle(item, section) {
   const parsed = parseDoc(raw, item.title);
   if (meta.title) parsed.title = String(meta.title);
   if (meta.description) parsed.description = String(meta.description);
+  if (meta.subtitle) parsed.subtitle = String(meta.subtitle);
   let htmlBody = marked.parse(sanitizeMd(parsed.bodyMd || stripFrontmatter(raw)));
   htmlBody = fixLiteralBoldHtml(htmlBody);
   htmlBody = htmlBody.replace(/^\s*<h1\b[^>]*>[\s\S]*?<\/h1>\s*/i, "");
@@ -1808,6 +1811,8 @@ function buildArticle(item, section) {
     fmSchema === "NewsArticle"
       ? fmSchema
       : schemaType;
+  const ogImageUrl =
+    String(meta.og_image || meta.image || "").trim() || LOGO_URL;
   const articleLd = {
     "@context": "https://schema.org",
     "@type": resolvedType,
@@ -1820,7 +1825,7 @@ function buildArticle(item, section) {
       "@id": canonical,
     },
     isBasedOn: sourceUrl || item.github,
-    image: LOGO_URL,
+    image: ogImageUrl,
     url: canonical,
   };
   if (datePub) articleLd.datePublished = datePub;
@@ -1853,6 +1858,7 @@ function buildArticle(item, section) {
       body,
       ogType: "article",
       htmlLang,
+      ogImage: ogImageUrl,
       extraHead: hreflangLinks(item, section),
       jsonLd: [
         articleLd,

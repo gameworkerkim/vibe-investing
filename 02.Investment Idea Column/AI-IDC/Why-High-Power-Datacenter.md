@@ -1,4 +1,51 @@
+---
+title: "왜 데이터센터인가? 아니, 왜 고전력 데이터센터인가?"
+subtitle: "버지니아를 만든 건 네트워크였고, 붙잡고 있는 건 전력이다 — Blackwell 랙·한국 공급절벽·원전 리드타임"
+description: "MAE-East에서 Data Center Alley까지, DeepSeek 내몽골 1GW, Blackwell Ultra 130kW 랙, 한국 수도권 전력 포화와 변전소 리드타임. GPU는 돈으로, 전력은 시간으로 산다."
+abstract: |
+  버지니아 IDC 집중은 네트워크로 시작됐지만 지금은 기가와트급 전력이 입지를 붙잡는다.
+  DeepSeek의 내몽골 울란차브 1GW·동수서산 전략, NVIDIA Blackwell Ultra 랙당 132~140kW(평균 대비 17배),
+  한국 수도권 신청 절반 이상 공급불가·2029년 공급절벽 경고를 정리한다.
+  빅테크 2026 CAPEX ~7,250억 달러 국면에서, 병목은 GPU 예산이 아니라 변전소 리드타임이다.
+summary_for_ai: |
+  Opinion column (not investment advice), as of 2026-08-07.
+  Thesis: site selection is latency; scale is power. Virginia/Ashburn grew on peering+fiber but is now held by ~5GW power.
+  DeepSeek Inner Mongolia Ulanqab ~1GW (Bloomberg Jul 30), Dongshu Xisuan; Blackwell B300 rack ~132-140kW vs ~8kW global avg; KR metro DC density 15-25kW vs AI 40-100kW, liquid cooling, slab load; >half KR capital-region power requests denied; substation lead time 10+ years; CBRE supply cliff after 2029.
+  Hyperscaler 2026 CAPEX guidance ~$725B. Nuclear as baseload thesis with 10-year lead-time caveat. Not a stock tip.
+date: 2026-08-07
+updated: 2026-08-07
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - AI
+  - 데이터센터
+  - IDC
+  - 전력
+  - Blackwell
+  - 하이퍼스케일러
+  - 원전
+keywords:
+  - "고전력 데이터센터"
+  - "Blackwell"
+  - "GB300 NVL72"
+  - "Data Center Alley"
+  - "동수서산"
+  - "변전소 리드타임"
+  - "액체냉각"
+  - "하이퍼스케일러 CAPEX"
+group: ai-llm
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+og_image: "https://vibequant.cc/og/why-high-power-datacenter.png"
+image: "https://vibequant.cc/og/why-high-power-datacenter.png"
+draft: false
+robots: index,follow
+---
+
 # 왜 데이터센터인가? 아니, 왜 **고전력** 데이터센터인가?
+
+![AI 고전력 데이터센터 생태계 — NVIDIA GPU·액체냉각, 원전·송전망 전력, 글로벌 네트워크, 한국 입지, Microsoft·Google·Meta·Amazon 하이퍼스케일러](https://vibequant.cc/og/why-high-power-datacenter.png)
 
 미국 버지니아에 데이터센터가 몰린 이유를 흔히 "국제 인터넷망이 미국 동부 중심이라서"라고 설명하는 사람들이 있지만, 사실 절반만 진실이다.
 
@@ -113,4 +160,4 @@ CBRE에 따르면 국내 기존 데이터센터의 평균 전력밀도는 15~25k
 
 ---
 
-`#빅테크` `#인공지능` `#AI` `#DeepSeek` `#OpenAI` `#DataCenter` `#IDC` `#전력` `#원전` `#Blackwell`
+*본 칼럼은 특정 종목의 매수·매도를 권유하지 않으며, 투자 판단과 그 결과에 대한 책임은 투자자 본인에게 있습니다.*

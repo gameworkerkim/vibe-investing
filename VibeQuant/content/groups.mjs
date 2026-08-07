@@ -9,7 +9,7 @@ export const COLUMN_GROUP_RULES = [
   { id: "media-blockchain", title_ko: "미디어 · 블록체인", title_en: "Media · Blockchain", match: [/^Blockchain-P2E\//i, /media-column\/blockchain/i] },
   { id: "media-macro", title_ko: "미디어 · 매크로", title_en: "Media · Macro", match: [/^Macro-Policy\//i, /media-column\/macro/i] },
   { id: "media-society", title_ko: "미디어 · 사회·문화", title_en: "Media · Society", match: [/^Society-Culture\//i, /media-column\/society/i] },
-  { id: "ai-llm", title_ko: "AI · LLM · 빅테크", title_en: "AI · LLM · Big Tech", match: [/ai_revolution/i, /ai-education/i, /ai-bottleneck/i, /ai bouble/i, /ai_bouble/i, /ai_hacking/i, /ai_trading/i, /deepseek/i, /claude/i, /meta\//i, /oracle/i, /jane street/i, /llm_supply/i, /bigtech/i, /kimi/i, /grok/i] },
+  { id: "ai-llm", title_ko: "AI · LLM · 빅테크", title_en: "AI · LLM · Big Tech", match: [/ai_revolution/i, /ai-education/i, /ai-bottleneck/i, /ai-idc/i, /high-power-datacenter/i, /ai bouble/i, /ai_bouble/i, /ai_hacking/i, /ai_trading/i, /deepseek/i, /claude/i, /meta\//i, /oracle/i, /jane street/i, /llm_supply/i, /bigtech/i, /kimi/i, /grok/i] },
   { id: "elon-spacex", title_ko: "Elon · SpaceX", title_en: "Elon · SpaceX", match: [/elon musk/i, /spacex/i] },
   { id: "crypto-web3", title_ko: "크립토 · Web3", title_en: "Crypto · Web3", match: [/bitcoin/i, /btc/i, /ethereum/i, /bnb/i, /crypto/i, /crytohft/i, /defi/i, /web3/i, /strategy\//i, /robinhood/i, /dex memecoin/i, /aws_blockchain/i, /prediction-market/i] },
   { id: "korea-hacking", title_ko: "한국 · 해킹", title_en: "Korea · Hacking", match: [/national-diplomatic/i, /외교원/i, /hacking-incident/i] },
@@ -62,6 +62,7 @@ export const ESSAY_GROUP_FALLBACK = { id: "other", title_ko: "기타 에세이",
 
 /** Paths (substring) that should appear in Recommended — order = display order */
 export const FEATURED_COLUMN_PATHS = [
+  "AI-IDC/Why-High-Power-Datacenter.md",
   "USA/Age-of-USD.md",
   "Prediction-Market/Prediction-Market-Growth-and-Opportunity.md",
   "K11/Adrian-Cheng-Fall.md",
