@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>One Build Flag Brought Down Cold Storage — The Coldcard Seed Entropy Flaw and the $88.6 Million Seed-Reconstruction Sweep — VibeQuant</title>
+  <meta name="description" content="Coldcard's fail-open RNG cut seed entropy to ~40 bits, enabling a contactless $88.6M BTC sweep. Timeline, migration steps, and Korea VASP regulation gaps." />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804-en/" />
+  <meta property="og:title" content="One Build Flag Brought Down Cold Storage — The Coldcard Seed Entropy Flaw and the $88.6 Million Seed-Reconstruction Sweep" />
+  <meta property="og:description" content="Coldcard's fail-open RNG cut seed entropy to ~40 bits, enabling a contactless $88.6M BTC sweep. Timeline, migration steps, and Korea VASP regulation gaps." />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/coldcard-rng-20260804-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"One Build Flag Brought Down Cold Storage — The Coldcard Seed Entropy Flaw and the $88.6 Million Seed-Reconstruction Sweep","description":"Coldcard's fail-open RNG cut seed entropy to ~40 bits, enabling a contactless $88.6M BTC sweep. Timeline, migration steps, and Korea VASP regulation gaps.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/coldcard-rng-20260804-en/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0804-COLDCARD-RNG_EN.md","image":"https://vibequant.cc/og-default.png","url":"https://cti.vibequant.cc/cti/coldcard-rng-20260804-en/","datePublished":"2026-08-04","dateModified":"2026-08-04","inLanguage":"en","keywords":"Cryptocurrency, Cold-Wallet, Hardware-Wallet, RNG-Failure, Seed-Generation, Blockchain-Forensics"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"One Build Flag Brought Down Cold Storage — The Coldcard Seed Entropy Flaw and the $88.6 Million Seed-Reconstruction Sweep","item":"https://cti.vibequant.cc/cti/coldcard-rng-20260804-en/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 크립토 · Web3</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">크립토 · Web3</p>
+        <h1>One Build Flag Brought Down Cold Storage — The Coldcard Seed Entropy Flaw and the $88.6 Million Seed-Reconstruction Sweep</h1>
+        <p class="article-dates"><time datetime="2026-08-04">발행 2026.08.04</time> · 주제 Cryptocurrency · Cold-Wallet · Hardware-Wallet · RNG-Failure · Seed-Generation · Blockchain-Forensics</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/coldcard-rng-20260804/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../cti/coldcard-rng-20260804-en/" data-lang="EN" aria-current="true">English</a>
+      <a class="lang-btn" href="../../cti/coldcard-rng-20260804-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn" href="../../cti/coldcard-rng-20260804-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Coldcard's fail-open RNG cut seed entropy to ~40 bits, enabling a contactless $88.6M BTC sweep. Timeline, migration steps, and Korea VASP regulation gaps.</p>
+        
+        <nav class="share-bar" aria-label="Share" data-url="https://cti.vibequant.cc/cti/coldcard-rng-20260804-en/" data-title="One Build Flag Brought Down Cold Storage — The Coldcard Seed Entropy Flaw and the $88.6 Million Seed-Reconstruction Sweep" data-text="Coldcard's fail-open RNG cut seed entropy to ~40 bits, enabling a contactless $88.6M BTC sweep. Timeline, migration steps, and Korea VASP regulation gaps." data-lang="en">
+  <span class="share-label">Share</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-en%2F&amp;text=One%20Build%20Flag%20Brought%20Down%20Cold%20Storage%20%E2%80%94%20The%20Coldcard%20Seed%20Entropy%20Flaw%20and%20the%20%2488.6%20Million%20Seed-Reconstruction%20Sweep" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-en%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-en%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">Copy link</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p><strong>Report ID</strong>CTI-2026-0804-COLDCARD-RNG ·<strong>Published</strong>2026-08-04 ·<strong>Classification</strong>TLP:GREEN ·<strong>Severity</strong>CRITICAL<strong>Author</strong> Dennis Kim / HoKwang Kim · <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · @gameworkerkim</p>
+<p>🌐 <a href="../../cti/coldcard-rng-20260804/">한국어</a> · <strong>English (this document)</strong> · <a href="../../cti/coldcard-rng-20260804-ja/">日本語</a> · <a href="../../cti/coldcard-rng-20260804-cn/">中文</a></p>
+<p><em>Hardware-wallet security was never really about where you keep the key — it was about how the key gets made. Coldcard protected the former perfectly, and missed the latter for five years.</em></p>
+<hr>
+<h2>Table of Contents</h2>
+<ol>
+<li>Executive Summary (TL;DR)</li>
+<li>Introduction — Isolation Held, Generation Failed</li>
+<li>Incident Timeline</li>
+<li>Root Cause Analysis — Macro-Existence Checks and the Fail-Open Structure</li>
+<li>Technical Vulnerability Analysis — Quantifying the Entropy Collapse</li>
+<li>Attack Chain Analysis — Offline Seed Reconstruction and On-Chain Sweeping</li>
+<li>Impact Quantification — Three Waves of Attack</li>
+<li>Survivor Analysis — What Kept Wallets Safe</li>
+<li>Response and Migration — What the Patch Cannot Fix</li>
+<li>Industry Implications — Re-Examining the Trust Model</li>
+<li>Korea Perspective — Regulatory Alignment and Recommendations for Domestic Exchanges</li>
+<li>Recommendations for Bitcoin Investors</li>
+<li>Detection, Response, and Prevention Checklist</li>
+<li>Conclusion</li>
+<li>References</li>
+<li>Appendix A — Impact Scope and Fixed-Firmware Cross-Reference Table</li>
+<li>Appendix B — Unconfirmed Items and Follow-Up Tracking Tasks</li>
+</ol>
+<hr>
+<h2>1. Executive Summary (TL;DR)</h2>
+<p>Between July 29 and August 2, 2026, a large-scale theft targeted seeds generated on <strong>Coldcard</strong>, the Bitcoin-only hardware wallet made by Canada&#39;s <strong>Coinkite</strong>. Per Galaxy Research, observed losses reached <strong>1,367.05 BTC (approximately $88.6 million, roughly ₩123 billion), across 4,585 addresses</strong>. The attack proceeded in three waves and, at the time of writing, remains unresolved.</p>
+<p>The essence of this attack is <strong>reconstruction, not intrusion</strong>. The attacker never touched a victim&#39;s device, never stole a PIN or seed phrase, and used no malware or phishing. A build-configuration inconsistency in Coldcard firmware from March 2021 routed seed generation away from the STM32 hardware random-number generator (TRNG) and into MicroPython&#39;s deterministic software PRNG (<strong>Yasmarang</strong>), which was <strong>seeded solely from the chip&#39;s unique ID and a timer register value</strong>and collected no additional entropy afterward. As a result, effective entropy collapsed from a designed 128 bits to<strong>approximately 40 bits</strong>on Mk2/Mk3, and<strong>approximately 72 bits</strong> on Mk4/Mk5/Q.</p>
+<p>Forty bits is a search space exhaustible by consumer-grade hardware. The attacker enumerated candidate seeds offline, derived addresses per BIP-32/BIP-39 rules, then <strong>queried the public blockchain for balances</strong> to selectively sweep only the funded addresses. The blockchain&#39;s transparency was repurposed as the attacker&#39;s reconnaissance infrastructure.</p>
+<p>Key facts at a glance</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Vulnerability introduced</td>
+<td>Commit on 2021-03-01 (<code>ckcc.rng_bytes</code> → <code>ngu.random.bytes</code>); firmware v4.0.0 shipped 2021-03-17</td>
+</tr>
+<tr>
+<td>Exposure window</td>
+<td>Approximately 5 years and 4 months</td>
+</tr>
+<tr>
+<td>Effective entropy</td>
+<td>Mk2/Mk3 ~40 bits, Mk4/Mk5/Q ~72 bits (design target: 128 bits)</td>
+</tr>
+<tr>
+<td>Wave 1</td>
+<td>2026-07-30 01:10–01:51 UTC, 41 minutes, 1,082.65 BTC / 1,196 addresses / ~$70.2 million</td>
+</tr>
+<tr>
+<td>Cumulative losses</td>
+<td>1,367.05 BTC / 4,585 addresses / ~$88.6 million (as of 2026-08-02)</td>
+</tr>
+<tr>
+<td>Vendor&#39;s first public notice</td>
+<td>~30 hours after Wave 1 ended</td>
+</tr>
+<tr>
+<td>Movement of stolen funds</td>
+<td>None — held unspent in attacker-controlled addresses</td>
+</tr>
+<tr>
+<td>Victim profile</td>
+<td>Average dormancy ~3.18 years; predominantly long-term individual holders</td>
+</tr>
+<tr>
+<td>Unaffected products</td>
+<td>TAPSIGNER, OPENDIME, SATSCARD (separate codebase); Trezor, Ledger, Block (Bitkey)</td>
+</tr>
+</tbody></table>
+<p><strong>One-sentence summary of this incident: cold storage protected the key, but it did not protect the moment the key was made.</strong></p>
+<hr>
+<h2>2. Introduction — Isolation Held, Generation Failed</h2>
+<p>The hardware-wallet security model rests on two independent premises.</p>
+<ol>
+<li><strong>The isolation premise</strong> — the private key never leaves a device that is not connected to the internet.</li>
+<li><strong>The generation premise</strong> — that key is derived from randomness that cannot be guessed with any amount of computing resources.</li>
+</ol>
+<p>Industry marketing, user education, and regulatory discussion as a whole have focused almost exclusively on the first premise. &quot;Never connects to the internet&quot; has been the centerpiece of hardware-wallet advertising, and Korea&#39;s own &quot;cold-wallet custody ratio&quot; metric for virtual-asset regulation is itself a quantification of the isolation premise.</p>
+<p>In this incident, <strong>the isolation premise was never once broken.</strong> One victim, Canada&#39;s Jonathan Goodman, used a Coldcard that had been stored in a bank safe-deposit box, had never connected to the internet, and whose seed phrase he had disclosed to no one. He still lost 18.25 BTC in seven minutes on the evening of July 29, 2026.</p>
+<p>What collapsed was the second premise. And once the second premise fails, the first premise <strong>provides no defensive value whatsoever.</strong> The attacker did not need to cross the perimeter. They simply re-derived, from the outside, a secret that had been created on the inside.</p>
+<p>This structure is fundamentally different from the traditional incident-response paradigm of cybersecurity. There is no trace of intrusion, no log to detect, and the moment of compromise is not the moment of theft but <strong>the moment of key generation.</strong> Victims had already been compromised five years earlier, with no way of knowing it.</p>
+<hr>
+<h2>3. Incident Timeline</h2>
+<table>
+<thead>
+<tr>
+<th>Date/Time</th>
+<th>Event</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2021-03-01</td>
+<td>Commit changes the seed-generation call from <code>ckcc.rng_bytes</code> to <code>ngu.random.bytes</code></td>
+<td>Point at which the vulnerability was introduced</td>
+</tr>
+<tr>
+<td>2021-03-17</td>
+<td>Firmware v4.0.0 released</td>
+<td>Start of distribution of vulnerable firmware</td>
+</tr>
+<tr>
+<td>2021-03 – 2026-07</td>
+<td>Vulnerable seeds continuously generated and put into circulation</td>
+<td>Neither users nor the vendor were aware</td>
+</tr>
+<tr>
+<td>Evening of 2026-07-29 (local)</td>
+<td>Individual victim Jonathan Goodman loses 18.25 BTC over 7 minutes</td>
+<td>First public victim testimony</td>
+</tr>
+<tr>
+<td>2026-07-30 01:10–01:51 UTC</td>
+<td>Wave 1: 1,082.65 BTC / 1,196 addresses swept (41 minutes, spread across 6 blocks)</td>
+<td>3 intermediate blocks show a gap — consistent with batched broadcasting</td>
+</tr>
+<tr>
+<td>2026-07-30 (first 10 minutes)</td>
+<td>~$30 million stolen, high-value wallets hit first</td>
+<td>Chainalysis analysis</td>
+</tr>
+<tr>
+<td>2026-07-31 (~30 hours after Wave 1 ended)</td>
+<td>Coinkite publishes its first security advisory (covering Mk2/Mk3)</td>
+<td>By this point the outflow was already complete</td>
+</tr>
+<tr>
+<td>2026-07-31 09:33 EDT</td>
+<td>Fixed firmware released (Mk4/Mk5 v5.6.0+, Q v1.5.0Q+)</td>
+<td></td>
+</tr>
+<tr>
+<td>2026-08-01</td>
+<td>Coinkite expands the advisory — Mk4/Mk5/Q also affected, at ~72-bit entropy</td>
+<td>Scope of impact widens</td>
+</tr>
+<tr>
+<td>2026-08-01</td>
+<td>Galaxy Research confirms Wave 2 — cumulative 1,158.66 BTC / 2,673 addresses / ~$75.1 million</td>
+<td>7 attacker-controlled addresses</td>
+</tr>
+<tr>
+<td>2026-08-02</td>
+<td>Galaxy Research confirms Wave 3 — an additional 207.73 BTC / 1,912 addresses</td>
+<td>Targets smaller wallets, harder-to-trace pattern</td>
+</tr>
+<tr>
+<td>2026-08-02</td>
+<td>Cumulative total: 1,367.05 BTC / 4,585 addresses / ~$88.6 million</td>
+<td>Attack ongoing</td>
+</tr>
+<tr>
+<td>2026-08-02</td>
+<td>Galaxy reports roughly 600 suspected attacker addresses to federal law enforcement and compliance vendors</td>
+<td></td>
+</tr>
+<tr>
+<td>2026-08-03 (present)</td>
+<td>Stolen funds remain unmoved; investigation ongoing</td>
+<td>Time of this report&#39;s writing</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. Root Cause Analysis — Macro-Existence Checks and the Fail-Open Structure</h2>
+<h3>4.1 Anatomy of the flaw</h3>
+<p>According to analysis published by Block&#39;s Bitcoin engineering team, the flaw unfolded in the following sequence.</p>
+<pre><code>[1] Coldcard production build configuration
+    MICROPY_HW_ENABLE_RNG = 0
+    (Coinkite deliberately set this to 0 because it supplies its own hardware RNG wrapper)
+         ↓
+[2] The libngu library
+    Checks only whether the macro &quot;is defined&quot; (an #ifdef-style check)
+    Does not check whether &quot;the value is enabled&quot; (an #if-style check)
+         ↓
+[3] Resulting determination
+    Because the macro is defined, the build is not mistakenly flagged as
+    &quot;hardware RNG available&quot; — it is instead bound to MicroPython&#39;s
+    default fallback path
+         ↓
+[4] Fallback PRNG: Yasmarang
+    Seed source = chip Unique ID (UID) + timer register
+    No new entropy collected after initialization
+         ↓
+[5] 2021-03-01 commit
+    ckcc.rng_bytes (direct STM32 hardware peripheral access)
+    → ngu.random.bytes (the compromised libngu path)
+         ↓
+[6] SHA256d hashing
+    Hashing does not increase input entropy
+    2^40 inputs → at most 2^40 outputs
+</code></pre>
+<p><strong>Step 6 is the crux.</strong>Many users, and some early reporting, assumed &quot;it&#39;s hashed with SHA256, so surely it&#39;s safe&quot; — but a cryptographic hash function<strong>provides compression and diffusion, not entropy creation.</strong> If there are 2^40 candidate inputs, there are at most 2^40 candidate outputs. This is the same structural error seen in a recurring string of RNG failures since 2012 (Debian OpenSSL, Android SecureRandom, the Profanity vanity-address generator, and others).</p>
+<h3>4.2 Why it went undetected for five years</h3>
+<table>
+<thead>
+<tr>
+<th>Factor</th>
+<th>Explanation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Undetectable from output alone</td>
+<td>Yasmarang&#39;s output passes statistical randomness tests (NIST STS, Dieharder, etc.). The problem is not distribution — it is <strong>the size of the search space</strong></td>
+</tr>
+<tr>
+<td>A build-time flaw</td>
+<td>Reading the source code alone does not reveal it. It emerges from the interaction between build configuration and the library&#39;s conditional compilation</td>
+</tr>
+<tr>
+<td>The open-source paradox</td>
+<td>Because the firmware was open source, attackers could verify it just as easily as anyone else. Auditability is a bidirectional asset</td>
+</tr>
+<tr>
+<td>No reproducibility verification</td>
+<td>The release process had no <strong>cross-device entropy verification</strong> step to check whether two identical devices produce different seeds</td>
+</tr>
+<tr>
+<td>Limits of automated auditing</td>
+<td>Coinkite has stated it ran an AI-based audit of this same code weeks before the incident and did not find the flaw</td>
+</tr>
+</tbody></table>
+<h3>4.3 Observations on how the attacker may have found the flaw</h3>
+<p>Coinkite has raised the possibility that the attacker used AI to locate the flaw in the open-source firmware. At the same time, the company&#39;s own AI audit found nothing in the same code. This asymmetry is worth noting.</p>
+<p>A defender&#39;s AI audit asks a <strong>broad, purposeless question</strong>: &quot;does this code contain a vulnerability?&quot; An attacker&#39;s use of AI asks a <strong>narrow, purpose-driven question</strong>: &quot;how many total seeds can this device possibly produce?&quot; The latter is a far easier question to answer. An LLM is not an oracle that substitutes for judgment — it is a tool that substitutes for computation, and the quality of a tool&#39;s output is proportional to the specificity of the question asked of it. This is a practically useful lesson for how defenders design AI-based audits.</p>
+<p>That said, whether the attacker actually used AI remains, at this point, <strong>circumstantial inference</strong>, not a confirmed fact.</p>
+<hr>
+<h2>5. Technical Vulnerability Analysis — Quantifying the Entropy Collapse</h2>
+<h3>5.1 Vulnerability summary</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Details</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Vulnerability class</td>
+<td>CWE-331 (Insufficient Entropy), CWE-338 (Use of Cryptographically Weak PRNG)</td>
+</tr>
+<tr>
+<td>Affected products</td>
+<td>Coldcard Mk2, Mk3, Mk4, Mk5, Q</td>
+</tr>
+<tr>
+<td>Introduced</td>
+<td>2021-03-01 (commit); 2021-03-17 (v4.0.0 release)</td>
+</tr>
+<tr>
+<td>CVSS v3.1 (estimated)</td>
+<td>9.1 (Critical) — AV:N / AC:L / PR:N / UI:N / S:U / C:H / I:N / A:H</td>
+</tr>
+<tr>
+<td>Attack prerequisites</td>
+<td>No physical or logical access to the target device required</td>
+</tr>
+<tr>
+<td>Detectability</td>
+<td>Undetectable by the victim (no evidence of compromise)</td>
+</tr>
+</tbody></table>
+<h3>5.2 Scale of the entropy collapse</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Design target</th>
+<th>Effective entropy</th>
+<th>Search space</th>
+<th>Practical interpretation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mk2 / Mk3</td>
+<td>128 bits</td>
+<td>~40 bits</td>
+<td>~1.1×10^12</td>
+<td>Exhaustible in hours to days with a consumer GPU cluster</td>
+</tr>
+<tr>
+<td>Mk4 / Mk5 / Q</td>
+<td>128 bits</td>
+<td>~72 bits</td>
+<td>~4.7×10^21</td>
+<td>Impractical with current consumer equipment; theoretically within range of nation-state or well-resourced attackers</td>
+</tr>
+<tr>
+<td>Standard BIP-39 12-word seed</td>
+<td>128 bits</td>
+<td>128 bits</td>
+<td>~3.4×10^38</td>
+<td>Not exhaustible</td>
+</tr>
+</tbody></table>
+<p>Mk4/Mk5/Q fared relatively better because their secure element mixed its own entropy into the PRNG state. However, per Coinkite&#39;s own technical backgrounder, most subsequent random values drawn on these models still came from the same compromised path after that initial mixing.</p>
+<p>Some early reporting described the search space as &quot;roughly 4 billion (2^32).&quot; This figure appears to derive from Block&#39;s reference to a &quot;32-bit reseed vulnerability&quot; and should be distinguished from Coinkite&#39;s official 40-bit estimate. Either way, the conclusion is identical: <strong>it is an exhaustible search space.</strong></p>
+<h3>5.3 Collateral effects beyond seed generation</h3>
+<p>The same compromised path was also used for functions other than seed generation. Block&#39;s public materials identify the following affected functions:</p>
+<ul>
+<li>Paper-wallet private key generation</li>
+<li>Seed XOR split-mask generation</li>
+<li>Device-cloning key generation</li>
+</ul>
+<p>In other words, <strong>users who split and stored their seed via Seed XOR may also have had the split mask itself be predictable.</strong> This means the common assumption that &quot;more advanced users were safer&quot; holds only partially.</p>
+<h3>5.4 An unresolved criticism of the fail-open structure</h3>
+<p>Block characterized the Mk4/Q/Mk5 architecture as a &quot;dangerous fail-open structure.&quot; Its point is that if an exception is caught early in the boot sequence, before the reseed routine runs, the device can operate with <strong>its exposed initial state and no additional entropy.</strong> Whether this scenario actually occurs in production remains a separate matter for evaluation, and is unresolved as of this report&#39;s writing.</p>
+<p>This matters from a safe-design standpoint. A cryptographic random-number generator must be <strong>fail-closed.</strong> If it cannot obtain an entropy source, it must halt rather than return a value. A design that returns a value anyway, at reduced quality, conceals the very fact that it has failed.</p>
+<hr>
+<h2>6. Attack Chain Analysis — Offline Seed Reconstruction and On-Chain Sweeping</h2>
+<h3>6.1 Step-by-step breakdown</h3>
+<table>
+<thead>
+<tr>
+<th>Step</th>
+<th>Action</th>
+<th>Observed basis</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. Flaw identification</td>
+<td>Analysis of open-source firmware and build configuration; search-space estimation</td>
+<td>Public firmware repository</td>
+</tr>
+<tr>
+<td>2. Candidate seed enumeration</td>
+<td>Reconstruction of candidate output streams by constraining UID, timer state, and prior RNG call history</td>
+<td>Block&#39;s analysis</td>
+</tr>
+<tr>
+<td>3. Address derivation</td>
+<td>Address generation across BIP-32/BIP-39/BIP-44, 49, 84 derivation paths</td>
+<td>Standard specifications</td>
+</tr>
+<tr>
+<td>4. Balance matching</td>
+<td>Cross-referenced against public blockchain data (the UTXO set)</td>
+<td>Galaxy/Chainalysis analysis</td>
+</tr>
+<tr>
+<td>5. Prioritization</td>
+<td>High-value wallets hit first, then expanded to smaller ones</td>
+<td>~$30 million in the first 10 minutes</td>
+</tr>
+<tr>
+<td>6. Automated sweeping</td>
+<td>Identical hardcoded fee rate (30 sat/vB) across all transactions, no change outputs</td>
+<td>Galaxy&#39;s analysis — consistent with automated tooling</td>
+</tr>
+<tr>
+<td>7. Fund retention</td>
+<td>Held unspent across 7 attacker addresses (Waves 1–2)</td>
+<td>On-chain observation</td>
+</tr>
+</tbody></table>
+<h3>6.2 Traffic fingerprint</h3>
+<p>Galaxy based its assessment of automated tooling on two indicators. First, every transaction used the <strong>same hardcoded fee rate (30 sat/vB).</strong>Legitimate wallet software adjusts fees dynamically based on mempool conditions. Second,<strong>there were no change outputs.</strong> This is a sweeping pattern that moves the entire balance to a single address.</p>
+<p>This fingerprint provides a basis for future detection rules against similar attacks.</p>
+<h3>6.3 Differences between waves</h3>
+<table>
+<thead>
+<tr>
+<th>Wave</th>
+<th>Timing</th>
+<th>Scale</th>
+<th>Characteristics</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>07-30 01:10–01:51 UTC</td>
+<td>1,082.65 BTC / 1,196 addresses</td>
+<td>High-value first, uniform pattern</td>
+</tr>
+<tr>
+<td>2</td>
+<td>Confirmed 08-01</td>
+<td>Cumulative 1,158.66 BTC / 2,673 addresses</td>
+<td>Pattern similar to Wave 1; presumed same operator</td>
+</tr>
+<tr>
+<td>3</td>
+<td>Confirmed 08-02</td>
+<td>+207.73 BTC / 1,912 addresses</td>
+<td>Targets smaller wallets; more complex, harder-to-trace pattern</td>
+</tr>
+</tbody></table>
+<p>Galaxy stated that while each wave appears to be the work of a single operator, <strong>on-chain data alone cannot determine whether all three waves are the same actor.</strong> Wave 3&#39;s pattern shift leaves open two possibilities: improved tooling by the same actor, or a separate actor exploiting the same key space.</p>
+<h3>6.4 MITRE ATT&amp;CK mapping</h3>
+<table>
+<thead>
+<tr>
+<th>Tactic</th>
+<th>Technique</th>
+<th>ID</th>
+<th>Implementation in this incident</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reconnaissance</td>
+<td>Gather Victim Host Information</td>
+<td>T1592</td>
+<td>Analysis of device UID and timer characteristics</td>
+</tr>
+<tr>
+<td>Reconnaissance</td>
+<td>Search Open Technical Databases</td>
+<td>T1596</td>
+<td>Querying the public blockchain UTXO set</td>
+</tr>
+<tr>
+<td>Reconnaissance</td>
+<td>Search Open Websites/Domains</td>
+<td>T1593</td>
+<td>Analysis of the open-source firmware repository</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>Develop Capabilities: Malware</td>
+<td>T1587.001</td>
+<td>Building automated sweeping tooling</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>Brute Force</td>
+<td>T1110</td>
+<td>Exhaustive search of the collapsed seed space</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>Unsecured Credentials: Private Keys</td>
+<td>T1552.004</td>
+<td>Deriving private keys from reconstructed seeds</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>Data from Information Repositories</td>
+<td>T1213</td>
+<td>Collecting on-chain balance data</td>
+</tr>
+<tr>
+<td>Impact</td>
+<td>Financial Theft</td>
+<td>T1657</td>
+<td>Sweeping bitcoin</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. Impact Quantification — Three Waves of Attack</h2>
+<h3>7.1 Scale of losses</h3>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Cumulative amount stolen</td>
+<td>1,367.05 BTC</td>
+</tr>
+<tr>
+<td>USD equivalent</td>
+<td>~$88.6 million</td>
+</tr>
+<tr>
+<td>KRW equivalent (at ₩1,390/USD)</td>
+<td>~₩123.2 billion</td>
+</tr>
+<tr>
+<td>Addresses affected</td>
+<td>4,585</td>
+</tr>
+<tr>
+<td>Duration of Wave 1</td>
+<td>41 minutes</td>
+</tr>
+<tr>
+<td>Single largest loss</td>
+<td>~$1.8 million</td>
+</tr>
+<tr>
+<td>Publicly reported individual loss</td>
+<td>18.25 BTC (~CAD 1.6 million)</td>
+</tr>
+<tr>
+<td>Funds recovered</td>
+<td>0 (entirety held, unmoved, in attacker addresses)</td>
+</tr>
+<tr>
+<td>Delay between vendor awareness and disclosure</td>
+<td>~30 hours</td>
+</tr>
+</tbody></table>
+<h3>7.2 Victim profile</h3>
+<p>Per Galaxy&#39;s analysis, the stolen assets had an <strong>average dormancy of approximately 3.18 years.</strong>This suggests the victim population is concentrated among<strong>long-term individual holders</strong>, not institutions.</p>
+<p>This profile carries three implications.</p>
+<ol>
+<li><strong>Detection lag</strong> — many users had not opened their wallets in years, which substantially delayed awareness of the theft.</li>
+<li><strong>An inverse correlation between security awareness and victimhood</strong> — a relatively security-conscious cohort, who distrusted exchanges and chose self-custody, ended up the victims instead.</li>
+<li><strong>Irrecoverability</strong> — self-custodied personal assets carry neither deposit insurance nor an exchange&#39;s reserve/insurance backstop.</li>
+</ol>
+<h3>7.3 Ongoing risk</h3>
+<p>Galaxy warned that the attack is <strong>ongoing</strong>, and that every address generated from a vulnerable seed will eventually be emptied. That Wave 3 targeted smaller wallets means the attacker is <strong>lowering the economic threshold and working through the remaining pool of targets.</strong> The assumption &quot;my wallet&#39;s balance is too small to be a priority&quot; no longer holds.</p>
+<hr>
+<h2>8. Survivor Analysis — What Kept Wallets Safe</h2>
+<h3>8.1 Conditions for survival</h3>
+<table>
+<thead>
+<tr>
+<th>Condition</th>
+<th>Protection level</th>
+<th>Basis</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>50–98 independent dice rolls entered</td>
+<td>Safe (the RNG flaw alone poses no risk)</td>
+<td>Dice input alone contributes 128+ bits</td>
+</tr>
+<tr>
+<td>99+ independent dice rolls</td>
+<td>Safe (contributes ~256 bits)</td>
+<td>Same as above</td>
+</tr>
+<tr>
+<td>Fewer than 50 dice rolls, or unable to recall</td>
+<td>At risk — migration required</td>
+<td>Per Coinkite&#39;s advisory</td>
+</tr>
+<tr>
+<td>A strong, unique BIP-39 passphrase</td>
+<td>Reduces immediate exposure, but does not solve the underlying problem</td>
+<td>Creates a separate wallet unreachable from the seed words alone</td>
+</tr>
+<tr>
+<td>Seed generated before the vulnerable firmware</td>
+<td>Safe</td>
+<td>Prior to v4.0.0</td>
+</tr>
+<tr>
+<td>Seed newly generated on fixed firmware</td>
+<td>Safe</td>
+<td>Device-generated entropy alone is now sufficient</td>
+</tr>
+<tr>
+<td>Multi-sig (all keys generated on vulnerable devices)</td>
+<td>At risk</td>
+<td>Every key is affected by the same flaw</td>
+</tr>
+<tr>
+<td>Multi-sig (some keys generated on other vendors&#39; devices)</td>
+<td>Conditionally safe</td>
+<td>Depends on the threshold configuration</td>
+</tr>
+</tbody></table>
+<p>The crux is that <strong>dice rolls were combined with device-generated entropy via hashing, and this user-supplied entropy was unaffected by the firmware flaw.</strong></p>
+<h3>8.2 Implications — reassessing user-supplied entropy</h3>
+<p>The dice-roll feature had, until now, been treated as an &quot;optional advanced feature for paranoid users.&quot; This incident shows it was <strong>the one line of defense that actually worked once vendor trust collapsed.</strong>At the same time, as Casa&#39;s leadership has pointed out, expecting ordinary investors to roll dice to supplement their seed is unrealistic. This exposes the<strong>gap between usability and security</strong> in stark terms, and closing that gap through product design — not user education — is the industry&#39;s task.</p>
+<p>The practical recommendation is clear. <strong>User-supplied entropy should shift from an optional feature to a default.</strong> At minimum, it is reasonable to make it a mandatory step when generating seeds intended for high-value custody.</p>
+<hr>
+<h2>9. Response and Migration — What the Patch Cannot Fix</h2>
+<h3>9.1 Fixed firmware versions</h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Release track</th>
+<th>Fixed version</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mk2 / Mk3</td>
+<td>Standard</td>
+<td>v4.2.0 or later</td>
+</tr>
+<tr>
+<td>Mk4 / Mk5</td>
+<td>Standard</td>
+<td>v5.6.0 or later</td>
+</tr>
+<tr>
+<td>Mk4 / Mk5</td>
+<td>Edge</td>
+<td>v6.6.0X or later</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>Standard</td>
+<td>v1.5.0Q or later</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>Edge</td>
+<td>v6.6.0QX or later</td>
+</tr>
+</tbody></table>
+<p><strong>Note:</strong> Standard and Edge are separate tracks. Do not assume a build is fixed simply because its Edge version number is higher than the standard track&#39;s.</p>
+<h3>9.2 Limits of the patch</h3>
+<blockquote>
+<p>A firmware update does not change or restore existing seeds.</p>
+</blockquote>
+<p>This single sentence is the whole story of this incident&#39;s remediation. The vulnerability lives not in the device, but in <strong>the number the device already drew.</strong>Accordingly, the following responses are<strong>all invalid</strong>:</p>
+<table>
+<thead>
+<tr>
+<th>Invalid response</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Updating firmware but continuing to use the existing wallet</td>
+<td>The seed itself remains vulnerable</td>
+</tr>
+<tr>
+<td>Restoring the vulnerable seed into a different vendor&#39;s wallet</td>
+<td>The attacker searches the seed space, not the device</td>
+</tr>
+<tr>
+<td>Re-transcribing the vulnerable seed onto a new paper/metal backup</td>
+<td>The seed value itself is the problem</td>
+</tr>
+<tr>
+<td>Moving funds to a different address (derivation index)</td>
+<td>Every address derived from the same seed is exposed</td>
+</tr>
+<tr>
+<td>Splitting assets into smaller amounts</td>
+<td>Wave 3 is actively targeting small amounts</td>
+</tr>
+</tbody></table>
+<h3>9.3 Correct migration procedure</h3>
+<ol>
+<li>Confirm your model and release track, and install the corresponding <strong>fixed firmware first</strong>.</li>
+<li>Verify the fixed firmware installation <strong>directly from the version string shown on-screen</strong>.</li>
+<li><strong>Generate a completely new seed.</strong> The fixed firmware&#39;s device-generated entropy alone is sufficient; dice rolls are optional.</li>
+<li>Back up the new seed and passphrase. <strong>Store the passphrase physically separate from the seed words.</strong>5. Power-cycle the device, then<strong>verify the wallet fingerprint and receive address on the device&#39;s own screen</strong>.</li>
+<li>Send a <strong>small test transaction</strong> first and confirm receipt.</li>
+<li>Transfer the remaining balance in full.</li>
+<li>Do not discard the old backup until migration is confirmed complete.</li>
+</ol>
+<p>Coinkite and multiple research organizations consistently emphasize <strong>do not rush.</strong> Migration mistakes made under pressure — address typos, incorrect backups, skipped verification — have repeatedly been observed to cause losses larger than the hack itself.</p>
+<h3>9.4 Assessment of the vendor&#39;s response</h3>
+<table>
+<thead>
+<tr>
+<th>Action</th>
+<th>Assessment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Fixed firmware shipped across all model tracks</td>
+<td>Appropriate — rapid deployment</td>
+</tr>
+<tr>
+<td>Full disposal of unshipped inventory</td>
+<td>Appropriate — cuts off supply-chain contamination</td>
+</tr>
+<tr>
+<td>Individual email notification to shipped customers</td>
+<td>Appropriate but limited reach</td>
+</tr>
+<tr>
+<td>~30-hour delay before the first public advisory</td>
+<td><strong>Inadequate</strong> — the advisory came after Wave 1 had ended</td>
+</tr>
+<tr>
+<td>Initial advisory classified Mk4/Q/Mk5 as &quot;not affected,&quot; corrected on 8/1</td>
+<td><strong>Inadequate</strong> — the initial scoping error distorted user decision-making</td>
+</tr>
+<tr>
+<td>Explicit statement of unaffected products (TAPSIGNER/OPENDIME/SATSCARD)</td>
+<td>Appropriate</td>
+</tr>
+</tbody></table>
+<p>The 30-hour delay is the single point in this response that deserves the most criticism. That said, because the attack <strong>preceded</strong> the disclosure, even immediate disclosure likely could not have stopped Wave 1. The real problem is that many Wave 2 and Wave 3 victims lost their window to act during that delay.</p>
+<hr>
+<h2>10. Industry Implications — Re-Examining the Trust Model</h2>
+<h3>10.1 Assumptions that collapsed</h3>
+<table>
+<thead>
+<tr>
+<th>Industry&#39;s implicit assumption</th>
+<th>Refuted by this incident</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>A hardware RNG can be trusted</td>
+<td>It can be disabled by a single build-configuration line, and the fact can be concealed</td>
+</tr>
+<tr>
+<td>Open-source firmware is sufficiently audited</td>
+<td>No one found this in five years of publicly available code</td>
+</tr>
+<tr>
+<td>Physical isolation guarantees key safety</td>
+<td>Isolation was perfect, and the assets still disappeared</td>
+</tr>
+<tr>
+<td>Cold storage is safer than hot wallets</td>
+<td>This comparison becomes meaningless in the face of a generation-stage flaw</td>
+</tr>
+<tr>
+<td>Self-custody eliminates exchange risk</td>
+<td>It merely trades exchange risk for vendor risk</td>
+</tr>
+</tbody></table>
+<h3>10.2 Structural lessons</h3>
+<p><strong>First, the minimum unit of trust is not the device but the moment.</strong>A hardware wallet&#39;s security assessment should not ask &quot;is this device safe?&quot; but &quot;was the moment this key was created safe?&quot; This changes the very framing of asset-custody due diligence.<strong>Second, a random-number generator must be fail-closed.</strong>A design that returns a low-quality value when it fails to secure an entropy source conceals the failure itself. This is precisely why NIST SP 800-90B&#39;s continuous health-test requirements exist.<strong>Third, auditability does not mean an audit happened.</strong>Open source invites the collective illusion that &quot;someone must have reviewed this.&quot; Whether a review actually took place is a separate fact, and anything unverified should be treated as not having happened.<strong>Fourth, transparency is a double-edged sword.</strong>The public ledger is both the foundation for audit and verification, and the attacker&#39;s free reconnaissance infrastructure. Privacy techniques (CoinJoin, avoiding address reuse) had real defensive value in this incident.<strong>Fifth, vendor concentration is a new single point of failure.</strong>When users in a decentralized system converge on a small number of hardware vendors, decentralization is preserved at the protocol layer while<strong>systemic risk accumulates at the key-generation layer.</strong> This incident is the first large-scale case of that risk materializing.</p>
+<h3>10.3 No issue was found at the protocol layer</h3>
+<p>One further point worth confirming: no flaw of any kind was found in the Bitcoin protocol, the secp256k1 curve, or the BIP-32/39 standards. The failure occurred entirely at the <strong>implementation layer</strong>, and specifically within one vendor&#39;s build configuration. Trezor, Ledger, and Block (Bitkey) have each confirmed their own products are unaffected.</p>
+<p>This distinction matters for market communication. &quot;Bitcoin was hacked&quot; is inaccurate framing; the accurate framing is &quot;a specific hardware-wallet manufacturer&#39;s key-generation implementation failed.&quot;</p>
+<hr>
+<h2>11. Korea Perspective — Regulatory Alignment and Recommendations for Domestic Exchanges</h2>
+<h3>11.1 A blind spot in current domestic regulation</h3>
+<p>The Virtual Asset User Protection Act (effective July 19, 2024) requires virtual asset service providers (VASPs) to hold <strong>at least 80% of the economic value of users&#39; virtual assets in cold wallets.</strong> This is an increase from the 70% threshold under the ISMS-certification requirements of the prior Act on Reporting and Using Specified Financial Transaction Information. Providers must calculate economic value and maintain this ratio on a monthly basis.</p>
+<p>In February 2026, in a written response to the National Assembly&#39;s Political Affairs Committee, the Financial Services Commission (FSC) stated it would <strong>consider raising the cold-wallet custody ratio to around 100%</strong> as part of the subordinate regulations for the &quot;Phase 2&quot; Digital Asset Basic Act. It is also reportedly considering regulating digital-asset custody as a separate licensed business.</p>
+<p>The problem is that this entire regulatory framework <strong>governs only the isolation premise.</strong></p>
+<table>
+<thead>
+<tr>
+<th>Regulatory metric</th>
+<th>What it governs</th>
+<th>Would it have defended against this incident?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>80% cold-wallet custody ratio</td>
+<td>Where the asset is located</td>
+<td>No</td>
+</tr>
+<tr>
+<td>100% cold-wallet custody ratio (under consideration)</td>
+<td>Where the asset is located</td>
+<td><strong>No</strong></td>
+</tr>
+<tr>
+<td>ISMS certification</td>
+<td>General management systems</td>
+<td>Partially</td>
+</tr>
+<tr>
+<td>Reserves/insurance (₩3 billion for KRW-market operators, ₩0.5 billion for others)</td>
+<td>Post-hoc compensation</td>
+<td>Response only after the fact</td>
+</tr>
+<tr>
+<td>Key-generation entropy quality standards</td>
+<td><strong>Does not exist</strong></td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h3>11.2 Recommendations for domestic exchanges and VASPs</h3>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Action</th>
+<th>Detail</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Immediate</td>
+<td><strong>Full audit of key-generation provenance</strong></td>
+<td>Inventory when, on what device/firmware version/HSM, every operational cold-wallet key was generated. If there is any history of using Coldcard-family devices, isolate and migrate immediately</td>
+</tr>
+<tr>
+<td>Immediate</td>
+<td><strong>Check for consumer hardware wallets used on operational assets</strong></td>
+<td>Consumer hardware wallets are not designed for institutional custody. Confirm whether any were used even temporarily or for emergency purposes</td>
+</tr>
+<tr>
+<td>1 week</td>
+<td><strong>Verify entropy-source redundancy</strong></td>
+<td>Check whether HSMs rely on a single TRNG. Combine at least two independent sources via XOR so that if either fails, the other still preserves security</td>
+</tr>
+<tr>
+<td>1 week</td>
+<td><strong>Establish key-generation provenance record-keeping</strong></td>
+<td>Preserve signed logs of generation date/time, device identifier, firmware version, entropy source, and witnesses for every key. A prerequisite for post-hoc impact scoping</td>
+</tr>
+<tr>
+<td>2 weeks</td>
+<td><strong>Audit multi-sig/MPC configurations for heterogeneity</strong></td>
+<td>If every key in a threshold configuration was generated from the same vendor, same firmware, and same library, redundancy is meaningless. Distribute across vendors, architectures, and entropy sources</td>
+</tr>
+<tr>
+<td>2 weeks</td>
+<td><strong>Introduce cross-device entropy verification procedures</strong></td>
+<td>Incorporate statistical-independence verification of keys generated from two or more identical-model devices into the key-generation SOP</td>
+</tr>
+<tr>
+<td>1 month</td>
+<td><strong>Re-verify HSM certification requirements</strong></td>
+<td>Confirm the validity and scope of certifications such as FIPS 140-2/140-3 Level 3 or CC EAL4+, and whether RNG is included in the certified scope</td>
+</tr>
+<tr>
+<td>1 month</td>
+<td><strong>Firmware SBOM and change management</strong></td>
+<td>Obtain an SBOM for every component of the custody infrastructure. Mandate third-party security audits and regression testing before firmware updates</td>
+</tr>
+<tr>
+<td>Quarterly</td>
+<td><strong>Establish a key-rotation policy</strong></td>
+<td>Eliminate indefinitely used keys. Regenerate with new entropy sources during periodic rotation</td>
+</tr>
+<tr>
+<td>Ongoing</td>
+<td><strong>Strengthen on-chain anomalous-withdrawal detection rules</strong></td>
+<td>Alert on sweeping fingerprints such as hardcoded uniform fee rates, absence of change outputs, and full transfers from long-dormant addresses</td>
+</tr>
+</tbody></table>
+<h3>11.3 Policy recommendations for regulators</h3>
+<ol>
+<li><p><strong>Extend regulation from storage location to the key lifecycle.</strong>The cold-wallet ratio is a necessary but not sufficient condition. The subordinate regulations under the Phase 2 Act should include<strong>integrity requirements covering the entire key generation, backup, rotation, and disposal lifecycle</strong>, independent of raising the storage ratio.</p>
+</li>
+<li><p><strong>Codify RNG requirements when custody becomes a separately licensed business.</strong> In the custody-licensing framework the FSC is reportedly considering, entry requirements should be examined for explicitly mandating the use of certified random-number generators (compliant with NIST SP 800-90A/B/C or an equivalent standard).</p>
+</li>
+<li><p><strong>Consider mandatory disclosure requirements for hardware-wallet vulnerabilities.</strong> A policy requiring domestic hardware-wallet vendors to notify users within a defined window (e.g., 24 hours) upon discovery of a critical vulnerability. This incident&#39;s 30-hour delay demonstrates the need.</p>
+</li>
+<li><p><strong>Provide information disclosure for self-custody users.</strong> Self-custody carries neither deposit insurance nor reserve-based compensation. Exchanges should be required to disclose this fact, along with the existence of vendor risk, at the point of withdrawal.</p>
+</li>
+<li><p><strong>Assess domestic distribution.</strong> There is currently no public data on how widely Coldcard has been distributed in Korea, or whether any domestic losses have occurred. A fact-finding effort by KISA and the Financial Security Institute, along with Korean-language advisories, is needed.</p>
+</li>
+</ol>
+<h3>11.4 Characteristics specific to the Korean market</h3>
+<p>The Korean market is known for high exchange concentration centered on the five major KRW-market exchanges, and for relatively low self-custody rates driven by withdrawal restrictions to personal wallets under the Travel Rule. This reduces direct exposure to this particular incident, but leaves two risks:</p>
+<ul>
+<li><strong>Key-generation risk concentrates within exchange custody infrastructure.</strong> Risk that would have remained an isolated individual incident if dispersed among individuals becomes systemic risk when concentrated at an exchange.</li>
+<li><strong>As the corporate market opens and institutional custody expands</strong>, if custody providers&#39; key-management standards are not established, an incident of the same type could recur at a far larger scale.</li>
+</ul>
+<hr>
+<h2>12. Recommendations for Bitcoin Investors</h2>
+<h3>12.1 Immediate triage procedure for Coldcard owners</h3>
+<pre><code>Q1. Was your wallet seed generated on a Coldcard?
+    No → Not affected (but check Q5)
+    Yes ↓
+
+Q2. Was the seed generated after March 17, 2021 (firmware v4.0.0 release)?
+    No → Not affected
+    Don&#39;t know → Proceed as if affected
+    Yes ↓
+
+Q3. Did you enter 50 or more independent, private dice rolls when generating the seed?
+    Yes (certain) → The RNG flaw alone does not pose a risk. Seed XOR users, however, see 12.3
+    No / can&#39;t remember ↓
+
+Q4. Immediate migration required. Follow the procedure in Section 9.3.
+
+Q5. Have you ever used the paper-wallet generation, Seed XOR splitting, or device-cloning features?
+    Yes → Those outputs may also have been predictable. A separate migration is required
+</code></pre>
+<p><strong>A note for passphrase users:</strong> a strong, unique BIP-39 passphrase greatly reduces immediate exposure, but it does not restore a vulnerable seed. Coinkite recommends that passphrase users migrate as soon as practically possible as well.</p>
+<h3>12.2 Recommendations for general Bitcoin investors</h3>
+<table>
+<thead>
+<tr>
+<th>Recommendation</th>
+<th>Rationale</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Distribute across vendors</strong></td>
+<td>Single-vendor dependence is the systemic risk this incident demonstrated. If your holdings are large, spread them across devices from different manufacturers and architectures</td>
+</tr>
+<tr>
+<td><strong>Build multi-sig from heterogeneous sources</strong></td>
+<td>If all three keys in a 2-of-3 configuration came from the same model and firmware, redundancy provides zero benefit</td>
+</tr>
+<tr>
+<td><strong>Make user-supplied entropy a habit</strong></td>
+<td>Combine entropy the vendor does not control — dice rolls, coin flips — into your seed. At least 50 rolls</td>
+</tr>
+<tr>
+<td><strong>Use a passphrase, but store it separately</strong></td>
+<td>Keep seed words and passphrase in physically different locations</td>
+</tr>
+<tr>
+<td><strong>Avoid address reuse</strong></td>
+<td>Weakens the structure by which the public ledger becomes an attacker&#39;s reconnaissance asset</td>
+</tr>
+<tr>
+<td><strong>Check your balance periodically</strong></td>
+<td>This incident&#39;s victims averaged 3.18 years of dormancy. Establish a routine to check balances at least once a year</td>
+</tr>
+<tr>
+<td><strong>Subscribe to vendor security-advisory channels</strong></td>
+<td>The 30-hour disclosure delay was itself a problem, but users who never saw the advisory lost days more</td>
+</tr>
+<tr>
+<td><strong>Tier your custody approach to scale</strong></td>
+<td>Small amounts: prioritize convenience. Large amounts: multi-sig, heterogeneous vendors, user entropy</td>
+</tr>
+<tr>
+<td><strong>Understand the scope of self-custody responsibility</strong></td>
+<td>Self-custodied assets carry neither deposit insurance nor an exchange&#39;s reserve/insurance backstop</td>
+</tr>
+</tbody></table>
+<h3>12.3 What not to do</h3>
+<table>
+<thead>
+<tr>
+<th>Prohibited action</th>
+<th>Reason</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Treating &quot;restoring a vulnerable seed into another wallet app/device&quot; as having &quot;moved&quot; it</td>
+<td>The seed value itself remains within the attacker&#39;s search space</td>
+</tr>
+<tr>
+<td>Postponing migration because the amount is small</td>
+<td>Wave 3 targeted wallets worth thousands of dollars</td>
+</tr>
+<tr>
+<td>Making large transfers in a panic without verification</td>
+<td>Migration mistakes have repeatedly caused losses larger than the hack itself</td>
+</tr>
+<tr>
+<td>Providing your seed to a third party claiming to offer a &quot;recovery service&quot;</td>
+<td>The period right after an incident is peak season for secondary phishing. Never give your seed to anyone, under any circumstances</td>
+</tr>
+<tr>
+<td>Skipping firmware verification before generating a new seed</td>
+<td>Generating a new seed on vulnerable firmware simply produces another vulnerable seed</td>
+</tr>
+</tbody></table>
+<h3>12.4 Response procedure for domestic (Korean) victims</h3>
+<ol>
+<li><strong>Preserve on-chain evidence</strong> — record the transaction ID(s) of the loss, the time (UTC), sending and receiving addresses, and amounts. Also capture screenshots from a block explorer.</li>
+<li><strong>Report to law enforcement</strong> — the National Police Agency&#39;s Cyber Investigation Bureau or the cyber-investigation unit of the relevant local police station. International cooperation is often required, so the timing of the initial report matters.</li>
+<li><strong>Report to on-chain analytics firms</strong> — Galaxy Research, Chainalysis, and others are building databases of attacker addresses. Providing victim-address information contributes to broader tracing efforts.</li>
+<li><strong>Request exchange freezes</strong> — pre-register addresses with the compliance channels of major domestic and international exchanges in case the funds flow into an exchange. Because the funds currently remain unmoved, this measure has real practical value.</li>
+<li><strong>Prepare tax documentation</strong> — the tax treatment of theft losses varies case by case, and records of asset movement plus proof of theft should be preserved. Specific determinations require consultation with a tax professional.</li>
+</ol>
+<p>This section is general information, not legal advice. Legal responses to individual cases should be discussed with an attorney.</p>
+<hr>
+<h2>13. Detection, Response, and Prevention Checklist</h2>
+<h3>13.1 Individual users</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Confirm the manufacturer, model, and firmware version of hardware wallets you own</li>
+<li><input disabled="" type="checkbox"> Confirm the generation time and generating device for each seed</li>
+<li><input disabled="" type="checkbox"> Confirm whether user-supplied entropy (e.g., dice rolls) was used</li>
+<li><input disabled="" type="checkbox"> If applicable: install fixed firmware → generate a new seed → send a small test → transfer full balance</li>
+<li><input disabled="" type="checkbox"> Separately check any Seed XOR, paper-wallet, or device-cloning outputs</li>
+<li><input disabled="" type="checkbox"> Set up block-explorer balance alerts</li>
+<li><input disabled="" type="checkbox"> Subscribe to vendor security-advisory channels</li>
+</ul>
+<h3>13.2 Exchanges and custody providers</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Inventory the generation provenance of every cold-wallet key</li>
+<li><input disabled="" type="checkbox"> Investigate any history of using consumer hardware wallets for operational assets</li>
+<li><input disabled="" type="checkbox"> Confirm whether HSM certification scope includes RNG</li>
+<li><input disabled="" type="checkbox"> Verify a multi-independent-entropy-source combination architecture</li>
+<li><input disabled="" type="checkbox"> Audit vendor heterogeneity across multi-sig/MPC configurations</li>
+<li><input disabled="" type="checkbox"> Incorporate cross-device entropy verification into the key-generation SOP</li>
+<li><input disabled="" type="checkbox"> Obtain a firmware SBOM and establish a third-party audit process prior to updates</li>
+<li><input disabled="" type="checkbox"> Deploy sweeping-fingerprint-based anomalous-withdrawal detection rules</li>
+<li><input disabled="" type="checkbox"> Establish and enforce a key-rotation policy</li>
+<li><input disabled="" type="checkbox"> Define a user-notification SLA for incidents (24 hours recommended)</li>
+</ul>
+<h3>13.3 Hardware-wallet manufacturers</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Redesign the RNG path to be fail-closed (halt operation if entropy acquisition fails)</li>
+<li><input disabled="" type="checkbox"> Add tests that verify the interaction between build configuration and library conditional compilation</li>
+<li><input disabled="" type="checkbox"> Incorporate cross-device seed-independence verification into the release gate</li>
+<li><input disabled="" type="checkbox"> Implement NIST SP 800-90B continuous health testing</li>
+<li><input disabled="" type="checkbox"> Consider converting user-supplied entropy input from optional to default</li>
+<li><input disabled="" type="checkbox"> Build an emergency vulnerability-notification system (multi-channel, given the limits of email reach)</li>
+<li><input disabled="" type="checkbox"> Provide an offline self-diagnosis tool for users</li>
+</ul>
+<hr>
+<h2>14. Conclusion</h2>
+<p>This incident shifts the focus of cryptocurrency security discourse <strong>from storage to generation.</strong></p>
+<p>Over the past decade, the industry concentrated its resources on improving &quot;where you keep it&quot; — from hot wallets to cold wallets, from single signatures to multi-sig, from self-custody to regulated custody. Korean regulation, too, has developed around the single metric of the cold-wallet custody ratio. That direction was correct in itself, and it genuinely prevented countless incidents.</p>
+<p>But this incident revealed that all of that improvement <strong>rested on a single, unverified premise:</strong> that the key was made unguessable in the first place. That premise collapsed with a single build-configuration line, went unnoticed for five years, and as a result, $88.6 million disappeared from perfectly isolated devices.</p>
+<p>Four points summarize this:</p>
+<ol>
+<li><strong>Cold storage protects the key, but it does not guarantee the key&#39;s quality.</strong> Storage regulation must be complemented by generation regulation.</li>
+<li><strong>A random-number generator must never fail silently.</strong> A fail-open RNG conceals the very fact of its failure, which is more dangerous than the failure itself.</li>
+<li><strong>Auditability is not an audit.</strong> What has not been verified should be treated as not having happened.</li>
+<li><strong>Decentralization must be evaluated layer by layer.</strong> Even when the protocol is decentralized, systemic risk persists if the key-generation layer is concentrated among a handful of vendors.</li>
+</ol>
+<p>&quot;Don&#39;t trust, verify&quot; is one of Bitcoin&#39;s oldest principles. This incident shows that the principle must be applied not only to the protocol, but also to <strong>how one&#39;s own key was made</strong> — and most users have no means of verifying that. Providing that means is the next task for manufacturers and regulators alike.</p>
+<hr>
+<h2>15. References</h2>
+<ol>
+<li>Coinkite. (2026). <em>COLDCARD Security Advisory — Seed Generation</em>. Coinkite Blog. <a href="https://blog.coinkite.com/coldcard-mk3-seed-generation-warning/">https://blog.coinkite.com/coldcard-mk3-seed-generation-warning/</a></li>
+<li>Coinkite. (2026). <em>Technical Deep Dive into the Entropy Issue</em>. Coinkite Blog. <a href="https://blog.coinkite.com/entropy-technical-backgrounder/">https://blog.coinkite.com/entropy-technical-backgrounder/</a></li>
+<li>CoinDesk. (2026, August 1). <em>How bitcoin cold wallets lost $70 million in an attack that never touched the devices</em>. <a href="https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices">https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices</a></li>
+<li>CoinDesk. (2026, August 2). <em>Bitcoin cold-wallet attack spreads to 4,500 addresses as losses near $89 million</em>. <a href="https://www.coindesk.com/tech/2026/08/02/bitcoin-cold-wallet-attack-spreads-to-4-500-addresses-as-losses-near-usd89-million">https://www.coindesk.com/tech/2026/08/02/bitcoin-cold-wallet-attack-spreads-to-4-500-addresses-as-losses-near-usd89-million</a></li>
+<li>Decrypt. (2026). <em>Coldcard Bitcoin Exploit Balloons to $88 Million as Attackers Keep Draining Wallets</em>. <a href="https://decrypt.co/374817/coldcard-bitcoin-exploit-88-million-attackers-draining-wallets">https://decrypt.co/374817/coldcard-bitcoin-exploit-88-million-attackers-draining-wallets</a></li>
+<li>The Hacker News. (2026, August). <em>Coldcard Hardware Wallet Flaw Linked to $70 Million Bitcoin Theft</em>. <a href="https://thehackernews.com/2026/08/coldcard-hardware-wallet-flaw-linked-to.html">https://thehackernews.com/2026/08/coldcard-hardware-wallet-flaw-linked-to.html</a></li>
+<li>BleepingComputer. (2026). <em>COLDCARD wallet RNG flaw likely linked to $88 million Bitcoin theft</em>. <a href="https://www.bleepingcomputer.com/news/security/coldcard-wallet-rng-flaw-likely-linked-to-88-million-bitcoin-theft/">https://www.bleepingcomputer.com/news/security/coldcard-wallet-rng-flaw-likely-linked-to-88-million-bitcoin-theft/</a></li>
+<li>Tech Times. (2026, July 31). <em>Coldcard Hardware Wallet Hacked via Firmware Bug That Bypassed RNG for Five Years</em>. <a href="https://www.techtimes.com/articles/322392/20260731/coldcard-hardware-wallet-hacked-via-firmware-bug-that-bypassed-rng-five-years.htm">https://www.techtimes.com/articles/322392/20260731/coldcard-hardware-wallet-hacked-via-firmware-bug-that-bypassed-rng-five-years.htm</a></li>
+<li>crypto.news. (2026). <em>A build error in Coldcard&#39;s firmware drained $38 million in bitcoin in 25 minutes</em>. <a href="https://crypto.news/coldcard-firmware-bug-drains-38-million-bitcoin/">https://crypto.news/coldcard-firmware-bug-drains-38-million-bitcoin/</a></li>
+<li>Bitcoin Magazine. (2026). <em>Coinkite Releases Fixed Firmware After Coldcard Bug; AI Likely Involved In The Breach</em>. <a href="https://bitcoinmagazine.com/business/coinkite-releases-fixed-firmware-after-coldcard-bug-ai-likely-involved-in-the-hack">https://bitcoinmagazine.com/business/coinkite-releases-fixed-firmware-after-coldcard-bug-ai-likely-involved-in-the-hack</a></li>
+<li>The Crypto Times. (2026, August 1). <em>Coldcard Hack Hits $75M After Alleged Second Attack Wave: Galaxy Research</em>. <a href="https://www.cryptotimes.io/2026/08/01/coldcard-hack-hits-75m-after-alleged-second-attack-wave-galaxy-research/">https://www.cryptotimes.io/2026/08/01/coldcard-hack-hits-75m-after-alleged-second-attack-wave-galaxy-research/</a></li>
+<li>TechSpot. (2026). <em>A Coldcard firmware flaw let hackers drain $70 million in Bitcoin in 41 minutes</em>. <a href="https://www.techspot.com/news/113322-coldcard-firmware-flaw-hackers-drain-70-million-bitcoin.html">https://www.techspot.com/news/113322-coldcard-firmware-flaw-hackers-drain-70-million-bitcoin.html</a></li>
+<li>PrivacyGuides. (2026, August 3). <em>Nearly 1,400 Bitcoin Hacked from Coldcard Wallets</em>. <a href="https://www.privacyguides.org/news/2026/08/03/nearly-1400-bitcoin-hacked-from-coldcard-wallets/">https://www.privacyguides.org/news/2026/08/03/nearly-1400-bitcoin-hacked-from-coldcard-wallets/</a></li>
+<li>247wallst.com. (2026, August 1). <em>Coldcard Hacked for $70M: How Do You Keep Bitcoin Safe if Cold Wallets Can Be Hacked?</em> <a href="https://247wallst.com/investing/cryptocurrency/2026/08/01/coldcard-hacked-for-70m-how-do-you-keep-bitcoin-safe-if-cold-wallets-can-be-hacked/">https://247wallst.com/investing/cryptocurrency/2026/08/01/coldcard-hacked-for-70m-how-do-you-keep-bitcoin-safe-if-cold-wallets-can-be-hacked/</a></li>
+<li>Financial Services Commission (Korea). (2023). <em>Press Release on the Draft Enforcement Decree of the &quot;Act on the Protection of Virtual Asset Users.&quot;</em> <a href="https://www.fsc.go.kr/no010101/81214">https://www.fsc.go.kr/no010101/81214</a></li>
+<li>News1. (2026, February 20). <em>&quot;FSC Reviewing Raising Exchange Cold-Wallet Custody Ratio to 100%.&quot;</em> <a href="https://www.news1.kr/finance/blockchain-fintech/6077484">https://www.news1.kr/finance/blockchain-fintech/6077484</a></li>
+<li>Decenter. (2026). <em>&quot;FSC: &#39;Reviewing a 100% Cold-Wallet Custody Ratio Under the Phase 2 Act.&#39;&quot;</em> <a href="https://www.decenter.kr/article/20010694">https://www.decenter.kr/article/20010694</a></li>
+<li>Etoday. (2026). <em>&quot;FSC: &#39;Digital Asset Basic Act as Swiftly as Possible&#39; — Tied to Opening the Corporate Market.&quot;</em> <a href="https://www.etoday.co.kr/news/view/2606627">https://www.etoday.co.kr/news/view/2606627</a></li>
+<li>Blockmedia. (2025, January 16). <em>&quot;Digital Asset Cold-Wallet Custody Ratio Raised to 80%; Operational Approaches Vary by Exchange.&quot;</em> <a href="https://www.blockmedia.co.kr/archives/843516">https://www.blockmedia.co.kr/archives/843516</a></li>
+<li>TheElec. (2025, December 10). <em>&quot;Upbit Keeps Over 98% in Cold Wallets for Better Security.&quot;</em> <a href="https://www.thelec.kr/news/articleView.html?idxno=45132">https://www.thelec.kr/news/articleView.html?idxno=45132</a></li>
+</ol>
+<hr>
+<h2>16. Appendix A — Impact Scope and Fixed-Firmware Cross-Reference Table</h2>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Affected firmware (per Coinkite advisory)</th>
+<th>Effective entropy</th>
+<th>Fixed version (Standard)</th>
+<th>Fixed version (Edge)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mk2</td>
+<td>v4.0.1 – v4.1.9</td>
+<td>~40 bits</td>
+<td>v4.2.0 or later</td>
+<td>Not applicable</td>
+</tr>
+<tr>
+<td>Mk3</td>
+<td>v4.0.1 – v4.1.9</td>
+<td>~40 bits</td>
+<td>v4.2.0 or later</td>
+<td>Not applicable</td>
+</tr>
+<tr>
+<td>Mk4</td>
+<td>All versions prior to the fix</td>
+<td>~72 bits</td>
+<td>v5.6.0 or later</td>
+<td>v6.6.0X or later</td>
+</tr>
+<tr>
+<td>Mk5</td>
+<td>All versions prior to the fix</td>
+<td>~72 bits</td>
+<td>v5.6.0 or later</td>
+<td>v6.6.0X or later</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>All versions prior to the fix</td>
+<td>~72 bits</td>
+<td>v1.5.0Q or later</td>
+<td>v6.6.0QX or later</td>
+</tr>
+<tr>
+<td>TAPSIGNER</td>
+<td>Not affected</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OPENDIME</td>
+<td>Not affected</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SATSCARD</td>
+<td>Not affected</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<p><strong>Note on inconsistent sourcing:</strong>for the Mk2/Mk3 affected range, Coinkite&#39;s advisory states v4.0.1–v4.1.9, while some early reporting states v4.0.0–v5.0.3. When in doubt, the safer approach is to<strong>assume you are affected</strong> and migrate.</p>
+<hr>
+<h2>17. Appendix B — Unconfirmed Items and Follow-Up Tracking Tasks</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Current status</th>
+<th>Need for tracking</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Attacker identity and nationality</td>
+<td>Unconfirmed. Galaxy has reported roughly 600 suspected addresses to law enforcement</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Whether the three waves share a single actor</td>
+<td>Unconfirmed. Waves 1–2 show a similar pattern; Wave 3 differs</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Whether the attacker used AI</td>
+<td>Vendor&#39;s inference; not confirmed</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Whether the ~72-bit Mk4/Mk5/Q space has actually been attacked</td>
+<td>Not observed to date</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Whether Block&#39;s identified fail-open boot path actually occurs</td>
+<td>Unresolved</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Domestic (Korean) distribution volume and any domestic losses</td>
+<td>No public data</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Losses to paper wallets or Seed XOR outputs generated from vulnerable seeds</td>
+<td>Not tallied</td>
+<td>Medium</td>
+</tr>
+<tr>
+<td>Final scale of losses</td>
+<td>Ongoing, may expand</td>
+<td>High</td>
+</tr>
+<tr>
+<td>Whether regulators will introduce hardware-wallet certification schemes</td>
+<td>Early-stage discussion</td>
+<td>Medium</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>This report is classified TLP:GREEN and may be shared within the community. Commercial use requires separate arrangement, and citations must credit the source. License: CC BY-NC-SA 4.0.</em></p>
+<p><em>Disclaimer: This document is a threat-intelligence analysis based on open-source information (OSINT) and does not constitute investment or legal advice. Because the incident is ongoing, figures and the scope of impact may change.</em></p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="Share" data-url="https://cti.vibequant.cc/cti/coldcard-rng-20260804-en/" data-title="One Build Flag Brought Down Cold Storage — The Coldcard Seed Entropy Flaw and the $88.6 Million Seed-Reconstruction Sweep" data-text="Coldcard's fail-open RNG cut seed entropy to ~40 bits, enabling a contactless $88.6M BTC sweep. Timeline, migration steps, and Korea VASP regulation gaps." data-lang="en">
+  <span class="share-label">Share</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-en%2F&amp;text=One%20Build%20Flag%20Brought%20Down%20Cold%20Storage%20%E2%80%94%20The%20Coldcard%20Seed%20Entropy%20Flaw%20and%20the%20%2488.6%20Million%20Seed-Reconstruction%20Sweep" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-en%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-en%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">Copy link</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0804-COLDCARD-RNG_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

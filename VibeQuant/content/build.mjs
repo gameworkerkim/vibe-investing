@@ -619,6 +619,11 @@ const SLUG_OVERRIDES = {
   "LLM_MiniMax/MiniMax-H3-GettingStart_EN.md": "minimax-h3-gettingstart-en",
   "LLM_MiniMax/MiniMax-H3-GettingStart_CN.md": "minimax-h3-gettingstart-cn",
   "LLM_MiniMax/MiniMax-H3-GettingStart_JA.md": "minimax-h3-gettingstart-ja",
+  "CTI-2026-0804-COLDCARD-RNG_KR.md": "coldcard-rng-20260804",
+  "CTI-2026-0804-COLDCARD-RNG_EN.md": "coldcard-rng-20260804-en",
+  "CTI-2026-0804-COLDCARD-RNG_JA.md": "coldcard-rng-20260804-ja",
+  "CTI-2026-0804-COLDCARD-RNG_CN.md": "coldcard-rng-20260804-cn",
+  "USA/Age-of-USD.md": "age-of-usd",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

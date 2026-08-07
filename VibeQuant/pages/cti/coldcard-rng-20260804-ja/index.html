@@ -1,0 +1,1239 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ビルド設定一行が崩壊させたコールドストレージ — Coldcardシードエントロピー欠陥と8,860万ドルのシード再現スイープ — VibeQuant</title>
+  <meta name="description" content="Coldcardファームウェアのfail-open型RNGにより、Mk2/Mk3の実効エントロピーが約40ビットに崩壊。1,367 BTC(約8,860万ドル)の無接触シード再現スイープの分析、タイムライン、マイグレーション手順、韓国VASP規制への示唆を整理する。" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804-ja/" />
+  <meta property="og:title" content="ビルド設定一行が崩壊させたコールドストレージ — Coldcardシードエントロピー欠陥と8,860万ドルのシード再現スイープ" />
+  <meta property="og:description" content="Coldcardファームウェアのfail-open型RNGにより、Mk2/Mk3の実効エントロピーが約40ビットに崩壊。1,367 BTC(約8,860万ドル)の無接触シード再現スイープの分析、タイムライン、マイグレーション手順、韓国VASP規制への示唆を整理する。" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/coldcard-rng-20260804-ja/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"ビルド設定一行が崩壊させたコールドストレージ — Coldcardシードエントロピー欠陥と8,860万ドルのシード再現スイープ","description":"Coldcardファームウェアのfail-open型RNGにより、Mk2/Mk3の実効エントロピーが約40ビットに崩壊。1,367 BTC(約8,860万ドル)の無接触シード再現スイープの分析、タイムライン、マイグレーション手順、韓国VASP規制への示唆を整理する。","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/coldcard-rng-20260804-ja/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0804-COLDCARD-RNG_JA.md","image":"https://vibequant.cc/og-default.png","url":"https://cti.vibequant.cc/cti/coldcard-rng-20260804-ja/","datePublished":"2026-08-04","dateModified":"2026-08-04","inLanguage":"ja","keywords":"Cryptocurrency, Cold-Wallet, Hardware-Wallet, RNG-Failure, Seed-Generation, Blockchain-Forensics"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"ビルド設定一行が崩壊させたコールドストレージ — Coldcardシードエントロピー欠陥と8,860万ドルのシード再現スイープ","item":"https://cti.vibequant.cc/cti/coldcard-rng-20260804-ja/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 크립토 · Web3</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">크립토 · Web3</p>
+        <h1>ビルド設定一行が崩壊させたコールドストレージ — Coldcardシードエントロピー欠陥と8,860万ドルのシード再現スイープ</h1>
+        <p class="article-dates"><time datetime="2026-08-04">발행 2026.08.04</time> · 주제 Cryptocurrency · Cold-Wallet · Hardware-Wallet · RNG-Failure · Seed-Generation · Blockchain-Forensics</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/coldcard-rng-20260804/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/coldcard-rng-20260804-en/" data-lang="EN">English</a>
+      <a class="lang-btn is-active" href="../../cti/coldcard-rng-20260804-ja/" data-lang="JP" aria-current="true">日本語</a>
+      <a class="lang-btn" href="../../cti/coldcard-rng-20260804-cn/" data-lang="CN">中文</a>
+    </div>
+        <p class="lede">Coldcardファームウェアのfail-open型RNGにより、Mk2/Mk3の実効エントロピーが約40ビットに崩壊。1,367 BTC(約8,860万ドル)の無接触シード再現スイープの分析、タイムライン、マイグレーション手順、韓国VASP規制への示唆を整理する。</p>
+        
+        <nav class="share-bar" aria-label="共有" data-url="https://cti.vibequant.cc/cti/coldcard-rng-20260804-ja/" data-title="ビルド設定一行が崩壊させたコールドストレージ — Coldcardシードエントロピー欠陥と8,860万ドルのシード再現スイープ" data-text="Coldcardファームウェアのfail-open型RNGにより、Mk2/Mk3の実効エントロピーが約40ビットに崩壊。1,367 BTC(約8,860万ドル)の無接触シード再現スイープの分析、タイムライン、マイグレーション手順、韓国VASP規制への示唆を整理する。" data-lang="ja">
+  <span class="share-label">共有</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-ja%2F&amp;text=%E3%83%93%E3%83%AB%E3%83%89%E8%A8%AD%E5%AE%9A%E4%B8%80%E8%A1%8C%E3%81%8C%E5%B4%A9%E5%A3%8A%E3%81%95%E3%81%9B%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%AB%E3%83%89%E3%82%B9%E3%83%88%E3%83%AC%E3%83%BC%E3%82%B8%20%E2%80%94%20Coldcard%E3%82%B7%E3%83%BC%E3%83%89%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E6%AC%A0%E9%99%A5%E3%81%A88%2C860%E4%B8%87%E3%83%89%E3%83%AB%E3%81%AE%E3%82%B7%E3%83%BC%E3%83%89%E5%86%8D%E7%8F%BE%E3%82%B9%E3%82%A4%E3%83%BC%E3%83%97" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-ja%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-ja%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">リンクをコピー</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p><strong>レポートID</strong>CTI-2026-0804-COLDCARD-RNG ·<strong>発行日</strong>2026-08-04 ·<strong>分類</strong>TLP:GREEN ·<strong>深刻度</strong>CRITICAL<strong>著者</strong> Dennis Kim / HoKwang Kim · <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · @gameworkerkim</p>
+<p>🌐 <a href="../../cti/coldcard-rng-20260804/">한국어</a> · <a href="../../cti/coldcard-rng-20260804-en/">English</a> · <strong>日本語（本文書）</strong> · <a href="../../cti/coldcard-rng-20260804-cn/">中文</a></p>
+<p><em>ハードウェアウォレットの安全性は「鍵をどこに置くか」ではなく「鍵をどう作るか」に懸かっていた。Coldcardは前者を完璧に守り、後者を5年間見落としていた。</em></p>
+<hr>
+<h2>目次</h2>
+<ol>
+<li>要約（TL;DR）</li>
+<li>はじめに — 隔離は保たれ、生成が崩壊した</li>
+<li>事案タイムライン</li>
+<li>根本原因分析 — マクロ存在検査とfail-open構造</li>
+<li>技術的脆弱性分析 — エントロピー崩壊の定量化</li>
+<li>攻撃チェーン分析 — オフラインのシード再現とオンチェーンスイープ</li>
+<li>影響の定量分析 — 3波にわたる攻撃</li>
+<li>生存者分析 — 何がウォレットを救ったか</li>
+<li>対応とマイグレーション — パッチが修復できないもの</li>
+<li>産業的含意 — 信頼モデルの再検討</li>
+<li>韓国の視点 — 規制整合性と国内取引所への提言</li>
+<li>ビットコイン投資者への提言</li>
+<li>検知・対応・予防チェックリスト</li>
+<li>結論</li>
+<li>参考文献</li>
+<li>附録A — 影響範囲と修正ファームウェア対照表</li>
+<li>附録B — 未確認事項と追跡課題</li>
+</ol>
+<hr>
+<h2>1. 要約（TL;DR）</h2>
+<p>2026年7月29日から8月2日にかけて、カナダのCoinkite社が製造するビットコイン専用ハードウェアウォレット<strong>Coldcard</strong>で生成されたシードを対象とした大規模な資産窃取が発生した。Galaxy Research基準で観測された被害は<strong>1,367.05 BTC(約8,860万ドル、日本円で約133億円)、4,585アドレス</strong>に上り、攻撃は3波にわたって進行し、本レポート作成時点でも終息していない。</p>
+<p>攻撃の本質は侵入ではなく<strong>再現</strong>である。攻撃者はいかなる被害者のデバイスにも触れておらず、PINやシードフレーズを窃取しておらず、マルウェアやフィッシングも使用していない。2021年3月、Coldcardファームウェアのビルド設定不整合により、シード生成がSTM32のハードウェア乱数生成器(TRNG)ではなく<strong>MicroPythonの決定論的ソフトウェアPRNG(Yasmarang)</strong>に配線され、このPRNGは<strong>チップ固有ID(UID)とタイマーレジスタ値のみ</strong>で初期化された後、追加のエントロピーを一切収集しなかった。結果として、Mk2/Mk3の実効エントロピーは128ビットから<strong>約40ビット</strong>へ、Mk4/Mk5/Qは<strong>約72ビット</strong>へ崩壊した。</p>
+<p>40ビットは民生用ハードウェアでも全数探索が可能な規模である。攻撃者は候補シードをオフラインで列挙し、BIP32/BIP39規則に従ってアドレスを派生させた後、<strong>公開ブロックチェーンで残高を照会</strong>し、資産のあるアドレスだけを選んでスイープした。ブロックチェーンの透明性が攻撃者の偵察インフラに転用されたのである。</p>
+<p>主要事実の要約</p>
+<table>
+<thead>
+<tr>
+<th>区分</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>脆弱性混入時点</td>
+<td>2021年3月1日のコミット(<code>ckcc.rng_bytes</code> → <code>ngu.random.bytes</code>)、ファームウェア v4.0.0は2021年3月17日リリース</td>
+</tr>
+<tr>
+<td>露出期間</td>
+<td>約5年4か月</td>
+</tr>
+<tr>
+<td>実効エントロピー</td>
+<td>Mk2/Mk3 約40ビット、Mk4/Mk5/Q 約72ビット(設計目標128ビット)</td>
+</tr>
+<tr>
+<td>第1波</td>
+<td>2026-07-30 01:10–01:51 UTC、41分間、1,082.65 BTC / 1,196アドレス / 約7,020万ドル</td>
+</tr>
+<tr>
+<td>累計被害</td>
+<td>1,367.05 BTC / 4,585アドレス / 約8,860万ドル(2026-08-02時点)</td>
+</tr>
+<tr>
+<td>メーカー最初の告知</td>
+<td>第1波終了から約30時間後</td>
+</tr>
+<tr>
+<td>窃取資金の移動</td>
+<td>なし — 攻撃者管理アドレスに未使用状態で保持</td>
+</tr>
+<tr>
+<td>被害者特性</td>
+<td>平均休眠期間約3.18年、大半が長期保有の個人</td>
+</tr>
+<tr>
+<td>影響なし製品</td>
+<td>TAPSIGNER、OPENDIME、SATSCARD(別コードベース)、Trezor、Ledger、Block(Bitkey)</td>
+</tr>
+</tbody></table>
+<p><strong>本事案を一文で要約すると: コールドストレージは鍵を守ったが、鍵を作る瞬間は守れなかった。</strong></p>
+<hr>
+<h2>2. はじめに — 隔離は保たれ、生成が崩壊した</h2>
+<p>ハードウェアウォレットの安全性モデルは二つの独立した前提の上に成り立っている。</p>
+<ol>
+<li><strong>隔離の前提</strong> — プライベートキーはインターネットに接続されないデバイスの外に出ない。</li>
+<li><strong>生成の前提</strong> — その鍵は、いかなる計算資源でも推測できない乱数から派生している。</li>
+</ol>
+<p>業界全体のマーケティング、ユーザー教育、規制論議は、ほぼ一貫して最初の前提に集中してきた。「インターネットに接続しない」という文言がハードウェアウォレット広告の核心であり、韓国の仮想資産規制における「コールドウォレット保管比率」という指標もまた、隔離の前提を定量化したものである。</p>
+<p>本事案において、<strong>隔離の前提は一度も破られていない。</strong> 被害者の一人であるカナダのJonathan Goodmanは、銀行の貸金庫に保管され、一度もインターネットに接続されたことのないColdcardを使用し、シードフレーズを誰にも公開していなかった。それにもかかわらず、2026年7月29日の夜、わずか7分間で18.25 BTCを失った。</p>
+<p>崩壊したのは二つ目の前提である。そして二つ目の前提が崩れれば、一つ目の前提は<strong>何の防御的価値も持たない。</strong> 攻撃者は防衛線を越える必要がなかった。防衛線の内側で作られた秘密を、外側で再び作り出しただけである。</p>
+<p>この構造は、従来のサイバーセキュリティにおける侵害対応のパラダイムとは根本的に異なる。侵入の痕跡はなく、検知すべきログもなく、事故の発生時点は窃取時点ではなく<strong>鍵生成の時点</strong>である。被害者は5年前にすでに侵害されており、その事実を知る手段がなかった。</p>
+<hr>
+<h2>3. 事案タイムライン</h2>
+<table>
+<thead>
+<tr>
+<th>日時</th>
+<th>イベント</th>
+<th>備考</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2021-03-01</td>
+<td>シード生成呼び出しを<code>ckcc.rng_bytes</code>から<code>ngu.random.bytes</code>に変更するコミットが反映</td>
+<td>脆弱性混入時点</td>
+</tr>
+<tr>
+<td>2021-03-17</td>
+<td>ファームウェア v4.0.0 リリース</td>
+<td>脆弱ファームウェアの配布開始</td>
+</tr>
+<tr>
+<td>2021-03 ~ 2026-07</td>
+<td>脆弱シードが継続的に生成・流通</td>
+<td>ユーザー・メーカーともに認識せず</td>
+</tr>
+<tr>
+<td>2026-07-29 夜(現地)</td>
+<td>個人被害者Jonathan Goodman、7分間で18.25 BTC流出</td>
+<td>最初の公開被害証言</td>
+</tr>
+<tr>
+<td>2026-07-30 01:10–01:51 UTC</td>
+<td>第1波: 1,082.65 BTC / 1,196アドレスをスイープ(41分間、6ブロックに分散)</td>
+<td>中間の3ブロックは空白 — バッチブロードキャストの兆候</td>
+</tr>
+<tr>
+<td>2026-07-30(初期10分)</td>
+<td>約3,000万ドル窃取、高額ウォレットを優先攻撃</td>
+<td>Chainalysis分析</td>
+</tr>
+<tr>
+<td>2026-07-31(第1波終了から約30時間後)</td>
+<td>Coinkite、最初のセキュリティ勧告を公開(Mk2/Mk3対象)</td>
+<td>すでに資金流出が完了していた時点</td>
+</tr>
+<tr>
+<td>2026-07-31 09:33 EDT</td>
+<td>修正ファームウェア配布(Mk4/Mk5 v5.6.0+、Q v1.5.0Q+)</td>
+<td></td>
+</tr>
+<tr>
+<td>2026-08-01</td>
+<td>Coinkite勧告を拡大 — Mk4/Mk5/Qも約72ビットのエントロピーで影響を受けると判明</td>
+<td>影響範囲の拡大</td>
+</tr>
+<tr>
+<td>2026-08-01</td>
+<td>Galaxy Research、第2波を確認 — 累計1,158.66 BTC / 2,673アドレス / 約7,510万ドル</td>
+<td>攻撃者管理アドレス7個</td>
+</tr>
+<tr>
+<td>2026-08-02</td>
+<td>Galaxy Research、第3波を確認 — 207.73 BTC / 1,912アドレスを追加</td>
+<td>少額ウォレット対象、追跡難易度の高いパターン</td>
+</tr>
+<tr>
+<td>2026-08-02</td>
+<td>累計1,367.05 BTC / 4,585アドレス / 約8,860万ドル</td>
+<td>攻撃進行中</td>
+</tr>
+<tr>
+<td>2026-08-02</td>
+<td>Galaxy、攻撃者疑いのあるアドレス約600個を連邦捜査機関・コンプライアンス企業に通報</td>
+<td></td>
+</tr>
+<tr>
+<td>2026-08-03(現在)</td>
+<td>窃取資金の未移動状態が継続、調査進行中</td>
+<td>本レポート作成時点</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 根本原因分析 — マクロ存在検査とfail-open構造</h2>
+<h3>4.1 欠陥の構造</h3>
+<p>Blockのビットコインエンジニアリングチームが公開した分析によれば、欠陥は以下の順序で発生した。</p>
+<pre><code>[1] Coldcardプロダクションビルド設定
+    MICROPY_HW_ENABLE_RNG = 0
+    (Coinkiteが独自のハードウェアRNGラッパーを提供するため、意図的に0を設定)
+         ↓
+[2] libnguライブラリ
+    マクロが「定義されているか」だけを検査(#ifdef系)
+    「値が有効になっているか」(#if)は検査しない
+         ↓
+[3] 判定結果
+    マクロは定義されているため「ハードウェアRNGが使用可能」と誤判定されず、
+    ビルドがMicroPythonの既定フォールバック経路にバインドされる
+         ↓
+[4] フォールバックPRNG: Yasmarang
+    シードソース = チップ固有ID(UID) + タイマーレジスタ
+    初期化以降、新規エントロピーの収集なし
+         ↓
+[5] 2021-03-01のコミット
+    ckcc.rng_bytes(STM32ハードウェアペリフェラルに直結)
+    → ngu.random.bytes(損傷したlibngu経路)
+         ↓
+[6] SHA256dハッシュ処理
+    ハッシュは入力エントロピーを増加させない
+    2^40個の入力 → 最大2^40個の出力
+</code></pre>
+<p><strong>核心は第6段階である。</strong>多くのユーザーや一部の初期報道は「SHA256でハッシュ化しているのだから安全ではないか」という誤解を示したが、暗号学的ハッシュ関数は<strong>圧縮と拡散を提供するが、エントロピーを創出しない。</strong> 入力候補が2^40個であれば、出力候補も2^40個である。これは2012年以降繰り返し再発してきたRNG失敗事例(Debian OpenSSL、Android SecureRandom、Profanityバニティアドレス生成器など)と同一の構造的誤りである。</p>
+<h3>4.2 なぜ5年間発見されなかったか</h3>
+<table>
+<thead>
+<tr>
+<th>要因</th>
+<th>説明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>出力観察だけでは検知不可能</td>
+<td>Yasmarangの出力は統計的乱数検定(NIST STS、Dieharderなど)を通過する。問題は分布ではなく<strong>探索空間の大きさ</strong>である</td>
+</tr>
+<tr>
+<td>ビルド時点の欠陥</td>
+<td>ソースコードを読むだけでは露見しない。ビルド設定とライブラリの条件付きコンパイルの相互作用から発生する</td>
+</tr>
+<tr>
+<td>オープンソースの逆説</td>
+<td>ファームウェアがオープンソースであったため、攻撃者も同様に検証できた。監査可能性は双方向の資産である</td>
+</tr>
+<tr>
+<td>再現性検証の不在</td>
+<td>同一機種2台が異なるシードを生成するかを確認する<strong>クロスデバイス・エントロピー検証</strong>がリリース手続きに存在しなかった</td>
+</tr>
+<tr>
+<td>自動化監査の限界</td>
+<td>Coinkiteは事案発生数週間前に同一コードに対しAIベースの監査を実施したが、欠陥を発見できなかったと明らかにしている</td>
+</tr>
+</tbody></table>
+<h3>4.3 攻撃者の発見経路に関する考察</h3>
+<p>Coinkiteは、攻撃者がオープンソースファームウェアから欠陥を見つけ出すためにAIを活用した可能性を提起した。同時に、自社のAI監査は同一コードから何も見つけられなかった。この非対称性は注目に値する。</p>
+<p>防御側のAI監査は「このコードに脆弱性はあるか」という<strong>広範で目的の定まらない質問</strong>を投げかける。一方、攻撃者側のAI活用は「このデバイスが生成できるシードの総数はいくつか」という<strong>狭く目的が明確な質問</strong>を投げかける。後者のほうがはるかに答えやすい質問である。LLMは判断を代行する神託ではなく、計算を代行する道具であり、道具の出力品質は投げかける質問の具体性に比例する。防御側のAI監査設計にとって、この点は実務的な教訓となる。</p>
+<p>ただし、攻撃者がAIを使用したかどうかは現時点では<strong>状況推定</strong>であり、確証された事実ではない。</p>
+<hr>
+<h2>5. 技術的脆弱性分析 — エントロピー崩壊の定量化</h2>
+<h3>5.1 脆弱性の概要</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>脆弱性タイプ</td>
+<td>CWE-331(不十分なエントロピー)、CWE-338(暗号学的に弱いPRNGの使用)</td>
+</tr>
+<tr>
+<td>影響製品</td>
+<td>Coldcard Mk2、Mk3、Mk4、Mk5、Q</td>
+</tr>
+<tr>
+<td>混入時点</td>
+<td>2021-03-01(コミット)、2021-03-17(v4.0.0リリース)</td>
+</tr>
+<tr>
+<td>CVSS v3.1(評価値)</td>
+<td>9.1(Critical) — AV:N / AC:L / PR:N / UI:N / S:U / C:H / I:N / A:H</td>
+</tr>
+<tr>
+<td>攻撃前提条件</td>
+<td>対象デバイスへの物理的・論理的アクセス不要</td>
+</tr>
+<tr>
+<td>検知可能性</td>
+<td>被害者側での検知不可能(侵害の痕跡が存在しない)</td>
+</tr>
+</tbody></table>
+<h3>5.2 エントロピー崩壊の規模</h3>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>設計目標</th>
+<th>実効エントロピー</th>
+<th>探索空間</th>
+<th>実務的解釈</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mk2 / Mk3</td>
+<td>128ビット</td>
+<td>約40ビット</td>
+<td>約1.1×10^12</td>
+<td>民生用GPUクラスタで数時間~数日以内に全数探索可能</td>
+</tr>
+<tr>
+<td>Mk4 / Mk5 / Q</td>
+<td>128ビット</td>
+<td>約72ビット</td>
+<td>約4.7×10^21</td>
+<td>現行の民生機器では非現実的。国家級・大規模資金の攻撃者にとっては理論上の射程内</td>
+</tr>
+<tr>
+<td>正常なBIP-39 12単語</td>
+<td>128ビット</td>
+<td>128ビット</td>
+<td>約3.4×10^38</td>
+<td>全数探索不可能</td>
+</tr>
+</tbody></table>
+<p>Mk4/Mk5/Qが相対的に良好な理由は、セキュアエレメントが独自のエントロピーをPRNG状態に混入させたためである。ただし、Coinkiteの技術背景文書によれば、これらのモデルも初期混入以降のほとんどの乱数値を、同一の損傷経路から取得していた。</p>
+<p>一部の初期報道は探索空間を「約40億個(2^32)」と記述した。これはBlockが言及した「32ビットのリシード脆弱性」から派生した数値と見られ、Coinkite公式勧告の40ビット推定値とは区別して読む必要がある。いずれにしても、<strong>全数探索が可能な領域</strong>であるという結論は変わらない。</p>
+<h3>5.3 シード以外への付随的影響</h3>
+<p>同一の損傷経路は、シード生成以外の機能にも使用されていた。Blockの公開資料が明示した影響機能は以下である。</p>
+<ul>
+<li>紙ウォレット(paper wallet)のプライベートキー生成</li>
+<li>Seed XOR分割マスクの生成</li>
+<li>デバイスクローニング(複製)キーの生成</li>
+</ul>
+<p>すなわち<strong>Seed XORでシードを分割保管していたユーザーも、分割マスク自体が予測可能であった可能性がある。</strong> これは「上級ユーザーほど安全だった」という通念が部分的にしか成立しないことを意味する。</p>
+<h3>5.4 fail-open構造に関する未解決の指摘</h3>
+<p>Blockは、Mk4/Q/Mk5の構造を「危険なfail-open構造」と規定した。ブートシーケンスの初期段階、リシード実行前に例外が捕捉された場合、デバイスが<strong>公開された初期状態のまま、追加エントロピーなしに</strong>動作しうるという指摘である。このシナリオが実際のプロダクション環境で発生するかどうかは別途評価の対象であり、本レポート作成時点で未解決の事項として残っている。</p>
+<p>これは安全設計原則の観点から重要である。暗号学的乱数生成器は<strong>fail-closed</strong>であるべきである。エントロピーソースを確保できない場合、値を返す代わりに動作を停止すべきである。値を返しつつ品質が低い構造は、失敗した事実そのものが隠蔽されてしまう。</p>
+<hr>
+<h2>6. 攻撃チェーン分析 — オフラインのシード再現とオンチェーンスイープ</h2>
+<h3>6.1 段階別分解</h3>
+<table>
+<thead>
+<tr>
+<th>段階</th>
+<th>行為</th>
+<th>観測根拠</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. 欠陥の識別</td>
+<td>オープンソースファームウェアおよびビルド設定の分析、探索空間の算定</td>
+<td>ファームウェア公開リポジトリ</td>
+</tr>
+<tr>
+<td>2. 候補シードの列挙</td>
+<td>UID・タイマー状態・先行RNG呼び出し履歴を制約し候補出力ストリームを再現</td>
+<td>Block分析</td>
+</tr>
+<tr>
+<td>3. アドレス派生</td>
+<td>BIP-32/BIP-39/BIP-44・49・84の派生パスごとにアドレスを生成</td>
+<td>標準規格</td>
+</tr>
+<tr>
+<td>4. 残高照合</td>
+<td>公開ブロックチェーンデータ(UTXOセット)と対比・マッチング</td>
+<td>Galaxy・Chainalysis分析</td>
+</tr>
+<tr>
+<td>5. 優先順位選定</td>
+<td>高額ウォレットを優先攻撃した後、少額へ拡散</td>
+<td>初期10分間で3,000万ドル</td>
+</tr>
+<tr>
+<td>6. 自動化スイープ</td>
+<td>全トランザクションで同一のハードコードされた手数料率30 sat/vB、おつり出力なし</td>
+<td>Galaxy分析 — 自動化ツール使用の兆候</td>
+</tr>
+<tr>
+<td>7. 資金保持</td>
+<td>7個(第1・2波基準)の攻撃者アドレスに未使用状態で保持</td>
+<td>オンチェーン観測</td>
+</tr>
+</tbody></table>
+<h3>6.2 トラフィックの指紋</h3>
+<p>Galaxyが自動化ツールの使用を判断した根拠は二つある。第一に、全トランザクションが<strong>同一のハードコードされた手数料率(30 sat/vB)</strong>を使用していた。正常なウォレットソフトウェアはmempoolの状況に応じて手数料を動的に調整する。第二に、<strong>おつり出力(change output)が存在しなかった。</strong> 残高全額を単一アドレスへ移動させるスイープパターンである。</p>
+<p>この指紋は、今後の類似攻撃の検知ルール策定の基礎資料となる。</p>
+<h3>6.3 波ごとの差異</h3>
+<table>
+<thead>
+<tr>
+<th>波</th>
+<th>時点</th>
+<th>規模</th>
+<th>特徴</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第1波</td>
+<td>07-30 01:10–01:51 UTC</td>
+<td>1,082.65 BTC / 1,196アドレス</td>
+<td>高額優先、均一パターン</td>
+</tr>
+<tr>
+<td>第2波</td>
+<td>08-01確認</td>
+<td>累計1,158.66 BTC / 2,673アドレス</td>
+<td>第1波と類似パターン、同一オペレーターと推定</td>
+</tr>
+<tr>
+<td>第3波</td>
+<td>08-02確認</td>
+<td>+207.73 BTC / 1,912アドレス</td>
+<td>少額対象、複雑で追跡難易度の高いパターン</td>
+</tr>
+</tbody></table>
+<p>Galaxyは各波が単独のオペレーターによる作業のように見えるとしつつ、<strong>3つの波が同一主体によるものかはオンチェーンデータのみでは判別できない</strong>と明示している。第3波のパターン変化は、ツールの改善、または同一の鍵空間を利用する別の行為者の出現、という二つの可能性をいずれも残す。</p>
+<h3>6.4 MITRE ATT&amp;CKマッピング</h3>
+<table>
+<thead>
+<tr>
+<th>Tactic</th>
+<th>Technique</th>
+<th>ID</th>
+<th>本事案での実装</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reconnaissance</td>
+<td>Gather Victim Host Information</td>
+<td>T1592</td>
+<td>デバイスUID・タイマー特性の分析</td>
+</tr>
+<tr>
+<td>Reconnaissance</td>
+<td>Search Open Technical Databases</td>
+<td>T1596</td>
+<td>公開ブロックチェーンUTXOセットの照会</td>
+</tr>
+<tr>
+<td>Reconnaissance</td>
+<td>Search Open Websites/Domains</td>
+<td>T1593</td>
+<td>オープンソースファームウェアリポジトリの分析</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>Develop Capabilities: Malware</td>
+<td>T1587.001</td>
+<td>自動化スイープツールの作成</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>Brute Force</td>
+<td>T1110</td>
+<td>縮小されたシード空間の全数探索</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>Unsecured Credentials: Private Keys</td>
+<td>T1552.004</td>
+<td>再現したシードからのプライベートキー派生</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>Data from Information Repositories</td>
+<td>T1213</td>
+<td>オンチェーン残高データの収集</td>
+</tr>
+<tr>
+<td>Impact</td>
+<td>Financial Theft</td>
+<td>T1657</td>
+<td>ビットコインのスイープ</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. 影響の定量分析 — 3波にわたる攻撃</h2>
+<h3>7.1 被害規模</h3>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>数値</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>累計窃取量</td>
+<td>1,367.05 BTC</td>
+</tr>
+<tr>
+<td>ドル換算</td>
+<td>約8,860万ドル</td>
+</tr>
+<tr>
+<td>円換算(1ドル≒150円想定)</td>
+<td>約133億円</td>
+</tr>
+<tr>
+<td>影響アドレス数</td>
+<td>4,585個</td>
+</tr>
+<tr>
+<td>第1波所要時間</td>
+<td>41分</td>
+</tr>
+<tr>
+<td>単一最大被害</td>
+<td>約180万ドル</td>
+</tr>
+<tr>
+<td>公開証言の個人被害</td>
+<td>18.25 BTC(約160万カナダドル)</td>
+</tr>
+<tr>
+<td>資金回収</td>
+<td>0(全額が攻撃者アドレスに未移動で保持)</td>
+</tr>
+<tr>
+<td>メーカー認知~告知の遅延</td>
+<td>約30時間</td>
+</tr>
+</tbody></table>
+<h3>7.2 被害者プロファイル</h3>
+<p>Galaxyの分析によれば、窃取された資産の<strong>平均休眠期間は約3.18年</strong>である。これは被害者集団が機関投資家ではなく、<strong>長期保有の個人(long-term holder)</strong>に集中していることを示唆する。</p>
+<p>このプロファイルは三つの含意を持つ。</p>
+<ol>
+<li><strong>検知の遅延</strong> — 数年間ウォレットを開いていないユーザーが多数であったため、流出の認知が大きく遅れた。</li>
+<li><strong>セキュリティ意識と被害の逆相関</strong> — 取引所を信頼せず自己保管を選んだ、相対的にセキュリティ意識の高い集団がむしろ被害者となった。</li>
+<li><strong>回復不能性</strong> — 個人の自己保管資産には、預金者保護も、取引所の準備金・保険も適用されない。</li>
+</ol>
+<h3>7.3 進行中のリスク</h3>
+<p>Galaxyは、攻撃が<strong>進行中</strong>であり、脆弱なシードで生成されたすべてのアドレスが最終的に空になると警告した。第3波が少額ウォレットを対象としたという事実は、攻撃者が<strong>経済性の閾値を下げながら残存ターゲットを消尽している</strong>ことを意味する。「自分のウォレットは金額が小さいから優先度が低いはずだ」という判断は、もはや成り立たない。</p>
+<hr>
+<h2>8. 生存者分析 — 何がウォレットを救ったか</h2>
+<h3>8.1 生存条件</h3>
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th>保護レベル</th>
+<th>根拠</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>独立したサイコロロール50~98回の入力</td>
+<td>安全(RNG欠陥単独ではリスクなし)</td>
+<td>サイコロ入力のみで128ビット以上を寄与</td>
+</tr>
+<tr>
+<td>独立したサイコロロール99回以上</td>
+<td>安全(約256ビットを寄与)</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>サイコロロール50回未満、または記憶が不明確</td>
+<td>危険 — マイグレーション対象</td>
+<td>Coinkite勧告</td>
+</tr>
+<tr>
+<td>強固かつ固有のBIP-39パスフレーズ</td>
+<td>即時露出は減少するが根本解決ではない</td>
+<td>シード単語だけでは到達できない別ウォレットの生成</td>
+</tr>
+<tr>
+<td>脆弱ファームウェア以前に生成されたシード</td>
+<td>安全</td>
+<td>v4.0.0以前</td>
+</tr>
+<tr>
+<td>修正ファームウェアで新規生成されたシード</td>
+<td>安全</td>
+<td>デバイス生成エントロピーのみで十分</td>
+</tr>
+<tr>
+<td>マルチシグ(全鍵が脆弱デバイス生成)</td>
+<td>危険</td>
+<td>全鍵が同一欠陥の影響を受ける</td>
+</tr>
+<tr>
+<td>マルチシグ(一部の鍵が他ベンダーデバイス生成)</td>
+<td>条件付き安全</td>
+<td>閾値構成により異なる</td>
+</tr>
+</tbody></table>
+<p>核心は、<strong>サイコロロールがデバイス生成エントロピーとハッシュで結合され、このユーザー提供エントロピーはファームウェア欠陥の影響を受けなかった</strong>という点である。</p>
+<h3>8.2 示唆 — ユーザーエントロピーの再評価</h3>
+<p>サイコロロール機能は、これまで「偏執的なユーザー向けの選択的高度機能」として扱われてきた。本事案は、この機能が<strong>ベンダー信頼が崩壊した状況で唯一機能した防衛線</strong>であったことを示している。</p>
+<p>同時に、Casaの経営陣が指摘したように、一般の投資家がサイコロを振ってシードを補完することを期待するのは非現実的である。<strong>使いやすさとセキュリティのギャップ</strong>がそのまま露呈した箇所であり、このギャップをユーザー教育ではなく製品設計で埋めることが業界の課題である。</p>
+<p>実務的な提言は明確である。<strong>ユーザー提供エントロピーを、選択機能ではなく既定値に転換すべきである。</strong> 少なくとも高額保管目的のシード生成時には、必須手続きとして強制することが妥当である。</p>
+<hr>
+<h2>9. 対応とマイグレーション — パッチが修復できないもの</h2>
+<h3>9.1 修正ファームウェアバージョン</h3>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>リリーストラック</th>
+<th>修正バージョン</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mk2 / Mk3</td>
+<td>標準</td>
+<td>v4.2.0以上</td>
+</tr>
+<tr>
+<td>Mk4 / Mk5</td>
+<td>標準</td>
+<td>v5.6.0以上</td>
+</tr>
+<tr>
+<td>Mk4 / Mk5</td>
+<td>Edge</td>
+<td>v6.6.0X以上</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>標準</td>
+<td>v1.5.0Q以上</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>Edge</td>
+<td>v6.6.0QX以上</td>
+</tr>
+</tbody></table>
+<p><strong>注意:</strong> 標準とEdgeは別のトラックである。Edgeのバージョン番号が標準より高いという理由だけで修正版であると仮定してはならない。</p>
+<h3>9.2 パッチの限界</h3>
+<blockquote>
+<p>ファームウェア更新は既存のシードを変更または復旧しない。</p>
+</blockquote>
+<p>この一文が、本事案対応のすべてである。脆弱性はデバイスにではなく、<strong>デバイスが既に引き出した数値</strong>に存在する。したがって、以下の対処は<strong>すべて無効</strong>である。</p>
+<table>
+<thead>
+<tr>
+<th>無効な対応</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ファームウェアのみ更新し既存ウォレットを継続使用</td>
+<td>シードはそのまま脆弱</td>
+</tr>
+<tr>
+<td>脆弱シードを別ベンダーのウォレットに復元</td>
+<td>攻撃者はデバイスではなくシード空間を探索する</td>
+</tr>
+<tr>
+<td>脆弱シードを紙・金属バックアップへ再記録</td>
+<td>シードの値自体が問題</td>
+</tr>
+<tr>
+<td>別アドレス(派生インデックス)への資金移動</td>
+<td>同一シードから派生する全アドレスが露出している</td>
+</tr>
+<tr>
+<td>資産を少額に分割</td>
+<td>第3波は少額を標的化している</td>
+</tr>
+</tbody></table>
+<h3>9.3 正しいマイグレーション手順</h3>
+<ol>
+<li>モデルとリリーストラックを確認し、該当する<strong>修正ファームウェアを先にインストール</strong>する。</li>
+<li>修正ファームウェアのインストールを画面上で<strong>バージョン文字列で直接確認</strong>する。</li>
+<li><strong>完全に新規のシードを生成</strong>する。修正ファームウェアのデバイス生成エントロピーのみで十分であり、サイコロロールは任意である。</li>
+<li>新しいシードとパスフレーズをバックアップする。<strong>パスフレーズはシード単語と物理的に分離保管</strong>する。</li>
+<li>デバイスを電源再投入(power-cycle)した後、<strong>ウォレットフィンガープリントと受信アドレスをデバイス画面で検証</strong>する。</li>
+<li><strong>少額のテストトランザクション</strong>をまず送信し、到着を確認する。</li>
+<li>残余資産全額を移動する。</li>
+<li>マイグレーション完了確認までは旧バックアップを廃棄しない。</li>
+</ol>
+<p>Coinkiteおよび複数の研究機関が共通して強調しているのは、<strong>急いではならない</strong>という点である。切迫した状況でのマイグレーションミス(アドレスの誤入力、誤ったバックアップ、検証の省略)がハッキングそのものより大きな損失を招いた事例は繰り返し観測されている。</p>
+<h3>9.4 メーカー対応の評価</h3>
+<table>
+<thead>
+<tr>
+<th>措置</th>
+<th>評価</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>修正ファームウェアの全モデルトラック配布</td>
+<td>適切 — 迅速な配布</td>
+</tr>
+<tr>
+<td>未出荷在庫デバイスの全量廃棄</td>
+<td>適切 — サプライチェーン汚染の遮断</td>
+</tr>
+<tr>
+<td>出荷済み顧客へのメール個別通知</td>
+<td>適切だが到達率に限界</td>
+</tr>
+<tr>
+<td>最初の告知まで約30時間の遅延</td>
+<td><strong>不適切</strong> — 第1波終了後の告知</td>
+</tr>
+<tr>
+<td>初期勧告でMk4/Q/Mk5を「影響なし」と分類後、8/1に訂正</td>
+<td><strong>不適切</strong> — 初期範囲算定の誤りがユーザー判断を歪めた</td>
+</tr>
+<tr>
+<td>影響のない製品(TAPSIGNER/OPENDIME/SATSCARD)の明示</td>
+<td>適切</td>
+</tr>
+</tbody></table>
+<p>30時間の遅延は、本事案対応において最も批判されるべき点である。ただし、攻撃が告知に<strong>先行</strong>していたため、直ちに告知していたとしても第1波を防げなかった可能性が高い。問題は、第2波・第3波の被害者の多くが、その遅延区間で対処の機会を失ったことにある。</p>
+<hr>
+<h2>10. 産業的含意 — 信頼モデルの再検討</h2>
+<h3>10.1 崩れた前提</h3>
+<table>
+<thead>
+<tr>
+<th>業界の暗黙の前提</th>
+<th>本事案による反証</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ハードウェアRNGは信頼できる</td>
+<td>ビルド設定一行で無効化され、その事実が隠蔽されうる</td>
+</tr>
+<tr>
+<td>オープンソースファームウェアは十分に監査される</td>
+<td>5年間公開されたコードで誰も発見できなかった</td>
+</tr>
+<tr>
+<td>物理的隔離が鍵の安全を保証する</td>
+<td>隔離は完璧であり、資産は消失した</td>
+</tr>
+<tr>
+<td>コールドストレージはホットウォレットより安全である</td>
+<td>生成段階の欠陥の前ではこの比較は無意味である</td>
+</tr>
+<tr>
+<td>自己保管は取引所リスクを排除する</td>
+<td>取引所リスクをベンダーリスクに交換するだけである</td>
+</tr>
+</tbody></table>
+<h3>10.2 構造的教訓</h3>
+<p><strong>第一に、信頼の最小単位はデバイスではなく瞬間である。</strong>ハードウェアウォレットの安全性評価は「このデバイスは安全か」ではなく「この鍵が作られた瞬間は安全だったか」を問うべきである。これは資産保管のデューデリジェンスの質問形式そのものを変える問題である。<strong>第二に、乱数生成器はfail-closedであるべきである。</strong>エントロピーソースの確保に失敗した際に低品質な値を返す設計は、失敗した事実そのものを隠蔽する。NIST SP 800-90Bの継続的健全性検査(continuous health test)要件が存在する理由はここにある。<strong>第三に、監査可能性は監査を意味しない。</strong>オープンソースは「誰かが検討したはずだ」という集団的な思い込みを誘発する。実際に検討されたかどうかは別の事実であり、検証されていないものは存在しないものとみなすべきである。<strong>第四に、透明性は両刃の剣である。</strong>公開台帳は監査と検証の基盤であると同時に、攻撃者にとっての無料の偵察インフラでもある。プライバシー技法(CoinJoin、アドレス再利用の回避)は、本事案において実質的な防御的価値を持っていた。<strong>第五に、ベンダー集中が新たな単一障害点である。</strong>分散型システムにおいてユーザーが少数のハードウェアベンダーへ収斂すると、プロトコル層の分散化は維持されるものの、<strong>鍵生成層にシステムリスクが蓄積する。</strong> 本事案は、そのリスクが実現した最初の大規模事例である。</p>
+<h3>10.3 プロトコル層には問題がなかった</h3>
+<p>付随的に確認しておくべき事項がある。ビットコインプロトコル、secp256k1曲線、BIP-32/39標準にはいかなる欠陥も発見されていない。失敗は完全に<strong>実装層</strong>、それも特定ベンダーのビルド設定において発生した。Trezor、Ledger、Block(Bitkey)は自社製品が影響を受けていないことを確認している。</p>
+<p>この区別は市場コミュニケーションにおいて重要である。「ビットコインがハッキングされた」という記述は不正確であり、正確な記述は「特定のハードウェアウォレットメーカーの鍵生成実装が失敗した」である。</p>
+<hr>
+<h2>11. 韓国の視点 — 規制整合性と国内取引所への提言</h2>
+<h3>11.1 現行国内規制の死角</h3>
+<p>仮想資産利用者保護法(2024年7月19日施行)は、仮想資産事業者に対し<strong>利用者仮想資産の経済的価値の80%以上をコールドウォレットに保管</strong>することを求めている。従来の特定金融情報法体系上のISMS認証要件における70%基準から上方修正されたものである。事業者は毎月経済的価値を算出し、比率を維持しなければならない。</p>
+<p>2026年2月、金融委員会は国会政務委員会への書面答弁を通じ、<strong>第2段階法(デジタル資産基本法)の下位規定策定時にコールドウォレット保管比率を100%水準へ上方修正する案を検討</strong>すると明らかにした。あわせて、デジタル資産カストディを別業種として規律する案も検討中である。</p>
+<p>問題は、この規制体系全体が<strong>隔離の前提のみを規律している</strong>点にある。</p>
+<table>
+<thead>
+<tr>
+<th>規制指標</th>
+<th>規律対象</th>
+<th>本事案を防御できるか</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>コールドウォレット保管比率80%</td>
+<td>資産がどこにあるか</td>
+<td>不可能</td>
+</tr>
+<tr>
+<td>コールドウォレット保管比率100%(検討中)</td>
+<td>資産がどこにあるか</td>
+<td><strong>不可能</strong></td>
+</tr>
+<tr>
+<td>ISMS認証</td>
+<td>管理体系一般</td>
+<td>部分的</td>
+</tr>
+<tr>
+<td>準備金・保険(ウォンマーケット30億ウォン、その他5億ウォン)</td>
+<td>事後補償</td>
+<td>事後対応のみ</td>
+</tr>
+<tr>
+<td>鍵生成エントロピー品質基準</td>
+<td><strong>不在</strong></td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h3>11.2 国内取引所・VASPへの提言</h3>
+<table>
+<thead>
+<tr>
+<th>優先度</th>
+<th>措置</th>
+<th>詳細</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>即時</td>
+<td><strong>鍵生成出所の全数調査</strong></td>
+<td>運用中の全コールドウォレットの鍵が、いつ、どのデバイス・ファームウェアバージョン・HSMで生成されたかを一覧化する。Coldcard系列の使用履歴があれば直ちに隔離し、マイグレーションを実施する</td>
+</tr>
+<tr>
+<td>即時</td>
+<td><strong>民生用ハードウェアウォレットの運用資産使用状況の点検</strong></td>
+<td>民生用ハードウェアウォレットは機関カストディ用途として設計されていない。臨時・非常用途であっても使用履歴があるかを確認する</td>
+</tr>
+<tr>
+<td>1週間</td>
+<td><strong>エントロピーソースの二重化検証</strong></td>
+<td>HSMのTRNG単一依存の有無を確認する。最低2つ以上の独立ソースをXOR結合し、いずれかが失敗しても残りがセキュリティを維持する構造を確保する</td>
+</tr>
+<tr>
+<td>1週間</td>
+<td><strong>鍵生成プロベナンス記録体系の確立</strong></td>
+<td>鍵ごとの生成日時・デバイス識別子・ファームウェアバージョン・エントロピーソース・立会者を署名済みログとして保存する。事後の影響範囲算定の前提条件である</td>
+</tr>
+<tr>
+<td>2週間</td>
+<td><strong>マルチシグ・MPC構成の異種混成監査</strong></td>
+<td>閾値構成のすべての鍵が同一ベンダー・同一ファームウェア・同一ライブラリから生成されている場合、多重化の意味がない。ベンダー・アーキテクチャ・エントロピーソースを交差分散する</td>
+</tr>
+<tr>
+<td>2週間</td>
+<td><strong>クロスデバイス・エントロピー検証手順の導入</strong></td>
+<td>同一モデル2台以上で生成した鍵の統計的独立性検証を鍵生成SOPに組み込む</td>
+</tr>
+<tr>
+<td>1か月</td>
+<td><strong>HSM認証要件の再確認</strong></td>
+<td>FIPS 140-2/140-3 Level 3以上、CC EAL4+などの認証の有効性と、認証範囲にRNGが含まれるかを確認する</td>
+</tr>
+<tr>
+<td>1か月</td>
+<td><strong>ファームウェアSBOMと変更管理</strong></td>
+<td>カストディインフラの全構成要素のSBOMを確保する。ファームウェア更新時の第三者セキュリティ監査と回帰検証を義務化する</td>
+</tr>
+<tr>
+<td>四半期</td>
+<td><strong>鍵ローテーションポリシーの策定</strong></td>
+<td>無期限使用の鍵を排除する。定期ローテーション時に新規エントロピーソースで再生成する</td>
+</tr>
+<tr>
+<td>常時</td>
+<td><strong>オンチェーン異常出金検知ルールの強化</strong></td>
+<td>同一手数料率のハードコード、おつり出力の不在、長期休眠アドレスの全額移動などのスイープ指紋に基づくアラート</td>
+</tr>
+</tbody></table>
+<h3>11.3 規制当局への政策提言</h3>
+<ol>
+<li><p><strong>保管場所規制から鍵ライフサイクル規制への拡張</strong>— コールドウォレット比率は必要条件であって十分条件ではない。第2段階法の下位規定には、比率の上方修正とは別に<strong>鍵の生成・バックアップ・ローテーション・廃棄の全過程における完全性要件</strong>を含めるべきである。</p>
+</li>
+<li><p><strong>カストディの別業種規律における明文RNG要件</strong> — 金融委員会が検討中のデジタル資産カストディ業の規律において、参入規制要件として認証済みの乱数生成器(NIST SP 800-90A/B/C準拠、または同等の認証)の使用を明示する案を検討する必要がある。</p>
+</li>
+<li><p><strong>ハードウェアウォレット脆弱性の開示義務検討</strong> — 国内で流通するハードウェアウォレットベンダーに対し、重大脆弱性発見時の利用者通知期限(例: 24時間)を規律する案。本事案の30時間の遅延は、その必要性を実証している。</p>
+</li>
+<li><p><strong>自己保管利用者への情報提供体系</strong> — 自己保管には預金者保護も準備金補償も適用されない。この事実とベンダーリスクの存在を、取引所の出金案内段階で告知するようにする案。</p>
+</li>
+<li><p><strong>国内流通履歴の把握</strong> — 国内にColdcardがどれほど流通しており、被害事例があるかについては現時点で公開資料がない。KISA・金融保安院レベルでの実態把握と国文の勧告配布が必要である。</p>
+</li>
+</ol>
+<h3>11.4 国内市場の特殊性</h3>
+<p>韓国市場は、ウォンマーケット5大取引所を中心とした高い取引所集中度と、トラベルルール施行に伴う個人ウォレットへの出金制約により、<strong>自己保管比率が相対的に低い</strong>と知られている。これは本事案への直接的な露出を減らす要因ではあるが、同時に次の二つのリスクを残す。</p>
+<ul>
+<li><strong>取引所カストディインフラ自体の鍵生成リスクが集中する。</strong> 個人が分散して保有していれば個別事故に留まったであろうリスクが、取引所に集中すればシステムリスクとなる。</li>
+<li><strong>法人市場開放と機関カストディ拡大の局面</strong>で、カストディ事業者の鍵管理標準が確立されなければ、同種の事故がはるかに大きな規模で再現される可能性がある。</li>
+</ul>
+<hr>
+<h2>12. ビットコイン投資者への提言</h2>
+<h3>12.1 Coldcard保有者向け即時判定手順</h3>
+<pre><code>Q1. ウォレットのシードをColdcardで生成したか?
+    いいえ → 影響なし(ただしQ5を確認)
+    はい ↓
+
+Q2. シード生成時点は2021年3月17日(ファームウェアv4.0.0リリース)以降か?
+    いいえ → 影響なし
+    わからない → 影響ありとみなして進める
+    はい ↓
+
+Q3. シード生成時に独立かつ非公開のサイコロロールを50回以上入力したか?
+    はい(確実) → RNG欠陥単独ではリスクなし。ただしSeed XOR使用者は12.3を参照
+    いいえ / 記憶が定かでない ↓
+
+Q4. 即時マイグレーション対象。9.3の手順に従う。
+
+Q5. 紙ウォレット生成、Seed XOR分割、デバイスクローニング機能を使用したことがあるか?
+    はい → 該当の生成物も予測可能であった可能性がある。別途マイグレーションが必要
+</code></pre>
+<p><strong>パスフレーズ利用者への注意:</strong> 強固かつ固有のBIP-39パスフレーズは即時露出を大きく減らすが、脆弱なシードそのものを修復しない。Coinkiteは、パスフレーズ利用者についても実務上可能な限り早くマイグレーションすることを推奨している。</p>
+<h3>12.2 一般ビットコイン投資者への提言</h3>
+<table>
+<thead>
+<tr>
+<th>提言</th>
+<th>根拠</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>ベンダーを分散させる</strong></td>
+<td>単一ベンダー依存は本事案が実証したシステムリスクである。保有規模が大きい場合は異なるメーカー・アーキテクチャのデバイスへ分散する</td>
+</tr>
+<tr>
+<td><strong>マルチシグは異種混成で構成する</strong></td>
+<td>2-of-3構成の3鍵がすべて同一モデル・同一ファームウェアから生成されていれば、多重化の効果はゼロである</td>
+</tr>
+<tr>
+<td><strong>ユーザーエントロピーを習慣化する</strong></td>
+<td>サイコロロールやコイントスなど、ベンダーが制御しないエントロピーをシードに結合する。最低50回</td>
+</tr>
+<tr>
+<td><strong>パスフレーズを使用するが分離保管する</strong></td>
+<td>シード単語とパスフレーズを物理的に異なる場所に保管する</td>
+</tr>
+<tr>
+<td><strong>アドレス再利用を避ける</strong></td>
+<td>公開台帳が攻撃者の偵察資産となる構造を弱める</td>
+</tr>
+<tr>
+<td><strong>定期的に残高を確認する</strong></td>
+<td>本事案の被害者の平均休眠期間は3.18年であった。年1回以上の残高確認ルーティンを確立する</td>
+</tr>
+<tr>
+<td><strong>ベンダーのセキュリティ告知チャネルを購読する</strong></td>
+<td>30時間の告知遅延も問題であったが、告知を見なかったユーザーは数日を失った</td>
+</tr>
+<tr>
+<td><strong>保管方式を規模に応じて階層化する</strong></td>
+<td>少額は利便性優先、高額はマルチシグ・異種混成・ユーザーエントロピー</td>
+</tr>
+<tr>
+<td><strong>自己保管の責任範囲を理解する</strong></td>
+<td>自己保管資産には預金者保護も、取引所の準備金・保険も適用されない</td>
+</tr>
+</tbody></table>
+<h3>12.3 してはならないこと</h3>
+<table>
+<thead>
+<tr>
+<th>禁止事項</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>脆弱なシードを別のウォレットアプリ・デバイスへ復元して「移行した」と判断する</td>
+<td>シードの値自体が探索空間の中にある</td>
+</tr>
+<tr>
+<td>少額であることを理由にマイグレーションを延期する</td>
+<td>第3波は数千ドル規模のウォレットを標的化した</td>
+</tr>
+<tr>
+<td>パニック状態で検証なしに大量移転する</td>
+<td>マイグレーションミスがハッキングより大きな損失を招いた事例が繰り返し観測されている</td>
+</tr>
+<tr>
+<td>「復旧サービス」を標榜する第三者にシードを提供する</td>
+<td>事故直後は二次フィッシングの最盛期である。いかなる状況でもシードを他人に提供してはならない</td>
+</tr>
+<tr>
+<td>新規シード生成前のファームウェア確認を省略する</td>
+<td>脆弱なファームウェアで新しいシードを作れば、再び脆弱なシードになる</td>
+</tr>
+</tbody></table>
+<h3>12.4 国内被害発生時の対応手順</h3>
+<ol>
+<li><strong>オンチェーン証拠の保全</strong> — 流出トランザクションID、時刻(UTC)、送信・受信アドレス、金額を記録する。ブロックエクスプローラーの画面キャプチャも併せて行う。</li>
+<li><strong>捜査機関への申告</strong> — 警察庁サイバー捜査局または管轄警察署のサイバー捜査隊。国際協力が必要になるため、初期申告の時点が重要である。</li>
+<li><strong>オンチェーン分析会社への通報</strong> — Galaxy Research、Chainalysisなどが攻撃者アドレスのデータベースを構築中である。被害アドレス情報の提供が全体の追跡に貢献する。</li>
+<li><strong>取引所への凍結要請</strong> — 資金が取引所へ流入する場合に備え、国内外主要取引所のコンプライアンスチャネルにアドレスを事前登録する。現在資金が未移動状態であるため、この措置は実効性を持つ。</li>
+<li><strong>税務処理の準備</strong> — 盗難損失の税務上の取り扱いは事案ごとに異なり、資産移動記録と盗難証憑を保全しておく必要がある。具体的な判断は税務専門家との相談が必要である。</li>
+</ol>
+<p>本項目は一般情報であり、法律助言ではない。個別事案の法的対応は弁護士に相談すべきである。</p>
+<hr>
+<h2>13. 検知・対応・予防チェックリスト</h2>
+<h3>13.1 個人ユーザー</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 保有するハードウェアウォレットのメーカー・モデル・ファームウェアバージョンを確認する</li>
+<li><input disabled="" type="checkbox"> 各シードの生成時点および生成デバイスの記録を確認する</li>
+<li><input disabled="" type="checkbox"> サイコロロールなどのユーザーエントロピー入力の有無を確認する</li>
+<li><input disabled="" type="checkbox"> 該当する場合、修正ファームウェアのインストール → 新規シードの生成 → 少額テスト → 全額移転</li>
+<li><input disabled="" type="checkbox"> Seed XOR・紙ウォレット・デバイスクローニングの生成物を別途点検する</li>
+<li><input disabled="" type="checkbox"> ブロックエクスプローラーの残高アラートを設定する</li>
+<li><input disabled="" type="checkbox"> ベンダーのセキュリティ告知チャネルを購読する</li>
+</ul>
+<h3>13.2 取引所・カストディ事業者</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 全コールドウォレット鍵の生成プロベナンスを一覧化する</li>
+<li><input disabled="" type="checkbox"> 民生用ハードウェアウォレットの運用資産使用履歴を調査する</li>
+<li><input disabled="" type="checkbox"> HSM認証範囲にRNGが含まれるかを確認する</li>
+<li><input disabled="" type="checkbox"> 複数の独立エントロピーソースの結合構造を検証する</li>
+<li><input disabled="" type="checkbox"> マルチシグ・MPC構成のベンダー異種混成を監査する</li>
+<li><input disabled="" type="checkbox"> クロスデバイス・エントロピー検証を鍵生成SOPに組み込む</li>
+<li><input disabled="" type="checkbox"> ファームウェアSBOMを確保し、更新前の第三者監査手続きを確立する</li>
+<li><input disabled="" type="checkbox"> スイープ指紋に基づく異常出金検知ルールを配布する</li>
+<li><input disabled="" type="checkbox"> 鍵ローテーションポリシーを策定・施行する</li>
+<li><input disabled="" type="checkbox"> 事故発生時の利用者通知SLAを定義する(24時間以内を推奨)</li>
+</ul>
+<h3>13.3 ハードウェアウォレットメーカー</h3>
+<ul>
+<li><input disabled="" type="checkbox"> RNG経路をfail-closedに再設計する(エントロピー確保失敗時は動作を停止)</li>
+<li><input disabled="" type="checkbox"> ビルド設定とライブラリの条件付きコンパイルの相互作用を検証するテストを追加する</li>
+<li><input disabled="" type="checkbox"> クロスデバイス・シード独立性検証をリリースゲートに組み込む</li>
+<li><input disabled="" type="checkbox"> NIST SP 800-90Bの継続的健全性検査を実装する</li>
+<li><input disabled="" type="checkbox"> ユーザーエントロピー入力を選択機能から既定値へ転換する検討を行う</li>
+<li><input disabled="" type="checkbox"> 脆弱性緊急通知体系を構築する(メール到達率の限界を考慮した複数チャネル)</li>
+<li><input disabled="" type="checkbox"> ユーザー自己診断ツール(オフライン)を提供する</li>
+</ul>
+<hr>
+<h2>14. 結論</h2>
+<p>本事案は、暗号資産セキュリティ議論の焦点を<strong>保管から生成へ</strong>移動させる。</p>
+<p>過去10年間、業界は「どこに置くか」を改善することに資源を集中させてきた。ホットウォレットからコールドウォレットへ、単一署名からマルチシグへ、自己保管から規制されたカストディへ。国内規制もまた、コールドウォレット保管比率という単一指標を中心に発展してきた。この方向自体は正しく、実際に数多くの事故を予防してきた。</p>
+<p>しかし本事案は、その改善のすべてが<strong>一つの検証されていない前提の上に載っていた</strong>ことを明らかにした。鍵がそもそも推測不可能に作られているという前提。その前提がビルド設定一行で崩れ、5年間誰も気づかず、その結果、完璧に隔離されたデバイスから8,860万ドルが消失した。</p>
+<p>まとめると、以下の四点である。</p>
+<ol>
+<li><strong>コールドストレージは鍵を保管するが、鍵の品質を保証しない。</strong> 保管規制は生成規制によって補完されなければならない。</li>
+<li><strong>乱数生成器は静かに失敗してはならない。</strong> fail-open型のRNGは失敗した事実そのものを隠蔽し、これは失敗そのものより危険である。</li>
+<li><strong>監査可能性は監査ではない。</strong> 検証されていないものは存在しないものとして扱うべきである。</li>
+<li><strong>分散化はレイヤーごとに評価されるべきである。</strong> プロトコルが分散化されていても、鍵生成層が少数のベンダーに集中していれば、システムリスクはそのまま残る。</li>
+</ol>
+<p>「信頼せず、検証せよ(Don&#39;t trust, verify)」はビットコインの古くからの原則である。本事案は、この原則がプロトコルのみならず、<strong>自分の鍵がどのように作られたか</strong>にも適用されるべきであることを示している。そして大半のユーザーは、それを検証する手段を持っていない。その手段を提供することが、メーカーと規制当局の次の課題である。</p>
+<hr>
+<h2>15. 参考文献</h2>
+<ol>
+<li>Coinkite. (2026). <em>COLDCARD Security Advisory — Seed Generation</em>. Coinkite Blog. <a href="https://blog.coinkite.com/coldcard-mk3-seed-generation-warning/">https://blog.coinkite.com/coldcard-mk3-seed-generation-warning/</a></li>
+<li>Coinkite. (2026). <em>Technical Deep Dive into the Entropy Issue</em>. Coinkite Blog. <a href="https://blog.coinkite.com/entropy-technical-backgrounder/">https://blog.coinkite.com/entropy-technical-backgrounder/</a></li>
+<li>CoinDesk. (2026, August 1). <em>How bitcoin cold wallets lost $70 million in an attack that never touched the devices</em>. <a href="https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices">https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices</a></li>
+<li>CoinDesk. (2026, August 2). <em>Bitcoin cold-wallet attack spreads to 4,500 addresses as losses near $89 million</em>. <a href="https://www.coindesk.com/tech/2026/08/02/bitcoin-cold-wallet-attack-spreads-to-4-500-addresses-as-losses-near-usd89-million">https://www.coindesk.com/tech/2026/08/02/bitcoin-cold-wallet-attack-spreads-to-4-500-addresses-as-losses-near-usd89-million</a></li>
+<li>Decrypt. (2026). <em>Coldcard Bitcoin Exploit Balloons to $88 Million as Attackers Keep Draining Wallets</em>. <a href="https://decrypt.co/374817/coldcard-bitcoin-exploit-88-million-attackers-draining-wallets">https://decrypt.co/374817/coldcard-bitcoin-exploit-88-million-attackers-draining-wallets</a></li>
+<li>The Hacker News. (2026, August). <em>Coldcard Hardware Wallet Flaw Linked to $70 Million Bitcoin Theft</em>. <a href="https://thehackernews.com/2026/08/coldcard-hardware-wallet-flaw-linked-to.html">https://thehackernews.com/2026/08/coldcard-hardware-wallet-flaw-linked-to.html</a></li>
+<li>BleepingComputer. (2026). <em>COLDCARD wallet RNG flaw likely linked to $88 million Bitcoin theft</em>. <a href="https://www.bleepingcomputer.com/news/security/coldcard-wallet-rng-flaw-likely-linked-to-88-million-bitcoin-theft/">https://www.bleepingcomputer.com/news/security/coldcard-wallet-rng-flaw-likely-linked-to-88-million-bitcoin-theft/</a></li>
+<li>Tech Times. (2026, July 31). <em>Coldcard Hardware Wallet Hacked via Firmware Bug That Bypassed RNG for Five Years</em>. <a href="https://www.techtimes.com/articles/322392/20260731/coldcard-hardware-wallet-hacked-via-firmware-bug-that-bypassed-rng-five-years.htm">https://www.techtimes.com/articles/322392/20260731/coldcard-hardware-wallet-hacked-via-firmware-bug-that-bypassed-rng-five-years.htm</a></li>
+<li>crypto.news. (2026). <em>A build error in Coldcard&#39;s firmware drained $38 million in bitcoin in 25 minutes</em>. <a href="https://crypto.news/coldcard-firmware-bug-drains-38-million-bitcoin/">https://crypto.news/coldcard-firmware-bug-drains-38-million-bitcoin/</a></li>
+<li>Bitcoin Magazine. (2026). <em>Coinkite Releases Fixed Firmware After Coldcard Bug; AI Likely Involved In The Breach</em>. <a href="https://bitcoinmagazine.com/business/coinkite-releases-fixed-firmware-after-coldcard-bug-ai-likely-involved-in-the-hack">https://bitcoinmagazine.com/business/coinkite-releases-fixed-firmware-after-coldcard-bug-ai-likely-involved-in-the-hack</a></li>
+<li>The Crypto Times. (2026, August 1). <em>Coldcard Hack Hits $75M After Alleged Second Attack Wave: Galaxy Research</em>. <a href="https://www.cryptotimes.io/2026/08/01/coldcard-hack-hits-75m-after-alleged-second-attack-wave-galaxy-research/">https://www.cryptotimes.io/2026/08/01/coldcard-hack-hits-75m-after-alleged-second-attack-wave-galaxy-research/</a></li>
+<li>TechSpot. (2026). <em>A Coldcard firmware flaw let hackers drain $70 million in Bitcoin in 41 minutes</em>. <a href="https://www.techspot.com/news/113322-coldcard-firmware-flaw-hackers-drain-70-million-bitcoin.html">https://www.techspot.com/news/113322-coldcard-firmware-flaw-hackers-drain-70-million-bitcoin.html</a></li>
+<li>PrivacyGuides. (2026, August 3). <em>Nearly 1,400 Bitcoin Hacked from Coldcard Wallets</em>. <a href="https://www.privacyguides.org/news/2026/08/03/nearly-1400-bitcoin-hacked-from-coldcard-wallets/">https://www.privacyguides.org/news/2026/08/03/nearly-1400-bitcoin-hacked-from-coldcard-wallets/</a></li>
+<li>247wallst.com. (2026, August 1). <em>Coldcard Hacked for $70M: How Do You Keep Bitcoin Safe if Cold Wallets Can Be Hacked?</em> <a href="https://247wallst.com/investing/cryptocurrency/2026/08/01/coldcard-hacked-for-70m-how-do-you-keep-bitcoin-safe-if-cold-wallets-can-be-hacked/">https://247wallst.com/investing/cryptocurrency/2026/08/01/coldcard-hacked-for-70m-how-do-you-keep-bitcoin-safe-if-cold-wallets-can-be-hacked/</a></li>
+<li>金融委員会(韓国). (2023). <em>「仮想資産利用者保護等に関する法律」施行令制定案報道資料</em>. <a href="https://www.fsc.go.kr/no010101/81214">https://www.fsc.go.kr/no010101/81214</a></li>
+<li>ニュース1(韓国). (2026, February 20). <em>金融委「取引所仮想資産コールドウォレット保管比率、100%水準へ上方検討」</em>. <a href="https://www.news1.kr/finance/blockchain-fintech/6077484">https://www.news1.kr/finance/blockchain-fintech/6077484</a></li>
+<li>Decenter(韓国). (2026). <em>金融委「第2段階法で取引所コールドウォレット保管比率100%へ上方検討」</em>. <a href="https://www.decenter.kr/article/20010694">https://www.decenter.kr/article/20010694</a></li>
+<li>イートゥデイ(韓国). (2026). <em>金融委「デジタル資産基本法を最大限速やかに」…法人市場開放と連動</em>. <a href="https://www.etoday.co.kr/news/view/2606627">https://www.etoday.co.kr/news/view/2606627</a></li>
+<li>ブロックメディア(韓国). (2025, January 16). <em>デジタル資産コールドウォレット保管比率80%へ上方、取引所ごとの運用方式は異なる</em>. <a href="https://www.blockmedia.co.kr/archives/843516">https://www.blockmedia.co.kr/archives/843516</a></li>
+<li>ディエレック(韓国). (2025, December 10). <em>Upbit、セキュリティに有利なコールドウォレットを98%以上使用</em>. <a href="https://www.thelec.kr/news/articleView.html?idxno=45132">https://www.thelec.kr/news/articleView.html?idxno=45132</a></li>
+</ol>
+<hr>
+<h2>16. 附録A — 影響範囲と修正ファームウェア対照表</h2>
+<table>
+<thead>
+<tr>
+<th>モデル</th>
+<th>影響ファームウェア(Coinkite勧告基準)</th>
+<th>実効エントロピー</th>
+<th>修正バージョン(標準)</th>
+<th>修正バージョン(Edge)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mk2</td>
+<td>v4.0.1 ~ v4.1.9</td>
+<td>約40ビット</td>
+<td>v4.2.0以上</td>
+<td>該当なし</td>
+</tr>
+<tr>
+<td>Mk3</td>
+<td>v4.0.1 ~ v4.1.9</td>
+<td>約40ビット</td>
+<td>v4.2.0以上</td>
+<td>該当なし</td>
+</tr>
+<tr>
+<td>Mk4</td>
+<td>修正版以前の全バージョン</td>
+<td>約72ビット</td>
+<td>v5.6.0以上</td>
+<td>v6.6.0X以上</td>
+</tr>
+<tr>
+<td>Mk5</td>
+<td>修正版以前の全バージョン</td>
+<td>約72ビット</td>
+<td>v5.6.0以上</td>
+<td>v6.6.0X以上</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>修正版以前の全バージョン</td>
+<td>約72ビット</td>
+<td>v1.5.0Q以上</td>
+<td>v6.6.0QX以上</td>
+</tr>
+<tr>
+<td>TAPSIGNER</td>
+<td>影響なし</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OPENDIME</td>
+<td>影響なし</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SATSCARD</td>
+<td>影響なし</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<p><strong>出典間の不整合に注意:</strong>Mk2/Mk3の影響範囲について、Coinkite勧告はv4.0.1<del>v4.1.9と記載しているが、一部の初期報道はv4.0.0</del>v5.0.3と記述している。確実でない場合は<strong>影響ありとみなして</strong>マイグレーションするのが安全である。</p>
+<hr>
+<h2>17. 附録B — 未確認事項と追跡課題</h2>
+<table>
+<thead>
+<tr>
+<th>項目</th>
+<th>現在の状態</th>
+<th>追跡の必要性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>攻撃者の身元および国籍</td>
+<td>未確認。Galaxyが疑いのあるアドレス約600個を捜査機関に通報</td>
+<td>高</td>
+</tr>
+<tr>
+<td>3波が同一主体かどうか</td>
+<td>未確定。第1・2波は類似パターン、第3波は異なる</td>
+<td>中</td>
+</tr>
+<tr>
+<td>攻撃者のAI活用の有無</td>
+<td>メーカーの推定、確証なし</td>
+<td>中</td>
+</tr>
+<tr>
+<td>Mk4/Mk5/Qの72ビット空間への実際の攻撃有無</td>
+<td>現時点で未観測</td>
+<td>高</td>
+</tr>
+<tr>
+<td>Blockが指摘したfail-openブート経路の実際の発生有無</td>
+<td>未解決</td>
+<td>高</td>
+</tr>
+<tr>
+<td>国内流通量および国内被害事例</td>
+<td>公開資料なし</td>
+<td>高</td>
+</tr>
+<tr>
+<td>脆弱シードで生成された紙ウォレット・Seed XOR生成物の被害</td>
+<td>未集計</td>
+<td>中</td>
+</tr>
+<tr>
+<td>最終的な被害規模</td>
+<td>進行中、拡大の可能性あり</td>
+<td>高</td>
+</tr>
+<tr>
+<td>規制当局によるハードウェアウォレット認証体系の導入有無</td>
+<td>議論初期段階</td>
+<td>中</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>本レポートはTLP:GREEN分類として、コミュニティ内での共有が許可されています。商業利用の際は別途協議が必要であり、引用時は出典を明記してください。ライセンス: CC BY-NC-SA 4.0。</em></p>
+<p><em>免責事項: 本文書は公開情報源(OSINT)に基づいて作成された脅威インテリジェンス分析であり、投資助言または法律助言ではありません。事案は進行中であるため、数値と影響範囲は変更される可能性があります。</em></p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="共有" data-url="https://cti.vibequant.cc/cti/coldcard-rng-20260804-ja/" data-title="ビルド設定一行が崩壊させたコールドストレージ — Coldcardシードエントロピー欠陥と8,860万ドルのシード再現スイープ" data-text="Coldcardファームウェアのfail-open型RNGにより、Mk2/Mk3の実効エントロピーが約40ビットに崩壊。1,367 BTC(約8,860万ドル)の無接触シード再現スイープの分析、タイムライン、マイグレーション手順、韓国VASP規制への示唆を整理する。" data-lang="ja">
+  <span class="share-label">共有</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-ja%2F&amp;text=%E3%83%93%E3%83%AB%E3%83%89%E8%A8%AD%E5%AE%9A%E4%B8%80%E8%A1%8C%E3%81%8C%E5%B4%A9%E5%A3%8A%E3%81%95%E3%81%9B%E3%81%9F%E3%82%B3%E3%83%BC%E3%83%AB%E3%83%89%E3%82%B9%E3%83%88%E3%83%AC%E3%83%BC%E3%82%B8%20%E2%80%94%20Coldcard%E3%82%B7%E3%83%BC%E3%83%89%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E6%AC%A0%E9%99%A5%E3%81%A88%2C860%E4%B8%87%E3%83%89%E3%83%AB%E3%81%AE%E3%82%B7%E3%83%BC%E3%83%89%E5%86%8D%E7%8F%BE%E3%82%B9%E3%82%A4%E3%83%BC%E3%83%97" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-ja%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-ja%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">リンクをコピー</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0804-COLDCARD-RNG_JA.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

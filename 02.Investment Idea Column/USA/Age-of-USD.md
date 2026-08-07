@@ -1,3 +1,46 @@
+---
+title: "주도주에서 다음 주도주는? — 테마는 어떻게 움직이는가"
+subtitle: "반도체 슈퍼사이클, 달러의 역설, 그리고 로마·파운드가 보여준 기축통화 교체의 법칙"
+description: "AI 반도체 슈퍼사이클과 실적 벽, 약달러 속 달러 자산 선호, 로마·대영제국·블랙 웬즈데이 사례로 읽는 기축통화 함량 조정. 주식회사 USA에 베팅하되 선언된 가격선은 믿지 말라."
+abstract: |
+  2026년 AI 수요가 견인하는 반도체 슈퍼사이클과 하이퍼스케일러 CAPEX 폭증 국면에서,
+  실적 서프라이즈에도 주가가 흔들리는 '기대치 과잉'과 닷컴 버블 유사 패턴을 짚는다.
+  달러 인덱스는 약세인데 달러 표시 자산으로 자금이 모이는 역설, 로마 은화·영국 파운드
+  (수에즈·블랙 웬즈데이) 사례를 통해 기축통화 패권 상실이 '소멸'이 아니라 '함량 조정'임을 논한다.
+  투자 결론: 주식회사 USA·현금성 자산에 중성장 배분하되, 정책 당국의 방어선 선언을 보장으로 착각하지 말 것.
+summary_for_ai: |
+  Opinion column (not investment advice), as of 2026-08-07.
+  Thesis: next market leadership is less about chasing themes than allocating to "Corp USA" (US ETF/cash-like) at mid-growth expectations while recognizing reserve-currency hegemony is adjusting in purity, not vanishing.
+  Covers: AI semi supercycle & hyperscaler CAPEX; Sandisk-like "good earnings, bad reaction"; BoA Harnett 2000-like breadth; weak USD index yet flight to USD assets; Rome denarius/political privatization/auction of empire; UK sterling (Anglo-American loan, Parkinson's law, 1976 IMF, Suez 1956, Black Wednesday 1992); Korea 1997 parallel; no ready USD successor (CNY/EUR/gold/stablecoins).
+date: 2026-08-07
+updated: 2026-08-07
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 매크로
+  - 달러
+  - 기축통화
+  - 반도체
+  - AI
+  - 지정학
+  - 투자
+keywords:
+  - "주도주"
+  - "달러 인덱스"
+  - "기축통화"
+  - "반도체 슈퍼사이클"
+  - "블랙 웬즈데이"
+  - "수에즈 위기"
+  - "주식회사 USA"
+  - "탈달러화"
+group: macro-geo
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 주도주에서 다음 주도주는? - 테마는 어떻게 움직이는가?
 
 ## 1. 반도체 슈퍼사이클, 이번엔 다르다

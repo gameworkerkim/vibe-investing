@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>一行构建配置击溃冷存储 — Coldcard 种子熵缺陷与8,860万美元种子复现清空事件 — VibeQuant</title>
+  <meta name="description" content="Coldcard固件RNG fail-open导致Mk2/Mk3实际熵降至约40比特。对1,367 BTC(约8,860万美元)无接触种子复现清空事件的分析、时间线、迁移指南与韩国VASP监管启示。" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804-cn/" />
+  <meta property="og:title" content="一行构建配置击溃冷存储 — Coldcard 种子熵缺陷与8,860万美元种子复现清空事件" />
+  <meta property="og:description" content="Coldcard固件RNG fail-open导致Mk2/Mk3实际熵降至约40比特。对1,367 BTC(约8,860万美元)无接触种子复现清空事件的分析、时间线、迁移指南与韩国VASP监管启示。" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/coldcard-rng-20260804-cn/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804/" />
+  <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804-en/" />
+  <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804-ja/" />
+  <link rel="alternate" hreflang="zh-Hans" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804-cn/" />
+  <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/coldcard-rng-20260804/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"一行构建配置击溃冷存储 — Coldcard 种子熵缺陷与8,860万美元种子复现清空事件","description":"Coldcard固件RNG fail-open导致Mk2/Mk3实际熵降至约40比特。对1,367 BTC(约8,860万美元)无接触种子复现清空事件的分析、时间线、迁移指南与韩国VASP监管启示。","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/coldcard-rng-20260804-cn/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0804-COLDCARD-RNG_CN.md","image":"https://vibequant.cc/og-default.png","url":"https://cti.vibequant.cc/cti/coldcard-rng-20260804-cn/","datePublished":"2026-08-04","dateModified":"2026-08-04","inLanguage":"zh-Hans","keywords":"Cryptocurrency, Cold-Wallet, Hardware-Wallet, RNG-Failure, Seed-Generation, Blockchain-Forensics"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"一行构建配置击溃冷存储 — Coldcard 种子熵缺陷与8,860万美元种子复现清空事件","item":"https://cti.vibequant.cc/cti/coldcard-rng-20260804-cn/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 크립토 · Web3</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">크립토 · Web3</p>
+        <h1>一行构建配置击溃冷存储 — Coldcard 种子熵缺陷与8,860万美元种子复现清空事件</h1>
+        <p class="article-dates"><time datetime="2026-08-04">발행 2026.08.04</time> · 주제 Cryptocurrency · Cold-Wallet · Hardware-Wallet · RNG-Failure · Seed-Generation · Blockchain-Forensics</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../cti/coldcard-rng-20260804/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../cti/coldcard-rng-20260804-en/" data-lang="EN">English</a>
+      <a class="lang-btn" href="../../cti/coldcard-rng-20260804-ja/" data-lang="JP">日本語</a>
+      <a class="lang-btn is-active" href="../../cti/coldcard-rng-20260804-cn/" data-lang="CN" aria-current="true">中文</a>
+    </div>
+        <p class="lede">Coldcard固件RNG fail-open导致Mk2/Mk3实际熵降至约40比特。对1,367 BTC(约8,860万美元)无接触种子复现清空事件的分析、时间线、迁移指南与韩国VASP监管启示。</p>
+        
+        <nav class="share-bar" aria-label="分享" data-url="https://cti.vibequant.cc/cti/coldcard-rng-20260804-cn/" data-title="一行构建配置击溃冷存储 — Coldcard 种子熵缺陷与8,860万美元种子复现清空事件" data-text="Coldcard固件RNG fail-open导致Mk2/Mk3实际熵降至约40比特。对1,367 BTC(约8,860万美元)无接触种子复现清空事件的分析、时间线、迁移指南与韩国VASP监管启示。" data-lang="zh-Hans">
+  <span class="share-label">分享</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-cn%2F&amp;text=%E4%B8%80%E8%A1%8C%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE%E5%87%BB%E6%BA%83%E5%86%B7%E5%AD%98%E5%82%A8%20%E2%80%94%20Coldcard%20%E7%A7%8D%E5%AD%90%E7%86%B5%E7%BC%BA%E9%99%B7%E4%B8%8E8%2C860%E4%B8%87%E7%BE%8E%E5%85%83%E7%A7%8D%E5%AD%90%E5%A4%8D%E7%8E%B0%E6%B8%85%E7%A9%BA%E4%BA%8B%E4%BB%B6" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-cn%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-cn%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">复制链接</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p><strong>报告编号</strong>CTI-2026-0804-COLDCARD-RNG ·<strong>发布日期</strong>2026-08-04 ·<strong>分类</strong>TLP:GREEN ·<strong>严重程度</strong>CRITICAL<strong>作者</strong> Dennis Kim / HoKwang Kim · <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · @gameworkerkim</p>
+<p><em>硬件钱包的安全性,从来不在于&quot;把密钥放在哪里&quot;,而在于&quot;密钥是如何生成的&quot;。Coldcard完美地守住了前者,却在后者上疏忽了整整五年。</em></p>
+<p><strong>🌐 Language:</strong><a href="../../cti/coldcard-rng-20260804/">한국어</a> · <a href="../../cti/coldcard-rng-20260804-en/">English</a> · <a href="../../cti/coldcard-rng-20260804-ja/">日本語</a> ·<strong>中文</strong></p>
+<hr>
+<h2>目录</h2>
+<ol>
+<li>摘要(TL;DR)</li>
+<li>引言 — 隔离依然完好,生成却已崩溃</li>
+<li>事件时间线</li>
+<li>根本原因分析 — 仅检查宏是否存在的fail-open结构</li>
+<li>技术性漏洞分析 — 熵崩溃的量化</li>
+<li>攻击链分析 — 离线种子复现与链上清空</li>
+<li>影响量化分析 — 三波攻击</li>
+<li>幸存者分析 — 什么保住了钱包</li>
+<li>应对与迁移 — 补丁无法修复的部分</li>
+<li>行业启示 — 重新审视信任模型</li>
+<li>韩国视角 — 监管适配性与对国内交易所的建议</li>
+<li>致比特币投资者的建议</li>
+<li>检测·响应·预防清单</li>
+<li>结论</li>
+<li>参考文献</li>
+<li>附录 A — 影响范围及修复固件对照表</li>
+<li>附录 B — 未确认事项与后续追踪课题</li>
+</ol>
+<hr>
+<h2>1. 摘要(TL;DR)</h2>
+<p>2026年7月29日至8月2日,加拿大Coinkite公司生产的比特币专用硬件钱包<strong>Coldcard</strong>所生成的种子,成为一场大规模资产窃取的目标。据Galaxy Research统计,已观测到的损失为<strong>1,367.05 BTC(约8,860万美元,约合1,230亿韩元)、4,585个地址</strong>,攻击分三波进行,截至本报告撰写时仍未结束。</p>
+<p>本次攻击的本质<strong>不是入侵,而是复现</strong>。攻击者没有接触过任何受害者的设备,没有窃取PIN码或种子短语,也没有使用恶意软件或钓鱼手段。2021年3月,Coldcard固件的构建配置出现不一致,导致种子生成被路由到<strong>MicroPython的确定性软件PRNG(Yasmarang)</strong>,而不是STM32硬件随机数生成器(TRNG)。这个PRNG<strong>仅以芯片唯一ID与计时器寄存器数值进行初始化</strong>,此后再未收集任何额外的熵。结果,Mk2/Mk3的实际熵从128比特崩溃至<strong>约40比特</strong>,Mk4/Mk5/Q则崩溃至<strong>约72比特</strong>。</p>
+<p>40比特是消费级硬件即可进行全空间搜索的规模。攻击者在离线状态下枚举候选种子,按BIP32/BIP39规则派生出地址,再<strong>查询公开区块链上的余额</strong>,只挑选有资产的地址进行清空。区块链的透明性,就这样被挪用成了攻击者的侦察基础设施。</p>
+<p>核心事实摘要</p>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>漏洞引入时点</td>
+<td>2021年3月1日提交(<code>ckcc.rng_bytes</code> → <code>ngu.random.bytes</code>),固件v4.0.0于2021年3月17日发布</td>
+</tr>
+<tr>
+<td>暴露期间</td>
+<td>约5年4个月</td>
+</tr>
+<tr>
+<td>实际熵</td>
+<td>Mk2/Mk3约40比特,Mk4/Mk5/Q约72比特(设计目标为128比特)</td>
+</tr>
+<tr>
+<td>第一波</td>
+<td>2026-07-30 01:10–01:51 UTC,41分钟,1,082.65 BTC / 1,196个地址 / 约7,020万美元</td>
+</tr>
+<tr>
+<td>累计损失</td>
+<td>1,367.05 BTC / 4,585个地址 / 约8,860万美元(截至2026-08-02)</td>
+</tr>
+<tr>
+<td>厂商首次公告</td>
+<td>第一波结束约30小时后</td>
+</tr>
+<tr>
+<td>被盗资金转移情况</td>
+<td>无——仍以未使用状态保留在攻击者控制的地址中</td>
+</tr>
+<tr>
+<td>受害者特征</td>
+<td>平均休眠期约3.18年,大多为长期持有的个人</td>
+</tr>
+<tr>
+<td>未受影响产品</td>
+<td>TAPSIGNER、OPENDIME、SATSCARD(独立代码库)、Trezor、Ledger、Block(Bitkey)</td>
+</tr>
+</tbody></table>
+<p><strong>本次事件一句话总结:冷存储守住了密钥,却没能守住密钥被制造出来的那个瞬间。</strong></p>
+<hr>
+<h2>2. 引言 — 隔离依然完好,生成却已崩溃</h2>
+<p>硬件钱包的安全模型建立在两个独立的前提之上。</p>
+<ol>
+<li><strong>隔离前提</strong> — 私钥永不离开未连接互联网的设备。</li>
+<li><strong>生成前提</strong> — 该密钥源自任何计算资源都无法猜测的随机数。</li>
+</ol>
+<p>整个行业的营销、用户教育与监管讨论,几乎全部集中在第一个前提上。&quot;不连接互联网&quot;这句话一直是硬件钱包广告的核心,韩国虚拟资产监管中的&quot;冷钱包保管比例&quot;指标,同样是对隔离前提的量化。</p>
+<p>在本次事件中,<strong>隔离前提从未被打破</strong>。受害者之一、加拿大人Jonathan Goodman使用的Coldcard一直存放在银行保险柜中,从未连接过互联网,他也从未向任何人透露过种子短语。然而在2026年7月29日晚间,他在短短7分钟内损失了18.25 BTC。</p>
+<p>崩溃的是第二个前提。而当第二个前提崩溃时,第一个前提便<strong>不再具有任何防御价值</strong>。攻击者根本不需要突破防线——他们只是在防线之外,重新制造出了防线之内生成的秘密。</p>
+<p>这一结构与传统网络安全的入侵响应范式截然不同。没有入侵痕迹,没有可供检测的日志,事件发生的时间点不是资产被窃取之时,而是<strong>密钥生成之时</strong>。受害者早在五年前就已被攻破,而他们根本没有办法知道这一点。</p>
+<hr>
+<h2>3. 事件时间线</h2>
+<table>
+<thead>
+<tr>
+<th>日期时间</th>
+<th>事件</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2021-03-01</td>
+<td>将种子生成调用从<code>ckcc.rng_bytes</code>改为<code>ngu.random.bytes</code>的提交(commit)被合并</td>
+<td>漏洞引入时点</td>
+</tr>
+<tr>
+<td>2021-03-17</td>
+<td>固件v4.0.0发布</td>
+<td>开始分发存在漏洞的固件</td>
+</tr>
+<tr>
+<td>2021-03 ~ 2026-07</td>
+<td>存在漏洞的种子持续被生成与流通</td>
+<td>用户与厂商均未察觉</td>
+</tr>
+<tr>
+<td>2026-07-29晚间(当地时间)</td>
+<td>个人受害者Jonathan Goodman,7分钟内损失18.25 BTC</td>
+<td>首个公开的受害证词</td>
+</tr>
+<tr>
+<td>2026-07-30 01:10–01:51 UTC</td>
+<td>第一波攻击:清空1,082.65 BTC / 1,196个地址(耗时41分钟,分布于6个区块)</td>
+<td>中间3个区块为空白——疑似批量广播痕迹</td>
+</tr>
+<tr>
+<td>2026-07-30(最初10分钟)</td>
+<td>约窃取3,000万美元,优先打击高额钱包</td>
+<td>Chainalysis分析</td>
+</tr>
+<tr>
+<td>2026-07-31(第一波结束约30小时后)</td>
+<td>Coinkite发布首份安全公告(针对Mk2/Mk3)</td>
+<td>资金已流出完毕</td>
+</tr>
+<tr>
+<td>2026-07-31 09:33 EDT</td>
+<td>发布修复固件(Mk4/Mk5 v5.6.0+, Q v1.5.0Q+)</td>
+<td></td>
+</tr>
+<tr>
+<td>2026-08-01</td>
+<td>Coinkite扩大公告范围——确认Mk4/Mk5/Q同样受约72比特熵影响</td>
+<td>影响范围扩大</td>
+</tr>
+<tr>
+<td>2026-08-01</td>
+<td>Galaxy Research确认第二波攻击——累计1,158.66 BTC / 2,673个地址 / 约7,510万美元</td>
+<td>7个攻击者控制地址</td>
+</tr>
+<tr>
+<td>2026-08-02</td>
+<td>Galaxy Research确认第三波攻击——新增207.73 BTC / 1,912个地址</td>
+<td>针对小额钱包,追踪难度更高的模式</td>
+</tr>
+<tr>
+<td>2026-08-02</td>
+<td>累计1,367.05 BTC / 4,585个地址 / 约8,860万美元</td>
+<td>攻击仍在进行</td>
+</tr>
+<tr>
+<td>2026-08-02</td>
+<td>Galaxy向联邦执法机构与合规公司举报约600个疑似攻击者地址</td>
+<td></td>
+</tr>
+<tr>
+<td>2026-08-03(截至目前)</td>
+<td>被盗资金仍未转移,调查持续进行</td>
+<td>本报告撰写时点</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 根本原因分析 — 仅检查宏是否存在的fail-open结构</h2>
+<h3>4.1 缺陷的结构</h3>
+<p>根据Block比特币工程团队公开的分析,该缺陷按以下顺序产生。</p>
+<pre><code>[1] Coldcard生产构建配置
+    MICROPY_HW_ENABLE_RNG = 0
+    (因Coinkite提供了自有的硬件RNG封装,故有意设置为0)
+         ↓
+[2] libngu库
+    仅检查宏&quot;是否被定义&quot;(#ifdef系列)
+    未检查&quot;值是否为启用状态&quot;(#if)
+         ↓
+[3] 判定结果
+    由于宏已被定义,不会被误判为&quot;硬件RNG可用&quot;,
+    构建绑定到MicroPython的默认回退路径
+         ↓
+[4] 回退PRNG:Yasmarang
+    种子来源 = 芯片唯一ID(UID)+ 计时器寄存器
+    初始化之后不再收集新的熵
+         ↓
+[5] 2021-03-01提交
+    ckcc.rng_bytes(直连STM32硬件外设)
+    → ngu.random.bytes(受损的libngu路径)
+         ↓
+[6] SHA256d哈希
+    哈希无法增加输入熵
+    2^40个输入 → 最多2^40个输出
+</code></pre>
+<p><strong>关键在于第6步。</strong>不少用户与部分早期报道曾误以为&quot;用SHA256哈希过就应该是安全的&quot;,但密码学哈希函数只提供压缩与扩散,<strong>并不会创造熵</strong>。如果输入候选有2^40个,输出候选同样只有2^40个。这与2012年以来反复出现的一系列RNG失败案例(Debian OpenSSL、Android SecureRandom、Profanity靓号地址生成器等)属于同一种结构性错误。</p>
+<h3>4.2 为何五年间未被发现</h3>
+<table>
+<thead>
+<tr>
+<th>因素</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>仅凭输出观察无法检测</td>
+<td>Yasmarang的输出能够通过统计随机性检验(NIST STS、Dieharder等)。问题不在于分布,而在于<strong>搜索空间的大小</strong></td>
+</tr>
+<tr>
+<td>构建时刻的缺陷</td>
+<td>仅阅读源代码无法发现该问题,它产生于构建配置与库条件编译之间的相互作用</td>
+</tr>
+<tr>
+<td>开源的悖论</td>
+<td>正因固件开源,攻击者也能以同样方式进行验证。可审计性是一把双刃剑</td>
+</tr>
+<tr>
+<td>缺乏可复现性验证</td>
+<td>发布流程中不存在<strong>跨设备熵验证</strong>——即检查两台相同设备是否会生成不同种子</td>
+</tr>
+<tr>
+<td>自动化审计的局限</td>
+<td>Coinkite表示,事件发生前数周曾对同一代码进行过基于AI的审计,但未发现该缺陷</td>
+</tr>
+</tbody></table>
+<h3>4.3 关于攻击者发现路径的观察</h3>
+<p>Coinkite提出,攻击者可能利用AI在开源固件中发现了该缺陷。与此同时,该公司自身的AI审计却在同一代码中一无所获。这种不对称值得关注。</p>
+<p>防御者的AI审计所提出的问题是<strong>宽泛且没有明确目标</strong>的——&quot;这段代码里有没有漏洞?&quot;而攻击者使用AI提出的问题则是<strong>狭窄且目标明确</strong>的——&quot;这台设备能生成的种子总共有多少种可能?&quot;后者显然是更容易回答的问题。LLM不是替代判断的神谕,而是替代计算的工具,工具产出的质量与提问的具体程度成正比。这一点为防御方的AI审计设计提供了实务上的教训。</p>
+<p>不过,攻击者是否真的使用了AI,目前仍属<strong>情境推测</strong>,并非已确证的事实。</p>
+<hr>
+<h2>5. 技术性漏洞分析 — 熵崩溃的量化</h2>
+<h3>5.1 漏洞摘要</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>内容</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>漏洞类型</td>
+<td>CWE-331(熵不足)、CWE-338(使用密码学上脆弱的PRNG)</td>
+</tr>
+<tr>
+<td>受影响产品</td>
+<td>Coldcard Mk2、Mk3、Mk4、Mk5、Q</td>
+</tr>
+<tr>
+<td>引入时点</td>
+<td>2021-03-01(提交)、2021-03-17(v4.0.0发布)</td>
+</tr>
+<tr>
+<td>CVSS v3.1(评估值)</td>
+<td>9.1(Critical) — AV:N / AC:L / PR:N / UI:N / S:U / C:H / I:N / A:H</td>
+</tr>
+<tr>
+<td>攻击前提条件</td>
+<td>无需对目标设备进行物理或逻辑访问</td>
+</tr>
+<tr>
+<td>可检测性</td>
+<td>受害者侧无法检测(不存在入侵痕迹)</td>
+</tr>
+</tbody></table>
+<h3>5.2 熵崩溃的规模</h3>
+<table>
+<thead>
+<tr>
+<th>型号</th>
+<th>设计目标</th>
+<th>实际熵</th>
+<th>搜索空间</th>
+<th>实务解读</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mk2 / Mk3</td>
+<td>128比特</td>
+<td>约40比特</td>
+<td>约1.1×10^12</td>
+<td>消费级GPU集群可在数小时至数天内完成全空间搜索</td>
+</tr>
+<tr>
+<td>Mk4 / Mk5 / Q</td>
+<td>128比特</td>
+<td>约72比特</td>
+<td>约4.7×10^21</td>
+<td>以现有消费级设备而言不现实,但对国家级或大规模资金攻击者而言处于理论射程之内</td>
+</tr>
+<tr>
+<td>正常BIP-39 12词</td>
+<td>128比特</td>
+<td>128比特</td>
+<td>约3.4×10^38</td>
+<td>无法全空间搜索</td>
+</tr>
+</tbody></table>
+<p>Mk4/Mk5/Q相对较好的原因,是其安全元件(secure element)将自身的熵混入了PRNG状态。但根据Coinkite的技术背景文档,这些型号在初始混入之后,后续大部分随机数值仍是从同一条受损路径中取出的。</p>
+<p>部分早期报道将搜索空间描述为&quot;约40亿个(2^32)&quot;。这一数字似乎源自Block提及的&quot;32比特重新播种(reseed)漏洞&quot;,应与Coinkite官方公告中约40比特的估算数值区分开来看待。但无论采用哪个数字,<strong>结论都同样是——处于可全空间搜索的范围之内</strong>。</p>
+<h3>5.3 种子之外的附带影响</h3>
+<p>同一条受损路径同样被用于种子生成以外的功能。Block公开资料所列出的受影响函数如下。</p>
+<ul>
+<li>纸钱包(paper wallet)私钥生成</li>
+<li>Seed XOR分割掩码生成</li>
+<li>设备复制(cloning)密钥生成</li>
+</ul>
+<p>也就是说,即便是使用Seed XOR将种子分割保管的用户,其分割掩码本身也可能是<strong>可预测的</strong>。这意味着&quot;高级用户反而更安全&quot;这一普遍认知,<strong>只能部分成立</strong>。</p>
+<h3>5.4 针对fail-open结构的未解决质疑</h3>
+<p>Block将Mk4/Q/Mk5的结构定性为&quot;危险的fail-open结构&quot;。其指出,若在启动序列早期、重新播种(reseed)执行之前捕获到异常,设备可能会<strong>以公开的初始状态、不附加任何额外熵</strong>的方式继续运行。该情形是否会在实际生产环境中发生,仍有待另行评估,截至本报告撰写时属于<strong>未解决事项</strong>。</p>
+<p>这一点从安全设计原则的角度看至关重要。<strong>密码学随机数生成器必须是fail-closed的</strong>——若无法获取熵源,应当中止运行,而不是返回一个数值。返回低质量数值的结构,会把&quot;失败&quot;这一事实本身给掩盖起来。</p>
+<hr>
+<h2>6. 攻击链分析 — 离线种子复现与链上清空</h2>
+<h3>6.1 分阶段拆解</h3>
+<table>
+<thead>
+<tr>
+<th>阶段</th>
+<th>行为</th>
+<th>观测依据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. 缺陷识别</td>
+<td>分析开源固件及构建配置,估算搜索空间</td>
+<td>固件公开仓库</td>
+</tr>
+<tr>
+<td>2. 候选种子枚举</td>
+<td>结合UID、计时器状态与前序RNG调用历史约束条件,复现候选输出流</td>
+<td>Block分析</td>
+</tr>
+<tr>
+<td>3. 地址派生</td>
+<td>按BIP-32/BIP-39/BIP-44、49、84各派生路径生成地址</td>
+<td>标准规范</td>
+</tr>
+<tr>
+<td>4. 余额比对</td>
+<td>与公开区块链数据(UTXO集)进行匹配比对</td>
+<td>Galaxy · Chainalysis分析</td>
+</tr>
+<tr>
+<td>5. 优先级选定</td>
+<td>优先打击高额钱包,再扩散至小额钱包</td>
+<td>最初10分钟窃取3,000万美元</td>
+</tr>
+<tr>
+<td>6. 自动化清空</td>
+<td>全部交易使用相同的硬编码手续费率30 sat/vB,无找零输出</td>
+<td>Galaxy分析——疑似使用自动化工具</td>
+</tr>
+<tr>
+<td>7. 资金保留</td>
+<td>资金保留在(第一、二波共计)7个攻击者地址中未动用</td>
+<td>链上观测</td>
+</tr>
+</tbody></table>
+<h3>6.2 交易指纹</h3>
+<p>Galaxy判断存在自动化工具使用的依据有两点。第一,<strong>所有交易均使用了相同的硬编码手续费率(30 sat/vB)</strong>——正常的钱包软件会根据mempool状况动态调整手续费。第二,<strong>不存在找零输出(change output)</strong>——这是一种将全部余额转移至单一地址的清空(sweep)模式。</p>
+<p>这一指纹为今后编写类似攻击的检测规则提供了基础素材。</p>
+<h3>6.3 各波次之间的差异</h3>
+<table>
+<thead>
+<tr>
+<th>波次</th>
+<th>时点</th>
+<th>规模</th>
+<th>特征</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>第一波</td>
+<td>07-30 01:10–01:51 UTC</td>
+<td>1,082.65 BTC / 1,196个地址</td>
+<td>优先打击高额、模式均一</td>
+</tr>
+<tr>
+<td>第二波</td>
+<td>08-01确认</td>
+<td>累计1,158.66 BTC / 2,673个地址</td>
+<td>与第一波模式相似,推测为同一操作者</td>
+</tr>
+<tr>
+<td>第三波</td>
+<td>08-02确认</td>
+<td>+207.73 BTC / 1,912个地址</td>
+<td>针对小额目标,模式更复杂、追踪难度更高</td>
+</tr>
+</tbody></table>
+<p>Galaxy明确指出,尽管每一波看起来都像是单一操作者所为,但<strong>仅凭链上数据无法判定三波是否为同一主体</strong>。第三波出现的模式变化,同时留下了两种可能性:一是工具改进,二是出现了利用相同密钥空间的另一名行为者。</p>
+<h3>6.4 MITRE ATT&amp;CK映射</h3>
+<table>
+<thead>
+<tr>
+<th>Tactic</th>
+<th>Technique</th>
+<th>ID</th>
+<th>在本事件中的实现</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Reconnaissance</td>
+<td>Gather Victim Host Information</td>
+<td>T1592</td>
+<td>分析设备UID与计时器特性</td>
+</tr>
+<tr>
+<td>Reconnaissance</td>
+<td>Search Open Technical Databases</td>
+<td>T1596</td>
+<td>查询公开区块链UTXO集</td>
+</tr>
+<tr>
+<td>Reconnaissance</td>
+<td>Search Open Websites/Domains</td>
+<td>T1593</td>
+<td>分析开源固件仓库</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>Develop Capabilities: Malware</td>
+<td>T1587.001</td>
+<td>制作自动化清空工具</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>Brute Force</td>
+<td>T1110</td>
+<td>对缩小后的种子空间进行全空间搜索</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>Unsecured Credentials: Private Keys</td>
+<td>T1552.004</td>
+<td>从复现出的种子中派生私钥</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>Data from Information Repositories</td>
+<td>T1213</td>
+<td>收集链上余额数据</td>
+</tr>
+<tr>
+<td>Impact</td>
+<td>Financial Theft</td>
+<td>T1657</td>
+<td>清空比特币资产</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. 影响量化分析 — 三波攻击</h2>
+<h3>7.1 损失规模</h3>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>累计窃取量</td>
+<td>1,367.05 BTC</td>
+</tr>
+<tr>
+<td>美元折算</td>
+<td>约8,860万美元</td>
+</tr>
+<tr>
+<td>韩元折算(按1,390韩元/美元计)</td>
+<td>约1,232亿韩元</td>
+</tr>
+<tr>
+<td>受影响地址数</td>
+<td>4,585个</td>
+</tr>
+<tr>
+<td>第一波耗时</td>
+<td>41分钟</td>
+</tr>
+<tr>
+<td>单笔最大损失</td>
+<td>约180万美元</td>
+</tr>
+<tr>
+<td>公开证词的个人损失</td>
+<td>18.25 BTC(约160万加元)</td>
+</tr>
+<tr>
+<td>资金追回</td>
+<td>0(全部滞留于攻击者地址,未转移)</td>
+</tr>
+<tr>
+<td>厂商察觉至公告的延迟</td>
+<td>约30小时</td>
+</tr>
+</tbody></table>
+<h3>7.2 受害者画像</h3>
+<p>根据Galaxy的分析,被窃资产的<strong>平均休眠期约为3.18年</strong>。这表明受害群体并非机构,而是集中在<strong>长期持有型个人(long-term holder)</strong>身上。</p>
+<p>这一画像具有三方面含义。</p>
+<ol>
+<li><strong>检测延迟</strong> — 由于许多用户数年未曾打开过钱包,他们察觉到资产被窃取的时间大幅延后。</li>
+<li><strong>安全意识与受害程度的反相关</strong> — 那些不信任交易所而选择自我保管的、安全意识相对更高的群体,反而成了受害者。</li>
+<li><strong>不可恢复性</strong> — 个人自我保管的资产既不受存款保险保护,也不适用交易所的储备金或保险。</li>
+</ol>
+<h3>7.3 持续进行中的风险</h3>
+<p>Galaxy警告称攻击<strong>仍在进行中</strong>,由脆弱种子生成的所有地址最终都会被清空。第三波以小额钱包为目标这一事实,意味着攻击者正在<strong>降低经济性门槛,逐步耗尽剩余目标</strong>。&quot;我的钱包金额小,优先级应该较低&quot;这种判断,<strong>已经不再成立</strong>。</p>
+<hr>
+<h2>8. 幸存者分析 — 什么保住了钱包</h2>
+<h3>8.1 幸存条件</h3>
+<table>
+<thead>
+<tr>
+<th>条件</th>
+<th>保护级别</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>独立掷骰输入50~98次</td>
+<td>安全(RNG缺陷单独不构成风险)</td>
+<td>骰子输入本身即可贡献128比特以上</td>
+</tr>
+<tr>
+<td>独立掷骰输入99次以上</td>
+<td>安全(贡献约256比特)</td>
+<td>同上</td>
+</tr>
+<tr>
+<td>掷骰次数不足50次或已不记得</td>
+<td>危险——需迁移</td>
+<td>Coinkite建议</td>
+</tr>
+<tr>
+<td>强且唯一的BIP-39密码短语(passphrase)</td>
+<td>立即暴露风险降低,但非根本解决</td>
+<td>生成了仅凭种子词无法到达的另一个钱包</td>
+</tr>
+<tr>
+<td>在存在漏洞的固件发布之前生成的种子</td>
+<td>安全</td>
+<td>v4.0.0之前</td>
+</tr>
+<tr>
+<td>在修复固件上新生成的种子</td>
+<td>安全</td>
+<td>仅设备生成的熵已足够</td>
+</tr>
+<tr>
+<td>多签(全部密钥均由存在漏洞的设备生成)</td>
+<td>危险</td>
+<td>所有密钥均受同一缺陷影响</td>
+</tr>
+<tr>
+<td>多签(部分密钥由其他厂商设备生成)</td>
+<td>条件性安全</td>
+<td>取决于阈值配置</td>
+</tr>
+</tbody></table>
+<p>关键在于,<strong>掷骰结果与设备生成的熵经哈希结合</strong>,而这部分用户提供的熵<strong>不受固件缺陷的影响</strong>。</p>
+<h3>8.2 启示 — 重新评估用户熵</h3>
+<p>掷骰功能一直被当作&quot;供偏执用户使用的可选高级功能&quot;。而本次事件表明,<strong>在厂商信任崩塌的情况下,这一功能是唯一真正发挥作用的防线</strong>。</p>
+<p>但正如Casa高层所指出的,期望普通投资者主动掷骰来补充种子熵<strong>并不现实</strong>。这恰恰暴露出<strong>易用性与安全性之间的鸿沟</strong>,而如何用<strong>产品设计</strong>而非用户教育来填补这一鸿沟,正是整个行业面临的课题。</p>
+<p>实务上的建议很明确:<strong>应将用户提供的熵从可选功能转变为默认设置</strong>。至少在生成用于大额保管的种子时,理应将其强制设为必要步骤。</p>
+<hr>
+<h2>9. 应对与迁移 — 补丁无法修复的部分</h2>
+<h3>9.1 修复固件版本</h3>
+<table>
+<thead>
+<tr>
+<th>型号</th>
+<th>发布轨道</th>
+<th>修复版本</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mk2 / Mk3</td>
+<td>标准</td>
+<td>v4.2.0及以上</td>
+</tr>
+<tr>
+<td>Mk4 / Mk5</td>
+<td>标准</td>
+<td>v5.6.0及以上</td>
+</tr>
+<tr>
+<td>Mk4 / Mk5</td>
+<td>Edge</td>
+<td>v6.6.0X及以上</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>标准</td>
+<td>v1.5.0Q及以上</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>Edge</td>
+<td>v6.6.0QX及以上</td>
+</tr>
+</tbody></table>
+<p><strong>注意:</strong> 标准轨道与Edge轨道是彼此独立的两条发布线。不能因为Edge版本号高于标准版本,就认为其一定是已修复版本。</p>
+<h3>9.2 补丁的局限性</h3>
+<blockquote>
+<p>固件更新不会更改或修复已有种子。</p>
+</blockquote>
+<p>这一句话,几乎概括了本次事件应对的全部要点。漏洞并不存在于设备本身,而存在于<strong>设备已经生成出来的那个数字</strong>中。因此,以下应对措施<strong>全部无效</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>无效的应对</th>
+<th>原因</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>仅更新固件、继续使用原有钱包</td>
+<td>种子仍然是脆弱的</td>
+</tr>
+<tr>
+<td>将脆弱种子恢复到其他厂商的钱包中</td>
+<td>攻击者搜索的是种子空间,而不是设备</td>
+</tr>
+<tr>
+<td>将脆弱种子重新抄写到纸质/金属备份上</td>
+<td>问题在于种子值本身</td>
+</tr>
+<tr>
+<td>将资金转移到其他地址(派生索引)</td>
+<td>由同一种子派生出的所有地址均已暴露</td>
+</tr>
+<tr>
+<td>将资产拆分为小额</td>
+<td>第三波攻击正在以小额资产为目标</td>
+</tr>
+</tbody></table>
+<h3>9.3 正确的迁移流程</h3>
+<ol>
+<li>确认设备型号与发布轨道,首先安装对应的<strong>修复固件</strong>。</li>
+<li>在屏幕上<strong>通过版本字符串直接确认</strong>已安装修复固件。</li>
+<li><strong>生成一个全新的种子</strong>。修复固件的设备生成熵已足够,掷骰输入为可选项。</li>
+<li>备份新的种子与密码短语。<strong>密码短语应与种子词在物理上分开保管</strong>。</li>
+<li>对设备重新通电(power-cycle),并<strong>在设备屏幕上验证钱包指纹(fingerprint)与收款地址</strong>。</li>
+<li>先发送<strong>小额测试交易</strong>并确认到账。</li>
+<li>转移剩余的全部资产。</li>
+<li>在确认迁移完成之前,<strong>不要销毁旧备份</strong>。</li>
+</ol>
+<p>Coinkite与多家研究机构共同强调的一点是:<strong>不要急躁</strong>。在紧急情况下因迁移失误(地址输入错误、备份有误、跳过验证)而导致的损失,已被反复观测到甚至超过了黑客攻击本身造成的损失。</p>
+<h3>9.4 厂商应对评估</h3>
+<table>
+<thead>
+<tr>
+<th>措施</th>
+<th>评价</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>向所有型号发布轨道推送修复固件</td>
+<td>恰当——响应迅速</td>
+</tr>
+<tr>
+<td>全部销毁未出货库存设备</td>
+<td>恰当——阻断供应链污染</td>
+</tr>
+<tr>
+<td>向已出货客户逐一发送邮件通知</td>
+<td>恰当,但触达率有限</td>
+</tr>
+<tr>
+<td>首次公告延迟约30小时</td>
+<td><strong>不恰当</strong>——公告发布于第一波结束之后</td>
+</tr>
+<tr>
+<td>初期公告将Mk4/Q/Mk5归类为&quot;无影响&quot;,8月1日才更正</td>
+<td><strong>不恰当</strong>——初期范围判定有误,误导了用户判断</td>
+</tr>
+<tr>
+<td>明确列出未受影响产品(TAPSIGNER/OPENDIME/SATSCARD)</td>
+<td>恰当</td>
+</tr>
+</tbody></table>
+<p>30小时的延迟是本次事件应对中<strong>最应受到批评的一点</strong>。不过,由于攻击发生在公告之前,即便厂商立即发布公告,很可能也无法阻止第一波攻击。问题在于,<strong>第二、第三波的大量受害者正是在这段延迟期内失去了采取行动的机会</strong>。</p>
+<hr>
+<h2>10. 行业启示 — 重新审视信任模型</h2>
+<h3>10.1 崩塌的假设</h3>
+<table>
+<thead>
+<tr>
+<th>行业的默认假设</th>
+<th>本次事件的反证</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>硬件RNG是可信的</td>
+<td>一行构建配置就能将其关闭,而且这一事实会被掩盖</td>
+</tr>
+<tr>
+<td>开源固件已被充分审计</td>
+<td>五年间公开的代码中,无人发现问题</td>
+</tr>
+<tr>
+<td>物理隔离能保障密钥安全</td>
+<td>隔离堪称完美,资产却已消失</td>
+</tr>
+<tr>
+<td>冷存储比热钱包更安全</td>
+<td>在生成阶段的缺陷面前,这种比较毫无意义</td>
+</tr>
+<tr>
+<td>自我保管能消除交易所风险</td>
+<td>只是把交易所风险换成了厂商风险</td>
+</tr>
+</tbody></table>
+<h3>10.2 结构性教训</h3>
+<p><strong>第一,信任的最小单位不是设备,而是瞬间。</strong>硬件钱包的安全评估,不应问&quot;这台设备是否安全&quot;,而应问&quot;这个密钥被生成的那一瞬间是否安全&quot;。这将改变资产保管尽职调查(due diligence)所应提出的问题形式。</p>
+<p><strong>第二,随机数生成器必须是fail-closed的。</strong>在无法获取熵源时仍返回低质量数值的设计,会把失败这一事实本身掩盖起来。这正是NIST SP 800-90B要求持续健全性检查(continuous health test)的原因所在。</p>
+<p><strong>第三,可审计性并不等于已被审计。</strong>开源会引发一种&quot;应该有人检查过吧&quot;的集体错觉。实际是否被检查过是另一回事,<strong>未经验证的事物应被当作不存在来对待</strong>。</p>
+<p><strong>第四,透明性是一把双刃剑。</strong>公开账本既是审计与验证的基础,同时也是攻击者的<strong>免费侦察基础设施</strong>。隐私技术(CoinJoin、避免地址重用)在本次事件中具备了实质性的防御价值。</p>
+<p><strong>第五,厂商集中化是一个新的单点故障。</strong>在去中心化系统中,若用户集中依赖少数几家硬件厂商,协议层的去中心化虽仍得以维持,但<strong>系统性风险却会在密钥生成层不断累积</strong>。本次事件是这一风险首次以大规模形式实现的案例。</p>
+<h3>10.3 协议层本身并无问题</h3>
+<p>有一点需要附带说明:比特币协议本身、secp256k1曲线、BIP-32/39标准中,<strong>均未发现任何缺陷</strong>。失败完全发生在实现层——更准确地说,是发生在<strong>特定厂商的构建配置</strong>中。Trezor、Ledger、Block(Bitkey)均已确认自家产品不受影响。</p>
+<p>这一区分在市场沟通中至关重要。&quot;比特币被黑了&quot;这种说法是不准确的,准确的说法应是&quot;<strong>某特定硬件钱包厂商的密钥生成实现失败了</strong>&quot;。</p>
+<hr>
+<h2>11. 韩国视角 — 监管适配性与对国内交易所的建议</h2>
+<h3>11.1 现行韩国监管的盲区</h3>
+<p>《虚拟资产用户保护法》(2024年7月19日起施行)要求虚拟资产业者将用户虚拟资产经济价值的<strong>80%以上</strong>保管于冷钱包中——这一比例是从此前《特定金融信息法》体系下ISMS认证要求的70%基准上调而来。业者须每月核算经济价值并维持该比例。</p>
+<p>2026年2月,韩国金融委员会通过对国会政务委员会的书面答复表示,在制定第二阶段法案(《数字资产基本法》)下位规定时,将<strong>考虑把冷钱包保管比例上调至100%水平</strong>。同时,该委员会也在研究是否将数字资产托管(custody)单独规范为一类业务。</p>
+<p>问题在于,<strong>整个监管体系规范的只是&quot;隔离前提&quot;</strong>。</p>
+<table>
+<thead>
+<tr>
+<th>监管指标</th>
+<th>规范对象</th>
+<th>是否能防御本次事件</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>冷钱包保管比例80%</td>
+<td>资产存放在哪里</td>
+<td>不能</td>
+</tr>
+<tr>
+<td>冷钱包保管比例100%(讨论中)</td>
+<td>资产存放在哪里</td>
+<td><strong>不能</strong></td>
+</tr>
+<tr>
+<td>ISMS认证</td>
+<td>一般管理体系</td>
+<td>部分</td>
+</tr>
+<tr>
+<td>准备金·保险(韩元市场30亿韩元,其他5亿韩元)</td>
+<td>事后赔偿</td>
+<td>仅限事后应对</td>
+</tr>
+<tr>
+<td>密钥生成熵质量标准</td>
+<td><strong>不存在</strong></td>
+<td>—</td>
+</tr>
+</tbody></table>
+<h3>11.2 对韩国国内交易所与VASP的建议</h3>
+<table>
+<thead>
+<tr>
+<th>优先级</th>
+<th>措施</th>
+<th>详情</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>立即</td>
+<td><strong>全面排查密钥生成来源</strong></td>
+<td>对所有运营中冷钱包的密钥进行清单化,记录其生成时间、设备与固件版本、HSM。若曾使用Coldcard系列,应立即隔离并迁移</td>
+</tr>
+<tr>
+<td>立即</td>
+<td><strong>排查消费级硬件钱包用于运营资产的情况</strong></td>
+<td>消费级硬件钱包并非为机构托管用途设计。需确认是否曾以临时或应急方式使用过此类设备</td>
+</tr>
+<tr>
+<td>1周</td>
+<td><strong>验证熵来源的冗余性</strong></td>
+<td>确认HSM是否单一依赖TRNG。至少将两个以上独立熵源做XOR结合,确保其中任一源失效时其余仍能维持安全性</td>
+</tr>
+<tr>
+<td>1周</td>
+<td><strong>建立密钥生成溯源(provenance)记录体系</strong></td>
+<td>以签名日志的形式保存每个密钥的生成日期、设备标识符、固件版本、熵源与见证人。这是事后确定影响范围的前提条件</td>
+</tr>
+<tr>
+<td>2周</td>
+<td><strong>审计多签·MPC配置的异构性</strong></td>
+<td>若阈值配置中的全部密钥均来自同一厂商、同一固件、同一库,则多重化毫无意义。应在厂商、架构、熵源三方面进行交叉分散</td>
+</tr>
+<tr>
+<td>2周</td>
+<td><strong>引入跨设备熵验证流程</strong></td>
+<td>将验证同型号两台以上设备生成密钥的统计独立性,纳入密钥生成SOP</td>
+</tr>
+<tr>
+<td>1个月</td>
+<td><strong>重新确认HSM认证要求</strong></td>
+<td>确认FIPS 140-2/140-3 Level 3以上、CC EAL4+等认证的有效性,以及RNG是否包含在认证范围之内</td>
+</tr>
+<tr>
+<td>1个月</td>
+<td><strong>固件SBOM与变更管理</strong></td>
+<td>获取托管基础设施全部组成部分的SBOM。固件更新时须强制进行第三方安全审计与回归验证</td>
+</tr>
+<tr>
+<td>每季度</td>
+<td><strong>制定密钥轮换政策</strong></td>
+<td>淘汰无限期使用的密钥。定期轮换时须使用新的熵源重新生成</td>
+</tr>
+<tr>
+<td>常态</td>
+<td><strong>强化链上异常提款检测规则</strong></td>
+<td>基于硬编码相同手续费率、无找零输出、长期休眠地址全额转移等清空指纹建立告警机制</td>
+</tr>
+</tbody></table>
+<h3>11.3 对监管当局的政策建议</h3>
+<ol>
+<li><p><strong>从保管位置监管扩展为密钥生命周期监管</strong>— 冷钱包比例是必要条件,而非充分条件。第二阶段法案下位规定除了上调比例外,还应纳入<strong>密钥生成、备份、轮换、销毁全过程的完整性要求</strong>。</p>
+</li>
+<li><p><strong>在托管单独业务规范中明确RNG要求</strong> — 金融委员会正在研究的数字资产托管业务规范中,有必要考虑将使用经认证的随机数生成器(符合NIST SP 800-90A/B/C或同等认证)明确列为准入监管要求。</p>
+</li>
+<li><p><strong>审议硬件钱包漏洞公示义务</strong> — 可考虑对在韩国境内流通的硬件钱包厂商,规定发现重大漏洞时须在一定期限内(如24小时)通知用户。本次事件30小时的延迟,恰恰证明了这一制度的必要性。</p>
+</li>
+<li><p><strong>建立自我保管用户的信息告知体系</strong> — 自我保管不适用存款保险,也不适用准备金赔偿。应在交易所提款环节告知用户这一事实以及厂商风险的存在。</p>
+</li>
+<li><p><strong>摸清国内流通情况</strong> — 目前尚无公开资料说明Coldcard在韩国国内的流通规模及受害案例。有必要由KISA、金融安全院层面开展实态调查,并发布韩文建议。</p>
+</li>
+</ol>
+<h3>11.4 韩国国内市场的特殊性</h3>
+<p>韩国市场以韩元市场五大交易所为中心呈现出较高的交易所集中度,加上《旅行规则》(Travel Rule)实施对个人钱包提款的限制,使得<strong>自我保管比例相对偏低</strong>。这一特点降低了本次事件对韩国的直接冲击,但同时也留下了以下两点风险。</p>
+<ul>
+<li><strong>交易所托管基础设施本身的密钥生成风险会更加集中。</strong> 如果由个人分散持有,个别事故本可局限于个体层面,但一旦集中于交易所,便会演变为系统性风险。</li>
+<li><strong>在法人市场开放与机构托管扩大的阶段</strong>,如果托管业者的密钥管理标准尚未确立,同类事故完全可能以远大得多的规模重演。</li>
+</ul>
+<hr>
+<h2>12. 致比特币投资者的建议</h2>
+<h3>12.1 致Coldcard持有者的即时判定流程</h3>
+<pre><code>Q1. 你的钱包种子是否由Coldcard生成?
+    否 → 无影响(但请确认Q5)
+    是 ↓
+
+Q2. 种子生成时间是否在2021年3月17日(固件v4.0.0发布)之后?
+    否 → 无影响
+    不确定 → 视为受影响,继续下一步
+    是 ↓
+
+Q3. 生成种子时是否输入了50次以上独立且未公开的掷骰结果?
+    是(确定) → RNG缺陷单独不构成风险。但Seed XOR用户请参见12.3
+    否 / 不记得 ↓
+
+Q4. 属于需立即迁移的对象。按照9.3的流程执行。
+
+Q5. 是否使用过纸钱包生成、Seed XOR分割、设备复制功能?
+    是 → 相应产出物也可能是可预测的。需要单独迁移
+</code></pre>
+<p><strong>密码短语(passphrase)用户注意:</strong>强且唯一的BIP-39密码短语能大幅降低即时暴露风险,但并不能修复脆弱的种子本身。Coinkite建议,即便是使用密码短语的用户,也应在实际条件允许的情况下尽快完成迁移。</p>
+<h3>12.2 致一般比特币投资者的建议</h3>
+<table>
+<thead>
+<tr>
+<th>建议</th>
+<th>依据</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>分散使用不同厂商</strong></td>
+<td>单一厂商依赖是本次事件所证实的系统性风险。持有规模较大者应将资产分散到不同制造商、不同架构的设备中</td>
+</tr>
+<tr>
+<td><strong>多签应采用异构配置</strong></td>
+<td>若2-of-3配置中的3个密钥均来自同一型号、同一固件,多重化效果等于零</td>
+</tr>
+<tr>
+<td><strong>养成使用用户熵的习惯</strong></td>
+<td>将厂商无法控制的熵(掷骰或抛硬币等)结合进种子中,至少50次</td>
+</tr>
+<tr>
+<td><strong>使用密码短语,但要分开保管</strong></td>
+<td>种子词与密码短语应存放在物理上不同的地点</td>
+</tr>
+<tr>
+<td><strong>避免地址重用</strong></td>
+<td>削弱公开账本沦为攻击者侦察资产的结构</td>
+</tr>
+<tr>
+<td><strong>定期检查余额</strong></td>
+<td>本次受害者的平均休眠期为3.18年。应建立至少每年一次的余额检查习惯</td>
+</tr>
+<tr>
+<td><strong>订阅厂商安全公告渠道</strong></td>
+<td>30小时的公告延迟固然是问题,但未看到公告的用户损失的是数天时间</td>
+</tr>
+<tr>
+<td><strong>按规模对保管方式分层</strong></td>
+<td>小额优先考虑便利性,大额则采用多签、异构、用户熵</td>
+</tr>
+<tr>
+<td><strong>理解自我保管的责任范围</strong></td>
+<td>自我保管资产既不受存款保险保护,也不适用交易所准备金或保险</td>
+</tr>
+</tbody></table>
+<h3>12.3 不应做的事</h3>
+<table>
+<thead>
+<tr>
+<th>禁止事项</th>
+<th>理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>将脆弱种子恢复到其他钱包应用/设备中,并认为自己已经&quot;迁移完成&quot;</td>
+<td>种子值本身就处于搜索空间之内</td>
+</tr>
+<tr>
+<td>因金额较小而推迟迁移</td>
+<td>第三波攻击的目标正是数千美元规模的钱包</td>
+</tr>
+<tr>
+<td>在恐慌状态下不经验证就大量转账</td>
+<td>迁移失误造成的损失反复被观测到甚至超过黑客攻击本身</td>
+</tr>
+<tr>
+<td>向自称提供&quot;恢复服务&quot;的第三方提供种子</td>
+<td>事件发生后正是二次钓鱼的高峰期。任何情况下都不应向他人提供种子</td>
+</tr>
+<tr>
+<td>生成新种子前省略固件确认步骤</td>
+<td>若在存在漏洞的固件上生成新种子,该种子仍会是脆弱的</td>
+</tr>
+</tbody></table>
+<h3>12.4 在韩国国内发生受害时的应对流程</h3>
+<ol>
+<li><strong>保全链上证据</strong> — 记录被盗交易的交易ID、时间(UTC)、发送/接收地址与金额,并同步截图区块浏览器画面。</li>
+<li><strong>向执法机构报案</strong> — 向警察厅网络调查局或所辖警察署网络调查队报案。由于需要国际协作,报案的时间点非常重要。</li>
+<li><strong>向链上分析公司举报</strong> — Galaxy Research、Chainalysis等机构正在建立攻击者地址数据库。提供受害地址信息有助于整体追踪。</li>
+<li><strong>申请交易所冻结</strong> — 为应对资金流入交易所的情况,可提前向国内外主要交易所的合规渠道登记相关地址。目前资金仍未转移,该措施具有实际效力。</li>
+<li><strong>准备税务处理</strong> — 被盗损失的税务处理因个案而异,应保留资产转移记录与被盗证明材料。具体判断需咨询税务专业人士。</li>
+</ol>
+<p>本节内容为一般性信息,并非法律建议。个别情况的法律应对应咨询律师。</p>
+<hr>
+<h2>13. 检测·响应·预防清单</h2>
+<h3>13.1 个人用户</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 确认所持硬件钱包的厂商、型号、固件版本</li>
+<li><input disabled="" type="checkbox"> 确认各个种子的生成时间及生成设备记录</li>
+<li><input disabled="" type="checkbox"> 确认是否输入过掷骰等用户熵</li>
+<li><input disabled="" type="checkbox"> 若适用:安装修复固件 → 生成新种子 → 小额测试 → 转移全部资产</li>
+<li><input disabled="" type="checkbox"> 单独排查Seed XOR、纸钱包、设备复制的产出物</li>
+<li><input disabled="" type="checkbox"> 设置区块浏览器余额提醒</li>
+<li><input disabled="" type="checkbox"> 订阅厂商安全公告渠道</li>
+</ul>
+<h3>13.2 交易所·托管业者</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 全部冷钱包密钥的生成溯源清单化</li>
+<li><input disabled="" type="checkbox"> 调查消费级硬件钱包用于运营资产的使用历史</li>
+<li><input disabled="" type="checkbox"> 确认HSM认证范围是否包含RNG</li>
+<li><input disabled="" type="checkbox"> 验证多个独立熵源的结合结构</li>
+<li><input disabled="" type="checkbox"> 审计多签·MPC配置的厂商异构化</li>
+<li><input disabled="" type="checkbox"> 将跨设备熵验证纳入密钥生成SOP</li>
+<li><input disabled="" type="checkbox"> 获取固件SBOM并建立更新前第三方审计流程</li>
+<li><input disabled="" type="checkbox"> 部署基于清空指纹的异常提款检测规则</li>
+<li><input disabled="" type="checkbox"> 制定并实施密钥轮换政策</li>
+<li><input disabled="" type="checkbox"> 定义事故发生时的用户通知SLA(建议24小时以内)</li>
+</ul>
+<h3>13.3 硬件钱包制造商</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 将RNG路径重新设计为fail-closed(熵获取失败时中止运行)</li>
+<li><input disabled="" type="checkbox"> 增加验证构建配置与库条件编译之间相互作用的测试</li>
+<li><input disabled="" type="checkbox"> 将跨设备种子独立性验证纳入发布关卡(release gate)</li>
+<li><input disabled="" type="checkbox"> 实现NIST SP 800-90B持续健全性检查</li>
+<li><input disabled="" type="checkbox"> 研究将用户熵输入从可选功能转为默认设置</li>
+<li><input disabled="" type="checkbox"> 建立漏洞紧急通知体系(考虑邮件触达率局限的多渠道方案)</li>
+<li><input disabled="" type="checkbox"> 提供用户可自行使用的(离线)自检工具</li>
+</ul>
+<hr>
+<h2>14. 结论</h2>
+<p>本次事件将加密货币安全讨论的焦点,从&quot;保管&quot;转移到了&quot;生成&quot;。</p>
+<p>过去十年间,整个行业将资源集中于改善&quot;存放在哪里&quot;这一问题——从热钱包转向冷钱包,从单签转向多签,从自我保管转向受监管的托管。韩国国内的监管也一直围绕冷钱包保管比例这一单一指标演进。这个方向本身是正确的,也确实预防了大量事故。</p>
+<p>然而,本次事件揭示出——所有这些改进,其实都建立在<strong>一个从未被验证的前提</strong>之上:密钥从一开始就被制造成不可猜测的。这个前提,因<strong>一行构建配置</strong>而崩塌,五年间无人知晓,最终导致<strong>在一台完美隔离的设备上,8,860万美元凭空消失</strong>。</p>
+<p>归纳起来,有以下四点。</p>
+<ol>
+<li><strong>冷存储保管的是密钥,而不保证密钥的质量。</strong>保管监管必须由生成监管来加以补充。</li>
+<li><strong>随机数生成器不应悄无声息地失败。</strong>fail-open型RNG会把失败这一事实本身掩盖起来,这比失败本身更加危险。</li>
+<li><strong>可审计性不等于已被审计。</strong>未经验证的事物,应被当作不存在来对待。</li>
+<li><strong>去中心化应按层级分别评估。</strong>即便协议层实现了去中心化,只要密钥生成层集中于少数厂商,系统性风险依然存在。</li>
+</ol>
+<p>&quot;不要信任,去验证(Don&#39;t trust, verify)&quot;是比特币历经已久的原则。本次事件表明,这一原则不仅适用于协议本身,也<strong>同样应适用于&quot;自己的密钥究竟是如何被生成的&quot;</strong>这一问题上。而绝大多数用户目前并没有验证这一点的手段。<strong>提供这样的手段,正是厂商与监管当局接下来必须完成的课题。</strong></p>
+<hr>
+<h2>15. 参考文献</h2>
+<ol>
+<li>Coinkite. (2026). <em>COLDCARD Security Advisory — Seed Generation</em>. Coinkite Blog. <a href="https://blog.coinkite.com/coldcard-mk3-seed-generation-warning/">https://blog.coinkite.com/coldcard-mk3-seed-generation-warning/</a></li>
+<li>Coinkite. (2026). <em>Technical Deep Dive into the Entropy Issue</em>. Coinkite Blog. <a href="https://blog.coinkite.com/entropy-technical-backgrounder/">https://blog.coinkite.com/entropy-technical-backgrounder/</a></li>
+<li>CoinDesk. (2026, August 1). <em>How bitcoin cold wallets lost $70 million in an attack that never touched the devices</em>. <a href="https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices">https://www.coindesk.com/tech/2026/08/01/how-bitcoin-cold-wallets-lost-usd70-million-in-an-attack-that-never-touched-the-devices</a></li>
+<li>CoinDesk. (2026, August 2). <em>Bitcoin cold-wallet attack spreads to 4,500 addresses as losses near $89 million</em>. <a href="https://www.coindesk.com/tech/2026/08/02/bitcoin-cold-wallet-attack-spreads-to-4-500-addresses-as-losses-near-usd89-million">https://www.coindesk.com/tech/2026/08/02/bitcoin-cold-wallet-attack-spreads-to-4-500-addresses-as-losses-near-usd89-million</a></li>
+<li>Decrypt. (2026). <em>Coldcard Bitcoin Exploit Balloons to $88 Million as Attackers Keep Draining Wallets</em>. <a href="https://decrypt.co/374817/coldcard-bitcoin-exploit-88-million-attackers-draining-wallets">https://decrypt.co/374817/coldcard-bitcoin-exploit-88-million-attackers-draining-wallets</a></li>
+<li>The Hacker News. (2026, August). <em>Coldcard Hardware Wallet Flaw Linked to $70 Million Bitcoin Theft</em>. <a href="https://thehackernews.com/2026/08/coldcard-hardware-wallet-flaw-linked-to.html">https://thehackernews.com/2026/08/coldcard-hardware-wallet-flaw-linked-to.html</a></li>
+<li>BleepingComputer. (2026). <em>COLDCARD wallet RNG flaw likely linked to $88 million Bitcoin theft</em>. <a href="https://www.bleepingcomputer.com/news/security/coldcard-wallet-rng-flaw-likely-linked-to-88-million-bitcoin-theft/">https://www.bleepingcomputer.com/news/security/coldcard-wallet-rng-flaw-likely-linked-to-88-million-bitcoin-theft/</a></li>
+<li>Tech Times. (2026, July 31). <em>Coldcard Hardware Wallet Hacked via Firmware Bug That Bypassed RNG for Five Years</em>. <a href="https://www.techtimes.com/articles/322392/20260731/coldcard-hardware-wallet-hacked-via-firmware-bug-that-bypassed-rng-five-years.htm">https://www.techtimes.com/articles/322392/20260731/coldcard-hardware-wallet-hacked-via-firmware-bug-that-bypassed-rng-five-years.htm</a></li>
+<li>crypto.news. (2026). <em>A build error in Coldcard&#39;s firmware drained $38 million in bitcoin in 25 minutes</em>. <a href="https://crypto.news/coldcard-firmware-bug-drains-38-million-bitcoin/">https://crypto.news/coldcard-firmware-bug-drains-38-million-bitcoin/</a></li>
+<li>Bitcoin Magazine. (2026). <em>Coinkite Releases Fixed Firmware After Coldcard Bug; AI Likely Involved In The Breach</em>. <a href="https://bitcoinmagazine.com/business/coinkite-releases-fixed-firmware-after-coldcard-bug-ai-likely-involved-in-the-hack">https://bitcoinmagazine.com/business/coinkite-releases-fixed-firmware-after-coldcard-bug-ai-likely-involved-in-the-hack</a></li>
+<li>The Crypto Times. (2026, August 1). <em>Coldcard Hack Hits $75M After Alleged Second Attack Wave: Galaxy Research</em>. <a href="https://www.cryptotimes.io/2026/08/01/coldcard-hack-hits-75m-after-alleged-second-attack-wave-galaxy-research/">https://www.cryptotimes.io/2026/08/01/coldcard-hack-hits-75m-after-alleged-second-attack-wave-galaxy-research/</a></li>
+<li>TechSpot. (2026). <em>A Coldcard firmware flaw let hackers drain $70 million in Bitcoin in 41 minutes</em>. <a href="https://www.techspot.com/news/113322-coldcard-firmware-flaw-hackers-drain-70-million-bitcoin.html">https://www.techspot.com/news/113322-coldcard-firmware-flaw-hackers-drain-70-million-bitcoin.html</a></li>
+<li>PrivacyGuides. (2026, August 3). <em>Nearly 1,400 Bitcoin Hacked from Coldcard Wallets</em>. <a href="https://www.privacyguides.org/news/2026/08/03/nearly-1400-bitcoin-hacked-from-coldcard-wallets/">https://www.privacyguides.org/news/2026/08/03/nearly-1400-bitcoin-hacked-from-coldcard-wallets/</a></li>
+<li>247wallst.com. (2026, August 1). <em>Coldcard Hacked for $70M: How Do You Keep Bitcoin Safe if Cold Wallets Can Be Hacked?</em> <a href="https://247wallst.com/investing/cryptocurrency/2026/08/01/coldcard-hacked-for-70m-how-do-you-keep-bitcoin-safe-if-cold-wallets-can-be-hacked/">https://247wallst.com/investing/cryptocurrency/2026/08/01/coldcard-hacked-for-70m-how-do-you-keep-bitcoin-safe-if-cold-wallets-can-be-hacked/</a></li>
+<li>韩国金融委员会(금융위원회). (2023). <em>《虚拟资产用户保护相关法律》施行令制定案新闻资料</em>. <a href="https://www.fsc.go.kr/no010101/81214">https://www.fsc.go.kr/no010101/81214</a></li>
+<li>新闻1(뉴스1). (2026年2月20日). <em>&quot;金融委员会:交易所虚拟资产冷钱包保管比例,拟审议上调至100%水平&quot;</em>. <a href="https://www.news1.kr/finance/blockchain-fintech/6077484">https://www.news1.kr/finance/blockchain-fintech/6077484</a></li>
+<li>Decenter(디센터). (2026). <em>&quot;金融委员会:在第二阶段法案中审议将交易所冷钱包保管比例上调至100%&quot;</em>. <a href="https://www.decenter.kr/article/20010694">https://www.decenter.kr/article/20010694</a></li>
+<li>每日经济(이투데이). (2026). <em>&quot;金融委员会:将尽快推进《数字资产基本法》&quot;……与法人市场开放联动</em>. <a href="https://www.etoday.co.kr/news/view/2606627">https://www.etoday.co.kr/news/view/2606627</a></li>
+<li>区块媒体(블록미디어). (2025年1月16日). <em>数字资产冷钱包保管比例上调至80%,各交易所运营方式不同</em>. <a href="https://www.blockmedia.co.kr/archives/843516">https://www.blockmedia.co.kr/archives/843516</a></li>
+<li>Thelec(디일렉). (2025年12月10日). <em>Upbit使用的冷钱包比例超过98%,有利于安全</em>. <a href="https://www.thelec.kr/news/articleView.html?idxno=45132">https://www.thelec.kr/news/articleView.html?idxno=45132</a></li>
+</ol>
+<hr>
+<h2>16. 附录 A — 影响范围及修复固件对照表</h2>
+<table>
+<thead>
+<tr>
+<th>型号</th>
+<th>受影响固件(以Coinkite公告为准)</th>
+<th>实际熵</th>
+<th>修复版本(标准)</th>
+<th>修复版本(Edge)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Mk2</td>
+<td>v4.0.1 ~ v4.1.9</td>
+<td>约40比特</td>
+<td>v4.2.0及以上</td>
+<td>不适用</td>
+</tr>
+<tr>
+<td>Mk3</td>
+<td>v4.0.1 ~ v4.1.9</td>
+<td>约40比特</td>
+<td>v4.2.0及以上</td>
+<td>不适用</td>
+</tr>
+<tr>
+<td>Mk4</td>
+<td>修复版本之前的全部版本</td>
+<td>约72比特</td>
+<td>v5.6.0及以上</td>
+<td>v6.6.0X及以上</td>
+</tr>
+<tr>
+<td>Mk5</td>
+<td>修复版本之前的全部版本</td>
+<td>约72比特</td>
+<td>v5.6.0及以上</td>
+<td>v6.6.0X及以上</td>
+</tr>
+<tr>
+<td>Q</td>
+<td>修复版本之前的全部版本</td>
+<td>约72比特</td>
+<td>v1.5.0Q及以上</td>
+<td>v6.6.0QX及以上</td>
+</tr>
+<tr>
+<td>TAPSIGNER</td>
+<td>无影响</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>OPENDIME</td>
+<td>无影响</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SATSCARD</td>
+<td>无影响</td>
+<td>—</td>
+<td>—</td>
+<td>—</td>
+</tr>
+</tbody></table>
+<p><strong>注意来源之间的不一致:</strong>关于Mk2/Mk3的受影响范围,Coinkite官方公告标注为v4.0.1<del>v4.1.9,而部分早期报道则标注为v4.0.0</del>v5.0.3。若无法确定,<strong>将其视为受影响并进行迁移是更安全的做法</strong>。</p>
+<hr>
+<h2>17. 附录 B — 未确认事项与后续追踪课题</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>当前状态</th>
+<th>追踪必要性</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>攻击者身份及国籍</td>
+<td>未确认。Galaxy已向执法机构举报约600个疑似地址</td>
+<td>高</td>
+</tr>
+<tr>
+<td>三波攻击是否为同一主体</td>
+<td>未确定。第一、二波模式相似,第三波有所不同</td>
+<td>中</td>
+</tr>
+<tr>
+<td>攻击者是否使用了AI</td>
+<td>厂商推测,尚无确证</td>
+<td>中</td>
+</tr>
+<tr>
+<td>Mk4/Mk5/Q的72比特空间是否已被实际攻击</td>
+<td>截至目前尚未观测到</td>
+<td>高</td>
+</tr>
+<tr>
+<td>Block指出的fail-open启动路径是否实际发生</td>
+<td>未解决</td>
+<td>高</td>
+</tr>
+<tr>
+<td>韩国国内流通量及受害案例</td>
+<td>无公开资料</td>
+<td>高</td>
+</tr>
+<tr>
+<td>由脆弱种子生成的纸钱包·Seed XOR产出物的受害情况</td>
+<td>尚未统计</td>
+<td>中</td>
+</tr>
+<tr>
+<td>最终损失规模</td>
+<td>仍在进行中,可能扩大</td>
+<td>高</td>
+</tr>
+<tr>
+<td>监管当局是否将引入硬件钱包认证体系</td>
+<td>讨论初期</td>
+<td>中</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>本报告采用TLP:GREEN分级,允许在社区内共享。商业用途需另行协商,引用时须注明出处。许可协议:CC BY-NC-SA 4.0。</em></p>
+<p><em>免责声明:本文档基于公开来源情报(OSINT)撰写,属于威胁情报分析,并非投资建议或法律建议。由于事件仍在进行中,数据与影响范围可能发生变化。</em></p>
+<hr>
+<p>© 2026 Dennis Kim(金浩光 · 김호광) · 本文作为独立CTI档案(TLP:GREEN)公开发布。
+联系:<a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · GitHub:<a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT">gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT</a></p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="分享" data-url="https://cti.vibequant.cc/cti/coldcard-rng-20260804-cn/" data-title="一行构建配置击溃冷存储 — Coldcard 种子熵缺陷与8,860万美元种子复现清空事件" data-text="Coldcard固件RNG fail-open导致Mk2/Mk3实际熵降至约40比特。对1,367 BTC(约8,860万美元)无接触种子复现清空事件的分析、时间线、迁移指南与韩国VASP监管启示。" data-lang="zh-Hans">
+  <span class="share-label">分享</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-cn%2F&amp;text=%E4%B8%80%E8%A1%8C%E6%9E%84%E5%BB%BA%E9%85%8D%E7%BD%AE%E5%87%BB%E6%BA%83%E5%86%B7%E5%AD%98%E5%82%A8%20%E2%80%94%20Coldcard%20%E7%A7%8D%E5%AD%90%E7%86%B5%E7%BC%BA%E9%99%B7%E4%B8%8E8%2C860%E4%B8%87%E7%BE%8E%E5%85%83%E7%A7%8D%E5%AD%90%E5%A4%8D%E7%8E%B0%E6%B8%85%E7%A9%BA%E4%BA%8B%E4%BB%B6" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-cn%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcoldcard-rng-20260804-cn%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">复制链接</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0804-COLDCARD-RNG_CN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
