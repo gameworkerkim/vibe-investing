@@ -1,0 +1,494 @@
+:root {
+  --cy-orange: #ff6a00;
+  --cy-orange-deep: #e85a00;
+  --cy-orange-soft: #ffb070;
+  --cy-cream: #fff8f0;
+  --cy-paper: #fffefb;
+  --cy-ink: #2a241c;
+  --cy-muted: #7a6e62;
+  --cy-line: #f0d0b0;
+  --cy-sky: #ffe8d2;
+  --cy-panel: #fff3e6;
+  --cy-chrome: linear-gradient(180deg, #ff9a3c 0%, #ff6a00 55%, #e85a00 100%);
+  --font-display: "Jua", "Apple SD Gothic Neo", sans-serif;
+  --font-body: "Noto Sans KR", "Apple SD Gothic Neo", sans-serif;
+  --font-pen: "Nanum Pen Script", cursive;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  scroll-behavior: smooth;
+}
+
+body.cy-body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--cy-ink);
+  font-family: var(--font-body);
+  background:
+    radial-gradient(ellipse at 20% 0%, #ffe0c2 0%, transparent 50%),
+    radial-gradient(ellipse at 90% 10%, #ffd0a8 0%, transparent 40%),
+    linear-gradient(180deg, #ffdcb8 0%, #f5e6d6 40%, #efe2d2 100%);
+  overflow-x: hidden;
+}
+
+body.cy-body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  background-image:
+    radial-gradient(circle at 1px 1px, #ff8a3a 1px, transparent 0);
+  background-size: 18px 18px;
+  z-index: 0;
+}
+
+.cy-stage {
+  position: relative;
+  z-index: 1;
+  width: min(980px, 100%);
+  margin: 0 auto;
+  padding: 1.25rem 0.75rem 2.5rem;
+}
+
+/* —— Desktop chrome —— */
+.cy-window {
+  background: var(--cy-cream);
+  border: 2px solid #d98a40;
+  border-radius: 14px;
+  box-shadow:
+    0 18px 40px rgba(120, 50, 0, 0.18),
+    0 2px 0 rgba(255, 255, 255, 0.55) inset;
+  overflow: hidden;
+  animation: cy-rise 0.7s ease both;
+}
+
+@keyframes cy-rise {
+  from { opacity: 0; transform: translateY(18px) scale(0.985); }
+  to { opacity: 1; transform: none; }
+}
+
+.cy-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.55rem 0.85rem;
+  background: var(--cy-chrome);
+  color: #fff;
+  text-shadow: 0 1px 0 rgba(0, 0, 0, 0.15);
+}
+
+.cy-dots {
+  display: flex;
+  gap: 0.35rem;
+}
+
+.cy-dots span {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.45);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.cy-titlebar h1 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.cy-titlebar .cy-live {
+  margin-left: auto;
+  font-size: 0.72rem;
+  opacity: 0.92;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+}
+
+.cy-shell {
+  display: grid;
+  grid-template-columns: 210px 1fr;
+  gap: 0;
+  min-height: 640px;
+  background: var(--cy-paper);
+}
+
+/* —— Left profile —— */
+.cy-side {
+  background: linear-gradient(180deg, #fff6ec 0%, #ffe9d4 100%);
+  border-right: 1px solid var(--cy-line);
+  padding: 1rem 0.85rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.cy-avatar {
+  aspect-ratio: 1;
+  border-radius: 12px;
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 2px var(--cy-orange), 0 8px 18px rgba(232, 90, 0, 0.2);
+  background:
+    linear-gradient(145deg, #ffb070, #ff6a00);
+  display: grid;
+  place-items: center;
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 2.6rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.cy-avatar::after {
+  content: "";
+  position: absolute;
+  inset: auto -20% -30% -20%;
+  height: 55%;
+  background: rgba(255, 255, 255, 0.18);
+  transform: rotate(-8deg);
+}
+
+.cy-name {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  text-align: center;
+  color: var(--cy-orange-deep);
+}
+
+.cy-mood {
+  margin: 0;
+  text-align: center;
+  font-size: 0.82rem;
+  color: var(--cy-muted);
+  font-family: var(--font-pen);
+  font-size: 1.15rem;
+}
+
+.cy-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+  font-size: 0.75rem;
+}
+
+.cy-stat {
+  background: #fff;
+  border: 1px dashed var(--cy-orange-soft);
+  border-radius: 8px;
+  padding: 0.45rem 0.35rem;
+  text-align: center;
+}
+
+.cy-stat b {
+  display: block;
+  color: var(--cy-orange);
+  font-size: 1rem;
+  font-family: var(--font-display);
+}
+
+.cy-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-top: 0.25rem;
+}
+
+.cy-nav button {
+  appearance: none;
+  border: 1px solid var(--cy-line);
+  background: #fff;
+  color: var(--cy-ink);
+  border-radius: 999px;
+  padding: 0.45rem 0.75rem;
+  font: inherit;
+  font-size: 0.82rem;
+  cursor: pointer;
+  text-align: left;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.cy-nav button:hover {
+  border-color: var(--cy-orange);
+  background: #fff7ef;
+}
+
+.cy-nav button.is-active {
+  background: var(--cy-orange);
+  border-color: var(--cy-orange);
+  color: #fff;
+  font-weight: 600;
+}
+
+.cy-side-note {
+  margin-top: auto;
+  font-size: 0.72rem;
+  color: var(--cy-muted);
+  line-height: 1.45;
+  padding: 0.55rem;
+  background: rgba(255, 255, 255, 0.55);
+  border-radius: 8px;
+}
+
+.cy-side-note a {
+  color: var(--cy-orange-deep);
+}
+
+/* —— Main board —— */
+.cy-main {
+  padding: 1rem 1.15rem 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  background:
+    linear-gradient(180deg, rgba(255, 248, 240, 0.9), rgba(255, 255, 255, 0.95));
+}
+
+.cy-board-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-bottom: 2px dotted var(--cy-orange-soft);
+  padding-bottom: 0.55rem;
+}
+
+.cy-board-head h2 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  color: var(--cy-orange-deep);
+  font-weight: 400;
+}
+
+.cy-board-head time {
+  font-size: 0.78rem;
+  color: var(--cy-muted);
+}
+
+.cy-quote {
+  margin: 0;
+  padding: 1rem 1.05rem;
+  background: linear-gradient(135deg, #fff 0%, #fff4ea 100%);
+  border-left: 4px solid var(--cy-orange);
+  border-radius: 0 12px 12px 0;
+  font-family: var(--font-pen);
+  font-size: clamp(1.35rem, 2.6vw, 1.75rem);
+  line-height: 1.35;
+  color: #3a2c20;
+  box-shadow: 0 6px 18px rgba(232, 90, 0, 0.08);
+  animation: cy-fade 0.9s ease 0.15s both;
+}
+
+@keyframes cy-fade {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+
+.cy-diary {
+  background: #fff;
+  border: 1px solid var(--cy-line);
+  border-radius: 12px;
+  padding: 1.1rem 1.15rem 1.35rem;
+  line-height: 1.75;
+  font-size: 0.95rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+}
+
+.cy-diary p {
+  margin: 0 0 1rem;
+}
+
+.cy-diary p:last-child {
+  margin-bottom: 0;
+}
+
+.cy-diary .cy-strong {
+  font-weight: 700;
+  color: var(--cy-orange-deep);
+}
+
+.cy-diary .cy-emphasis {
+  background: linear-gradient(180deg, transparent 60%, rgba(255, 180, 100, 0.35) 60%);
+}
+
+.cy-stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-top: 0.35rem;
+  padding: 0.35rem 0.7rem;
+  border: 2px solid var(--cy-orange);
+  color: var(--cy-orange-deep);
+  border-radius: 6px;
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  transform: rotate(-2deg);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.cy-ilchon {
+  margin-top: 0.25rem;
+  padding: 0.75rem 0.9rem;
+  background: var(--cy-panel);
+  border: 1px dashed var(--cy-orange-soft);
+  border-radius: 10px;
+  font-size: 0.82rem;
+  color: var(--cy-muted);
+}
+
+.cy-ilchon strong {
+  color: var(--cy-orange-deep);
+  font-family: var(--font-display);
+  font-weight: 400;
+}
+
+.cy-foot {
+  text-align: center;
+  margin-top: 0.85rem;
+  font-size: 0.75rem;
+  color: var(--cy-muted);
+}
+
+.cy-foot a {
+  color: var(--cy-orange-deep);
+  text-decoration: none;
+}
+
+.cy-foot a:hover {
+  text-decoration: underline;
+}
+
+/* —— Mobile top bar —— */
+.cy-mobile-bar {
+  display: none;
+}
+
+/* —— Responsive —— */
+@media (max-width: 760px) {
+  .cy-stage {
+    padding: 0 0 2rem;
+    width: 100%;
+  }
+
+  .cy-window {
+    border-radius: 0;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    min-height: 100vh;
+    box-shadow: none;
+  }
+
+  .cy-titlebar {
+    display: none;
+  }
+
+  .cy-mobile-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+    background: var(--cy-chrome);
+    color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+  }
+
+  .cy-mobile-bar h1 {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 400;
+  }
+
+  .cy-mobile-bar .cy-live {
+    font-size: 0.7rem;
+    background: rgba(255, 255, 255, 0.22);
+    padding: 0.2rem 0.5rem;
+    border-radius: 999px;
+  }
+
+  .cy-shell {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+
+  .cy-side {
+    border-right: 0;
+    border-bottom: 1px solid var(--cy-line);
+    padding: 1rem;
+    display: grid;
+    grid-template-columns: 88px 1fr;
+    grid-template-areas:
+      "avatar meta"
+      "nav nav"
+      "note note";
+    gap: 0.75rem 0.85rem;
+  }
+
+  .cy-avatar {
+    grid-area: avatar;
+    width: 88px;
+    font-size: 2rem;
+  }
+
+  .cy-meta {
+    grid-area: meta;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.35rem;
+  }
+
+  .cy-name { text-align: left; }
+  .cy-mood { text-align: left; }
+
+  .cy-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .cy-nav {
+    grid-area: nav;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .cy-nav button {
+    flex: 1 1 auto;
+    text-align: center;
+    min-width: 4.5rem;
+  }
+
+  .cy-side-note {
+    grid-area: note;
+    margin-top: 0;
+  }
+
+  .cy-main {
+    padding: 1rem 1rem 1.5rem;
+  }
+
+  .cy-quote {
+    font-size: 1.35rem;
+  }
+
+  .cy-diary {
+    padding: 1rem;
+    font-size: 0.92rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cy-window,
+  .cy-quote {
+    animation: none;
+  }
+}

@@ -14,6 +14,7 @@ const HOST_SEO = {
   "tech.vibequant.cc": { sitemap: "/sitemaps/tech.xml", robots: "/sitemaps/robots-tech.txt" },
   "cti.vibequant.cc": { sitemap: "/sitemaps/cti.xml", robots: "/sitemaps/robots-cti.txt" },
   "play.vibequant.cc": { sitemap: "/sitemaps/play.xml", robots: "/sitemaps/robots-play.txt" },
+  "cyworld.vibequant.cc": { sitemap: "/sitemaps/cyworld.xml", robots: "/sitemaps/robots-cyworld.txt" },
 };
 
 async function serveAsset(context, assetPath, contentType, cacheControl) {
@@ -138,6 +139,12 @@ export async function onRequest(context) {
   if (host === "cti.vibequant.cc") {
     if (path === "/" || path === "") {
       return Response.redirect(`${url.origin}/cti/`, 302);
+    }
+  }
+
+  if (host === "cyworld.vibequant.cc") {
+    if (path === "/" || path === "") {
+      return Response.redirect(`${url.origin}/cyworld/`, 302);
     }
   }
 
