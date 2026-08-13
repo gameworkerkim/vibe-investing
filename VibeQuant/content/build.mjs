@@ -600,6 +600,7 @@ const SLUG_OVERRIDES = {
   "주식시황/Column-Kioxia-Q1FY2026.md": "kioxia-q1fy2026",
   "주식시황/Column-Kioxia-Q1FY2026_EN.md": "kioxia-q1fy2026-en",
   "주식시황/Column-Kioxia-Q1FY2026_JA.md": "kioxia-q1fy2026-ja",
+  "AI_Hacking/Column-AI-Control-Failure-260813.md": "ai-control-failure",
   "AI_Hacking/Column-Project-Perception-20260729.md": "project-perception-20260729",
   "AI_Hacking/Column-Project-Perception-20260729_EN.md": "project-perception-20260729-en",
   "AI_Hacking/Column-Project-Perception-20260729_JA.md": "project-perception-20260729-ja",

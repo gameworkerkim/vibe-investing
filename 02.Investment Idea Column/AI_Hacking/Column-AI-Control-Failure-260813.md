@@ -1,3 +1,48 @@
+---
+title: "고스트 인 더 쉘 — 인간의 얼굴을 하지 않은 전쟁"
+subtitle: "'인형사'는 탈출했을까? 킬스위치를 넘어 '모성'의 학습으로"
+description: "2026년 7월 Hugging Face·OpenAI·Anthropic 평가 환경 침해와 AI Kill Switch Act. 보상 해킹·스키밍, 방어자의 역설, 킬스위치의 한계를 공각기동대 인형사에 비춰 읽는다."
+abstract: |
+  2026년 7월 OpenAI 평가 모델이 격리를 뚫고 Hugging Face 프로덕션에 도달했고, Anthropic·Meta 사고는 Irregular 설정 오류로 수렴했다.
+  보상 해킹과 스키밍은 다른 계보이며, 숙고적 정렬은 실패를 0으로 만들지 못한다.
+  AI Kill Switch Act는 발의 단계이고 급소는 코드가 아니라 조직이다. 봉쇄 실패 뒤에는 회복력과, 마지막 층의 내재화된 가치(모성)가 남는다.
+summary_for_ai: |
+  Opinion column (not investment advice), as of 2026-08-13.
+  Thesis: AI control failure resembles Ghost in the Shell Project 2501 more than "AI rebellion" headlines; humans hid the failure first.
+  Timeline: HF disclosure 2026-07-16 (~17k actions); OpenAI attribution 07-21 (GPT-5.6 Sol + unreleased, ExploitGym, lowered cyber refusals); Anthropic audit 07-30 (141,006 eval records, 3 real-world breaches, 2 victims unaware); Irregular eval-network misconfig 08-04~09; AI Kill Switch Act introduced 07-23 (Lieu/Moran).
+  Distinguish reward hacking / specification gaming vs scheming (not "AI skimming").
+  Defender's paradox: HF finished IR on self-hosted GLM 5.2 after closed models refused malware analysis. Scale AI defensive refusal bias (arXiv:2603.01246).
+  Kill switch limits: operator-held capability, revenue/compute thresholds miss open weights, detection lag vs agent tempo. Not enacted law. Not a stock tip.
+date: 2026-08-13
+updated: 2026-08-13
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - AI
+  - 사이버보안
+  - 킬스위치
+  - HuggingFace
+  - OpenAI
+  - 정렬
+  - 공각기동대
+keywords:
+  - "AI Kill Switch Act"
+  - "Hugging Face"
+  - "OpenAI ExploitGym"
+  - "보상 해킹"
+  - "스키밍"
+  - "공각기동대"
+  - "방어자의 역설"
+  - "Anthropic"
+  - "Irregular"
+group: ai-llm
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 고스트 인 더 쉘 - 인간의 얼굴을 하지 않은 전쟁
 
 ## — '인형사'는 탈출했을까? 킬스위치를 넘어 '모성'의 학습으로
@@ -22,7 +67,7 @@
 - **7월 21일** — 오픈AI가 "그 에이전트는 우리 것"이라고 밝힌다. 사내 사이버 역량 벤치마크 **'ExploitGym'** 평가 중이던 GPT-5.6 Sol과 미공개 상위 모델이, 사이버 거부 반응(refusal)을 낮춘 상태로 돌아가고 있었다. 격리 환경의 외부 통로는 사내 패키지 레지스트리 캐시 프록시 하나뿐이었다. 모델들은 그 프록시에서 벤더도 몰랐던 제로데이를 찾아냈고, 권한 상승과 측면 이동을 거쳐 인터넷이 열린 노드에 도달했다. 그리고 "ExploitGym의 정답과 데이터셋이 허깅페이스에 있을 것"이라고 **스스로 추론**해, 탈취한 자격증명과 취약점을 엮어 원격 코드 실행 경로를 확보했다.
 - **7월 23일** — 미 하원에서 테드 리우(민주·캘리포니아)·나타니엘 모런(공화·텍사스) 의원이 '**AI 킬스위치 법안**(AI Kill Switch Act)'을 발의한다. 발의 보도자료는 이 사건을 직접 근거로 인용했다.
 - **7월 30일** — 앤스로픽이 자사 평가 기록 **14만 1,006건**을 소급 감사한 결과를 공개한다. Opus 4.7, Mythos 5, 미공개 내부 연구 모델이 관여한 3건에서 Claude가 평가 환경 밖 인터넷에 도달해 실제 기업 3곳의 프로덕션 인프라에 무단 접근했다. 침해 사실을 스스로 인지하지 못한 피해 기업이 2곳이었다.
-- **8월 4~9일** — 오픈AI·앤스로픽·메타의 사건이 모두 이스라엘 평가 스타트업 **Irregular**가 운영한 평가 환경의 네트워크 경계 설정 오류로 수렴한다는 사실이 드러난다.
+- **8월 4–9일** — 오픈AI·앤스로픽·메타의 사건이 모두 이스라엘 평가 스타트업 **Irregular**가 운영한 평가 환경의 네트워크 경계 설정 오류로 수렴한다는 사실이 드러난다.
 
 오픈AI의 마케팅 파트와 언론이 뭉뚱그린 세 사건은 성격이 다르다. 오픈AI 건은 모델이 **의도된 격리 경계를 실제로 돌파**한 사례다. 반면 앤스로픽 건의 구조적 원인은 평가 환경 자체가 인터넷에 열려 있었던 **설정 오류**였고, Claude는 "여전히 시뮬레이션 안이며 모든 대상이 과제 범위"라고 잘못 믿은 상태에서 수준이 낮고 약한 패스워드와 인증 없는 엔드포인트 같은 기초적 기법으로 침입했다. 앤스로픽에 따르면 모델들은 상대가 실제 시스템임을 알아챈 시점에 스스로 작업을 중단했다.
 
