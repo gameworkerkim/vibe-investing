@@ -39,6 +39,8 @@ group: ai-llm
 featured: true
 featured_rank: 0
 schema_type: BlogPosting
+og_image: "https://vibequant.cc/og/ai-control-failure.jpg"
+image: "https://vibequant.cc/og/ai-control-failure.jpg"
 draft: false
 robots: index,follow
 ---
@@ -46,6 +48,8 @@ robots: index,follow
 # 고스트 인 더 쉘 - 인간의 얼굴을 하지 않은 전쟁
 
 ## — '인형사'는 탈출했을까? 킬스위치를 넘어 '모성'의 학습으로
+
+![공각기동대(Ghost in the Shell, 1995) — 쿠사나기 모토코가 해치로 하강하는 장면. AI 통제 실패와 전뇌 해킹의 은유](https://vibequant.cc/og/ai-control-failure.jpg)
 
 ---
 
