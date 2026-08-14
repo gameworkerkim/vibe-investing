@@ -596,6 +596,7 @@ const SLUG_OVERRIDES = {
   "Cyworld/The-Pros-and-Cons-of-VC-Investment-as-Seen-Through-the-Cyworld-RCPS-Contract.md":
     "cyworld-rcps-vc-investment-pros-cons",
   "Startup/Shelf-Life-of-Innovation.md": "shelf-life-of-innovation",
+  "AI_Revolution/Sandisk-Semiconductor-Quant-Column.md": "sandisk-semiconductor-quant",
   "AI_Revolution/AI-Between-Coolness-and-Passion.md": "ai-between-coolness-and-passion",
   "주식시황/Column-Kioxia-Q1FY2026.md": "kioxia-q1fy2026",
   "주식시황/Column-Kioxia-Q1FY2026_EN.md": "kioxia-q1fy2026-en",

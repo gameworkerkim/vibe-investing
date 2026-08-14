@@ -62,6 +62,7 @@ export const ESSAY_GROUP_FALLBACK = { id: "other", title_ko: "기타 에세이",
 
 /** Paths (substring) that should appear in Recommended — order = display order */
 export const FEATURED_COLUMN_PATHS = [
+  "AI_Revolution/Sandisk-Semiconductor-Quant-Column.md",
   "AI_Hacking/Column-AI-Control-Failure-260813.md",
   "AI-Bottleneck/Nvidia-AI-Infra.md",
   "AI-IDC/Why-High-Power-Datacenter.md",
