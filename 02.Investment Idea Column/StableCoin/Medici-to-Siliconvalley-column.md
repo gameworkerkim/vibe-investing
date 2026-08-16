@@ -36,6 +36,8 @@ group: crypto-web3
 featured: true
 featured_rank: 0
 schema_type: BlogPosting
+og_image: "https://vibequant.cc/og/medici-to-siliconvalley.jpg"
+image: "https://vibequant.cc/og/medici-to-siliconvalley.jpg"
 draft: false
 robots: index,follow
 ---
@@ -43,6 +45,8 @@ robots: index,follow
 # 그들은 금화를 찍지 않았다
 
 ## 환어음에서 스테이블코인까지, 사적(私的) 화폐 네트워크의 천 년
+
+![금화 더미 — 주화가 아니라 어음·신용이 중세 사적 화폐 네트워크의 힘이었고, 스테이블코인도 같은 구조다](https://vibequant.cc/og/medici-to-siliconvalley.jpg)
 
 ---
 
