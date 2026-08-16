@@ -74,7 +74,7 @@ vLLM, SGLang, TokenSpeed, llama.cpp, Ollama, LM Studio, Unsloth, Docker Model Ru
 | 항목 | 내용 |
 |---|---|
 | **가중치 용량** | 27.78B × 2B = **약 55.6GB**(BF16). FP8 약 27.8GB, Q4_K_M 약 13.9GB, Q5_K_M 약 17.4GB |
-| **실제 VRAM** | 양자화 수치는 *가중치만*이다. KV 캐시가 32K에서 8~10GB, 256K에서 60~80GB. "16GB에서 돈다"는 홍보는 짧은 컨텍스트 전제 |
+| **실제 VRAM** | 양자화 수치는 *가중치만*이다. KV 캐시가 32K에서 8 ~ 10GB, 256K에서 60 ~ 80GB. "16GB에서 돈다"는 홍보는 짧은 컨텍스트 전제 |
 | **권장 사양** | BF16 = 80GB급 1장. 로컬 실용선은 24GB 초과 VRAM(RTX 4090/5090, R9700 32GB, Ryzen AI Max+ 통합메모리) |
 | **약한 축** | 순수 텍스트 추론. GPQA Diamond 89.2(Opus 4.6 Max 91.3), HLE 30.8(Opus 40.0), Terminal Bench 73.0(Opus 78.2). **시각·에이전트에 최적화된 대신 심층 텍스트 추론은 프런티어에 못 미친다** |
 | **YaRN 부작용** | 100만 토큰은 정적 YaRN 스케일링 기반이며, Qwen 스스로 "짧은 프롬프트 성능을 해칠 수 있다"고 경고한다 |
