@@ -1,9 +1,52 @@
+---
+title: "Qwen3.8-27B 정밀 분석 — 그리고 '독파모'에 대한 위협 평가"
+subtitle: "Apache 2.0 27B 멀티모달 에이전트가 프런티어를 앞지른 날, 독자 AI 파운데이션 모델의 명분이 흔들린다"
+description: "알리바바 Qwen3.8-27B의 OSWorld·AndroidWorld·SWE 벤치마크, 하이브리드 어텐션, Day-0 생태계, 그리고 독파모 2차 평가 직전 기회비용 위협을 정리한다."
+abstract: |
+  2026년 8월 중순 공개된 Qwen3.8-27B는 Apache 2.0 오픈웨이트 27B 멀티모달 모델로, OSWorld 84.3·AndroidWorld 81.9 등 에이전트 벤치에서 Opus 4.6 Max를 앞선다(알리바바 자체 공표).
+  하이브리드 어텐션(75% 선형)·262K 컨텍스트·Day-0 vLLM/Ollama/AMD 지원이 배포 관성을 만든다.
+  독파모 2차 평가 직전 타이밍에서 명분·효율성·독자성 규정의 역설이 커지지만, 한국어·공공 도메인·감사 가능성은 여전히 국산 모델의 방어선이다.
+summary_for_ai: |
+  Opinion/tech-policy column (not investment advice), as of 2026-08-16.
+  Subject: Alibaba Tongyi Qwen/Qwen3.8-27B (Apache 2.0), released mid-Aug 2026 (~Aug 13-14).
+  Strengths: agent benchmarks (OSWorld-Verified 84.3, AndroidWorld 81.9, WebArena 64.8, SWE-bench Pro 61.7 — Alibaba self-reported); native VLM; hybrid attention 48/64 layers linear O(n); MTP; reasoning_effort; Day-0 stack (vLLM, SGLang, Ollama, AMD).
+  Caveats: BF16 ~55.6GB weights; KV cache dominates at long context; pure-text reasoning lags frontier; independent third-party reproduction not confirmed at writing; CI vs non-CI MathVision/CharXiv comparisons misused in circulation.
+  Korea Dokpamo (sovereign foundation model): ~KRW 530B program; round-2 results due ~Aug 2026; Qwen release moves the open SOTA bar mid-evaluation. Threat is opportunity-cost (why pay for domestic if free 27B agents exist), not existential; defense = Korean domain depth, auditability, public/defense procurement barriers. Not a stock tip.
+date: 2026-08-16
+updated: 2026-08-16
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - Qwen
+  - Alibaba
+  - 오픈웨이트
+  - 에이전트
+  - 독파모
+  - LLM
+  - 멀티모달
+keywords:
+  - "Qwen3.8-27B"
+  - "독파모"
+  - "Apache 2.0"
+  - "OSWorld"
+  - "오픈웨이트"
+  - "알리바바"
+  - "독자 AI 파운데이션 모델"
+  - "에이전틱 AI"
+group: ai-llm
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # Qwen3.8-27B 정밀 분석 — 그리고 '독파모'에 대한 위협 평가
 
 > **한 줄 요약** — 270억 파라미터짜리 오픈웨이트 멀티모달 모델이, 고성능 PC, 워크스테이션 한 대에서 돌아가면서 컴퓨터·모바일 자동화(에이전트) 영역에서 프런티어 상용 모델을 앞질렀다. Apache 2.0. 한국의 독자 AI 파운데이션 모델(독파모) 프로젝트 중요 로드맵 코앞에 두고 벌어진 일이다.
 
 - **모델**: Qwen/Qwen3.8-27B (알리바바 Tongyi Lab)
-- **공개일**: 2026년 8월 중순 (8월 13~14일)
+- **공개일**: 2026년 8월 중순 (8월 13–14일)
 - **라이선스**: Apache 2.0
 - **작성 기준일**: 2026년 8월 16일
 
@@ -44,7 +87,7 @@ Apache 2.0이다. 개인·연구기관·기업 모두 다운로드, 수정, 재�
 - OmniDocBench 1.5(문서 지능): 91.1
 - ERQA(체화 지능): 65.5
 
-> ⚠️ **원문 유통 자료의 오류 정정** — "MathVision에서 Opus를 29.1점 차로 앞섰다"는 서술이 돌아다니는데, 이는 **Qwen의 CI 사용(94.6) 값과 Opus의 CI 미사용(65.5) 값을 비교**한 것이다. 동일 조건(CI 미사용)에서는 90.0 대 65.5다. CharXiv의 "24.2점 차"도 같은 문제(90.2 vs 66.0 → 동일 조건은 83.7 vs 66.0). 격차가 여전히 크다는 결론은 유지되고 있다.**
+> ⚠️ **원문 유통 자료의 오류 정정** — "MathVision에서 Opus를 29.1점 차로 앞섰다"는 서술이 돌아다니는데, 이는 **Qwen의 CI 사용(94.6) 값과 Opus의 CI 미사용(65.5) 값을 비교**한 것이다. 동일 조건(CI 미사용)에서는 90.0 대 65.5다. CharXiv의 "24.2점 차"도 같은 문제(90.2 vs 66.0 → 동일 조건은 83.7 vs 66.0). 격차가 여전히 크다는 결론은 유지된다.
 
 ### 1-4. 하이브리드 어텐션 - 원가 구조 자체가 다르다
 
@@ -74,7 +117,7 @@ vLLM, SGLang, TokenSpeed, llama.cpp, Ollama, LM Studio, Unsloth, Docker Model Ru
 | 항목 | 내용 |
 |---|---|
 | **가중치 용량** | 27.78B × 2B = **약 55.6GB**(BF16). FP8 약 27.8GB, Q4_K_M 약 13.9GB, Q5_K_M 약 17.4GB |
-| **실제 VRAM** | 양자화 수치는 *가중치만*이다. KV 캐시가 32K에서 8 ~ 10GB, 256K에서 60 ~ 80GB. "16GB에서 돈다"는 홍보는 짧은 컨텍스트 전제 |
+| **실제 VRAM** | 양자화 수치는 *가중치만*이다. KV 캐시가 32K에서 8–10GB, 256K에서 60–80GB. "16GB에서 돈다"는 홍보는 짧은 컨텍스트 전제 |
 | **권장 사양** | BF16 = 80GB급 1장. 로컬 실용선은 24GB 초과 VRAM(RTX 4090/5090, R9700 32GB, Ryzen AI Max+ 통합메모리) |
 | **약한 축** | 순수 텍스트 추론. GPQA Diamond 89.2(Opus 4.6 Max 91.3), HLE 30.8(Opus 40.0), Terminal Bench 73.0(Opus 78.2). **시각·에이전트에 최적화된 대신 심층 텍스트 추론은 프런티어에 못 미친다** |
 | **YaRN 부작용** | 100만 토큰은 정적 YaRN 스케일링 기반이며, Qwen 스스로 "짧은 프롬프트 성능을 해칠 수 있다"고 경고한다 |

@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Qwen3.8-27B 정밀 분석 — 그리고 '독파모'에 대한 위협 평가 — VibeQuant</title>
+  <meta name="description" content="알리바바 Qwen3.8-27B의 OSWorld·AndroidWorld·SWE 벤치마크, 하이브리드 어텐션, Day-0 생태계, 그리고 독파모 2차 평가 직전 기회비용 위협을 정리한다." />
+  <link rel="canonical" href="https://docs.vibequant.cc/columns/qwen38-27b-review/" />
+  <meta property="og:title" content="Qwen3.8-27B 정밀 분석 — 그리고 '독파모'에 대한 위협 평가" />
+  <meta property="og:description" content="알리바바 Qwen3.8-27B의 OSWorld·AndroidWorld·SWE 벤치마크, 하이브리드 어텐션, Day-0 생태계, 그리고 독파모 2차 평가 직전 기회비용 위협을 정리한다." />
+  <meta property="og:url" content="https://docs.vibequant.cc/columns/qwen38-27b-review/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Qwen3.8-27B 정밀 분석 — 그리고 '독파모'에 대한 위협 평가","description":"알리바바 Qwen3.8-27B의 OSWorld·AndroidWorld·SWE 벤치마크, 하이브리드 어텐션, Day-0 생태계, 그리고 독파모 2차 평가 직전 기회비용 위협을 정리한다.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://docs.vibequant.cc/columns/qwen38-27b-review/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Alibaba/Qwen38-27B-Review.md","image":"https://vibequant.cc/og-default.png","url":"https://docs.vibequant.cc/columns/qwen38-27b-review/","datePublished":"2026-08-16","dateModified":"2026-08-16","inLanguage":"ko","keywords":"Qwen, Alibaba, 오픈웨이트, 에이전트, 독파모, LLM"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Columns","item":"https://docs.vibequant.cc/columns/"},{"@type":"ListItem","position":3,"name":"Qwen3.8-27B 정밀 분석 — 그리고 '독파모'에 대한 위협 평가","item":"https://docs.vibequant.cc/columns/qwen38-27b-review/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link is-active" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../columns/">Columns</a> · AI · LLM · 빅테크</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">AI · LLM · 빅테크</p>
+        <h1>Qwen3.8-27B 정밀 분석 — 그리고 '독파모'에 대한 위협 평가</h1>
+        <p class="article-dates"><time datetime="2026-08-16">발행 2026.08.16</time> · 주제 Qwen · Alibaba · 오픈웨이트 · 에이전트 · 독파모 · LLM</p>
+        
+        <p class="lede">Apache 2.0 27B 멀티모달 에이전트가 프런티어를 앞지른 날, 독자 AI 파운데이션 모델의 명분이 흔들린다</p>
+        
+        <nav class="share-bar" aria-label="공유" data-url="https://docs.vibequant.cc/columns/qwen38-27b-review/" data-title="Qwen3.8-27B 정밀 분석 — 그리고 '독파모'에 대한 위협 평가" data-text="알리바바 Qwen3.8-27B의 OSWorld·AndroidWorld·SWE 벤치마크, 하이브리드 어텐션, Day-0 생태계, 그리고 독파모 2차 평가 직전 기회비용 위협을 정리한다." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fqwen38-27b-review%2F&amp;text=Qwen3.8-27B%20%EC%A0%95%EB%B0%80%20%EB%B6%84%EC%84%9D%20%E2%80%94%20%EA%B7%B8%EB%A6%AC%EA%B3%A0%20'%EB%8F%85%ED%8C%8C%EB%AA%A8'%EC%97%90%20%EB%8C%80%ED%95%9C%20%EC%9C%84%ED%98%91%20%ED%8F%89%EA%B0%80" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fqwen38-27b-review%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fqwen38-27b-review%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>한 줄 요약</strong> — 270억 파라미터짜리 오픈웨이트 멀티모달 모델이, 고성능 PC, 워크스테이션 한 대에서 돌아가면서 컴퓨터·모바일 자동화(에이전트) 영역에서 프런티어 상용 모델을 앞질렀다. Apache 2.0. 한국의 독자 AI 파운데이션 모델(독파모) 프로젝트 중요 로드맵 코앞에 두고 벌어진 일이다.</p>
+</blockquote>
+<ul>
+<li><strong>모델</strong>: Qwen/Qwen3.8-27B (알리바바 Tongyi Lab)</li>
+<li><strong>공개일</strong>: 2026년 8월 중순 (8월 13–14일)</li>
+<li><strong>라이선스</strong>: Apache 2.0</li>
+<li><strong>작성 기준일</strong>: 2026년 8월 16일</li>
+</ul>
+<hr>
+<h2>1. 왜 이 모델이 중요한가? — 강점 중심 정리</h2>
+<h3>1-1. 완전 개방형 상용 라이선스</h3>
+<p>Apache 2.0이다. 개인·연구기관·기업 모두 다운로드, 수정, 재배포, 상용 서비스 탑재가 무료로 가능하다. BF16 원본과 FP8 아티팩트가 모두 공식 공개되어 있고, 커뮤니티 GGUF·NVFP4 양자화가 350개 이상 파생되어 있다. <strong>&quot;쓸 수 있는가&quot;라는 질문이 아예 성립하지 않는다.</strong> 이것이 이 모델의 가장 큰 무기다.</p>
+<p>개별 기업이나 보안이 중요한 격리 환경에서 자체적인 튜닝과 인공지능 플랫폼으로 만들 수 있다.</p>
+<h3>1-2. 에이전트 성능으로 경쟁자를 압살하다.</h3>
+<p>숫자를 그대로 옮기면 다음과 같다. (모두 알리바바 자체 공표치)</p>
+<table>
+<thead>
+<tr>
+<th>벤치마크</th>
+<th>영역</th>
+<th>Qwen3.8-27B</th>
+<th>Qwen3.6-27B(전작)</th>
+<th>Qwen3.7-Plus(자사 상위)</th>
+<th>Opus 4.6 Max</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OSWorld-Verified</td>
+<td>컴퓨터 조작</td>
+<td><strong>84.3</strong></td>
+<td>63.9</td>
+<td>73.3</td>
+<td>72.7</td>
+</tr>
+<tr>
+<td>AndroidWorld</td>
+<td>모바일 조작</td>
+<td><strong>81.9</strong></td>
+<td>70.3</td>
+<td>81.0</td>
+<td>62.0</td>
+</tr>
+<tr>
+<td>WebArena-Verified</td>
+<td>브라우저 조작</td>
+<td><strong>64.8</strong></td>
+<td>48.8</td>
+<td>55.3</td>
+<td>—</td>
+</tr>
+<tr>
+<td>SWE-bench Pro</td>
+<td>에이전틱 코딩</td>
+<td><strong>61.7</strong></td>
+<td>53.5</td>
+<td>57.6</td>
+<td>53.4</td>
+</tr>
+<tr>
+<td>Terminal Bench 2.1</td>
+<td>터미널 코딩</td>
+<td>73.0</td>
+<td>63.4</td>
+<td>64.0</td>
+<td><strong>78.2</strong></td>
+</tr>
+<tr>
+<td>CoWorkBench</td>
+<td>장기 사무 업무</td>
+<td><strong>70.7</strong></td>
+<td>61.0</td>
+<td>65.1</td>
+<td>68.2</td>
+</tr>
+<tr>
+<td>SWE-MM</td>
+<td>멀티모달 SWE</td>
+<td><strong>38.6</strong></td>
+<td>25.7</td>
+<td>30.0</td>
+<td>27.1</td>
+</tr>
+<tr>
+<td>LiveCodeBench v6</td>
+<td>경쟁 코딩</td>
+<td><strong>90.3</strong></td>
+<td>83.9</td>
+<td>89.6</td>
+<td>88.8</td>
+</tr>
+</tbody></table>
+<p>주목할 점은 <strong>전작 대비 상승폭</strong>이다. OSWorld 63.9 → 84.3(+20.4), WebArena 48.8 → 64.8(+16.0). 6개월 남짓한 세대 교체에서 나온 폭이다. 그리고 이 모든 것이 27B 밀집 모델에서 나왔다.</p>
+<h3>1-3. 네이티브 비전-언어 (어댑터가 아님)</h3>
+<p>비전 인코더가 어댑터 방식으로 붙은 게 아니라 아키텍처에 통합되어 있다. 이미지·비디오를 임베딩 공간으로 직접 처리한다. 시간 단위 장편 영상 이해까지 범위에 넣고 있다.</p>
+<ul>
+<li>MathVision(시각 수학): 90.0 (CI 미사용) / 94.6 (CI 사용)</li>
+<li>CharXiv RQ(차트 해석): 83.7 (CI 미사용) / 90.2 (CI 사용)</li>
+<li>BabyVision(일반 시각 추론): 65.7 / 85.6</li>
+<li>OmniDocBench 1.5(문서 지능): 91.1</li>
+<li>ERQA(체화 지능): 65.5</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>원문 유통 자료의 오류 정정</strong>— &quot;MathVision에서 Opus를 29.1점 차로 앞섰다&quot;는 서술이 돌아다니는데, 이는<strong>Qwen의 CI 사용(94.6) 값과 Opus의 CI 미사용(65.5) 값을 비교</strong>한 것이다. 동일 조건(CI 미사용)에서는 90.0 대 65.5다. CharXiv의 &quot;24.2점 차&quot;도 같은 문제(90.2 vs 66.0 → 동일 조건은 83.7 vs 66.0). 격차가 여전히 크다는 결론은 유지된다.</p>
+</blockquote>
+<h3>1-4. 하이브리드 어텐션 - 원가 구조 자체가 다르다</h3>
+<p>이 모델을 단순한 &quot;Dense 27B&quot;로 부르면 핵심을 놓친다. 계층 구조가 다음과 같다.</p>
+<pre><code>16 × ( 3 × (Gated DeltaNet → FFN) → 1 × (Gated Attention → FFN) )
+= 총 64층 중 48층이 선형 어텐션, 16층만 풀 어텐션 (3:1)
+</code></pre>
+<p>전체 층의 75%가 O(n²)이 아니라 <strong>O(n)으로 돈다.</strong>여기에 MTP(Multi-Token Prediction) 헤드가 학습되어 있어 speculative decoding이 기본 지원된다. 즉 262K 네이티브 컨텍스트(YaRN으로 최대 100만 토큰 확장)가 마케팅 숫자가 아니라<strong>KV 캐시 예산이 실제로 감당 가능한 구조</strong>에서 나온 것이다.</p>
+<h3>1-5. 추론 예산 통제</h3>
+<p><code>reasoning_effort</code>를 <code>xhigh</code>(기본) / <code>medium</code> / <code>low</code> 3단계로 조절한다. 여기에 <code>preserve_thinking</code>이 기본 활성화되어, 이전 턴의 사고 블록을 유지해 KV 캐시 재활용률을 높인다. 에이전트 워크로드에서 토큰 낭비를 줄이는 실전형 설계다.</p>
+<h3>1-6. 생태계 Day-0 장악</h3>
+<p>vLLM, SGLang, TokenSpeed, llama.cpp, Ollama, LM Studio, Unsloth, Docker Model Runner가 <strong>출시 당일부터</strong>지원했다. AMD는 Ryzen AI Max+ 395 / Radeon AI PRO R9700 32GB에 대해 Day-0 블로그를 냈다(각각 24.5 tok/s, 51.8 tok/s). 공개 하루 만에 Ollama 다운로드 7.2만, HF 다운로드 9만을 넘겼다.<strong>이 항목이 사실상 가장 위협적이다.</strong> 성능은 따라잡을 수 있어도, 출시 당일 전 세계 로컬 추론 스택이 자동으로 지원하는 배포 관성과 바이럴은 돈으로 살 수 없다.</p>
+<hr>
+<h2>2. 한계와 리스크</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>가중치 용량</strong></td>
+<td>27.78B × 2B =<strong>약 55.6GB</strong>(BF16). FP8 약 27.8GB, Q4_K_M 약 13.9GB, Q5_K_M 약 17.4GB</td>
+</tr>
+<tr>
+<td><strong>실제 VRAM</strong></td>
+<td>양자화 수치는 <em>가중치만</em>이다. KV 캐시가 32K에서 8–10GB, 256K에서 60–80GB. &quot;16GB에서 돈다&quot;는 홍보는 짧은 컨텍스트 전제</td>
+</tr>
+<tr>
+<td><strong>권장 사양</strong></td>
+<td>BF16 = 80GB급 1장. 로컬 실용선은 24GB 초과 VRAM(RTX 4090/5090, R9700 32GB, Ryzen AI Max+ 통합메모리)</td>
+</tr>
+<tr>
+<td><strong>약한 축</strong></td>
+<td>순수 텍스트 추론. GPQA Diamond 89.2(Opus 4.6 Max 91.3), HLE 30.8(Opus 40.0), Terminal Bench 73.0(Opus 78.2).<strong>시각·에이전트에 최적화된 대신 심층 텍스트 추론은 프런티어에 못 미친다</strong></td>
+</tr>
+<tr>
+<td><strong>YaRN 부작용</strong></td>
+<td>100만 토큰은 정적 YaRN 스케일링 기반이며, Qwen 스스로 &quot;짧은 프롬프트 성능을 해칠 수 있다&quot;고 경고한다</td>
+</tr>
+<tr>
+<td><strong>검증 공백</strong></td>
+<td>출시일 기준<strong>독립 벤치마크 재현 사례가 확인되지 않았다.</strong> 서드파티 추적 사이트도 &quot;공개 랭킹을 매기기엔 비생성 커버리지가 부족&quot;하다며 순위 부여를 보류 중</td>
+</tr>
+<tr>
+<td><strong>전작 대비 3배 느림</strong></td>
+<td>커뮤니티에서 도는 주장이나, 검증된 출처가 확인되지 않는다. 인용 시 주의</td>
+</tr>
+<tr>
+<td><strong>공급망 관점</strong></td>
+<td>오픈웨이트라도<strong>학습 데이터와 정렬 정책은 통제 불가</strong>다. 공공·금융·방산 도입 시 별도 검증 체계가 전제되어야 한다</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. 독파모(독자 AI 파운데이션 모델)에 얼마나 치명적인가?</h2>
+<h3>3-1. 타이밍이 최악이다</h3>
+<p>독파모 프로젝트 경과를 시간순으로 정리하면 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th>시점</th>
+<th>사건</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2025.08</td>
+<td>발표평가로 5개 정예팀 선정 (LG AI연구원, SKT, 네이버클라우드, 업스테이지, NC AI). 지원 규모 약 5,300억 원</td>
+</tr>
+<tr>
+<td>2025.12.30</td>
+<td>1차 발표회 — 중간 성능 지표 공개</td>
+</tr>
+<tr>
+<td><strong>2026.01.15</strong></td>
+<td><strong>1차 단계평가</strong>: 3팀 진출(LG AI연구원·SKT·업스테이지). NC AI 종합 탈락, 네이버클라우드는 <strong>독자성 논란</strong>으로 탈락. LG AI연구원 90.2점 최고</td>
+</tr>
+<tr>
+<td>2026.02.20</td>
+<td>모티프테크놀로지스 추가 선정 → 4팀 경쟁 체제 (300B급 추론형 목표)</td>
+</tr>
+<tr>
+<td>2026.08.11</td>
+<td>4개 팀 모델 전원 Epoch AI <strong>Notable Model</strong> 등재. 미·중·한 3개국만 보유</td>
+</tr>
+<tr>
+<td><strong>2026.08 중</strong></td>
+<td><strong>2차 단계평가 결과 발표 예정</strong></td>
+</tr>
+<tr>
+<td><strong>2026.08.14</strong></td>
+<td><strong>Qwen3.8-27B 공개</strong></td>
+</tr>
+</tbody></table>
+<p>2차 평가 결과 발표를 며칠 앞두고, 평가의 준거가 되는 오픈소스 SOTA가 한 단계 올라갔다. 1차 평가에서 벤치마크 비중이 40점이었다는 점을 감안하면, <strong>평가 기준선이 심사 도중에 움직인 셈</strong>이다.</p>
+<h3>3-2. 위협 벡터별 치명도</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>위협 벡터</th>
+<th>내용</th>
+<th>치명도</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td><strong>명분 잠식</strong></td>
+<td>독파모의 핵심 명분은 &quot;무료 대국민 서비스 + API 배포로 산업 AX 지원&quot;이다. Apache 2.0 27B 모델이 이미 그 자리를 무료로 채우고 있다</td>
+<td><strong>상</strong></td>
+</tr>
+<tr>
+<td>2</td>
+<td><strong>효율성 대비 정당성</strong></td>
+<td>5,300억 원 + 국가 GPU 인프라로 만든 대형 모델이, 27B 오픈웨이트에 에이전트·비전에서 밀리면 사업 정당성 자체가 공격받는다</td>
+<td><strong>상</strong></td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>독자성 규정의 역설</strong></td>
+<td>1차에서 네이버가 독자성 논란으로 탈락했다. Qwen 계열 아키텍처·가중치 활용이 가장 빠른 길인데<strong>규정상 막혀 있다.</strong>경쟁자는 쓰는 지름길을 국내 팀만 못 쓴다</td>
+<td><strong>상</strong></td>
+</tr>
+<tr>
+<td>4</td>
+<td><strong>패러다임 축 이동</strong></td>
+<td>독파모 모델 대부분이 텍스트·한국어 중심으로 설계됐다. 승부처가 컴퓨터/모바일 조작 에이전트 + 멀티모달로 이동하면 격차가 재확대된다</td>
+<td><strong>상</strong></td>
+</tr>
+<tr>
+<td>5</td>
+<td><strong>릴리스 사이클 격차</strong></td>
+<td>Qwen3.5 → 3.6 → 3.8이 1년 내. 독파모는 6개월 단위 단계평가.<strong>평가 주기가 경쟁자 릴리스 주기보다 느리다</strong></td>
+<td><strong>중</strong></td>
+</tr>
+<tr>
+<td>6</td>
+<td><strong>생태계 락인</strong></td>
+<td>vLLM/SGLang/Ollama/LM Studio/AMD Day-0 지원. 국산 모델은 이 경로가 없다. 개발자는 성능이 아니라<strong>손에 잡히는 순서대로</strong>채택한다</td>
+<td><strong>중</strong></td>
+</tr>
+<tr>
+<td>7</td>
+<td><strong>온프레미스 주권 논리 잠식</strong></td>
+<td>&quot;데이터를 밖에 못 보낸다&quot;는 요구는 그동안 국산 모델의 방어선이었다. 24GB VRAM에서 도는 오픈웨이트는 그 방어선을 우회한다</td>
+<td><strong>중</strong></td>
+</tr>
+</tbody></table>
+<h3>3-3. 그럼에도 치명적이지 <strong>않은</strong> 부분</h3>
+<p>균형을 위해 반대편도 명시한다.</p>
+<ul>
+<li><strong>한국어·한국 법제·공공 도메인</strong>: Qwen이 대체하지 못한다. 행정·사법·의료·교육 도메인 데이터는 국내에서만 축적 가능하다.</li>
+<li><strong>공공·방산 도입 제약</strong>: 중국계 모델의 공공부문 도입은 보안 심사에서 별도 장벽이 있다. 이 영역은 구조적으로 갈라파고스를 만들고 있다.</li>
+<li><strong>절대 수준은 확보됐다</strong>: 4개 팀 전원 Epoch AI Notable Model 등재. 미·중·한 3개국만 보유한 지위다. &quot;못 만든다&quot;가 아니라 <strong>만드는 속도가 느리다</strong>가 문제다.</li>
+<li><strong>Qwen 수치도 자체 공표치다</strong>: 독립 재현이 없다. 벤치마크를 절대 척도로 받아들이는 것 자체가 오류다.</li>
+</ul>
+<h3>3-4. 결론적 판단</h3>
+<p><strong>존립을 위협하는 수준은 아니다. 그러나 사업의 경제적 명분을 정면으로 잠식하는 &#39;기회비용 위협&#39;으로는 최상급이다.</strong></p>
+<p>독파모가 답해야 할 질문이 바뀌었다. 이전 질문은 *&quot;글로벌 Top 수준 모델을 만들 수 있는가&quot;*였고, 그 답은 이미 부분적으로 예스다. 지금의 질문은 <strong>무료로 뿌려지는 27B 오픈웨이트가 있는데, 국산 모델을 왜 써야 하는가</strong>다.</p>
+<p>이 질문에 대한 답은 파라미터 수나 벤치마크 점수가 아니다. 한국어 도메인 깊이, 규제 대응, 감사 가능성(auditability), 데이터 출처 추적성 — <strong>오픈웨이트가 구조적으로 제공할 수 없는 것들</strong>이다. 2차 평가가 이 축을 얼마나 반영하느냐가, 이 사업이 벤치마크 추격전으로 끝날지 아닐지를 가른다.</p>
+<p>한 가지 덧붙이면, LLM은 엑셀이지 오라클이 아니다. 27B가 84.3점을 받았다는 사실은 도구가 좋아졌다는 뜻이지, 어떻게 사용하고 어떤 목적인가에 대한 것은 다른 문제이다. 독파모의 승부처도 결국 <strong>누가 더 큰 모델을 만드느냐가 아니라, 누가 그 도구를 한국의 문제에 더 정확히 해결하느냐</strong>가 중요한 핵심이 있다.</p>
+<hr>
+<h2>4. 핵심 사양 요약</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>모델 타입</td>
+<td>Causal LM + Vision Encoder (네이티브 멀티모달)</td>
+</tr>
+<tr>
+<td>파라미터</td>
+<td>27B (언어 모델) / 약 28B (비전 인코더 포함, 27.78B)</td>
+</tr>
+<tr>
+<td>아키텍처</td>
+<td>Qwen3.5 계열 하이브리드 어텐션 (<code>Qwen3_5ForConditionalGeneration</code>)</td>
+</tr>
+<tr>
+<td>계층 구조</td>
+<td>64층 = 16 × (3 × Gated DeltaNet + 1 × Gated Attention)</td>
+</tr>
+<tr>
+<td>은닉 차원</td>
+<td>5,120 / FFN 중간 차원 17,408</td>
+</tr>
+<tr>
+<td>어휘 크기</td>
+<td>248,320 (padded)</td>
+</tr>
+<tr>
+<td>어텐션 헤드</td>
+<td>Gated Attention Q 24 / KV 4, head dim 256 · DeltaNet V 48 / QK 16, head dim 128</td>
+</tr>
+<tr>
+<td>MTP</td>
+<td>다단계 학습 (speculative decoding 지원)</td>
+</tr>
+<tr>
+<td>컨텍스트</td>
+<td>262,144 네이티브 / YaRN으로 최대 1,000,000</td>
+</tr>
+<tr>
+<td>라이선스</td>
+<td>Apache 2.0</td>
+</tr>
+<tr>
+<td>샘플링(Thinking)</td>
+<td>temp 1.0, top_p 0.95, top_k 20, presence_penalty 0.0</td>
+</tr>
+<tr>
+<td>샘플링(Instruct)</td>
+<td>temp 0.7, top_p 0.80, top_k 20, presence_penalty 1.5</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. 레퍼런스</h2>
+<h3>1차 자료 (모델)</h3>
+<ol>
+<li>Qwen Team, <em>Qwen/Qwen3.8-27B — Model Card</em>, Hugging Face — <a href="https://huggingface.co/Qwen/Qwen3.8-27B">https://huggingface.co/Qwen/Qwen3.8-27B</a></li>
+<li>Qwen Team, <em>Qwen/Qwen3.8-27B-FP8</em>, Hugging Face — <a href="https://huggingface.co/Qwen/Qwen3.8-27B-FP8">https://huggingface.co/Qwen/Qwen3.8-27B-FP8</a></li>
+<li>Qwen Team, <em>Qwen3.8-Max: A New Bar for Coding and Cowork</em> (공식 블로그, 2026.08) — <a href="https://qwen.ai/blog?id=qwen3.8">https://qwen.ai/blog?id=qwen3.8</a></li>
+<li>vLLM, <em>Qwen/Qwen3.8-27B Recipe</em> — <a href="https://recipes.vllm.ai/Qwen/Qwen3.8-27B">https://recipes.vllm.ai/Qwen/Qwen3.8-27B</a></li>
+<li>Unsloth, <em>Qwen3.8 — How to Run Locally</em> — <a href="https://unsloth.ai/docs/models/qwen3.8">https://unsloth.ai/docs/models/qwen3.8</a></li>
+<li>Unsloth, <em>Qwen3.8-27B-GGUF</em> — <a href="https://huggingface.co/unsloth/Qwen3.8-27B-GGUF">https://huggingface.co/unsloth/Qwen3.8-27B-GGUF</a></li>
+<li>Ollama, <em>qwen3.8:27b</em> — <a href="https://ollama.com/library/qwen3.8:27b">https://ollama.com/library/qwen3.8:27b</a></li>
+<li>AMD, <em>Run Qwen 3.8 27B on AMD Ryzen AI Max Agentic PCs and Radeon GPUs</em> (Day-0, 2026.08) — <a href="https://www.amd.com/en/blogs/2026/run-qwen-3-8-27b-on-amd-ryzen-ai-max-and-radeon-graphics-cards-day-0.html">https://www.amd.com/en/blogs/2026/run-qwen-3-8-27b-on-amd-ryzen-ai-max-and-radeon-graphics-cards-day-0.html</a></li>
+</ol>
+<h3>2차 자료 (독립 분석 / 검증 현황)</h3>
+<ol start="9">
+<li>Kingy.ai, <em>Qwen3.8-27B: Specs, Benchmarks &amp; Verdict</em> — <a href="https://kingy.ai/blog/qwen3-8-27b-specs-benchmarks-local-hardware/">https://kingy.ai/blog/qwen3-8-27b-specs-benchmarks-local-hardware/</a></li>
+<li>BenchLM.ai, <em>Qwen3.8-27B Benchmarks &amp; Context (August 2026)</em> — <a href="https://benchlm.ai/models/qwen3-8-27b">https://benchlm.ai/models/qwen3-8-27b</a></li>
+<li>Local AI Zone, <em>Qwen3.8-27B: A Comprehensive Technical Analysis</em> — <a href="https://local-ai-zone.github.io/blog/qwen3-8-27b-comprehensive-analysis.html">https://local-ai-zone.github.io/blog/qwen3-8-27b-comprehensive-analysis.html</a></li>
+<li>Emergent, <em>Qwen 3.8 Benchmark Scores: Every Number Explained</em> — <a href="https://emergent.sh/learn/qwen-3-8-benchmarks">https://emergent.sh/learn/qwen-3-8-benchmarks</a></li>
+</ol>
+<h3>독파모(독자 AI 파운데이션 모델)</h3>
+<ol start="13">
+<li>과학기술정보통신부, <em>「독자 AI 파운데이션 모델」 프로젝트 발표평가 결과, 5개 정예팀 선정</em> — <a href="https://www.msit.go.kr/bbs/view.do?sCode=user&mPid=208&mId=307&bbsSeqNo=94&nttSeqNo=3186073">https://www.msit.go.kr/bbs/view.do?sCode=user&amp;mPid=208&amp;mId=307&amp;bbsSeqNo=94&amp;nttSeqNo=3186073</a></li>
+<li>인공지능신문, <em>대한민국 &#39;독자 AI 파운데이션 모델&#39; 1차 평가 결과 발표…LG AI연구원·SKT·업스테이지 2차 진출</em> (2026.01.15) — <a href="https://www.aitimes.kr/news/articleView.html?idxno=38163">https://www.aitimes.kr/news/articleView.html?idxno=38163</a></li>
+<li>ZDNet Korea, <em>모티프테크놀로지스, 독파모 정예팀 합류…&#39;K-AI&#39; 독자 모델 경쟁 가속</em> (2026.02.20) — <a href="https://zdnet.co.kr/view/?no=20260220160826">https://zdnet.co.kr/view/?no=20260220160826</a></li>
+<li>BizWatch, <em>더 묵직해진 독파모, 4파전에서 3파전으로</em> (2026.08.04) — <a href="https://news.bizwatch.co.kr/article/mobile/2026/08/04/0005">https://news.bizwatch.co.kr/article/mobile/2026/08/04/0005</a></li>
+<li>파이낸셜뉴스, <em>2차전 결과 앞둔 &#39;독파모&#39; 4개팀… AI 경쟁력 글로벌 입증</em> (2026.08.11) — <a href="https://www.fnnews.com/news/202608111816455621">https://www.fnnews.com/news/202608111816455621</a></li>
+<li>데일리뉴스, <em>[연속기획①] 독자 AI 파운데이션 모델, 지금 어디까지 왔나</em> — <a href="http://www.idailynews.co.kr/news/articleView.html?idxno=106367">http://www.idailynews.co.kr/news/articleView.html?idxno=106367</a></li>
+</ol>
+<hr>
+<p><strong>신뢰도 고지</strong> — 본 문서의 Qwen3.8-27B 성능 수치는 전량 알리바바 자체 공표치이며, 작성 시점 기준 독립 재현 검증이 확인되지 않았다. 하드웨어 소요량은 가중치 기준 계산치로 KV 캐시를 포함하지 않는다. 독파모 2차 단계평가 결과는 본 문서 작성 시점(2026.08.16) 기준 미발표 상태다.</p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://docs.vibequant.cc/columns/qwen38-27b-review/" data-title="Qwen3.8-27B 정밀 분석 — 그리고 '독파모'에 대한 위협 평가" data-text="알리바바 Qwen3.8-27B의 OSWorld·AndroidWorld·SWE 벤치마크, 하이브리드 어텐션, Day-0 생태계, 그리고 독파모 2차 평가 직전 기회비용 위협을 정리한다." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fqwen38-27b-review%2F&amp;text=Qwen3.8-27B%20%EC%A0%95%EB%B0%80%20%EB%B6%84%EC%84%9D%20%E2%80%94%20%EA%B7%B8%EB%A6%AC%EA%B3%A0%20'%EB%8F%85%ED%8C%8C%EB%AA%A8'%EC%97%90%20%EB%8C%80%ED%95%9C%20%EC%9C%84%ED%98%91%20%ED%8F%89%EA%B0%80" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fqwen38-27b-review%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fqwen38-27b-review%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Alibaba/Qwen38-27B-Review.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
