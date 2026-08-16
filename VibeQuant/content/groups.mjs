@@ -11,7 +11,7 @@ export const COLUMN_GROUP_RULES = [
   { id: "media-society", title_ko: "미디어 · 사회·문화", title_en: "Media · Society", match: [/^Society-Culture\//i, /media-column\/society/i] },
   { id: "ai-llm", title_ko: "AI · LLM · 빅테크", title_en: "AI · LLM · Big Tech", match: [/ai_revolution/i, /ai-education/i, /ai-bottleneck/i, /ai-idc/i, /high-power-datacenter/i, /ai bouble/i, /ai_bouble/i, /ai_hacking/i, /ai_trading/i, /deepseek/i, /claude/i, /meta\//i, /oracle/i, /jane street/i, /llm_supply/i, /bigtech/i, /kimi/i, /grok/i, /alibaba/i, /qwen/i] },
   { id: "elon-spacex", title_ko: "Elon · SpaceX", title_en: "Elon · SpaceX", match: [/elon musk/i, /spacex/i] },
-  { id: "crypto-web3", title_ko: "크립토 · Web3", title_en: "Crypto · Web3", match: [/bitcoin/i, /btc/i, /ethereum/i, /bnb/i, /crypto/i, /crytohft/i, /defi/i, /web3/i, /strategy\//i, /robinhood/i, /dex memecoin/i, /aws_blockchain/i, /prediction-market/i] },
+  { id: "crypto-web3", title_ko: "크립토 · Web3", title_en: "Crypto · Web3", match: [/bitcoin/i, /btc/i, /ethereum/i, /bnb/i, /crypto/i, /crytohft/i, /defi/i, /web3/i, /strategy\//i, /robinhood/i, /dex memecoin/i, /aws_blockchain/i, /prediction-market/i, /stablecoin/i, /medici/i] },
   { id: "korea-hacking", title_ko: "한국 · 해킹", title_en: "Korea · Hacking", match: [/national-diplomatic/i, /외교원/i, /hacking-incident/i] },
   { id: "korea", title_ko: "한국 · 코리아 디스카운트", title_en: "Korea", match: [/korea/i, /주식시황/i, /msci/i, /starbucks/i, /seoul/i, /kpop/i, /toss /i, /기레기/i, /골드만/i, /cyworld/i] },
   { id: "macro-geo", title_ko: "매크로 · 지정학", title_en: "Macro · Geopolitics", match: [/\/usa\//i, /age-of-usd/i, /pax americana/i, /trump/i, /defense/i, /rome/i, /world_bank/i, /us treasury/i, /japan/i, /china /i, /drone/i, /tobacco/i] },
@@ -62,6 +62,7 @@ export const ESSAY_GROUP_FALLBACK = { id: "other", title_ko: "기타 에세이",
 
 /** Paths (substring) that should appear in Recommended — order = display order */
 export const FEATURED_COLUMN_PATHS = [
+  "StableCoin/Medici-to-Siliconvalley-column.md",
   "Alibaba/Qwen38-27B-Review.md",
   "AI_Revolution/Sandisk-Semiconductor-Quant-Column.md",
   "AI_Hacking/Column-AI-Control-Failure-260813.md",

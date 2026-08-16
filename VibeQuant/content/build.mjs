@@ -598,6 +598,7 @@ const SLUG_OVERRIDES = {
   "Startup/Shelf-Life-of-Innovation.md": "shelf-life-of-innovation",
   "AI_Revolution/Sandisk-Semiconductor-Quant-Column.md": "sandisk-semiconductor-quant",
   "Alibaba/Qwen38-27B-Review.md": "qwen38-27b-review",
+  "StableCoin/Medici-to-Siliconvalley-column.md": "medici-to-siliconvalley",
   "AI_Revolution/AI-Between-Coolness-and-Passion.md": "ai-between-coolness-and-passion",
   "주식시황/Column-Kioxia-Q1FY2026.md": "kioxia-q1fy2026",
   "주식시황/Column-Kioxia-Q1FY2026_EN.md": "kioxia-q1fy2026-en",
