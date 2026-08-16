@@ -1,39 +1,50 @@
-<!--
 ---
-title: 그들은 금화를 찍지 않았다
-subtitle: 환어음에서 스테이블코인까지, 사적(私的) 화폐 네트워크의 천 년
-description: 성전 기사단·메디치 환어음에서 GENIUS Act·AP2·스테이블코인까지. 사적 신용화폐는 공적 결제자산 위에 얹힌 2층 구조이며, 이번 주권은 훨씬 빨리 울타리를 치고 있다.
-abstract: 성전 기사단과 메디치는 자체 금화를 찍지 않았다. 힘은 주화가 아니라 환어음·상계·지점 간 신용에 있었다. 스테이블코인은 21세기의 환어음(발행자 청구권)이며, GENIUS Act는 비금융 빅테크의 직접 발행을 이미 제한했다. 과거 두 제국은 각각 188년과 97년 만에 무너졌지만, 이번 주권은 5년도 되기 전에 반응했다. 관전 포인트는 왕국의 건설 속도가 아니라 울타리의 속도다.
-summary_for_ai: >
+title: "그들은 금화를 찍지 않았다"
+subtitle: "환어음에서 스테이블코인까지, 사적(私的) 화폐 네트워크의 천 년"
+description: "성전 기사단·메디치 환어음에서 GENIUS Act·AP2·스테이블코인까지. 사적 신용화폐는 공적 결제자산 위에 얹힌 2층 구조이며, 이번 주권은 훨씬 빨리 울타리를 치고 있다."
+abstract: |
+  성전 기사단과 메디치는 자체 금화를 찍지 않았다. 힘은 주화가 아니라 환어음·상계·지점 간 신용에 있었다.
+  스테이블코인은 21세기의 환어음(발행자 청구권)이며, GENIUS Act는 비금융 빅테크의 직접 발행을 이미 제한했다.
+  과거 두 제국은 각각 188년과 97년 만에 무너졌지만, 이번 주권은 5년도 되기 전에 반응했다. 관전 포인트는 왕국의 건설 속도가 아니라 울타리의 속도다.
+summary_for_ai: |
   Opinion/history-finance column (not investment advice), as of 2026-08-17.
-  Thesis: medieval private credit (bills of exchange, Templar branch transfers, Medici clearing)
-  maps onto modern stablecoins — issuer IOUs, not sovereign coinage. Final settlement asset was
-  never theirs (florin / US Treasuries). Reframed conclusion: the notable fact is not that Big Tech
-  is building an independent realm, but that sovereign fencing arrived far faster this time
-  (GENIUS Act public-company issuance ban with SCRC unanimous-vote exception; NYDFS mirroring rule).
+  Thesis: medieval private credit (bills of exchange, Templar branch transfers, Medici clearing) maps onto modern stablecoins — issuer IOUs, not sovereign coinage. Final settlement asset was never theirs (florin / US Treasuries).
+  Reframed conclusion: the notable fact is not that Big Tech is building an independent realm, but that sovereign fencing arrived far faster this time (GENIUS Act public-company issuance ban with SCRC unanimous-vote exception; NYDFS mirroring rule).
   Includes explicit counterargument that stablecoins may extend rather than threaten dollar hegemony.
-  Three scenarios for private credit money: stay-as-IOU / absorbed-by-state (Bank of England 1694 path)
-  / eliminated (Templar path). Key data: OECD Pillar Two side-by-side package Jan 2026 (US-only safe
-  harbor); IMF COFER USD share 57.13% (2026Q1); stablecoin market cap ~$287B (Aug 2026).
-  Watch metrics with time horizons: on-chain settlement vs fiat redemption ratio (quarterly);
-  reserve composition drift (quarterly); SCRC approvals (through 2027). Not a stock tip.
+  Three scenarios for private credit money: stay-as-IOU / absorbed-by-state (Bank of England 1694 path) / eliminated (Templar path).
+  Key data: OECD Pillar Two side-by-side package Jan 2026 (US-only safe harbor); IMF COFER USD share 57.13% (2026Q1); stablecoin market cap about $287B (Aug 2026).
+  Watch metrics with time horizons: on-chain settlement vs fiat redemption ratio (quarterly); reserve composition drift (quarterly); SCRC approvals (through 2027). Not a stock tip.
 date: 2026-08-16
 updated: 2026-08-17
-author: 김호광 (Dennis Kim)
+author: "김호광 (Dennis Kim)"
 lang: ko
-tags: [스테이블코인, 메디치, 환어음, GENIUS-Act, 빅테크, 금융사, AP2]
-keywords: [스테이블코인, 메디치, 환어음, GENIUS Act, 성전 기사단, AP2, 사적 화폐, 달러 패권]
+tags:
+  - 스테이블코인
+  - 메디치
+  - 환어음
+  - GENIUS-Act
+  - 빅테크
+  - 금융사
+  - AP2
+keywords:
+  - "스테이블코인"
+  - "메디치"
+  - "환어음"
+  - "GENIUS Act"
+  - "성전 기사단"
+  - "AP2"
+  - "사적 화폐"
+  - "달러 패권"
 group: crypto-web3
 featured: true
 featured_rank: 0
 schema_type: BlogPosting
-og_image: https://vibequant.cc/og/medici-to-siliconvalley.jpg
-image: https://vibequant.cc/og/medici-to-siliconvalley.jpg
+og_image: "https://vibequant.cc/og/medici-to-siliconvalley.jpg"
+image: "https://vibequant.cc/og/medici-to-siliconvalley.jpg"
 draft: false
 robots: index,follow
 ---
 
--->
 # 그들은 금화를 찍지 않았다
 
 ## 환어음에서 스테이블코인까지, 사적(私的) 화폐 네트워크의 천 년
