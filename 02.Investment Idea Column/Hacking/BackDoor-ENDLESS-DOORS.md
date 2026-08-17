@@ -1,3 +1,50 @@
+---
+title: "백도어의 경제학"
+subtitle: "왜 중국산 공유기와 CCTV에는 문이 열려 있는가 — 사실과 오해"
+description: "Zbtlink ENDLESSDOORS(CVE-2026-66747)로 본 출하 펌웨어 백도어. 원격 유지보수 비용 절감이 구매자·내부망으로 전가되는 구조, OEM/ODM·산차이 유통, 실무 대응과 한계를 정리한다."
+abstract: |
+  2026년 8월 5일 VulnCheck가 Zbtlink 공유기 20개 모델 출하 펌웨어에서 ENDLESSDOORS(CVE-2026-66747, CVSS 9.3) 루트 원격제어 임플란트를 공개했다.
+  핵심은 국적 스파이 서사가 아니라, 원격 AS 비용 절감이 구매자 리스크로 전가되는 외부효과·정보 비대칭(레몬 마켓)이다.
+  D-Link·Juniper·XZ·Tenda 사례와 대조해 의도성 스펙트럼을 정리하고, 모델명 인벤토리·이그레스 탐지·조달 기준 변경을 권고한다.
+summary_for_ai: |
+  Opinion/security-economics column (not investment advice), as of 2026-08-17.
+  Thesis: ENDLESSDOORS is an incentive/accounting problem — outbound unauthenticated root remote-maintenance channel ships in OEM firmware; savings accrue to vendor, risk to buyers.
+  Incident: VulnCheck (Jacob Baines) 2026-08-05; CVE-2026-66747 / CWE-506; CVSS 4.0 9.3; implant based on ycsunjane/rctl (2015); process masquerades as kworker; outbound C2 ports 7000/7001; no inbound listen.
+  Vendor Zbtlink claimed after-sales remote support; researchers found it in all public firmware images, not samples only; no coordinated disclosure because behavior appeared intentional.
+  Economics: AS cost avoidance, Akerlof lemon market (buyers cannot audit firmware), state as another demander of backdoors (Juniper ScreenOS Dual_EC).
+  Misconceptions addressed: not China-only; not all intentional; patches/factory reset insufficient when implant is in vendor init.
+  Practical: inventory by model (ZBT/Wiflyer/ODM), detect non-bracket kworker, alert on egress not only block, prefer replace over trust remaining image, change procurement (signed updates, EOL, PSIRT).
+  Limits: device count estimates unverified; no proven wild exploitation; intent unresolved; CVE count is not a safety ranking. Not a stock tip.
+date: 2026-08-17
+updated: 2026-08-17
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 백도어
+  - ENDLESSDOORS
+  - Zbtlink
+  - 사이버보안
+  - OEM
+  - 공유기
+  - CVE-2026-66747
+keywords:
+  - "ENDLESSDOORS"
+  - "CVE-2026-66747"
+  - "Zbtlink"
+  - "백도어"
+  - "공유기 펌웨어"
+  - "원격 유지보수"
+  - "OEM ODM"
+  - "VulnCheck"
+  - "kworker rctl"
+group: korea-hacking
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 백도어의 경제학
 
 ## 왜 중국산 공유기와 CCTV에는 문이 열려 있는가? - 사실과 오해
@@ -113,7 +160,7 @@ Zbtlink는 OEM/ODM 서비스를 공개적으로 판매한다. 즉 동일한 하�
 |---|---|---|---|
 | 2013.10 | D-Link / Planex / Alpha Networks 라우터 | 백도어(User-Agent 인증 우회), 실제 악용 관측 | CVE-2013-6026 |
 | 2015.12 | Juniper ScreenOS | 백도어(하드코딩 비밀번호 + VPN 복호화) | CVE-2015-7755 / 7756 |
-| 2021.01 | FiberHome HG6245D / RP2602 | 백도어 28건 + 취약점. IPv6 방화벽 부재. 2021년 2월 최신 펌웨어(RP2613)도 취약 확인 | CVE-2021-27143 ~ 27164 등 |
+| 2021.01 | FiberHome HG6245D / RP2602 | 백도어 28건 + 취약점. IPv6 방화벽 부재. 2021년 2월 최신 펌웨어(RP2613)도 취약 확인 | CVE-2021-27143–27164 등 |
 | 2022.06 등록 | Xiongmai DVR/NVR/IP 카메라 | 백도어(`macGuarder`·`dvrHelper` 내 정적 root 자격증명) | CVE-2021-41506 |
 | 2025.07 | Dahua 카메라 | 취약점(ONVIF 스택 오버플로 / 미문서화 업로드 엔드포인트). 2025.7.7 패치 | CVE-2025-31700 / 31701 |
 | 2025.07 | Huawei VRP 기업용 라우터 (룩셈부르크 POST) | 미공개 취약점에 의한 전국망 3시간+ 마비. **CVE 미발급** | — |
