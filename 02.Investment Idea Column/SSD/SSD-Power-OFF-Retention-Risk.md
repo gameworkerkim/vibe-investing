@@ -1,3 +1,4 @@
+<!--
 ---
 title: "전원이 끊긴 SSD는 얼마나 버티는가?"
 subtitle: "무전원 방치 서버의 데이터 유실(Data Retention Failure) 기술 분석"
@@ -44,6 +45,7 @@ schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
+-->
 
 # 전원이 끊긴 SSD는 얼마나 버티는가?
 
