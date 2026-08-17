@@ -1,3 +1,50 @@
+---
+title: "전원이 끊긴 SSD는 얼마나 버티는가?"
+subtitle: "무전원 방치 서버의 데이터 유실(Data Retention Failure) 기술 분석"
+description: "JEDEC 규격상 엔터프라이즈 SSD 무전원 보존은 40°C 3개월. NAND 전하 누설·온도·마모도, 첫 부팅 전 이미징 절차와 장기 보관 실무를 정리한다."
+abstract: |
+  SSD는 무전원에서도 영구 보존되는 매체가 아니라, 절연막에 가둔 전자의 누설을 늦춘 저장장치다.
+  JESD218 기준 클라이언트는 30°C/1년, 엔터프라이즈는 40°C/3개월이며 서버용이 무전원에서 더 짧다.
+  방치 랙은 첫 전원 인가 전 write blocker·이미징이 핵심이며, 장기 보관은 LTO/다중 사본·주기적 scrub이 답이다.
+summary_for_ai: |
+  Technical reference column (not investment advice), as of 2026-08-17.
+  Thesis: powered-off NAND data retention is probabilistic charge leakage (detrapping, SILC, early retention loss, 3D layer variation), not permanent storage.
+  JEDEC JESD218/219: Client 30°C/1 year; Enterprise 40°C/3 months (worst-case at end-of-endurance). Enterprise cold retention shorter than client.
+  "25°C / 105 weeks" is 2015 JEDEC JC-64.8 (Alvin Cox) reference curve for client MLC, not a mandatory clause.
+  Temperature dominates via Arrhenius (~5–10°C rise halves retention). Other drivers: P/E wear, TLC/QLC margins, firmware refresh only when powered.
+  Failure mode is partial UECC / metadata SPOF / correlated RAID failure — not wholesale wipe. First power-on can destroy recoverability (fsck, TRIM, GC, auto-rebuild).
+  Recovery order: document → write-blocker image → work on copies → stop at UECC → professional chip-off if needed.
+  Cold archive: do not use SSD long-term; prefer LTO/HDD multi-copy; scrub+rewrite; ambient logging. Not a stock tip.
+date: 2026-08-17
+updated: 2026-08-17
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - SSD
+  - NAND
+  - 데이터보존
+  - JEDEC
+  - 서버
+  - 스토리지
+  - 데이터복구
+keywords:
+  - "SSD 무전원 보존"
+  - "data retention"
+  - "JESD218"
+  - "JEDEC"
+  - "엔터프라이즈 SSD"
+  - "NAND 전하 누설"
+  - "UECC"
+  - "write blocker"
+  - "Arrhenius"
+group: semi-storage
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 전원이 끊긴 SSD는 얼마나 버티는가?
 
 ## — 무전원 방치 서버의 데이터 유실(Data Retention Failure) 기술 분석
@@ -7,7 +54,7 @@ SSD는 전기가 장기간 끊기면 데이터를 잃어버린다.
 > **핵심 요지**
 > SSD는 "전원을 안 써도 데이터가 남는 저장장치"가 아니라, **"전자를 절연막 안에 가둬 두고 새는 속도를 늦춰 놓은 저장장치"** 다.
 > 시간·온도·마모도가 누적되면 전하는 반드시 새어 나가고, 임계전압(Vth) 분포가 겹치는 순간 ECC 정정 한계를 넘어 데이터가 복구 불가 영역으로 넘어간다.
-> 그리고 서버용(엔터프라이즈) SSD의 **무전원 보존 규격은 소비자용보다 오히려 짧다.** 2~3년 방치된 서버 랙은 규격상 이미 한참 전에 보증 구간을 벗어나 있다.
+> 그리고 서버용(엔터프라이즈) SSD의 **무전원 보존 규격은 소비자용보다 오히려 짧다.** 2–3년 방치된 서버 랙은 규격상 이미 한참 전에 보증 구간을 벗어나 있다.
 
 ---
 
@@ -21,7 +68,7 @@ NAND 플래시의 1비트는 절연막(터널 산화막)으로 둘러싸인 저�
 |---|---|
 | **Detrapping / 전하 손실** | 절연막의 트랩에 걸려 있던 전자가 열에너지로 탈출. 시간의 로그 스케일로 진행되어 초기에 빠르게, 이후 완만하게 누적된다. |
 | **SILC (Stress-Induced Leakage Current)** | P/E 사이클로 산화막에 생긴 결함이 누설 경로를 만든다. 마모된 셀에서 지배적. |
-| **Early retention loss (3D NAND 고유)** | 프로그램 직후 수십 분~수 시간 내에 Vth가 급격히 이동. 3D CTF 구조에서 특히 관측되며, 방치 이전부터 마진을 깎아 놓는다. |
+| **Early retention loss (3D NAND 고유)** | 프로그램 직후 수십 분–수 시간 내에 Vth가 급격히 이동. 3D CTF 구조에서 특히 관측되며, 방치 이전부터 마진을 깎아 놓는다. |
 | **레이어 간 공정 편차** | 3D NAND는 적층 위치에 따라 셀 특성이 다르다. 가장 약한 워드라인이 전체 블록의 실패 시점을 결정한다. |
 
 결과는 "0과 1이 뒤집힌다"가 아니라 **Vth 분포가 옆으로 밀리고 넓어지면서 인접 상태와 겹친다**는 것이다. 겹침 영역의 비트가 곧 RBER(Raw Bit Error Rate)이며, RBER이 LDPC/BCH의 정정 능력을 초과하면 그 페이지는 **UECC(Uncorrectable ECC)** — 즉 읽기 실패다.
@@ -58,7 +105,7 @@ $$t_{retention} \propto \exp\left(\frac{E_a}{k_B T}\right)$$
 
 활성화 에너지 $E_a$ 를 약 1.1 eV로 잡으면 실무 경험칙은 다음과 같다.
 
-- **약 5~10°C 상승할 때마다 보존 기간이 절반**으로 줄어든다.
+- **약 5–10°C 상승할 때마다 보존 기간이 절반**으로 줄어든다.
   (문헌에 따라 "5°C당 절반"과 "10°C당 절반"이 함께 쓰인다. 공정·셀 타입·마모도에 따라 $E_a$ 가 달라지기 때문이며, 보수적으로 판단해야 하는 상황에서는 5°C 쪽을 쓰는 것이 안전하다.)
 
 참고용 추정 스케일(클라이언트 MLC 기준, 마모 말기 가정)
@@ -70,7 +117,7 @@ $$t_{retention} \propto \exp\left(\frac{E_a}{k_B T}\right)$$
 | 40°C | ~수개월 |
 | 55°C | ~수주 |
 
-**실무적 공포** 냉방이 끊긴 IDC, 창고, 컨테이너, 여름철 무공조 사무실에 랙을 세워 둔 경우 — 실측 온도가 30°C를 넘나든다면 "2~3년"이 아니라 **"1년 이내"** 를 위험 구간으로 봐야 할 수 있다. 그리고 대부분의 서버가 방치된 상황에서는 **아무도 그 온도를 기록하지 않았다**는 점이 진짜 문제다. 보존 여부를 사후에 추정할 근거 자체가 없다.
+**실무적 공포** 냉방이 끊긴 IDC, 창고, 컨테이너, 여름철 무공조 사무실에 랙을 세워 둔 경우 — 실측 온도가 30°C를 넘나든다면 "2–3년"이 아니라 **"1년 이내"** 를 위험 구간으로 봐야 할 수 있다. 그리고 대부분의 서버가 방치된 상황에서는 **아무도 그 온도를 기록하지 않았다**는 점이 진짜 문제다. 보존 여부를 사후에 추정할 근거 자체가 없다.
 
 ---
 
@@ -136,23 +183,23 @@ $$t_{retention} \propto \exp\left(\frac{E_a}{k_B T}\right)$$
 
 ---
 
-## 7. 최악의 참사 피하기 - "3~6개월마다 잠깐 켜기"는 절반만 맞다
+## 7. 최악의 참사 피하기 - "3–6개월마다 잠깐 켜기"는 절반만 맞다
 
-통용되는 권고 — *"장기 보관 시 3~6개월에 한 번 1~2시간 전원을 켜라"* — 는 방향은 맞지만 메커니즘을 오해하기 쉽다.
+통용되는 권고 — *"장기 보관 시 3–6개월에 한 번 1–2시간 전원을 켜라"* — 는 방향은 맞지만 메커니즘을 오해하기 쉽다.
 
 **정확히는 이렇다.**
 전원 인가 자체가 셀을 재충전하지 않는다. 리프레시는 컨트롤러가 **해당 블록을 읽고 다른 블록에 다시 쓸 때**만 일어난다. 일부 엔터프라이즈/산업용 SSD는 background media scan으로 블록별 경과 시간과 BER을 감시해 임계 초과 블록을 자동 재기록하지만, **모든 SSD가 이 기능을 갖고 있지는 않다.** 특히 소비자용 드라이브는 정적 데이터(오래 쓰이지 않은 데이터)를 스캔하지 않거나 매우 제한적으로만 처리한다.
 
-또한 **1~2시간은 수 TB 어레이를 전수 스캔할 시간이 못 된다.** 컨트롤러가 리프레시할 기회를 얻지 못한 채 다시 전원이 내려간다.
+또한 **1–2시간은 수 TB 어레이를 전수 스캔할 시간이 못 된다.** 컨트롤러가 리프레시할 기회를 얻지 못한 채 다시 전원이 내려간다.
 
 **실효성 있는 대책(강한 것부터):**
 
 | 우선순위 | 조치 |
 |---|---|
 | ① | **SSD를 장기 보관 매체로 쓰지 않는다.** 콜드 아카이브는 LTO 테이프 또는 HDD/객체 스토리지 다중 사본으로 이전. 3-2-1 원칙 준수. |
-| ② | **주기적 전수 읽기 + 재기록(scrub).** 6~12개월마다 전 데이터를 읽어 BER을 확인하고, 가능하면 새 매체로 재기록. 읽기만으로는 리프레시가 보장되지 않으므로 재기록이 핵심. |
-| ③ | **정기 전원 인가는 "충분한 시간" 확보 시에만 유효.** 최소 수 시간~수십 시간, 백그라운드 스크럽/patrol read를 실제로 완주시킬 것. 드라이브 펌웨어의 refresh 지원 여부를 벤더 문서로 확인. |
-| ④ | **환경 통제.** 보관 온도를 낮고 일정하게(가능하면 20~25°C 이하, 40°C 절대 초과 금지). 온도 로거로 **기록**을 남긴다 — 사후에 위험도를 판단할 수 있는 유일한 근거다. |
+| ② | **주기적 전수 읽기 + 재기록(scrub).** 6–12개월마다 전 데이터를 읽어 BER을 확인하고, 가능하면 새 매체로 재기록. 읽기만으로는 리프레시가 보장되지 않으므로 재기록이 핵심. |
+| ③ | **정기 전원 인가는 "충분한 시간" 확보 시에만 유효.** 최소 수 시간–수십 시간, 백그라운드 스크럽/patrol read를 실제로 완주시킬 것. 드라이브 펌웨어의 refresh 지원 여부를 벤더 문서로 확인. |
+| ④ | **환경 통제.** 보관 온도를 낮고 일정하게(가능하면 20–25°C 이하, 40°C 절대 초과 금지). 온도 로거로 **기록**을 남긴다 — 사후에 위험도를 판단할 수 있는 유일한 근거다. |
 | ⑤ | **마모도 기준 분류.** SMART `Percentage Used`가 높은 드라이브는 장기 보관 대상에서 제외하고 데이터를 먼저 이전. |
 
 ---
@@ -176,7 +223,7 @@ $$t_{retention} \propto \exp\left(\frac{E_a}{k_B T}\right)$$
 - [ ] 해시·절차·시각을 문서화한다.
 
 **한 줄 결론**
-> SSD의 무전원 보존은 **보증이 아니라 확률**이다. 2~3년 방치는 "확실히 날아갔다"는 뜻도 아니지만, "괜찮을 것"이라고 가정할 근거는 전혀 없다. 그리고 그 확률을 확인하는 유일한 시도 — 첫 전원 인가 — 는 **되돌릴 수 없다.**
+> SSD의 무전원 보존은 **보증이 아니라 확률**이다. 2–3년 방치는 "확실히 날아갔다"는 뜻도 아니지만, "괜찮을 것"이라고 가정할 근거는 전혀 없다. 그리고 그 확률을 확인하는 유일한 시도 — 첫 전원 인가 — 는 **되돌릴 수 없다.**
 
 ---
 
