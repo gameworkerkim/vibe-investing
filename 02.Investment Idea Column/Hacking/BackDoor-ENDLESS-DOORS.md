@@ -1,8 +1,7 @@
-<!--
 ---
 title: "백도어의 경제학"
 subtitle: "왜 중국산 공유기와 CCTV에는 문이 열려 있는가 — 사실과 오해"
-description: "Zbtlink ENDLESSDOORS(CVE-2026-66747)로 본 출하 펌웨어 백도어. 원격 유지보수 비용 절감이 구매자·내부망으로 전가되는 구조, OEM/ODM·산차이 유통, 실무 대응과 한계를 정리한다."
+description: "Zbtlink ENDLESSDOORS(CVE-2026-66747): 출하 펌웨어에 심긴 루트 원격제어 임플란트와 OEM 공유기 폰홈. 원격 AS 비용 절감이 구매자 리스크로 전가되는 구조와 실무 대응을 정리한다."
 abstract: |
   2026년 8월 5일 VulnCheck가 Zbtlink 공유기 20개 모델 출하 펌웨어에서 ENDLESSDOORS(CVE-2026-66747, CVSS 9.3) 루트 원격제어 임플란트를 공개했다.
   핵심은 국적 스파이 서사가 아니라, 원격 AS 비용 절감이 구매자 리스크로 전가되는 외부효과·정보 비대칭(레몬 마켓)이다.
@@ -45,7 +44,6 @@ schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
--->
 
 # 백도어의 경제학
 
@@ -59,7 +57,7 @@ robots: index,follow
 
 수십 만대의 OEM 제조사 공유기가 방화벽이 있어도 그걸 우회해서 스스로 통신을 고향인 중국으로 통신을 정기적으로 했다. 
 
-문제의 통신 문자열 xmlset_roodkcableoj28840ybtide 뒤집으면 **edit by 04882 joel backdoo**r가 된다.
+문제의 통신 문자열 xmlset_roodkcableoj28840ybtide 뒤집으면 **edit by 04882 joel backdoor**가 된다.
 
 유지보수 소프트웨어라면 평문 텍스트, 백도어라는 단어를 오해를 피하기 위해서라도 넣지 않을 것이다.
 
