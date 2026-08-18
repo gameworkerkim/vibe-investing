@@ -1,0 +1,3354 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>싸이월드 방치 서버 복원 플레이북 — VibeQuant</title>
+  <meta name="description" content="IDC 바닥에 무전원 방치된 싸이월드 서버 약 300대의 데이터 복원·보안 패치·AWS 이관 플레이북. 부팅 전 실사, 포렌식 이미징, Assume Breach, DC 간 정합성, CentOS EOL 패치와 3.8 PB S3 이관을 단계별로 정리한다." />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/cyworld-server-restoration-playbook/" />
+  <meta property="og:title" content="싸이월드 방치 서버 복원 플레이북" />
+  <meta property="og:description" content="IDC 바닥에 무전원 방치된 싸이월드 서버 약 300대의 데이터 복원·보안 패치·AWS 이관 플레이북. 부팅 전 실사, 포렌식 이미징, Assume Breach, DC 간 정합성, CentOS EOL 패치와 3.8 PB S3 이관을 단계별로 정리한다." />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/cyworld-server-restoration-playbook/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"싸이월드 방치 서버 복원 플레이북","description":"IDC 바닥에 무전원 방치된 싸이월드 서버 약 300대의 데이터 복원·보안 패치·AWS 이관 플레이북. 부팅 전 실사, 포렌식 이미징, Assume Breach, DC 간 정합성, CentOS EOL 패치와 3.8 PB S3 이관을 단계별로 정리한다.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/cyworld-server-restoration-playbook/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Cyworld/Cyworld-Server-Restoration-Playbook.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/cyworld-server-restoration-playbook/","datePublished":"2026-08-18","dateModified":"2026-08-18","inLanguage":"ko","keywords":"싸이월드, 데이터복원, 포렌식, 클라우드이관, CentOS, AWS"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"싸이월드 방치 서버 복원 플레이북","item":"https://tech.vibequant.cc/tech/cyworld-server-restoration-playbook/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 보안</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">보안</p>
+        <h1>싸이월드 방치 서버 복원 플레이북</h1>
+        <p class="article-dates"><time datetime="2026-08-18">발행 2026.08.18</time> · 주제 싸이월드 · 데이터복원 · 포렌식 · 클라우드이관 · CentOS · AWS</p>
+        
+        <p class="lede">콜드 부팅 전 실사·이미징·침해 전제 조사부터 3.8 PB S3 이관까지</p>
+        
+        <nav class="share-bar" aria-label="공유" data-url="https://tech.vibequant.cc/tech/cyworld-server-restoration-playbook/" data-title="싸이월드 방치 서버 복원 플레이북" data-text="IDC 바닥에 무전원 방치된 싸이월드 서버 약 300대의 데이터 복원·보안 패치·AWS 이관 플레이북. 부팅 전 실사, 포렌식 이미징, Assume Breach, DC 간 정합성, CentOS EOL 패치와 3.8 PB S3 이관을 단계별로 정리한다." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fcyworld-server-restoration-playbook%2F&amp;text=%EC%8B%B8%EC%9D%B4%EC%9B%94%EB%93%9C%20%EB%B0%A9%EC%B9%98%20%EC%84%9C%EB%B2%84%20%EB%B3%B5%EC%9B%90%20%ED%94%8C%EB%A0%88%EC%9D%B4%EB%B6%81" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fcyworld-server-restoration-playbook%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fcyworld-server-restoration-playbook%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p><strong>문서 버전</strong>v1.0<strong>작성 기준일</strong>2026-08-18<strong>대상</strong>서버 약 300대 / CentOS(2024년 이후 패치 없음) / MySQL(2021-08 이후 패치 없음) / Nginx(패치 없음)<strong>이관 대상</strong>파일 데이터 3.8 PB → AWS S3, DB 10 GB → AWS Managed DB<strong>투입 인력</strong>SE 10명 (시그마체인 주장)<strong>신뢰도 표기</strong> 본 문서의 정량 추정치에는 CTI Admiralty Code 방식의 신뢰도 등급을 병기한다. (A–F: 출처 신뢰도 / 1–6: 정보 확실성)</p>
+<hr>
+<p>오디세우스는 고향으로 돌아가기 위해 트로이에서 전쟁을 했다. 교착된 전쟁을 뚫기 위해 거대한 목마를 만들어 트로이 성안으로 잠입하는데 성공했다. 이 오래된 신화는 보안 업계에서 트로이 목마라는 악성 코드의 모티브가 되었다. 유지보수 인력이 사라지고 데이터센터에 있다가 IDC 비용을 내지 못해서 방치된 서버의 전원이 내려가고 IDC 센터 한 구석 바닥에 서버가 있다면 단순히 데이터 복원의 일이 아니다. </p>
+<h2>0. 시작하는 말 - 왜 &quot;부팅&quot;이 복구의 시작이 아닌가?</h2>
+<h3>0.1 장기 방치된 서버는 전원을 넣는다고 실행 가능한 상태가 되지 않는다</h3>
+<p>장기간 방치된 서버는 전원 버튼을 누르는 순간 서비스가 살아나는 물건이 아니다. 2년의 무전원·무패치 기간은 서버를 &quot;잠들어 있던 상태&quot;로 보존하지 않는다. 그 기간 동안 다음 세 가지가 동시에 진행된다.</p>
+<ol>
+<li><p><strong>물리적 열화</strong> — 무전원 상태의 SSD 셀 전하 손실, HDD 베어링·윤활유 고착(stiction), RAID 컨트롤러 배터리/슈퍼캐패시터 수명 종료, CMOS 배터리 소진에 따른 시스템 시각 초기화. 하드웨어는 &quot;쉬는&quot; 것이 아니라 &quot;늙는다&quot;.</p>
+</li>
+<li><p><strong>논리적 부패</strong>— 마지막 종료가 정상 종료(graceful shutdown)가 아니었다면 파일시스템 저널, DB 리두 로그, 애플리케이션 큐가 모두 미완결 상태로 남아 있다. 부팅과 함께 자동 복구가 시작되면, 그 복구가<strong>증거와 데이터를 동시에 훼손</strong>될 수 있다.</p>
+</li>
+<li><p><strong>보안 부채 누적</strong>— OS·DB·웹서버가 2년간 패치되지 않은 상태에서, 그 2년간 공개된 원격 코드 실행 취약점은 전부 &quot;이미 무기화되어 유통되는&quot; 상태다. 즉, 이 서버들은 패치 관점에서 2년 전이 아니라<strong>2년치 취약점을 한꺼번에 안고 있는 현재</strong>에 놓인다.</p>
+</li>
+</ol>
+<p>여기서 가장 위험한 오판은 &quot;전원이 꺼져 있었으니 침해도 없었다&quot;는 추론이다. 전원이 꺼진 시점 <strong>이전</strong>에 침해가 있었다면, 그 침해는 디스크 위에 그대로 동면(dormant)하고 있다. 백도어는 전원이 들어오기를 기다린다. 따라서 복원 작업의 첫 단계는 부팅이 아니라 <strong>사전 점검과 침해 전제(assume breach) 조사</strong>여야 한다.</p>
+<h3>0.2 오디세이의 목마 — 성벽을 무너뜨린 것은 공성추가 아니었다</h3>
+<p>『오디세이』가 전하는 트로이 함락의 핵심은 전투력의 우열이 아니다. 10년을 버틴 성벽은 정면 공격으로 뚫리지 않았다. 성이 무너진 것은 <strong>성 안의 사람들이 스스로 문을 열고, 스스로 목마를 끌어들였기 때문</strong>이다.</p>
+<p>이 비유가 이 프로젝트에 정확히 대응하는 지점은 세 가지다.</p>
+<table>
+<thead>
+<tr>
+<th>트로이</th>
+<th>본 복원 프로젝트</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10년을 버틴 성벽</td>
+<td>방화벽, 망분리, 접근통제 — 정면으로는 견고하다</td>
+</tr>
+<tr>
+<td>성 안으로 들여온 목마</td>
+<td>검증 없이 운영망으로 반입되는 방치 서버·디스크·백업 테이프</td>
+</tr>
+<tr>
+<td>&quot;전리품이니 안전하다&quot;는 판단</td>
+<td>&quot;우리 자산이었으니 신뢰할 수 있다&quot;는 판단</td>
+</tr>
+<tr>
+<td>카산드라·라오콘의 경고 무시</td>
+<td>사전 점검·포렌식 절차를 일정 압박으로 생략</td>
+</tr>
+<tr>
+<td>밤중에 안에서 열린 문</td>
+<td>부팅 즉시 활성화되는 동면 백도어·크론·systemd 유닛</td>
+</tr>
+</tbody></table>
+<p><strong>목마를 성 안으로 끌어들인 행위는 단 한 번의 결정이었고, 되돌릴 수 없었다.</strong> 이 프로젝트에서 그에 해당하는 단 한 번의 결정은 <em>&quot;검증되지 않은 방치 서버를 운영망 또는 AWS 신규 환경에 직결하는 것&quot;</em> 이다. 사소한 보안적 실수 — 임시로 열어둔 22번 포트 하나, 옛 관리자 계정 하나, 백업 스크립트에 하드코딩된 자격증명 하나 — 가 3.8 PB 전체의 신뢰성을 무너뜨린다.</p>
+<p>그리고 싸이월드는 <strong>보안 사고의 파급이 기술 이슈로 끝나지 않는 자산</strong>이다. 전 국민이 자신의 사진·일기·방명록·일촌평이 그 안에 있다는 것을 알고 있고, 이미 과거의 데이터 유출 사건들로 인해 사회적 민감도가 최고 수준으로 형성되어 있다. 여기서 발생하는 유출은 &quot;서버 300대 사고&quot;가 아니라 &quot;국민 데이터 사고&quot;로 규정된다. 따라서 본 프로젝트의 보안은 <strong>아무리 강조해도 과하지 않으며, 일정보다 우선하는 제약조건</strong>으로 취급한다.</p>
+<blockquote>
+<p><strong>원칙 1 (Assume Breach)</strong>— 모든 방치 서버는 &quot;침해되었을 가능성이 있는 자산&quot;으로 분류하고, 침해 아님이<strong>증명될 때까지</strong> 격리망에서만 다룬다.
+<strong>원칙 2 (Read-Only First)</strong> — 원본 매체는 이미지화 이전에 쓰기 작업을 일절 허용하지 않는다.
+<strong>원칙 3 (No Direct Path)</strong> — 방치 서버에서 운영망/AWS로의 직접 경로는 어떤 단계에서도 만들지 않는다. 반드시 정제(clean-room) 구간을 경유한다.</p>
+</blockquote>
+<h3>0.3 랙에서 분리된 채, 두 곳의 데이터센터에, 무전원으로 - 정합성의 실체적 어려움</h3>
+<p>이 프로젝트가 일반적인 &quot;레거시 서버 패치 후 클라우드 이관&quot; 과제와 근본적으로 다른 지점은 <strong>서버 데이터의 물리적 형상이 이미 해체되어 있다</strong>는 점이다.</p>
+<p>현 상태의 특징은 다음과 같다.</p>
+<ul>
+<li>서버가 <strong>2개 데이터센터에 분산</strong>되어 있고,</li>
+<li>상당량이 <strong>랙에서 분리(derack)</strong> 되어 IDC 한 구석 바닥에 보관 상태이며,</li>
+<li>전원이 인가되지 않은 <strong>무전원(cold) 상태</strong>로 장기간 방치되었다.</li>
+</ul>
+<p>이 조건에서 데이터 정합성(consistency)을 맞추는 작업은, <strong>당시 운영 담당자가 그대로 있다 하더라도 쉽지 않다.</strong> 이유는 담당자의 기억이나 역량 부족이 아니라, 정합성을 성립시키던 정보가 물리적 배치에 암묵적으로 저장되어 있었기 때문이다.</p>
+<table>
+<thead>
+<tr>
+<th>랙 분리로 상실되는 암묵 정보</th>
+<th>왜 문제인가?</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>랙-유닛 위치 ↔ 논리 노드 ID(호스트명/샤드번호) 매핑</td>
+<td>클러스터의 어느 노드가 어느 샤드의 마스터였는지 알 수 없다</td>
+</tr>
+<tr>
+<td>케이블링 토폴로지 (스위치 포트 ↔ NIC)</td>
+<td>VLAN·본딩·이중화 구성이 재현되지 않아 클러스터가 스플릿 브레인으로 기동</td>
+</tr>
+<tr>
+<td>디스크 슬롯 순서 ↔ RAID 멤버 순서</td>
+<td>슬롯 순서가 바뀐 채 컨트롤러에 인식되면 <strong>어레이 재구성 시 데이터 파괴</strong></td>
+</tr>
+<tr>
+<td>JBOD/외장 스토리지 ↔ 헤드 노드 결선</td>
+<td>LUN 매핑 소실, 마운트포인트 뒤바뀜</td>
+</tr>
+<tr>
+<td>DC-A / DC-B 중 어느 쪽이 Primary였는가</td>
+<td>두 사본 중 어느 쪽이 최신인지 판정 근거가 사라짐</td>
+</tr>
+<tr>
+<td>마지막 정상 백업 세트의 물리 소재</td>
+<td>복구 기준점(RPO) 자체를 특정할 수 없음</td>
+</tr>
+</tbody></table>
+<p>특히 <strong>양 데이터센터에 동일 데이터의 사본이 존재하는 경우</strong>, 복원의 난제는 &quot;데이터를 읽는 것&quot;이 아니라 <strong>두 사본 중 어느 것이 진본인지 판정하는 것</strong> 으로 이동한다. 복제(replication)가 비정상 종료되었다면 DC-A와 DC-B는 서로 다른 시점에서 멈춰 있고, 어느 한쪽이 전체적으로 최신인 것도 아니다. 디렉터리 단위로, 파일 단위로, 심지어 동일 파일의 블록 단위로 신선도가 엇갈릴 수 있다.</p>
+<p>따라서 본 플레이북은 정합성 문제를 다음과 같이 재정의했다.</p>
+<blockquote>
+<p><strong>정합성 확보 = ① 물리 자산 재식별 → ② 논리 신원 복원 → ③ 사본 간 차분 판정 → ④ 진본 선정 규칙 적용 → ⑤ 판정 결과의 감사 가능한 기록</strong>이 다섯 단계는 Phase 0–Phase 3에서 순차적으로 다룬다. 어느 하나를 생략하면 3.8 PB를 S3로 올린 뒤에 &quot;무엇을 올렸는지 설명할 수 없는 상태&quot;가 된다.<strong>설명할 수 없는 데이터는 복원된 데이터가 아니다.</strong></p>
+</blockquote>
+<hr>
+<h2>1. 전체 단계 개요</h2>
+<pre><code>Phase 0  물리 자산 실사 및 재식별 (무전원 상태에서 수행)
+   ↓
+Phase 1  격리망 콜드 부팅 및 비파괴 하드웨어 점검
+   ↓
+Phase 2  침해 흔적 조사 (포렌식 이미지 기반 / Assume Breach)
+   ↓
+Phase 3  데이터 정합성 판정 (DC-A vs DC-B 차분, 진본 선정)
+   ↓
+Phase 4  보안 패치 (파일럿 5~10대 → 전체 300대)
+   ↓
+Phase 5  파일 데이터 3.8 PB → S3 이관
+   ↓
+Phase 6  DB 10 GB → AWS Managed DB 이관
+   ↓
+Phase 7  통합 검증 · 보안 감사 · 인수
+</code></pre>
+<p><strong>게이트(Gate) 원칙</strong>: 각 Phase 종료 시 체크리스트 100% 충족 + 서면 승인 없이는 다음 Phase로 진행하지 않는다. 게이트 미통과 항목은 예외 승인(Waiver) 문서로만 우회 가능하며, 예외는 보안팀장·CISO 공동 서명을 요구한다.</p>
+<hr>
+<h2>Phase 0 — 물리 자산 실사 및 재식별 (전원 인가 이전)</h2>
+<h3>0-A 목적</h3>
+<p>전원을 넣기 전에, <strong>되돌릴 수 없는 실수의 사전 확률을 낮춘다.</strong> 이 단계의 산출물은 자산 대장 하나가 아니라 &quot;부팅해도 되는 서버 / 부팅하면 안 되는 서버&quot;의 분류다.</p>
+<h3>0-B 핵심 작업</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>작업</th>
+<th>방법</th>
+<th>산출물</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0.1</td>
+<td>물리 실사 (DC-A/DC-B 각각)</td>
+<td>2인 1조 육안 확인, 사진 촬영(4면 + 라벨 + 디스크 슬롯)</td>
+<td><code>asset_inventory_DC-A.csv</code></td>
+</tr>
+<tr>
+<td>0.2</td>
+<td>섀시 라벨/서비스태그/시리얼 채록</td>
+<td>서비스태그, MAC, 자산번호, 원 랙위치 라벨</td>
+<td>동일 CSV</td>
+</tr>
+<tr>
+<td>0.3</td>
+<td><strong>디스크 슬롯 순서 보존</strong></td>
+<td>섀시별 디스크 탈거 여부 확인, 탈거 시 슬롯번호 재부여 후 라벨링</td>
+<td><code>disk_slot_map.csv</code></td>
+</tr>
+<tr>
+<td>0.4</td>
+<td>외장 스토리지/JBOD 결선 흔적 조사</td>
+<td>SAS 케이블 라벨, 인클로저 시리얼</td>
+<td><code>enclosure_map.csv</code></td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>네트워크 토폴로지 역추적</td>
+<td>구 스위치 config 백업, DHCP/DNS 존 파일, 모니터링 시스템 DB, IPAM</td>
+<td><code>topology_reconstructed.md</code></td>
+</tr>
+<tr>
+<td>0.6</td>
+<td>백업 매체 소재 확인</td>
+<td>테이프, 백업 어플라이언스, 오프사이트 보관분</td>
+<td><code>backup_media_inventory.csv</code></td>
+</tr>
+<tr>
+<td>0.7</td>
+<td>사전 위험 등급 분류</td>
+<td>아래 0-C 기준 적용</td>
+<td><code>boot_risk_classification.csv</code></td>
+</tr>
+<tr>
+<td>0.8</td>
+<td>문서·인적 자원 수집</td>
+<td>구 운영 문서, 런북, 담당자 인터뷰(녹취 동의 필수)</td>
+<td><code>tribal_knowledge_capture.md</code></td>
+</tr>
+</tbody></table>
+<h3>0-C 부팅 위험 등급 분류 기준</h3>
+<table>
+<thead>
+<tr>
+<th>등급</th>
+<th>조건</th>
+<th>처리</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>R0 (부팅 금지)</strong></td>
+<td>디스크가 탈거되어 슬롯 순서 불명 / RAID 컨트롤러 배터리 팽창·누액 / 침수·부식 흔적</td>
+<td>원본 절대 보존, 디스크 단위 이미징 전용 장비에서만 취급</td>
+</tr>
+<tr>
+<td><strong>R1 (조건부 부팅)</strong></td>
+<td>디스크 슬롯 순서 확인됨, 외관 정상, 단 무전원 24개월 초과</td>
+<td>이미징 완료 후에만 부팅 허용</td>
+</tr>
+<tr>
+<td><strong>R2 (부팅 가능)</strong></td>
+<td>랙 유지, 슬롯 순서 유지, 무전원 12개월 이하, 정상 종료 로그 존재</td>
+<td>격리망 부팅 허용</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>슬롯 순서를 모르는 상태로 RAID 어레이를 컨트롤러에 인식시키는 것이 이 프로젝트에서 <strong>데이터를 영구 파괴할 수 있는 1순위 시나리오</strong>다. 컨트롤러가 &quot;Foreign Configuration&quot;을 임포트하거나 자동 리빌드를 개시하면 패리티가 잘못된 순서로 재계산되어 복구가 불가능해진다. Phase 0의 최우선 산출물이 <code>disk_slot_map.csv</code>인 이유다. (신뢰도: A2)</p>
+</blockquote>
+<h3>0-D 무전원 장기 방치의 매체별 열화 리스크</h3>
+<table>
+<thead>
+<tr>
+<th>매체</th>
+<th>리스크</th>
+<th>기술적 근거</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>SSD/NVMe</strong></td>
+<td>무전원 상태 셀 전하 손실 → 정정 불가 비트오류(UECC), 펌웨어 메타데이터 손상</td>
+<td>JEDEC의 SSD 신뢰성 규격 체계(JESD218 계열)는 전원 차단 상태 데이터 보존을<strong>소비자용 등급 약 1년(30℃ 기준), 엔터프라이즈 등급 약 3개월(40℃ 기준) 수준</strong>으로 규정한다. 즉 24개월 무전원은 <strong>보증 구간을 크게 초과</strong>한다. (신뢰도: B2)</td>
+<td>최우선 이미징 대상. 첫 전원 인가 후 즉시 전체 읽기(read scrub) → 재기록(refresh) 금지, <strong>읽기만</strong> 수행</td>
+</tr>
+<tr>
+<td><strong>HDD</strong></td>
+<td>스핀업 실패(stiction), 베어링 고착, 헤드 고착, 모터 기동 전류 급증</td>
+<td>회전체 장기 정지 시 윤활 유막 소실. 스핀업 재시도 반복이 플래터 손상을 가속</td>
+<td>1회 스핀업 실패 시 재시도 금지, 데이터 복구 전문업체 이관 판단</td>
+</tr>
+<tr>
+<td><strong>RAID 캐시 BBU/슈퍼캡</strong></td>
+<td>수명 종료 → 컨트롤러가 Write-Back → Write-Through 강제 전환, 캐시에 남은 더티 데이터 유실</td>
+<td>배터리 백업 캐시의 보존 시간은 통상 수십 시간 단위</td>
+<td>컨트롤러 이벤트 로그에서 &quot;cache data lost&quot; 이벤트 확인 필수</td>
+</tr>
+<tr>
+<td><strong>CMOS 배터리</strong></td>
+<td>시스템 시각 초기화 → TLS 인증서 검증 실패, 로그 타임스탬프 왜곡, Kerberos/토큰 실패</td>
+<td>—</td>
+<td>부팅 즉시 BIOS 시각 수동 설정, NTP 연동은 격리망 내부 NTP로</td>
+</tr>
+<tr>
+<td><strong>테이프</strong></td>
+<td>자성 열화, 테이프 접착(sticking), 드라이브 부재</td>
+<td>LTO 세대 호환은 통상 읽기 2세대</td>
+<td>드라이브 확보 여부 선확인, 복원 리허설 1본 선행</td>
+</tr>
+<tr>
+<td><strong>광학/구형 매체</strong></td>
+<td>디스크 로트(disc rot)</td>
+<td>—</td>
+<td>별도 취급</td>
+</tr>
+</tbody></table>
+<h3>Phase 0 체크리스트</h3>
+<pre><code>[ ] 0.1  DC-A 물리 실사 완료 (총 __대, 사진 __매)
+[ ] 0.2  DC-B 물리 실사 완료 (총 __대, 사진 __매)
+[ ] 0.3  자산 대장(asset_inventory) 2개 DC 통합 완료, 300대 대비 실사 일치율 __%
+[ ] 0.4  실사 불일치(대장에 있으나 미발견 / 발견되었으나 대장 없음) 목록 작성 및 에스컬레이션
+[ ] 0.5  디스크 슬롯 맵 작성 완료 — 섀시별 슬롯 순서 확정 또는 &#39;불명&#39; 판정
+[ ] 0.6  R0/R1/R2 부팅 위험 등급 전 대수 분류 완료
+[ ] 0.7  R0 자산 물리 격리 보관 구역 지정 및 접근통제 적용
+[ ] 0.8  외장 스토리지/JBOD 결선 맵 복원 또는 &#39;불명&#39; 판정
+[ ] 0.9  구 네트워크 토폴로지 역추적 자료 확보 (스위치 config / IPAM / DNS / 모니터링 DB)
+[ ] 0.10 백업 매체 인벤토리 및 판독 드라이브 확보 여부 확인
+[ ] 0.11 당시 담당자 인터뷰 완료 (__명), 녹취/서면 동의 확보
+[ ] 0.12 개인정보 포함 자산 식별 및 개인정보 취급 대장 등재
+[ ] 0.13 반입/반출 절차서 및 자산 이동 이력(Chain of Custody) 양식 확정
+[ ] 0.14 Phase 0 게이트 승인 (보안팀장 / 인프라팀장 / PM 서명)
+</code></pre>
+<hr>
+<h2>Phase 1 — 격리망 콜드 부팅 및 비파괴 하드웨어 점검</h2>
+<h3>1-A 격리(Clean-Room) 환경 요건</h3>
+<p>방치 서버를 다루는 네트워크는 <strong>운영망·인터넷·AWS와 물리적으로 분리</strong>된 조사망(Forensic Enclave)이어야 한다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>요건</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>인터넷 접속</td>
+<td><strong>차단</strong> (아웃바운드 전면 Deny, DNS 포함)</td>
+</tr>
+<tr>
+<td>운영망 접속</td>
+<td><strong>차단</strong> (L2 분리, 별도 스위치·별도 VLAN·별도 물리 포트)</td>
+</tr>
+<tr>
+<td>내부 서비스</td>
+<td>격리망 전용 NTP, 격리망 전용 패치 저장소(로컬 미러), 로그 수집기</td>
+</tr>
+<tr>
+<td>로그</td>
+<td>전 작업 세션 기록(터미널 레코딩), 조사망 스위치 미러링 및 PCAP 상시 캡처</td>
+</tr>
+<tr>
+<td>반출</td>
+<td>조사망 → 정제망 이동은 단방향 파일 이관(승인된 파일 형식 + 해시 검증)만 허용</td>
+</tr>
+<tr>
+<td>계정</td>
+<td>조사 전용 계정, 원 서버의 기존 계정으로는 로그인하지 않음</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>아웃바운드 차단이 핵심이다.</strong>동면 백도어의 첫 동작은 대부분 C2 서버로의 콜백(beaconing)이다. 아웃바운드가 열려 있는 상태에서 첫 부팅을 하면, 조사 이전에 공격자가 먼저 침해 사실을 알게 된다. 동시에 캡처된 PCAP의 콜백 시도 자체가<strong>가장 강력한 침해 증거</strong>가 된다.</p>
+</blockquote>
+<h3>1-B 콜드 부팅 절차 (서버 1대 기준)</h3>
+<table>
+<thead>
+<tr>
+<th>순서</th>
+<th>작업</th>
+<th>금지사항</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>섀시 개방, 육안 점검(먼지, 배터리 팽창, 커패시터 누액, 부식)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>2</td>
+<td>디스크 슬롯 순서 재확인 및 사진</td>
+<td>디스크 임의 재삽입 금지</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>디스크 전량 탈거</strong> 후 섀시만 전원 인가 (BIOS/BMC 점검)</td>
+<td>디스크 장착 상태 첫 부팅 금지</td>
+</tr>
+<tr>
+<td>4</td>
+<td>BMC/iDRAC/iLO 이벤트 로그 수집, 시스템 시각 설정</td>
+<td>—</td>
+</tr>
+<tr>
+<td>5</td>
+<td>RAID 컨트롤러 설정 <strong>읽기 전용 조회</strong>, 기존 설정 덤프 저장</td>
+<td>Foreign Config Import 금지, Initialize 금지, Auto-Rebuild 금지</td>
+</tr>
+<tr>
+<td>6</td>
+<td>디스크는 별도 워크스테이션에서 <strong>쓰기 방지 장치(Write Blocker)</strong> 경유 개별 이미징</td>
+<td>원본 마운트 금지</td>
+</tr>
+<tr>
+<td>7</td>
+<td>이미징 완료·해시 검증 후, <strong>복제본으로만</strong> 부팅 시험</td>
+<td>원본 부팅 금지</td>
+</tr>
+<tr>
+<td>8</td>
+<td>Live 미디어(RescueCD) 부팅으로 파일시스템 <code>ro,noexec,nodev,nosuid</code> 마운트 후 조사</td>
+<td>설치 OS로 부팅 금지(Phase 2 완료 전)</td>
+</tr>
+</tbody></table>
+<h3>1-C 300대를 10명이 처리하기 위한 라인 편성</h3>
+<table>
+<thead>
+<tr>
+<th>라인</th>
+<th>인원</th>
+<th>역할</th>
+<th>처리량 목표</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>L1 물리 실사·반입</td>
+<td>2</td>
+<td>실사, 라벨링, 이동 이력</td>
+<td>40대/일</td>
+</tr>
+<tr>
+<td>L2 하드웨어 점검</td>
+<td>2</td>
+<td>섀시 점검, BMC 로그, RAID 설정 덤프</td>
+<td>15대/일</td>
+</tr>
+<tr>
+<td>L3 이미징</td>
+<td>3</td>
+<td>Write Blocker 기반 디스크 이미징, 해시</td>
+<td>12–20 디스크/일 (용량 의존)</td>
+</tr>
+<tr>
+<td>L4 포렌식 분석</td>
+<td>2</td>
+<td>IOC 트리아지, 타임라인</td>
+<td>10대/일</td>
+</tr>
+<tr>
+<td>L5 자동화·플랫폼</td>
+<td>1</td>
+<td>스크립트, 저장소 미러, 대시보드</td>
+<td>상시</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>병목은 이미징이다.</strong>3.8 PB 전량을 포렌식 이미징하는 것은 현실적으로 불가능하므로,<strong>① OS/시스템 볼륨은 전수 이미징, ② 대용량 데이터 볼륨은 이미징 대신 &quot;쓰기 방지 마운트 + 해시 매니페스트 + 표본 심층 검사&quot;</strong> 로 이원화한다. 이 결정은 문서화하고 게이트 승인 대상에 포함한다.</p>
+</blockquote>
+<h3>Phase 1 체크리스트</h3>
+<pre><code>[ ] 1.1  조사망(Forensic Enclave) 구축 완료, 아웃바운드 전면 차단 검증 (테스트 콜백으로 확인)
+[ ] 1.2  조사망 PCAP 상시 캡처 및 보존 정책 적용
+[ ] 1.3  Write Blocker 장비 확보 (__대) 및 동작 검증
+[ ] 1.4  이미징 저장 공간 확보 (필요 용량 __TB, 확보 __TB)
+[ ] 1.5  섀시 육안 점검 이상 자산 목록 작성 (배터리 팽창/누액/부식)
+[ ] 1.6  BMC/iDRAC/iLO 이벤트 로그 전 대수 수집
+[ ] 1.7  RAID 컨트롤러 기존 설정 덤프 전 대수 확보 (Foreign Import 미실행 확인)
+[ ] 1.8  SMART 전수 수집 및 위험 디스크(재할당 섹터/미보정 오류) 목록화
+[ ] 1.9  OS 볼륨 전수 이미징 완료 및 SHA-256 해시 검증 통과율 __%
+[ ] 1.10 스핀업 실패 디스크 목록 및 데이터복구 업체 이관 판단 완료
+[ ] 1.11 시스템 시각(BIOS/CMOS) 보정 및 조사망 NTP 동기 완료
+[ ] 1.12 원본 매체 무결성 서약 — 원본 쓰기 발생 0건 확인 (감사 로그 근거 첨부)
+[ ] 1.13 Phase 1 게이트 승인
+</code></pre>
+<hr>
+<h2>Phase 2 — 침해 흔적 조사 (Assume Breach)</h2>
+<h3>2-A 조사 원칙</h3>
+<p>이 단계의 목표는 &quot;침해가 있었는지&quot;를 묻는 것이 아니라, <strong>침해가 없었음을 어느 수준까지 입증할 수 있는지</strong> 를 확정하는 것이다. 결론은 다음 3가지 중 하나로만 기록한다.</p>
+<table>
+<thead>
+<tr>
+<th>판정</th>
+<th>의미</th>
+<th>후속 처리</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>C (Compromised)</strong></td>
+<td>침해 지표 확인</td>
+<td>해당 서버 재사용 금지. 데이터만 정제 후 추출, OS는 폐기·재설치</td>
+</tr>
+<tr>
+<td><strong>S (Suspicious)</strong></td>
+<td>설명되지 않는 이상 징후 존재</td>
+<td>심층 분석 대기, 잠정적으로 C 취급</td>
+</tr>
+<tr>
+<td><strong>N (No indicators found)</strong></td>
+<td>지표 미발견 (≠ &quot;침해 없음&quot;)</td>
+<td>패치 대상 편입, 단 Phase 4에서 재검증</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>&quot;N&quot;은 무죄 판결이 아니라 증거 부재다.</strong> 이 문구를 보고서에 명시적으로 남긴다. 2년 전의 로그가 로테이션으로 소실되었다면, 그 구간에 대해서는 어떤 판정도 불가능하다.</p>
+</blockquote>
+<h3>2-B 침해 지표(IOC) 수집 항목</h3>
+<table>
+<thead>
+<tr>
+<th>분류</th>
+<th>점검 대상</th>
+<th>착안점</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>지속성(Persistence)</td>
+<td><code>/etc/cron*</code>, 사용자 crontab, <code>systemd</code> 유닛/타이머, <code>/etc/rc.local</code>, <code>~/.bashrc</code>, <code>/etc/ld.so.preload</code></td>
+<td>정상 목록과 diff. <code>ld.so.preload</code>는 존재 자체가 강한 의심 신호</td>
+</tr>
+<tr>
+<td>계정</td>
+<td><code>/etc/passwd</code>, <code>/etc/shadow</code>, <code>/etc/sudoers*</code>, <code>authorized_keys</code>, UID 0 중복</td>
+<td>알 수 없는 SSH 공개키 = 사실상 확정적 침해 지표</td>
+</tr>
+<tr>
+<td>웹셸</td>
+<td>Nginx <code>root</code>/<code>alias</code> 경로 하위 스크립트, 업로드 디렉터리</td>
+<td>실행 가능 확장자, 난독화 문자열, 최근 mtime</td>
+</tr>
+<tr>
+<td>바이너리 무결성</td>
+<td><code>rpm -Va</code>, 패키지 해시 비교</td>
+<td><code>ps</code>, <code>ls</code>, <code>netstat</code>, <code>ss</code>, <code>sshd</code> 변조 여부</td>
+</tr>
+<tr>
+<td>로그 이상</td>
+<td><code>wtmp/btmp/lastlog</code>, <code>secure</code>, <code>messages</code>, Nginx access/error</td>
+<td><strong>로그 파일 크기 0 / 특정 구간 결손 = 은폐 시도 지표</strong></td>
+</tr>
+<tr>
+<td>커널 모듈</td>
+<td><code>lsmod</code>, <code>/lib/modules</code> 내 서명 없는 모듈</td>
+<td>루트킷</td>
+</tr>
+<tr>
+<td>DB</td>
+<td>MySQL <code>user</code> 테이블, <code>FILE</code>/<code>SUPER</code> 권한 계정, <code>general_log</code>, <code>init_file</code>, UDF <code>.so</code></td>
+<td>2021년 이후 미패치 → DB 경유 침해 시나리오 우선 검토</td>
+</tr>
+<tr>
+<td>파일시스템 타임라인</td>
+<td><code>/tmp</code>, <code>/var/tmp</code>, <code>/dev/shm</code>, <code>/root</code></td>
+<td>삭제된 inode, 시각 역전(timestomping)</td>
+</tr>
+<tr>
+<td>네트워크</td>
+<td>조사망 PCAP의 아웃바운드 시도</td>
+<td>콜백 도메인/IP → CTI 조회</td>
+</tr>
+</tbody></table>
+<h3>2-C 이 환경에 특히 중요한 취약점 계열</h3>
+<p>2년 이상 미패치 상태에서 우선 확인해야 할 공격 표면은 다음과 같다. (실제 버전 확인 후 CVE 목록을 확정한다 — 신뢰도: B2)</p>
+<ol>
+<li><strong>웹서버 계층</strong> — Nginx 및 그 앞단의 리버스 프록시/WAF, 그리고 함께 배포된 PHP/애플리케이션 런타임. 실무상 침해는 Nginx 본체보다 그 뒤의 애플리케이션에서 발생하는 비율이 압도적으로 높다.</li>
+<li><strong>DB 계층</strong> — MySQL 5.7 계열은 2023년 10월 EOL. 2021년 8월 이후 누적 보안 수정 전량 미적용.</li>
+<li><strong>OS 계층</strong>— CentOS 7은 2024년 6월 EOL, CentOS 8은 2021년 12월 EOL.<strong>EOL 이후 공개된 커널·glibc·OpenSSL·sudo·polkit 계열 권한상승 취약점은 벤더 패치가 존재하지 않는다.</strong>4.<strong>관리 인터페이스</strong>— BMC(iDRAC/iLO/IPMI) 펌웨어. 무전원이어도 전원 코드가 연결되어 있었다면 BMC는 살아 있었을 수 있다.<strong>이 경로는 반드시 별도 조사한다.</strong>5.<strong>인증 자산</strong>— 만료된 TLS 사설키, SSH 호스트키, API 키, DB 계정.<strong>전량 폐기·재발급 대상</strong>으로 간주한다.</li>
+</ol>
+<h3>2-D CentOS EOL이 만들어내는 구조적 제약</h3>
+<p>이 프로젝트에서 반드시 조기에 확정해야 하는 사항이 있다.</p>
+<blockquote>
+<p><strong>CentOS는 EOL 상태이므로, &quot;최신 보안 패치를 적용한다&quot;는 목표가 원칙적으로 달성 불가능하다.</strong>- 공식 미러(<code>mirror.centos.org</code>)는 서비스 종료되어 <code>yum update</code>가<strong>저장소 접속 실패로 그대로 끝난다.</strong>아카이브(<code>vault.centos.org</code>)로 전환해야 하는데, 아카이브에는<strong>EOL 시점까지의 패치만</strong> 존재한다.</p>
+</blockquote>
+<ul>
+<li>즉 CentOS 7 서버에 vault 저장소로 패치를 적용하면 <strong>2024년 6월 시점까지의 보안 상태</strong>에 도달할 뿐이며, 그 이후 2년치 취약점은 남는다.</li>
+</ul>
+<p>새로 리눅스 계열의 OS를 설치하고 안정성, 호환성을 확보해야 한다.</p>
+<p>따라서 Phase 4의 실제 목표를 다음과 같이 재정의해야 한다.</p>
+<table>
+<thead>
+<tr>
+<th>선택지</th>
+<th>내용</th>
+<th>평가</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>(a) Vault 패치 + 완화 통제</strong></td>
+<td>vault.centos.org 기준 최대 패치 + 망분리·WAF·EDR·최소권한으로 잔여 위험 보전</td>
+<td><strong>데이터 추출 기간 동안의 잠정 대책으로만 타당</strong></td>
+</tr>
+<tr>
+<td><strong>(b) 유상 확장 지원(ELS) 도입</strong></td>
+<td>상용 벤더의 CentOS 확장 지원 계약</td>
+<td>예산·계약 리드타임 필요</td>
+</tr>
+<tr>
+<td><strong>(c) OS 교체(RHEL/Rocky/Alma/Ubuntu)</strong></td>
+<td>이관 대상 OS를 현행화하여 재구축</td>
+<td><strong>최종 해답. 단 애플리케이션 호환성 검증 필요</strong></td>
+</tr>
+<tr>
+<td><strong>(d) 데이터만 추출 후 서버 폐기</strong></td>
+<td>서버를 살리지 않고 데이터만 꺼내 S3/RDS로 이관</td>
+<td><strong>본 프로젝트 목적(데이터 복원)에 가장 부합</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>권고</strong>: 본 프로젝트의 목적이 &quot;서비스 재개&quot;가 아니라 <strong>데이터 복원 및 클라우드 이관</strong>이라면, 300대 전체를 완전 패치하여 장기 운영하는 시나리오는 비용·위험 모두에서 열등하다.<strong>(a)+(d) 조합</strong> — 즉 <em>데이터 추출에 필요한 최소 기간만 패치·완화 통제로 버티고, 추출 완료 후 서버는 폐기(데이터 완전 삭제 후 매체 파기)</em> — 를 기본 전략으로 제안한다. Phase 4의 패치는 &quot;영구 운영을 위한 패치&quot;가 아니라 <strong>안전한 추출 창구를 확보하기 위한 패치</strong> 로 목적을 좁힌다. (신뢰도: B2)</p>
+</blockquote>
+<h3>Phase 2 체크리스트</h3>
+<pre><code>[ ] 2.1  IOC 트리아지 스크립트 검증 완료 (오탐/누락 시험)
+[ ] 2.2  전 대수 트리아지 수행 (__/300)
+[ ] 2.3  C/S/N 판정 완료 및 대장 기록 — C: __대, S: __대, N: __대
+[ ] 2.4  ld.so.preload / 미등록 SSH 공개키 / UID 0 중복 점검 결과 첨부
+[ ] 2.5  rpm -Va 기반 바이너리 무결성 결과 및 예외 사유 정리
+[ ] 2.6  웹셸 스캔 완료 (Nginx 문서 루트 및 업로드 경로 전수)
+[ ] 2.7  로그 결손 구간 목록화 — &quot;판정 불가 구간&quot; 명시
+[ ] 2.8  MySQL 계정/권한/UDF/init_file 점검 완료
+[ ] 2.9  BMC/IPMI 펌웨어 버전 및 접근 로그 조사 완료
+[ ] 2.10 조사망 PCAP 아웃바운드 콜백 시도 분석 완료 (시도 __건, CTI 조회 결과 첨부)
+[ ] 2.11 모든 인증 자산(TLS키/SSH키/DB계정/API키) 폐기·재발급 대상 목록 확정
+[ ] 2.12 침해 확인 시 개인정보 유출 신고 판단 프로세스 가동 (법무·개인정보보호책임자 통보)
+[ ] 2.13 OS 전략 (a)/(b)/(c)/(d) 의사결정 서면 확정
+[ ] 2.14 Phase 2 게이트 승인 (CISO 서명 필수)
+</code></pre>
+<hr>
+<h2>Phase 3 — 데이터 정합성 판정 (DC-A vs DC-B)</h2>
+<h3>3-A 정합성 판정의 5단계</h3>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>내용</th>
+<th>산출물</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>① 물리 자산 재식별</td>
+<td>Phase 0 결과 + 디스크 UUID/시리얼 기반 재구성</td>
+<td><code>physical_identity.csv</code></td>
+</tr>
+<tr>
+<td>② 논리 신원 복원</td>
+<td>디스크 내부에서 호스트명·IP·샤드번호·클러스터 멤버십 역추출</td>
+<td><code>logical_identity.csv</code></td>
+</tr>
+<tr>
+<td>③ 사본 간 차분 판정</td>
+<td>DC-A / DC-B 매니페스트 대조</td>
+<td><code>divergence_report.csv</code></td>
+</tr>
+<tr>
+<td>④ 진본 선정 규칙 적용</td>
+<td>아래 3-C 규칙</td>
+<td><code>golden_copy_decision.csv</code></td>
+</tr>
+<tr>
+<td>⑤ 감사 기록</td>
+<td>판정 근거·판정자·판정 시각 기록</td>
+<td><code>integrity_audit_log.jsonl</code></td>
+</tr>
+</tbody></table>
+<h3>3-B 논리 신원 역추출 방법 (랙 정보가 소실된 경우)</h3>
+<p>디스크 이미지 내부에서 다음을 읽어 <strong>서버의 원래 신원을 복원</strong>한다.</p>
+<table>
+<thead>
+<tr>
+<th>근거 파일</th>
+<th>얻을 수 있는 정보</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/etc/hostname</code>, <code>/etc/sysconfig/network</code></td>
+<td>호스트명</td>
+</tr>
+<tr>
+<td><code>/etc/sysconfig/network-scripts/ifcfg-*</code></td>
+<td>IP, VLAN, 본딩, MAC</td>
+</tr>
+<tr>
+<td><code>/etc/fstab</code>, <code>/etc/multipath.conf</code></td>
+<td>마운트 구조, LUN/WWID 매핑</td>
+</tr>
+<tr>
+<td><code>/etc/my.cnf</code> (<code>server_id</code>, <code>log_bin</code>, <code>relay_log</code>)</td>
+<td>MySQL 복제 토폴로지, 마스터/슬레이브 여부</td>
+</tr>
+<tr>
+<td><code>mysql/master.info</code>, <code>relay-log.info</code>, <code>auto.cnf</code></td>
+<td>복제 소스 호스트, 적용 위치, server UUID</td>
+</tr>
+<tr>
+<td><code>/etc/nginx/nginx.conf</code>, <code>conf.d/*</code></td>
+<td>upstream 멤버 = 클러스터 구성 역추적</td>
+</tr>
+<tr>
+<td><code>/etc/hosts</code></td>
+<td>구 클러스터 멤버 전체 목록 (매우 유용)</td>
+</tr>
+<tr>
+<td>모니터링 에이전트 설정</td>
+<td>서비스 그룹, 태그, 역할</td>
+</tr>
+<tr>
+<td><code>/var/log/messages</code> 최종 엔트리</td>
+<td><strong>마지막 가동 시각 = 데이터 신선도 기준점</strong></td>
+</tr>
+<tr>
+<td>RAID 컨트롤러 로그</td>
+<td>어레이 구성, 멤버 순서, 최종 상태</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><code>/etc/hosts</code>와 <code>master.info</code>의 조합은 랙 배치도가 완전히 소실된 상황에서 <strong>클러스터 위상을 복원하는 가장 신뢰도 높은 근거</strong>다. (신뢰도: A2)</p>
+</blockquote>
+<h3>3-C 진본(Golden Copy) 선정 규칙</h3>
+<p>두 데이터센터의 사본이 다를 때 적용하는 <strong>사전 확정 규칙</strong>이다. 규칙을 먼저 확정하고 나서 데이터를 보는 것이 원칙이다. (사후에 규칙을 만들면 판정이 자의적이 된다.)</p>
+<table>
+<thead>
+<tr>
+<th>우선순위</th>
+<th>규칙</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>R-1</td>
+<td>양측 해시 동일 → 어느 쪽이든 채택, 1부만 이관</td>
+<td>중복 제거</td>
+</tr>
+<tr>
+<td>R-2</td>
+<td>한쪽만 존재 → 존재하는 쪽 채택 + <strong>누락 사유 조사 기록</strong></td>
+<td>삭제였는지 미복제였는지 구분</td>
+</tr>
+<tr>
+<td>R-3</td>
+<td>크기·해시 상이, mtime 명확 → <strong>최종 가동 시각이 늦은 DC의 사본</strong> 채택</td>
+<td>단 CMOS 초기화로 시각 신뢰 불가한 자산은 제외</td>
+</tr>
+<tr>
+<td>R-4</td>
+<td>시각 신뢰 불가 → <strong>파일 자체의 내부 메타데이터</strong> 기준 (이미지 EXIF, 파일 헤더, DB 레코드 시각)</td>
+<td>자동 판정 불가 시 R-6</td>
+</tr>
+<tr>
+<td>R-5</td>
+<td>한쪽이 절단(truncated)·손상 → 정상 파싱되는 쪽 채택</td>
+<td>파일 유형별 검증기 필요</td>
+</tr>
+<tr>
+<td>R-6</td>
+<td>판정 불가</td>
+<td><strong>양측 모두 보존</strong>하여 <code>_dcA</code> / <code>_dcB</code> 접미로 S3에 병렬 적재 + 격리 목록 등재</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>R-6은 실패가 아니라 <strong>정직한 처리</strong>다. 임의로 하나를 버리는 것보다, 판정 불가로 표시하고 둘 다 보존하는 것이 개인 데이터 복원에서 옳다. 3.8 PB에서 R-6 비율은 통상 수 % 이내로 수렴한다. (신뢰도: C3)</p>
+</blockquote>
+<h3>3-D 3.8 PB 규모에서의 현실적 검증 전략</h3>
+<p>전량 SHA-256은 I/O 병목으로 비현실적일 수 있다. 다음 3계층으로 나눈다.</p>
+<table>
+<thead>
+<tr>
+<th>계층</th>
+<th>방법</th>
+<th>적용 범위</th>
+<th>목적</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>L1 빠른 대조</td>
+<td>경로 + 크기 + mtime 매니페스트</td>
+<td><strong>전량 100%</strong></td>
+<td>존재/누락/명백한 차이 판정</td>
+</tr>
+<tr>
+<td>L2 해시 대조</td>
+<td>xxHash64 또는 BLAKE3 (SHA-256보다 수 배 빠름)</td>
+<td><strong>전량 100%</strong> (I/O 허용 시) 또는 L1 차이 발생분 + 무작위 10%</td>
+<td>내용 동일성</td>
+</tr>
+<tr>
+<td>L3 심층 검증</td>
+<td>SHA-256 + 파일 유형별 파싱 검증(JPEG/PNG 디코드, ZIP CRC 등)</td>
+<td>표본 1–3% + R-4/R-5/R-6 대상 전량</td>
+<td>실제 사용 가능성</td>
+</tr>
+</tbody></table>
+<p><strong>매니페스트는 S3 이관 전·후 모두 생성하여 대조한다.</strong> 이관 후 대조 없이는 &quot;3.8 PB를 올렸다&quot;고 말할 수 없다.</p>
+<h3>Phase 3 체크리스트</h3>
+<pre><code>[ ] 3.1  진본 선정 규칙(R-1~R-6) 서면 확정 및 승인 — 데이터 확인 이전에 확정했음을 기록
+[ ] 3.2  논리 신원 역추출 완료 (__/300), 신원 불명 자산 __대
+[ ] 3.3  클러스터 위상 복원도 작성 (MySQL 복제 / Nginx upstream 기준)
+[ ] 3.4  각 자산의 &#39;마지막 가동 시각&#39; 확정, CMOS 초기화로 시각 신뢰 불가 자산 별도 표기
+[ ] 3.5  DC-A 전량 L1 매니페스트 생성 완료 (파일 __억건, __PB)
+[ ] 3.6  DC-B 전량 L1 매니페스트 생성 완료
+[ ] 3.7  L2 해시 매니페스트 생성 완료 (커버리지 __%)
+[ ] 3.8  차분 리포트 생성 — 동일 __%, 편측존재 __%, 상이 __%, 판정불가 __%
+[ ] 3.9  R-1~R-6 규칙 적용 결과 및 진본 결정 대장 완성
+[ ] 3.10 R-6(판정 불가) 목록 및 병렬 보존 계획 확정
+[ ] 3.11 표본 심층 검증(L3) 실시 및 실제 개방 가능성 검증 통과율 __%
+[ ] 3.12 개인정보 포함 데이터 분류(사진/일기/방명록/회원정보) 및 접근통제 등급 부여
+[ ] 3.13 정합성 판정 감사 로그 무결성(해시 체인) 적용
+[ ] 3.14 Phase 3 게이트 승인
+</code></pre>
+<hr>
+<h2>Phase 4 — 보안 패치 (파일럿 → 전체)</h2>
+<p><strong>목적 재확인</strong>: 본 Phase의 패치는 <em>영구 운영</em>이 아니라 <strong>안전한 데이터 추출 창구 확보</strong>를 목적으로 한다. (Phase 2-D 결정 사항)</p>
+<h3>4-A 패치 이전 필수 선결 조건</h3>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>선결 조건</th>
+<th>이유</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>Phase 2 판정 <strong>N</strong> 자산만 대상</td>
+<td>C/S 자산은 패치해도 신뢰할 수 없다</td>
+</tr>
+<tr>
+<td>2</td>
+<td>전 자산 스냅샷/이미지 백업 완료</td>
+<td>롤백 불가 시 패치 금지</td>
+</tr>
+<tr>
+<td>3</td>
+<td><strong>CentOS vault 저장소 로컬 미러 구축</strong></td>
+<td>격리망은 인터넷 차단, 공식 미러도 종료</td>
+</tr>
+<tr>
+<td>4</td>
+<td>인증 자산 전량 재발급 완료</td>
+<td>구 키를 유지한 채 패치하면 백도어를 패치하는 셈</td>
+</tr>
+<tr>
+<td>5</td>
+<td>디스크 여유 공간 확보 (<code>/boot</code> 최소 200MB, <code>/</code> 최소 5GB)</td>
+<td>커널 패치 실패 주 원인</td>
+</tr>
+<tr>
+<td>6</td>
+<td>콘솔(BMC/시리얼) 접근 확보</td>
+<td>부팅 실패 시 원격 복구 유일 수단</td>
+</tr>
+<tr>
+<td>7</td>
+<td>부팅 실패 대응 런북 작성</td>
+<td>예상 실패 6–15대 (원 시나리오 문서 기준)</td>
+</tr>
+</tbody></table>
+<h3>4-B 패치 순서와 서비스 영향</h3>
+<pre><code>스냅샷 → 서비스 정지 → 저장소 전환 → 패치 사전점검
+   → OS(비커널) 패치 → Nginx 패치 → MySQL 패치 → 커널 패치
+   → 리부트 → 헬스체크 → 검증 → 승인/롤백
+</code></pre>
+<p><strong>커널 패치를 마지막에 두는 이유</strong>: 커널 외 패키지 패치는 리부트 없이 검증 가능하므로, 리부트를 1회로 줄이고 실패 원인 분리를 쉽게 한다.</p>
+<h3>4-C 파일럿 (5–10대) 판정 기준</h3>
+<table>
+<thead>
+<tr>
+<th>지표</th>
+<th>통과 기준</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>부팅 성공률</td>
+<td>10/10 또는 9/10 이상</td>
+</tr>
+<tr>
+<td>서비스 기동 성공률</td>
+<td>100% (Nginx, MySQL)</td>
+</tr>
+<tr>
+<td>DB 정합성</td>
+<td><code>mysqlcheck</code> 오류 0건, 행수 일치</td>
+</tr>
+<tr>
+<td>성능 회귀</td>
+<td>기준 대비 -10% 이내</td>
+</tr>
+<tr>
+<td>취약점 스캔</td>
+<td>패치 전 대비 심각도 High 이상 항목 감소 확인</td>
+</tr>
+<tr>
+<td>롤백 리허설</td>
+<td><strong>최소 1대는 의도적으로 롤백을 실행하여 성공 확인</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>롤백 리허설을 실제로 수행하지 않은 롤백 계획은 계획이 아니다. 파일럿에서 반드시 1회 실행한다.</p>
+</blockquote>
+<h3>4-D 전체 300대 배치 전략</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>배치 크기</td>
+<td>20–30대</td>
+</tr>
+<tr>
+<td>배치 수</td>
+<td>10–15</td>
+</tr>
+<tr>
+<td>동시 병렬도</td>
+<td>배치 내 5대 (Ansible <code>serial: 5</code>)</td>
+</tr>
+<tr>
+<td>배치당 소요</td>
+<td>4–6시간 (패치+검증)</td>
+</tr>
+<tr>
+<td>배치 간 관찰 구간</td>
+<td>최소 2시간 (지연 발현 장애 포착)</td>
+</tr>
+<tr>
+<td>총 소요</td>
+<td>8–12 영업일</td>
+</tr>
+<tr>
+<td>중단 기준(Abort Criteria)</td>
+<td>한 배치에서 실패율 20% 초과 시 전체 중단 및 원인 분석</td>
+</tr>
+</tbody></table>
+<h3>Phase 4 체크리스트</h3>
+<pre><code>[ ] 4.1  대상 자산 확정 (Phase 2 판정 N 자산 __대)
+[ ] 4.2  vault.centos.org 로컬 미러 구축 및 GPG 키 검증 완료
+[ ] 4.3  MySQL / Nginx 패키지 로컬 저장소 확보 (버전 고정 명시)
+[ ] 4.4  전 대수 스냅샷/이미지 백업 완료 및 복원 리허설 1건 성공
+[ ] 4.5  인증 자산 재발급 완료 (SSH 호스트키 __, TLS __, DB 계정 __)
+[ ] 4.6  패치 사전점검 스크립트 전 대수 통과 (실패 자산 __대 → 사유별 처리)
+[ ] 4.7  파일럿 __대 선정 및 승인
+[ ] 4.8  파일럿 패치 실행 및 판정 기준 전 항목 통과
+[ ] 4.9  <strong>롤백 리허설 1대 이상 실제 수행 및 성공 확인</strong>
+[ ] 4.10 파일럿 결과 보고서 작성 및 CCB 승인
+[ ] 4.11 Ansible 플레이북 검증 (--check 모드 → 스테이징 → 운영)
+[ ] 4.12 배치 편성표 및 배치별 담당자/시간창 확정
+[ ] 4.13 중단 기준(Abort Criteria) 및 에스컬레이션 경로 사전 합의
+[ ] 4.14 배치 1~N 실행 및 배치별 검증 리포트 첨부
+[ ] 4.15 부팅 실패 자산 처리 완료 (예상 6~15대 / 실제 __대)
+[ ] 4.16 패치 후 취약점 재스캔 실시 및 잔여 위험(EOL 미해결분) 문서화
+[ ] 4.17 잔여 위험에 대한 완화 통제 적용 (망분리/WAF/EDR/최소권한) 및 승인
+[ ] 4.18 Phase 4 게이트 승인
+</code></pre>
+<hr>
+<h2>Phase 5 — 파일 데이터 3.8 PB → AWS S3</h2>
+<h3>5-A 전송 방식 결정</h3>
+<table>
+<thead>
+<tr>
+<th>방식</th>
+<th>예상 소요</th>
+<th>적합성</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>전용선 1 Gbps</td>
+<td>약 350–420일</td>
+<td><strong>부적합</strong></td>
+</tr>
+<tr>
+<td>전용선 10 Gbps</td>
+<td>약 50–60일 (효율 60–80% 반영)</td>
+<td>조건부</td>
+</tr>
+<tr>
+<td>전용선 100 Gbps</td>
+<td>약 5–7일</td>
+<td>적합하나 회선 확보 리드타임·비용 검토 필요</td>
+</tr>
+<tr>
+<td><strong>AWS Snowball Edge 다중 병행</strong></td>
+<td>디바이스 수·왕복 물류에 의존</td>
+<td><strong>PB급에 현실적</strong></td>
+</tr>
+<tr>
+<td>물리 대용량 전송 서비스</td>
+<td>초대용량 전용</td>
+<td>계약 가능성 확인 필요</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>권고: 하이브리드.</strong>① 대용량 콜드 데이터(사진·동영상 등 대부분)는<strong>Snowball Edge 다중 병행</strong>으로 물류 전송, ② 변경분·소용량·메타데이터·DB는 <strong>전용선</strong>으로 전송, ③ 전송 후 매니페스트 대조로 통합. Direct Connect 프로비저닝 리드타임(수주–수개월)이 전체 일정의 임계 경로가 되지 않도록 <strong>Phase 0과 동시에 착수</strong>한다. (신뢰도: B2)</p>
+</blockquote>
+<h3>5-B 보안 요건 (금융권/개인정보 기준 준용)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>요건</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>전송 중 암호화</td>
+<td>TLS 1.2 이상 / Snowball 자체 암호화</td>
+</tr>
+<tr>
+<td>저장 시 암호화</td>
+<td>S3 SSE-KMS, <strong>CMK(고객 관리 키)</strong> 사용, 키 정책 최소권한</td>
+</tr>
+<tr>
+<td>버킷 정책</td>
+<td>Block Public Access 전면 적용, <code>aws:SecureTransport</code> 강제</td>
+</tr>
+<tr>
+<td>버전관리/보존</td>
+<td>버전관리 활성화, <strong>Object Lock(Compliance 모드)</strong> 로 조작 방지</td>
+</tr>
+<tr>
+<td>접근 로깅</td>
+<td>CloudTrail Data Events + S3 서버 액세스 로그, 별도 계정으로 전송</td>
+</tr>
+<tr>
+<td>무결성</td>
+<td>업로드 시 체크섬(SHA-256/CRC32C) 지정 및 서버측 검증</td>
+</tr>
+<tr>
+<td>스토리지 클래스</td>
+<td>초기 S3 Standard → 검증 완료 후 Glacier 계열 전환(Lifecycle)</td>
+</tr>
+<tr>
+<td>계정 분리</td>
+<td>데이터 계정 / 로그 계정 / 보안 계정 분리</td>
+</tr>
+<tr>
+<td>개인정보</td>
+<td>리전 확정(국내 리전 여부), 국외이전 여부 법무 검토 <strong>필수</strong></td>
+</tr>
+</tbody></table>
+<h3>Phase 5 체크리스트</h3>
+<pre><code>[ ] 5.1  Direct Connect 발주 완료 (발주일 __, 예상 개통 __) — Phase 0과 동시 착수 확인
+[ ] 5.2  전송 방식 결정 서면 확정 (전용선 / Snowball / 하이브리드)
+[ ] 5.3  VPC/서브넷/보안그룹/NACL 설계 및 구축 완료
+[ ] 5.4  S3 버킷 생성, SSE-KMS(CMK), Block Public Access, 버전관리, Object Lock 적용
+[ ] 5.5  버킷 정책에 SecureTransport 강제 및 최소권한 IAM 역할 적용
+[ ] 5.6  CloudTrail Data Events / 액세스 로그 별도 계정 전송 구성
+[ ] 5.7  개인정보 국외이전 여부 법무·개인정보보호책임자 검토 완료
+[ ] 5.8  이관 전 매니페스트(L1/L2) 최종 확정 및 동결(freeze)
+[ ] 5.9  파일럿 이관 (1~10 TB) 및 무결성 100% 검증
+[ ] 5.10 본 이관 진행률 관리 (__PB / 3.8PB, __%)
+[ ] 5.11 이관 후 매니페스트 생성 및 이관 전 매니페스트와 대조 — 불일치 __건
+[ ] 5.12 불일치 전건 재전송 및 재검증 완료 (잔여 0건 확인)
+[ ] 5.13 R-6(판정 불가) 데이터 병렬 적재 및 격리 태깅 완료
+[ ] 5.14 Lifecycle 정책 적용 및 비용 추계 검증
+[ ] 5.15 Phase 5 게이트 승인
+</code></pre>
+<hr>
+<h2>Phase 6 — DB 10 GB → AWS Managed DB</h2>
+<h3>6-A 핵심 리스크: MySQL LTS 버전 업그레이드</h3>
+<p>2021년 8월 이후 미패치 상태에서 8.0 LTS 으로 올릴 때의 주요 실패 요인:</p>
+<table>
+<thead>
+<tr>
+<th>요인</th>
+<th>내용</th>
+<th>대응</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>데이터 딕셔너리 변환 실패</td>
+<td>구버전 mysql의 <code>.frm</code> → 8.0 트랜잭셔널 데이터 딕셔너리 전환 중 오류</td>
+<td><code>mysqlsh</code> 업그레이드 체커 사전 실행</td>
+</tr>
+<tr>
+<td>예약어 충돌</td>
+<td>8.0 신규 예약어(<code>rank</code>, <code>groups</code>, <code>lead</code> 등)를 컬럼/테이블명으로 사용</td>
+<td>사전 스캔 후 리네임 또는 백틱 처리</td>
+</tr>
+<tr>
+<td>문자셋/콜레이션 변경</td>
+<td>기본값 <code>utf8mb4_general_ci</code> → <code>utf8mb4_0900_ai_ci</code></td>
+<td><strong>정렬 순서 변경으로 애플리케이션 결과가 달라질 수 있음.</strong> 명시적 콜레이션 고정</td>
+</tr>
+<tr>
+<td>인증 플러그인 변경</td>
+<td><code>mysql_native_password</code> → <code>caching_sha2_password</code></td>
+<td>구 클라이언트 호환 검토</td>
+</tr>
+<tr>
+<td>제거된 옵션/구문</td>
+<td><code>query_cache</code>, <code>NO_AUTO_CREATE_USER</code> 등</td>
+<td>my.cnf 정제</td>
+</tr>
+<tr>
+<td>파티션/스토리지 엔진</td>
+<td>MyISAM 파티션 미지원 등</td>
+<td>InnoDB 전환</td>
+</tr>
+<tr>
+<td>손상 테이블</td>
+<td>비정상 종료로 인한 InnoDB 손상</td>
+<td><code>mysqlcheck</code> 및 필요 시 <code>innodb_force_recovery</code> 단계적 사용</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>10 GB는 전송이 문제가 아니라 호환성과 변환이 문제다.</strong> 전송은 10Gbps에서 수십 분이지만, 스키마 호환성 정리와 검증에 최소 3–6 영업일이 소요된다.</p>
+</blockquote>
+<h3>6-B 권고 절차</h3>
+<ol>
+<li>이미지에서 복제한 데이터 디렉터리로 <strong>격리망에 구버전 mysql db 인스턴스 기동</strong> (원본 미접촉)</li>
+<li><code>mysqlcheck --all-databases --check</code> 로 손상 여부 확인, 필요 시 복구</li>
+<li><strong>논리 백업(<code>mysqldump</code> 또는 <code>mysqlpump</code>) 생성</strong> — 물리 파일 승계보다 논리 이관이 안전</li>
+<li><code>mysqlsh -- util check-for-server-upgrade</code> 로 8.0 호환성 리포트 확보</li>
+<li>리포트 지적사항 수정 (예약어, 콜레이션, 옵션)</li>
+<li>정제망에 최신 버전 MySQL 스테이징 구축 → 임포트 → 검증</li>
+<li>AWS RDS/Aurora로 이관 (DMS 또는 dump 임포트)</li>
+<li>행수·체크섬·주요 쿼리 결과 대조, 저장 프로시저/트리거/뷰/이벤트 검증</li>
+<li>애플리케이션 연동 테스트</li>
+</ol>
+<h3>Phase 6 체크리스트</h3>
+<pre><code>[ ] 6.1  DB 원본 이미지 복제본에서 구버전 mysql 인스턴스 기동 성공 (원본 미접촉 확인)
+[ ] 6.2  mysqlcheck 손상 점검 완료 — 손상 테이블 __개 / 복구 __개
+[ ] 6.3  논리 백업 생성 및 백업 파일 해시 기록
+[ ] 6.4  업그레이드 체커 리포트 확보 및 지적사항 전건 처리 (__건/__건)
+[ ] 6.5  예약어 충돌 스캔 및 처리 완료
+[ ] 6.6  문자셋/콜레이션 정책 확정 (정렬 순서 변경 영향 검토 포함)
+[ ] 6.7  인증 플러그인 호환성 결정
+[ ] 6.8  8.0 스테이징 임포트 성공 및 검증
+[ ] 6.9  RDS/Aurora 파라미터 그룹·백업·암호화(KMS)·Multi-AZ 설정 완료
+[ ] 6.10 데이터 무결성 검증: 테이블 수, 행수, 체크섬 전건 일치
+[ ] 6.11 프로시저/함수/트리거/뷰/이벤트 개수 및 동작 검증
+[ ] 6.12 주요 쿼리 성능 비교 (회귀 -10% 이내)
+[ ] 6.13 개인정보 컬럼 식별 및 암호화/마스킹 정책 적용
+[ ] 6.14 DB 접속 계정 전량 신규 발급, 구 계정 전량 폐기 확인
+[ ] 6.15 Phase 6 게이트 승인
+</code></pre>
+<hr>
+<h2>Phase 7 — 통합 검증 · 보안 감사 · 인수</h2>
+<h3>7-A 최종 검증 항목</h3>
+<table>
+<thead>
+<tr>
+<th>영역</th>
+<th>검증 내용</th>
+<th>통과 기준</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>데이터 완전성</td>
+<td>이관 전/후 매니페스트 대조</td>
+<td>불일치 0건 (또는 R-6 격리분만 예외)</td>
+</tr>
+<tr>
+<td>데이터 사용성</td>
+<td>무작위 표본 개방 테스트 (사진 디코드, 텍스트 인코딩)</td>
+<td>표본 __건 중 실패 0건</td>
+</tr>
+<tr>
+<td>DB 정합성</td>
+<td>행수·체크섬·객체 수</td>
+<td>100% 일치</td>
+</tr>
+<tr>
+<td>접근통제</td>
+<td>IAM/KMS/버킷 정책 최소권한 검증</td>
+<td>과도권한 0건</td>
+</tr>
+<tr>
+<td>암호화</td>
+<td>전송/저장 암호화 적용률</td>
+<td>100%</td>
+</tr>
+<tr>
+<td>로깅/감사</td>
+<td>CloudTrail, S3 액세스 로그, 작업 이력</td>
+<td>결손 구간 0</td>
+</tr>
+<tr>
+<td>취약점</td>
+<td>최종 스캔</td>
+<td>High 이상 잔여 항목 전건 완화 통제 문서화</td>
+</tr>
+<tr>
+<td>개인정보</td>
+<td>처리 근거, 보유기간, 파기 계획</td>
+<td>법무 승인</td>
+</tr>
+<tr>
+<td>원본 매체 폐기</td>
+<td>데이터 완전 삭제 + 물리 파기 증명서</td>
+<td>자산 대장 대비 100%</td>
+</tr>
+</tbody></table>
+<h3>7-B 원본 자산 폐기 (Phase 2-D의 (d) 전략 채택 시)</h3>
+<p>이관·검증 완료 후 원본 서버·디스크는 <strong>폐기 대상</strong>이다. 이 단계를 생략하면 2년 후 동일한 문제가 반복된다.</p>
+<pre><code>검증 완료 확인 → 폐기 승인 → 매체별 처리
+  · SSD/NVMe : 암호 삭제(Crypto Erase) + 물리 파기
+  · HDD      : 표준 삭제 또는 소자(Degauss) + 물리 파기
+  · 테이프    : 소자 + 물리 파기
+→ 파기 증명서 수령 → 자산 대장 말소 → 감사 기록 보존
+</code></pre>
+<h3>Phase 7 체크리스트</h3>
+<pre><code>[ ] 7.1  최종 매니페스트 대조 리포트 (불일치 0건)
+[ ] 7.2  표본 사용성 테스트 통과 (__건)
+[ ] 7.3  DB 최종 정합성 검증 통과
+[ ] 7.4  IAM/KMS/버킷 정책 최소권한 감사 통과
+[ ] 7.5  최종 취약점 스캔 및 잔여 위험 등록부(Risk Register) 확정
+[ ] 7.6  전 작업 감사 로그 보존 정책 적용 (보존기간 __년)
+[ ] 7.7  개인정보 처리 근거·보유기간·파기계획 법무 승인
+[ ] 7.8  침해 정황 발견 자산에 대한 신고·통지 의무 이행 여부 최종 확인
+[ ] 7.9  운영 인수인계 문서 작성 (구성도, 런북, 복구 절차)
+[ ] 7.10 원본 매체 폐기 완료 및 파기 증명서 수령 (__/__대)
+[ ] 7.11 자산 대장 말소 및 Chain of Custody 종결
+[ ] 7.12 프로젝트 종료 보고 및 최종 승인 (CISO / 경영진)
+</code></pre>
+<hr>
+<h1>부록 A. 스크립트 모음</h1>
+<blockquote>
+<p><strong>공통 주의사항</strong>&gt; 1. 모든 스크립트는<strong>격리망(Forensic Enclave) 내부에서만</strong> 실행한다.
+2. <code>S-01</code>–<code>S-03</code>은 <strong>원본 매체에 쓰기를 수행하지 않는다.</strong> 마운트는 반드시 <code>ro,noexec,nodev,nosuid</code>.
+3. 실행 전 반드시 1대에서 검증하고, 결과를 눈으로 확인한 뒤 확산한다.
+4. 스크립트는 표준 출력이 아니라 <strong>파일로 증거를 남긴다.</strong> 증거 디렉터리는 사후 변경 금지.
+5. <code>set -euo pipefail</code> 을 기본으로 하되, 조사 스크립트는 개별 항목 실패로 전체가 중단되지 않도록 항목별 오류를 흡수한다.</p>
+</blockquote>
+<hr>
+<h2>A-1. <code>S-01_cold_inspect.sh</code> — 콜드 부팅 후 비파괴 사전 점검</h2>
+<p>Live/Rescue 미디어로 부팅한 상태에서 실행. <strong>디스크를 마운트하지 않고</strong> 하드웨어·매체 상태만 수집한다.</p>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# S-01_cold_inspect.sh
+# 목적: 장기 방치 서버의 비파괴 사전 점검 (원본 쓰기 없음)
+# 실행: Live/Rescue 미디어 부팅 후 root 권한
+# 산출: /evidence/&lt;TAG&gt;/cold_inspect/*
+set -uo pipefail
+
+TAG=&quot;${1:-$(hostname)-$(date +%Y%m%dT%H%M%S)}&quot;
+OUT=&quot;/evidence/${TAG}/cold_inspect&quot;
+mkdir -p &quot;$OUT&quot;
+LOG=&quot;${OUT}/_run.log&quot;
+
+log() { printf &#39;[%s] %s\n&#39; &quot;$(date -u +%FT%TZ)&quot; &quot;$*&quot; | tee -a &quot;$LOG&quot;; }
+run() { # run &lt;파일명&gt; &lt;명령...&gt;  : 실패해도 계속 진행
+  local f=&quot;$1&quot;; shift
+  log &quot;COLLECT ${f} :: $*&quot;
+  { &quot;$@&quot;; } &gt; &quot;${OUT}/${f}&quot; 2&gt; &quot;${OUT}/${f}.err&quot; || log &quot;  WARN: 실패(코드 $?) - ${f}&quot;
+}
+
+log &quot;=== S-01 콜드 점검 시작 : TAG=${TAG} ===&quot;
+
+# ── 0. 조사자 기록 ────────────────────────────────────────────
+cat &gt; &quot;${OUT}/00_context.txt&quot; &lt;&lt;CTX
+조사 태그      : ${TAG}
+조사 시각(UTC) : $(date -u +%FT%TZ)
+조사자         : ${INSPECTOR:-미기재}
+자산번호       : ${ASSET_ID:-미기재}
+데이터센터     : ${DC_SITE:-미기재}
+원 랙 위치     : ${RACK_POS:-미기재}
+부팅위험등급   : ${BOOT_RISK:-미기재}
+CTX
+
+# ── 1. 시스템 시각 (CMOS 배터리 소진 확인) ────────────────────
+{
+  echo &quot;system_clock_utc=$(date -u +%FT%TZ)&quot;
+  echo &quot;hwclock=$(hwclock -r 2&gt;/dev/null || echo READ_FAIL)&quot;
+} &gt; &quot;${OUT}/01_clock.txt&quot;
+# 시각이 과거로 크게 어긋나 있으면 CMOS 배터리 소진 → 로그 타임스탬프 신뢰도 하락
+YEAR=&quot;$(date -u +%Y)&quot;
+if [ &quot;$YEAR&quot; -lt 2020 ]; then
+  log &quot;  ALERT: 시스템 시각 이상(${YEAR}). CMOS 배터리 소진 의심 → 타임스탬프 신뢰 불가로 기록&quot;
+  echo &quot;CLOCK_UNRELIABLE=true&quot; &gt;&gt; &quot;${OUT}/01_clock.txt&quot;
+fi
+
+# ── 2. 하드웨어 인벤토리 ──────────────────────────────────────
+run 02_dmidecode.txt        dmidecode
+run 03_lscpu.txt            lscpu
+run 04_meminfo.txt          cat /proc/meminfo
+run 05_lspci.txt            lspci -vvv
+run 06_lsblk.txt            lsblk -o NAME,KNAME,SIZE,TYPE,ROTA,MODEL,SERIAL,WWN,FSTYPE,UUID,LABEL,MOUNTPOINT
+run 07_blkid.txt            blkid
+run 08_lsscsi.txt           lsscsi -s
+run 09_dmesg.txt            dmesg
+
+# ── 3. 매체 건강 상태 (SMART) : 무전원 장기방치 핵심 지표 ─────
+: &gt; &quot;${OUT}/10_smart_summary.csv&quot;
+echo &quot;device,type,model,serial,power_on_hours,power_cycles,reallocated,pending,uncorrectable,media_wearout,percentage_used,overall_health&quot; \
+  &gt;&gt; &quot;${OUT}/10_smart_summary.csv&quot;
+
+for d in /dev/sd? /dev/nvme?n?; do
+  [ -b &quot;$d&quot; ] || continue
+  base=&quot;$(basename &quot;$d&quot;)&quot;
+  smartctl -x &quot;$d&quot; &gt; &quot;${OUT}/smart_${base}.txt&quot; 2&gt;&amp;1 || true
+
+  model=$(awk -F: &#39;/Device Model|Model Number/{gsub(/^ +/,&quot;&quot;,$2);print $2;exit}&#39; &quot;${OUT}/smart_${base}.txt&quot;)
+  serial=$(awk -F: &#39;/Serial Number/{gsub(/^ +/,&quot;&quot;,$2);print $2;exit}&#39; &quot;${OUT}/smart_${base}.txt&quot;)
+  poh=$(awk &#39;/Power_On_Hours|Power On Hours/{print $(NF);exit}&#39; &quot;${OUT}/smart_${base}.txt&quot;)
+  pc=$(awk &#39;/Power_Cycle_Count|Power Cycles/{print $(NF);exit}&#39; &quot;${OUT}/smart_${base}.txt&quot;)
+  realloc=$(awk &#39;/Reallocated_Sector_Ct/{print $(NF);exit}&#39; &quot;${OUT}/smart_${base}.txt&quot;)
+  pending=$(awk &#39;/Current_Pending_Sector/{print $(NF);exit}&#39; &quot;${OUT}/smart_${base}.txt&quot;)
+  uncorr=$(awk &#39;/Offline_Uncorrectable|Media and Data Integrity Errors/{print $(NF);exit}&#39; &quot;${OUT}/smart_${base}.txt&quot;)
+  wear=$(awk &#39;/Media_Wearout_Indicator|Wear_Leveling_Count/{print $(NF);exit}&#39; &quot;${OUT}/smart_${base}.txt&quot;)
+  used=$(awk -F: &#39;/Percentage Used/{gsub(/[ %]/,&quot;&quot;,$2);print $2;exit}&#39; &quot;${OUT}/smart_${base}.txt&quot;)
+  health=$(awk -F: &#39;/SMART overall-health|SMART Health Status/{gsub(/^ +/,&quot;&quot;,$2);print $2;exit}&#39; &quot;${OUT}/smart_${base}.txt&quot;)
+  type=$([ &quot;${base:0:4}&quot; = &quot;nvme&quot; ] &amp;&amp; echo SSD || ( [ &quot;$(cat /sys/block/${base}/queue/rotational 2&gt;/dev/null)&quot; = &quot;0&quot; ] &amp;&amp; echo SSD || echo HDD ))
+
+  printf &#39;%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s\n&#39; \
+    &quot;$d&quot; &quot;$type&quot; &quot;${model:-NA}&quot; &quot;${serial:-NA}&quot; &quot;${poh:-NA}&quot; &quot;${pc:-NA}&quot; \
+    &quot;${realloc:-NA}&quot; &quot;${pending:-NA}&quot; &quot;${uncorr:-NA}&quot; &quot;${wear:-NA}&quot; &quot;${used:-NA}&quot; &quot;${health:-NA}&quot; \
+    &gt;&gt; &quot;${OUT}/10_smart_summary.csv&quot;
+
+  # 위험 판정
+  for v in &quot;$realloc&quot; &quot;$pending&quot; &quot;$uncorr&quot;; do
+    if [ -n &quot;${v:-}&quot; ] &amp;&amp; [ &quot;${v}&quot; != &quot;0&quot; ] &amp;&amp; [ &quot;${v}&quot; != &quot;NA&quot; ]; then
+      log &quot;  ALERT: ${d} 매체 오류 지표 비정상 (realloc=${realloc:-NA} pending=${pending:-NA} uncorr=${uncorr:-NA}) → 이미징 최우선&quot;
+      echo &quot;${d}&quot; &gt;&gt; &quot;${OUT}/11_at_risk_devices.txt&quot;
+      break
+    fi
+  done
+done
+
+# ── 4. RAID 컨트롤러 : 읽기 전용 조회만 수행 ──────────────────
+#  경고: Foreign Config Import / Initialize / Auto-Rebuild 를 절대 실행하지 않는다.
+if command -v storcli64 &gt;/dev/null 2&gt;&amp;1; then
+  run 20_storcli_show_all.txt storcli64 /call show all
+  run 21_storcli_events.txt   storcli64 /call show events
+elif command -v perccli64 &gt;/dev/null 2&gt;&amp;1; then
+  run 20_perccli_show_all.txt perccli64 /call show all
+elif command -v hpssacli &gt;/dev/null 2&gt;&amp;1; then
+  run 20_hpssacli.txt hpssacli ctrl all show config detail
+elif command -v ssacli &gt;/dev/null 2&gt;&amp;1; then
+  run 20_ssacli.txt ssacli ctrl all show config detail
+else
+  log &quot;  NOTE: RAID CLI 미발견 → BIOS/BMC 화면 캡처로 대체 기록 필요&quot;
+fi
+run 22_mdstat.txt cat /proc/mdstat
+
+# ── 5. 파티션 테이블 백업 (구조 보존) ─────────────────────────
+for d in /dev/sd? /dev/nvme?n?; do
+  [ -b &quot;$d&quot; ] || continue
+  b=&quot;$(basename &quot;$d&quot;)&quot;
+  sfdisk -d &quot;$d&quot; &gt; &quot;${OUT}/30_parttable_${b}.sfdisk&quot; 2&gt;/dev/null || true
+  sgdisk --backup=&quot;${OUT}/30_gpt_${b}.bin&quot; &quot;$d&quot; &gt;/dev/null 2&gt;&amp;1 || true
+done
+
+# ── 6. LVM 메타데이터 (읽기 전용) ─────────────────────────────
+run 40_pvs.txt pvs -o+pv_used --readonly
+run 41_vgs.txt vgs --readonly
+run 42_lvs.txt lvs -a -o+devices --readonly
+
+# ── 7. 마운트 여부 최종 확인 (원본 보호 증거) ─────────────────
+mount | grep -E &#39;^/dev/(sd|nvme|mapper)&#39; &gt; &quot;${OUT}/50_mounts.txt&quot; || true
+if [ -s &quot;${OUT}/50_mounts.txt&quot; ]; then
+  log &quot;  CRITICAL: 원본 블록 디바이스가 마운트되어 있음! 즉시 언마운트하고 사유를 기록하라.&quot;
+else
+  log &quot;  OK: 원본 블록 디바이스 마운트 없음 (무결성 보존)&quot;
+fi
+
+# ── 8. 증거 봉인 ──────────────────────────────────────────────
+( cd &quot;$OUT&quot; &amp;&amp; find . -type f ! -name &#39;MANIFEST.sha256&#39; -print0 \
+  | sort -z | xargs -0 sha256sum &gt; MANIFEST.sha256 )
+log &quot;=== S-01 완료. 증거: ${OUT} (파일 $(wc -l &lt; &quot;${OUT}/MANIFEST.sha256&quot;)개 봉인) ===&quot;
+</code></pre>
+<p><strong>판독 가이드</strong></p>
+<table>
+<thead>
+<tr>
+<th>관찰</th>
+<th>해석</th>
+<th>조치</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>CLOCK_UNRELIABLE=true</code></td>
+<td>CMOS 소진 → 로그·파일 mtime 신뢰 불가</td>
+<td>Phase 3의 R-3 규칙 적용 대상에서 제외, R-4로 이동</td>
+</tr>
+<tr>
+<td><code>11_at_risk_devices.txt</code> 존재</td>
+<td>매체 오류 발생 중</td>
+<td><strong>최우선 이미징</strong>, 재시도 최소화</td>
+</tr>
+<tr>
+<td><code>Percentage Used</code> 높음(SSD)</td>
+<td>수명 소진</td>
+<td>이미징 중 실패 대비 <code>ddrescue</code> 사용</td>
+</tr>
+<tr>
+<td>storcli 이벤트에 cache/battery 관련 오류</td>
+<td>캐시 유실 가능</td>
+<td>해당 볼륨 데이터 정합성 의심 등급 상향</td>
+</tr>
+<tr>
+<td><code>50_mounts.txt</code> 비어있지 않음</td>
+<td><strong>원본 오염 발생</strong></td>
+<td>작업 중단, 사고 보고</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>A-2. <code>S-02_forensic_image.sh</code> — 쓰기 방지 이미징 + 해시 검증</h2>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# S-02_forensic_image.sh &lt;소스디바이스&gt; &lt;출력디렉터리&gt; [태그]
+# 목적: 원본 매체를 비파괴로 이미징하고 해시로 무결성 증명
+# 전제: 하드웨어 Write Blocker 경유 연결 또는 blockdev --setro 적용
+set -euo pipefail
+
+SRC=&quot;${1:?사용법: $0 /dev/sdX /images [태그]}&quot;
+DEST_DIR=&quot;${2:?출력 디렉터리 필요}&quot;
+TAG=&quot;${3:-$(basename &quot;$SRC&quot;)-$(date +%Y%m%dT%H%M%S)}&quot;
+
+IMG=&quot;${DEST_DIR}/${TAG}.img&quot;
+MAP=&quot;${DEST_DIR}/${TAG}.mapfile&quot;
+META=&quot;${DEST_DIR}/${TAG}.meta.txt&quot;
+mkdir -p &quot;$DEST_DIR&quot;
+
+[ -b &quot;$SRC&quot; ] || { echo &quot;오류: $SRC 는 블록 디바이스가 아님&quot;; exit 1; }
+
+# 1) 마운트 상태면 즉시 중단
+if mount | grep -q &quot;^${SRC}&quot;; then
+  echo &quot;치명적 오류: ${SRC} 가 마운트되어 있음. 이미징 중단.&quot;; exit 2
+fi
+
+# 2) 소프트웨어 읽기전용 강제 (하드웨어 Write Blocker의 보조 수단)
+blockdev --setro &quot;$SRC&quot;
+if [ &quot;$(blockdev --getro &quot;$SRC&quot;)&quot; != &quot;1&quot; ]; then
+  echo &quot;치명적 오류: 읽기전용 설정 실패. 중단.&quot;; exit 3
+fi
+echo &quot;읽기전용 설정 확인: OK&quot;
+
+# 3) 메타데이터 기록
+{
+  echo &quot;tag=${TAG}&quot;
+  echo &quot;source=${SRC}&quot;
+  echo &quot;size_bytes=$(blockdev --getsize64 &quot;$SRC&quot;)&quot;
+  echo &quot;sector_size=$(blockdev --getss &quot;$SRC&quot;)&quot;
+  echo &quot;model=$(cat /sys/block/$(basename &quot;$SRC&quot;)/device/model 2&gt;/dev/null || echo NA)&quot;
+  echo &quot;serial=$(udevadm info --query=property --name=&quot;$SRC&quot; 2&gt;/dev/null | awk -F= &#39;/ID_SERIAL_SHORT/{print $2}&#39;)&quot;
+  echo &quot;wwn=$(udevadm info --query=property --name=&quot;$SRC&quot; 2&gt;/dev/null | awk -F= &#39;/ID_WWN=/{print $2}&#39;)&quot;
+  echo &quot;start_utc=$(date -u +%FT%TZ)&quot;
+  echo &quot;operator=${INSPECTOR:-미기재}&quot;
+  echo &quot;asset_id=${ASSET_ID:-미기재}&quot;
+  echo &quot;dc_site=${DC_SITE:-미기재}&quot;
+  echo &quot;slot=${DISK_SLOT:-미기재}&quot;
+} &gt; &quot;$META&quot;
+
+# 4) 이미징 : 불량 섹터 대응이 가능한 ddrescue 우선
+if command -v ddrescue &gt;/dev/null 2&gt;&amp;1; then
+  echo &quot;ddrescue 1차 패스 (빠른 스캔, 불량 구간 건너뜀)&quot;
+  ddrescue -n -b &quot;$(blockdev --getss &quot;$SRC&quot;)&quot; &quot;$SRC&quot; &quot;$IMG&quot; &quot;$MAP&quot;
+  echo &quot;ddrescue 2차 패스 (불량 구간 재시도 3회)&quot;
+  ddrescue -d -r3 -b &quot;$(blockdev --getss &quot;$SRC&quot;)&quot; &quot;$SRC&quot; &quot;$IMG&quot; &quot;$MAP&quot;
+else
+  echo &quot;경고: ddrescue 미설치 → dd 사용 (불량 섹터 대응 불가)&quot;
+  dd if=&quot;$SRC&quot; of=&quot;$IMG&quot; bs=1M conv=noerror,sync status=progress
+fi
+
+# 5) 해시 계산 (원본 vs 이미지)
+echo &quot;원본 해시 계산 중...&quot;
+SRC_HASH=$(dd if=&quot;$SRC&quot; bs=1M status=none | sha256sum | awk &#39;{print $1}&#39;)
+echo &quot;이미지 해시 계산 중...&quot;
+IMG_HASH=$(sha256sum &quot;$IMG&quot; | awk &#39;{print $1}&#39;)
+
+{
+  echo &quot;end_utc=$(date -u +%FT%TZ)&quot;
+  echo &quot;source_sha256=${SRC_HASH}&quot;
+  echo &quot;image_sha256=${IMG_HASH}&quot;
+} &gt;&gt; &quot;$META&quot;
+
+if [ &quot;$SRC_HASH&quot; = &quot;$IMG_HASH&quot; ]; then
+  echo &quot;verify=PASS&quot; &gt;&gt; &quot;$META&quot;
+  echo &quot;무결성 검증 통과 (해시 일치)&quot;
+else
+  echo &quot;verify=FAIL&quot; &gt;&gt; &quot;$META&quot;
+  echo &quot;경고: 해시 불일치. 불량 섹터 존재 시 정상일 수 있음 → mapfile 확인 필요&quot;
+  if [ -f &quot;$MAP&quot; ]; then
+    ddrescue --log-rates=/dev/null 2&gt;/dev/null || true
+    grep -c &#39;&#39; &quot;$MAP&quot; &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &quot;mapfile=${MAP} (복구 실패 구간 확인)&quot; &gt;&gt; &quot;$META&quot;
+  fi
+fi
+
+# 6) 이미지 자체를 읽기전용으로
+chmod 0440 &quot;$IMG&quot;
+echo &quot;완료: ${IMG}&quot;
+echo &quot;메타: ${META}&quot;
+</code></pre>
+<hr>
+<h2>A-3. <code>S-03_ioc_triage.sh</code> — 침해 흔적 트리아지 (읽기 전용 마운트 기반)</h2>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# S-03_ioc_triage.sh &lt;마운트루트&gt; &lt;출력디렉터리&gt;
+# 목적: 이미지 복제본을 ro 마운트한 상태에서 침해 지표 수집
+# 예: mount -o ro,noexec,nodev,nosuid,loop image.img /mnt/target
+#     ./S-03_ioc_triage.sh /mnt/target /evidence/host01/ioc
+set -uo pipefail
+
+ROOT=&quot;${1:?사용법: $0 &lt;마운트루트&gt; &lt;출력디렉터리&gt;}&quot;
+OUT=&quot;${2:?출력 디렉터리 필요}&quot;
+mkdir -p &quot;$OUT&quot;
+FINDINGS=&quot;${OUT}/FINDINGS.md&quot;
+: &gt; &quot;$FINDINGS&quot;
+
+sev() { printf &#39;- <strong>[%s]</strong> %s\n&#39; &quot;$1&quot; &quot;$2&quot; &gt;&gt; &quot;$FINDINGS&quot;; echo &quot;[$1] $2&quot;; }
+cp_if() { [ -e &quot;${ROOT}$1&quot; ] &amp;&amp; cp -a &quot;${ROOT}$1&quot; &quot;${OUT}/$2&quot; 2&gt;/dev/null; }
+
+echo &quot;# 침해 흔적 트리아지 결과&quot; &gt;&gt; &quot;$FINDINGS&quot;
+echo &quot;&quot; &gt;&gt; &quot;$FINDINGS&quot;
+echo &quot;- 대상: \`${ROOT}\`&quot; &gt;&gt; &quot;$FINDINGS&quot;
+echo &quot;- 수집 시각(UTC): $(date -u +%FT%TZ)&quot; &gt;&gt; &quot;$FINDINGS&quot;
+echo &quot;- 조사자: ${INSPECTOR:-미기재}&quot; &gt;&gt; &quot;$FINDINGS&quot;
+echo &quot;&quot; &gt;&gt; &quot;$FINDINGS&quot;
+echo &quot;## 지표&quot; &gt;&gt; &quot;$FINDINGS&quot;
+
+# ── 1. 기본 신원 ──────────────────────────────────────────────
+{
+  echo &quot;hostname=$(cat &quot;${ROOT}/etc/hostname&quot; 2&gt;/dev/null)&quot;
+  echo &quot;os_release=$(cat &quot;${ROOT}/etc/redhat-release&quot; 2&gt;/dev/null || cat &quot;${ROOT}/etc/os-release&quot; 2&gt;/dev/null | head -3)&quot;
+  echo &quot;kernel_installed=$(ls &quot;${ROOT}/lib/modules&quot; 2&gt;/dev/null | tr &#39;\n&#39; &#39; &#39;)&quot;
+  echo &quot;last_syslog_entry=$(tail -1 &quot;${ROOT}/var/log/messages&quot; 2&gt;/dev/null)&quot;
+  echo &quot;last_secure_entry=$(tail -1 &quot;${ROOT}/var/log/secure&quot; 2&gt;/dev/null)&quot;
+} &gt; &quot;${OUT}/00_identity.txt&quot;
+
+# ── 2. ld.so.preload : 존재 자체가 강한 의심 신호 ─────────────
+if [ -s &quot;${ROOT}/etc/ld.so.preload&quot; ]; then
+  sev CRITICAL &quot;/etc/ld.so.preload 존재 및 내용 있음 → 유저랜드 루트킷 강력 의심&quot;
+  cp_if /etc/ld.so.preload 10_ld.so.preload
+fi
+
+# ── 3. 계정 / 권한 ────────────────────────────────────────────
+cp_if /etc/passwd 20_passwd
+cp_if /etc/group  21_group
+cp_if /etc/shadow 22_shadow
+cp_if /etc/sudoers 23_sudoers
+[ -d &quot;${ROOT}/etc/sudoers.d&quot; ] &amp;&amp; cp -a &quot;${ROOT}/etc/sudoers.d&quot; &quot;${OUT}/23_sudoers.d&quot; 2&gt;/dev/null
+
+# UID 0 중복
+awk -F: &#39;$3==0 {print $1}&#39; &quot;${ROOT}/etc/passwd&quot; 2&gt;/dev/null &gt; &quot;${OUT}/24_uid0_accounts.txt&quot;
+UID0_CNT=$(wc -l &lt; &quot;${OUT}/24_uid0_accounts.txt&quot;)
+[ &quot;$UID0_CNT&quot; -gt 1 ] &amp;&amp; sev CRITICAL &quot;UID 0 계정이 ${UID0_CNT}개 (root 외 특권 계정 존재)&quot;
+
+# 쉘 로그인 가능 계정 목록
+awk -F: &#39;$7 !~ /(nologin|false)$/ {print $1&quot;:&quot;$3&quot;:&quot;$7}&#39; &quot;${ROOT}/etc/passwd&quot; 2&gt;/dev/null \
+  &gt; &quot;${OUT}/25_login_shell_accounts.txt&quot;
+
+# 빈 패스워드
+awk -F: &#39;$2==&quot;&quot; {print $1}&#39; &quot;${ROOT}/etc/shadow&quot; 2&gt;/dev/null &gt; &quot;${OUT}/26_empty_password.txt&quot;
+[ -s &quot;${OUT}/26_empty_password.txt&quot; ] &amp;&amp; sev CRITICAL &quot;빈 패스워드 계정 발견&quot;
+
+# ── 4. SSH 공개키 : 미등록 키는 사실상 확정적 침해 지표 ───────
+: &gt; &quot;${OUT}/30_authorized_keys.txt&quot;
+find &quot;${ROOT}/root&quot; &quot;${ROOT}/home&quot; -maxdepth 3 -name &#39;authorized_keys*&#39; 2&gt;/dev/null | while read -r f; do
+  echo &quot;=== ${f#$ROOT} ===&quot; &gt;&gt; &quot;${OUT}/30_authorized_keys.txt&quot;
+  cat &quot;$f&quot; &gt;&gt; &quot;${OUT}/30_authorized_keys.txt&quot; 2&gt;/dev/null
+  # 지문 산출
+  ssh-keygen -lf &quot;$f&quot; &gt;&gt; &quot;${OUT}/31_key_fingerprints.txt&quot; 2&gt;/dev/null || true
+done
+[ -s &quot;${OUT}/30_authorized_keys.txt&quot; ] &amp;&amp; sev HIGH &quot;SSH authorized_keys 발견 → 자산관리대장의 승인 키 목록과 지문 대조 필수&quot;
+
+cp_if /etc/ssh/sshd_config 32_sshd_config
+grep -Ei &#39;^(PermitRootLogin|PasswordAuthentication|PermitEmptyPasswords|Port|AllowUsers)&#39; \
+  &quot;${ROOT}/etc/ssh/sshd_config&quot; 2&gt;/dev/null &gt; &quot;${OUT}/33_sshd_key_settings.txt&quot;
+grep -qi &#39;^PermitEmptyPasswords[[:space:]]*yes&#39; &quot;${ROOT}/etc/ssh/sshd_config&quot; 2&gt;/dev/null \
+  &amp;&amp; sev CRITICAL &quot;sshd: PermitEmptyPasswords yes&quot;
+
+# ── 5. 지속성 메커니즘 ────────────────────────────────────────
+for p in /etc/crontab /etc/cron.d /etc/cron.hourly /etc/cron.daily /etc/cron.weekly \
+         /etc/cron.monthly /var/spool/cron /etc/rc.local /etc/rc.d/rc.local /etc/anacrontab; do
+  [ -e &quot;${ROOT}${p}&quot; ] &amp;&amp; cp -a &quot;${ROOT}${p}&quot; &quot;${OUT}/40_$(echo &quot;$p&quot; | tr &#39;/&#39; &#39;_&#39;)&quot; 2&gt;/dev/null
+done
+
+# 크론에서 의심 패턴 탐색
+grep -rEl &#39;curl|wget|base64|/dev/tcp|nc |ncat|python -c|perl -e|chmod \+x|/tmp/&#39; \
+  &quot;${ROOT}/etc/cron&quot;* &quot;${ROOT}/var/spool/cron&quot; &quot;${ROOT}/etc/crontab&quot; 2&gt;/dev/null \
+  &gt; &quot;${OUT}/41_suspicious_cron.txt&quot;
+[ -s &quot;${OUT}/41_suspicious_cron.txt&quot; ] &amp;&amp; sev HIGH &quot;크론에 원격 다운로드/인코딩/역쉘 의심 패턴 존재&quot;
+
+# systemd 유닛 : 패키지 소유가 아닌 유닛 식별
+find &quot;${ROOT}/etc/systemd/system&quot; &quot;${ROOT}/usr/lib/systemd/system&quot; \
+     -name &#39;*.service&#39; -o -name &#39;*.timer&#39; 2&gt;/dev/null | sed &quot;s|^${ROOT}||&quot; \
+  &gt; &quot;${OUT}/42_systemd_units.txt&quot;
+grep -rEl &#39;ExecStart=.*(curl|wget|/tmp/|/dev/shm/|base64)&#39; \
+  &quot;${ROOT}/etc/systemd/system&quot; 2&gt;/dev/null &gt; &quot;${OUT}/43_suspicious_units.txt&quot;
+[ -s &quot;${OUT}/43_suspicious_units.txt&quot; ] &amp;&amp; sev HIGH &quot;systemd 유닛에 의심 ExecStart 존재&quot;
+
+# 쉘 프로파일 변조
+grep -rE &#39;curl|wget|base64|/dev/tcp&#39; \
+  &quot;${ROOT}/etc/profile&quot; &quot;${ROOT}/etc/profile.d&quot; &quot;${ROOT}/etc/bashrc&quot; \
+  &quot;${ROOT}/root/.bashrc&quot; &quot;${ROOT}/root/.bash_profile&quot; 2&gt;/dev/null \
+  &gt; &quot;${OUT}/44_profile_suspicious.txt&quot;
+[ -s &quot;${OUT}/44_profile_suspicious.txt&quot; ] &amp;&amp; sev MEDIUM &quot;쉘 프로파일에 의심 패턴&quot;
+
+# ── 6. 로그 은폐 흔적 ─────────────────────────────────────────
+: &gt; &quot;${OUT}/50_zeroed_logs.txt&quot;
+for lf in messages secure cron maillog audit/audit.log wtmp btmp lastlog; do
+  f=&quot;${ROOT}/var/log/${lf}&quot;
+  if [ -e &quot;$f&quot; ] &amp;&amp; [ ! -s &quot;$f&quot; ]; then
+    echo &quot;/var/log/${lf} : 크기 0&quot; &gt;&gt; &quot;${OUT}/50_zeroed_logs.txt&quot;
+  fi
+done
+[ -s &quot;${OUT}/50_zeroed_logs.txt&quot; ] &amp;&amp; sev HIGH &quot;핵심 로그 파일 크기 0 → 로그 삭제/은폐 의심&quot;
+
+# 로그인 기록
+last -f &quot;${ROOT}/var/log/wtmp&quot;    &gt; &quot;${OUT}/51_last_wtmp.txt&quot; 2&gt;/dev/null || true
+lastb -f &quot;${ROOT}/var/log/btmp&quot;   &gt; &quot;${OUT}/52_lastb_btmp.txt&quot; 2&gt;/dev/null || true
+grep -Ei &#39;accepted (password|publickey)&#39; &quot;${ROOT}/var/log/secure&quot;* 2&gt;/dev/null \
+  | tail -500 &gt; &quot;${OUT}/53_ssh_accepted.txt&quot; || true
+grep -Ei &#39;failed password&#39; &quot;${ROOT}/var/log/secure&quot;* 2&gt;/dev/null \
+  | awk &#39;{print $(NF-3)}&#39; | sort | uniq -c | sort -rn | head -50 \
+  &gt; &quot;${OUT}/54_ssh_bruteforce_src.txt&quot; || true
+
+# 로그 커버리지 구간 (판정 불가 구간 산출용)
+{
+  echo &quot;=== /var/log/messages 존재 파일 및 기간 ===&quot;
+  for f in &quot;${ROOT}&quot;/var/log/messages*; do
+    [ -e &quot;$f&quot; ] || continue
+    echo &quot;--- ${f#$ROOT}&quot;
+    (zcat -f &quot;$f&quot; 2&gt;/dev/null || cat &quot;$f&quot;) | head -1
+    (zcat -f &quot;$f&quot; 2&gt;/dev/null || cat &quot;$f&quot;) | tail -1
+  done
+} &gt; &quot;${OUT}/55_log_coverage.txt&quot; 2&gt;/dev/null
+
+# ── 7. 바이너리 무결성 (rpm DB 사용) ──────────────────────────
+if command -v rpm &gt;/dev/null 2&gt;&amp;1 &amp;&amp; [ -d &quot;${ROOT}/var/lib/rpm&quot; ]; then
+  rpm --root=&quot;$ROOT&quot; -Va --nodeps --noscripts --notriggers 2&gt;/dev/null \
+    &gt; &quot;${OUT}/60_rpm_verify_all.txt&quot; || true
+  # 5번째 문자가 5(MD5 불일치)이고 c(설정파일)가 아닌 항목 = 바이너리 변조 후보
+  awk &#39;$1 ~ /5/ &amp;&amp; $2 != &quot;c&quot;&#39; &quot;${OUT}/60_rpm_verify_all.txt&quot; \
+    &gt; &quot;${OUT}/61_rpm_binary_mismatch.txt&quot; 2&gt;/dev/null || true
+  [ -s &quot;${OUT}/61_rpm_binary_mismatch.txt&quot; ] &amp;&amp; \
+    sev HIGH &quot;rpm -Va: 비설정 파일 해시 불일치 $(wc -l &lt; &quot;${OUT}/61_rpm_binary_mismatch.txt&quot;)건 → 변조 가능성&quot;
+  rpm --root=&quot;$ROOT&quot; -qa --last &gt; &quot;${OUT}/62_rpm_install_history.txt&quot; 2&gt;/dev/null || true
+  # 마지막 정상 패치 시점 확인
+  head -20 &quot;${OUT}/62_rpm_install_history.txt&quot; &gt; &quot;${OUT}/63_recent_packages.txt&quot;
+fi
+
+# ── 8. 웹셸 스캔 (Nginx 문서 루트) ────────────────────────────
+[ -d &quot;${ROOT}/etc/nginx&quot; ] &amp;&amp; cp -a &quot;${ROOT}/etc/nginx&quot; &quot;${OUT}/70_nginx_conf&quot; 2&gt;/dev/null
+WEBROOTS=$(grep -rhoE &#39;^\s*(root|alias)\s+[^;]+;&#39; &quot;${ROOT}/etc/nginx&quot; 2&gt;/dev/null \
+  | awk &#39;{print $2}&#39; | tr -d &#39;;&#39; | sort -u)
+echo &quot;$WEBROOTS&quot; &gt; &quot;${OUT}/71_webroots.txt&quot;
+: &gt; &quot;${OUT}/72_webshell_candidates.txt&quot;
+for wr in $WEBROOTS; do
+  tgt=&quot;${ROOT}${wr}&quot;
+  [ -d &quot;$tgt&quot; ] || continue
+  grep -rIlE &#39;eval\s*\(|assert\s*\(|base64_decode|shell_exec|passthru|system\s*\(|popen\s*\(|\$_(POST|GET|REQUEST)\s*\[&#39; \
+    &quot;$tgt&quot; 2&gt;/dev/null &gt;&gt; &quot;${OUT}/72_webshell_candidates.txt&quot; || true
+  # 업로드 경로에 실행 가능 확장자
+  find &quot;$tgt&quot; -type f \( -name &#39;*.php&#39; -o -name &#39;*.jsp&#39; -o -name &#39;*.jspx&#39; -o -name &#39;*.asp&#39; -o -name &#39;*.aspx&#39; -o -name &#39;*.py&#39; -o -name &#39;*.sh&#39; \) \
+    -newermt &#39;2020-01-01&#39; 2&gt;/dev/null &gt;&gt; &quot;${OUT}/73_executable_in_webroot.txt&quot; || true
+done
+[ -s &quot;${OUT}/72_webshell_candidates.txt&quot; ] &amp;&amp; \
+  sev CRITICAL &quot;웹셸 후보 $(sort -u &quot;${OUT}/72_webshell_candidates.txt&quot; | wc -l)건 발견 → 개별 정밀 분석 필수&quot;
+
+# ── 9. MySQL 침해 지표 ───────────────────────────────────────
+cp_if /etc/my.cnf 80_my.cnf
+[ -d &quot;${ROOT}/etc/my.cnf.d&quot; ] &amp;&amp; cp -a &quot;${ROOT}/etc/my.cnf.d&quot; &quot;${OUT}/80_my.cnf.d&quot; 2&gt;/dev/null
+grep -Ei &#39;^(init_file|init-file|plugin_dir|secure_file_priv|general_log|log_bin|server_id|datadir)&#39; \
+  &quot;${ROOT}/etc/my.cnf&quot; &quot;${ROOT}&quot;/etc/my.cnf.d/* 2&gt;/dev/null &gt; &quot;${OUT}/81_mysql_key_settings.txt&quot;
+grep -qiE &#39;^(init_file|init-file)&#39; &quot;${ROOT}/etc/my.cnf&quot; 2&gt;/dev/null \
+  &amp;&amp; sev HIGH &quot;my.cnf에 init_file 설정 → 기동 시 임의 SQL 실행 경로&quot;
+
+DATADIR=$(awk -F= &#39;/^datadir/{gsub(/[ \t]/,&quot;&quot;,$2);print $2;exit}&#39; &quot;${ROOT}/etc/my.cnf&quot; 2&gt;/dev/null)
+DATADIR=&quot;${DATADIR:-/var/lib/mysql}&quot;
+# 플러그인 디렉터리의 비표준 .so = UDF 백도어 후보
+find &quot;${ROOT}/usr/lib64/mysql/plugin&quot; &quot;${ROOT}/usr/lib/mysql/plugin&quot; -name &#39;*.so&#39; 2&gt;/dev/null \
+  &gt; &quot;${OUT}/82_mysql_plugins.txt&quot;
+find &quot;${ROOT}${DATADIR}&quot; -maxdepth 1 -name &#39;*.so&#39; 2&gt;/dev/null &gt; &quot;${OUT}/83_so_in_datadir.txt&quot;
+[ -s &quot;${OUT}/83_so_in_datadir.txt&quot; ] &amp;&amp; sev CRITICAL &quot;MySQL datadir에 .so 파일 존재 → UDF 백도어 강력 의심&quot;
+
+# ── 10. 임시 디렉터리 / 타임스톰핑 ────────────────────────────
+for d in /tmp /var/tmp /dev/shm /root; do
+  find &quot;${ROOT}${d}&quot; -maxdepth 3 -type f -printf &#39;%T+ %s %M %u %p\n&#39; 2&gt;/dev/null \
+    | sort &gt;&gt; &quot;${OUT}/90_tmp_inventory.txt&quot;
+done
+# 실행 권한 있는 임시 파일
+find &quot;${ROOT}/tmp&quot; &quot;${ROOT}/var/tmp&quot; &quot;${ROOT}/dev/shm&quot; -maxdepth 3 -type f -perm -u+x 2&gt;/dev/null \
+  &gt; &quot;${OUT}/91_executable_in_tmp.txt&quot;
+[ -s &quot;${OUT}/91_executable_in_tmp.txt&quot; ] &amp;&amp; sev HIGH &quot;임시 디렉터리에 실행 권한 파일 존재&quot;
+
+# SUID/SGID 비정상
+find &quot;$ROOT&quot; -xdev -type f \( -perm -4000 -o -perm -2000 \) -printf &#39;%M %u %g %p\n&#39; 2&gt;/dev/null \
+  | sed &quot;s|${ROOT}||&quot; &gt; &quot;${OUT}/92_suid_sgid.txt&quot;
+
+# ── 11. 커널 모듈 ────────────────────────────────────────────
+find &quot;${ROOT}/lib/modules&quot; -name &#39;*.ko&#39; -newermt &#39;2021-01-01&#39; 2&gt;/dev/null \
+  | sed &quot;s|${ROOT}||&quot; &gt; &quot;${OUT}/93_recent_kmods.txt&quot;
+
+# ── 12. 판정 요약 ────────────────────────────────────────────
+{
+  echo &quot;&quot;
+  echo &quot;## 판정 제안&quot;
+  C=$(grep -c &#39;\[CRITICAL\]&#39; &quot;$FINDINGS&quot; || true)
+  H=$(grep -c &#39;\[HIGH\]&#39; &quot;$FINDINGS&quot; || true)
+  M=$(grep -c &#39;\[MEDIUM\]&#39; &quot;$FINDINGS&quot; || true)
+  echo &quot;&quot;
+  echo &quot;| 심각도 | 건수 |&quot;
+  echo &quot;|---|---|&quot;
+  echo &quot;| CRITICAL | ${C} |&quot;
+  echo &quot;| HIGH | ${H} |&quot;
+  echo &quot;| MEDIUM | ${M} |&quot;
+  echo &quot;&quot;
+  if [ &quot;${C:-0}&quot; -gt 0 ]; then
+    echo &quot;<strong>제안 판정: C (Compromised)</strong> — 서버 재사용 금지. 데이터만 정제 추출.&quot;
+  elif [ &quot;${H:-0}&quot; -gt 0 ]; then
+    echo &quot;<strong>제안 판정: S (Suspicious)</strong> — 심층 분석 필요. 잠정적으로 C로 취급.&quot;
+  else
+    echo &quot;<strong>제안 판정: N (No indicators found)</strong> — 지표 미발견. 단 이는 &#39;침해 없음&#39;의 증명이 아니다.&quot;
+    echo &quot;&quot;
+    echo &quot;&gt; 로그 결손 구간(\`55_log_coverage.txt\`)에 대해서는 어떤 판정도 성립하지 않음을 명시한다.&quot;
+  fi
+  echo &quot;&quot;
+  echo &quot;최종 판정은 자동 제안이 아니라 <strong>분석자 검토 후 서면 확정</strong>한다.&quot;
+} &gt;&gt; &quot;$FINDINGS&quot;
+
+( cd &quot;$OUT&quot; &amp;&amp; find . -type f ! -name &#39;MANIFEST.sha256&#39; -print0 | sort -z | xargs -0 sha256sum &gt; MANIFEST.sha256 )
+echo &quot;완료. 결과 요약: ${FINDINGS}&quot;
+</code></pre>
+<hr>
+<h2>A-4. <code>S-04_centos_vault_repo.sh</code> — EOL CentOS 저장소 전환 (필수 선행)</h2>
+<blockquote>
+<p>이 스크립트 없이는 <code>yum update</code>가 <strong>저장소 접속 실패로 끝난다.</strong> CentOS 공식 미러는 서비스 종료되었고 아카이브(vault)로만 접근 가능하다.</p>
+</blockquote>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# S-04_centos_vault_repo.sh
+# 목적: EOL CentOS의 저장소를 사내 미러(권장) 또는 vault 아카이브로 전환
+# 주의: 격리망에서는 반드시 사내 미러를 사용한다(외부 접속 차단 원칙).
+set -euo pipefail
+
+MIRROR_BASE=&quot;${MIRROR_BASE:-http://repo.internal.local/centos}&quot;   # 사내 미러 (권장)
+USE_VAULT=&quot;${USE_VAULT:-0}&quot;                                        # 1이면 vault.centos.org 직접 사용
+BACKUP_DIR=&quot;/root/repo-backup-$(date +%Y%m%dT%H%M%S)&quot;
+
+# 1) 버전 판별
+if [ -f /etc/centos-release ]; then
+  FULLVER=$(rpm -q --qf &#39;%{VERSION}.%{RELEASE}\n&#39; centos-release 2&gt;/dev/null | head -1)
+  MAJOR=$(rpm -E %{rhel})
+else
+  echo &quot;CentOS 계열이 아님. 중단.&quot;; exit 1
+fi
+echo &quot;감지: CentOS major=${MAJOR}&quot;
+
+# 2) EOL 시점 아카이브 버전 매핑 (환경에 맞게 확인 후 사용)
+case &quot;$MAJOR&quot; in
+  7) ARCHIVE_VER=&quot;${ARCHIVE_VER:-7.9.2009}&quot; ;;
+  8) ARCHIVE_VER=&quot;${ARCHIVE_VER:-8.5.2111}&quot; ;;
+  *) echo &quot;지원하지 않는 major 버전: ${MAJOR}&quot;; exit 1 ;;
+esac
+echo &quot;아카이브 버전: ${ARCHIVE_VER}&quot;
+
+if [ &quot;$USE_VAULT&quot; = &quot;1&quot; ]; then
+  BASE=&quot;https://vault.centos.org/${ARCHIVE_VER}&quot;
+else
+  BASE=&quot;${MIRROR_BASE}/${ARCHIVE_VER}&quot;
+fi
+echo &quot;저장소 기준 URL: ${BASE}&quot;
+
+# 3) 기존 repo 파일 백업
+mkdir -p &quot;$BACKUP_DIR&quot;
+cp -a /etc/yum.repos.d/. &quot;$BACKUP_DIR&quot;/ 2&gt;/dev/null || true
+echo &quot;기존 저장소 백업: ${BACKUP_DIR}&quot;
+
+# 4) 기존 repo 비활성화
+for f in /etc/yum.repos.d/*.repo; do
+  [ -e &quot;$f&quot; ] || continue
+  mv &quot;$f&quot; &quot;${f}.disabled&quot;
+done
+
+# 5) 신규 repo 작성
+if [ &quot;$MAJOR&quot; = &quot;7&quot; ]; then
+  cat &gt; /etc/yum.repos.d/centos-archive.repo &lt;&lt;&#39;REPO7&#39;
+[base-archive]
+name=CentOS-7 - Base (Archive)
+baseurl=__BASE__/os/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+
+[updates-archive]
+name=CentOS-7 - Updates (Archive)
+baseurl=__BASE__/updates/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+
+[extras-archive]
+name=CentOS-7 - Extras (Archive)
+baseurl=__BASE__/extras/$basearch/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-CentOS-7
+enabled=1
+REPO7
+  sed -i &quot;s|__BASE__|${BASE}|g&quot; /etc/yum.repos.d/centos-archive.repo
+else
+  cat &gt; /etc/yum.repos.d/centos-archive.repo &lt;&lt;&#39;REPO8&#39;
+[baseos-archive]
+name=CentOS-8 - BaseOS (Archive)
+baseurl=__BASE__/BaseOS/$basearch/os/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
+enabled=1
+
+[appstream-archive]
+name=CentOS-8 - AppStream (Archive)
+baseurl=__BASE__/AppStream/$basearch/os/
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
+enabled=1
+REPO8
+  sed -i &quot;s|__BASE__|${BASE}|g&quot; /etc/yum.repos.d/centos-archive.repo
+fi
+
+# 6) 캐시 재구성 및 검증
+yum clean all &gt;/dev/null 2&gt;&amp;1 || true
+rm -rf /var/cache/yum /var/cache/dnf 2&gt;/dev/null || true
+
+if yum makecache -y &gt;/dev/null 2&gt;&amp;1 || yum makecache fast -y &gt;/dev/null 2&gt;&amp;1; then
+  echo &quot;저장소 전환 성공&quot;
+  yum repolist
+else
+  echo &quot;저장소 전환 실패 → 백업 복구&quot;
+  rm -f /etc/yum.repos.d/centos-archive.repo
+  cp -a &quot;$BACKUP_DIR&quot;/. /etc/yum.repos.d/
+  exit 2
+fi
+
+# 7) GPG 서명 검증이 켜져 있는지 최종 확인 (금융권 필수)
+if grep -q &#39;^gpgcheck=0&#39; /etc/yum.repos.d/centos-archive.repo; then
+  echo &quot;치명적: gpgcheck=0 발견. 중단.&quot;; exit 3
+fi
+echo &quot;GPG 검증 활성 확인: OK&quot;
+
+# 8) 잔여 위험 고지
+cat &lt;&lt;&#39;WARN&#39;
+
+================================================================
+[중요] 이 저장소는 EOL 시점까지의 패치만 포함한다.
+       EOL 이후 공개된 취약점은 벤더 패치가 존재하지 않는다.
+       → Phase 2-D에서 결정한 완화 통제(망분리/WAF/EDR/최소권한)를
+         반드시 병행 적용하고, 잔여 위험을 문서화하라.
+================================================================
+WARN
+</code></pre>
+<hr>
+<h2>A-5. <code>S-05_patch_precheck.sh</code> — 패치 사전 점검 (실패 예방)</h2>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# S-05_patch_precheck.sh
+# 목적: 패치 실행 전 실패 요인 사전 차단. 하나라도 실패하면 패치 진행 금지.
+set -uo pipefail
+
+RC=0
+PASS=0; FAIL=0
+OUT=&quot;/var/log/patch-precheck-$(date +%Y%m%dT%H%M%S).log&quot;
+
+chk() { # chk &lt;항목명&gt; &lt;조건결과(0=통과)&gt; &lt;상세&gt;
+  if [ &quot;$2&quot; -eq 0 ]; then
+    printf &#39;  [PASS] %-38s %s\n&#39; &quot;$1&quot; &quot;${3:-}&quot; | tee -a &quot;$OUT&quot;; PASS=$((PASS+1))
+  else
+    printf &#39;  [FAIL] %-38s %s\n&#39; &quot;$1&quot; &quot;${3:-}&quot; | tee -a &quot;$OUT&quot;; FAIL=$((FAIL+1)); RC=1
+  fi
+}
+
+echo &quot;=== 패치 사전 점검 : $(hostname) / $(date -u +%FT%TZ) ===&quot; | tee &quot;$OUT&quot;
+
+# 1. 권한
+[ &quot;$(id -u)&quot; -eq 0 ]; chk &quot;root 권한&quot; $? &quot;&quot;
+
+# 2. 디스크 여유 (커널 패치 실패 1순위 원인)
+BOOT_AVAIL=$(df -Pm /boot 2&gt;/dev/null | awk &#39;NR==2{print $4}&#39;)
+ROOT_AVAIL=$(df -Pm /      | awk &#39;NR==2{print $4}&#39;)
+VAR_AVAIL=$(df -Pm /var    | awk &#39;NR==2{print $4}&#39;)
+[ &quot;${BOOT_AVAIL:-0}&quot; -ge 200 ]; chk &quot;/boot 여유 &gt;= 200MB&quot;  $? &quot;현재 ${BOOT_AVAIL:-NA}MB&quot;
+[ &quot;${ROOT_AVAIL:-0}&quot; -ge 5120 ]; chk &quot;/ 여유 &gt;= 5GB&quot;       $? &quot;현재 ${ROOT_AVAIL:-0}MB&quot;
+[ &quot;${VAR_AVAIL:-0}&quot;  -ge 3072 ]; chk &quot;/var 여유 &gt;= 3GB&quot;    $? &quot;현재 ${VAR_AVAIL:-0}MB&quot;
+
+# 3. 설치된 커널 개수 (과다 시 /boot 고갈)
+KCNT=$(rpm -q kernel 2&gt;/dev/null | wc -l)
+[ &quot;$KCNT&quot; -le 3 ]; chk &quot;설치 커널 &lt;= 3개&quot; $? &quot;현재 ${KCNT}개 (초과 시 package-cleanup --oldkernels 검토)&quot;
+
+# 4. 저장소 정상 동작 (S-04 선행 필수)
+yum repolist enabled &gt;/dev/null 2&gt;&amp;1; chk &quot;yum 저장소 응답&quot; $? &quot;&quot;
+REPOCNT=$(yum repolist enabled 2&gt;/dev/null | grep -cE &#39;^[a-zA-Z0-9]&#39; || echo 0)
+[ &quot;$REPOCNT&quot; -ge 1 ]; chk &quot;활성 저장소 1개 이상&quot; $? &quot;${REPOCNT}개&quot;
+
+# 5. GPG 검증 활성 (금융권 필수)
+! grep -rq &#39;^gpgcheck=0&#39; /etc/yum.repos.d/ 2&gt;/dev/null; chk &quot;gpgcheck=0 없음&quot; $? &quot;&quot;
+
+# 6. RPM DB 정상
+rpm -qa &gt;/dev/null 2&gt;&amp;1; chk &quot;RPM DB 조회 정상&quot; $? &quot;&quot;
+[ ! -f /var/lib/rpm/.rpm.lock ]; chk &quot;RPM 락 없음&quot; $? &quot;&quot;
+
+# 7. 진행 중 yum 트랜잭션 잔여
+! yum-complete-transaction --help &gt;/dev/null 2&gt;&amp;1 || \
+  [ -z &quot;$(ls /var/lib/yum/transaction-* 2&gt;/dev/null)&quot; ]
+chk &quot;미완료 yum 트랜잭션 없음&quot; $? &quot;&quot;
+
+# 8. 백업/스냅샷 존재 증거 (파일 기반 플래그)
+[ -f /var/lib/patch-guard/backup.ok ]; chk &quot;백업 완료 플래그 존재&quot; $? &quot;없으면 패치 금지: /var/lib/patch-guard/backup.ok&quot;
+
+# 9. 서비스 현황 기록 (패치 후 비교 기준)
+mkdir -p /var/lib/patch-guard
+systemctl list-units --type=service --state=running --no-legend --no-pager 2&gt;/dev/null \
+  | awk &#39;{print $1}&#39; | sort &gt; /var/lib/patch-guard/services.before
+ss -Hltnp 2&gt;/dev/null | awk &#39;{print $4}&#39; | sort -u &gt; /var/lib/patch-guard/listeners.before
+[ -s /var/lib/patch-guard/services.before ]; chk &quot;실행 서비스 목록 기록&quot; $? &quot;$(wc -l &lt; /var/lib/patch-guard/services.before)개&quot;
+
+# 10. Nginx 설정 문법
+if command -v nginx &gt;/dev/null 2&gt;&amp;1; then
+  nginx -t &gt;/dev/null 2&gt;&amp;1; chk &quot;nginx 설정 문법 정상(패치 전)&quot; $? &quot;&quot;
+  nginx -v 2&gt;&amp;1 | tee -a &quot;$OUT&quot; &gt;/dev/null
+  nginx -V 2&gt;&amp;1 &gt; /var/lib/patch-guard/nginx.before
+fi
+
+# 11. MySQL 상태 및 백업
+if command -v mysql &gt;/dev/null 2&gt;&amp;1; then
+  mysqladmin ping &gt;/dev/null 2&gt;&amp;1; chk &quot;mysqld 응답&quot; $? &quot;&quot;
+  mysql -N -e &quot;SELECT VERSION();&quot; 2&gt;/dev/null &gt; /var/lib/patch-guard/mysql_version.before
+  chk &quot;MySQL 버전 기록&quot; $? &quot;$(cat /var/lib/patch-guard/mysql_version.before 2&gt;/dev/null)&quot;
+  # 테이블/행수 스냅샷 (검증 기준)
+  mysql -N -e &quot;SELECT table_schema, COUNT(*) FROM information_schema.tables GROUP BY 1;&quot; \
+    2&gt;/dev/null &gt; /var/lib/patch-guard/mysql_tablecount.before
+  [ -f /var/lib/patch-guard/mysql_dump.ok ]; chk &quot;MySQL 논리 백업 플래그&quot; $? &quot;없으면 DB 패치 금지&quot;
+fi
+
+# 12. 콘솔 접근 (부팅 실패 대비)
+[ -n &quot;${BMC_REACHABLE:-}&quot; ]; chk &quot;BMC/콘솔 접근 확인(환경변수)&quot; $? &quot;BMC_REACHABLE=1 로 명시 필요&quot;
+
+# 13. 시스템 시각
+if command -v chronyc &gt;/dev/null 2&gt;&amp;1; then
+  chronyc tracking &gt;/dev/null 2&gt;&amp;1; chk &quot;시각 동기(chrony)&quot; $? &quot;&quot;
+elif command -v ntpq &gt;/dev/null 2&gt;&amp;1; then
+  ntpq -p &gt;/dev/null 2&gt;&amp;1; chk &quot;시각 동기(ntpd)&quot; $? &quot;&quot;
+fi
+Y=$(date +%Y); [ &quot;$Y&quot; -ge 2024 ]; chk &quot;시스템 연도 정상&quot; $? &quot;현재 ${Y}&quot;
+
+# 14. 예상 패치 규모
+yum check-update &gt; /var/lib/patch-guard/updates.pending 2&gt;/dev/null
+PKGS=$(grep -cE &#39;^[a-zA-Z0-9].*\.(x86_64|noarch|i686)&#39; /var/lib/patch-guard/updates.pending || echo 0)
+echo &quot;  [INFO] 갱신 대상 패키지: ${PKGS}개&quot; | tee -a &quot;$OUT&quot;
+grep -qE &#39;^kernel&#39; /var/lib/patch-guard/updates.pending &amp;&amp; \
+  echo &quot;  [INFO] 커널 갱신 포함 → 리부트 필수&quot; | tee -a &quot;$OUT&quot;
+
+echo &quot;&quot; | tee -a &quot;$OUT&quot;
+echo &quot;=== 결과: PASS ${PASS} / FAIL ${FAIL} ===&quot; | tee -a &quot;$OUT&quot;
+if [ &quot;$RC&quot; -ne 0 ]; then
+  echo &quot;!!! 사전 점검 실패. 패치를 진행하지 마십시오. 로그: ${OUT}&quot; | tee -a &quot;$OUT&quot;
+fi
+exit &quot;$RC&quot;
+</code></pre>
+<hr>
+<h2>A-6. <code>S-06_patch_apply.sh</code> — 패치 적용 (백업 → 패치 → 헬스체크 → 자동 롤백)</h2>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# S-06_patch_apply.sh [--dry-run]
+# 순서: 스냅샷 → 서비스 정지 → OS(비커널) → Nginx → MySQL → 커널 → 리부트 → 헬스체크
+# 실패 시 자동 롤백(yum history undo) 시도 후 결과 보고
+set -uo pipefail
+
+DRY_RUN=0
+[ &quot;${1:-}&quot; = &quot;--dry-run&quot; ] &amp;&amp; DRY_RUN=1
+
+TS=$(date +%Y%m%dT%H%M%S)
+WORK=&quot;/var/lib/patch-guard&quot;
+LOG=&quot;/var/log/patch-apply-${TS}.log&quot;
+BK=&quot;/var/backups/prepatch-${TS}&quot;
+mkdir -p &quot;$WORK&quot; &quot;$BK&quot;
+
+log() { printf &#39;[%s] %s\n&#39; &quot;$(date -u +%FT%TZ)&quot; &quot;$*&quot; | tee -a &quot;$LOG&quot;; }
+die() { log &quot;치명적 오류: $*&quot;; log &quot;롤백 절차 확인 필요. 로그: ${LOG}&quot;; exit 1; }
+do_cmd() {
+  if [ &quot;$DRY_RUN&quot; -eq 1 ]; then log &quot;[DRY-RUN] $*&quot;; return 0; fi
+  log &quot;실행: $*&quot;
+  &quot;$@&quot; &gt;&gt; &quot;$LOG&quot; 2&gt;&amp;1
+}
+
+log &quot;===== 패치 적용 시작 : $(hostname) =====&quot;
+[ &quot;$DRY_RUN&quot; -eq 1 ] &amp;&amp; log &quot;*<strong>DRY-RUN 모드 : 실제 변경 없음</strong>*&quot;
+
+# ── 0. 사전 점검 재확인 (게이트) ──────────────────────────────
+if [ &quot;$DRY_RUN&quot; -eq 0 ]; then
+  /usr/local/sbin/S-05_patch_precheck.sh || die &quot;사전 점검 실패 → 패치 중단&quot;
+fi
+
+# ── 1. 설정 백업 ──────────────────────────────────────────────
+log &quot;--- 1. 설정/메타데이터 백업 ---&quot;
+for p in /etc /boot/grub2 /var/spool/cron; do
+  [ -e &quot;$p&quot; ] &amp;&amp; tar czf &quot;${BK}/$(echo &quot;$p&quot; | tr &#39;/&#39; &#39;_&#39;).tar.gz&quot; &quot;$p&quot; 2&gt;/dev/null
+done
+rpm -qa --qf &#39;%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n&#39; | sort &gt; &quot;${BK}/rpm-list.before&quot;
+uname -r &gt; &quot;${BK}/kernel.before&quot;
+cp -a /etc/yum.repos.d &quot;${BK}/yum.repos.d&quot; 2&gt;/dev/null || true
+log &quot;백업 위치: ${BK}&quot;
+
+# ── 2. yum history 기준점 기록 (롤백 앵커) ────────────────────
+YUM_TID_BEFORE=$(yum history list 2&gt;/dev/null | awk &#39;NR==4{print $1}&#39; | tr -d &#39;|&#39;)
+echo &quot;${YUM_TID_BEFORE}&quot; &gt; &quot;${BK}/yum_tid.before&quot;
+log &quot;yum 트랜잭션 기준점: ${YUM_TID_BEFORE}&quot;
+
+# ── 3. 서비스 정지 (역순 의존) ────────────────────────────────
+log &quot;--- 3. 서비스 정지 ---&quot;
+for svc in nginx php-fpm httpd mysqld mariadb; do
+  systemctl is-active --quiet &quot;$svc&quot; 2&gt;/dev/null &amp;&amp; { do_cmd systemctl stop &quot;$svc&quot;; echo &quot;$svc&quot; &gt;&gt; &quot;${BK}/stopped_services&quot;; }
+done
+
+# ── 4. OS 비커널 보안 패치 ────────────────────────────────────
+log &quot;--- 4. OS 보안 패치 (커널 제외) ---&quot;
+if [ &quot;$DRY_RUN&quot; -eq 1 ]; then
+  yum --security check-update 2&gt;&amp;1 | tail -40 | tee -a &quot;$LOG&quot;
+else
+  # --security 플러그인이 없는 환경도 있으므로 폴백
+  if yum --security check-update &gt;/dev/null 2&gt;&amp;1; then
+    yum -y --security --exclude=&#39;kernel*&#39; update &gt;&gt; &quot;$LOG&quot; 2&gt;&amp;1 || log &quot;경고: 보안 패치 일부 실패&quot;
+  else
+    log &quot;경고: yum-plugin-security 미지원 → 전체 update로 대체(--exclude kernel)&quot;
+    yum -y --exclude=&#39;kernel*&#39; update &gt;&gt; &quot;$LOG&quot; 2&gt;&amp;1 || log &quot;경고: 패치 일부 실패&quot;
+  fi
+fi
+
+# ── 5. Nginx 패치 ─────────────────────────────────────────────
+log &quot;--- 5. Nginx 패치 ---&quot;
+if rpm -q nginx &gt;/dev/null 2&gt;&amp;1; then
+  cp -a /etc/nginx &quot;${BK}/nginx.conf.before&quot; 2&gt;/dev/null || true
+  do_cmd yum -y update nginx
+  if [ &quot;$DRY_RUN&quot; -eq 0 ]; then
+    if nginx -t &gt;&gt; &quot;$LOG&quot; 2&gt;&amp;1; then
+      log &quot;nginx 설정 문법 정상&quot;
+    else
+      log &quot;경고: nginx 설정 문법 오류 → 설정 원복 시도&quot;
+      rm -rf /etc/nginx &amp;&amp; cp -a &quot;${BK}/nginx.conf.before&quot; /etc/nginx
+      nginx -t &gt;&gt; &quot;$LOG&quot; 2&gt;&amp;1 || die &quot;nginx 설정 복구 실패&quot;
+      log &quot;설정 원복 완료. 신버전 문법 차이 항목을 수동 조정하라.&quot;
+    fi
+  fi
+fi
+
+# ── 6. MySQL 패치 ─────────────────────────────────────────────
+log &quot;--- 6. MySQL 패치 ---&quot;
+if rpm -qa | grep -qiE &#39;^(mysql|mariadb)&#39;; then
+  [ -f &quot;${WORK}/mysql_dump.ok&quot; ] || die &quot;MySQL 논리 백업 미확인 → DB 패치 중단&quot;
+  do_cmd yum -y update &#39;mysql*&#39; &#39;mariadb*&#39;
+  if [ &quot;$DRY_RUN&quot; -eq 0 ]; then
+    systemctl start mysqld 2&gt;/dev/null || systemctl start mariadb 2&gt;/dev/null || log &quot;경고: DB 기동 실패&quot;
+    sleep 10
+    if mysqladmin ping &gt;/dev/null 2&gt;&amp;1; then
+      log &quot;DB 기동 확인. mysql_upgrade / mysqlcheck 수행&quot;
+      mysql_upgrade &gt;&gt; &quot;$LOG&quot; 2&gt;&amp;1 || log &quot;경고: mysql_upgrade 경고 발생 (로그 확인)&quot;
+      mysqlcheck --all-databases --check &gt;&gt; &quot;$LOG&quot; 2&gt;&amp;1 || log &quot;경고: mysqlcheck 오류 발생&quot;
+    else
+      log &quot;치명적: DB 기동 실패 → 롤백 필요&quot;
+      ROLLBACK_NEEDED=1
+    fi
+  fi
+fi
+
+# ── 7. 커널 패치 (마지막) ─────────────────────────────────────
+log &quot;--- 7. 커널 패치 ---&quot;
+if yum check-update kernel &gt;/dev/null 2&gt;&amp;1; then
+  do_cmd yum -y update &#39;kernel*&#39;
+  if [ &quot;$DRY_RUN&quot; -eq 0 ]; then
+    # 부팅 실패 대비: 이전 커널 엔트리 보존 확인
+    NEWK=$(rpm -q kernel --qf &#39;%{VERSION}-%{RELEASE}.%{ARCH}\n&#39; | sort -V | tail -1)
+    log &quot;신규 커널: ${NEWK} / 기존: $(cat &quot;${BK}/kernel.before&quot;)&quot;
+    grep -c &#39;menuentry &#39; /boot/grub2/grub.cfg 2&gt;/dev/null | xargs -I{} log &quot;grub 엔트리 수: {}&quot;
+    log &quot;부팅 실패 시 BMC 콘솔에서 이전 커널 엔트리를 선택하여 복구하라.&quot;
+    # initramfs 재생성 (드라이버 호환 문제 예방)
+    dracut -f --regenerate-all &gt;&gt; &quot;$LOG&quot; 2&gt;&amp;1 || log &quot;경고: dracut 재생성 실패&quot;
+  fi
+fi
+
+# ── 8. 롤백 판단 ──────────────────────────────────────────────
+if [ &quot;${ROLLBACK_NEEDED:-0}&quot; = &quot;1&quot; ] &amp;&amp; [ &quot;$DRY_RUN&quot; -eq 0 ]; then
+  log &quot;--- 자동 롤백 개시 (yum history undo ${YUM_TID_BEFORE}) ---&quot;
+  YUM_TID_NOW=$(yum history list 2&gt;/dev/null | awk &#39;NR==4{print $1}&#39; | tr -d &#39;|&#39;)
+  if [ -n &quot;$YUM_TID_NOW&quot; ] &amp;&amp; [ &quot;$YUM_TID_NOW&quot; != &quot;$YUM_TID_BEFORE&quot; ]; then
+    yum -y history undo &quot;$YUM_TID_NOW&quot; &gt;&gt; &quot;$LOG&quot; 2&gt;&amp;1 \
+      &amp;&amp; log &quot;패키지 롤백 성공&quot; || log &quot;패키지 롤백 실패 → 스냅샷 복원 필요&quot;
+  fi
+  # 설정 복원
+  for t in &quot;${BK}&quot;/_etc.tar.gz; do [ -f &quot;$t&quot; ] &amp;&amp; tar xzf &quot;$t&quot; -C / 2&gt;/dev/null; done
+  log &quot;롤백 완료(또는 부분 완료). 스냅샷 복원 여부를 판단하라.&quot;
+  exit 1
+fi
+
+# ── 9. 결과 기록 ──────────────────────────────────────────────
+rpm -qa --qf &#39;%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n&#39; | sort &gt; &quot;${BK}/rpm-list.after&quot;
+diff &quot;${BK}/rpm-list.before&quot; &quot;${BK}/rpm-list.after&quot; &gt; &quot;${BK}/rpm-diff.txt&quot; || true
+log &quot;변경 패키지: $(grep -c &#39;^&gt;&#39; &quot;${BK}/rpm-diff.txt&quot; || echo 0)개 추가/갱신&quot;
+
+if [ &quot;$DRY_RUN&quot; -eq 1 ]; then
+  log &quot;===== DRY-RUN 종료 (실제 변경 없음) =====&quot;
+  exit 0
+fi
+
+# ── 10. 리부트 안내 ───────────────────────────────────────────
+if [ -f /var/run/reboot-required ] || \
+   [ &quot;$(uname -r)&quot; != &quot;$(rpm -q kernel --qf &#39;%{VERSION}-%{RELEASE}.%{ARCH}\n&#39; | sort -V | tail -1)&quot; ]; then
+  log &quot;커널 변경 감지 → 리부트 필요&quot;
+  touch &quot;${WORK}/reboot.pending&quot;
+  log &quot;다음 단계: (1) BMC 콘솔 준비 (2) &#39;systemctl reboot&#39; (3) S-07 검증 스크립트 실행&quot;
+else
+  log &quot;리부트 불필요. S-07 검증 스크립트를 실행하라.&quot;
+fi
+
+log &quot;===== 패치 적용 종료. 로그: ${LOG} / 백업: ${BK} =====&quot;
+</code></pre>
+<hr>
+<h2>A-7. <code>S-07_postpatch_verify.sh</code> — 패치 후 검증</h2>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# S-07_postpatch_verify.sh
+# 목적: 패치/리부트 후 기능·보안 검증. 실패 항목이 있으면 롤백 판단 근거로 사용.
+set -uo pipefail
+
+WORK=&quot;/var/lib/patch-guard&quot;
+TS=$(date +%Y%m%dT%H%M%S)
+RPT=&quot;/var/log/postpatch-verify-${TS}.md&quot;
+PASS=0; FAIL=0; WARN=0
+
+ok()   { printf &#39;| %s | ✅ PASS | %s |\n&#39; &quot;$1&quot; &quot;${2:-}&quot; &gt;&gt; &quot;$RPT&quot;; PASS=$((PASS+1)); }
+ng()   { printf &#39;| %s | ❌ FAIL | %s |\n&#39; &quot;$1&quot; &quot;${2:-}&quot; &gt;&gt; &quot;$RPT&quot;; FAIL=$((FAIL+1)); }
+warn() { printf &#39;| %s | ⚠️ WARN | %s |\n&#39; &quot;$1&quot; &quot;${2:-}&quot; &gt;&gt; &quot;$RPT&quot;; WARN=$((WARN+1)); }
+
+{
+  echo &quot;# 패치 후 검증 리포트&quot;
+  echo &quot;&quot;
+  echo &quot;- 호스트: \`$(hostname)\`&quot;
+  echo &quot;- 시각(UTC): $(date -u +%FT%TZ)&quot;
+  echo &quot;- 커널: \`$(uname -r)\` (패치 전: \`$(cat /var/backups/prepatch-*/kernel.before 2&gt;/dev/null | tail -1)\`)&quot;
+  echo &quot;&quot;
+  echo &quot;| 항목 | 결과 | 상세 |&quot;
+  echo &quot;|---|---|---|&quot;
+} &gt; &quot;$RPT&quot;
+
+# 1. 부팅 성공 및 업타임
+UP=$(awk &#39;{printf &quot;%d&quot;, $1/60}&#39; /proc/uptime)
+ok &quot;부팅 성공&quot; &quot;업타임 ${UP}분&quot;
+
+# 2. 커널 로드 상태
+if [ &quot;$(uname -r)&quot; = &quot;$(rpm -q kernel --qf &#39;%{VERSION}-%{RELEASE}.%{ARCH}\n&#39; | sort -V | tail -1)&quot; ]; then
+  ok &quot;최신 커널로 부팅&quot; &quot;$(uname -r)&quot;
+else
+  warn &quot;최신 커널 미적용&quot; &quot;실행 $(uname -r) / 설치 최신 $(rpm -q kernel --qf &#39;%{VERSION}-%{RELEASE}.%{ARCH}\n&#39; | sort -V | tail -1)&quot;
+fi
+
+# 3. dmesg 에러/드라이버 문제
+DMERR=$(dmesg --level=err,crit,alert,emerg 2&gt;/dev/null | wc -l)
+[ &quot;$DMERR&quot; -eq 0 ] &amp;&amp; ok &quot;dmesg 심각 오류 없음&quot; &quot;&quot; || warn &quot;dmesg 오류 ${DMERR}건&quot; &quot;드라이버 호환성 확인 필요&quot;
+
+# 4. 실패 유닛
+FAILED=$(systemctl list-units --state=failed --no-legend --no-pager 2&gt;/dev/null | wc -l)
+[ &quot;$FAILED&quot; -eq 0 ] &amp;&amp; ok &quot;실패 systemd 유닛 없음&quot; &quot;&quot; || ng &quot;실패 유닛 ${FAILED}건&quot; &quot;$(systemctl list-units --state=failed --no-legend --no-pager | awk &#39;{print $2}&#39; | tr &#39;\n&#39; &#39; &#39;)&quot;
+
+# 5. 서비스 목록 비교 (패치 전 기록 대비)
+if [ -f &quot;${WORK}/services.before&quot; ]; then
+  systemctl list-units --type=service --state=running --no-legend --no-pager 2&gt;/dev/null \
+    | awk &#39;{print $1}&#39; | sort &gt; &quot;${WORK}/services.after&quot;
+  MISSING=$(comm -23 &quot;${WORK}/services.before&quot; &quot;${WORK}/services.after&quot; | tr &#39;\n&#39; &#39; &#39;)
+  [ -z &quot;$MISSING&quot; ] &amp;&amp; ok &quot;패치 전 실행 서비스 전부 복귀&quot; &quot;&quot; || ng &quot;미복귀 서비스&quot; &quot;${MISSING}&quot;
+fi
+
+# 6. 리스닝 포트 비교
+if [ -f &quot;${WORK}/listeners.before&quot; ]; then
+  ss -Hltnp 2&gt;/dev/null | awk &#39;{print $4}&#39; | sort -u &gt; &quot;${WORK}/listeners.after&quot;
+  LMISS=$(comm -23 &quot;${WORK}/listeners.before&quot; &quot;${WORK}/listeners.after&quot; | tr &#39;\n&#39; &#39; &#39;)
+  LNEW=$(comm -13 &quot;${WORK}/listeners.before&quot; &quot;${WORK}/listeners.after&quot; | tr &#39;\n&#39; &#39; &#39;)
+  [ -z &quot;$LMISS&quot; ] &amp;&amp; ok &quot;리스닝 포트 전부 복귀&quot; &quot;&quot; || ng &quot;미복귀 포트&quot; &quot;${LMISS}&quot;
+  [ -z &quot;$LNEW&quot; ] &amp;&amp; ok &quot;신규 리스닝 포트 없음&quot; &quot;&quot; || warn &quot;신규 포트 출현&quot; &quot;${LNEW} (사유 확인)&quot;
+fi
+
+# 7. Nginx
+if command -v nginx &gt;/dev/null 2&gt;&amp;1; then
+  nginx -t &gt;/dev/null 2&gt;&amp;1 &amp;&amp; ok &quot;nginx 설정 문법&quot; &quot;$(nginx -v 2&gt;&amp;1)&quot; || ng &quot;nginx 설정 문법 오류&quot; &quot;&quot;
+  systemctl is-active --quiet nginx &amp;&amp; ok &quot;nginx 실행 중&quot; &quot;&quot; || ng &quot;nginx 미실행&quot; &quot;&quot;
+  code=$(curl -s -o /dev/null -w &#39;%{http_code}&#39; -m 5 http://127.0.0.1/ 2&gt;/dev/null || echo 000)
+  [ &quot;$code&quot; != &quot;000&quot; ] &amp;&amp; ok &quot;HTTP 응답&quot; &quot;HTTP ${code}&quot; || ng &quot;HTTP 무응답&quot; &quot;&quot;
+fi
+
+# 8. MySQL
+if command -v mysql &gt;/dev/null 2&gt;&amp;1; then
+  if mysqladmin ping &gt;/dev/null 2&gt;&amp;1; then
+    ok &quot;mysqld 응답&quot; &quot;$(mysql -N -e &#39;SELECT VERSION();&#39; 2&gt;/dev/null)&quot;
+    # 테이블 수 비교
+    if [ -f &quot;${WORK}/mysql_tablecount.before&quot; ]; then
+      mysql -N -e &quot;SELECT table_schema, COUNT(*) FROM information_schema.tables GROUP BY 1;&quot; \
+        2&gt;/dev/null &gt; &quot;${WORK}/mysql_tablecount.after&quot;
+      if diff -q &quot;${WORK}/mysql_tablecount.before&quot; &quot;${WORK}/mysql_tablecount.after&quot; &gt;/dev/null; then
+        ok &quot;DB 테이블 수 일치&quot; &quot;&quot;
+      else
+        ng &quot;DB 테이블 수 불일치&quot; &quot;$(diff &quot;${WORK}/mysql_tablecount.before&quot; &quot;${WORK}/mysql_tablecount.after&quot; | tr &#39;\n&#39; &#39; &#39; | cut -c1-160)&quot;
+      fi
+    fi
+    ERRC=$(mysqlcheck --all-databases --check 2&gt;&amp;1 | grep -ci &#39;error&#39; || true)
+    [ &quot;$ERRC&quot; -eq 0 ] &amp;&amp; ok &quot;mysqlcheck 오류 없음&quot; &quot;&quot; || ng &quot;mysqlcheck 오류 ${ERRC}건&quot; &quot;&quot;
+    # 복제 상태(해당 시)
+    mysql -N -e &quot;SHOW SLAVE STATUS\G&quot; 2&gt;/dev/null | grep -E &#39;Slave_(IO|SQL)_Running|Seconds_Behind&#39; \
+      &gt; &quot;${WORK}/replication.after&quot; 2&gt;/dev/null || true
+  else
+    ng &quot;mysqld 무응답&quot; &quot;&quot;
+  fi
+fi
+
+# 9. 파일시스템 / 마운트
+BADMNT=$(awk &#39;$4 ~ /^ro/ &amp;&amp; $2 !~ /(proc|sys|cgroup|snap)/ {print $2}&#39; /proc/mounts 2&gt;/dev/null | tr &#39;\n&#39; &#39; &#39;)
+[ -z &quot;$BADMNT&quot; ] &amp;&amp; ok &quot;읽기전용 전환된 마운트 없음&quot; &quot;&quot; || ng &quot;읽기전용 마운트 발생&quot; &quot;${BADMNT}&quot;
+DFULL=$(df -Ph | awk &#39;NR&gt;1 &amp;&amp; $5+0 &gt;= 90 {print $6&quot;(&quot;$5&quot;)&quot;}&#39; | tr &#39;\n&#39; &#39; &#39;)
+[ -z &quot;$DFULL&quot; ] &amp;&amp; ok &quot;디스크 사용률 정상&quot; &quot;&quot; || warn &quot;사용률 90% 이상&quot; &quot;${DFULL}&quot;
+
+# 10. 패치 적용 확인
+PEND=$(yum check-update 2&gt;/dev/null | grep -cE &#39;^[a-zA-Z0-9].*\.(x86_64|noarch|i686)&#39; || echo 0)
+[ &quot;$PEND&quot; -eq 0 ] &amp;&amp; ok &quot;잔여 갱신 패키지 없음&quot; &quot;&quot; || warn &quot;잔여 갱신 ${PEND}개&quot; &quot;EOL 저장소 한계 또는 제외 패키지&quot;
+
+# 11. 보안 기본 통제 재확인 (패치로 원복되는 경우 있음)
+grep -qi &#39;^PermitRootLogin[[:space:]]*no&#39; /etc/ssh/sshd_config 2&gt;/dev/null \
+  &amp;&amp; ok &quot;PermitRootLogin no&quot; &quot;&quot; || warn &quot;PermitRootLogin 설정 확인 필요&quot; &quot;패치 후 원복 여부 점검&quot;
+[ &quot;$(getenforce 2&gt;/dev/null || echo NA)&quot; != &quot;Disabled&quot; ] \
+  &amp;&amp; ok &quot;SELinux 미비활성&quot; &quot;$(getenforce 2&gt;/dev/null)&quot; || warn &quot;SELinux Disabled&quot; &quot;&quot;
+systemctl is-active --quiet firewalld 2&gt;/dev/null || systemctl is-active --quiet iptables 2&gt;/dev/null \
+  &amp;&amp; ok &quot;호스트 방화벽 활성&quot; &quot;&quot; || warn &quot;호스트 방화벽 비활성&quot; &quot;&quot;
+
+# 12. 무결성 재확인 (패치 후 IOC 재점검 - 축약판)
+[ ! -s /etc/ld.so.preload ] &amp;&amp; ok &quot;ld.so.preload 비어있음&quot; &quot;&quot; || ng &quot;ld.so.preload 내용 존재&quot; &quot;재침해 의심&quot;
+NEWKEYS=$(find /root/.ssh /home/*/.ssh -name &#39;authorized_keys&#39; -newermt &quot;-1 day&quot; 2&gt;/dev/null | tr &#39;\n&#39; &#39; &#39;)
+[ -z &quot;$NEWKEYS&quot; ] &amp;&amp; ok &quot;24시간 내 SSH 키 변경 없음&quot; &quot;&quot; || warn &quot;SSH 키 최근 변경&quot; &quot;${NEWKEYS}&quot;
+
+# ── 요약 ─────────────────────────────────────────────────────
+{
+  echo &quot;&quot;
+  echo &quot;## 요약&quot;
+  echo &quot;&quot;
+  echo &quot;| PASS | WARN | FAIL |&quot;
+  echo &quot;|---|---|---|&quot;
+  echo &quot;| ${PASS} | ${WARN} | ${FAIL} |&quot;
+  echo &quot;&quot;
+  if [ &quot;$FAIL&quot; -gt 0 ]; then
+    echo &quot;<strong>판정: 검증 실패 — 롤백 검토 대상.</strong> FAIL 항목 전건 해소 또는 예외 승인 없이 다음 배치로 진행 금지.&quot;
+  elif [ &quot;$WARN&quot; -gt 0 ]; then
+    echo &quot;<strong>판정: 조건부 통과 —</strong> WARN 항목의 사유를 기록하고 담당자 확인 서명.&quot;
+  else
+    echo &quot;<strong>판정: 통과.</strong>&quot;
+  fi
+} &gt;&gt; &quot;$RPT&quot;
+
+cat &quot;$RPT&quot;
+[ &quot;$FAIL&quot; -eq 0 ] || exit 1
+</code></pre>
+<hr>
+<h2>A-8. <code>patch_playbook.yml</code> — Ansible 배치 패치 (300대 확산용)</h2>
+<pre><code class="language-yaml">---
+# patch_playbook.yml
+# 사용: ansible-playbook -i inventory/batch01.ini patch_playbook.yml --check   (선행)
+#       ansible-playbook -i inventory/batch01.ini patch_playbook.yml
+# 원칙: serial 로 소규모 병렬, any_errors_fatal 로 배치 즉시 중단
+- name: &quot;싸이월드 레거시 서버 보안 패치 (배치 단위)&quot;
+  hosts: patch_batch
+  become: true
+  serial: 5                    # 배치 내 5대씩
+  any_errors_fatal: false      # 개별 실패는 격리, 임계치는 별도 판단
+  max_fail_percentage: 20      # 20% 초과 실패 시 배치 중단
+  gather_facts: true
+
+  vars:
+    patch_guard_dir: /var/lib/patch-guard
+    backup_root: /var/backups
+    script_dir: /usr/local/sbin
+    min_boot_mb: 200
+    min_root_mb: 5120
+    require_backup_flag: true
+
+  pre_tasks:
+    - name: &quot;OS 계열 확인 (CentOS 전용)&quot;
+      ansible.builtin.assert:
+        that:
+          - ansible_facts[&#39;os_family&#39;] == &#39;RedHat&#39;
+        fail_msg: &quot;RedHat 계열이 아님 — 대상 제외&quot;
+
+    - name: &quot;패치 가드 디렉터리 생성&quot;
+      ansible.builtin.file:
+        path: &quot;{{ patch_guard_dir }}&quot;
+        state: directory
+        mode: &#39;0750&#39;
+
+    - name: &quot;백업 완료 플래그 확인 (없으면 패치 금지)&quot;
+      ansible.builtin.stat:
+        path: &quot;{{ patch_guard_dir }}/backup.ok&quot;
+      register: backup_flag
+
+    - name: &quot;백업 미확인 시 중단&quot;
+      ansible.builtin.fail:
+        msg: &quot;백업 완료 플래그 없음 — 스냅샷/이미지 백업 후 재시도&quot;
+      when: require_backup_flag and not backup_flag.stat.exists
+
+    - name: &quot;/boot 여유 공간 확인&quot;
+      ansible.builtin.assert:
+        that:
+          - (ansible_facts[&#39;mounts&#39;] | selectattr(&#39;mount&#39;,&#39;equalto&#39;,&#39;/boot&#39;) | list | length == 0)
+            or ((ansible_facts[&#39;mounts&#39;] | selectattr(&#39;mount&#39;,&#39;equalto&#39;,&#39;/boot&#39;) | first).size_available / 1048576) &gt; min_boot_mb
+        fail_msg: &quot;/boot 여유 공간 부족 — 구커널 정리 필요&quot;
+
+    - name: &quot;루트 여유 공간 확인&quot;
+      ansible.builtin.assert:
+        that:
+          - ((ansible_facts[&#39;mounts&#39;] | selectattr(&#39;mount&#39;,&#39;equalto&#39;,&#39;/&#39;) | first).size_available / 1048576) &gt; min_root_mb
+        fail_msg: &quot;/ 여유 공간 부족&quot;
+
+    - name: &quot;스크립트 배포&quot;
+      ansible.builtin.copy:
+        src: &quot;scripts/{{ item }}&quot;
+        dest: &quot;{{ script_dir }}/{{ item }}&quot;
+        mode: &#39;0750&#39;
+      loop:
+        - S-04_centos_vault_repo.sh
+        - S-05_patch_precheck.sh
+        - S-06_patch_apply.sh
+        - S-07_postpatch_verify.sh
+
+  tasks:
+    - name: &quot;1. 저장소를 사내 미러(EOL 아카이브)로 전환&quot;
+      ansible.builtin.command: &quot;{{ script_dir }}/S-04_centos_vault_repo.sh&quot;
+      environment:
+        MIRROR_BASE: &quot;{{ internal_mirror_base }}&quot;
+      register: repo_switch
+      changed_when: &quot;&#39;저장소 전환 성공&#39; in repo_switch.stdout&quot;
+
+    - name: &quot;2. 사전 점검&quot;
+      ansible.builtin.command: &quot;{{ script_dir }}/S-05_patch_precheck.sh&quot;
+      register: precheck
+      failed_when: precheck.rc != 0
+      changed_when: false
+
+    - name: &quot;3. 설정 백업 (/etc)&quot;
+      ansible.builtin.archive:
+        path: /etc
+        dest: &quot;{{ backup_root }}/etc-{{ ansible_date_time.iso8601_basic_short }}.tar.gz&quot;
+        format: gz
+      changed_when: true
+
+    - name: &quot;4. 패치 전 패키지 목록 기록&quot;
+      ansible.builtin.shell: |
+        rpm -qa --qf &#39;%{NAME}-%{VERSION}-%{RELEASE}.%{ARCH}\n&#39; | sort &gt; {{ patch_guard_dir }}/rpm.before
+      changed_when: false
+
+    - name: &quot;5. 서비스 정지 (패치 대상 서비스)&quot;
+      ansible.builtin.service:
+        name: &quot;{{ item }}&quot;
+        state: stopped
+      loop: [nginx, php-fpm, mysqld]
+      failed_when: false
+
+    - name: &quot;6. 보안 패치 적용 (커널 제외)&quot;
+      ansible.builtin.yum:
+        name: &#39;*&#39;
+        state: latest
+        security: true
+        exclude: &#39;kernel*&#39;
+      register: os_patch
+      retries: 2
+      delay: 30
+      until: os_patch is succeeded
+
+    - name: &quot;7. Nginx 패치&quot;
+      ansible.builtin.yum:
+        name: nginx
+        state: latest
+      when: &quot;&#39;nginx&#39; in ansible_facts.packages | default({})&quot;
+      register: nginx_patch
+
+    - name: &quot;8. Nginx 설정 문법 검증&quot;
+      ansible.builtin.command: nginx -t
+      register: nginx_t
+      changed_when: false
+      failed_when: nginx_t.rc != 0
+      when: nginx_patch is defined and nginx_patch is changed
+
+    - name: &quot;9. MySQL 패치&quot;
+      ansible.builtin.yum:
+        name: [&#39;mysql-server&#39;, &#39;mysql&#39;]
+        state: latest
+      failed_when: false
+      register: mysql_patch
+
+    - name: &quot;10. 커널 패치 (마지막)&quot;
+      ansible.builtin.yum:
+        name: &#39;kernel*&#39;
+        state: latest
+      register: kernel_patch
+
+    - name: &quot;11. initramfs 재생성 (드라이버 호환성)&quot;
+      ansible.builtin.command: dracut -f --regenerate-all
+      when: kernel_patch is changed
+      changed_when: true
+
+    - name: &quot;12. 리부트 (커널 변경 시)&quot;
+      ansible.builtin.reboot:
+        reboot_timeout: 900
+        connect_timeout: 30
+        post_reboot_delay: 60
+        test_command: &quot;systemctl is-system-running --wait || true&quot;
+      when: kernel_patch is changed
+
+    - name: &quot;13. 서비스 기동&quot;
+      ansible.builtin.service:
+        name: &quot;{{ item }}&quot;
+        state: started
+        enabled: true
+      loop: [mysqld, php-fpm, nginx]
+      failed_when: false
+
+    - name: &quot;14. 패치 후 검증&quot;
+      ansible.builtin.command: &quot;{{ script_dir }}/S-07_postpatch_verify.sh&quot;
+      register: verify
+      changed_when: false
+      failed_when: verify.rc != 0
+
+    - name: &quot;15. 검증 리포트 수거&quot;
+      ansible.builtin.fetch:
+        src: &quot;{{ item }}&quot;
+        dest: &quot;reports/{{ inventory_hostname }}/&quot;
+        flat: true
+      with_fileglob: []
+      failed_when: false
+
+  post_tasks:
+    - name: &quot;검증 리포트 로컬 수집&quot;
+      ansible.builtin.shell: &quot;ls -t /var/log/postpatch-verify-*.md | head -1&quot;
+      register: rptpath
+      changed_when: false
+
+    - name: &quot;리포트 가져오기&quot;
+      ansible.builtin.fetch:
+        src: &quot;{{ rptpath.stdout }}&quot;
+        dest: &quot;reports/{{ inventory_hostname }}.md&quot;
+        flat: true
+      when: rptpath.stdout != &quot;&quot;
+
+  handlers:
+    - name: &quot;롤백 안내&quot;
+      ansible.builtin.debug:
+        msg: &quot;실패 호스트는 yum history undo 및 스냅샷 복원 절차로 수동 롤백하라.&quot;
+</code></pre>
+<hr>
+<h2>A-9. <code>S-08_manifest_build.sh</code> — 대용량 매니페스트 생성 (정합성 판정 입력)</h2>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# S-08_manifest_build.sh &lt;스캔루트&gt; &lt;출력파일&gt; [해시모드] [병렬도]
+# 해시모드: none(L1) | fast(xxhash/blake3, L2) | sha256(L3)
+# 출력: TSV — relpath \t size \t mtime_epoch \t hash \t hashalgo
+set -euo pipefail
+
+ROOT=&quot;${1:?사용법: $0 &lt;스캔루트&gt; &lt;출력파일&gt; [none|fast|sha256] [병렬도]}&quot;
+OUTF=&quot;${2:?출력 파일 필요}&quot;
+MODE=&quot;${3:-fast}&quot;
+JOBS=&quot;${4:-$(nproc)}&quot;
+
+[ -d &quot;$ROOT&quot; ] || { echo &quot;오류: ${ROOT} 디렉터리 없음&quot;; exit 1; }
+# 원본 보호: 읽기전용 마운트 여부 경고
+if ! findmnt -no OPTIONS --target &quot;$ROOT&quot; 2&gt;/dev/null | grep -q &#39;\bro\b&#39;; then
+  echo &quot;경고: ${ROOT} 가 읽기전용 마운트가 아님. 원본 보호 원칙 확인 필요.&quot;
+fi
+
+# 해시 도구 선택
+case &quot;$MODE&quot; in
+  none)   HASHER=&quot;&quot;; ALGO=&quot;none&quot; ;;
+  fast)
+    if command -v b3sum &gt;/dev/null 2&gt;&amp;1;      then HASHER=&quot;b3sum --no-names&quot;; ALGO=&quot;blake3&quot;
+    elif command -v xxh128sum &gt;/dev/null 2&gt;&amp;1; then HASHER=&quot;xxh128sum -H2&quot;; ALGO=&quot;xxh128&quot;
+    elif command -v xxhsum &gt;/dev/null 2&gt;&amp;1;    then HASHER=&quot;xxhsum -H1&quot;;    ALGO=&quot;xxh64&quot;
+    else echo &quot;경고: 고속 해시 도구 없음 → sha256으로 대체&quot;; HASHER=&quot;sha256sum&quot;; ALGO=&quot;sha256&quot;; fi ;;
+  sha256) HASHER=&quot;sha256sum&quot;; ALGO=&quot;sha256&quot; ;;
+  *) echo &quot;알 수 없는 모드: ${MODE}&quot;; exit 1 ;;
+esac
+
+echo &quot;스캔 루트 : ${ROOT}&quot;
+echo &quot;해시 모드 : ${MODE} (${ALGO})&quot;
+echo &quot;병렬도    : ${JOBS}&quot;
+START=$(date +%s)
+
+emit_one() {
+  local f=&quot;$1&quot; root=&quot;$2&quot; hasher=&quot;$3&quot; algo=&quot;$4&quot;
+  local rel size mtime h
+  rel=&quot;${f#$root/}&quot;
+  # stat 실패(권한/손상) 시에도 레코드는 남긴다
+  if ! read -r size mtime &lt; &lt;(stat -c &#39;%s %Y&#39; &quot;$f&quot; 2&gt;/dev/null); then
+    printf &#39;%s\t%s\t%s\t%s\t%s\n&#39; &quot;$rel&quot; &quot;ERR&quot; &quot;ERR&quot; &quot;STAT_FAIL&quot; &quot;$algo&quot;; return
+  fi
+  if [ -z &quot;$hasher&quot; ]; then
+    printf &#39;%s\t%s\t%s\t%s\t%s\n&#39; &quot;$rel&quot; &quot;$size&quot; &quot;$mtime&quot; &quot;-&quot; &quot;none&quot;
+  else
+    h=$($hasher &quot;$f&quot; 2&gt;/dev/null | awk &#39;{print $1}&#39;)
+    printf &#39;%s\t%s\t%s\t%s\t%s\n&#39; &quot;$rel&quot; &quot;$size&quot; &quot;$mtime&quot; &quot;${h:-READ_FAIL}&quot; &quot;$algo&quot;
+  fi
+}
+export -f emit_one
+
+TMP=&quot;${OUTF}.part&quot;
+: &gt; &quot;$TMP&quot;
+
+# 파일 목록 → 병렬 처리
+if command -v parallel &gt;/dev/null 2&gt;&amp;1; then
+  find &quot;$ROOT&quot; -xdev -type f -print0 2&gt;/dev/null \
+    | parallel -0 -j &quot;$JOBS&quot; --will-cite emit_one {} &quot;$ROOT&quot; &quot;$HASHER&quot; &quot;$ALGO&quot; &gt;&gt; &quot;$TMP&quot;
+else
+  find &quot;$ROOT&quot; -xdev -type f -print0 2&gt;/dev/null \
+    | xargs -0 -P &quot;$JOBS&quot; -I{} bash -c &#39;emit_one &quot;$@&quot;&#39; _ {} &quot;$ROOT&quot; &quot;$HASHER&quot; &quot;$ALGO&quot; &gt;&gt; &quot;$TMP&quot;
+fi
+
+# 정렬(대조 성능) 및 요약
+LC_ALL=C sort -t$&#39;\t&#39; -k1,1 &quot;$TMP&quot; &gt; &quot;$OUTF&quot;
+rm -f &quot;$TMP&quot;
+
+FILES=$(wc -l &lt; &quot;$OUTF&quot;)
+BYTES=$(awk -F&#39;\t&#39; &#39;$2 ~ /^[0-9]+$/ {s+=$2} END{printf &quot;%.0f&quot;, s}&#39; &quot;$OUTF&quot;)
+FAILS=$(awk -F&#39;\t&#39; &#39;$4==&quot;READ_FAIL&quot; || $4==&quot;STAT_FAIL&quot;&#39; &quot;$OUTF&quot; | wc -l)
+ELAPSED=$(( $(date +%s) - START ))
+
+cat &gt; &quot;${OUTF}.meta&quot; &lt;&lt;META
+manifest_file=${OUTF}
+scan_root=${ROOT}
+hash_mode=${MODE}
+hash_algo=${ALGO}
+file_count=${FILES}
+total_bytes=${BYTES}
+total_tib=$(awk &quot;BEGIN{printf \&quot;%.3f\&quot;, ${BYTES}/1099511627776}&quot;)
+read_failures=${FAILS}
+elapsed_sec=${ELAPSED}
+generated_utc=$(date -u +%FT%TZ)
+host=$(hostname)
+operator=${INSPECTOR:-미기재}
+dc_site=${DC_SITE:-미기재}
+manifest_sha256=$(sha256sum &quot;$OUTF&quot; | awk &#39;{print $1}&#39;)
+META
+
+echo &quot;완료: 파일 ${FILES}건 / $(awk &quot;BEGIN{printf \&quot;%.2f\&quot;, ${BYTES}/1099511627776}&quot;) TiB / 읽기실패 ${FAILS}건 / ${ELAPSED}초&quot;
+[ &quot;$FAILS&quot; -gt 0 ] &amp;&amp; echo &quot;경고: 읽기 실패 ${FAILS}건 — 매체 손상 가능. 별도 목록화 필요.&quot;
+cat &quot;${OUTF}.meta&quot;
+</code></pre>
+<hr>
+<h2>A-10. <code>S-09_reconcile_dc.py</code> — DC-A / DC-B 차분 판정 및 진본 선정</h2>
+<pre><code class="language-python">#!/usr/bin/env python3
+&quot;&quot;&quot;
+S-09_reconcile_dc.py — 두 데이터센터 매니페스트를 대조하여 진본(Golden Copy)을 판정한다.
+
+사용:
+  ./S-09_reconcile_dc.py --a manifest_dcA.tsv --b manifest_dcB.tsv \
+      --a-last-boot 2024-05-01T09:00:00Z --b-last-boot 2024-04-18T22:10:00Z \
+      --a-clock-reliable true --b-clock-reliable false \
+      --out-dir ./reconcile_out
+
+규칙(사전 확정, Phase 3-C):
+  R-1 해시 동일            → 동일. 1부만 이관
+  R-2 편측 존재            → 존재하는 쪽 채택 + 누락 사유 조사
+  R-3 상이 + 시각 신뢰 가능 → 최종 가동 시각이 늦은 DC 채택
+  R-4 상이 + 시각 신뢰 불가 → 내부 메타데이터 검사 필요 (수동/후속)
+  R-5 한쪽 손상/절단        → 정상 파싱되는 쪽 채택 (후속 검증 필요)
+  R-6 판정 불가            → 양측 보존, 격리 목록 등재
+&quot;&quot;&quot;
+import argparse
+import csv
+import json
+import os
+import sys
+from datetime import datetime, timezone
+
+
+def parse_iso(s):
+    if not s:
+        return None
+    return datetime.fromisoformat(s.replace(&quot;Z&quot;, &quot;+00:00&quot;)).astimezone(timezone.utc)
+
+
+def load_manifest(path):
+    &quot;&quot;&quot;TSV: relpath, size, mtime_epoch, hash, algo&quot;&quot;&quot;
+    rows = {}
+    bad = 0
+    with open(path, &quot;r&quot;, encoding=&quot;utf-8&quot;, errors=&quot;surrogateescape&quot;) as fh:
+        for line in fh:
+            parts = line.rstrip(&quot;\n&quot;).split(&quot;\t&quot;)
+            if len(parts) &lt; 5:
+                bad += 1
+                continue
+            rel, size, mtime, h, algo = parts[0], parts[1], parts[2], parts[3], parts[4]
+            rows[rel] = {
+                &quot;size&quot;: size,
+                &quot;mtime&quot;: mtime,
+                &quot;hash&quot;: h,
+                &quot;algo&quot;: algo,
+                &quot;readable&quot;: h not in (&quot;READ_FAIL&quot;, &quot;STAT_FAIL&quot;),
+            }
+    return rows, bad
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument(&quot;--a&quot;, required=True, help=&quot;DC-A 매니페스트 TSV&quot;)
+    ap.add_argument(&quot;--b&quot;, required=True, help=&quot;DC-B 매니페스트 TSV&quot;)
+    ap.add_argument(&quot;--a-label&quot;, default=&quot;DC-A&quot;)
+    ap.add_argument(&quot;--b-label&quot;, default=&quot;DC-B&quot;)
+    ap.add_argument(&quot;--a-last-boot&quot;, default=None, help=&quot;DC-A 최종 가동 시각 ISO8601&quot;)
+    ap.add_argument(&quot;--b-last-boot&quot;, default=None, help=&quot;DC-B 최종 가동 시각 ISO8601&quot;)
+    ap.add_argument(&quot;--a-clock-reliable&quot;, default=&quot;true&quot;)
+    ap.add_argument(&quot;--b-clock-reliable&quot;, default=&quot;true&quot;)
+    ap.add_argument(&quot;--out-dir&quot;, default=&quot;./reconcile_out&quot;)
+    args = ap.parse_args()
+
+    os.makedirs(args.out_dir, exist_ok=True)
+
+    a_rows, a_bad = load_manifest(args.a)
+    b_rows, b_bad = load_manifest(args.b)
+
+    a_clock = args.a_clock_reliable.lower() == &quot;true&quot;
+    b_clock = args.b_clock_reliable.lower() == &quot;true&quot;
+    a_boot = parse_iso(args.a_last_boot)
+    b_boot = parse_iso(args.b_last_boot)
+
+    # 시각 신뢰 가능 여부 및 어느 쪽이 최신인지
+    newer = None
+    if a_clock and b_clock and a_boot and b_boot:
+        newer = args.a_label if a_boot &gt; b_boot else args.b_label
+    elif a_clock and not b_clock:
+        newer = args.a_label
+    elif b_clock and not a_clock:
+        newer = args.b_label
+
+    all_keys = set(a_rows) | set(b_rows)
+    stats = {k: 0 for k in (&quot;R-1&quot;, &quot;R-2a&quot;, &quot;R-2b&quot;, &quot;R-3&quot;, &quot;R-4&quot;, &quot;R-5&quot;, &quot;R-6&quot;)}
+    bytes_selected = 0
+
+    dec_path = os.path.join(args.out_dir, &quot;golden_copy_decision.csv&quot;)
+    div_path = os.path.join(args.out_dir, &quot;divergence_report.csv&quot;)
+    q_path = os.path.join(args.out_dir, &quot;quarantine_R6.csv&quot;)
+    audit_path = os.path.join(args.out_dir, &quot;integrity_audit_log.jsonl&quot;)
+
+    with open(dec_path, &quot;w&quot;, newline=&quot;&quot;, encoding=&quot;utf-8&quot;) as fd, \
+         open(div_path, &quot;w&quot;, newline=&quot;&quot;, encoding=&quot;utf-8&quot;) as fv, \
+         open(q_path, &quot;w&quot;, newline=&quot;&quot;, encoding=&quot;utf-8&quot;) as fq, \
+         open(audit_path, &quot;w&quot;, encoding=&quot;utf-8&quot;) as fa:
+
+        wd = csv.writer(fd); wd.writerow([&quot;relpath&quot;, &quot;rule&quot;, &quot;selected_source&quot;, &quot;size&quot;, &quot;hash&quot;, &quot;note&quot;])
+        wv = csv.writer(fv); wv.writerow([&quot;relpath&quot;, &quot;rule&quot;, &quot;a_size&quot;, &quot;b_size&quot;, &quot;a_hash&quot;, &quot;b_hash&quot;, &quot;a_mtime&quot;, &quot;b_mtime&quot;])
+        wq = csv.writer(fq); wq.writerow([&quot;relpath&quot;, &quot;reason&quot;, &quot;a_size&quot;, &quot;b_size&quot;, &quot;a_hash&quot;, &quot;b_hash&quot;])
+
+        for rel in sorted(all_keys):
+            a = a_rows.get(rel)
+            b = b_rows.get(rel)
+
+            # R-2: 편측 존재
+            if a and not b:
+                rule, sel, note = &quot;R-2a&quot;, args.a_label, &quot;DC-B 미존재 — 삭제/미복제 사유 조사 필요&quot;
+                stats[&quot;R-2a&quot;] += 1
+            elif b and not a:
+                rule, sel, note = &quot;R-2b&quot;, args.b_label, &quot;DC-A 미존재 — 삭제/미복제 사유 조사 필요&quot;
+                stats[&quot;R-2b&quot;] += 1
+
+            # R-5: 한쪽 읽기 불가
+            elif a and b and (not a[&quot;readable&quot;] or not b[&quot;readable&quot;]):
+                if a[&quot;readable&quot;] and not b[&quot;readable&quot;]:
+                    rule, sel, note = &quot;R-5&quot;, args.a_label, &quot;DC-B 읽기 실패 — 매체 손상 의심&quot;
+                elif b[&quot;readable&quot;] and not a[&quot;readable&quot;]:
+                    rule, sel, note = &quot;R-5&quot;, args.b_label, &quot;DC-A 읽기 실패 — 매체 손상 의심&quot;
+                else:
+                    rule, sel, note = &quot;R-6&quot;, &quot;NONE&quot;, &quot;양측 모두 읽기 실패 — 복구 대상&quot;
+                    stats[&quot;R-6&quot;] += 1
+                    wq.writerow([rel, note, a[&quot;size&quot;], b[&quot;size&quot;], a[&quot;hash&quot;], b[&quot;hash&quot;]])
+                if rule == &quot;R-5&quot;:
+                    stats[&quot;R-5&quot;] += 1
+
+            # R-1: 해시 동일
+            elif a[&quot;hash&quot;] == b[&quot;hash&quot;] and a[&quot;hash&quot;] not in (&quot;-&quot;, &quot;&quot;):
+                rule, sel, note = &quot;R-1&quot;, args.a_label, &quot;양측 동일 — 1부만 이관&quot;
+                stats[&quot;R-1&quot;] += 1
+
+            # 해시 미산출(L1 매니페스트)일 때는 size+mtime로 대체 판정
+            elif a[&quot;hash&quot;] == &quot;-&quot; and b[&quot;hash&quot;] == &quot;-&quot; and a[&quot;size&quot;] == b[&quot;size&quot;] and a[&quot;mtime&quot;] == b[&quot;mtime&quot;]:
+                rule, sel, note = &quot;R-1&quot;, args.a_label, &quot;L1 기준 동일(크기·mtime) — L2 해시 재검증 권고&quot;
+                stats[&quot;R-1&quot;] += 1
+
+            else:
+                # 상이 → R-3 / R-4 / R-6
+                wv.writerow([rel, &quot;DIVERGENT&quot;, a[&quot;size&quot;], b[&quot;size&quot;], a[&quot;hash&quot;], b[&quot;hash&quot;], a[&quot;mtime&quot;], b[&quot;mtime&quot;]])
+
+                a_mt = int(a[&quot;mtime&quot;]) if a[&quot;mtime&quot;].isdigit() else None
+                b_mt = int(b[&quot;mtime&quot;]) if b[&quot;mtime&quot;].isdigit() else None
+
+                if a_clock and b_clock and a_mt is not None and b_mt is not None and a_mt != b_mt:
+                    sel = args.a_label if a_mt &gt; b_mt else args.b_label
+                    rule, note = &quot;R-3&quot;, f&quot;mtime 기준 최신 채택 (a={a_mt}, b={b_mt})&quot;
+                    stats[&quot;R-3&quot;] += 1
+                elif newer:
+                    sel = newer
+                    rule, note = &quot;R-3&quot;, f&quot;파일 mtime 판정 불가 → DC 최종가동시각 기준 {newer} 채택&quot;
+                    stats[&quot;R-3&quot;] += 1
+                else:
+                    rule, sel = &quot;R-4&quot;, &quot;MANUAL&quot;
+                    note = &quot;시각 신뢰 불가 — 파일 내부 메타데이터 검사 필요&quot;
+                    stats[&quot;R-4&quot;] += 1
+                    wq.writerow([rel, note, a[&quot;size&quot;], b[&quot;size&quot;], a[&quot;hash&quot;], b[&quot;hash&quot;]])
+
+            src = a if sel == args.a_label else (b if sel == args.b_label else None)
+            if src:
+                wd.writerow([rel, rule, sel, src[&quot;size&quot;], src[&quot;hash&quot;], note])
+                if src[&quot;size&quot;].isdigit():
+                    bytes_selected += int(src[&quot;size&quot;])
+            else:
+                wd.writerow([rel, rule, sel, &quot;&quot;, &quot;&quot;, note])
+
+            fa.write(json.dumps({
+                &quot;relpath&quot;: rel, &quot;rule&quot;: rule, &quot;selected&quot;: sel, &quot;note&quot;: note,
+                &quot;decided_utc&quot;: datetime.now(timezone.utc).isoformat(),
+                &quot;decider&quot;: os.environ.get(&quot;INSPECTOR&quot;, &quot;미기재&quot;),
+            }, ensure_ascii=False) + &quot;\n&quot;)
+
+    total = len(all_keys)
+    summary = {
+        &quot;generated_utc&quot;: datetime.now(timezone.utc).isoformat(),
+        &quot;a_label&quot;: args.a_label, &quot;b_label&quot;: args.b_label,
+        &quot;a_files&quot;: len(a_rows), &quot;b_files&quot;: len(b_rows),
+        &quot;a_malformed_lines&quot;: a_bad, &quot;b_malformed_lines&quot;: b_bad,
+        &quot;union_files&quot;: total,
+        &quot;a_clock_reliable&quot;: a_clock, &quot;b_clock_reliable&quot;: b_clock,
+        &quot;newer_dc&quot;: newer,
+        &quot;rules&quot;: stats,
+        &quot;selected_bytes&quot;: bytes_selected,
+        &quot;selected_tib&quot;: round(bytes_selected / (1024 ** 4), 3),
+        &quot;manual_review_required&quot;: stats[&quot;R-4&quot;] + stats[&quot;R-6&quot;],
+    }
+    with open(os.path.join(args.out_dir, &quot;summary.json&quot;), &quot;w&quot;, encoding=&quot;utf-8&quot;) as fh:
+        json.dump(summary, fh, ensure_ascii=False, indent=2)
+
+    print(json.dumps(summary, ensure_ascii=False, indent=2))
+    print(f&quot;\n결정 대장 : {dec_path}&quot;)
+    print(f&quot;차분 리포트: {div_path}&quot;)
+    print(f&quot;격리 목록  : {q_path}&quot;)
+    print(f&quot;감사 로그  : {audit_path}&quot;)
+    if summary[&quot;manual_review_required&quot;] &gt; 0:
+        print(f&quot;\n[주의] 수동 판정 필요 {summary[&#39;manual_review_required&#39;]}건 — 자동 판정으로 종결하지 말 것.&quot;)
+        return 2
+    return 0
+
+
+if __name__ == &quot;__main__&quot;:
+    sys.exit(main())
+</code></pre>
+<hr>
+<h2>A-11. <code>S-10_s3_upload_verify.sh</code> — S3 이관 및 이관 후 무결성 대조</h2>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# S-10_s3_upload_verify.sh &lt;소스경로&gt; &lt;s3://버킷/프리픽스&gt; &lt;사전매니페스트&gt;
+# 목적: SSE-KMS 암호화 업로드 + 이관 후 매니페스트 대조로 무결성 증명
+set -euo pipefail
+
+SRC=&quot;${1:?사용법: $0 &lt;소스경로&gt; &lt;s3://버킷/프리픽스&gt; &lt;사전매니페스트&gt;}&quot;
+DST=&quot;${2:?S3 대상 필요}&quot;
+PRE_MANIFEST=&quot;${3:?사전 매니페스트 필요}&quot;
+
+KMS_KEY_ID=&quot;${KMS_KEY_ID:?KMS_KEY_ID 환경변수 필요 (CMK)}&quot;
+STORAGE_CLASS=&quot;${STORAGE_CLASS:-STANDARD}&quot;
+CONCURRENCY=&quot;${CONCURRENCY:-32}&quot;
+TS=$(date +%Y%m%dT%H%M%S)
+WORK=&quot;./s3verify-${TS}&quot;
+mkdir -p &quot;$WORK&quot;
+
+echo &quot;=== S3 이관 시작 ===&quot;
+echo &quot;소스        : ${SRC}&quot;
+echo &quot;대상        : ${DST}&quot;
+echo &quot;KMS 키      : ${KMS_KEY_ID}&quot;
+echo &quot;스토리지 클래스: ${STORAGE_CLASS}&quot;
+
+# 0) 사전 조건 검증
+command -v aws &gt;/dev/null 2&gt;&amp;1 || { echo &quot;aws CLI 필요&quot;; exit 1; }
+aws sts get-caller-identity &gt; &quot;${WORK}/identity.json&quot; || { echo &quot;AWS 자격증명 실패&quot;; exit 1; }
+
+BUCKET=$(echo &quot;$DST&quot; | sed -E &#39;s#^s3://([^/]+).*#\1#&#39;)
+PREFIX=$(echo &quot;$DST&quot; | sed -E &#39;s#^s3://[^/]+/?##&#39;)
+
+# 버킷 보안 설정 검증 (금융권 필수)
+echo &quot;--- 버킷 보안 설정 검증 ---&quot;
+aws s3api get-public-access-block --bucket &quot;$BUCKET&quot; &gt; &quot;${WORK}/pab.json&quot; 2&gt;/dev/null \
+  &amp;&amp; grep -q &#39;&quot;BlockPublicAcls&quot;: true&#39; &quot;${WORK}/pab.json&quot; \
+  &amp;&amp; echo &quot;  [OK] Block Public Access 적용&quot; \
+  || { echo &quot;  [FAIL] Block Public Access 미적용 → 중단&quot;; exit 2; }
+
+aws s3api get-bucket-encryption --bucket &quot;$BUCKET&quot; &gt; &quot;${WORK}/enc.json&quot; 2&gt;/dev/null \
+  &amp;&amp; grep -q &#39;aws:kms&#39; &quot;${WORK}/enc.json&quot; \
+  &amp;&amp; echo &quot;  [OK] 기본 암호화(KMS) 적용&quot; \
+  || { echo &quot;  [FAIL] KMS 기본 암호화 미적용 → 중단&quot;; exit 2; }
+
+aws s3api get-bucket-versioning --bucket &quot;$BUCKET&quot; &gt; &quot;${WORK}/ver.json&quot; 2&gt;/dev/null
+grep -q &#39;&quot;Status&quot;: &quot;Enabled&quot;&#39; &quot;${WORK}/ver.json&quot; \
+  &amp;&amp; echo &quot;  [OK] 버전관리 활성&quot; || echo &quot;  [WARN] 버전관리 비활성 — 권고 위반&quot;
+
+aws s3api get-object-lock-configuration --bucket &quot;$BUCKET&quot; &gt; &quot;${WORK}/lock.json&quot; 2&gt;/dev/null \
+  &amp;&amp; echo &quot;  [OK] Object Lock 설정 확인&quot; || echo &quot;  [WARN] Object Lock 미설정&quot;
+
+# 1) 전송 성능 설정
+aws configure set default.s3.max_concurrent_requests &quot;$CONCURRENCY&quot;
+aws configure set default.s3.multipart_chunksize 64MB
+aws configure set default.s3.multipart_threshold 128MB
+
+# 2) 업로드
+echo &quot;--- 업로드 실행 ---&quot;
+aws s3 sync &quot;$SRC&quot; &quot;$DST&quot; \
+  --sse aws:kms \
+  --sse-kms-key-id &quot;$KMS_KEY_ID&quot; \
+  --storage-class &quot;$STORAGE_CLASS&quot; \
+  --only-show-errors \
+  2&gt;&amp;1 | tee &quot;${WORK}/sync.log&quot;
+
+# 3) 이관 후 목록 수집 (S3 인벤토리 대신 즉시 list)
+echo &quot;--- 이관 후 목록 수집 ---&quot;
+aws s3api list-objects-v2 --bucket &quot;$BUCKET&quot; --prefix &quot;$PREFIX&quot; \
+  --query &#39;Contents[].[Key,Size,ETag]&#39; --output text &gt; &quot;${WORK}/s3_objects.tsv&quot;
+
+# 4) 대조
+echo &quot;--- 무결성 대조 ---&quot;
+awk -F&#39;\t&#39; &#39;{print $1&quot;\t&quot;$2}&#39; &quot;$PRE_MANIFEST&quot; | LC_ALL=C sort &gt; &quot;${WORK}/local.tsv&quot;
+awk -v p=&quot;$PREFIX&quot; -F&#39;\t&#39; &#39;{k=$1; sub(&quot;^&quot;p&quot;/?&quot;,&quot;&quot;,k); print k&quot;\t&quot;$2}&#39; &quot;${WORK}/s3_objects.tsv&quot; \
+  | LC_ALL=C sort &gt; &quot;${WORK}/remote.tsv&quot;
+
+comm -23 &quot;${WORK}/local.tsv&quot; &quot;${WORK}/remote.tsv&quot; &gt; &quot;${WORK}/missing_or_mismatch.tsv&quot; || true
+comm -13 &quot;${WORK}/local.tsv&quot; &quot;${WORK}/remote.tsv&quot; &gt; &quot;${WORK}/extra_in_s3.tsv&quot; || true
+
+LOCAL_N=$(wc -l &lt; &quot;${WORK}/local.tsv&quot;)
+REMOTE_N=$(wc -l &lt; &quot;${WORK}/remote.tsv&quot;)
+MISS_N=$(wc -l &lt; &quot;${WORK}/missing_or_mismatch.tsv&quot;)
+EXTRA_N=$(wc -l &lt; &quot;${WORK}/extra_in_s3.tsv&quot;)
+
+# 5) 표본 심층 검증 (SHA-256 대조)
+echo &quot;--- 표본 SHA-256 검증 (100건) ---&quot;
+: &gt; &quot;${WORK}/sample_hash_check.txt&quot;
+awk -F&#39;\t&#39; &#39;{print $1}&#39; &quot;${WORK}/remote.tsv&quot; | shuf -n 100 2&gt;/dev/null | while read -r key; do
+  [ -f &quot;${SRC}/${key}&quot; ] || continue
+  lh=$(sha256sum &quot;${SRC}/${key}&quot; | awk &#39;{print $1}&#39;)
+  aws s3api head-object --bucket &quot;$BUCKET&quot; --key &quot;${PREFIX}/${key}&quot; \
+    --checksum-mode ENABLED &gt; &quot;${WORK}/_ho.json&quot; 2&gt;/dev/null || continue
+  # 다운로드 대조 (체크섬 미설정 객체 대비)
+  aws s3 cp &quot;s3://${BUCKET}/${PREFIX}/${key}&quot; &quot;${WORK}/_tmpobj&quot; --quiet 2&gt;/dev/null || continue
+  rh=$(sha256sum &quot;${WORK}/_tmpobj&quot; | awk &#39;{print $1}&#39;)
+  if [ &quot;$lh&quot; = &quot;$rh&quot; ]; then
+    echo &quot;PASS ${key}&quot; &gt;&gt; &quot;${WORK}/sample_hash_check.txt&quot;
+  else
+    echo &quot;FAIL ${key} local=${lh} remote=${rh}&quot; &gt;&gt; &quot;${WORK}/sample_hash_check.txt&quot;
+  fi
+  rm -f &quot;${WORK}/_tmpobj&quot;
+done
+SAMP_FAIL=$(grep -c &#39;^FAIL&#39; &quot;${WORK}/sample_hash_check.txt&quot; || true)
+
+# 6) 리포트
+cat &gt; &quot;${WORK}/REPORT.md&quot; &lt;&lt;RPT
+# S3 이관 무결성 리포트
+
+- 생성(UTC): $(date -u +%FT%TZ)
+- 소스: \`${SRC}\`
+- 대상: \`${DST}\`
+- 담당: ${INSPECTOR:-미기재}
+
+| 항목 | 값 |
+|---|---|
+| 로컬 객체 수 | ${LOCAL_N} |
+| S3 객체 수 | ${REMOTE_N} |
+| 누락/크기 불일치 | ${MISS_N} |
+| S3 초과 객체 | ${EXTRA_N} |
+| 표본 해시 검증 실패 | ${SAMP_FAIL} |
+
+## 판정
+$( if [ &quot;$MISS_N&quot; -eq 0 ] &amp;&amp; [ &quot;${SAMP_FAIL:-0}&quot; -eq 0 ]; then
+     echo &quot;<strong>통과</strong> — 누락 0건, 표본 해시 전건 일치.&quot;
+   else
+     echo &quot;<strong>미통과</strong> — 누락 ${MISS_N}건 / 표본 실패 ${SAMP_FAIL}건. 재전송 후 재검증 필수.&quot;
+   fi )
+
+## 첨부
+- \`missing_or_mismatch.tsv\`
+- \`extra_in_s3.tsv\`
+- \`sample_hash_check.txt\`
+- \`sync.log\`
+RPT
+
+cat &quot;${WORK}/REPORT.md&quot;
+echo &quot;&quot;
+echo &quot;작업 디렉터리: ${WORK}&quot;
+[ &quot;$MISS_N&quot; -eq 0 ] &amp;&amp; [ &quot;${SAMP_FAIL:-0}&quot; -eq 0 ] || exit 1
+</code></pre>
+<hr>
+<h2>A-12. <code>S-11_mysql_precheck.sh</code> — MySQL 5.7 → 8.0 이관 사전 점검</h2>
+<pre><code class="language-bash">#!/usr/bin/env bash
+# S-11_mysql_precheck.sh
+# 목적: 8.0 업그레이드 실패 요인을 사전에 전수 조사
+# 실행: 격리망의 복제본 5.7 인스턴스에 대해 실행 (원본 미접촉)
+set -uo pipefail
+
+MYSQL_USER=&quot;${MYSQL_USER:-root}&quot;
+MYSQL_HOST=&quot;${MYSQL_HOST:-127.0.0.1}&quot;
+MYSQL_PORT=&quot;${MYSQL_PORT:-3306}&quot;
+OUT=&quot;./mysql-precheck-$(date +%Y%m%dT%H%M%S)&quot;
+mkdir -p &quot;$OUT&quot;
+Q() { mysql -u&quot;$MYSQL_USER&quot; -h&quot;$MYSQL_HOST&quot; -P&quot;$MYSQL_PORT&quot; -N -B -e &quot;$1&quot; 2&gt;&gt;&quot;${OUT}/_errors.log&quot;; }
+
+echo &quot;=== MySQL 이관 사전 점검 ===&quot; | tee &quot;${OUT}/summary.txt&quot;
+
+# 1. 버전 및 기본 정보
+Q &quot;SELECT VERSION();&quot; &gt; &quot;${OUT}/01_version.txt&quot;
+Q &quot;SHOW VARIABLES WHERE Variable_name IN
+   (&#39;version&#39;,&#39;datadir&#39;,&#39;character_set_server&#39;,&#39;collation_server&#39;,
+    &#39;innodb_file_per_table&#39;,&#39;lower_case_table_names&#39;,&#39;sql_mode&#39;,
+    &#39;default_authentication_plugin&#39;,&#39;log_bin&#39;,&#39;server_id&#39;,&#39;secure_file_priv&#39;);&quot; \
+   &gt; &quot;${OUT}/02_key_variables.txt&quot;
+echo &quot;버전: $(cat &quot;${OUT}/01_version.txt&quot;)&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+
+# 2. 스토리지 엔진 분포 (MyISAM은 8.0 이관 시 InnoDB 전환 권고)
+Q &quot;SELECT engine, COUNT(*) AS tables, ROUND(SUM(data_length+index_length)/1024/1024,1) AS mb
+   FROM information_schema.tables
+   WHERE table_schema NOT IN (&#39;mysql&#39;,&#39;information_schema&#39;,&#39;performance_schema&#39;,&#39;sys&#39;)
+   GROUP BY engine ORDER BY 3 DESC;&quot; &gt; &quot;${OUT}/03_engines.txt&quot;
+MYISAM=$(awk &#39;$1==&quot;MyISAM&quot;{print $2}&#39; &quot;${OUT}/03_engines.txt&quot;)
+[ -n &quot;${MYISAM:-}&quot; ] &amp;&amp; echo &quot;[주의] MyISAM 테이블 ${MYISAM}개 → InnoDB 전환 검토&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+
+# 3. 8.0 예약어 충돌 (테이블/컬럼명)
+cat &gt; &quot;${OUT}/_reserved.txt&quot; &lt;&lt;&#39;RW&#39;
+CUBE
+CUME_DIST
+DENSE_RANK
+EMPTY
+EXCEPT
+FIRST_VALUE
+FUNCTION
+GROUPING
+GROUPS
+JSON_TABLE
+LAG
+LAST_VALUE
+LATERAL
+LEAD
+NTH_VALUE
+NTILE
+OF
+OVER
+PERCENT_RANK
+RANK
+RECURSIVE
+ROW_NUMBER
+SYSTEM
+WINDOW
+RW
+RESERVED=$(paste -sd, &quot;${OUT}/_reserved.txt&quot; | sed &quot;s/[^,]*/&#39;&amp;&#39;/g&quot;)
+Q &quot;SELECT &#39;TABLE&#39; AS kind, table_schema, table_name, &#39;&#39; AS col
+   FROM information_schema.tables
+   WHERE UPPER(table_name) IN (${RESERVED})
+     AND table_schema NOT IN (&#39;mysql&#39;,&#39;information_schema&#39;,&#39;performance_schema&#39;,&#39;sys&#39;)
+   UNION ALL
+   SELECT &#39;COLUMN&#39;, table_schema, table_name, column_name
+   FROM information_schema.columns
+   WHERE UPPER(column_name) IN (${RESERVED})
+     AND table_schema NOT IN (&#39;mysql&#39;,&#39;information_schema&#39;,&#39;performance_schema&#39;,&#39;sys&#39;);&quot; \
+   &gt; &quot;${OUT}/04_reserved_word_conflicts.txt&quot;
+RWC=$(wc -l &lt; &quot;${OUT}/04_reserved_word_conflicts.txt&quot;)
+echo &quot;예약어 충돌: ${RWC}건&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+
+# 4. 문자셋/콜레이션 (8.0 기본값 변경으로 정렬 순서 달라질 수 있음)
+Q &quot;SELECT table_schema, table_collation, COUNT(*)
+   FROM information_schema.tables
+   WHERE table_schema NOT IN (&#39;mysql&#39;,&#39;information_schema&#39;,&#39;performance_schema&#39;,&#39;sys&#39;)
+   GROUP BY 1,2;&quot; &gt; &quot;${OUT}/05_collations.txt&quot;
+Q &quot;SELECT table_schema, table_name, column_name, character_set_name, collation_name
+   FROM information_schema.columns
+   WHERE collation_name IS NOT NULL
+     AND collation_name NOT LIKE &#39;utf8mb4%&#39;
+     AND table_schema NOT IN (&#39;mysql&#39;,&#39;information_schema&#39;,&#39;performance_schema&#39;,&#39;sys&#39;);&quot; \
+   &gt; &quot;${OUT}/06_non_utf8mb4_columns.txt&quot;
+NONU=$(wc -l &lt; &quot;${OUT}/06_non_utf8mb4_columns.txt&quot;)
+echo &quot;비 utf8mb4 컬럼: ${NONU}건 (한글 데이터 인코딩 확인 필수)&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+
+# 5. 계정/권한 (침해 조사 겸용)
+Q &quot;SELECT user, host, plugin, authentication_string=&#39;&#39; AS empty_pw,
+          Super_priv, File_priv, Process_priv, Grant_priv
+   FROM mysql.user ORDER BY user;&quot; &gt; &quot;${OUT}/07_users.txt&quot;
+Q &quot;SELECT user, host FROM mysql.user WHERE authentication_string=&#39;&#39; OR authentication_string IS NULL;&quot; \
+  &gt; &quot;${OUT}/08_empty_password_users.txt&quot;
+[ -s &quot;${OUT}/08_empty_password_users.txt&quot; ] &amp;&amp; echo &quot;[위험] 빈 패스워드 DB 계정 존재&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+Q &quot;SELECT user, host FROM mysql.user WHERE Super_priv=&#39;Y&#39; OR File_priv=&#39;Y&#39;;&quot; \
+  &gt; &quot;${OUT}/09_privileged_users.txt&quot;
+Q &quot;SELECT user, host FROM mysql.user WHERE host=&#39;%&#39;;&quot; &gt; &quot;${OUT}/10_wildcard_host_users.txt&quot;
+[ -s &quot;${OUT}/10_wildcard_host_users.txt&quot; ] &amp;&amp; echo &quot;[위험] host=&#39;%&#39; 계정 존재&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+
+# 6. UDF / 플러그인 백도어 점검
+Q &quot;SELECT * FROM mysql.func;&quot; &gt; &quot;${OUT}/11_udf_functions.txt&quot; 2&gt;/dev/null
+[ -s &quot;${OUT}/11_udf_functions.txt&quot; ] &amp;&amp; echo &quot;[위험] 사용자 정의 함수(UDF) 등록됨 → 백도어 가능성&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+Q &quot;SELECT plugin_name, plugin_library FROM information_schema.plugins WHERE plugin_library IS NOT NULL;&quot; \
+  &gt; &quot;${OUT}/12_plugins.txt&quot;
+
+# 7. 8.0 제거/변경 옵션 사용 여부
+Q &quot;SHOW VARIABLES WHERE Variable_name IN
+   (&#39;query_cache_type&#39;,&#39;query_cache_size&#39;,&#39;innodb_file_format&#39;,
+    &#39;innodb_large_prefix&#39;,&#39;show_compatibility_56&#39;,&#39;metadata_locks_cache_size&#39;);&quot; \
+   &gt; &quot;${OUT}/13_removed_options.txt&quot;
+
+# 8. 파티션 + 비InnoDB 조합 (8.0에서 미지원)
+Q &quot;SELECT DISTINCT t.table_schema, t.table_name, t.engine
+   FROM information_schema.tables t
+   JOIN information_schema.partitions p
+     ON t.table_schema=p.table_schema AND t.table_name=p.table_name
+   WHERE p.partition_name IS NOT NULL AND t.engine &lt;&gt; &#39;InnoDB&#39;;&quot; \
+   &gt; &quot;${OUT}/14_nonnative_partitions.txt&quot;
+[ -s &quot;${OUT}/14_nonnative_partitions.txt&quot; ] &amp;&amp; echo &quot;[차단] 비InnoDB 파티션 테이블 존재 → 8.0 업그레이드 차단 요인&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+
+# 9. 객체 수 (이관 후 대조 기준)
+Q &quot;SELECT &#39;tables&#39;, COUNT(*) FROM information_schema.tables
+   WHERE table_schema NOT IN (&#39;mysql&#39;,&#39;information_schema&#39;,&#39;performance_schema&#39;,&#39;sys&#39;)
+   UNION ALL SELECT &#39;routines&#39;, COUNT(*) FROM information_schema.routines
+   UNION ALL SELECT &#39;triggers&#39;, COUNT(*) FROM information_schema.triggers
+   UNION ALL SELECT &#39;views&#39;, COUNT(*) FROM information_schema.views
+   UNION ALL SELECT &#39;events&#39;, COUNT(*) FROM information_schema.events;&quot; \
+   &gt; &quot;${OUT}/15_object_counts.txt&quot;
+
+# 10. 테이블별 행수 (이관 후 대조 기준 — 정확값)
+Q &quot;SELECT table_schema, table_name FROM information_schema.tables
+   WHERE table_type=&#39;BASE TABLE&#39;
+     AND table_schema NOT IN (&#39;mysql&#39;,&#39;information_schema&#39;,&#39;performance_schema&#39;,&#39;sys&#39;);&quot; \
+  | while read -r db tb; do
+      [ -z &quot;${tb:-}&quot; ] &amp;&amp; continue
+      n=$(Q &quot;SELECT COUNT(*) FROM \`${db}\`.\`${tb}\`;&quot;)
+      printf &#39;%s\t%s\t%s\n&#39; &quot;$db&quot; &quot;$tb&quot; &quot;${n:-ERR}&quot;
+    done &gt; &quot;${OUT}/16_exact_rowcounts.tsv&quot;
+echo &quot;행수 스냅샷: $(wc -l &lt; &quot;${OUT}/16_exact_rowcounts.tsv&quot;) 테이블&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+
+# 11. 손상 점검
+mysqlcheck -u&quot;$MYSQL_USER&quot; -h&quot;$MYSQL_HOST&quot; -P&quot;$MYSQL_PORT&quot; --all-databases --check \
+  &gt; &quot;${OUT}/17_mysqlcheck.txt&quot; 2&gt;&amp;1 || true
+CORRUPT=$(grep -ci &#39;error&#39; &quot;${OUT}/17_mysqlcheck.txt&quot; || true)
+echo &quot;mysqlcheck 오류: ${CORRUPT}건&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+
+# 12. 공식 업그레이드 체커 (mysqlsh 존재 시)
+if command -v mysqlsh &gt;/dev/null 2&gt;&amp;1; then
+  mysqlsh --uri &quot;${MYSQL_USER}@${MYSQL_HOST}:${MYSQL_PORT}&quot; -- \
+    util check-for-server-upgrade --outputFormat=JSON \
+    &gt; &quot;${OUT}/18_upgrade_checker.json&quot; 2&gt;&amp;1 || true
+  echo &quot;업그레이드 체커 결과: ${OUT}/18_upgrade_checker.json&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+else
+  echo &quot;[권고] mysql-shell 설치 후 util.checkForServerUpgrade() 실행 필수&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+fi
+
+# 13. 논리 백업 (이관 원본)
+DUMP=&quot;${OUT}/full_dump.sql.gz&quot;
+mysqldump -u&quot;$MYSQL_USER&quot; -h&quot;$MYSQL_HOST&quot; -P&quot;$MYSQL_PORT&quot; \
+  --all-databases --single-transaction --routines --triggers --events \
+  --hex-blob --default-character-set=utf8mb4 --set-gtid-purged=OFF 2&gt;&gt;&quot;${OUT}/_errors.log&quot; \
+  | gzip &gt; &quot;$DUMP&quot;
+if [ -s &quot;$DUMP&quot; ]; then
+  sha256sum &quot;$DUMP&quot; &gt; &quot;${DUMP}.sha256&quot;
+  echo &quot;논리 백업 완료: ${DUMP} ($(du -h &quot;$DUMP&quot; | cut -f1))&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+  touch /var/lib/patch-guard/mysql_dump.ok 2&gt;/dev/null || true
+else
+  echo &quot;[실패] 논리 백업 생성 실패 — _errors.log 확인&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+fi
+
+echo &quot;&quot;
+echo &quot;=== 점검 완료: ${OUT} ===&quot; | tee -a &quot;${OUT}/summary.txt&quot;
+cat &quot;${OUT}/summary.txt&quot;
+</code></pre>
+<hr>
+<h1>부록 B. 리스크 등록부 (Risk Register)</h1>
+<table>
+<thead>
+<tr>
+<th>ID</th>
+<th>리스크</th>
+<th>발생 확률</th>
+<th>영향</th>
+<th>대응</th>
+<th>소유자</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>R-01</td>
+<td>동면 백도어가 첫 부팅 시 활성화되어 C2 통신</td>
+<td>중</td>
+<td><strong>치명</strong></td>
+<td>조사망 아웃바운드 전면 차단, PCAP 상시 캡처 (Phase 1)</td>
+<td>보안팀</td>
+</tr>
+<tr>
+<td>R-02</td>
+<td>RAID 슬롯 순서 오인으로 어레이 재구성 → 데이터 영구 파괴</td>
+<td>중</td>
+<td><strong>치명</strong></td>
+<td>슬롯 맵 선작성, Foreign Import 금지, 이미징 후 부팅 (Phase 0/1)</td>
+<td>인프라팀</td>
+</tr>
+<tr>
+<td>R-03</td>
+<td>무전원 24개월 SSD 셀 전하 손실로 UECC 발생</td>
+<td><strong>중–고</strong></td>
+<td>높음</td>
+<td>최우선 이미징, <code>ddrescue</code> 사용, 읽기 전용 (Phase 1)</td>
+<td>인프라팀</td>
+</tr>
+<tr>
+<td>R-04</td>
+<td>HDD 스핀업 실패(고착)</td>
+<td>중</td>
+<td>높음</td>
+<td>1회 실패 시 재시도 금지, 전문 복구 업체 이관</td>
+<td>인프라팀</td>
+</tr>
+<tr>
+<td>R-05</td>
+<td>개별 서버 부팅 실패 (예상 6–15대 / 300대)</td>
+<td>고</td>
+<td>중</td>
+<td>스냅샷 필수, BMC 콘솔 확보, 이전 커널 엔트리 보존 (Phase 4)</td>
+<td>SE팀</td>
+</tr>
+<tr>
+<td>R-06</td>
+<td>CentOS EOL로 최신 패치 확보 불가</td>
+<td><strong>확정</strong></td>
+<td>높음</td>
+<td>Phase 2-D의 완화 통제 + 추출 후 서버 폐기 전략</td>
+<td>CISO</td>
+</tr>
+<tr>
+<td>R-07</td>
+<td>MySQL 5.7 → 8.0 데이터 딕셔너리/예약어/콜레이션 실패</td>
+<td>고</td>
+<td>중</td>
+<td><code>S-11</code> 사전 점검, 논리 백업 기반 이관</td>
+<td>DBA</td>
+</tr>
+<tr>
+<td>R-08</td>
+<td>한글 데이터 인코딩 손상 (euckr/utf8 혼재)</td>
+<td><strong>중–고</strong></td>
+<td>높음</td>
+<td>컬럼별 문자셋 조사, 변환 전 표본 육안 검증</td>
+<td>DBA</td>
+</tr>
+<tr>
+<td>R-09</td>
+<td>DC-A/DC-B 사본 신선도 판정 불가(R-6) 대량 발생</td>
+<td>중</td>
+<td>중</td>
+<td>양측 병렬 보존, 격리 목록 관리 (Phase 3)</td>
+<td>데이터팀</td>
+</tr>
+<tr>
+<td>R-10</td>
+<td>CMOS 초기화로 타임스탬프 신뢰 불가 → 진본 판정 근거 상실</td>
+<td>고</td>
+<td>중</td>
+<td>파일 내부 메타데이터 기반 R-4 경로, 판정 불가 명시</td>
+<td>데이터팀</td>
+</tr>
+<tr>
+<td>R-11</td>
+<td>Direct Connect 프로비저닝 지연이 임계 경로화</td>
+<td>고</td>
+<td>높음</td>
+<td>Phase 0과 동시 발주, Snowball 병행 전략</td>
+<td>PM</td>
+</tr>
+<tr>
+<td>R-12</td>
+<td>3.8 PB 전송 중 무결성 손상 미탐지</td>
+<td>중</td>
+<td><strong>치명</strong></td>
+<td>이관 전/후 매니페스트 대조 의무화, 표본 SHA-256 (Phase 5)</td>
+<td>데이터팀</td>
+</tr>
+<tr>
+<td>R-13</td>
+<td>개인정보 국외 이전 법적 요건 미충족</td>
+<td>중</td>
+<td><strong>치명</strong></td>
+<td>리전 확정 및 법무·개인정보보호책임자 사전 검토</td>
+<td>법무/CPO</td>
+</tr>
+<tr>
+<td>R-14</td>
+<td>침해 확인 시 신고·통지 의무 지연</td>
+<td>중</td>
+<td><strong>치명</strong></td>
+<td>Phase 2 착수 시점부터 CPO·법무 상시 참여</td>
+<td>CPO</td>
+</tr>
+<tr>
+<td>R-15</td>
+<td>SE 10명으로 300대 처리 시 이미징 병목</td>
+<td><strong>고</strong></td>
+<td>중</td>
+<td>OS 볼륨 전수 / 데이터 볼륨 매니페스트 이원화, 라인 편성 (Phase 1-C)</td>
+<td>PM</td>
+</tr>
+<tr>
+<td>R-16</td>
+<td>구 자격증명(SSH키/DB계정/API키) 재사용으로 재침해</td>
+<td>중</td>
+<td><strong>치명</strong></td>
+<td>인증 자산 전량 폐기·재발급을 패치 선결 조건화 (Phase 4-A)</td>
+<td>보안팀</td>
+</tr>
+<tr>
+<td>R-17</td>
+<td>원본 매체 폐기 누락으로 데이터 잔존</td>
+<td>중</td>
+<td>높음</td>
+<td>Crypto Erase + 물리 파기 + 증명서 대조 (Phase 7-B)</td>
+<td>인프라팀</td>
+</tr>
+</tbody></table>
+<hr>
+<h1>부록 C. 종합 일정 (병렬화 반영)</h1>
+<pre><code>주차   1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16
+─────────────────────────────────────────────────────────
+P0 실사  ████
+P1 격리     ██████
+P2 조사        ████████
+P3 정합성          ████████████
+P4 패치               ██████████
+P5 S3                    ████████████████████
+P6 DB                          ██████
+P7 검증                                 ██████
+DX 발주  ████████████████ (Direct Connect 리드타임 — 최우선 착수)
+</code></pre>
+<table>
+<thead>
+<tr>
+<th>시나리오</th>
+<th>총 소요</th>
+<th>전제</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>최소</strong></td>
+<td>약 8–10주</td>
+<td>100Gbps 회선 또는 Snowball 다중 병행, Phase 병렬 최대화, 침해 판정 C 소수</td>
+</tr>
+<tr>
+<td><strong>보통</strong></td>
+<td>약 3.5–5개월</td>
+<td>10Gbps 순차, 침해 판정 C 다수 발생, R-4/R-6 수동 판정 상당량</td>
+</tr>
+<tr>
+<td><strong>최대</strong></td>
+<td>약 7–13개월</td>
+<td>1Gbps, Direct Connect 프로비저닝 지연, 다수 자산 하드웨어 복구 필요</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>원 시나리오 문서 대비 <strong>+2–4주</strong>가 추가되었다. 이는 Phase 0–3(물리 실사·격리·침해 조사·정합성 판정)이 새로 편입되었기 때문이다. 이 기간은 절약할 수 없다. 절약하면 목마를 성 안으로 들이는 결정을 하게 된다.</p>
+</blockquote>
+<hr>
+<h1>부록 D. 마스터 체크리스트 (요약 1페이지)</h1>
+<pre><code>■ 착수 전
+[ ] 이 문서의 원칙 1~3(Assume Breach / Read-Only First / No Direct Path) 전원 숙지 및 서명
+[ ] Direct Connect 발주 (임계 경로 — 1주차 착수)
+[ ] 법무·개인정보보호책임자(CPO) 프로젝트 상시 참여 확정
+[ ] Chain of Custody 양식 및 반입/반출 절차 확정
+
+■ Phase 0 물리 실사        → 체크리스트 0.1 ~ 0.14
+■ Phase 1 격리·이미징      → 체크리스트 1.1 ~ 1.13
+■ Phase 2 침해 조사        → 체크리스트 2.1 ~ 2.14   (CISO 서명 필수)
+■ Phase 3 정합성 판정      → 체크리스트 3.1 ~ 3.14
+■ Phase 4 보안 패치        → 체크리스트 4.1 ~ 4.18   (롤백 리허설 필수)
+■ Phase 5 S3 이관          → 체크리스트 5.1 ~ 5.15
+■ Phase 6 DB 이관          → 체크리스트 6.1 ~ 6.15
+■ Phase 7 검증·인수·폐기   → 체크리스트 7.1 ~ 7.12
+
+■ 절대 금지 (Never)
+[×] 검증 전 원본 매체 쓰기
+[×] 슬롯 순서 불명 상태의 RAID Foreign Config Import / Initialize / Rebuild
+[×] 조사망 아웃바운드 개방
+[×] 방치 서버 → 운영망/AWS 직결
+[×] 구 자격증명(SSH키/DB계정/API키) 유지
+[×] gpgcheck=0 설정
+[×] 백업 없는 패치
+[×] 롤백 리허설 없는 롤백 계획
+[×] 매니페스트 대조 없는 &quot;이관 완료&quot; 선언
+</code></pre>
+<hr>
+<h1>부록 E. 신뢰도 및 검증 필요 항목</h1>
+<p>본 문서의 수치·규격 관련 서술 중 <strong>실행 전 반드시 실환경에서 재확인</strong>해야 하는 항목:</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>본문 서술</th>
+<th>확인 방법</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SSD 무전원 보존 기간</td>
+<td>소비자 약 1년(30℃), 엔터프라이즈 약 3개월(40℃) 수준</td>
+<td>JEDEC JESD218 계열 규격 원문 및 제조사 제품 데이터시트 확인</td>
+</tr>
+<tr>
+<td>CentOS EOL 시점</td>
+<td>CentOS 8: 2021-12 / CentOS 7: 2024-06</td>
+<td>실 설치 버전(<code>/etc/centos-release</code>) 확인 후 확정</td>
+</tr>
+<tr>
+<td>vault 아카이브 버전 문자열</td>
+<td>7.9.2009 / 8.5.2111</td>
+<td>실제 아카이브 디렉터리 구조 확인 (사내 미러 구성 시점)</td>
+</tr>
+<tr>
+<td>MySQL 5.7 EOL</td>
+<td>2023-10</td>
+<td>Oracle 라이프사이클 정책 확인</td>
+</tr>
+<tr>
+<td>부팅 실패율 2–5%</td>
+<td>원 시나리오 문서 인용</td>
+<td><strong>파일럿 5–10대 결과로 실측 대체</strong></td>
+</tr>
+<tr>
+<td>전송 효율 60–80%</td>
+<td>일반적 경험치</td>
+<td>파일럿 이관(1–10TB) 실측으로 대체</td>
+</tr>
+<tr>
+<td>Direct Connect 리드타임</td>
+<td>수주–수개월</td>
+<td>AWS 및 회선사업자 견적 시 확정</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>파일럿의 목적은 이 표를 실측값으로 바꾸는 것이다.</strong> 추정치로 300대를 진행하지 않는다.</p>
+</blockquote>
+<hr>
+<p><strong>문서 끝.</strong></p>
+<p>작성: Betalabs Inc. / 검토 요청 대상: 보안팀 · 인프라팀 · DBA · 법무 · CPO · CISO
+분류: 대외 공개  — 배포 시 접근통제 및 워터마킹 적용</p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://tech.vibequant.cc/tech/cyworld-server-restoration-playbook/" data-title="싸이월드 방치 서버 복원 플레이북" data-text="IDC 바닥에 무전원 방치된 싸이월드 서버 약 300대의 데이터 복원·보안 패치·AWS 이관 플레이북. 부팅 전 실사, 포렌식 이미징, Assume Breach, DC 간 정합성, CentOS EOL 패치와 3.8 PB S3 이관을 단계별로 정리한다." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fcyworld-server-restoration-playbook%2F&amp;text=%EC%8B%B8%EC%9D%B4%EC%9B%94%EB%93%9C%20%EB%B0%A9%EC%B9%98%20%EC%84%9C%EB%B2%84%20%EB%B3%B5%EC%9B%90%20%ED%94%8C%EB%A0%88%EC%9D%B4%EB%B6%81" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fcyworld-server-restoration-playbook%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fcyworld-server-restoration-playbook%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Cyworld/Cyworld-Server-Restoration-Playbook.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
