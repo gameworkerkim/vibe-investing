@@ -1,3 +1,4 @@
+<!--
 ---
 title: "Bending Spoons 비즈니스 모델 심층 분석"
 subtitle: "Buy–Rebuild–Hold–Reinvest 모델의 구조, 한계, 그리고 실행 체크리스트"
@@ -43,7 +44,7 @@ schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
-
+-->
 # Bending Spoons 비즈니스 모델 심층 분석
 ### "Buy–Rebuild–Hold–Reinvest" 모델의 구조, 한계, 그리고 실행 체크리스트
 
