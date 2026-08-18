@@ -1,3 +1,5 @@
+<!--
+
 ---
 title: "중국은 지금 '정부용 윈도우'를 지우고 있다"
 subtitle: "CMIT판 Windows 10 조기 폐기가 말해주는 것 — 미중 기술전쟁의 다음 국면"
@@ -43,7 +45,7 @@ schema_type: TechArticle
 draft: false
 robots: index,follow
 ---
-
+-->
 # 중국은 지금 '정부용 윈도우'를 지우고 있다
 
 ## CMIT판 Windows 10 조기 폐기가 말해주는 것 — 미중 기술전쟁의 다음 국면
