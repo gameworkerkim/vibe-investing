@@ -14,7 +14,7 @@ export const COLUMN_GROUP_RULES = [
   { id: "crypto-web3", title_ko: "크립토 · Web3", title_en: "Crypto · Web3", match: [/bitcoin/i, /btc/i, /ethereum/i, /bnb/i, /crypto/i, /crytohft/i, /defi/i, /web3/i, /strategy\//i, /robinhood/i, /dex memecoin/i, /aws_blockchain/i, /prediction-market/i, /stablecoin/i, /medici/i] },
   { id: "korea-hacking", title_ko: "한국 · 해킹", title_en: "Korea · Hacking", match: [/national-diplomatic/i, /외교원/i, /hacking-incident/i, /\/hacking\//i, /backdoor/i, /endless.?doors/i] },
   { id: "korea", title_ko: "한국 · 코리아 디스카운트", title_en: "Korea", match: [/korea/i, /주식시황/i, /msci/i, /starbucks/i, /seoul/i, /kpop/i, /toss /i, /기레기/i, /골드만/i, /cyworld/i] },
-  { id: "macro-geo", title_ko: "매크로 · 지정학", title_en: "Macro · Geopolitics", match: [/\/usa\//i, /age-of-usd/i, /pax americana/i, /trump/i, /defense/i, /rome/i, /world_bank/i, /us treasury/i, /japan/i, /china /i, /drone/i, /tobacco/i] },
+  { id: "macro-geo", title_ko: "매크로 · 지정학", title_en: "Macro · Geopolitics", match: [/\/usa\//i, /age-of-usd/i, /pax americana/i, /trump/i, /defense/i, /rome/i, /world_bank/i, /us treasury/i, /japan/i, /china /i, /drone/i, /tobacco/i, /\/windows10\//i, /eod-win10/i] },
   { id: "quant-strategy", title_ko: "퀀트 · 투자 전략", title_en: "Quant · Strategy", match: [/momentum/i, /special situations/i, /insider/i, /model vs reality/i, /medbridge/i, /semiconductor ai etf/i, /stock_option/i, /money_game/i] },
   { id: "semi-storage", title_ko: "반도체 · 스토리지", title_en: "Semi · Storage", match: [/storage war/i, /marvell/i, /intel/i, /memory/i, /semi/i, /\/ssd\//i, /power-off-retention/i, /sandisk/i, /kioxia/i] },
   { id: "industry", title_ko: "산업 · 소비", title_en: "Industry · Consumer", match: [/uber/i, /netflex/i, /netflix/i, /mokrak/i, /luxury/i, /webtoon/i, /kidult/i, /ford/i, /adobe/i, /voce/i, /brain/i, /bouble/i, /cyber wrecker/i, /518/i, /startup/i, /shelf-life/i, /\/k11\//i, /adrian-cheng/i] },
@@ -44,7 +44,7 @@ export const TECH_GROUP_RULES = [
   { id: "cloud-free", title_ko: "클라우드 · Free tier", title_en: "Cloud · Free tier", match: [/cloudflare/i, /cloudeflare/i, /web-analytics/i, /free_hosting/i, /freeemail/i, /oraclecloud/i, /vercel/i, /neon/i, /turso/i, /sqlite/i, /upstash/i, /serverless_redis/i, /paas_railway/i, /aws\//i, /github_cdn/i, /python_saas/i, /\/seo\//i, /seo-ai-readability/i] },
   { id: "llm-agents", title_ko: "LLM · 에이전트", title_en: "LLM · Agents", match: [/llm/i, /claude/i, /grok/i, /minimax/i, /minicpm/i, /bonsai/i, /tencent/i, /local_llm/i, /ollama/i, /qwen/i, /effective_llm/i, /agent-friendly/i, /ai-agent-framework/i, /awesome-llm-apps/i, /awesome-agent/i, /openworker/i, /ai-open-weights/i, /solar-open/i, /solar open/i, /kimi-k3/i, /opencodemcp/i, /opencodex/i, /llm_proxy/i, /mcp/i, /deepwiki/i, /openwiki/i, /google_code_wiki/i, /zcode/i, /headroom/i, /caveman/i, /quivr/i] },
   { id: "quant-data", title_ko: "퀀트 · 데이터", title_en: "Quant · Data", match: [/qlib/i, /gs_quant/i, /timesfm/i, /pyodide/i, /python_pyodide/i, /robinhood/i, /\/toss\//i, /toss-openapi/i, /semiconductor-supercycle/i] },
-  { id: "security", title_ko: "보안", title_en: "Security", match: [/security/i, /claw/i, /secret scanning/i, /\/cyworld\//i, /restoration-playbook/i] },
+  { id: "security", title_ko: "보안", title_en: "Security", match: [/security/i, /claw/i, /secret scanning/i, /\/cyworld\//i, /restoration-playbook/i, /\/windows10\//i, /eod-win10/i, /cmit/i] },
   { id: "ui-tools", title_ko: "UI · 개발도구", title_en: "UI · Dev tools", match: [/niceui/i, /nicegui/i, /ui_opensource/i, /astryx/i, /bigfive/i, /orca/i, /loop/i, /china-physical/i] },
   { id: "firebase-alt", title_ko: "BaaS · DB", title_en: "BaaS · DB", match: [/supabase/i, /opensource_firebase/i] },
 ];
@@ -62,6 +62,7 @@ export const ESSAY_GROUP_FALLBACK = { id: "other", title_ko: "기타 에세이",
 
 /** Paths (substring) that should appear in Recommended — order = display order */
 export const FEATURED_COLUMN_PATHS = [
+  "Windows10/EOD-Win10-China.md",
   "SSD/SSD-Power-OFF-Retention-Risk.md",
   "Hacking/BackDoor-ENDLESS-DOORS.md",
   "StableCoin/Medici-to-Siliconvalley-column.md",
@@ -100,6 +101,7 @@ export const FEATURED_COLUMN_PATHS = [
 
 /** TechDoc recommended — order = display order */
 export const FEATURED_TECH_PATHS = [
+  "Windows10/EOD-Win10-China.md",
   "Cyworld/Cyworld-Server-Restoration-Playbook.md",
   "LLM_MiniMax/MiniMax-H3-GettingStart.md",
   "KIMI-K3/KIMI-K3-Cloud-Install-Guide.md",
