@@ -603,6 +603,7 @@ const SLUG_OVERRIDES = {
   "SSD/SSD-Power-OFF-Retention-Risk.md": "ssd-power-off-retention-risk",
   "Cyworld/Cyworld-Server-Restoration-Playbook.md": "cyworld-server-restoration-playbook",
   "Windows10/EOD-Win10-China.md": "eod-win10-china",
+  "Bending spoons/Bending spoons playbook analysis.md": "bending-spoons-playbook",
   "AI_Revolution/AI-Between-Coolness-and-Passion.md": "ai-between-coolness-and-passion",
   "주식시황/Column-Kioxia-Q1FY2026.md": "kioxia-q1fy2026",
   "주식시황/Column-Kioxia-Q1FY2026_EN.md": "kioxia-q1fy2026-en",
