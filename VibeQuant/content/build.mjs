@@ -636,6 +636,10 @@ const SLUG_OVERRIDES = {
   "CTI-2026-0804-COLDCARD-RNG_EN.md": "coldcard-rng-20260804-en",
   "CTI-2026-0804-COLDCARD-RNG_JA.md": "coldcard-rng-20260804-ja",
   "CTI-2026-0804-COLDCARD-RNG_CN.md": "coldcard-rng-20260804-cn",
+  "CTI-2026-0822-Column-KR.md": "cert-authority-breach-20260822",
+  "CTI-2026-0822-Column-EN.md": "cert-authority-breach-20260822-en",
+  "CTI-2026-0822-Column-JA.md": "cert-authority-breach-20260822-ja",
+  "CTI-2026-0822-Column-CN.md": "cert-authority-breach-20260822-cn",
   "USA/Age-of-USD.md": "age-of-usd",
   "AI-IDC/Why-High-Power-Datacenter.md": "why-high-power-datacenter",
 };
@@ -1391,7 +1395,8 @@ function ctiFamilyKey(rel) {
   return path
     .basename(rel)
     .replace(/\.(md)$/i, "")
-    .replace(/_(KR|EN|JP|CN|ZH|JA)$/i, "")
+    // GitHub CTI uses both CTI-…_KR.md and CTI-…-KR.md
+    .replace(/[_-](KR|EN|JP|CN|ZH|JA)$/i, "")
     .toUpperCase();
 }
 
@@ -1471,7 +1476,7 @@ function scanCti() {
       featuredRank = Number(meta.featured_rank ?? 50);
     }
     const lang = normalizeCtiLang(
-      meta.lang || (rel.match(/_(KR|EN|JP|CN|ZH|JA)\.md$/i) || [, ""])[1]
+      meta.lang || (rel.match(/[_-](KR|EN|JP|CN|ZH|JA)\.md$/i) || [, ""])[1]
     );
     const dates = resolveItemDates({
       md,
