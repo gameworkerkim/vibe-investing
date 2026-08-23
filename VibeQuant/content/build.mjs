@@ -607,6 +607,7 @@ const SLUG_OVERRIDES = {
   "Travel-Rule/Travel-Rule-1won-Market-Shift.md": "travel-rule-1won-market-shift",
   "AI-Education/AI-Era-Developer-Flow-and-Communication.md": "ai-era-developer-flow-communication",
   "Cyworld/Cyworld-True-Mother-Guestbook.md": "cyworld-true-mother-guestbook",
+  "comics/X-Men-The-Economics-of-the-Borderline-People.md": "x-men-economics-borderline-people",
   "AI_Revolution/AI-Between-Coolness-and-Passion.md": "ai-between-coolness-and-passion",
   "주식시황/Column-Kioxia-Q1FY2026.md": "kioxia-q1fy2026",
   "주식시황/Column-Kioxia-Q1FY2026_EN.md": "kioxia-q1fy2026-en",
