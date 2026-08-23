@@ -1,3 +1,48 @@
+---
+title: "포스트 코로나, 술 마시며 연결되는 세상은 끝났다"
+subtitle: "27년 만에 주류 출고량 300만㎘ 붕괴 — 기울어가던 잔을 넘어뜨린 팬데믹"
+description: "2025년 국내 주류 출고량 298.8만㎘로 27년 만에 300만㎘ 하회. 20대 음주 급감·글로벌 증류주 재고·프랑스 발근을 읽되, 코로나를 25년 하락의 가속장치로 보는 사회적 학습 단절 가설."
+abstract: |
+  국세청 집계 2025년 국내 주류 출고량은 298만 8000㎘로 1998년 이후 27년 만에 300만㎘ 선이 무너졌다. 20대 일평균 섭취 64.8g으로 전 연령 최저, 미국 갤럽 음주 성인 54%는 조사 이래 최저다.
+  글로벌 주류 5사 숙성 재고 약 220억 달러, 프랑스 영구 발근·보르도 재고 폐기는 수요 붕괴의 물리적 증거다.
+  본 칼럼은 선진국 청소년 음주가 코로나 이전 20여 년간 이미 하락해 왔음을 전제로, 팬데믹을 원인이 아니라 기울어진 잔을 넘어뜨린 가속장치로 보고, 술자리라는 사회적 학습 단절 가설을 제시한다. 투자 권유 아님.
+summary_for_ai: |
+  Industry/society analysis column (not investment advice), revised 2026-08-24.
+  Thesis: Drinking-as-social-ritual collapsing; KR shipments <3M ㎘ first time since 1998; 20s lead abstention. COVID is NOT the origin — high-income youth drinking declined ~25 years (US from before 1999; ESPAD Europe peak ~2003). Pandemic accelerated a long decline into a cliff; interrupted social learning of drinking culture for cohorts who turned ~20 in 2020–22.
+  KR: NTS 2025 2.988M ㎘ (−21.5% vs 2015); KDCA 20s 64.8g/day; 19–29 low-frequency 56%; campus CU beer/soju down; industrial-park convenience alcohol still up.
+  Global: Gallup US drinkers 54%; FT ~$22B aging spirits inventory; Jim Beam Clermont pause 2026; Diageo/Pernod Korea earnings collapse; OIV wine lowest since 1961; France arrachage ~28k ha.
+  Hypothesis falsifiable via post-pandemic age-20 cohorts. Competing hypotheses: health messaging, prices, demographics. Not a stock tip.
+date: 2026-08-24
+updated: 2026-08-24
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 포스트코로나
+  - 주류
+  - MZ
+  - 음주
+  - 소비트렌드
+  - 디아지오
+  - 와인
+keywords:
+  - "주류 출고량"
+  - "소버 큐리어스"
+  - "홈술"
+  - "혼술"
+  - "위스키 재고"
+  - "포도밭 발근"
+  - "포스트 코로나"
+  - "20대 음주"
+  - "사회적 학습"
+  - "ESPAD"
+group: industry
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 포스트 코로나, 술 마시며 연결되는 세상은 끝났다
 
 가을이 되면 마을 사람들은 축제를 벌였다. 추수한 곡물로 막걸리와 소주를 만들고 보름달을 바라보며 마을 사람들은 수확의 기쁨을 맛보았다. 이런 계절의 변화에 따른 축제는 지구촌 어디서나 볼 수 있었고, 그 축제에서는 술이 빠지지 않았다. 술은 개인의 기호이기 전에 공동체의 의례였다. 그 의례가 언제 무너지기 시작했는지 보여주는 숫자가 있다.
