@@ -1,13 +1,11 @@
-<!--
 ---
 title: "X-Men: 낯선 이들, 경계의 사람들을 위한 경제학"
 subtitle: "문화콘텐츠가 사회적 공감을 만들고, 그 공감이 시장으로 번역되는 순간에 관하여"
-description: "엑스맨 IP·핑크 이코노미·그라인더 실적·디즈니 2028 리부트·태국 결혼평등·한국 여론 후퇴를 연결해, 경계인 시장을 스타트업 제품 문법으로 읽는 칼럼."
+description: "엑스맨·핑크 이코노미·그라인더 vs Match·Bumble 대조군, 디즈니 2028 리부트·태국 결혼평등·한국 여론 후퇴를 연결해 경계인 시장을 스타트업 제품 문법으로 읽는 칼럼."
 abstract: |
   엑스맨의 돌연변이 서사는 사춘기·성소수자·민권 담론의 은유였고, 미국 성인 LGBTQ+ 자기보고 9%(30세 미만 23%)가 그 공감을 시장으로 옮겼다.
-  LGBT Capital은 글로벌 구매력 약 4.7조 달러(미국 1.4조)를 추산하며, Grindr는 FY2025 매출 4.4억 달러·조정 EBITDA 마진 43%+로 버티컬 수익성을 실증한다.
-  디즈니는 X-Men 리부트를 2028-05-05에 배치하고, 태국은 결혼평등을 관광·산업 전략으로 프레이밍했다. 한국은 시장·제도 신호와 여론 후퇴(동성혼 찬성 34%)가 공존한다.
-  레인보우 워싱 철수와 제품형 수요의 차이를 구분하고, 마케팅보다 제품·프라이버시·인접 시장·아시아 크로스보더·보텀업 유닛이코노믹스 다섯 원칙을 제시한다. 투자 권유 아님.
+  Grindr FY2025는 매출 +28%·조정 EBITDA 마진 43%+이나, Match·Bumble 대조군으로 고마진이 업종 특성인지 버티컬 프리미엄인지 가른다.
+  디즈니 2028 X-Men 리부트·태국 결혼평등 관광 전략·한국 여론 후퇴(동성혼 찬성 34%)를 겹쳐 읽고, 캠페인이 아닌 제품·프라이버시·아시아 크로스보더 실행 문법을 제시한다. 투자 권유 아님.
 summary_for_ai: |
   Industry/culture analysis column (not investment advice), as of 2026-08-23.
   Thesis: Borderline/marginalized identities (via X-Men metaphor) can translate cultural empathy into markets; Korea startups should build products not pride campaigns.
@@ -47,7 +45,6 @@ schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
--->
 # X-Men: 낯선 이들, 경계의 사람들을 위한 경제학
 
 > 문화콘텐츠가 사회적 공감을 만들고, 그 공감이 시장으로 번역되는 순간에 관하여
