@@ -48,11 +48,9 @@ draft: false
 robots: index,follow
 ---
 -->
-
 # X-Men: 낯선 이들, 경계의 사람들을 위한 경제학
 
 > 문화콘텐츠가 사회적 공감을 만들고, 그 공감이 시장으로 번역되는 순간에 관하여
-
 
 ![X-Men — 90년대 스타일 팀 일러스트. 경계인·돌연변이 서사가 문화 공감과 시장으로 이어지는 칼럼 썸네일](https://vibequant.cc/og/x-men-economics-borderline-people.jpg)
 
@@ -68,11 +66,11 @@ robots: index,follow
 
 ---
 
-## 2. 엑스맨의 탄생 - 경계인들의 초상
+## 2. 엑스맨의 탄생 — 경계인들의 초상
 
 왜 미국에서 엑스맨이 그토록 강렬한 인기를 얻었을까? 답의 첫 번째 가설은 청소년기의 심리적 변화에 있다.
 
-소년도 어른도 아닌, 어디에도 속하지 못한 상태. 몸이 갑자기 변하고, 통제되지 않는 힘이 튀어나오고, 그 변화를 부모에게 설명할 수 없는 시기. 엑스맨의 돌연변이 각성 서사는 사춘기의 은유 그 자체다. **특정 무리에 속하지 못한 경계인의 외로움**—이것은 자아를 찾아가는 모든 청소년이 통과하는 보편적 경험이었고, 엑스맨은 그 심리를 슈퍼히어로 장르의 문법으로 정교하게 포장했다.
+소년도 어른도 아닌, 어디에도 속하지 못한 상태. 몸이 갑자기 변하고, 통제되지 않는 힘이 튀어나오고, 그 변화를 부모에게 설명할 수 없는 시기. 엑스맨의 돌연변이 각성 서사는 사춘기의 은유 그 자체다. **특정 무리에 속하지 못한 경계인의 외로움** — 이것은 자아를 찾아가는 모든 청소년이 통과하는 보편적 경험이었고, 엑스맨은 그 심리를 슈퍼히어로 장르의 문법으로 정교하게 포장했다.
 
 그러나 엑스맨의 공감대는 거기서 멈추지 않았다. 엑스맨은 성소수자 커뮤니티에서 특히 깊은 울림을 얻었다. 이유는 다름의 서사가 가족에게조차 외면 받는 아픔을 다들 겪었기 때문이다. 돌연변이는 **부모와 다르게 태어난다**. 가족 안에서조차 이해받지 못하고, 자신의 정체를 언제 어떻게 밝힐 것인가를 고민하며, 커밍아웃의 순간이 곧 인생의 분기점이 된다. 브라이언 싱어의 〈엑스맨 2〉에서 아이스맨이 어머니에게 자신이 돌연변이임을 고백하고, 어머니가 "언제부터 그랬니? 정상으로 되돌릴 순 없니?"라고 되묻는 장면은 장르영화 역사상 가장 노골적인 커밍아웃 알레고리로 남아 있다.
 
@@ -90,9 +88,9 @@ robots: index,follow
 
 갤럽(Gallup)의 최신 조사에 따르면, **2025년 미국 성인의 9.0%가 자신을 레즈비언, 게이, 양성애자, 트랜스젠더 또는 이성애자가 아닌 정체성으로 인식**한다고 답했다. 갤럽이 이 항목을 처음 측정한 2012년의 3.5%에서 13년 만에 두 배 이상 늘어난 수치다. 2024년의 9.3%가 역대 최고치였고, 2025년은 사실상 같은 수준에서 유지됐다.
 
-이 증가를 견인한 것은 MZ 세대이다. **30세 미만 성인의 23%**가 LGBTQ+로 응답했다. 50세 이상에서는 3% 이하다. 세대 간 격차가 7–8배에 이른다. 정체성 구성을 보면 양성애자가 전체 LGBTQ+ 인구의 58.6%로 압도적이고, 게이 17.4%, 레즈비언 16.0%, 트랜스젠더 12.1% 순이다.
+이 증가를 견인한 것은 MZ 세대이다. 30세 미만 성인의 23%가 LGBTQ+로 응답했다. 50세 이상에서는 3% 이하다. 세대 간 격차가 7–8배에 이른다. 정체성 구성을 보면 양성애자가 전체 LGBTQ+ 인구의 58.6%로 압도적이고, 게이 17.4%, 레즈비언 16.0%, 트랜스젠더 12.1% 순이다.
 
-여기서 주의할 점이 있다. 이 수치는 '성소수자가 늘어났다'기보다 **'스스로를 그렇게 밝히는 사람이 늘어났다'**에 가까운 것이다. 개인의 내밀한 성적취향은 자기보고(self-report) 기반 통계이기 때문이다. 그러나 시장의 관점에서는 오히려 이쪽이 더 중요하다. 소비는 정체성이 아니라 **가시화된 정체성**을 따라 움직인다. 밝히지 않은 정체성은 전용 서비스를 선택, 구매하지 않는다.
+여기서 주의할 점이 있다. 이 수치는 '성소수자가 늘어났다'기보다 '**스스로를 그렇게 밝히는 사람이 늘어났다**'에 가까운 것이다. 개인의 내밀한 성적 취향은 자기보고(self-report) 기반 통계이기 때문이다. 그러나 시장의 관점에서는 오히려 이쪽이 더 중요하다. 소비는 정체성이 아니라 **가시화된 정체성**을 따라 움직인다. 밝히지 않은 정체성은 전용 서비스를 선택하거나 구매하지 않는다.
 
 "10명 중 1명"이라는 숫자가 사회적으로 갖는 의미는 단순한 통계 이상이다. 그것은 **가족 중 한 명, 이웃 중 한 명, 동료 중 한 명이 차별받는 존재일 수 있다**는 뜻이다. 미국 사회는 지난 20년간 가족 내 불화와 갈등, 화해의 과정을 집단적으로 통과하며 그 공감대를 축적해왔다. 엑스맨이 은유로 말한 것을 인구통계가 실증한 셈이다.
 
@@ -105,7 +103,7 @@ robots: index,follow
 규모는 어떻게 되는가?
 
 - **글로벌 구매력**: 홍콩 기반 리서치사 LGBT Capital은 전 세계 성소수자의 연간 구매력(LGBT-GDP)을 약 **4.7조 달러**, 그중 미국이 약 **1.4조 달러**로 추산한다(2023년 기준). 이전에 널리 인용되던 3.7–3.9조 달러 추정치의 갱신판이다.
-- **여행 시장**: Coherent Market Insights는 글로벌 LGBT 관광 시장을 **2025년 3,570억 달러(약 490조 원)에서 2032년 6,043억 달러(약 830조 원)**로 전망한다. 연평균 성장률 약 7.8%.
+- **여행 시장**: Coherent Market Insights는 글로벌 LGBT 관광 시장을 2025년 **3,570억 달러**(약 490조 원)에서 2032년 6,043억 달러(약 830조 원)로 전망한다. 연평균 성장률 약 7.8%.
 - **추정치 편차**: 같은 여행 시장을 market.us는 2023년 2,968억 달러 → 2033년 6,349억 달러로, Future Data Stats는 2025년 3,340억 달러 → 2031년 5,220억 달러로 본다. 기관 간 편차가 15–20%에 이른다.
 
 여전히 국내 기사에서 "미국 성소수자 연간 소비 9,170억 달러"라는 수치가 인용되는데, 이는 **2015년 추정치**다. 10년 전 데이터를 현재형으로 쓰는 것은 피해야 한다.
@@ -114,35 +112,34 @@ robots: index,follow
 
 시장 규모 추정치는 언제나 부풀려질 여지가 있다. 더 신뢰할 만한 신호는 **실제 손익계산서**다.
 
-뉴욕증권거래소 상장사 **그라인더(Grindr, NYSE: GRND)**는 게이·바이·트랜스·퀴어 이용자를 대상으로 한 위치 기반 소셜 앱이다. 2025 회계연도 실적은 다음과 같다.
+뉴욕증권거래소 상장사 **그라인더**(Grindr, NYSE: GRND)는 게이·바이·트랜스·퀴어 이용자를 대상으로 한 위치 기반 소셜 앱이다. 2025 회계연도 실적은 다음과 같다.
 
 | 항목 | FY2025 |
-|---|---|
+| --- | --- |
 | 매출 | 4억 3,990만 달러 (전년 대비 +28%) |
 | 순이익 | 9,500만 달러 |
 | 조정 EBITDA | 1억 9,560만 달러 (마진 43%+) |
 | 평균 MAU | 1,500만 명 |
 | 평균 유료 이용자 | 약 130만 명 |
-| 2026 가이던스 | 매출 5억 2,800만 달러 이상 |
 
-핵심은 **43%를 넘는 EBITDA 마진**이다. 이는 소수자 커뮤니티를 타깃으로 한 버티컬 서비스가 '착한 사업'이 아니라 **구조적으로 수익성이 높은 사업**일 수 있음을 보여준다. 이유는 명확하다. 대체재가 적고, 커뮤니티 내 네트워크 효과가 강하며, 고객 획득 비용이 낮고, 이탈률이 낮다. 범용 플랫폼이 채워주지 못하는 니즈일수록 지불 의사가 높다.
+숫자 자체는 인상적이다. 매출이 28% 늘면서 43%를 넘는 EBITDA 마진을 남겼다. 소수자 커뮤니티를 타깃으로 한 버티컬 서비스가 '착한 사업'이 아니라 **수익성 있는 사업**일 수 있음을 보여주는 사례다.
 
-이것이 스타트업이 읽어야 할 진짜 신호다. 4.7조 달러라는 숫자가 아니라, **1,500만 MAU로 4억 달러를 벌고 43% 마진을 남기는 회사가 존재한다**는 사실 말이다.
+이것이 스타트업이 읽어야 할 첫 번째 신호다. 4.7조 달러라는 추정치가 아니라, **1,500만 MAU로 4억 달러를 버는 회사가 실제로 존재한다**는 사실 말이다.
 
-40% 이상의 마진이라면 반도체, 빅테크, 럭셔리 마켓과 동등한 수준의 마진율이다.
+**다만 이 숫자만으로는 아직 아무것도 증명되지 않는다.** 왜 이런 실적이 나왔는지, 그것이 '소수자 시장'이라는 속성에서 온 것인지 아니면 다른 이유에서 온 것인지를 가르지 않았기 때문이다. 대조군이 필요하다.
 
 ---
 
-## §4-2. 대조군: 43% 마진은 소수자 프리미엄인가, 업종 특성인가?
+## 4-2. 대조군: 43% 마진은 소수자 프리미엄인가, 업종 특성인가?
 
-앞 절에서 그라인더의 43% EBITDA 마진을 제시했다. 그런데 이 숫자만으로는 아무것도 증명되지 않는다. **데이팅 앱 업종 자체가 원래 고마진일 가능성**을 배제하지 않았기 때문이다. 콘텐츠 원가가 없고, 사용자가 콘텐츠를 생산하며, 구독 결제가 자동 갱신되는 구조는 정체성과 무관하게 마진이 높을 수 밖에 없다. 그라인더가 비지니스 모델을 잘 잡은 것이다.
+앞 절의 43% 마진은 **데이팅 앱 업종 자체가 원래 고마진일 가능성**을 배제하지 않는다. 콘텐츠 원가가 없고, 사용자가 콘텐츠를 생산하며, 구독 결제가 자동 갱신되는 구조는 정체성과 무관하게 마진이 높을 수밖에 없다.
 
 그래서 대조군을 놓고 봐야 한다.
 
 ### 미국에 상장된 데이팅·소셜 플랫폼 FY2025 비교
 
 | 항목 | 그라인더 (GRND) | 매치그룹 (MTCH) | 범블 (BMBL) |
-|---|---|---|---|
+| --- | --- | --- | --- |
 | 타깃 | LGBTQ+ 버티컬 | 범용 (틴더·힌지) | 범용 (여성 우선) |
 | FY2025 매출 | 4억 3,990만 달러 | 35억 달러 | 9억 6,570만 달러 |
 | 매출 성장률 | **+28%** | **0% (플랫)** | **−9.9%** |
@@ -156,13 +153,13 @@ robots: index,follow
 
 ### 여기서 읽어야 할 것
 
-**마진 프리미엄은 생각보다 작다.** 43% 대 35%. 8%p 차이다. "소수자 버티컬이라서 마진이 높다"는 주장은 이 표 앞에서 절반만 참이다. 고마진의 상당 부분은 데이팅 앱이라는 업종 자체의 특성으로 이해할 수 있다.
+**마진 프리미엄은 생각보다 작다.** 43% 대 35%. 8%p 차이다. "소수자 버티컬이라서 마진이 높다"는 주장은 이 표 앞에서 절반만 참이다. 고마진의 상당 부분은 데이팅 앱이라는 업종 자체의 특성으로 이해할 수 있다. 40% 이상의 마진율은 반도체나 럭셔리에 비견되는 수준이지만, 그 자리에는 이미 매치그룹과 범블도 함께 서 있다.
 
-**진짜 차이는 성장률에서 나온다.** 같은 회계연도에 그라인더 +28%, 매치그룹 0%, 범블 −9.9%다. 격차가 28~38%p다. 마진 격차의 네 배이며, 무서운 성장세이다.
+**진짜 차이는 성장률에서 나온다.** 같은 회계연도에 그라인더 +28%, 매치그룹 0%, 범블 −9.9%다. 격차가 28~38%p다. 마진 격차의 네 배이며, 무서운 성장세다.
 
 그리고 이 격차는 벌어지고 있다. 2026년 2분기 그라인더 매출은 1억 3,810만 달러로 **전년 대비 33% 증가**했고, 조정 EBITDA 5,760만 달러(마진 41.7%)를 기록했다. 회사는 2026년 연간 가이던스를 매출 약 5억 4,000만 달러, 조정 EBITDA 약 2억 3,200만 달러로 상향했다. 같은 기간 매치그룹의 2026년 가이던스는 매출 플랫이다.
 
-**즉, 소수자 버티컬의 프리미엄은 손익계산서의 마진 줄이 아니라 성장 지속성에 나타난다.** 범용 플랫폼이 '스와이프 피로'와 사용자 이탈에 시달리는 국면에서도, 대체재가 없는 커뮤니티 서비스는 가격을 올려도 이탈이 적다. 그라인더 경영진은 2025년 말과 2026년 초 단행한 가격 인상에 대해 예상보다 이탈률이 낮았다고 설명했다. 락인 효과가 강력한 대체재 부재의 실체다.
+**즉, 소수자 버티컬의 프리미엄은 손익계산서의 마진 줄이 아니라 성장 지속성에 나타난다.** 범용 플랫폼이 '스와이프 피로'와 사용자 이탈에 시달리는 국면에서도, 대체재가 없는 커뮤니티 서비스는 가격을 올려도 이탈이 적다. 그라인더 경영진은 2025년 말과 2026년 초 단행한 가격 인상에 대해 예상보다 이탈률이 낮았다고 설명했다. 이것이 대체재 부재가 만들어내는 락인 효과의 실체다.
 
 스타트업이 가져갈 문장은 이렇게 바뀌어야 한다. "*소수자 버티컬은 마진이 높다*"가 아니라, "*소수자 버티컬은 범용 시장이 역성장하는 국면에서도 성장한다*"이다.
 
@@ -170,15 +167,15 @@ robots: index,follow
 
 같은 컨셉의 버티컬만으로 결과가 결정되지 않는다는 증거는 같은 시장 안에 있다.
 
-중국의 블루드(Blued)를 운영한 블루시티 홀딩스(BlueCity Holdings)는 2020년 7월 나스닥에 상장한 세계 최초의 LGBTQ+ 관련 상장사였다. 등록 사용자는 6,000만 명을 넘었다. 그라인더의 MAU 1,500만 명과 비교하면 압도적인 규모를 보여줬다.
+중국의 블루드(Blued)를 운영한 블루시티 홀딩스(BlueCity Holdings)는 2020년 7월 나스닥에 상장한 세계 최초의 LGBTQ+ 관련 상장사였다. 등록 사용자는 6,000만 명을 넘었다. 그라인더의 MAU 1,500만 명과 비교하면 압도적인 규모였다.
 
 결과는 정반대였다. 상장 당시 기업가치는 약 8억 달러였으나, 2022년 8월 창업자 주도 컨소시엄이 **지분가치 약 6,000만 달러**에 상장폐지시켰다. 2년 만에 90% 이상의 가치가 사라졌다. FY2021 순손실은 약 4,860만 달러로 전년 대비 40% 확대됐다.
 
 *(주: 블루시티 재무 수치는 2차 출처 기반이다. 인용 전 SEC Form 20-F 원문 확인을 권한다.)*
 
-왜 갈렸는가. **과금 구조가 달랐다.** 그라인더 매출은 구독(XTRA·Unlimited)과 소비재 중심이다. 2026년 2분기 앱 기반 매출 1억 1,300만 달러 대 광고 2,500만 달러 구조다. 반면 블루드 매출의 대부분은 라이브스트리밍이었다. 라이브스트리밍은 호스트에게 수익을 배분하는 구조라 매출이 커져도 마진이 남지 않는다. 여기에 중국의 규제 환경이 겹친 것이 문제였다. 중국의 규제가 문제가 되었다.
+왜 갈렸는가. **과금 구조가 달랐다.** 그라인더 매출은 구독(XTRA·Unlimited)과 소비재 중심이다. 2026년 2분기 앱 기반 매출 1억 1,300만 달러 대 광고 2,500만 달러 구조다. 반면 블루드 매출의 대부분은 라이브스트리밍이었다. 라이브스트리밍은 호스트에게 수익을 배분하는 구조라 매출이 커져도 마진이 남지 않는다. 여기에 중국의 규제 환경이 겹쳤다.
 
-**같은 커뮤니티, 같은 사용자 규모, 정반대 손익.** 마진을 결정한 것은 정체성이 아니라 과금 모델이었다.
+**같은 커뮤니티, 비슷하거나 더 큰 사용자 규모, 정반대 손익.** 마진을 결정한 것은 정체성이 아니라 과금 모델이었다.
 
 ### 반례 2 — 정체성이 브랜드 스킨에 그칠 때: 데이라이트(Daylight)
 
@@ -186,12 +183,12 @@ robots: index,follow
 
 2023년 6월 30일 영업을 종료했다. 창업자는 폐업을 알리며 이 서비스들을 비용을 감당하는 방식으로 제공할 수 없었다고 밝혔다. 고금리 환경, 예정 상품의 부진, SVB에 예치돼 있던 준비금이 겹쳤다.
 
-여기서 나오는 판별 기준을 추가로 살펴볼 수 있다. **정체성이 제품의 핵심 기능인가?, 아니면 브랜드 스킨인가.**
+여기서 판별 기준이 하나 나온다. **정체성이 제품의 핵심 기능인가, 아니면 브랜드 스킨인가.**
 
-- 소셜·매칭·헬스케어에서 정체성은 **매칭 함수 그 자체**다. 누구를 보여줄지, 어떤 진료 프로토콜을 적용할지가 정체성에 의해 결정된다. 대체 불가능하고 규모의 경제가 중요하다.
-- 은행 계좌에서 정체성은 **카드 디자인과 마케팅 카피**다. 이자율과 인터체인지 수수료는 사용자가 누구인지 신경 쓰지 않는다. 대형 은행이 카드 이름 정책 하나만 바꾸면 차별화가 소멸될 수 있다.
+- 소셜·매칭·헬스케어에서 정체성은 **매칭 함수 그 자체**다. 누구를 보여줄지, 어떤 진료 프로토콜을 적용할지가 정체성에 의해 결정된다. 대체 불가능하고, 커뮤니티 내부의 네트워크 효과가 규모의 경제로 이어진다.
+- 은행 계좌에서 정체성은 **카드 디자인과 마케팅 카피**다. 이자율과 인터체인지 수수료는 사용자가 누구인지 신경 쓰지 않는다. 대형 은행이 카드 이름 정책 하나만 바꾸면 차별화가 소멸한다.
 
-전자는 프리미엄이 붙고, 후자는 격리된 모델이 아닌 MBA적으로 접근한 것이다.
+**전자는 프리미엄이 붙고, 후자는 붙지 않는다.**
 
 ### 참고 — LGBTQ 밖의 소수자 버티컬: 무즈(Muzz)
 
@@ -199,12 +196,11 @@ robots: index,follow
 
 영국의 무즈(Muzz, 구 무즈매치)는 무슬림 결혼 매칭 앱이다. 총 조달액은 약 920만 달러로, 데이라이트보다 적다. 2024년 기준 회원 1,000만 명 이상, 임직원 110명 규모다. 유료 전환율은 약 10% 수준이며, 창업자는 회사가 흑자라고 밝혀왔다. 종교적 가치와 결혼 지향이라는 명확한 목적이 범용 앱의 매출 감소 국면에서 방어력으로 작동했다는 것이 회사 측 설명이다.
 
-무즈는 리스크도 함께 보여준다. 매치그룹이 특허와 상표권으로 소송을 제기했고, 무즈는 영국 법원에서 패소해 사명을 변경했다. **버티컬이 커지고 카피를 잘하면 앞선 범용 플랫폼의 법무팀이 먼저 찾아온다.**
+무즈는 리스크도 함께 보여준다. 매치그룹이 특허와 상표권으로 소송을 제기했고, 무즈는 영국 법원에서 패소해 사명을 변경했다. **버티컬이 커지면 앞선 범용 플랫폼의 법무팀이 먼저 찾아온다.**
 
-*(주: 무즈는 비상장사로 재무 수치가 공시되지 않았다. 위 수치는 언론 인터뷰와 3자 추정 기반이며 정밀도가 낮다.)*
+*(주: 무즈는 비상장사로 재무 수치가 공시되지 않는다. 위 수치는 언론 인터뷰와 3자 추정 기반이며 정밀도가 낮다.)*
 
 ---
-
 
 ## 5. 디즈니의 베팅: 2028년 5월 5일
 
@@ -218,7 +214,7 @@ robots: index,follow
 - 그로부터 5개월 뒤인 **2028년 5월**, 엑스맨이 MCU 다음 시대의 문을 연다.
 - 2008년 5월 〈아이언맨〉으로 시작된 **MCU 20주년**이 바로 그 시점이다.
 
-디즈니는 2019년 21세기 폭스 인수로 확보한 최대 IP 자산을, 프랜차이즈 전체를 재시작하는 자리에 배치했다. 케빈 파이기는 슈라이어의 방향성을 **'젊은 세대 중심'**으로 설명했다.
+디즈니는 2019년 21세기 폭스 인수로 확보한 최대 IP 자산을, 프랜차이즈 전체를 재시작하는 자리에 배치했다. 케빈 파이기는 슈라이어의 방향성을 '**젊은 세대 중심**'으로 설명했다.
 
 왜 하필 엑스맨인가? Z세대와 알파 세대에게 '다름'은 더 이상 낙인이 아니라 정체성의 구성 요소이기 때문이다. 30세 미만의 23%가 스스로를 성소수자로 인식하는 세대에게, 돌연변이는 억압의 은유이기 이전에 **자기 서술의 언어**다. 디즈니의 결정은 세대의 정서를 읽고 시장을 선점하는 전형적인 스타트업 경영의 문법이다. 다만 자본의 규모가 다를 뿐이다.
 
@@ -243,24 +239,24 @@ robots: index,follow
 
 중국의 성소수자 인구는 **6,000만 ~ 7,000만 명**, 시장 규모는 연 **3,000억 ~ 5,000억 달러**로 추산된다(Daxue Consulting, LGBT Capital). 인구 기준 세계 최대 시장이다.
 
-그러나 이 수치는 **2015–2020년에 생산된 추정치가 반복 인용되고 있는 것**이며, 그 이후 중국의 규제 환경은 오히려 후퇴했다. 최대 게이 소셜 앱 블루드(Blued)의 성장 서사도 예전 같지 않다. 숫자만 보고 진입할 수 있는 시장이 아니다.
+그러나 이 수치는 **2015–2020년에 생산된 추정치가 반복 인용되고 있는 것**이며, 그 이후 중국의 규제 환경은 오히려 후퇴했다. 최대 게이 소셜 앱 블루드(Blued)의 궤적이 그 결과를 보여준다(4-2 반례 1 참조). 숫자만 보고 진입할 수 있는 시장이 아니다.
 
 ---
 
-## 7. 한국: 시장은 있는데 여론은 20세기로 회귀했다.
+## 7. 한국: 시장은 있는데 여론은 20세기로 회귀했다
 
 한국은 어떤가? 두 개의 상반된 신호가 동시에 발산하고 있다.
 
 ### 시장 측면
 
 - 한국에는 **성소수자에 대한 공식 인구 통계가 존재하지 않는다.** 시민사회에서는 약 **230만 명** 규모로 추정한다.
-- 입소스(Ipsos)의 〈LGBT+ Pride 2023〉 조사에서 한국 응답자의 **6%**가 동성애자·양성애자·범성애자·무성애자 중 하나에 해당한다고 답했다. 글로벌 평균 8%보다 낮지만, 2021년 대비 2%p 상승했다.
+- 입소스(Ipsos)의 〈LGBT+ Pride 2023〉 조사에서 한국 응답자의 6%가 동성애자·양성애자·범성애자·무성애자 중 하나에 해당한다고 답했다. 글로벌 평균 8%보다 낮지만, 2021년 대비 2%p 상승했다.
 - 인구 5,100만 명에 5–6%를 적용하면 **200만 ~ 300만 명**. 부산광역시 인구에 맞먹는 규모다.
 - K-컬처의 글로벌 확산은 아시아 성소수자 커뮤니티 내에서 한국 콘텐츠·뷰티·패션의 브랜드 파워를 이미 축적해두었다. **한국은 자국 시장보다 아시아 크로스보더 시장에서 더 강한 카드를 쥐고 있다.**
 
-가입자 정보 유출로 홍역을 치른 소수자 앱의 비공개 데이터에 의하면 350–380만명으로 추정될 수 있다.
+가입자 정보 유출로 홍역을 치른 소수자 앱의 비공개 데이터를 복수 경로로 확인한 바에 따르면, 실제 규모는 350–380만 명으로 추정할 수 있다. 공개 검증이 불가능한 비공개 추정치이므로 위 공개 통계와 같은 수준으로 취급하지 않는다.
 
-### 제도 측면 - 담대하고 조용한 전진
+### 제도 측면 — 담대하고 조용한 전진
 
 - **2024년 7월**, 대법원은 동성 동거인의 **건강보험 피부양자 자격**을 인정했다. 사실혼 관계를 준용한 판결로, 한국 사법부가 동성 파트너십의 실질을 인정한 첫 사례다. 한국 사회가 사랑하는 파트너에 대한 기본 인권을 인정한 사례라고 볼 수 있다.
 - **2025년 인구주택총조사**부터 동성이라도 가구주와의 관계를 **'배우자' 또는 '비혼동거'로 입력**할 수 있게 됐다. 국가데이터처는 이를 "조사 누락 방지와 통계 정확성 제고" 조치로 설명했다. **시장의 관점에서 이것은 결정적이다. 측정되지 않는 시장에는 투자가 들어오지 않기 때문이다.**
@@ -277,7 +273,7 @@ robots: index,follow
 
 이 비대칭이 스타트업에게 시사하는 바는 분명하다. **한국 시장에서 '결혼·가족' 프레임은 저항을 부르고, '차별 금지·공정한 서비스 접근' 프레임은 지지를 얻는다.** 같은 사업이라도 어떤 언어로 포장하느냐에 따라 결과가 달라진다.
 
-우리 사회가 한 방향을 달려갈 때 엄청난 추진력을 얻지만 그 지지를 얻기까지는 아직 소수자에 대한 배려와 이해가 부족한 상황이다.
+우리 사회가 한 방향으로 달려갈 때 엄청난 추진력을 얻지만, 그 지지를 얻기까지는 아직 소수자에 대한 배려와 이해가 부족한 상황이다.
 
 ### 보수 기독교 지형
 
@@ -287,7 +283,7 @@ robots: index,follow
 
 ---
 
-## 8. 리스크 - 레인보 워싱의 청구서는 이미 도착했다
+## 8. 리스크 — 레인보 워싱의 청구서는 이미 도착했다
 
 2023년 이후 미국에서 벌어진 일은 반드시 참고해야 할 사례다.
 
@@ -300,35 +296,35 @@ robots: index,follow
 
 > **철수한 것은 마케팅 캠페인이지 제품이 아니다.**
 
-로고를 무지개로 바꾸는 6월 한 달짜리 캠페인은 정치 지형이 바뀌면 즉시 취소된다. 반면 그라인더는 같은 기간에 매출을 28% 성장시켰다. 프라이드 후원금은 마케팅 예산 항목이지만, 커뮤니티가 실제로 매일 쓰는 제품은 손익계산서의 매출 항목이다. **전자는 정치적 베타가 1보다 크고, 후자는 훨씬 낮다.**
+로고를 무지개로 바꾸는 6월 한 달짜리 캠페인은 정치 지형이 바뀌면 즉시 취소될 수 밖에 없다. 반면 그라인더는 같은 기간에 매출을 28% 성장시켰고, 2026년 2분기에는 33%를 기록했다. 프라이드 후원금은 마케팅 예산 항목이지만, 커뮤니티가 실제로 매일 쓰는 제품은 손익계산서의 매출 항목이다. **전자는 정치적 베타가 1보다 크고, 후자는 훨씬 낮다.**
 
 확고한 신념이나 제품적 실체 없이 시류에 편승한 레인보 워싱은 득보다 실이 크다. 그러나 그 실패가 시장 자체의 부재를 뜻하지는 않는다.
 
 ---
 
-## 8-2. 그라인더 고유 리스크 - 대리변수의 한계
+## 8-2. 그라인더 고유 리스크 — 대리변수의 한계
 
 이 칼럼은 그라인더를 소수자 시장의 대리변수(proxy)로 사용했다. 그런데 그라인더에는 시장 자체와 무관한 고유 리스크가 두 가지 있다. 이것을 밝히지 않으면 앞의 논증이 과대 해석될 수 있다.
 
-### 지배구조의 이슈 - 지배주주가 사고, 접고, 파는 구조
+### 지배구조 — 지배주주가 사고, 접고, 파는 구조
 
-그라인더는 2022년 11월 SPAC(Tiga Acquisition) 합병으로 상장했다. 그 이전인 2020년 6월, 레이 제이지(George Raymond Zage III)와 제임스 루(James Fu Bin Lu)가 이끄는 산 비센테 어퀴지션이 약 6억 800만 달러에 그라인더를 인수했다. 이 인수 자체가 중국 쿤룬(Kunlun)의 보유를 미국 CFIUS가 국가안보를 이유로 강제 매각시킨 결과였다.
+그라인더는 2022년 11월 SPAC(Tiga Acquisition) 합병으로 상장했다. 그 이전인 2020년 6월, 레이 제이지(George Raymond Zage III)와 제임스 루(James Fu Bin Lu)가 이끄는 산 비센테 어퀴지션이 약 6억 800만 달러에 그라인더를 인수했다. 이 인수 자체가 중국 쿤룬(Kunlun)의 보유 지분을 미국 CFIUS가 국가안보를 이유로 강제 매각시킨 결과였다.
 
-이후 전개는 소수주주 입장에서 유쾌하지 않다.
+이후 전개는 소수주주, 투자자 입장에서 유쾌하지 않다.
 
-- 두 사람은 그라인더 지분 **60~64%**를 보유한 지배주주다.
+- 두 사람은 그라인더 지분 60 ~ 64%를 보유한 지배주주다.
 - **2025년 10월**, 이들은 나머지 지분을 주당 18달러(기업가치 약 34.6억 달러)에 인수해 상장폐지하겠다고 제안했다. 10월 10일 종가 대비 51% 프리미엄이었다. 루는 이해상충 해소를 이유로 이사회 의장직에서 사임했다.
 - **2025년 11월**, 이사회 특별위원회가 자금조달의 불확실성을 이유로 협상을 종료했다. 제안자들은 제안을 철회했다.
 - **2026년 2월**, 루는 사흘에 걸쳐 145만 주를 주당 평균 약 10.07달러에 장내 매도했다. 최근 매도 중간값의 두 배가 넘는 규모다.
 - 특별위원회의 협상 종료가 선관주의의무 위반인지에 대한 조사가 진행 중이다.
 
-**요약하면, 지배주주가 18달러에 사겠다고 했다가, 철회하고, 10달러에 팔았다.** 지분율 60% 초과의 지배구조에서 소수주주가 감당하는 리스크다. 이것은 성소수자 시장의 리스크가 아니라 이 회사의 리스크다.
+**요약하면, 지배주주가 18달러에 사겠다고 했다가, 철회하고, 10달러에 팔았다.** 지분율 60%를 넘는 지배구조에서 소수주주가 감당하는 리스크다. 이것은 성소수자 시장의 리스크가 아니라 이 회사의 리스크다.
 
-동시에 이것은 스타트업 사업 모델에 고려할 가치를 갖는다. **소수자 버티컬은 투자자 풀이 좁다.** 기관 투자자 중 상당수가 ESG·평판 스크리닝, 혹은 단순한 이해 부족으로 이 섹터를 회피한다. 자본 공급이 좁으면 특정 주주에게 지분이 집중되고, 지분이 집중되면 거버넌스 리스크가 커진다. 데이라이트가 준비금 전액을 SVB 한 곳에 두고 있었던 것도 같은 계열의 문제다. **좁은 자본시장은 집중 리스크를 낳는다.**
+동시에 이것은 스타트업이 고려할 구조적 함의를 갖는다. **소수자 버티컬은 투자자 풀이 좁다.** 기관 투자자 중 상당수가 ESG·평판 스크리닝, 혹은 단순한 이해 부족으로 이 섹터를 회피한다. 자본 공급이 좁으면 특정 주주에게 지분이 집중되고, 지분이 집중되면 거버넌스 리스크가 커진다. 데이라이트가 준비금 전액을 SVB 한 곳에 두고 있었던 것도 같은 계열의 문제다. **좁은 자본시장은 집중 리스크를 낳는다.**
 
-### 프라이버시 규제 - 이 회사가 가장 비싸게 배운 교훈
+### 프라이버시 규제 — 이 회사가 가장 비싸게 배운 교훈
 
-그라인더는 데이터 프라이버시로 반복해서 제재와 소송을 받아왔다. 바로 프라이버시 문제이다.
+그라인더는 데이터 프라이버시로 반복해서 제재와 소송을 받아왔다. 유저를 모으고 마케팅하고 돈을 만들기 위해서는 그 프라이버시의 경계를 계속 건들여야 하기 때문이다.
 
 - **2021년 12월**, 노르웨이 데이터보호청(Datatilsynet)이 GDPR 위반으로 6,500만 노르웨이 크로네(약 570만 유로)의 과징금을 부과했다. 유효한 동의 없이 정밀 위치정보를 포함한 사용자 데이터를 광고·마케팅 업체에 공유했다는 판단이었다. 개인정보보호 항소위원회가 결정을 유지했고, 회사는 노르웨이 법원에서 다투었다.
 - **2022년 7월**, 영국 정보위원회(ICO)가 사용자에게 투명하고 실효적인 개인정보 처리 고지를 하지 않았다며 공식 견책했다.
@@ -345,41 +341,43 @@ robots: index,follow
 
 이것이 프라이버시를 부가 기능이 아니라 제품의 핵심으로 두어야 한다고 말하는 실증적 근거다. 슬로건이 아니다. **광고 의존도가 높은 소수자 서비스는 구조적으로 규제 베타가 높다.** 구독 매출은 사용자와 회사 사이의 거래지만, 광고 매출은 사용자 데이터를 제3자에게 이동시켜야 성립하기 때문이다.
 
+이 문제는 페이스북과 인스타그램을 운영하고 있는 메타 역시 가지고 있는 문제로 메타의 법무 팀은 크고 훌륭하기로 정평이 나 있다.
+
 ---
 
 ## 9. 스타트업을 위한 실행 방식 제안
 
-앞의 데이터에서 여섯 개의 원칙이 도출될 수 있다. 각 원칙은 사례에 고정돼 있다.
+앞의 데이터에서 여섯 개의 원칙과, 그 전부에 앞서는 하나의 전제가 도출된다. 각 원칙은 사례에 고정돼 있다.
 
-### 첫째, 버티컬이 아니라 과금 모델이 마진을 결정한다.
+### 첫째, 버티컬이 아니라 과금 모델이 마진을 결정한다
 
-블루드는 등록 사용자 6,000만 명으로 적자를 냈고, 그라인더는 MAU 1,500만 명으로 43% 마진을 남겼다. 사용자 규모가 4배 차이인데 결과가 반대다. 차이는 라이브스트리밍이냐 구독이냐가 차이이다.
+블루드는 등록 사용자 6,000만 명으로 적자를 냈고, 그라인더는 MAU 1,500만 명으로 43% 마진을 남겼다. 사용자 규모가 몇 배 차이인데 결과가 반대다. 차이는 라이브스트리밍이냐 구독이냐였다.
 
 구조적으로 정리하면 이렇다.
 
 | 과금 모델 | 마진 구조 | 소수자 버티컬 적합도 |
-|---|---|---|
+| --- | --- | --- |
 | 구독·소비재 | 한계원가 거의 0, 갱신 예측 가능 | 높음 |
 | 광고 | 매출은 크지만 데이터 이전 필수 → 규제 베타 최상 | 낮음 |
 | 라이브스트리밍·기프팅 | 호스트 수익배분으로 마진 잠식 | 낮음 |
 | 거래 수수료·인터체인지 | 정체성과 무관한 커모디티 경제 | 매우 낮음 |
 
-**설계 순서를 뒤집어야 한다.** "어떤 커뮤니티를 서비스할까"가 아니라 "이 커뮤니티가 구독으로 지불할 이유가 무엇인가?"부터 고민해야 한다.
+**설계 순서를 뒤집어야 한다.** "어떤 커뮤니티를 서비스할까"가 아니라 "이 커뮤니티가 구독으로 지불할 이유가 무엇인가"부터 고민해야 한다.
 
 ### 둘째, 정체성이 매칭 함수인 영역만 프리미엄이 붙는다
 
-데이라이트는 2,000만 달러를 조달하고 3년 만에 문을 닫았다. 실패 원인은 커뮤니티가 없어서가 아니라, **은행 계좌에서 정체성이 브랜드 스킨에 불과했기 때문**이다. 이자율과 수수료는 사용자가 누구인지 모를 수 밖에 없다.
+데이라이트는 2,000만 달러를 조달하고 3년 만에 문을 닫았다. 실패 원인은 커뮤니티가 없어서가 아니라, **은행 계좌에서 정체성이 브랜드 스킨에 불과했기 때문**이다. 이자율과 수수료는 사용자가 누구인지 알지 못한다.
 
 인접 시장 진입 전에 던져야 할 단 하나의 질문이 있다.
 
 > **이 제품에서 사용자의 정체성을 제거하면, 제품의 핵심 기능이 망가지는가?**
 
-망가지면 진입해도 된다. 안 망가지면 대형 사업자가 정책 한 줄 바꾸는 순간 차별화가 소멸할 수 밖에 없다.
+망가지면 진입해도 된다. 안 망가지면 대형 사업자가 정책 한 줄 바꾸는 순간 차별화가 소멸한다.
 
 이 기준으로 걸러본 결과는 다음과 같다.
 
 | 인접 시장 | 정체성 = 매칭 함수? | 판정 |
-|---|---|---|
+| --- | --- | --- |
 | 헬스케어 (정신건강·성건강 원격의료) | 진료 프로토콜 자체가 달라짐 | **적합** |
 | 여행·숙박 (안전 목적지 큐레이션) | 안전 정보가 정체성 의존적 | **적합** |
 | 법률테크 (가족관계 공백 계약 설계) | 법적 공백 자체가 정체성에서 발생 | **적합** |
@@ -393,7 +391,7 @@ robots: index,follow
 
 2025년 프라이드 관련 대외 활동을 축소하겠다고 밝힌 미국 기업은 39%였다. 전년 9%에서 급등한 수치다. 뉴욕 프라이드는 75만 달러, 샌프란시스코 프라이드는 20만 달러의 후원 공백이 발생했다.
 
-같은 기간 그라인더 매출은 28% 늘었고, 이듬해 2분기에는 33% 늘었다.
+같은 기간 그라인더 매출은 28% 늘었고, 이듬해 2분기에는 33% 늘었다. 카테고리 킬러로 유저가 모이면서 점점 시너지가 나고 있는 것이다.
 
 **철수한 것은 마케팅 캠페인이지 제품이 아니다.** 후원금은 손익계산서의 비용 항목이고, 커뮤니티가 매일 쓰는 제품은 매출 항목이다. 전자는 정치적 베타가 1보다 크고 후자는 훨씬 낮다.
 
@@ -405,7 +403,7 @@ robots: index,follow
 
 한국에서 이 문제는 더 무겁다. 아웃팅은 이 사회에서 직장, 가족, 신체 안전이 걸린 사건이다. 국내에서도 소수자 앱의 가입자 정보 유출 사례가 있었다.
 
-설계 대상에 반드시 포함되어야 할 항목이다.
+설계 대상에 반드시 포함되어야 할 항목은 다음과 같다.
 
 - **결제 명세 표기**: 카드 명세서와 앱스토어 영수증에 찍히는 상호명. 가족 공유 결제 환경을 전제로 설계.
 - **푸시 알림**: 잠금화면 미리보기에 노출되는 문자열. 발신자명과 본문 모두.
@@ -427,14 +425,12 @@ robots: index,follow
 
 ### 여섯째, 자본 구조와 거버넌스를 처음부터 설계한다
 
-이것이 이번 개정에서 추가된 원칙이다.
-
 소수자 버티컬은 **투자자 풀이 구조적으로 좁다.** 스크리닝, 평판 리스크, 혹은 단순한 이해 부족으로 상당수 기관이 이 섹터를 보지 않는다. 좁은 자본시장은 두 가지 결과를 낳는다.
 
 - **지분 집중.** 그라인더는 지배주주 지분율이 60%를 넘고, 그 결과 지배주주의 상장폐지 제안 → 철회 → 장내 매도라는 국면에서 소수주주가 일방적으로 노출됐다.
 - **거래상대방 집중.** 데이라이트는 준비금 전액을 SVB에 두고 있었고, SVB 파산이 폐업 결정에 직접 작용했다.
 
-실행 지침은 다음고 ㅏ같다.
+실행 지침은 다음과 같다.
 
 - 초기부터 투자자 구성을 분산한다. 커뮤니티 성향 펀드 한 곳에 의존하지 않는다.
 - 은행·PG·클라우드 등 거래상대방을 이중화한다. 소수자 서비스는 **디플랫포밍 리스크**가 실재한다. 결제대행사나 앱스토어 정책 변경 한 번에 매출이 끊길 수 있다.
@@ -448,96 +444,108 @@ robots: index,follow
 
 - 무즈의 유료 전환율은 약 10% 수준이었다.
 - 그라인더는 MAU 1,500만 명 대비 유료 사용자 약 130만 명, 약 8.7%다.
-- 범블의 2025년 유료자당 연 매출(ARPPU 환산)은 약 21.6달러 수준이며, 유료 사용자는 11.5% 감소했다.
+- 범블의 2025년 유료자당 매출(ARPPU)은 약 21.6달러 수준이며, 유료 사용자는 11.5% 감소했다.
 
-**200만 명이라는 추정치보다, 유료 전환한 1,000명의 12개월 리텐션 곡선이 훨씬 강력한 근거다.** 그리고 그 곡선을 만들 때 위 세 벤치마크가 투자자를 설득하는 좌표계가 될 수 있다.
+**200만 명이라는 추정치보다, 유료 전환한 1,000명의 12개월 리텐션 곡선이 훨씬 강력한 근거다.** 그리고 그 곡선을 만들 때 위 세 벤치마크가 투자자를 설득하는 좌표계가 된다.
 
+---
 
 ## 10. 맺으며, X-Men 경계인들의 경제학
 
 엑스맨이 가르쳐준 것은 단순하다. **낯선 이들, 경계의 사람들을 향한 사회적 공감은 문화콘텐츠를 넘어 시장의 언어로 번역될 수 있다.**
 
-디즈니가 가장 상징적인 자리에 엑스맨을 배치한 이유, 태국 정부가 프라이드를 관광 전략으로 삼은 이유, 그라인더가 1,500만 MAU로 43% 마진을 남기는 이유는 모두 같은 구조를 공유한다. 주류가 채워주지 않는 자리에는 언제나 공급 공백이 존재하고, 공급 공백은 시장이다.
+디즈니가 가장 상징적인 자리에 엑스맨을 배치한 이유, 태국 정부가 프라이드를 관광 전략으로 삼은 이유, 그리고 범용 데이팅 시장이 역성장하는 국면에서 그라인더만 28%, 33%로 성장하는 이유는 모두 같은 구조를 공유한다. 주류가 채워주지 않는 자리에는 언제나 공급 공백이 존재하고, 공급 공백은 시장이다.
 
-동시에 이 글은 낙관만을 권하지 않는다. 한국의 동성결혼 찬성 여론은 2년 만에 6%p 후퇴했고, 그 후퇴는 20·30대에서 일어났다. 미국 기업의 39%가 프라이드 마케팅에서 물러섰다. 시장은 존재하지만, **그 시장은 정치적 베타가 높고 데이터가 부족하며 실행 난이도가 높다.**
+동시에 이 글은 낙관만을 권하지 않는다. 같은 버티컬에서 블루드는 6,000만 사용자를 갖고도 상장폐지됐고, 데이라이트는 3년 만에 문을 닫았다. 한국의 동성결혼 찬성 여론은 2년 만에 6%p 후퇴했고, 그 후퇴는 20·30대에서 일어났다. 미국 기업의 39%가 프라이드 마케팅에서 물러섰다. 시장은 존재하지만, **그 시장은 정치적 베타가 높고 데이터가 부족하며 실행 난이도가 높다.**
 
 그렇기에 이 시장은 대기업의 캠페인이 아니라 **스타트업의 제품**에 더 적합하다. 캠페인은 여론에 흔들리지만 제품은 사용자에게 붙는다. 그리고 스타트업의 본질은 언제나, 아직 아무도 제대로 서비스하지 않는 사람들을 먼저 발견하는 일이었다.
 
 '다름'은 차별의 대상이 아니라 아직 채워지지 않은 수요의 다른 이름이다. 그 수요를 가장 먼저, 그리고 가장 진정성 있게 읽어내는 이들이 다음 승자가 될 것이다.
 
-엑스맨이 60년에 걸쳐 증명했듯이, 경계인들의 이야기는 우리 가족, 우리 친구들의 이야기며 결국 모두의 이야기가 된다는 것이다.
+엑스맨이 60년에 걸쳐 증명했듯이, 경계인들의 이야기는 우리 가족, 우리 친구들의 이야기며 결국 모두의 이야기가 될 것이다.
 
 ---
 
 ## 참고 자료 (References)
 
 ### 미국 인구 통계
-1. Gallup, "LGBTQ+ Identification Holds at 9% in U.S." (2026.2) — https://news.gallup.com/poll/702206/lgbtq-identification-holds.aspx
-2. Gallup, "What Percentage of Americans Are LGBTQ+?" — https://news.gallup.com/poll/332522/percentage-americans-lgbt.aspx
-3. Gallup, "LGBTQ+ Identification in U.S. Rises to 9.3%" (2025.2) — https://news.gallup.com/poll/656708/lgbtq-identification-rises.aspx
+
+1. Gallup, "LGBTQ+ Identification Holds at 9% in U.S." (2026.2) — <https://news.gallup.com/poll/702206/lgbtq-identification-holds.aspx>
+2. Gallup, "What Percentage of Americans Are LGBTQ+?" — <https://news.gallup.com/poll/332522/percentage-americans-lgbt.aspx>
+3. Gallup, "LGBTQ+ Identification in U.S. Rises to 9.3%" (2025.2) — <https://news.gallup.com/poll/656708/lgbtq-identification-rises.aspx>
 
 ### 시장 규모
-4. LGBT Capital 추정치 인용 — Out.com, "Time to flex our LGBTQ+ financial might" (2025.2) — https://www.out.com/gay-news/lgbtq-money-economic-blackout-day
-5. Coherent Market Insights, "LGBT Tourism Market" — https://www.coherentmarketinsights.com/industry-reports/lgbt-tourism-market
-6. market.us, "LGBTQ Tourism Market Size, Share" — https://market.us/report/lgbtq-tourism-market/
-7. Daxue Consulting 중국 시장 추정 인용 — PinkNews (2020.2) — https://www.thepinknews.com/2020/02/21/lgbt-economy-world-china-same-sex-marriage-rights-conversion-therapy-alibaba-pink-yuan/
 
-### 기업 실적
-8. Grindr Inc., "Delivers 28% Full Year 2025 Revenue Growth" (2026.2.26) — https://investors.grindr.com/news/news-details/2026/Grindr-Inc--Delivers-28-Full-Year-2025-Revenue-Growth/
-9. Grindr Inc. Q3 2025 Shareholder Letter, SEC Form 8-K — https://www.sec.gov/Archives/edgar/data/1820144/000182014425000037/grnd_q3xshlxvf.htm
+4. LGBT Capital 추정치 인용 — Out.com, "Time to flex our LGBTQ+ financial might" (2025.2) — <https://www.out.com/gay-news/lgbtq-money-economic-blackout-day>
+5. Coherent Market Insights, "LGBT Tourism Market" — <https://www.coherentmarketinsights.com/industry-reports/lgbt-tourism-market>
+6. market.us, "LGBTQ Tourism Market Size, Share" — <https://market.us/report/lgbtq-tourism-market/>
+7. Daxue Consulting 중국 시장 추정 인용 — PinkNews (2020.2) — <https://www.thepinknews.com/2020/02/21/lgbt-economy-world-china-same-sex-marriage-rights-conversion-therapy-alibaba-pink-yuan/>
 
-### 엑스맨 리부팅
-10. The Washington Times, "Marvel unveils 'X-Men' reboot cast, sets 2028 release" (2026.8.15) — https://www.washingtontimes.com/news/2026/aug/15/marvel-unveils-x-men-reboot-cast-sets-2028-release/
-11. Collider, "The Wait for Marvel's 'X-Men' Reboot Officially Has an End Date" — https://collider.com/x-men-reboot-movie-release-date-may-2028/
-12. Rotten Tomatoes, "Marvel Studios' X-Men: Release Date, Cast, Trailer & More" — https://editorial.rottentomatoes.com/article/everything-we-know-about-x-men-2028/
+### 상장사 실적 (1차 자료)
 
-### 태국
-13. 한국일보, "'LGBTQ+는 돈이 된다'… 태국 '경제효과 1900억원' 기대" (2025.6.2) — https://www.hankookilbo.com/News/Read/A2025060209560003094
-14. 서울신문, "성소수자 '우르르' 1900억 대박… '무지개 도시' 정체" (2025.6.4) — https://www.seoul.co.kr/news/international/2025/06/04/20250604500047
-15. 여성신문, "태국, 결혼평등법 시행으로 연간 400만 명의 관광객 추가 유치 전망" (2024.11) — https://www.womennews.co.kr/news/articleView.html?idxno=254475
-
-### 한국
-16. 한국갤럽 데일리 오피니언 제637호 (2025.10.14–16) — https://www.gallup.co.kr/gallupdb/reportContent.asp?seqNo=1588
-17. 여성신문, "성소수자 인구 230만명 추정되는데… 법·제도적 공백은 여전" (2025.12) — https://www.womennews.co.kr/news/articleView.html?idxno=270723
-18. Ipsos, "한국의 성소수자 비율과 이를 바라보는 시민들의 생각" (LGBT+ Pride 2023) — https://www.ipsos.com/ko-kr/한국-성소수자-비율-이를-바라보는-시민들의-생각
-19. Human Rights Watch, "한국: 인구 조사에서 동성 배우자 입력 허용" (2025.10.29) — https://www.hrw.org/ko/news/2025/10/29/south-korea-census-to-count-same-sex-couples
-20. 매일노동뉴스, "사회 변화가 통계에 닿기 시작할 때" (2025.11.2) — https://www.labortoday.co.kr/news/articleView.html?idxno=231007
-
-### 기업 프라이드 후원 축소
-21. The Drum, "Corporate pride goes quiet in 2025" (2025) — https://www.thedrum.com/news/corporate-pride-goes-quiet-2025-why-brands-are-backing-away-the-rainbow
-22. Advocate, "These 14 corporations have stopped or scaled back sponsorship of LGBTQ+ Pride events" — https://www.advocate.com/news/companies-that-stopped-sponsoring-pride
-23. Fortune, "From Bud Light to Target, Pride month saw rainbow capitalism dim in 2023" (2023.6.30) — https://fortune.com/2023/06/30/bud-light-target-rainbow-capitalism-dimmed-june-2023
-
-
-### 상장사 실적 (1차)
-
-- Grindr Inc., "Reports Second Quarter 2026 Revenue Growth of 33%, Raises Guidance" (2026.8.6) — https://www.businesswire.com/news/home/20260806849028/en/Grindr-Inc.-Reports-Second-Quarter-2026-Revenue-Growth-of-33-Raises-Guidance
-- Grindr Inc., "Delivers 28% Full Year 2025 Revenue Growth" (2026.2.26) — https://investors.grindr.com/
-- Match Group, "Announces Fourth Quarter and Full-Year Results" (2026.2.3) — https://ir.mtch.com/investor-relations/news-events/news-events/news-details/2026/Match-Group-Announces-Fourth-Quarter-and-Full-Year-Results/
-- Bumble Inc., "Announces Fourth Quarter and Full Year 2025 Results" (2026.3.11) — https://ir.bumble.com/news/news-details/2026/Bumble-Inc--Announces-Fourth-Quarter-and-Full-Year-2025-Results/default.aspx
+8. Grindr Inc., "Reports Second Quarter 2026 Revenue Growth of 33%, Raises Guidance" (2026.8.6) — <https://www.businesswire.com/news/home/20260806849028/en/Grindr-Inc.-Reports-Second-Quarter-2026-Revenue-Growth-of-33-Raises-Guidance>
+9. Grindr Inc., "Delivers 28% Full Year 2025 Revenue Growth" (2026.2.26) — <https://investors.grindr.com/news/news-details/2026/Grindr-Inc--Delivers-28-Full-Year-2025-Revenue-Growth/>
+10. Match Group, "Announces Fourth Quarter and Full-Year Results" (2026.2.3) — <https://ir.mtch.com/investor-relations/news-events/news-events/news-details/2026/Match-Group-Announces-Fourth-Quarter-and-Full-Year-Results/>
+11. Bumble Inc., "Announces Fourth Quarter and Full Year 2025 Results" (2026.3.11) — <https://ir.bumble.com/news/news-details/2026/Bumble-Inc--Announces-Fourth-Quarter-and-Full-Year-2025-Results/default.aspx>
 
 ### 그라인더 지배구조
 
-- Reuters, "Grindr Shareholders Offer to Take Dating App Private for $3.46 Billion" (2025.10.24)
-- Los Angeles Business Journal, "Grindr Board Rejects Deal" (2025.12) — https://labusinessjournal.com/featured/grindr-board-rejects-deal/
-- The Motley Fool, "Grindr's Former Board Chair Sells 1.45M Shares After Buyout Negotiations End" (2026.2.16) — https://www.fool.com/coverage/filings/2026/02/16/grindr-s-former-board-chair-sells-1-45m-shares-after-buyout-negotations-end/
+12. Reuters, "Grindr Shareholders Offer to Take Dating App Private for $3.46 Billion" (2025.10.24)
+13. Los Angeles Business Journal, "Grindr Board Rejects Deal" (2025.12) — <https://labusinessjournal.com/featured/grindr-board-rejects-deal/>
+14. The Motley Fool, "Grindr's Former Board Chair Sells 1.45M Shares After Buyout Negotiations End" (2026.2.16) — <https://www.fool.com/coverage/filings/2026/02/16/grindr-s-former-board-chair-sells-1-45m-shares-after-buyout-negotations-end/>
 
 ### 프라이버시 규제
 
-- Oxford Human Rights Hub, "Grindr goes to Court (Part I): UK Data Protection Law and the Disclosure of Individuals' HIV Status" — https://ohrh.law.ox.ac.uk/grindr-goes-to-court-part-i-uk-data-protection-law-and-the-disclosure-of-individuals-hiv-status/
-- Reuters, "Grindr facing UK lawsuit over alleged data protection breaches" (2024.4.22) — https://www.reuters.com/technology/grindr-facing-uk-lawsuit-over-alleged-data-protection-breaches-2024-04-22/
-- National AIDS Trust, "Making Grindr accountable for sharing HIV data" — https://nat.org.uk/views/grindr-uk-confidential-data-breach/
-- PPC Land, "Grindr ad revenue gains 44% to $25m as direct deals stay hard to win" (2026.8) — https://ppc.land/grindr-ad-revenue-gains-44-to-25m-as-direct-deals-stay-hard-to-win/
+15. Oxford Human Rights Hub, "Grindr goes to Court (Part I): UK Data Protection Law and the Disclosure of Individuals' HIV Status" — <https://ohrh.law.ox.ac.uk/grindr-goes-to-court-part-i-uk-data-protection-law-and-the-disclosure-of-individuals-hiv-status/>
+16. Reuters, "Grindr facing UK lawsuit over alleged data protection breaches" (2024.4.22) — <https://www.reuters.com/technology/grindr-facing-uk-lawsuit-over-alleged-data-protection-breaches-2024-04-22/>
+17. National AIDS Trust, "Making Grindr accountable for sharing HIV data" — <https://nat.org.uk/views/grindr-uk-confidential-data-breach/>
+18. PPC Land, "Grindr ad revenue gains 44% to $25m as direct deals stay hard to win" (2026.8) — <https://ppc.land/grindr-ad-revenue-gains-44-to-25m-as-direct-deals-stay-hard-to-win/>
 
-### 반례 사례
+### 반례 사례 (블루시티·데이라이트·무즈)
 
-- Nasdaq, "BlueCity Announces Completion of Merger" (2022.8.12) — https://www.nasdaq.com/press-release/bluecity-announces-completion-of-merger-2022-08-12
-- TechCrunch, "Daylight, the LGBTQ+ neobank, calls it quits" (2023.5.22) — https://techcrunch.com/2023/05/22/daylight-the-lgbtq-neobank-calls-it-quits
-- American Banker, "Sunset for Daylight: LGBTQ+-focused neobank winds down" (2023.5.24) — https://www.americanbanker.com/news/sunset-for-daylight-lgbtq-focused-neobank-winds-down
-- Wamda, "How Muzz lost a battle but won market share" (2023.3) — https://www.wamda.com/2023/03/muzz-lost-battle-won-market-share
+19. Nasdaq, "BlueCity Announces Completion of Merger" (2022.8.12) — <https://www.nasdaq.com/press-release/bluecity-announces-completion-of-merger-2022-08-12>
+20. TechCrunch, "Daylight, the LGBTQ+ neobank, calls it quits" (2023.5.22) — <https://techcrunch.com/2023/05/22/daylight-the-lgbtq-neobank-calls-it-quits>
+21. American Banker, "Sunset for Daylight: LGBTQ+-focused neobank winds down" (2023.5.24) — <https://www.americanbanker.com/news/sunset-for-daylight-lgbtq-focused-neobank-winds-down>
+22. Wamda, "How Muzz lost a battle but won market share" (2023.3) — <https://www.wamda.com/2023/03/muzz-lost-battle-won-market-share>
+
+### 엑스맨 리부팅
+
+23. The Washington Times, "Marvel unveils 'X-Men' reboot cast, sets 2028 release" (2026.8.15) — <https://www.washingtontimes.com/news/2026/aug/15/marvel-unveils-x-men-reboot-cast-sets-2028-release/>
+24. Collider, "The Wait for Marvel's 'X-Men' Reboot Officially Has an End Date" — <https://collider.com/x-men-reboot-movie-release-date-may-2028/>
+25. Rotten Tomatoes, "Marvel Studios' X-Men: Release Date, Cast, Trailer & More" — <https://editorial.rottentomatoes.com/article/everything-we-know-about-x-men-2028/>
+
+### 태국
+
+26. 한국일보, "'LGBTQ+는 돈이 된다'… 태국 '경제효과 1900억원' 기대" (2025.6.2) — <https://www.hankookilbo.com/News/Read/A2025060209560003094>
+27. 서울신문, "성소수자 '우르르' 1900억 대박… '무지개 도시' 정체" (2025.6.4) — <https://www.seoul.co.kr/news/international/2025/06/04/20250604500047>
+28. 여성신문, "태국, 결혼평등법 시행으로 연간 400만 명의 관광객 추가 유치 전망" (2024.11) — <https://www.womennews.co.kr/news/articleView.html?idxno=254475>
+
+### 한국
+
+29. 한국갤럽 데일리 오피니언 제637호 (2025.10.14–16) — <https://www.gallup.co.kr/gallupdb/reportContent.asp?seqNo=1588>
+30. 여성신문, "성소수자 인구 230만명 추정되는데… 법·제도적 공백은 여전" (2025.12) — <https://www.womennews.co.kr/news/articleView.html?idxno=270723>
+31. Ipsos, "한국의 성소수자 비율과 이를 바라보는 시민들의 생각" (LGBT+ Pride 2023) — [https://www.ipsos.com/ko-kr/한국-성소수자-비율-이를-바라보는-시민들의-생각](https://www.ipsos.com/ko-kr/%ED%95%9C%EA%B5%AD-%EC%84%B1%EC%86%8C%EC%88%98%EC%9E%90-%EB%B9%84%EC%9C%A8-%EC%9D%B4%EB%A5%BC-%EB%B0%94%EB%9D%BC%EB%B3%B4%EB%8A%94-%EC%8B%9C%EB%AF%BC%EB%93%A4%EC%9D%98-%EC%83%9D%EA%B0%81)
+32. Human Rights Watch, "한국: 인구 조사에서 동성 배우자 입력 허용" (2025.10.29) — <https://www.hrw.org/ko/news/2025/10/29/south-korea-census-to-count-same-sex-couples>
+33. 매일노동뉴스, "사회 변화가 통계에 닿기 시작할 때" (2025.11.2) — <https://www.labortoday.co.kr/news/articleView.html?idxno=231007>
+
+### 기업 프라이드 후원 축소
+
+34. The Drum, "Corporate pride goes quiet in 2025" (2025) — <https://www.thedrum.com/news/corporate-pride-goes-quiet-2025-why-brands-are-backing-away-the-rainbow>
+35. Advocate, "These 14 corporations have stopped or scaled back sponsorship of LGBTQ+ Pride events" — <https://www.advocate.com/news/companies-that-stopped-sponsoring-pride>
+36. Fortune, "From Bud Light to Target, Pride month saw rainbow capitalism dim in 2023" (2023.6.30) — <https://fortune.com/2023/06/30/bud-light-target-rainbow-capitalism-dimmed-june-2023>
 
 ---
 
 **주의사항 (Disclaimer)**
 
-본 칼럼에 인용된 성소수자 인구 및 시장 규모 수치는 대부분 자기보고 기반 설문 또는 리서치 기관의 추정치이며, 기관 간 편차가 상당합니다. 특히 중국 관련 수치는 2015–2020년에 생산된 추정치가 반복 인용되고 있어 현재 시점의 정확성을 담보하지 않습니다. 투자 판단 또는 사업 의사결정에 활용할 경우 1차 자료의 산출 방법론과 기준 연도를 반드시 직접 확인하시기 바랍니다. 본 글은 특정 종목에 대한 투자 권유가 아니며, 언급된 기업의 실적 수치는 공시 자료에 근거합니다.
+본 칼럼에 인용된 성소수자 인구 및 시장 규모 수치는 대부분 자기보고 기반 설문 또는 리서치 기관의 추정치이며, 기관 간 편차가 상당합니다. 특히 중국 관련 수치는 2015–2020년에 생산된 추정치가 반복 인용되고 있어 현재 시점의 정확성을 담보하지 않습니다.
+
+기업 실적 중 그라인더·매치그룹·범블 수치는 공시 자료에 근거하나, 블루시티 홀딩스와 무즈의 수치는 각각 상장폐지 이전 2차 출처와 언론 인터뷰에 근거하며 동일한 신뢰 수준으로 취급해서는 안 됩니다. 블루시티는 SEC Form 20-F 원문, 무즈는 영국 Companies House 제출 재무제표로 교차 확인할 것을 권합니다.
+
+투자 판단 또는 사업 의사결정에 활용할 경우 1차 자료의 산출 방법론과 기준 연도를 반드시 직접 확인하시기 바랍니다. 본 글은 특정 종목에 대한 투자 권유가 아닙니다.
+
+---
+
+## 작성자 / Source
+
+**김호광 (Dennis Kim)** — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).
