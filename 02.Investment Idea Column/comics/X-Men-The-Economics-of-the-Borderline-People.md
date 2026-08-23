@@ -40,6 +40,8 @@ keywords:
 group: industry
 featured: true
 featured_rank: 0
+og_image: "https://vibequant.cc/og/x-men-economics-borderline-people.jpg"
+image: "https://vibequant.cc/og/x-men-economics-borderline-people.jpg"
 schema_type: BlogPosting
 draft: false
 robots: index,follow
@@ -48,6 +50,9 @@ robots: index,follow
 # X-Men: 낯선 이들, 경계의 사람들을 위한 경제학
 
 > 문화콘텐츠가 사회적 공감을 만들고, 그 공감이 시장으로 번역되는 순간에 관하여
+
+
+![X-Men — 90년대 스타일 팀 일러스트. 경계인·돌연변이 서사가 문화 공감과 시장으로 이어지는 칼럼 썸네일](https://vibequant.cc/og/x-men-economics-borderline-people.jpg)
 
 ---
 
