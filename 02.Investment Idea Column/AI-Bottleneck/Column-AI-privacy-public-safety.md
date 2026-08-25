@@ -1,3 +1,51 @@
+---
+title: "인공지능, 사생활과 공공 안전 사이"
+subtitle: "같은 대화 파이프라인 — FBI로 가거나, 광고 서버로 가거나"
+description: "2026년 8월 ChatGPT 살해 협박 FBI 제보와 한국 광고 개시가 같은 달에. 텀블러리지 미신고·저우 신고·소송·AI 기본법을 겹쳐, 자율규제 한계와 안전·광고 데이터 분리 절차를 묻는 칼럼."
+abstract: |
+  2026년 8월 OpenAI는 플로리다 스토킹·살해 협박 사건에서 ChatGPT 대화를 FBI에 넘겼고, 같은 달 한국 등 5개국에 ChatGPT 스폰서 광고를 시작했다. 두 출력은 대화를 읽고 의미를 추출하는 동일 파이프라인의 분기점이다.
+  텀블러리지 학교 총격에서는 8개월 전 플래그·안전팀 에스컬레이션에도 경영진이 당국 미통보로 계정 정지에 그쳤고, 저우 사건에서는 내부 검토팀이 신고로 이어졌다. LLM은 신호가 아니라 회사 절차가 결정한다.
+  AI 기본법·개정 개인정보보호법이 투명성·적법성을 다루더라도 위해 인지 시 통보 의무·면책·안전/광고 목적 분리 지침은 공백이다. 판단이 아니라 기록되는 절차를 규율해야 한다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Policy/AI ethics column (not legal or investment advice), date 2026-08-25.
+  Thesis: Safety classifiers and ad targeting share the same premise—reading chat for meaning; the fork is corporate procedure, not model "judgment." LLM is a spreadsheet not an oracle; the company reports, not the AI.
+  Case A (worked): Darren Zhou (Goldman analyst), FL — ChatGPT murder-plan prompts re ex; OpenAI review → FBI; May 2026 arrest; Aug 13 2026 deferred adjudication, 8 years probation. Logs to deputies lacked bot replies (edited).
+  Case B (failed): Tumbler Ridge BC school shooting 2026-02-10 — Jesse Van Rootselaar; flagged Jun 2025 for firearm-violence planning; safety urged LE notify; execs deactivated account; second account continued; Altman later apologized for not notifying. Policy: "imminent and credible risk of serious physical harm to others" — self-harm generally not LE-reported.
+  Litigation: Maya Gebala parents BCSC Mar 2026; SF federal suits Apr 29; BC AG Niki Sharma Jul 2026; plaintiffs seek structural remedies (block new accounts after violence flags, mandatory LE notice, external audit) not confirmed "$1B" damages. Tarasoff-style duty-to-warn expansion contested (Robin Feldman).
+  Ads: ChatGPT sponsored ads KR/UK/MX/BR/JP from 2026-08-11; memory+ad personalization may use saved memories; advertisers get aggregate metrics only per OpenAI; EU opt-in vs US opt-out; health context risk.
+  Korea: AI Framework Act full effect 2026-01-22; amended PIPA 2026-09-11 (fine up to 10% total revenue). No clear duty/immunity for violence tip-offs; voluntary disclosure constrained by secrecy/PIPA → bias to inaction.
+  Proposals: (1) regulate recorded procedure/escalation logs not lexical definitions of "imminent"; (2) good-faith tip immunity to avoid over-reporting chilling crisis users; (3) hard purpose separation of safety-processed chat data from ads/profiling.
+date: 2026-08-25
+updated: 2026-08-25
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - AI
+  - ChatGPT
+  - OpenAI
+  - 프라이버시
+  - 공공안전
+  - AI기본법
+  - 광고
+keywords:
+  - "ChatGPT 광고"
+  - "OpenAI FBI"
+  - "텀블러리지"
+  - "대런 저우"
+  - "임박하고 신뢰할 만한 위험"
+  - "AI 기본법"
+  - "대화 프라이버시"
+  - "안전 분류기"
+  - "목적 제한"
+  - "타라소프"
+group: ai-llm
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 인공지능, 사생활과 공공 안전 사이
 
 ## 같은 달에 벌어진 두 가지 일
@@ -66,7 +114,7 @@ OpenAI의 해명은 정책 말 그대로였다. 그 활동이 "타인에 대한 
 
 ---
 
-## 5. 그리고 같은 데이터를 봇다는 파이프라인이 광고를 만든다
+## 5. 그리고 같은 데이터를 보는 파이프라인이 광고를 만든다
 
 여기서 처음의 이야기로 돌아온다.
 

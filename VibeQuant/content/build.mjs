@@ -626,6 +626,7 @@ const SLUG_OVERRIDES = {
   "KIMI-K3/KIMI-K3-Cloud-Install-Guide_JA.md": "kimi-k3-cloud-install-guide-ja",
   "AI-Bottleneck/AI-Bottleneck.md": "ai-bottleneck",
   "AI-Bottleneck/Nvidia-AI-Infra.md": "nvidia-ai-infra",
+  "AI-Bottleneck/Column-AI-privacy-public-safety.md": "ai-privacy-public-safety",
   "K11/Adrian-Cheng-Fall.md": "adrian-cheng-fall",
   "Prediction-Market/Prediction-Market-Growth-and-Opportunity.md": "prediction-market-growth-and-opportunity",
   "Prediction-Market/Prediction-Market-Growth-and-Opportunity_EN.md": "prediction-market-growth-and-opportunity-en",
