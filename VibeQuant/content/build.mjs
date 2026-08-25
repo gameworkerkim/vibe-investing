@@ -627,6 +627,7 @@ const SLUG_OVERRIDES = {
   "AI-Bottleneck/AI-Bottleneck.md": "ai-bottleneck",
   "AI-Bottleneck/Nvidia-AI-Infra.md": "nvidia-ai-infra",
   "AI-Bottleneck/Column-AI-privacy-public-safety.md": "ai-privacy-public-safety",
+  "AI Bouble/Nvidia-Fait-Accompli.md": "nvidia-fait-accompli",
   "K11/Adrian-Cheng-Fall.md": "adrian-cheng-fall",
   "Prediction-Market/Prediction-Market-Growth-and-Opportunity.md": "prediction-market-growth-and-opportunity",
   "Prediction-Market/Prediction-Market-Growth-and-Opportunity_EN.md": "prediction-market-growth-and-opportunity-en",

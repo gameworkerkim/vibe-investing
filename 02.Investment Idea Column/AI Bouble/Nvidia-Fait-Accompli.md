@@ -1,3 +1,50 @@
+---
+title: "엔비디아 실적발표, 반도체와 AI 시장을 구원할까?"
+subtitle: "페따 꼼쁠리 — 이미 반영된 호재 앞에서 시장이 묻는 '다음 문장'"
+description: "2026-08-26 NVDA FY27 Q2 실적 전, 코스톨라니 페따 꼼쁠리로 읽는 컨센서스·수급·유가·중국·잭슨홀. 발표 후 4분기 연속 하락 패턴과 한국 메모리 역설을 정리한 칼럼."
+abstract: |
+  2026년 8월 26일(현지) 엔비디아 FY27 Q2 실적 발표를 앞두고, 시장 눈높이는 회사 가이던스 910억 달러(±2%) 대비 컨센서스 매출 918.5억·EPS 2.08달러로 서프라이즈 여지가 얇다. 진짜 시험대는 3분기 가이던스(~1,040억)다.
+  최근 네 분기 모두 컨센서스 상회 뒤에도 발표 익일 평균 −2.79%·이틀 −5.31%로 페따 꼼쁠리 패턴이 관측됐고, 이번에는 발표 전 7거래일 하락·반도체 펀드 3주 63억 달러 유출이 선행했다.
+  유가·이란 제재·중국 H200 옵션·잭슨홀·메모리 ASP 상승이 같은 주에 겹친다. 단기 이벤트 베팅의 기대수익률이 대중과 반대일 수 있음을 읽되, 장기 본질가치와 혼동하지 말 것. 투자 권유 아님.
+summary_for_ai: |
+  Market psychology / AI infra column (not investment advice), as of 2026-08-24 data, published 2026-08-25.
+  Thesis: NVDA FY27 Q2 print is largely fait accompli (Kostolany); watch Q3 guidance, gross margin, China sentence — not beat-and-raise theater. Short-term event long often loses after prints.
+  Setup: earnings 2026-08-26 after close. Co guidance Q2 rev $91B ±2%; Street ~$91.85B / EPS $2.08 vs Y/Y $46.74B / $1.05. Q3 Street ~$103.96B / $2.37; bar ~$103B+, some want ≥$105B. Q1: $81.6B rev, DC $75.2B (92%), networking $14.8B (+199% Y/Y); China/HK rev $4.55B vs $9.66B Y/Y; Hopper DC China ship 0; Q2 guide excludes China DC compute.
+  Pattern: last 4 prints beat then fell ≥2 sessions; avg D+1 −2.79%, 2d −5.31% (~$290B on $5.2T mkt). Pre-print: 7 down days; SMH −4%+; semi funds −$6.3B over 3w while broad inflows +$40.1B; BofA Bull&Bear 9.5; options imply ~$282B move; beta ~1.94–2.22.
+  Macro overlays: Hormuz/Iran sanctions → Brent path (Jul 69→105, ~92); EIA Q3 Brent ~$85; discount rate / datacenter power / US-China via Iran oil. Jackson Hole (Kevin Warsh) same week; 30y UST ~20y highs; S&P 7674 / NDX 26180 (8/21). US-Canada trade rupture.
+  Korea angle: HBM/DRAM/NAND ASP up helps Samsung/SK Hynix (Bernstein TPs cited) but can lift AI infra BOM up to ~30% → pressure on NVDA customer TCO and ~75% non-GAAP GM guide. "NVDA good ⇒ memory good" itself is priced narrative.
+  Scenarios: (1) beat + Q3 ~$104B → sell-the-news; (2) surprise needs ≥$105B Q3 and/or China restart and/or Vera Rubin early ramp; (3) miss → amplified by beta amid thin fund support. Fait accompli ≠ long sell signal (man-and-dog); only says event-chasing expected return opposite crowd.
+date: 2026-08-25
+updated: 2026-08-25
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - Nvidia
+  - 엔비디아
+  - 실적발표
+  - 페따꼼쁠리
+  - AI인프라
+  - 반도체
+  - 코스톨라니
+keywords:
+  - "엔비디아 실적"
+  - "NVIDIA FY27 Q2"
+  - "페따 꼼쁠리"
+  - "fait accompli"
+  - "앙드레 코스톨라니"
+  - "데이터센터"
+  - "블랙웰"
+  - "H200 중국"
+  - "잭슨홀"
+  - "HBM"
+group: ai-llm
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 엔비디아 실적발표, 반도체와 AI 시장을 구원할까?
 
 ## 들어가며
@@ -66,7 +113,7 @@
 
 코스톨라니의 언어로 번역하면 명확하다. **강한 손은 이미 나갔다.** 지금 남아 있는 물량의 상당 부분은 실적 발표라는 이벤트에 베팅한 떨리는 손이다.
 
-옵션 시장의 계산도 이를 뒷받침한다. 이번 발표를 앞두고 옵션이 반영하는 예상 변동 폭 기준으로 **약 2,820억 달러의 시가총액이 걸려 있다.** 참고로 5월 발표 직전 반영된 변동 폭은 양방향 약 5.3%였고, 최근 여덟 번의 실제 변동 폭 평균은 4~4.5%였다. 엔비디아의 베타는 1.94~2.22 수준으로, 시장이 흔들릴 때 두 배로 흔들리는 종목이다.
+옵션 시장의 계산도 이를 뒷받침한다. 이번 발표를 앞두고 옵션이 반영하는 예상 변동 폭 기준으로 **약 2,820억 달러의 시가총액이 걸려 있다.** 참고로 5월 발표 직전 반영된 변동 폭은 양방향 약 5.3%였고, 최근 여덟 번의 실제 변동 폭 평균은 4–4.5%였다. 엔비디아의 베타는 1.94–2.22 수준으로, 시장이 흔들릴 때 두 배로 흔들리는 종목이다.
 
 ---
 
