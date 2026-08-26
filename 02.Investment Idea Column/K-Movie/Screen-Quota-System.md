@@ -1,14 +1,60 @@
+---
+title: "오디세이로 보는 스크린쿼터제의 의미"
+subtitle: "용아맥 만석과 73일 의무 — 규제가 목적을 수단으로 바꿔버리는 순간"
+description: "놀런 《오디세이》 용아맥 매진·암표 속 스크린쿼터 잔여일 제약. 2025 점유율 추락 vs 2026 콘텐츠 회복 데이터로, 스크린 단위 산정의 한계와 탄력적 쿼터 대안을 묻는 칼럼."
+abstract: |
+  크리스토퍼 놀런 《오디세이》는 전 분량 아이맥스 필름 촬영작으로, 국내 1.43:1 완전 구현관인 용산 CGV 아이맥스(용아맥)에서 매진·암표까지 발생했다. 그런데 영화진흥법 시행령상 스크린별 연간 상영일 1/5(약 73일) 한국영화 의무와 '전 회차 한국영화' 산정 방식 때문에 특별관 연장 상영이 막힌다.
+  2025년에도 쿼터는 유지됐으나 한국영화 관객·점유율은 급락했고, 2026년 상반기는 《왕과 사는 남자》《군체》 등 콘텐츠로 점유율 65.5%까지 회복했다. 쿼터는 좌석을 비울 수 있어도 관객을 만들지 못한다.
+  제도 자체(GATT·유네스코 근거)는 정당하나 동질 스크린 전제의 산정 단위는 이질적 특별관 시대에 맞지 않는다. 극장 합산·특별관 하한·포맷 인센티브 등 탄력적 설계와 쇼비즈 체질 개선을 제안한다. 법률·투자 권유 아님.
+summary_for_ai: |
+  Industry/culture-policy column (not legal or investment advice), date 2026-08-26.
+  Thesis: Screen quota as cultural exception is legitimate; today's per-screen day-count (full-day Korean programming) applied to IMAX/4DX creates deadweight—blocks sold-out Odyssey at Yongsan IMAX while stuffing non-IMAX Korean titles; 2025–26 data show content drives share, not quota alone.
+  Case: Nolan Odyssey (first full-feature IMAX film camera); only KR 1.43:1 venue "Yong-A-Mac"; sellouts, scalping to ~₩300k vs ₩17k face; KOFIC taking tip-offs. As of 2026-08-21 venue had 35 Korean screening days YTD, 38 left to hit ~73; Dune 3 / Avengers Doomsday year-end squeeze → Odyssey window ~2 months max (~mid-Oct).
+  Law: Film & Video Promotion Act Art.40; Enforcement Decree Art.19 — ≥1/5 annual screening days Korean; counted per screen, day counts only if all shows that day are Korean; special formats included. International: GATT Art.IV screen quota exception; UNESCO cultural diversity convention.
+  Data: 2024 KR film 71.47M admissions / 58.0% share (Parasite-era hits: Exhuma 11.91M, Crime City 4 11.50M). 2025: 43.58M (−39%), ₩419.1B (−39.4%), share 41.1% (−17pp), no 10M film since 2012 (top Zombie Daughter ~5.63M)—quota still in force. 2026 H1 total box 57.05M / ₩579.0B (+34.2%/+41.9% YoY); KR 37.37M / ₩370.2B (+74.9%/+81.7%), share 65.5%; King Living with Man 16.91M; Colony (Yeon Sang-ho) 5.95M + SEA records. Odyssey ~7.1M cum (8/24), IMAX ~0.71M (~10% of admissions) vs Spidey Brand New Day 2.6%, Hope 3.2%.
+  Proposals: (1) theater-level aggregate quota + separate lower floor for premium screens; (2) format exceptions / incentives for IMAX-ready KR production instead of forced cross-play; (3) showbiz promotion culture / contract norms—not more regulation. Voucher/support stats cited (2026 mid-budget support ₩46B; discount coupons). Quota is means not end; content first.
+date: 2026-08-26
+updated: 2026-08-26
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 스크린쿼터
+  - 한국영화
+  - 오디세이
+  - 아이맥스
+  - 영화산업
+  - 규제
+  - K-콘텐츠
+keywords:
+  - "스크린쿼터"
+  - "오디세이"
+  - "용아맥"
+  - "아이맥스"
+  - "한국영화 점유율"
+  - "영화진흥법"
+  - "왕과 사는 남자"
+  - "군체"
+  - "탄력적 스크린쿼터"
+  - "GATT 제4조"
+group: industry
+featured: true
+featured_rank: 0
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 오디세이로 보는 스크린쿼터제의 의미
 
 ## 규제가 만든 가장 이상한 종영
 
-오디세우스는 포세이돈의 저주를 받아 바다를 떠돌고 크라켄과 세이렌의 유혹은 견디며 20년만에 고향으로 돌아왔다고 한다. 이 외롭고 장대한 대서사시는 전 세계적으로 흥행을 이끌었다. 
+오디세우스는 포세이돈의 저주를 받아 바다를 떠돌고 크라켄과 세이렌의 유혹은 견디며 20년 만에 고향으로 돌아왔다고 한다. 이 외롭고 장대한 대서사시는 전 세계적으로 흥행을 이끌었다. 
 
 지금 서울 용산 CGV 아이파크몰 아이맥스관, 이른바 '용아맥'에서는 기묘한 일이 벌어지고 있다. 크리스토퍼 놀런의 《오디세이》는 영화 역사상 최초로 전 분량을 아이맥스 필름 카메라로 촬영한 작품이다. 국내에서 1.43:1 화면비를 온전히 구현하는 상영관은 용아맥이 유일하다. 촬영본이 잘리지 않는 유일한 극장이라는 사실이 알려지면서, 예매가 열리는 날 CGV 모바일 앱이 접속 지연을 겪었고, 맨 앞줄을 제외한 전 좌석이 매진됐다. 정가 1만 7,000원짜리 좌석이 중고 거래 플랫폼에서 30만 원에 거래되는 암표까지 등장했다. 영화진흥위원회가 암표 제보를 접수할 정도다.
 
 관객은 줄을 서 있다. 극장은 팔고 싶어 한다. 배급사는 더 틀고 싶어 한다. 그런데 더 상영을 하지 못하는 기묘한 일이 발생하고 있다.
 
-이유는 시장의 수요에 따라 결정된 것ㅇ 아니라 규제 법령이다. 「영화 및 비디오물의 진흥에 관한 법률 시행령」은 영화관이 연간 상영일수의 5분의 1 이상을 한국영화로 채우도록 의무화한다. 365일 운영하는 극장이라면 최소 73일이다. 문제는 이 의무가 **극장 단위가 아니라 개별 스크린 단위**로 적용된다는 점, 그리고 **하루 전 회차를 한국영화로 편성해야 그날 하루가 한국영화 상영일로 인정**된다는 점이다. 아이맥스도, 4DX도 예외가 아니다.
+이유는 시장의 수요에 따라 결정된 것이 아니라 규제 법령이다. 「영화 및 비디오물의 진흥에 관한 법률 시행령」은 영화관이 연간 상영일수의 5분의 1 이상을 한국영화로 채우도록 의무화한다. 365일 운영하는 극장이라면 최소 73일이다. 문제는 이 의무가 **극장 단위가 아니라 개별 스크린 단위**로 적용된다는 점, 그리고 **하루 전 회차를 한국영화로 편성해야 그날 하루가 한국영화 상영일로 인정**된다는 점이다. 아이맥스도, 4DX도 예외가 아니다.
 
 8월 21일 기준 용아맥의 올해 한국영화 상영일은 35일이다. 연말까지 38일을 더 채워야 한다. 여기에 연말 개봉이 예정된 《듄: 파트 3》, 《어벤져스: 둠스데이》 같은 특별관 수요가 확실한 작품들의 편성까지 고려하면, 용아맥에서 《오디세이》를 상영할 수 있는 현실적인 잔여 기간은 길게 잡아 두 달 남짓이다. 10월 중순이면 사실상 끝이다.
 
@@ -36,7 +82,7 @@
 
 그리고 정확히 1년 뒤, 반대 방향의 증명이 나왔다.
 
-2026년 상반기 극장 전체 관객은 5,705만 명, 매출은 5,790억 원으로 전년 동기 대비 각각 34.2%, 41.9% 늘었다. 이 중 한국영화 관객은 3,737만 명, 매출은 3,702억 원이다. 전년 동기 대비 관객 74.9%, 매출 81.7% 증가한 수치이며, 팬데믹 이후 상반기 한국영화 최고 기록이다. 매출 기준으로 팬데믹 이전(2017~2019년) 상반기 평균의 94.2% 수준까지 회복했다.
+2026년 상반기 극장 전체 관객은 5,705만 명, 매출은 5,790억 원으로 전년 동기 대비 각각 34.2%, 41.9% 늘었다. 이 중 한국영화 관객은 3,737만 명, 매출은 3,702억 원이다. 전년 동기 대비 관객 74.9%, 매출 81.7% 증가한 수치이며, 팬데믹 이후 상반기 한국영화 최고 기록이다. 매출 기준으로 팬데믹 이전(2017–2019년) 상반기 평균의 94.2% 수준까지 회복했다.
 
 상반기 한국영화 관객 점유율은 65.5%다. 40%대에서 60%대 중반으로, 1년 만에 24%포인트 넘게 뛰었다.
 
@@ -113,7 +159,7 @@ WTO 체제는 문화 상품을 일반 상품과 동일하게 취급하지 않는
 
 # 부록: 데이터
 
-## 1. 극장 전체 지표 (2024~2026)
+## 1. 극장 전체 지표 (2024–2026)
 
 | 구분 | 2024년 | 2025년 | 2026년 상반기 |
 |---|---|---|---|
@@ -132,7 +178,7 @@ WTO 체제는 문화 상품을 일반 상품과 동일하게 취급하지 않는
 | 최고 흥행작 | 《파묘》 1,191만 / 《범죄도시4》 1,150만 | 《좀비딸》 약 563만 | 《왕과 사는 남자》 1,691만 |
 
 > **참고 1.** 2025년 한국영화 관객·매출은 팬데믹 기간을 제외하면 각각 2005년, 2009년 이후 최저치다.
-> **참고 2.** 2026년 상반기 한국영화 매출은 팬데믹 이전(2017~2019년) 상반기 평균의 94.2% 수준까지 회복했다.
+> **참고 2.** 2026년 상반기 한국영화 매출은 팬데믹 이전(2017–2019년) 상반기 평균의 94.2% 수준까지 회복했다.
 > **참고 3.** 상반기 수치는 연간 수치와 직접 비교할 수 없다. 하반기 편성에 따라 연간 점유율은 달라질 수 있다.
 
 ## 3. 《오디세이》 아이맥스 관람 지표

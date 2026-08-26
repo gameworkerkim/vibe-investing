@@ -17,7 +17,7 @@ export const COLUMN_GROUP_RULES = [
   { id: "macro-geo", title_ko: "매크로 · 지정학", title_en: "Macro · Geopolitics", match: [/\/usa\//i, /age-of-usd/i, /pax americana/i, /trump/i, /defense/i, /rome/i, /world_bank/i, /us treasury/i, /japan/i, /china /i, /drone/i, /tobacco/i, /\/windows10\//i, /eod-win10/i] },
   { id: "quant-strategy", title_ko: "퀀트 · 투자 전략", title_en: "Quant · Strategy", match: [/momentum/i, /special situations/i, /insider/i, /model vs reality/i, /medbridge/i, /semiconductor ai etf/i, /stock_option/i, /money_game/i] },
   { id: "semi-storage", title_ko: "반도체 · 스토리지", title_en: "Semi · Storage", match: [/storage war/i, /marvell/i, /intel/i, /memory/i, /semi/i, /\/ssd\//i, /power-off-retention/i, /sandisk/i, /kioxia/i] },
-  { id: "industry", title_ko: "산업 · 소비", title_en: "Industry · Consumer", match: [/uber/i, /netflex/i, /netflix/i, /mokrak/i, /luxury/i, /webtoon/i, /kidult/i, /ford/i, /adobe/i, /voce/i, /brain/i, /bouble/i, /cyber wrecker/i, /518/i, /startup/i, /shelf-life/i, /\/k11\//i, /adrian-cheng/i, /bending.?spoons/i, /\/comics\//i, /x-men/i, /pink.?econom/i, /post-covid/i, /end-of-drink/i, /drink.?age/i] },
+  { id: "industry", title_ko: "산업 · 소비", title_en: "Industry · Consumer", match: [/uber/i, /netflex/i, /netflix/i, /mokrak/i, /luxury/i, /webtoon/i, /kidult/i, /ford/i, /adobe/i, /voce/i, /brain/i, /bouble/i, /cyber wrecker/i, /518/i, /startup/i, /shelf-life/i, /\/k11\//i, /adrian-cheng/i, /bending.?spoons/i, /\/comics\//i, /x-men/i, /pink.?econom/i, /post-covid/i, /end-of-drink/i, /drink.?age/i, /k-movie/i, /screen.?quota/i] },
 ];
 
 /** Recommended media columns (relative to 03. Media-Column/) */
@@ -62,6 +62,7 @@ export const ESSAY_GROUP_FALLBACK = { id: "other", title_ko: "기타 에세이",
 
 /** Paths (substring) that should appear in Recommended — order = display order */
 export const FEATURED_COLUMN_PATHS = [
+  "K-Movie/Screen-Quota-System.md",
   "AI Bouble/Nvidia-Fait-Accompli.md",
   "AI-Bottleneck/Column-AI-privacy-public-safety.md",
   "Post-COVID/End-of-Drink-age.md",
