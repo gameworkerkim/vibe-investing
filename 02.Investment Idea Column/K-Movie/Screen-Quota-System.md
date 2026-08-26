@@ -1,3 +1,4 @@
+<!--
 ---
 title: "오디세이로 보는 스크린쿼터제의 의미"
 subtitle: "용아맥 만석과 73일 의무 — 규제가 목적을 수단으로 바꿔버리는 순간"
@@ -43,7 +44,7 @@ schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
-
+-->
 # 오디세이로 보는 스크린쿼터제의 의미
 
 ## 규제가 만든 가장 이상한 종영
