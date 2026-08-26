@@ -1,4 +1,3 @@
-<!--
 ---
 title: "오디세이로 보는 스크린쿼터제의 의미"
 subtitle: "용아맥 만석과 73일 의무 — 규제가 목적을 수단으로 바꿔버리는 순간"
@@ -40,12 +39,17 @@ keywords:
 group: industry
 featured: true
 featured_rank: 0
+og_image: "https://vibequant.cc/og/screen-quota-system.jpg"
+image: "https://vibequant.cc/og/screen-quota-system.jpg"
 schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
--->
+
 # 오디세이로 보는 스크린쿼터제의 의미
+
+
+![크리스토퍼 놀런 《오디세이》 포스터 — 용아맥 스크린쿼터 논쟁 칼럼 썸네일](https://vibequant.cc/og/screen-quota-system.jpg)
 
 ## 규제가 만든 가장 이상한 종영
 
