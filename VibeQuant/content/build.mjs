@@ -648,6 +648,7 @@ const SLUG_OVERRIDES = {
   "USA/Age-of-USD.md": "age-of-usd",
   "AI-IDC/Why-High-Power-Datacenter.md": "why-high-power-datacenter",
   "BitCoin/BTC-Arbitrage-Bithumb-Column.md": "btc-arbitrage-bithumb",
+  "Internet/CIA-North-Lorea-Opsec-Column.md": "cia-north-korea-opsec",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
