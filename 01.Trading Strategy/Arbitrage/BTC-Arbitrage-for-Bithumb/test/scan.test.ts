@@ -203,15 +203,29 @@ describe("runArbitrageScan", () => {
     expect(stored.prices).toEqual(result.prices);
   });
 
-  it("프리미엄이 임계값 미만이면 NEUTRAL", async () => {
+  it("비용을 못 넘기는 작은 갭은 NEUTRAL", async () => {
+    // 프리미엄 +0.3% → 순이익 0.3 - 0.14(테이커) - 0.14(BTC 출금비) = 0.02% < 0.2%
+    mockMarkets(
+      { "KRW-BTC": 100_300_000, "KRW-ETH": 4_900_000, "KRW-SOL": 210_000, "KRW-XRP": 700, "KRW-USDT": 1400 },
+      { BTCUSDT: 71428.57, ETHUSDT: 3500, SOLUSDT: 150, XRPUSDT: 0.5 }
+    );
+    const result = await runArbitrageScan(env0());
+    const btc = result.signals.find((s) => s.coin === "BTC")!;
+    expect(btc.action).toBe("NEUTRAL");
+    expect(btc.netPct!).toBeLessThan(0.2);
+  });
+
+  it("비용을 넘긴 작은 갭은 발동한다 (예전 ±1.5% 기준이면 놓쳤을 기회)", async () => {
+    // 프리미엄 +0.5% → 순이익 0.22% ≥ 0.2%
     mockMarkets(
       { "KRW-BTC": 100_500_000, "KRW-ETH": 4_900_000, "KRW-SOL": 210_000, "KRW-XRP": 700, "KRW-USDT": 1400 },
       { BTCUSDT: 71428.57, ETHUSDT: 3500, SOLUSDT: 150, XRPUSDT: 0.5 }
     );
-    const env = makeEnv();
-    const result = await runArbitrageScan(env);
+    const result = await runArbitrageScan(env0());
     const btc = result.signals.find((s) => s.coin === "BTC")!;
-    expect(btc.action).toBe("NEUTRAL");
+    expect(btc.action).toBe("BITHUMB_SELL");
+    expect(btc.triggered).toBe(true);
+    expect(btc.premiumPct).toBeCloseTo(0.5, 1);
   });
 
   it("업스트림 오류 시 ok:false + error", async () => {
@@ -252,10 +266,10 @@ describe("runArbitrageScan", () => {
 
 describe("signalsFromSnapshot", () => {
   it("스냅샷 없으면 빈 배열", () => {
-    expect(signalsFromSnapshot(null, 1.5)).toEqual([]);
+    expect(signalsFromSnapshot(null, configFromVars({}))).toEqual([]);
   });
 
-  it("스냅샷 프리미엄으로 시그널 재구성", () => {
+  it("저장된 스냅샷으로 시그널 재구성", () => {
     const snapshot: Snapshot = {
       fetchedAt: new Date(0).toISOString(),
       fetchedAtMs: 0,
@@ -273,7 +287,32 @@ describe("signalsFromSnapshot", () => {
         },
       ],
     };
-    const signals = signalsFromSnapshot(snapshot, configFromVars({}).signalThresholdPct);
+    const signals = signalsFromSnapshot(snapshot, configFromVars({}));
     expect(signals[0].action).toBe("BITHUMB_SELL");
+  });
+
+  it("대시보드 판정은 크론과 같은 기준을 쓴다 (순이익이 임계값 미만이면 대기)", () => {
+    const snapshot: Snapshot = {
+      fetchedAt: new Date(0).toISOString(),
+      fetchedAtMs: 0,
+      usdKrw: 1400,
+      fxSource: "bithumb-usdt",
+      prices: [
+        {
+          coin: "BTC",
+          bithumbKrw: 100_050_000,
+          binanceUsdt: 70_000,
+          binanceKrw: 100_000_000,
+          premiumPct: 0.05,
+          spreadKrw: 50_000,
+          netPct: -0.23, // 비용 차감 후 마이너스
+        },
+      ],
+    };
+    expect(signalsFromSnapshot(snapshot, configFromVars({}))[0].action).toBe("NEUTRAL");
+    // 같은 스냅샷이라도 헤드라인 김프 기준(fx)에서는 0.05% 라 여전히 대기
+    expect(signalsFromSnapshot(snapshot, configFromVars({ FX_MODE: "fx" }))[0].action).toBe(
+      "NEUTRAL"
+    );
   });
 });

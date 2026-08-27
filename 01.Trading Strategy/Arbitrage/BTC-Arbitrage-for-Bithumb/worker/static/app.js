@@ -32,8 +32,10 @@ function fmtUsdt(v) {
 
 function fmtPct(v) {
   if (num(v) === null) return "—";
-  const sign = v > 0 ? "+" : "";
-  return sign + nf2.format(v) + "%";
+  // 소수 2자리로 반올림하면 0 이 되는 값은 부호를 떼고 0.00% 로 (−0.00% 방지)
+  const rounded = Math.abs(v) < 0.005 ? 0 : v;
+  const sign = rounded > 0 ? "+" : "";
+  return sign + nf2.format(rounded) + "%";
 }
 
 function pctClass(v) {
@@ -164,11 +166,13 @@ function renderMeta(status, signals) {
   const threshold = t === null ? "—" : nf2.format(t);
   const fxLabel = s.fxSource === "bithumb-usdt" ? "빗썸 KRW-USDT" : "두나무 환율";
   const basis = status.fxMode === "fx" ? "헤드라인 김프" : "실행 가능 스프레드";
+  // 임계값의 단위가 기준마다 다르므로 무엇을 재는 값인지 함께 보여준다.
+  const basisLabel = status.signalBasis === "premium" ? "프리미엄" : "순이익";
   const ago = Math.max(0, Math.round((Date.now() - s.fetchedAtMs) / 60000));
   const stale = ago > STALE_MIN ? '<span class="stale">⚠ stale ' + ago + "분 전</span>" : "최신";
   el.innerHTML =
     "<span>환산율(USD/KRW): <b>" + fmtNum(s.usdKrw) + "</b> (" + fxLabel + " · " + basis + ")</span>" +
-    "<span>시그널 임계값: <b>±" + threshold + "%</b></span>" +
+    "<span>시그널 기준: <b>" + basisLabel + " ≥ " + threshold + "%</b></span>" +
     "<span>상태: " + stale + "</span>";
 }
 

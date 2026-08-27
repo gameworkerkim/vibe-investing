@@ -33,8 +33,10 @@ export function formatUsdt(value: MaybeNumber): string {
 
 export function formatPremium(pct: MaybeNumber): string {
   if (!isNum(pct)) return "—";
-  const sign = pct > 0 ? "+" : "";
-  return `${sign}${nf2.format(pct)}%`;
+  // 반올림하면 0 이 되는 값에 "-" 가 붙지 않도록 (−0.00% 방지)
+  const rounded = Math.abs(pct) < 0.005 ? 0 : pct;
+  const sign = rounded > 0 ? "+" : "";
+  return `${sign}${nf2.format(rounded)}%`;
 }
 
 /** 텔레그램 HTML 메시지 생성 (parse_mode=HTML) */

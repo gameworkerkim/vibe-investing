@@ -1,8 +1,9 @@
 import { formatTestMessage, sendTelegramMessage } from "./alerts";
-import { configFromEnv } from "./config";
+import { configForFxSource, configFromEnv } from "./config";
 import { Env } from "./env";
 import { runArbitrageScan, signalsFromSnapshot } from "./scan";
 import { kvStore, loadHistory, loadSnapshot } from "./storage";
+import type { FxSource } from "./types";
 
 /**
  * 크론 주기(5분)보다 짧게 잡아 엣지 캐시가 스냅샷보다 뒤처지지 않게 한다.
@@ -55,19 +56,27 @@ function isAuthorized(request: Request, env: Env): boolean {
   return token !== null && safeEqual(token, expected);
 }
 
+/** 저장된 스냅샷의 환산율 출처를 반영한 설정 (폴백이 있었으면 기준이 달라진다) */
+function effectiveConfig(env: Env, snapshot: { fxSource: FxSource } | null) {
+  const config = configFromEnv(env);
+  return snapshot ? configForFxSource(config, snapshot.fxSource) : config;
+}
+
 async function handleStatus(env: Env): Promise<Response> {
   const store = kvStore(env.ARB_DATA);
-  const config = configFromEnv(env);
   const [snapshot, history] = await Promise.all([
     loadSnapshot(store),
     loadHistory(store),
   ]);
+  // 스냅샷이 어떤 환산율로 만들어졌는지에 맞춰 기준을 보고한다
+  const config = effectiveConfig(env, snapshot);
   // thresholdPct 를 함께 내려야 대시보드가 한 번의 응답으로 시그널을 판정할 수 있다.
   return json({
     ok: true,
     thresholdPct: config.signalThresholdPct,
     clearPct: config.signalClearPct,
     fxMode: config.fxMode,
+    signalBasis: config.signalBasis,
     snapshot,
     history,
   });
@@ -76,13 +85,14 @@ async function handleStatus(env: Env): Promise<Response> {
 async function handleSignals(env: Env): Promise<Response> {
   const store = kvStore(env.ARB_DATA);
   const snapshot = await loadSnapshot(store);
-  const config = configFromEnv(env);
+  const config = effectiveConfig(env, snapshot);
   return json({
     ok: true,
     thresholdPct: config.signalThresholdPct,
     clearPct: config.signalClearPct,
     fxMode: config.fxMode,
-    signals: signalsFromSnapshot(snapshot, config.signalThresholdPct),
+    signalBasis: config.signalBasis,
+    signals: signalsFromSnapshot(snapshot, config),
     updatedAt: snapshot?.fetchedAt ?? null,
   });
 }

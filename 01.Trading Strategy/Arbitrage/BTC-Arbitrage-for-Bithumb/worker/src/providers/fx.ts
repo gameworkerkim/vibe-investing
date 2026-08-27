@@ -28,8 +28,10 @@ async function fromBithumbUsdt(): Promise<FxRate | null> {
     const map = await fetchBithumbTickers(["KRW-USDT"]);
     const rate = map["KRW-USDT"];
     if (rate && rate > 0) return { rate, source: "bithumb-usdt" };
-  } catch {
-    // 폴백으로 진행
+    console.warn("[fx] bithumb KRW-USDT 응답에 값이 없음");
+  } catch (error) {
+    // 조용히 폴백하면 기준이 바뀐 걸 아무도 모른다. 반드시 남긴다.
+    console.warn("[fx] bithumb KRW-USDT 실패", error instanceof Error ? error.message : error);
   }
   return null;
 }
@@ -44,8 +46,9 @@ async function fromDunamu(): Promise<FxRate | null> {
     if (item && Number.isFinite(item.basePrice) && item.basePrice > 0) {
       return { rate: item.basePrice, source: "dunamu" };
     }
-  } catch {
-    // 폴백으로 진행
+    console.warn("[fx] dunamu 응답에 FRX.KRWUSD 가 없음");
+  } catch (error) {
+    console.warn("[fx] dunamu 실패", error instanceof Error ? error.message : error);
   }
   return null;
 }

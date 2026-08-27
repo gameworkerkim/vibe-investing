@@ -63,8 +63,9 @@ describe("GET /api/status", () => {
     const res = await handleApi(get("/api/status"), makeEnv());
     const body = (await res.json()) as Record<string, unknown>;
     expect(res.status).toBe(200);
-    expect(body.thresholdPct).toBe(1.5);
+    expect(body.thresholdPct).toBe(0.2); // FX_MODE=usdt → 순이익 0.2% 기준
     expect(body.fxMode).toBe("usdt");
+    expect(body.signalBasis).toBe("net");
     expect((body.snapshot as Snapshot).prices.length).toBe(2);
   });
 
@@ -83,6 +84,30 @@ describe("GET /api/signals", () => {
     const body = (await res.json()) as { signals: Array<{ coin: string; action: string }> };
     expect(body.signals.map((s) => s.coin)).toEqual(["BTC"]);
     expect(body.signals[0].action).toBe("BITHUMB_SELL");
+  });
+
+  it("FX_MODE=fx 라도 스냅샷이 폴백된 환산율이면 그 기준을 보고한다", async () => {
+    // 저장된 스냅샷은 fxSource=bithumb-usdt (두나무 폴백이 일어난 상태)
+    const res = await handleApi(get("/api/signals"), makeEnv({ FX_MODE: "fx" }));
+    const body = (await res.json()) as Record<string, unknown>;
+    expect(body.signalBasis).toBe("net");
+    expect(body.thresholdPct).toBe(0.2);
+  });
+
+  it("스냅샷이 실환율(dunamu)이면 프리미엄 기준으로 보고한다", async () => {
+    const env = makeEnv({
+      FX_MODE: "fx",
+      ARB_DATA: fakeKv({
+        "snapshot:latest": { ...snapshot, fxSource: "dunamu" },
+      }),
+    });
+    const body = (await (await handleApi(get("/api/signals"), env)).json()) as Record<
+      string,
+      unknown
+    >;
+    expect(body.signalBasis).toBe("premium");
+    expect(body.thresholdPct).toBe(1.5);
+    expect(body.clearPct).toBe(0.5);
   });
 });
 

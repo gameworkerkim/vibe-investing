@@ -51,42 +51,54 @@ export function estimateNetPct(
   return grossPct - takerCost - withdrawalCostPct;
 }
 
+/** 판정에 쓰는 값 — basis 에 따라 순이익률 또는 프리미엄 절댓값 */
+export function signalMetric(
+  premiumPct: number,
+  netPct: number,
+  config: ArbConfig
+): number {
+  return config.signalBasis === "net" ? netPct : Math.abs(premiumPct);
+}
+
+/** 프리미엄 부호가 곧 실행 방향이다 (빗썸이 비싸면 빗썸 매도) */
+export function directionFor(premiumPct: number): Exclude<SignalAction, "NEUTRAL"> {
+  return premiumPct >= 0 ? "BITHUMB_SELL" : "BITHUMB_BUY";
+}
+
 /**
  * 히스테리시스가 적용된 시그널 평가.
  *
- * - NEUTRAL(대기): |프리미엄| ≥ 임계값이면 방향 시그널 트리거
- *   - 프리미엄 ≥ +threshold → BITHUMB_SELL (빗썸 비싼 쪽 → 빗썸에서 매도·바이낸스에서 매수)
- *   - 프리미엄 ≤ -threshold → BITHUMB_BUY  (빗썸 싼 쪽 → 빗썸에서 매수·바이낸스에서 매도)
- * - 트리거된 상태: 해제 임계값 안쪽으로 들어와야 NEUTRAL 로 복귀 (플래핑 방지)
- * - 단, 반대 방향으로 임계값을 넘기면 NEUTRAL 을 거치지 않고 즉시 반전한다.
- *   (거치게 두면 실제로 뒤집힌 기회를 한 스캔 주기만큼 놓친다)
+ * **방향은 프리미엄의 부호**, **발동 여부는 basis 값의 크기**로 나눠서 본다.
+ * (예전에는 프리미엄 하나로 둘 다 판정해서, 비용을 못 넘기는 0.05% 짜리 갭도
+ *  임계값만 넘으면 신호가 됐고 반대로 비용을 넘긴 기회는 놓쳤다.)
+ *
+ * - NEUTRAL(대기): metric ≥ 임계값이면 프리미엄 부호 방향으로 트리거
+ *   - 프리미엄 > 0 → BITHUMB_SELL (빗썸 비싼 쪽 → 빗썸에서 매도·바이낸스에서 매수)
+ *   - 프리미엄 < 0 → BITHUMB_BUY  (빗썸 싼 쪽 → 빗썸에서 매수·바이낸스에서 매도)
+ * - 트리거된 상태: metric 이 해제 임계값 이하로 내려와야 NEUTRAL 복귀 (플래핑 방지)
+ * - 방향이 뒤집히고 metric 이 다시 임계값을 넘으면 NEUTRAL 을 거치지 않고 즉시 반전
  */
 export function evaluateSignal(
-  _coin: Coin,
   premiumPct: number,
+  netPct: number,
   config: ArbConfig,
   prev?: AlertState
 ): SignalEvaluation {
-  const threshold = config.signalThresholdPct;
-  const clear = config.signalClearPct;
+  const metric = signalMetric(premiumPct, netPct, config);
+  const direction = directionFor(premiumPct);
+  const open = metric >= config.signalThresholdPct;
 
   if (prev && prev.action !== "NEUTRAL") {
-    if (prev.action === "BITHUMB_SELL" && premiumPct <= -threshold) {
-      return { action: "BITHUMB_BUY", triggered: true };
+    if (open && direction !== prev.action) {
+      return { action: direction, triggered: true };
     }
-    if (prev.action === "BITHUMB_BUY" && premiumPct >= threshold) {
-      return { action: "BITHUMB_SELL", triggered: true };
+    if (metric <= config.signalClearPct) {
+      return { action: "NEUTRAL", triggered: false };
     }
-    const cleared =
-      prev.action === "BITHUMB_SELL"
-        ? premiumPct <= clear
-        : premiumPct >= -clear;
-    if (cleared) return { action: "NEUTRAL", triggered: false };
     return { action: prev.action, triggered: false };
   }
 
-  if (premiumPct >= threshold) return { action: "BITHUMB_SELL", triggered: true };
-  if (premiumPct <= -threshold) return { action: "BITHUMB_BUY", triggered: true };
+  if (open) return { action: direction, triggered: true };
   return { action: "NEUTRAL", triggered: false };
 }
 

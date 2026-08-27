@@ -19,9 +19,10 @@ A serverless signal bot that compares prices between **Bithumb** (KRW market) an
 
 ![Bithumb x Binance arbitrage signal dashboard](docs/assets/dashboard.png)
 
-Live capture from a local `wrangler dev` run with real public quotes. Every premium here sits within ±0.1%,
-which is exactly what `FX_MODE=usdt` is expected to show — see [§1.1](#11-which-usdkrw-do-you-mean).
-`추정 순이익` (estimated net) goes negative once fees are deducted, i.e. **there is no executable edge at this moment**.
+Live capture from a local `wrangler dev` run with real public quotes. Every premium sits within ±0.1% while the
+round-trip cost is 0.17–0.36%, so `추정 순이익` (estimated net) is negative and every row correctly reads 대기 —
+**there is no executable edge at this moment**. Measured numbers and the cost breakdown:
+[docs/ARBITRAGE-SITUATION.md](docs/ARBITRAGE-SITUATION.md).
 
 ---
 
@@ -54,17 +55,33 @@ Set it with the `FX_MODE` var:
 | `usdt` (default) | Bithumb `KRW-USDT` ticker | **Executable spread** — the coin-specific gap left after the stablecoin premium cancels out on both legs. This is what you actually capture by moving USDT. | ±0.1% — `±1.5%` almost never fires |
 | `fx` | Dunamu `FRX.KRWUSD` | **Headline Kimchi premium** — includes the USDT premium itself. | Swings by whole percent |
 
-If you want alerts that fire at all, either run `FX_MODE=fx`, or keep `usdt` and lower
-`SIGNAL_THRESHOLD_PCT` to something on the order of the real spread (e.g. `0.3`).
-Whichever source is picked first, the other one is used as a fallback when it is unreachable.
+Thresholds follow the basis automatically, so the shipped defaults fire in either mode:
+
+| Basis | Default threshold | Default clear |
+|---|---|---|
+| `net` (from `FX_MODE=usdt`) | `0.2` (net %) | `0.05` |
+| `premium` (from `FX_MODE=fx`) | `1.5` (premium %) | `0.5` |
+
+Whichever source is picked first, the other is used as a fallback when it is unreachable — and **the basis
+follows the rate actually obtained, not the one requested**. If `fx` is configured but Dunamu is down, the
+Bithumb USDT rate is used and the basis reverts to `net` with its own thresholds; keeping 1.5% there would
+mean never firing again. Explicit `SIGNAL_THRESHOLD_PCT` / `SIGNAL_CLEAR_PCT` values are always respected.
 
 5. Evaluate signals (with **hysteresis** + **cooldown**):
 
 | Premium | Signal | Meaning |
 |---|---|---|
-| `≥ +1.5%` | 🔴 `BITHUMB_SELL` | Bithumb is expensive → **sell on Bithumb, buy on Binance** |
-| `≤ -1.5%` | 🟢 `BITHUMB_BUY` | Bithumb is cheap → **buy on Bithumb, sell on Binance** |
+| net `≥ 0.2%`, premium > 0 | 🔴 `BITHUMB_SELL` | Bithumb is expensive → **sell on Bithumb, buy on Binance** |
+| net `≥ 0.2%`, premium < 0 | 🟢 `BITHUMB_BUY` | Bithumb is cheap → **buy on Bithumb, sell on Binance** |
 | otherwise | ⚪ `NEUTRAL` | wait |
+
+**Direction comes from the sign of the premium; whether it fires comes from the net edge.** Those are two
+different questions, and conflating them was the original design's mistake: a 0.05% gap that cannot cover
+fees would fire on a premium threshold, while a genuinely profitable gap below 1.5% never would.
+Since `net` already has costs subtracted, **0 is break-even** and the threshold reads as "tell me when
+there is this much left". Under `FX_MODE=fx` the basis switches to the premium's absolute value instead
+(see [§1.1](#11-which-usdkrw-do-you-mean)) — applying a net test to a headline premium produces false signals,
+because you pay that same premium when buying USDT in the first place.
 
 6. **Persist + alert** — snapshots/history go to KV; newly triggered signals are sent to Telegram.
 
@@ -102,6 +119,8 @@ BTC-Arbitrage-for-Bithumb/
 ├── readme.md                  This file (English)
 ├── CLAUDE.md                  Project rules (Korean)
 ├── docs/DEVELOPMENT-PLAN.md   Development plan (Korean)
+├── docs/ARBITRAGE-SITUATION.md  Measured arbitrage situation (Korean)
+├── docs/TEST-SCENARIOS.md     Test scenario catalogue (Korean)
 ├── docs/assets/dashboard.png  Dashboard screenshot
 ├── wrangler.jsonc             Workers config (cron·KV·static assets)
 ├── worker/
@@ -128,7 +147,7 @@ npm install
 cp .dev.vars.example .dev.vars   # optional Telegram token etc.
 
 npm run dev                      # wrangler dev --test-scheduled → http://localhost:8787
-npm test                         # vitest
+npm test                         # vitest — 66 tests
 npm run typecheck                # tsc --noEmit
 ```
 
@@ -167,7 +186,7 @@ After deploy, the dashboard is available at `https://<your-worker>.<subdomain>.w
 
 | Path | Auth | Description |
 |---|---|---|
-| `GET /api/status` | none | Latest snapshot + premium history + thresholds |
+| `GET /api/status` | none | Latest snapshot + premium history + thresholds + basis |
 | `GET /api/signals` | none | Current signal list (by threshold) |
 | `GET /api/health` | none | Health check |
 | `GET /api/refresh` | `ADMIN_TOKEN` | Run a manual scan |
@@ -189,8 +208,8 @@ responses are returned `no-store` so a stale 401 or 502 never sticks in a shared
 |---|---|---|
 | `COINS` | `BTC,ETH,SOL,XRP` | Watchlist (comma separated) |
 | `FX_MODE` | `usdt` | `usdt` = executable spread · `fx` = headline Kimchi premium ([§1.1](#11-which-usdkrw-do-you-mean)) |
-| `SIGNAL_THRESHOLD_PCT` | `1.5` | Signal trigger premium threshold (%) |
-| `SIGNAL_CLEAR_PCT` | `0.5` | Hysteresis clear threshold (%) |
+| `SIGNAL_THRESHOLD_PCT` | basis-dependent | Trigger threshold. Unit follows the basis: net % (`0.2`) or premium % (`1.5`) |
+| `SIGNAL_CLEAR_PCT` | basis-dependent | Hysteresis clear threshold (`0.05` / `0.5`) |
 | `ALERT_COOLDOWN_MIN` | `30` | Re-alert cooldown per coin (min) |
 | `BITHUMB_TAKER_FEE_PCT` | `0.04` | Bithumb taker fee (%) |
 | `BINANCE_TAKER_FEE_PCT` | `0.1` | Binance taker fee (%) |
@@ -203,14 +222,21 @@ responses are returned `no-store` so a stale 401 or 502 never sticks in a shared
 > The net estimate also **omits** KRW deposit/withdrawal cost, transfer latency, order-book depth, and slippage,
 > so treat it as an optimistic upper bound rather than a P&L figure.
 
-## 8. References
+## 8. Documents
+
+- [docs/ARBITRAGE-SITUATION.md](docs/ARBITRAGE-SITUATION.md) — measured premiums, per-coin break-even costs,
+  why the threshold is 0.2%, and what the net estimate leaves out
+- [docs/TEST-SCENARIOS.md](docs/TEST-SCENARIOS.md) — all 66 test scenarios by area, with regression tests marked
+- [docs/DEVELOPMENT-PLAN.md](docs/DEVELOPMENT-PLAN.md) — development plan and review log
+
+## 9. References
 
 - [Bithumb Open API — Ticker](https://apidocs.bithumb.com/reference/현재가-조회)
 - [Bithumb Developer Docs](https://apidocs.bithumb.com)
 - [bithumb-ai-trade-kit (GitHub)](https://github.com/bithumb-official/bithumb-ai-trade-kit)
 - [Binance Market Data API](https://developers.binance.com/docs/binance-spot-api-docs/rest-api/market-data-endpoints)
 
-## 9. Disclaimer
+## 10. Disclaimer
 
 - This project is a **research/educational signal detector**. It does not place orders or move funds automatically.
 - Signals are estimates based on public quotes; fillability, fees, withdrawal delays, and slippage are not guaranteed.

@@ -99,3 +99,9 @@ describe("sendTelegramMessage", () => {
 it("formatTestMessage 상수", () => {
   expect(formatTestMessage()).toContain("차익거래 시그널");
 });
+
+it("반올림하면 0 이 되는 음수는 -0.00% 가 아니라 0.00%", () => {
+  expect(formatPremium(-0.0015)).toBe("0.00%");
+  expect(formatPremium(0.0015)).toBe("0.00%");
+  expect(formatPremium(-0.02)).toBe("-0.02%");
+});

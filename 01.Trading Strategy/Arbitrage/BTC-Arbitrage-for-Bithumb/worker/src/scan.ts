@@ -1,11 +1,13 @@
-import { configFromEnv, SYMBOLS } from "./config";
+import { ArbConfig, configForFxSource, configFromEnv, SYMBOLS } from "./config";
 import { Env } from "./env";
 import {
   computePremium,
   computeSpreadKrw,
+  directionFor,
   estimateNetPct,
   evaluateSignal,
   markAlertSent,
+  signalMetric,
   shouldSendAlert,
   updateAlertState,
 } from "./signals";
@@ -50,7 +52,8 @@ export interface ScanResult {
  * 5) 스냅샷·히스토리·알림상태 KV 저장 — 발송 성공 시각까지 반영해야 하므로 알림 뒤에 저장
  */
 export async function runArbitrageScan(env: Env): Promise<ScanResult> {
-  const config = configFromEnv(env);
+  const requested = configFromEnv(env);
+  let config = requested;
   const store = kvStore(env.ARB_DATA);
   const now = Date.now();
 
@@ -63,6 +66,9 @@ export async function runArbitrageScan(env: Env): Promise<ScanResult> {
       fetchBinancePrices(binanceSymbols),
       fetchUsdKrw(config.fxMode),
     ]);
+
+    // 환산율이 폴백됐다면 판정 기준도 실제 출처에 맞춘다 (요청한 모드가 아니라 결과 기준)
+    config = configForFxSource(config, fx.source);
 
     const prices: CoinPrice[] = config.coins.map((coin) => {
       const bithumbKrw = bithumbMap[SYMBOLS.bithumb[coin]];
@@ -123,7 +129,7 @@ export async function runArbitrageScan(env: Env): Promise<ScanResult> {
         continue;
       }
       const prev = prevStates[price.coin];
-      const evaluation = evaluateSignal(price.coin, premiumPct, config, prev);
+      const evaluation = evaluateSignal(premiumPct, price.netPct ?? 0, config, prev);
       states[price.coin] = updateAlertState(prev, evaluation.action, now);
       const decision: SignalDecision = {
         coin: price.coin,
@@ -180,7 +186,7 @@ export async function runArbitrageScan(env: Env): Promise<ScanResult> {
       ok: false,
       fetchedAtMs: now,
       usdKrw: 0,
-      fxSource: config.fxMode === "fx" ? "dunamu" : "bithumb-usdt",
+      fxSource: requested.fxMode === "fx" ? "dunamu" : "bithumb-usdt",
       prices: [],
       signals: [],
       alertsSent: 0,
@@ -192,25 +198,22 @@ export async function runArbitrageScan(env: Env): Promise<ScanResult> {
 /**
  * 가장 최근 저장된 스냅샷으로 현재 시그널 목록 재구성 (대시보드용, 네트워크 호출 없음).
  *
- * 주의: 여기에는 히스테리시스가 적용되지 않는다. KV 의 알림 상태(`state:alerts`)가
- * 아니라 프리미엄 값만 보고 임계값을 다시 판정하므로, 해제 구간(±0.5~1.5%)에서는
- * 대시보드가 NEUTRAL 을 보여주는 동안 알림 상태는 아직 방향을 유지할 수 있다.
- * 대시보드는 "지금 프리미엄이 임계값을 넘었는가"를 보여주는 용도다.
+ * 크론과 **같은 기준·같은 임계값**을 쓴다. 다만 히스테리시스는 적용하지 않는다 —
+ * KV 의 알림 상태가 아니라 저장된 값만 다시 판정하므로, 해제 구간에서는 대시보드가
+ * NEUTRAL 을 보여주는 동안 알림 상태는 아직 방향을 유지할 수 있다.
+ * 대시보드는 "지금 임계값을 넘었는가"를 보여주는 용도다.
  */
 export function signalsFromSnapshot(
   snapshot: Snapshot | null,
-  signalThresholdPct: number
+  config: ArbConfig
 ): Array<Pick<SignalDecision, "coin" | "action" | "premiumPct" | "netPct">> {
   if (!snapshot) return [];
   const result: Array<Pick<SignalDecision, "coin" | "action" | "premiumPct" | "netPct">> = [];
   for (const p of snapshot.prices) {
     if (p.premiumPct === null || !Number.isFinite(p.premiumPct)) continue;
+    const metric = signalMetric(p.premiumPct, p.netPct ?? 0, config);
     const action =
-      p.premiumPct >= signalThresholdPct
-        ? ("BITHUMB_SELL" as const)
-        : p.premiumPct <= -signalThresholdPct
-          ? ("BITHUMB_BUY" as const)
-          : ("NEUTRAL" as const);
+      metric >= config.signalThresholdPct ? directionFor(p.premiumPct) : ("NEUTRAL" as const);
     result.push({ coin: p.coin, action, premiumPct: p.premiumPct, netPct: p.netPct });
   }
   return result;

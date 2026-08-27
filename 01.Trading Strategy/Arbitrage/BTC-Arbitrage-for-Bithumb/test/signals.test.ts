@@ -1,16 +1,22 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_CONFIG } from "../worker/src/config";
+import { configFromVars, DEFAULT_CONFIG } from "../worker/src/config";
 import {
   computePremium,
   computeSpreadKrw,
+  directionFor,
   estimateNetPct,
   evaluateSignal,
   markAlertSent,
   shouldSendAlert,
+  signalMetric,
   updateAlertState,
 } from "../worker/src/signals";
 
 const config = { ...DEFAULT_CONFIG };
+/** 기본: FX_MODE=usdt → 순이익 기준, 임계값 0.2% / 해제 0.05% */
+const netConfig = configFromVars({});
+/** FX_MODE=fx → 프리미엄 절댓값 기준, 임계값 1.5% / 해제 0.5% */
+const premiumConfig = configFromVars({ FX_MODE: "fx" });
 
 describe("computePremium", () => {
   it("계산: (빗썸/바이낸스KRW - 1) × 100", () => {
@@ -52,38 +58,75 @@ describe("estimateNetPct", () => {
   });
 });
 
-describe("evaluateSignal (히스테리시스)", () => {
-  it("대기 상태에서 임계값 돌파 시 방향 트리거", () => {
-    expect(evaluateSignal("BTC", 1.5, config).action).toBe("BITHUMB_SELL");
-    expect(evaluateSignal("BTC", 1.5, config).triggered).toBe(true);
-    expect(evaluateSignal("BTC", -1.5, config).action).toBe("BITHUMB_BUY");
-    expect(evaluateSignal("BTC", 0.1, config).action).toBe("NEUTRAL");
+describe("signalMetric / directionFor", () => {
+  it("basis=net 이면 순이익률, basis=premium 이면 프리미엄 절댓값", () => {
+    expect(signalMetric(-3, 0.4, netConfig)).toBe(0.4);
+    expect(signalMetric(-3, 0.4, premiumConfig)).toBe(3);
   });
 
-  it("트리거 상태는 해제 임계값 안쪽으로 들어와야 중립 복귀 (플래핑 방지)", () => {
+  it("방향은 프리미엄 부호가 결정한다", () => {
+    expect(directionFor(0.01)).toBe("BITHUMB_SELL");
+    expect(directionFor(-0.01)).toBe("BITHUMB_BUY");
+  });
+});
+
+describe("evaluateSignal — basis=net (기본, FX_MODE=usdt)", () => {
+  it("순이익이 임계값을 넘으면 프리미엄 부호 방향으로 트리거", () => {
+    // 프리미엄은 +0.5% 로 작지만 비용을 빼고도 0.3% 남으면 신호다
+    const up = evaluateSignal(0.5, 0.3, netConfig);
+    expect(up.action).toBe("BITHUMB_SELL");
+    expect(up.triggered).toBe(true);
+
+    const down = evaluateSignal(-0.5, 0.3, netConfig);
+    expect(down.action).toBe("BITHUMB_BUY");
+    expect(down.triggered).toBe(true);
+  });
+
+  it("프리미엄이 커도 비용을 못 넘기면 신호가 아니다 (거짓 신호 차단)", () => {
+    // 예전 프리미엄 기준이라면 |2%| 로 발동했겠지만, 순이익이 음수면 실행할 이유가 없다
+    const result = evaluateSignal(2.0, -0.05, netConfig);
+    expect(result.action).toBe("NEUTRAL");
+    expect(result.triggered).toBe(false);
+  });
+
+  it("해제 임계값 아래로 내려와야 중립 복귀", () => {
     const prev = { action: "BITHUMB_SELL" as const, since: 0, lastAlertAt: 0 };
-    expect(evaluateSignal("BTC", 0.8, config, prev).action).toBe("BITHUMB_SELL");
-    expect(evaluateSignal("BTC", 0.8, config, prev).triggered).toBe(false);
-    expect(evaluateSignal("BTC", 0.4, config, prev).action).toBe("NEUTRAL");
-    expect(evaluateSignal("BTC", 0.4, config, prev).triggered).toBe(false);
+    expect(evaluateSignal(0.5, 0.1, netConfig, prev).action).toBe("BITHUMB_SELL");
+    expect(evaluateSignal(0.5, 0.04, netConfig, prev).action).toBe("NEUTRAL");
+  });
+
+  it("방향이 뒤집히고 임계값을 다시 넘기면 즉시 반전", () => {
+    const prev = { action: "BITHUMB_SELL" as const, since: 0, lastAlertAt: 0 };
+    const flipped = evaluateSignal(-0.5, 0.3, netConfig, prev);
+    expect(flipped.action).toBe("BITHUMB_BUY");
+    expect(flipped.triggered).toBe(true);
+  });
+
+  it("방향만 뒤집히고 임계값에 못 미치면 이전 상태 유지", () => {
+    const prev = { action: "BITHUMB_SELL" as const, since: 0, lastAlertAt: 0 };
+    const held = evaluateSignal(-0.5, 0.1, netConfig, prev);
+    expect(held.action).toBe("BITHUMB_SELL");
+    expect(held.triggered).toBe(false);
+  });
+});
+
+describe("evaluateSignal — basis=premium (FX_MODE=fx)", () => {
+  it("프리미엄 절댓값으로 판정하고 순이익은 보지 않는다", () => {
+    expect(evaluateSignal(1.5, -99, premiumConfig).action).toBe("BITHUMB_SELL");
+    expect(evaluateSignal(-1.5, -99, premiumConfig).action).toBe("BITHUMB_BUY");
+    expect(evaluateSignal(0.1, 99, premiumConfig).action).toBe("NEUTRAL");
+  });
+
+  it("해제 임계값(0.5%) 안쪽으로 들어와야 중립 복귀 (플래핑 방지)", () => {
+    const prev = { action: "BITHUMB_SELL" as const, since: 0, lastAlertAt: 0 };
+    expect(evaluateSignal(0.8, 0, premiumConfig, prev).action).toBe("BITHUMB_SELL");
+    expect(evaluateSignal(0.4, 0, premiumConfig, prev).action).toBe("NEUTRAL");
   });
 
   it("BITHUMB_BUY 방향도 대칭 동작", () => {
     const prev = { action: "BITHUMB_BUY" as const, since: 0, lastAlertAt: 0 };
-    expect(evaluateSignal("BTC", -0.8, config, prev).action).toBe("BITHUMB_BUY");
-    expect(evaluateSignal("BTC", -0.4, config, prev).action).toBe("NEUTRAL");
-  });
-
-  it("반대 방향 임계값을 넘기면 NEUTRAL 을 거치지 않고 즉시 반전", () => {
-    const sell = { action: "BITHUMB_SELL" as const, since: 0, lastAlertAt: 0 };
-    const flipped = evaluateSignal("BTC", -2.0, config, sell);
-    expect(flipped.action).toBe("BITHUMB_BUY");
-    expect(flipped.triggered).toBe(true);
-
-    const buy = { action: "BITHUMB_BUY" as const, since: 0, lastAlertAt: 0 };
-    const flippedBack = evaluateSignal("BTC", 2.0, config, buy);
-    expect(flippedBack.action).toBe("BITHUMB_SELL");
-    expect(flippedBack.triggered).toBe(true);
+    expect(evaluateSignal(-0.8, 0, premiumConfig, prev).action).toBe("BITHUMB_BUY");
+    expect(evaluateSignal(-0.4, 0, premiumConfig, prev).action).toBe("NEUTRAL");
   });
 });
 
