@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>빗썸 × 바이낸스 차익거래 시그널</title>
+  <meta name="description" content="빗썸(Bithumb)과 바이낸스(Binance) 가격 차이(김치 프리미엄) 기반 차익거래 시그널 대시보드" />
+  <style>
+    :root {
+      --bg: #0d1117;
+      --panel: #161b22;
+      --border: #30363d;
+      --text: #e6edf3;
+      --muted: #8b949e;
+      --red: #f85149;
+      --green: #3fb950;
+      --amber: #d29922;
+      --blue: #58a6ff;
+      --font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans KR", sans-serif;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 24px 16px 64px;
+    }
+    .wrap { max-width: 960px; margin: 0 auto; }
+    header { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    h1 { font-size: 20px; font-weight: 700; }
+    h1 .badge { font-size: 12px; color: var(--blue); border: 1px solid var(--blue); border-radius: 999px; padding: 2px 10px; margin-left: 8px; vertical-align: middle; }
+    .updated { color: var(--muted); font-size: 12px; }
+    .disclaimer {
+      background: #2d1a0a;
+      border: 1px solid var(--amber);
+      color: #ffd9a8;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-size: 12px;
+      margin-bottom: 16px;
+    }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    .panel h2 { font-size: 13px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin-bottom: 12px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { text-align: right; padding: 10px 8px; border-bottom: 1px solid var(--border); white-space: nowrap; }
+    th { color: var(--muted); font-size: 12px; font-weight: 600; }
+    th:first-child, td:first-child { text-align: left; }
+    td.coin { font-weight: 700; }
+    .pos { color: var(--red); }
+    .neg { color: var(--green); }
+    .bar { display: inline-block; width: 90px; height: 8px; border-radius: 4px; background: var(--border); vertical-align: middle; overflow: hidden; margin-right: 8px; }
+    .bar > i { display: block; height: 100%; border-radius: 4px; }
+    .badge-sell { color: #fff; background: var(--red); border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 700; }
+    .badge-buy { color: #fff; background: var(--green); border-radius: 999px; padding: 2px 10px; font-size: 12px; font-weight: 700; }
+    .badge-wait { color: var(--muted); border: 1px solid var(--border); border-radius: 999px; padding: 2px 10px; font-size: 12px; }
+    .spark { height: 28px; }
+    .meta { display: flex; gap: 24px; flex-wrap: wrap; color: var(--muted); font-size: 12px; }
+    .meta b { color: var(--text); }
+    .err { color: var(--red); padding: 12px 0; }
+    .loading { color: var(--muted); }
+    .stale { color: var(--amber); }
+    footer { color: var(--muted); font-size: 12px; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <h1>빗썸 × 바이낸스 차익거래 시그널 <span class="badge">signal bot</span></h1>
+      <div class="updated" id="updated">불러오는 중…</div>
+    </header>
+
+    <div class="disclaimer">
+      ⚠️ <b>주의 고지</b> — 거래소 출금 정책 및 한국의 가상화폐 정책에 따라 본 아비트리지는 과세 및 규제의 대상이 될 수 있습니다.
+      이 대시보드는 연구·신호 탐지 목적으로만 제공되며, 투자 조언이 아닙니다. 실제 자금 운용 전 반드시 법률·세무 검토를 거치세요.
+    </div>
+
+    <section class="panel">
+      <h2>실시간 프리미엄 · 시그널</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>코인</th>
+            <th>빗썸 (KRW)</th>
+            <th>바이낸스 (USDT)</th>
+            <th>바이낸스 (KRW 환산)</th>
+            <th>김치 프리미엄</th>
+            <th>추정 순이익</th>
+            <th>시그널</th>
+          </tr>
+        </thead>
+        <tbody id="rows">
+          <tr><td colspan="7" class="loading">데이터를 불러오는 중…</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>프리미엄 추이 (최근 4시간)</h2>
+      <table>
+        <thead>
+          <tr><th>코인</th><th>트렌드</th></tr>
+        </thead>
+        <tbody id="sparks">
+          <tr><td colspan="2" class="loading">데이터를 불러오는 중…</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section class="panel">
+      <h2>설정 · 상태</h2>
+      <div class="meta" id="meta">불러오는 중…</div>
+    </section>
+
+    <footer>
+      BTC · ETH · SOL · XRP ｜ 데이터: 빗썸 공개 API · 바이낸스 공개 API ｜
+      시그널은 수수료·출금비를 반영한 추정치이며, 실제 실행 가능성을 보장하지 않습니다.
+    </footer>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

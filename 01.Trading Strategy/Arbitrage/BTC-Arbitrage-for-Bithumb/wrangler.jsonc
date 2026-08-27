@@ -1,0 +1,52 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "bithumb-arbitrage-signals",
+  "main": "worker/src/index.ts",
+  "compatibility_date": "2026-08-01",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // 정적 대시보드 (worker/static) + Worker 가 함께 배포되는 단일 서버리스 앱.
+  // /api/* 는 Worker 가 먼저 처리하고, 나머지는 정적 자산을 서빙한다.
+  "assets": {
+    "directory": "./worker/static",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/__scheduled"]
+  },
+
+  // 5분마다 시그널 스캔. 로컬 테스트: wrangler dev --test-scheduled
+  "triggers": {
+    "crons": ["*/5 * * * *"]
+  },
+
+  // 바이낸스 등 업스트림과 가까운 위치에서 실행되도록 스마트 플레이스먼트
+  "placement": {
+    "mode": "smart"
+  },
+
+  // 상태 저장소 (스냅샷·히스토리·알림 상태). wrangler kv namespace create 로 생성 후 id 입력
+  "kv_namespaces": [
+    {
+      "binding": "ARB_DATA",
+      "id": "REPLACE_WITH_KV_NAMESPACE_ID"
+    }
+  ],
+
+  // 시크릿(커밋 금지): TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID, ADMIN_TOKEN
+  // 로컬은 .dev.vars. 배포는 wrangler secret put <NAME>
+  "vars": {
+    "ENVIRONMENT": "production",
+    "COINS": "BTC,ETH,SOL,XRP",
+    "SIGNAL_THRESHOLD_PCT": 1.5,
+    "SIGNAL_CLEAR_PCT": 0.5,
+    "ALERT_COOLDOWN_MIN": 30,
+    "BITHUMB_TAKER_FEE_PCT": 0.04,
+    "BINANCE_TAKER_FEE_PCT": 0.1,
+    "ASSUMED_CAPITAL_KRW": 5000000
+  },
+
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}
