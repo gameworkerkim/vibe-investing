@@ -647,6 +647,7 @@ const SLUG_OVERRIDES = {
   "CTI-2026-0822-Column-CN.md": "cert-authority-breach-20260822-cn",
   "USA/Age-of-USD.md": "age-of-usd",
   "AI-IDC/Why-High-Power-Datacenter.md": "why-high-power-datacenter",
+  "BitCoin/BTC-Arbitrage-Bithumb-Column.md": "btc-arbitrage-bithumb",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
