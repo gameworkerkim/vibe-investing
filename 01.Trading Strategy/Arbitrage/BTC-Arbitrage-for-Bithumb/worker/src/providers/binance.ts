@@ -1,3 +1,5 @@
+import { fetchJson } from "./http";
+
 /**
  * 바이낸스 공개 시세 API (인증 불필요)
  * 일부 지역(미국 등)은 api.binance.com 이 IP 차단(451)할 수 있어
@@ -12,14 +14,25 @@ interface BinancePrice {
   price: string;
 }
 
+/**
+ * HTTP 에러뿐 아니라 네트워크 예외(DNS 실패·타임아웃·TLS)도 삼켜서 null 을 돌려준다.
+ * 그래야 호출부가 폴백 호스트로 넘어갈 수 있다.
+ */
 async function requestPrices(base: string, symbols: string[]): Promise<Record<string, number> | null> {
   const params = encodeURIComponent(JSON.stringify(symbols));
-  const res = await fetch(`${base}?symbols=${params}`);
-  if (!res.ok) return null;
-  const data = (await res.json()) as BinancePrice[];
-  const map: Record<string, number> = {};
-  for (const p of data) map[p.symbol] = Number(p.price);
-  return map;
+  try {
+    const data = await fetchJson<BinancePrice[]>(`${base}?symbols=${params}`, "binance ticker");
+    if (!Array.isArray(data)) return null;
+    const map: Record<string, number> = {};
+    for (const p of data) {
+      const price = Number(p.price);
+      if (Number.isFinite(price) && price > 0) map[p.symbol] = price;
+    }
+    return map;
+  } catch (error) {
+    console.warn("[binance] host failed", base, error instanceof Error ? error.message : error);
+    return null;
+  }
 }
 
 export async function fetchBinancePrices(symbols: string[]): Promise<Record<string, number>> {

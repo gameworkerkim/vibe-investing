@@ -3,10 +3,10 @@
   "name": "bithumb-arbitrage-signals",
   "main": "worker/src/index.ts",
   "compatibility_date": "2026-08-01",
-  "compatibility_flags": ["nodejs_compat"],
 
   // 정적 대시보드 (worker/static) + Worker 가 함께 배포되는 단일 서버리스 앱.
   // /api/* 는 Worker 가 먼저 처리하고, 나머지는 정적 자산을 서빙한다.
+  // /__scheduled 는 `wrangler dev --test-scheduled` 전용 경로다 (배포 환경엔 없음).
   "assets": {
     "directory": "./worker/static",
     "binding": "ASSETS",
@@ -19,12 +19,9 @@
     "crons": ["*/5 * * * *"]
   },
 
-  // 바이낸스 등 업스트림과 가까운 위치에서 실행되도록 스마트 플레이스먼트
-  "placement": {
-    "mode": "smart"
-  },
-
   // 상태 저장소 (스냅샷·히스토리·알림 상태). wrangler kv namespace create 로 생성 후 id 입력
+  // 주의: 무료 플랜 KV 는 하루 1,000 write. 5분 크론 = 288 스캔/일 이므로
+  // 스캔당 쓰기를 2회(스냅샷+히스토리)로 유지하고 알림 상태는 변경 시에만 쓴다.
   "kv_namespaces": [
     {
       "binding": "ARB_DATA",
@@ -37,6 +34,9 @@
   "vars": {
     "ENVIRONMENT": "production",
     "COINS": "BTC,ETH,SOL,XRP",
+    // "usdt" = 빗썸 KRW-USDT 기준(실행 가능 스프레드, 0 근처에 몰림)
+    // "fx"   = 두나무 실환율 기준(헤드라인 김프, 변동 폭 큼 → 임계값 상향 필요)
+    "FX_MODE": "usdt",
     "SIGNAL_THRESHOLD_PCT": 1.5,
     "SIGNAL_CLEAR_PCT": 0.5,
     "ALERT_COOLDOWN_MIN": 30,

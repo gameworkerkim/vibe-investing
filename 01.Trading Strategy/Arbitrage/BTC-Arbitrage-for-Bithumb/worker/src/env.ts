@@ -11,6 +11,8 @@ export interface Env {
   ADMIN_TOKEN?: string;
   ENVIRONMENT?: string;
   COINS?: string;
+  /** "usdt" (기본) 또는 "fx" — 환산율 기준 */
+  FX_MODE?: string;
   SIGNAL_THRESHOLD_PCT?: string;
   SIGNAL_CLEAR_PCT?: string;
   ALERT_COOLDOWN_MIN?: string;

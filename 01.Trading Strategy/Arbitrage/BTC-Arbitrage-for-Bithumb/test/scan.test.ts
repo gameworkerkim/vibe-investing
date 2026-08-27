@@ -4,7 +4,7 @@ import { runArbitrageScan, signalsFromSnapshot } from "../worker/src/scan";
 import { Env } from "../worker/src/env";
 import { Snapshot } from "../worker/src/types";
 
-function fakeKv() {
+function fakeKv(): KVNamespace {
   const map = new Map<string, string>();
   return {
     map,
@@ -35,6 +35,10 @@ function route(url: string, payload: unknown, status = 200) {
     headers: { "Content-Type": "application/json" },
     ...(url.includes("binance") ? {} : {}),
   });
+}
+
+function env0(): Env {
+  return makeEnv();
 }
 
 const fetchMock = vi.fn();
@@ -120,7 +124,7 @@ describe("runArbitrageScan", () => {
     );
   });
 
-  it("쿨다운 이내 재트리거 시 알림 억제", async () => {
+  it("동일 상태 유지 시 재알림 없음 (히스테리시스)", async () => {
     mockMarkets(
       { "KRW-BTC": 102_000_000, "KRW-ETH": 4_900_000, "KRW-SOL": 210_000, "KRW-XRP": 700, "KRW-USDT": 1400 },
       { BTCUSDT: 71428.57, ETHUSDT: 3500, SOLUSDT: 150, XRPUSDT: 0.5 }
@@ -132,6 +136,71 @@ describe("runArbitrageScan", () => {
     // 두 번째 스캔: 동일 상태 유지 → 알림 없음 (트리거 아님)
     const second = await runArbitrageScan(env);
     expect(second.alertsSent).toBe(0);
+  });
+
+  it("발송 성공 시 lastAlertAt 을 KV 에 기록한다 (쿨다운 기준점)", async () => {
+    mockMarkets(
+      { "KRW-BTC": 102_000_000, "KRW-ETH": 4_900_000, "KRW-SOL": 210_000, "KRW-XRP": 700, "KRW-USDT": 1400 },
+      { BTCUSDT: 71428.57, ETHUSDT: 3500, SOLUSDT: 150, XRPUSDT: 0.5 }
+    );
+    const kv = fakeKv();
+    const env = makeEnv({ ARB_DATA: kv, TELEGRAM_BOT_TOKEN: "bot123", TELEGRAM_CHAT_ID: "chat123" });
+    const result = await runArbitrageScan(env);
+    expect(result.alertsSent).toBe(1);
+
+    const states = JSON.parse((await kv.get("state:alerts")) as string);
+    expect(states.BTC.action).toBe("BITHUMB_SELL");
+    // 예전에는 lastAlertAt 이 영원히 0 이라 30분 쿨다운이 아무 일도 하지 않았다.
+    expect(states.BTC.lastAlertAt).toBe(result.fetchedAtMs);
+  });
+
+  it("반대 방향으로 뒤집히면 쿨다운 이내에는 알림을 억제한다", async () => {
+    const kv = fakeKv();
+    const env = makeEnv({ ARB_DATA: kv, TELEGRAM_BOT_TOKEN: "bot123", TELEGRAM_CHAT_ID: "chat123" });
+
+    // 1) +2% → BITHUMB_SELL 알림 발송
+    mockMarkets(
+      { "KRW-BTC": 102_000_000, "KRW-ETH": 4_900_000, "KRW-SOL": 210_000, "KRW-XRP": 700, "KRW-USDT": 1400 },
+      { BTCUSDT: 71428.57, ETHUSDT: 3500, SOLUSDT: 150, XRPUSDT: 0.5 }
+    );
+    expect((await runArbitrageScan(env)).alertsSent).toBe(1);
+
+    // 2) -2% 로 반전 → 방향은 즉시 뒤집히지만 쿨다운(30분) 이내라 알림은 없다
+    mockMarkets(
+      { "KRW-BTC": 98_000_000, "KRW-ETH": 4_900_000, "KRW-SOL": 210_000, "KRW-XRP": 700, "KRW-USDT": 1400 },
+      { BTCUSDT: 71428.57, ETHUSDT: 3500, SOLUSDT: 150, XRPUSDT: 0.5 }
+    );
+    const flipped = await runArbitrageScan(env);
+    const btc = flipped.signals.find((s) => s.coin === "BTC")!;
+    expect(btc.action).toBe("BITHUMB_BUY");
+    expect(btc.triggered).toBe(true);
+    expect(flipped.alertsSent).toBe(0);
+  });
+
+  it("한 거래소 시세가 빠져도 나머지 코인은 계속 계산한다", async () => {
+    mockMarkets(
+      { "KRW-BTC": 102_000_000, "KRW-SOL": 210_000, "KRW-XRP": 700, "KRW-USDT": 1400 }, // ETH 누락(0)
+      { BTCUSDT: 71428.57, ETHUSDT: 3500, SOLUSDT: 150, XRPUSDT: 0.5 }
+    );
+    const result = await runArbitrageScan(env0());
+    expect(result.ok).toBe(true);
+    const eth = result.prices.find((p) => p.coin === "ETH")!;
+    // KV 는 JSON 이라 NaN 을 저장할 수 없다 → 처음부터 null 로 표현한다
+    expect(eth.premiumPct).toBeNull();
+    expect(eth.netPct).toBeNull();
+    expect(result.signals.some((s) => s.coin === "ETH")).toBe(false);
+    expect(result.signals.some((s) => s.coin === "BTC")).toBe(true);
+  });
+
+  it("스냅샷은 JSON 라운드트립 후에도 값이 보존된다 (NaN 미사용)", async () => {
+    mockMarkets(
+      { "KRW-BTC": 102_000_000, "KRW-ETH": 4_900_000, "KRW-SOL": 210_000, "KRW-XRP": 700, "KRW-USDT": 1400 },
+      { BTCUSDT: 71428.57, ETHUSDT: 3500, SOLUSDT: 150, XRPUSDT: 0.5 }
+    );
+    const kv = fakeKv();
+    const result = await runArbitrageScan(makeEnv({ ARB_DATA: kv }));
+    const stored = JSON.parse((await kv.get("snapshot:latest")) as string);
+    expect(stored.prices).toEqual(result.prices);
   });
 
   it("프리미엄이 임계값 미만이면 NEUTRAL", async () => {
@@ -150,7 +219,9 @@ describe("runArbitrageScan", () => {
     const env = makeEnv();
     const result = await runArbitrageScan(env);
     expect(result.ok).toBe(false);
-    expect(result.error).toBe("network down");
+    // 어떤 업스트림이 먼저 거부되는지는 구현 세부사항이므로 메시지 문자열에 고정하지 않는다
+    expect(result.error).toBeTruthy();
+    expect(result.prices).toEqual([]);
   });
 
   it("바이낸스 폴백 호스트 사용", async () => {

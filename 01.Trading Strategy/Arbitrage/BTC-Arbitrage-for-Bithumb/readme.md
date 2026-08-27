@@ -15,6 +15,16 @@ A serverless signal bot that compares prices between **Bithumb** (KRW market) an
 
 ---
 
+## Dashboard
+
+![Bithumb x Binance arbitrage signal dashboard](docs/assets/dashboard.png)
+
+Live capture from a local `wrangler dev` run with real public quotes. Every premium here sits within ±0.1%,
+which is exactly what `FX_MODE=usdt` is expected to show — see [§1.1](#11-which-usdkrw-do-you-mean).
+`추정 순이익` (estimated net) goes negative once fees are deducted, i.e. **there is no executable edge at this moment**.
+
+---
+
 ## 1. How it works
 
 On every scan (5 min):
@@ -27,8 +37,26 @@ On every scan (5 min):
 ```
 premium(%)    = (BithumbKRW / (BinanceUSDT × USD/KRW) − 1) × 100
 spread(KRW)   = BithumbKRW − BinanceKRW
-net(%)        = premium − Bithumb taker fee − Binance taker fee − withdrawal fee (as % of position)
+net(%)        = |premium| − Bithumb taker fee − Binance taker fee − withdrawal fee (as % of position)
 ```
+
+`net` uses **`|premium|`** on purpose. Arbitrage earns the *magnitude* of the gap regardless of direction:
+a −3% premium means "buy on Bithumb, sell on Binance" for a +3% gross edge. Subtracting costs from the signed
+value would render that as −3.14%, which reads like a loss.
+
+### 1.1 Which USD/KRW do you mean?
+
+The two conversion bases measure different things, and the choice changes what the threshold means.
+Set it with the `FX_MODE` var:
+
+| `FX_MODE` | Rate source | What the premium means | Typical magnitude |
+|---|---|---|---|
+| `usdt` (default) | Bithumb `KRW-USDT` ticker | **Executable spread** — the coin-specific gap left after the stablecoin premium cancels out on both legs. This is what you actually capture by moving USDT. | ±0.1% — `±1.5%` almost never fires |
+| `fx` | Dunamu `FRX.KRWUSD` | **Headline Kimchi premium** — includes the USDT premium itself. | Swings by whole percent |
+
+If you want alerts that fire at all, either run `FX_MODE=fx`, or keep `usdt` and lower
+`SIGNAL_THRESHOLD_PCT` to something on the order of the real spread (e.g. `0.3`).
+Whichever source is picked first, the other one is used as a fallback when it is unreachable.
 
 5. Evaluate signals (with **hysteresis** + **cooldown**):
 
@@ -41,7 +69,9 @@ net(%)        = premium − Bithumb taker fee − Binance taker fee − withdraw
 6. **Persist + alert** — snapshots/history go to KV; newly triggered signals are sent to Telegram.
 
 > Hysteresis: once tripped, a signal only returns to NEUTRAL when the premium crosses back inside the clear threshold (`±0.5%`), preventing alert flapping.
-> Cooldown: no re-alert within 30 minutes per coin.
+> A move past the threshold in the *opposite* direction flips the signal immediately, without waiting to pass through NEUTRAL.
+> Cooldown: no re-alert within 30 minutes per coin. The cooldown clock starts only when a Telegram send actually
+> succeeds — a failed send does not consume the window.
 
 ## 2. Architecture
 
@@ -58,16 +88,21 @@ Cloudflare Worker (single serverless app)
 ```
 
 - **All data sources are public APIs** — no API keys required. Secrets are only Telegram token/chat ID and an admin token.
-- **Pre-compute, then serve** — the cron stores results in KV; `/api/*` reads KV with edge caching (`s-maxage=240`).
+- **Pre-compute, then serve** — the cron stores results in KV; `/api/*` reads KV with edge caching
+  (`max-age=0, s-maxage=240`: shared caches reuse for 4 min, browsers always revalidate).
+- **Partial failure is survivable** — a coin missing from one exchange is stored as `null` and skipped for signals;
+  the other coins still scan. Every upstream call has an 8 s timeout.
+- **KV write budget** — the free plan allows 1,000 writes/day and a 5-minute cron is 288 scans/day.
+  Each scan writes the snapshot + history (2 writes); alert state is written **only when it changes**.
 
 ## 3. Project layout
 
 ```
 BTC-Arbitrage-for-Bithumb/
-├── readme.md                  Korean README
-├── README.md                  English README
-├── CLAUDE.md                  Project rules
+├── readme.md                  This file (English)
+├── CLAUDE.md                  Project rules (Korean)
 ├── docs/DEVELOPMENT-PLAN.md   Development plan (Korean)
+├── docs/assets/dashboard.png  Dashboard screenshot
 ├── wrangler.jsonc             Workers config (cron·KV·static assets)
 ├── worker/
 │   ├── src/
@@ -79,7 +114,7 @@ BTC-Arbitrage-for-Bithumb/
 │   │   ├── storage.ts         KV layer
 │   │   ├── alerts.ts          Telegram send + message formatting
 │   │   ├── env.ts             Env types
-│   │   └── providers/         bithumb / binance / fx
+│   │   └── providers/         bithumb / binance / fx / http (timeout + UA)
 │   └── static/                static dashboard (index.html + app.js)
 ├── test/                      vitest unit & integration tests
 ├── tsconfig.json / vitest.config.ts / package.json
@@ -103,7 +138,8 @@ Test the cron handler locally:
 # 1) terminal A: npm run dev
 # 2) terminal B:
 curl "http://localhost:8787/__scheduled?cron=*/5+*+*+*+*"        # run a scan
-curl "http://localhost:8787/api/refresh?token=change-me-local"   # manual scan
+curl -H "Authorization: Bearer change-me-local" \
+     "http://localhost:8787/api/refresh"                         # manual scan
 curl "http://localhost:8787/api/status"    # snapshot
 curl "http://localhost:8787/api/signals"   # signals
 ```
@@ -131,17 +167,28 @@ After deploy, the dashboard is available at `https://<your-worker>.<subdomain>.w
 
 | Path | Auth | Description |
 |---|---|---|
-| `GET /api/status` | none | Latest snapshot + premium history |
+| `GET /api/status` | none | Latest snapshot + premium history + thresholds |
 | `GET /api/signals` | none | Current signal list (by threshold) |
 | `GET /api/health` | none | Health check |
-| `GET /api/refresh?token=…` | `ADMIN_TOKEN` | Run a manual scan |
-| `POST/GET /api/telegram/test?token=…` | `ADMIN_TOKEN` | Send a Telegram test message |
+| `GET /api/refresh` | `ADMIN_TOKEN` | Run a manual scan |
+| `GET /api/telegram/test` | `ADMIN_TOKEN` | Send a Telegram test message |
+
+Admin endpoints prefer the header form — a token in the query string ends up in Cloudflare logs,
+browser history, and `Referer`:
+
+```bash
+curl -H "Authorization: Bearer $ADMIN_TOKEN" https://<worker>/api/refresh
+```
+
+`?token=…` still works for local `curl` convenience. Comparison is constant-time, and admin/error
+responses are returned `no-store` so a stale 401 or 502 never sticks in a shared cache.
 
 ## 7. Configuration (`wrangler.jsonc` `vars` / secrets)
 
 | Variable | Default | Description |
 |---|---|---|
 | `COINS` | `BTC,ETH,SOL,XRP` | Watchlist (comma separated) |
+| `FX_MODE` | `usdt` | `usdt` = executable spread · `fx` = headline Kimchi premium ([§1.1](#11-which-usdkrw-do-you-mean)) |
 | `SIGNAL_THRESHOLD_PCT` | `1.5` | Signal trigger premium threshold (%) |
 | `SIGNAL_CLEAR_PCT` | `0.5` | Hysteresis clear threshold (%) |
 | `ALERT_COOLDOWN_MIN` | `30` | Re-alert cooldown per coin (min) |
@@ -153,6 +200,8 @@ After deploy, the dashboard is available at `https://<your-worker>.<subdomain>.w
 | `ADMIN_TOKEN` | — | Admin token for manual APIs (**secret**) |
 
 > Withdrawal fee estimates (`WITHDRAWAL_FEES_USD` in `worker/src/config.ts`) change with exchange policy — tune them to real values.
+> The net estimate also **omits** KRW deposit/withdrawal cost, transfer latency, order-book depth, and slippage,
+> so treat it as an optimistic upper bound rather than a P&L figure.
 
 ## 8. References
 

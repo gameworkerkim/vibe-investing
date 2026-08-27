@@ -8,6 +8,13 @@ describe("configFromVars", () => {
     expect(c.signalThresholdPct).toBe(DEFAULT_CONFIG.signalThresholdPct);
     expect(c.signalClearPct).toBe(DEFAULT_CONFIG.signalClearPct);
     expect(c.alertCooldownMs).toBe(30 * 60 * 1000);
+    expect(c.fxMode).toBe("usdt");
+  });
+
+  it("FX_MODE 파싱 — 알 수 없는 값은 기본(usdt)", () => {
+    expect(configFromVars({ FX_MODE: "fx" }).fxMode).toBe("fx");
+    expect(configFromVars({ FX_MODE: "USDT" }).fxMode).toBe("usdt");
+    expect(configFromVars({ FX_MODE: "nonsense" }).fxMode).toBe("usdt");
   });
 
   it("커스텀 변수 파싱", () => {

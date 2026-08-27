@@ -1,4 +1,4 @@
-import { CoinPrice, SignalDecision } from "./types";
+import { CoinPrice, MaybeNumber, SignalDecision } from "./types";
 
 const nf0 = new Intl.NumberFormat("ko-KR", { maximumFractionDigits: 0 });
 const nf2 = new Intl.NumberFormat("ko-KR", {
@@ -18,15 +18,21 @@ const ACTION_EMOJI: Record<SignalDecision["action"], string> = {
   NEUTRAL: "⚪",
 };
 
-export function formatKrw(value: number): string {
-  return `${nf0.format(value)} KRW`;
+/** 값이 없거나 비정상이면 계산 결과 대신 "—" 를 보여준다 (NaN·null 노출 방지) */
+function isNum(value: MaybeNumber): value is number {
+  return value !== null && Number.isFinite(value);
 }
 
-export function formatUsdt(value: number): string {
-  return `${nf2.format(value)} USDT`;
+export function formatKrw(value: MaybeNumber): string {
+  return isNum(value) ? `${nf0.format(value)} KRW` : "—";
 }
 
-export function formatPremium(pct: number): string {
+export function formatUsdt(value: MaybeNumber): string {
+  return isNum(value) ? `${nf2.format(value)} USDT` : "—";
+}
+
+export function formatPremium(pct: MaybeNumber): string {
+  if (!isNum(pct)) return "—";
   const sign = pct > 0 ? "+" : "";
   return `${sign}${nf2.format(pct)}%`;
 }

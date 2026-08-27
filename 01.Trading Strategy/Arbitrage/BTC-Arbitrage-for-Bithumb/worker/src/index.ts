@@ -12,7 +12,8 @@ import { runArbitrageScan } from "./scan";
 export default {
   async fetch(request: Request, env: Env): Promise<Response> {
     const url = new URL(request.url);
-    if (url.pathname.startsWith("/api/")) {
+    // "/api" (슬래시 없음) 도 API 로 넘겨야 정적 SPA 폴백이 JSON 대신 HTML 을 돌려주지 않는다.
+    if (url.pathname === "/api" || url.pathname.startsWith("/api/")) {
       return handleApi(request, env);
     }
     return env.ASSETS.fetch(request);

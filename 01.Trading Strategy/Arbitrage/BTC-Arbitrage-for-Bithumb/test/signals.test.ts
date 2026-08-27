@@ -5,6 +5,7 @@ import {
   computeSpreadKrw,
   estimateNetPct,
   evaluateSignal,
+  markAlertSent,
   shouldSendAlert,
   updateAlertState,
 } from "../worker/src/signals";
@@ -40,6 +41,15 @@ describe("estimateNetPct", () => {
       1.5 - 0.14 - withdrawalBig
     );
   });
+
+  it("역방향(음수 프리미엄)도 같은 크기의 순이익으로 계산한다", () => {
+    // 빗썸이 3% 싸면 "빗썸 매수 · 바이낸스 매도"로 +3% 를 노린다.
+    // 부호를 그대로 쓰면 -3.14% 라는 손실처럼 보이는 값이 나왔었다.
+    expect(estimateNetPct(-3, "BTC", config, 1400)).toBeCloseTo(
+      estimateNetPct(3, "BTC", config, 1400)
+    );
+    expect(estimateNetPct(-3, "BTC", config, 1400)).toBeGreaterThan(0);
+  });
 });
 
 describe("evaluateSignal (히스테리시스)", () => {
@@ -63,15 +73,34 @@ describe("evaluateSignal (히스테리시스)", () => {
     expect(evaluateSignal("BTC", -0.8, config, prev).action).toBe("BITHUMB_BUY");
     expect(evaluateSignal("BTC", -0.4, config, prev).action).toBe("NEUTRAL");
   });
+
+  it("반대 방향 임계값을 넘기면 NEUTRAL 을 거치지 않고 즉시 반전", () => {
+    const sell = { action: "BITHUMB_SELL" as const, since: 0, lastAlertAt: 0 };
+    const flipped = evaluateSignal("BTC", -2.0, config, sell);
+    expect(flipped.action).toBe("BITHUMB_BUY");
+    expect(flipped.triggered).toBe(true);
+
+    const buy = { action: "BITHUMB_BUY" as const, since: 0, lastAlertAt: 0 };
+    const flippedBack = evaluateSignal("BTC", 2.0, config, buy);
+    expect(flippedBack.action).toBe("BITHUMB_SELL");
+    expect(flippedBack.triggered).toBe(true);
+  });
 });
 
-describe("updateAlertState / shouldSendAlert (쿨다운)", () => {
+describe("updateAlertState / markAlertSent / shouldSendAlert (쿨다운)", () => {
   it("상태 진입 시 since 갱신, 동일 상태는 유지", () => {
     const now = 1000;
     const s1 = updateAlertState(undefined, "BITHUMB_SELL", now);
     expect(s1).toEqual({ action: "BITHUMB_SELL", since: now, lastAlertAt: 0 });
     const s2 = updateAlertState(s1, "BITHUMB_SELL", 2000);
     expect(s2.since).toBe(now);
+  });
+
+  it("updateAlertState 는 lastAlertAt 을 건드리지 않고, markAlertSent 만 갱신한다", () => {
+    const prev = { action: "BITHUMB_SELL" as const, since: 0, lastAlertAt: 500 };
+    expect(updateAlertState(prev, "BITHUMB_SELL", 9000).lastAlertAt).toBe(500);
+    expect(markAlertSent(prev, 9000).lastAlertAt).toBe(9000);
+    expect(markAlertSent(prev, 9000).since).toBe(0);
   });
 
   it("새 트리거 + 쿨다운 경과 → 알림 발송", () => {

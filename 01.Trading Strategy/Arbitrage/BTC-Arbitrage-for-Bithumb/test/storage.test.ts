@@ -6,6 +6,7 @@ import {
   loadHistory,
   loadSnapshot,
   saveAlertStates,
+  saveAlertStatesIfChanged,
   saveSnapshot,
 } from "../worker/src/storage";
 import { Snapshot } from "../worker/src/types";
@@ -69,6 +70,29 @@ describe("kvStore", () => {
     expect(history.length).toBe(48);
     expect(history[0].t).toBe(12);
     expect(history[47].t).toBe(59);
+  });
+
+  it("historySize 를 줄이면 최신 N개만 남는다", async () => {
+    const store: Store = kvStore(fakeKv());
+    for (let i = 0; i < 10; i++) await saveSnapshot(store, snapshot(i, { BTC: i }), 10);
+    await saveSnapshot(store, snapshot(10, { BTC: 10 }), 3);
+    const history = await loadHistory(store);
+    expect(history.map((h) => h.t)).toEqual([8, 9, 10]);
+  });
+
+  it("alert states 는 바뀐 경우에만 쓴다 (KV 쓰기 예산)", async () => {
+    const kv = fakeKv();
+    const store: Store = kvStore(kv);
+    const states = { BTC: { action: "BITHUMB_SELL" as const, since: 1, lastAlertAt: 1 } };
+
+    expect(await saveAlertStatesIfChanged(store, {}, states)).toBe(true);
+    expect(await saveAlertStatesIfChanged(store, states, states)).toBe(false);
+    expect(
+      await saveAlertStatesIfChanged(store, states, {
+        BTC: { action: "BITHUMB_SELL", since: 1, lastAlertAt: 99 },
+      })
+    ).toBe(true);
+    expect(JSON.parse(kv.map.get("state:alerts") as string).BTC.lastAlertAt).toBe(99);
   });
 
   it("alert states 저장·로드", async () => {

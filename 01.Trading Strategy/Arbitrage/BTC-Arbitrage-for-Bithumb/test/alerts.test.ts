@@ -34,6 +34,13 @@ describe("포맷", () => {
     expect(formatPremium(1.2)).toBe("+1.20%");
     expect(formatPremium(-0.5)).toBe("-0.50%");
   });
+
+  it("값이 없으면 NaN 대신 — 를 보여준다", () => {
+    expect(formatKrw(null)).toBe("—");
+    expect(formatUsdt(null)).toBe("—");
+    expect(formatPremium(null)).toBe("—");
+    expect(formatKrw(NaN)).toBe("—");
+  });
 });
 
 describe("formatSignalMessage", () => {
@@ -50,6 +57,16 @@ describe("formatSignalMessage", () => {
   it("BUY 방향 라벨", () => {
     const buy = formatSignalMessage({ ...decision, action: "BITHUMB_BUY" }, price);
     expect(buy).toContain("매수");
+  });
+
+  it("일부 값이 비어 있어도 메시지를 만든다", () => {
+    const partial = formatSignalMessage(
+      { ...decision, netPct: null },
+      { ...price, binanceKrw: null }
+    );
+    expect(partial).toContain("BTC");
+    expect(partial).toContain("—");
+    expect(partial).not.toContain("NaN");
   });
 });
 

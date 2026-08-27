@@ -1,4 +1,5 @@
 import { COINS, Coin } from "./types";
+import type { FxMode } from "./providers/fx";
 import type { Env } from "./env";
 
 /** 거래 페어 심볼 매핑 (빗썸 = KRW 마켓, 바이낸스 = USDT) */
@@ -24,6 +25,8 @@ export const WITHDRAWAL_FEES_USD: Record<Coin, number> = {
 
 export interface ArbConfig {
   coins: Coin[];
+  /** 환산율 기준 — "usdt"(실행 가능 스프레드) 또는 "fx"(헤드라인 김프). providers/fx.ts 참고 */
+  fxMode: FxMode;
   /** 시그널 트리거 프리미엄 임계값 (%) */
   signalThresholdPct: number;
   /** 히스테리시스 해제 임계값 (%) */
@@ -40,6 +43,7 @@ export interface ArbConfig {
 
 export const DEFAULT_CONFIG: ArbConfig = {
   coins: [...COINS],
+  fxMode: "usdt",
   signalThresholdPct: 1.5,
   signalClearPct: 0.5,
   alertCooldownMs: 30 * 60 * 1000,
@@ -63,6 +67,7 @@ export function configFromVars(vars: Record<string, string | undefined>): ArbCon
 
   return {
     coins: coins.length > 0 ? coins : DEFAULT_CONFIG.coins,
+    fxMode: vars.FX_MODE === "fx" ? "fx" : DEFAULT_CONFIG.fxMode,
     signalThresholdPct: num(vars.SIGNAL_THRESHOLD_PCT, DEFAULT_CONFIG.signalThresholdPct),
     signalClearPct: num(vars.SIGNAL_CLEAR_PCT, DEFAULT_CONFIG.signalClearPct),
     alertCooldownMs: num(vars.ALERT_COOLDOWN_MIN, DEFAULT_CONFIG.alertCooldownMs / 60000) * 60_000,
@@ -76,6 +81,7 @@ export function configFromVars(vars: Record<string, string | undefined>): ArbCon
 export function configFromEnv(env: Env): ArbConfig {
   return configFromVars({
     COINS: env.COINS,
+    FX_MODE: env.FX_MODE,
     SIGNAL_THRESHOLD_PCT: env.SIGNAL_THRESHOLD_PCT,
     SIGNAL_CLEAR_PCT: env.SIGNAL_CLEAR_PCT,
     ALERT_COOLDOWN_MIN: env.ALERT_COOLDOWN_MIN,
