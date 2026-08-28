@@ -649,6 +649,7 @@ const SLUG_OVERRIDES = {
   "AI-IDC/Why-High-Power-Datacenter.md": "why-high-power-datacenter",
   "BitCoin/BTC-Arbitrage-Bithumb-Column.md": "btc-arbitrage-bithumb",
   "Internet/CIA-North-Lorea-Opsec-Column.md": "cia-north-korea-opsec",
+  "interest/History-of-Interest.md": "history-of-interest",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
