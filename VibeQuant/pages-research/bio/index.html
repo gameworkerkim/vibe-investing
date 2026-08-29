@@ -36,16 +36,31 @@
 
     <section class="panel" id="regime-panel">
       <h2>거시 레짐 · XBI</h2>
+      <p class="panel-note">
+        AMQS-BIO는 AI-Infra의 QQQ 대신 <strong>SPDR S&amp;P Biotech ETF (XBI)</strong>를 바이오 섹터 레짐 벤치마크로 씁니다.
+        XBI는 동일가중 소형·중형 바이오텍 비중이 커서 IBB(대형주)보다 리스크 선호와 카탈리스트 민감도를 잘 반영합니다.
+      </p>
       <div class="metric-grid" id="regime-metrics"></div>
+      <div class="panel-detail" id="regime-detail" hidden></div>
     </section>
 
     <section class="panel">
       <h2>금리 · 거시 적합성</h2>
+      <p class="panel-note">
+        AMQS-BIO는 100점 채점 중 <strong>거시 적합성 25%</strong>를 배정합니다(일반 AMQS 10%).
+        바이오는 롱듀레이션 자산이라 <strong>10Y 국채 수익률(TNX) 60일 추세</strong>와 SPY 200일선, VIX가 종목별 macro 점수(대형/소형 세그먼트)를 조정합니다.
+        60일 +15% 이상 상승 시 <strong>금리 역풍</strong>으로 판정해 소형주 macro×0.6, 대형주×0.9 페널티를 적용합니다.
+      </p>
       <div class="metric-grid" id="macro-metrics"></div>
+      <div class="panel-detail" id="macro-detail" hidden></div>
     </section>
 
     <section class="panel">
       <h2>포트폴리오 · Top-8</h2>
+      <p class="panel-note">
+        Top-8 선별 · 서브테마당 최대 2종 · score-tilted 비중.
+        임상 실패 갭(-55% 가정) 대비 <strong>갭 캡 5.5%</strong> — 재정규화 없이 초과분은 현금.
+      </p>
       <div class="metric-grid" id="port-metrics" style="margin-bottom:0.85rem"></div>
       <p class="rq-lede" style="margin:0;font-size:0.82rem" id="holdings"></p>
     </section>
@@ -89,9 +104,19 @@
     })();
 
     const REGIME_LABEL = {
-      RISK_ON: "Risk-On (100%)",
-      RISK_OFF: "Risk-Off (50%)",
-      DEFENSIVE: "Defensive (현금/방어)",
+      RISK_ON: "Risk-On",
+      RISK_OFF: "Risk-Off",
+      DEFENSIVE: "Defensive",
+    };
+    const REGIME_COLOR = {
+      RISK_ON: "#2ecc71",
+      RISK_OFF: "#e74c3c",
+      DEFENSIVE: "#c678dd",
+    };
+    const REGIME_ALLOC = {
+      RISK_ON: "100% 투자",
+      RISK_OFF: "50% 현금화",
+      DEFENSIVE: "방어 바스켓 전환",
     };
 
     function pct(n, dec = 2) {
@@ -106,8 +131,12 @@
       const k = (s || "HOLD").replace(/[^A-Z_]/g, "");
       return `<span class="sig sig-${k}">${s || "—"}</span>`;
     }
-    function metric(label, value, sub) {
-      return `<div class="metric"><span class="metric-label">${label}</span><span class="metric-value">${value}</span>${sub ? `<span class="metric-sub">${sub}</span>` : ""}</div>`;
+    function metricCard(m) {
+      return `<div class="metric">
+        <div class="lbl">${m.lbl}</div>
+        <div class="val ${m.cls || ""}" style="${m.color ? "color:" + m.color : ""}">${m.val}</div>
+        ${m.sub ? `<div class="sub">${m.sub}</div>` : ""}
+      </div>`;
     }
 
     async function load(force) {
@@ -123,27 +152,60 @@
         if (d.error && !d.stocks) throw new Error(d.error);
 
         const r = d.regime || {};
+        const rc = REGIME_COLOR[r.label] || "#3d9bdb";
+        const xbiMa = r.ma200 != null ? `200MA ${r.ma200}` : (r.xbiAbove200 ? "200MA 위" : "200MA 아래");
         document.getElementById("regime-metrics").innerHTML = [
-          metric("레짐", REGIME_LABEL[r.label] || r.label || "—", r.reason || ""),
-          metric("XBI", r.xbi != null ? r.xbi : "—", r.xbiAbove200 ? "200MA 위" : "200MA 아래"),
-          metric("VIX", r.vix != null ? r.vix.toFixed(1) : "—", ""),
-          metric("XBI 5D", pct(d.bench?.xbi5d), "IBB " + pct(d.bench?.ibb5d)),
-        ].join("");
+          { lbl: "레짐", val: REGIME_LABEL[r.label] || r.label || "—", sub: REGIME_ALLOC[r.label] || "", color: rc },
+          { lbl: "XBI", val: r.xbi != null ? r.xbi : "—", sub: xbiMa },
+          { lbl: "VIX", val: r.vix != null ? r.vix.toFixed(1) : "—", sub: r.vix != null ? (r.vix < 22 ? "Risk-On 구간" : r.vix > 28 ? "Risk-Off 구간" : "중립") : "" },
+          { lbl: "XBI 5D", val: pct(d.bench?.xbi5d), sub: "IBB " + pct(d.bench?.ibb5d), cls: cls(d.bench?.xbi5d) },
+        ].map(metricCard).join("");
+
+        const regimeDetail = document.getElementById("regime-detail");
+        const xbi5 = d.bench?.xbi5d;
+        let regimeExplain = "";
+        if (r.label === "RISK_ON") {
+          regimeExplain = `<strong>${REGIME_LABEL.RISK_ON}</strong> — XBI가 200일선 위에 있고 VIX가 ${r.vix != null ? r.vix.toFixed(1) : "—"}로 28 미만입니다. 모델상 <strong>풀 배분(100%)</strong> 구간이나, 종목별 갭 캡 때문에 실제 비중은 더 낮을 수 있습니다.`;
+        } else if (r.label === "RISK_OFF") {
+          regimeExplain = `<strong>${REGIME_LABEL.RISK_OFF}</strong> — XBI &lt; 200MA 또는 VIX &gt; 28 조건 충족. 투자 비중을 <strong>50%로 축소</strong>하고 나머지는 현금으로 둡니다.`;
+        } else if (r.label === "DEFENSIVE") {
+          regimeExplain = `<strong>${REGIME_LABEL.DEFENSIVE}</strong> — XBI 5일 수익률이 -8% 미만(급락). <strong>방어 바스켓</strong>(BRK-B, WMT, COST, JNJ, KO, PG, PEP) 전환을 권고합니다.`;
+        }
+        if (xbi5 != null && xbi5 < -5) {
+          regimeExplain += ` 최근 XBI 5일 ${pct(xbi5)} — 단기 조정 국면, DIP 신호는 XBI 대비 상대 낙폭 필터를 통과해야만 발생합니다.`;
+        }
+        if (r.reason) regimeExplain += `<br><span style="opacity:0.85">판정: ${r.reason}</span>`;
+        regimeDetail.className = "panel-detail " + (r.label === "RISK_ON" ? "regime-on" : r.label === "RISK_OFF" ? "regime-off" : "regime-def");
+        regimeDetail.innerHTML = regimeExplain;
+        regimeDetail.hidden = !regimeExplain;
 
         const m = d.macro || {};
         document.getElementById("macro-metrics").innerHTML = [
-          metric("10Y 60D", pct(m.tnxChg), m.rateHeadwind ? "금리 역풍" : "중립"),
-          metric("거시·대형", m.large != null ? m.large.toFixed(0) : "—", "LLY·MRK 등"),
-          metric("거시·소형", m.small != null ? m.small.toFixed(0) : "—", "XBI 성격"),
-          metric("XBI−IBB 5D", pct(d.bench?.xbiIbbSpread5d), "소형 vs 대형"),
-        ].join("");
+          { lbl: "10Y 60D", val: pct(m.tnxChg), sub: m.rateHeadwind ? "금리 역풍" : "중립", cls: cls(m.tnxChg) },
+          { lbl: "거시·대형", val: m.large != null ? m.large.toFixed(0) : "—", sub: "LLY · MRK · ABBV" },
+          { lbl: "거시·소형", val: m.small != null ? m.small.toFixed(0) : "—", sub: "XBI 성격 종목" },
+          { lbl: "XBI−IBB 5D", val: pct(d.bench?.xbiIbbSpread5d), sub: "소형 vs 대형", cls: cls(d.bench?.xbiIbbSpread5d) },
+        ].map(metricCard).join("");
+
+        const macroDetail = document.getElementById("macro-detail");
+        const spread = d.bench?.xbiIbbSpread5d;
+        let macroExplain = m.rateHeadwind
+          ? `<strong>금리 역풍</strong> — 10Y 수익률 60일 변화 ${pct(m.tnxChg)} (≥+15% 임계). 무수익·소형 바이오텍 macro 점수에 <strong>×0.6</strong>, 현금창출 대형주에 <strong>×0.9</strong> 페널티.`
+          : `<strong>금리 중립</strong> — 10Y 60일 변화 ${pct(m.tnxChg)}. SPY 200MA · VIX 기준 base macro 점수 유지 (대형 ${m.large != null ? m.large.toFixed(0) : "—"} · 소형 ${m.small != null ? m.small.toFixed(0) : "—"}).`;
+        if (spread != null) {
+          macroExplain += spread > 0
+            ? `<br>XBI−IBB 5D ${pct(spread)} — <strong>소형·중형 바이오텍</strong>이 대형 파마보다 강세 (리스크온·카탈리스트 국면).`
+            : `<br>XBI−IBB 5D ${pct(spread)} — <strong>대형주 방어</strong> 선호 (IBB 상대 강세).`;
+        }
+        macroDetail.innerHTML = macroExplain;
+        macroDetail.hidden = !macroExplain;
 
         const p = d.portfolio || {};
         document.getElementById("port-metrics").innerHTML = [
-          metric("투자 비중", p.invested != null ? (p.invested * 100).toFixed(1) + "%" : "—", "현금 " + (p.invested != null ? ((1 - p.invested) * 100).toFixed(0) + "%" : "—")),
-          metric("평균 점수", p.avgScore != null ? p.avgScore : "—", "100점 만점"),
-          metric("보유 종목", (p.holdings || []).length, "Top-8 캡"),
-        ].join("");
+          { lbl: "투자 비중", val: p.invested != null ? (p.invested * 100).toFixed(1) + "%" : "—", sub: "현금 " + (p.invested != null ? ((1 - p.invested) * 100).toFixed(0) + "%" : "—") },
+          { lbl: "평균 점수", val: p.avgScore != null ? p.avgScore : "—", sub: "100점 만점" },
+          { lbl: "보유 종목", val: String((p.holdings || []).length), sub: "Top-8 캡" },
+        ].map(metricCard).join("");
         document.getElementById("holdings").textContent = (p.holdings || [])
           .map((h) => `${h.symbol} ${(h.weight * 100).toFixed(1)}% (${h.signal})`)
           .join(" · ") || "선별 종목 없음";
