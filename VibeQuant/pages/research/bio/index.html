@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>BIO — AMQS-BIO · Research · VibeQuant</title>
+  <meta name="description" content="미국 바이오·제약 AMQS-BIO 대시보드. XBI 레짐 · 금리 · Top-8 모멘텀 · 점프 필터. 4시간 캐시." />
+  <link rel="canonical" href="https://vibequant.cc/research/bio/" />
+  <link rel="icon" type="image/svg+xml" href="../favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../css/research.css" />
+</head>
+<body class="rq-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="../">Research</a>
+      <a class="site-nav-link" href="../quant/">Quant</a>
+      <a class="site-nav-link is-active" href="./">BIO</a>
+      <a class="site-nav-link" href="../spacex/">Space</a>
+      <a class="site-nav-link" href="../trump/">Trump</a>
+      <a class="site-nav-link" href="../paper/">Paper</a>
+    </nav>
+  </header>
+
+  <main class="rq-wrap">
+    <h1>AMQS-BIO</h1>
+    <p class="rq-lede">미국 바이오·제약 33종 · XBI/IBB 레짐 · 4-Factor 모멘텀 · 점프 리스크 필터 · Top-8 비중. Yahoo · 4시간 캐시.</p>
+    <div class="rq-meta">
+      <span id="meta">로딩…</span>
+      <button type="button" class="rq-btn" id="refresh">새로고침</button>
+    </div>
+    <p class="err" id="err" hidden></p>
+
+    <section class="panel" id="regime-panel">
+      <h2>거시 레짐 · XBI</h2>
+      <div class="metric-grid" id="regime-metrics"></div>
+    </section>
+
+    <section class="panel">
+      <h2>금리 · 거시 적합성</h2>
+      <div class="metric-grid" id="macro-metrics"></div>
+    </section>
+
+    <section class="panel">
+      <h2>포트폴리오 · Top-8</h2>
+      <div class="metric-grid" id="port-metrics" style="margin-bottom:0.85rem"></div>
+      <p class="rq-lede" style="margin:0;font-size:0.82rem" id="holdings"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Universe 점수표</h2>
+      <div class="tbl-wrap">
+        <table class="rq">
+          <thead>
+            <tr>
+              <th>종목</th>
+              <th>서브테마</th>
+              <th>가격</th>
+              <th>1D%</th>
+              <th>12-1</th>
+              <th>5D</th>
+              <th>20D</th>
+              <th>RSI</th>
+              <th>거시</th>
+              <th>총점</th>
+              <th>비중</th>
+              <th>시그널</th>
+            </tr>
+          </thead>
+          <tbody id="body"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <p>투자 조언 아님 · <a href="https://github.com/gameworkerkim/vibe-investing/tree/main/01.Trading%20Strategy/AMQS-BIO">AMQS-BIO</a> · <a href="../">Research</a></p>
+  </footer>
+
+  <script>
+    const API = (() => {
+      const h = location.hostname;
+      if (h === "vibequant.cc" || h.endsWith(".vibequant-web.pages.dev") || h === "localhost")
+        return "/api/research/bio";
+      return "https://vibequant.cc/api/research/bio";
+    })();
+
+    const REGIME_LABEL = {
+      RISK_ON: "Risk-On (100%)",
+      RISK_OFF: "Risk-Off (50%)",
+      DEFENSIVE: "Defensive (현금/방어)",
+    };
+
+    function pct(n, dec = 2) {
+      if (n == null || Number.isNaN(n)) return "—";
+      return (n >= 0 ? "+" : "") + Number(n).toFixed(dec) + "%";
+    }
+    function cls(n) {
+      if (n == null) return "";
+      return n >= 0 ? "up" : "down";
+    }
+    function sigHtml(s) {
+      const k = (s || "HOLD").replace(/[^A-Z_]/g, "");
+      return `<span class="sig sig-${k}">${s || "—"}</span>`;
+    }
+    function metric(label, value, sub) {
+      return `<div class="metric"><span class="metric-label">${label}</span><span class="metric-value">${value}</span>${sub ? `<span class="metric-sub">${sub}</span>` : ""}</div>`;
+    }
+
+    async function load(force) {
+      const btn = document.getElementById("refresh");
+      const err = document.getElementById("err");
+      btn.disabled = true;
+      err.hidden = true;
+      try {
+        const url = force ? API + "?refresh=1" : API;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const d = await res.json();
+        if (d.error && !d.stocks) throw new Error(d.error);
+
+        const r = d.regime || {};
+        document.getElementById("regime-metrics").innerHTML = [
+          metric("레짐", REGIME_LABEL[r.label] || r.label || "—", r.reason || ""),
+          metric("XBI", r.xbi != null ? r.xbi : "—", r.xbiAbove200 ? "200MA 위" : "200MA 아래"),
+          metric("VIX", r.vix != null ? r.vix.toFixed(1) : "—", ""),
+          metric("XBI 5D", pct(d.bench?.xbi5d), "IBB " + pct(d.bench?.ibb5d)),
+        ].join("");
+
+        const m = d.macro || {};
+        document.getElementById("macro-metrics").innerHTML = [
+          metric("10Y 60D", pct(m.tnxChg), m.rateHeadwind ? "금리 역풍" : "중립"),
+          metric("거시·대형", m.large != null ? m.large.toFixed(0) : "—", "LLY·MRK 등"),
+          metric("거시·소형", m.small != null ? m.small.toFixed(0) : "—", "XBI 성격"),
+          metric("XBI−IBB 5D", pct(d.bench?.xbiIbbSpread5d), "소형 vs 대형"),
+        ].join("");
+
+        const p = d.portfolio || {};
+        document.getElementById("port-metrics").innerHTML = [
+          metric("투자 비중", p.invested != null ? (p.invested * 100).toFixed(1) + "%" : "—", "현금 " + (p.invested != null ? ((1 - p.invested) * 100).toFixed(0) + "%" : "—")),
+          metric("평균 점수", p.avgScore != null ? p.avgScore : "—", "100점 만점"),
+          metric("보유 종목", (p.holdings || []).length, "Top-8 캡"),
+        ].join("");
+        document.getElementById("holdings").textContent = (p.holdings || [])
+          .map((h) => `${h.symbol} ${(h.weight * 100).toFixed(1)}% (${h.signal})`)
+          .join(" · ") || "선별 종목 없음";
+
+        document.getElementById("body").innerHTML = (d.stocks || []).map((s) => `
+          <tr class="${s.selected ? "row-sel" : ""}">
+            <td><strong>${s.symbol}</strong>${s.selected ? " *" : ""}</td>
+            <td>${s.subtheme || "—"}</td>
+            <td class="num">${s.price != null ? s.price : "—"}</td>
+            <td class="num ${cls(s.change1d)}">${pct(s.change1d)}</td>
+            <td class="num ${cls(s.factorA)}">${pct(s.factorA)}</td>
+            <td class="num ${cls(s.ret5d)}">${pct(s.ret5d)}</td>
+            <td class="num ${cls(s.ret20d)}">${pct(s.ret20d)}</td>
+            <td class="num">${s.rsi14 != null ? s.rsi14 : "—"}</td>
+            <td class="num">${s.scoreMacro != null ? s.scoreMacro : "—"}</td>
+            <td class="num"><strong>${s.total100 != null ? s.total100 : "—"}</strong></td>
+            <td class="num">${s.weight > 0 ? (s.weight * 100).toFixed(1) + "%" : "—"}</td>
+            <td>${sigHtml(s.signal)}${s.filterReason ? `<br><span style="color:var(--muted);font-size:0.7rem">${s.filterReason}</span>` : ""}</td>
+          </tr>`).join("");
+
+        const when = d.generatedAt ? new Date(d.generatedAt).toLocaleString("ko-KR") : "—";
+        let cache = d.fromCache
+          ? `캐시 · ${Math.floor((d.cachedSecondsAgo || 0) / 60)}분 전`
+          : "실시간 갱신";
+        if (d.stale) cache += " (stale)";
+        document.getElementById("meta").textContent = `${when} · ${cache}`;
+      } catch (e) {
+        err.hidden = false;
+        err.textContent = "로드 실패: " + (e.message || e);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    document.getElementById("refresh").addEventListener("click", () => load(true));
+    load(false);
+    setInterval(() => load(false), 4 * 60 * 60 * 1000);
+  </script>
+</body>
+</html>

@@ -4,7 +4,11 @@
 
 **기준일: 2026-08-29** · **기반 프레임워크: [AMQS for AI Infra](https://github.com/gameworkerkim/vibe-investing/tree/main/01.Trading%20Strategy/Adaptive%20Momentum%20Quant%20Strategy%20(AMQS)%20for%20AI%20Infra)**
 
-> **데이터 한계 고지 (먼저 읽을 것).** 이 리포트의 점수는 실제 가격 시계열로 계산한 4-Factor z-score가 **아니다.** 본 실행 환경은 yfinance 도메인 접근이 차단되어 있어, 공개 보도자료·증권사 코멘터리에서 확보한 수익률·가격·밸류에이션을 근거로 5차원 채점을 **정성 근사**했다. 따라서 아래 총점은 *순위의 방향성*은 의미가 있으나 *절대값은 신뢰하지 말아야* 한다. 실제 매매 판단 전 `python -m script.amqs_ai_infra --mode track` 를 바이오 유니버스로 재실행해 교차 검증할 것.
+> **실행:** `pip install -r requirements.txt && python -m script.amqs_bio --mode track`  
+> **LLM 지시문:** [`prompts/AMQS_BIO_kr.MD`](prompts/AMQS_BIO_kr.MD) · [`prompts/AMQS_BIO_EN.MD`](prompts/AMQS_BIO_EN.MD)  
+> **대시보드:** [vibequant.cc/research/bio/](https://vibequant.cc/research/bio/)
+
+> **데이터 한계 고지.** 아래 정성 근사 점수는 yfinance 교차검증 전 참고용이다. 실매매 판단 전 CLI 트래커로 교차 검증할 것.
 
 ---
 
