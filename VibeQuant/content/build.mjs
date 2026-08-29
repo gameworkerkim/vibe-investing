@@ -650,6 +650,7 @@ const SLUG_OVERRIDES = {
   "BitCoin/BTC-Arbitrage-Bithumb-Column.md": "btc-arbitrage-bithumb",
   "Internet/CIA-North-Lorea-Opsec-Column.md": "cia-north-korea-opsec",
   "interest/History-of-Interest.md": "history-of-interest",
+  "AMQS-BIO/Immortal-Subscription-Model-Column.md": "immortal-subscription-model",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
