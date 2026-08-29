@@ -328,8 +328,8 @@ function truncateAtWord(text, max = 155) {
 /** Fix common MD bold patterns; marked often fails on complex **…** spans. */
 function sanitizeMd(md) {
   let s = String(md ?? "");
-  // ** spaced **
-  s = s.replace(/\*\*\s+([^*\n]+?)\s*\*\*/g, (_, t) => `**${t.trim()}**`);
+  // ** spaced ** (horizontal whitespace only; skip closing ** after . or word — e.g. ".** 그")
+  s = s.replace(/(?<![.*\w\uAC00-\uD7A3%)\]])\*\*[ \t]+([^*\n]+?)[ \t]*\*\*/g, (_, t) => `**${t.trim()}**`);
   // **'quoted'** / **"quoted"**
   s = s.replace(/\*\*(['"“”‘’「」])([^*\n]+?)\1\*\*/g, "**$2**");
   // Pre-convert inline bold to HTML so marked cannot leave literal **
@@ -651,6 +651,8 @@ const SLUG_OVERRIDES = {
   "Internet/CIA-North-Lorea-Opsec-Column.md": "cia-north-korea-opsec",
   "interest/History-of-Interest.md": "history-of-interest",
   "AMQS-BIO/Immortal-Subscription-Model-Column.md": "immortal-subscription-model",
+  "AI_Revolution/China-AI-IPO-Bouble.md": "china-ai-ipo-bubble",
+  "Capital-Market/Kim-Junbeom-Fugitive-Verdicts-Column.md": "kim-junbeom-fugitive-verdicts",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

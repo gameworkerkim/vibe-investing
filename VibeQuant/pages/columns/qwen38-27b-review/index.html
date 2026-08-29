@@ -163,18 +163,19 @@
 <li>ERQA(체화 지능): 65.5</li>
 </ul>
 <blockquote>
-<p>⚠️ <strong>원문 유통 자료의 오류 정정</strong>— &quot;MathVision에서 Opus를 29.1점 차로 앞섰다&quot;는 서술이 돌아다니는데, 이는<strong>Qwen의 CI 사용(94.6) 값과 Opus의 CI 미사용(65.5) 값을 비교</strong>한 것이다. 동일 조건(CI 미사용)에서는 90.0 대 65.5다. CharXiv의 &quot;24.2점 차&quot;도 같은 문제(90.2 vs 66.0 → 동일 조건은 83.7 vs 66.0). 격차가 여전히 크다는 결론은 유지된다.</p>
+<p>⚠️ <strong>원문 유통 자료의 오류 정정</strong> — &quot;MathVision에서 Opus를 29.1점 차로 앞섰다&quot;는 서술이 돌아다니는데, 이는 <strong>Qwen의 CI 사용(94.6) 값과 Opus의 CI 미사용(65.5) 값을 비교</strong>한 것이다. 동일 조건(CI 미사용)에서는 90.0 대 65.5다. CharXiv의 &quot;24.2점 차&quot;도 같은 문제(90.2 vs 66.0 → 동일 조건은 83.7 vs 66.0). 격차가 여전히 크다는 결론은 유지된다.</p>
 </blockquote>
 <h3>1-4. 하이브리드 어텐션 - 원가 구조 자체가 다르다</h3>
 <p>이 모델을 단순한 &quot;Dense 27B&quot;로 부르면 핵심을 놓친다. 계층 구조가 다음과 같다.</p>
 <pre><code>16 × ( 3 × (Gated DeltaNet → FFN) → 1 × (Gated Attention → FFN) )
 = 총 64층 중 48층이 선형 어텐션, 16층만 풀 어텐션 (3:1)
 </code></pre>
-<p>전체 층의 75%가 O(n²)이 아니라 <strong>O(n)으로 돈다.</strong>여기에 MTP(Multi-Token Prediction) 헤드가 학습되어 있어 speculative decoding이 기본 지원된다. 즉 262K 네이티브 컨텍스트(YaRN으로 최대 100만 토큰 확장)가 마케팅 숫자가 아니라<strong>KV 캐시 예산이 실제로 감당 가능한 구조</strong>에서 나온 것이다.</p>
+<p>전체 층의 75%가 O(n²)이 아니라 <strong>O(n)으로 돈다.</strong> 여기에 MTP(Multi-Token Prediction) 헤드가 학습되어 있어 speculative decoding이 기본 지원된다. 즉 262K 네이티브 컨텍스트(YaRN으로 최대 100만 토큰 확장)가 마케팅 숫자가 아니라 <strong>KV 캐시 예산이 실제로 감당 가능한 구조</strong>에서 나온 것이다.</p>
 <h3>1-5. 추론 예산 통제</h3>
 <p><code>reasoning_effort</code>를 <code>xhigh</code>(기본) / <code>medium</code> / <code>low</code> 3단계로 조절한다. 여기에 <code>preserve_thinking</code>이 기본 활성화되어, 이전 턴의 사고 블록을 유지해 KV 캐시 재활용률을 높인다. 에이전트 워크로드에서 토큰 낭비를 줄이는 실전형 설계다.</p>
 <h3>1-6. 생태계 Day-0 장악</h3>
-<p>vLLM, SGLang, TokenSpeed, llama.cpp, Ollama, LM Studio, Unsloth, Docker Model Runner가 <strong>출시 당일부터</strong>지원했다. AMD는 Ryzen AI Max+ 395 / Radeon AI PRO R9700 32GB에 대해 Day-0 블로그를 냈다(각각 24.5 tok/s, 51.8 tok/s). 공개 하루 만에 Ollama 다운로드 7.2만, HF 다운로드 9만을 넘겼다.<strong>이 항목이 사실상 가장 위협적이다.</strong> 성능은 따라잡을 수 있어도, 출시 당일 전 세계 로컬 추론 스택이 자동으로 지원하는 배포 관성과 바이럴은 돈으로 살 수 없다.</p>
+<p>vLLM, SGLang, TokenSpeed, llama.cpp, Ollama, LM Studio, Unsloth, Docker Model Runner가 <strong>출시 당일부터</strong> 지원했다. AMD는 Ryzen AI Max+ 395 / Radeon AI PRO R9700 32GB에 대해 Day-0 블로그를 냈다(각각 24.5 tok/s, 51.8 tok/s). 공개 하루 만에 Ollama 다운로드 7.2만, HF 다운로드 9만을 넘겼다.</p>
+<p><strong>이 항목이 사실상 가장 위협적이다.</strong> 성능은 따라잡을 수 있어도, 출시 당일 전 세계 로컬 추론 스택이 자동으로 지원하는 배포 관성과 바이럴은 돈으로 살 수 없다.</p>
 <hr>
 <h2>2. 한계와 리스크</h2>
 <table>
@@ -186,7 +187,7 @@
 </thead>
 <tbody><tr>
 <td><strong>가중치 용량</strong></td>
-<td>27.78B × 2B =<strong>약 55.6GB</strong>(BF16). FP8 약 27.8GB, Q4_K_M 약 13.9GB, Q5_K_M 약 17.4GB</td>
+<td>27.78B × 2B = <strong>약 55.6GB</strong>(BF16). FP8 약 27.8GB, Q4_K_M 약 13.9GB, Q5_K_M 약 17.4GB</td>
 </tr>
 <tr>
 <td><strong>실제 VRAM</strong></td>
@@ -198,7 +199,7 @@
 </tr>
 <tr>
 <td><strong>약한 축</strong></td>
-<td>순수 텍스트 추론. GPQA Diamond 89.2(Opus 4.6 Max 91.3), HLE 30.8(Opus 40.0), Terminal Bench 73.0(Opus 78.2).<strong>시각·에이전트에 최적화된 대신 심층 텍스트 추론은 프런티어에 못 미친다</strong></td>
+<td>순수 텍스트 추론. GPQA Diamond 89.2(Opus 4.6 Max 91.3), HLE 30.8(Opus 40.0), Terminal Bench 73.0(Opus 78.2). <strong>시각·에이전트에 최적화된 대신 심층 텍스트 추론은 프런티어에 못 미친다</strong></td>
 </tr>
 <tr>
 <td><strong>YaRN 부작용</strong></td>
@@ -206,7 +207,7 @@
 </tr>
 <tr>
 <td><strong>검증 공백</strong></td>
-<td>출시일 기준<strong>독립 벤치마크 재현 사례가 확인되지 않았다.</strong> 서드파티 추적 사이트도 &quot;공개 랭킹을 매기기엔 비생성 커버리지가 부족&quot;하다며 순위 부여를 보류 중</td>
+<td>출시일 기준 <strong>독립 벤치마크 재현 사례가 확인되지 않았다.</strong> 서드파티 추적 사이트도 &quot;공개 랭킹을 매기기엔 비생성 커버리지가 부족&quot;하다며 순위 부여를 보류 중</td>
 </tr>
 <tr>
 <td><strong>전작 대비 3배 느림</strong></td>
@@ -214,7 +215,7 @@
 </tr>
 <tr>
 <td><strong>공급망 관점</strong></td>
-<td>오픈웨이트라도<strong>학습 데이터와 정렬 정책은 통제 불가</strong>다. 공공·금융·방산 도입 시 별도 검증 체계가 전제되어야 한다</td>
+<td>오픈웨이트라도 <strong>학습 데이터와 정렬 정책은 통제 불가</strong>다. 공공·금융·방산 도입 시 별도 검증 체계가 전제되어야 한다</td>
 </tr>
 </tbody></table>
 <hr>
@@ -283,7 +284,7 @@
 <tr>
 <td>3</td>
 <td><strong>독자성 규정의 역설</strong></td>
-<td>1차에서 네이버가 독자성 논란으로 탈락했다. Qwen 계열 아키텍처·가중치 활용이 가장 빠른 길인데<strong>규정상 막혀 있다.</strong>경쟁자는 쓰는 지름길을 국내 팀만 못 쓴다</td>
+<td>1차에서 네이버가 독자성 논란으로 탈락했다. Qwen 계열 아키텍처·가중치 활용이 가장 빠른 길인데 <strong>규정상 막혀 있다.</strong> 경쟁자는 쓰는 지름길을 국내 팀만 못 쓴다</td>
 <td><strong>상</strong></td>
 </tr>
 <tr>
@@ -295,13 +296,13 @@
 <tr>
 <td>5</td>
 <td><strong>릴리스 사이클 격차</strong></td>
-<td>Qwen3.5 → 3.6 → 3.8이 1년 내. 독파모는 6개월 단위 단계평가.<strong>평가 주기가 경쟁자 릴리스 주기보다 느리다</strong></td>
+<td>Qwen3.5 → 3.6 → 3.8이 1년 내. 독파모는 6개월 단위 단계평가. <strong>평가 주기가 경쟁자 릴리스 주기보다 느리다</strong></td>
 <td><strong>중</strong></td>
 </tr>
 <tr>
 <td>6</td>
 <td><strong>생태계 락인</strong></td>
-<td>vLLM/SGLang/Ollama/LM Studio/AMD Day-0 지원. 국산 모델은 이 경로가 없다. 개발자는 성능이 아니라<strong>손에 잡히는 순서대로</strong>채택한다</td>
+<td>vLLM/SGLang/Ollama/LM Studio/AMD Day-0 지원. 국산 모델은 이 경로가 없다. 개발자는 성능이 아니라 <strong>손에 잡히는 순서대로</strong> 채택한다</td>
 <td><strong>중</strong></td>
 </tr>
 <tr>
