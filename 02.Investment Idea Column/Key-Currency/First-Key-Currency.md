@@ -39,6 +39,8 @@ keywords:
 group: macro-geo
 featured: true
 featured_rank: 4
+og_image: "https://vibequant.cc/og/wushu-first-key-currency.jpg"
+image: "https://vibequant.cc/og/wushu-first-key-currency.jpg"
 schema_type: BlogPosting
 draft: false
 robots: index,follow
@@ -47,6 +49,8 @@ robots: index,follow
 # 오수전(五銖錢), 동아시아 최초의 기축통화
 
 ## — 명·청 은본위제 이전, 700년간 동아시아 무역을 흐른 혈관
+
+![방공원전(方孔圓錢) 동전 — 오수전·동아시아 기축통화 칼럼 썸네일](https://vibequant.cc/og/wushu-first-key-currency.jpg)
 
 ---
 
