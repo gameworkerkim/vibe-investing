@@ -653,6 +653,7 @@ const SLUG_OVERRIDES = {
   "AMQS-BIO/Immortal-Subscription-Model-Column.md": "immortal-subscription-model",
   "AI_Revolution/China-AI-IPO-Bouble.md": "china-ai-ipo-bubble",
   "Capital-Market/Kim-Junbeom-Fugitive-Verdicts-Column.md": "kim-junbeom-fugitive-verdicts",
+  "Key-Currency/First-Key-Currency.md": "wushu-first-key-currency",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
