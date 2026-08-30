@@ -655,6 +655,7 @@ const SLUG_OVERRIDES = {
   "Capital-Market/Kim-Junbeom-Fugitive-Verdicts-Column.md": "kim-junbeom-fugitive-verdicts",
   "Key-Currency/First-Key-Currency.md": "wushu-first-key-currency",
   "Key-Currency/The-Fall-of-the-Empire.md": "fall-of-the-empire-currency",
+  "Key-Currency/Climate-Crisis-and-the-Fall-of-Empires.md": "climate-crisis-fall-of-empires",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
