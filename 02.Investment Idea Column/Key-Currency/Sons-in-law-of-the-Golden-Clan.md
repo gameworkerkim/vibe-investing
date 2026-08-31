@@ -44,12 +44,16 @@ keywords:
 group: macro-geo
 featured: true
 featured_rank: 7
+og_image: "https://vibequant.cc/og/sons-in-law-golden-clan.jpg"
+image: "https://vibequant.cc/og/sons-in-law-golden-clan.jpg"
 schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
 
 # 결혼 동맹으로 만들어진 사위의 제국
+
+![석조 아치와 석양 속 실루엣 커플 — 황금씨족·혼인 동맹 칼럼 썸네일](https://vibequant.cc/og/sons-in-law-golden-clan.jpg)
 
 ## 황금씨족·합스부르크·메디치, 혼인으로 쓴 세 개의 권력의 속성
 
