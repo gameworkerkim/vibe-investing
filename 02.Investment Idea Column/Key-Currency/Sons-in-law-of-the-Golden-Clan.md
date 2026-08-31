@@ -1,3 +1,54 @@
+---
+title: "결혼 동맹으로 만들어진 사위의 제국 — 황금씨족·합스부르크·메디치"
+title_en: "Sons-in-law of the Golden Clan — Marriage Alliances and Empire"
+subtitle: "혼인으로 쓴 세 개의 권력의 문법"
+description: "칭기즈조·주치·구르칸·부마국 고려·티무르·무굴. 합스부르크 족내혼·카를로스 2세. 메디치 교황·왕비. 혼인=계약."
+abstract: |
+  몽골 황금씨족(Altan Urug)—칭기즈조 원리로 칸은 부계 한정. 주치 혈통 미해결→1219 쿠릴타이 4칸국 분열.
+  구르칸(사위): 티무르·무굴·고려 부마국(불개토풍). 합스부르크는 혼인=주권 상속(카를 5세·카를로스 2세 근친).
+  메디치는 자본→교황→왕비→합스부르크 접속. 세 문법 비교표. 투자 권유·학술 자문 아님.
+summary_for_ai: |
+  Korean history/political column (not investment advice), 2026-08-31, group macro-geo, Key-Currency series.
+  Thesis: empires are built by war but maintained by marriage contracts—legitimacy rules differ by blood definition.
+  Mongol Golden Clan: Chinggisid principle (khan = patriline only); Jochi paternity unresolved → 1219 kurultai split → 4 ulus.
+  Güregen (son-in-law): Timur kept Gurkhan title not khan; Mughal name; Goryeo buma state (1274 Kublai marriage, survival vs Song/Xia).
+  Habsburg: "Let others make war"—marriage inherits thrones; Charles V triple crown; Carlos II inbreeding F=0.254 (PLoS ONE).
+  Medici: no blood → buy via marriage to Orsini, papacy (Leo X), Catherine de Medici queen, Francis I marriage 1536.
+  Comparison table §7. Marriage = contract reflecting who society accepts as "us."
+date: 2026-08-31
+updated: 2026-08-31
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 황금씨족
+  - 몽골
+  - 칭기즈칸
+  - 합스부르크
+  - 메디치
+  - 혼인
+  - 정통성
+  - 고려
+  - 부마국
+  - 역사
+keywords:
+  - "황금씨족"
+  - "칭기즈조"
+  - "구르칸"
+  - "부마국"
+  - "티무르"
+  - "무굴 제국"
+  - "합스부르크"
+  - "메디치"
+  - "카를로스 2세"
+  - "혼인 동맹"
+group: macro-geo
+featured: true
+featured_rank: 7
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 결혼 동맹으로 만들어진 사위의 제국
 
 ## 황금씨족·합스부르크·메디치, 혼인으로 쓴 세 개의 권력의 속성
@@ -222,7 +273,7 @@
 | 대표 사례 | 티무르, 고려 충렬왕 | 카를 5세 | 카트린 드 메디시스 |
 | 확장의 결과 | 유라시아 최대 판도 | 해가 지지 않는 제국 | 토스카나 대공국 |
 | 실패의 방식 | **정치적 분열** (4칸국) | **생물학적 절멸** (1700) | **혈통 소진** (1737 단절) |
-| 규범의 수명 | 칭기즈조 원리 ~1783 | 1918년까지 존속 | 1737년 단절 |
+| 규범의 수명 | 칭기즈조 원리 –1783 | 1918년까지 존속 | 1737년 단절 |
 
 세 가문의 종말 방식이 각자의 전략을 그대로 반영한다는 점이 인상적이다. 피를 신성시하고 밖에서만 배우자를 구한 몽골은 **밖으로 흩어져** 끝났다. 피를 축적하고 안에서만 결혼한 합스부르크는 **안으로 무너져** 끝났다. 피를 사들인 메디치는 살 돈이 떨어지자 **조용히 소진되어** 끝났다.
 

@@ -656,6 +656,7 @@ const SLUG_OVERRIDES = {
   "Key-Currency/First-Key-Currency.md": "wushu-first-key-currency",
   "Key-Currency/The-Fall-of-the-Empire.md": "fall-of-the-empire-currency",
   "Key-Currency/Climate-Crisis-and-the-Fall-of-Empires.md": "climate-crisis-fall-of-empires",
+  "Key-Currency/Sons-in-law-of-the-Golden-Clan.md": "sons-in-law-golden-clan",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
