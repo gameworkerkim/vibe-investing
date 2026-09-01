@@ -657,6 +657,7 @@ const SLUG_OVERRIDES = {
   "Key-Currency/The-Fall-of-the-Empire.md": "fall-of-the-empire-currency",
   "Key-Currency/Climate-Crisis-and-the-Fall-of-Empires.md": "climate-crisis-fall-of-empires",
   "Key-Currency/Sons-in-law-of-the-Golden-Clan.md": "sons-in-law-golden-clan",
+  "Key-Currency/The-Rise-and-Fall of-the-Mughal-Empire.md": "rise-and-fall-mughal-empire",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
