@@ -1,3 +1,4 @@
+<!--
 ---
 title: "사위의 제국 — 티무르에서 무굴까지, M&A로 국가를 만드는 사람들"
 title_en: "The Rise and Fall of the Mughal Empire — Gurkhani Legitimacy to Roll-ups"
@@ -49,6 +50,7 @@ schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
+-->
 
 # 사위의 제국 - 티무르에서 무굴까지, 그리고 M&A로 국가를 만드는 사람들
 
