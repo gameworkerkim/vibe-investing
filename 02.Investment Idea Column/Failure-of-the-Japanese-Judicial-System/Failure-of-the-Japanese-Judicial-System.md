@@ -1,3 +1,4 @@
+<!--
 ---
 title: "카를로스 곤의 일본 탈주 — 일본은 왜 '엔자이(冤罪)'의 나라가 되었는가"
 title_en: "Failure of the Japanese Judicial System — Ghosn, Enzai, and Hostage Justice"
@@ -46,6 +47,7 @@ schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
+-->
 
 # 카를로스 곤의 일본 탈주 사태 - 일본은 왜 '엔자이(冤罪)'의 나라가 되었는가?
 
