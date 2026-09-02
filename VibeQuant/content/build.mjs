@@ -659,6 +659,7 @@ const SLUG_OVERRIDES = {
   "Key-Currency/Sons-in-law-of-the-Golden-Clan.md": "sons-in-law-golden-clan",
   "Key-Currency/The-Rise-and-Fall of-the-Mughal-Empire.md": "rise-and-fall-mughal-empire",
   "Failure-of-the-Japanese-Judicial-System/Failure-of-the-Japanese-Judicial-System.md": "failure-japanese-judicial-system",
+  "K-Culture/Moon-Jar.md": "moon-jar",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
