@@ -660,6 +660,7 @@ const SLUG_OVERRIDES = {
   "Key-Currency/The-Rise-and-Fall of-the-Mughal-Empire.md": "rise-and-fall-mughal-empire",
   "Failure-of-the-Japanese-Judicial-System/Failure-of-the-Japanese-Judicial-System.md": "failure-japanese-judicial-system",
   "K-Culture/Moon-Jar.md": "moon-jar",
+  "NorthKorea/Lazarus_AnySign4PC.md": "lazarus-anysign4pc",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

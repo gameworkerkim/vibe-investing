@@ -1,18 +1,65 @@
+---
+title: "국가가 강제로 설치한 프로그램이 국민을 공격하는 통로가 되었다"
+title_en: "A State-Mandated Security App Became the Attack Path — Lazarus AnySign4PC"
+subtitle: "AnySign4PC 제로데이 워터링 홀 사태가 남긴 질문"
+description: "라자루스 AnySign4PC 제로데이·72기관. Operation Double Barrel·한컴위드·필수 보안SW. 투자 권유 아님."
+abstract: |
+  2026 여름: 한컴위드 AnySign4PC 제로데이(RCE)를 북한 라자루스가 워터링 홀로 악용, 최소 72기관 감염(안랩 Double Barrel).
+  CVE-2020-7882 이후 '패치' 1.1.4.4–1.1.4.6이 재악용. 자동업데이트 부재·필수설치 구조·WebSocket 로컬 노출.
+  Veraport·Cross EX 후 세 번째. 팔란트(2023) 경고 현실화. WebAuthn/FIDO2 전환·CVE 공개 의무 제안. 투자·법률 자문 아님.
+summary_for_ai: |
+  Korean security/policy column (not investment or legal advice), 2026-09-03, group korea-hacking, NorthKorea series.
+  Event: Lazarus-linked watering-hole abuse of AnySign4PC (Hancom With, formerly Dream Security) zero-day RCE; AhnLab Operation Double Barrel; ≥72 orgs; SIGNBT/Struggle, COPPERHEDGE/Brandoor; some Gunra ransomware overlap.
+  Timeline: CVE-2020-7882 patched to 1.1.4.4; KISA 2025-03 upgrade notice; 2026-06-01 KISA disclosure of 1.1.4.4–1.1.4.6 zero-day; exploit in wild from late 2025.
+  Thesis: Korea's mandated "security software" model (no auto-update, JS↔local process bridge) is a national attack surface; talent shortage at vendors blocks secure coding/IR.
+  Remedies: forced auto-update + remote kill of vulnerable builds; public CVE/product naming (not "financial security software A"); retire local agents for WebAuthn/FIDO2.
+  Sources: KISA, AhnLab ASEC, ENKI Whitehat, The Hacker News 2026-07-30, Rescana 2026-07-31, Wladimir Palant 2023 KR security apps series.
+date: 2026-09-03
+updated: 2026-09-03
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 라자루스
+  - AnySign4PC
+  - 제로데이
+  - 워터링홀
+  - 북한
+  - 한컴위드
+  - 공인인증
+  - KISA
+  - 금융보안
+  - 사이버안보
+keywords:
+  - "AnySign4PC"
+  - "라자루스"
+  - "Lazarus"
+  - "제로데이"
+  - "Operation Double Barrel"
+  - "한컴위드"
+  - "워터링 홀"
+  - "필수 보안 소프트웨어"
+  - "CVE-2020-7882"
+group: korea-hacking
+featured: true
+featured_rank: 11
+og_image: "https://vibequant.cc/og/lazarus-anysign4pc.jpg"
+image: "https://vibequant.cc/og/lazarus-anysign4pc.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 국가가 강제로 설치한 프로그램이 국민을 공격하는 통로가 되었다
 
+![정부·금융 사이트 보안 프로그램 설치 요구 화면 — 라자루스 AnySign4PC 칼럼 썸네일](https://vibequant.cc/og/lazarus-anysign4pc.jpg)
+
 ## AnySign4PC 제로데이 워터링 홀 사태가 남긴 질문
-
-**김호광 (Dennis Kim) | 싸이월드 전대표**
-
----
 
 2026년 여름, 한국 보안 업계는 오랫동안 미뤄왔던 청구서를 받았다. 공공기관과 금융 사이트를 이용하려면 누구나 설치해야 하는 전자서명 솔루션 AnySign4PC에서 제로데이 취약점이 발견됐고, 북한 라자루스(Lazarus) 그룹으로 지목된 공격자들은 이를 이용해 최소 72개 기관을 감염시켰다. 사용자는 아무것도 클릭하지 않았다. 늘 가던 커뮤니티와 뉴스 사이트에 접속했을 뿐이다.
 
 이 사건은 단순한 취약점 하나의 문제가 아니다. 20년 넘게 유지되어 온 한국형 "필수 설치 보안 소프트웨어" 모델이 구조적으로 어떤 위험을 안고 있는지, 그리고 그 소프트웨어를 만드는 기업들이 지금 어떤 상태인지를 동시에 드러낸 사건이다.
 
----
-
-### 1. 무슨 일이 있었나?
+## 1. 무슨 일이 있었나?
 
 AnySign4PC는 한컴위드(구 드림시큐리티)가 개발한 Non-ActiveX 기반 공인인증서·전자서명 솔루션이다. 한마디로 ActiveX를 사용하지 않고 EXE 실행 파일이 상당한 권한을 가진 상태로 PC에 설치된다는 뜻이다. 정부 민원 사이트, 은행, 카드사, 보험사 등 이용자에게 "보안 프로그램 설치"를 요구하는 국내 사이트 상당수가 이 제품을 배포한다.
 
@@ -21,7 +68,7 @@ AnySign4PC는 한컴위드(구 드림시큐리티)가 개발한 Non-ActiveX 기�
 | 구분 | 취약 버전 | 내용 | 패치 |
 | --- | --- | --- | --- |
 | CVE-2020-7882 | 1.1.4.3 이하 | `getPFXFolderList` 함수 매개변수 조작으로 인증서 정보 열람·파일 삭제가 가능한 디렉토리 트래버설 | v1.1.4.4 |
-| 2026년 제로데이 | 1.1.4.4 ~ 1.1.4.6 | 버퍼 오버플로우 및 원격 코드 실행(RCE). KISA가 2026년 6월 1일 공개, ENKI Whitehat은 공개 이전부터 실제 공격에 악용된 제로데이였다고 밝힘 | v1.1.5.0 → v1.1.5.1 |
+| 2026년 제로데이 | 1.1.4.4–1.1.4.6 | 버퍼 오버플로우 및 원격 코드 실행(RCE). KISA가 2026년 6월 1일 공개, ENKI Whitehat은 공개 이전부터 실제 공격에 악용된 제로데이였다고 밝힘 | v1.1.5.0 → v1.1.5.1 |
 
 주목할 점은 두 번째다. 2025년 3월 KISA는 1.1.4.3 이하 버전 사용자에게 1.1.4.4로 업그레이드하라고 공지했다. 그 "패치된 버전"이 1년 뒤 제로데이의 대상이 됐다. 공격자는 2025년 하반기부터 이미 이 취약점을 쓰고 있었고, 방어 측이 그것을 인지하고 패치를 내놓기까지 반년 이상이 걸렸다. 올해 6월까지 북한은 이 제로데이 백도어를 통해 자유롭게 들락날락 거렸다.
 
@@ -29,9 +76,7 @@ AnySign4PC는 한컴위드(구 드림시큐리티)가 개발한 Non-ActiveX 기�
 
 최종적으로 설치된 것은 SIGNBT(안랩 명명 Struggle) 또는 COPPERHEDGE(Brandoor) 백도어였다. 원격 명령 실행, 파일 탈취, 내부 정찰이 가능한 도구들이다. 안랩은 일부 침해 사례에서 Gunra 랜섬웨어로 이어진 흔적도 확인했다.
 
----
-
-### 2. 얼마나 설치되어 있나?
+## 2. 얼마나 설치되어 있나?
 
 AnySign4PC의 정확한 설치 대수는 공개된 적이 없다. 그러나 이 제품의 배포 구조를 보면 "국내에서 인터넷뱅킹이나 공공 민원을 PC로 처리해 본 사람 대부분"이라고 보는 것이 합리적이다. 이 프로그램은 사용자가 선택해서 설치하는 것이 아니라, 특정 사이트에 접속하는 순간 설치를 요구받는 구조다. 한 번 설치되면 부팅 시 자동 실행되어 상시 백그라운드에 상주한다. 사이트를 이용하지 않는 동안에도 취약한 프로세스는 계속 떠 있다.
 
@@ -39,9 +84,7 @@ AnySign4PC의 정확한 설치 대수는 공개된 적이 없다. 그러나 이 
 
 실제로 은행과 공공기관이 배포하는 설치 파일 버전은 사이트마다 제각각이다. 팔란트는 2023년 조사 당시 씨티은행 한국 사이트가 2020년 버전을, 다른 다운로드 경로에서는 2015년 버전을 배포하고 있었다고 기록했다. 3년이 지난 지금도 구조는 크게 달라지지 않았다. 결국 "얼마나 설치되어 있나?"라는 질문의 답은 "최소 수십 만대에서 수백만 대, 그중 상당수가 어느 버전인지 아무도 모른다"에 가깝다.
 
----
-
-### 3. 왜 북한이 이것을 노리나?
+## 3. 왜 북한이 이것을 노리나?
 
 라자루스가 한국 보안 소프트웨어를 노린 것은 이번이 처음이 아니다. 2020년 위즈베라 Veraport 공급망 공격, 이후 이니라인 Cross EX 취약점을 이용한 워터링 홀 공격, 그리고 2026년 AnySign4PC까지 같은 전략이 반복된다. 이유는 단순하다. 공격 대상으로서 이보다 효율적인 소프트웨어가 없기 때문이다.
 
@@ -53,9 +96,7 @@ AnySign4PC의 정확한 설치 대수는 공개된 적이 없다. 그러나 이 
 
 넷째, **목표가 명확하다.** 라자루스의 주된 임무 중 하나는 외화 획득이다. 금융 사이트 이용을 위해 설치된 프로그램을 통해 감염된 PC는, 정의상 금융 거래를 하는 PC다. 여기에 랜섬웨어까지 결합하면 첩보와 수익을 동시에 노릴 수 있다. 실제로 안랩은 이번 캠페인과 Gunra 랜섬웨어 사이에 초기 침투 취약점, 악성코드 파일명, SSH 키 지문, 네트워크 인프라가 겹친다고 밝혔다.
 
----
-
-### 4. 해외 전문가들은 이미 경고했다
+## 4. 해외 전문가들은 이미 경고했다
 
 해외 보안 커뮤니티가 이번 사건을 바라보는 시각은 "놀랍다"가 아니라 "예고된 일"에 가깝다.
 
@@ -71,11 +112,9 @@ AnySign4PC의 정확한 설치 대수는 공개된 적이 없다. 그러나 이 
 
 주목할 만한 대목은 안랩이 보고서에서 두 개의 악용된 제품을 "금융보안 소프트웨어 A"와 "I"로만 표기하고 제품명, 취약 버전, 취약점 식별자를 공개하지 않았다는 점이다. 해외 매체는 이를 그대로 지적했다. 제품명을 밝힌 것은 ENKI Whitehat이었다. 국민 대다수의 PC에 설치된 소프트웨어의 취약점 정보가 이런 방식으로 유통되는 것이 정상인지는 따로 논의가 필요하다.
 
-한국의 폐쇄적인 보안 소프트웨어 시장, 보안 장비 시장에서 자신들도 당할 수 있는 제로데이 공격에 대해서 너무 체면을 봐주고 있다. 
+한국의 폐쇄적인 보안 소프트웨어 시장, 보안 장비 시장에서 자신들도 당할 수 있는 제로데이 공격에 대해서 너무 체면을 봐주고 있다.
 
----
-
-### 5. 더 근본적인 문제 - 만드는 사람이 없다
+## 5. 더 근본적인 문제 - 만드는 사람이 없다
 
 기술적 취약점 이면에는 더 구조적인 문제가 있다. 이 소프트웨어들을 만들고 유지하는 회사들의 상태다.
 
@@ -85,11 +124,9 @@ AnySign4PC의 정확한 설치 대수는 공개된 적이 없다. 그러나 이 
 
 이 상황에서 "제로데이 대응"이나 "시큐어 코딩"을 요구하는 것은 현실을 모르는 소리다. 유지보수 인력이 없는 회사에 취약점 연구 역량이 있을 리 없고, 대규모 공격에 대응할 인시던트 팀이 있을 리 없다. 이번 사건에서 취약점을 찾아내고 분석한 것은 제조사가 아니라 ENKI, 안랩, 카스퍼스키였다.
 
----
+## 6. 사건의 여파 - 무엇이 바뀌어야 하나?
 
-### 6. 사건의 여파 - 무엇이 바뀌어야 하나?
-
-72개 기관이라는 숫자는 안랩이 확인한 최소치다. 자동 업데이트가 없는 구조에서 취약 버전 1.1.4.4~1.1.4.6이 얼마나 남아 있는지 아무도 모르기 때문에, 실제 감염 규모는 이보다 클 가능성이 높다. 2025년 하반기부터 2026년까지 최소 반년 이상 방치된 제로데이가 그 기간 동안 무엇을 가져갔는지도 아직 다 드러나지 않았다.
+72개 기관이라는 숫자는 안랩이 확인한 최소치다. 자동 업데이트가 없는 구조에서 취약 버전 1.1.4.4–1.1.4.6이 얼마나 남아 있는지 아무도 모르기 때문에, 실제 감염 규모는 이보다 클 가능성이 높다. 2025년 하반기부터 2026년까지 최소 반년 이상 방치된 제로데이가 그 기간 동안 무엇을 가져갔는지도 아직 다 드러나지 않았다.
 
 이 사건이 던지는 질문은 결국 하나다. 국가가 국민에게 설치를 강제하는 소프트웨어의 보안 책임은 누가 지는가?
 
