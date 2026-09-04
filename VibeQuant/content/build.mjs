@@ -661,6 +661,7 @@ const SLUG_OVERRIDES = {
   "Failure-of-the-Japanese-Judicial-System/Failure-of-the-Japanese-Judicial-System.md": "failure-japanese-judicial-system",
   "K-Culture/Moon-Jar.md": "moon-jar",
   "NorthKorea/Lazarus_AnySign4PC.md": "lazarus-anysign4pc",
+  "Line/SoftBank-Naver-Line.md": "softbank-naver-line",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
