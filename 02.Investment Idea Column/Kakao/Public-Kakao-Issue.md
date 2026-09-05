@@ -1,3 +1,4 @@
+<!--
 ---
 title: "차단은 보안이 아니다 — '공공용 카카오톡'을 만들어라"
 title_en: "Blocking Is Not Security — Build a Public KakaoTalk"
@@ -48,6 +49,7 @@ schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
+-->
 
 # 차단은 보안이 아니다 — '공공용 카카오톡'을 만들어라
 
