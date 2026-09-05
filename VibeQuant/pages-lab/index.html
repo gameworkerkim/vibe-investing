@@ -3,24 +3,368 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lab — VibeQuant</title>
-  <meta name="description" content="곧 연결할께요." />
-  <meta name="robots" content="noindex" />
+  <title>Lab — TokenForge · VibeQuant</title>
+  <meta name="description" content="TokenForge: 한국어 코딩 프롬프트를 DeepSeek로 영어 최적화하고 Claude·ChatGPT 토큰 절약을 예측하는 VibeQuant Lab." />
   <link rel="canonical" href="https://vibequant.cc/lab/" />
-  <style>
-    html,body{height:100%;margin:0}
-    body{display:flex;flex-direction:column;align-items:center;justify-content:center;
-      font-family:system-ui,-apple-system,sans-serif;background:#0f0f14;color:#e8e8ed;
-      text-align:center;padding:40px 24px}
-    h1{font-size:clamp(1.6rem,5vw,2.2rem);font-weight:800;margin:0;letter-spacing:-0.02em}
-    p{margin:18px 0 0;font-size:1.05rem;color:#9a9aa3}
-    a{margin-top:28px;color:#8b7cf7;text-decoration:none;font-size:0.9rem}
-    a:hover{text-decoration:underline}
-  </style>
+  <meta property="og:title" content="TokenForge — VibeQuant Lab" />
+  <meta property="og:description" content="한국어·외국어 프롬프트 → 영어 최적화 → Claude/ChatGPT 토큰 절약 예측" />
+  <meta property="og:url" content="https://vibequant.cc/lab/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="VibeQuant Lab" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/lab.css?v=1" />
 </head>
 <body>
-  <h1>Lab</h1>
-  <p>곧 연결할께요.</p>
-  <a href="https://vibequant.cc/">← VibeQuant</a>
+  <div class="grain" aria-hidden="true"></div>
+
+  <nav class="topnav" aria-label="Primary">
+    <a class="brand" href="https://vibequant.cc/">VibeQuant</a>
+    <a href="https://docs.vibequant.cc/columns/">Columns</a>
+    <a href="https://tech.vibequant.cc/tech/">Tech</a>
+    <a href="https://play.vibequant.cc/play/">Play</a>
+    <a href="https://cti.vibequant.cc/cti/">CTI</a>
+    <a class="is-active" href="https://vibequant.cc/lab/" aria-current="page">Lab</a>
+    <a href="https://vibequant.cc/research/">Research</a>
+    <span class="sep"></span>
+    <a href="https://github.com/gameworkerkim/vibe-investing/tree/main/TokenForge" target="_blank" rel="noopener noreferrer">GitHub</a>
+  </nav>
+
+  <div class="wrap">
+    <header class="hero">
+      <p class="eyebrow">VibeQuant Lab</p>
+      <h1>TokenForge</h1>
+      <p class="lede">
+        한국어·외국어 코딩 프롬프트를 DeepSeek로 압축된 영어 프롬프트로 바꿉니다.
+        Claude / ChatGPT에 넣기 전에 토큰과 비용을 예측하세요.
+      </p>
+      <div class="hero-meta">
+        <span id="mode-pill" class="status-pill">상태 확인 중…</span>
+        <span id="storage-pill" class="status-pill">기억: localStorage</span>
+        <span id="model-pill" class="status-pill">deepseek-v4-flash</span>
+        <button type="button" id="btn-settings" class="btn ghost sm">설정</button>
+      </div>
+    </header>
+
+    <div class="tool-tabs" role="tablist" aria-label="Lab tools">
+      <button type="button" class="tool-tab active" data-tool="tokenforge" role="tab" aria-selected="true">TokenForge</button>
+      <button type="button" class="tool-tab is-soon" data-tool="vaultguard" role="tab" aria-selected="false">VaultGuard <span class="soon">soon</span></button>
+      <button type="button" class="tool-tab is-soon" data-tool="myip" role="tab" aria-selected="false">MY-IP <span class="soon">soon</span></button>
+    </div>
+
+    <!-- ========== TokenForge ========== -->
+    <section id="panel-tokenforge" class="panel active" role="tabpanel">
+      <nav class="subnav" id="tf-subnav" aria-label="TokenForge steps">
+        <button type="button" data-view="overview" class="active">개요</button>
+        <button type="button" data-view="plan">계획</button>
+        <button type="button" data-view="forge">최적화</button>
+        <button type="button" data-view="memory">기억</button>
+        <button type="button" data-view="skill">스킬</button>
+      </nav>
+
+      <div id="view-overview" class="view active">
+        <h2>파이프라인</h2>
+        <div class="flow">
+          <div class="card flow-card"><span class="n">01</span><b>전체 계획</b><p>목표를 넣으면 프로젝트를 목표→제약→산출물→단계→리스크로 분해하는 영어 마스터 프롬프트를 만듭니다.</p></div>
+          <div class="card flow-card"><span class="n">02</span><b>세부 프롬프트</b><p>각 단계를 한국어·일본어·중국어 등 편한 언어로 작성합니다. 기억에 저장할 수 있습니다.</p></div>
+          <div class="card flow-card"><span class="n">03</span><b>영어 최적화</b><p>DeepSeek V4 Flash가 요구사항을 보존한 채 압축된 영어 프롬프트로 재작성합니다.</p></div>
+          <div class="card flow-card"><span class="n">04</span><b>토큰 절약</b><p>원문 vs 최적화문의 Claude·ChatGPT 토큰·절약율·비용을 추정합니다 (±15%).</p></div>
+          <div class="card flow-card"><span class="n">05</span><b>기억</b><p>계획·프롬프트·위키 스니펫을 이 브라우저에 저장하고 Forge 컨텍스트로 재사용합니다.</p></div>
+          <div class="card flow-card"><span class="n">06</span><b>SKILL.md</b><p>계획 + 최적화 프롬프트 번들을 Claude Code / opencode 스킬로 내보냅니다.</p></div>
+        </div>
+
+        <div class="card">
+          <h3>왜 영어인가</h3>
+          <p>
+            한글은 문자당 토큰이 영어보다 몇 배 큽니다. 같은 요구를 군더더기 없는 영어 명령으로 바꾸면
+            Claude·ChatGPT 입력 토큰이 줄어들고, 에이전트가 더 안정적으로 실행합니다.
+            TokenForge는 의미를 버리지 않는 압축을 우선합니다.
+          </p>
+          <div class="row">
+            <button type="button" class="btn primary" id="btn-goto-plan">계획부터 시작</button>
+            <button type="button" class="btn ghost" id="btn-goto-forge">프롬프트만 최적화</button>
+            <button type="button" class="btn ghost" id="btn-demo">샘플로 절감 체험</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-plan" class="view">
+        <h2>전체 계획 생성</h2>
+        <div class="card">
+          <label>목표 <span class="req">*</span>
+            <input id="plan-goal" type="text" placeholder="예) Cloudflare Pages 무료 티어 정적 대시보드 + DeepSeek 연동" />
+          </label>
+          <div class="grid2">
+            <label>계획 응답 언어
+              <select id="plan-lang">
+                <option value="ko">한국어</option>
+                <option value="en">English</option>
+                <option value="ja">日本語</option>
+                <option value="zh">中文</option>
+              </select>
+            </label>
+            <label>대상 AI
+              <select id="plan-target">
+                <option value="claude">Claude</option>
+                <option value="chatgpt">ChatGPT</option>
+              </select>
+            </label>
+          </div>
+          <label>컨텍스트·제약 (선택)
+            <textarea id="plan-constraints" rows="2" placeholder="예) 외부 DB 없음, free tier만, 한국어 UI"></textarea>
+          </label>
+          <div class="row">
+            <button type="button" class="btn primary" id="btn-make-plan">계획 생성</button>
+            <span id="plan-status" class="hint"></span>
+          </div>
+        </div>
+        <div id="plan-result" class="hidden">
+          <div class="card">
+            <div class="row spread">
+              <h3 id="plan-title">…</h3>
+              <span id="plan-badge" class="status-pill"></span>
+            </div>
+            <p id="plan-goal-view" class="goal"></p>
+            <div id="plan-explanation" class="callout"></div>
+            <details open>
+              <summary>전체 계획 프롬프트 (영어)</summary>
+              <textarea id="plan-whole" class="code-area" rows="6"></textarea>
+              <div class="row">
+                <button type="button" class="btn ghost" data-copy="plan-whole">복사</button>
+                <button type="button" class="btn ghost" id="btn-plan-regen">이 프롬프트로 다시 계획</button>
+              </div>
+            </details>
+          </div>
+          <div class="card">
+            <h3>단계별 세부 프롬프트</h3>
+            <div id="plan-steps"></div>
+          </div>
+          <div class="card grid2">
+            <div><h3>리스크</h3><ul id="plan-risks"></ul></div>
+            <div><h3>산출물</h3><ul id="plan-outputs"></ul></div>
+          </div>
+          <div class="row">
+            <button type="button" class="btn primary" id="btn-save-plan">계획을 기억에 저장</button>
+            <button type="button" class="btn ghost" id="btn-forge-all">최적화로 이동</button>
+            <button type="button" class="btn ghost" id="btn-export-skill-from-plan">이 계획으로 SKILL</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-forge" class="view">
+        <h2>세부 프롬프트 → 영어 최적화</h2>
+        <div class="split">
+          <div class="card">
+            <label>원문 (한국어/외국어) <span class="req">*</span>
+              <textarea id="forge-source" rows="10" placeholder='예) "이동평균 파이썬 함수를 만들어줘. 예외 처리하고 주석은 한국어로…"'></textarea>
+            </label>
+            <div class="live-tok" id="live-tok">Claude · ChatGPT 토큰 추정 대기</div>
+            <div class="grid2">
+              <label>원문 언어
+                <select id="forge-lang">
+                  <option value="">자동 감지</option>
+                  <option value="ko">한국어</option>
+                  <option value="en">English</option>
+                  <option value="ja">日本語</option>
+                  <option value="zh">中文</option>
+                </select>
+              </label>
+              <label>대상 AI
+                <select id="forge-target">
+                  <option value="claude">Claude</option>
+                  <option value="chatgpt">ChatGPT</option>
+                </select>
+              </label>
+            </div>
+            <label>참고 기억
+              <select id="forge-memory"><option value="">없음</option></select>
+            </label>
+            <label>추가 지시
+              <input id="forge-extra" type="text" placeholder="예) 초보자 톤, 코드 예시 포함" />
+            </label>
+            <div class="row">
+              <button type="button" class="btn primary" id="btn-optimize">DeepSeek로 최적화</button>
+              <span id="forge-status" class="hint"></span>
+            </div>
+          </div>
+          <div class="card">
+            <div class="row spread">
+              <h3>최적화된 영어 프롬프트</h3>
+              <span id="forge-badge" class="status-pill">대기</span>
+            </div>
+            <textarea id="forge-out" class="code-area code-out" rows="12" placeholder="최적화가 여기에 나타납니다."></textarea>
+            <div class="row">
+              <button type="button" class="btn primary" data-copy="forge-out">복사</button>
+              <button type="button" class="btn ghost" id="btn-save-forge">기억에 저장</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="forge-result" class="hidden">
+          <div class="card">
+            <h3>변경 요약 · 추천</h3>
+            <div id="forge-summary" class="callout"></div>
+            <div class="grid2">
+              <div><h4>변경 사항</h4><ul id="forge-changes"></ul></div>
+              <div><h4>추천 팁</h4><ul id="forge-tips"></ul></div>
+            </div>
+          </div>
+          <div class="card">
+            <h3>토큰 절약 예상도</h3>
+            <div class="ring-wrap">
+              <div class="ring" id="save-ring" style="--p:0%"></div>
+              <div class="ring-copy">
+                <div class="big" id="save-big">—</div>
+                <div class="sub">Claude 기준 절약율 · 추정 ±15%</div>
+              </div>
+            </div>
+            <div class="grid2" id="token-cards"></div>
+            <p class="hint" id="token-note"></p>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-memory" class="view">
+        <h2>기억</h2>
+        <div class="card">
+          <div class="row spread">
+            <div class="row" style="margin-top:0">
+              <input id="mem-q" type="search" placeholder="검색 (제목/태그/내용)" style="min-width:220px" />
+              <select id="mem-kind">
+                <option value="">전체</option>
+                <option value="project">project</option>
+                <option value="prompt">prompt</option>
+                <option value="wiki">wiki</option>
+                <option value="skill">skill</option>
+              </select>
+              <button type="button" class="btn ghost" id="btn-mem-refresh">새로고침</button>
+            </div>
+            <button type="button" class="btn ghost" id="btn-mem-new">+ 새 항목</button>
+          </div>
+          <div id="mem-local-notice" class="callout">이 브라우저 localStorage에 저장됩니다. 서버 KV는 Lab에서 사용하지 않습니다.</div>
+        </div>
+        <div id="mem-list"></div>
+        <dialog id="mem-dialog">
+          <form method="dialog">
+            <h3 id="mem-dialog-title">새 기억 항목</h3>
+            <label>종류
+              <select id="mem-new-kind">
+                <option value="project">project</option>
+                <option value="prompt">prompt</option>
+                <option value="wiki">wiki</option>
+                <option value="skill">skill</option>
+              </select>
+            </label>
+            <label>제목 <span class="req">*</span><input id="mem-new-title" type="text" /></label>
+            <label>태그 (콤마 구분)<input id="mem-new-tags" type="text" placeholder="claude, coding" /></label>
+            <label>내용<textarea id="mem-new-content" rows="5"></textarea></label>
+            <div class="row end">
+              <button value="cancel" class="btn ghost">취소</button>
+              <button value="default" class="btn primary" id="btn-mem-save">저장</button>
+            </div>
+          </form>
+        </dialog>
+      </div>
+
+      <div id="view-skill" class="view">
+        <h2>스킬(SKILL.md)</h2>
+        <div class="card">
+          <label>소스
+            <select id="skill-source">
+              <option value="current-plan">현재 계획</option>
+              <option value="memory">기억 항목</option>
+            </select>
+          </label>
+          <div id="skill-memory-picker" class="hidden">
+            <select id="skill-memory-id"></select>
+          </div>
+          <label>태그<input id="skill-tags" type="text" placeholder="claude-code, frontend" /></label>
+          <div class="row">
+            <button type="button" class="btn primary" id="btn-skill-build">SKILL.md 생성</button>
+            <span id="skill-status" class="hint"></span>
+          </div>
+        </div>
+        <div id="skill-result" class="hidden">
+          <div class="card">
+            <div class="row spread">
+              <h3>미리보기</h3>
+              <div class="row" style="margin-top:0">
+                <button type="button" class="btn ghost" data-copy="skill-md">복사</button>
+                <button type="button" class="btn primary" id="btn-skill-download">다운로드</button>
+              </div>
+            </div>
+            <pre id="skill-md" class="code-block tall"></pre>
+          </div>
+          <div class="card">
+            <h3>설치</h3>
+            <ol>
+              <li><code>~/.claude/skills/&lt;name&gt;/SKILL.md</code> (Claude Code)</li>
+              <li><code>~/.config/opencode/skills/&lt;name&gt;/SKILL.md</code> (opencode)</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="panel-vaultguard" class="panel" role="tabpanel" hidden>
+      <div class="card soon-card">
+        <p class="eyebrow">Coming soon</p>
+        <h3>LAON VaultGuard</h3>
+        <p>멀티 LLM 교차검증 시크릿 스캐너. 로컬 CLI와 백테스트는 이미 레포에 있습니다. Lab 웹 데모는 다음 탭에서 연결됩니다.</p>
+        <div class="row">
+          <a class="btn primary" href="https://github.com/gameworkerkim/vibe-investing/tree/main/LAON_VaultGuard">GitHub</a>
+          <button type="button" class="btn ghost" data-tool-back="tokenforge">TokenForge로 돌아가기</button>
+        </div>
+      </div>
+    </section>
+
+    <section id="panel-myip" class="panel" role="tabpanel" hidden>
+      <div class="card soon-card">
+        <p class="eyebrow">Coming soon</p>
+        <h3>MY-IP</h3>
+        <p>IP·DNS·WebRTC 네트워크 진단. CTI Lab 로드맵의 다음 도구입니다.</p>
+        <div class="row">
+          <button type="button" class="btn ghost" data-tool-back="tokenforge">TokenForge로 돌아가기</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <dialog id="settings-dialog">
+    <form method="dialog">
+      <h3>설정</h3>
+      <p class="hint">DeepSeek 키는 Play와 같은 Worker 시크릿을 사용합니다. 브라우저에 키를 넣지 않습니다.</p>
+      <label class="check">
+        <input id="set-precise" type="checkbox" />
+        ChatGPT 토큰을 tiktoken CDN으로 정밀 계수
+      </label>
+      <h4>비용 가정 ($/1M 토큰, 입력 / 출력)</h4>
+      <div class="grid2">
+        <label>Claude <input id="set-price-claude-in" type="number" min="0" step="0.1" /> / <input id="set-price-claude-out" type="number" min="0" step="0.1" /></label>
+        <label>ChatGPT <input id="set-price-gpt-in" type="number" min="0" step="0.1" /> / <input id="set-price-gpt-out" type="number" min="0" step="0.1" /></label>
+      </div>
+      <div class="row end">
+        <button value="cancel" class="btn ghost">취소</button>
+        <button value="default" class="btn primary" id="btn-settings-save">저장</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <footer class="foot">
+    <p>
+      <a href="https://vibequant.cc/">Home</a> ·
+      <a href="https://play.vibequant.cc/play/">Play</a> ·
+      <a href="https://github.com/gameworkerkim/vibe-investing/tree/main/TokenForge">TokenForge</a>
+    </p>
+    <p>토큰 수치는 추정(±15%)입니다. 연구·교육 목적 — 투자 조언이 아닙니다. DeepSeek 호출은 IP당 약 12초 간격입니다.</p>
+  </footer>
+
+  <script src="./js/runtime-config.js?v=1"></script>
+  <script type="module" src="./js/app.js?v=1"></script>
 </body>
 </html>

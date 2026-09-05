@@ -37,7 +37,7 @@ export function corsHeaders(origin: string | null): HeadersInit {
   const value = !origin ? "*" : allowed ? origin : "https://vibequant-web.pages.dev";
   return {
     "Access-Control-Allow-Origin": value,
-    "Access-Control-Allow-Methods": "GET, HEAD, OPTIONS",
+    "Access-Control-Allow-Methods": "GET, HEAD, POST, DELETE, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
     Vary: "Origin",
   };

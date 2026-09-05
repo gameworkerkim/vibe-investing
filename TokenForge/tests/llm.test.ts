@@ -19,6 +19,7 @@ describe("llm mock mode", () => {
     expect(typeof parsed.optimized_prompt).toBe("string");
     expect(typeof parsed.summary_ko).toBe("string");
     expect(Array.isArray(parsed.changes)).toBe(true);
+    expect(String(parsed.optimized_prompt)).not.toMatch(/[가-힣]/);
   });
 
   it("mock plan returns wholePromptEn and steps", async () => {

@@ -3,6 +3,8 @@
 > 한국어·외국어 코딩 프롬프트를 **DeepSeek(무료 tier)**으로 영어로 최적화하고,
 > **Claude / ChatGPT** 토큰 절약·비용을 예측하는 **웹 브라우저 변환기** + **스킬 빌더**.
 > Cloudflare Pages **free tier** (정적 페이지 + Pages Functions + KV 기억).
+>
+> **대시보드**: [vibequant.cc/lab](https://vibequant.cc/lab/) (VibeQuant Lab · TokenForge 탭). DeepSeek 키는 Play Worker 시크릿을 재사용합니다.
 
 **참고**: 이 폴더는 메인 `vibe-investing` 레포의 서브 프로젝트로, 독립 실행됩니다. 개념 검증·시장 리서치는 [`docs/RESEARCH.md`](docs/RESEARCH.md), Phase 2(WIKI+RAG)는 [`docs/PHASE2_WIKI.md`](docs/PHASE2_WIKI.md) 참고.
 
