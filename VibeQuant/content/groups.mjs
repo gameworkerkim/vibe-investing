@@ -13,7 +13,7 @@ export const COLUMN_GROUP_RULES = [
   { id: "elon-spacex", title_ko: "Elon · SpaceX", title_en: "Elon · SpaceX", match: [/elon musk/i, /spacex/i] },
   { id: "crypto-web3", title_ko: "크립토 · Web3", title_en: "Crypto · Web3", match: [/bitcoin/i, /btc/i, /ethereum/i, /bnb/i, /crypto/i, /crytohft/i, /defi/i, /web3/i, /strategy\//i, /robinhood/i, /dex memecoin/i, /aws_blockchain/i, /prediction-market/i, /stablecoin/i, /medici/i, /travel-rule/i] },
   { id: "korea-hacking", title_ko: "한국 · 해킹", title_en: "Korea · Hacking", match: [/national-diplomatic/i, /외교원/i, /hacking-incident/i, /\/hacking\//i, /backdoor/i, /endless.?doors/i] },
-  { id: "korea", title_ko: "한국 · 코리아 디스카운트", title_en: "Korea", match: [/korea/i, /주식시황/i, /msci/i, /starbucks/i, /seoul/i, /kpop/i, /toss /i, /기레기/i, /골드만/i, /cyworld/i] },
+  { id: "korea", title_ko: "한국 · 코리아 디스카운트", title_en: "Korea", match: [/korea/i, /주식시황/i, /msci/i, /starbucks/i, /seoul/i, /kpop/i, /\/idol\//i, /ive-starship/i, /toss /i, /기레기/i, /골드만/i, /cyworld/i] },
   { id: "macro-geo", title_ko: "매크로 · 지정학", title_en: "Macro · Geopolitics", match: [/\/usa\//i, /age-of-usd/i, /pax americana/i, /trump/i, /defense/i, /rome/i, /world_bank/i, /us treasury/i, /japan/i, /china /i, /drone/i, /tobacco/i, /\/windows10\//i, /eod-win10/i, /\/interest\//i, /history-of-interest/i] },
   { id: "quant-strategy", title_ko: "퀀트 · 투자 전략", title_en: "Quant · Strategy", match: [/momentum/i, /special situations/i, /insider/i, /model vs reality/i, /medbridge/i, /semiconductor ai etf/i, /stock_option/i, /money_game/i] },
   { id: "semi-storage", title_ko: "반도체 · 스토리지", title_en: "Semi · Storage", match: [/storage war/i, /marvell/i, /intel/i, /memory/i, /semi/i, /\/ssd\//i, /power-off-retention/i, /sandisk/i, /kioxia/i] },

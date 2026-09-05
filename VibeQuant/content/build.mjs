@@ -663,6 +663,7 @@ const SLUG_OVERRIDES = {
   "NorthKorea/Lazarus_AnySign4PC.md": "lazarus-anysign4pc",
   "Line/SoftBank-Naver-Line.md": "softbank-naver-line",
   "Kakao/Public-Kakao-Issue.md": "public-kakao-issue",
+  "IDOL/IVE-Starship-Issue.md": "ive-starship-issue",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
