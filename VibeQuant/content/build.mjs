@@ -662,6 +662,7 @@ const SLUG_OVERRIDES = {
   "K-Culture/Moon-Jar.md": "moon-jar",
   "NorthKorea/Lazarus_AnySign4PC.md": "lazarus-anysign4pc",
   "Line/SoftBank-Naver-Line.md": "softbank-naver-line",
+  "Kakao/Public-Kakao-Issue.md": "public-kakao-issue",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

@@ -1,16 +1,63 @@
+---
+title: "차단은 보안이 아니다 — '공공용 카카오톡'을 만들어라"
+title_en: "Blocking Is Not Security — Build a Public KakaoTalk"
+subtitle: "서울시의 PC 카카오톡·네이버 메일·웹하드 차단, 원칙은 맞지만 방법이 틀렸다"
+description: "서울시 카톡 차단·5% 예외 비판. EU BEAM·미국 FRA vs 공공용 카카오톡. AnySign4PC 교훈. 투자 권유 아님."
+abstract: |
+  2026-10-01 서울시 업무PC 상용 메신저·개인메일·웹하드 원칙 차단(예외 5%). 차단은 우회로로 위험을 사각지대로 밀어냄.
+  경기도는 사전승인·서약서로 56% 사용. EU 자체 메신저(BEAM/Wire), 미국 FRA·NARA 기록의무.
+  AnySign4PC 제로데이 교훈: 강제+무관리는 실패. 제안: 공공 프로필·단톡 보안·AI DLP·DRM·유료화. 투자·법률 자문 아님.
+summary_for_ai: |
+  Korean public-sector security policy column (not investment or legal advice), 2026-09-05, group korea, Kakao series.
+  Event: Seoul Metropolitan Government blocks KakaoTalk/Naver mail/web hard on work PCs from 2026-10-01; exceptions ≤5% with director-level approval; cites 74% commercial messenger use vs other metros ≤5%.
+  Thesis: Blocking without alternatives moves risk from managed PCs (AV/DLP/logs) to unmanaged phones/personal accounts; exceptions become backdoors.
+  Contrast: Gyeonggi uses pre-approval + pledges (~3,550 staff / 56%). EU builds government messengers (BEAM, Wire); US regulates via FRA 44 USC §2911 and NARA memos (recordkeeping, not ban).
+  Lesson from AnySign4PC / Lazarus watering-hole: mandated software without patch ops fails. Proposal: public KakaoTalk/Naver profiles, room security, AI DLP, DRM file share, paid SLAs.
+  Not investment advice.
+date: 2026-09-05
+updated: 2026-09-05
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 카카오톡
+  - 서울시
+  - 공공보안
+  - 메신저
+  - 네이버
+  - DLP
+  - AnySign4PC
+  - 정보유출
+  - 전자정부
+  - 카카오
+keywords:
+  - "공공용 카카오톡"
+  - "서울시 카카오톡 차단"
+  - "상용 메신저"
+  - "BEAM"
+  - "연방기록관리법"
+  - "AnySign4PC"
+  - "공공 메신저"
+  - "정보 유출"
+  - "웹하드 차단"
+group: korea
+featured: true
+featured_rank: 13
+og_image: "https://vibequant.cc/og/public-kakao-issue.jpg"
+image: "https://vibequant.cc/og/public-kakao-issue.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
 # 차단은 보안이 아니다 — '공공용 카카오톡'을 만들어라
 
-**서울시의 PC 카카오톡·네이버 메일·웹하드 차단, 원칙은 맞지만 방법이 틀렸다**
-
----
+![스마트폰 카카오톡 스플래시 화면 — 공공용 카카오톡 칼럼 썸네일](https://vibequant.cc/og/public-kakao-issue.jpg)
 
 10월 1일부터 서울시 업무용 PC에서 카카오톡 등 상용 메신저와 네이버 메일 같은 개인 이메일, 네이버 박스·구글드라이브 같은 웹하드가 원칙적으로 막힌다. 국장급 이상 결재를 받으면 예외를 인정하지만 부서 현원의 5% 이내다. 서울시가 밝힌 이유는 단순하다. 상용 메신저를 통한 정보 유출이 계속되는데, 본청의 상용 메신저 이용률이 74%로 다른 광역단체(5% 이하)보다 지나치게 높다는 것이다.
 
 문제 인식 자체는 옳다. 카카오톡과 개인 메일은 실제로 해킹과 스미싱의 가장 빈번한 진입로다. 첨부파일 하나, 링크 하나가 내부망까지 타고 들어오는 게이트웨이가 된 지 오래다. 보안 담당자라면 누구나 이 채널을 통제하고 싶어 한다.
 
 그러나 처방이 틀렸다. **차단은 보안이 아니라 보안의 포기다.** 우회로가 열려 있는 차단은 위험을 없애는 게 아니라 위험을 통제와 관리 밖으로 밀어내는 것이다.
-
----
 
 ## 1. PC만 막으면 위험은 사라지는 게 아니라 숨는다
 
@@ -26,8 +73,6 @@
 
 이 또한 물리적인 보안 솔루션이 없기에 근본적인 한계는 있다.
 
----
-
 ## 2. 카카오톡은 이미 공공 인프라다
 
 현실을 직시하자. 카카오톡은 국민 메신저를 넘어 **대한민국 공공 부문의 사실상 공식 소통 채널**이다. 민원인은 카카오톡으로 공무원에게 사진을 보내고, 자치구와 시청은 카카오톡으로 협의하며, 시의원 보좌진과 해외 기관도 카카오톡으로 연결된다. 서울시 행정포털의 내부 메신저는 업무용 PC에서만 돌아가고 모바일 버전도 없으며 외부 관계자와는 아예 연결되지 않는다. 대체재가 없는 상태에서 차단만 하는 것이다.
@@ -35,8 +80,6 @@
 카카오톡을 부정하고 차단하는 것은 국민과의 소통 창구를 끊겠다는 것과 같다. 인프라라면 인프라답게 다뤄야 한다. 도로가 위험하다고 도로를 폐쇄하지 않는다. 가드레일을 세우고 신호등을 달고 속도를 제한한다.
 
 카카오는 최근 경찰청, 검찰청, 국민건강보험공단, 병무청 등 공공기관 채널에 전용 채팅방 배경을 적용해 기관 사칭 피해를 막는 작업을 시작했다. 방향은 맞다. 그러나 이건 표면이다. 진짜 필요한 것은 그 아래 구조다.
-
----
 
 ## 3. 해외는 '차단' 대신 '통제 가능한 플랫폼'을 만든다
 
@@ -52,9 +95,7 @@
 
 EU는 플랫폼을 바꾸고, 미국은 규칙을 바꾼다. 방식은 다르지만 공통점은 명확하다. 둘 다 메신저를 없애지 않고, 공무원의 소통을 정부가 통제하고 기록할 수 있는 영역 안으로 끌어들인다. 서울시의 '5% 예외 차단'은 이 두 모델 어디에도 속하지 않는다.
 
-5%에서 뚫리던 1몀에서 뚫리던 통제되지 않는 환경이기에 해킹의 입구가 될 수 있다. 그것도 고위직이다. 
-
----
+5%에서 뚫리던 1몀에서 뚫리던 통제되지 않는 환경이기에 해킹의 입구가 될 수 있다. 그것도 고위직이다.
 
 ## 4. AnySign4PC의 교훈 - 강제된 규정은 관리 없이는 반드시 실패한다
 
@@ -63,8 +104,6 @@ EU는 플랫폼을 바꾸고, 미국은 규칙을 바꾼다. 방식은 다르지
 교훈은 분명하다. 국가가 "이걸 깔아라"라고 강제할 수는 있어도, 그 뒤에 지속적인 취약점 관리와 패치 체계가 없으면 강제 설치된 프로그램은 오히려 전 국민의 PC에 심어진 공격 입장권이 된다. **보안은 규정으로 완성되지 않는다. 운영으로 완성된다.**
 
 서울시의 차단 조치는 같은 함정에 빠질 위험이 크다. 규정은 강력하지만 대체 수단은 없고, 우회는 쉽고, 우회된 트래픽에 대한 관리 체계는 아예 없다.
-
----
 
 ## 5. 제안 - 보안이 강화된 '공공용 카카오톡'과 '공공용 네이버'를 만들어라
 
@@ -79,8 +118,6 @@ EU는 플랫폼을 바꾸고, 미국은 규칙을 바꾼다. 방식은 다르지
 **넷째, DRM이 적용된 웹하드와 파일 공유.** 기관 프로필에서 공유되는 파일에는 별도 DRM을 걸어 열람 권한, 유효 기간, 다운로드 가능 여부를 통제한다. 네이버 박스·네이버 메일 역시 동일한 '공공 프로필'을 도입해 첨부파일 검역, AI 기반 스미싱 탐지, 외부 전송 통제를 강화해야 한다.
 
 **다섯째, 유료화.** 이 모든 것은 공짜로 유지될 수 없다. AnySign4PC가 보여줬듯 관리되지 않는 보안 프로그램은 재앙이 된다. 공공기관이 정당한 비용을 지불하는 유료 서비스로 만들어야 지속적인 보안 패치, 취약점 대응, 감사 체계가 유지된다. 세금으로 별도 메신저를 개발해 방치하는 것보다, 이미 검증된 인프라에 보안 계층을 얹고 그 관리 비용을 지불하는 편이 훨씬 싸고 안전하다.
-
----
 
 ## 관점을 바꿔야 보안이 풀린다
 
