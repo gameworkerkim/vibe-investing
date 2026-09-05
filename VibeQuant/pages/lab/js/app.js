@@ -133,6 +133,25 @@ async function refreshHealth() {
   updateModePills();
 }
 
+const HERO = {
+  dart: {
+    title: "DART Monitor",
+    lede: "코스닥 DART 공시 실시간 분석 · 관계망 · 퀀트 대시보드. 앱은 Vercel에서 돌고, 이 페이지는 Cloudflare Pages VibeQuant/pages/lab/ 에서 올라갑니다.",
+  },
+  tokenforge: {
+    title: "TokenForge",
+    lede: "한국어·외국어 코딩 프롬프트를 DeepSeek로 caveman-ultra 영어로 바꿉니다. Claude / ChatGPT 토큰과 비용을 예측하세요.",
+  },
+  vaultguard: {
+    title: "VaultGuard",
+    lede: "멀티 LLM 교차검증 시크릿 스캐너. Lab 웹 데모는 곧 연결합니다.",
+  },
+  myip: {
+    title: "MY-IP",
+    lede: "IP·DNS·WebRTC 네트워크 진단. CTI Lab 로드맵의 다음 도구입니다.",
+  },
+};
+
 function showTool(name) {
   $$(".tool-tab").forEach((b) => {
     const on = b.dataset.tool === name;
@@ -144,9 +163,18 @@ function showTool(name) {
     p.classList.toggle("active", on);
     p.hidden = !on;
   });
+  const hero = HERO[name] || HERO.dart;
+  const titleEl = $("#hero-title");
+  const ledeEl = $("#hero-lede");
+  if (titleEl) titleEl.textContent = hero.title;
+  if (ledeEl) ledeEl.textContent = hero.lede;
+  const meta = $("#tf-hero-meta");
+  if (meta) meta.hidden = name !== "tokenforge";
   if (name === "tokenforge") {
     const hash = location.hash.replace("#", "") || "tokenforge";
-    if (!hash.startsWith("tokenforge")) location.hash = "tokenforge";
+    if (!hash.startsWith("tokenforge") && hash !== "forge" && hash !== "plan") {
+      location.hash = "tokenforge";
+    }
   } else {
     location.hash = name;
   }
@@ -756,9 +784,12 @@ function bind() {
 }
 
 function applyHash() {
-  const h = (location.hash || "#tokenforge").replace("#", "");
-  if (h === "vaultguard" || h === "myip") showTool(h);
-  else showTool("tokenforge");
+  const h = (location.hash || "#dart").replace("#", "");
+  if (h === "vaultguard" || h === "myip" || h === "tokenforge" || h === "dart") showTool(h);
+  else if (h === "forge" || h === "plan" || h === "overview" || h === "memory" || h === "skill") {
+    showTool("tokenforge");
+    showView(h === "forge" || h === "plan" || h === "memory" || h === "skill" ? h : "overview");
+  } else showTool("dart");
 }
 
 async function init() {

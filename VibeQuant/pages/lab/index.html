@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Lab — TokenForge · VibeQuant</title>
-  <meta name="description" content="TokenForge: 한국어 코딩 프롬프트를 DeepSeek로 영어 최적화하고 Claude·ChatGPT 토큰 절약을 예측하는 VibeQuant Lab." />
+  <title>Lab — DART Monitor · VibeQuant</title>
+  <meta name="description" content="DART Monitor (CASSANDRA AI): 코스닥 DART 공시 실시간 분석. VibeQuant Lab." />
   <link rel="canonical" href="https://vibequant.cc/lab/" />
-  <meta property="og:title" content="TokenForge — VibeQuant Lab" />
-  <meta property="og:description" content="한국어·외국어 프롬프트 → 영어 최적화 → Claude/ChatGPT 토큰 절약 예측" />
+  <meta property="og:title" content="DART Monitor — VibeQuant Lab" />
+  <meta property="og:description" content="코스닥 DART 공시 실시간 분석 + 관계망. 소스: github.com/gameworkerkim/cassandra-ai" />
   <meta property="og:url" content="https://vibequant.cc/lab/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="VibeQuant Lab" />
@@ -16,7 +16,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="./css/lab.css?v=2" />
+  <link rel="stylesheet" href="./css/lab.css?v=3" />
 </head>
 <body>
   <div class="grain" aria-hidden="true"></div>
@@ -30,19 +30,18 @@
     <a class="is-active" href="https://vibequant.cc/lab/" aria-current="page">Lab</a>
     <a href="https://vibequant.cc/research/">Research</a>
     <span class="sep"></span>
-    <a href="https://github.com/gameworkerkim/vibe-investing/tree/main/TokenForge" target="_blank" rel="noopener noreferrer">GitHub</a>
+    <a href="https://github.com/gameworkerkim/cassandra-ai" target="_blank" rel="noopener noreferrer">GitHub</a>
   </nav>
 
   <div class="wrap">
     <header class="hero">
       <p class="eyebrow">VibeQuant Lab</p>
-      <h1>TokenForge</h1>
-      <p class="lede">
-        한국어·외국어 코딩 프롬프트를 DeepSeek로 압축된 영어 프롬프트로 바꿉니다.
-        Claude / ChatGPT에 넣기 전에 토큰과 비용을 예측하세요.
-        영어 결과는 <b>caveman ultra</b> — "Why use many token when few token do trick?"
+      <h1 id="hero-title">DART Monitor</h1>
+      <p class="lede" id="hero-lede">
+        코스닥 DART 공시 실시간 분석 · 관계망 · 퀀트 대시보드.
+        앱은 Vercel에서 돌고, 이 페이지는 Cloudflare Pages <code>VibeQuant/pages/lab/</code> 에서 올라갑니다.
       </p>
-      <div class="hero-meta">
+      <div class="hero-meta" id="tf-hero-meta" hidden>
         <span id="mode-pill" class="status-pill">상태 확인 중…</span>
         <span id="storage-pill" class="status-pill">기억: localStorage</span>
         <span id="model-pill" class="status-pill">deepseek-v4-flash</span>
@@ -51,13 +50,72 @@
     </header>
 
     <div class="tool-tabs" role="tablist" aria-label="Lab tools">
-      <button type="button" class="tool-tab active" data-tool="tokenforge" role="tab" aria-selected="true">TokenForge</button>
+      <button type="button" class="tool-tab active" data-tool="dart" role="tab" aria-selected="true">DART Monitor</button>
+      <button type="button" class="tool-tab" data-tool="tokenforge" role="tab" aria-selected="false">TokenForge</button>
       <button type="button" class="tool-tab is-soon" data-tool="vaultguard" role="tab" aria-selected="false">VaultGuard <span class="soon">soon</span></button>
       <button type="button" class="tool-tab is-soon" data-tool="myip" role="tab" aria-selected="false">MY-IP <span class="soon">soon</span></button>
     </div>
 
+    <!-- ========== DART Monitor ========== -->
+    <section id="panel-dart" class="panel active" role="tabpanel">
+      <h2>코스닥 DART 리스크 모니터</h2>
+      <p class="lede" style="margin-top:0">
+        CASSANDRA AI. 패키지 이름 <code>dart-monitor</code>.
+        로그인 후 검색·관계망·공시 챗봇을 씁니다.
+      </p>
+      <div class="row">
+        <a class="btn primary" href="https://dart-monitor-pi.vercel.app/" target="_blank" rel="noopener noreferrer">앱 열기</a>
+        <a class="btn ghost" href="https://github.com/gameworkerkim/cassandra-ai" target="_blank" rel="noopener noreferrer">Vercel 소스 (cassandra-ai)</a>
+      </div>
+
+      <div class="card">
+        <h3>GitHub · 배포 소스 경로</h3>
+        <p>Lab URL과 DART 앱은 <b>다른 레포/폴더</b>에서 올라갑니다. Cloudflare에 TokenForge나 <code>CASSANDRA AI</code> 폴더를 루트로 넣으면 <code>/lab/</code> 가 안 바뀝니다.</p>
+        <div class="table-wrap">
+          <table class="path-table">
+            <thead>
+              <tr><th>무엇</th><th>GitHub 경로</th><th>배포</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>이 Lab 페이지<br><code>vibequant.cc/lab/</code></td>
+                <td><a href="https://github.com/gameworkerkim/vibe-investing/tree/main/VibeQuant/pages/lab">vibe-investing/<b>VibeQuant/pages/lab</b></a><br>편집: <a href="https://github.com/gameworkerkim/vibe-investing/tree/main/VibeQuant/pages-lab">VibeQuant/pages-lab</a></td>
+                <td>Pages 프로젝트 <code>vibequant-web</code><br><code>cd VibeQuant/pages && wrangler pages deploy .</code></td>
+              </tr>
+              <tr>
+                <td>DART Monitor 앱<br>(Next.js)</td>
+                <td><a href="https://github.com/gameworkerkim/cassandra-ai"><b>gameworkerkim/cassandra-ai</b></a><br>Root Directory: <code>./</code> · package: <code>dart-monitor</code></td>
+                <td>Vercel · <a href="https://dart-monitor-pi.vercel.app/">dart-monitor-pi.vercel.app</a></td>
+              </tr>
+              <tr>
+                <td>모노레포 사본<br>(Vercel 루트 아님)</td>
+                <td><a href="https://github.com/gameworkerkim/vibe-investing/tree/main/CASSANDRA%20AI">vibe-investing/<b>CASSANDRA AI</b></a><br>폴더명에 공백</td>
+                <td>문서·동기화용. Vercel Root로 쓰지 말 것</td>
+              </tr>
+              <tr>
+                <td>TokenForge 엔진</td>
+                <td><a href="https://github.com/gameworkerkim/vibe-investing/tree/main/TokenForge">vibe-investing/<b>TokenForge</b></a></td>
+                <td>Lab 두 번째 탭 + Worker <code>/api/v1/tokenforge/*</code></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="flow">
+        <div class="card flow-card"><span class="n">01</span><b>검색 · 관계망</b><p>회사·인물·법인 통합 검색. Cytoscape 그래프. 3,920개 DART 기업.</p></div>
+        <div class="card flow-card"><span class="n">02</span><b>공시 챗봇</b><p>DB → DART API → 인물 → 실시간 폴백. CB·소송·대주주 카테고리.</p></div>
+        <div class="card flow-card"><span class="n">03</span><b>퀀트</b><p>ARDS-X · AMQS-M7 · 헤지 비중. Yahoo 실데이터.</p></div>
+        <div class="card flow-card"><span class="n">04</span><b>SpaceX · Trump</b><p>우주항공 시세, Truth Social + DeepSeek 종목 픽.</p></div>
+        <div class="card flow-card"><span class="n">05</span><b>WIKI</b><p>주식셀럽 10명 + DART 인명 검색.</p></div>
+        <div class="card flow-card"><span class="n">06</span><b>핀보드</b><p>관심 인물/회사 고정 → 이상 징후 리포트.</p></div>
+      </div>
+    </section>
+
     <!-- ========== TokenForge ========== -->
-    <section id="panel-tokenforge" class="panel active" role="tabpanel">
+    <section id="panel-tokenforge" class="panel" role="tabpanel" hidden>
+      <h2>TokenForge</h2>
+      <p>한국어·외국어 코딩 프롬프트 → caveman-ultra 영어. Claude / ChatGPT 토큰 절약 추정.</p>
       <nav class="subnav" id="tf-subnav" aria-label="TokenForge steps">
         <button type="button" data-view="overview" class="active">개요</button>
         <button type="button" data-view="plan">계획</button>
@@ -317,7 +375,7 @@
         <p>멀티 LLM 교차검증 시크릿 스캐너. 로컬 CLI와 백테스트는 이미 레포에 있습니다. Lab 웹 데모는 다음 탭에서 연결됩니다.</p>
         <div class="row">
           <a class="btn primary" href="https://github.com/gameworkerkim/vibe-investing/tree/main/LAON_VaultGuard">GitHub</a>
-          <button type="button" class="btn ghost" data-tool-back="tokenforge">TokenForge로 돌아가기</button>
+          <button type="button" class="btn ghost" data-tool-back="dart">DART Monitor로 돌아가기</button>
         </div>
       </div>
     </section>
@@ -328,7 +386,7 @@
         <h3>MY-IP</h3>
         <p>IP·DNS·WebRTC 네트워크 진단. CTI Lab 로드맵의 다음 도구입니다.</p>
         <div class="row">
-          <button type="button" class="btn ghost" data-tool-back="tokenforge">TokenForge로 돌아가기</button>
+          <button type="button" class="btn ghost" data-tool-back="dart">DART Monitor로 돌아가기</button>
         </div>
       </div>
     </section>

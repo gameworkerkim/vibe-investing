@@ -83,7 +83,8 @@ Four working papers posted to SSRN, 113 pages total — three on cryptocurrency 
 
 | Tool | One-liner |
 | --- | --- |
-| [TokenForge Lab](https://vibequant.cc/lab/) | Korean/other coding prompts → caveman-ultra English via DeepSeek; Claude/ChatGPT token-savings estimate. Same Worker key as Play, no finance gate. [`TokenForge/readme.md`](https://github.com/gameworkerkim/vibe-investing/blob/main/TokenForge/readme.md) |
+| [DART Monitor Lab](https://vibequant.cc/lab/) | KOSDAQ DART disclosure monitor. Live app: [dart-monitor-pi.vercel.app](https://dart-monitor-pi.vercel.app/) from [`cassandra-ai`](https://github.com/gameworkerkim/cassandra-ai) (Vercel root `./`). Lab HTML: [`VibeQuant/pages/lab/`](https://github.com/gameworkerkim/vibe-investing/tree/main/VibeQuant/pages/lab) |
+| [TokenForge Lab](https://vibequant.cc/lab/#tokenforge) | Korean/other coding prompts → caveman-ultra English via DeepSeek; Claude/ChatGPT token-savings estimate. Same Worker key as Play, no finance gate. [`TokenForge/readme.md`](https://github.com/gameworkerkim/vibe-investing/blob/main/TokenForge/readme.md) |
 | [Harness Quant v2](https://github.com/gameworkerkim/vibe-investing/blob/main/Harness%20quant%20v2%20readme%20.MD) | Six-scenario-matrix LLM trading platform (backtest + MCP + multi-agent debate) (in development) |
 | [Earnings Momentum Agent](https://github.com/gameworkerkim/vibe-investing/blob/main/Harness%20quantv2/Earnings%20momentum%20agent%20readme%20.MD) | Bottom-rebound + earnings-surprise Top 30 recommendation pipeline (24-month backtest, 30-day hit rate 83.3%) |
 | [Nasdaq-BTC Coupling Bot](https://github.com/gameworkerkim/vibe-investing/blob/main/01.Trading%20Strategy/Investment%20Strategy%20Based%20on%20Bitcoin%20and%20Nasdaq%20Coupling/) | BTC-QQQ 30-day rolling correlation tracking + 6-regime classification + signal generation (547-line Python) |

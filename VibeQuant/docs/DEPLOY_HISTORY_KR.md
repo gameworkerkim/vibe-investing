@@ -14,7 +14,7 @@
 | 면 | URL |
 |---|---|
 | Pages (대시보드) | https://vibequant-web.pages.dev/ |
-| Lab (TokenForge) | https://vibequant.cc/lab/ |
+| Lab (DART Monitor) | https://vibequant.cc/lab/ |
 | Worker (API) | https://vibequant-api.gameworker-4bb.workers.dev |
 | Health | https://vibequant-api.gameworker-4bb.workers.dev/api/health |
 | TokenForge health | https://api.vibequant.cc/api/v1/tokenforge/health |

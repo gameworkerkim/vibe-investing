@@ -2,7 +2,7 @@
  * Host-based routing for vibequant.cc (free tier, single Pages project).
  * docs → /columns · tech → /tech · cti → /cti · play → /play · essays → /essays
  * research → static /research/* + /api/research/* (no login)
- * lab → /lab (TokenForge dashboard, static)
+ * lab → /lab (DART Monitor + TokenForge, static pages/lab)
  *
  * SEO: Google requires same-host URLs in each sitemap. Per-host files live under
  * /sitemaps/*; this middleware serves them as /sitemap.xml and /robots.txt.
