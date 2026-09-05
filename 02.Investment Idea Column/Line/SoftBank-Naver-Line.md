@@ -1,3 +1,4 @@
+<!--
 ---
 title: "국화와 칼 - 라인 메신저 사태 2년, 무엇이 달라졌나?"
 title_en: "The Chrysanthemum and the Sword — Two Years After the LINE Messenger Affair"
@@ -55,6 +56,7 @@ schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
+-->
 
 # 국화와 칼 - 라인 메신저 사태 2년, 무엇이 달라졌나?
 
