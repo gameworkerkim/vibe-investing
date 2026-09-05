@@ -77,11 +77,12 @@ Related: <a href="Cloudflare%20free%20tier%20guide.md">Cloudflare Free Tier Sign
 For sign-up steps, limits, and quota numbers, see the existing <a href="Cloudflare%20free%20tier%20guide.md">sign-up &amp; limits guide</a>.</p>
 <hr>
 <h2>1. What Is Cloudflare?</h2>
-<p>Cloudflare originally built its reputation on <strong>DNS, CDN, and DDoS protection</strong>as an edge network company. In the industry, it&#39;s often placed in front of Web3 services, exchanges, and other services with volatile traffic. Since the 2020s, it has expanded into a<strong>developer platform</strong>that bundles<strong>Workers (serverless), Pages (static/SSR), R2 (object storage), D1 (SQLite), KV, and the Cache API</strong>into a single account, handling &quot;security in front of the domain + global distribution + a lightweight backend&quot; all<strong>on the same edge</strong>. More recently, AI-related products such as <strong>Workers AI and AI Gateway</strong> have been added too.</p>
+<p>Cloudflare originally built its reputation on <strong>DNS, CDN, and DDoS protection</strong> as an edge network company. In the industry, it&#39;s often placed in front of Web3 services, exchanges, and other services with volatile traffic. Since the 2020s, it has expanded into a <strong>developer platform</strong> that bundles <strong>Workers (serverless), Pages (static/SSR), R2 (object storage), D1 (SQLite), KV, and the Cache API</strong> into a single account, handling &quot;security in front of the domain + global distribution + a lightweight backend&quot; all <strong>on the same edge</strong>. More recently, AI-related products such as <strong>Workers AI and AI Gateway</strong> have been added too.</p>
 <p>In one line:</p>
 <blockquote>
-<p><strong>No matter where the traffic comes from, handle HTML, API calls, and caching at the nearest PoP, and eliminate as much origin server cost as possible.</strong>Even on the free plan, you get custom domains, HTTPS, CDN, basic WAF/bot mitigation, and Pages/Workers — with some limits. It fits well with something like VibeQuant:<strong>a content archive + a thin API + browser-based quant experiments</strong>.</p>
+<p><strong>No matter where the traffic comes from, handle HTML, API calls, and caching at the nearest PoP, and eliminate as much origin server cost as possible.</strong></p>
 </blockquote>
+<p>Even on the free plan, you get custom domains, HTTPS, CDN, basic WAF/bot mitigation, and Pages/Workers — with some limits. It fits well with something like VibeQuant: <strong>a content archive + a thin API + browser-based quant experiments</strong>.</p>
 <p>I bought a custom domain, so the only cost I actually incur is the domain itself. A <code>*.pages.dev</code> subdomain would work too, but having a real domain helps with SEO and branding.</p>
 <hr>
 <h2>2. Advantages</h2>
@@ -114,7 +115,7 @@ For sign-up steps, limits, and quota numbers, see the existing <a href="Cloudfla
 <p>If your site is mostly static HTML, this becomes a design where <strong>the origin server is never exposed</strong>. Attack traffic hits <strong>Cloudflare&#39;s edge</strong> first, rather than your application server&#39;s CPU.
 That said, on the free tier you still have <strong>daily edge limits and fair-use policy</strong> to deal with. Reduced origin bombardment is a separate matter from quota exhaustion and terms-of-service issues (see §3, §8).</p>
 <h3>2.2 CDN (Bandwidth That&#39;s Nearly Free)</h3>
-<p>Pages static assets can be served with close to <strong>unlimited bandwidth</strong>(subject to fair use / terms of service). R2&#39;s key differentiator is<strong>free egress</strong>. This means &quot;more Columns/TechDoc HTML pages&quot; doesn&#39;t translate into &quot;a bandwidth cost bomb&quot; — a notable contrast to Vercel Hobby&#39;s monthly bandwidth cap and overage billing structure.</p>
+<p>Pages static assets can be served with close to <strong>unlimited bandwidth</strong> (subject to fair use / terms of service). R2&#39;s key differentiator is <strong>free egress</strong>. This means &quot;more Columns/TechDoc HTML pages&quot; doesn&#39;t translate into &quot;a bandwidth cost bomb&quot; — a notable contrast to Vercel Hobby&#39;s monthly bandwidth cap and overage billing structure.</p>
 <h3>2.3 Serverless Integration</h3>
 <p>A single account can combine roughly this:</p>
 <pre><code>Pages (HTML/SEO)  +  Pages Functions / Workers (API)
@@ -143,11 +144,11 @@ That said, on the free tier you still have <strong>daily edge limits and fair-us
 </thead>
 <tbody><tr>
 <td><strong>Daily request/CPU limits</strong></td>
-<td>Workers free tier is roughly<strong>100k requests/day</strong>, with about <strong>~10ms CPU per request</strong>. If you exhaust it during a peak, you can be blocked until UTC midnight (09:00 KST)</td>
+<td>Workers free tier is roughly <strong>100k requests/day</strong>, with about <strong>~10ms CPU per request</strong>. If you exhaust it during a peak, you can be blocked until UTC midnight (09:00 KST)</td>
 </tr>
 <tr>
 <td><strong>KV write limits</strong></td>
-<td>Free KV writes are capped at roughly 1,000/day — tight. Not suitable for sessions or real-time counters →<strong>prefer the Cache API</strong> as the practical pattern</td>
+<td>Free KV writes are capped at roughly 1,000/day — tight. Not suitable for sessions or real-time counters → <strong>prefer the Cache API</strong> as the practical pattern</td>
 </tr>
 <tr>
 <td><strong>Weak native Python</strong></td>
@@ -174,6 +175,7 @@ That said, on the free tier you still have <strong>daily edge limits and fair-us
 <td>Even &quot;unlimited&quot; bandwidth can be restricted for abuse, attacks, or large-scale commercial distribution</td>
 </tr>
 </tbody></table>
+<p><strong>Summary:</strong>Strong for security, CDN, and static-plus-thin-API workloads, but<strong>heavy backends, strongly-consistent databases, and long-running Python</strong> are better placed elsewhere.</p>
 <p>When traffic or roles exceed what fits, mix providers <strong>by role</strong>. For example: read cache -&gt; Upstash Redis, long jobs/Python APIs -&gt; Render/Railway, Next.js full-stack experiments -&gt; Vercel (check terms/bandwidth). Rather than &quot;just bolt on Vercel,&quot; attach <strong>only the piece that fits the limits and terms</strong>.</p>
 <hr>
 <h2>4. Competing Services (PaaS, Including Vercel)</h2>
@@ -188,7 +190,7 @@ That said, on the free tier you still have <strong>daily edge limits and fair-us
 <tbody><tr>
 <td><strong><a href="../vercel/vercel_analysis.md">Vercel</a></strong></td>
 <td>Next.js-optimized PaaS, best-in-class DX</td>
-<td>Hobby plan has commercial-use restrictions, bandwidth caps, and overage-billing risk. Attractive for Next.js full-stack apps; for<strong>high-traffic static archives</strong>, CF is often the better fit</td>
+<td>Hobby plan has commercial-use restrictions, bandwidth caps, and overage-billing risk. Attractive for Next.js full-stack apps; for <strong>high-traffic static archives</strong>, CF is often the better fit</td>
 </tr>
 <tr>
 <td><strong>Netlify</strong></td>
@@ -198,7 +200,7 @@ That said, on the free tier you still have <strong>daily edge limits and fair-us
 <tr>
 <td><strong>GitHub Pages</strong></td>
 <td>Docs, portfolios</td>
-<td>Weak on serverless APIs, edge caching, integrated WAF. Best as<strong>an archive of the original Markdown</strong> (VibeQuant uses a dual GitHub + CF structure)</td>
+<td>Weak on serverless APIs, edge caching, integrated WAF. Best as <strong>an archive of the original Markdown</strong> (VibeQuant uses a dual GitHub + CF structure)</td>
 </tr>
 <tr>
 <td><strong>Railway / Render / Fly.io</strong></td>
@@ -276,7 +278,7 @@ That said, on the free tier you still have <strong>daily edge limits and fair-us
 <li><strong>Heavy numpy/pandas batch jobs</strong> on Workers — use browser-side Pyodide or an external PaaS instead</li>
 <li><strong>Long-lived connections</strong> like Prisma + Neon over TCP — needs a redesign for Pages Functions (REST/HTTP client + caching)</li>
 <li><strong>Puppeteer / local filesystem access</strong> — not available at the edge. Pre-build the output or use a different runtime</li>
-<li><strong>LLM calls on every request</strong>— cache, respect daily limits and cost. Call things like DeepSeek from a Worker, but<strong>cache the result</strong></li>
+<li><strong>LLM calls on every request</strong> — cache, respect daily limits and cost. Call things like DeepSeek from a Worker, but <strong>cache the result</strong></li>
 </ul>
 <h3>5.3 One-Line Language Summary</h3>
 <blockquote>

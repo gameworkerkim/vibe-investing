@@ -81,15 +81,17 @@ See Chapter 6 of <a href="./Claude_skill_guide.md">Claude_skill_guide.md</a> for
 <li><strong>Trigger phrases</strong>: &quot;review my portfolio,&quot; &quot;how&#39;s my account,&quot; &quot;today&#39;s review,&quot; &quot;check my holdings,&quot; &quot;do I need to rebalance?,&quot; &quot;daily check&quot;</li>
 <li><strong>Core behavior</strong>:<ol>
 <li>Loads holdings, average cost, and risk limits from <code>assets/portfolio.json</code> (no need to re-enter every time)</li>
-<li>Refreshes current prices via web search, then evaluates <strong>quantitative triggers (T1-T5)</strong>3.<strong>If no trigger fires -&gt; ends with a one-line &quot;no anomalies&quot; message</strong> (blocking noise is this skill&#39;s #1 rule)</li>
+<li>Refreshes current prices via web search, then evaluates <strong>quantitative triggers (T1-T5)</strong></li>
+<li><strong>If no trigger fires -&gt; ends with a one-line &quot;no anomalies&quot; message</strong> (blocking noise is this skill&#39;s #1 rule)</li>
 <li>Only when triggered: <strong>independently collects</strong> quant/news/social data across 3 sources -&gt; cross-validation matrix</li>
 <li>Presents action candidates (hold / trim / add / consider stop-loss / watch further) + counterarguments + falsification conditions</li>
 <li>Updates <code>last_review</code> and logs the review (used to compute the delta from the previous review)</li>
 </ol>
 </li>
 </ul>
-<p><strong>3 design characteristics</strong>-<strong>The definition of &quot;meaningful change&quot; is not left to LLM discretion</strong> - it&#39;s fixed by trigger-rules.md&#39;s quantitative rules plus a judgment script</p>
+<p><strong>3 design characteristics</strong></p>
 <ul>
+<li><strong>The definition of &quot;meaningful change&quot; is not left to LLM discretion</strong> - it&#39;s fixed by trigger-rules.md&#39;s quantitative rules plus a judgment script</li>
 <li><strong>Market-sync filter</strong> - if a stock&#39;s move is within 1.5 percentage points of the benchmark&#39;s move, it&#39;s downgraded to &quot;market-synced move&quot; and gets only a brief report (this prevents a flood of lengthy per-stock analysis on every index-down day)</li>
 <li><strong>Thesis-first</strong> - checks the validity of the registered investment thesis before looking at price movement. Extreme social-media sentiment is treated only as a potential contrarian indicator</li>
 </ul>
@@ -317,7 +319,7 @@ big drop&quot;) is never used as a trigger.
 |---|---|---|
 | <strong>T1</strong> Individual sharp move | Absolute daily change of a ticker ≥ 3% (≥ 7% for crypto) | Medium |
 | <strong>T2</strong> Portfolio-level move | Absolute daily change in total portfolio value ≥ 2% | High |
-| <strong>T3</strong>Risk limit | A `risk_limits` entry is violated (weight exceeded, loss limit reached) |<strong>Highest</strong> |
+| <strong>T3</strong> Risk limit | A `risk_limits` entry is violated (weight exceeded, loss limit reached) | <strong>Highest</strong> |
 | <strong>T4</strong> Event | Major primary-source news related to a held ticker (earnings release/guidance change, regulatory action, security incident/hack, delisting/trading halt, large-scale rights offering/convertible bond) | High |
 | <strong>T5</strong> Volatility jump | Ticker&#39;s historical volatility (20-day) up ≥ 50% vs. the prior day | Medium |
 

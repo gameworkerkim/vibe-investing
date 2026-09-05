@@ -233,8 +233,9 @@ DeepSeek · Anthropic Claude · OpenAI ChatGPT — Coding Plan · API · Self-ho
 <li>Enter your API Key → click &#39;Done&#39; (top right)</li>
 <li>Select model: MiniMax-M3 (or M2.5 / M2.7) → enable &#39;Auto-approve: Edit&#39; and start</li>
 </ol>
-<p><strong>Tips for Cline-Specific Features</strong>-<strong>Plan / Act mode separation</strong>: Plan only proposes a multi-file change plan; Act performs the actual edits. Review big refactors in Plan first.</p>
+<p><strong>Tips for Cline-Specific Features</strong></p>
 <ul>
+<li><strong>Plan / Act mode separation</strong>: Plan only proposes a multi-file change plan; Act performs the actual edits. Review big refactors in Plan first.</li>
 <li><strong>MCP Marketplace</strong>: Add built-in tools (browser, GitHub, DB clients, etc.) in one click.</li>
 <li><strong>@ mentions</strong>: Type <code>@filepath</code> in chat to auto-inject that file as context.</li>
 <li><strong>Checkpoints</strong>: Step-by-step snapshots are saved, enabling one-click rollback on mistakes.</li>
@@ -301,8 +302,9 @@ claude --model MiniMax-M3
 <li>Entrypoint: <code>api.minimax.io</code> or <code>api.minimaxi.com</code></li>
 <li>Enter API Key → Model: select MiniMax-M3 → Done</li>
 </ol>
-<p><strong>Kilo Code&#39;s Unique Strengths</strong>-<strong>Orchestrator mode</strong>: Multi-step orchestration that decomposes complex tasks into subtasks and auto-delegates them to specialist modes (Architect, Code, Debug, etc.). A strong alternative to Cline&#39;s single Plan-Act loop when autonomously handling large features or PR-scale work in one pass.</p>
+<p><strong>Kilo Code&#39;s Unique Strengths</strong></p>
 <ul>
+<li><strong>Orchestrator mode</strong>: Multi-step orchestration that decomposes complex tasks into subtasks and auto-delegates them to specialist modes (Architect, Code, Debug, etc.). A strong alternative to Cline&#39;s single Plan-Act loop when autonomously handling large features or PR-scale work in one pass.</li>
 <li><strong>Custom mode marketplace</strong>: Role-based presets like Architect, Ask, Code, Debug.</li>
 <li><strong>Side-by-side diff view</strong>: More refined change previews than Cline.</li>
 <li><strong>Step-by-step terminal permission control</strong>: Safety-first workflows.</li>
@@ -325,10 +327,13 @@ claude --model MiniMax-M3
 <h2>3. Designing Agent Workflows</h2>
 <h3>3.1 Understanding the Plan-Act Loop</h3>
 <p>In 2026, AI coding agents aren&#39;t simple Q&amp;A — they autonomously repeat a &quot;read → think → write → verify&quot; loop. This is the <strong>Plan-Act-Verify loop</strong>, and VS Code tools implement it in various forms.</p>
-<p><strong>The Four Stages of the Loop</strong>1.<strong>Read</strong>: Actively explore the working directory, files, and docs (grep, find, sed, ls, etc.).
-2. <strong>Think</strong>: Decompose the task, infer intent, decide which tools/APIs to call. MiniMax M3 includes a thinking block in its responses.
-3. <strong>Act</strong>: Create/modify files, run commands, call functions. All changes apply after user approval (human-in-the-loop).
-4. <strong>Verify</strong>: Run tests, type-check, confirm the build. On failure, return to stages 1–2 to self-correct.</p>
+<p><strong>The Four Stages of the Loop</strong></p>
+<ol>
+<li><strong>Read</strong>: Actively explore the working directory, files, and docs (grep, find, sed, ls, etc.).</li>
+<li><strong>Think</strong>: Decompose the task, infer intent, decide which tools/APIs to call. MiniMax M3 includes a thinking block in its responses.</li>
+<li><strong>Act</strong>: Create/modify files, run commands, call functions. All changes apply after user approval (human-in-the-loop).</li>
+<li><strong>Verify</strong>: Run tests, type-check, confirm the build. On failure, return to stages 1–2 to self-correct.</li>
+</ol>
 <p><strong>Example: real flow of an &quot;add JWT auth middleware&quot; task</strong></p>
 <pre><code class="language-javascript">// Steps Cline / Kilo Code performs
 // 1. Read:   src/middleware/auth.ts, src/routes/api.ts, AGENTS.md
@@ -1051,7 +1056,19 @@ claude --model MiniMax-M3
 <hr>
 <h2>6. Decision Guide — Which Model, When?</h2>
 <p>Don&#39;t try to solve every situation with one model. The decision tree below lets you choose in 30 seconds.</p>
-<p><strong>① If budget is your biggest constraint</strong>→ MiniMax M2.5 or DeepSeek V4-Flash. You get SWE-bench in the 70–80% range at around $0.03 per 100K tokens. M2.5 has a clear upgrade path to M3, and after M3&#39;s release you can use up to a 1M context as-is.<strong>② If code quality (catching subtle intent) is the top priority</strong>→ Claude Opus 4.7. At 64.0% on SWE-Bench Pro, it&#39;s #1 at solving real GitHub issues. If your team keeps getting &quot;almost right but slightly off&quot; results, we recommend a failover setup that routes to Opus.<strong>③ If you have many long autonomous tasks (8h+ continuous)</strong>→ GPT-5.5. At 82.7% on Terminal-Bench 2.0, it&#39;s #1 and the strongest for long autonomous work. But its price ($5/$30) is 2×, so route to it only for genuinely long tasks.<strong>④ If you need 1M-token full-codebase analysis</strong>→ MiniMax M3, Gemini 3.1 Pro, DeepSeek V4-Pro / V4-Flash, Claude Opus 4.7/4.8 (all support 1M). Among these, V4-Flash ($0.14/$0.28) and M3 ($0.30/$1.20) lead on price efficiency. Sonnet 4.6 also supports 1M.<strong>⑤ If you need data sovereignty / on-premises</strong>→ MiniMax M2.5/M2.7 (open-weight) or DeepSeek V3.2/V4. Pull the weights from Hugging Face and serve them on an internal cluster with vLLM/SGLang. MiniMax is MIT-style; DeepSeek is MIT + Model License (commercial use allowed).<strong>⑥ If you need Computer Use (browser/OS automation)</strong>→ GPT-5.4 (native, OSWorld 75%) or Claude Opus 4.7 (API). MiniMax M3 is natively multimodal, but Computer Use requires separate implementation via tool calls.<strong>⑦ Recommended hybrid routing config (OpenClaw example)</strong></p>
+<p><strong>① If budget is your biggest constraint</strong>
+→ MiniMax M2.5 or DeepSeek V4-Flash. You get SWE-bench in the 70–80% range at around $0.03 per 100K tokens. M2.5 has a clear upgrade path to M3, and after M3&#39;s release you can use up to a 1M context as-is.</p>
+<p><strong>② If code quality (catching subtle intent) is the top priority</strong>
+→ Claude Opus 4.7. At 64.0% on SWE-Bench Pro, it&#39;s #1 at solving real GitHub issues. If your team keeps getting &quot;almost right but slightly off&quot; results, we recommend a failover setup that routes to Opus.</p>
+<p><strong>③ If you have many long autonomous tasks (8h+ continuous)</strong>
+→ GPT-5.5. At 82.7% on Terminal-Bench 2.0, it&#39;s #1 and the strongest for long autonomous work. But its price ($5/$30) is 2×, so route to it only for genuinely long tasks.</p>
+<p><strong>④ If you need 1M-token full-codebase analysis</strong>
+→ MiniMax M3, Gemini 3.1 Pro, DeepSeek V4-Pro / V4-Flash, Claude Opus 4.7/4.8 (all support 1M). Among these, V4-Flash ($0.14/$0.28) and M3 ($0.30/$1.20) lead on price efficiency. Sonnet 4.6 also supports 1M.</p>
+<p><strong>⑤ If you need data sovereignty / on-premises</strong>
+→ MiniMax M2.5/M2.7 (open-weight) or DeepSeek V3.2/V4. Pull the weights from Hugging Face and serve them on an internal cluster with vLLM/SGLang. MiniMax is MIT-style; DeepSeek is MIT + Model License (commercial use allowed).</p>
+<p><strong>⑥ If you need Computer Use (browser/OS automation)</strong>
+→ GPT-5.4 (native, OSWorld 75%) or Claude Opus 4.7 (API). MiniMax M3 is natively multimodal, but Computer Use requires separate implementation via tool calls.</p>
+<p><strong>⑦ Recommended hybrid routing config (OpenClaw example)</strong></p>
 <pre><code class="language-json">{
   &quot;agents&quot;: {
     &quot;defaults&quot;: {

@@ -69,9 +69,9 @@
 </nav>
       </header>
       <div class="article-body prose"><blockquote>
-<p><strong>문서 버전</strong>v2.0 (2026-07-27) ·<strong>검증 기준</strong> DeepSeek 공식 HF 모델 카드 / DeepSeek API Docs / 기술 보고서(arXiv 2606.19348)
-<strong>범위 변경</strong>v1은 Flash 단독 문서였으나, V4는<strong>Pro/Flash 2종 패밀리 릴리스</strong>이므로 양쪽을 함께 다룬다. 아키텍처가 동일해 분리 서술이 오히려 오해를 만든다.
-<strong>상태</strong>공식 모델 카드는 스스로를<strong>preview version</strong>으로 표기한다. GA 체크포인트는 별도다.</p>
+<p><strong>문서 버전</strong> v2.0 (2026-07-27) · <strong>검증 기준</strong> DeepSeek 공식 HF 모델 카드 / DeepSeek API Docs / 기술 보고서(arXiv 2606.19348)
+<strong>범위 변경</strong> v1은 Flash 단독 문서였으나, V4는 <strong>Pro/Flash 2종 패밀리 릴리스</strong>이므로 양쪽을 함께 다룬다. 아키텍처가 동일해 분리 서술이 오히려 오해를 만든다.
+<strong>상태</strong> 공식 모델 카드는 스스로를 <strong>preview version</strong>으로 표기한다. GA 체크포인트는 별도다.</p>
 </blockquote>
 <hr>
 <h2>0. v1 대비 주요 수정 사항</h2>
@@ -106,7 +106,7 @@
 <td>4</td>
 <td>Flash 하드웨어</td>
 <td>&quot;FP8 H100 2장 / INT4 H100 1장&quot;</td>
-<td><strong>틀림.</strong>Instruct는 FP4+FP8 혼합 약 158GB. 1M 컨텍스트 포함 약 170~175GB →<strong>2×H200 또는 4×A100</strong>. 2×H100(160GB)은 부족</td>
+<td><strong>틀림.</strong> Instruct는 FP4+FP8 혼합 약 158GB. 1M 컨텍스트 포함 약 170~175GB → <strong>2×H200 또는 4×A100</strong>. 2×H100(160GB)은 부족</td>
 </tr>
 <tr>
 <td>5</td>
@@ -209,7 +209,7 @@
 </thead>
 <tbody><tr>
 <td><strong>Hybrid Attention</strong></td>
-<td>CSA(Compressed Sparse Attention) + HCA(Heavily Compressed Attention) 결합. 1M 컨텍스트에서 V4-Pro는<strong>V3.2 대비 단일 토큰 추론 FLOPs 27%, KV 캐시 10%</strong></td>
+<td>CSA(Compressed Sparse Attention) + HCA(Heavily Compressed Attention) 결합. 1M 컨텍스트에서 V4-Pro는 <strong>V3.2 대비 단일 토큰 추론 FLOPs 27%, KV 캐시 10%</strong></td>
 </tr>
 <tr>
 <td><strong>mHC</strong></td>
@@ -302,6 +302,7 @@
 <td>특수 시스템 프롬프트 + <code>&lt;think&gt;</code> 사고 <code>&lt;/think&gt;</code> 요약</td>
 </tr>
 </tbody></table>
+<p><strong>모드 선택이 성능을 지배한다.</strong> 아래는 동일 모델에서 모드만 바꾼 결과다.</p>
 <table>
 <thead>
 <tr>
@@ -731,10 +732,12 @@
 <td>51.8</td>
 </tr>
 </tbody></table>
+<p><strong>해석 포인트</strong></p>
 <ul>
+<li><strong>코딩은 1위다.</strong> LiveCodeBench 93.5, Codeforces 3206으로 폐쇄형 프런티어를 앞선다. 이것이 V4-Pro의 가장 확실한 근거다.</li>
 <li><strong>MCPAtlas 73.6은 Opus-4.6(73.8)과 사실상 동률</strong>이다. MCP 기반 에이전트에서 오픈 웨이트가 폐쇄형과 붙는 드문 사례다.</li>
 <li><strong>SimpleQA-Verified 57.9는 Gemini(75.6)에 크게 뒤진다.</strong> 사실 조회형 워크로드에는 부적합하며, RAG 없이 쓰면 안 된다.</li>
-<li><strong>롱컨텍스트 실측은 기대에 못 미친다.</strong>1M을 지원하지만 MRCR 1M 83.5, CorpusQA 1M 62.0으로 Opus-4.6(92.9 / 71.7)에 밀린다.<strong>1M을 &quot;넣을 수 있다&quot;와 &quot;정확히 읽는다&quot;는 다르다.</strong></li>
+<li><strong>롱컨텍스트 실측은 기대에 못 미친다.</strong> 1M을 지원하지만 MRCR 1M 83.5, CorpusQA 1M 62.0으로 Opus-4.6(92.9 / 71.7)에 밀린다. <strong>1M을 &quot;넣을 수 있다&quot;와 &quot;정확히 읽는다&quot;는 다르다.</strong></li>
 <li>Apex 38.3은 Gemini(60.9)·GPT-5.4(54.1)와 격차가 크다.</li>
 </ul>
 <h3>4.2 모드별 비교 (Flash vs Pro)</h3>
@@ -904,8 +907,11 @@
 <td><strong>51.8</strong></td>
 </tr>
 </tbody></table>
+<p><strong>실무적으로 가장 중요한 표다.</strong></p>
 <ul>
-<li><strong>MCPAtlas는 Pro High(74.2)가 Pro Max(73.6)보다 높다.</strong>도구 호출에서는 과도한 추론이 오히려 해롭다.<strong>에이전트 오케스트레이션은 High로 고정할 것.</strong>-<strong>Non-think는 코딩·수학·에이전트에 쓰면 안 된다.</strong> LiveCodeBench 55.2, Apex 1.0, HLE 8.1로 사실상 무력하다. Non-think는 분류·요약·라우팅 전용이다.</li>
+<li><strong>Flash High가 가성비 최적점이다.</strong> MMLU-Pro 86.4는 Flash Max(86.2)보다 오히려 높고, LiveCodeBench 88.4는 Max(91.6)와 3.2점 차인데 토큰 소모는 훨씬 적다.</li>
+<li><strong>MCPAtlas는 Pro High(74.2)가 Pro Max(73.6)보다 높다.</strong> 도구 호출에서는 과도한 추론이 오히려 해롭다. <strong>에이전트 오케스트레이션은 High로 고정할 것.</strong></li>
+<li><strong>Non-think는 코딩·수학·에이전트에 쓰면 안 된다.</strong> LiveCodeBench 55.2, Apex 1.0, HLE 8.1로 사실상 무력하다. Non-think는 분류·요약·라우팅 전용이다.</li>
 <li><strong>SWE Verified는 Flash High 78.6 vs Pro Max 80.6으로 2점 차</strong>다. 코드 수정 작업이라면 Flash로 충분하다.</li>
 </ul>
 <h3>4.3 Base 모델 (사전학습 품질)</h3>
@@ -997,6 +1003,7 @@
 <td><strong>51.5</strong></td>
 </tr>
 </tbody></table>
+<p><strong>MultiLoKo 51.1(Pro)은 V3.2 대비 +12.4점</strong>으로 개선폭이 가장 큰 항목 중 하나다. 다국어 능력이 세대 간 실질적으로 향상됐다는 신호다.</p>
 <p>주의할 점: <strong>BigCodeBench와 MATH에서 V4-Flash-Base가 V3.2-Base보다 낮다.</strong> 활성 파라미터가 37B → 13B로 줄어든 대가이며, Flash를 V3.2 대체재로 무비판적으로 채택하면 회귀가 발생할 수 있다.</p>
 <hr>
 <h2>5. 한국어·일본어 성능 — 공식 정보 없음, 제3자 데이터 있음</h2>
@@ -1083,9 +1090,11 @@
 </tr>
 </tbody></table>
 <p>또한 Ko-GDPval에서 <strong>DeepSeek-V4-Pro(1.6T)는 86.91점</strong>으로 Solar Open 2(86.75)를 근소하게 앞섰다.</p>
-<p><strong>결론이 뒤집힌다.</strong>v1 문서의 &quot;한국어 성능 정보 부족 → 한국 도입 시 추가 파인튜닝 필요&quot;라는 진단은 사실과 다르다.<strong>DeepSeek-V4-Flash는 한국어 전용 최적화 모델과 0.5점 차이의 한국어 성능을 낸다.</strong>한국어 수학(Ko-AIME 98.0, HRM8K 93.4)과 종합지식(KMMLU-Pro 78.9)은 오히려 앞선다.<strong>일본어</strong>는 여전히 공개 데이터가 없다. Nejumi 리더보드나 JMMLU 자체 측정이 필요하다.</p>
-<p><strong>한국어 사용 시 실무 유의점</strong>- 토크나이저가 한국어 최적화되지 않아<strong>토큰 소모가 한국어 특화 모델보다 많다.</strong> 성능은 대등해도 비용은 불리할 수 있으므로 실측 필요</p>
+<p><strong>결론이 뒤집힌다.</strong> v1 문서의 &quot;한국어 성능 정보 부족 → 한국 도입 시 추가 파인튜닝 필요&quot;라는 진단은 사실과 다르다. <strong>DeepSeek-V4-Flash는 한국어 전용 최적화 모델과 0.5점 차이의 한국어 성능을 낸다.</strong> 한국어 수학(Ko-AIME 98.0, HRM8K 93.4)과 종합지식(KMMLU-Pro 78.9)은 오히려 앞선다.</p>
+<p><strong>일본어</strong>는 여전히 공개 데이터가 없다. Nejumi 리더보드나 JMMLU 자체 측정이 필요하다.</p>
+<p><strong>한국어 사용 시 실무 유의점</strong></p>
 <ul>
+<li>토크나이저가 한국어 최적화되지 않아 <strong>토큰 소모가 한국어 특화 모델보다 많다.</strong> 성능은 대등해도 비용은 불리할 수 있으므로 실측 필요</li>
 <li>한국 특유의 문서 서식·행정 관용 표현은 학습되지 않았을 가능성이 높다. Ko-GDPval 85.0은 그럼에도 상당히 높은 수치이나, 사내 서식 few-shot 주입은 필수</li>
 <li>중국어 정치·역사 관련 주제에서 응답 편향이 보고되어 왔다. 해당 도메인을 다룬다면 사전 검증할 것</li>
 </ul>
@@ -1176,6 +1185,7 @@
 <td><strong>16.6</strong></td>
 </tr>
 </tbody></table>
+<p><strong>정직한 결론</strong>: 두 모델은 성능상 대등하며 한국어조차 0.5점 차다. Solar Open 2가 우위인 것은 APEX-Agents, 한국어 토큰 효율(글로벌 대비 50~80%), 한국 업무 문맥 학습이다. DeepSeek-V4-Flash가 우위인 것은 <strong>MIT 라이선스, Base 모델 공개, 에이전트 코딩(SWE·Terminal), 더 낮은 활성 파라미터</strong>다.</p>
 <p>한국 기업의 선택 기준은 성능이 아니라 다른 축에서 갈린다 — <strong>국산 조달 요건이 있으면 Solar, 라이선스 자유도와 파인튜닝 유연성이 중요하면 DeepSeek, 중국산 배제 정책이 있으면 Solar.</strong></p>
 <h3>6.2 Kimi K3 (Moonshot AI, 2.8T)</h3>
 <table>
@@ -1312,8 +1322,10 @@
 <ul>
 <li>시스템 RAM: Flash 기준 256GB 이상, 스토리지 NVMe 500GB 이상</li>
 <li>vLLM 텐서 병렬은 2의 거듭제곱(1/2/4/8)에서 최적. 2×A100(160GB)은 1M 컨텍스트 예산에 미달하므로 4×A100 권장</li>
-<li><strong>V4-Pro는 8×H100 80GB(640GB)에 들어가지 않는다</strong>### 7.2 채팅 인코딩 (필수 선행 이해)<strong>이 릴리스에는 Jinja 채팅 템플릿이 없다.</strong> <code>encoding</code> 폴더의 스크립트를 사용한다.</li>
+<li><strong>V4-Pro는 8×H100 80GB(640GB)에 들어가지 않는다</strong></li>
 </ul>
+<h3>7.2 채팅 인코딩 (필수 선행 이해)</h3>
+<p><strong>이 릴리스에는 Jinja 채팅 템플릿이 없다.</strong> <code>encoding</code> 폴더의 스크립트를 사용한다.</p>
 <pre><code class="language-python">from encoding_dsv4 import encode_messages, parse_message_from_completion_text
 import transformers
 
@@ -1474,7 +1486,8 @@ resp = client.chat.completions.create(
 <p><strong>반드시 짚어야 할 한계</strong>: MRCR 1M 83.5, CorpusQA 1M 62.0이다. Opus-4.6(92.9 / 71.7)에 비해 낮다. <strong>컨텍스트에 넣었다고 정확히 읽는다는 보장이 없다.</strong></p>
 <p>실무 권고:</p>
 <ul>
-<li>100만 토큰을 다 채우지 말고 <strong>200~400K 수준에서 운용</strong>- 중요 조항은<strong>2회 독립 질의로 교차 검증</strong></li>
+<li>100만 토큰을 다 채우지 말고 <strong>200~400K 수준에서 운용</strong></li>
+<li>중요 조항은 <strong>2회 독립 질의로 교차 검증</strong></li>
 <li>자체 needle-in-haystack 테스트로 실전 임계점을 먼저 측정할 것</li>
 </ul>
 <h3>8.3 MCP 기반 에이전트 오케스트레이션</h3>
@@ -1518,7 +1531,8 @@ V4-Flash-Base → 사내 코드베이스 + 기술문서 → 조직 전용 코딩
 <h2>9. 한국 시장 사업 도입 시나리오</h2>
 <h3>9.0 전제: 규제의 정확한 범위를 이해할 것</h3>
 <p>한국은 2025년 개인정보보호위원회가 DeepSeek 앱의 국외 이전 문제로 국내 서비스를 일시 중단시키고 시정 권고했으며, 외교부·국방부·산업통상자원부 등 다수 부처와 한수원·한전KPS 등 공공기관, 주요 금융권이 접속을 차단했다. 카카오·라인야후 등 민간 IT 기업도 업무 목적 사용을 금지했다.</p>
-<p><strong>그러나 이 조치들의 대상은 호스팅 서비스다.</strong>MIT 라이선스 가중치를 사내 GPU에서 구동하는 것은 데이터가 어디로도 나가지 않으므로 규제 논리 자체가 성립하지 않는다.<strong>따라서 한국에서 DeepSeek-V4의 유일한 정당한 도입 경로는 자체 호스팅이다.</strong> API 사용은 논외로 두는 것이 안전하다.</p>
+<p><strong>그러나 이 조치들의 대상은 호스팅 서비스다.</strong> MIT 라이선스 가중치를 사내 GPU에서 구동하는 것은 데이터가 어디로도 나가지 않으므로 규제 논리 자체가 성립하지 않는다.</p>
+<p><strong>따라서 한국에서 DeepSeek-V4의 유일한 정당한 도입 경로는 자체 호스팅이다.</strong> API 사용은 논외로 두는 것이 안전하다.</p>
 <p>동시에 현실적 제약도 인정해야 한다. 조달·심사 과정에서 &quot;중국산 모델&quot;이라는 사실 자체가 감점 요인이 되는 조직이 있다. 특히 공공·방산·금융 일부는 모델 출처를 기술적 검증과 무관하게 배제한다. <strong>이 경우 Solar Open 2가 대안이며, 성능 차이가 0.5점 수준이므로 실질 손실이 거의 없다.</strong></p>
 <h3>9.1 소프트웨어 개발 조직 — 1순위</h3>
 <table>
@@ -1702,7 +1716,8 @@ V4-Flash-Base → 사내 코드베이스 + 기술문서 → 조직 전용 코딩
 </tbody></table>
 <p>일본 시장에서 즉시 착수 가능한 유일한 시나리오다.</p>
 <h3>10.2 일본어 특화 파생 모델 개발 — 중장기 전략</h3>
-<p><strong>Base 모델 공개 + MIT 라이선스가 만드는 기회다.</strong>업스테이지가 Solar 기반으로 일본 카라쿠리와 Syn Pro(31B)를 만들어 Nejumi 1위를 기록한 것과 같은 전략을, DeepSeek-V4-Flash-Base 위에서<strong>라이선스 제약 없이</strong> 실행할 수 있다. Solar License는 &quot;Solar&quot; 접두사와 &quot;Built with Solar&quot; 표기를 요구하지만, MIT는 아무것도 요구하지 않는다.</p>
+<p><strong>Base 모델 공개 + MIT 라이선스가 만드는 기회다.</strong></p>
+<p>업스테이지가 Solar 기반으로 일본 카라쿠리와 Syn Pro(31B)를 만들어 Nejumi 1위를 기록한 것과 같은 전략을, DeepSeek-V4-Flash-Base 위에서 <strong>라이선스 제약 없이</strong> 실행할 수 있다. Solar License는 &quot;Solar&quot; 접두사와 &quot;Built with Solar&quot; 표기를 요구하지만, MIT는 아무것도 요구하지 않는다.</p>
 <table>
 <thead>
 <tr>
@@ -1820,7 +1835,8 @@ V4-Flash-Base → 사내 코드베이스 + 기술문서 → 조직 전용 코딩
 </tr>
 </tbody></table>
 <p><code>No DeepSeek on Government Devices Act</code>(H.R.1121) 등 연방 차원 입법이 진행됐다.</p>
-<p><strong>결정적 구분</strong>: 이 규제들은 &quot;DeepSeek 애플리케이션 또는 그 후속 애플리케이션·서비스&quot;를 대상으로 하며, 근거는 <strong>데이터가 중국 서버로 전송된다</strong>는 점이다. <strong>미국 인프라에서 MIT 가중치를 자체 구동하는 것은 데이터 전송이 발생하지 않는다.</strong>실제로 NVIDIA가 <code>nvidia/DeepSeek-V4-Pro-NVFP4</code> 양자화 모델을 배포하고 build.nvidia.com에 모델 카드를 게시했으며, Runpod·Spheron 등 미국 GPU 클라우드들이 배포 가이드를 제공하고 있다.<strong>미국 인프라 위에서 V4를 구동하는 것은 이미 표준 관행이다.</strong></p>
+<p><strong>결정적 구분</strong>: 이 규제들은 &quot;DeepSeek 애플리케이션 또는 그 후속 애플리케이션·서비스&quot;를 대상으로 하며, 근거는 <strong>데이터가 중국 서버로 전송된다</strong>는 점이다. <strong>미국 인프라에서 MIT 가중치를 자체 구동하는 것은 데이터 전송이 발생하지 않는다.</strong></p>
+<p>실제로 NVIDIA가 <code>nvidia/DeepSeek-V4-Pro-NVFP4</code> 양자화 모델을 배포하고 build.nvidia.com에 모델 카드를 게시했으며, Runpod·Spheron 등 미국 GPU 클라우드들이 배포 가이드를 제공하고 있다. <strong>미국 인프라 위에서 V4를 구동하는 것은 이미 표준 관행이다.</strong></p>
 <h3>11.1 AI 스타트업 — 비용 구조 자체를 바꾸는 선택</h3>
 <table>
 <thead>
@@ -1901,7 +1917,7 @@ V4-Flash-Base → 사내 코드베이스 + 기술문서 → 조직 전용 코딩
 </tr>
 <tr>
 <td><strong>냉정한 계산</strong></td>
-<td>API 요율($0.14/$0.28) 기준 손익분기는<strong>일 30~40억 토큰</strong> 수준이다. 8×H100 단일 노드로는 물리적으로 소화할 수 없는 양이다</td>
+<td>API 요율($0.14/$0.28) 기준 손익분기는 <strong>일 30~40억 토큰</strong> 수준이다. 8×H100 단일 노드로는 물리적으로 소화할 수 없는 양이다</td>
 </tr>
 <tr>
 <td>결론</td>

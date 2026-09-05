@@ -131,7 +131,10 @@
 <hr>
 <h2>1. Executive Summary</h2>
 <p>On April 19, 2026, <strong>Vercel Inc.</strong>, one of the leading frontend cloud development platforms, formally confirmed unauthorized access to its internal systems. The breach did not stem from a vulnerability in Vercel&#39;s own product; instead, it originated from a compromise of <strong>Context.ai</strong>, an AI-agent platform used by a Vercel employee. The resulting chain — <strong>Google Workspace OAuth token theft → environment variable enumeration → internal lateral movement</strong> — represents a textbook third-party SaaS supply chain attack.</p>
-<p>A threat actor self-identifying as ShinyHunters posted on BreachForums offering Vercel&#39;s internal database, access keys, source code, NPM tokens, GitHub tokens, and employee credentials <strong>for USD 2 million (≈ KRW 2.9 billion)</strong>. Vercel CEO Guillermo Rauch publicly assessed that, given the attacker&#39;s operational velocity and deep understanding of Vercel&#39;s internal systems, the intrusion was <strong>very likely significantly accelerated by AI.</strong>&gt; ⚠<strong>Core Risk</strong>: If NPM and GitHub tokens were in fact exfiltrated, the attacker could inject malicious code into the deployment pipeline of the entire Next.js-based ecosystem — extending far beyond Vercel itself. This holds the potential to escalate into a global software supply chain incident comparable to SolarWinds or Salesloft-Drift. Vercel has officially stated that Next.js, Turbopack, and its open-source supply chain remain safe, but the impact investigation is still ongoing.</p>
+<p>A threat actor self-identifying as ShinyHunters posted on BreachForums offering Vercel&#39;s internal database, access keys, source code, NPM tokens, GitHub tokens, and employee credentials <strong>for USD 2 million (≈ KRW 2.9 billion)</strong>. Vercel CEO Guillermo Rauch publicly assessed that, given the attacker&#39;s operational velocity and deep understanding of Vercel&#39;s internal systems, the intrusion was <strong>very likely significantly accelerated by AI.</strong></p>
+<blockquote>
+<p>⚠ <strong>Core Risk</strong>: If NPM and GitHub tokens were in fact exfiltrated, the attacker could inject malicious code into the deployment pipeline of the entire Next.js-based ecosystem — extending far beyond Vercel itself. This holds the potential to escalate into a global software supply chain incident comparable to SolarWinds or Salesloft-Drift. Vercel has officially stated that Next.js, Turbopack, and its open-source supply chain remain safe, but the impact investigation is still ongoing.</p>
+</blockquote>
 <h3>Key Judgments</h3>
 <table>
 <thead>
@@ -144,27 +147,27 @@
 <tbody><tr>
 <td><strong>KJ-1</strong></td>
 <td>Initial access originated from the Context.ai compromise; there is no evidence of a vulnerability in Vercel&#39;s own product.</td>
-<td>Explicitly stated in Vercel&#39;s official security bulletin and CEO statement.<strong>Confidence: High</strong></td>
+<td>Explicitly stated in Vercel&#39;s official security bulletin and CEO statement. <strong>Confidence: High</strong></td>
 </tr>
 <tr>
 <td><strong>KJ-2</strong></td>
 <td>Environment variables classified as &quot;non-sensitive&quot; served as the decisive pivot for privilege escalation.</td>
-<td>Publicly acknowledged by the CEO on X (Twitter). &quot;Non-sensitive&quot; variables are not encrypted at rest and are therefore readable.<strong>Confidence: High</strong></td>
+<td>Publicly acknowledged by the CEO on X (Twitter). &quot;Non-sensitive&quot; variables are not encrypted at rest and are therefore readable. <strong>Confidence: High</strong></td>
 </tr>
 <tr>
 <td><strong>KJ-3</strong></td>
 <td>If NPM/GitHub token theft is confirmed, a secondary supply-chain attack against the global JavaScript ecosystem becomes a realistic scenario.</td>
-<td>Based on claims in the BreachForums listing. Vercel&#39;s supply chain audit found Next.js and Turbopack safe.<strong>Confidence: Medium</strong></td>
+<td>Based on claims in the BreachForums listing. Vercel&#39;s supply chain audit found Next.js and Turbopack safe. <strong>Confidence: Medium</strong></td>
 </tr>
 <tr>
 <td><strong>KJ-4</strong></td>
 <td>The seller&#39;s &quot;ShinyHunters&quot; self-identification may be brand hijacking, but the TTPs are consistent with the 2025–2026 campaigns.</td>
-<td>Actors linked to recent ShinyHunters operations denied involvement to BleepingComputer. Mandiant clusters activity as UNC6240, UNC6661, and UNC6671.<strong>Confidence: Medium</strong></td>
+<td>Actors linked to recent ShinyHunters operations denied involvement to BleepingComputer. Mandiant clusters activity as UNC6240, UNC6661, and UNC6671. <strong>Confidence: Medium</strong></td>
 </tr>
 <tr>
 <td><strong>KJ-5</strong></td>
 <td>This incident will become a reference case for the emerging attack pattern: &quot;AI SaaS → identity plane → development ecosystem.&quot;</td>
-<td>A chain of structurally identical incidents exists, including Salesloft-Drift (Aug 2025), Gainsight, Mixpanel, and Anodot.<strong>Confidence: High</strong></td>
+<td>A chain of structurally identical incidents exists, including Salesloft-Drift (Aug 2025), Gainsight, Mixpanel, and Anodot. <strong>Confidence: High</strong></td>
 </tr>
 </tbody></table>
 <hr>
@@ -283,7 +286,8 @@
 <hr>
 <h2>4. Attack Vector and Technical Analysis</h2>
 <h3>4.1 The Role of Context.ai and OAuth Delegation Abuse</h3>
-<p>Context.ai is an AI-agent platform for enterprise workflow automation. It integrates with Google Workspace via OAuth and obtains delegated scopes across users&#39; mail, calendar, and drive data. In this incident, by compromising either Context.ai&#39;s own systems or its OAuth application credentials, the attacker reached a position from which <strong>tokens belonging to every Google Workspace user who had consented to the app</strong>could be indirectly obtained.<strong>Intrinsic risks of this architecture:</strong></p>
+<p>Context.ai is an AI-agent platform for enterprise workflow automation. It integrates with Google Workspace via OAuth and obtains delegated scopes across users&#39; mail, calendar, and drive data. In this incident, by compromising either Context.ai&#39;s own systems or its OAuth application credentials, the attacker reached a position from which <strong>tokens belonging to every Google Workspace user who had consented to the app</strong> could be indirectly obtained.</p>
+<p><strong>Intrinsic risks of this architecture:</strong></p>
 <table>
 <thead>
 <tr>

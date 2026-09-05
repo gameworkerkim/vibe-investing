@@ -72,11 +72,12 @@
       <div class="article-body prose"><p>본 문서는 “제대로 된 운영 없이 구글링·LLM이 나열한 매뉴얼”이 아니라, <strong><a href="https://vibequant.cc/">VibeQuant</a>를 Cloudflare 무료 티어만으로 설계·운영한 이유와 방법</strong>을 정리한 문서다.<br>가입·한도·쿼터 숫자는 기존 <a href="Cloudflare%20free%20tier%20guide.md">가입·한도 가이드</a>를 본다.</p>
 <hr>
 <h2>1. Cloudflare란?</h2>
-<p>Cloudflare는 원래 <strong>DNS·CDN·DDoS 방어</strong>로 유명해진 엣지 네트워크 회사다. 업계에서는 Web3·거래소·트래픽 변동이 큰 서비스 앞단에 두는 경우가 많다. 2020년대 들어 <strong>Workers(서버리스) · Pages(정적/SSR) · R2(오브젝트 스토리지) · D1(SQLite) · KV · Cache API</strong>등을 한 계정에 묶어, “도메인 앞단 보안 + 전 세계 배포 + 가벼운 백엔드”를<strong>같은 엣지</strong>에서 처리하는 <strong>개발자 플랫폼</strong>으로 확장했다. 최근에는 <strong>Workers AI · AI Gateway</strong> 등 AI 관련 제품도 늘고 있다.</p>
+<p>Cloudflare는 원래 <strong>DNS·CDN·DDoS 방어</strong>로 유명해진 엣지 네트워크 회사다. 업계에서는 Web3·거래소·트래픽 변동이 큰 서비스 앞단에 두는 경우가 많다. 2020년대 들어 <strong>Workers(서버리스) · Pages(정적/SSR) · R2(오브젝트 스토리지) · D1(SQLite) · KV · Cache API</strong> 등을 한 계정에 묶어, “도메인 앞단 보안 + 전 세계 배포 + 가벼운 백엔드”를 <strong>같은 엣지</strong>에서 처리하는 <strong>개발자 플랫폼</strong>으로 확장했다. 최근에는 <strong>Workers AI · AI Gateway</strong> 등 AI 관련 제품도 늘고 있다.</p>
 <p>한 줄로 요약하면:</p>
 <blockquote>
-<p><strong>트래픽이 어디서 오든, 가까운 PoP에서 HTML·API·캐시를 처리하고, 원본 서버 비용을 최대한 없앤다.</strong>무료 플랜에서도 (제한은 있지만) 커스텀 도메인, HTTPS, CDN, 기본 WAF/봇 완화, Pages·Workers를 쓸 수 있다. VibeQuant처럼<strong>콘텐츠 아카이브 + 얇은 API + 브라우저 퀀트 실험</strong>에 잘 맞는다.</p>
+<p><strong>트래픽이 어디서 오든, 가까운 PoP에서 HTML·API·캐시를 처리하고, 원본 서버 비용을 최대한 없앤다.</strong></p>
 </blockquote>
+<p>무료 플랜에서도 (제한은 있지만) 커스텀 도메인, HTTPS, CDN, 기본 WAF/봇 완화, Pages·Workers를 쓸 수 있다. VibeQuant처럼 <strong>콘텐츠 아카이브 + 얇은 API + 브라우저 퀀트 실험</strong>에 잘 맞는다.</p>
 <p>나는 커스텀 도메인을 사서 <strong>도메인 비용만</strong> 썼다. <code>*.pages.dev</code>만으로도 되지만, SEO·브랜드에는 도메인이 붙은 편이 유리하다.</p>
 <hr>
 <h2>2. 장점</h2>
@@ -106,7 +107,7 @@
 <td>Pages HTML에는 API 키를 넣지 않는 구조가 자연스럽다</td>
 </tr>
 </tbody></table>
-<p>정적 HTML이 대부분이라면 <strong>원본 서버를 노출하지 않는</strong>설계가 된다. 공격 트래픽이 “앱 서버 CPU”가 아니라<strong>Cloudflare 엣지</strong>에 먼저 부딪힌다.<br>다만 무료 티어에서는 <strong>엣지 일일 한도·공정 사용</strong>이 남는다. 오리진 폭격은 줄어도, 한도 소진·약관 이슈는 별개다 (§3·§8).</p>
+<p>정적 HTML이 대부분이라면 <strong>원본 서버를 노출하지 않는</strong> 설계가 된다. 공격 트래픽이 “앱 서버 CPU”가 아니라 <strong>Cloudflare 엣지</strong>에 먼저 부딪힌다.<br>다만 무료 티어에서는 <strong>엣지 일일 한도·공정 사용</strong>이 남는다. 오리진 폭격은 줄어도, 한도 소진·약관 이슈는 별개다 (§3·§8).</p>
 <h3>2.2 CDN (대역폭이 무료에 가깝다)</h3>
 <p>Pages 정적 자산은 <strong>대역폭 무제한</strong>에 가깝게 쓸 수 있다(공정 사용·약관은 별도). R2는 <strong>egress 무료</strong>가 핵심 차별점이다. “칼럼·TechDoc HTML이 늘어도 전송료 폭탄”이 상대적으로 적다. Vercel Hobby의 월 대역폭 상한·초과 과금 구조와 대비된다.</p>
 <h3>2.3 서버리스 통합성</h3>
@@ -137,11 +138,11 @@
 </thead>
 <tbody><tr>
 <td><strong>일일 요청·CPU 한도</strong></td>
-<td>Workers 무료는 대략<strong>10만 req/일</strong>, 요청당 CPU <strong>~10ms</strong> 급. 피크에 소진되면 UTC 자정(KST 09:00)까지 막힐 수 있다</td>
+<td>Workers 무료는 대략 <strong>10만 req/일</strong>, 요청당 CPU <strong>~10ms</strong> 급. 피크에 소진되면 UTC 자정(KST 09:00)까지 막힐 수 있다</td>
 </tr>
 <tr>
 <td><strong>KV 쓰기 한도</strong></td>
-<td>무료 KV 쓰기는 하루 ~1,000 수준으로 빡세다. 세션·실시간 카운터에 부적합 →<strong>Cache API 우선</strong>이 실무 패턴</td>
+<td>무료 KV 쓰기는 하루 ~1,000 수준으로 빡세다. 세션·실시간 카운터에 부적합 → <strong>Cache API 우선</strong>이 실무 패턴</td>
 </tr>
 <tr>
 <td><strong>Python 네이티브 약함</strong></td>
@@ -168,7 +169,8 @@
 <td>대역폭 “무제한”도 남용·공격·상업 대량 배포에는 제약이 걸릴 수 있다</td>
 </tr>
 </tbody></table>
-<p>트래픽·역할이 넘치면 <strong>역할별로</strong>섞는다. 예: 읽기 캐시 → Upstash Redis, 긴 잡·Python API → Render/Railway, Next 풀스택 실험 → Vercel(약관·대역폭 확인). “그냥 Vercel을 얹는다”가 아니라<strong>한도·약관에 맞는 조각</strong>만 붙인다.</p>
+<p><strong>요약:</strong>보안·CDN·정적+얇은 API에는 강하지만,<strong>무거운 백엔드·강한 일관성 DB·장시간 Python</strong>은 다른 곳으로 빼는 편이 맞다.</p>
+<p>트래픽·역할이 넘치면 <strong>역할별로</strong> 섞는다. 예: 읽기 캐시 → Upstash Redis, 긴 잡·Python API → Render/Railway, Next 풀스택 실험 → Vercel(약관·대역폭 확인). “그냥 Vercel을 얹는다”가 아니라 <strong>한도·약관에 맞는 조각</strong>만 붙인다.</p>
 <hr>
 <h2>4. 경쟁 서비스 (Vercel 포함 PaaS)</h2>
 <table>
@@ -182,7 +184,7 @@
 <tbody><tr>
 <td><strong><a href="../vercel/vercel_analysis.md">Vercel</a></strong></td>
 <td>Next.js 최적화 PaaS, DX 최고</td>
-<td>Hobby는 상업 제한·대역폭 상한·초과 과금 리스크. Next 풀스택이면 매력,<strong>트래픽 큰 정적 아카이브</strong>면 CF가 유리한 경우가 많음</td>
+<td>Hobby는 상업 제한·대역폭 상한·초과 과금 리스크. Next 풀스택이면 매력, <strong>트래픽 큰 정적 아카이브</strong>면 CF가 유리한 경우가 많음</td>
 </tr>
 <tr>
 <td><strong>Netlify</strong></td>
@@ -192,7 +194,7 @@
 <tr>
 <td><strong>GitHub Pages</strong></td>
 <td>문서·포트폴리오</td>
-<td>서버리스 API·엣지 캐시·통합 WAF는 약함.<strong>원문 MD 보관소</strong>로는 최고 (VibeQuant는 GitHub + CF 이중 구조)</td>
+<td>서버리스 API·엣지 캐시·통합 WAF는 약함. <strong>원문 MD 보관소</strong>로는 최고 (VibeQuant는 GitHub + CF 이중 구조)</td>
 </tr>
 <tr>
 <td><strong>Railway / Render / Fly.io</strong></td>
@@ -270,7 +272,7 @@
 <li>Workers 위에서 <strong>무거운 numpy/pandas 배치</strong> — 브라우저 Pyodide 또는 외부 PaaS</li>
 <li><strong>Prisma + Neon TCP</strong> 같은 장수 커넥션 — Pages Functions에서 재설계 필요 (REST/HTTP 클라이언트·캐시)</li>
 <li><strong>Puppeteer / 로컬 fs</strong> — 엣지에 없음. 사전 빌드하거나 다른 런타임</li>
-<li><strong>매 요청 LLM</strong>— 캐시·일일 한도·비용. DeepSeek 등은 Worker에서 호출하되<strong>결과 캐시</strong></li>
+<li><strong>매 요청 LLM</strong> — 캐시·일일 한도·비용. DeepSeek 등은 Worker에서 호출하되 <strong>결과 캐시</strong></li>
 </ul>
 <h3>5.3 언어 한 줄 요약</h3>
 <blockquote>
@@ -280,7 +282,7 @@
 <h2>6. 어떻게 사이트를 개발했나? — 설계와 컨셉</h2>
 <h3>6.1 문제의식</h3>
 <ol>
-<li><p><strong>뉴스·칼럼 웹의 휘발성</strong>나는 2000년부터 뉴스 칼럼을 작성했다. 미디어·블로그 개편이 반복되면 과거 글 URL이 사라지고,<strong>2014년 이전 칼럼이 통째로 없는</strong> 식의 공백이 생긴다. “14년치가 없다”는 건 검색·인용·연구 연속성 측면에서 치명적이다. 네이버처럼 검색 엔진에 닫힌 공간에만 두면 구글·LLM 유입도 막힌다.<br>→ <strong>GitHub에 Markdown으로 원문을 영구 보관</strong>하고, 웹은 <strong>그 원본의 발행면</strong>으로 둔다.</p>
+<li><p><strong>뉴스·칼럼 웹의 휘발성</strong><br>나는 2000년부터 뉴스 칼럼을 작성했다. 미디어·블로그 개편이 반복되면 과거 글 URL이 사라지고, <strong>2014년 이전 칼럼이 통째로 없는</strong> 식의 공백이 생긴다. “14년치가 없다”는 건 검색·인용·연구 연속성 측면에서 치명적이다. 네이버처럼 검색 엔진에 닫힌 공간에만 두면 구글·LLM 유입도 막힌다.<br>→ <strong>GitHub에 Markdown으로 원문을 영구 보관</strong>하고, 웹은 <strong>그 원본의 발행면</strong>으로 둔다.</p>
 </li>
 <li><p><strong>사람 검색(SEO)과 AI 검색(GEO)을 동시에</strong><br>GitHub 트리만으로는 구글·소셜 OG가 약하고, ChatGPT·Perplexity·Cursor 같은 에이전트는 <code>llms.txt</code>·시맨틱 HTML·개별 URL이 없으면 인용에서 밀린다.<br>→ Pages에 <strong>개별 문서 URL + sitemap + llms.txt + canonical(GitHub blob 링크)</strong> 을 깐다.</p>
 </li>
@@ -353,7 +355,8 @@
 <li>HTML은 빌드 산출물 — 런타임 렌더 최소화  </li>
 <li>캐시 가능한 건 캐시 (장중 30분 / 장외 2시간 등)  </li>
 <li>KV 쓰기 남발 금지 → Cache API  </li>
-<li>무거운 계산은 엣지가 아니라 <strong>사용자 브라우저</strong>5. Neon/Prisma/Puppeteer 같은<strong>TCP·로컬 런타임 가정</strong>은 이식 대상에서 제외하거나 사전 계산  </li>
+<li>무거운 계산은 엣지가 아니라 <strong>사용자 브라우저</strong>  </li>
+<li>Neon/Prisma/Puppeteer 같은 <strong>TCP·로컬 런타임 가정</strong>은 이식 대상에서 제외하거나 사전 계산  </li>
 <li>배포는 <code>wrangler pages deploy</code> — 로컬 <code>HTTP_PROXY</code> 등이 있으면 unset</li>
 </ol>
 <hr>

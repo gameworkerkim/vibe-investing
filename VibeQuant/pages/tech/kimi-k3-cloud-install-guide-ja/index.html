@@ -128,9 +128,12 @@
 <td>B — 参考用</td>
 </tr>
 </tbody></table>
-<p><strong>重要な注意事項を3つ、先に明かしておきます。</strong>1.<strong>AWS 原文ブログ本文と実際の YAML の間に不整合があります。</strong>ブログ本文は &quot;MXFP4 load format&quot; と記述していますが、実際の YAML の <code>--load-format</code> の値は <code>fastsafetensors</code> です。MXFP4 は<strong>重み保存形式</strong>であり、<code>fastsafetensors</code> は<strong>ローディング方式</strong>で、互いに異なる層の概念です。他クラウドへ移植する際にこの区別を混同するとローディングが失敗します。
-2. <strong>CPU アーキテクチャがクラウドごとに異なります。</strong>AWS <code>p6-b300.48xlarge</code> は x86_64 HGX B300 ノードですが、Azure ND GB300 v6 と GCP A4X Max は<strong>NVIDIA Grace CPU ベースの ARM64(aarch64)</strong> です。<code>vllm/vllm-openai:kimi-k3</code> イメージが arm64 マニフェストを提供していなければ、Azure/GCP ではそのまま動作しません。デプロイ前に <code>docker manifest inspect</code> で必ず確認してください。
-3. <strong>単一ノードの GPU 数が異なります。</strong>AWS は 1 ノード 8 GPU で <code>--tensor-parallel-size 8</code> が 1 ノードに収まりますが、Azure/GCP の GB300 VM は<strong>VM あたり 4 GPU</strong> です。したがって Azure/GCP では 2 ノード分散サービングが必須となり、マニフェスト構造自体が変わります。</p>
+<p><strong>重要な注意事項を3つ、先に明かしておきます。</strong></p>
+<ol>
+<li><strong>AWS 原文ブログ本文と実際の YAML の間に不整合があります。</strong>ブログ本文は &quot;MXFP4 load format&quot; と記述していますが、実際の YAML の <code>--load-format</code> の値は <code>fastsafetensors</code> です。MXFP4 は<strong>重み保存形式</strong>であり、<code>fastsafetensors</code> は<strong>ローディング方式</strong>で、互いに異なる層の概念です。他クラウドへ移植する際にこの区別を混同するとローディングが失敗します。</li>
+<li><strong>CPU アーキテクチャがクラウドごとに異なります。</strong>AWS <code>p6-b300.48xlarge</code> は x86_64 HGX B300 ノードですが、Azure ND GB300 v6 と GCP A4X Max は<strong>NVIDIA Grace CPU ベースの ARM64(aarch64)</strong> です。<code>vllm/vllm-openai:kimi-k3</code> イメージが arm64 マニフェストを提供していなければ、Azure/GCP ではそのまま動作しません。デプロイ前に <code>docker manifest inspect</code> で必ず確認してください。</li>
+<li><strong>単一ノードの GPU 数が異なります。</strong>AWS は 1 ノード 8 GPU で <code>--tensor-parallel-size 8</code> が 1 ノードに収まりますが、Azure/GCP の GB300 VM は<strong>VM あたり 4 GPU</strong> です。したがって Azure/GCP では 2 ノード分散サービングが必須となり、マニフェスト構造自体が変わります。</li>
+</ol>
 <hr>
 <h2>1. Kimi K3 概要</h2>
 <p>2026年7月27日に Moonshot AI が公開した 2.8兆パラメータの MoE モデルで、<strong>3兆パラメータクラスに到達した初のオープンウェイトシステム</strong>です。DeepSeek V4 と並び、Moonshot AI はまさにオープンウェイトの頂点にあります。</p>
@@ -345,7 +348,7 @@
 <li>SageMaker AI コンソールで <strong>HyperPod Clusters &gt; Cluster Management &gt; Create HyperPod cluster</strong> を選択</li>
 <li><strong>Orchestrated by Amazon EKS</strong> を選択</li>
 <li><strong>Quick setup</strong>(基本ネットワーキング/ストレージ/IAM)または <strong>Custom setup</strong>(既存 VPC 統合)を選択</li>
-<li><strong>Orchestration</strong>で新規 EKS クラスタを作成、または既存クラスタを接続。<strong>Use default Helm charts and add-ons</strong> オプションが選択されていることを確認 (Inference Operator の自動インストール)</li>
+<li><strong>Orchestration</strong> で新規 EKS クラスタを作成、または既存クラスタを接続。<strong>Use default Helm charts and add-ons</strong> オプションが選択されていることを確認 (Inference Operator の自動インストール)</li>
 <li><strong>Instance groups</strong> で <code>ml.p6-b300.48xlarge</code> ワーカグループを追加</li>
 <li>構成を確認して <strong>Submit</strong></li>
 </ol>
@@ -489,7 +492,7 @@ az aks nodepool add \
   --skip-gpu-driver-install false
 </code></pre>
 <blockquote>
-<p><strong>容量の確保</strong>: ND GB300 v6 のデフォルトクォータは 0 です。Azure ポータルの <strong>Quotas &gt; Compute</strong>で対象リージョンの <code>Standard NDGB300v6 Family vCPUs</code> の増設をリクエストし、継続的なワークロードなら<strong>Capacity Reservation Group</strong> を作成して容量を先取りしてください。承認には営業日ベースで数日かかります。</p>
+<p><strong>容量の確保</strong>: ND GB300 v6 のデフォルトクォータは 0 です。Azure ポータルの <strong>Quotas &gt; Compute</strong> で対象リージョンの <code>Standard NDGB300v6 Family vCPUs</code> の増設をリクエストし、継続的なワークロードなら <strong>Capacity Reservation Group</strong> を作成して容量を先取りしてください。承認には営業日ベースで数日かかります。</p>
 </blockquote>
 <p>Azure に載せるには、事前に Azure アカウント担当者と長時間のコミュニケーションが必要です。この部分が最も重要です。希望するリージョンに GPU が無い可能性があります。</p>
 <h3>4.3 重みを Azure Blob Storage へ事前同期 (強く推奨)</h3>
@@ -813,11 +816,15 @@ gcloud container clusters delete ${CLUSTER_NAME} --location=${REGION}
 </ul>
 <h3>6.2 オプション A — PAI-EAS (Model Gallery / カスタムデプロイ)</h3>
 <p>PAI-EAS は vLLM、SGLang、自社開発の BladeLLM エンジンを統合サポートし、<strong>MoE モデル用のエキスパート並列(EP) + Prefill-Decode 分離デプロイ</strong>をワンクリックで提供します。Kimi K3 のように 896 個のエキスパートを持つモデルには、EP+PD 分離がスループットとコストの両面で有意な利点をもたらします。</p>
-<p><strong>デプロイ手順:</strong>1. PAI コンソールにログイン後、対象リージョンを選択。<strong>分散デプロイには 灵骏 インテリジェントコンピューティングリソースが必須で、VPC 設定が必ず必要です。</strong>2.<strong>模型在线服务(EAS) &gt; 部署服务 &gt; 自定义部署</strong> を選択
-3. デプロイ方式で <strong>镜像部署(イメージデプロイ)</strong> を選択後、<code>vllm/vllm-openai:kimi-k3</code> を指定 (社内 ACR ミラー推奨)
-4. モデルソースとして OSS バケットのパスを指定 (事前に重みをアップロード)
-5. リソース構成で 灵骏 リソースクォータとマルチノード(≥2)を指定
-6. 実行コマンドに以下を入力:</p>
+<p><strong>デプロイ手順:</strong></p>
+<ol>
+<li>PAI コンソールにログイン後、対象リージョンを選択。<strong>分散デプロイには 灵骏 インテリジェントコンピューティングリソースが必須で、VPC 設定が必ず必要です。</strong></li>
+<li><strong>模型在线服务(EAS) &gt; 部署服务 &gt; 自定义部署</strong> を選択</li>
+<li>デプロイ方式で <strong>镜像部署(イメージデプロイ)</strong> を選択後、<code>vllm/vllm-openai:kimi-k3</code> を指定 (社内 ACR ミラー推奨)</li>
+<li>モデルソースとして OSS バケットのパスを指定 (事前に重みをアップロード)</li>
+<li>リソース構成で 灵骏 リソースクォータとマルチノード(≥2)を指定</li>
+<li>実行コマンドに以下を入力:</li>
+</ol>
 <pre><code class="language-bash">vllm serve /mnt/models/Kimi-K3 \
   --trust-remote-code \
   --load-format fastsafetensors \

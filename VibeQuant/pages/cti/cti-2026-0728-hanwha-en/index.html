@@ -90,7 +90,7 @@
 </ol>
 <hr>
 <h2>1. Summary (TL;DR)</h2>
-<p>On July 24, 2026, a security researcher (blog name hhh.hn, pseudonym Austin) disclosed that after analyzing the network camera firmware of Hanwha Vision (formerly Samsung Techwin), they had found the same <strong>GitHub personal access token</strong>embedded in roughly 30 build artifacts of the camera&#39;s web admin UI. That token carried<strong>organization-wide admin privileges over hundreds of repositories</strong> inside Hanwha&#39;s GitHub organization. The cause was simple — a Vite configuration used to build the camera admin UI had bound a single build-time variable to the entire <code>process.env</code> object, so the whole environment of the CI/CD job (build system addresses, internal infrastructure IPs, and the GitHub token included) was baked verbatim into the client-side build output.</p>
+<p>On July 24, 2026, a security researcher (blog name hhh.hn, pseudonym Austin) disclosed that after analyzing the network camera firmware of Hanwha Vision (formerly Samsung Techwin), they had found the same <strong>GitHub personal access token</strong> embedded in roughly 30 build artifacts of the camera&#39;s web admin UI. That token carried <strong>organization-wide admin privileges over hundreds of repositories</strong> inside Hanwha&#39;s GitHub organization. The cause was simple — a Vite configuration used to build the camera admin UI had bound a single build-time variable to the entire <code>process.env</code> object, so the whole environment of the CI/CD job (build system addresses, internal infrastructure IPs, and the GitHub token included) was baked verbatim into the client-side build output.</p>
 <p>The researcher noted that the firmware itself was also doubly encrypted, but that by feeding the <code>fwupgrader</code> binary to Ghidra together with <strong>Claude Code</strong>, they were able to unwind the XOR-obfuscated AES-256-CBC key/IV recovery logic within a matter of hours. It&#39;s a case that illustrates how &quot;code obfuscation stopped buying anything but time — and now it doesn&#39;t even buy much of that.&quot;</p>
 <p>The exposed CI environment variables also included three IP addresses that appeared to fall within a U.S. Department of Defense (DoD) allocated range, which became a point of controversy. After confirming the details, Hanwha formally replied that <strong>this addressing scheme has been used internally as a matter of practice since the Samsung Techwin era, and we were not aware that the range had been officially allocated to the DoD,</strong>and the researcher subsequently retracted and corrected the speculative language in the original post (2026-07-27). The matter was confirmed to be<strong>misuse of a legacy internal addressing scheme</strong>, not evidence of an actual compromise.</p>
 <p>Hanwha revoked the token within <strong>12 hours</strong> of the report being filed, which stands out as a fast-response case; however, it has not been publicly confirmed whether the underlying root cause — a build configuration that bakes the entire CI environment into client output — has actually been remediated.</p>
@@ -109,17 +109,17 @@
 </thead>
 <tbody><tr>
 <td>KJ-1</td>
-<td>The exposure was not the result of an attack but a <strong>build configuration defect</strong>(a Vite environment variable bound to the entire <code>process.env</code>), which incidentally exposed the CI job&#39;s full environment in the client build output.</td>
+<td>The exposure was not the result of an attack but a <strong>build configuration defect</strong> (a Vite environment variable bound to the entire <code>process.env</code>), which incidentally exposed the CI job&#39;s full environment in the client build output.</td>
 <td><strong>High</strong></td>
 </tr>
 <tr>
 <td>KJ-2</td>
-<td>The exposed GitHub token was a single credential with <strong>organization-wide admin privileges</strong>, exposing a <strong>single point of failure (SPOF)</strong>structure in which one build-configuration mistake translates directly into a confidentiality/integrity risk for the organization&#39;s entire code estate.</td>
+<td>The exposed GitHub token was a single credential with <strong>organization-wide admin privileges</strong>, exposing a <strong>single point of failure (SPOF)</strong> structure in which one build-configuration mistake translates directly into a confidentiality/integrity risk for the organization&#39;s entire code estate.</td>
 <td><strong>High</strong></td>
 </tr>
 <tr>
 <td>KJ-3</td>
-<td>The firmware&#39;s two-layer encryption (an outer, model-name-derived passphrase, and an inner XOR-obfuscated AES key inside the binary) was once a meaningful line of defense, but <strong>LLM-assisted reverse engineering (Claude Code + Ghidra)</strong>let a single person defeat it in a matter of hours, effectively eliminating its protective value.</td>
+<td>The firmware&#39;s two-layer encryption (an outer, model-name-derived passphrase, and an inner XOR-obfuscated AES key inside the binary) was once a meaningful line of defense, but <strong>LLM-assisted reverse engineering (Claude Code + Ghidra)</strong> let a single person defeat it in a matter of hours, effectively eliminating its protective value.</td>
 <td><strong>High</strong></td>
 </tr>
 <tr>
@@ -129,12 +129,12 @@
 </tr>
 <tr>
 <td>KJ-5</td>
-<td>Decryption succeeded with the same method for 62% of roughly 500 firmware images, and all three firmware images in which the token was found contained the <strong>exact same token</strong>— indicating that a single CI pipeline&#39;s output is reused across multiple model lines.</td>
+<td>Decryption succeeded with the same method for 62% of roughly 500 firmware images, and all three firmware images in which the token was found contained the <strong>exact same token</strong> — indicating that a single CI pipeline&#39;s output is reused across multiple model lines.</td>
 <td><strong>Medium-High</strong></td>
 </tr>
 <tr>
 <td>KJ-6</td>
-<td>Revoking the token within 12 hours of the report was fast, but publicly available information does not confirm whether the <strong>root cause (the entire <code>process.env</code> being exposed by the build script) has actually been fixed</strong>— the risk of recurrence remains.</td>
+<td>Revoking the token within 12 hours of the report was fast, but publicly available information does not confirm whether the <strong>root cause (the entire <code>process.env</code> being exposed by the build script) has actually been fixed</strong> — the risk of recurrence remains.</td>
 <td><strong>Medium</strong></td>
 </tr>
 <tr>
@@ -381,7 +381,7 @@ IV  = 53f926801b81454a4f889c9a390db6e6
 <hr>
 <h2>10. Korean Perspective — Domestic Defense-Industry Affiliates and CTI Implications</h2>
 <ul>
-<li><strong>The surveillance-equipment/defense-affiliate structure.</strong>Hanwha Vision originated as Samsung Techwin before being folded into the Hanwha Group, and has a history of producing subsystems for the K9 self-propelled howitzer, the K10 ammunition resupply vehicle, the K2 tank, and the SGR-A1 sentry robot. While this particular incident occurred in the web UI of a civilian CCTV product rather than a defense product, the fact that Hanwha Group also includes defense-industry affiliates such as Hanwha Aerospace and Hanwha Defense USA means that<strong>the software supply-chain security boundaries between affiliates sharing common group-wide CI infrastructure</strong> may warrant future scrutiny.</li>
+<li><strong>The surveillance-equipment/defense-affiliate structure.</strong> Hanwha Vision originated as Samsung Techwin before being folded into the Hanwha Group, and has a history of producing subsystems for the K9 self-propelled howitzer, the K10 ammunition resupply vehicle, the K2 tank, and the SGR-A1 sentry robot. While this particular incident occurred in the web UI of a civilian CCTV product rather than a defense product, the fact that Hanwha Group also includes defense-industry affiliates such as Hanwha Aerospace and Hanwha Defense USA means that <strong>the software supply-chain security boundaries between affiliates sharing common group-wide CI infrastructure</strong> may warrant future scrutiny.</li>
 <li><strong>A shared risk across domestic IoT/embedded vendors.</strong> As also noted in the GeekNews comment section, hardcoded credentials and risky defaults remain a chronic problem across the IoT industry both domestically and abroad. That said, this case offers a relatively favorable benchmark — a &quot;12-hour response after disclosure&quot; — that domestic vendors could reference when designing their own vulnerability disclosure response processes.</li>
 <li><strong>The enterprise-asset-ification of surveillance cameras.</strong> As noted in the original source, amid an industry trend (exemplified by AXIS) of redefining cameras as &quot;enterprise network assets that happen to run Linux,&quot; domestic CCTV vendors also face a growing need to adopt credential lifecycle management, SBOMs (software bills of materials), and secret scanning as standard components of their build pipelines.</li>
 </ul>
@@ -389,8 +389,8 @@ IV  = 53f926801b81454a4f889c9a390db6e6
 <h2>11. Detection, Mitigation, and Response Recommendations</h2>
 <h3>For Manufacturers / Embedded-IoT Vendors in General</h3>
 <ol>
-<li><strong>Extend secret scanning to build outputs</strong>— Beyond source repositories, run trufflehog-class secret scanners as a mandatory final step of the CI pipeline against<strong>build artifacts (client bundles, firmware images, container images)</strong>. This incident demonstrates that even when the source contains no secrets, build-tool configuration defects can still let them leak into artifacts.</li>
-<li><strong>Whitelist build variables</strong>— Prohibit patterns in bundler configurations (Vite/Webpack <code>define</code>/<code>env</code> settings, etc.) that expose the<strong>entire</strong> <code>process.env</code> to the client, and instead inject only explicitly required variables via an individual whitelist.</li>
+<li><strong>Extend secret scanning to build outputs</strong> — Beyond source repositories, run trufflehog-class secret scanners as a mandatory final step of the CI pipeline against <strong>build artifacts (client bundles, firmware images, container images)</strong>. This incident demonstrates that even when the source contains no secrets, build-tool configuration defects can still let them leak into artifacts.</li>
+<li><strong>Whitelist build variables</strong> — Prohibit patterns in bundler configurations (Vite/Webpack <code>define</code>/<code>env</code> settings, etc.) that expose the <strong>entire</strong> <code>process.env</code> to the client, and instead inject only explicitly required variables via an individual whitelist.</li>
 <li><strong>Eliminate long-lived credentials</strong> — Rather than keeping long-lived tokens like GitHub PATs permanently resident in the CI environment, migrate to GitHub Actions OIDC, fine-grained PATs, or short-TTL tokens. Eliminate the underlying structure in which a single token with organization-wide admin privileges is shared across multiple CI jobs.</li>
 <li><strong>Redesign firmware encryption</strong> — Stop treating in-binary, XOR-obfuscated key-reassembly schemes as a valid line of defense. Move toward hardware-security-module (HSM/TPM/Secure Element)-based key derivation and per-device unique key issuance.</li>
 <li><strong>Audit internal addressing schemes</strong> — Conduct a full audit of any legacy practice of arbitrarily reusing publicly allocated IP ranges (particularly government/defense-allocated ranges) as internal addresses, and migrate to RFC 1918 private address ranges.</li>
@@ -398,7 +398,7 @@ IV  = 53f926801b81454a4f889c9a390db6e6
 </ol>
 <h3>Security Disclosure Process (As a Reference Case)</h3>
 <ol start="7">
-<li>This incident&#39;s <strong>12-hour token revocation response</strong>and<strong>substantiated reply to a public inquiry</strong> are worth referencing as a benchmark for other companies&#39; vulnerability disclosure response processes.</li>
+<li>This incident&#39;s <strong>12-hour token revocation response</strong> and <strong>substantiated reply to a public inquiry</strong> are worth referencing as a benchmark for other companies&#39; vulnerability disclosure response processes.</li>
 </ol>
 <h3>For Enterprises Purchasing/Operating Cameras</h3>
 <ol start="8">

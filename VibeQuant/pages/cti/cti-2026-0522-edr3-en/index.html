@@ -114,7 +114,7 @@
 </tr>
 </tbody></table>
 <blockquote>
-<p><strong>Purpose.</strong>As of the third week of May 2026, this report consolidates three vulnerabilities that share two traits:<strong>limited domestic (Korean) press coverage, yet active in-the-wild exploitation or a public exploit.</strong>Superficially unrelated, the three cases converge on a single theme — they target<strong>the defense/automation layer itself</strong> — and together illustrate a defining trend of the 2026 threat landscape.</p>
+<p><strong>Purpose.</strong> As of the third week of May 2026, this report consolidates three vulnerabilities that share two traits: <strong>limited domestic (Korean) press coverage, yet active in-the-wild exploitation or a public exploit.</strong> Superficially unrelated, the three cases converge on a single theme — they target <strong>the defense/automation layer itself</strong> — and together illustrate a defining trend of the 2026 threat landscape.</p>
 </blockquote>
 <hr>
 <h2>Table of Contents</h2>
@@ -134,9 +134,11 @@
 <hr>
 <h2>1. Executive Summary</h2>
 <p>In the third week of May 2026, <strong>high-severity vulnerabilities surfaced almost simultaneously across three product categories that act as the &quot;last line of defense&quot; or the &quot;nervous system&quot; of security operations.</strong></p>
-<p><strong>(1) Microsoft Defender</strong>— Two zero-days in the antimalware engine/platform were confirmed exploited in the wild upon their May 19 disclosure, and were added to the U.S. CISA Known Exploited Vulnerabilities (KEV) catalog.<strong>(2) n8n</strong>— A maximum-severity (CVSS 10.0) unauthenticated remote code execution flaw in this workflow-automation platform (100M+ Docker pulls) has spread alongside a public PoC exploit chain.<strong>(3) Trend Micro Apex One</strong> — A directory-traversal flaw in this widely deployed endpoint-security management console was added to the KEV catalog on May 21 based on evidence of active exploitation.</p>
+<p><strong>(1) Microsoft Defender</strong> — Two zero-days in the antimalware engine/platform were confirmed exploited in the wild upon their May 19 disclosure, and were added to the U.S. CISA Known Exploited Vulnerabilities (KEV) catalog.</p>
+<p><strong>(2) n8n</strong> — A maximum-severity (CVSS 10.0) unauthenticated remote code execution flaw in this workflow-automation platform (100M+ Docker pulls) has spread alongside a public PoC exploit chain.</p>
+<p><strong>(3) Trend Micro Apex One</strong> — A directory-traversal flaw in this widely deployed endpoint-security management console was added to the KEV catalog on May 21 based on evidence of active exploitation.</p>
 <blockquote>
-<p>⚠ <strong>Core risk.</strong>What the three cases share is that attackers target components that have<strong>already been granted high trust and privilege</strong> — the protection engine (Defender), the automation hub (n8n), and the central management console (Apex One). Compromise of such components carries an abnormally large blast radius across privilege escalation, defense evasion, and lateral spread.</p>
+<p>⚠ <strong>Core risk.</strong> What the three cases share is that attackers target components that have <strong>already been granted high trust and privilege</strong> — the protection engine (Defender), the automation hub (n8n), and the central management console (Apex One). Compromise of such components carries an abnormally large blast radius across privilege escalation, defense evasion, and lateral spread.</p>
 </blockquote>
 <h3>Key Judgments</h3>
 <table>
@@ -150,32 +152,32 @@
 <tbody><tr>
 <td><strong>KJ-1</strong></td>
 <td>The two Microsoft Defender zero-days (CVE-2026-41091, CVE-2026-45498) were already being exploited at disclosure.</td>
-<td>Microsoft&#39;s advisory acknowledged exploitation; CISA added them to KEV.<strong>Confidence: High</strong></td>
+<td>Microsoft&#39;s advisory acknowledged exploitation; CISA added them to KEV. <strong>Confidence: High</strong></td>
 </tr>
 <tr>
 <td><strong>KJ-2</strong></td>
 <td>Defender LPE (CVE-2026-41091) is a textbook post-exploitation tool for the &quot;obtain SYSTEM after initial access&quot; stage.</td>
-<td>CWE-59 link following; low privilege, no user interaction, low complexity; resides in mpengine.dll.<strong>Confidence: High</strong></td>
+<td>CWE-59 link following; low privilege, no user interaction, low complexity; resides in mpengine.dll. <strong>Confidence: High</strong></td>
 </tr>
 <tr>
 <td><strong>KJ-3</strong></td>
 <td>The Defender exploits are plausibly linked to the RedSun/UnDefend tools published by &quot;Nightmare Eclipse.&quot;</td>
-<td>Multiple security outlets raised the link; Microsoft did not officially name them.<strong>Confidence: Medium</strong></td>
+<td>Multiple security outlets raised the link; Microsoft did not officially name them. <strong>Confidence: Medium</strong></td>
 </tr>
 <tr>
 <td><strong>KJ-4</strong></td>
 <td>n8n Ni8mare (CVE-2026-21858) yields unauthenticated RCE on internet-exposed instances and acts as a powerful post-compromise accelerator when deployed internally.</td>
-<td>Cyera original research + public PoC chain (linked to CVE-2025-68613). Armis assesses internal deployment as typical.<strong>Confidence: High</strong></td>
+<td>Cyera original research + public PoC chain (linked to CVE-2025-68613). Armis assesses internal deployment as typical. <strong>Confidence: High</strong></td>
 </tr>
 <tr>
 <td><strong>KJ-5</strong></td>
 <td>The KEV listing of Trend Micro Apex One (CVE-2026-34926) reaffirms the &quot;security product as attack infrastructure&quot; trend.</td>
-<td>CISA added it on 2026-05-21 on exploitation evidence; the Apex family has 10+ cumulative KEV entries.<strong>Confidence: High</strong></td>
+<td>CISA added it on 2026-05-21 on exploitation evidence; the Apex family has 10+ cumulative KEV entries. <strong>Confidence: High</strong></td>
 </tr>
 <tr>
 <td><strong>KJ-6</strong></td>
 <td>All three threats apply directly to Korean organizations, yet limited domestic coverage creates an awareness/response gap.</td>
-<td>No dedicated in-depth coverage found in major Korean security media. Assessed at publication.<strong>Confidence: Medium</strong></td>
+<td>No dedicated in-depth coverage found in major Korean security media. Assessed at publication. <strong>Confidence: Medium</strong></td>
 </tr>
 </tbody></table>
 <hr>
@@ -239,13 +241,13 @@
 <hr>
 <h2>3. Microsoft Defender Zero-Days (CVE-2026-41091 / -45498 / -45584)</h2>
 <h3>3.1 Overview</h3>
-<p>Among the Microsoft Defender vulnerabilities disclosed on May 19, 2026, <strong>CVE-2026-41091 (privilege escalation, CVSS 7.8)</strong>and<strong>CVE-2026-45498 (denial of service, CVSS 4.0)</strong>were confirmed to be under active exploitation at the time of disclosure. Microsoft acknowledged this in its advisory, and CISA formalized the in-the-wild abuse by adding both to the KEV catalog. A concurrently patched flaw,<strong>CVE-2026-45584</strong>, is a remote code execution issue in the antimalware engine.</p>
+<p>Among the Microsoft Defender vulnerabilities disclosed on May 19, 2026, <strong>CVE-2026-41091 (privilege escalation, CVSS 7.8)</strong> and <strong>CVE-2026-45498 (denial of service, CVSS 4.0)</strong> were confirmed to be under active exploitation at the time of disclosure. Microsoft acknowledged this in its advisory, and CISA formalized the in-the-wild abuse by adding both to the KEV catalog. A concurrently patched flaw, <strong>CVE-2026-45584</strong>, is a remote code execution issue in the antimalware engine.</p>
 <h3>3.2 Technical Analysis</h3>
 <h4>3.2.1 CVE-2026-41091 — SYSTEM Privilege Escalation via Link Following</h4>
-<p>The flaw originates in the <strong>Microsoft Malware Protection Engine (MPE, mpengine.dll)</strong>— which handles scanning, detection, and cleaning — improperly resolving links (symlinks/junctions) before file access (CWE-59, link following). An authenticated local attacker can coerce Defender into following an attacker-controlled path, ultimately obtaining<strong>SYSTEM privileges</strong>. With low required privilege, no user interaction, and low attack complexity, it is a reliable privilege-escalation primitive for an attacker who already has a foothold.</p>
+<p>The flaw originates in the <strong>Microsoft Malware Protection Engine (MPE, mpengine.dll)</strong> — which handles scanning, detection, and cleaning — improperly resolving links (symlinks/junctions) before file access (CWE-59, link following). An authenticated local attacker can coerce Defender into following an attacker-controlled path, ultimately obtaining <strong>SYSTEM privileges</strong>. With low required privilege, no user interaction, and low attack complexity, it is a reliable privilege-escalation primitive for an attacker who already has a foothold.</p>
 <p><strong>Operational pitfall to note:</strong> Even on systems where Defender is disabled, version checks on the installed binaries can cause scan output to flag the system as &quot;vulnerable&quot; — though it is not actually exploitable in that state. Do not conflate this inventory false positive with severity assessment.</p>
 <h4>3.2.2 CVE-2026-45498 — Defender Denial of Service</h4>
-<p>This DoS flaw affects the <strong>Microsoft Defender Antimalware Platform (MsMpEng.exe)</strong>family, responsible for real-time protection. Although rated CVSS 4.0, it can be triggered locally with no privilege and no user interaction, and it<strong>disables the protection function itself</strong> — meaning more than its score suggests, as it can be abused as a pre-step to neutralize defenses ahead of a follow-on attack. It does not directly affect confidentiality or integrity, but it can paralyze incident-response and detection capabilities.</p>
+<p>This DoS flaw affects the <strong>Microsoft Defender Antimalware Platform (MsMpEng.exe)</strong> family, responsible for real-time protection. Although rated CVSS 4.0, it can be triggered locally with no privilege and no user interaction, and it <strong>disables the protection function itself</strong> — meaning more than its score suggests, as it can be abused as a pre-step to neutralize defenses ahead of a follow-on attack. It does not directly affect confidentiality or integrity, but it can paralyze incident-response and detection capabilities.</p>
 <h4>3.2.3 Exploit Provenance — RedSun / UnDefend</h4>
 <p>Multiple security outlets raised the plausibility that the two flaws are linked to the <strong>RedSun · UnDefend</strong> exploits published last month on GitHub by a researcher self-styled &quot;Nightmare Eclipse.&quot; Microsoft did not name those exploits in its advisory, so attribution should be treated as circumstantial.</p>
 <h3>3.3 Affected Versions and Fixes</h3>
@@ -274,7 +276,7 @@
 <hr>
 <h2>4. n8n &quot;Ni8mare&quot; (CVE-2026-21858) — Unauthenticated RCE Chain</h2>
 <h3>4.1 Overview</h3>
-<p>n8n is a low-code, node-based workflow-automation platform that acts as an <strong>automation hub</strong>connecting Salesforce, Slack, OpenAI, and internal services. It has an estimated 100M+ Docker pulls and roughly 100,000 self-hosted instances. Discovered and disclosed by Dor Attias of Cyera Research Labs (2025-11-09) and codenamed &quot;Ni8mare,&quot; it carries a<strong>maximum CVSS of 10.0</strong>. n8n shipped a fix in version 1.121.0 on 2025-11-18 and published a formal advisory on 2026-01-07.</p>
+<p>n8n is a low-code, node-based workflow-automation platform that acts as an <strong>automation hub</strong> connecting Salesforce, Slack, OpenAI, and internal services. It has an estimated 100M+ Docker pulls and roughly 100,000 self-hosted instances. Discovered and disclosed by Dor Attias of Cyera Research Labs (2025-11-09) and codenamed &quot;Ni8mare,&quot; it carries a <strong>maximum CVSS of 10.0</strong>. n8n shipped a fix in version 1.121.0 on 2025-11-18 and published a formal advisory on 2026-01-07.</p>
 <h3>4.2 Technical Analysis — From Content-Type Confusion to RCE</h3>
 <p>The root cause is that the Form Webhook node, when handling file uploads, <strong>fails to verify that the Content-Type is <code>multipart/form-data</code>.</strong> By manipulating the Content-Type header, an attacker causes n8n to invoke the wrong parser and overwrite internal request-parsing state (internal JSON objects such as <code>req.body.files</code>). This establishes the following chain:</p>
 <table>
@@ -301,15 +303,20 @@
 <td>Remote code execution · full instance takeover</td>
 </tr>
 </tbody></table>
+<p><strong>Public PoC context:</strong>A working reproduction/exploit was reportedly built within ~9 hours of public disclosure via patch-diff analysis (a conditional PoC requiring a specific workflow configuration). In other words, this is<strong>no longer a theoretical risk but one that has been weaponized.</strong></p>
 <h3>4.3 Exposure Surface and Real-World Risk</h3>
-<p>Armis and others note that the &quot;CVSS 10.0&quot; framing can obscure reality. In many organizations, n8n is not directly internet-exposed but deployed as an <strong>internal automation service (private network/VPN/trusted cloud segment).</strong>In that case Ni8mare is not an &quot;initial access&quot; vulnerability but a<strong>post-compromise accelerator</strong>that dramatically increases blast radius once an attacker is already inside — precisely because n8n holds many stored credentials and execution privileges.<strong>Affected versions:</strong>Primarily self-hosted builds 1.65.0 – 1.120.4; fixed in 1.121.0 and later. Cloud instances were auto-patched. Also worth checking are<strong>CVE-2025-68613</strong> (authenticated expression injection, used in the chain) and a separate RCE-via-Arbitrary-File-Write (CVE-2026-21877, CVSS 9.9).</p>
+<p>Armis and others note that the &quot;CVSS 10.0&quot; framing can obscure reality. In many organizations, n8n is not directly internet-exposed but deployed as an <strong>internal automation service (private network/VPN/trusted cloud segment).</strong> In that case Ni8mare is not an &quot;initial access&quot; vulnerability but a <strong>post-compromise accelerator</strong> that dramatically increases blast radius once an attacker is already inside — precisely because n8n holds many stored credentials and execution privileges.</p>
+<p><strong>Affected versions:</strong>Primarily self-hosted builds 1.65.0 – 1.120.4; fixed in 1.121.0 and later. Cloud instances were auto-patched. Also worth checking are<strong>CVE-2025-68613</strong> (authenticated expression injection, used in the chain) and a separate RCE-via-Arbitrary-File-Write (CVE-2026-21877, CVSS 9.9).</p>
 <hr>
 <h2>5. Trend Micro Apex One (CVE-2026-34926) — Management Console Directory Traversal</h2>
 <h3>5.1 Overview</h3>
 <p>On May 21, 2026, CISA added <strong>CVE-2026-34926, a directory-traversal vulnerability in Trend Micro Apex One (on-premise),</strong>to the KEV catalog on evidence of active exploitation (Langflow&#39;s CVE-2025-34291 was added the same day). Apex One is an<strong>endpoint security management solution</strong> delivering ransomware protection, zero-day defense, EDR, DLP, and virtual patching through a single agent, with a management console that centrally controls many endpoint agents.</p>
 <h3>5.2 Technical Analysis and Context</h3>
 <p>CVE-2026-34926 is a directory-traversal (CWE-22) flaw that allows manipulating the management console&#39;s key table to inject malicious code and <strong>deploy it to the agents</strong> of affected installations. The core risk is that once the security management console is compromised, &quot;every endpoint it protected&quot; becomes &quot;an attack-delivery channel.&quot;</p>
-<p>In a prior advisory in February 2026, Trend Micro patched two unauthenticated directory-traversal RCE flaws in the same console (CVE-2025-71210, CVE-2025-71211, each CVSS 9.8), warning at the time that externally exposed console IPs amplify the risk. The Apex family has been a repeated target, with <strong>10+ cumulative entries in the CISA KEV catalog.</strong>&gt; ℹ️<strong>Correction note.</strong>The &quot;Apex One pre-authenticated local directory traversal (a separate CVE)&quot; mentioned in the initial briefing is a different item from this KEV in-the-wild listing. The item covered here —<strong>confirmed exploited + KEV-listed on 2026-05-21</strong> — is CVE-2026-34926. Distinguish CVE identifiers precisely when prioritizing operations.</p>
+<p>In a prior advisory in February 2026, Trend Micro patched two unauthenticated directory-traversal RCE flaws in the same console (CVE-2025-71210, CVE-2025-71211, each CVSS 9.8), warning at the time that externally exposed console IPs amplify the risk. The Apex family has been a repeated target, with <strong>10+ cumulative entries in the CISA KEV catalog.</strong></p>
+<blockquote>
+<p>ℹ️ <strong>Correction note.</strong> The &quot;Apex One pre-authenticated local directory traversal (a separate CVE)&quot; mentioned in the initial briefing is a different item from this KEV in-the-wild listing. The item covered here — <strong>confirmed exploited + KEV-listed on 2026-05-21</strong> — is CVE-2026-34926. Distinguish CVE identifiers precisely when prioritizing operations.</p>
+</blockquote>
 <h3>5.3 Exposure Surface and Remediation Premise</h3>
 <p>Exploitation presupposes <strong>management console access.</strong> Therefore the first line of defense is to avoid exposing the console directly to the internet and to apply source-IP restrictions and network segmentation. On-premise users should update to the latest build; SaaS users (Trend Vision One Endpoint) often need no action but should confirm via the advisory.</p>
 <hr>
@@ -487,7 +494,7 @@
 </tr>
 </tbody></table>
 <blockquote>
-<p>💡 <strong>Recommendation.</strong>Domestically, these three cases were barely covered even as standalone briefs. Yet all three products<strong>exist pervasively in the operational stacks of Korean organizations.</strong> Security leaders should reconfirm, on an asset basis, that &quot;absence of domestic coverage&quot; does not mean &quot;irrelevant domestically.&quot;</p>
+<p>💡 <strong>Recommendation.</strong> Domestically, these three cases were barely covered even as standalone briefs. Yet all three products <strong>exist pervasively in the operational stacks of Korean organizations.</strong> Security leaders should reconfirm, on an asset basis, that &quot;absence of domestic coverage&quot; does not mean &quot;irrelevant domestically.&quot;</p>
 </blockquote>
 <hr>
 <h2>9. Conclusion &amp; Strategic Implications</h2>
@@ -499,7 +506,7 @@
 <h3>Lesson 3 — KEV Is Not a &quot;Checklist&quot; but a &quot;Real-Time Map&quot;</h3>
 <p>A CISA KEV listing means &quot;the debate over exploitability is over.&quot; As the rapid KEV listings of Defender and Apex One show, organizations need an operational system that continuously feeds KEV into patch prioritization.</p>
 <blockquote>
-<p>📍 <strong>Final judgment.</strong>Of the three items, the two Defender CVEs and the one Apex One CVE are<strong>KEV-listed and confirmed exploited</strong>, making them top-priority. Because a public PoC chain exists for n8n Ni8mare, organizations running self-hosted instances are advised to patch and block exposure immediately. This report will be updated as further information becomes available.</p>
+<p>📍 <strong>Final judgment.</strong> Of the three items, the two Defender CVEs and the one Apex One CVE are <strong>KEV-listed and confirmed exploited</strong>, making them top-priority. Because a public PoC chain exists for n8n Ni8mare, organizations running self-hosted instances are advised to patch and block exposure immediately. This report will be updated as further information becomes available.</p>
 </blockquote>
 <hr>
 <h2>10. References &amp; Sources</h2>

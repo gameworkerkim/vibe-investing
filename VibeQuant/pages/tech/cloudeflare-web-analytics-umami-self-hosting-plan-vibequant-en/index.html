@@ -70,7 +70,8 @@
 </nav>
       </header>
       <div class="article-body prose"><h2>1. Introduction: A Practical Approach</h2>
-<p>Attempting to run Umami <strong>entirely</strong>on Cloudflare is appealing, but in practice it&#39;s<strong>a path with high complexity.</strong>Umami<strong>officially supports only PostgreSQL or MySQL,</strong> and Cloudflare D1 (SQLite-based) is not officially supported. Cloudflare Workers run in a V8 Isolate environment, so a Node.js-based app like Umami can&#39;t be deployed as-is — you&#39;d need to patch the database layer directly, and that patch carries a high risk of breaking with every update.</p>
+<p>Attempting to run Umami <strong>entirely</strong> on Cloudflare is appealing, but in practice it&#39;s <strong>a path with high complexity.</strong></p>
+<p>Umami <strong>officially supports only PostgreSQL or MySQL,</strong> and Cloudflare D1 (SQLite-based) is not officially supported. Cloudflare Workers run in a V8 Isolate environment, so a Node.js-based app like Umami can&#39;t be deployed as-is — you&#39;d need to patch the database layer directly, and that patch carries a high risk of breaking with every update.</p>
 <p>So this document examines two practical approaches to <strong>running Umami as close to Cloudflare as possible, but pragmatically.</strong> The target sites are <a href="https://vibequant.cc">vibequant.cc</a> and its subdomains, currently running on the Cloudflare Pages free tier.</p>
 <p>Related background: this is the execution plan for &quot;start with Web Analytics → expand to Umami if needed,&quot; as recommended in the <a href="./CloudeFlare-Web-Analytics-Guide_EN.md">Cloudflare Web Analytics Solutions Guide</a>.</p>
 <table>
@@ -147,7 +148,7 @@ Umami app (A: Vercel / B: Fly.io)  &lt;--&gt;  PostgreSQL (Neon or Supabase)
 <td>Same</td>
 </tr>
 </tbody></table>
-<p><strong>Conclusion (recommendation):</strong>Adopt and validate with<strong>A</strong>first, then migrate to<strong>B</strong> if Vercel cold starts, Hobby-plan limits, or Prisma connection issues become noticeable. The Worker proxy and <code>analytics.vibequant.cc</code> domain design are reusable across both approaches.</p>
+<p><strong>Conclusion (recommendation):</strong>Adopt and validate with<strong>A</strong> first, then migrate to <strong>B</strong> if Vercel cold starts, Hobby-plan limits, or Prisma connection issues become noticeable. The Worker proxy and <code>analytics.vibequant.cc</code> domain design are reusable across both approaches.</p>
 <hr>
 <h2>3. Approach A: Vercel + Cloudflare Worker Proxy (Recommended)</h2>
 <p>This is the combination most widely used in the Umami community. Official guide: <a href="https://docs.umami.is/docs/guides/running-on-vercel">Running on Vercel</a>.</p>
@@ -195,14 +196,19 @@ Vercel (Umami Next.js)  &lt;--&gt;  Neon or Supabase (PostgreSQL)
 </tr>
 </tbody></table>
 <h3>3.3 Step-by-Step Installation</h3>
-<p><strong>Step 1: Fork the Umami repository</strong>Fork <a href="https://github.com/umami-software/umami">umami-software/umami</a> to your GitHub account.<strong>Step 2: Create a PostgreSQL instance</strong></p>
+<p><strong>Step 1: Fork the Umami repository</strong></p>
+<p>Fork <a href="https://github.com/umami-software/umami">umami-software/umami</a> to your GitHub account.</p>
+<p><strong>Step 2: Create a PostgreSQL instance</strong></p>
 <p>Create a project on <a href="https://neon.tech">Neon</a> or <a href="https://supabase.com">Supabase</a> and copy the connection string (<code>postgresql://...</code>).</p>
 <ul>
 <li>Neon: serverless Postgres, can suspend (cold start) when idle</li>
 <li>Supabase: check the free tier&#39;s DB storage and connection limits</li>
 </ul>
-<p><strong>Step 3: Deploy Umami to Vercel</strong>1. In Vercel, use<strong>Add New → Project</strong> to import your forked <code>umami</code>
-2. Set the environment variables:</p>
+<p><strong>Step 3: Deploy Umami to Vercel</strong></p>
+<ol>
+<li>In Vercel, use <strong>Add New → Project</strong> to import your forked <code>umami</code></li>
+<li>Set the environment variables:</li>
+</ol>
 <table>
 <thead>
 <tr>
@@ -244,8 +250,12 @@ Vercel (Umami Next.js)  &lt;--&gt;  Neon or Supabase (PostgreSQL)
 <ol>
 <li>Visit the deployed URL</li>
 <li>Default account: <code>admin</code> / <code>umami</code> (<a href="https://docs.umami.is/docs/login">Login</a>)</li>
-<li><strong>Change the password immediately</strong>4. Add a site under Settings → Websites and copy the<strong>Website ID</strong>Since vibequant has multiple hosts, decide how to split up Websites before this step (see <a href="#8-additional-requirements-for-vibequantcc">Additional Requirements for vibequant.cc</a> below).<strong>Step 5: Cloudflare Worker proxy</strong>The Worker needs to proxy<strong>both the tracker script and the collection API.</strong> If you only pass through <code>/api/send</code> as in the original guide, script loading breaks.</li>
+<li><strong>Change the password immediately</strong></li>
+<li>Add a site under Settings → Websites and copy the <strong>Website ID</strong></li>
 </ol>
+<p>Since vibequant has multiple hosts, decide how to split up Websites before this step (see <a href="#8-additional-requirements-for-vibequantcc">Additional Requirements for vibequant.cc</a> below).</p>
+<p><strong>Step 5: Cloudflare Worker proxy</strong></p>
+<p>The Worker needs to proxy <strong>both the tracker script and the collection API.</strong> If you only pass through <code>/api/send</code> as in the original guide, script loading breaks.</p>
 <p>Example (adjust paths to match your actual <code>TRACKER_SCRIPT_NAME</code> / <code>COLLECT_API_ENDPOINT</code>):</p>
 <pre><code class="language-javascript">const UMAMI_ORIGIN = &quot;https://your-umami.vercel.app&quot;; // Vercel Umami URL
 const SCRIPT_PATH = &quot;/u.js&quot;;          // matches TRACKER_SCRIPT_NAME output
@@ -288,7 +298,10 @@ export default {
 <li>Do not hardcode the dashboard&#39;s statistics API token in the Worker source. Access the dashboard directly via the Vercel URL (or a separate protected path).</li>
 <li>In production, keep <code>UMAMI_ORIGIN</code> in Worker <strong>Secrets / Vars.</strong></li>
 </ul>
-<p><strong>Step 6: Custom domain</strong>Attach <code>analytics.vibequant.cc</code> to the Worker. Making tracking appear first-party (or a subdomain of the same registered domain) increases the odds of avoiding ad blockers. Community discussion: <a href="https://github.com/umami-software/umami/discussions/1026">umami#1026</a>.<strong>Step 7: Insert tracking code into vibequant.cc</strong>The correct script form is as follows (<code>src</code> points to the<strong>script file</strong>, not <code>/api/send</code>):</p>
+<p><strong>Step 6: Custom domain</strong></p>
+<p>Attach <code>analytics.vibequant.cc</code> to the Worker. Making tracking appear first-party (or a subdomain of the same registered domain) increases the odds of avoiding ad blockers. Community discussion: <a href="https://github.com/umami-software/umami/discussions/1026">umami#1026</a>.</p>
+<p><strong>Step 7: Insert tracking code into vibequant.cc</strong></p>
+<p>The correct script form is as follows (<code>src</code> points to the <strong>script file</strong>, not <code>/api/send</code>):</p>
 <pre><code class="language-html">&lt;script
   defer
   src=&quot;https://analytics.vibequant.cc/u.js&quot;
@@ -550,7 +563,9 @@ fly deploy
 <td>Charges kick in past IPv4/memory limits</td>
 </tr>
 </tbody></table>
+<p><strong>Realistic monthly cost expectations</strong></p>
 <ul>
+<li><strong>A:</strong>can stay close to<strong>$0</strong> if traffic is not large</li>
 <li><strong>B:</strong> hard to guarantee &quot;completely free.&quot; Memory and IPv4 alone can incur a small monthly charge. Be sure to enable billing alerts.</li>
 </ul>
 <p>&quot;$0/month&quot; is only a safe target with the <strong>A + Neon/Supabase + Worker</strong> combination.</p>
@@ -755,7 +770,9 @@ fly deploy
 <li>Migrating to B later just means swapping the Worker origin</li>
 </ul>
 </li>
-<li><strong>Do not attempt D1/Workers-native Umami</strong>4.<strong>Insert via build.mjs + use per-host Website IDs</strong>5.<strong>Migrate to B once cold starts / Hobby limits become noticeable</strong><ul>
+<li><strong>Do not attempt D1/Workers-native Umami</strong></li>
+<li><strong>Insert via build.mjs + use per-host Website IDs</strong></li>
+<li><strong>Migrate to B once cold starts / Hobby limits become noticeable</strong><ul>
 <li>Until then, don&#39;t assume Fly is &quot;free&quot;</li>
 </ul>
 </li>

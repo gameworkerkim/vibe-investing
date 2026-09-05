@@ -69,11 +69,14 @@
   <span class="share-status" data-share-status hidden></span>
 </nav>
       </header>
-      <div class="article-body prose"><p><strong>文档 ID:</strong>CTI-2026-0520-FAST16<strong>发布日期:</strong>2026年5月20日<strong>分析师:</strong>Dennis Kim (HoKwang Kim, 김호광) — CEO, Betalabs Inc. / Independent CTI Analyst / Microsoft Azure MVP<strong>TLP:</strong> CLEAR</p>
+      <div class="article-body prose"><p><strong>文档 ID:</strong> CTI-2026-0520-FAST16
+<strong>发布日期:</strong> 2026年5月20日
+<strong>分析师:</strong> Dennis Kim (HoKwang Kim, 김호광) — CEO, Betalabs Inc. / Independent CTI Analyst / Microsoft Azure MVP
+<strong>TLP:</strong> CLEAR</p>
 <hr>
 <h2>执行摘要</h2>
-<p>本报告是对 <strong>fast16</strong>破坏框架的综合分析。SentinelLABS 于 2026 年 4 月首次公开披露,Broadcom Symantec Threat Hunter Team 于 2026 年 5 月发布了后续分析。fast16 的代码库经确认编译于 2005 年前后,这表明<strong>比 Stuxnet 至少早 5 年</strong>,国家级网络破坏能力就已建成并投入运行。</p>
-<p>Symantec 的后续分析为 SentinelLABS 未能解决的核心问题 — <strong>攻击者究竟想要篡改什么</strong>— 提供了决定性答案。fast16 的钩子引擎以高精度爆炸仿真软件<strong>LS-DYNA</strong>和<strong>AUTODYN</strong>为目标,其内部逻辑仅在铀达到 30 g/cm³ 以上密度时才触发 — 也就是<strong>只有在内爆型(implosion-type)核武器中才能达到的冲击压缩条件</strong>。</p>
+<p>本报告是对 <strong>fast16</strong> 破坏框架的综合分析。SentinelLABS 于 2026 年 4 月首次公开披露,Broadcom Symantec Threat Hunter Team 于 2026 年 5 月发布了后续分析。fast16 的代码库经确认编译于 2005 年前后,这表明<strong>比 Stuxnet 至少早 5 年</strong>,国家级网络破坏能力就已建成并投入运行。</p>
+<p>Symantec 的后续分析为 SentinelLABS 未能解决的核心问题 — <strong>攻击者究竟想要篡改什么</strong>— 提供了决定性答案。fast16 的钩子引擎以高精度爆炸仿真软件<strong>LS-DYNA</strong> 和 <strong>AUTODYN</strong> 为目标,其内部逻辑仅在铀达到 30 g/cm³ 以上密度时才触发 — 也就是<strong>只有在内爆型(implosion-type)核武器中才能达到的冲击压缩条件</strong>。</p>
 <h3>主要结论 (Key Findings)</h3>
 <ul>
 <li>fast16 旨在隐秘篡改核武器设计核心步骤——高爆药内爆(implosion)仿真的输出值。</li>
@@ -116,13 +119,13 @@
 <h2>1. 发现的背景与意义</h2>
 <h3>1.1 两个分析团队的协同发现</h3>
 <p>fast16 的公开经过两个阶段。2026 年 4 月 23 日,SentinelLABS 的 Vitaly Kamluk 和 Juan Andrés Guerrero-Saade 在追踪&quot;使用嵌入式 Lua 虚拟机的最早精巧 Windows 恶意软件&quot;的过程中,偶然发现 <code>svcmgmt.exe</code> 作为起点的分析公之于众。该分析识别了 fast16 的架构、自传播机制和基于 FPU 的补丁引擎的存在,但<em>目标软件的确切身份和篡改的最终目的仍未得到阐明。</em></p>
-<p>2026 年 5 月 16 日,Broadcom Symantec Threat Hunter Team 公布后续分析填补了这一空白。Symantec 分析了 SentinelLABS 提取的 101 条字节模式规则,确认 <strong>LS-DYNA 和 AUTODYN</strong>即为目标。更进一步地,通过对钩子代码的语义分析,Symantec 阐明了篡改机制<strong>仅在核武器内爆仿真的特定物理阶段才被激活</strong>这一决定性事实。</p>
+<p>2026 年 5 月 16 日,Broadcom Symantec Threat Hunter Team 公布后续分析填补了这一空白。Symantec 分析了 SentinelLABS 提取的 101 条字节模式规则,确认 <strong>LS-DYNA 和 AUTODYN</strong> 即为目标。更进一步地,通过对钩子代码的语义分析,Symantec 阐明了篡改机制<strong>仅在核武器内爆仿真的特定物理阶段才被激活</strong>这一决定性事实。</p>
 <blockquote>
 <p><strong>以阻挠核武器仿真过程为目的的国家级黑客行动计划。</strong></p>
 </blockquote>
 <h3>1.2 Shadow Brokers 与 &quot;Territorial Dispute&quot; 的阴影</h3>
 <p>2017 年 4 月,Shadow Brokers 泄露的 NSA 工具组中的 <strong>Territorial Dispute (TeDi)</strong> 组件包含一份签名列表,用于识别 NSA 操作员在目标系统中可能遇到的&quot;敌对&quot;或&quot;友好&quot;植入体。该列表中的 &quot;fast16&quot; 条目附有以下指令:</p>
-<pre><code>fast16 *<strong>Nothing to see here – carry on</strong>*
+<pre><code>fast16 *<strong> Nothing to see here – carry on </strong>*
 </code></pre>
 <p>这短短一行对分析师而言成为长达 9 年的未解之谜。&quot;无需查看,继续行进&quot;这一表达被解释为指示 NSA 操作员在遇到 fast16 时应予以回避,避免冲突和暴露。这表明 fast16 的运营者与 NSA 处于&quot;去冲突化(deconfliction)关系&quot; — 也就是说,是友好国家或同一阵营的行为者。SentinelLABS 的分析通过 <code>svcmgmt.exe</code> 内部的 PDB 路径 <code>C:\buildy\driver\fd\i386\fast16.pdb</code>,决定性地将 2005 年的二进制文件与 2017 年的泄露文档联系起来。</p>
 <h3>1.3 &quot;Stuxnet 之前&quot;意味着什么</h3>
@@ -206,7 +209,8 @@
 <h4>目标识别:Intel 编译器构件</h4>
 <p>驱动程序不会不加区分地篡改所有可执行文件。目标资格由两个条件的结合决定:</p>
 <ul>
-<li>文件扩展名为 <strong><code>.EXE</code></strong>- 在最后一个 PE 段头之后立即存在以 &quot;<strong><code>Intel</code></strong>&quot; 开头的可打印 ASCII 字符串(Intel C/C++ 编译器元数据)</li>
+<li>文件扩展名为 <strong><code>.EXE</code></strong></li>
+<li>在最后一个 PE 段头之后立即存在以 &quot;<strong><code>Intel</code></strong>&quot; 开头的可打印 ASCII 字符串(Intel C/C++ 编译器元数据)</li>
 </ul>
 <p>这种筛选逻辑表明攻击者知道目标软件是用哪种工具链构建的。LS-DYNA 和 AUTODYN 均按行业惯例采用 <strong>Intel Fortran/C++</strong> 编译器进行精密浮点运算的构建。</p>
 <blockquote>
@@ -321,7 +325,8 @@
 <h3>5.1 安装前检查(Pre-installation Kill-Switch)</h3>
 <p>fast16 的运营者为避免暴露风险,构建了精巧的环境感知机制。安装前的 <code>ok_to_install()</code> 例程会检查以下内容:</p>
 <ul>
-<li>通过 <code>NtfsMetaDataMutex</code> 检查<strong>确保单一实例</strong>- 扫描共<strong>18 个安全产品注册表键</strong>,若任一存在则拒绝传播</li>
+<li>通过 <code>NtfsMetaDataMutex</code> 检查<strong>确保单一实例</strong></li>
+<li>扫描共 <strong>18 个安全产品注册表键</strong>,若任一存在则拒绝传播</li>
 </ul>
 <p>被扫描的安全产品列表反映了 2005 年时&quot;目标网络中预计会存在&quot;的产品组合:</p>
 <pre><code>HKLM\SOFTWARE\Symantec\InstalledApps

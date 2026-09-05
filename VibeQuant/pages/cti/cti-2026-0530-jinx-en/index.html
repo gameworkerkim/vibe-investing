@@ -86,7 +86,7 @@
 </ol>
 <hr>
 <h2>Executive Summary (TL;DR)</h2>
-<p>On May 28, 2026, Wiz (CIRT &amp; Research) disclosed a previously undocumented threat actor, <strong>JINX-0164</strong>, targeting cryptocurrency organizations to facilitate digital-asset theft. The cluster has been active <strong>since at least mid-2025</strong>and focuses almost entirely on<strong>macOS</strong>.</p>
+<p>On May 28, 2026, Wiz (CIRT &amp; Research) disclosed a previously undocumented threat actor, <strong>JINX-0164</strong>, targeting cryptocurrency organizations to facilitate digital-asset theft. The cluster has been active <strong>since at least mid-2025</strong> and focuses almost entirely on <strong>macOS</strong>.</p>
 <p>The flow is: (1) LinkedIn-based recruitment/business-proposal social engineering to approach developers → (2) lure to a fake meeting page impersonating Microsoft Teams etc. → (3) download a custom macOS RAT → (4) steal credentials and wallet data → (5) move laterally from the compromised employee laptop to <strong>code-distribution systems and CI/CD infrastructure</strong>. The actor has further demonstrated <strong>npm supply-chain compromise</strong> capability.</p>
 <p>The actor shares TTPs with North Korean clusters such as BlueNoroff, Contagious Interview, and UNC1069 (Sleet), but shows <strong>no infrastructure overlap</strong>; Wiz classified it as a financially motivated cluster without attributing it to a state sponsor.</p>
 <h3>Key Judgments</h3>
@@ -100,12 +100,12 @@
 </thead>
 <tbody><tr>
 <td>KJ-1</td>
-<td>JINX-0164 precisely targets <strong>crypto developers</strong>by combining recruitment-lure social engineering with custom macOS malware. The target role is clear.</td>
+<td>JINX-0164 precisely targets <strong>crypto developers</strong> by combining recruitment-lure social engineering with custom macOS malware. The target role is clear.</td>
 <td><strong>High</strong></td>
 </tr>
 <tr>
 <td>KJ-2</td>
-<td>Beyond mere endpoint theft, it makes <strong>lateral movement to CI/CD and code-distribution infrastructure</strong>a core objective — supply-chain-oriented, amplifying one compromise into many downstream ones.</td>
+<td>Beyond mere endpoint theft, it makes <strong>lateral movement to CI/CD and code-distribution infrastructure</strong> a core objective — supply-chain-oriented, amplifying one compromise into many downstream ones.</td>
 <td><strong>High</strong></td>
 </tr>
 <tr>
@@ -120,7 +120,7 @@
 </tr>
 <tr>
 <td>KJ-5</td>
-<td>Korean exchanges, Web3 builders, and DeFi teams are exposed to the <strong>same attack surface</strong>due to high macOS adoption and active LinkedIn recruiting. Risk is amplified where multisig/hot-wallet keys coexist on dev endpoints.</td>
+<td>Korean exchanges, Web3 builders, and DeFi teams are exposed to the <strong>same attack surface</strong> due to high macOS adoption and active LinkedIn recruiting. Risk is amplified where multisig/hot-wallet keys coexist on dev endpoints.</td>
 <td><strong>Medium-High</strong></td>
 </tr>
 </tbody></table>
@@ -206,11 +206,12 @@
 <p>The crux is stage ⑤. JINX-0164 treats the compromised developer laptop <strong>not as an endpoint but as a springboard</strong>. The goal is to reach code-distribution systems and dev infrastructure, amplifying one compromise into many downstream ones.</p>
 <hr>
 <h2>3. Malware Analysis — AUDIOFIX &amp; MINIRAT</h2>
-<p><strong>AUDIOFIX</strong>— a compiled Python binary that performs broad automated information theft. It masquerades as the system audio driver (<code>coreaudiod</code>), is saved under the filename <code>ChromeUpdater</code>, and runs via <code>launchctl</code>. Stolen data includes: credentials from password managers, web browsers, and iCloud Keychain; local admin credentials; SSH keys; config/console history files; crypto browser-extension info and wallet addresses; active Discord, Slack, and Telegram sessions.<strong>MINIRAT</strong>— a lightweight Go-based backdoor. It does not perform AUDIOFIX&#39;s broad automated theft but provides<strong>persistent remote access, command execution, and file movement</strong>. Both malware families communicate with C2 over HTTPS and share common infrastructure (e.g., <code>datahub[.]ink</code>). The malware identifies the OS and then downloads an architecture-specific payload.</p>
+<p><strong>AUDIOFIX</strong> — a compiled Python binary that performs broad automated information theft. It masquerades as the system audio driver (<code>coreaudiod</code>), is saved under the filename <code>ChromeUpdater</code>, and runs via <code>launchctl</code>. Stolen data includes: credentials from password managers, web browsers, and iCloud Keychain; local admin credentials; SSH keys; config/console history files; crypto browser-extension info and wallet addresses; active Discord, Slack, and Telegram sessions.</p>
+<p><strong>MINIRAT</strong> — a lightweight Go-based backdoor. It does not perform AUDIOFIX&#39;s broad automated theft but provides <strong>persistent remote access, command execution, and file movement</strong>. Both malware families communicate with C2 over HTTPS and share common infrastructure (e.g., <code>datahub[.]ink</code>). The malware identifies the OS and then downloads an architecture-specific payload.</p>
 <hr>
 <h2>4. Supply-Chain Compromise — @velora-dex/sdk</h2>
 <p>On April 7, 2026, JINX-0164 conducted a supply-chain operation by trojanizing the npm package <strong><code>@velora-dex/sdk</code> 4.9.1</strong>. This package is a legitimate DeFi toolkit used for token swaps, limit orders, and delta trading on the VeloraDEX decentralized exchange.</p>
-<p>The malicious version <strong>appended three lines</strong>to <code>dist/index.js</code> so that whenever the package was imported, it downloaded a shell script from a remote server. That script delivered the macOS-specific binary<strong>MINIRAT</strong>. (This compromise was earlier observed and disclosed by SafeDep and StepSecurity.)</p>
+<p>The malicious version <strong>appended three lines</strong> to <code>dist/index.js</code> so that whenever the package was imported, it downloaded a shell script from a remote server. That script delivered the macOS-specific binary <strong>MINIRAT</strong>. (This compromise was earlier observed and disclosed by SafeDep and StepSecurity.)</p>
 <p>The essence of this technique is <strong>turning a trusted codebase into an infection vector</strong>. The normal act of a developer pulling in a legitimate dependency becomes the infection trigger. In some cases, the <strong>source code itself was modified</strong> to enable further credential theft, particularly of cryptocurrency wallets.</p>
 <hr>
 <h2>5. Similarities and Differences vs. DPRK clusters</h2>

@@ -128,9 +128,12 @@
 <td>B — Reference only</td>
 </tr>
 </tbody></table>
-<p><strong>Let me first disclose three key caveats.</strong>1.<strong>There is an inconsistency between the AWS original blog&#39;s prose and the actual YAML.</strong>The blog text describes &quot;MXFP4 load format&quot;, but the actual YAML&#39;s <code>--load-format</code> value is <code>fastsafetensors</code>. MXFP4 is a<strong>weight storage format</strong>while <code>fastsafetensors</code> is a<strong>loading method</strong>, which are concepts at different layers. Confusing this distinction when porting to other clouds will cause loading to fail.
-2. <strong>The CPU architecture differs per cloud.</strong>AWS <code>p6-b300.48xlarge</code> is an x86_64 HGX B300 node, but Azure ND GB300 v6 and GCP A4X Max are<strong>ARM64 (aarch64) based on NVIDIA Grace CPUs</strong>. If the <code>vllm/vllm-openai:kimi-k3</code> image does not provide an arm64 manifest, it will not work as-is on Azure/GCP. You must verify this with <code>docker manifest inspect</code> before deployment.
-3. <strong>The number of GPUs per single node differs.</strong>On AWS, one node has 8 GPUs so <code>--tensor-parallel-size 8</code> fits on a single node, but GB300 VMs on Azure/GCP have<strong>4 GPUs per VM</strong>. As a result, Azure/GCP require 2-node distributed serving, and the manifest structure itself differs.</p>
+<p><strong>Let me first disclose three key caveats.</strong></p>
+<ol>
+<li><strong>There is an inconsistency between the AWS original blog&#39;s prose and the actual YAML.</strong> The blog text describes &quot;MXFP4 load format&quot;, but the actual YAML&#39;s <code>--load-format</code> value is <code>fastsafetensors</code>. MXFP4 is a <strong>weight storage format</strong> while <code>fastsafetensors</code> is a <strong>loading method</strong>, which are concepts at different layers. Confusing this distinction when porting to other clouds will cause loading to fail.</li>
+<li><strong>The CPU architecture differs per cloud.</strong> AWS <code>p6-b300.48xlarge</code> is an x86_64 HGX B300 node, but Azure ND GB300 v6 and GCP A4X Max are <strong>ARM64 (aarch64) based on NVIDIA Grace CPUs</strong>. If the <code>vllm/vllm-openai:kimi-k3</code> image does not provide an arm64 manifest, it will not work as-is on Azure/GCP. You must verify this with <code>docker manifest inspect</code> before deployment.</li>
+<li><strong>The number of GPUs per single node differs.</strong> On AWS, one node has 8 GPUs so <code>--tensor-parallel-size 8</code> fits on a single node, but GB300 VMs on Azure/GCP have <strong>4 GPUs per VM</strong>. As a result, Azure/GCP require 2-node distributed serving, and the manifest structure itself differs.</li>
+</ol>
 <hr>
 <h2>1. Kimi K3 Overview</h2>
 <p>Released by Moonshot AI on July 27, 2026, it is a 2.8-trillion-parameter MoE model and the <strong>first open-weight system to reach the 3-trillion-parameter class</strong>. Along with DeepSeek V4, Moonshot AI is truly the best in open weights.</p>
@@ -342,9 +345,12 @@
 <p>HyperPod&#39;s Inference Operator is installed automatically at cluster creation and abstracts container orchestration, model loading, and endpoint management.</p>
 <h4>Prerequisite 1: Create an EKS-orchestrated HyperPod cluster</h4>
 <ol>
-<li>In the SageMaker AI console, select <strong>HyperPod Clusters &gt; Cluster Management &gt; Create HyperPod cluster</strong>2. Select<strong>Orchestrated by Amazon EKS</strong>3. Select<strong>Quick setup</strong>(default networking/storage/IAM) or<strong>Custom setup</strong> (integration with existing VPC)</li>
+<li>In the SageMaker AI console, select <strong>HyperPod Clusters &gt; Cluster Management &gt; Create HyperPod cluster</strong></li>
+<li>Select <strong>Orchestrated by Amazon EKS</strong></li>
+<li>Select <strong>Quick setup</strong> (default networking/storage/IAM) or <strong>Custom setup</strong> (integration with existing VPC)</li>
 <li>In <strong>Orchestration</strong>, create a new EKS cluster or connect an existing one. Confirm the <strong>Use default Helm charts and add-ons</strong> option is selected (automatically installs the Inference Operator)</li>
-<li>Add a <code>ml.p6-b300.48xlarge</code> worker group in <strong>Instance groups</strong>6. Review the configuration and click<strong>Submit</strong></li>
+<li>Add a <code>ml.p6-b300.48xlarge</code> worker group in <strong>Instance groups</strong></li>
+<li>Review the configuration and click <strong>Submit</strong></li>
 </ol>
 <h4>Prerequisite 2: Secure capacity with a Flexible Training Plan</h4>
 <ol>
@@ -810,10 +816,15 @@ gcloud container clusters delete ${CLUSTER_NAME} --location=${REGION}
 </ul>
 <h3>6.2 Option A — PAI-EAS (Model Gallery / Custom Deployment)</h3>
 <p>PAI-EAS integrates support for vLLM, SGLang, and its in-house BladeLLM engine, and offers one-click <strong>expert parallel (EP) + Prefill-Decode separated deployment for MoE models</strong>. For a model with 896 experts like Kimi K3, EP+PD separation provides meaningful benefits in both throughput and cost.</p>
-<p><strong>Deployment procedure:</strong>1. Log in to the PAI console and select the target region.<strong>Distributed deployment requires 灵骏 intelligent computing resources, and VPC configuration is mandatory.</strong>2. Select<strong>模型在线服务 (EAS) &gt; 部署服务 &gt; 自定义部署</strong>3. In the deployment method, select<strong>镜像部署 (image deployment)</strong> and specify <code>vllm/vllm-openai:kimi-k3</code> (an internal ACR mirror is recommended)
-4. Specify an OSS bucket path as the model source (upload weights in advance)
-5. In the resource configuration, specify the 灵骏 resource quota and multiple nodes (≥2)
-6. Enter the following as the run command:</p>
+<p><strong>Deployment procedure:</strong></p>
+<ol>
+<li>Log in to the PAI console and select the target region. <strong>Distributed deployment requires 灵骏 intelligent computing resources, and VPC configuration is mandatory.</strong></li>
+<li>Select <strong>模型在线服务 (EAS) &gt; 部署服务 &gt; 自定义部署</strong></li>
+<li>In the deployment method, select <strong>镜像部署 (image deployment)</strong> and specify <code>vllm/vllm-openai:kimi-k3</code> (an internal ACR mirror is recommended)</li>
+<li>Specify an OSS bucket path as the model source (upload weights in advance)</li>
+<li>In the resource configuration, specify the 灵骏 resource quota and multiple nodes (≥2)</li>
+<li>Enter the following as the run command:</li>
+</ol>
 <pre><code class="language-bash">vllm serve /mnt/models/Kimi-K3 \
   --trust-remote-code \
   --load-format fastsafetensors \

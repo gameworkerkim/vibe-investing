@@ -148,7 +148,7 @@ Umami 应用 (A: Vercel / B: Fly.io)  &lt;--&gt;  PostgreSQL (Neon 或 Supabase)
 <td>相同</td>
 </tr>
 </tbody></table>
-<p><strong>结论(推荐):</strong>先用<strong>A</strong>落地并验证,若 Vercel 冷启动、Hobby 限额或 Prisma 连接问题变得明显,再迁移到<strong>B</strong>。Worker 代理和 <code>analytics.vibequant.cc</code> 域名设计在两种方案中都可复用。</p>
+<p><strong>结论(推荐):</strong>先用<strong>A</strong> 落地并验证,若 Vercel 冷启动、Hobby 限额或 Prisma 连接问题变得明显,再迁移到 <strong>B</strong>。Worker 代理和 <code>analytics.vibequant.cc</code> 域名设计在两种方案中都可复用。</p>
 <hr>
 <h2>3. 方案 A:Vercel + Cloudflare Worker 代理(推荐)</h2>
 <p>这是 Umami 社区中最常用的组合。官方指南:<a href="https://docs.umami.is/docs/guides/running-on-vercel">Running on Vercel</a>。</p>
@@ -196,14 +196,19 @@ Vercel (Umami Next.js)  &lt;--&gt;  Neon 或 Supabase (PostgreSQL)
 </tr>
 </tbody></table>
 <h3>3.3 分步安装</h3>
-<p><strong>第一步:Fork Umami 仓库</strong>将 <a href="https://github.com/umami-software/umami">umami-software/umami</a> Fork 到自己的 GitHub 账号。<strong>第二步:创建 PostgreSQL</strong></p>
+<p><strong>第一步:Fork Umami 仓库</strong></p>
+<p>将 <a href="https://github.com/umami-software/umami">umami-software/umami</a> Fork 到自己的 GitHub 账号。</p>
+<p><strong>第二步:创建 PostgreSQL</strong></p>
 <p>在 <a href="https://neon.tech">Neon</a> 或 <a href="https://supabase.com">Supabase</a> 创建项目,复制连接字符串(<code>postgresql://...</code>)。</p>
 <ul>
 <li>Neon:无服务器 Postgres,闲置时可能暂停(冷启动)</li>
 <li>Supabase:需确认免费层的数据库容量和连接数限制</li>
 </ul>
-<p><strong>第三步:将 Umami 部署到 Vercel</strong>1. 在 Vercel 中通过<strong>Add New → Project</strong> 导入 Fork 的 <code>umami</code>
-2. 设置环境变量:</p>
+<p><strong>第三步:将 Umami 部署到 Vercel</strong></p>
+<ol>
+<li>在 Vercel 中通过 <strong>Add New → Project</strong> 导入 Fork 的 <code>umami</code></li>
+<li>设置环境变量:</li>
+</ol>
 <table>
 <thead>
 <tr>
@@ -245,8 +250,12 @@ Vercel (Umami Next.js)  &lt;--&gt;  Neon 或 Supabase (PostgreSQL)
 <ol>
 <li>访问部署后的 URL</li>
 <li>默认账号:<code>admin</code> / <code>umami</code>(<a href="https://docs.umami.is/docs/login">Login</a>)</li>
-<li><strong>立即修改密码</strong>4. 在 Settings → Websites 中添加站点,并复制<strong>Website ID</strong>由于 vibequant 有多个主机,应在此步骤之前先决定 Website 的划分方式(参见下文 <a href="#8-vibequantcc-%E7%9A%84%E9%A2%9D%E5%A4%96%E9%9C%80%E6%B1%82">8. vibequant.cc 的额外需求</a>)。<strong>第五步:Cloudflare Worker 代理</strong>Worker 需要同时代理<strong>追踪脚本和采集 API</strong>。如果像原始方案那样只转发 <code>/api/send</code>,脚本加载会失败。</li>
+<li><strong>立即修改密码</strong></li>
+<li>在 Settings → Websites 中添加站点,并复制 <strong>Website ID</strong></li>
 </ol>
+<p>由于 vibequant 有多个主机,应在此步骤之前先决定 Website 的划分方式(参见下文 <a href="#8-vibequantcc-%E7%9A%84%E9%A2%9D%E5%A4%96%E9%9C%80%E6%B1%82">8. vibequant.cc 的额外需求</a>)。</p>
+<p><strong>第五步:Cloudflare Worker 代理</strong></p>
+<p>Worker 需要同时代理<strong>追踪脚本和采集 API</strong>。如果像原始方案那样只转发 <code>/api/send</code>,脚本加载会失败。</p>
 <p>示例(路径需根据实际的 <code>TRACKER_SCRIPT_NAME</code> / <code>COLLECT_API_ENDPOINT</code> 调整):</p>
 <pre><code class="language-javascript">const UMAMI_ORIGIN = &quot;https://your-umami.vercel.app&quot;; // Vercel Umami 地址
 const SCRIPT_PATH = &quot;/u.js&quot;;          // 与 TRACKER_SCRIPT_NAME 的结果一致
@@ -287,8 +296,12 @@ export default {
 <p>注意事项:</p>
 <ul>
 <li>不要把用于查询统计数据的 API Token 硬编码在 Worker 源码中。仪表盘应直接通过 Vercel URL(或另一个受保护的路径)访问。</li>
-<li>在生产环境中,将 <code>UMAMI_ORIGIN</code> 保存在 Worker 的 <strong>Secrets / Vars</strong>中。<strong>第六步:自定义域名</strong>将 <code>analytics.vibequant.cc</code> 绑定到 Worker。当追踪流量看起来像第一方(或同一注册域名下的子域名)时,规避广告拦截器的概率会提升。社区讨论:<a href="https://github.com/umami-software/umami/discussions/1026">umami#1026</a>。<strong>第七步:在 vibequant.cc 中插入追踪代码</strong>正确的脚本形式如下(<code>src</code> 指向<strong>脚本文件</strong>,而不是 <code>/api/send</code>):</li>
+<li>在生产环境中,将 <code>UMAMI_ORIGIN</code> 保存在 Worker 的 <strong>Secrets / Vars</strong> 中。</li>
 </ul>
+<p><strong>第六步:自定义域名</strong></p>
+<p>将 <code>analytics.vibequant.cc</code> 绑定到 Worker。当追踪流量看起来像第一方(或同一注册域名下的子域名)时,规避广告拦截器的概率会提升。社区讨论:<a href="https://github.com/umami-software/umami/discussions/1026">umami#1026</a>。</p>
+<p><strong>第七步:在 vibequant.cc 中插入追踪代码</strong></p>
+<p>正确的脚本形式如下(<code>src</code> 指向<strong>脚本文件</strong>,而不是 <code>/api/send</code>):</p>
 <pre><code class="language-html">&lt;script
   defer
   src=&quot;https://analytics.vibequant.cc/u.js&quot;
@@ -550,6 +563,11 @@ fly deploy
 <td>超出 IPv4/内存限额后需付费</td>
 </tr>
 </tbody></table>
+<p><strong>现实的月成本预期</strong></p>
+<ul>
+<li><strong>A:</strong>若流量不大,可以维持在接近<strong>0 元</strong></li>
+<li><strong>B:</strong> 很难断言&quot;完全免费&quot;。仅内存和 IPv4 就可能产生每月小额费用,务必开启账单提醒。</li>
+</ul>
 <p>只有在 <strong>A + Neon/Supabase + Worker</strong> 组合下,把&quot;月成本 0 元&quot;作为安全目标才是合理的。</p>
 <hr>
 <h2>7. 常见风险与运维事项</h2>
@@ -752,7 +770,9 @@ fly deploy
 <li>之后若迁移到 B,只需替换 Worker 的 origin</li>
 </ul>
 </li>
-<li><strong>不要尝试 D1/Workers 原生的 Umami 部署</strong>4.<strong>通过 build.mjs 注入 + 按主机划分 Website ID</strong>5.<strong>当冷启动/Hobby 限额变得明显时再迁移到 B</strong><ul>
+<li><strong>不要尝试 D1/Workers 原生的 Umami 部署</strong></li>
+<li><strong>通过 build.mjs 注入 + 按主机划分 Website ID</strong></li>
+<li><strong>当冷启动/Hobby 限额变得明显时再迁移到 B</strong><ul>
 <li>在那之前不要预设 Fly 是&quot;免费的&quot;</li>
 </ul>
 </li>

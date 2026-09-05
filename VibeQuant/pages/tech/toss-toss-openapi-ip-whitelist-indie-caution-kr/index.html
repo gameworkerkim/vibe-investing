@@ -185,7 +185,7 @@
 <h3>3-3. 시크릿을 <code>vars</code>에 넣지 마라</h3>
 <p>당시 GHA는 <code>vars.TOSS_CLIENT_*</code>를 썼다. repository variables는 로그·권한 측면에서 secrets보다 노출면이 넓다. IP 정책과 별개로, <strong>자격증명은 항상 secrets</strong>.</p>
 <h3>3-4. 제품 목적과 유니버스도 같이 점검</h3>
-<p>Toss 전환 과정에서 코스닥 소형주 동적 스크리닝(시총 5,000억 미만·SPAC 제외)이 깨지고, KOSPI 대형주 위주 하드코딩 유니버스로 바뀐 적도 있다. OAuth가 살아나도 <strong>원래 가설(한계기업 이상징후)</strong>과 어긋날 수 있다. API 마이그레이션은 인증만이 아니라<strong>유니버스·필터·단위(억원 vs 원)</strong> 회귀 테스트가 필요하다.</p>
+<p>Toss 전환 과정에서 코스닥 소형주 동적 스크리닝(시총 5,000억 미만·SPAC 제외)이 깨지고, KOSPI 대형주 위주 하드코딩 유니버스로 바뀐 적도 있다. OAuth가 살아나도 <strong>원래 가설(한계기업 이상징후)</strong> 과 어긋날 수 있다. API 마이그레이션은 인증만이 아니라 <strong>유니버스·필터·단위(억원 vs 원)</strong> 회귀 테스트가 필요하다.</p>
 <p>추가로 2026-07 기준 Naver <code>marketValue</code> API는 <code>sortType</code>(등락·거래량)을 무시하고 시총순만 반환한다. 롤백 시 <strong>클라이언트 정렬</strong>로 상승/거래량 랭킹을 복구했다. “예전에 되던 쿼리 파라미터”도 깨질 수 있다.</p>
 <hr>
 <h2>4. 우리가 내린 결정: Naver로 롤백</h2>
@@ -223,7 +223,9 @@
 <hr>
 <h2>5. 인디 개발자를 위한 한 줄 원칙</h2>
 <ol>
-<li><strong>증권 Open API를 고를 때 문서의 “인증”만 보지 말고 “네트워크 바인딩(IP·Mutual TLS·기기)”을 먼저 보라.</strong>2.<strong>CI IP가 고정이 아니면, 그 API는 배치 파이프라인의 SPOF가 된다.</strong>3.<strong>빈 데이터를 성공으로 커밋하지 마라.</strong> 한 달짜리 <code>[]</code> 히스토리보다 빨간 X가 싸다.  </li>
+<li><strong>증권 Open API를 고를 때 문서의 “인증”만 보지 말고 “네트워크 바인딩(IP·Mutual TLS·기기)”을 먼저 보라.</strong>  </li>
+<li><strong>CI IP가 고정이 아니면, 그 API는 배치 파이프라인의 SPOF가 된다.</strong>  </li>
+<li><strong>빈 데이터를 성공으로 커밋하지 마라.</strong> 한 달짜리 <code>[]</code> 히스토리보다 빨간 X가 싸다.  </li>
 <li><strong>공식 API와 비공식 시세는 역할이 다르다.</strong> 주문·계좌는 공식+고정망, 공개 모니터 시세는 폴백 가능한 소스.  </li>
 <li><strong>정책은 바뀐다.</strong> 키가 유효해도 어제 되던 호출이 오늘 막힐 수 있다 — health check에 OAuth 자체를 넣어라.</li>
 </ol>

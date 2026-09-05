@@ -233,8 +233,9 @@ DeepSeek · Anthropic Claude · OpenAI ChatGPT — Coding Plan · API · Self-ho
 <li>API Key 입력 → 우측 상단 &#39;Done&#39; 클릭</li>
 <li>모델 선택: MiniMax-M3 (또는 M2.5 / M2.7) → &#39;Auto-approve: Edit&#39; 활성화 후 사용 시작</li>
 </ol>
-<p><strong>Cline 고유 기능 활용 팁</strong>-<strong>Plan / Act 모드 분리</strong>: Plan은 다중 파일 변경 계획만 제안, Act는 실제 편집 수행. 큰 리팩토링은 Plan으로 먼저 검토.</p>
+<p><strong>Cline 고유 기능 활용 팁</strong></p>
 <ul>
+<li><strong>Plan / Act 모드 분리</strong>: Plan은 다중 파일 변경 계획만 제안, Act는 실제 편집 수행. 큰 리팩토링은 Plan으로 먼저 검토.</li>
 <li><strong>MCP 마켓플레이스</strong>: 내장 도구(브라우저, GitHub, DB 클라이언트 등)를 1클릭 추가.</li>
 <li><strong>@ 멘션</strong>: 채팅창에 <code>@파일경로</code>를 입력하면 해당 파일을 컨텍스트로 자동 주입.</li>
 <li><strong>Checkpoints</strong>: 단계별 스냅샷이 저장되어 실수 시 1클릭 롤백.</li>
@@ -301,8 +302,9 @@ claude --model MiniMax-M3
 <li>Entrypoint: <code>api.minimax.io</code> 또는 <code>api.minimaxi.com</code></li>
 <li>API Key 입력 → Model: MiniMax-M3 선택 → Done</li>
 </ol>
-<p><strong>Kilo Code만의 강점</strong>-<strong>Orchestrator 모드</strong>: 복잡한 작업을 하위 작업으로 분해해 Architect·Code·Debug 등 전문 모드에 자동 위임하는 멀티스텝 오케스트레이션. 큰 기능 구현이나 PR 단위 작업을 한 번에 자율 처리할 때 Cline의 단일 Plan-Act 루프보다 유리한 대안입니다.</p>
+<p><strong>Kilo Code만의 강점</strong></p>
 <ul>
+<li><strong>Orchestrator 모드</strong>: 복잡한 작업을 하위 작업으로 분해해 Architect·Code·Debug 등 전문 모드에 자동 위임하는 멀티스텝 오케스트레이션. 큰 기능 구현이나 PR 단위 작업을 한 번에 자율 처리할 때 Cline의 단일 Plan-Act 루프보다 유리한 대안입니다.</li>
 <li><strong>맞춤 모드 마켓플레이스</strong>: Architect, Ask, Code, Debug 등 역할 기반 프리셋.</li>
 <li><strong>Side-by-side Diff 뷰</strong>: 변경사항을 Cline보다 정교하게 미리보기.</li>
 <li><strong>단계별 터미널 권한 제어</strong>: 안전 우선 워크플로우.</li>
@@ -325,10 +327,13 @@ claude --model MiniMax-M3
 <h2>3. 에이전트 워크플로우 설계</h2>
 <h3>3.1 Plan-Act 루프의 이해</h3>
 <p>2026년의 AI 코딩 에이전트는 단순 Q&amp;A가 아니라 &#39;읽기 → 생각 → 쓰기 → 검증&#39; 루프를 자율적으로 반복합니다. 이를 <strong>Plan-Act-Verify 루프</strong>라 부르며, VS Code 도구들은 이 루프를 다양한 형태로 구현합니다.</p>
-<p><strong>루프의 4단계</strong>1.<strong>Read</strong>: 작업 디렉터리·파일·문서를 능동적으로 탐색 (grep, find, sed, ls 등).
-2. <strong>Think</strong>: 작업 분해, 의도 추론, 호출할 도구/API 결정. 미니맥스 M3는 thinking 블록이 응답에 포함됩니다.
-3. <strong>Act</strong>: 파일 생성·수정, 명령 실행, 함수 호출. 모든 변경은 사용자 승인 후 적용 (Human-in-the-loop).
-4. <strong>Verify</strong>: 테스트 실행, 타입 체크, 빌드 확인. 실패 시 1~2단계로 되돌아가 자기 수정.</p>
+<p><strong>루프의 4단계</strong></p>
+<ol>
+<li><strong>Read</strong>: 작업 디렉터리·파일·문서를 능동적으로 탐색 (grep, find, sed, ls 등).</li>
+<li><strong>Think</strong>: 작업 분해, 의도 추론, 호출할 도구/API 결정. 미니맥스 M3는 thinking 블록이 응답에 포함됩니다.</li>
+<li><strong>Act</strong>: 파일 생성·수정, 명령 실행, 함수 호출. 모든 변경은 사용자 승인 후 적용 (Human-in-the-loop).</li>
+<li><strong>Verify</strong>: 테스트 실행, 타입 체크, 빌드 확인. 실패 시 1~2단계로 되돌아가 자기 수정.</li>
+</ol>
 <p><strong>예시: &#39;JWT 인증 미들웨어 추가&#39; 작업의 실제 흐름</strong></p>
 <pre><code class="language-javascript">// Cline / Kilo Code가 수행하는 단계
 // 1. Read:   src/middleware/auth.ts, src/routes/api.ts, AGENTS.md
@@ -1051,7 +1056,19 @@ claude --model MiniMax-M3
 <hr>
 <h2>6. 의사결정 가이드 — 어떤 모델을 언제 쓸까?</h2>
 <p>모든 상황을 단일 모델로 해결하려 하지 마세요. 다음 의사결정 트리로 30초 안에 선택할 수 있습니다.</p>
-<p><strong>① 예산이 가장 큰 제약이라면</strong>→ 미니맥스 M2.5 또는 DeepSeek V4-Flash. SWE-bench 70~80%대를 100K 토큰당 $0.03 안팎에 사용할 수 있습니다. M2.5는 M3로 업그레이드 경로가 명확하고, M3 출시 후 1M 컨텍스트까지 그대로 사용 가능합니다.<strong>② 코드 품질(미세한 의도 파악)이 최우선이라면</strong>→ Claude Opus 4.7. SWE-Bench Pro 64.0%로 실제 GitHub 이슈 해결 1위. &#39;거의 맞는데 살짝 어긋난&#39; 결과가 반복되는 팀이라면 Opus로 라우팅하는 페일오버 구성을 권장합니다.<strong>③ 장기 자율 작업(8시간+ 연속)이 많다면</strong>→ GPT-5.5. Terminal-Bench 2.0 82.7%로 1위, 장시간 자율 작업 최강. 다만 가격($5/$30)이 2배이므로 정말 긴 작업에만 라우팅합니다.<strong>④ 1M 토큰 풀 코드베이스 분석이 필요하면</strong>→ 미니맥스 M3, Gemini 3.1 Pro, DeepSeek V4-Pro / V4-Flash, Claude Opus 4.7/4.8(모두 1M 지원). 이 중 가격 효율은 V4-Flash($0.14/$0.28)와 M3($0.30/$1.20)가 우위입니다. Sonnet 4.6도 1M을 지원합니다.<strong>⑤ 데이터 주권 / 온프레미스가 필요하면</strong>→ 미니맥스 M2.5/M2.7(오픈웨이트) 또는 DeepSeek V3.2/V4. Hugging Face에서 가중치를 받아 vLLM/SGLang으로 사내 클러스터에 서빙합니다. 미니맥스는 MIT-style, DeepSeek는 MIT + Model License(상업 허용)입니다.<strong>⑥ Computer Use(브라우저/OS 자동화)가 필요하면</strong>→ GPT-5.4(네이티브, OSWorld 75%) 또는 Claude Opus 4.7(API). 미니맥스 M3는 네이티브 멀티모달이지만 Computer Use는 도구 호출로 별도 구현이 필요합니다.<strong>⑦ 권장 하이브리드 라우팅 구성 (OpenClaw 예시)</strong></p>
+<p><strong>① 예산이 가장 큰 제약이라면</strong>
+→ 미니맥스 M2.5 또는 DeepSeek V4-Flash. SWE-bench 70~80%대를 100K 토큰당 $0.03 안팎에 사용할 수 있습니다. M2.5는 M3로 업그레이드 경로가 명확하고, M3 출시 후 1M 컨텍스트까지 그대로 사용 가능합니다.</p>
+<p><strong>② 코드 품질(미세한 의도 파악)이 최우선이라면</strong>
+→ Claude Opus 4.7. SWE-Bench Pro 64.0%로 실제 GitHub 이슈 해결 1위. &#39;거의 맞는데 살짝 어긋난&#39; 결과가 반복되는 팀이라면 Opus로 라우팅하는 페일오버 구성을 권장합니다.</p>
+<p><strong>③ 장기 자율 작업(8시간+ 연속)이 많다면</strong>
+→ GPT-5.5. Terminal-Bench 2.0 82.7%로 1위, 장시간 자율 작업 최강. 다만 가격($5/$30)이 2배이므로 정말 긴 작업에만 라우팅합니다.</p>
+<p><strong>④ 1M 토큰 풀 코드베이스 분석이 필요하면</strong>
+→ 미니맥스 M3, Gemini 3.1 Pro, DeepSeek V4-Pro / V4-Flash, Claude Opus 4.7/4.8(모두 1M 지원). 이 중 가격 효율은 V4-Flash($0.14/$0.28)와 M3($0.30/$1.20)가 우위입니다. Sonnet 4.6도 1M을 지원합니다.</p>
+<p><strong>⑤ 데이터 주권 / 온프레미스가 필요하면</strong>
+→ 미니맥스 M2.5/M2.7(오픈웨이트) 또는 DeepSeek V3.2/V4. Hugging Face에서 가중치를 받아 vLLM/SGLang으로 사내 클러스터에 서빙합니다. 미니맥스는 MIT-style, DeepSeek는 MIT + Model License(상업 허용)입니다.</p>
+<p><strong>⑥ Computer Use(브라우저/OS 자동화)가 필요하면</strong>
+→ GPT-5.4(네이티브, OSWorld 75%) 또는 Claude Opus 4.7(API). 미니맥스 M3는 네이티브 멀티모달이지만 Computer Use는 도구 호출로 별도 구현이 필요합니다.</p>
+<p><strong>⑦ 권장 하이브리드 라우팅 구성 (OpenClaw 예시)</strong></p>
 <pre><code class="language-json">{
   &quot;agents&quot;: {
     &quot;defaults&quot;: {

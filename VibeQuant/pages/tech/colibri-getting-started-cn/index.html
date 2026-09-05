@@ -75,8 +75,8 @@
 <h2>项目说明</h2>
 <p>Colibri利用了这样一个事实:744B规模的MoE模型每个token<strong>仅激活约40B参数</strong>,而且每个token激活的专家(Expert)各不相同(约11GB):</p>
 <ul>
-<li><strong>密集部分(Dense part)</strong>— Attention、共享专家、Embeddings等约17B参数 →<strong>以int4常驻内存</strong>(约9.9GB)</li>
-<li><strong>路由专家(Routed Experts)</strong>— 75个MoE层 × 256 =<strong>19,456个专家</strong>,每个专家在int4下约19MB → <strong>存储在磁盘上</strong>(约370GB)</li>
+<li><strong>密集部分(Dense part)</strong> — Attention、共享专家、Embeddings等约17B参数 → <strong>以int4常驻内存</strong>(约9.9GB)</li>
+<li><strong>路由专家(Routed Experts)</strong> — 75个MoE层 × 256 = <strong>19,456个专家</strong>,每个专家在int4下约19MB → <strong>存储在磁盘上</strong>(约370GB)</li>
 </ul>
 <p>核心思路是<strong>模型不需要&quot;塞进&quot;快速内存</strong>。专家会在需要时从磁盘流式加载,将显存、内存和存储视为一个统一管理的内存层级结构。</p>
 <hr>
@@ -85,9 +85,9 @@
 <p>每一层的每个token都会经历<strong>Route(路由) → Union(去重) → Place(放置) → Overlap(重叠) → Learn(学习)</strong>这五个阶段:</p>
 <ol>
 <li><strong>Route</strong> — 路由器决定针对输入token激活哪些专家</li>
-<li><strong>Union</strong>— 当批次内多个token选中相同专家时,进行<strong>去重</strong>(batch-union)</li>
-<li><strong>Place</strong>— 决定从哪里获取专家(显存 &gt; 内存 &gt; 磁盘)。批处理策略<strong>仅影响速度</strong>,不会改变路由决策或权重精度</li>
-<li><strong>Overlap</strong>— 异步I/O池(<code>PIPE=1</code>)在从磁盘加载缺失专家的同时,用已常驻的专家继续计算。路由预览线程(<code>PILOT=1</code>)会预取下一层的专家(路由具有<strong>71.6%的可预测性</strong>)</li>
+<li><strong>Union</strong> — 当批次内多个token选中相同专家时,进行<strong>去重</strong>(batch-union)</li>
+<li><strong>Place</strong> — 决定从哪里获取专家(显存 &gt; 内存 &gt; 磁盘)。批处理策略<strong>仅影响速度</strong>,不会改变路由决策或权重精度</li>
+<li><strong>Overlap</strong> — 异步I/O池(<code>PIPE=1</code>)在从磁盘加载缺失专家的同时,用已常驻的专家继续计算。路由预览线程(<code>PILOT=1</code>)会预取下一层的专家(路由具有<strong>71.6%的可预测性</strong>)</li>
 <li><strong>Learn</strong> — 将路由记录保存到<code>.coli_usage</code>文件,并自动固定(Pin)常用专家</li>
 </ol>
 <h3>内存层级结构</h3>

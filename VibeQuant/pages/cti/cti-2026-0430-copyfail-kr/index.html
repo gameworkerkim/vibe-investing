@@ -61,7 +61,8 @@
 </nav>
       </header>
       <div class="article-body prose"><blockquote>
-<p><strong>요약(Executive Summary)</strong>&gt; 2026년 4월 29일, 보안 연구기업 Xint(Xint Code Research Team)가 리눅스 커널의 암호화 서브시스템에서 발견한 신종 권한상승 취약점<strong>CVE-2026-31431, 일명 &quot;Copy Fail&quot;</strong>을 공개했다. 이 취약점은 비특권 로컬 사용자가 <strong>단 732바이트짜리 파이썬 스크립트만으로 우분투, Amazon Linux, RHEL, SUSE 등 사실상 모든 주요 리눅스 배포판에서 루트(root) 권한을 획득</strong>할 수 있게 만든다. 더욱 심각한 것은 이 결함이 <strong>2017년부터 약 9년간 모든 메이저 배포판에 조용히 잠재해 있었다</strong>는 점이며, 컨테이너 경계까지 무력화시키는 <strong>쿠버네티스 노드 탈출(container escape)</strong> 1차 프리미티브로도 활용된다는 사실이다.</p>
+<p><strong>요약(Executive Summary)</strong>
+2026년 4월 29일, 보안 연구기업 Xint(Xint Code Research Team)가 리눅스 커널의 암호화 서브시스템에서 발견한 신종 권한상승 취약점 <strong>CVE-2026-31431, 일명 &quot;Copy Fail&quot;</strong>을 공개했다. 이 취약점은 비특권 로컬 사용자가 <strong>단 732바이트짜리 파이썬 스크립트만으로 우분투, Amazon Linux, RHEL, SUSE 등 사실상 모든 주요 리눅스 배포판에서 루트(root) 권한을 획득</strong>할 수 있게 만든다. 더욱 심각한 것은 이 결함이 <strong>2017년부터 약 9년간 모든 메이저 배포판에 조용히 잠재해 있었다</strong>는 점이며, 컨테이너 경계까지 무력화시키는 <strong>쿠버네티스 노드 탈출(container escape)</strong> 1차 프리미티브로도 활용된다는 사실이다.</p>
 </blockquote>
 <hr>
 <h2>1. 취약점 한눈에 보기</h2>
@@ -112,9 +113,16 @@
 <hr>
 <h2>2. 왜 &quot;Copy Fail&quot;이 위험한가 — Dirty Cow, Dirty Pipe와의 결정적 차이</h2>
 <p>리눅스 커널 권한상승 취약점은 새로운 이야기가 아니다. 2016년의 <strong>Dirty Cow(CVE-2016-5195)</strong>, 2022년의 <strong>Dirty Pipe(CVE-2022-0847)</strong>가 대표적이다. 그러나 Copy Fail은 이들과 본질적으로 다른 위험성을 가진다.</p>
-<p><strong>(1) 경쟁 조건(race condition)이 없다.</strong>Dirty Cow는 VM 서브시스템의 copy-on-write 경로에서 race를 이겨야 했으며, 다회 시도와 시스템 크래시를 동반했다. Copy Fail은<strong>단일 직선(straight-line) 로직 결함</strong>으로, 재시도나 타이밍 운에 의존하지 않는 결정론적(deterministic) 공격이다.</p>
-<p><strong>(2) 이식성(portability)이 압도적이다.</strong>배포판별 오프셋 보정, 재컴파일, 버전 체크가 일체 불필요하다.<strong>동일한 스크립트 한 본</strong>이 Ubuntu, Amazon Linux, RHEL, SUSE에서 그대로 동작한다.</p>
-<p><strong>(3) 극도로 작고 가볍다.</strong>표준 라이브러리(<code>os</code>, <code>socket</code>, <code>zlib</code>)만 사용하는 Python 3.10+ 스크립트로, 컴파일된 페이로드도, 외부 의존성 설치도 필요 없다.<strong>(4) 스텔스성(stealth) — 디스크에는 흔적이 남지 않는다.</strong>변조는 페이지 캐시(page cache)의 인메모리 사본에만 발생한다. 커널이 해당 페이지를 dirty로 표시하지 않기 때문에<strong>디스크 상의 파일과 체크섬은 그대로</strong>다. AIDE, Tripwire, Wazuh 같은 <strong>온디스크 무결성 검증 도구는 이 변조를 절대 탐지하지 못한다.</strong>그러나 시스템이 파일을 읽을 때 실제로 참조하는 것은 페이지 캐시이므로, 변조된 버전은 시스템 전역에 즉시 적용된다.<strong>(5) 컨테이너 격리를 무력화한다.</strong>페이지 캐시는 호스트와 모든 컨테이너가 공유한다. 즉, 컨테이너 내부의 비특권 사용자가 호스트의 setuid 바이너리를 변조할 수 있다는 의미이며, 이는 곧<strong>쿠버네티스 노드 침해(node compromise)</strong> 1차 프리미티브가 된다.</p>
+<p><strong>(1) 경쟁 조건(race condition)이 없다.</strong>
+Dirty Cow는 VM 서브시스템의 copy-on-write 경로에서 race를 이겨야 했으며, 다회 시도와 시스템 크래시를 동반했다. Copy Fail은 <strong>단일 직선(straight-line) 로직 결함</strong>으로, 재시도나 타이밍 운에 의존하지 않는 결정론적(deterministic) 공격이다.</p>
+<p><strong>(2) 이식성(portability)이 압도적이다.</strong>
+배포판별 오프셋 보정, 재컴파일, 버전 체크가 일체 불필요하다. <strong>동일한 스크립트 한 본</strong>이 Ubuntu, Amazon Linux, RHEL, SUSE에서 그대로 동작한다.</p>
+<p><strong>(3) 극도로 작고 가볍다.</strong>
+표준 라이브러리(<code>os</code>, <code>socket</code>, <code>zlib</code>)만 사용하는 Python 3.10+ 스크립트로, 컴파일된 페이로드도, 외부 의존성 설치도 필요 없다.</p>
+<p><strong>(4) 스텔스성(stealth) — 디스크에는 흔적이 남지 않는다.</strong>
+변조는 페이지 캐시(page cache)의 인메모리 사본에만 발생한다. 커널이 해당 페이지를 dirty로 표시하지 않기 때문에 <strong>디스크 상의 파일과 체크섬은 그대로</strong>다. AIDE, Tripwire, Wazuh 같은 <strong>온디스크 무결성 검증 도구는 이 변조를 절대 탐지하지 못한다.</strong> 그러나 시스템이 파일을 읽을 때 실제로 참조하는 것은 페이지 캐시이므로, 변조된 버전은 시스템 전역에 즉시 적용된다.</p>
+<p><strong>(5) 컨테이너 격리를 무력화한다.</strong>
+페이지 캐시는 호스트와 모든 컨테이너가 공유한다. 즉, 컨테이너 내부의 비특권 사용자가 호스트의 setuid 바이너리를 변조할 수 있다는 의미이며, 이는 곧 <strong>쿠버네티스 노드 침해(node compromise)</strong> 1차 프리미티브가 된다.</p>
 <hr>
 <h2>3. 기술적 근본 원인 — &quot;선의의 최적화&quot;가 만든 9년짜리 시한폭탄</h2>
 <p>이 취약점은 단일 결함이 아니라, <strong>세 가지 정상적인 설계 결정의 교차점</strong>에서 발생했다.</p>
@@ -185,7 +193,7 @@ u.recv(...)  # 복호화 트리거 → 페이지 캐시 쓰기 발생
 </tr>
 <tr>
 <td><strong>2017</strong></td>
-<td><strong><code>algif_aead.c</code>에 in-place 최적화가 적용됨 (commit 72548b093ee3).</strong><code>req-&gt;src = req-&gt;dst</code>로 통합되며 페이지 캐시 페이지가<strong>쓰기 가능한 destination scatterlist에 chain됨.</strong></td>
+<td><strong><code>algif_aead.c</code>에 in-place 최적화가 적용됨 (commit 72548b093ee3).</strong> <code>req-&gt;src = req-&gt;dst</code>로 통합되며 페이지 캐시 페이지가 <strong>쓰기 가능한 destination scatterlist에 chain됨.</strong></td>
 <td><strong>이 시점부터 모든 메이저 리눅스 배포판에 Copy Fail이 잠재.</strong></td>
 </tr>
 </tbody></table>
@@ -221,7 +229,8 @@ u.recv(...)  # 복호화 트리거 → 페이지 캐시 쓰기 발생
 <ul>
 <li><strong>퍼블릭 클라우드 인스턴스</strong>: AWS EC2(특히 Amazon Linux), Azure, GCP 모두 영향</li>
 <li><strong>온프레미스 엔터프라이즈 서버</strong>: RHEL, SUSE, Ubuntu Server 운영 환경 대부분</li>
-<li><strong>컨테이너/쿠버네티스</strong>: 페이지 캐시가 호스트와 공유되므로 컨테이너 내부에서 호스트 setuid 바이너리 변조 가능 → <strong>노드 전체 침해</strong>-<strong>CI/CD 러너</strong>: GitHub Actions self-hosted runner, GitLab runner, Jenkins worker 등 비신뢰 코드를 실행하는 모든 환경</li>
+<li><strong>컨테이너/쿠버네티스</strong>: 페이지 캐시가 호스트와 공유되므로 컨테이너 내부에서 호스트 setuid 바이너리 변조 가능 → <strong>노드 전체 침해</strong></li>
+<li><strong>CI/CD 러너</strong>: GitHub Actions self-hosted runner, GitLab runner, Jenkins worker 등 비신뢰 코드를 실행하는 모든 환경</li>
 <li><strong>공유 호스팅·VDI 환경</strong>: 일반 사용자 셸 권한만 있어도 즉시 root 탈취</li>
 </ul>
 <p>특히 쿠버네티스 환경에서의 영향은 다음 공개 예정인 Part 2에서 상세히 다뤄질 예정이며, &quot;Pod에서 호스트로(From Pod to Host)&quot;라는 제목 그대로 <strong>모든 주요 클라우드 매니지드 쿠버네티스 플랫폼이 탈출 대상</strong>이라고 Xint는 예고했다.</p>
@@ -239,12 +248,16 @@ aead_request_set_crypt(&amp;areq-&gt;cra_u.aead_req, tsgl_src,
 </code></pre>
 <p>커밋 메시지는 명료하다 — <em>&quot;algif_aead에서 source와 destination이 서로 다른 매핑에서 오는 이상, in-place 동작은 어떠한 이점도 없다.&quot;</em></p>
 <h3>권장 대응 절차</h3>
-<p><strong>(1) 즉시 — 커널 패키지 업데이트</strong>각 배포판 벤더(Ubuntu, Amazon, Red Hat, SUSE 등)가 배포하는 커널 보안 업데이트를 정상 패치 채널로 즉시 적용한다.<strong>(2) 패치 전 임시 완화 — <code>algif_aead</code> 모듈 차단</strong>
+<p><strong>(1) 즉시 — 커널 패키지 업데이트</strong>
+각 배포판 벤더(Ubuntu, Amazon, Red Hat, SUSE 등)가 배포하는 커널 보안 업데이트를 정상 패치 채널로 즉시 적용한다.</p>
+<p><strong>(2) 패치 전 임시 완화 — <code>algif_aead</code> 모듈 차단</strong>
 패치 적용이 즉시 어려운 환경에서는 다음과 같이 모듈 로딩을 차단한다.</p>
 <pre><code class="language-bash">echo &quot;install algif_aead /bin/false&quot; &gt; /etc/modprobe.d/disable-algif-aead.conf
 rmmod algif_aead 2&gt;/dev/null
 </code></pre>
-<p><strong>(3) 컨테이너 보안 강화</strong>seccomp 프로파일에 <code>socket(AF_ALG, ...)</code> 차단을 추가한다. Docker 기본 seccomp는 일부 보호를 제공하지만, 커스텀 프로파일을 사용하는 경우 명시적으로 차단해야 한다.<strong>(4) 무결성 모니터링의 한계 인지</strong>
+<p><strong>(3) 컨테이너 보안 강화</strong>
+seccomp 프로파일에 <code>socket(AF_ALG, ...)</code> 차단을 추가한다. Docker 기본 seccomp는 일부 보호를 제공하지만, 커스텀 프로파일을 사용하는 경우 명시적으로 차단해야 한다.</p>
+<p><strong>(4) 무결성 모니터링의 한계 인지</strong>
 <strong>중요</strong>: 디스크 기반 무결성 검사(AIDE, Tripwire 등)는 이 공격을 탐지할 수 없다. 따라서 <strong>메모리 기반 탐지(eBPF 기반 행위 모니터링, AF_ALG 비정상 사용 탐지)</strong>를 보완 수단으로 도입하는 것이 권장된다.</p>
 <p><strong>(5) 이상 행위 탐지 룰 추가</strong></p>
 <ul>
@@ -300,9 +313,13 @@ rmmod algif_aead 2&gt;/dev/null
 <hr>
 <h2>10. 결론 — 보안 책임자가 지금 당장 해야 할 일</h2>
 <p>Copy Fail은 단순한 또 하나의 LPE(Local Privilege Escalation) 취약점이 아니다. 다음 세 가지 측면에서 보안 책임자에게 실질적인 행동을 요구한다.</p>
-<p><strong>첫째, 모든 리눅스 자산의 패치 우선순위를 즉시 재조정해야 한다.</strong>일반적인 LPE는 &quot;원격 진입점이 별도로 있어야 위험&quot;하다고 평가되어 후순위로 밀리곤 한다. 그러나 Copy Fail은 (1) 컨테이너 탈출까지 가능하고 (2) 디스크 무결성 검증으로 탐지되지 않으며 (3) 익스플로잇이 트위터 한 줄에 들어갈 만큼 작다.<strong>패치 우선순위는 RCE급으로 취급되어야 한다.</strong></p>
-<p><strong>둘째, 컨테이너 보안 모델에 대한 가정을 재검토해야 한다.</strong>&quot;컨테이너 격리 + 비특권 사용자&quot;라는 이중 방어가 작동하지 않는 케이스가 다시 한번 입증되었다. 페이지 캐시는 커널 자원이며 컨테이너 경계를 알지 못한다.<strong>공유 커널 위에서 동작하는 컨테이너의 본질적 한계</strong>를 다시 인식하고, 신뢰 경계가 중요한 워크로드는 gVisor·Kata Containers·Firecracker 같은 강한 격리 옵션을 검토해야 한다.</p>
-<p><strong>셋째, AI 보조 취약점 발굴이 만들어 낼 &quot;공개 가속화&quot;에 대비해야 한다.</strong>Xint Code가 한 번의 스캔에서 다수의 고심각도 결함을 추가로 발견했다는 점, 그리고 동일한 도구를 다른 연구팀과 공격자들도 곧 사용하게 될 것이라는 점은,<strong>앞으로 메이저 커널·런타임·라이브러리에서 동등한 등급의 결함이 더 짧은 주기로 공개될 가능성</strong>을 의미한다. 정기 패치 사이클(월 1회 등)에 안주하는 조직은 갈수록 노출 윈도우가 커진다. <strong>무중단 패치 자동화와 가상 패치(virtual patching) 역량 확보가 더 이상 옵션이 아닌 필수 영역으로 이동하고 있다.</strong>732바이트. 단지 그 정도의 코드가 9년간 잠들어 있던 결함을 깨워, 전 세계 리눅스 인프라의 신뢰 경계를 무너뜨릴 수 있다는 사실은,<strong>현대 커널 보안이 &quot;단일 결함의 심각도&quot;가 아니라 &quot;결정의 누적 상호작용&quot;의 시대로 들어섰음</strong>을 분명히 보여준다.</p>
+<p><strong>첫째, 모든 리눅스 자산의 패치 우선순위를 즉시 재조정해야 한다.</strong>
+일반적인 LPE는 &quot;원격 진입점이 별도로 있어야 위험&quot;하다고 평가되어 후순위로 밀리곤 한다. 그러나 Copy Fail은 (1) 컨테이너 탈출까지 가능하고 (2) 디스크 무결성 검증으로 탐지되지 않으며 (3) 익스플로잇이 트위터 한 줄에 들어갈 만큼 작다. <strong>패치 우선순위는 RCE급으로 취급되어야 한다.</strong></p>
+<p><strong>둘째, 컨테이너 보안 모델에 대한 가정을 재검토해야 한다.</strong>
+&quot;컨테이너 격리 + 비특권 사용자&quot;라는 이중 방어가 작동하지 않는 케이스가 다시 한번 입증되었다. 페이지 캐시는 커널 자원이며 컨테이너 경계를 알지 못한다. <strong>공유 커널 위에서 동작하는 컨테이너의 본질적 한계</strong>를 다시 인식하고, 신뢰 경계가 중요한 워크로드는 gVisor·Kata Containers·Firecracker 같은 강한 격리 옵션을 검토해야 한다.</p>
+<p><strong>셋째, AI 보조 취약점 발굴이 만들어 낼 &quot;공개 가속화&quot;에 대비해야 한다.</strong>
+Xint Code가 한 번의 스캔에서 다수의 고심각도 결함을 추가로 발견했다는 점, 그리고 동일한 도구를 다른 연구팀과 공격자들도 곧 사용하게 될 것이라는 점은, <strong>앞으로 메이저 커널·런타임·라이브러리에서 동등한 등급의 결함이 더 짧은 주기로 공개될 가능성</strong>을 의미한다. 정기 패치 사이클(월 1회 등)에 안주하는 조직은 갈수록 노출 윈도우가 커진다. <strong>무중단 패치 자동화와 가상 패치(virtual patching) 역량 확보가 더 이상 옵션이 아닌 필수 영역으로 이동하고 있다.</strong></p>
+<p>732바이트. 단지 그 정도의 코드가 9년간 잠들어 있던 결함을 깨워, 전 세계 리눅스 인프라의 신뢰 경계를 무너뜨릴 수 있다는 사실은, <strong>현대 커널 보안이 &quot;단일 결함의 심각도&quot;가 아니라 &quot;결정의 누적 상호작용&quot;의 시대로 들어섰음</strong>을 분명히 보여준다.</p>
 <hr>
 <h3>참고 자료</h3>
 <ul>

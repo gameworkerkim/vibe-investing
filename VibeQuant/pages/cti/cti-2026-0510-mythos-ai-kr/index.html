@@ -107,9 +107,9 @@
 <p>Anthropic은 2026년 4월 자사 모델 <strong>Claude Mythos</strong>가 &quot;AI가 자율적으로 발견·익스플로잇한 최초의 원격 커널 취약점&quot;이라며 <strong>CVE-2026-4747</strong> (FreeBSD NFS 원격 코드 실행)을 공개했다. 이는 17년간 인간 검토와 수백만 회의 자동 테스트를 견뎌낸 취약점이며, ~$50의 컴퓨트 비용으로 발견되었다고 보고되었다.</p>
 <p>이에 대해 <strong>Rival Security의 Jake Feiglin</strong> (2026-05-05)은 다음과 같이 반박했다:</p>
 <ol>
-<li><strong>CVE-2026-4747은 사실상 신규 취약점이 아니다.</strong>FreeBSD의 RPCSEC_GSS 코드는 MIT Kerberos 5의 <code>librpcsecgss</code> 코드와 거의 동일하며, 동일한 결함은 이미<strong>2007년 CVE-2007-3999</strong> (그리고 그 패치 결함인 CVE-2007-4743)로 공개되어 있었다.</li>
+<li><strong>CVE-2026-4747은 사실상 신규 취약점이 아니다.</strong> FreeBSD의 RPCSEC_GSS 코드는 MIT Kerberos 5의 <code>librpcsecgss</code> 코드와 거의 동일하며, 동일한 결함은 이미 <strong>2007년 CVE-2007-3999</strong> (그리고 그 패치 결함인 CVE-2007-4743)로 공개되어 있었다.</li>
 <li>Mythos가 한 일은 &quot;새 발견&quot;이 아니라 <strong>학습 데이터에 이미 존재하던 취약점 패턴을 새로운 코드베이스에 적용</strong>한 <strong>조합적 창의성(combinatorial creativity)</strong>에 가깝다.</li>
-<li><strong>그럼에도 불구하고 위협은 줄지 않는다.</strong>오히려 더 우려스럽다 — LLM이 안전하지 않은 패턴을 학습하여 그것을 새 코드에 재생산(regurgitate)하고 있고, 동시에 공격자에게<strong>수십 년 묵은 취약점을 새 코드베이스에서 자동으로 찾아내는 능력</strong>을 ~$50 단위 가격으로 제공한다.</li>
+<li><strong>그럼에도 불구하고 위협은 줄지 않는다.</strong> 오히려 더 우려스럽다 — LLM이 안전하지 않은 패턴을 학습하여 그것을 새 코드에 재생산(regurgitate)하고 있고, 동시에 공격자에게 <strong>수십 년 묵은 취약점을 새 코드베이스에서 자동으로 찾아내는 능력</strong>을 ~$50 단위 가격으로 제공한다.</li>
 </ol>
 <p>본 보고서는 이 주장을 검증하고, 한국 기업·금융권·블록체인 업계가 취해야 할 방어 포지셔닝을 정리한다.</p>
 <p><strong>핵심 결론:</strong>위협의 본질은 &quot;AI가 생각해낸 신규 제로데이&quot;가 아니라,<strong>취약점 발견의 한계비용이 $50 수준으로 붕괴</strong>한 점이다. 이는 공격 경제학을 비대칭적으로 공격자 우위로 이동시킨다.</p>
@@ -216,15 +216,17 @@
 </tbody></table>
 <h3>3.2 왜 두 코드가 비슷한가 — 역사적 맥락</h3>
 <ul>
-<li><strong>1997년 IETF가 RPCSEC_GSS 표준을 RFC 2203으로 발표.</strong>- 미시간 대학교<strong>CITI(Center for Information Technology Integration)</strong>가 NFSv4·RPCSEC_GSS·커널 컴포넌트의 다수를 자금 지원·구현.</li>
+<li><strong>1997년 IETF가 RPCSEC_GSS 표준을 RFC 2203으로 발표.</strong></li>
+<li>미시간 대학교 <strong>CITI(Center for Information Technology Integration)</strong>가 NFSv4·RPCSEC_GSS·커널 컴포넌트의 다수를 자금 지원·구현.</li>
 <li>같은 시기, <strong>Dug Song</strong>의 RPCSEC_GSS 코드가 MIT Kerberos에 흡수되었고, 이후 거의 모든 Linux 배포판이 동일한 구현을 채택.</li>
 <li><strong>FreeBSD는 base OS를 통합 리포지토리로 유지</strong>하기 때문에 RPCSEC_GSS 코드가 Kerberos 트리와 <strong>사실상 동형(virtually identical)</strong> 구조로 존재.</li>
 <li>결과적으로 2007년 MIT Kerberos에서 공개된 결함은 <strong>FreeBSD 트리 안에 19년간 잠재</strong>해 있었다.</li>
 </ul>
 <h3>3.3 핵심 통찰</h3>
 <blockquote>
-<p><strong>Mythos는 새 패턴을 만들어낸 것이 아니라, 학습 데이터에 이미 들어있던 결함 패턴(CVE-2007-3999 계열)을 다른 코드베이스(FreeBSD)에 적용했다.</strong>이는<strong>수학·과학에서 LLM이 만드는 &quot;재발견(rediscovery)&quot;</strong> 현상과 동일한 메커니즘이다. 새로운 정리(theorem)를 발명하지는 않지만, A 분야에서 알려진 결과를 B 분야로 옮기는 능력은 충분히 유효하다.</p>
+<p><strong>Mythos는 새 패턴을 만들어낸 것이 아니라, 학습 데이터에 이미 들어있던 결함 패턴(CVE-2007-3999 계열)을 다른 코드베이스(FreeBSD)에 적용했다.</strong></p>
 </blockquote>
+<p>이는 <strong>수학·과학에서 LLM이 만드는 &quot;재발견(rediscovery)&quot;</strong> 현상과 동일한 메커니즘이다. 새로운 정리(theorem)를 발명하지는 않지만, A 분야에서 알려진 결과를 B 분야로 옮기는 능력은 충분히 유효하다.</p>
 <hr>
 <h2>4. 핵심 쟁점: &quot;조합적 창의성(Combinatorial Creativity)&quot;의 의미</h2>
 <h3>4.1 정의</h3>
@@ -250,7 +252,7 @@
 <tr>
 <td><strong>&quot;조합적 재발견&quot;으로 보는 입장 (Rival Security)</strong></td>
 <td>모델이 학습 데이터에 이미 있던 결함 패턴을 다른 코드베이스에 적용</td>
-<td>&quot;AI 능력의 한계&quot;는 줄어들지만,<strong>위협의 본질은 더 심각</strong> — 한계비용 붕괴와 학습 데이터 오염의 이중 위협</td>
+<td>&quot;AI 능력의 한계&quot;는 줄어들지만, <strong>위협의 본질은 더 심각</strong> — 한계비용 붕괴와 학습 데이터 오염의 이중 위협</td>
 </tr>
 </tbody></table>
 <h3>4.3 두 입장이 모두 동의하는 위험</h3>
@@ -258,7 +260,8 @@
 <ul>
 <li>만약 Mythos가 진정한 신규 취약점을 만들어내고 있다면, 그것은 정점급 보안 연구자의 자동화이므로 인간이 따라잡기 어려우나 <strong>모델 capability가 한계에 부딪히면 멈출 가능성</strong>이 있다.</li>
 <li>만약 Mythos가 조합적 재발견에 능하다면, <strong>현재 LLM이 &quot;안전하지 않은 코드 패턴&quot;을 학습하여 그것을 새 코드에 재주입(regurgitate)</strong>하고 있다는 뜻이다. 이는:<ul>
-<li><strong>2026년 현재 AI가 작성·구성하는 코드 안에 19년 묵은 결함이 다시 심어지고 있을 가능성</strong>- 공격자도 동일한 도구로<strong>이 새로 심어진 옛 결함</strong>을 자동 탐지·익스플로잇 가능</li>
+<li><strong>2026년 현재 AI가 작성·구성하는 코드 안에 19년 묵은 결함이 다시 심어지고 있을 가능성</strong></li>
+<li>공격자도 동일한 도구로 <strong>이 새로 심어진 옛 결함</strong>을 자동 탐지·익스플로잇 가능</li>
 </ul>
 </li>
 </ul>
@@ -318,7 +321,9 @@
 <li><strong>LLM이 작동 중인 CVE 익스플로잇을 10~15분, 약 $1에 생성</strong>하는 사례 관측 (Checkmarx).</li>
 <li>2028년에는 1분 이내로 단축될 것으로 전망.</li>
 <li>평균 <strong>취약점 발생부터 익스플로잇까지의 시간(time-to-exploit) = -7일</strong> (CISA·Kiteworks 데이터). 즉 익스플로잇이 CVE 공개보다 7일 먼저 도는 시대.</li>
-<li>평균 <strong>중대 취약점 패치 완료 시간 = 74일.</strong>- eCrime 침투 후 lateral movement까지<strong>breakout time = 29분.</strong>- Barracuda CISO 분석: 향후 5년 내<strong>공격자가 수비자보다 더 많은 CVE를 먼저 발견</strong>(55~72%)할 것으로 예측.</li>
+<li>평균 <strong>중대 취약점 패치 완료 시간 = 74일.</strong></li>
+<li>eCrime 침투 후 lateral movement까지 <strong>breakout time = 29분.</strong></li>
+<li>Barracuda CISO 분석: 향후 5년 내 <strong>공격자가 수비자보다 더 많은 CVE를 먼저 발견</strong>(55~72%)할 것으로 예측.</li>
 </ul>
 <h3>5.3 ZeroFox의 경고: 취약점 정보의 상품화</h3>
 <p>Mythos가 진짜로 바꾼 것은 <em>기술적 능력</em>이 아니라 <strong>&quot;전문가 팀 + 분기 단위 시간 + 막대한 인건비&quot;가 필요했던 작업이 예산 한 줄짜리 항목으로 이동했다는 점</strong>.</p>
@@ -427,7 +432,8 @@
 </ol>
 <h3>7.2 중기 조치 (30~180일)</h3>
 <ol start="4">
-<li><strong>위협 우선순위 체계 전환</strong>- NVD enrichment 중단(2026-04-14)에 대응하여<strong>EPSS + CISA KEV + 자체 공격 표면</strong> 기반 가중 우선순위 모델 구축.<ul>
+<li><strong>위협 우선순위 체계 전환</strong><ul>
+<li>NVD enrichment 중단(2026-04-14)에 대응하여 <strong>EPSS + CISA KEV + 자체 공격 표면</strong> 기반 가중 우선순위 모델 구축.</li>
 <li>CVSS 단독 의존 폐기.</li>
 </ul>
 </li>
@@ -491,9 +497,10 @@
 </tbody></table>
 <h3>핵심 메시지</h3>
 <blockquote>
-<p><strong>AI가 새로운 취약점을 만든 것이 아니라, 오래된 취약점을 &quot;찾는 비용&quot;을 무너뜨렸다.</strong>- 19년 묵은 RPCSEC_GSS 결함이 FreeBSD 트리에서 발견된 것은<strong>AI의 마법&quot;이 아니라 &quot;동일한 결함이 여러 트리에 복제되어 있다</strong>는 사실의 폭로다.</p>
+<p><strong>AI가 새로운 취약점을 만든 것이 아니라, 오래된 취약점을 &quot;찾는 비용&quot;을 무너뜨렸다.</strong></p>
 </blockquote>
 <ul>
+<li>19년 묵은 RPCSEC_GSS 결함이 FreeBSD 트리에서 발견된 것은 <strong>AI의 마법&quot;이 아니라 &quot;동일한 결함이 여러 트리에 복제되어 있다</strong>는 사실의 폭로다.</li>
 <li>이는 모든 한국 기업의 의존성 그래프에 똑같이 적용된다 — 우리도 어느 트리에 무엇이 복제되어 있는지 모른다.</li>
 <li>진짜 방어선은 패치 속도가 아니라 <strong>내가 가진 모든 코드 트리 사이의 패턴 동형성을 가시화하는 능력</strong>이다.</li>
 <li>그리고 그 능력 자체가 이제 <strong>공격자에게 ~$50/회로 제공</strong>된다는 사실을 위협 모델에 즉시 반영해야 한다.</li>

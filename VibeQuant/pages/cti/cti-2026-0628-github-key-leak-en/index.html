@@ -129,8 +129,12 @@
 </ul>
 <hr>
 <h2>1. Executive Summary</h2>
-<p>In June 2026, two incidents of entirely different character occurred at nearly the same time. One was a Web3 hack in which roughly <strong>USD 1.7 million (about KRW 2.4 billion)</strong>was withdrawn from the bridge of Ethereum L2<strong>Taiko</strong>, a zero-knowledge (ZK) rollup. The other was a personal-data breach affecting about <strong>19 million people</strong>at major Korean OTT<strong>TVING</strong>.</p>
-<p>The tech stacks, harm types, and industries differ—but <strong>the root cause is the same.</strong>&gt;*<strong>Secrets and credentials that should never have entered the code repository (GitHub) were committed, and attackers simply picked them up and used them.</strong>*In other words, both incidents began not with a sophisticated exploit chain or a zero-day, but with a<strong>secret-management failure that should have been caught at the commit stage</strong>. Even the most sophisticated trust models—Taiko&#39;s SGX hardware trust, TVING&#39;s ISMS certification and DB encryption—were wholly neutralized by a single exposed key, illustrating how easily humans break simple security rules.</p>
+<p>In June 2026, two incidents of entirely different character occurred at nearly the same time. One was a Web3 hack in which roughly <strong>USD 1.7 million (about KRW 2.4 billion)</strong> was withdrawn from the bridge of Ethereum L2 <strong>Taiko</strong>, a zero-knowledge (ZK) rollup. The other was a personal-data breach affecting about <strong>19 million people</strong> at major Korean OTT <strong>TVING</strong>.</p>
+<p>The tech stacks, harm types, and industries differ—but <strong>the root cause is the same.</strong></p>
+<blockquote>
+<p><em><strong>Secrets and credentials that should never have entered the code repository (GitHub) were committed, and attackers simply picked them up and used them.</strong></em></p>
+</blockquote>
+<p>In other words, both incidents began not with a sophisticated exploit chain or a zero-day, but with a <strong>secret-management failure that should have been caught at the commit stage</strong>. Even the most sophisticated trust models—Taiko&#39;s SGX hardware trust, TVING&#39;s ISMS certification and DB encryption—were wholly neutralized by a single exposed key, illustrating how easily humans break simple security rules.</p>
 <hr>
 <h2>2. Incident ① — Taiko Bridge Hack (2026-06-22)</h2>
 <h3>2.1 Overview</h3>
@@ -141,8 +145,9 @@
 <li><strong>Market impact:</strong> TAIKO token fell roughly 10–20%; attacker moved about 2 million TAIKO (~$170K) to MEXC</li>
 </ul>
 <h3>2.2 Attack Analysis</h3>
-<p>Taiko does not use a single sequencer; it adopted a multi-prover architecture. The proof-generation stack <strong>Raiko</strong>combines Intel SGX attestation with ZK backends (SP1, RISC0) so that forgery requires simultaneously breaking independent proof systems. That multi-structure, however, was<strong>bypassed by a single operational error that enabled easy authentication outside the intended trust model.</strong>-<strong>Key exposure:</strong> The RSA-3072 private key used for SGX enclave signing was committed as <code>enclave-key.pem</code> to the public repository taikoxyz/raiko and was downloadable by anyone. That value must never leave the hardware (enclave).</p>
+<p>Taiko does not use a single sequencer; it adopted a multi-prover architecture. The proof-generation stack <strong>Raiko</strong> combines Intel SGX attestation with ZK backends (SP1, RISC0) so that forgery requires simultaneously breaking independent proof systems. That multi-structure, however, was <strong>bypassed by a single operational error that enabled easy authentication outside the intended trust model.</strong></p>
 <ul>
+<li><strong>Key exposure:</strong> The RSA-3072 private key used for SGX enclave signing was committed as <code>enclave-key.pem</code> to the public repository taikoxyz/raiko and was downloadable by anyone. That value must never leave the hardware (enclave).</li>
 <li><strong>Malicious prover registration:</strong> The L1 contract was designed to trust enclaves matching a stored MrSigner value. Using the stolen key, the attacker called <code>SgxVerifier.registerInstance</code> and registered a prover under their control as &quot;legitimate.&quot;</li>
 <li><strong>Forged proof generation:</strong> The trusted prover signed fake L2 state attestations and withdrawal proofs.</li>
 <li><strong>Asset withdrawal:</strong> Withdrawal requests were submitted on Ethereum L1 without corresponding Taiko L2 deposits (MessageSent events). The contract had no way to reject proofs that passed verification, so assets were drained.</li>
@@ -235,8 +240,9 @@
 <p>If you do not notice when large coin assets leave, you should not be running a mainnet. The lesson is that many Web3 projects on GitHub have not properly operated pre-commit controls at the source-management level.</p>
 <hr>
 <h2>5. Why the Pre-commit Stage Is Critical</h2>
-<p><strong>The core is simple: secrets do not disappear when deleted after they are committed.</strong>- GitHub retains full commit history. Deleting a key from current code leaves it in past commits. Exposed keys must therefore be<strong>revoked and rotated</strong>, not merely &quot;deleted.&quot; (That is why the TVING report listed both &quot;AWS key revocation + credential replacement.&quot;)</p>
+<p><strong>The core is simple: secrets do not disappear when deleted after they are committed.</strong></p>
 <ul>
+<li>GitHub retains full commit history. Deleting a key from current code leaves it in past commits. Exposed keys must therefore be <strong>revoked and rotated</strong>, not merely &quot;deleted.&quot; (That is why the TVING report listed both &quot;AWS key revocation + credential replacement.&quot;)</li>
 <li>Public repositories are searchable worldwide, and bots that automatically scan for credentials run continuously. Time from exposure to abuse is often measured in minutes.</li>
 <li>Defense gravity must therefore move from &quot;respond after exposure&quot; to &quot;block before commit&quot;—the pre-commit stage.</li>
 </ul>
@@ -271,7 +277,10 @@
 </blockquote>
 <p>The first place hackers search is keys in public code. Therefore security investment priority, before flashy defense products, should be:</p>
 <ul>
-<li><strong>(1) Secret blocking at the pre-commit stage</strong>-<strong>(2) Structural migration to dedicated secret stores</strong>-<strong>(3) Regular security monitoring</strong>-<strong>(4) Immediate revoke-and-replace playbooks on exposure</strong></li>
+<li><strong>(1) Secret blocking at the pre-commit stage</strong></li>
+<li><strong>(2) Structural migration to dedicated secret stores</strong></li>
+<li><strong>(3) Regular security monitoring</strong></li>
+<li><strong>(4) Immediate revoke-and-replace playbooks on exposure</strong></li>
 </ul>
 <p>The lesson both incidents showed in the same month is that humans always err, and systems must be designed and operated assuming the worst case.</p>
 <hr>

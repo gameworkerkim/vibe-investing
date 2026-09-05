@@ -842,10 +842,22 @@ ocr config set telemetry.otlp_endpoint localhost:4317
 <hr>
 <h2>11. 优缺点分析</h2>
 <h3>优点</h3>
-<p><strong>大规模验证(Battle-tested)</strong>超过 2 万名阿里巴巴内部开发者使用了两年，累计检测出 100 多万个缺陷。由于是 CLI 工具而非 SaaS 服务，代码和数据不会外泄，满足企业级安全要求。结合本地 LLM 使用，还可以构建完全的隔离(Air-gap)环境。<strong>经济性与混合式设计</strong>相较纯 LLM 智能体方案，token 使用量削减 80%。通用 AI 代码审查中三个长期存在的顽疾(覆盖不完整、位置漂移、质量不稳定)都在确定性工程层得到了结构性的解决。<strong>灵活的模型支持</strong>支持 OpenAI、Anthropic、DeepSeek、DashScope(Qwen)、Ollama 等任何暴露 OpenAI 兼容端点的运行时环境，可以自由切换云端与本地 LLM。<strong>CI/CD 与智能体生态集成</strong></p>
+<p><strong>大规模验证(Battle-tested)</strong></p>
+<p>超过 2 万名阿里巴巴内部开发者使用了两年，累计检测出 100 多万个缺陷。由于是 CLI 工具而非 SaaS 服务，代码和数据不会外泄，满足企业级安全要求。结合本地 LLM 使用，还可以构建完全的隔离(Air-gap)环境。</p>
+<p><strong>经济性与混合式设计</strong></p>
+<p>相较纯 LLM 智能体方案，token 使用量削减 80%。通用 AI 代码审查中三个长期存在的顽疾(覆盖不完整、位置漂移、质量不稳定)都在确定性工程层得到了结构性的解决。</p>
+<p><strong>灵活的模型支持</strong></p>
+<p>支持 OpenAI、Anthropic、DeepSeek、DashScope(Qwen)、Ollama 等任何暴露 OpenAI 兼容端点的运行时环境，可以自由切换云端与本地 LLM。</p>
+<p><strong>CI/CD 与智能体生态集成</strong></p>
 <p>官方提供 GitHub Actions、GitLab CI 示例，并通过插件/技能/命令等方式与 Claude Code、Codex 等主流 AI 编码智能体集成。</p>
 <h3>缺点与注意事项</h3>
-<p><strong>LLM API 成本</strong>工具本身以 Apache 2.0 免费提供，但后端 LLM API 的调用成本需由用户自行承担。使用本地 LLM 可以消除这部分成本，但会带来相应的硬件要求。<strong>初始环境配置</strong>已经在使用 Claude Code 的用户由于环境变量会被自动识别，无需额外配置；但新用户需要经历配置 LLM API 密钥、端点、模型的过程。使用本地 LLM 时，还需额外安装 Ollama 并下载模型(数 GB)。<strong>业务逻辑的局限性</strong>尽管内置规则和自定义规则可以弥补相当一部分需求，但无法完全理解团队特有的业务逻辑或领域特定的约定。需要持续在规则文件中补充团队专属的指引才能保证效果。<strong>AI 的根本性局限</strong></p>
+<p><strong>LLM API 成本</strong></p>
+<p>工具本身以 Apache 2.0 免费提供，但后端 LLM API 的调用成本需由用户自行承担。使用本地 LLM 可以消除这部分成本，但会带来相应的硬件要求。</p>
+<p><strong>初始环境配置</strong></p>
+<p>已经在使用 Claude Code 的用户由于环境变量会被自动识别，无需额外配置；但新用户需要经历配置 LLM API 密钥、端点、模型的过程。使用本地 LLM 时，还需额外安装 Ollama 并下载模型(数 GB)。</p>
+<p><strong>业务逻辑的局限性</strong></p>
+<p>尽管内置规则和自定义规则可以弥补相当一部分需求，但无法完全理解团队特有的业务逻辑或领域特定的约定。需要持续在规则文件中补充团队专属的指引才能保证效果。</p>
+<p><strong>AI 的根本性局限</strong></p>
 <p>高层次的架构设计合理性以及是否完全契合业务需求，仍难以用 AI 判断取代人工判断。OCR 是减轻审查人员负担的辅助工具，而非完全的替代品。</p>
 <hr>
 <h2>12. 模型选型指南</h2>
@@ -895,7 +907,13 @@ ocr config set telemetry.otlp_endpoint localhost:4317
 </tbody></table>
 <hr>
 <h2>13. 适用团队类型</h2>
-<p><strong>运营大规模代码库的组织</strong>即便在同时变更大量文件的 PR 中，智能打包与文件选择逻辑也能做到无遗漏的全面覆盖。相较通用智能体，其遗漏率在结构上更低。<strong>重视安全漏洞应对的团队</strong>能在审查初期阶段拦截 NPE、SQL 注入、XSS、线程安全等高风险缺陷。结合本地 LLM 使用，还可以构建代码完全不外泄的私有化环境。<strong>对 AI 引入成本敏感的团队</strong>节省 80% 的 token，相当于用同等预算将可覆盖的审查规模扩大 5 倍。使用 DeepSeek 云端 API 或 Qwen 本地模型，还能进一步降低成本。<strong>希望将 AI 融入现有审查流程的团队</strong></p>
+<p><strong>运营大规模代码库的组织</strong></p>
+<p>即便在同时变更大量文件的 PR 中，智能打包与文件选择逻辑也能做到无遗漏的全面覆盖。相较通用智能体，其遗漏率在结构上更低。</p>
+<p><strong>重视安全漏洞应对的团队</strong></p>
+<p>能在审查初期阶段拦截 NPE、SQL 注入、XSS、线程安全等高风险缺陷。结合本地 LLM 使用，还可以构建代码完全不外泄的私有化环境。</p>
+<p><strong>对 AI 引入成本敏感的团队</strong></p>
+<p>节省 80% 的 token，相当于用同等预算将可覆盖的审查规模扩大 5 倍。使用 DeepSeek 云端 API 或 Qwen 本地模型，还能进一步降低成本。</p>
+<p><strong>希望将 AI 融入现有审查流程的团队</strong></p>
 <p>OCR 作为第一道过滤，先处理 NPE、安全漏洞、编码规范违规等问题，人工审查者便可以专注于架构设计和业务逻辑的审查。</p>
 <hr>
 <h2>参考资料</h2>

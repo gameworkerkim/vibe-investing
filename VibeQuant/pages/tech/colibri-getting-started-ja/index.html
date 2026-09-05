@@ -75,8 +75,8 @@
 <h2>プロジェクトの説明</h2>
 <p>Colibriは、744B規模のMoEモデルがトークンあたり<strong>約40Bパラメータのみを活性化</strong>すること、また活性化されるエキスパート(専門家)がトークンごとに異なる(約11GB)という点を利用しています。</p>
 <ul>
-<li><strong>密な部分(Dense part)</strong>— Attention、Shared Experts、Embeddingsなど約17Bパラメータ →<strong>int4でRAMに常駐</strong>(約9.9GB)</li>
-<li><strong>ルーティングされたエキスパート(Routed Experts)</strong>— 75のMoEレイヤー × 256 =<strong>19,456個のエキスパート</strong>、各々int4で約19MB → <strong>ディスクに保存</strong>(約370GB)</li>
+<li><strong>密な部分(Dense part)</strong> — Attention、Shared Experts、Embeddingsなど約17Bパラメータ → <strong>int4でRAMに常駐</strong>(約9.9GB)</li>
+<li><strong>ルーティングされたエキスパート(Routed Experts)</strong> — 75のMoEレイヤー × 256 = <strong>19,456個のエキスパート</strong>、各々int4で約19MB → <strong>ディスクに保存</strong>(約370GB)</li>
 </ul>
 <p>核心的なアイデアは、<strong>モデルが高速メモリに「収まる」必要はない</strong>ということです。必要に応じてエキスパートをディスクからストリーミングし、VRAM・RAM・ストレージを1つの管理されたメモリ階層として扱います。</p>
 <hr>
@@ -85,9 +85,9 @@
 <p>すべてのレイヤーのすべてのトークンは、<strong>Route → Union → Place → Overlap → Learn</strong>という5段階を経ます。</p>
 <ol>
 <li><strong>Route</strong> — ルーターが入力トークンに対してどのエキスパートを活性化するかを決定</li>
-<li><strong>Union</strong>— バッチ内の複数のトークンが同じエキスパートを選んだ場合、<strong>重複を排除</strong>(batch-union)</li>
-<li><strong>Place</strong>— エキスパートをどこから取得するかを決定(VRAM &gt; RAM &gt; ディスク)。バッチポリシーは<strong>速度にのみ</strong>影響し、ルーターの決定や重みの精度は変わらない</li>
-<li><strong>Overlap</strong>— 非同期I/Oプール(<code>PIPE=1</code>)が欠落したエキスパートをディスクからロードする間、常駐エキスパートで計算を実行。ルーターのプレビュースレッド(<code>PILOT=1</code>)が次のレイヤーのエキスパートをプリフェッチ(ルーティングは<strong>71.6%予測可能</strong>)</li>
+<li><strong>Union</strong> — バッチ内の複数のトークンが同じエキスパートを選んだ場合、<strong>重複を排除</strong>(batch-union)</li>
+<li><strong>Place</strong> — エキスパートをどこから取得するかを決定(VRAM &gt; RAM &gt; ディスク)。バッチポリシーは<strong>速度にのみ</strong>影響し、ルーターの決定や重みの精度は変わらない</li>
+<li><strong>Overlap</strong> — 非同期I/Oプール(<code>PIPE=1</code>)が欠落したエキスパートをディスクからロードする間、常駐エキスパートで計算を実行。ルーターのプレビュースレッド(<code>PILOT=1</code>)が次のレイヤーのエキスパートをプリフェッチ(ルーティングは<strong>71.6%予測可能</strong>)</li>
 <li><strong>Learn</strong> — <code>.coli_usage</code>ファイルにルーティング履歴を保存し、よく使われるエキスパートを自動的に固定(Pin)</li>
 </ol>
 <h3>メモリ階層構造</h3>

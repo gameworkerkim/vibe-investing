@@ -65,7 +65,7 @@
 <p><em>CVSS 9.8 · CRLF 인젝션 무인증 RCE급 · 대량 악용 진행 중</em></p>
 <p>발행일: 2026-05-20 (KST) | 분류: 대량 악용 취약점(Mass Exploitation) | 작성: Dennis Kim CTI</p>
 <h3>1. 핵심 요약 (Executive Summary)</h3>
-<p>CVE-2026-41940은 cPanel과 WHM(WebHost Manager)의 <strong>사전 인증 인증 우회(pre-auth authentication bypass)</strong>취약점으로, CVSS<strong>9.8</strong>(일부 평가 10.0)이다. 자격증명 없이 네트워크 접근만으로 <strong>루트 수준 제어를 획득</strong>할 수 있으며, 2단계 인증(2FA)도 이 익스플로잇을 막지 못한다.</p>
+<p>CVE-2026-41940은 cPanel과 WHM(WebHost Manager)의 <strong>사전 인증 인증 우회(pre-auth authentication bypass)</strong> 취약점으로, CVSS <strong>9.8</strong>(일부 평가 10.0)이다. 자격증명 없이 네트워크 접근만으로 <strong>루트 수준 제어를 획득</strong>할 수 있으며, 2단계 인증(2FA)도 이 익스플로잇을 막지 못한다.</p>
 <p>이미 <strong>공개 24시간 내 다수 행위자가 무기화</strong>했고, Mirai 봇넷 변종과 &#39;Sorry&#39; 랜섬웨어가 배포되었다. Shadowserver 기준 약 <strong>44,000개 IP가 침해된 것으로 추정</strong>되며, 인터넷 노출 cPanel 인스턴스는 약 150만 개로 집계된다. 특히 실제 공격은 패치 공개(4/28) 약 두 달 전인 2026년 2월 23일까지 거슬러 올라가, 사실상 장기 제로데이로 악용된 정황이 있다.</p>
 <blockquote>
 <p><strong>핵심</strong> — 한국 호스팅 사업자와 자체 cPanel 운영 환경도 광범위한 대상이다. 패치 적용 여부와 IOC 스캔 결과를 반드시 확인하라.</p>
@@ -166,8 +166,11 @@
 </code></pre>
 <ul>
 <li>탐지 대상: badpass 출처 세션 내 <code>token_denied</code>와 공격자 주입 <code>cp_security_token</code> 공존, 사전 인증 세션 내 <code>authenticated</code> 속성, 의심 <code>tfa_verified</code> 상태, 변조된 다중행 password 값</li>
-<li><strong>CRITICAL/WARNING 결과 = 침해 정황 → 즉시 대응 필요</strong>&gt;<strong>주의 (오탐)</strong> — 상위(upstream) cPanel 스크립트의 다중행 pass 정규식은 프로덕션의 모든 인증 세션에서 오탐을 일으킨다는 지적이 있다. 커뮤니티 개선판(로그 교차 상관 포함)을 병행 검토하되, 결과는 반드시 사람이 검증할 것.</li>
+<li><strong>CRITICAL/WARNING 결과 = 침해 정황 → 즉시 대응 필요</strong></li>
 </ul>
+<blockquote>
+<p><strong>주의 (오탐)</strong> — 상위(upstream) cPanel 스크립트의 다중행 pass 정규식은 프로덕션의 모든 인증 세션에서 오탐을 일으킨다는 지적이 있다. 커뮤니티 개선판(로그 교차 상관 포함)을 병행 검토하되, 결과는 반드시 사람이 검증할 것.</p>
+</blockquote>
 <h4>4.2 로그 기반 점검</h4>
 <ul>
 <li>/usr/local/cpanel/logs/access_log 및 세션 디렉토리에서 예기치 않은 세션, 비정상 로그인, <code>user=root</code> 또는 <code>hasroot=1</code> 속성이 주입된 세션 파일 검토</li>
@@ -230,7 +233,7 @@
 <p><em>CVSS 9.8 · CRLF injection, unauthenticated RCE-class · Mass exploitation ongoing</em></p>
 <p>Published: 2026-05-20 (KST) | Category: Mass Exploitation | Author: Dennis Kim CTI</p>
 <h3>1. Executive Summary</h3>
-<p>CVE-2026-41940 is a <strong>pre-auth authentication bypass</strong>vulnerability in cPanel and WHM (WebHost Manager), rated CVSS<strong>9.8</strong>(some assessments rate it 10.0). With only network access and no credentials, an attacker can<strong>gain root-level control</strong>, and two-factor authentication (2FA) does not stop this exploit.</p>
+<p>CVE-2026-41940 is a <strong>pre-auth authentication bypass</strong> vulnerability in cPanel and WHM (WebHost Manager), rated CVSS <strong>9.8</strong> (some assessments rate it 10.0). With only network access and no credentials, an attacker can <strong>gain root-level control</strong>, and two-factor authentication (2FA) does not stop this exploit.</p>
 <p>It was <strong>weaponized by multiple actors within 24 hours of disclosure</strong>, with a Mirai botnet variant and the &#39;Sorry&#39; ransomware deployed. Shadowserver estimates approximately <strong>44,000 IPs were compromised</strong>, and internet-exposed cPanel instances are counted at around 1.5 million. Notably, real-world attacks trace back to February 23, 2026 — roughly two months before the patch release (4/28) — indicating it was effectively exploited as a long-running zero-day.</p>
 <blockquote>
 <p><strong>Key point</strong> — Korean hosting providers and self-managed cPanel environments are also broadly in scope. Be sure to verify patch status and IOC scan results.</p>
@@ -331,8 +334,11 @@
 </code></pre>
 <ul>
 <li>Detection targets: co-existence of <code>token_denied</code> and attacker-injected <code>cp_security_token</code> in badpass-origin sessions, an <code>authenticated</code> attribute in pre-auth sessions, suspicious <code>tfa_verified</code> states, and tampered multi-line password values</li>
-<li><strong>CRITICAL/WARNING result = signs of compromise → immediate response required</strong>&gt;<strong>Caution (False Positives)</strong> — There are reports that the upstream cPanel script&#39;s multi-line pass regex produces false positives on every authenticated session in production. Consider community-improved versions (including log cross-correlation) in parallel, but always have a human verify the results.</li>
+<li><strong>CRITICAL/WARNING result = signs of compromise → immediate response required</strong></li>
 </ul>
+<blockquote>
+<p><strong>Caution (False Positives)</strong> — There are reports that the upstream cPanel script&#39;s multi-line pass regex produces false positives on every authenticated session in production. Consider community-improved versions (including log cross-correlation) in parallel, but always have a human verify the results.</p>
+</blockquote>
 <h4>4.2 Log-Based Inspection</h4>
 <ul>
 <li>Review /usr/local/cpanel/logs/access_log and the session directory for unexpected sessions, anomalous logins, and session files with injected <code>user=root</code> or <code>hasroot=1</code> attributes</li>

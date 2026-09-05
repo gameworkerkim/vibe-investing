@@ -185,9 +185,10 @@
 </tr>
 <tr>
 <td>2026-07-27 (approx. 23 hours post-incident)</td>
-<td>Circumstances of privilege takeover <strong>unconfirmed</strong>publicly. Full review of related contracts with external experts underway</td>
+<td>Circumstances of privilege takeover <strong>unconfirmed</strong> publicly. Full review of related contracts with external experts underway</td>
 </tr>
 </tbody></table>
+<p><strong>Damage scale:</strong> Approx. KRW 7.6–7.7 billion (issuer and press estimates). Confirmed stablecoin outflow: approx. USD 724,000 equivalent in USDC.e.</p>
 <h3>2.2 February 2025 Incident (Prior Event)</h3>
 <table>
 <thead>
@@ -258,13 +259,16 @@
 </tbody></table>
 <p><strong>Key point:</strong> Most industry audit budgets and marketing language concentrate on L2, while the overwhelming majority of large fund-outflow incidents occur at L3.</p>
 <h3>3.2 Three Structural Defects</h3>
-<p><strong>① Single Owner Privilege</strong>An <code>mint()</code> function bearing the <code>onlyOwner</code> modifier is entirely normal from a code perspective. The problem is that the owner is a single EOA (or an account controlled by a single key). In this structure, what the attacker obtains is not merely &quot;the right to call a function&quot; but<strong>the currency-issuance authority itself</strong>.</p>
+<p><strong>① Single Owner Privilege</strong></p>
+<p>An <code>mint()</code> function bearing the <code>onlyOwner</code> modifier is entirely normal from a code perspective. The problem is that the owner is a single EOA (or an account controlled by a single key). In this structure, what the attacker obtains is not merely &quot;the right to call a function&quot; but <strong>the currency-issuance authority itself</strong>.</p>
 <pre><code>Risk function = f(privilege strength, number of privilege holders, time delay, amount cap)
 
 WEMIX$ mint()  = f(unlimited issuance, effectively 1, 0 seconds, none)
 Safe design    = f(capped issuance, m-of-n multisig, 24–48h timelock, daily cap)
 </code></pre>
-<p><strong>② Absence of Privilege Tier Separation</strong>Mint, burn, pause, transferOwnership, and upgradeTo are functions of entirely different risk grades. Bundling them under one owner privilege multiplies damage on compromise. Especially when <code>transferOwnership</code> can execute immediately without a timelock, the attacker can<strong>exclude legitimate operators</strong>immediately after breach.<strong>③ Absence of Detection · Circuit Breaker</strong></p>
+<p><strong>② Absence of Privilege Tier Separation</strong></p>
+<p>Mint, burn, pause, transferOwnership, and upgradeTo are functions of entirely different risk grades. Bundling them under one owner privilege multiplies damage on compromise. Especially when <code>transferOwnership</code> can execute immediately without a timelock, the attacker can <strong>exclude legitimate operators</strong> immediately after breach.</p>
+<p><strong>③ Absence of Detection · Circuit Breaker</strong></p>
 <p>5.22 million unauthorized mints were not blocked in real time, and an external analyst discovered them first. Any one of the following would have substantially reduced damage:</p>
 <ul>
 <li>Issuance anomaly alert → on-call response (minute-scale)</li>
@@ -474,7 +478,8 @@ Safe design    = f(capped issuance, m-of-n multisig, 24–48h timelock, daily ca
 <li>Investors · users: misread as &quot;audit passed = principal safe&quot;</li>
 <li>Actual risk: composite score is also influenced by <strong>variables unrelated to security</strong>, such as community votes and market metrics</li>
 </ul>
-<p>A high composite score is a valid signal that &quot;this project spent heavily on security.&quot; It is not a valid signal that &quot;this project&#39;s mint keys are protected by multisig.&quot; <strong>Investors need the latter; what circulates in the market is the former.</strong>Notably, the WEMIX team itself explicitly described in a 2023 technical blog that audits cannot prevent all incidents. The incident did not occur from lack of awareness.<strong>The gap between awareness and execution</strong> caused it.</p>
+<p>A high composite score is a valid signal that &quot;this project spent heavily on security.&quot; It is not a valid signal that &quot;this project&#39;s mint keys are protected by multisig.&quot; <strong>Investors need the latter; what circulates in the market is the former.</strong></p>
+<p>Notably, the WEMIX team itself explicitly described in a 2023 technical blog that audits cannot prevent all incidents. The incident did not occur from lack of awareness. <strong>The gap between awareness and execution</strong> caused it.</p>
 <hr>
 <h2>5. Remediation Framework</h2>
 <h3>5.1 Layered Response Matrix</h3>

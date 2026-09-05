@@ -233,8 +233,9 @@ MiniMax与DeepSeek · Anthropic Claude · OpenAI ChatGPT的Coding Plan · API ·
 <li>输入API密钥 → 点击右上角&quot;Done&quot;</li>
 <li>选择模型:MiniMax-M3(或M2.5 / M2.7) → 启用&quot;Auto-approve: Edit&quot;后即可开始使用</li>
 </ol>
-<p><strong>Cline专属功能使用技巧</strong>-<strong>Plan / Act模式分离</strong>:Plan仅提出跨文件修改计划,Act执行实际编辑。大型重构应先用Plan审查。</p>
+<p><strong>Cline专属功能使用技巧</strong></p>
 <ul>
+<li><strong>Plan / Act模式分离</strong>:Plan仅提出跨文件修改计划,Act执行实际编辑。大型重构应先用Plan审查。</li>
 <li><strong>MCP市场</strong>:一键添加内置工具(浏览器、GitHub、数据库客户端等)。</li>
 <li><strong>@提及</strong>:在聊天框中输入<code>@文件路径</code>可将该文件自动注入上下文。</li>
 <li><strong>Checkpoints</strong>:自动保存每个阶段的快照,出错时可一键回滚。</li>
@@ -301,8 +302,9 @@ claude --model MiniMax-M3
 <li>Entrypoint:<code>api.minimax.io</code>或<code>api.minimaxi.com</code></li>
 <li>输入API密钥 → Model选择:MiniMax-M3 → Done</li>
 </ol>
-<p><strong>Kilo Code的独特优势</strong>-<strong>Orchestrator模式</strong>:将复杂任务拆解为子任务,自动分派给Architect、Code、Debug等专业模式,实现多步骤编排。在需要一次性自主完成大型功能实现或PR级任务时,比Cline单一的Plan-Act循环更具优势。</p>
+<p><strong>Kilo Code的独特优势</strong></p>
 <ul>
+<li><strong>Orchestrator模式</strong>:将复杂任务拆解为子任务,自动分派给Architect、Code、Debug等专业模式,实现多步骤编排。在需要一次性自主完成大型功能实现或PR级任务时,比Cline单一的Plan-Act循环更具优势。</li>
 <li><strong>自定义模式市场</strong>:提供Architect、Ask、Code、Debug等基于角色的预设。</li>
 <li><strong>并排Diff视图</strong>:比Cline更精细地预览变更内容。</li>
 <li><strong>分级终端权限控制</strong>:安全优先的工作流。</li>
@@ -325,10 +327,13 @@ claude --model MiniMax-M3
 <h2>3. 代理工作流设计</h2>
 <h3>3.1 理解Plan-Act循环</h3>
 <p>2026年的AI编程代理已不再是简单的问答系统,而是自主重复&quot;读取 → 思考 → 编写 → 验证&quot;的循环。这被称为<strong>Plan-Act-Verify循环</strong>,VS Code的各类工具以不同形式实现了这一循环。</p>
-<p><strong>循环的四个阶段</strong>1.<strong>Read(读取)</strong>:主动探索工作目录、文件、文档(grep、find、sed、ls等)。
-2. <strong>Think(思考)</strong>:拆解任务、推断意图、决定调用哪些工具/API。MiniMax M3的响应中会包含thinking块。
-3. <strong>Act(执行)</strong>:创建/修改文件、执行命令、调用函数。所有更改均需用户批准后才生效(Human-in-the-loop)。
-4. <strong>Verify(验证)</strong>:运行测试、类型检查、确认构建。失败时返回第1~2阶段进行自我修正。</p>
+<p><strong>循环的四个阶段</strong></p>
+<ol>
+<li><strong>Read(读取)</strong>:主动探索工作目录、文件、文档(grep、find、sed、ls等)。</li>
+<li><strong>Think(思考)</strong>:拆解任务、推断意图、决定调用哪些工具/API。MiniMax M3的响应中会包含thinking块。</li>
+<li><strong>Act(执行)</strong>:创建/修改文件、执行命令、调用函数。所有更改均需用户批准后才生效(Human-in-the-loop)。</li>
+<li><strong>Verify(验证)</strong>:运行测试、类型检查、确认构建。失败时返回第1~2阶段进行自我修正。</li>
+</ol>
 <p><strong>示例:&quot;添加JWT认证中间件&quot;任务的实际流程</strong></p>
 <pre><code class="language-javascript">// Cline / Kilo Code执行的步骤
 // 1. Read:   src/middleware/auth.ts, src/routes/api.ts, AGENTS.md
@@ -1051,7 +1056,19 @@ claude --model MiniMax-M3
 <hr>
 <h2>6. 决策指南 — 何时使用哪个模型?</h2>
 <p>不要试图用单一模型解决所有场景。通过以下决策树可在30秒内做出选择。</p>
-<p><strong>① 如果预算是最大的限制条件</strong>→ MiniMax M2.5或DeepSeek V4-Flash。可以以每10万token约$0.03的价格获得SWE-bench 70~80%水平的能力。M2.5升级到M3的路径清晰,M3发布后还可直接使用1M上下文。<strong>② 如果代码质量(精细意图理解)是首要考虑</strong>→ Claude Opus 4.7。SWE-Bench Pro 64.0%,在实际GitHub issue解决能力上排名第一。如果团队经常遇到&quot;几乎正确但略有偏差&quot;的结果,建议配置路由到Opus的故障转移方案。<strong>③ 如果长时间自主任务(连续8小时以上)较多</strong>→ GPT-5.5。Terminal-Bench 2.0取得82.7%排名第一,长时间自主任务能力最强。但价格($5/$30)是前者的2倍,建议只将真正的长任务路由到该模型。<strong>④ 如果需要分析100万token的完整代码库</strong>→ MiniMax M3、Gemini 3.1 Pro、DeepSeek V4-Pro / V4-Flash、Claude Opus 4.7/4.8(均支持1M)。其中性价比更高的是V4-Flash($0.14/$0.28)和M3($0.30/$1.20)。Sonnet 4.6也支持1M。<strong>⑤ 如果需要数据主权/本地部署</strong>→ MiniMax M2.5/M2.7(开源权重)或DeepSeek V3.2/V4。可从Hugging Face获取权重,通过vLLM/SGLang部署到公司内部集群。MiniMax采用MIT风格许可证,DeepSeek采用MIT+Model License(允许商用)。<strong>⑥ 如果需要Computer Use(浏览器/操作系统自动化)</strong>→ GPT-5.4(原生支持,OSWorld 75%)或Claude Opus 4.7(通过API)。MiniMax M3具备原生多模态能力,但Computer Use需要通过工具调用单独实现。<strong>⑦ 推荐的混合路由配置(OpenClaw示例)</strong></p>
+<p><strong>① 如果预算是最大的限制条件</strong>
+→ MiniMax M2.5或DeepSeek V4-Flash。可以以每10万token约$0.03的价格获得SWE-bench 70~80%水平的能力。M2.5升级到M3的路径清晰,M3发布后还可直接使用1M上下文。</p>
+<p><strong>② 如果代码质量(精细意图理解)是首要考虑</strong>
+→ Claude Opus 4.7。SWE-Bench Pro 64.0%,在实际GitHub issue解决能力上排名第一。如果团队经常遇到&quot;几乎正确但略有偏差&quot;的结果,建议配置路由到Opus的故障转移方案。</p>
+<p><strong>③ 如果长时间自主任务(连续8小时以上)较多</strong>
+→ GPT-5.5。Terminal-Bench 2.0取得82.7%排名第一,长时间自主任务能力最强。但价格($5/$30)是前者的2倍,建议只将真正的长任务路由到该模型。</p>
+<p><strong>④ 如果需要分析100万token的完整代码库</strong>
+→ MiniMax M3、Gemini 3.1 Pro、DeepSeek V4-Pro / V4-Flash、Claude Opus 4.7/4.8(均支持1M)。其中性价比更高的是V4-Flash($0.14/$0.28)和M3($0.30/$1.20)。Sonnet 4.6也支持1M。</p>
+<p><strong>⑤ 如果需要数据主权/本地部署</strong>
+→ MiniMax M2.5/M2.7(开源权重)或DeepSeek V3.2/V4。可从Hugging Face获取权重,通过vLLM/SGLang部署到公司内部集群。MiniMax采用MIT风格许可证,DeepSeek采用MIT+Model License(允许商用)。</p>
+<p><strong>⑥ 如果需要Computer Use(浏览器/操作系统自动化)</strong>
+→ GPT-5.4(原生支持,OSWorld 75%)或Claude Opus 4.7(通过API)。MiniMax M3具备原生多模态能力,但Computer Use需要通过工具调用单独实现。</p>
+<p><strong>⑦ 推荐的混合路由配置(OpenClaw示例)</strong></p>
 <pre><code class="language-json">{
   &quot;agents&quot;: {
     &quot;defaults&quot;: {

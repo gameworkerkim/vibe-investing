@@ -85,8 +85,8 @@
 <hr>
 <h2>요약 (TL;DR)</h2>
 <p>Citrix NetScaler ADC/Gateway의 사전인증 메모리 오버리드 취약점 <code>CVE-2026-3055</code>이 2026년 6월 초 대규모 실제 악용 단계로 진입했다. Fortinet 위협 인텔리전스팀은 전 세계 인터넷 노출 NetScaler SAML 엔드포인트를 겨냥한 공격 시도가 하루 수천 건 탐지·차단되고 있다고 확인했다.</p>
-<p>핵심은 두 가지다. <strong>첫째, 이것은 신규 0-day가 아니다.</strong>Citrix는 이미 3월 23일 권고(CTX696300)로 공개·패치했고, 3월 말 정찰·악용이 시작돼 CISA KEV에 등재됐다. 6월의 사건은 &quot;새 취약점의 등장&quot;이 아니라<strong>미패치 자산 위에서 악용이 산업적 규모로 확대된 것</strong>이다. <strong>둘째, 임팩트 라벨이 소스마다 갈린다.</strong>일부 위협 피드는 이를 &quot;RCE(CVSS 9.8)&quot;로 표기하지만, Citrix·Rapid7·Horizon3 등 1차 소스는<strong>메모리 오버리드에 의한 민감정보 유출(CVSS 9.3, CVSS v4.0)</strong>로 규정한다. 본 리포트는 이 구분을 핵심 분석 축으로 삼는다 — 정확한 임팩트는 <em>세션 토큰·자격증명의 메모리 누출</em>이며, 이는 곧 <strong>CitrixBleed(CVE-2023-4966) 계열의 세션 하이재킹</strong>으로 직결된다.</p>
-<p>이 구분이 실무에서 결정적인 이유는 대응 절차가 달라지기 때문이다. 정보유출형 결함은 <strong>패치만으로 끝나지 않는다.</strong>패치 이전에 메모리에서 새어 나간 세션 토큰은 패치 후에도 유효하므로, CitrixBleed의 교훈대로<strong>활성 세션 강제 종료</strong>가 패치와 동급의 필수 조치다.</p>
+<p>핵심은 두 가지다. <strong>첫째, 이것은 신규 0-day가 아니다.</strong> Citrix는 이미 3월 23일 권고(CTX696300)로 공개·패치했고, 3월 말 정찰·악용이 시작돼 CISA KEV에 등재됐다. 6월의 사건은 &quot;새 취약점의 등장&quot;이 아니라 <strong>미패치 자산 위에서 악용이 산업적 규모로 확대된 것</strong>이다. <strong>둘째, 임팩트 라벨이 소스마다 갈린다.</strong> 일부 위협 피드는 이를 &quot;RCE(CVSS 9.8)&quot;로 표기하지만, Citrix·Rapid7·Horizon3 등 1차 소스는 <strong>메모리 오버리드에 의한 민감정보 유출(CVSS 9.3, CVSS v4.0)</strong>로 규정한다. 본 리포트는 이 구분을 핵심 분석 축으로 삼는다 — 정확한 임팩트는 <em>세션 토큰·자격증명의 메모리 누출</em>이며, 이는 곧 <strong>CitrixBleed(CVE-2023-4966) 계열의 세션 하이재킹</strong>으로 직결된다.</p>
+<p>이 구분이 실무에서 결정적인 이유는 대응 절차가 달라지기 때문이다. 정보유출형 결함은 <strong>패치만으로 끝나지 않는다.</strong> 패치 이전에 메모리에서 새어 나간 세션 토큰은 패치 후에도 유효하므로, CitrixBleed의 교훈대로 <strong>활성 세션 강제 종료</strong>가 패치와 동급의 필수 조치다.</p>
 <blockquote>
 <p>⚠️ <strong>KISA/KrCERT 권고 반영 여부 확인 필요</strong> — 본 건은 글로벌(Citrix·CISA KEV·Fortinet·Rapid7) 기준으로 정리됐다. 국내 공식 권고 등재·갱신 시점과 차이가 있을 수 있으니, 사내 적용 시 KISA 보안공지와 교차 확인할 것.</p>
 </blockquote>
@@ -204,7 +204,7 @@
 </tr>
 </tbody></table>
 <p>분석적으로, 1차 벤더 기술서(Citrix)와 주요 취약점 연구기관(Rapid7·Horizon3)의 규정이 더 신뢰할 만하다. 그들은 일관되게 이를 <strong>out-of-bounds read에 의한 정보 유출(information disclosure)</strong>로 기술한다. &quot;RCE&quot; 표기는 ① CVSS 점수를 9.8로 잡은 일부 집계와 함께 전파됐고, ② 경계 장비라는 위치 때문에 최악 시나리오가 과대 일반화된 결과로 보인다.</p>
-<p>그렇다면 &quot;정보유출이니 RCE보다 가볍다&quot;인가? <strong>아니다.</strong>본 결함의 실질 위협은 직접 코드 실행이 아니라, 프로세스 메모리에서<strong>세션 토큰·자격증명을 누출</strong>시키는 데 있다 — 이는 정확히 CitrixBleed가 그러했던 방식이다. 누출된 세션 토큰은 인증·MFA를 우회해 <strong>유효 세션을 가로채는</strong>데 쓰이고, 거기서부터 SSO 신뢰 사슬과 내부망으로의 피벗이 시작된다. 즉 임팩트 유형은 &quot;RCE&quot;가 아니라 &quot;<strong>자격증명/세션 누출 → 신원 도용</strong>&quot;이며, 이 정확한 분류가 다음 절의 대응 절차(패치만으로 불충분, 세션 무효화 필수)를 결정한다.</p>
+<p>그렇다면 &quot;정보유출이니 RCE보다 가볍다&quot;인가? <strong>아니다.</strong> 본 결함의 실질 위협은 직접 코드 실행이 아니라, 프로세스 메모리에서 <strong>세션 토큰·자격증명을 누출</strong>시키는 데 있다 — 이는 정확히 CitrixBleed가 그러했던 방식이다. 누출된 세션 토큰은 인증·MFA를 우회해 <strong>유효 세션을 가로채는</strong> 데 쓰이고, 거기서부터 SSO 신뢰 사슬과 내부망으로의 피벗이 시작된다. 즉 임팩트 유형은 &quot;RCE&quot;가 아니라 &quot;<strong>자격증명/세션 누출 → 신원 도용</strong>&quot;이며, 이 정확한 분류가 다음 절의 대응 절차(패치만으로 불충분, 세션 무효화 필수)를 결정한다.</p>
 <blockquote>
 <p>실무 함의: CVE의 임팩트 <em>유형</em>을 오분류하면 대응 절차가 어긋난다. &quot;RCE&quot;로 보면 &quot;패치하면 끝&quot;으로 오인하기 쉽지만, &quot;정보유출(토큰 누출)&quot;로 정확히 보면 패치 후에도 잔존하는 탈취 토큰을 무효화해야 함이 자명해진다.</p>
 </blockquote>
@@ -243,10 +243,10 @@
 <h2>5. 공격 시나리오 — 토큰 탈취에서 SSO·VPN 장악까지</h2>
 <p>CitrixBleed 패턴을 본 건에 투영하면 다음과 같은 체인이 성립한다.</p>
 <ol>
-<li><strong>사전인증 메모리 누출</strong>— 노출된 SAML IdP 엔드포인트에 특수 요청을 보내 프로세스 메모리에서 세션 토큰·자격증명을 추출한다. (ATT&amp;CK<strong>T1190</strong>)</li>
-<li><strong>세션 하이재킹</strong>— 탈취한 세션 토큰으로 인증·MFA를 우회해 유효 세션을 가로챈다. (<strong>T1539</strong>Steal Web Session Cookie,<strong>T1550.004</strong> Use Alternate Authentication Material)</li>
-<li><strong>SSO 신뢰 붕괴</strong>— NetScaler가 SAML IdP이므로, IdP 장악은 그것이 보증하던 다수 백엔드 애플리케이션에 대한 신원 보증의 붕괴를 의미한다. SAML 어서션 조작·IdP 개시 로그인 악용으로 확산된다. (<strong>T1078</strong> Valid Accounts)</li>
-<li><strong>지속·피벗</strong>— 경계 VPN 접근을 지속화하고 내부망으로 이동한다. (<strong>T1133</strong> External Remote Services, 이후 측면 이동)</li>
+<li><strong>사전인증 메모리 누출</strong> — 노출된 SAML IdP 엔드포인트에 특수 요청을 보내 프로세스 메모리에서 세션 토큰·자격증명을 추출한다. (ATT&amp;CK <strong>T1190</strong>)</li>
+<li><strong>세션 하이재킹</strong> — 탈취한 세션 토큰으로 인증·MFA를 우회해 유효 세션을 가로챈다. (<strong>T1539</strong> Steal Web Session Cookie, <strong>T1550.004</strong> Use Alternate Authentication Material)</li>
+<li><strong>SSO 신뢰 붕괴</strong> — NetScaler가 SAML IdP이므로, IdP 장악은 그것이 보증하던 다수 백엔드 애플리케이션에 대한 신원 보증의 붕괴를 의미한다. SAML 어서션 조작·IdP 개시 로그인 악용으로 확산된다. (<strong>T1078</strong> Valid Accounts)</li>
+<li><strong>지속·피벗</strong> — 경계 VPN 접근을 지속화하고 내부망으로 이동한다. (<strong>T1133</strong> External Remote Services, 이후 측면 이동)</li>
 </ol>
 <p>이 체인에서 NetScaler는 단일 장애점으로 기능한다. 경계 하나의 메모리 누출이 SSO 신뢰 전체와 내부 자원 접근으로 번지는 구조다. 역사적으로 이 표면은 <strong>랜섬웨어 그룹과 국가배후 첩보 행위자 양쪽</strong>에서 가장 공격적으로 노려졌다.</p>
 <hr>
@@ -269,7 +269,7 @@
 </ol>
 <hr>
 <h2>8. 결론</h2>
-<p><code>CVE-2026-3055</code>은 두 가지를 동시에 가르친다. 첫째, <strong>위협의 시계는 공개일이 아니라 패치 적용일에 멈춘다.</strong>3월에 패치가 나왔어도 적용하지 않은 자산은 6월의 대규모 악용 앞에 그대로 노출됐다. 둘째,<strong>임팩트 유형의 정확한 분류가 대응을 결정한다.</strong> &quot;RCE&quot;라는 과대 라벨에 기대면 &quot;패치하면 끝&quot;으로 오인하지만, 본질이 <em>세션 토큰 누출</em>임을 정확히 보면 패치 후 세션 무효화가 자명한 필수 절차가 된다.</p>
+<p><code>CVE-2026-3055</code>은 두 가지를 동시에 가르친다. 첫째, <strong>위협의 시계는 공개일이 아니라 패치 적용일에 멈춘다.</strong> 3월에 패치가 나왔어도 적용하지 않은 자산은 6월의 대규모 악용 앞에 그대로 노출됐다. 둘째, <strong>임팩트 유형의 정확한 분류가 대응을 결정한다.</strong> &quot;RCE&quot;라는 과대 라벨에 기대면 &quot;패치하면 끝&quot;으로 오인하지만, 본질이 <em>세션 토큰 누출</em>임을 정확히 보면 패치 후 세션 무효화가 자명한 필수 절차가 된다.</p>
 <p>이는 직전 리포트(<code>CTI-2026-0602-FAULTLINE</code>)의 명제 — <em>벤더·집계 라벨이 실제 위험을 예측하지 못한다</em> — 의 또 다른 단면이다. 거기서는 &quot;악용 가능성 낮음&quot;이 먼저 터졌고, 여기서는 &quot;RCE/정보유출&quot;의 분류 차이가 대응 절차를 가른다. 경계 장비 방어의 기준선은 단순하다. <em>패치는 입구를 닫을 뿐, 이미 새어 나간 것을 회수하지 못한다.</em> 그러므로 패치와 세션 무효화는 분리될 수 없는 한 쌍이다.</p>
 <hr>
 <h2>9. 참고 문헌 (References)</h2>

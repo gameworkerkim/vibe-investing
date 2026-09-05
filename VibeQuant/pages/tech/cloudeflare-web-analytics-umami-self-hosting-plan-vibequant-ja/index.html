@@ -196,14 +196,19 @@ Vercel (Umami Next.js)  &lt;--&gt;  Neon または Supabase (PostgreSQL)
 </tr>
 </tbody></table>
 <h3>3.3 段階別インストール</h3>
-<p><strong>Step 1: Umamiリポジトリのフォーク</strong><a href="https://github.com/umami-software/umami">umami-software/umami</a>を自分のGitHubアカウントにフォークします。<strong>Step 2: PostgreSQL作成</strong></p>
+<p><strong>Step 1: Umamiリポジトリのフォーク</strong></p>
+<p><a href="https://github.com/umami-software/umami">umami-software/umami</a>を自分のGitHubアカウントにフォークします。</p>
+<p><strong>Step 2: PostgreSQL作成</strong></p>
 <p><a href="https://neon.tech">Neon</a>または<a href="https://supabase.com">Supabase</a>でプロジェクトを作成し、接続文字列(<code>postgresql://...</code>)をコピーします。</p>
 <ul>
 <li>Neon:サーバーレスPostgres、アイドル時に一時停止(コールドスタート)する可能性がある</li>
 <li>Supabase:無料ティアのDB容量・接続上限を確認する必要がある</li>
 </ul>
-<p><strong>Step 3: VercelへUmamiをデプロイ</strong>1. Vercelで<strong>Add New → Project</strong>からフォークした<code>umami</code>をインポート
-2. 環境変数を設定:</p>
+<p><strong>Step 3: VercelへUmamiをデプロイ</strong></p>
+<ol>
+<li>Vercelで<strong>Add New → Project</strong>からフォークした<code>umami</code>をインポート</li>
+<li>環境変数を設定:</li>
+</ol>
 <table>
 <thead>
 <tr>
@@ -245,10 +250,12 @@ Vercel (Umami Next.js)  &lt;--&gt;  Neon または Supabase (PostgreSQL)
 <ol>
 <li>デプロイURLにアクセス</li>
 <li>デフォルトアカウント:<code>admin</code> / <code>umami</code>(<a href="https://docs.umami.is/docs/login">Login</a>)</li>
-<li><strong>すぐにパスワードを変更</strong>4. Settings → Websitesでサイトを追加し<strong>Website ID</strong>をコピー</li>
+<li><strong>すぐにパスワードを変更</strong></li>
+<li>Settings → Websitesでサイトを追加し<strong>Website ID</strong>をコピー</li>
 </ol>
 <p>vibequantはホストが複数あるため、Websiteをどう分割するかをこのステップの前に決めます(下記<a href="#8-vibequantcc%E3%81%AE%E8%BF%BD%E5%8A%A0%E8%A6%81%E4%BB%B6">8. vibequant.ccの追加要件</a>参照)。</p>
-<p><strong>Step 5: Cloudflare Workerプロキシ</strong>Workerは<strong>トラッカースクリプトと収集APIの両方</strong>をプロキシする必要があります。元の案のように<code>/api/send</code>だけを通すと、スクリプトの読み込みが壊れます。</p>
+<p><strong>Step 5: Cloudflare Workerプロキシ</strong></p>
+<p>Workerは<strong>トラッカースクリプトと収集APIの両方</strong>をプロキシする必要があります。元の案のように<code>/api/send</code>だけを通すと、スクリプトの読み込みが壊れます。</p>
 <p>例(パスは実際の<code>TRACKER_SCRIPT_NAME</code> / <code>COLLECT_API_ENDPOINT</code>に合わせて調整):</p>
 <pre><code class="language-javascript">const UMAMI_ORIGIN = &quot;https://your-umami.vercel.app&quot;; // Vercel Umami URL
 const SCRIPT_PATH = &quot;/u.js&quot;;          // TRACKER_SCRIPT_NAMEの結果に合わせる
@@ -291,7 +298,10 @@ export default {
 <li>統計照会用のAPIトークンをWorkerのソースにハードコードしないこと。ダッシュボードはVercel URL(または別の保護されたパス)から直接アクセスします。</li>
 <li>プロダクションでは<code>UMAMI_ORIGIN</code>をWorkerの<strong>Secrets / Vars</strong>として保持します。</li>
 </ul>
-<p><strong>Step 6: カスタムドメイン</strong>Workerに<code>analytics.vibequant.cc</code>を接続します。トラッキングがファーストパーティ(または同じ登録ドメインのサブドメイン)として見えれば、広告ブロッカー回避の確率が上がります。コミュニティの議論:<a href="https://github.com/umami-software/umami/discussions/1026">umami#1026</a>。<strong>Step 7: vibequant.ccにトラッキングコードを挿入</strong>正しいスクリプトの形は以下の通りです(<code>src</code>は<strong>スクリプトファイル</strong>、<code>/api/send</code>ではない):</p>
+<p><strong>Step 6: カスタムドメイン</strong></p>
+<p>Workerに<code>analytics.vibequant.cc</code>を接続します。トラッキングがファーストパーティ(または同じ登録ドメインのサブドメイン)として見えれば、広告ブロッカー回避の確率が上がります。コミュニティの議論:<a href="https://github.com/umami-software/umami/discussions/1026">umami#1026</a>。</p>
+<p><strong>Step 7: vibequant.ccにトラッキングコードを挿入</strong></p>
+<p>正しいスクリプトの形は以下の通りです(<code>src</code>は<strong>スクリプトファイル</strong>、<code>/api/send</code>ではない):</p>
 <pre><code class="language-html">&lt;script
   defer
   src=&quot;https://analytics.vibequant.cc/u.js&quot;
@@ -553,7 +563,9 @@ fly deploy
 <td>IPv4・メモリ超過時に有料化</td>
 </tr>
 </tbody></table>
+<p><strong>現実的な月額コスト期待値</strong></p>
 <ul>
+<li><strong>A:</strong>トラフィックが大きくなければ<strong>0円</strong>に近く維持可能</li>
 <li><strong>B:</strong> 「完全無料」と断定しづらい。メモリ・IPv4だけでも月に少額課金が発生しうる。Billing alertを必ず設定する。</li>
 </ul>
 <p>「月額コスト0円」は<strong>A + Neon/Supabase + Worker</strong>の組み合わせでのみ安全に目標とすべきです。</p>
@@ -758,7 +770,9 @@ fly deploy
 <li>後でBに移行してもWorker originだけ差し替え</li>
 </ul>
 </li>
-<li><strong>D1/Workersネイティブのumamiは行わない</strong>4.<strong>build.mjs経由で挿入 + ホストごとのWebsite ID</strong>5.<strong>コールドスタート・Hobby上限が体感されたらBに移行</strong><ul>
+<li><strong>D1/Workersネイティブのumamiは行わない</strong></li>
+<li><strong>build.mjs経由で挿入 + ホストごとのWebsite ID</strong></li>
+<li><strong>コールドスタート・Hobby上限が体感されたらBに移行</strong><ul>
 <li>それまではFlyの「無料」を前提としないこと</li>
 </ul>
 </li>

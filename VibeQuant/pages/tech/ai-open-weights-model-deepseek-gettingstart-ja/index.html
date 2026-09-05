@@ -209,7 +209,7 @@
 </thead>
 <tbody><tr>
 <td><strong>Hybrid Attention</strong></td>
-<td>CSA + HCA の結合。1M コンテキストで V4-Pro は<strong>V3.2 比単一トークン推論 FLOPs 27%、KV キャッシュ 10%</strong></td>
+<td>CSA + HCA の結合。1M コンテキストで V4-Pro は <strong>V3.2 比単一トークン推論 FLOPs 27%、KV キャッシュ 10%</strong></td>
 </tr>
 <tr>
 <td><strong>mHC</strong></td>
@@ -302,6 +302,7 @@
 <td>特殊システムプロンプト + <code>&lt;think&gt;</code> 思考 <code>&lt;/think&gt;</code> 要約</td>
 </tr>
 </tbody></table>
+<p><strong>モード選択が性能を支配する。</strong> 以下は同一モデルでモードのみ変えた結果である。</p>
 <table>
 <thead>
 <tr>
@@ -485,7 +486,8 @@
 <p>Flash-Max は大きな thinking budget を与えると Pro に準じる推論性能を出すが、<strong>純粋な知識作業と最も複雑なエージェントワークフローでは Pro に劣る。</strong> モデルカードが直接認める部分である。</p>
 <p>具体的に SimpleQA-Verified が Flash-Max 34.1 vs Pro-Max 57.9 で 23.8 点差である。<strong>事実正確性が重要な用途では Flash は危険である。</strong></p>
 <h3>3.6 地政学・規制リスク (ホスティング API に限定)</h3>
-<p>DeepSeek <strong>ホスティングサービス/アプリ/API</strong>は多数の国で政府機器使用が禁止または制限されている。韓国は 2025 年個人情報保護委員会が国外移転問題でアプリサービスを一時停止し是正勧告し、多数の省庁・公共機関・金融圏がアクセスを遮断した。米国は連邦一部機関と多数州政府が政府機器使用を禁止し関連法案が発議された。日本・豪州・台湾・イタリアなども類似措置を取った。<strong>核心の区別</strong>: これらの規制は <strong>データが中国に送信されるホスティングサービス</strong>を対象とし、MIT ライセンスで配布された<strong>重みを自社インフラで稼働する行為</strong> を禁止するものではない。この区別が §9〜11 事業シナリオ全体の前提である。</p>
+<p>DeepSeek <strong>ホスティングサービス/アプリ/API</strong> は多数の国で政府機器使用が禁止または制限されている。韓国は 2025 年個人情報保護委員会が国外移転問題でアプリサービスを一時停止し是正勧告し、多数の省庁・公共機関・金融圏がアクセスを遮断した。米国は連邦一部機関と多数州政府が政府機器使用を禁止し関連法案が発議された。日本・豪州・台湾・イタリアなども類似措置を取った。</p>
+<p><strong>核心の区別</strong>: これらの規制は <strong>データが中国に送信されるホスティングサービス</strong>を対象とし、MIT ライセンスで配布された<strong>重みを自社インフラで稼働する行為</strong> を禁止するものではない。この区別が §9〜11 事業シナリオ全体の前提である。</p>
 <p>ただし組織によっては「中国製モデル」自体を排除する調達政策が存在しうるため、事前確認が必要である。</p>
 <h3>3.7 Preview 状態</h3>
 <p>モデルカードは自らを preview と表記する。GA チェックポイントで品質変更の可能性があるため、preview で確立したベースラインは <strong>評価基準線として使い、最終成果物品質保証の根拠としては使わない</strong> のが安全である。</p>
@@ -730,7 +732,9 @@
 <td>51.8</td>
 </tr>
 </tbody></table>
+<p><strong>解釈ポイント</strong></p>
 <ul>
+<li><strong>コーディングは 1 位である。</strong> LiveCodeBench 93.5、Codeforces 3206 でクローズドフロンティアを上回る。これが V4-Pro の最も確実な根拠である。</li>
 <li><strong>MCPAtlas 73.6 は Opus-4.6 (73.8) と事実上同率</strong> である。MCP ベースエージェントでオープンウェイトがクローズドに並ぶ稀な事例である。</li>
 <li><strong>SimpleQA-Verified 57.9 は Gemini (75.6) に大きく劣る。</strong> 事実照会型ワークロードには不適で、RAG なしでは使うべきでない。</li>
 <li><strong>ロングコンテキスト実測は期待に届かない。</strong>1M 対応だが MRCR 1M 83.5、CorpusQA 1M 62.0 で Opus-4.6 (92.9 / 71.7) に劣る。<strong>1M を「入れられる」と「正確に読む」は別である。</strong></li>
@@ -903,8 +907,11 @@
 <td><strong>51.8</strong></td>
 </tr>
 </tbody></table>
+<p><strong>実務上最も重要な表である。</strong></p>
 <ul>
-<li><strong>MCPAtlas は Pro High (74.2) が Pro Max (73.6) より高い。</strong>ツール呼び出しでは過剰推論が有害である。<strong>エージェントオーケストレーションは High に固定すること。</strong>-<strong>Non-think はコーディング・数学・エージェントに使うべきでない。</strong> LiveCodeBench 55.2、Apex 1.0、HLE 8.1 で事実上無力である。Non-think は分類・要約・ルーティング専用である。</li>
+<li><strong>Flash High がコスパ最適点である。</strong> MMLU-Pro 86.4 は Flash Max (86.2) より高く、LiveCodeBench 88.4 は Max (91.6) と 3.2 点差だがトークン消費ははるかに少ない。</li>
+<li><strong>MCPAtlas は Pro High (74.2) が Pro Max (73.6) より高い。</strong>ツール呼び出しでは過剰推論が有害である。<strong>エージェントオーケストレーションは High に固定すること。</strong></li>
+<li><strong>Non-think はコーディング・数学・エージェントに使うべきでない。</strong> LiveCodeBench 55.2、Apex 1.0、HLE 8.1 で事実上無力である。Non-think は分類・要約・ルーティング専用である。</li>
 <li><strong>SWE Verified は Flash High 78.6 vs Pro Max 80.6 で 2 点差</strong> である。コード修正作業なら Flash で十分である。</li>
 </ul>
 <h3>4.3 Base モデル (事前学習品質)</h3>
@@ -996,6 +1003,7 @@
 <td><strong>51.5</strong></td>
 </tr>
 </tbody></table>
+<p><strong>MultiLoKo 51.1 (Pro) は V3.2 比 +12.4 点</strong> で改善幅が最大の項目の一つである。多言語能力が世代間で実質的に向上したシグナルである。</p>
 <p>注意点: <strong>BigCodeBench と MATH で V4-Flash-Base が V3.2-Base より低い。</strong> 活性パラメータが 37B → 13B に減った代償であり、Flash を V3.2 代替として無批判に採用すると回帰が起きうる。</p>
 <hr>
 <h2>5. 韓国語・日本語性能 — 公式情報なし、第三者データあり</h2>
@@ -1081,8 +1089,12 @@
 <td>69.6</td>
 </tr>
 </tbody></table>
-<p>また Ko-GDPval で <strong>DeepSeek-V4-Pro (1.6T) は 86.91 点</strong>で Solar Open 2 (86.75) を僅差で上回った。<strong>結論が覆る。</strong>v1 文書の「韓国語性能情報不足 → 韓国導入時追加ファインチューニング必要」という診断は事実と異なる。<strong>DeepSeek-V4-Flash は韓国語専用最適化モデルと 0.5 点差の韓国語性能を出す。</strong>韓国語数学 (Ko-AIME 98.0、HRM8K 93.4) と総合知識 (KMMLU-Pro 78.9) はむしろ先行する。<strong>日本語</strong>は依然として公開データがない。Nejumi リーダーボードや JMMLU 自社測定が必要である。<strong>韓国語利用時の実務注意点</strong>- トークナイザが韓国語最適化されておらず<strong>トークン消費が韓国語特化モデルより多い。</strong> 性能は同等でもコストは不利になりうるため実測が必要</p>
+<p>また Ko-GDPval で <strong>DeepSeek-V4-Pro (1.6T) は 86.91 点</strong> で Solar Open 2 (86.75) を僅差で上回った。</p>
+<p><strong>結論が覆る。</strong>v1 文書の「韓国語性能情報不足 → 韓国導入時追加ファインチューニング必要」という診断は事実と異なる。<strong>DeepSeek-V4-Flash は韓国語専用最適化モデルと 0.5 点差の韓国語性能を出す。</strong> 韓国語数学 (Ko-AIME 98.0、HRM8K 93.4) と総合知識 (KMMLU-Pro 78.9) はむしろ先行する。</p>
+<p><strong>日本語</strong> は依然として公開データがない。Nejumi リーダーボードや JMMLU 自社測定が必要である。</p>
+<p><strong>韓国語利用時の実務注意点</strong></p>
 <ul>
+<li>トークナイザが韓国語最適化されておらず <strong>トークン消費が韓国語特化モデルより多い。</strong> 性能は同等でもコストは不利になりうるため実測が必要</li>
 <li>韓国特有の文書書式・行政慣用表現は学習されていない可能性が高い。Ko-GDPval 85.0 はそれでもかなり高い数値だが、社内書式 few-shot 注入は必須</li>
 <li>中国語政治・歴史関連トピックで応答バイアスが報告されている。該当ドメインを扱うなら事前検証すること</li>
 </ul>
@@ -1173,6 +1185,7 @@
 <td><strong>16.6</strong></td>
 </tr>
 </tbody></table>
+<p><strong>正直な結論</strong>: 両モデルは性能上対等で韓国語ですら 0.5 点差である。Solar Open 2 が優位なのは APEX-Agents、韓国語トークン効率 (グローバル比 50〜80%)、韓国業務文脈学習である。DeepSeek-V4-Flash が優位なのは <strong>MIT ライセンス、Base モデル公開、エージェントコーディング (SWE・Terminal)、より低い活性パラメータ</strong> である。</p>
 <p>韓国企業の選択基準は性能ではなく別軸で分かれる — <strong>国産調達要件があれば Solar、ライセンス自由度とファインチューニング柔軟性が重要なら DeepSeek、中国製排除政策があれば Solar。</strong></p>
 <h3>6.2 Kimi K3 (Moonshot AI, 2.8T)</h3>
 <table>
@@ -1309,8 +1322,10 @@
 <ul>
 <li>システム RAM: Flash 基準 256GB 以上、ストレージ NVMe 500GB 以上</li>
 <li>vLLM テンソル並列は 2 の累乗 (1/2/4/8) で最適。2×A100 (160GB) は 1M コンテキスト予算に不足のため 4×A100 推奨</li>
-<li><strong>V4-Pro は 8×H100 80GB (640GB) に収まらない</strong>### 7.2 チャットエンコーディング (必須の事前理解)<strong>本リリースには Jinja チャットテンプレートがない。</strong> <code>encoding</code> フォルダのスクリプトを使用する。</li>
+<li><strong>V4-Pro は 8×H100 80GB (640GB) に収まらない</strong></li>
 </ul>
+<h3>7.2 チャットエンコーディング (必須の事前理解)</h3>
+<p><strong>本リリースには Jinja チャットテンプレートがない。</strong> <code>encoding</code> フォルダのスクリプトを使用する。</p>
 <pre><code class="language-python">from encoding_dsv4 import encode_messages, parse_message_from_completion_text
 import transformers
 
@@ -1430,8 +1445,9 @@ export CLAUDE_CODE_EFFORT_LEVEL=max
 cd /path/to/project &amp;&amp; claude
 </code></pre>
 <blockquote>
-<p>v1 の <code>api.deepseek.com/v1</code> は誤りである。Anthropic 互換パスは <strong><code>/anthropic</code></strong>であり、<code>[1m]</code> 接尾辞は 1M コンテキストを指定する DeepSeek 固有 modifier のため文書どおり維持する。ゲートウェイ経由では課金精算時にこの接尾辞正規化が必要な場合がある。<strong>自社ホスティング vLLM に接続する場合</strong> は上記 URL を内部エンドポイントに置き換えればよい。規制環境での標準パスである。</p>
+<p>v1 の <code>api.deepseek.com/v1</code> は誤りである。Anthropic 互換パスは <strong><code>/anthropic</code></strong> であり、<code>[1m]</code> 接尾辞は 1M コンテキストを指定する DeepSeek 固有 modifier のため文書どおり維持する。ゲートウェイ経由では課金精算時にこの接尾辞正規化が必要な場合がある。</p>
 </blockquote>
+<p><strong>自社ホスティング vLLM に接続する場合</strong> は上記 URL を内部エンドポイントに置き換えればよい。規制環境での標準パスである。</p>
 <h3>7.9 GGUF / ローカル実行 (未検証)</h3>
 <p>llama.cpp・Ollama 用コミュニティ GGUF は存在するが <strong>公式チェックポイント比検証されていない。</strong> 実験用途のみとし、本番には vLLM または SGLang を使うこと。メインライン対応は時点により異なるため導入前に現行状態を直接確認すること。</p>
 <hr>
@@ -1470,7 +1486,8 @@ resp = client.chat.completions.create(
 <p><strong>必ず指摘すべき限界</strong>: MRCR 1M 83.5、CorpusQA 1M 62.0 である。Opus-4.6 (92.9 / 71.7) より低い。<strong>コンテキストに入れたから正確に読む保証はない。</strong></p>
 <p>実務推奨:</p>
 <ul>
-<li>100 万トークンを満たさず <strong>200〜400K 水準で運用</strong>- 重要条項は<strong>2 回独立クエリでクロス検証</strong></li>
+<li>100 万トークンを満たさず <strong>200〜400K 水準で運用</strong></li>
+<li>重要条項は <strong>2 回独立クエリでクロス検証</strong></li>
 <li>自社 needle-in-haystack テストで実戦閾値を先に測定すること</li>
 </ul>
 <h3>8.3 MCP ベースエージェントオーケストレーション</h3>
@@ -1514,7 +1531,8 @@ V4-Flash-Base → 社内コードベース + 技術文書 → 組織専用コー
 <h2>9. 韓国市場事業導入シナリオ</h2>
 <h3>9.0 前提: 規制の正確な範囲を理解すること</h3>
 <p>韓国は 2025 年個人情報保護委員会が DeepSeek アプリの国外移転問題で国内サービスを一時停止し是正勧告し、外務部・国防省・産業通商資源部など多数省庁と韓水原・韓電 KPS など公共機関、主要金融圏がアクセスを遮断した。カカオ・LINE ヤフーなど民間 IT 企業も業務目的使用を禁止した。</p>
-<p><strong>しかしこれら措置の対象はホスティングサービスである。</strong>MIT ライセンス重みを社内 GPU で稼働する行為はデータがどこにも出ないため規制論理自体が成立しない。<strong>したがって韓国で DeepSeek-V4 の唯一の正当な導入経路は自社ホスティングである。</strong> API 利用は論外として安全である。</p>
+<p><strong>しかしこれら措置の対象はホスティングサービスである。</strong> MIT ライセンス重みを社内 GPU で稼働する行為はデータがどこにも出ないため規制論理自体が成立しない。</p>
+<p><strong>したがって韓国で DeepSeek-V4 の唯一の正当な導入経路は自社ホスティングである。</strong> API 利用は論外として安全である。</p>
 <p>同時に現実的制約も認めるべきである。調達・審査過程で「中国製モデル」という事実自体が減点要因になる組織がある。特に公共・防衛・金融一部はモデル出所を技術検証と無関係に排除する。<strong>この場合 Solar Open 2 が代替であり、性能差は 0.5 点水準で実質損失はほぼない。</strong></p>
 <h3>9.1 ソフトウェア開発組織 — 最優先</h3>
 <table>
@@ -1698,7 +1716,8 @@ V4-Flash-Base → 社内コードベース + 技術文書 → 組織専用コー
 </tbody></table>
 <p>日本市場で即時着手可能な唯一のシナリオである。</p>
 <h3>10.2 日本語特化派生モデル開発 — 中長期戦略</h3>
-<p><strong>Base モデル公開 + MIT ライセンスが生む機会である。</strong>Upstage が Solar ベースで日本のカラクリと Syn Pro (31B) を作り Nejumi 1 位を記録したのと同じ戦略を、DeepSeek-V4-Flash-Base 上で<strong>ライセンス制約なしに</strong> 実行できる。Solar License は &quot;Solar&quot; 接頭辞と &quot;Built with Solar&quot; 表記を要求するが、MIT は何も要求しない。</p>
+<p><strong>Base モデル公開 + MIT ライセンスが生む機会である。</strong></p>
+<p>Upstage が Solar ベースで日本のカラクリと Syn Pro (31B) を作り Nejumi 1 位を記録したのと同じ戦略を、DeepSeek-V4-Flash-Base 上で <strong>ライセンス制約なしに</strong> 実行できる。Solar License は &quot;Solar&quot; 接頭辞と &quot;Built with Solar&quot; 表記を要求するが、MIT は何も要求しない。</p>
 <table>
 <thead>
 <tr>
@@ -1816,7 +1835,8 @@ V4-Flash-Base → 社内コードベース + 技術文書 → 組織専用コー
 </tr>
 </tbody></table>
 <p><code>No DeepSeek on Government Devices Act</code> (H.R.1121) など連邦レベル立法が進行した。</p>
-<p><strong>決定的な区別</strong>: これらの規制は「DeepSeek アプリケーションまたはその後継アプリケーション・サービス」を対象とし、根拠は <strong>データが中国サーバーに送信される</strong>点である。<strong>米国インフラで MIT 重みを自社稼働する行為はデータ送信が発生しない。</strong>実際に NVIDIA が <code>nvidia/DeepSeek-V4-Pro-NVFP4</code> 量子化モデルを配布し build.nvidia.com にモデルカードを掲載し、Runpod・Spheron など米国 GPU クラウドが展開ガイドを提供している。<strong>米国インフラ上で V4 を稼働するのは既に標準的慣行である。</strong></p>
+<p><strong>決定的な区別</strong>: これらの規制は「DeepSeek アプリケーションまたはその後継アプリケーション・サービス」を対象とし、根拠は <strong>データが中国サーバーに送信される</strong>点である。<strong>米国インフラで MIT 重みを自社稼働する行為はデータ送信が発生しない。</strong></p>
+<p>実際に NVIDIA が <code>nvidia/DeepSeek-V4-Pro-NVFP4</code> 量子化モデルを配布し build.nvidia.com にモデルカードを掲載し、Runpod・Spheron など米国 GPU クラウドが展開ガイドを提供している。<strong>米国インフラ上で V4 を稼働するのは既に標準的慣行である。</strong></p>
 <h3>11.1 AI スタートアップ — コスト構造そのものを変える選択</h3>
 <table>
 <thead>

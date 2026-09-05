@@ -90,7 +90,7 @@
 <ul>
 <li><strong>CVE-2026-8644 (CVSS 9.1)</strong> — 身份冒充 / 身份验证绕过。攻击者冒充合法用户，使身份验证机制本身失效。（CWE-290）</li>
 <li><strong>CVE-2026-9311 (CVSS 9.0)</strong> — 通过绕过安全控制实现的远程代码执行（RCE）。恶意输入绕过校验/净化路径，抵达代码执行汇聚点。（CWE-94）</li>
-<li><strong>CVE-2026-9319 (CVSS 9.0)</strong>— 在启用 WS-Security 的 JAX-WS 端点上，对<strong>不可信数据进行反序列化</strong>导致的 RCE。（CWE-502）</li>
+<li><strong>CVE-2026-9319 (CVSS 9.0)</strong> — 在启用 WS-Security 的 JAX-WS 端点上，对<strong>不可信数据进行反序列化</strong>导致的 RCE。（CWE-502）</li>
 </ul>
 <p>该套件危险的原因有三。<strong>其一，可链接性。</strong>8644（冒充）提供&quot;接入&quot;，9311 与 9319（RCE）提供&quot;执行&quot;——同一产品同时暴露了入侵链的不同阶段。<strong>其二，风险等级。</strong>Java 应用服务器的反序列化漏洞历来属于最危险、被利用最广泛的漏洞类别（2017 年 Equifax 入侵即为 Apache Struts 的反序列化漏洞）。<strong>其三，补丁陷阱。</strong>正式 Fix Pack（9.0.5.29 / 8.5.5.30）<strong>目标为 3Q2026，尚未发布</strong>；当前唯一可用路径是 <strong>临时修复（Interim Fix，APAR PH71422、PH71454 等）</strong>。&quot;等待 Fix Pack&quot;等同于延长暴露期。</p>
 <p>截至目前尚未确认在野利用（in-the-wild）。但反序列化 RCE 是一类在 PoC 出现后会被迅速武器化的漏洞，而当下——刚披露之际——正是<em>在 PoC 成熟之前完成修补的窗口</em>。</p>
@@ -182,8 +182,8 @@
 <h2>3. 链式风险 — 冒充（8644）与 RCE（9311·9319）的交汇点</h2>
 <p>单独看，三者各自都是严重的独立漏洞；合在一起看，便构成一条<strong>完整的入侵链</strong>。</p>
 <ol>
-<li><strong>取得接入</strong>— 利用 <code>CVE-2026-8644</code> 冒充合法用户（或管理员），绕过身份验证。（ATT&amp;CK<strong>T1078</strong>Valid Accounts、<strong>T1556</strong> Modify Authentication Process）</li>
-<li><strong>执行代码</strong>— 利用 <code>CVE-2026-9311</code>（控制绕过）或 <code>CVE-2026-9319</code>（反序列化）在中间件上执行任意代码。（<strong>T1190</strong>Exploit Public-Facing Application、<strong>T1059</strong> Command and Scripting Interpreter）</li>
+<li><strong>取得接入</strong>— 利用 <code>CVE-2026-8644</code> 冒充合法用户（或管理员），绕过身份验证。（ATT&amp;CK<strong>T1078</strong> Valid Accounts、<strong>T1556</strong> Modify Authentication Process）</li>
+<li><strong>执行代码</strong>— 利用 <code>CVE-2026-9311</code>（控制绕过）或 <code>CVE-2026-9319</code>（反序列化）在中间件上执行任意代码。（<strong>T1190</strong> Exploit Public-Facing Application、<strong>T1059</strong> Command and Scripting Interpreter）</li>
 <li><strong>接管、持久化、横向移动</strong> — 取得 WebSphere 实例控制权，并向其下的业务逻辑、会话与后端数据库连接扩展。</li>
 </ol>
 <p>关键在于它们<strong>共享同一产品与版本区间</strong>。若一处脆弱，三者很可能皆脆弱。因此正解不是&quot;先修最严重的一个&quot;，而是<strong>将三者作为一个套件</strong>一并封堵。部分修补只切断链条的一环，留下其余环节。</p>

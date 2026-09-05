@@ -128,9 +128,12 @@
 <td>B — 참고용</td>
 </tr>
 </tbody></table>
-<p><strong>핵심 주의사항 3가지를 먼저 밝힙니다.</strong>1.<strong>AWS 원문 블로그 본문과 실제 YAML 사이에 불일치가 있습니다.</strong>블로그 본문은 &quot;MXFP4 load format&quot;이라고 서술하지만, 실제 YAML의 <code>--load-format</code> 값은 <code>fastsafetensors</code>입니다. MXFP4는<strong>가중치 저장 형식</strong>이고, <code>fastsafetensors</code>는 <strong>로딩 방식</strong>으로 서로 다른 계층의 개념입니다. 타 클라우드로 이식할 때 이 구분을 혼동하면 로딩이 실패합니다.
-2. <strong>CPU 아키텍처가 클라우드마다 다릅니다.</strong>AWS <code>p6-b300.48xlarge</code>는 x86_64 HGX B300 노드이지만, Azure ND GB300 v6와 GCP A4X Max는<strong>NVIDIA Grace CPU 기반 ARM64(aarch64)</strong> 입니다. <code>vllm/vllm-openai:kimi-k3</code> 이미지가 arm64 매니페스트를 제공하지 않으면 Azure/GCP에서는 그대로 동작하지 않습니다. 배포 전 <code>docker manifest inspect</code>로 반드시 확인해야 합니다.
-3. <strong>단일 노드 GPU 수가 다릅니다.</strong>AWS는 1노드 8 GPU로 <code>--tensor-parallel-size 8</code>이 한 노드에 들어가지만, Azure/GCP의 GB300 VM은<strong>VM당 4 GPU</strong>입니다. 따라서 Azure/GCP에서는 2노드 분산 서빙이 강제되며, 매니페스트 구조 자체가 달라집니다.</p>
+<p><strong>핵심 주의사항 3가지를 먼저 밝힙니다.</strong></p>
+<ol>
+<li><strong>AWS 원문 블로그 본문과 실제 YAML 사이에 불일치가 있습니다.</strong> 블로그 본문은 &quot;MXFP4 load format&quot;이라고 서술하지만, 실제 YAML의 <code>--load-format</code> 값은 <code>fastsafetensors</code>입니다. MXFP4는 <strong>가중치 저장 형식</strong>이고, <code>fastsafetensors</code>는 <strong>로딩 방식</strong>으로 서로 다른 계층의 개념입니다. 타 클라우드로 이식할 때 이 구분을 혼동하면 로딩이 실패합니다.</li>
+<li><strong>CPU 아키텍처가 클라우드마다 다릅니다.</strong> AWS <code>p6-b300.48xlarge</code>는 x86_64 HGX B300 노드이지만, Azure ND GB300 v6와 GCP A4X Max는 <strong>NVIDIA Grace CPU 기반 ARM64(aarch64)</strong> 입니다. <code>vllm/vllm-openai:kimi-k3</code> 이미지가 arm64 매니페스트를 제공하지 않으면 Azure/GCP에서는 그대로 동작하지 않습니다. 배포 전 <code>docker manifest inspect</code>로 반드시 확인해야 합니다.</li>
+<li><strong>단일 노드 GPU 수가 다릅니다.</strong> AWS는 1노드 8 GPU로 <code>--tensor-parallel-size 8</code>이 한 노드에 들어가지만, Azure/GCP의 GB300 VM은 <strong>VM당 4 GPU</strong>입니다. 따라서 Azure/GCP에서는 2노드 분산 서빙이 강제되며, 매니페스트 구조 자체가 달라집니다.</li>
+</ol>
 <hr>
 <h2>1. Kimi K3 개요</h2>
 <p>2026년 7월 27일 Moonshot AI가 공개한 2.8조 파라미터 MoE 모델로, <strong>3조 파라미터 클래스에 도달한 최초의 오픈 가중치 시스템</strong>입니다. DeepSeek V4와 더불어 문샷AI는 정말 오픈웨이트에서 최고입니다.</p>
@@ -813,11 +816,15 @@ gcloud container clusters delete ${CLUSTER_NAME} --location=${REGION}
 </ul>
 <h3>6.2 옵션 A — PAI-EAS (Model Gallery / 커스텀 배포)</h3>
 <p>PAI-EAS는 vLLM, SGLang, 자체 개발 BladeLLM 엔진을 통합 지원하며, <strong>MoE 모델용 전문가 병렬(EP) + Prefill-Decode 분리 배포</strong>를 원클릭으로 제공합니다. Kimi K3처럼 896 전문가를 갖는 모델에는 EP+PD 분리가 처리량과 비용 양쪽에서 유의미한 이점을 줍니다.</p>
-<p><strong>배포 절차:</strong>1. PAI 콘솔 로그인 후 대상 리전 선택.<strong>분산 배포는 灵骏 지능형 컴퓨팅 리소스가 필수이며 VPC 설정이 반드시 필요합니다.</strong>2.<strong>模型在线服务(EAS) &gt; 部署服务 &gt; 自定义部署</strong> 선택
-3. 배포 방식에서 <strong>镜像部署(이미지 배포)</strong> 선택 후 <code>vllm/vllm-openai:kimi-k3</code> 지정 (사내 ACR 미러 권장)
-4. 모델 소스로 OSS 버킷 경로 지정 (사전에 가중치 업로드)
-5. 리소스 구성에서 灵骏 리소스 쿼터와 다중 노드(≥2) 지정
-6. 실행 명령에 다음 입력:</p>
+<p><strong>배포 절차:</strong></p>
+<ol>
+<li>PAI 콘솔 로그인 후 대상 리전 선택. <strong>분산 배포는 灵骏 지능형 컴퓨팅 리소스가 필수이며 VPC 설정이 반드시 필요합니다.</strong></li>
+<li><strong>模型在线服务(EAS) &gt; 部署服务 &gt; 自定义部署</strong> 선택</li>
+<li>배포 방식에서 <strong>镜像部署(이미지 배포)</strong> 선택 후 <code>vllm/vllm-openai:kimi-k3</code> 지정 (사내 ACR 미러 권장)</li>
+<li>모델 소스로 OSS 버킷 경로 지정 (사전에 가중치 업로드)</li>
+<li>리소스 구성에서 灵骏 리소스 쿼터와 다중 노드(≥2) 지정</li>
+<li>실행 명령에 다음 입력:</li>
+</ol>
 <pre><code class="language-bash">vllm serve /mnt/models/Kimi-K3 \
   --trust-remote-code \
   --load-format fastsafetensors \

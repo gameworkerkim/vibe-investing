@@ -75,8 +75,8 @@
 <h2>프로젝트 설명</h2>
 <p>Colibri는 744B 규모의 MoE 모델이 토큰당 <strong>약 40B 매개변수만 활성화</strong>한다는 점과, 활성화된 전문가(Expert)들만 토큰마다 달라진다는 점(약 11GB)을 활용합니다:</p>
 <ul>
-<li><strong>밀집 부분(Dense part)</strong>— Attention, Shared Experts, Embeddings 등 약 17B 매개변수 →<strong>int4로 RAM에 상주</strong> (약 9.9GB)</li>
-<li><strong>라우팅된 전문가(Routed Experts)</strong>— 75개 MoE 레이어 × 256 =<strong>19,456개 전문가</strong>, 각각 int4 기준 약 19MB → <strong>디스크에 저장</strong> (약 370GB)</li>
+<li><strong>밀집 부분(Dense part)</strong> — Attention, Shared Experts, Embeddings 등 약 17B 매개변수 → <strong>int4로 RAM에 상주</strong> (약 9.9GB)</li>
+<li><strong>라우팅된 전문가(Routed Experts)</strong> — 75개 MoE 레이어 × 256 = <strong>19,456개 전문가</strong>, 각각 int4 기준 약 19MB → <strong>디스크에 저장</strong> (약 370GB)</li>
 </ul>
 <p>핵심 아이디어는 <strong>모델이 빠른 메모리에 &quot;맞아야&quot; 할 필요가 없다</strong>는 것입니다. 전문가를 필요할 때 디스크에서 스트리밍하여, VRAM·RAM·Storage를 하나의 관리된 메모리 계층 구조로 취급합니다.</p>
 <hr>
@@ -85,9 +85,9 @@
 <p>모든 레이어의 모든 토큰은 <strong>Route → Union → Place → Overlap → Learn</strong>의 5단계를 거칩니다:</p>
 <ol>
 <li><strong>Route</strong> — 라우터가 입력 토큰에 대해 어떤 전문가를 활성화할지 결정</li>
-<li><strong>Union</strong>— 배치 내 여러 토큰이 동일한 전문가를 선택하면<strong>중복 제거</strong> (batch-union)</li>
-<li><strong>Place</strong>— 전문가를 어디서 가져올지 결정 (VRAM &gt; RAM &gt; 디스크). 배치 정책은<strong>속도에만 영향</strong>을 미치며, 라우터 결정과 가중치 정밀도는 변하지 않음</li>
-<li><strong>Overlap</strong>— 비동기 I/O 풀(<code>PIPE=1</code>)이 누락된 전문가를 디스크에서 로드하는 동안 상주 전문가로 계산 수행. 라우터 미리보기 스레드(<code>PILOT=1</code>)가 다음 레이어의 전문가를 프리페치 (라우팅은<strong>71.6% 예측 가능</strong>)</li>
+<li><strong>Union</strong> — 배치 내 여러 토큰이 동일한 전문가를 선택하면 <strong>중복 제거</strong> (batch-union)</li>
+<li><strong>Place</strong> — 전문가를 어디서 가져올지 결정 (VRAM &gt; RAM &gt; 디스크). 배치 정책은 <strong>속도에만 영향</strong>을 미치며, 라우터 결정과 가중치 정밀도는 변하지 않음</li>
+<li><strong>Overlap</strong> — 비동기 I/O 풀(<code>PIPE=1</code>)이 누락된 전문가를 디스크에서 로드하는 동안 상주 전문가로 계산 수행. 라우터 미리보기 스레드(<code>PILOT=1</code>)가 다음 레이어의 전문가를 프리페치 (라우팅은 <strong>71.6% 예측 가능</strong>)</li>
 <li><strong>Learn</strong> — <code>.coli_usage</code> 파일에 라우팅 기록을 저장하고, 자주 사용되는 전문가를 자동으로 고정(Pin)</li>
 </ol>
 <h3>메모리 계층 구조</h3>
@@ -125,7 +125,7 @@
 </tr>
 <tr>
 <td><strong>정확성 유지</strong></td>
-<td>기본 정책은<strong>모델 정밀도나 라우터 의미론을 절대 변경하지 않음</strong></td>
+<td>기본 정책은 <strong>모델 정밀도나 라우터 의미론을 절대 변경하지 않음</strong></td>
 </tr>
 <tr>
 <td><strong>학습형 캐시</strong></td>

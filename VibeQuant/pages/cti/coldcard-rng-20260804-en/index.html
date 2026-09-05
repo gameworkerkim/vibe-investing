@@ -69,7 +69,8 @@
   <span class="share-status" data-share-status hidden></span>
 </nav>
       </header>
-      <div class="article-body prose"><p><strong>Report ID</strong>CTI-2026-0804-COLDCARD-RNG ·<strong>Published</strong>2026-08-04 ·<strong>Classification</strong>TLP:GREEN ·<strong>Severity</strong>CRITICAL<strong>Author</strong> Dennis Kim / HoKwang Kim · <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · @gameworkerkim</p>
+      <div class="article-body prose"><p><strong>Report ID</strong> CTI-2026-0804-COLDCARD-RNG · <strong>Published</strong> 2026-08-04 · <strong>Classification</strong> TLP:GREEN · <strong>Severity</strong> CRITICAL</p>
+<p><strong>Author</strong> Dennis Kim / HoKwang Kim · <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · @gameworkerkim</p>
 <p>🌐 <a href="../../cti/coldcard-rng-20260804/">한국어</a> · <strong>English (this document)</strong> · <a href="../../cti/coldcard-rng-20260804-ja/">日本語</a> · <a href="../../cti/coldcard-rng-20260804-cn/">中文</a></p>
 <p><em>Hardware-wallet security was never really about where you keep the key — it was about how the key gets made. Coldcard protected the former perfectly, and missed the latter for five years.</em></p>
 <hr>
@@ -96,7 +97,7 @@
 <hr>
 <h2>1. Executive Summary (TL;DR)</h2>
 <p>Between July 29 and August 2, 2026, a large-scale theft targeted seeds generated on <strong>Coldcard</strong>, the Bitcoin-only hardware wallet made by Canada&#39;s <strong>Coinkite</strong>. Per Galaxy Research, observed losses reached <strong>1,367.05 BTC (approximately $88.6 million, roughly ₩123 billion), across 4,585 addresses</strong>. The attack proceeded in three waves and, at the time of writing, remains unresolved.</p>
-<p>The essence of this attack is <strong>reconstruction, not intrusion</strong>. The attacker never touched a victim&#39;s device, never stole a PIN or seed phrase, and used no malware or phishing. A build-configuration inconsistency in Coldcard firmware from March 2021 routed seed generation away from the STM32 hardware random-number generator (TRNG) and into MicroPython&#39;s deterministic software PRNG (<strong>Yasmarang</strong>), which was <strong>seeded solely from the chip&#39;s unique ID and a timer register value</strong>and collected no additional entropy afterward. As a result, effective entropy collapsed from a designed 128 bits to<strong>approximately 40 bits</strong>on Mk2/Mk3, and<strong>approximately 72 bits</strong> on Mk4/Mk5/Q.</p>
+<p>The essence of this attack is <strong>reconstruction, not intrusion</strong>. The attacker never touched a victim&#39;s device, never stole a PIN or seed phrase, and used no malware or phishing. A build-configuration inconsistency in Coldcard firmware from March 2021 routed seed generation away from the STM32 hardware random-number generator (TRNG) and into MicroPython&#39;s deterministic software PRNG (<strong>Yasmarang</strong>), which was <strong>seeded solely from the chip&#39;s unique ID and a timer register value</strong> and collected no additional entropy afterward. As a result, effective entropy collapsed from a designed 128 bits to <strong>approximately 40 bits</strong> on Mk2/Mk3, and <strong>approximately 72 bits</strong> on Mk4/Mk5/Q.</p>
 <p>Forty bits is a search space exhaustible by consumer-grade hardware. The attacker enumerated candidate seeds offline, derived addresses per BIP-32/BIP-39 rules, then <strong>queried the public blockchain for balances</strong> to selectively sweep only the funded addresses. The blockchain&#39;s transparency was repurposed as the attacker&#39;s reconnaissance infrastructure.</p>
 <p>Key facts at a glance</p>
 <table>
@@ -265,7 +266,7 @@
     Hashing does not increase input entropy
     2^40 inputs → at most 2^40 outputs
 </code></pre>
-<p><strong>Step 6 is the crux.</strong>Many users, and some early reporting, assumed &quot;it&#39;s hashed with SHA256, so surely it&#39;s safe&quot; — but a cryptographic hash function<strong>provides compression and diffusion, not entropy creation.</strong> If there are 2^40 candidate inputs, there are at most 2^40 candidate outputs. This is the same structural error seen in a recurring string of RNG failures since 2012 (Debian OpenSSL, Android SecureRandom, the Profanity vanity-address generator, and others).</p>
+<p><strong>Step 6 is the crux.</strong> Many users, and some early reporting, assumed &quot;it&#39;s hashed with SHA256, so surely it&#39;s safe&quot; — but a cryptographic hash function <strong>provides compression and diffusion, not entropy creation.</strong> If there are 2^40 candidate inputs, there are at most 2^40 candidate outputs. This is the same structural error seen in a recurring string of RNG failures since 2012 (Debian OpenSSL, Android SecureRandom, the Profanity vanity-address generator, and others).</p>
 <h3>4.2 Why it went undetected for five years</h3>
 <table>
 <thead>
@@ -428,7 +429,7 @@
 </tr>
 </tbody></table>
 <h3>6.2 Traffic fingerprint</h3>
-<p>Galaxy based its assessment of automated tooling on two indicators. First, every transaction used the <strong>same hardcoded fee rate (30 sat/vB).</strong>Legitimate wallet software adjusts fees dynamically based on mempool conditions. Second,<strong>there were no change outputs.</strong> This is a sweeping pattern that moves the entire balance to a single address.</p>
+<p>Galaxy based its assessment of automated tooling on two indicators. First, every transaction used the <strong>same hardcoded fee rate (30 sat/vB).</strong> Legitimate wallet software adjusts fees dynamically based on mempool conditions. Second, <strong>there were no change outputs.</strong> This is a sweeping pattern that moves the entire balance to a single address.</p>
 <p>This fingerprint provides a basis for future detection rules against similar attacks.</p>
 <h3>6.3 Differences between waves</h3>
 <table>
@@ -567,7 +568,7 @@
 </tr>
 </tbody></table>
 <h3>7.2 Victim profile</h3>
-<p>Per Galaxy&#39;s analysis, the stolen assets had an <strong>average dormancy of approximately 3.18 years.</strong>This suggests the victim population is concentrated among<strong>long-term individual holders</strong>, not institutions.</p>
+<p>Per Galaxy&#39;s analysis, the stolen assets had an <strong>average dormancy of approximately 3.18 years.</strong> This suggests the victim population is concentrated among <strong>long-term individual holders</strong>, not institutions.</p>
 <p>This profile carries three implications.</p>
 <ol>
 <li><strong>Detection lag</strong> — many users had not opened their wallets in years, which substantially delayed awareness of the theft.</li>
@@ -630,7 +631,8 @@
 </tbody></table>
 <p>The crux is that <strong>dice rolls were combined with device-generated entropy via hashing, and this user-supplied entropy was unaffected by the firmware flaw.</strong></p>
 <h3>8.2 Implications — reassessing user-supplied entropy</h3>
-<p>The dice-roll feature had, until now, been treated as an &quot;optional advanced feature for paranoid users.&quot; This incident shows it was <strong>the one line of defense that actually worked once vendor trust collapsed.</strong>At the same time, as Casa&#39;s leadership has pointed out, expecting ordinary investors to roll dice to supplement their seed is unrealistic. This exposes the<strong>gap between usability and security</strong> in stark terms, and closing that gap through product design — not user education — is the industry&#39;s task.</p>
+<p>The dice-roll feature had, until now, been treated as an &quot;optional advanced feature for paranoid users.&quot; This incident shows it was <strong>the one line of defense that actually worked once vendor trust collapsed.</strong></p>
+<p>At the same time, as Casa&#39;s leadership has pointed out, expecting ordinary investors to roll dice to supplement their seed is unrealistic. This exposes the <strong>gap between usability and security</strong> in stark terms, and closing that gap through product design — not user education — is the industry&#39;s task.</p>
 <p>The practical recommendation is clear. <strong>User-supplied entropy should shift from an optional feature to a default.</strong> At minimum, it is reasonable to make it a mandatory step when generating seeds intended for high-value custody.</p>
 <hr>
 <h2>9. Response and Migration — What the Patch Cannot Fix</h2>
@@ -674,7 +676,7 @@
 <blockquote>
 <p>A firmware update does not change or restore existing seeds.</p>
 </blockquote>
-<p>This single sentence is the whole story of this incident&#39;s remediation. The vulnerability lives not in the device, but in <strong>the number the device already drew.</strong>Accordingly, the following responses are<strong>all invalid</strong>:</p>
+<p>This single sentence is the whole story of this incident&#39;s remediation. The vulnerability lives not in the device, but in <strong>the number the device already drew.</strong> Accordingly, the following responses are <strong>all invalid</strong>:</p>
 <table>
 <thead>
 <tr>
@@ -708,7 +710,8 @@
 <li>Confirm your model and release track, and install the corresponding <strong>fixed firmware first</strong>.</li>
 <li>Verify the fixed firmware installation <strong>directly from the version string shown on-screen</strong>.</li>
 <li><strong>Generate a completely new seed.</strong> The fixed firmware&#39;s device-generated entropy alone is sufficient; dice rolls are optional.</li>
-<li>Back up the new seed and passphrase. <strong>Store the passphrase physically separate from the seed words.</strong>5. Power-cycle the device, then<strong>verify the wallet fingerprint and receive address on the device&#39;s own screen</strong>.</li>
+<li>Back up the new seed and passphrase. <strong>Store the passphrase physically separate from the seed words.</strong></li>
+<li>Power-cycle the device, then <strong>verify the wallet fingerprint and receive address on the device&#39;s own screen</strong>.</li>
 <li>Send a <strong>small test transaction</strong> first and confirm receipt.</li>
 <li>Transfer the remaining balance in full.</li>
 <li>Do not discard the old backup until migration is confirmed complete.</li>
@@ -780,7 +783,11 @@
 </tr>
 </tbody></table>
 <h3>10.2 Structural lessons</h3>
-<p><strong>First, the minimum unit of trust is not the device but the moment.</strong>A hardware wallet&#39;s security assessment should not ask &quot;is this device safe?&quot; but &quot;was the moment this key was created safe?&quot; This changes the very framing of asset-custody due diligence.<strong>Second, a random-number generator must be fail-closed.</strong>A design that returns a low-quality value when it fails to secure an entropy source conceals the failure itself. This is precisely why NIST SP 800-90B&#39;s continuous health-test requirements exist.<strong>Third, auditability does not mean an audit happened.</strong>Open source invites the collective illusion that &quot;someone must have reviewed this.&quot; Whether a review actually took place is a separate fact, and anything unverified should be treated as not having happened.<strong>Fourth, transparency is a double-edged sword.</strong>The public ledger is both the foundation for audit and verification, and the attacker&#39;s free reconnaissance infrastructure. Privacy techniques (CoinJoin, avoiding address reuse) had real defensive value in this incident.<strong>Fifth, vendor concentration is a new single point of failure.</strong>When users in a decentralized system converge on a small number of hardware vendors, decentralization is preserved at the protocol layer while<strong>systemic risk accumulates at the key-generation layer.</strong> This incident is the first large-scale case of that risk materializing.</p>
+<p><strong>First, the minimum unit of trust is not the device but the moment.</strong> A hardware wallet&#39;s security assessment should not ask &quot;is this device safe?&quot; but &quot;was the moment this key was created safe?&quot; This changes the very framing of asset-custody due diligence.</p>
+<p><strong>Second, a random-number generator must be fail-closed.</strong> A design that returns a low-quality value when it fails to secure an entropy source conceals the failure itself. This is precisely why NIST SP 800-90B&#39;s continuous health-test requirements exist.</p>
+<p><strong>Third, auditability does not mean an audit happened.</strong> Open source invites the collective illusion that &quot;someone must have reviewed this.&quot; Whether a review actually took place is a separate fact, and anything unverified should be treated as not having happened.</p>
+<p><strong>Fourth, transparency is a double-edged sword.</strong> The public ledger is both the foundation for audit and verification, and the attacker&#39;s free reconnaissance infrastructure. Privacy techniques (CoinJoin, avoiding address reuse) had real defensive value in this incident.</p>
+<p><strong>Fifth, vendor concentration is a new single point of failure.</strong> When users in a decentralized system converge on a small number of hardware vendors, decentralization is preserved at the protocol layer while <strong>systemic risk accumulates at the key-generation layer.</strong> This incident is the first large-scale case of that risk materializing.</p>
 <h3>10.3 No issue was found at the protocol layer</h3>
 <p>One further point worth confirming: no flaw of any kind was found in the Bitcoin protocol, the secp256k1 curve, or the BIP-32/39 standards. The failure occurred entirely at the <strong>implementation layer</strong>, and specifically within one vendor&#39;s build configuration. Trezor, Ledger, and Block (Bitkey) have each confirmed their own products are unaffected.</p>
 <p>This distinction matters for market communication. &quot;Bitcoin was hacked&quot; is inaccurate framing; the accurate framing is &quot;a specific hardware-wallet manufacturer&#39;s key-generation implementation failed.&quot;</p>
@@ -824,6 +831,7 @@
 <td>—</td>
 </tr>
 </tbody></table>
+<p><strong>Even a 100% cold-wallet ratio would not have stopped this class of attack.</strong> A cold wallet generated from a vulnerable seed gets emptied while sitting 100% cold. In other words, the regulatory metric is not aligned with the actual risk.</p>
 <h3>11.2 Recommendations for domestic exchanges and VASPs</h3>
 <table>
 <thead>
@@ -886,7 +894,7 @@
 </tbody></table>
 <h3>11.3 Policy recommendations for regulators</h3>
 <ol>
-<li><p><strong>Extend regulation from storage location to the key lifecycle.</strong>The cold-wallet ratio is a necessary but not sufficient condition. The subordinate regulations under the Phase 2 Act should include<strong>integrity requirements covering the entire key generation, backup, rotation, and disposal lifecycle</strong>, independent of raising the storage ratio.</p>
+<li><p><strong>Extend regulation from storage location to the key lifecycle.</strong> The cold-wallet ratio is a necessary but not sufficient condition. The subordinate regulations under the Phase 2 Act should include <strong>integrity requirements covering the entire key generation, backup, rotation, and disposal lifecycle</strong>, independent of raising the storage ratio.</p>
 </li>
 <li><p><strong>Codify RNG requirements when custody becomes a separately licensed business.</strong> In the custody-licensing framework the FSC is reportedly considering, entry requirements should be examined for explicitly mandating the use of certified random-number generators (compliant with NIST SP 800-90A/B/C or an equivalent standard).</p>
 </li>

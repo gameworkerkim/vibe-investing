@@ -69,7 +69,8 @@
   <span class="share-status" data-share-status hidden></span>
 </nav>
       </header>
-      <div class="article-body prose"><p><strong>리포트 ID</strong>CTI-2026-0804-COLDCARD-RNG ·<strong>발행일</strong>2026-08-04 ·<strong>분류</strong>TLP:GREEN ·<strong>심각도</strong>CRITICAL<strong>저자</strong> Dennis Kim / HoKwang Kim · <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · @gameworkerkim</p>
+      <div class="article-body prose"><p><strong>리포트 ID</strong> CTI-2026-0804-COLDCARD-RNG · <strong>발행일</strong> 2026-08-04 · <strong>분류</strong> TLP:GREEN · <strong>심각도</strong> CRITICAL</p>
+<p><strong>저자</strong> Dennis Kim / HoKwang Kim · <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a> · @gameworkerkim</p>
 <p>🌐 <strong>한국어 (본 문서)</strong> · <a href="../../cti/coldcard-rng-20260804-en/">English</a> · <a href="../../cti/coldcard-rng-20260804-ja/">日本語</a> · <a href="../../cti/coldcard-rng-20260804-cn/">中文</a></p>
 <p><em>하드웨어 지갑의 보안은 &quot;키를 어디에 두는가&quot;가 아니라 &quot;키를 어떻게 만드는가&quot;에 달려 있었다. Coldcard는 전자를 완벽하게 지켰고, 후자를 5년간 놓쳤다.</em></p>
 <hr>
@@ -96,7 +97,7 @@
 <hr>
 <h2>1. 요약 (TL;DR)</h2>
 <p>2026년 7월 29일부터 8월 2일까지, 캐나다 Coinkite 사의 비트코인 전용 하드웨어 지갑 <strong>Coldcard</strong>에서 생성된 시드를 대상으로 한 대규모 자산 탈취가 발생했다. Galaxy Research 기준 관측된 피해는 <strong>1,367.05 BTC(약 8,860만 달러, 원화 약 1,230억 원), 4,585개 주소</strong>이며, 공격은 3차에 걸친 웨이브로 진행되었고 리포트 작성 시점에도 종결되지 않았다.</p>
-<p>공격의 본질은 침입이 아니라 <strong>재현</strong>이다. 공격자는 어떤 피해자의 장치도 만지지 않았고, PIN이나 시드 문구를 탈취하지 않았으며, 악성코드나 피싱도 사용하지 않았다. 2021년 3월 Coldcard 펌웨어의 빌드 설정 불일치로 인해 시드 생성이 STM32 하드웨어 난수 생성기(TRNG) 대신 <strong>MicroPython의 결정론적 소프트웨어 PRNG(Yasmarang)</strong>로 라우팅되었고, 이 PRNG는<strong>칩 고유 ID와 타이머 레지스터 값만으로 초기화</strong>된 뒤 추가 엔트로피를 전혀 수집하지 않았다. 그 결과 Mk2/Mk3의 실효 엔트로피는 128비트에서 <strong>약 40비트</strong>로, Mk4/Mk5/Q는 <strong>약 72비트</strong>로 붕괴했다.</p>
+<p>공격의 본질은 침입이 아니라 <strong>재현</strong>이다. 공격자는 어떤 피해자의 장치도 만지지 않았고, PIN이나 시드 문구를 탈취하지 않았으며, 악성코드나 피싱도 사용하지 않았다. 2021년 3월 Coldcard 펌웨어의 빌드 설정 불일치로 인해 시드 생성이 STM32 하드웨어 난수 생성기(TRNG) 대신 <strong>MicroPython의 결정론적 소프트웨어 PRNG(Yasmarang)</strong> 로 라우팅되었고, 이 PRNG는 <strong>칩 고유 ID와 타이머 레지스터 값만으로 초기화</strong>된 뒤 추가 엔트로피를 전혀 수집하지 않았다. 그 결과 Mk2/Mk3의 실효 엔트로피는 128비트에서 <strong>약 40비트</strong>로, Mk4/Mk5/Q는 <strong>약 72비트</strong>로 붕괴했다.</p>
 <p>40비트는 소비자용 하드웨어로 전수 탐색이 가능한 규모다. 공격자는 후보 시드를 오프라인에서 열거하고, BIP32/BIP39 규칙에 따라 주소를 파생한 뒤, <strong>공개 블록체인에서 잔고를 조회</strong>해 자산이 있는 주소만 골라 스위핑했다. 블록체인의 투명성이 공격자의 정찰 인프라로 전용된 것이다.</p>
 <p>핵심 사실 요약</p>
 <table>
@@ -264,7 +265,7 @@
     해시는 입력 엔트로피를 증가시키지 못함
     2^40개 입력 → 최대 2^40개 출력
 </code></pre>
-<p><strong>핵심은 6단계다.</strong>많은 사용자와 일부 초기 보도가 &quot;SHA256으로 해싱하니 안전한 것 아닌가&quot;라는 오해를 보였으나, 암호학적 해시 함수는<strong>압축과 확산은 제공하지만 엔트로피를 창출하지 않는다.</strong> 입력 후보가 2^40개면 출력 후보도 2^40개다. 이는 2012년 이후 반복적으로 재발한 RNG 실패 사례들(Debian OpenSSL, Android SecureRandom, Profanity 벌니티 주소 생성기 등)과 동일한 구조적 오류다.</p>
+<p><strong>핵심은 6단계다.</strong> 많은 사용자와 일부 초기 보도가 &quot;SHA256으로 해싱하니 안전한 것 아닌가&quot;라는 오해를 보였으나, 암호학적 해시 함수는 <strong>압축과 확산은 제공하지만 엔트로피를 창출하지 않는다.</strong> 입력 후보가 2^40개면 출력 후보도 2^40개다. 이는 2012년 이후 반복적으로 재발한 RNG 실패 사례들(Debian OpenSSL, Android SecureRandom, Profanity 벌니티 주소 생성기 등)과 동일한 구조적 오류다.</p>
 <h3>4.2 왜 5년간 발견되지 않았는가</h3>
 <table>
 <thead>
@@ -427,7 +428,7 @@
 </tr>
 </tbody></table>
 <h3>6.2 트래픽 지문</h3>
-<p>Galaxy가 자동화 도구 사용을 판단한 근거는 두 가지다. 첫째, 모든 트랜잭션이 <strong>동일한 하드코딩 수수료율(30 sat/vB)</strong>을 사용했다. 정상적인 지갑 소프트웨어는 mempool 상황에 따라 수수료를 동적으로 조정한다. 둘째,<strong>잔돈 출력(change output)이 존재하지 않았다.</strong> 잔고 전액을 단일 주소로 이동시키는 스위핑 패턴이다.</p>
+<p>Galaxy가 자동화 도구 사용을 판단한 근거는 두 가지다. 첫째, 모든 트랜잭션이 <strong>동일한 하드코딩 수수료율(30 sat/vB)</strong> 을 사용했다. 정상적인 지갑 소프트웨어는 mempool 상황에 따라 수수료를 동적으로 조정한다. 둘째, <strong>잔돈 출력(change output)이 존재하지 않았다.</strong> 잔고 전액을 단일 주소로 이동시키는 스위핑 패턴이다.</p>
 <p>이 지문은 향후 유사 공격 탐지 규칙 작성의 기초 자료가 된다.</p>
 <h3>6.3 웨이브 간 차이</h3>
 <table>
@@ -781,7 +782,11 @@
 </tr>
 </tbody></table>
 <h3>10.2 구조적 교훈</h3>
-<p><strong>첫째, 신뢰의 최소 단위는 장치가 아니라 순간이다.</strong>하드웨어 지갑의 보안 평가는 &quot;이 장치가 안전한가&quot;가 아니라 &quot;이 키가 만들어진 순간이 안전했는가&quot;를 물어야 한다. 이는 자산 보관 실사(due diligence)의 질문 형식을 바꾸는 문제다.<strong>둘째, 난수 생성기는 fail-closed여야 한다.</strong>엔트로피 소스 확보에 실패했을 때 저품질 값을 반환하는 설계는, 실패 사실 자체를 은폐한다. NIST SP 800-90B의 지속적 건전성 검사(continuous health test) 요구사항이 존재하는 이유가 여기에 있다.<strong>셋째, 감사 가능성은 감사를 의미하지 않는다.</strong>오픈소스는 &quot;누군가 검토했을 것&quot;이라는 집단적 착각을 유발한다. 실제 검토 여부는 별개의 사실이며, 검증되지 않으면 존재하지 않는 것으로 간주해야 한다.<strong>넷째, 투명성은 양날의 검이다.</strong>공개 원장은 감사와 검증의 기반이면서 동시에 공격자의 무료 정찰 인프라다. 프라이버시 기법(코인조인, 주소 재사용 회피)은 이번 사건에서 실질적 방어 가치를 가졌다.<strong>다섯째, 벤더 집중이 새로운 단일 실패 지점이다.</strong>탈중앙화 시스템에서 사용자들이 소수 하드웨어 벤더에 수렴하면, 프로토콜 레이어의 탈중앙화는 유지되지만<strong>키 생성 레이어에 시스템 리스크가 축적</strong>된다. 이번 사건은 그 리스크가 실현된 첫 대규모 사례다.</p>
+<p><strong>첫째, 신뢰의 최소 단위는 장치가 아니라 순간이다.</strong> 하드웨어 지갑의 보안 평가는 &quot;이 장치가 안전한가&quot;가 아니라 &quot;이 키가 만들어진 순간이 안전했는가&quot;를 물어야 한다. 이는 자산 보관 실사(due diligence)의 질문 형식을 바꾸는 문제다.</p>
+<p><strong>둘째, 난수 생성기는 fail-closed여야 한다.</strong> 엔트로피 소스 확보에 실패했을 때 저품질 값을 반환하는 설계는, 실패 사실 자체를 은폐한다. NIST SP 800-90B의 지속적 건전성 검사(continuous health test) 요구사항이 존재하는 이유가 여기에 있다.</p>
+<p><strong>셋째, 감사 가능성은 감사를 의미하지 않는다.</strong> 오픈소스는 &quot;누군가 검토했을 것&quot;이라는 집단적 착각을 유발한다. 실제 검토 여부는 별개의 사실이며, 검증되지 않으면 존재하지 않는 것으로 간주해야 한다.</p>
+<p><strong>넷째, 투명성은 양날의 검이다.</strong> 공개 원장은 감사와 검증의 기반이면서 동시에 공격자의 무료 정찰 인프라다. 프라이버시 기법(코인조인, 주소 재사용 회피)은 이번 사건에서 실질적 방어 가치를 가졌다.</p>
+<p><strong>다섯째, 벤더 집중이 새로운 단일 실패 지점이다.</strong> 탈중앙화 시스템에서 사용자들이 소수 하드웨어 벤더에 수렴하면, 프로토콜 레이어의 탈중앙화는 유지되지만 <strong>키 생성 레이어에 시스템 리스크가 축적</strong>된다. 이번 사건은 그 리스크가 실현된 첫 대규모 사례다.</p>
 <h3>10.3 프로토콜 레이어에는 문제가 없었다</h3>
 <p>부수적으로 확인해 둘 사항이 있다. 비트코인 프로토콜, secp256k1 곡선, BIP-32/39 표준에는 어떤 결함도 발견되지 않았다. 실패는 전적으로 <strong>구현 레이어</strong>, 그것도 특정 벤더의 빌드 설정에서 발생했다. Trezor, Ledger, Block(Bitkey)은 자사 제품의 미영향을 확인했다.</p>
 <p>이 구분은 시장 커뮤니케이션에서 중요하다. &quot;비트코인이 해킹당했다&quot;는 서술은 부정확하며, 정확한 서술은 &quot;특정 하드웨어 지갑 제조사의 키 생성 구현이 실패했다&quot;이다.</p>
@@ -825,6 +830,7 @@
 <td>—</td>
 </tr>
 </tbody></table>
+<p><strong>콜드월렛 비율이 100%였더라도 이번 유형의 공격은 막지 못한다.</strong> 취약한 시드로 생성된 콜드월렛은 100% 콜드 상태에서 비워진다. 규제 지표가 실제 위험과 정렬되어 있지 않다는 뜻이다.</p>
 <h3>11.2 국내 거래소·VASP 대상 권고</h3>
 <table>
 <thead>
@@ -887,7 +893,7 @@
 </tbody></table>
 <h3>11.3 규제 당국 대상 정책 제언</h3>
 <ol>
-<li><p><strong>보관 위치 규제에서 키 생명주기 규제로의 확장</strong>— 콜드월렛 비율은 필요조건이지 충분조건이 아니다. 2단계법 하위규정에는 비율 상향과 별개로<strong>키 생성·백업·로테이션·폐기 전 과정의 무결성 요건</strong>이 포함되어야 한다.</p>
+<li><p><strong>보관 위치 규제에서 키 생명주기 규제로의 확장</strong> — 콜드월렛 비율은 필요조건이지 충분조건이 아니다. 2단계법 하위규정에는 비율 상향과 별개로 <strong>키 생성·백업·로테이션·폐기 전 과정의 무결성 요건</strong>이 포함되어야 한다.</p>
 </li>
 <li><p><strong>커스터디 별도 업 규율 시 RNG 요건 명문화</strong> — 금융위가 검토 중인 디지털자산 커스터디 업 규율에서, 진입 규제 요건으로 인증된 난수 생성기(NIST SP 800-90A/B/C 준거 또는 동등 인증) 사용을 명시하는 방안을 검토할 필요가 있다.</p>
 </li>

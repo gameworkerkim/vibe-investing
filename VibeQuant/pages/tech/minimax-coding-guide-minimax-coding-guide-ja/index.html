@@ -233,8 +233,9 @@ DeepSeek・Anthropic Claude・OpenAI ChatGPT — Coding Plan・API・セルフ�
 <li>APIキーを入力 → 右上の「Done」をクリック</li>
 <li>モデル選択: MiniMax-M3(またはM2.5 / M2.7) → 「Auto-approve: Edit」を有効化して使用開始</li>
 </ol>
-<p><strong>Cline独自機能の活用ヒント</strong>-<strong>Plan / Actモードの分離</strong>: Planは複数ファイル変更計画の提案のみ、Actは実際の編集を実行。大きなリファクタリングはまずPlanで検討。</p>
+<p><strong>Cline独自機能の活用ヒント</strong></p>
 <ul>
+<li><strong>Plan / Actモードの分離</strong>: Planは複数ファイル変更計画の提案のみ、Actは実際の編集を実行。大きなリファクタリングはまずPlanで検討。</li>
 <li><strong>MCPマーケットプレイス</strong>: 内蔵ツール(ブラウザ、GitHub、DBクライアントなど)をワンクリックで追加。</li>
 <li><strong>@メンション</strong>: チャット欄に<code>@ファイルパス</code>を入力すると該当ファイルをコンテキストとして自動注入。</li>
 <li><strong>Checkpoints</strong>: 段階ごとのスナップショットが保存され、ミス時にワンクリックでロールバック。</li>
@@ -301,8 +302,9 @@ claude --model MiniMax-M3
 <li>Entrypoint: <code>api.minimax.io</code>または<code>api.minimaxi.com</code></li>
 <li>APIキーを入力 → Model: MiniMax-M3を選択 → Done</li>
 </ol>
-<p><strong>Kilo Code独自の強み</strong>-<strong>Orchestratorモード</strong>: 複雑な作業をサブタスクに分解し、Architect・Code・Debugなど専門モードに自動委任するマルチステップオーケストレーション。大規模な機能実装やPR単位の作業を一度に自律処理する際、Clineの単一Plan-Actループより有利な選択肢である。</p>
+<p><strong>Kilo Code独自の強み</strong></p>
 <ul>
+<li><strong>Orchestratorモード</strong>: 複雑な作業をサブタスクに分解し、Architect・Code・Debugなど専門モードに自動委任するマルチステップオーケストレーション。大規模な機能実装やPR単位の作業を一度に自律処理する際、Clineの単一Plan-Actループより有利な選択肢である。</li>
 <li><strong>カスタムモードマーケットプレイス</strong>: Architect、Ask、Code、Debugなどロールベースのプリセット。</li>
 <li><strong>Side-by-side Diffビュー</strong>: Clineより精緻に変更内容をプレビュー。</li>
 <li><strong>段階的なターミナル権限制御</strong>: セーフティファーストのワークフロー。</li>
@@ -325,10 +327,13 @@ claude --model MiniMax-M3
 <h2>3. エージェントワークフロー設計</h2>
 <h3>3.1 Plan-Actループの理解</h3>
 <p>2026年のAIコーディングエージェントは単純なQ&amp;Aではなく、「読む → 考える → 書く → 検証する」ループを自律的に繰り返す。これを<strong>Plan-Act-Verifyループ</strong>と呼び、VS Codeツール群はこのループを様々な形で実装している。</p>
-<p><strong>ループの4段階</strong>1.<strong>Read</strong>: 作業ディレクトリ・ファイル・文書を能動的に探索(grep、find、sed、lsなど)。
-2. <strong>Think</strong>: 作業分解、意図推論、呼び出すツール/APIの決定。MiniMax M3ではthinkingブロックが応答に含まれる。
-3. <strong>Act</strong>: ファイル作成・修正、コマンド実行、関数呼び出し。すべての変更はユーザー承認後に適用(Human-in-the-loop)。
-4. <strong>Verify</strong>: テスト実行、型チェック、ビルド確認。失敗時は1~2段階に戻って自己修正。</p>
+<p><strong>ループの4段階</strong></p>
+<ol>
+<li><strong>Read</strong>: 作業ディレクトリ・ファイル・文書を能動的に探索(grep、find、sed、lsなど)。</li>
+<li><strong>Think</strong>: 作業分解、意図推論、呼び出すツール/APIの決定。MiniMax M3ではthinkingブロックが応答に含まれる。</li>
+<li><strong>Act</strong>: ファイル作成・修正、コマンド実行、関数呼び出し。すべての変更はユーザー承認後に適用(Human-in-the-loop)。</li>
+<li><strong>Verify</strong>: テスト実行、型チェック、ビルド確認。失敗時は1~2段階に戻って自己修正。</li>
+</ol>
 <p><strong>例: 「JWT認証ミドルウェア追加」作業の実際の流れ</strong></p>
 <pre><code class="language-javascript">// Cline / Kilo Codeが実行するステップ
 // 1. Read:   src/middleware/auth.ts, src/routes/api.ts, AGENTS.md
@@ -1051,7 +1056,19 @@ claude --model MiniMax-M3
 <hr>
 <h2>6. 意思決定ガイド — どのモデルをいつ使うか?</h2>
 <p>すべての状況を単一モデルで解決しようとしないこと。以下の意思決定ツリーで30秒以内に選択できる。</p>
-<p><strong>① 予算が最大の制約であれば</strong>→ MiniMax M2.5またはDeepSeek V4-Flash。SWE-bench 70~80%台を10万トークンあたり$0.03前後で使用できる。M2.5はM3へのアップグレードパスが明確で、M3リリース後は1Mコンテキストまでそのまま使用可能。<strong>② コード品質(微細な意図の把握)が最優先であれば</strong>→ Claude Opus 4.7。SWE-Bench Pro 64.0%で実際のGitHubイシュー解決1位。「ほぼ正しいがわずかにずれた」結果が繰り返されるチームであれば、Opusへルーティングするフェイルオーバー構成を推奨する。<strong>③ 長時間の自律作業(8時間以上連続)が多ければ</strong>→ GPT-5.5。Terminal-Bench 2.0で82.7%で1位、長時間自律作業最強。ただし価格($5/$30)が2倍なので本当に長い作業にのみルーティングすること。<strong>④ 1Mトークンのフルコードベース分析が必要であれば</strong>→ MiniMax M3、Gemini 3.1 Pro、DeepSeek V4-Pro / V4-Flash、Claude Opus 4.7/4.8(すべて1M対応)。このうち価格効率はV4-Flash($0.14/$0.28)とM3($0.30/$1.20)が優位。Sonnet 4.6も1Mをサポートする。<strong>⑤ データ主権/オンプレミスが必要であれば</strong>→ MiniMax M2.5/M2.7(オープンウェイト)またはDeepSeek V3.2/V4。Hugging Faceから重みを取得しvLLM/SGLangで社内クラスタにサービングする。MiniMaxはMIT-style、DeepSeekはMIT+Model License(商用許可)である。<strong>⑥ Computer Use(ブラウザ/OS自動化)が必要であれば</strong>→ GPT-5.4(ネイティブ、OSWorld 75%)またはClaude Opus 4.7(API)。MiniMax M3はネイティブマルチモーダルだが、Computer Useはツール呼び出しで別途実装が必要である。<strong>⑦ 推奨ハイブリッドルーティング構成(OpenClaw例)</strong></p>
+<p><strong>① 予算が最大の制約であれば</strong>
+→ MiniMax M2.5またはDeepSeek V4-Flash。SWE-bench 70~80%台を10万トークンあたり$0.03前後で使用できる。M2.5はM3へのアップグレードパスが明確で、M3リリース後は1Mコンテキストまでそのまま使用可能。</p>
+<p><strong>② コード品質(微細な意図の把握)が最優先であれば</strong>
+→ Claude Opus 4.7。SWE-Bench Pro 64.0%で実際のGitHubイシュー解決1位。「ほぼ正しいがわずかにずれた」結果が繰り返されるチームであれば、Opusへルーティングするフェイルオーバー構成を推奨する。</p>
+<p><strong>③ 長時間の自律作業(8時間以上連続)が多ければ</strong>
+→ GPT-5.5。Terminal-Bench 2.0で82.7%で1位、長時間自律作業最強。ただし価格($5/$30)が2倍なので本当に長い作業にのみルーティングすること。</p>
+<p><strong>④ 1Mトークンのフルコードベース分析が必要であれば</strong>
+→ MiniMax M3、Gemini 3.1 Pro、DeepSeek V4-Pro / V4-Flash、Claude Opus 4.7/4.8(すべて1M対応)。このうち価格効率はV4-Flash($0.14/$0.28)とM3($0.30/$1.20)が優位。Sonnet 4.6も1Mをサポートする。</p>
+<p><strong>⑤ データ主権/オンプレミスが必要であれば</strong>
+→ MiniMax M2.5/M2.7(オープンウェイト)またはDeepSeek V3.2/V4。Hugging Faceから重みを取得しvLLM/SGLangで社内クラスタにサービングする。MiniMaxはMIT-style、DeepSeekはMIT+Model License(商用許可)である。</p>
+<p><strong>⑥ Computer Use(ブラウザ/OS自動化)が必要であれば</strong>
+→ GPT-5.4(ネイティブ、OSWorld 75%)またはClaude Opus 4.7(API)。MiniMax M3はネイティブマルチモーダルだが、Computer Useはツール呼び出しで別途実装が必要である。</p>
+<p><strong>⑦ 推奨ハイブリッドルーティング構成(OpenClaw例)</strong></p>
 <pre><code class="language-json">{
   &quot;agents&quot;: {
     &quot;defaults&quot;: {

@@ -86,13 +86,13 @@
 </ol>
 <hr>
 <h2>Executive Summary (TL;DR)</h2>
-<p>On June 1, 2026, IBM <strong>simultaneously disclosed</strong>three critical vulnerabilities affecting WebSphere Application Server 8.5 and 9.0. The three differ in nature but share the same product and the same version range, and IBM and multiple analysts characterize them as a single<strong>coordinated patch bundle</strong> to be applied in one maintenance window.</p>
+<p>On June 1, 2026, IBM <strong>simultaneously disclosed</strong> three critical vulnerabilities affecting WebSphere Application Server 8.5 and 9.0. The three differ in nature but share the same product and the same version range, and IBM and multiple analysts characterize them as a single <strong>coordinated patch bundle</strong> to be applied in one maintenance window.</p>
 <ul>
 <li><strong>CVE-2026-8644 (CVSS 9.1)</strong> — Identity spoofing / authentication bypass. An attacker impersonates a legitimate user, neutralizing the authentication mechanism itself. (CWE-290)</li>
 <li><strong>CVE-2026-9311 (CVSS 9.0)</strong> — Remote code execution via a security control bypass. Malicious input evades validation/sanitization paths to reach a code-execution sink. (CWE-94)</li>
-<li><strong>CVE-2026-9319 (CVSS 9.0)</strong>— RCE via<strong>deserialization of untrusted data</strong> at JAX-WS endpoints with WS-Security. (CWE-502)</li>
+<li><strong>CVE-2026-9319 (CVSS 9.0)</strong> — RCE via <strong>deserialization of untrusted data</strong> at JAX-WS endpoints with WS-Security. (CWE-502)</li>
 </ul>
-<p>This bundle is dangerous for three reasons. <strong>First, chainability.</strong>8644 (spoofing) provides identity/access; 9311 and 9319 (RCE) provide code execution — a single product simultaneously exposes different stages of the intrusion chain.<strong>Second, the risk class.</strong>Deserialization flaws in Java application servers are historically among the most dangerous and most widely exploited vulnerability classes (the 2017 Equifax breach was an Apache Struts deserialization flaw).<strong>Third, the patch trap.</strong>The official Fix Packs (9.0.5.29 / 8.5.5.30) are<strong>targeted for 3Q2026 and not yet released</strong>; the only path available now is the <strong>Interim Fix (APAR PH71422, PH71454, etc.)</strong>. Choosing to &quot;wait for the Fix Pack&quot; is synonymous with extending exposure.</p>
+<p>This bundle is dangerous for three reasons. <strong>First, chainability.</strong> 8644 (spoofing) provides identity/access; 9311 and 9319 (RCE) provide code execution — a single product simultaneously exposes different stages of the intrusion chain. <strong>Second, the risk class.</strong> Deserialization flaws in Java application servers are historically among the most dangerous and most widely exploited vulnerability classes (the 2017 Equifax breach was an Apache Struts deserialization flaw). <strong>Third, the patch trap.</strong> The official Fix Packs (9.0.5.29 / 8.5.5.30) are <strong>targeted for 3Q2026 and not yet released</strong>; the only path available now is the <strong>Interim Fix (APAR PH71422, PH71454, etc.)</strong>. Choosing to &quot;wait for the Fix Pack&quot; is synonymous with extending exposure.</p>
 <p>No in-the-wild exploitation has been confirmed to date. However, deserialization RCE is a class that gets weaponized quickly after a PoC appears, and this moment — just after disclosure — is <em>the window to patch before the PoC matures</em>.</p>
 <blockquote>
 <p>⚠️ <strong>Verify KISA/KrCERT advisory status</strong> — This report is compiled from global sources (IBM security bulletins, GHSA, EUVD, analysis firms). There may be a gap relative to when Korean national advisories are published; cross-check against KISA bulletins before operational application.</p>
@@ -108,7 +108,7 @@
 </thead>
 <tbody><tr>
 <td>KJ-1</td>
-<td>The three CVEs are not independent matters but a <strong>chainable bundle</strong>sharing the same product and version range. Spoofing (8644) yields identity, RCE (9311·9319) yields execution — so a single coordinated patch across one maintenance window is the right move.</td>
+<td>The three CVEs are not independent matters but a <strong>chainable bundle</strong> sharing the same product and version range. Spoofing (8644) yields identity, RCE (9311·9319) yields execution — so a single coordinated patch across one maintenance window is the right move.</td>
 <td><strong>High</strong></td>
 </tr>
 <tr>
@@ -135,7 +135,7 @@
 <hr>
 <h2>1. Opening — &quot;The middleware tier is the quietest and most lethal&quot;</h2>
 <p>Security discussion tends to concentrate on edge devices (firewalls, VPNs) and endpoints. Yet the <strong>application middleware tier</strong> that sits between them is the quietest and most lethal target. A Java EE application server like WebSphere consolidates and processes authentication, sessions, business logic, and backend DB connections. Code execution at this tier means standing in the middle of the business data and authentication flows.</p>
-<p>This trio is a textbook illustration of middleware-tier risk. One <strong>forges identity</strong>(8644), two<strong>execute code</strong>(9311·9319). From an attacker&#39;s standpoint, this combination means securing the two core stages of the intrusion chain — access and execution — from a single product. And one of them (9319) belongs to the most notorious flaw class in Java security history:<strong>deserialization</strong>.</p>
+<p>This trio is a textbook illustration of middleware-tier risk. One <strong>forges identity</strong> (8644), two <strong>execute code</strong> (9311·9319). From an attacker&#39;s standpoint, this combination means securing the two core stages of the intrusion chain — access and execution — from a single product. And one of them (9319) belongs to the most notorious flaw class in Java security history: <strong>deserialization</strong>.</p>
 <p>This connects to the consistent thesis of this series. If <code>CTI-2026-0602-FAULTLINE</code> was &quot;labels fail to predict risk&quot; and <code>CTI-2026-0603-NETSCALER</code> was &quot;the clock of a threat stops on the patch-application date,&quot; then the thesis of this report is: <em>&quot;in the window just after disclosure, when an official patch does not yet exist, what do you block in the interim?&quot;</em></p>
 <hr>
 <h2>2. Vulnerability Analysis — Decomposing the Three</h2>
@@ -177,13 +177,13 @@
 <h3>2.2 CVE-2026-9311 — RCE via Security Control Bypass</h3>
 <p>An RCE that bypasses existing security controls (input validation / sanitization routines) to execute code via an unintended path (CWE-94 code injection). It is a form in which a mechanism designed to prevent malicious input from reaching a sensitive code-execution sink is circumvented; on success it hands over control of the affected WebSphere instance. IBM security bulletin node/7274733.</p>
 <h3>2.3 CVE-2026-9319 — JAX-WS Deserialization RCE</h3>
-<p>An RCE arising from deserialization of untrusted data at <strong>JAX-WS (SOAP web service) endpoints with WS-Security applied</strong>(CWE-502). By the vector it has<strong>high attack complexity (AC:H)</strong>but requires no privileges (PR:N) and has a<strong>changed scope (S:C)</strong>— meaning impact can extend beyond the vulnerable component to other security authority. High complexity should not be a comfort: once a deserialization gadget chain is published, it is reused and automated. APAR<strong>PH71454</strong>, GHSA-rqhj-2grh-m6c2.</p>
+<p>An RCE arising from deserialization of untrusted data at <strong>JAX-WS (SOAP web service) endpoints with WS-Security applied</strong> (CWE-502). By the vector it has <strong>high attack complexity (AC:H)</strong> but requires no privileges (PR:N) and has a <strong>changed scope (S:C)</strong> — meaning impact can extend beyond the vulnerable component to other security authority. High complexity should not be a comfort: once a deserialization gadget chain is published, it is reused and automated. APAR <strong>PH71454</strong>, GHSA-rqhj-2grh-m6c2.</p>
 <hr>
 <h2>3. Chained Risk — Where Spoofing (8644) Meets RCE (9311·9319)</h2>
 <p>Viewed individually, each is a serious standalone flaw; viewed together, they form a <strong>complete intrusion chain</strong>.</p>
 <ol>
-<li><strong>Gain access</strong>— Use <code>CVE-2026-8644</code> to impersonate a legitimate user (or administrator) and bypass authentication. (ATT&amp;CK<strong>T1078</strong>Valid Accounts,<strong>T1556</strong> Modify Authentication Process)</li>
-<li><strong>Execute code</strong>— Use <code>CVE-2026-9311</code> (control bypass) or <code>CVE-2026-9319</code> (deserialization) to execute arbitrary code on the middleware. (<strong>T1190</strong>Exploit Public-Facing Application,<strong>T1059</strong> Command and Scripting Interpreter)</li>
+<li><strong>Gain access</strong> — Use <code>CVE-2026-8644</code> to impersonate a legitimate user (or administrator) and bypass authentication. (ATT&amp;CK <strong>T1078</strong> Valid Accounts, <strong>T1556</strong> Modify Authentication Process)</li>
+<li><strong>Execute code</strong> — Use <code>CVE-2026-9311</code> (control bypass) or <code>CVE-2026-9319</code> (deserialization) to execute arbitrary code on the middleware. (<strong>T1190</strong> Exploit Public-Facing Application, <strong>T1059</strong> Command and Scripting Interpreter)</li>
 <li><strong>Takeover, persistence, pivot</strong> — Secure control of the WebSphere instance and expand into the business logic, sessions, and backend DB connections beneath it.</li>
 </ol>
 <p>The crux is that these <strong>share the same product and version range</strong>. If one is vulnerable, all three are likely vulnerable. So the answer is not &quot;the most severe one first&quot; but <strong>all three as one bundle</strong>. A partial patch breaks only one link of the chain and leaves the others.</p>
@@ -195,7 +195,7 @@
 <h2>5. The Patch Trap — Official Fix Pack in 3Q2026; for Now, Interim Fixes</h2>
 <p>This is the most easily missed fact from an operational standpoint. <strong>The official Fix Packs (9.0.5.29 / 8.5.5.30) are targeted for 3Q2026 and have not been released as of this report.</strong> The paths immediately available now are therefore:</p>
 <ul>
-<li><strong>Interim Fix</strong>— Apply the Interim Fix resolving each APAR (8644: PH71422, 9319: PH71454, 9311: the corresponding APAR). This may first require a<strong>prerequisite upgrade to the minimum Fix Pack level</strong> required by the Interim Fix.</li>
+<li><strong>Interim Fix</strong> — Apply the Interim Fix resolving each APAR (8644: PH71422, 9319: PH71454, 9311: the corresponding APAR). This may first require a <strong>prerequisite upgrade to the minimum Fix Pack level</strong> required by the Interim Fix.</li>
 <li><strong>Compensating controls (before/if Interim Fix is not possible)</strong> — Restrict network access to JAX-WS endpoints with WS-Security to trusted ranges, implement input validation/filtering on deserialized objects, and monitor for suspicious serialized-object traffic directed at WS-Security endpoints.</li>
 </ul>
 <p>Choosing to &quot;wait for the 3Q2026 Fix Pack&quot; is synonymous with months of extended exposure. The heavier the change-management burden of the operating environment, the more the exposure window must first be narrowed with the Interim-Fix-plus-compensating-controls combination.</p>

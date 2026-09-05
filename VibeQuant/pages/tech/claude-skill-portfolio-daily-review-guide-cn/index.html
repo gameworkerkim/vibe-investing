@@ -80,15 +80,17 @@
 <li><strong>触发短语</strong>:&quot;检查一下投资组合&quot;、&quot;我的账户怎么样&quot;、&quot;今天的评审&quot;、&quot;检查持仓&quot;、&quot;需要再平衡吗?&quot;、&quot;每日检查&quot;</li>
 <li><strong>核心行为</strong>:<ol>
 <li>从<code>assets/portfolio.json</code>加载持仓、平均成本和风险限额(无需每次重新输入)</li>
-<li>通过网页搜索更新当前价格,然后评估<strong>量化触发条件(T1~T5)</strong>3.<strong>若未触发任何条件→以一行&quot;无异常&quot;结束</strong>(屏蔽噪音是该技能的第一原则)</li>
+<li>通过网页搜索更新当前价格,然后评估<strong>量化触发条件(T1~T5)</strong></li>
+<li><strong>若未触发任何条件→以一行&quot;无异常&quot;结束</strong>(屏蔽噪音是该技能的第一原则)</li>
 <li>只有触发时才对量化/新闻/社交媒体三个来源进行<strong>独立采集→交叉验证矩阵</strong></li>
 <li>给出行动候选项(持有/减仓/加仓/考虑止损/继续观察)+反方论点+反证条件</li>
 <li>更新<code>last_review</code>并记录评审日志(用于计算下一次评审的变化量)</li>
 </ol>
 </li>
 </ul>
-<p><strong>三大设计特点</strong>-<strong>&quot;变化&quot;的定义不交由LLM自行裁量</strong>——由trigger-rules.md中的量化规则加判定脚本固定下来</p>
+<p><strong>三大设计特点</strong></p>
 <ul>
+<li><strong>&quot;变化&quot;的定义不交由LLM自行裁量</strong>——由trigger-rules.md中的量化规则加判定脚本固定下来</li>
 <li><strong>市场同步过滤器</strong>——若个股波动幅度与基准指数波动幅度相差在1.5个百分点以内,则降级为&quot;市场同步波动&quot;,仅提供简要报告(避免每逢指数下跌日就对个股进行大篇幅分析而产生信息过载)</li>
 <li><strong>论点优先</strong>——先检查已登记投资论点的有效性,而非先看价格变化。社交媒体上的极端情绪仅被视为潜在的反向指标</li>
 </ul>
@@ -228,7 +230,8 @@ description: &gt;
 依据`references/action-framework.md`遵循以下格式:
 
 - <strong>行动候选项</strong>:持有/减仓/加仓/考虑止损/继续观察中的1~2项
-- 明确列出每个候选项的<strong>依据与反方论点</strong>-<strong>反证条件</strong>:必须包含&quot;若观察到X,则此评估失效&quot;
+- 明确列出每个候选项的<strong>依据与反方论点</strong>
+- <strong>反证条件</strong>:必须包含&quot;若观察到X,则此评估失效&quot;
 - 明确说明最终决定权在用户手中。不使用买入/卖出的指令性用语
 
 ### 第5步:更新状态
@@ -293,7 +296,7 @@ description: &gt;
 |---|---|---|
 | <strong>T1</strong> 个股急剧波动 | 股票日涨跌幅绝对值≥3%(加密货币为≥7%) | 中 |
 | <strong>T2</strong> 投资组合波动 | 总市值日涨跌幅绝对值≥2% | 高 |
-| <strong>T3</strong>风险限额 | 违反`risk_limits`中的项目(超出仓位比例、达到亏损限额) |<strong>最高</strong> |
+| <strong>T3</strong> 风险限额 | 违反`risk_limits`中的项目(超出仓位比例、达到亏损限额) | <strong>最高</strong> |
 | <strong>T4</strong> 事件 | 与持仓股票相关的一次信息源重大新闻(财报发布/指引变更、监管、安全事件·黑客攻击、退市/停牌事项、大规模增发·可转债) | 高 |
 | <strong>T5</strong> 波动率跳升 | 股票历史波动率(20日)较前一日上升50%以上 | 中 |
 

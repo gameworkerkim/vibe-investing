@@ -70,7 +70,7 @@
 </nav>
       </header>
       <div class="article-body prose"><h2>1. 들어가며: 현실적인 접근법</h2>
-<p>Umami를 Cloudflare <strong>온전히</strong>위에 올리려는 시도는 매력적이지만,<strong>현실적으로 복잡도가 높은 경로</strong>입니다.</p>
+<p>Umami를 Cloudflare <strong>온전히</strong> 위에 올리려는 시도는 매력적이지만, <strong>현실적으로 복잡도가 높은 경로</strong>입니다.</p>
 <p>Umami는 <strong>PostgreSQL 또는 MySQL만 공식 지원</strong>하며, Cloudflare D1(SQLite 기반)은 공식 지원하지 않습니다. Cloudflare Workers는 V8 Isolate 환경이라 Node.js 기반 Umami를 그대로 올릴 수 없고, 데이터베이스 레이어를 직접 패치해야 합니다. 그 패치는 업데이트마다 깨질 위험이 큽니다.</p>
 <p>따라서 이 문서에서는 <strong>“Umami를 Cloudflare와 최대한 가깝게, 그러나 실용적으로 운영”</strong> 하는 두 가지 현실적인 접근법을 검토합니다. 대상 사이트는 Cloudflare Pages 무료 티어에서 운영 중인 <a href="https://vibequant.cc">vibequant.cc</a>와 그 서브도메인들입니다.</p>
 <p>관련 배경: <a href="./CloudeFlare-Web-Analytics-Guide.md">Cloudflare 웹 분석 솔루션 가이드</a>에서 권장한 “Web Analytics로 시작 → 필요 시 Umami 확장”의 실행 계획에 해당합니다.</p>
@@ -196,14 +196,19 @@ Vercel (Umami Next.js)  &lt;--&gt;  Neon 또는 Supabase (PostgreSQL)
 </tr>
 </tbody></table>
 <h3>3.3 단계별 설치</h3>
-<p><strong>Step 1: Umami 레포지토리 Fork</strong><a href="https://github.com/umami-software/umami">umami-software/umami</a>를 GitHub 계정으로 Fork합니다.<strong>Step 2: PostgreSQL 생성</strong></p>
+<p><strong>Step 1: Umami 레포지토리 Fork</strong></p>
+<p><a href="https://github.com/umami-software/umami">umami-software/umami</a>를 GitHub 계정으로 Fork합니다.</p>
+<p><strong>Step 2: PostgreSQL 생성</strong></p>
 <p><a href="https://neon.tech">Neon</a> 또는 <a href="https://supabase.com">Supabase</a>에서 프로젝트를 만들고 Connection String(<code>postgresql://...</code>)을 복사합니다.</p>
 <ul>
 <li>Neon: serverless Postgres, idle 시 일시중지(콜드스타트) 가능</li>
 <li>Supabase: 무료 티어 DB 용량·연결 한도 확인 필요</li>
 </ul>
-<p><strong>Step 3: Vercel에 Umami 배포</strong>1. Vercel에서<strong>Add New → Project</strong>로 fork한 <code>umami</code>를 import
-2. 환경 변수 설정:</p>
+<p><strong>Step 3: Vercel에 Umami 배포</strong></p>
+<ol>
+<li>Vercel에서 <strong>Add New → Project</strong>로 fork한 <code>umami</code>를 import</li>
+<li>환경 변수 설정:</li>
+</ol>
 <table>
 <thead>
 <tr>
@@ -245,10 +250,12 @@ Vercel (Umami Next.js)  &lt;--&gt;  Neon 또는 Supabase (PostgreSQL)
 <ol>
 <li>배포 URL로 접속</li>
 <li>기본 계정: <code>admin</code> / <code>umami</code> (<a href="https://docs.umami.is/docs/login">Login</a>)</li>
-<li><strong>즉시 비밀번호 변경</strong>4. Settings → Websites에서 사이트 추가 후<strong>Website ID</strong> 복사</li>
+<li><strong>즉시 비밀번호 변경</strong></li>
+<li>Settings → Websites에서 사이트 추가 후 <strong>Website ID</strong> 복사</li>
 </ol>
 <p>vibequant는 호스트가 여러 개이므로 Website를 어떻게 나눌지 Step 전에 정합니다 (아래 <a href="#8-vibequantcc-%EC%B6%94%EA%B0%80-%ED%95%84%EC%9A%94-%EC%82%AC%ED%95%AD">추가 필요 사항</a> 참고).</p>
-<p><strong>Step 5: Cloudflare Worker 프록시</strong>Worker는<strong>트래커 스크립트</strong>와 <strong>수집 API</strong>를 모두 프록시해야 합니다. 원안처럼 <code>/api/send</code>만 넘기면 스크립트 로딩이 깨집니다.</p>
+<p><strong>Step 5: Cloudflare Worker 프록시</strong></p>
+<p>Worker는 <strong>트래커 스크립트</strong>와 <strong>수집 API</strong>를 모두 프록시해야 합니다. 원안처럼 <code>/api/send</code>만 넘기면 스크립트 로딩이 깨집니다.</p>
 <p>예시 (경로는 실제 <code>TRACKER_SCRIPT_NAME</code> / <code>COLLECT_API_ENDPOINT</code>에 맞게 조정):</p>
 <pre><code class="language-javascript">const UMAMI_ORIGIN = &quot;https://your-umami.vercel.app&quot;; // Vercel Umami URL
 const SCRIPT_PATH = &quot;/u.js&quot;;          // TRACKER_SCRIPT_NAME 결과에 맞춤
@@ -291,7 +298,10 @@ export default {
 <li>통계 조회용 API 토큰을 Worker 소스에 하드코딩하지 않습니다. 대시보드는 Vercel URL(또는 별도 보호된 경로)로 직접 접속합니다.</li>
 <li>Production에서는 <code>UMAMI_ORIGIN</code>을 Worker <strong>Secrets / Vars</strong>로 둡니다.</li>
 </ul>
-<p><strong>Step 6: 커스텀 도메인</strong>Worker에 <code>analytics.vibequant.cc</code>를 연결합니다. 트래킹이 첫-party(또는 같은 등록 도메인의 서브도메인)로 보이면 광고 차단기 회피 확률이 올라갑니다. 커뮤니티 논의: <a href="https://github.com/umami-software/umami/discussions/1026">umami#1026</a>.<strong>Step 7: vibequant.cc에 트래킹 코드 삽입</strong>올바른 스크립트 형태는 다음과 같습니다 (<code>src</code>는<strong>스크립트 파일</strong>, <code>/api/send</code>가 아님):</p>
+<p><strong>Step 6: 커스텀 도메인</strong></p>
+<p>Worker에 <code>analytics.vibequant.cc</code>를 연결합니다. 트래킹이 첫-party(또는 같은 등록 도메인의 서브도메인)로 보이면 광고 차단기 회피 확률이 올라갑니다. 커뮤니티 논의: <a href="https://github.com/umami-software/umami/discussions/1026">umami#1026</a>.</p>
+<p><strong>Step 7: vibequant.cc에 트래킹 코드 삽입</strong></p>
+<p>올바른 스크립트 형태는 다음과 같습니다 (<code>src</code>는 <strong>스크립트 파일</strong>, <code>/api/send</code>가 아님):</p>
 <pre><code class="language-html">&lt;script
   defer
   src=&quot;https://analytics.vibequant.cc/u.js&quot;
@@ -553,7 +563,9 @@ fly deploy
 <td>IPv4·메모리 초과 시 유료화</td>
 </tr>
 </tbody></table>
+<p><strong>현실적 월 비용 기대치</strong></p>
 <ul>
+<li><strong>A:</strong>트래픽이 크지 않으면<strong>0원</strong>에 가깝게 유지 가능</li>
 <li><strong>B:</strong> “완전 무료”를 단정하기 어렵다. 메모리·IPv4만으로도 월 소액이 날 수 있다. Billing alert를 반드시 켠다.</li>
 </ul>
 <p>“월 비용 0원”은 <strong>A + Neon/Supabase + Worker</strong> 조합에서만 안전하게 목표로 잡는 것이 좋습니다.</p>
@@ -758,7 +770,9 @@ fly deploy
 <li>나중에 B로 이전해도 Worker origin만 교체</li>
 </ul>
 </li>
-<li><strong>D1/Workers-native Umami는 하지 않음</strong>4.<strong>build.mjs 경유 삽입 + 호스트별 Website ID</strong>5.<strong>콜드스타트·Hobby 한도가 체감되면 B로 이전</strong>  <ul>
+<li><strong>D1/Workers-native Umami는 하지 않음</strong>  </li>
+<li><strong>build.mjs 경유 삽입 + 호스트별 Website ID</strong>  </li>
+<li><strong>콜드스타트·Hobby 한도가 체감되면 B로 이전</strong>  <ul>
 <li>그 전까지 Fly “무료”를 전제로 잡지 말 것</li>
 </ul>
 </li>

@@ -90,9 +90,9 @@
 <ul>
 <li><strong>CVE-2026-8644 (CVSS 9.1)</strong> — 신원 사칭(Identity Spoofing) / 인증 우회. 공격자가 정상 사용자를 사칭해 인증 메커니즘 자체를 무력화한다. (CWE-290)</li>
 <li><strong>CVE-2026-9311 (CVSS 9.0)</strong> — 보안 통제 우회를 통한 원격코드실행(RCE). 입력 검증·살균 경로를 우회해 코드 실행 싱크에 도달한다. (CWE-94)</li>
-<li><strong>CVE-2026-9319 (CVSS 9.0)</strong>— WS-Security가 적용된 JAX-WS 엔드포인트의<strong>신뢰할 수 없는 데이터 역직렬화</strong> RCE. (CWE-502)</li>
+<li><strong>CVE-2026-9319 (CVSS 9.0)</strong> — WS-Security가 적용된 JAX-WS 엔드포인트의 <strong>신뢰할 수 없는 데이터 역직렬화</strong> RCE. (CWE-502)</li>
 </ul>
-<p>이 묶음이 위험한 이유는 세 가지다. <strong>첫째, 연쇄성.</strong>8644(사칭)는 신원·접근을, 9311·9319(RCE)는 코드 실행을 제공한다 — 침투 사슬의 서로 다른 단계를 한 제품이 동시에 노출한다.<strong>둘째, 위험 계급.</strong>자바 앱서버의 역직렬화 결함은 역사적으로 가장 위험하고 가장 광범위하게 악용된 취약점 군에 속한다(2017년 Equifax 침해가 Apache Struts 역직렬화였다).<strong>셋째, 패치의 함정.</strong>정식 Fix Pack(9.0.5.29 / 8.5.5.30)은<strong>3Q2026 제공 목표라 아직 배포 전</strong>이며, 현재 즉시 적용 가능한 경로는 <strong>임시픽스(Interim Fix, APAR PH71422·PH71454 등)</strong>뿐이다. &quot;패치를 기다린다&quot;는 선택은 곧 노출 연장을 의미한다.</p>
+<p>이 묶음이 위험한 이유는 세 가지다. <strong>첫째, 연쇄성.</strong> 8644(사칭)는 신원·접근을, 9311·9319(RCE)는 코드 실행을 제공한다 — 침투 사슬의 서로 다른 단계를 한 제품이 동시에 노출한다. <strong>둘째, 위험 계급.</strong> 자바 앱서버의 역직렬화 결함은 역사적으로 가장 위험하고 가장 광범위하게 악용된 취약점 군에 속한다(2017년 Equifax 침해가 Apache Struts 역직렬화였다). <strong>셋째, 패치의 함정.</strong> 정식 Fix Pack(9.0.5.29 / 8.5.5.30)은 <strong>3Q2026 제공 목표라 아직 배포 전</strong>이며, 현재 즉시 적용 가능한 경로는 <strong>임시픽스(Interim Fix, APAR PH71422·PH71454 등)</strong>뿐이다. &quot;패치를 기다린다&quot;는 선택은 곧 노출 연장을 의미한다.</p>
 <p>현재까지 공개된 실제 악용(in-the-wild)은 확인되지 않았다. 그러나 역직렬화 RCE는 PoC 공개 후 빠르게 무기화되는 계급이며, 공개 직후의 이 시점이 <em>PoC가 성숙하기 전에 패치할 수 있는 창</em>이다.</p>
 <blockquote>
 <p>⚠️ <strong>KISA/KrCERT 권고 반영 여부 확인 필요</strong> — 본 건은 글로벌(IBM 보안공지·GHSA·EUVD·분석기관) 기준으로 정리됐다. 국내 공식 권고 등재 시점과 차이가 있을 수 있으니, 사내 적용 시 KISA 보안공지와 교차 확인할 것.</p>
@@ -177,13 +177,13 @@
 <h3>2.2 CVE-2026-9311 — 보안 통제 우회 RCE</h3>
 <p>기존 보안 통제(입력 검증·살균 루틴)를 우회해 의도치 않은 경로로 코드를 실행시키는 RCE다(CWE-94 코드 인젝션). 악성 입력이 민감한 코드 실행 싱크에 도달하지 못하도록 설계된 메커니즘이 우회되는 형태로, 성공 시 영향 WebSphere 인스턴스에 대한 제어권을 내준다. IBM 보안공지 node/7274733.</p>
 <h3>2.3 CVE-2026-9319 — JAX-WS 역직렬화 RCE</h3>
-<p><strong>WS-Security가 적용된 JAX-WS(SOAP 웹서비스) 엔드포인트</strong>에서 신뢰할 수 없는 데이터를 역직렬화하며 발생하는 RCE다(CWE-502). 벡터상 <strong>공격 복잡도가 높지만(AC:H)</strong>권한이 불필요하고(PR:N)<strong>스코프가 변경(S:C)</strong>된다 — 취약 컴포넌트를 넘어 다른 보안 권한 범위에까지 영향을 미칠 수 있다는 의미다. 복잡도가 높다는 점이 위안이 되어선 안 된다. 역직렬화 가젯 체인은 한 번 공개되면 재사용·자동화되기 때문이다. APAR <strong>PH71454</strong>, GHSA-rqhj-2grh-m6c2.</p>
+<p><strong>WS-Security가 적용된 JAX-WS(SOAP 웹서비스) 엔드포인트</strong>에서 신뢰할 수 없는 데이터를 역직렬화하며 발생하는 RCE다(CWE-502). 벡터상 <strong>공격 복잡도가 높지만(AC:H)</strong> 권한이 불필요하고(PR:N) <strong>스코프가 변경(S:C)</strong>된다 — 취약 컴포넌트를 넘어 다른 보안 권한 범위에까지 영향을 미칠 수 있다는 의미다. 복잡도가 높다는 점이 위안이 되어선 안 된다. 역직렬화 가젯 체인은 한 번 공개되면 재사용·자동화되기 때문이다. APAR <strong>PH71454</strong>, GHSA-rqhj-2grh-m6c2.</p>
 <hr>
 <h2>3. 연쇄 위험 — 사칭(8644)이 RCE(9311·9319)를 만나는 지점</h2>
 <p>세 건을 따로 보면 각각 심각한 단일 결함이지만, 함께 보면 <strong>완결된 침투 사슬</strong>이 된다.</p>
 <ol>
-<li><strong>접근 확보</strong>— <code>CVE-2026-8644</code>로 정상 사용자(또는 관리자)를 사칭해 인증을 우회한다. (ATT&amp;CK<strong>T1078</strong>Valid Accounts,<strong>T1556</strong> Modify Authentication Process)</li>
-<li><strong>코드 실행</strong>— <code>CVE-2026-9311</code>(통제 우회) 또는 <code>CVE-2026-9319</code>(역직렬화)로 미들웨어에서 임의 코드를 실행한다. (<strong>T1190</strong>Exploit Public-Facing Application,<strong>T1059</strong> Command and Scripting Interpreter)</li>
+<li><strong>접근 확보</strong> — <code>CVE-2026-8644</code>로 정상 사용자(또는 관리자)를 사칭해 인증을 우회한다. (ATT&amp;CK <strong>T1078</strong> Valid Accounts, <strong>T1556</strong> Modify Authentication Process)</li>
+<li><strong>코드 실행</strong> — <code>CVE-2026-9311</code>(통제 우회) 또는 <code>CVE-2026-9319</code>(역직렬화)로 미들웨어에서 임의 코드를 실행한다. (<strong>T1190</strong> Exploit Public-Facing Application, <strong>T1059</strong> Command and Scripting Interpreter)</li>
 <li><strong>장악·지속·피벗</strong> — WebSphere 인스턴스 제어권을 확보하고, 그 아래 비즈니스 로직·세션·백엔드 DB 연결로 확장한다.</li>
 </ol>
 <p>핵심은 이들이 <strong>동일 제품·버전대를 공유</strong>한다는 점이다. 한 곳이 취약하면 셋 다 취약할 개연성이 높다. 그래서 &quot;가장 심각한 하나만 먼저&quot;가 아니라 <strong>셋을 한 묶음으로</strong> 닫아야 한다. 부분 패치는 사슬의 한 고리만 끊을 뿐, 다른 고리를 남긴다.</p>
@@ -195,7 +195,7 @@
 <h2>5. 패치의 함정 — 정식 Fix Pack은 3Q2026, 지금은 임시픽스</h2>
 <p>운영 관점에서 가장 놓치기 쉬운 사실이다. <strong>정식 Fix Pack(9.0.5.29 / 8.5.5.30)의 제공 목표는 3Q2026이며, 본 리포트 작성 시점에 아직 배포되지 않았다.</strong> 따라서 지금 즉시 적용 가능한 경로는 다음과 같다.</p>
 <ul>
-<li><strong>임시픽스(Interim Fix)</strong>— 각 APAR(8644: PH71422, 9319: PH71454, 9311: 해당 APAR)을 해소하는 Interim Fix를 적용한다. 이를 위해 먼저 Interim Fix가 요구하는<strong>최소 Fix Pack 레벨로 선행 업그레이드</strong>가 필요할 수 있다.</li>
+<li><strong>임시픽스(Interim Fix)</strong> — 각 APAR(8644: PH71422, 9319: PH71454, 9311: 해당 APAR)을 해소하는 Interim Fix를 적용한다. 이를 위해 먼저 Interim Fix가 요구하는 <strong>최소 Fix Pack 레벨로 선행 업그레이드</strong>가 필요할 수 있다.</li>
 <li><strong>보상통제(임시픽스 적용 전/불가 시)</strong> — WS-Security가 적용된 JAX-WS 엔드포인트의 네트워크 접근을 신뢰 대역으로 제한하고, 역직렬화 객체에 대한 입력 검증·필터링을 도입하며, WS-Security 엔드포인트로 향하는 의심 직렬화 객체 트래픽을 모니터링한다.</li>
 </ul>
 <p>&quot;3Q2026 Fix Pack을 기다린다&quot;는 선택은 수개월의 노출 연장과 동의어다. 변경관리 부담이 큰 운영 환경일수록 임시픽스+보상통제 조합으로 노출 창을 먼저 좁혀야 한다.</p>

@@ -60,7 +60,12 @@
   <span class="share-status" data-share-status hidden></span>
 </nav>
       </header>
-      <div class="article-body prose"><p><strong>문서 버전</strong>v1.0<strong>작성 기준일</strong>2026-08-18<strong>대상</strong>서버 약 300대 / CentOS(2024년 이후 패치 없음) / MySQL(2021-08 이후 패치 없음) / Nginx(패치 없음)<strong>이관 대상</strong>파일 데이터 3.8 PB → AWS S3, DB 10 GB → AWS Managed DB<strong>투입 인력</strong>SE 10명 (시그마체인 주장)<strong>신뢰도 표기</strong> 본 문서의 정량 추정치에는 CTI Admiralty Code 방식의 신뢰도 등급을 병기한다. (A–F: 출처 신뢰도 / 1–6: 정보 확실성)</p>
+      <div class="article-body prose"><p><strong>문서 버전</strong> v1.0
+<strong>작성 기준일</strong> 2026-08-18
+<strong>대상</strong> 서버 약 300대 / CentOS(2024년 이후 패치 없음) / MySQL(2021-08 이후 패치 없음) / Nginx(패치 없음)
+<strong>이관 대상</strong> 파일 데이터 3.8 PB → AWS S3, DB 10 GB → AWS Managed DB
+<strong>투입 인력</strong> SE 10명 (시그마체인 주장)
+<strong>신뢰도 표기</strong> 본 문서의 정량 추정치에는 CTI Admiralty Code 방식의 신뢰도 등급을 병기한다. (A–F: 출처 신뢰도 / 1–6: 정보 확실성)</p>
 <hr>
 <p>오디세우스는 고향으로 돌아가기 위해 트로이에서 전쟁을 했다. 교착된 전쟁을 뚫기 위해 거대한 목마를 만들어 트로이 성안으로 잠입하는데 성공했다. 이 오래된 신화는 보안 업계에서 트로이 목마라는 악성 코드의 모티브가 되었다. 유지보수 인력이 사라지고 데이터센터에 있다가 IDC 비용을 내지 못해서 방치된 서버의 전원이 내려가고 IDC 센터 한 구석 바닥에 서버가 있다면 단순히 데이터 복원의 일이 아니다. </p>
 <h2>0. 시작하는 말 - 왜 &quot;부팅&quot;이 복구의 시작이 아닌가?</h2>
@@ -69,9 +74,9 @@
 <ol>
 <li><p><strong>물리적 열화</strong> — 무전원 상태의 SSD 셀 전하 손실, HDD 베어링·윤활유 고착(stiction), RAID 컨트롤러 배터리/슈퍼캐패시터 수명 종료, CMOS 배터리 소진에 따른 시스템 시각 초기화. 하드웨어는 &quot;쉬는&quot; 것이 아니라 &quot;늙는다&quot;.</p>
 </li>
-<li><p><strong>논리적 부패</strong>— 마지막 종료가 정상 종료(graceful shutdown)가 아니었다면 파일시스템 저널, DB 리두 로그, 애플리케이션 큐가 모두 미완결 상태로 남아 있다. 부팅과 함께 자동 복구가 시작되면, 그 복구가<strong>증거와 데이터를 동시에 훼손</strong>될 수 있다.</p>
+<li><p><strong>논리적 부패</strong> — 마지막 종료가 정상 종료(graceful shutdown)가 아니었다면 파일시스템 저널, DB 리두 로그, 애플리케이션 큐가 모두 미완결 상태로 남아 있다. 부팅과 함께 자동 복구가 시작되면, 그 복구가 <strong>증거와 데이터를 동시에 훼손</strong>될 수 있다.</p>
 </li>
-<li><p><strong>보안 부채 누적</strong>— OS·DB·웹서버가 2년간 패치되지 않은 상태에서, 그 2년간 공개된 원격 코드 실행 취약점은 전부 &quot;이미 무기화되어 유통되는&quot; 상태다. 즉, 이 서버들은 패치 관점에서 2년 전이 아니라<strong>2년치 취약점을 한꺼번에 안고 있는 현재</strong>에 놓인다.</p>
+<li><p><strong>보안 부채 누적</strong> — OS·DB·웹서버가 2년간 패치되지 않은 상태에서, 그 2년간 공개된 원격 코드 실행 취약점은 전부 &quot;이미 무기화되어 유통되는&quot; 상태다. 즉, 이 서버들은 패치 관점에서 2년 전이 아니라 <strong>2년치 취약점을 한꺼번에 안고 있는 현재</strong>에 놓인다.</p>
 </li>
 </ol>
 <p>여기서 가장 위험한 오판은 &quot;전원이 꺼져 있었으니 침해도 없었다&quot;는 추론이다. 전원이 꺼진 시점 <strong>이전</strong>에 침해가 있었다면, 그 침해는 디스크 위에 그대로 동면(dormant)하고 있다. 백도어는 전원이 들어오기를 기다린다. 따라서 복원 작업의 첫 단계는 부팅이 아니라 <strong>사전 점검과 침해 전제(assume breach) 조사</strong>여야 한다.</p>
@@ -109,7 +114,7 @@
 <p><strong>목마를 성 안으로 끌어들인 행위는 단 한 번의 결정이었고, 되돌릴 수 없었다.</strong> 이 프로젝트에서 그에 해당하는 단 한 번의 결정은 <em>&quot;검증되지 않은 방치 서버를 운영망 또는 AWS 신규 환경에 직결하는 것&quot;</em> 이다. 사소한 보안적 실수 — 임시로 열어둔 22번 포트 하나, 옛 관리자 계정 하나, 백업 스크립트에 하드코딩된 자격증명 하나 — 가 3.8 PB 전체의 신뢰성을 무너뜨린다.</p>
 <p>그리고 싸이월드는 <strong>보안 사고의 파급이 기술 이슈로 끝나지 않는 자산</strong>이다. 전 국민이 자신의 사진·일기·방명록·일촌평이 그 안에 있다는 것을 알고 있고, 이미 과거의 데이터 유출 사건들로 인해 사회적 민감도가 최고 수준으로 형성되어 있다. 여기서 발생하는 유출은 &quot;서버 300대 사고&quot;가 아니라 &quot;국민 데이터 사고&quot;로 규정된다. 따라서 본 프로젝트의 보안은 <strong>아무리 강조해도 과하지 않으며, 일정보다 우선하는 제약조건</strong>으로 취급한다.</p>
 <blockquote>
-<p><strong>원칙 1 (Assume Breach)</strong>— 모든 방치 서버는 &quot;침해되었을 가능성이 있는 자산&quot;으로 분류하고, 침해 아님이<strong>증명될 때까지</strong> 격리망에서만 다룬다.
+<p><strong>원칙 1 (Assume Breach)</strong> — 모든 방치 서버는 &quot;침해되었을 가능성이 있는 자산&quot;으로 분류하고, 침해 아님이 <strong>증명될 때까지</strong> 격리망에서만 다룬다.
 <strong>원칙 2 (Read-Only First)</strong> — 원본 매체는 이미지화 이전에 쓰기 작업을 일절 허용하지 않는다.
 <strong>원칙 3 (No Direct Path)</strong> — 방치 서버에서 운영망/AWS로의 직접 경로는 어떤 단계에서도 만들지 않는다. 반드시 정제(clean-room) 구간을 경유한다.</p>
 </blockquote>
@@ -157,8 +162,9 @@
 <p>특히 <strong>양 데이터센터에 동일 데이터의 사본이 존재하는 경우</strong>, 복원의 난제는 &quot;데이터를 읽는 것&quot;이 아니라 <strong>두 사본 중 어느 것이 진본인지 판정하는 것</strong> 으로 이동한다. 복제(replication)가 비정상 종료되었다면 DC-A와 DC-B는 서로 다른 시점에서 멈춰 있고, 어느 한쪽이 전체적으로 최신인 것도 아니다. 디렉터리 단위로, 파일 단위로, 심지어 동일 파일의 블록 단위로 신선도가 엇갈릴 수 있다.</p>
 <p>따라서 본 플레이북은 정합성 문제를 다음과 같이 재정의했다.</p>
 <blockquote>
-<p><strong>정합성 확보 = ① 물리 자산 재식별 → ② 논리 신원 복원 → ③ 사본 간 차분 판정 → ④ 진본 선정 규칙 적용 → ⑤ 판정 결과의 감사 가능한 기록</strong>이 다섯 단계는 Phase 0–Phase 3에서 순차적으로 다룬다. 어느 하나를 생략하면 3.8 PB를 S3로 올린 뒤에 &quot;무엇을 올렸는지 설명할 수 없는 상태&quot;가 된다.<strong>설명할 수 없는 데이터는 복원된 데이터가 아니다.</strong></p>
+<p><strong>정합성 확보 = ① 물리 자산 재식별 → ② 논리 신원 복원 → ③ 사본 간 차분 판정 → ④ 진본 선정 규칙 적용 → ⑤ 판정 결과의 감사 가능한 기록</strong></p>
 </blockquote>
+<p>이 다섯 단계는 Phase 0–Phase 3에서 순차적으로 다룬다. 어느 하나를 생략하면 3.8 PB를 S3로 올린 뒤에 &quot;무엇을 올렸는지 설명할 수 없는 상태&quot;가 된다. <strong>설명할 수 없는 데이터는 복원된 데이터가 아니다.</strong></p>
 <hr>
 <h2>1. 전체 단계 개요</h2>
 <pre><code>Phase 0  물리 자산 실사 및 재식별 (무전원 상태에서 수행)
@@ -282,7 +288,7 @@ Phase 7  통합 검증 · 보안 감사 · 인수
 <tbody><tr>
 <td><strong>SSD/NVMe</strong></td>
 <td>무전원 상태 셀 전하 손실 → 정정 불가 비트오류(UECC), 펌웨어 메타데이터 손상</td>
-<td>JEDEC의 SSD 신뢰성 규격 체계(JESD218 계열)는 전원 차단 상태 데이터 보존을<strong>소비자용 등급 약 1년(30℃ 기준), 엔터프라이즈 등급 약 3개월(40℃ 기준) 수준</strong>으로 규정한다. 즉 24개월 무전원은 <strong>보증 구간을 크게 초과</strong>한다. (신뢰도: B2)</td>
+<td>JEDEC의 SSD 신뢰성 규격 체계(JESD218 계열)는 전원 차단 상태 데이터 보존을 <strong>소비자용 등급 약 1년(30℃ 기준), 엔터프라이즈 등급 약 3개월(40℃ 기준) 수준</strong>으로 규정한다. 즉 24개월 무전원은 <strong>보증 구간을 크게 초과</strong>한다. (신뢰도: B2)</td>
 <td>최우선 이미징 대상. 첫 전원 인가 후 즉시 전체 읽기(read scrub) → 재기록(refresh) 금지, <strong>읽기만</strong> 수행</td>
 </tr>
 <tr>
@@ -369,7 +375,7 @@ Phase 7  통합 검증 · 보안 감사 · 인수
 </tr>
 </tbody></table>
 <blockquote>
-<p><strong>아웃바운드 차단이 핵심이다.</strong>동면 백도어의 첫 동작은 대부분 C2 서버로의 콜백(beaconing)이다. 아웃바운드가 열려 있는 상태에서 첫 부팅을 하면, 조사 이전에 공격자가 먼저 침해 사실을 알게 된다. 동시에 캡처된 PCAP의 콜백 시도 자체가<strong>가장 강력한 침해 증거</strong>가 된다.</p>
+<p><strong>아웃바운드 차단이 핵심이다.</strong> 동면 백도어의 첫 동작은 대부분 C2 서버로의 콜백(beaconing)이다. 아웃바운드가 열려 있는 상태에서 첫 부팅을 하면, 조사 이전에 공격자가 먼저 침해 사실을 알게 된다. 동시에 캡처된 PCAP의 콜백 시도 자체가 <strong>가장 강력한 침해 증거</strong>가 된다.</p>
 </blockquote>
 <h3>1-B 콜드 부팅 절차 (서버 1대 기준)</h3>
 <table>
@@ -463,7 +469,7 @@ Phase 7  통합 검증 · 보안 감사 · 인수
 </tr>
 </tbody></table>
 <blockquote>
-<p><strong>병목은 이미징이다.</strong>3.8 PB 전량을 포렌식 이미징하는 것은 현실적으로 불가능하므로,<strong>① OS/시스템 볼륨은 전수 이미징, ② 대용량 데이터 볼륨은 이미징 대신 &quot;쓰기 방지 마운트 + 해시 매니페스트 + 표본 심층 검사&quot;</strong> 로 이원화한다. 이 결정은 문서화하고 게이트 승인 대상에 포함한다.</p>
+<p><strong>병목은 이미징이다.</strong> 3.8 PB 전량을 포렌식 이미징하는 것은 현실적으로 불가능하므로, <strong>① OS/시스템 볼륨은 전수 이미징, ② 대용량 데이터 볼륨은 이미징 대신 &quot;쓰기 방지 마운트 + 해시 매니페스트 + 표본 심층 검사&quot;</strong> 로 이원화한다. 이 결정은 문서화하고 게이트 승인 대상에 포함한다.</p>
 </blockquote>
 <h3>Phase 1 체크리스트</h3>
 <pre><code>[ ] 1.1  조사망(Forensic Enclave) 구축 완료, 아웃바운드 전면 차단 검증 (테스트 콜백으로 확인)
@@ -571,14 +577,17 @@ Phase 7  통합 검증 · 보안 감사 · 인수
 <ol>
 <li><strong>웹서버 계층</strong> — Nginx 및 그 앞단의 리버스 프록시/WAF, 그리고 함께 배포된 PHP/애플리케이션 런타임. 실무상 침해는 Nginx 본체보다 그 뒤의 애플리케이션에서 발생하는 비율이 압도적으로 높다.</li>
 <li><strong>DB 계층</strong> — MySQL 5.7 계열은 2023년 10월 EOL. 2021년 8월 이후 누적 보안 수정 전량 미적용.</li>
-<li><strong>OS 계층</strong>— CentOS 7은 2024년 6월 EOL, CentOS 8은 2021년 12월 EOL.<strong>EOL 이후 공개된 커널·glibc·OpenSSL·sudo·polkit 계열 권한상승 취약점은 벤더 패치가 존재하지 않는다.</strong>4.<strong>관리 인터페이스</strong>— BMC(iDRAC/iLO/IPMI) 펌웨어. 무전원이어도 전원 코드가 연결되어 있었다면 BMC는 살아 있었을 수 있다.<strong>이 경로는 반드시 별도 조사한다.</strong>5.<strong>인증 자산</strong>— 만료된 TLS 사설키, SSH 호스트키, API 키, DB 계정.<strong>전량 폐기·재발급 대상</strong>으로 간주한다.</li>
+<li><strong>OS 계층</strong> — CentOS 7은 2024년 6월 EOL, CentOS 8은 2021년 12월 EOL. <strong>EOL 이후 공개된 커널·glibc·OpenSSL·sudo·polkit 계열 권한상승 취약점은 벤더 패치가 존재하지 않는다.</strong></li>
+<li><strong>관리 인터페이스</strong> — BMC(iDRAC/iLO/IPMI) 펌웨어. 무전원이어도 전원 코드가 연결되어 있었다면 BMC는 살아 있었을 수 있다. <strong>이 경로는 반드시 별도 조사한다.</strong></li>
+<li><strong>인증 자산</strong> — 만료된 TLS 사설키, SSH 호스트키, API 키, DB 계정. <strong>전량 폐기·재발급 대상</strong>으로 간주한다.</li>
 </ol>
 <h3>2-D CentOS EOL이 만들어내는 구조적 제약</h3>
 <p>이 프로젝트에서 반드시 조기에 확정해야 하는 사항이 있다.</p>
 <blockquote>
-<p><strong>CentOS는 EOL 상태이므로, &quot;최신 보안 패치를 적용한다&quot;는 목표가 원칙적으로 달성 불가능하다.</strong>- 공식 미러(<code>mirror.centos.org</code>)는 서비스 종료되어 <code>yum update</code>가<strong>저장소 접속 실패로 그대로 끝난다.</strong>아카이브(<code>vault.centos.org</code>)로 전환해야 하는데, 아카이브에는<strong>EOL 시점까지의 패치만</strong> 존재한다.</p>
+<p><strong>CentOS는 EOL 상태이므로, &quot;최신 보안 패치를 적용한다&quot;는 목표가 원칙적으로 달성 불가능하다.</strong></p>
 </blockquote>
 <ul>
+<li>공식 미러(<code>mirror.centos.org</code>)는 서비스 종료되어 <code>yum update</code>가 <strong>저장소 접속 실패로 그대로 끝난다.</strong> 아카이브(<code>vault.centos.org</code>)로 전환해야 하는데, 아카이브에는 <strong>EOL 시점까지의 패치만</strong> 존재한다.</li>
 <li>즉 CentOS 7 서버에 vault 저장소로 패치를 적용하면 <strong>2024년 6월 시점까지의 보안 상태</strong>에 도달할 뿐이며, 그 이후 2년치 취약점은 남는다.</li>
 </ul>
 <p>새로 리눅스 계열의 OS를 설치하고 안정성, 호환성을 확보해야 한다.</p>
@@ -997,7 +1006,7 @@ Phase 7  통합 검증 · 보안 감사 · 인수
 </tr>
 </tbody></table>
 <blockquote>
-<p><strong>권고: 하이브리드.</strong>① 대용량 콜드 데이터(사진·동영상 등 대부분)는<strong>Snowball Edge 다중 병행</strong>으로 물류 전송, ② 변경분·소용량·메타데이터·DB는 <strong>전용선</strong>으로 전송, ③ 전송 후 매니페스트 대조로 통합. Direct Connect 프로비저닝 리드타임(수주–수개월)이 전체 일정의 임계 경로가 되지 않도록 <strong>Phase 0과 동시에 착수</strong>한다. (신뢰도: B2)</p>
+<p><strong>권고: 하이브리드.</strong> ① 대용량 콜드 데이터(사진·동영상 등 대부분)는 <strong>Snowball Edge 다중 병행</strong>으로 물류 전송, ② 변경분·소용량·메타데이터·DB는 <strong>전용선</strong>으로 전송, ③ 전송 후 매니페스트 대조로 통합. Direct Connect 프로비저닝 리드타임(수주–수개월)이 전체 일정의 임계 경로가 되지 않도록 <strong>Phase 0과 동시에 착수</strong>한다. (신뢰도: B2)</p>
 </blockquote>
 <h3>5-B 보안 요건 (금융권/개인정보 기준 준용)</h3>
 <table>
@@ -1223,11 +1232,14 @@ Phase 7  통합 검증 · 보안 감사 · 인수
 <hr>
 <h1>부록 A. 스크립트 모음</h1>
 <blockquote>
-<p><strong>공통 주의사항</strong>&gt; 1. 모든 스크립트는<strong>격리망(Forensic Enclave) 내부에서만</strong> 실행한다.
-2. <code>S-01</code>–<code>S-03</code>은 <strong>원본 매체에 쓰기를 수행하지 않는다.</strong> 마운트는 반드시 <code>ro,noexec,nodev,nosuid</code>.
-3. 실행 전 반드시 1대에서 검증하고, 결과를 눈으로 확인한 뒤 확산한다.
-4. 스크립트는 표준 출력이 아니라 <strong>파일로 증거를 남긴다.</strong> 증거 디렉터리는 사후 변경 금지.
-5. <code>set -euo pipefail</code> 을 기본으로 하되, 조사 스크립트는 개별 항목 실패로 전체가 중단되지 않도록 항목별 오류를 흡수한다.</p>
+<p><strong>공통 주의사항</strong></p>
+<ol>
+<li>모든 스크립트는 <strong>격리망(Forensic Enclave) 내부에서만</strong> 실행한다.</li>
+<li><code>S-01</code>–<code>S-03</code>은 <strong>원본 매체에 쓰기를 수행하지 않는다.</strong> 마운트는 반드시 <code>ro,noexec,nodev,nosuid</code>.</li>
+<li>실행 전 반드시 1대에서 검증하고, 결과를 눈으로 확인한 뒤 확산한다.</li>
+<li>스크립트는 표준 출력이 아니라 <strong>파일로 증거를 남긴다.</strong> 증거 디렉터리는 사후 변경 금지.</li>
+<li><code>set -euo pipefail</code> 을 기본으로 하되, 조사 스크립트는 개별 항목 실패로 전체가 중단되지 않도록 항목별 오류를 흡수한다.</li>
+</ol>
 </blockquote>
 <hr>
 <h2>A-1. <code>S-01_cold_inspect.sh</code> — 콜드 부팅 후 비파괴 사전 점검</h2>
@@ -1974,7 +1986,7 @@ do_cmd() {
 }
 
 log &quot;===== 패치 적용 시작 : $(hostname) =====&quot;
-[ &quot;$DRY_RUN&quot; -eq 1 ] &amp;&amp; log &quot;*<strong>DRY-RUN 모드 : 실제 변경 없음</strong>*&quot;
+[ &quot;$DRY_RUN&quot; -eq 1 ] &amp;&amp; log &quot;*<strong> DRY-RUN 모드 : 실제 변경 없음 </strong>*&quot;
 
 # ── 0. 사전 점검 재확인 (게이트) ──────────────────────────────
 if [ &quot;$DRY_RUN&quot; -eq 0 ]; then

@@ -262,13 +262,15 @@
 </tbody></table>
 <p>要点：行业审计预算与营销话术大多集中在 L2，而实际大型资金外流事故绝大多数发生在 L3。</p>
 <h3>3.2 三种结构性缺陷</h3>
-<p><strong>① 单一 Owner 权限（Single Owner Privilege）</strong>带有 <code>onlyOwner</code> 修饰符的 <code>mint()</code> 函数，从代码角度看完全正常。问题在于 Owner 为单一 EOA（或由单一密钥控制的账户）。在此结构中，攻击者获得的不是&quot;函数调用权限&quot;，而是<strong>货币发行权本身</strong>。</p>
+<p><strong>① 单一 Owner 权限（Single Owner Privilege）</strong></p>
+<p>带有 <code>onlyOwner</code> 修饰符的 <code>mint()</code> 函数，从代码角度看完全正常。问题在于 Owner 为单一 EOA（或由单一密钥控制的账户）。在此结构中，攻击者获得的不是&quot;函数调用权限&quot;，而是<strong>货币发行权本身</strong>。</p>
 <pre><code>风险函数 = f(权限强度, 权限持有者数量, 时间延迟, 金额上限)
 
 WEMIX$ mint()  = f(无限增发, 实质上为 1, 0 秒, 无)
 安全设计        = f(限制增发, m-of-n 多签, 24~48 小时时间锁, 每日上限)
 </code></pre>
-<p><strong>② 权限层级分离缺失</strong>增发（mint）、销毁（burn）、暂停（pause）、Owner 转移（transferOwnership）、升级（upgradeTo）是风险等级完全不同的函数。若捆绑于同一 Owner 权限，入侵时损害将成倍放大。尤其当 <code>transferOwnership</code> 可在无时间锁的情况下立即执行时，攻击者可在入侵后立即<strong>排除正当运营者</strong>。</p>
+<p><strong>② 权限层级分离缺失</strong></p>
+<p>增发（mint）、销毁（burn）、暂停（pause）、Owner 转移（transferOwnership）、升级（upgradeTo）是风险等级完全不同的函数。若捆绑于同一 Owner 权限，入侵时损害将成倍放大。尤其当 <code>transferOwnership</code> 可在无时间锁的情况下立即执行时，攻击者可在入侵后立即<strong>排除正当运营者</strong>。</p>
 <p><strong>③ 检测·阻断（Circuit Breaker）缺失</strong></p>
 <p>522 万枚未经授权增发未在实时被阻断，且由外部分析师率先发现。以下三者具备其一，损害即可大幅缩减：</p>
 <ul>
@@ -479,7 +481,8 @@ WEMIX$ mint()  = f(无限增发, 实质上为 1, 0 秒, 无)
 <li>投资者·用户：误读为&quot;审计通过 = 本金安全&quot;</li>
 <li>实际风险：综合分数亦受社区投票·市场指标等<strong>与安全无关的变量</strong>影响</li>
 </ul>
-<p>高综合分数作为&quot;该项目在安全上投入大量资金&quot;的信号有效。但作为&quot;该项目发行密钥受多签保护&quot;的信号无效。<strong>投资者所需信息是后者，而市场流通的信息是前者。</strong>值得注意的是，WEMIX 团队自身在 2023 年技术博客中已明确阐述审计无法阻止所有事故这一局限。事故并非因缺乏认识而发生。<strong>认识与执行之间的鸿沟</strong>制造了事故。</p>
+<p>高综合分数作为&quot;该项目在安全上投入大量资金&quot;的信号有效。但作为&quot;该项目发行密钥受多签保护&quot;的信号无效。<strong>投资者所需信息是后者，而市场流通的信息是前者。</strong></p>
+<p>值得注意的是，WEMIX 团队自身在 2023 年技术博客中已明确阐述审计无法阻止所有事故这一局限。事故并非因缺乏认识而发生。<strong>认识与执行之间的鸿沟</strong>制造了事故。</p>
 <hr>
 <h2>5. 应对框架</h2>
 <h3>5.1 分层应对矩阵</h3>

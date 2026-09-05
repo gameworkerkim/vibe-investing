@@ -74,7 +74,8 @@
 <h2>1. Cloudflare 네이티브 솔루션</h2>
 <h3>1.1 Web Analytics (추천 1순위 · 시작용)</h3>
 <p>Cloudflare Web Analytics는 <strong>무료·프라이버시 우선</strong>이라는 가장 강력한 무기를 가진 도구입니다. 쿠키나 브라우저 지문을 사용하지 않으며, Cloudflare Pages와 동일한 계정에서 바로 활성화할 수 있습니다. 사이트별 Top Pages, Referrer, 국가별 트래픽을 기본으로 제공하며, 사이트에 배너를 추가할 부담도 거의 없습니다. docs/tech/cti 호스트마다 사이트만 추가하면 바로 지표를 확인할 수 있어 <strong>&quot;글별 PV + 유입 경로&quot;를 주간 단위로 점검</strong>하거나 SNS 트래픽을 끄는 실험을 할 때 최적입니다.</p>
-<p>2025년 10월 15일부터 Cloudflare는 모든 무료 도메인에 Web Analytics를 기본적으로 활성화하기 시작했으며, 2026년에는 RUM(Real User Monitoring) 도구와 네트워크 수준 인사이트를 결합한 대규모 업그레이드가 진행 중입니다. 또한 2026년 4월 업데이트를 통해 <strong>Navigation Type 필터링 및 보고</strong>기능이 추가되어, 사용자가 링크 클릭으로 이동했는지, 뒤로가기/앞으로가기로 이동했는지, 캐시 적중 여부까지 확인할 수 있게 되었습니다. 대규모 계정(사이트 100개 이상)을 위한 대시보드 안정성도 개선되어, 최대 1,000개 사이트까지 계정 전체 집계 조회가 가능해졌습니다.<strong>단점</strong>은 분명합니다. 스크롤 깊이·체류 시간·커스텀 이벤트·퍼널 분석이 매우 약하고, UI가 얕으며, 장기 원시 데이터 내보내기와 SQL 질의 기능이 빈약합니다. 서브도메인마다 설정을 별도로 해줘야 하는 번거로움도 있습니다.</p>
+<p>2025년 10월 15일부터 Cloudflare는 모든 무료 도메인에 Web Analytics를 기본적으로 활성화하기 시작했으며, 2026년에는 RUM(Real User Monitoring) 도구와 네트워크 수준 인사이트를 결합한 대규모 업그레이드가 진행 중입니다. 또한 2026년 4월 업데이트를 통해 <strong>Navigation Type 필터링 및 보고</strong> 기능이 추가되어, 사용자가 링크 클릭으로 이동했는지, 뒤로가기/앞으로가기로 이동했는지, 캐시 적중 여부까지 확인할 수 있게 되었습니다. 대규모 계정(사이트 100개 이상)을 위한 대시보드 안정성도 개선되어, 최대 1,000개 사이트까지 계정 전체 집계 조회가 가능해졌습니다.</p>
+<p><strong>단점</strong>은 분명합니다. 스크롤 깊이·체류 시간·커스텀 이벤트·퍼널 분석이 매우 약하고, UI가 얕으며, 장기 원시 데이터 내보내기와 SQL 질의 기능이 빈약합니다. 서브도메인마다 설정을 별도로 해줘야 하는 번거로움도 있습니다.</p>
 <blockquote>
 <p><strong>적합:</strong> &quot;글별 PV + 유입 경로&quot; 주간 점검, SNS 효과 측정, 라이트한 시작용.</p>
 </blockquote>
@@ -86,7 +87,8 @@
 </blockquote>
 <h3>1.3 Workers Analytics Engine / Logpush + R2</h3>
 <p>이 조합은 <strong>데이터 소유권을 100% 확보</strong>하고 싶은 개발자를 위한 솔루션입니다. Workers의 <code>_middleware</code>나 Pages Function에서 path별 카운트, 스크롤 비콘 등을 직접 쌓을 수 있으며, Workers Analytics Engine은 <strong>무제한 카디널리티(unlimited-cardinality) 시계열 분석</strong>을 SQL API로 질의할 수 있게 해줍니다.</p>
-<p>Logpush는 Cloudflare의 로그를 R2, S3, Splunk, Datadog 등 외부 저장소나 분석 도구로 자동 전송하는 기능입니다. 2026년에는 <strong>Pipelines</strong>기능이 추가되어, Logpush 데이터를 SQL로 변환한 뒤 R2에 Parquet이나 Apache Iceberg 테이블 형태로 저장할 수 있게 되었습니다. 이를 통해 원시 로그를 장기 보관하면서도 빠르게 질의할 수 있는 인프라를 구성할 수 있습니다.<strong>단점</strong>은 대시보드·데이터 리텐션·쿼리를 <strong>직접 만들어야 한다</strong>는 점입니다. 운영 비용과 개발 시간이 상당히 큽니다.</p>
+<p>Logpush는 Cloudflare의 로그를 R2, S3, Splunk, Datadog 등 외부 저장소나 분석 도구로 자동 전송하는 기능입니다. 2026년에는 <strong>Pipelines</strong> 기능이 추가되어, Logpush 데이터를 SQL로 변환한 뒤 R2에 Parquet이나 Apache Iceberg 테이블 형태로 저장할 수 있게 되었습니다. 이를 통해 원시 로그를 장기 보관하면서도 빠르게 질의할 수 있는 인프라를 구성할 수 있습니다.</p>
+<p><strong>단점</strong>은 대시보드·데이터 리텐션·쿼리를 <strong>직접 만들어야 한다</strong>는 점입니다. 운영 비용과 개발 시간이 상당히 큽니다.</p>
 <blockquote>
 <p><strong>적합:</strong> Umami도 싫고 &quot;완전 내 인프라&quot;만 원할 때. 데이터 엔지니어링 역량이 갖춰진 팀에게 추천.</p>
 </blockquote>
@@ -94,7 +96,8 @@
 <h2>2. 서드파티 · 오픈소스</h2>
 <h3>2.1 Umami (OSS, 자주 추천)</h3>
 <p>Umami는 MIT 라이선스의 오픈소스 분석 도구로, <strong>셀프호스트(또는 클라우드)</strong> 가 가능합니다. 페이지뷰·Referrer·커스텀 이벤트·다중 사이트를 지원하며, 스크립트 크기가 2KB 미만으로 가볍습니다. Cloudflare Workers 및 Pages와 D1/PostgreSQL 등을 조합한 사례가 많아 Cloudflare 생태계와 궁합이 좋습니다.</p>
-<p>Cloudflare Web Analytics 다음 단계로, <strong>글별 + 이벤트</strong>까지 추적하고 싶을 때 자연스러운 선택지입니다. 실제로 Cloudflare Web Analytics에서 Umami로 전환한 블로거들의 후기도 긍정적입니다.<strong>단점</strong>은 호스팅·백업·업데이트를 직접 관리해야 하며, 스크롤 깊이는 직접 이벤트를 정의해야 합니다. Umami는 PostgreSQL 또는 MySQL만 공식 지원하며, Cloudflare D1이나 SQLite는 공식 지원하지 않는다는 점도 유의해야 합니다.</p>
+<p>Cloudflare Web Analytics 다음 단계로, <strong>글별 + 이벤트</strong> 까지 추적하고 싶을 때 자연스러운 선택지입니다. 실제로 Cloudflare Web Analytics에서 Umami로 전환한 블로거들의 후기도 긍정적입니다.</p>
+<p><strong>단점</strong>은 호스팅·백업·업데이트를 직접 관리해야 하며, 스크롤 깊이는 직접 이벤트를 정의해야 합니다. Umami는 PostgreSQL 또는 MySQL만 공식 지원하며, Cloudflare D1이나 SQLite는 공식 지원하지 않는다는 점도 유의해야 합니다.</p>
 <blockquote>
 <p><strong>적합:</strong> CF Web Analytics 다음 단계, &quot;글별 + 이벤트&quot;까지 원할 때.</p>
 </blockquote>
@@ -105,7 +108,8 @@
 <p><strong>적합:</strong> 돈을 내고 UI와 조회 속도만 챙기고 싶을 때.</p>
 </blockquote>
 <h3>2.3 GoatCounter (OSS)</h3>
-<p>GoatCounter는 <strong>매우 가벼운</strong>오픈소스 도구로, 무료 티어와 셀프호스트를 모두 지원합니다. 페이지뷰와 Referrer 중심의 단순한 지표를 제공합니다. Cloudflare R2와 조합하여 리디렉션 추적용으로 활용하는 사례도 있습니다.<strong>단점</strong>은 이벤트 추적과 세분화 기능이 약해 &quot;읽음 깊이&quot; 분석에는 부족합니다.</p>
+<p>GoatCounter는 <strong>매우 가벼운</strong> 오픈소스 도구로, 무료 티어와 셀프호스트를 모두 지원합니다. 페이지뷰와 Referrer 중심의 단순한 지표를 제공합니다. Cloudflare R2와 조합하여 리디렉션 추적용으로 활용하는 사례도 있습니다.</p>
+<p><strong>단점</strong>은 이벤트 추적과 세분화 기능이 약해 &quot;읽음 깊이&quot; 분석에는 부족합니다.</p>
 <blockquote>
 <p><strong>적합:</strong> PV만 초경량으로 확인하고 싶을 때.</p>
 </blockquote>

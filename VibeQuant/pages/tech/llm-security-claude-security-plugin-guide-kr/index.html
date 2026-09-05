@@ -115,8 +115,8 @@
 </thead>
 <tbody><tr>
 <td align="left">한 줄 정의</td>
-<td align="left">Claude가 <strong>코드를 쓰는 동안</strong>자기 변경분을 검토</td>
-<td align="left">저장소 전체를<strong>온디맨드 딥스캔</strong>하는 멀티에이전트 감사</td>
+<td align="left">Claude가 <strong>코드를 쓰는 동안</strong> 자기 변경분을 검토</td>
+<td align="left">저장소 전체를 <strong>온디맨드 딥스캔</strong>하는 멀티에이전트 감사</td>
 </tr>
 <tr>
 <td align="left">트리거</td>
@@ -253,7 +253,7 @@
 <tr>
 <td align="left"><strong>Scan changes</strong></td>
 <td align="left">브랜치 diff, PR diff, 단일 커밋</td>
-<td align="left">Git 필수.<strong>커밋된 변경만</strong> 대상. 리서치 에이전트는 diff만 보지 않고 문맥을 위해 저장소 전체를 읽는다</td>
+<td align="left">Git 필수. <strong>커밋된 변경만</strong> 대상. 리서치 에이전트는 diff만 보지 않고 문맥을 위해 저장소 전체를 읽는다</td>
 </tr>
 <tr>
 <td align="left"><strong>Suggest patches</strong></td>
@@ -279,7 +279,7 @@
 <tbody><tr>
 <td align="left">1</td>
 <td align="left"><strong>Inventory</strong></td>
-<td align="left">저장소를 컴포넌트로 분할. 모든 최상위 디렉터리는 스캔되거나<strong>이유를 명시해 제외</strong>되어야 함</td>
+<td align="left">저장소를 컴포넌트로 분할. 모든 최상위 디렉터리는 스캔되거나 <strong>이유를 명시해 제외</strong>되어야 함</td>
 </tr>
 <tr>
 <td align="left">2</td>
@@ -491,9 +491,12 @@
 <td align="left"><code>patches/F&lt;n&gt;.patch</code> + 변경 설명 노트 배치</td>
 </tr>
 </tbody></table>
-<p><strong>3개 주장</strong>1. 해당 변경이 그<strong>단일</strong> 발견을 해결한다
-2. 새로운 취약점을 도입하지 않는다
-3. 그 외 동작은 불변이다 — <em>코드가 수용하는 입력 집합의 변화는 동작 변경으로 계산</em></p>
+<p><strong>3개 주장</strong></p>
+<ol>
+<li>해당 변경이 그 <strong>단일</strong> 발견을 해결한다</li>
+<li>새로운 취약점을 도입하지 않는다</li>
+<li>그 외 동작은 불변이다 — <em>코드가 수용하는 입력 집합의 변화는 동작 변경으로 계산</em></li>
+</ol>
 <p>보안을 약화시키면서 수정을 주장하는 변경(인증 검사 완화, 테스트 비활성화 등)은 <strong>자동 거부</strong>된다. 세 주장을 보증할 수 없으면 패치 대신 사유 노트가 나온다. 대상 코드에 테스트가 없으면 노트에 &quot;테스트 실행 없이 코드 리뷰로만 검증됨&quot;이 명시된다.</p>
 <p>적용은 항상 사용자의 결정이다.</p>
 <pre><code class="language-bash">git apply CLAUDE-SECURITY-&lt;timestamp&gt;/patches/F1.patch
@@ -582,7 +585,7 @@
 <tr>
 <td align="left">3</td>
 <td align="left"><strong>격리(isolation) 없음</strong></td>
-<td align="left">스캔은 사용자 권한으로 실행되며 커밋된 <code>.claude/</code> 설정, hooks, <code>CLAUDE.md</code>가 그대로 적용된다. 저장소 내용을 데이터로 취급하지만<strong>적대적 저장소에 대한 방어책이 아니다</strong></td>
+<td align="left">스캔은 사용자 권한으로 실행되며 커밋된 <code>.claude/</code> 설정, hooks, <code>CLAUDE.md</code>가 그대로 적용된다. 저장소 내용을 데이터로 취급하지만 <strong>적대적 저장소에 대한 방어책이 아니다</strong></td>
 <td align="left">신뢰하지 않는 코드는 <code>sandbox-runtime</code> 또는 VM/컨테이너에서 스캔</td>
 </tr>
 <tr>
@@ -674,7 +677,8 @@
 <ul>
 <li>End-of-turn은 턴당 최대 30개 변경 파일, 연속 3회 후 사용자에게 양보</li>
 <li>Commit 리뷰는 롤링 1시간당 20회 상한</li>
-<li><strong>사용자가 자기 셸에서(또는 <code>!</code> 이스케이프로) 한 커밋은 검토되지 않는다</strong>- 어떤 계층도 쓰기·커밋을<strong>차단하지 않는다</strong> (non-blocking, best-effort)</li>
+<li><strong>사용자가 자기 셸에서(또는 <code>!</code> 이스케이프로) 한 커밋은 검토되지 않는다</strong></li>
+<li>어떤 계층도 쓰기·커밋을 <strong>차단하지 않는다</strong> (non-blocking, best-effort)</li>
 <li>리뷰어는 코드를 쓴 인스턴스가 자기 채점을 하는 구조가 아니다. 별도 호출·신규 컨텍스트·보안 전용 프롬프트로 &quot;문제만 찾도록&quot; 지시된다</li>
 </ul>
 <h3>5.2 확장 지점</h3>
@@ -830,7 +834,7 @@
 <td align="left">리포트 무결성의 코드 기반 증명. 사설망·비GitHub 대응</td>
 </tr>
 <tr>
-<td align="left"><strong>Codex Security</strong>(구 Aardvark)</td>
+<td align="left"><strong>Codex Security</strong> (구 Aardvark)</td>
 <td align="left">OpenAI</td>
 <td align="left">Research preview (2026-03 전환)</td>
 <td align="left">클라우드 (Codex 웹)</td>
@@ -863,7 +867,7 @@
 <td align="left">SaaS</td>
 <td align="left">상위 스캐너 결과를 AI로 트리아지</td>
 <td align="left">고신뢰 패치 생성</td>
-<td align="left">독립 스캐너가 아님. Semgrep·CodeQL·Snyk·Checkmarx 결과의<strong>수정 레이어</strong>. 탐지 품질은 상위 도구에 종속</td>
+<td align="left">독립 스캐너가 아님. Semgrep·CodeQL·Snyk·Checkmarx 결과의 <strong>수정 레이어</strong>. 탐지 품질은 상위 도구에 종속</td>
 </tr>
 <tr>
 <td align="left"><strong>CodeAnt AI / Arnica</strong></td>
@@ -964,7 +968,7 @@
 </tr>
 <tr>
 <td align="left">Tier 3</td>
-<td align="left"><strong>AI 네이티브 SAST</strong>— LLM이 1차 탐지 엔진</td>
+<td align="left"><strong>AI 네이티브 SAST</strong> — LLM이 1차 탐지 엔진</td>
 <td align="left"><strong>Claude Security</strong>, Codex Security, ZeroPath, CodeAnt AI</td>
 </tr>
 </tbody></table>

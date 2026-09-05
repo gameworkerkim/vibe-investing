@@ -69,14 +69,14 @@
   <span class="share-status" data-share-status hidden></span>
 </nav>
       </header>
-      <div class="article-body prose"><p><strong>Colibri</strong>is a project that runs<strong>GLM-5.2</strong>, a <strong>744B-parameter MoE (Mixture of Experts) model</strong>, using an ultra-lightweight engine written in pure C. It&#39;s designed to run even on ordinary consumer machines with as little as <strong>25GB of RAM</strong>. The catch is that &quot;ordinary&quot; here still means a fairly high-end developer machine, and disk streaming can feel noticeably sluggish. Still, the fact that you can run a model of this size locally at all is the whole point.</p>
+      <div class="article-body prose"><p><strong>Colibri</strong> is a project that runs <strong>GLM-5.2</strong>, a <strong>744B-parameter MoE (Mixture of Experts) model</strong>, using an ultra-lightweight engine written in pure C. It&#39;s designed to run even on ordinary consumer machines with as little as <strong>25GB of RAM</strong>. The catch is that &quot;ordinary&quot; here still means a fairly high-end developer machine, and disk streaming can feel noticeably sluggish. Still, the fact that you can run a model of this size locally at all is the whole point.</p>
 <p>The more you use it continuously rather than just once, the faster it gets, since relevant topics get progressively loaded into memory.</p>
 <hr>
 <h2>Project Description</h2>
 <p>Colibri exploits the fact that a 744B-scale MoE model activates <strong>only about 40B parameters per token</strong>, and that the activated experts differ per token (about 11GB):</p>
 <ul>
-<li><strong>Dense part</strong>— attention, shared experts, embeddings, etc., roughly 17B parameters →<strong>resident in RAM as int4</strong> (about 9.9GB)</li>
-<li><strong>Routed experts</strong>— 75 MoE layers x 256 =<strong>19,456 experts</strong>, each about 19MB at int4 → <strong>stored on disk</strong> (about 370GB)</li>
+<li><strong>Dense part</strong> — attention, shared experts, embeddings, etc., roughly 17B parameters → <strong>resident in RAM as int4</strong> (about 9.9GB)</li>
+<li><strong>Routed experts</strong> — 75 MoE layers x 256 = <strong>19,456 experts</strong>, each about 19MB at int4 → <strong>stored on disk</strong> (about 370GB)</li>
 </ul>
 <p>The core idea is that <strong>the model doesn&#39;t need to &quot;fit&quot; in fast memory</strong>. Experts are streamed from disk as needed, treating VRAM, RAM, and storage as a single managed memory hierarchy.</p>
 <hr>
@@ -86,8 +86,8 @@
 <ol>
 <li><strong>Route</strong> — the router decides which experts to activate for the input token</li>
 <li><strong>Union</strong> — when multiple tokens in a batch pick the same expert, it&#39;s deduplicated (batch-union)</li>
-<li><strong>Place</strong>— decides where to fetch the expert from (VRAM &gt; RAM &gt; disk). Batching policy only affects<strong>speed</strong>; it never changes router decisions or weight precision</li>
-<li><strong>Overlap</strong>— an async I/O pool (<code>PIPE=1</code>) loads missing experts from disk while computation proceeds using resident experts. A router lookahead thread (<code>PILOT=1</code>) prefetches the next layer&#39;s experts (routing is<strong>71.6% predictable</strong>)</li>
+<li><strong>Place</strong> — decides where to fetch the expert from (VRAM &gt; RAM &gt; disk). Batching policy only affects <strong>speed</strong>; it never changes router decisions or weight precision</li>
+<li><strong>Overlap</strong> — an async I/O pool (<code>PIPE=1</code>) loads missing experts from disk while computation proceeds using resident experts. A router lookahead thread (<code>PILOT=1</code>) prefetches the next layer&#39;s experts (routing is <strong>71.6% predictable</strong>)</li>
 <li><strong>Learn</strong> — routing history is saved to a <code>.coli_usage</code> file, and frequently used experts get automatically pinned</li>
 </ol>
 <h3>Memory Hierarchy</h3>
@@ -98,7 +98,7 @@
 <li><strong>Large hosts</strong>: the full expert set stays resident (<code>CUDA_EXPERT_GB=auto PIN_GB=all</code>) → eliminates the disk bottleneck entirely</li>
 <li><strong>Multi-socket hosts</strong>: memory controller interleaving via <code>COLI_NUMA=1</code></li>
 </ul>
-<p>A <strong>learned cache</strong>operates across the tiers. It records which experts your workload uses and automatically pins the most frequent ones —<strong>it gets faster the more you use it</strong>.</p>
+<p>A <strong>learned cache</strong> operates across the tiers. It records which experts your workload uses and automatically pins the most frequent ones — <strong>it gets faster the more you use it</strong>.</p>
 <h3>Compressed KV State</h3>
 <p>MLA (Multi-head Latent Attention) compresses KV state to 576 floats per token (32,768 → 576, a <strong>57x compression</strong>). It&#39;s saved to a <code>.coli_kv</code> file, so KV state survives restarts and is byte-identical to an uninterrupted session.</p>
 <h3>Speculative Decoding (Inference Acceleration)</h3>
@@ -125,7 +125,7 @@
 </tr>
 <tr>
 <td><strong>Preserves accuracy</strong></td>
-<td>The default policy<strong>never changes model precision or router semantics</strong></td>
+<td>The default policy <strong>never changes model precision or router semantics</strong></td>
 </tr>
 <tr>
 <td><strong>Learned cache</strong></td>

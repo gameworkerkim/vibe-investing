@@ -90,7 +90,7 @@
 <ul>
 <li><strong>CVE-2026-8644 (CVSS 9.1)</strong> — なりすまし（Identity Spoofing）／認証バイパス。攻撃者が正規ユーザーになりすまし、認証メカニズムそのものを無力化する。（CWE-290）</li>
 <li><strong>CVE-2026-9311 (CVSS 9.0)</strong> — セキュリティ制御のバイパスによるリモートコード実行（RCE）。悪意ある入力が検証／サニタイズ経路を回避し、コード実行シンクに到達する。（CWE-94）</li>
-<li><strong>CVE-2026-9319 (CVSS 9.0)</strong>— WS-Security を適用した JAX-WS エンドポイントにおける、<strong>信頼できないデータのデシリアライゼーション</strong>による RCE。（CWE-502）</li>
+<li><strong>CVE-2026-9319 (CVSS 9.0)</strong> — WS-Security を適用した JAX-WS エンドポイントにおける、<strong>信頼できないデータのデシリアライゼーション</strong>による RCE。（CWE-502）</li>
 </ul>
 <p>この群が危険な理由は3つある。<strong>第一に、連鎖性。</strong>8644（なりすまし）は「侵入」を、9311・9319（RCE）は「実行」を提供する——単一の製品が侵入チェーンの異なる段階を同時に露出させている。<strong>第二に、危険クラス。</strong>Java アプリケーションサーバーのデシリアライゼーション欠陥は、歴史的に最も危険で最も広く悪用されてきた脆弱性クラスに属する（2017年の Equifax 侵害は Apache Struts のデシリアライゼーション欠陥だった）。<strong>第三に、パッチの罠。</strong>正式 Fix Pack（9.0.5.29 / 8.5.5.30）は<strong>3Q2026 目標で、まだ未リリース</strong>であり、現時点で即時に取り得る唯一の経路は <strong>暫定修正（Interim Fix、APAR PH71422・PH71454 など）</strong> である。「Fix Pack を待つ」という選択は、露出期間の延長と同義だ。</p>
 <p>現時点で実環境での悪用（in-the-wild）は確認されていない。しかしデシリアライゼーション RCE は PoC 公開後に急速に武器化されるクラスであり、公開直後の今こそが <em>PoC が成熟する前にパッチを当てられる窓</em> である。</p>
@@ -182,8 +182,8 @@
 <h2>3. 連鎖リスク — なりすまし（8644）が RCE（9311・9319）と交わる地点</h2>
 <p>個別に見れば3件はそれぞれ重大な単独欠陥だが、合わせて見れば<strong>完結した侵入チェーン</strong>となる。</p>
 <ol>
-<li><strong>侵入の確保</strong>— <code>CVE-2026-8644</code> で正規ユーザー（または管理者）になりすまし、認証を回避する。（ATT&amp;CK<strong>T1078</strong>Valid Accounts、<strong>T1556</strong> Modify Authentication Process）</li>
-<li><strong>コード実行</strong>— <code>CVE-2026-9311</code>（制御バイパス）または <code>CVE-2026-9319</code>（デシリアライゼーション）でミドルウェア上に任意コードを実行する。（<strong>T1190</strong>Exploit Public-Facing Application、<strong>T1059</strong> Command and Scripting Interpreter）</li>
+<li><strong>侵入の確保</strong>— <code>CVE-2026-8644</code> で正規ユーザー（または管理者）になりすまし、認証を回避する。（ATT&amp;CK<strong>T1078</strong> Valid Accounts、<strong>T1556</strong> Modify Authentication Process）</li>
+<li><strong>コード実行</strong>— <code>CVE-2026-9311</code>（制御バイパス）または <code>CVE-2026-9319</code>（デシリアライゼーション）でミドルウェア上に任意コードを実行する。（<strong>T1190</strong> Exploit Public-Facing Application、<strong>T1059</strong> Command and Scripting Interpreter）</li>
 <li><strong>掌握・永続化・横展開</strong> — WebSphere インスタンスの制御権を確保し、その下層の業務ロジック・セッション・バックエンド DB 接続へと拡大する。</li>
 </ol>
 <p>要点は、これらが<strong>同一製品・バージョン帯を共有する</strong>ことだ。一箇所が脆弱なら、3件すべてが脆弱である公算が高い。したがって正解は「最も深刻な一つを先に」ではなく、<strong>3件を一つの群として</strong>塞ぐことだ。部分的なパッチはチェーンの一環を断つだけで、他の環を残す。</p>

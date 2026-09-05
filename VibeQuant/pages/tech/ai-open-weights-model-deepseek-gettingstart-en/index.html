@@ -69,9 +69,9 @@
 </nav>
       </header>
       <div class="article-body prose"><blockquote>
-<p><strong>Document version</strong>v2.0 (2026-07-27) ·<strong>Verification basis</strong> DeepSeek official HF model cards / DeepSeek API Docs / technical report (arXiv 2606.19348)
-<strong>Scope change</strong>v1 covered Flash only; V4 is a<strong>Pro/Flash two-model family release</strong>, so both are covered together. The architecture is identical — separate write-ups would cause confusion.
-<strong>Status</strong>Official model cards label themselves as<strong>preview version</strong>. GA checkpoints are separate.</p>
+<p><strong>Document version</strong> v2.0 (2026-07-27) · <strong>Verification basis</strong> DeepSeek official HF model cards / DeepSeek API Docs / technical report (arXiv 2606.19348)
+<strong>Scope change</strong> v1 covered Flash only; V4 is a <strong>Pro/Flash two-model family release</strong>, so both are covered together. The architecture is identical — separate write-ups would cause confusion.
+<strong>Status</strong> Official model cards label themselves as <strong>preview version</strong>. GA checkpoints are separate.</p>
 </blockquote>
 <hr>
 <h2>0. Major Corrections vs v1</h2>
@@ -106,7 +106,7 @@
 <td>4</td>
 <td>Flash hardware</td>
 <td>&quot;FP8 H100 ×2 / INT4 H100 ×1&quot;</td>
-<td><strong>Wrong.</strong>Instruct is FP4+FP8 mixed ~158GB. With 1M context ~170–175GB →<strong>2×H200 or 4×A100</strong>. 2×H100 (160GB) is insufficient</td>
+<td><strong>Wrong.</strong> Instruct is FP4+FP8 mixed ~158GB. With 1M context ~170–175GB → <strong>2×H200 or 4×A100</strong>. 2×H100 (160GB) is insufficient</td>
 </tr>
 <tr>
 <td>5</td>
@@ -209,7 +209,7 @@
 </thead>
 <tbody><tr>
 <td><strong>Hybrid Attention</strong></td>
-<td>CSA + HCA combined. At 1M context, V4-Pro achieves<strong>27% single-token inference FLOPs and 10% KV cache vs V3.2</strong></td>
+<td>CSA + HCA combined. At 1M context, V4-Pro achieves <strong>27% single-token inference FLOPs and 10% KV cache vs V3.2</strong></td>
 </tr>
 <tr>
 <td><strong>mHC</strong></td>
@@ -302,6 +302,7 @@
 <td>Special system prompt + <code>&lt;think&gt;</code> reasoning <code>&lt;/think&gt;</code> summary</td>
 </tr>
 </tbody></table>
+<p><strong>Mode choice dominates performance.</strong> Below are results on the same model with only the mode changed.</p>
 <table>
 <thead>
 <tr>
@@ -485,7 +486,8 @@
 <p>Flash-Max approaches Pro-level reasoning with large thinking budget, but <strong>lags Pro on pure knowledge work and the most complex agent workflows</strong> — acknowledged on the model card.</p>
 <p>SimpleQA-Verified: Flash-Max 34.1 vs Pro-Max 57.9 — a 23.8-point gap. <strong>Flash is risky when factual accuracy matters.</strong></p>
 <h3>3.6 Geopolitical / Regulatory Risk (Hosted API Only)</h3>
-<p>DeepSeek <strong>hosted services/apps/API</strong>are banned or restricted on government devices in many countries. Korea&#39;s PIPC suspended the app in 2025 over cross-border data transfer and issued corrective orders; many ministries, public agencies, and financial firms blocked access. The US federal government and many states banned government-device use; legislation introduced. Japan, Australia, Taiwan, Italy, and others took similar measures.<strong>Key distinction</strong>: These rules target <strong>hosted services with data sent to China</strong>, not <strong>running MIT-licensed weights on your own infrastructure.</strong> This distinction underpins §9–11 business scenarios.</p>
+<p>DeepSeek <strong>hosted services/apps/API</strong> are banned or restricted on government devices in many countries. Korea&#39;s PIPC suspended the app in 2025 over cross-border data transfer and issued corrective orders; many ministries, public agencies, and financial firms blocked access. The US federal government and many states banned government-device use; legislation introduced. Japan, Australia, Taiwan, Italy, and others took similar measures.</p>
+<p><strong>Key distinction</strong>: These rules target <strong>hosted services with data sent to China</strong>, not <strong>running MIT-licensed weights on your own infrastructure.</strong> This distinction underpins §9–11 business scenarios.</p>
 <p>Some organizations may exclude &quot;China-origin models&quot; in procurement regardless — verify in advance.</p>
 <h3>3.7 Preview Status</h3>
 <p>Model cards label themselves preview. Quality may change at GA — use preview baselines as <strong>evaluation reference lines, not final deliverable quality guarantees.</strong></p>
@@ -730,10 +732,12 @@
 <td>51.8</td>
 </tr>
 </tbody></table>
+<p><strong>Interpretation</strong></p>
 <ul>
+<li><strong>Coding is #1.</strong> LiveCodeBench 93.5, Codeforces 3206 beat closed frontiers — V4-Pro&#39;s strongest evidence.</li>
 <li><strong>MCPAtlas 73.6 is effectively tied with Opus-4.6 (73.8).</strong> Rare case of open weight matching closed on MCP agents.</li>
 <li><strong>SimpleQA-Verified 57.9 trails Gemini (75.6) badly.</strong> Unsuitable for factual lookup without RAG.</li>
-<li><strong>Long-context measured scores underwhelm.</strong>MRCR 1M 83.5, CorpusQA 1M 62.0 vs Opus-4.6 (92.9 / 71.7).<strong>Can fit 1M&quot; ≠ &quot;reads accurately.</strong></li>
+<li><strong>Long-context measured scores underwhelm.</strong> MRCR 1M 83.5, CorpusQA 1M 62.0 vs Opus-4.6 (92.9 / 71.7). <strong>Can fit 1M&quot; ≠ &quot;reads accurately.</strong></li>
 <li>Apex 38.3 trails Gemini (60.9) and GPT-5.4 (54.1) substantially.</li>
 </ul>
 <h3>4.2 Mode Comparison (Flash vs Pro)</h3>
@@ -903,8 +907,11 @@
 <td><strong>51.8</strong></td>
 </tr>
 </tbody></table>
+<p><strong>The most important table for practitioners.</strong></p>
 <ul>
-<li><strong>MCPAtlas: Pro High (74.2) &gt; Pro Max (73.6).</strong>Excessive reasoning hurts tool calling.<strong>Fix agent orchestration to High.</strong>-<strong>Do not use Non-think for coding, math, or agents.</strong> LiveCodeBench 55.2, Apex 1.0, HLE 8.1 — effectively useless. Non-think is for classification, summarization, routing only.</li>
+<li><strong>Flash High is the cost-performance sweet spot.</strong> MMLU-Pro 86.4 beats Flash Max (86.2); LiveCodeBench 88.4 is only 3.2 below Max (91.6) at much lower token cost.</li>
+<li><strong>MCPAtlas: Pro High (74.2) &gt; Pro Max (73.6).</strong> Excessive reasoning hurts tool calling. <strong>Fix agent orchestration to High.</strong></li>
+<li><strong>Do not use Non-think for coding, math, or agents.</strong> LiveCodeBench 55.2, Apex 1.0, HLE 8.1 — effectively useless. Non-think is for classification, summarization, routing only.</li>
 <li><strong>SWE Verified: Flash High 78.6 vs Pro Max 80.6 — 2-point gap.</strong> Flash is enough for code-fix tasks.</li>
 </ul>
 <h3>4.3 Base Models (Pre-training Quality)</h3>
@@ -996,6 +1003,7 @@
 <td><strong>51.5</strong></td>
 </tr>
 </tbody></table>
+<p><strong>MultiLoKo 51.1 (Pro) is +12.4 vs V3.2</strong> — among the largest gains. Signals real multilingual improvement across generations.</p>
 <p>Caveat: <strong>V4-Flash-Base trails V3.2-Base on BigCodeBench and MATH</strong> — cost of active params 37B → 13B. Uncritical Flash-as-V3.2-replacement can regress.</p>
 <hr>
 <h2>5. Korean and Japanese Performance — No Official Data, Third-Party Data Exists</h2>
@@ -1082,8 +1090,11 @@
 </tr>
 </tbody></table>
 <p>Also, <strong>DeepSeek-V4-Pro (1.6T) scored 86.91 on Ko-GDPval</strong>, narrowly ahead of Solar Open 2 (86.75).</p>
-<p><strong>The conclusion flips.</strong>v1&#39;s &quot;insufficient Korean performance info → fine-tuning required for Korea&quot; is wrong.<strong>DeepSeek-V4-Flash is within 0.5 points of Korea-optimized models on Korean average.</strong>Korean math (Ko-AIME 98.0, HRM8K 93.4) and general knowledge (KMMLU-Pro 78.9) actually lead.<strong>Japanese</strong>still has no public data. Nejumi leaderboard or self-run JMMLU needed.<strong>Korean practical notes</strong>- Tokenizer is not Korean-optimized —<strong>higher token cost than Korean-specialized models.</strong> Measure cost even if quality is comparable</p>
+<p><strong>The conclusion flips.</strong> v1&#39;s &quot;insufficient Korean performance info → fine-tuning required for Korea&quot; is wrong. <strong>DeepSeek-V4-Flash is within 0.5 points of Korea-optimized models on Korean average.</strong> Korean math (Ko-AIME 98.0, HRM8K 93.4) and general knowledge (KMMLU-Pro 78.9) actually lead.</p>
+<p><strong>Japanese</strong> still has no public data. Nejumi leaderboard or self-run JMMLU needed.</p>
+<p><strong>Korean practical notes</strong></p>
 <ul>
+<li>Tokenizer is not Korean-optimized — <strong>higher token cost than Korean-specialized models.</strong> Measure cost even if quality is comparable</li>
 <li>Korean document formats and administrative idioms may be underrepresented. Ko-GDPval 85.0 is still strong; few-shot in-house format injection is essential</li>
 <li>Response bias reported on Chinese political/historical topics — validate if your domain touches them</li>
 </ul>
@@ -1174,6 +1185,7 @@
 <td><strong>16.6</strong></td>
 </tr>
 </tbody></table>
+<p><strong>Honest conclusion</strong>: Performance is comparable; Korean gap is 0.5 points. Solar Open 2 leads on APEX-Agents, Korean token efficiency (50–80% vs global), and Korean business context training. DeepSeek-V4-Flash leads on <strong>MIT license, Base release, agent coding (SWE·Terminal), lower active params</strong>.</p>
 <p>Korean enterprise choice splits on other axes — <strong>domestic procurement → Solar; license freedom and fine-tuning flexibility → DeepSeek; China-exclusion policy → Solar.</strong></p>
 <h3>6.2 Kimi K3 (Moonshot AI, 2.8T)</h3>
 <table>
@@ -1310,8 +1322,10 @@
 <ul>
 <li>System RAM: 256GB+ for Flash; NVMe storage 500GB+</li>
 <li>vLLM tensor parallel optimal at powers of 2 (1/2/4/8). 2×A100 (160GB) insufficient for 1M context — prefer 4×A100</li>
-<li><strong>V4-Pro does not fit on 8×H100 80GB (640GB)</strong>### 7.2 Chat Encoding (Required Prerequisite)<strong>This release has no Jinja chat template.</strong> Use scripts in the <code>encoding</code> folder.</li>
+<li><strong>V4-Pro does not fit on 8×H100 80GB (640GB)</strong></li>
 </ul>
+<h3>7.2 Chat Encoding (Required Prerequisite)</h3>
+<p><strong>This release has no Jinja chat template.</strong> Use scripts in the <code>encoding</code> folder.</p>
 <pre><code class="language-python">from encoding_dsv4 import encode_messages, parse_message_from_completion_text
 import transformers
 
@@ -1517,7 +1531,8 @@ V4-Flash-Base → internal codebase + technical docs → org-specific coding mod
 <h2>9. Korea Market Adoption Scenarios</h2>
 <h3>9.0 Prerequisite: Understand Regulatory Scope Precisely</h3>
 <p>In 2025 Korea&#39;s PIPC suspended DeepSeek&#39;s app over cross-border transfer and issued corrective orders; many ministries (Foreign Affairs, Defense, MOTIE), public agencies (KHNP, KEPCO KPS), and major financial firms blocked access. Kakao, LINE Yahoo, and other private IT firms banned business use.</p>
-<p><strong>These measures target hosted services.</strong>Running MIT weights on in-house GPUs sends no data abroad — the regulatory logic does not apply.<strong>Therefore the only legitimate Korea adoption path is self-hosting.</strong> Treat API use as off the table.</p>
+<p><strong>These measures target hosted services.</strong> Running MIT weights on in-house GPUs sends no data abroad — the regulatory logic does not apply.</p>
+<p><strong>Therefore the only legitimate Korea adoption path is self-hosting.</strong> Treat API use as off the table.</p>
 <p>Also acknowledge reality: some orgs penalize &quot;China-origin model&quot; in procurement regardless of technical validation — especially public, defense, and parts of finance. <strong>Solar Open 2 is the alternative; performance gap is ~0.5 points.</strong></p>
 <h3>9.1 Software Development Organizations — Top Priority</h3>
 <table>
@@ -1701,7 +1716,8 @@ V4-Flash-Base → internal codebase + technical docs → org-specific coding mod
 </tbody></table>
 <p>Only scenario immediately actionable in Japan.</p>
 <h3>10.2 Japanese-Specialized Derivative Model — Mid/Long-Term Strategy</h3>
-<p><strong>Base release + MIT license creates the opportunity.</strong>Same strategy as Upstage&#39;s Karakuri and Syn Pro (31B) on Solar for Nejumi #1 — executable on DeepSeek-V4-Flash-Base<strong>without license constraints.</strong> Solar License requires &quot;Solar&quot; prefix and &quot;Built with Solar&quot;; MIT requires nothing.</p>
+<p><strong>Base release + MIT license creates the opportunity.</strong></p>
+<p>Same strategy as Upstage&#39;s Karakuri and Syn Pro (31B) on Solar for Nejumi #1 — executable on DeepSeek-V4-Flash-Base <strong>without license constraints.</strong> Solar License requires &quot;Solar&quot; prefix and &quot;Built with Solar&quot;; MIT requires nothing.</p>
 <table>
 <thead>
 <tr>
@@ -1819,7 +1835,8 @@ V4-Flash-Base → internal codebase + technical docs → org-specific coding mod
 </tr>
 </tbody></table>
 <p>Federal legislation such as <code>No DeepSeek on Government Devices Act</code> (H.R.1121) progressed.</p>
-<p><strong>Decisive distinction</strong>: Rules target &quot;DeepSeek application or successor applications/services&quot; because <strong>data is sent to China servers.</strong> <strong>Running MIT weights on US infrastructure involves no data transfer.</strong>NVIDIA ships <code>nvidia/DeepSeek-V4-Pro-NVFP4</code> and published on build.nvidia.com; Runpod, Spheron, and other US GPU clouds provide deployment guides.<strong>Running V4 on US infrastructure is already standard practice.</strong></p>
+<p><strong>Decisive distinction</strong>: Rules target &quot;DeepSeek application or successor applications/services&quot; because <strong>data is sent to China servers.</strong> <strong>Running MIT weights on US infrastructure involves no data transfer.</strong></p>
+<p>NVIDIA ships <code>nvidia/DeepSeek-V4-Pro-NVFP4</code> and published on build.nvidia.com; Runpod, Spheron, and other US GPU clouds provide deployment guides. <strong>Running V4 on US infrastructure is already standard practice.</strong></p>
 <h3>11.1 AI Startups — Changes Cost Structure</h3>
 <table>
 <thead>
@@ -1900,7 +1917,7 @@ V4-Flash-Base → internal codebase + technical docs → org-specific coding mod
 </tr>
 <tr>
 <td><strong>Cold calculation</strong></td>
-<td>API break-even at<strong>~3–4 billion tokens/day.</strong> Single 8×H100 node cannot physically handle that</td>
+<td>API break-even at <strong>~3–4 billion tokens/day.</strong> Single 8×H100 node cannot physically handle that</td>
 </tr>
 <tr>
 <td>Conclusion</td>
