@@ -1,3 +1,4 @@
+<!--
 ---
 title: "걸그룹 7년 계약의 저주, 그리고 아이브 - 스타쉽의 넥슨식 과금"
 title_en: "The 7-Year Girl Group Curse — IVE and Starship's Nexon-Style Monetization"
@@ -49,12 +50,13 @@ schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
+-->
 
 # 걸그룹 7년 계약의 저주, 그리고 아이브 - 스타쉽의 넥슨식 과금
 
 ## 예매 1위가 말해주지 않는 것
 
-![아이브(IVE) 스타쉽엔터테인먼트 공식 프로모션 화보 — 장원영·안유진 포함 6인](https://vibequant.cc/og/ive-starship-issue.jpg)
+![아이브(IVE) 스타쉽엔터테인먼트 공식 프로모션 화보 — 장원영·안유진 포함 6인](ive-starship-issue.jpg)
 
 2026년 9월 5일, 서울 성동구 더 서울라이티움에서 아이브(IVE) 장원영·안유진의 미디어아트 전시 '안녕(An-Young)'이 개막했다. 일반 티켓 3만원, 스페셜 티켓 6만 6000원. 티켓은 오픈 직후 멜론티켓 전시·행사 부문 예매 1위에 올랐다. 스타쉽엔터테인먼트 입장에서는 성공이다.
 
