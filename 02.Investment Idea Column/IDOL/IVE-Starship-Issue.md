@@ -1,3 +1,4 @@
+<!--
 ---
 title: "걸그룹 7년 계약의 저주, 그리고 아이브 - 스타쉽의 넥슨식 과금"
 title_en: "The 7-Year Girl Group Curse — IVE and Starship's Nexon-Style Monetization"
@@ -49,6 +50,7 @@ schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
+-->
 
 # 걸그룹 7년 계약의 저주, 그리고 아이브 - 스타쉽의 넥슨식 과금
 
