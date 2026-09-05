@@ -19,6 +19,7 @@
 | CASSANDRA AI | `CASSANDRA AI/` | TS (Next.js 15 + Prisma) | `npm install && npm run dev` | 없음 |
 | toss-dashboard | `toss-dashboard/` | TS (Next.js 15 + Drizzle) | `npm install && npm run dev` | 없음 |
 | VibeQuant | `VibeQuant/` | Python (라이브러리) | `pip install -e .` | `PYTHONPATH=. python3 -m pytest tests/` (17 tests) |
+| TokenForge | `TokenForge/` | TS (Cloudflare Pages Functions) | `npm install && npm run dev` | `npm test` (vitest, 25 tests) |
 
 **중요**: 각 프로젝트는 루트가 아닌 **자기 폴더에서** 실행. 루트에 통합 빌드/테스트 없음.
 
@@ -30,6 +31,7 @@
 - `CASSANDRA AI/` → Next.js 15 + Prisma(PostgreSQL/Neon) + Upstash Redis. DART OpenAPI 키·DeepSeek API 키·DB env 필요. Vercel 배포. 테스트 없음.
 - `toss-dashboard/` → Next.js 15 + Drizzle ORM + Neon + Upstash Redis. `Toss/`(Express)와 별개의 Next.js 버전. 테스트 없음.
 - `VibeQuant/` → GS Quant API 호환 오픈소스 퀀트 엔진 (`gs_quant`→`vi_quant`, `Gs*`→`Vi*`). Pre-Alpha. gs-quant에서 vendoring된 코드는 `scripts/vendor_rename.py`로 재생성 — 직접 수정 금지. **모든 문서는 영어**. 자세한 내용은 `VibeQuant/README.md`·`ROADMAP.md` 참조.
+- `TokenForge/` → 한국어·외국어 코딩 프롬프트 → DeepSeek **caveman-ultra 영어** 최적화 → Claude/ChatGPT 토큰 절약 예측. 독립 Pages Functions(`npm run dev`)와 Lab(`VibeQuant/pages-lab/` → `https://vibequant.cc/lab/`) 병행. Worker `POST /api/v1/tokenforge/*`는 Play와 같은 `DEEPSEEK_API_KEY`, 금융 게이트 없음. 키 없으면 mock. `npm test`(25). 작업 시 `TokenForge/CLAUDE.md` 먼저 읽기.
 
 ## git workflow
 

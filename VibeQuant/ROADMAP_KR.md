@@ -108,6 +108,8 @@
 - [x] LLM Quant Prompt UI + Worker (`POST /api/v1/llm/quant-prompt`)
 - [x] DeepSeek V4 Pro / Flash; 금융 게이트; 30초 쿨다운; 거부 1분 캐시
 - [x] 골든 프롬프트 + 산출물 스키마 (스크립트 / 가정 / 리스크)
+- [x] Lab TokenForge ([vibequant.cc/lab](https://vibequant.cc/lab/)) — 한국어·외국어 코딩 프롬프트 → caveman-ultra 영어. Play와 같은 Worker `DEEPSEEK_API_KEY`, **금융 게이트 없음**
+- [x] Worker `GET /api/v1/tokenforge/health`, `POST /api/v1/tokenforge/plan`, `POST /api/v1/tokenforge/optimize` (IP 쿨다운 ~12초). 기억은 브라우저 localStorage
 - [ ] 성공 프롬프트·stdout 아카이브 + 사람 평가
 - [ ] 멀티 LLM bake-off 하네스 (동일 시세 스냅샷)
 - [ ] (선택) 로컬 `vi_quant` 헤비 경로 — QuantLib 등은 데스크톱만

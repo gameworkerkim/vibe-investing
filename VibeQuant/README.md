@@ -65,7 +65,9 @@ multi-SaaS path.
 
 ## Dashboard (browser demo)
 
-**Live site:** [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)  
+**Live site:** [https://vibequant.cc](https://vibequant.cc/) · dashboard [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)  
+**Play (quant prompt):** [https://play.vibequant.cc/play/](https://play.vibequant.cc/play/)  
+**Lab (TokenForge):** [https://vibequant.cc/lab/](https://vibequant.cc/lab/) — Korean/other coding prompts → caveman-ultra English via DeepSeek (same Worker key as Play; mock fallback if the TokenForge route is not deployed yet)  
 **User manual (Examples / LLM / Python):** [docs/USER_MANUAL.md](docs/USER_MANUAL.md) · [KR](docs/USER_MANUAL_KR.md) · [ZH](docs/USER_MANUAL_ZH.md)  
 **Committee checklist:** [docs/COMMITTEE_CHECKLIST.md](docs/COMMITTEE_CHECKLIST.md)
 
@@ -182,6 +184,7 @@ Not a production pricing / research engine.
 | `backend/` Express (Vercel stack) | Implemented — **legacy**, freeze feature work |
 | Cloudflare Worker + D1 + R2 | Live — Yahoo candles; TOSS deferred |
 | Pages + Pyodide webview (`pages/`) | Live — https://vibequant-web.pages.dev/ |
+| Lab TokenForge (`pages/lab/`, source `pages-lab/`) | Live UI — https://vibequant.cc/lab/ (Worker `/api/v1/tokenforge/*`; mock until Worker deploy) |
 | `instrument` / `risk` / QuantLib | Not started — local/heavy later |
 
 ## License
