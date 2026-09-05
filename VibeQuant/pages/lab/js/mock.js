@@ -100,23 +100,21 @@ export function buildMockOptimizedPrompt(source) {
   if (body.length > 280) body = body.slice(0, 280).replace(/\s+\S*$/, "");
   const task =
     lang === "en"
-      ? body || `${intent} the request. Be imperative and concise.`
-      : `${intent}: ${body || "the stated engineering request"}. Honor every requirement.`;
-  const keep = ids.length ? `\nKEEP: ${ids.join(", ")}` : "";
-  return `ROLE: Precise coding assistant
-TASK: ${task}${keep}
-RULES: Preserve all requirements. Return only the artifact. No filler. Identifiers/paths/code verbatim.`;
+      ? body || `${intent} request. Be short.`
+      : `${intent} ${body || "stated engineering request"}. Keep all requirement.`;
+  const keep = ids.length ? ` Keep verbatim: ${ids.join(", ")}.` : "";
+  return `${task}${keep} Path/code/id byte-perfect. No filler. Caveman ultra.`;
 }
 
 export function mockOptimizeResult(source, targetFamily = "claude") {
   const lang = detectSourceLang(source);
   return {
     optimizedPrompt: buildMockOptimizedPrompt(source),
-    summaryKo: `[mock] 원문(${lang})을 영어 ROLE/TASK/RULES로 압축했습니다. live 모드(DeepSeek)는 요구사항을 빠짐없이 번역합니다.`,
-    changes: [`원문 언어 감지: ${lang}`, "필러·공손 표현 제거", "영어 ROLE/TASK/RULES 구조 (CJK 본문 제거)"],
+    summaryKo: `[mock·caveman] 원문(${lang})을 원시인 영어(ultra)로 압축했습니다. live DeepSeek가 의미를 보존한 caveman 번역을 수행합니다.`,
+    changes: [`원문 언어 감지: ${lang}`, "caveman ultra: 관사·공손 표현 제거", "영어 전보체 (CJK 본문 제거)"],
     tips: [
-      "토큰 절약은 주로 한국어→영어 변환에서 발생합니다.",
-      "Worker live 모드가 켜지면 DeepSeek가 의미를 보존해 번역합니다.",
+      "Why use many token when few token do trick?",
+      "Worker live 모드가 켜지면 DeepSeek가 의미를 보존해 caveman English로 번역합니다.",
     ],
     targetFamily,
     mode: "mock",

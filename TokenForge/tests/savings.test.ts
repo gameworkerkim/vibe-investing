@@ -12,8 +12,8 @@ describe("mock optimizer token savings", () => {
   it("strips Hangul from optimized English", () => {
     const out = buildMockOptimizedPrompt(VERBOSE_KO);
     expect(out).not.toMatch(/[가-힣]/);
-    expect(out).toMatch(/^ROLE:/);
-    expect(out).toMatch(/TASK:/);
+    expect(out.toLowerCase()).toMatch(/caveman|verbatim|requirement|implement|make/);
+    expect(out).not.toMatch(/^ROLE:/);
   });
 
   it("saves Claude tokens on a verbose Korean coding prompt", () => {

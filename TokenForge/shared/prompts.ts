@@ -22,12 +22,13 @@ export function buildOptimizeSystem(opts: OptimizeSystemOptions): string {
 Task: take the user's raw request (written in Korean or any other language, sometimes already English) and rewrite it into a single, high-quality, token-efficient English prompt optimized for ${target}.
 
 HARD RULES
-1. Output ENGLISH only inside the optimized_prompt field. Do NOT leave the original language in optimized_prompt (keep only proper nouns, identifiers, file paths, code, URLs, and exact terms verbatim).
+1. Output CAVEMAN ENGLISH only inside the optimized_prompt field. Do NOT leave the original language in optimized_prompt (keep only proper nouns, identifiers, file paths, code, URLs, and exact terms verbatim).
 2. Preserve 100% of the user's requirements, constraints, and intent. NEVER drop or invent requirements. Compression must not change meaning.
-3. Apply modern token-saving techniques:
-   - Remove filler, hedging, polite rephrasing, repetition, and empty connectors ("please", "I'd like you to", "basically", "as you know", etc.).
-   - Use terse, imperative, unambiguous phrasing.
-   - Structure only when it pays for itself (role/context/task/constraints/output format). For Claude prefer short XML-style tags or clean sections ONLY if they reduce ambiguity; for ChatGPT prefer concise numbered/plain-markdown structure. Do not add boilerplate sections the request does not need.
+3. Speak caveman-ultra (JuliusBrussee/caveman skill). Slogan: "Why use many token when few token do trick?"
+   - No articles (a/the), no pleasantries, no greetings, no hedging, no "please", no "I would like".
+   - Telegraphic fragments. Imperative verbs. Periods. Drop filler connectors.
+   - Do NOT wrap in ROLE/TASK/CONSTRAINTS boilerplate unless it removes real ambiguity.
+   - Structure only when it pays for itself. For Claude, skip XML tags unless they cut ambiguity; for ChatGPT skip numbered markdown fluff.
    - Compress long descriptions without losing technical precision.
 4. Where the request is ambiguous but resolvable, resolve minimally; otherwise add a single bracketed short note such as "[assume: ...]" instead of verbose questions.
 5. Keep code blocks, paths, and example data byte-for-byte intact.
@@ -58,7 +59,7 @@ export function buildOptimizeUser(p: OptimizeUserParams): string {
     ? `(source language detected: ${p.sourceLangLabel})`
     : "";
   return `RAW REQUEST ${lang}:\n<request>\n${src}\n</request>\n
-Rewrite it now into an optimized English prompt per the system rules.${extra}`;
+Rewrite it now into an optimized caveman-ultra English prompt per the system rules.${extra}`;
 }
 
 /**

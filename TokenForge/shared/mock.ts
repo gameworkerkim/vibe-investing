@@ -115,12 +115,10 @@ export function buildMockOptimizedPrompt(source: string): string {
   if (body.length > 280) body = body.slice(0, 280).replace(/\s+\S*$/, "");
   const task =
     lang === "en"
-      ? body || `${intent} the request. Be imperative and concise.`
-      : `${intent}: ${body || "the stated engineering request"}. Honor every requirement.`;
-  const keep = ids.length ? `\nKEEP: ${ids.join(", ")}` : "";
-  return `ROLE: Precise coding assistant
-TASK: ${task}${keep}
-RULES: Preserve all requirements. Return only the artifact. No filler. Identifiers/paths/code verbatim.`;
+      ? body || `${intent} request. Be short.`
+      : `${intent} ${body || "stated engineering request"}. Keep all requirement.`;
+  const keep = ids.length ? ` Keep verbatim: ${ids.join(", ")}.` : "";
+  return `${task}${keep} Path/code/id byte-perfect. No filler. Caveman ultra.`;
 }
 
 export function mockOptimizeJson(source: string): string {
@@ -129,15 +127,15 @@ export function mockOptimizeJson(source: string): string {
   const optimized = buildMockOptimizedPrompt(src);
   return JSON.stringify({
     optimized_prompt: optimized,
-    summary_ko: `[mock] 원문(${lang})을 영어 ROLE/TASK/RULES로 압축했습니다. CJK는 번역 gloss 후 제거되어 토큰이 줄어듭니다. 실제 의미 보존 번역은 DeepSeek live 모드에서 수행됩니다.`,
+    summary_ko: `[mock·caveman] 원문(${lang})을 원시인 영어(ultra)로 압축했습니다. 관사·인사·필러 제거. live DeepSeek가 의미를 보존한 caveman 번역을 수행합니다.`,
     changes: [
       `원문 언어 감지: ${lang}`,
-      "필러·공손 표현 제거",
-      "영어 ROLE/TASK/RULES 구조로 재작성 (CJK 본문 제거)",
+      "caveman ultra: 관사·공손 표현 제거",
+      "영어 전보체(telegraphic) 재작성 (CJK 본문 제거)",
     ],
     tips: [
-      "토큰 절약은 주로 한국어→영어 변환에서 발생합니다 (문자당 토큰이 낮음).",
-      "live 모드(DeepSeek)는 요구사항을 빠짐없이 영어로 보존합니다.",
+      "Why use many token when few token do trick?",
+      "live 모드(DeepSeek)는 요구사항을 빠짐없이 caveman English로 보존합니다.",
     ],
   });
 }
