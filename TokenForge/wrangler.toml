@@ -1,0 +1,28 @@
+# ============================================================
+# TokenForge — Cloudflare Pages (free tier) 설정
+#   정적 프론트(frontend/) + Pages Functions(functions/api/*)
+# ============================================================
+# 로컬 개발 : npm run dev            (wrangler pages dev)
+#             -> KV/시크릿 없이도 miniflare 가 로컬 에뮬레이션.
+#             DeepSeek 키가 없으면 API 는 mock 모드로 동작.
+# 배포       : npm run deploy
+#   1) wrangler kv namespace create TOKENFORGE_MEMORY  (KV 생성)
+#      -> 아래 [[kv_namespaces]].id 를 반환값으로 교체
+#   2) wrangler pages secret put DEEPSEEK_API_KEY      (선택)
+#   3) wrangler pages deploy
+#
+# 외부 장기 저장소(옵션): KV 대신 아래를 쓸 수 있음 (우선순위 KV < Upstash < Neon)
+#   - UPSTASH_REDIS_REST_URL + UPSTASH_REDIS_REST_TOKEN : Upstash Redis (REST)
+#   - NEON_DATABASE_URL                                  : Neon Postgres (Phase 2)
+# 둘 다 없으면 Cloudflare KV(TF_MEMORY) 를 사용하고, KV 도 없으면 브라우저 localStorage 폴백.
+#   - DEEPSEEK_BASE_URL (기본 https://api.deepseek.com)
+#   - DEEPSEEK_MODEL    (기본 deepseek-v4-flash / 구버전은 deepseek-chat)
+
+name = "tokenforge"
+pages_build_output_dir = "frontend"
+compatibility_date = "2026-06-01"
+compatibility_flags = ["nodejs_compat"]
+
+[[kv_namespaces]]
+binding = "TF_MEMORY"
+id = "00000000000000000000000000000000"

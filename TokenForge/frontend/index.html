@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TokenForge — 한국어 프롬프트 → 영어 최적화 · 토큰 절약 예측</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚒️</text></svg>" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand">
+        <span class="logo">⚒️</span>
+        <div>
+          <h1>TokenForge</h1>
+          <p class="tagline">한국어·외국어 프롬프트 → DeepSeek로 영어 최적화 → Claude/ChatGPT 토큰 절약 예측</p>
+        </div>
+      </div>
+      <div class="top-right">
+        <span id="mode-pill" class="pill pill-gray">…</span>
+        <span id="storage-pill" class="pill pill-gray">…</span>
+        <button id="btn-settings" class="btn ghost" title="설정">⚙️ 설정</button>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs">
+      <button data-tab="workflow" class="tab active">① 워크플로</button>
+      <button data-tab="plan" class="tab">② 계획</button>
+      <button data-tab="forge" class="tab">③ 최적화(Forge)</button>
+      <button data-tab="memory" class="tab">④ 기억</button>
+      <button data-tab="skill" class="tab">⑤ 스킬</button>
+    </nav>
+
+    <main>
+      <!-- ============ ① 워크플로 ============ -->
+      <section id="view-workflow" class="view active">
+        <h2>파이프라인</h2>
+        <div class="flow">
+          <div class="card flow-card"><b>1. 전체 계획 프롬프트</b><p>목표를 넣으면 AI가 프로젝트를 목표→제약→산출물→단계→리스크로 분해하는 <em>마스터 계획 프롬프트</em>(영어)를 만들고 <b>설명</b>합니다.</p></div>
+          <div class="arrow">→</div>
+          <div class="card flow-card"><b>2. 기억(Memory)</b><p>계획·세부 프롬프트·위키 스니펫을 저장합니다. (Cloudflare KV free tier / Upstash / 브라우저 localStorage 폴백)</p></div>
+          <div class="arrow">→</div>
+          <div class="card flow-card"><b>3. 세부 프롬프트 작성</b><p>각 단계의 세부 프롬프트를 <b>한국어·일본어·중국어 등 원하는 언어</b>로 작성합니다.</p></div>
+          <div class="arrow">→</div>
+          <div class="card flow-card"><b>4. DeepSeek로 영어 최적화</b><p><b>DeepSeek V4-Flash</b>가 한국어/외국어 → 압축된 <b>영어 프롬프트</b>로 재작성 + 변경 이유/추천을 반환합니다.</p></div>
+          <div class="arrow">→</div>
+          <div class="card flow-card"><b>5. 토큰 절약 예상도</b><p>Claude·ChatGPT 기준 원문 vs 최적화문 <b>토큰 수·절약율·비용</b>을 계산합니다 (휴리스틱 + ChatGPT는 tiktoken CDN 정밀모드).</p></div>
+          <div class="arrow">→</div>
+          <div class="card flow-card"><b>6. 스킬로 만들기</b><p>계획 + 최적화된 프롬프트 번들을 <b>SKILL.md</b>(Claude·opencode 스킬 형식)로 내보냅니다.</p></div>
+        </div>
+
+        <div class="card">
+          <h3>전체 계획 프롬프트란?</h3>
+          <p>
+            코딩 에이전트(Claude Code·ChatGPT)에 단일 작업을 바로 시키기 전에, 먼저
+            <b>“프로젝트 전체를 계획하라”</b>고 지시하는 마스터 프롬프트를 쓰면 맥락 누락·반복 작업·토큰 낭비가 줄어듭니다.
+            TokenForge는 이 전체 계획 프롬프트를 <b>설명</b>하고, 그 계획을 <b>기억</b>한 뒤,
+            단계별 <b>세부 프롬프트</b>를 한국어/외국어로 받아 <b>영어로 최적화</b>합니다.
+          </p>
+          <details open>
+            <summary>전체 계획 프롬프트 템플릿 (영어, 토큰 절약형)</summary>
+            <pre id="master-template" class="code-block"></pre>
+          </details>
+          <div class="row">
+            <button class="btn primary" id="btn-goto-plan">② 계획 생성하러 가기</button>
+            <button class="btn" id="btn-copy-master">📋 템플릿 복사</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h3>DeepSeek 무료 티어 사용법</h3>
+          <ol>
+            <li>⚙️ 설정에서 DeepSeek API 키(Free Tier)를 입력하세요. 없으면 <b>mock 모드</b>로 UI만 체험할 수 있습니다.</li>
+            <li>모델 기본값은 <code>deepseek-v4-flash</code> — 환경변수/설정에서 변경 가능(구버전은 <code>deepseek-chat</code>).</li>
+            <li>이 페이지는 Cloudflare Pages <b>free tier</b>로 동작합니다 (정적 페이지 + Pages Functions + KV).</li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- ============ ② 계획 ============ -->
+      <section id="view-plan" class="view">
+        <h2>전체 계획 생성</h2>
+        <div class="card">
+          <label>목표 <span class="req">*</span>
+            <input id="plan-goal" type="text" placeholder="예) 대시보드 페이지 1장 + DeepSeek 연동 기능의 정적 웹앱을 만들어줘" />
+          </label>
+          <div class="grid2">
+            <label>계획 응답 언어
+              <select id="plan-lang">
+                <option value="ko">한국어</option>
+                <option value="en">English</option>
+                <option value="ja">日本語</option>
+                <option value="zh">中文</option>
+              </select>
+            </label>
+            <label>대상 AI (전체 계획 프롬프트 기준)
+              <select id="plan-target">
+                <option value="claude">Claude</option>
+                <option value="chatgpt">ChatGPT</option>
+              </select>
+            </label>
+          </div>
+          <label>컨텍스트·제약 (선택)
+            <textarea id="plan-constraints" rows="2" placeholder="예) 외부 DB 없음, free tier만, 한국어 UI, 산출물은 실행 가능한 프롬프트"></textarea>
+          </label>
+          <div class="row">
+            <button class="btn primary" id="btn-make-plan">🧠 계획 생성</button>
+            <span id="plan-status" class="hint"></span>
+          </div>
+        </div>
+
+        <div id="plan-result" class="hidden">
+          <div class="card">
+            <div class="row spread">
+              <h3 id="plan-title">…</h3>
+              <span id="plan-badge" class="pill pill-gray"></span>
+            </div>
+            <p id="plan-goal-view" class="goal"></p>
+            <div id="plan-explanation" class="callout"></div>
+            <details open>
+              <summary>전체 계획 프롬프트 (whole-planning prompt · 영어)</summary>
+              <textarea id="plan-whole" class="code-area" rows="6"></textarea>
+              <div class="row">
+                <button class="btn" data-copy="plan-whole">📋 복사</button>
+                <button class="btn ghost" id="btn-plan-regen" title="이 마스터로 다시 계획">↻ 이 프롬프트로 다시 계획</button>
+              </div>
+            </details>
+          </div>
+
+          <div class="card">
+            <h3>단계별 세부 프롬프트 <small>(원문 언어로 작성/편집)</small></h3>
+            <div id="plan-steps"></div>
+          </div>
+
+          <div class="card grid2">
+            <div>
+              <h3>리스크</h3>
+              <ul id="plan-risks"></ul>
+            </div>
+            <div>
+              <h3>산출물</h3>
+              <ul id="plan-outputs"></ul>
+            </div>
+          </div>
+
+          <div class="row">
+            <button class="btn primary" id="btn-save-plan">💾 계획을 기억에 저장</button>
+            <button class="btn" id="btn-forge-all">③ 모든 단계 최적화하러 가기</button>
+            <button class="btn ghost" id="btn-export-skill-from-plan">⑤ 이 계획으로 SKILL 만들기</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ③ 최적화(Forge) ============ -->
+      <section id="view-forge" class="view">
+        <h2>세부 프롬프트 → 영어 최적화</h2>
+        <div class="card">
+          <label>세부 프롬프트 원문 (한국어/외국어) <span class="req">*</span>
+            <textarea id="forge-source" rows="6" placeholder='예) "~하는 파이썬 함수를 만들어줘. 예외 처리도 해주고, 주석은 한국어로 달아줘. 성능도 신경 써줘…"'></textarea>
+          </label>
+          <div class="grid2">
+            <label>원문 언어
+              <select id="forge-lang">
+                <option value="">자동 감지</option>
+                <option value="ko">한국어</option>
+                <option value="en">English</option>
+                <option value="ja">日本語</option>
+                <option value="zh">中文</option>
+                <option value="other">기타</option>
+              </select>
+            </label>
+            <label>대상 AI (최적화 대상·토큰 기준)
+              <select id="forge-target">
+                <option value="claude">Claude</option>
+                <option value="chatgpt">ChatGPT</option>
+              </select>
+            </label>
+          </div>
+          <label>참고할 기억(프로젝트 컨텍스트) — 미니 RAG
+            <select id="forge-memory"><option value="">없음</option></select>
+          </label>
+          <label>추가 지시 (선택)
+            <input id="forge-extra" type="text" placeholder="예) 초보자용 톤, 3개 이하로 제한, 코드 예시 포함" />
+          </label>
+          <div class="row">
+            <button class="btn primary" id="btn-optimize">⚡ DeepSeek로 영어 최적화</button>
+            <span id="forge-status" class="hint"></span>
+          </div>
+        </div>
+
+        <div id="forge-result" class="hidden">
+          <div class="card">
+            <div class="row spread">
+              <h3>최적화된 영어 프롬프트</h3>
+              <span id="forge-badge" class="pill pill-green"></span>
+            </div>
+            <textarea id="forge-out" class="code-area code-out" rows="10"></textarea>
+            <div class="row">
+              <button class="btn primary" data-copy="forge-out">📋 복사</button>
+              <button class="btn" id="btn-save-forge">💾 기억에 저장</button>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>변경 요약 · 추천</h3>
+            <div id="forge-summary" class="callout"></div>
+            <div class="grid2">
+              <div><h4>변경 사항</h4><ul id="forge-changes"></ul></div>
+              <div><h4>추천 팁</h4><ul id="forge-tips"></ul></div>
+            </div>
+          </div>
+
+          <div class="card">
+            <h3>토큰 절약 예상도 (원문 vs 최적화문)</h3>
+            <div class="grid2" id="token-cards"></div>
+            <p class="hint" id="token-note"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ④ 기억 ============ -->
+      <section id="view-memory" class="view">
+        <h2>기억 (Memory)</h2>
+        <div class="card">
+          <div class="row spread">
+            <div class="row">
+              <input id="mem-q" type="search" placeholder="검색 (제목/태그/내용)" style="min-width:220px" />
+              <select id="mem-kind">
+                <option value="">전체</option>
+                <option value="project">project</option>
+                <option value="prompt">prompt</option>
+                <option value="wiki">wiki</option>
+                <option value="skill">skill</option>
+              </select>
+              <button class="btn" id="btn-mem-refresh">↻ 새로고침</button>
+            </div>
+            <button class="btn ghost" id="btn-mem-new">+ 새 항목</button>
+          </div>
+          <div id="mem-local-notice" class="callout hidden"></div>
+        </div>
+        <div id="mem-list"></div>
+
+        <!-- 새 항목 모달 -->
+        <dialog id="mem-dialog">
+          <form method="dialog">
+            <h3 id="mem-dialog-title">새 기억 항목</h3>
+            <label>종류
+              <select id="mem-new-kind">
+                <option value="project">project</option>
+                <option value="prompt">prompt</option>
+                <option value="wiki">wiki</option>
+                <option value="skill">skill</option>
+              </select>
+            </label>
+            <label>제목 <span class="req">*</span>
+              <input id="mem-new-title" type="text" />
+            </label>
+            <label>태그 (콤마 구분)
+              <input id="mem-new-tags" type="text" placeholder="claude, coding, 대시보드" />
+            </label>
+            <label>내용
+              <textarea id="mem-new-content" rows="5"></textarea>
+            </label>
+            <div class="row end">
+              <button value="cancel" class="btn ghost">취소</button>
+              <button value="default" class="btn primary" id="btn-mem-save">저장</button>
+            </div>
+          </form>
+        </dialog>
+      </section>
+
+      <!-- ============ ⑤ 스킬 ============ -->
+      <section id="view-skill" class="view">
+        <h2>스킬(SKILL.md) 만들기</h2>
+        <div class="card">
+          <label>소스 선택
+            <select id="skill-source">
+              <option value="current-plan">현재 계획 (계획 탭에서 생성한 것)</option>
+              <option value="memory">기억 항목에서 선택…</option>
+            </select>
+          </label>
+          <div id="skill-memory-picker" class="hidden">
+            <select id="skill-memory-id"></select>
+          </div>
+          <label>태그 (선택)
+            <input id="skill-tags" type="text" placeholder="claude-code, frontend" />
+          </label>
+          <div class="row">
+            <button class="btn primary" id="btn-skill-build">⚒️ SKILL.md 생성</button>
+            <span id="skill-status" class="hint"></span>
+          </div>
+        </div>
+        <div id="skill-result" class="hidden">
+          <div class="card">
+            <div class="row spread">
+              <h3>SKILL.md 미리보기</h3>
+              <div class="row">
+                <button class="btn" data-copy="skill-md">📋 복사</button>
+                <button class="btn primary" id="btn-skill-download">⬇ 다운로드</button>
+              </div>
+            </div>
+            <pre id="skill-md" class="code-block tall"></pre>
+          </div>
+          <div class="card">
+            <h3>설치 방법</h3>
+            <ol>
+              <li>위 SKILL.md 를 <code>&lt;skill 폴더&gt;/SKILL.md</code> 로 저장하세요.</li>
+              <li><b>Claude Code</b>: <code>~/.claude/skills/&lt;name&gt;/SKILL.md</code></li>
+              <li><b>opencode</b>: <code>~/.config/opencode/skills/&lt;name&gt;/SKILL.md</code></li>
+              <li>재사용 시: 에이전트가 이 스킬을 로드해 프로젝트 전반을 이해하고 단계별 최적화된 영어 프롬프트를 실행합니다.</li>
+            </ol>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- ============ 설정 ============ -->
+    <dialog id="settings-dialog">
+      <form method="dialog">
+        <h3>⚙️ 설정</h3>
+        <label>DeepSeek API Key (Free Tier)
+          <input id="set-key" type="password" placeholder="sk-…" autocomplete="off" />
+        </label>
+        <div class="grid2">
+          <label>Base URL
+            <input id="set-base" type="text" />
+          </label>
+          <label>모델
+            <input id="set-model" type="text" />
+          </label>
+        </div>
+        <label class="check">
+          <input id="set-precise" type="checkbox" />
+          ChatGPT 토큰을 tiktoken CDN 으로 정밀 계수 (인터넷 필요, 실패 시 휴리스틱 폴백)
+        </label>
+        <h4>비용 가정 ($/1M 토큰, 입력/출력 — 편집 가능)</h4>
+        <div class="grid2 price-row">
+          <span>Claude <input id="set-price-claude-in" class="num" type="number" min="0" step="0.1" /> / <input id="set-price-claude-out" class="num" type="number" min="0" step="0.1" /></span>
+          <span>ChatGPT <input id="set-price-gpt-in" class="num" type="number" min="0" step="0.1" /> / <input id="set-price-gpt-out" class="num" type="number" min="0" step="0.1" /></span>
+        </div>
+        <p class="hint">키는 브라우저 localStorage 에만 저장되며 요청 시 헤더로 서버에 전달됩니다. 없으면 mock 모드.</p>
+        <div class="row end">
+          <button value="cancel" class="btn ghost">취소</button>
+          <button value="default" class="btn primary" id="btn-settings-save">저장</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div id="toast" class="toast hidden"></div>
+    <script type="module" src="./app.js"></script>
+  </body>
+</html>
