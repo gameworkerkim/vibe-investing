@@ -4,7 +4,8 @@
 > **Claude / ChatGPT** 토큰 절약·비용을 예측하는 **웹 브라우저 변환기** + **스킬 빌더**.
 > Cloudflare Pages **free tier** (정적 페이지 + Pages Functions + KV 기억).
 >
-> **대시보드**: [vibequant.cc/lab](https://vibequant.cc/lab/#tokenforge) (VibeQuant Lab · TokenForge 탭). Lab 기본 탭은 DART Monitor. DeepSeek 키는 Play Worker(`vibequant-api`) 시크릿을 재사용합니다.
+> **대시보드**: [vibequant.cc/lab](https://vibequant.cc/lab/) (VibeQuant Lab · TokenForge 기본 탭). DeepSeek 키는 Play Worker(`vibequant-api`) 시크릿을 재사용합니다.  
+> **화면 매뉴얼 (컨셉 → 계획 → 최적화, 스크린샷)**: [`docs/LAB_MANUAL.md`](docs/LAB_MANUAL.md)
 > 영어 출력은 [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman) ultra 스타일 — *"Why use many token when few token do trick?"*
 
 **참고**: 이 폴더는 메인 `vibe-investing` 레포의 서브 프로젝트로, 독립 실행됩니다. 개념 검증·시장 리서치는 [`docs/RESEARCH.md`](docs/RESEARCH.md), Phase 2(WIKI+RAG)는 [`docs/PHASE2_WIKI.md`](docs/PHASE2_WIKI.md) 참고.
@@ -110,7 +111,7 @@ npm test            # vitest run
 ## 9. 로드맵
 
 - [x] **Phase 1**: 번역+토큰 최적화 변환기, 기억, mock/live 듀얼 모드, 스킬 빌더
-- [x] **Lab 대시보드**: [vibequant.cc/lab](https://vibequant.cc/lab/#tokenforge) TokenForge 탭 (Play 톤의 Syne/IBM Plex UI). Lab 기본은 DART Monitor. 소스 `VibeQuant/pages-lab/` → 배포 복사본 `VibeQuant/pages/lab/` (Pages 프로젝트 `vibequant-web`, GitHub 경로 `VibeQuant/pages/lab`)
+- [x] **Lab 대시보드**: [vibequant.cc/lab](https://vibequant.cc/lab/) TokenForge 기본 탭 (Play 톤의 Syne/IBM Plex UI). 소스 `VibeQuant/pages-lab/` → 배포 복사본 `VibeQuant/pages/lab/` (Pages 프로젝트 `vibequant-web`). 화면 매뉴얼 [`docs/LAB_MANUAL.md`](docs/LAB_MANUAL.md)
 - [x] **Worker API**: `GET/POST /api/v1/tokenforge/*` — Play DeepSeek 키 재사용, 금융 게이트 없음
 - [x] **Caveman ultra**: 영어 `optimized_prompt`는 관사·인사·ROLE/TASK 보일러플레이트 없이 전보체. mock도 CJK를 영어 래퍼에 남기지 않음 (`shared/mock.ts`)
 - [ ] Phase 1.5: 다중 프롬프트 일괄 최적화, 계획 단계 ↔ 최적화 결과 바인딩 자동화

@@ -6,7 +6,7 @@
 ## 목표
 한국어·외국어 프롬프트 → **DeepSeek으로 caveman-ultra 영어 최적화** → **Claude/ChatGPT 토큰 절약 예측** →
 계획·프롬프트를 **기억**하고 **SKILL.md**로 내보내는 브라우저 변환기(Cloudflare Pages free tier).
-Lab UI: [vibequant.cc/lab](https://vibequant.cc/lab/#tokenforge) (`VibeQuant/pages-lab/` → `VibeQuant/pages/lab/`). Lab 기본 탭은 DART Monitor.
+Lab UI: [vibequant.cc/lab](https://vibequant.cc/lab/) (`VibeQuant/pages-lab/` → `VibeQuant/pages/lab/`). Lab 기본 탭은 TokenForge. 화면 매뉴얼: [`docs/LAB_MANUAL.md`](docs/LAB_MANUAL.md).
 Worker: `POST /api/v1/tokenforge/optimize` (Play와 같은 `DEEPSEEK_API_KEY`, 금융 게이트 없음).
 
 ## 절대 규칙

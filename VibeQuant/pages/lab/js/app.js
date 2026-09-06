@@ -134,21 +134,13 @@ async function refreshHealth() {
 }
 
 const HERO = {
-  dart: {
-    title: "DART Monitor",
-    lede: "코스닥 DART 공시 실시간 분석 · 관계망 · 퀀트 대시보드. 앱은 Vercel에서 돌고, 이 페이지는 Cloudflare Pages VibeQuant/pages/lab/ 에서 올라갑니다.",
-  },
   tokenforge: {
     title: "TokenForge",
-    lede: "한국어·외국어 코딩 프롬프트를 DeepSeek로 caveman-ultra 영어로 바꿉니다. Claude / ChatGPT 토큰과 비용을 예측하세요.",
+    lede: "한국어·외국어 코딩 프롬프트를 DeepSeek V4 Flash로 caveman-ultra 영어 프롬프트로 바꿉니다. 한국어 대비 최대 70% 토큰을 아껴 Claude / ChatGPT에 바로 넣을 명령을 만듭니다.",
   },
   vaultguard: {
     title: "VaultGuard",
     lede: "멀티 LLM 교차검증 시크릿 스캐너. Lab 웹 데모는 곧 연결합니다.",
-  },
-  myip: {
-    title: "MY-IP",
-    lede: "IP·DNS·WebRTC 네트워크 진단. CTI Lab 로드맵의 다음 도구입니다.",
   },
 };
 
@@ -163,7 +155,7 @@ function showTool(name) {
     p.classList.toggle("active", on);
     p.hidden = !on;
   });
-  const hero = HERO[name] || HERO.dart;
+  const hero = HERO[name] || HERO.tokenforge;
   const titleEl = $("#hero-title");
   const ledeEl = $("#hero-lede");
   if (titleEl) titleEl.textContent = hero.title;
@@ -784,12 +776,12 @@ function bind() {
 }
 
 function applyHash() {
-  const h = (location.hash || "#dart").replace("#", "");
-  if (h === "vaultguard" || h === "myip" || h === "tokenforge" || h === "dart") showTool(h);
+  const h = (location.hash || "#tokenforge").replace("#", "");
+  if (h === "vaultguard" || h === "tokenforge") showTool(h);
   else if (h === "forge" || h === "plan" || h === "overview" || h === "memory" || h === "skill") {
     showTool("tokenforge");
     showView(h === "forge" || h === "plan" || h === "memory" || h === "skill" ? h : "overview");
-  } else showTool("dart");
+  } else showTool("tokenforge");
 }
 
 async function init() {

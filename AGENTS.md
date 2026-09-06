@@ -31,7 +31,7 @@
 - `CASSANDRA AI/` → 패키지 이름 `dart-monitor`. Next.js 15 + Prisma(PostgreSQL/Neon) + Upstash Redis. DART·DeepSeek·DB env 필요. **Vercel Git 소스는 별도 레포** [`gameworkerkim/cassandra-ai`](https://github.com/gameworkerkim/cassandra-ai) Root Directory `./`. 모노레포 폴더명에 공백 — Vercel Root로 쓰지 말 것. Lab 허브: `https://vibequant.cc/lab/`. 테스트 없음.
 - `toss-dashboard/` → Next.js 15 + Drizzle ORM + Neon + Upstash Redis. `Toss/`(Express)와 별개의 Next.js 버전. 테스트 없음.
 - `VibeQuant/` → GS Quant API 호환 오픈소스 퀀트 엔진 (`gs_quant`→`vi_quant`, `Gs*`→`Vi*`). Pre-Alpha. gs-quant에서 vendoring된 코드는 `scripts/vendor_rename.py`로 재생성 — 직접 수정 금지. **모든 문서는 영어**. 자세한 내용은 `VibeQuant/README.md`·`ROADMAP.md` 참조.
-- `TokenForge/` → 한국어·외국어 코딩 프롬프트 → DeepSeek **caveman-ultra 영어** 최적화 → Claude/ChatGPT 토큰 절약 예측. 독립 Pages Functions(`npm run dev`)와 Lab 탭 `https://vibequant.cc/lab/#tokenforge` 병행. Lab 기본 탭은 DART Monitor. Apex Lab HTML 배포 경로는 **`VibeQuant/pages/lab/`** (Pages `vibequant-web`). Worker `POST /api/v1/tokenforge/*`는 Play와 같은 `DEEPSEEK_API_KEY`, 금융 게이트 없음. 키 없으면 mock. `npm test`(25). 작업 시 `TokenForge/CLAUDE.md` 먼저 읽기.
+- `TokenForge/` → 한국어·외국어 코딩 프롬프트 → DeepSeek **caveman-ultra 영어** 최적화 → Claude/ChatGPT 토큰 절약 예측. 독립 Pages Functions(`npm run dev`)와 Lab 탭 `https://vibequant.cc/lab/` 병행. Lab 탭은 **TokenForge**(기본)와 **VaultGuard**(soon). Apex Lab HTML 배포 경로는 **`VibeQuant/pages/lab/`** (Pages `vibequant-web`). Worker `POST /api/v1/tokenforge/*`는 Play와 같은 `DEEPSEEK_API_KEY`, 금융 게이트 없음. 키 없으면 mock. `npm test`(25). 작업 시 `TokenForge/CLAUDE.md` 먼저 읽기.
 
 ## git workflow
 

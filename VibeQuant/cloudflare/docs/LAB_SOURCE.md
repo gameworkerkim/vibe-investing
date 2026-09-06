@@ -22,9 +22,9 @@ Those folders are app sources. The Pages project that owns the apex domain only 
 
 `lab.vibequant.cc` → 302 to `https://vibequant.cc/lab/` (apex Pages). The unused project name `vibequant-lab` is **not** what serves the live path.
 
-## 2. DART Monitor app (Next.js, already live)
+## 2. DART Monitor app (Next.js, not a Lab tab)
 
-Lab’s default tab launches this app. It is **not** a Cloudflare static build.
+DART Monitor is a separate Vercel app. It is **not** shown as a Lab tab.
 
 | Item | Value |
 |---|---|
@@ -42,10 +42,10 @@ Vercel dashboard → Project → Settings → Git:
 
 Do not set Root Directory to `CASSANDRA AI` on the monorepo unless you accept the space in the path.
 
-## 3. TokenForge (Lab second tab)
+## 3. TokenForge (Lab default tab)
 
 | Item | Value |
 |---|---|
 | App source | [`TokenForge/`](https://github.com/gameworkerkim/vibe-investing/tree/main/TokenForge) |
 | Worker API | `POST /api/v1/tokenforge/*` on `vibequant-api` |
-| Lab UI | same `pages/lab/` files as above |
+| Lab UI | same `pages/lab/` files as above. Tabs: **TokenForge** (default), **VaultGuard** (soon). |
