@@ -658,6 +658,7 @@ const SLUG_OVERRIDES = {
   "Key-Currency/Climate-Crisis-and-the-Fall-of-Empires.md": "climate-crisis-fall-of-empires",
   "Key-Currency/Sons-in-law-of-the-Golden-Clan.md": "sons-in-law-golden-clan",
   "Key-Currency/The-Rise-and-Fall of-the-Mughal-Empire.md": "rise-and-fall-mughal-empire",
+  "Key-Currency/The-History-of-the-Collapse-of-Key-Currencies.md": "collapse-of-key-currencies",
   "Failure-of-the-Japanese-Judicial-System/Failure-of-the-Japanese-Judicial-System.md": "failure-japanese-judicial-system",
   "K-Culture/Moon-Jar.md": "moon-jar",
   "NorthKorea/Lazarus_AnySign4PC.md": "lazarus-anysign4pc",
