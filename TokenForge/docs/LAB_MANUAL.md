@@ -1,30 +1,33 @@
 # TokenForge Lab 매뉴얼
 
+한국어는 영어에 비해 토큰 사용량이 거의 2배 이상 많습니다. 영어로 LLM이 만들어졌기 때문입니다. 영어권 개발자들 사이에서 토큰을 절약하기 위한 프로젝트들이 활발합니다. 영어로 원시인처럼 말할 경우 토큰이 절감되는 caveman 프로젝트가 대표적이며, DeepSeek v4 Flash 무료 티어를 이용해 한국어 및 외국어를 영어로 프롬프트를 변환하면서 최적화된 원시인 영어 caveman로 변경하여 최대 70% 토큰을 절약할 수 있게 만들었습니다.
+
+
 > 라이브: [https://vibequant.cc/lab/](https://vibequant.cc/lab/)  
 > 엔진 소스: [`TokenForge/`](https://github.com/gameworkerkim/vibe-investing/tree/main/TokenForge)  
 > Lab HTML: [`VibeQuant/pages-lab/`](https://github.com/gameworkerkim/vibe-investing/tree/main/VibeQuant/pages-lab) → 배포 복사본 `VibeQuant/pages/lab/`
 
-한국어·외국어로 코딩 프롬프트를 쓰고, DeepSeek V4 Flash가 **caveman-ultra 영어**로 바꿔 Claude / ChatGPT에 넣을 명령을 만듭니다. 한국어 대비 **최대 70%** 토큰을 아끼는 것이 목표입니다. 화면의 토큰·비용은 **추정 ±15%**입니다.
+한국어·외국어로 코딩 프롬프트를 쓰고, DeepSeek V4 Flash가 **caveman-ultra 영어**로 바꿔 Claude / ChatGPT에 넣을 명령을 만듭니다. 한국어 대비 **최대 70%** 토큰을 절약할 수. ㅣㅆ습니다.
 
-이 문서는 **컨셉 → 계획 수립 → 토큰 최적화** 세 구간만 다룹니다.
+이 문서는 **컨셉 → 계획 수립 → 토큰 최적화** 세 구간을 설명합니다.
 
 ---
 
 ## 1. 컨셉
 
-Lab을 열면 TokenForge가 기본 탭입니다. VaultGuard는 soon입니다.
+https://vibequant.cc 페이지에서 Lab을 열면 TokenForge, 토큰을 절약하는 프로젝트의 웹 페이지를 볼 수 있습니다.
 
 ![TokenForge 컨셉 — 히어로, 파이프라인, 키 아이디어](manual/01-concept.jpg)
 
-### 무엇을 하는가
+### 무엇을 하는가?
 
-TokenForge는 번역기가 아닙니다. 한글(또는 다른 언어)로 적은 요구를, Claude / ChatGPT가 **바로 실행할 짧은 영어 명령**으로 다시 씁니다.
+TokenForge는 토큰을 절약하기 위한 프로젝트로 단순히 한영 번역기가 아닙니다. 한글(또는 다른 언어)로 적은 요구를, Claude / ChatGPT가 **바로 실행할 짧은 영어 명령**으로 다시 씁니다.
 
 - **모델:** DeepSeek V4 Flash (Play Worker와 같은 `DEEPSEEK_API_KEY`, 금융 게이트 없음)
 - **문체:** caveman-ultra — 관사·인사·필러 없는 전보체. 경로·코드·고유명사는 그대로
 - **절감:** 한국어 원문 대비 최대 70%. 샘플 프롬프트 기준 Claude ~53%, ChatGPT ~45%
 
-### 파이프라인 (6칸)
+### 파이프라인
 
 | 단계 | 하는 일 |
 |---|---|
@@ -35,7 +38,7 @@ TokenForge는 번역기가 아닙니다. 한글(또는 다른 언어)로 적은 
 | 05 기억 | 이 브라우저 localStorage에 계획·프롬프트를 저장합니다 |
 | 06 SKILL.md | 계획 + 최적화 번들을 Claude Code / opencode 스킬로 내보냅니다 |
 
-개요 하단 **키 아이디어**가 위 내용을 세 문장으로 요약합니다. 바로 쓰려면 **계획부터 시작**, 이미 프롬프트가 있으면 **프롬프트만 최적화**, 샘플로 숫자를 보려면 **샘플로 절감 체험**을 누릅니다.
+개요 하단 **키 아이디어**가 위 내용을 세 문장으로 요약합니다. 바로 쓰려면 **계획부터 시작**, 이미 프롬프트가 있으면 **프롬프트만 최적화**, 샘플로 숫자를 보려면 **샘플로 절감 체험**을 눌러 절약된 토큰을 확인할 수 있습니다.
 
 ---
 
@@ -54,7 +57,7 @@ TokenForge는 번역기가 아닙니다. 한글(또는 다른 언어)로 적은 
 | 대상 AI | Claude 또는 ChatGPT — 이후 최적화 문체에 반영 |
 | 컨텍스트·제약 | 선택. 예: `외부 DB 없음, free tier만, 한국어 UI` |
 
-**계획 생성**을 누르면 Worker `POST /api/v1/tokenforge/plan`을 호출합니다. 키가 없거나 파싱에 실패하면 브라우저 mock으로 같은 화면을 채웁니다. DeepSeek 호출은 IP당 약 **12초** 간격입니다.
+**계획 생성**을 누르면 Worker `POST /api/v1/tokenforge/plan`을 호출합니다. 키가 없거나 파싱에 실패하면 브라우저 mock으로 같은 화면을 채웁니다. DeepSeek 호출은 IP당 약 **12초** 간격입니다. DeepSeek API 남용을 못하게 한 것이 간격 제한의 이유입니다.
 
 ![계획 결과 — 영어 마스터 프롬프트와 단계별 한국어 세부 프롬프트](manual/03-plan-result.jpg)
 
@@ -112,6 +115,5 @@ Worker live가 아니면 화면이 `로컬 mock으로 완료`로 떨어져도, m
 
 - Lab 루트로 `TokenForge/` 폴더를 Cloudflare에 올리면 `vibequant.cc/lab/`이 바뀌지 않습니다. Apex Lab은 **`VibeQuant/pages/lab/`** 입니다.
 - 계획 직후 바로 최적화를 누르면 12초 쿨다운에 걸릴 수 있습니다. 잠깐 기다렸다가 다시 누르세요.
-- 토큰 숫자는 청구서가 아닙니다. ±15% 추정입니다.
 
 다음 단계(기억, SKILL.md보내기)는 개요 파이프라인 05–06과 [`readme.md`](../readme.md)를 보면 됩니다.
