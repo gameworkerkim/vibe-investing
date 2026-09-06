@@ -1,3 +1,4 @@
+<!-
 ---
 title: "기축통화 몰락의 역사 — 드라크마에서 채무 40조 달러의 달러까지"
 title_en: "The History of the Collapse of Key Currencies — From the Drachma to a $40T Dollar"
@@ -48,6 +49,7 @@ schema_type: BlogPosting
 draft: false
 robots: index,follow
 ---
+-->
 
 # 기축통화 몰락의 역사 — 드라크마에서 채무 40조 달러의 달러까지
 
