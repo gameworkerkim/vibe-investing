@@ -20,6 +20,30 @@ AI를 엑셀과 같은 도구일뿐입니다, 시장의 소음에서 신호를 �
 
 ---
 
+## NEW · DART Monitor — vibequant.cc/lab 기본 탭
+
+> 코스닥 DART 공시 모니터를 Lab 첫 화면에 붙였다. 앱과 Lab HTML의 GitHub 경로는 다르다.
+
+**앱**은 이미 [dart-monitor-pi.vercel.app](https://dart-monitor-pi.vercel.app/) 에 있다. Vercel Git 소스는 [`github.com/gameworkerkim/cassandra-ai`](https://github.com/gameworkerkim/cassandra-ai) **루트 `./`** (package.json 이름 `dart-monitor`). 모노레포 폴더 `CASSANDRA AI/`(공백 있음)는 사본일 뿐 Vercel Root가 아니다.
+
+**Lab 페이지** `https://vibequant.cc/lab/` 는 Cloudflare Pages 프로젝트 `vibequant-web`이 [`VibeQuant/pages/lab/`](https://github.com/gameworkerkim/vibe-investing/tree/main/VibeQuant/pages/lab) 를 올린 결과다. `TokenForge/` 나 `CASSANDRA AI/` 를 Pages 루트로 지정하면 `/lab/` 이 안 바뀐다. 배포: `cd VibeQuant/pages && npx wrangler pages deploy . --project-name=vibequant-web`.
+
+경로 표: [`VibeQuant/pages-lab/SOURCE.md`](https://github.com/gameworkerkim/vibe-investing/blob/main/VibeQuant/pages-lab/SOURCE.md)
+
+---
+
+## NEW · TokenForge Lab — 한국어 프롬프트를 caveman 영어로, 토큰을 줄인다
+
+> *"Why use many token when few token do trick?"* — caveman ultra, now on [vibequant.cc/lab/#tokenforge](https://vibequant.cc/lab/#tokenforge)
+
+코딩 에이전트(Claude Code, ChatGPT)에 넣는 한국어 프롬프트는 같은 뜻의 영어보다 토큰이 비싸다. **TokenForge**는 DeepSeek으로 요구사항을 빠짐없이 **caveman-ultra 영어**(관사·인사·please·ROLE/TASK 보일러플레이트 없음)로 다시 쓰고, Claude·ChatGPT 각각의 절감 추정(±15%)을 보여 준다. Play(`play.vibequant.cc`)와 **같은** Worker DeepSeek 키를 쓰지만 **금융 게이트는 없다** — 코딩 프롬프트 변환기다. 키/라우트 없으면 mock이 한글을 영어 래퍼에 남기지 않고 실제로 토큰을 줄인다(샘플 한국어 프롬프트 기준 Claude ~53%, ChatGPT ~45%).
+
+→ **Lab:** [https://vibequant.cc/lab/#tokenforge](https://vibequant.cc/lab/#tokenforge) · **코드·로드맵:** [`TokenForge/readme.md`](https://github.com/gameworkerkim/vibe-investing/blob/main/TokenForge/readme.md) · caveman 원전 [JuliusBrussee/caveman](https://github.com/JuliusBrussee/caveman)
+
+> *"의미는 남기고 문체만 줄인다. 경로·코드·고유명사는 byte-perfect."*
+
+---
+
 ## NEW · 당신의 LLM에 넣는 그 프롬프트, 검증된 건가요? — Awesome LLM Prompts for Finance & Quant
 
 > *"143,000명이 별을 준 프롬프트 라이브러리도, 막상 당신의 포트폴리오 앞에서는 아무 말도 못 한다."*

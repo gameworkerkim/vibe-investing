@@ -12,6 +12,7 @@ import { getAssetInfo, getPriceQuotes } from "./assets";
 import { listWatchlist, watchlistCount, WATCHLIST_MAX } from "./watchlist";
 import { tossConfigured } from "./toss";
 import { deepseekConfigured, handleQuantPrompt } from "./llm-quant";
+import { handleTokenforge } from "./tokenforge";
 
 export type { Env };
 
@@ -91,7 +92,7 @@ export default {
         {
           status: "ok",
           service: "vibequant-api",
-          version: "0.3.0",
+          version: "0.4.0",
           provider_default: env.DEFAULT_PROVIDER ?? "yahoo",
           toss: { configured: tossConfigured(env) },
           deepseek: { configured: deepseekConfigured(env) },
@@ -111,6 +112,7 @@ export default {
           prices: "GET /api/v1/prices/:provider?symbols=AAPL,MSFT",
           market_data: "GET /api/v1/market-data/:provider/:symbol",
           llm_quant: "POST /api/v1/llm/quant-prompt",
+          tokenforge: "GET /api/v1/tokenforge/health · POST /plan · POST /optimize",
         },
         200,
         origin
@@ -146,6 +148,17 @@ export default {
         origin,
         { "Cache-Control": "public, max-age=30" }
       );
+    }
+
+    if (pathname === "/api/v1/tokenforge" || pathname.startsWith("/api/v1/tokenforge/")) {
+      if (origin && !isAllowedOrigin(origin)) {
+        return json({ error: "CORS_DENIED", message: "Origin not allowed" }, 403, origin);
+      }
+      const tf = await handleTokenforge(request, env, pathname);
+      if (!tf) {
+        return json({ error: "NOT_FOUND", message: `No route for ${pathname}` }, 404, origin);
+      }
+      return json(tf.body, tf.status, origin, tf.extra);
     }
 
     if (pathname === "/api/v1/llm/quant-prompt") {

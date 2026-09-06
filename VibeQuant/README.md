@@ -65,7 +65,9 @@ multi-SaaS path.
 
 ## Dashboard (browser demo)
 
-**Live site:** [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)  
+**Live site:** [https://vibequant.cc](https://vibequant.cc/) · dashboard [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)  
+**Play (quant prompt):** [https://play.vibequant.cc/play/](https://play.vibequant.cc/play/)  
+**Lab (DART Monitor):** [https://vibequant.cc/lab/](https://vibequant.cc/lab/) — default tab launches [dart-monitor](https://dart-monitor-pi.vercel.app/) from GitHub [`cassandra-ai`](https://github.com/gameworkerkim/cassandra-ai) (Vercel Root Directory `./`). Apex HTML is uploaded from [`VibeQuant/pages/lab/`](https://github.com/gameworkerkim/vibe-investing/tree/main/VibeQuant/pages/lab). TokenForge is the second tab.  
 **User manual (Examples / LLM / Python):** [docs/USER_MANUAL.md](docs/USER_MANUAL.md) · [KR](docs/USER_MANUAL_KR.md) · [ZH](docs/USER_MANUAL_ZH.md)  
 **Committee checklist:** [docs/COMMITTEE_CHECKLIST.md](docs/COMMITTEE_CHECKLIST.md)
 
@@ -182,6 +184,7 @@ Not a production pricing / research engine.
 | `backend/` Express (Vercel stack) | Implemented — **legacy**, freeze feature work |
 | Cloudflare Worker + D1 + R2 | Live — Yahoo candles; TOSS deferred |
 | Pages + Pyodide webview (`pages/`) | Live — https://vibequant-web.pages.dev/ |
+| Lab (`pages/lab/`, source `pages-lab/`) | Live UI — https://vibequant.cc/lab/ (default **DART Monitor**; TokenForge tab + Worker `/api/v1/tokenforge/*`) |
 | `instrument` / `risk` / QuantLib | Not started — local/heavy later |
 
 ## License

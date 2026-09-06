@@ -191,8 +191,12 @@ window.VIBEQUANT_CDN_BASE  // 보통 API + "/cdn"
 ```bash
 curl -sS "$VIBEQUANT_API_BASE/api/health"
 curl -sS "$VIBEQUANT_API_BASE/cdn/tests/hello.txt"
+curl -sS "$VIBEQUANT_API_BASE/api/v1/tokenforge/health"
 # Pages: https://vibequant-web.pages.dev/
+# Lab:   https://vibequant.cc/lab/
 ```
+
+TokenForge health는 `"service":"tokenforge"` JSON을 반환해야 합니다. Worker에 Play와 같은 `DEEPSEEK_API_KEY`가 있으면 `"mode":"live"`. 라우트 미배포 시 Lab은 클라이언트 mock으로 폴백합니다.
 
 **배포·커밋 이력:** [docs/DEPLOY_HISTORY_KR.md](../docs/DEPLOY_HISTORY_KR.md) · [DEPLOY_HISTORY.md](../docs/DEPLOY_HISTORY.md)
 
