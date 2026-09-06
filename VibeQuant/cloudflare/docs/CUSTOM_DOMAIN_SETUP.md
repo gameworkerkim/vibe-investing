@@ -130,6 +130,8 @@ cd ../pages-cti
 npx wrangler pages deploy . --project-name=vibequant-cti --commit-dirty=true
 
 # Lab
+# Apex /lab/ is NOT this project. It is static files under VibeQuant/pages/lab/
+# uploaded with vibequant-web (see LAB_SOURCE.md).
 cd ../pages-lab
 npx wrangler pages deploy . --project-name=vibequant-lab --commit-dirty=true
 
@@ -181,3 +183,20 @@ curl -s https://api.vibequant.cc/api/health
 # www redirect
 curl -sI https://www.vibequant.cc/ | grep -i location
 ```
+
+---
+
+## 10. Lab source paths (vibequant.cc/lab/)
+
+Apex Lab is **not** `vibequant-lab` and **not** `TokenForge/` or `CASSANDRA AI/`.
+
+| Surface | GitHub path | Deploy |
+|---|---|---|
+| `https://vibequant.cc/lab/` HTML | `VibeQuant/pages/lab/` (edit `VibeQuant/pages-lab/` first) | `cd VibeQuant/pages && npx wrangler pages deploy . --project-name=vibequant-web` |
+| DART Monitor app | `github.com/gameworkerkim/cassandra-ai` Root `./` (package `dart-monitor`) | Vercel → dart-monitor-pi.vercel.app |
+| Monorepo copy | `vibe-investing/CASSANDRA AI` (space in folder name) | Do not set as Vercel Root Directory |
+
+On `main`, `/lab/*` was coming-soon because `_routes.json` included `/lab/*` and `_middleware.js` returned 「곧 연결할께요」. Static Lab requires: no `/lab/*` in `_routes.json` include, and middleware must not intercept `/lab`.
+
+Details: [LAB_SOURCE.md](LAB_SOURCE.md) · [pages-lab/SOURCE.md](../../pages-lab/SOURCE.md)
+

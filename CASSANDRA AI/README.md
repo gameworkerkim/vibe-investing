@@ -11,7 +11,15 @@
 >
 > 코스닥 1,822개 종목 DART 공시 실시간 분석 + 주식셀럽 관계망
 
-배포: **[dart-monitor-pi.vercel.app](https://dart-monitor-pi.vercel.app)**
+배포: **[dart-monitor-pi.vercel.app](https://dart-monitor-pi.vercel.app)** · Lab 허브: **[vibequant.cc/lab](https://vibequant.cc/lab/)**
+
+**소스 경로 (배포할 때 여기를 가리킬 것)**
+
+| 무엇 | GitHub | Root / 업로드 경로 |
+|---|---|---|
+| DART Monitor 앱 (Vercel) | [`gameworkerkim/cassandra-ai`](https://github.com/gameworkerkim/cassandra-ai) | Root Directory **`./`** (패키지 이름 `dart-monitor`) |
+| 모노레포 사본 | [`vibe-investing/CASSANDRA AI`](https://github.com/gameworkerkim/vibe-investing/tree/main/CASSANDRA%20AI) | 폴더명에 공백. Vercel Root로 쓰지 말 것 |
+| Lab 페이지 `vibequant.cc/lab/` | [`vibe-investing/VibeQuant/pages/lab`](https://github.com/gameworkerkim/vibe-investing/tree/main/VibeQuant/pages/lab) | Pages `vibequant-web`에 `VibeQuant/pages` 전체를 업로드 |
 
 ---
 

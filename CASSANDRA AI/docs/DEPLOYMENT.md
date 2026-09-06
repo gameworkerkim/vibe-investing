@@ -21,8 +21,9 @@ cd dart-monitor
 vercel login
 vercel
 # → Import existing project
+# → Repository: gameworkerkim/cassandra-ai  (not vibe-investing)
 # → Framework: Next.js
-# → Root Directory: ./
+# → Root Directory: ./     ← empty / repo root. Do NOT use "CASSANDRA AI"
 ```
 
 ### 3. 환경변수 설정 (Vercel Dashboard)

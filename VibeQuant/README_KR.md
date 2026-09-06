@@ -69,7 +69,9 @@
 
 ## 대시보드 (브라우저 데모)
 
-**라이브 사이트:** [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)  
+**라이브 사이트:** [https://vibequant.cc](https://vibequant.cc/) · 대시보드 [https://vibequant-web.pages.dev/#workspace](https://vibequant-web.pages.dev/#workspace)  
+**Play (퀀트 프롬프트):** [https://play.vibequant.cc/play/](https://play.vibequant.cc/play/)  
+**Lab (DART Monitor):** [https://vibequant.cc/lab/](https://vibequant.cc/lab/) — 기본 탭은 [dart-monitor](https://dart-monitor-pi.vercel.app/). Vercel 소스 [`cassandra-ai`](https://github.com/gameworkerkim/cassandra-ai) (Root Directory `./`). Apex HTML은 [`VibeQuant/pages/lab/`](https://github.com/gameworkerkim/vibe-investing/tree/main/VibeQuant/pages/lab). TokenForge는 두 번째 탭.  
 **사용 매뉴얼 (Examples / LLM / 파이썬):** [docs/USER_MANUAL_KR.md](docs/USER_MANUAL_KR.md) · [EN](docs/USER_MANUAL.md) · [ZH](docs/USER_MANUAL_ZH.md)  
 **위원회 검증 체크리스트:** [docs/COMMITTEE_CHECKLIST_KR.md](docs/COMMITTEE_CHECKLIST_KR.md)
 
@@ -180,6 +182,7 @@ IRSwap('Pay', '10y', 'USD').calc(Price())
 | `backend/` Express (Vercel 스택) | 구현됨 — **레거시**, 기능 확장 동결 |
 | Cloudflare Worker + D1 + R2 | 라이브 — Yahoo 캔들; TOSS 후순위 |
 | Pages + Pyodide 웹뷰 (`pages/`) | 라이브 — https://vibequant-web.pages.dev/ |
+| Lab (`pages/lab/`, 소스 `pages-lab/`) | UI 라이브 — https://vibequant.cc/lab/ (기본 **DART Monitor**; TokenForge 탭 + Worker `/api/v1/tokenforge/*`) |
 | `instrument` / `risk` / QuantLib | 미착수 — 로컬/헤비 후속 |
 
 ## 라이선스

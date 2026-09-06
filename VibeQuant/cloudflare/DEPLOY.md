@@ -174,8 +174,12 @@ window.VIBEQUANT_CDN_BASE
 ```bash
 curl -sS "$VIBEQUANT_API_BASE/api/health"
 curl -sS "$VIBEQUANT_API_BASE/cdn/tests/hello.txt"
+curl -sS "$VIBEQUANT_API_BASE/api/v1/tokenforge/health"
 # Pages: https://vibequant-web.pages.dev/
+# Lab:   https://vibequant.cc/lab/
 ```
+
+TokenForge health should return JSON with `"service":"tokenforge"` and `"mode":"live"` when `DEEPSEEK_API_KEY` is set on the Worker (same secret as Play). Until that route is deployed, Lab falls back to the client mock.
 
 **Deploy / commit log:** [docs/DEPLOY_HISTORY.md](../docs/DEPLOY_HISTORY.md) · [DEPLOY_HISTORY_KR.md](../docs/DEPLOY_HISTORY_KR.md)
 

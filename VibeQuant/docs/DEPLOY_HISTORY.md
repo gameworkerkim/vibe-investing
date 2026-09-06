@@ -14,8 +14,10 @@ Roadmap: [ROADMAP.md](../ROADMAP.md).
 | Surface | URL |
 |---|---|
 | Pages (dashboard) | https://vibequant-web.pages.dev/ |
+| Lab (DART Monitor) | https://vibequant.cc/lab/ |
 | Worker (API) | https://vibequant-api.gameworker-4bb.workers.dev |
 | Health | https://vibequant-api.gameworker-4bb.workers.dev/api/health |
+| TokenForge health | https://api.vibequant.cc/api/v1/tokenforge/health |
 
 **Commands (from `VibeQuant/cloudflare`)**
 

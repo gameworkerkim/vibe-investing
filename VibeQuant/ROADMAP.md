@@ -107,6 +107,9 @@ Historical Phase 0–2 work that the committee stage already depends on:
 - [x] LLM Quant Prompt UI + Worker (`POST /api/v1/llm/quant-prompt`)
 - [x] DeepSeek V4 Pro / Flash; finance gate; 30s cooldown; 1m reject cache
 - [x] Golden prompts + output schema (script / assumptions / risks)
+- [x] Lab TokenForge ([vibequant.cc/lab](https://vibequant.cc/lab/) `#tokenforge`) — Korean/other coding prompts → caveman-ultra English; same Worker `DEEPSEEK_API_KEY` as Play; **no finance gate**
+- [x] Lab default tab **DART Monitor** — live app [dart-monitor-pi.vercel.app](https://dart-monitor-pi.vercel.app/) from GitHub [`gameworkerkim/cassandra-ai`](https://github.com/gameworkerkim/cassandra-ai) (Root Directory `./`, package `dart-monitor`). Apex Lab HTML ships from [`VibeQuant/pages/lab/`](https://github.com/gameworkerkim/vibe-investing/tree/main/VibeQuant/pages/lab) via Pages `vibequant-web`
+- [x] Worker `GET /api/v1/tokenforge/health`, `POST /api/v1/tokenforge/plan`, `POST /api/v1/tokenforge/optimize` (~12s IP cooldown). Memory stays in browser localStorage
 - [ ] Archive successful prompt+stdout for human eval
 - [ ] Multi-LLM bake-off harness (shared market snapshot)
 - [ ] Optional local `vi_quant` heavy path (QuantLib desktop-only)

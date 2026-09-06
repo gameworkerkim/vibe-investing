@@ -23,6 +23,7 @@
 - [x] 일일 공시 동기화 (`npm run daily` + 8종 룰셋)
 - [x] DB: 541개사, 2,630건 공시
 - [x] Vercel + Neon 배포 ($0/월)
+- [x] vibe-investing Lab 허브 (`https://vibequant.cc/lab/`) — 기본 탭 DART Monitor. Apex HTML은 `VibeQuant/pages/lab/` (Pages `vibequant-web`). 앱 소스는 이 레포가 아니라 [`cassandra-ai`](https://github.com/gameworkerkim/cassandra-ai) Root `./`
 
 ### SpaceX 대시보드 (`/spacex`)
 - [x] SPCX 티커 교체 (UFO → SPCX), 스테일 종목 자동 DB 정리
