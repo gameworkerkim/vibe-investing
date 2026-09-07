@@ -348,6 +348,17 @@ function fixLiteralBoldHtml(html) {
 }
 
 /**
+ * Column MD often uses GitHub-relative `./images/foo.png`. Pages wipes slug dirs,
+ * so publish those files from pages/og/ instead.
+ */
+function rewriteRelativeColumnImages(html) {
+  return String(html ?? "").replace(
+    /\bsrc=(["'])\.\/images\/([^"'/]+)\1/gi,
+    (_, quote, file) => `src=${quote}${SITE}/og/${file}${quote}`
+  );
+}
+
+/**
  * GitHub CTI MD uses relative sibling links like CTI-…_EN.md for language switchers.
  * On the published site those must become /cti/<slug>/ (or GitHub blob as fallback).
  */
@@ -1759,6 +1770,7 @@ function buildArticle(item, section) {
   if (section === "cti") {
     htmlBody = rewriteCtiRelativeMdLinks(htmlBody, item, `${prefix}cti/`);
   }
+  htmlBody = rewriteRelativeColumnImages(htmlBody);
   const base = siteForSection(section);
   const canonical = `${base}/${section}/${item.slug}/`;
   const schemaType = section === "tech" || section === "cti" ? "TechArticle" : "BlogPosting";
