@@ -139,6 +139,7 @@ export const FEATURED_TECH_PATHS = [
 
 /** essays recommended — order = display order */
 export const FEATURED_ESSAY_PATHS = [
+  "book-review/04-Odyssey-Calypso.md",
   "culture-taste/05-walmart-paradox-chinese-ai.md",
   "culture-taste/02-ai-writes-code-humans-ship-it.md",
   "book-review/03-black-swan-black-scholes.md",

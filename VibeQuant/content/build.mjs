@@ -1380,9 +1380,14 @@ function scanEssays() {
     } catch {
       continue;
     }
+    const meta = parseColumnMeta(md);
+    if (meta.draft === true) continue;
     const group = resolveGroup(rel, ESSAY_GROUP_RULES, ESSAY_GROUP_FALLBACK);
     const baseTitle = path.basename(rel, path.extname(rel)).replace(/^\d+-/, "").replace(/[_-]+/g, " ");
-    const parsed = parseDoc(md, baseTitle);
+    const parsed = parseDoc(md, meta.title || baseTitle);
+    if (meta.title) parsed.title = String(meta.title).slice(0, 200);
+    if (meta.description) parsed.description = String(meta.description).slice(0, 200);
+    if (meta.subtitle) parsed.subtitle = String(meta.subtitle).slice(0, 160);
     const dates = resolveItemDates({ md, relPath: rel, gitEntry: gitDates.get(rel) });
     const featuredRank = FEATURED_ESSAY_PATHS.findIndex((p) => {
       const needle = p.replace(/\\/g, "/").toLowerCase();
