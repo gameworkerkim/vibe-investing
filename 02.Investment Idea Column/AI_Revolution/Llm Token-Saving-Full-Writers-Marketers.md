@@ -1,10 +1,59 @@
+<!--
+---
+title: "유료 LLM 토큰 절약 종합 가이드 — 완전판"
+title_en: "A Complete Guide to Saving Paid LLM Tokens — for Writers and Marketers"
+subtitle: "작가·인문 필자·마케터를 위한 실전 편"
+description: "정액제 작가·마케터의 비용은 돈이 아니라 한도다. 대화 길이·전문 재출력·프로젝트 캐시로 Claude 한도를 지키는 실전. 2026년 9월. 투자 권유 아님."
+abstract: |
+  유료 LLM의 진짜 비용은 청구액이 아니라 5시간·주간 사용 한도이다. 대화가 길수록 매 턴이 누적 과금된다.
+  작가는 전문 재출력 대신 차이만 받고, 원고는 프로젝트 지식에 올려 캐시한다. 마케터는 카피 배치 생성·브랜드 가이드 자산화.
+  영어 압축·원시인 영어는 문학 텍스트에 부적합. 미발표 원고 보안과 API 전환 시점까지 정리. 투자 권유 아님.
+summary_for_ai: |
+  Korean practical guide (not investment advice), 2026-09-09, group ai-llm, Claude.ai paid plans as of Sep 2026.
+  Audience: subscription writers, humanities authors, marketers — not API developers.
+  Thesis: the scarce resource is usage quota (5h rolling + weekly), driven mainly by conversation length and full-text regeneration; output tokens cost ~5x input.
+  Tactics: project knowledge cache, partial diffs not full rewrites, model/effort switching, tool off by default, batch copy variants, brand guide as files.
+  Warns against caveman/compressed English for literary text; security of unpublished manuscripts; when to move to API (batch, prompt cache).
+  Sources: Anthropic usage-limit and project RAG help articles. Limits change; re-check official pages.
+date: 2026-09-09
+updated: 2026-09-09
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - LLM
+  - 토큰절약
+  - Claude
+  - 작가
+  - 마케터
+  - 프롬프트
+  - Anthropic
+keywords:
+  - "LLM 토큰 절약"
+  - "Claude 사용 한도"
+  - "작가 ChatGPT"
+  - "마케터 프롬프트"
+  - "프로젝트 캐시"
+  - "claude.ai Pro"
+  - "전문 재출력"
+  - "프롬프트 캐싱"
+group: ai-llm
+featured: true
+featured_rank: 0
+og_image: "https://vibequant.cc/og-default.png"
+image: "https://vibequant.cc/og-default.png"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # 유료 LLM 토큰 절약 종합 가이드 — 완전판
 
 ## 작가·인문 필자·마케터를 위한 실전 편
 
 *2026년 9월 기준 · Anthropic 공식 문서 및 헬프센터 확인 버전*
 
-# 들어가며, 당신이 내는 비용은 토큰이 아니다
+## 들어가며, 당신이 내는 비용은 토큰이 아니다
 
 토큰 절약 글의 90%는 개발자를 향해 쓰여 있다. 백만 토큰당 몇 달러, 캐시 히트율, 배치 API. 그런데 정작 사람의 대부분은 월 정액을 내고 채팅창을 쓰는 작가와 마케터다. 그들에게 "토큰당 $2"는 아무 의미가 없다. 청구서는 어차피 고정이니까.
 
@@ -61,7 +110,7 @@ LLM은 기억을 갖고 있지 않다. 대화 40번째 턴에서 당신이 "그 
 원고를 채팅창에 붙여넣으면 매번 전액을 낸다. 같은 원고를 프로젝트 지식에 올려두면 재사용은 한도를 소모하지 않는다. 같은 파일, 같은 내용이지만 한도에 포함되지 않는다.
 
 
-# PART 1. 작가와 인문 필자를 위한 절약 가이드
+## PART 1. 작가와 인문 필자를 위한 절약 가이드
 
 ## 1-1. 가장 큰 낭비 - "전문을 다시 써줘"
 
@@ -233,7 +282,7 @@ LLM은 기억을 갖고 있지 않다. 대화 40번째 턴에서 당신이 "그 
 
 ---
 
-# PART 2. 마케터를 위한 절약
+## PART 2. 마케터를 위한 절약
 
 ## 2-1. 카피 30종은 서른 번 묻는 게 아니라 한 번 묻는다
 
@@ -371,7 +420,7 @@ CSV를 텍스트로 붙여넣으면 헤더, 구분자, 반복되는 값, 빈 셀
 
 ---
 
-# PART 3. 두 직군 공통 - 한도를 지키며 일하는 운영 규칙
+## PART 3. 두 직군 공통 - 한도를 지키며 일하는 운영 규칙
 
 ## 3-1. 사용량, 계기판을 켜고 일한다
 
@@ -433,7 +482,7 @@ CSV를 텍스트로 붙여넣으면 헤더, 구분자, 반복되는 값, 빈 셀
 
 ---
 
-# PART 4. 언어와 문체의 경제학 — 인문학적 관점
+## PART 4. 언어와 문체의 경제학 — 인문학적 관점
 
 이 장은 절약 기법이 아니라 **절약해서는 안 되는 것**에 관한 이야기다.
 
@@ -506,7 +555,7 @@ CSV를 텍스트로 붙여넣으면 헤더, 구분자, 반복되는 값, 빈 셀
 
 ---
 
-# PART 5. 보안 - 원고와 캠페인 자료는 어디로 가는가?
+## PART 5. 보안 - 원고와 캠페인 자료는 어디로 가는가?
 
 토큰 절약 가이드에 이 장이 없는 경우가 많은데, 실무에서는 가격보다 중요하다.
 
@@ -558,7 +607,7 @@ CSV를 텍스트로 붙여넣으면 헤더, 구분자, 반복되는 값, 빈 셀
 
 ---
 
-# PART 6. 토큰 거지들을 위한 다단계 워크플로우 — 검증
+## PART 6. 토큰 거지들을 위한 다단계 워크플로우 — 검증
 
 널리 공유되는 절약 워크플로우가 하나 있다. 저비용 모델로 프롬프트를 정리하고, 영어로 바꾸고, 압축한 뒤, 고가 모델에 넣고, 다시 저비용 도구로 번역해 돌려받는 6단계 파이프라인이다.
 
@@ -586,7 +635,7 @@ PART 4-3에서 다룬 세 가지 — 기제 오류, 절감 상한, 재질문 손
 
 ---
 
-# PART 7. 규모가 커졌다면 API로 넘어갈 때가 된 것이다.
+## PART 7. 규모가 커졌다면 API로 넘어갈 때가 된 것이다.
 
 카피 1,000종, 문서 500건 분류, 매일 도는 리포트 파이프라인 — 이 정도 규모가 되면 채팅 인터페이스가 아니라 API가 맞다. 참고용으로 핵심만 정리한다.
 
@@ -643,7 +692,7 @@ PART 4-3에서 다룬 세 가지 — 기제 오류, 절감 상한, 재질문 손
 
 ---
 
-# PART 8. 하지 말아야 할 절약 (안티패턴)
+## PART 8. 하지 말아야 할 절약 (안티패턴)
 
 1. **재질문을 유발하는 과압축.** 재질문 15%면 손익분기다. 압축은 "한 번에 이해되는 선"까지만.
 2. **품질 미달 모델로 내렸다가 재시도.** 하위 모델로 실패하고 상위 모델로 다시 하면 처음부터 상위 모델을 쓰는 것보다 비싸다. 티어링은 어떤 작업이 어느 티어에 맞는지 알 때만 유효하다.
@@ -656,7 +705,7 @@ PART 4-3에서 다룬 세 가지 — 기제 오류, 절감 상한, 재질문 손
 
 ---
 
-# PART 9. 직군별 체크리스트
+## PART 9. 직군별 체크리스트
 
 ## 작가·인문 필자용
 
@@ -709,7 +758,7 @@ PART 4-3에서 다룬 세 가지 — 기제 오류, 절감 상한, 재질문 손
 
 ---
 
-# PART 10. 한 장 요약 - 오늘 할 수 있는 순서
+## PART 10. 한 장 요약 - 오늘 할 수 있는 순서
 
 효과가 큰 순서대로다. **1번과 2번만 해도 대부분의 사람은 체감이 달라진다.**
 
@@ -729,7 +778,7 @@ PART 4-3에서 다룬 세 가지 — 기제 오류, 절감 상한, 재질문 손
 
 ---
 
-# 마치며
+## 마치며
 
 토큰 최적화 글이 유독 과장되기 쉬운 이유가 있다. **절감률은 분모를 밝히지 않고도 쓸 수 있는 숫자이기 때문이다.** "80% 절감"은 어떤 작업에서 무엇을 기준으로 재느냐에 따라 사실일 수도 있고 완전한 허구일 수도 있다. 그리고 그 분모를 밝힌 글은 거의 없다.
 
@@ -761,3 +810,7 @@ PART 4-3에서 다룬 세 가지 — 기제 오류, 절감 상한, 재질문 손
 - 배치 처리 — https://platform.claude.com/docs/en/build-with-claude/batch-processing
 
 *가격, 한도, 기능은 변경된다. 중요한 판단을 하기 전에 공식 페이지에서 다시 확인할 것.*
+
+---
+
+*이 글은 유료 LLM 사용 실전 가이드이며, 투자 권유나 특정 모델·플랜 가입 권유가 아닙니다.*
