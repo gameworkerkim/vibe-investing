@@ -16,7 +16,7 @@ summary_for_ai: |
   Korea: Communications Secrets Protection Act vs transcription; PIPA consent vs OTA scope change; conference-room TV as unmanaged always-on node.
   Mitigations: air-gap, VLAN, disable Live Plus/ACR and always-ready voice. Not unique to LG (Samsung, TCL, Roku, Vizio ACR).
 date: 2026-09-09
-updated: 2026-09-09
+updated: 2026-09-10
 author: "김호광 (Dennis Kim)"
 lang: ko
 tags:
@@ -141,7 +141,7 @@ TV가 왜 공기청정기와 서버 관리 컨트롤러의 존재를 알아야 �
 
 즉 로컬 네트워크 스캔은 IP 변경과 ID 초기화를 뚫고 살아남는 **가구 단위 지문(household fingerprint)**을 만든다. 온도조절기가 흥미로워서가 아니라, 안정적이어서 수집한다.
 
-LG Ads Solutions의 자료가 이 설계를 그대로 확인해 준다. 미국 내 webOS 기반 LG TV는 약 4,900만 대. 그런데 회사가 말하는 총 도달 범위는 **3억 6,300만 대의 "도달 가능한 2차 기기(addressable secondary devices)"**다. (일부 국내 보도가 이 숫자를 "TV 대수"로 옮겼는데, 2차 기기 수다. 이 차이가 오히려 사안의 본질이다.) TV 한 대당 7~8대의 다른 기기를 붙여서 팔고 있다는 뜻이고, 그 7~8대의 정체가 바로 로컬 네트워크 스캔의 결과물이다.
+LG Ads Solutions의 자료가 이 설계를 그대로 확인해 준다. 미국 내 webOS 기반 LG TV는 약 4,900만 대. 그런데 회사가 말하는 총 도달 범위는 **3억 6,300만 대의 "도달 가능한 2차 기기(addressable secondary devices)"**다. (일부 국내 보도가 이 숫자를 "TV 대수"로 옮겼는데, 2차 기기 수다. 이 차이가 오히려 사안의 본질이다.) TV 한 대당 7-8대의 다른 기기를 붙여서 팔고 있다는 뜻이고, 그 7-8대의 정체가 바로 로컬 네트워크 스캔의 결과물이다.
 
 LG의 광고주 대상 마케팅 문구는 놀랍도록 솔직하다. "우리는 LG 가구 안에 누가 있는지 안다. 어떤 기기가 있는지 안다. TV에서 무엇에 노출됐는지 알고, 그 도달을 모바일로 확장하는 법을 안다." 가머스 넥서스 영상에는 LG 임원 세 명이 각각 **"우리가 그 유리(the glass)를 소유한다"**고 말하는 장면이 담겨 있다.
 
