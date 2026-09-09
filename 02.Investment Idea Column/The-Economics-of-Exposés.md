@@ -1,4 +1,58 @@
+<!--
+---
+title: "폭로의 정치 - 게임 이론과 행동경제학으로 읽는 타이밍·내용·출구 공식"
+title_en: "The Politics of Exposés — Timing, Content, and Exit from Game Theory and Behavioral Economics"
+subtitle: "한동훈의 김승원 녹취, 복당은 시간문제인가"
+description: "폭로는 감이 아니라 게임이다. 타이밍·살라미·출구 공식을 정리하고, 한동훈의 김승원 녹취 폭로에 적용해 복당·존재감·외연을 읽는다. 투자 권유 아님."
+abstract: |
+  폭로는 불완전 정보 아래의 신호·순차·소모전이다. 값비싼 신호, 앵커링, 살라미가 승패를 가른다.
+  최적 타이밍은 주목의 창·대응 시간 압축·제도 이관. 예고 과열은 기대 대비 손실로 역풍이 된다.
+  한동훈 김승원 녹취는 교과서적 살라미이나 출처 논란이 아킬레스건. 결집에는 유리, 외연에는 불리.
+  복당은 시간문제, 당권은 별개. 출구는 청문회·수사 이관 후 정책 전환. 투자·정치 자문 아님.
+summary_for_ai: |
+  Korean political-economy column (not investment or campaign advice), 2026-09-09, group korea.
+  Thesis: exposés are signaling/sequential/war-of-attrition games; costly signals, anchoring, salami tactics, and an exit formula beat raw information quality.
+  Case: Sep 2026 Han Dong-hoon independent MP leak of Kim Seung-won confirmation-hearing recordings; Democratic Party response team; source/edit frames; PPP re-entry vs party leadership (Jang Dong-hyuk).
+  Timing: attention window before hearings; diminishing sensitivity; scandal fatigue; peak-end; messenger vs message.
+  Outlook: re-entry likely as option value until 2027 convention; founding a new party unlikely; expansion requires policy pivot, not more tapes.
+  Disclaimer: not investment, legal, or political advice.
+date: 2026-09-09
+updated: 2026-09-09
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 한동훈
+  - 김승원
+  - 폭로
+  - 게임이론
+  - 행동경제학
+  - 국민의힘
+  - 복당
+  - 청문회
+keywords:
+  - "한동훈"
+  - "김승원 녹취"
+  - "폭로의 정치"
+  - "게임 이론"
+  - "살라미 전술"
+  - "국민의힘 복당"
+  - "장동혁"
+  - "행동경제학"
+  - "청문회"
+group: korea
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/economics-of-exposes.jpg"
+image: "https://vibequant.cc/og/economics-of-exposes.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # 폭로의 정치 - 게임 이론과 행동경제학으로 읽는 타이밍·내용·출구 공식
+
+![한동훈 무소속 의원이 기자회견에서 발언하는 모습 — 폭로의 정치 칼럼 썸네일](https://vibequant.cc/og/economics-of-exposes.jpg)
 
 정치판에서 폭로는 더 이상 예외적 사건이 아니다. 녹취록, 문자, 수사 자료가 하루가 멀다 하고 쏟아지고, 그것이 정치적 생존과 제거를 가른다. 그런데 폭로는 감(感)의 영역처럼 보이지만 실은 꽤 정교한 타이밍과 여론 게임이다. 폭로자, 피폭로자, 언론, 유권자라는 네 플레이어가 불완전 정보 아래에서 순차적으로 수를 두는 게임이며, 그 승패를 가르는 것은 정보의 질 못지않게 인간의 인지 편향이다.
 
@@ -164,3 +218,8 @@
 폭로의 정치가 효과를 보려면 내용의 진실성, 타이밍의 적절성, 프레임의 설득력이 삼위일체를 이뤄야 한다. 여기에 한 가지를 더해야 한다. **출구의 설계**다. 폭로로 얻은 지지율은 폭로의 진실성이 제도에서 검증될 때까지 일시적이며, 폭로자가 제때 물러서지 못하면 그 일시적 지지율마저 메신저 논란과 피로감에 잠식된다.
 
 폭로가 난무할수록 진위를 가리는 일은 어려워지고 정치에 대한 신뢰는 떨어진다. 폭로는 정치의 수단일 수는 있어도 목적일 수는 없다. 폭로 정국을 정책 정국으로 전환하는 정치, 그것이 폭로로 시작한 정치인이 폭로에 소모되지 않는 유일한 길이다.
+
+---
+
+*이 글은 게임 이론·행동경제학으로 본 정치 분석이며, 투자 권유나 특정 정당·후보에 대한 지지·자문이 아닙니다.*
+

@@ -676,6 +676,8 @@ const SLUG_OVERRIDES = {
   "Line/SoftBank-Naver-Line.md": "softbank-naver-line",
   "Kakao/Public-Kakao-Issue.md": "public-kakao-issue",
   "IDOL/IVE-Starship-Issue.md": "ive-starship-issue",
+  "The-Economics-of-Expos\u00e9s.md": "economics-of-exposes",
+  "The-Economics-of-Exposes.md": "economics-of-exposes",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
