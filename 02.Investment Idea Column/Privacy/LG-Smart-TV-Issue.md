@@ -1,4 +1,57 @@
+<!--
+---
+title: "왜 LG TV는 화면이 꺼진 상태에서도 듣고 있을까?"
+title_en: "Why Is an LG TV Still Listening After the Screen Goes Dark?"
+subtitle: "도청의 문제가 아니라, 광고 수익의 문제다"
+description: "LG webOS TV의 대기 수집은 도청이 아니라 광고 사업이다. 전사 텍스트, 가구 지문, 오프라인 큐. 통신비밀보호법과 OTA 동의의 공백. 투자 권유 아님."
+abstract: |
+  2026-09-07 Gamers Nexus 조사: LG 스마트 TV가 위치·주변 Wi-Fi·로컬 기기·음성 전사 텍스트를 수집하고, 대기 상태·오프라인 큐까지 이어진다는 주장.
+  "화면 꺼짐"은 전원 꺼짐이 아니다. 녹음이 아니라 텍스트 전사는 부인의 문법. 로컬 스캔은 가구 지문(2차 기기 3.63억).
+  패널 마진 붕괴 → CTV 광고가 본체. 한국은 통신비밀보호법·개인정보보호법·OTA 재동의. 투자·법률 자문 아님.
+summary_for_ai: |
+  Korean privacy/security column (not investment or legal advice), 2026-09-09, group korea.
+  Event: Gamers Nexus + Level1Techs 135-min investigation (2026-09-07) on LG webOS TV telemetry.
+  Three layers: native collection (IP, location, Wi-Fi, unpaired LAN devices, plaintext STT); standby/offline store-and-forward claims; RCE demo of mic capture.
+  Thesis: not a bugging scandal but ad P&L — panel sold near cost, household fingerprint + ACR + STT as the product (LG Ads: 49M US TVs, 363M addressable secondary devices).
+  Korea: Communications Secrets Protection Act vs transcription; PIPA consent vs OTA scope change; conference-room TV as unmanaged always-on node.
+  Mitigations: air-gap, VLAN, disable Live Plus/ACR and always-ready voice. Not unique to LG (Samsung, TCL, Roku, Vizio ACR).
+date: 2026-09-09
+updated: 2026-09-09
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - LG
+  - 스마트TV
+  - webOS
+  - 프라이버시
+  - ACR
+  - 개인정보
+  - Gamers-Nexus
+  - 통신비밀보호법
+keywords:
+  - "LG 스마트 TV"
+  - "webOS"
+  - "화면 꺼짐 도청"
+  - "Gamers Nexus"
+  - "ACR"
+  - "Live Plus"
+  - "가구 지문"
+  - "통신비밀보호법"
+  - "개인정보보호법"
+group: korea
+featured: true
+featured_rank: 0
+og_image: "https://vibequant.cc/og/lg-smart-tv-issue.jpg"
+image: "https://vibequant.cc/og/lg-smart-tv-issue.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # 왜 LG TV는 화면이 꺼진 상태에서도 듣고 있을까?
+
+![LG webOS TV 홈 화면 — 스마트 TV 프라이버시 칼럼 썸네일](https://vibequant.cc/og/lg-smart-tv-issue.jpg)
 
 ## — 도청의 문제가 아니라, 광고 수익의 문제다
 
@@ -202,3 +255,7 @@ TV 하드웨어 마진은 오래전에 붕괴했다. 패널은 범용화됐고, 
 - Notebookcheck, Digital Watch Observatory 관련 보도 (2026. 9.)
 - The Register / BBC / CBC, 2013년 Jason Huntley 사건 및 LG 공식 입장
 - LG Ads Solutions 공개 마케팅 자료 (미국 webOS TV 4,900만 대, 도달 가능 2차 기기 3억 6,300만 대)
+
+---
+
+*이 글은 프라이버시·보안 분석이며, 투자 권유나 법률 자문이 아닙니다. LG에 대한 고발·단정이 아니라 사업 구조와 능력(capability)을 읽은 글입니다.*

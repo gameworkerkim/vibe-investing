@@ -679,6 +679,7 @@ const SLUG_OVERRIDES = {
   "The-Economics-of-Expos\u00e9s.md": "economics-of-exposes",
   "The-Economics-of-Exposes.md": "economics-of-exposes",
   "AI_Revolution/Llm Token-Saving-Full-Writers-Marketers.md": "llm-token-saving-writers-marketers",
+  "Privacy/LG-Smart-TV-Issue.md": "lg-smart-tv-issue",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
