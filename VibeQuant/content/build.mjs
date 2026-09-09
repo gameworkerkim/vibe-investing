@@ -325,22 +325,39 @@ function truncateAtWord(text, max = 155) {
   return `${base}…`;
 }
 
+const BOLD_START = "%%BQ:%%";
+const BOLD_END = "%%:QB%%";
+
 /** Fix common MD bold patterns; marked often fails on complex **…** spans. */
 function sanitizeMd(md) {
   let s = String(md ?? "");
-  // ** spaced ** (horizontal whitespace only; skip closing ** after . or word — e.g. ".** 그")
-  s = s.replace(/(?<![.*\w\uAC00-\uD7A3%)\]])\*\*[ \t]+([^*\n]+?)[ \t]*\*\*/g, (_, t) => `**${t.trim()}**`);
+  // ** spaced ** — do not treat a closer after punctuation (":** next") as an opener
+  s = s.replace(
+    /(?<![.:：,;!?—–.*\w\uAC00-\uD7A3%)\]])\*\*[ \t]+([^*\n]+?)[ \t]*\*\*/g,
+    (_, t) => `**${t.trim()}**`
+  );
   // **'quoted'** / **"quoted"**
   s = s.replace(/\*\*(['"“”‘’「」])([^*\n]+?)\1\*\*/g, "**$2**");
-  // Pre-convert inline bold to HTML so marked cannot leave literal **
-  const parts = s.split(/(```[\s\S]*?```)/);
-  s = parts
+  // Protect **bold** from marked (colon/Korean closers nest wrongly) and from
+  // space-stripping around raw <strong> injected before parse.
+  const fences = s.split(/(```[\s\S]*?```)/);
+  s = fences
     .map((part, idx) => {
-      if (idx % 2 === 1) return part; // fenced code
-      return part.replace(/\*\*([^*\n]+?)\*\*/g, "<strong>$1</strong>");
+      if (idx % 2 === 1) return part;
+      return part
+        .split(/(`[^`\n]*`)/)
+        .map((bit, j) => {
+          if (j % 2 === 1) return bit;
+          return bit.replace(/\*\*([^*\n]+?)\*\*/g, `${BOLD_START}$1${BOLD_END}`);
+        })
+        .join("");
     })
     .join("");
   return s;
+}
+
+function restoreProtectedBold(html) {
+  return String(html ?? "").replace(/%%BQ:%%([\s\S]*?)%%:QB%%/g, "<strong>$1</strong>");
 }
 
 function fixLiteralBoldHtml(html) {
@@ -657,6 +674,7 @@ const SLUG_OVERRIDES = {
   "CTI-2026-0822-Column-JA.md": "cert-authority-breach-20260822-ja",
   "CTI-2026-0822-Column-CN.md": "cert-authority-breach-20260822-cn",
   "CTI-2026-0910-KIMSUKI.md": "kimsuky-ai-20260910",
+  "CTI-2026-0910-KIMSUKY.md": "kimsuky-ai-20260910",
   "USA/Age-of-USD.md": "age-of-usd",
   "AI-IDC/Why-High-Power-Datacenter.md": "why-high-power-datacenter",
   "BitCoin/BTC-Arbitrage-Bithumb-Column.md": "btc-arbitrage-bithumb",
@@ -1774,6 +1792,7 @@ function buildArticle(item, section) {
   if (meta.description) parsed.description = String(meta.description);
   if (meta.subtitle) parsed.subtitle = String(meta.subtitle);
   let htmlBody = marked.parse(sanitizeMd(parsed.bodyMd || stripFrontmatter(raw)));
+  htmlBody = restoreProtectedBold(htmlBody);
   htmlBody = fixLiteralBoldHtml(htmlBody);
   htmlBody = htmlBody.replace(/^\s*<h1\b[^>]*>[\s\S]*?<\/h1>\s*/i, "");
   const prefix = "../../";
