@@ -1,3 +1,53 @@
+<!--
+---
+title: "유료 LLM 토큰 절약 종합 가이드 — 통합 완전판"
+title_en: "A Complete Guide to Saving Paid LLM Tokens — Unified Edition for Writers and Marketers"
+subtitle: "작가·인문 필자·마케터를 위한 실전서"
+description: "정액제 작가·마케터의 비용은 한도다. 캐시·부분 출력·배치가 우선이고, NotebookLM·DeepSeek 수치는 2026년 9월 기준으로 다시 본다. 투자 권유 아님."
+abstract: |
+  정액제 채팅과 API는 다른 트랙이다. 진짜 비용은 청구액이 아니라 5시간·주간 한도이며, 대화 길이가 낭비를 만든다.
+  우선순위는 프로젝트 캐시, 부분 출력, 배치 요청. 영어 압축·원시인 영어는 창작에서 상한이 낮다.
+  NotebookLM 무료 50회/일, DeepSeek 요금 변경, OpenRouter를 2026년 9월 수치로 재정리. 투자 권유 아님.
+summary_for_ai: |
+  Korean practical guide (not investment advice), updated 2026-09-09, group ai-llm.
+  Unified rewrite: Track A subscription chat vs Track B API; quota is time not money.
+  Priority order: project cache, partial output, batch requests, session design, model/effort, tools, NotebookLM, API, prompt wording last.
+  New: input-share formula, NotebookLM daily 50-query cap, DeepSeek Aug 2026 price change, OpenRouter, pipeline when-worth-it, security of unpublished MSS.
+  Warns against caveman English for literary work; cite-and-calculate not copy savings percentages.
+  Sources: Anthropic usage/RAG help, Claude API pricing, NotebookLM, DeepSeek, OpenRouter. Re-check official pages.
+date: 2026-09-09
+updated: 2026-09-09
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - LLM
+  - 토큰절약
+  - Claude
+  - 작가
+  - 마케터
+  - NotebookLM
+  - DeepSeek
+  - Anthropic
+keywords:
+  - "LLM 토큰 절약"
+  - "Claude 사용 한도"
+  - "프로젝트 캐시"
+  - "NotebookLM"
+  - "DeepSeek 요금"
+  - "작가 ChatGPT"
+  - "마케터 프롬프트"
+  - "claude.ai Pro"
+group: ai-llm
+featured: true
+featured_rank: 0
+og_image: "https://vibequant.cc/og-default.png"
+image: "https://vibequant.cc/og-default.png"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # 유료 LLM 토큰 절약 종합 가이드 — 통합 완전판
 
 ## 작가·인문 필자·마케터를 위한 실전서
@@ -6,7 +56,7 @@
 
 ---
 
-# PART 0. 관점의 전환
+## PART 0. 관점의 전환
 
 ## 절약의 목표는 돈이 아니라 시간이다
 
@@ -40,7 +90,7 @@
 
 ---
 
-# PART 1. 비용 구조: 당신은 어느 트랙에 있는가
+## PART 1. 비용 구조: 당신은 어느 트랙에 있는가
 
 두 개의 완전히 다른 과금 체계가 있고, 절약 전략도 다르다.
 
@@ -128,7 +178,7 @@ LLM은 기억이 없다. 대화 40번째 턴에서 "그 문단 다시 손봐줘"
 
 ---
 
-# PART 2. 작가와 인문 필자를 위한 절약
+## PART 2. 작가와 인문 필자를 위한 절약
 
 ## 2-1. 가장 큰 낭비: "전문을 다시 써줘"
 
@@ -282,7 +332,7 @@ LLM은 기억이 없다. 대화 40번째 턴에서 "그 문단 다시 손봐줘"
 
 ---
 
-# PART 3. 마케터를 위한 절약
+## PART 3. 마케터를 위한 절약
 
 ## 3-1. 카피 30종은 서른 번 묻는 게 아니라 한 번 묻는다
 
@@ -388,7 +438,7 @@ CSV를 텍스트로 붙여넣으면 헤더·구분자·반복 값·빈 셀까지
 
 ---
 
-# PART 4. 일반 사용자를 위한 기본기
+## PART 4. 일반 사용자를 위한 기본기
 
 작가도 마케터도 아닌, 그냥 매일 쓰는 사람을 위한 최소 규칙이다. 이것만 해도 30~50%가 달라진다.
 
@@ -405,7 +455,7 @@ CSV를 텍스트로 붙여넣으면 헤더·구분자·반복 값·빈 셀까지
 
 ---
 
-# PART 5. 공통 운영 규칙
+## PART 5. 공통 운영 규칙
 
 ## 5-1. 계기판을 켜고 일한다
 
@@ -451,7 +501,7 @@ CSV를 텍스트로 붙여넣으면 헤더·구분자·반복 값·빈 셀까지
 
 ---
 
-# PART 6. 언어와 문체의 경제학 — 인문학적 관점
+## PART 6. 언어와 문체의 경제학 — 인문학적 관점
 
 이 장은 절약 기법이 아니라 **절약해서는 안 되는 것**에 관한 이야기다.
 
@@ -528,7 +578,7 @@ CSV를 텍스트로 붙여넣으면 헤더·구분자·반복 값·빈 셀까지
 
 ---
 
-# PART 7. 외부 도구 활용 — 현재 수치로 다시 보기
+## PART 7. 외부 도구 활용 — 현재 수치로 다시 보기
 
 여러 가이드가 NotebookLM·DeepSeek·OpenRouter를 절약 수단으로 소개한다. 유용하지만 **수치가 계속 바뀌고 있고**, 대부분의 소개글이 오래된 수치를 인용한다. 2026년 9월 기준으로 다시 정리한다.
 
@@ -604,7 +654,7 @@ CSV를 텍스트로 붙여넣으면 헤더·구분자·반복 값·빈 셀까지
 
 ---
 
-# PART 8. 다단계 파이프라인 — 언제 만들 가치가 있는가?
+## PART 8. 다단계 파이프라인 — 언제 만들 가치가 있는가?
 
 널리 공유되는 6단계 워크플로우가 있다.
 
@@ -644,7 +694,7 @@ CSV를 텍스트로 붙여넣으면 헤더·구분자·반복 값·빈 셀까지
 
 ---
 
-# PART 9. 보안: 원고와 캠페인 자료는 어디로 가는가
+## PART 9. 보안: 원고와 캠페인 자료는 어디로 가는가
 
 토큰 절약 가이드에 이 장이 없는 경우가 많은데, 실무에서는 가격보다 중요하다.
 
@@ -684,7 +734,7 @@ CSV를 텍스트로 붙여넣으면 헤더·구분자·반복 값·빈 셀까지
 
 ---
 
-# PART 10.  규모가 커졌을 때 API 전환하라
+## PART 10.  규모가 커졌을 때 API 전환하라
 
 ## 10-1. 판단 기준
 
@@ -758,7 +808,7 @@ CSV를 텍스트로 붙여넣으면 헤더·구분자·반복 값·빈 셀까지
 
 ---
 
-# PART 11. 안티패턴 — 이렇게 하면 오히려 손해
+## PART 11. 안티패턴 — 이렇게 하면 오히려 손해
 
 1. **재질문을 유발하는 과압축.** 대화형 작업에서 재질문 15%면 손익분기다. 압축은 "한 번에 이해되는 선"까지만.
 2. **품질 미달 모델로 내렸다가 재시도.** 하위 모델로 실패하고 상위 모델로 다시 하면 처음부터 상위 모델을 쓰는 것보다 비싸다. 티어링은 어떤 작업이 어느 티어에 맞는지 알 때만 유효하다.
@@ -773,7 +823,7 @@ CSV를 텍스트로 붙여넣으면 헤더·구분자·반복 값·빈 셀까지
 
 ---
 
-# PART 12. 직군별 체크리스트
+## PART 12. 직군별 체크리스트
 
 ## 작가·인문 필자용
 
@@ -820,7 +870,7 @@ CSV를 텍스트로 붙여넣으면 헤더·구분자·반복 값·빈 셀까지
 
 ---
 
-# PART 13. 한 장 요약
+## PART 13. 한 장 요약
 
 | 순서 | 할 일 | 예상 효과 |
 |------|-------|-----------|
@@ -840,7 +890,7 @@ CSV를 텍스트로 붙여넣으면 헤더·구분자·반복 값·빈 셀까지
 
 ---
 
-# 마치며
+## 마치며
 
 토큰 최적화 글이 유독 과장되기 쉬운 이유가 있다. **절감률은 분모를 밝히지 않고도 쓸 수 있는 숫자이기 때문이다.** "80% 절감"은 어떤 작업에서 무엇을 기준으로 재느냐에 따라 사실일 수도 있고 완전한 허구일 수도 있다. 그리고 그 분모를 밝힌 글은 거의 없다.
 
@@ -877,3 +927,7 @@ CSV를 텍스트로 붙여넣으면 헤더·구분자·반복 값·빈 셀까지
 - OpenRouter 한도 — https://openrouter.ai/docs/api_reference/limits
 
 *가격·한도·기능은 자주 바뀐다. 특히 DeepSeek은 2026년 8월, OpenRouter는 그 이전에 조건이 변경됐다. 중요한 판단 전에 공식 페이지에서 다시 확인할 것.*
+
+---
+
+*이 글은 유료 LLM 사용 실전 가이드이며, 투자 권유나 특정 모델·플랜 가입 권유가 아닙니다.*
