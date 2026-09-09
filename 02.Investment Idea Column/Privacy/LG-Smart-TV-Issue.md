@@ -51,9 +51,9 @@ robots: index,follow
 
 # 왜 LG TV는 화면이 꺼진 상태에서도 듣고 있을까?
 
-![LG webOS TV 홈 화면 — 스마트 TV 프라이버시 칼럼 썸네일](https://vibequant.cc/og/lg-smart-tv-issue.jpg)
+## 도청의 문제가 아니라, 광고 수익의 문제다
 
-## — 도청의 문제가 아니라, 광고 수익의 문제다
+![LG webOS TV 홈 화면 — 스마트 TV 프라이버시 칼럼 썸네일](https://vibequant.cc/og/lg-smart-tv-issue.jpg)
 
 2026년 9월 7일, 유튜브 채널 가머스 넥서스(Gamers Nexus)가 Level1Techs 및 독립 보안 연구자들과 함께 135분짜리 조사 영상을 공개했다. 요지는 이렇다. LG 스마트 TV가 시청 정보뿐 아니라 집 안의 다른 기기, 주변 Wi-Fi, 위치, 그리고 마이크로 들어온 음성에서 생성된 텍스트까지 수집하고 있으며, 그중 일부는 화면이 꺼진 대기 상태에서도 계속된다는 것이다.
 
