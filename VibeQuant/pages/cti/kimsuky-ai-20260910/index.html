@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>북한 해킹 팀 김수키(Kimsuky)도 AI 딸깍 - AI 무기화 종합 분석 — VibeQuant</title>
+  <meta name="description" content="김수키가 오픈코드(opencode)로 미끼 문서를 만들어 GitHub C2와 AsyncRAT을 배포한 Operation GitPower 변종. AI 무기화와 다층 방어를 정리한 CTI 보고서." />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/kimsuky-ai-20260910/" />
+  <meta property="og:title" content="북한 해킹 팀 김수키(Kimsuky)도 AI 딸깍 - AI 무기화 종합 분석" />
+  <meta property="og:description" content="김수키가 오픈코드(opencode)로 미끼 문서를 만들어 GitHub C2와 AsyncRAT을 배포한 Operation GitPower 변종. AI 무기화와 다층 방어를 정리한 CTI 보고서." />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/kimsuky-ai-20260910/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og/kimsuky-20260910.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og/kimsuky-20260910.jpg" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"북한 해킹 팀 김수키(Kimsuky)도 AI 딸깍 - AI 무기화 종합 분석","description":"김수키가 오픈코드(opencode)로 미끼 문서를 만들어 GitHub C2와 AsyncRAT을 배포한 Operation GitPower 변종. AI 무기화와 다층 방어를 정리한 CTI 보고서.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/kimsuky-ai-20260910/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0910-KIMSUKI.md","image":"https://vibequant.cc/og/kimsuky-20260910.jpg","url":"https://cti.vibequant.cc/cti/kimsuky-ai-20260910/","datePublished":"2026-09-10","dateModified":"2026-09-10","inLanguage":"ko","keywords":"Kimsuky, AsyncRAT, Spearphishing, GitHub-C2, opencode, DPRK"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"북한 해킹 팀 김수키(Kimsuky)도 AI 딸깍 - AI 무기화 종합 분석","item":"https://cti.vibequant.cc/cti/kimsuky-ai-20260910/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 북한 · Lazarus · Kimsuky</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">북한 · Lazarus · Kimsuky</p>
+        <h1>북한 해킹 팀 김수키(Kimsuky)도 AI 딸깍 - AI 무기화 종합 분석</h1>
+        <p class="article-dates"><time datetime="2026-09-10">발행 2026.09.10</time> · 주제 Kimsuky · AsyncRAT · Spearphishing · GitHub-C2 · opencode · DPRK</p>
+        
+        <p class="lede">위협 행위자 프로파일부터 코딩 에이전트 악용, 그리고 다층 AI 방어 전략까지</p>
+        
+        <nav class="share-bar" aria-label="공유" data-url="https://cti.vibequant.cc/cti/kimsuky-ai-20260910/" data-title="북한 해킹 팀 김수키(Kimsuky)도 AI 딸깍 - AI 무기화 종합 분석" data-text="김수키가 오픈코드(opencode)로 미끼 문서를 만들어 GitHub C2와 AsyncRAT을 배포한 Operation GitPower 변종. AI 무기화와 다층 방어를 정리한 CTI 보고서." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fkimsuky-ai-20260910%2F&amp;text=%EB%B6%81%ED%95%9C%20%ED%95%B4%ED%82%B9%20%ED%8C%80%20%EA%B9%80%EC%88%98%ED%82%A4(Kimsuky)%EB%8F%84%20AI%20%EB%94%B8%EA%B9%8D%20-%20AI%20%EB%AC%B4%EA%B8%B0%ED%99%94%20%EC%A2%85%ED%95%A9%20%EB%B6%84%EC%84%9D" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fkimsuky-ai-20260910%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fkimsuky-ai-20260910%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p><img src="https://vibequant.cc/og/kimsuky-20260910.jpg" alt="김정은과 북한 ICBM 이동발사대 — 김수키(Kimsuky) 배후인 정찰총국 국가 지원 사이버 위협의 상징"></p>
+<p>북한의 해킹 부대인 김수키는 인공지능을 지엽적으로 사용하는 것에서 벗어나서 적극적으로 활용하기 시작했다. 2026년 9월 7일 지니언스 시큐리티센터(GSC)는 김수키가 오픈소스 AI 코딩 에이전트 <strong>오픈코드(opencode)</strong> 로 제작한 미끼 문서를 실제 공격에 사용한 정황을 공개했다. 이는 해킹 조직이 AI 코딩 에이전트를 실제 공격 파일 제작에 활용한 것이 확인된 최초 사례로 볼 수 있다.</p>
+<p>여기서 가장 중요한 점은 AI가 만든 문서를 검수도 없이, 수정도 없이 올린 덕분에 AI가 만들어낸 질 낮은 품질의 문서라는 점을 쉽게 인지할 수 있었다.</p>
+<p>북한의 해킹 조직도 AI 딸깍으로 생산성과 품질이라는 두 마리 토끼를 놓치고 내부적인 홍역을 치루고 있는 것이다. </p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>문서 종류</td>
+<td>위협 인텔리전스 종합 분석 보고서 (Comprehensive Threat Intelligence Report)</td>
+</tr>
+<tr>
+<td>대상 위협 그룹</td>
+<td>Kimsuky (김수키) / 북한 정찰총국(RGB) 산하</td>
+</tr>
+<tr>
+<td>관련 캠페인</td>
+<td>Operation GitPower, FlowerPower 계열, KONNI 연계 활동</td>
+</tr>
+<tr>
+<td>분석 대상 기간</td>
+<td>2012년 ~ 2026년 9월 (집중 분석: 2025.09 ~ 2026.09)</td>
+</tr>
+<tr>
+<td>문서 버전</td>
+<td>v2.0 (Full Edition)</td>
+</tr>
+<tr>
+<td>작성일</td>
+<td>2026년 9월 10일</td>
+</tr>
+<tr>
+<td>신뢰도</td>
+<td>기술적 사실 — High / 귀속 — Moderate-High / 전망 — Moderate</td>
+</tr>
+<tr>
+<td>배포 등급</td>
+<td>TLP:CLEAR</td>
+</tr>
+<tr>
+<td>작성</td>
+<td>Dennis Kim (김호광) / <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>0. 요약 (Executive Summary)</h2>
+<p><strong>① 김수키는 실험을 끝내고 실전에 진입했다.</strong> 2026년 9월 7일 지니언스 시큐리티센터(GSC)는 김수키가 오픈소스 AI 코딩 에이전트 <strong>오픈코드(opencode)</strong> 로 제작한 미끼 문서를 실제 공격에 사용한 정황을 공개했다. 이는 해킹 조직이 AI 코딩 에이전트를 실제 공격 파일 제작에 활용한 것이 확인된 최초 사례다.</p>
+<p><strong>② 세 개의 보안 기업이, 서로 다른 증거로, 같은 결론에 도달했다.</strong></p>
+<ul>
+<li><strong>카스퍼스키(2026.05)</strong> — 러스트 기반 백도어 <code>HelloDoor</code> 코드 내부의 이모지 주석과 문법 오류 → <strong>악성코드 개발에 LLM 관여</strong></li>
+<li><strong>지니언스(2026.08)</strong> — C2 인프라에서 로컬 LLM 3종·RAG DB·에이전트 프레임워크·STT 도구 → <strong>자체 AI 연구 환경 구축</strong></li>
+<li><strong>지니언스(2026.09)</strong> — 미끼 PDF 메타데이터의 <code>opencode</code> 문자열 → <strong>실전 산출물 제작에 코딩 에이전트 사용</strong></li>
+</ul>
+<p>여러 건의 독립 관측이 수렴한다는 것은 단일 벤더의 오판 가능성이 낮다는 뜻이다.</p>
+<p><strong>③ 그런데 그들은 만들어진 것을 읽지 않았다 — 문서에서도, 코드에서도.</strong> 미끼 PDF에는 <code>(임시값)</code>이 최대 9회 잔존했고 메타데이터에 <code>opencode</code>가 그대로 남았다. 29건 중 18건은 파일명만 바꾼 재사용이었고, 4개 PDF의 생성 시각은 <strong>초 단위까지 동일</strong>했다. 그리고 악성코드 <code>HelloDoor</code>에는 <strong>이모지가 들어간 주석과 문법 오류가 컴파일되어 배포</strong>됐다. 문서도, 코드도 북한의 해킹팀 김수키는 검토하지 않았다.</p>
+<p><strong>④ 이것이 본 보고서의 중심 논지다.</strong> 국가 배후 사이버 작전 조직조차 AI 산출물을 검토하지 않고 배포했다. 이는 한국의 기업·기관·공공영역에서 매일 관측되는 것과 <strong>정확히 동일한 실패 패턴</strong>이다. 공격자와 방어자가 같은 인지적 함정에 빠져 있으며, 원인도 같다 — <strong>생성 비용은 0이 됐지만 검토 비용은 그대로다.</strong></p>
+<p><strong>⑤ 이 실수는 탐지 기회지만 반감기가 있다.</strong> 플레이스홀더 잔존, 메타데이터 지문, 이모지 주석은 지금 강력한 신호다. 그러나 공격자가 검수 단계 하나를 추가하거나 혹은 그 검수를 수행할 또 다른 AI 에이전트 하나를 붙이면 이런 AI 품질 문제에 대한 실수는 전부 소멸한다. 동시에 어색한 번역체·맞춤법 오류 같은 전통적 피싱 판별 지표는 이미 무력화되고 있다.</p>
+<p><strong>⑥ 핵심 결론: 다층 AI 방어.</strong> AI는 단일 솔루션이 아니라 사람·문서·실행·지속성·네트워크·페이로드·상관분석·거버넌스 <strong>8개 계층 각각에서 다른 역할</strong>로 배치되어야 한다. 어떤 계층도 단독으로 이 공격을 막지 못한다는 것을 전제로 설계해야 한다.</p>
+<p><strong>⑦ 그리고 AI 방어에도 사람의 검토가 필요하다.</strong> AI를 이용한 공격자의 실패를 방어자가 반복하면, AI 탐지의 오탐과 미탐을 아무도 읽지 않는 상태가 된다. <strong>LLM은 계산을 위한 엑셀이지 모든 것을 통달한 오라클이 아니다.</strong></p>
+<hr>
+<h2>1. 위협 행위자 프로파일 - 김수키</h2>
+<h3>1-1. 기본 식별 정보</h3>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>주 명칭</strong></td>
+<td>Kimsuky (김수키 / 킴수키)</td>
+</tr>
+<tr>
+<td><strong>활동 개시</strong></td>
+<td>최소 2012년 (미 재무부 평가), 2013년 카스퍼스키 최초 공개 분석</td>
+</tr>
+<tr>
+<td><strong>소속</strong></td>
+<td>북한 정찰총국(RGB, Reconnaissance General Bureau) 산하</td>
+</tr>
+<tr>
+<td><strong>하위 조직 평가</strong></td>
+<td>MSMT(다국적제재모니터링팀) 자료 기준 <strong>63연구소</strong> 소속으로 김수키·코니(Konni)가 함께 분류</td>
+</tr>
+<tr>
+<td><strong>성격</strong></td>
+<td>정보 수집(첩보) 중심 APT. 라자루스와 달리 외화벌이보다 첩보가 주 임무이나, 가상자산 관련 활동도 병행 관측</td>
+</tr>
+<tr>
+<td><strong>주요 수법</strong></td>
+<td>스피어피싱, 사회공학, 정상 서비스 악용(Living-off-Trusted-Sites), LNK/PowerShell 체인</td>
+</tr>
+<tr>
+<td><strong>제재 지정</strong></td>
+<td>2023년 11월 30일 미 재무부 OFAC 제재 대상 지정</td>
+</tr>
+</tbody></table>
+<h3>1-2. 별칭(Alias) 정리 — 그리고 중요한 주의사항</h3>
+<table>
+<thead>
+<tr>
+<th>별칭</th>
+<th>부여 기관</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>APT43</strong></td>
+<td>Mandiant / Google</td>
+</tr>
+<tr>
+<td><strong>TA406</strong></td>
+<td>Proofpoint</td>
+</tr>
+<tr>
+<td><strong>Velvet Chollima</strong></td>
+<td>CrowdStrike</td>
+</tr>
+<tr>
+<td><strong>Emerald Sleet</strong> (구 THALLIUM)</td>
+<td>Microsoft</td>
+</tr>
+<tr>
+<td><strong>Black Banshee</strong></td>
+<td>PwC</td>
+</tr>
+<tr>
+<td><strong>ARCHIPELAGO</strong></td>
+<td>Google TAG</td>
+</tr>
+<tr>
+<td><strong>Nickel Kimball</strong></td>
+<td>(미 정부 문서 병기)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>⚠ 분석적 주의사항</strong></p>
+</blockquote>
+<blockquote>
+<p>이 별칭들은 <strong>완전히 동일한 대상을 가리키지 않는다.</strong> 각 벤더는 자체 관측 데이터로 클러스터를 정의하며, 그 경계가 서로 다르다. TA406은 Proofpoint가 관측한 특정 활동 클러스터를 지칭하고, APT43은 Mandiant가 첩보와 자금조달 활동을 묶어 정의한 그룹이다. 부분적으로 겹치되 완전 일치하지 않는다.</p>
+</blockquote>
+<blockquote>
+<p><strong>Konni(코니)</strong> 는 더 복잡하다. 표적 분야와 인프라가 김수키·APT37과 겹쳐 일부 연구자는 동일 조직으로 분류하지만, 별개 클러스터로 보는 견해도 있다. 본 보고서는 Konni 활동을 <strong>김수키 연계로 평가되는 활동</strong> 으로 표기하며 동일시하지 않는다.</p>
+</blockquote>
+<blockquote>
+<p>실무적 의미: 위협 인텔리전스 소비 시 <strong>&quot;김수키가 X를 했다&quot;는 서술의 원 출처와 클러스터 정의를 확인</strong>해야 한다. 이름이 같다고 같은 조직의 같은 팀이 아닐 수 있다.</p>
+</blockquote>
+<h3>1-3. 김수키 해킹 타임라인</h3>
+<table>
+<thead>
+<tr>
+<th>시기</th>
+<th>사건</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2012</td>
+<td>활동 개시 (미 정부 평가 기준)</td>
+</tr>
+<tr>
+<td>2013</td>
+<td>카스퍼스키, 최초 공개 분석 — 한국 싱크탱크·통일 관련 기관 표적</td>
+</tr>
+<tr>
+<td>2014</td>
+<td>한국수력원자력 관련 침해 사건 연계 평가</td>
+</tr>
+<tr>
+<td>2018</td>
+<td>Operation STOLEN PENCIL — 학술기관 대상</td>
+</tr>
+<tr>
+<td>2019</td>
+<td>금융·가상자산 정보 수집 기능 추가 악성코드 관측 (ESRC)</td>
+</tr>
+<tr>
+<td>2020</td>
+<td>UN 관계자 대상 캠페인, AppleSeed 계열 확산</td>
+</tr>
+<tr>
+<td>2021</td>
+<td>한국원자력연구원(KAERI) 내부망 침투 확인</td>
+</tr>
+<tr>
+<td>2022</td>
+<td>AppleSeed 2.1에 <strong>정부 전자인증서(GPKI) 디렉터리 수집 기능</strong> 추가</td>
+</tr>
+<tr>
+<td>2023.06</td>
+<td>한미 정보기관 공동 보안권고 발표 — 언론인·전문가 사칭 수법 경고</td>
+</tr>
+<tr>
+<td>2023.11</td>
+<td><strong>미 재무부 OFAC 제재 지정</strong> (군사정찰위성 발사 대응 조치의 일환)</td>
+</tr>
+<tr>
+<td>2023</td>
+<td>FlowerPower 캠페인 — PowerShell 기반 체계, Git 저장소 활용 (지니언스)</td>
+</tr>
+<tr>
+<td>2024.02</td>
+<td>오피니언 칼럼 위장 캠페인 — RTF 헤더 변조 + Gzip 복구 기법 (지니언스)</td>
+</tr>
+<tr>
+<td>2025.08</td>
+<td><strong>HelloDoor</strong> — 러스트 기반 DLL 백도어 최초 관측</td>
+</tr>
+<tr>
+<td>2025.09~11</td>
+<td><strong>KONNI 연계 원격 초기화 캠페인</strong> — 안드로이드 기기 초기화 + 카카오톡 계정 악용</td>
+</tr>
+<tr>
+<td>2026.01</td>
+<td>VS Code 원격 터널링 악용 분석 공개 (Darktrace)</td>
+</tr>
+<tr>
+<td>2026.03~04</td>
+<td>Webex 사칭·보안 프로그램 설치 페이지 위장, JSONPing 감염 확인 기법 (ENKI)</td>
+</tr>
+<tr>
+<td>2026.04</td>
+<td>LNK + GitHub C2 북한 연계 캠페인 공개 (Fortinet)</td>
+</tr>
+<tr>
+<td>2026.05</td>
+<td><strong>카스퍼스키 — HelloDoor 코드의 LLM 사용 정황, httpMalice, AppleSeed GPKI 수집</strong></td>
+</tr>
+<tr>
+<td>2026.08.10</td>
+<td><strong>지니언스 — Operation GitPower, 로컬 LLM·RAG·에이전트 프레임워크 축적 확인</strong></td>
+</tr>
+<tr>
+<td>2026.09.07</td>
+<td><strong>지니언스 — 오픈코드(opencode) 제작 미끼 문서 확인</strong></td>
+</tr>
+</tbody></table>
+<h3>1-4. 표적 프로파일</h3>
+<p><strong>지리적 우선순위:</strong> 한국 &gt; 미국 &gt; 일본 · 유럽 &gt; 러시아 · UN 기구</p>
+<p><strong>분야별 표적</strong></p>
+<table>
+<thead>
+<tr>
+<th>분야</th>
+<th>구체적 표적</th>
+<th>공격 목적</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>외교·안보</td>
+<td>통일부 관련 기관, 재외공관, 한반도 전문 싱크탱크, 외교 연구자</td>
+<td>정책 동향 첩보</td>
+</tr>
+<tr>
+<td>국방·방산</td>
+<td>군 관계자, 방산업체, 관련 협력사</td>
+<td>기술·작전 정보</td>
+</tr>
+<tr>
+<td>원자력</td>
+<td>원자력 연구기관, 발전 운영사</td>
+<td>핵 기술 정보</td>
+</tr>
+<tr>
+<td>정부·공공</td>
+<td>공무원(GPKI 인증서 탈취), 공공기관 홈페이지</td>
+<td>계정 도용, 내부망 확산</td>
+</tr>
+<tr>
+<td>학술·언론</td>
+<td>대학, 연구소, 기자 (사칭 및 표적 양방향)</td>
+<td>접근 경로 확보, 신뢰 획득</td>
+</tr>
+<tr>
+<td>금융·가상자산</td>
+<td>핀테크 플랫폼 사용자, 가상자산 종사자</td>
+<td>자금 확보, 지갑 정보</td>
+</tr>
+<tr>
+<td><strong>인권·탈북민</strong></td>
+<td>북한인권운동가, 탈북 청소년 상담사</td>
+<td><strong>감시 및 직접 피해 유발</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>마지막 항목은 성격이 다르다. 첩보 수집이 아니라 <strong>개인에 대한 직접적 위해</strong>를 목적으로 한다. 2025년 KONNI 연계 캠페인에서 확인된 것이 이 유형이다.</p>
+</blockquote>
+<h3>1-5. 악성코드 계보</h3>
+<table>
+<thead>
+<tr>
+<th>악성코드</th>
+<th>성격</th>
+<th>특징</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>AppleSeed</strong></td>
+<td>백도어 (장기 주력)</td>
+<td>문서·키입력·USB 수집. 2022년부터 <code>C:\GPKI</code> 디렉터리 수집 기능 추가</td>
+</tr>
+<tr>
+<td><strong>PebbleDash</strong></td>
+<td>백도어</td>
+<td>오래된 계열. 이후 변종의 기반</td>
+</tr>
+<tr>
+<td><strong>httpMalice</strong></td>
+<td>백도어 (신규, 2026)</td>
+<td>PebbleDash와 AppleSeed 두 클러스터 특성 결합. Dropbox API 버전과 HTTP(S) 버전 존재. <code>CacheDB</code> 윈도우 서비스로 지속성 확보</td>
+</tr>
+<tr>
+<td><strong>HelloDoor</strong></td>
+<td>백도어 (신규, 2025.08~)</td>
+<td><strong>김수키 최초의 러스트(Rust) 기반 DLL 백도어.</strong> JSE 드로퍼로 배포, TryCloudflare 임시 터널을 C2로 사용. <strong>코드 내 이모지 주석·문법 오류 → LLM 개발 정황</strong></td>
+</tr>
+<tr>
+<td><strong>HTTPSpy 변종</strong></td>
+<td>정보 수집</td>
+<td>2026년 ENKI 관측. 시스템 정보·화면 캡처·메모리 실행</td>
+</tr>
+<tr>
+<td><strong>AsyncRAT</strong> (오픈소스)</td>
+<td>RAT</td>
+<td>Operation GitPower에서 이미지 위장·RC4 암호화 형태로 배포</td>
+</tr>
+<tr>
+<td><strong>JSONPing</strong></td>
+<td>감염 확인 기법</td>
+<td>실시간 감염 여부 확인</td>
+</tr>
+</tbody></table>
+<p><strong>계보에서 읽어야 할 것:</strong>김수키는 도구를 버리지 않고<strong>누적</strong>한다. AppleSeed는 10년 가까이 유지되며 기능이 덧붙는다. 동시에 러스트 같은 신규 언어와 오픈소스 RAT을 병행 도입한다. <strong>오래된 IoC를 폐기하지 말아야 하는 이유</strong>가 여기 있다.</p>
+<h3>1-6. 지속적으로 관측되는 TTP 패턴</h3>
+<ol>
+<li><strong>정상 서비스 악용(LOTS)</strong> — GitHub, GitLab, Pastebin, Dropbox, TryCloudflare, VS Code 원격 터널. 모두 차단할 수 없는 신뢰 서비스다.</li>
+<li><strong>정상 도구 악용(LOLBin/LOTL)</strong> — PowerShell, 예약 작업, VS Code, DW에이전트, Google Find Hub.</li>
+<li><strong>LNK 중심 초기 실행</strong> — 10년 가까이 유지되는 핵심 기법.</li>
+<li><strong>신뢰 관계 악용</strong> — 지인 사칭, 실제 회의 일정 확보 후 활용, 탈취 계정을 통한 2차 유포.</li>
+<li><strong>문서 위장</strong> — 공문, 사례비 지급 의뢰, 언론 원고, 대사관 서신, 투자 전략 팩, 보험료 납부 안내.</li>
+</ol>
+<hr>
+<h2>2. 최근 12개월 활동 스펙트럼 (2025.09 ~ 2026.09)</h2>
+<p>AI 악용 사건 하나만 보면 전체 그림을 놓친다. 같은 기간 김수키(및 연계 클러스터)는 <strong>세 개의 축으로 동시 확장</strong>하고 있었다.</p>
+<h3>축 A — 파괴적 전환 - 정보 탈취를 넘어 직접 피해로</h3>
+<p><strong>KONNI 연계 원격 초기화 캠페인 (2025.09 발생, 2025.11 공개, 지니언스)</strong></p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>초기 침투</td>
+<td>국세청 사칭 피싱 메일 → 악성 파일 다운로드</td>
+</tr>
+<tr>
+<td>계정 탈취</td>
+<td>PC 침투 후 구글·네이버 등 IT 서비스 계정 장악</td>
+</tr>
+<tr>
+<td><strong>원격 초기화</strong></td>
+<td>구글 <strong>Find Hub</strong>(도난·분실 기기 관리 기능)를 악용해 피해자 스마트폰·태블릿 <strong>원격 초기화</strong> — 사진·문서·연락처 전부 삭제</td>
+</tr>
+<tr>
+<td>동시 유포</td>
+<td>PC 버전 카카오톡으로 지인에게 &#39;스트레스 해소 프로그램&#39; 위장 악성파일 전송</td>
+</tr>
+<tr>
+<td>소통 차단</td>
+<td>지인이 진위를 확인하려 전화·문자를 해도 <strong>피해자 기기는 이미 초기화 진행 중</strong></td>
+</tr>
+<tr>
+<td>복구 방해</td>
+<td>원격 초기화를 <strong>여러 차례 반복 실행</strong></td>
+</tr>
+<tr>
+<td>흔적 삭제</td>
+<td>네이버 계정 로그인 후 구글 보안 경고 메일 삭제, 휴지통 기록까지 제거</td>
+</tr>
+</tbody></table>
+<p><strong>표적:</strong> 탈북 청소년 전문 심리상담사, 북한인권운동가</p>
+<p><strong>분석적 의미:</strong>국가 배후 해커가 기기 위치 추적과 원격 초기화를 감행한 사례는 이것이 처음으로 보고됐다. 지니언스는 데이터 삭제·계정 탈취·감시를 결합한 형태가 북한발 해킹에서 전례 없다고 평가했다.<strong>사이버 작전이 정보전 단계를 넘어 개인의 물리적 일상을 직접 타격하는 단계로 이동했다는 신호다.</strong></p>
+<p>이 사건은 본 보고서의 AI 논의와 직접 연결되지는 않지만, <strong>김수키 계열의 작전 목표가 확장되고 있다</strong>는 맥락을 제공한다. AI로 공격 준비 비용이 떨어지고, 작전 목표는 넓어지고 있다.</p>
+<h3>축 B — 정상 도구 악용의 심화</h3>
+<table>
+<thead>
+<tr>
+<th>도구</th>
+<th>악용 방식</th>
+<th>출처</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>VS Code 원격 터널링</strong></td>
+<td>마이크로소프트 인프라를 경유하는 통신 → 기존 C2 탐지 무력화</td>
+<td>카스퍼스키(2026.05), Darktrace(2026.01)</td>
+</tr>
+<tr>
+<td><strong>TryCloudflare</strong></td>
+<td>클라우드플레어 임시 터널을 HelloDoor의 C2로 사용 → 인프라 추적 곤란</td>
+<td>카스퍼스키(2026.05)</td>
+</tr>
+<tr>
+<td><strong>DW에이전트</strong></td>
+<td>정상 원격관리 도구 악용</td>
+<td>카스퍼스키(2026.05)</td>
+</tr>
+<tr>
+<td><strong>Dropbox API</strong></td>
+<td>httpMalice의 통신 채널</td>
+<td>카스퍼스키(2026.05)</td>
+</tr>
+<tr>
+<td><strong>GitHub / GitLab</strong></td>
+<td>Raw Contents API로 페이로드·명령 배포. PAT 하드코딩</td>
+<td>지니언스(2026.08), Fortinet(2026.04)</td>
+</tr>
+<tr>
+<td><strong>Pastebin</strong></td>
+<td>GitHub 차단 시 백업 명령 채널</td>
+<td>지니언스(2026.09)</td>
+</tr>
+<tr>
+<td><strong>Google Find Hub</strong></td>
+<td>피해자 기기 원격 초기화</td>
+<td>지니언스(2025.11)</td>
+</tr>
+<tr>
+<td><strong>카카오톡 PC</strong></td>
+<td>탈취 계정으로 지인에게 2차 유포</td>
+<td>지니언스(2025.11)</td>
+</tr>
+<tr>
+<td><strong>Webex 사칭</strong></td>
+<td>실제 회의 일정 확보 후 화상회의 서비스 위장</td>
+<td>ENKI(2026.05)</td>
+</tr>
+<tr>
+<td><strong>기업 메신저 보안 프로그램 설치 페이지 위장</strong></td>
+<td>기업 관리자 표적</td>
+<td>ENKI(2026.05)</td>
+</tr>
+</tbody></table>
+<p><strong>방어의 면에서 의미:</strong>이 목록에서<strong>차단 가능한 항목은 거의 없다.</strong> 전부 업무에 필요한 정상 서비스다. 따라서 방어는 &quot;무엇에 접속했는가?&quot;가 아니라 <strong>누가, 어떤 프로세스로, 어떤 주기로 접속했는가?</strong> 로 관심 있게 살펴봐야 한다.</p>
+<h3>축 C — 인증서·자격증명 표적화</h3>
+<p><strong>AppleSeed의 GPKI 수집 기능 (카스퍼스키, 2026.05)</strong></p>
+<p>AppleSeed 2.1 버전에서 2022년부터 <code>C:\GPKI</code> 디렉터리를 수집하는 기능이 추가된 것이 확인됐다. GPKI는 공무원과 공공기관 관계자가 정부 시스템 접속에 사용하는 전자인증서 저장 영역이다.</p>
+<p><strong>이것이 왜 심각한가?</strong>단순 정보 탈취가 아니라<strong>정부 시스템 접근 권한의 탈취</strong>다. 유출 시 공무원 계정 도용과 내부 시스템 접근으로 이어질 수 있다. 4년 전 추가된 기능이 이제야 공개 분석됐다는 점 또한 시사적이다 — <strong>우리가 아는 것은 항상 지연되어 있다.</strong></p>
+<h3>김수키의 공격의 프로파일링 종합</h3>
+<pre><code>축 A (파괴)     ─── 개인 기기 초기화, 계정 탈취, 지인망 확산
+                    → 작전 목표의 확장
+
+축 B (은닉)     ─── 정상 서비스·도구 악용 심화
+                    → 네트워크 계층 탐지의 무력화
+
+축 C (권한)     ─── GPKI 등 인증서·자격증명 표적화
+                    → 침해 영향 범위의 확대
+
+축 D (자동화)   ─── AI 코딩 에이전트, 로컬 LLM, RAG, STT
+   ← 본 보고서     → 공격 준비 비용의 붕괴
+</code></pre>
+<p><strong>네 축은 독립적이지 않다.</strong> 축 D(AI)가 축 A·B·C의 실행 속도와 규모를 곱한다. 미끼 문서 제작 시간이 0에 수렴하면, 축 A의 표적 개인화가 쉬워지고, 축 C의 인증서 탈취 시도 횟수가 늘어난다. <strong>AI는 별도의 위협이 아니라 기존 모든 위협의 승수(multiplier)다.</strong></p>
+<hr>
+<h2>3. Operation GitPower 공격 체인 기술 분석</h2>
+<h3>3-1. 이번 변종의 개요</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>발견</td>
+<td>2026년 9월 7일 (GSC 보고서 공개)</td>
+</tr>
+<tr>
+<td>분석 대상</td>
+<td>2026년 8월 수집 김수키 계열 악성 파일 13종, 미끼 문서 29건</td>
+</tr>
+<tr>
+<td>사용 AI 도구</td>
+<td>오픈소스 AI 코딩 에이전트 <code>opencode</code></td>
+</tr>
+<tr>
+<td>캠페인</td>
+<td>Operation GitPower 변종</td>
+</tr>
+<tr>
+<td>유포</td>
+<td>이메일 첨부 ZIP 압축파일</td>
+</tr>
+<tr>
+<td>위장 주제</td>
+<td>보험료 납부 안내, 이자 납부 안내, 정책자금 지원 안내 (업체당 최대 1억 원, 연 2.0% 고정금리 등)</td>
+</tr>
+</tbody></table>
+<h3>3-2. 전체 실행 흐름</h3>
+<p><img src="https://vibequant.cc/og/kimsuky-gitpower-flow.jpg" alt="스피어피싱 기반 GitHub 연계 악성코드 감염 및 AsyncRAT 배포 흐름도 — 김수키 Operation GitPower 변종 10단계"></p>
+<p>스피어피싱 메일 → ZIP·위장 LNK → 커스텀 Base64 디코더 → GitHub Raw 미끼 PDF와 백그라운드 악성 행위 → 숨김 예약 작업 → GitHub/Pastebin/GitLab C2 → 이미지 위장 RC4 .NET 페이로드(AsyncRAT) 배포.</p>
+<h3>3-3. 탐지 회피 기능 (신규 변종 강화 사항)</h3>
+<ul>
+<li>보안 분석 도구 실행 여부 사전 확인 → 탐지 시 즉시 작동 중단</li>
+<li>가상화·샌드박스 환경 감지 시 자체 정지</li>
+<li>명령어 실행 기록 자동 삭제</li>
+<li>정상 소프트웨어 명칭으로 위장한 예약 작업 등록</li>
+<li>정적 문자열 분석 회피를 위한 URL·식별자 분할 저장</li>
+</ul>
+<h3>3-4. OPSEC 실패 흔적</h3>
+<p>방어자에게 유용한 것은 공격자의 실수다. 이번 헤킹 캠페인에서 확인된 것은 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th>실수</th>
+<th>노출된 정보</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>테스트 IP 잔존</td>
+<td>링크로컬 주소 <code>169.254.33.137</code>이 페이로드 내부에 남음</td>
+</tr>
+<tr>
+<td>한국 소재 C2 사용</td>
+<td><code>112.216.9.171</code></td>
+</tr>
+<tr>
+<td>PAT 하드코딩</td>
+<td>GitHub 액세스 토큰 노출 (현재 폐기됨)</td>
+</tr>
+<tr>
+<td>C2 서버 로그 노출</td>
+<td>개발·테스트·AI 연구 환경 전체가 관측됨</td>
+</tr>
+<tr>
+<td>테스트 데이터 잔존</td>
+<td>내부 IP <code>172.16.11.141</code> 포함 감염정보 파일 업로드 기록</td>
+</tr>
+<tr>
+<td>계정 정보 노출</td>
+<td>저장소 소유자명, 커밋 작성자 이메일</td>
+</tr>
+<tr>
+<td><strong>AI 산출물 미검토</strong></td>
+<td><strong><code>opencode</code> 메타데이터, <code>(임시값)</code> 잔존 — 5장 참조</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>4. 김수키의 AI 스택 — 관측된 실체</h2>
+<h3>4-1. 세 개의 독립 관측이 수렴한다</h3>
+<table>
+<thead>
+<tr>
+<th>출처</th>
+<th>시점</th>
+<th>관측 대상</th>
+<th>증거</th>
+<th>결론</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>카스퍼스키</strong></td>
+<td>2026.05</td>
+<td>악성코드 <code>HelloDoor</code></td>
+<td>코드 내 이모지 주석, 비정상 문장 구조, 오타</td>
+<td><strong>악성코드 개발에 LLM 관여</strong></td>
+</tr>
+<tr>
+<td><strong>지니언스</strong></td>
+<td>2026.08</td>
+<td>C2 인프라 로그</td>
+<td>로컬 LLM 3종 설치·구동 흔적, RAG DB, NuGet 에이전트 패키지, STT 도구, 한국어 학습자료</td>
+<td><strong>자체 AI 연구·개발 환경 구축</strong></td>
+</tr>
+<tr>
+<td><strong>지니언스</strong></td>
+<td>2026.09</td>
+<td>미끼 문서 29건</td>
+<td>PDF 메타데이터 <code>opencode</code>, <code>(임시값)</code> 잔존, 생성시각 군집</td>
+<td><strong>실전 산출물 제작에 코딩 에이전트 사용</strong></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>카스퍼스키는 <strong>코드</strong>를 보고, 지니언스는 <strong>인프라</strong>와 <strong>문서</strong>를 봤다. 관측 대상도 방법론도 다른 세 조사가 같은 결론에 수렴한다는 것은, 이것이 단일 벤더의 과잉 해석이 아니라는 강한 근거다.</p>
+<p>참고로 카스퍼스키는 과거 블루노로프(BlueNoroff)의 PowerShell 기반 스틸러에서도 유사한 AI 코드 생성 흔적을 확인한 바 있다. <strong>북한 사이버 조직 전반의 경향</strong>일 가능성이 있다.</p>
+</blockquote>
+<h3>4-2. 관측된 AI 스택 전체</h3>
+<table>
+<thead>
+<tr>
+<th>계층</th>
+<th>도구</th>
+<th>확인 근거</th>
+<th>공격적 함의</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>로컬 LLM 실행</strong></td>
+<td>Ollama</td>
+<td><code>.ollama\id_ed25519</code>, <code>id_ed25519.pub</code> — 최초 실행 시 자동 생성되는 인증 키 (= 다운로드가 아니라 실제 구동)</td>
+<td>외부 AI 서비스에 프롬프트 미전송 → OPSEC 확보</td>
+</tr>
+<tr>
+<td></td>
+<td>GPT4All</td>
+<td><code>LocalDocs-Setup-0.4.2.exe</code>, <code>AppData\Local\nomic.ai\GPT4All\</code></td>
+<td>오픈 모델 로컬 구동</td>
+</tr>
+<tr>
+<td></td>
+<td>Msty</td>
+<td><code>MstyStudio_x64.exe</code>(Pictures 폴더에 은닉), <code>msty-local-studio.exe</code></td>
+<td>로컬·클라우드 LLM 통합 관리, MCP 연동 지원</td>
+</tr>
+<tr>
+<td><strong>RAG</strong></td>
+<td>GPT4All LocalDocs</td>
+<td><code>localdocs_v3.db</code> 생성, <code>cache\models3.json</code></td>
+<td><strong>탈취 문서를 AI 지식베이스로 연결</strong> — 대량 자료의 자동 가치 선별</td>
+</tr>
+<tr>
+<td><strong>에이전트 개발</strong></td>
+<td>LLaMaSharp (+ CUDA11/12 백엔드)</td>
+<td><code>Pictures\zzz\nupkg\</code> 내 NuGet 패키지</td>
+<td>C# 프로그램에 LLM 직접 이식, GPU 추론 가속</td>
+</tr>
+<tr>
+<td></td>
+<td>Microsoft.SemanticKernel</td>
+<td>동일 경로</td>
+<td>다단계 계획·도구 호출 구현</td>
+</tr>
+<tr>
+<td></td>
+<td>Microsoft.Agents.AI</td>
+<td>동일 경로</td>
+<td><strong>자체 악성 도구에 에이전트 기능 탑재</strong></td>
+</tr>
+<tr>
+<td></td>
+<td>LangChain.providers.llamasharp</td>
+<td>동일 경로</td>
+<td>RAG·체이닝</td>
+</tr>
+<tr>
+<td></td>
+<td>Microsoft.Extensions.AI</td>
+<td>동일 경로</td>
+<td>다중 모델 공통 인터페이스</td>
+</tr>
+<tr>
+<td></td>
+<td>OpenAI, Azure.AI.OpenAI</td>
+<td>동일 경로</td>
+<td>상용 AI 서비스 연동 확보</td>
+</tr>
+<tr>
+<td><strong>코딩 에이전트</strong></td>
+<td>Cursor AI</td>
+<td>설치본 다수, <code>Pumpfun-AI-Attack-Defence-Requirements.md</code> 편집, <code>Test-com1.json</code>에서 GitHub API 응답 클립보드 복사</td>
+<td><strong>C2 기능 개발·검증에 직접 사용</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><strong>opencode</strong></td>
+<td><strong>미끼 PDF 메타데이터 Producer/Creator 필드 잔존</strong></td>
+<td><strong>실전 산출물 제작</strong></td>
+</tr>
+<tr>
+<td><strong>코드 생성(추정)</strong></td>
+<td>미상 LLM</td>
+<td>HelloDoor 코드의 이모지 주석·문법 오류</td>
+<td><strong>악성코드 본체 개발</strong></td>
+</tr>
+<tr>
+<td><strong>음성 처리</strong></td>
+<td>Whisper / faster-whisper</td>
+<td><code>whisper.7z</code>, <code>faster-whisper.7z</code>, 한국어 실습자료 <code>.mhtml</code></td>
+<td>통화·회의 녹음 탈취물의 텍스트 전환 및 검색 편입</td>
+</tr>
+<tr>
+<td><strong>학습</strong></td>
+<td>한국어 ML/AI 기술 블로그 아카이브</td>
+<td><code>Pictures\zzz\</code> 내 다수 <code>.mhtml</code> (ML.NET, LLaMaSharp, faster-whisper 관련)</td>
+<td>습득 단계</td>
+</tr>
+<tr>
+<td><strong>문서 자동생성</strong></td>
+<td>python-docx / WPS 文字</td>
+<td>3월 미끼 PDF 메타데이터</td>
+<td>초기 단계 자동화 파이프라인</td>
+</tr>
+</tbody></table>
+<h3>4-3. 능력 평가 — 과대평가도 과소평가도 경계</h3>
+<p><strong>확인된 것:</strong> 공개 AI 모델과 프레임워크를 자신들의 개발 환경(주로 C#/.NET)에 결합하는 방법을 집중 학습·실험한 흔적. 그리고 그 결과물이 실전에 반영되기 시작한 지점.</p>
+<p><strong>확인되지 않은 것:</strong> 자체 모델 훈련(training)·파인튜닝의 근거. 대량 학습 데이터셋도, 훈련 산출물 모델 파일도 관측되지 않았다.</p>
+<p><strong>평가:</strong>현재 단계는 &quot;AI를 만드는&quot; 단계가 아니라<strong>존재하는 AI를 공격에 접목하기 위해 연구·습득하고, 일부를 실전 적용하는</strong> 단계다. 이 구분은 중요하다. 위협을 과장하면 대응 우선순위가 왜곡되고, 과소평가하면 준비 시간을 잃는다.</p>
+<p><strong>다만 다음 세 조합은 향후 위협 예측에 결정적이다.</strong></p>
+<table>
+<thead>
+<tr>
+<th>조합</th>
+<th>해소되는 병목</th>
+<th>예상 효과</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>RAG × 탈취 문서</strong></td>
+<td>&quot;무엇이 가치 있는 자료인가&quot;를 사람이 판단하던 병목</td>
+<td>침해 후 정보 활용 리드타임 급감</td>
+</tr>
+<tr>
+<td><strong>STT × 통화·회의 녹음</strong></td>
+<td>음성 데이터가 검색 불가 자산이던 문제</td>
+<td>탈취 자산 범위 확대</td>
+</tr>
+<tr>
+<td><strong>에이전트 프레임워크 × C#/.NET</strong></td>
+<td>자체 도구에 AI 이식하는 개발 비용</td>
+<td>감염 단말 내 자율 판단 가능성</td>
+</tr>
+</tbody></table>
+<h3>4-4. 귀속(Attribution) 지표</h3>
+<table>
+<thead>
+<tr>
+<th>유형</th>
+<th>내용</th>
+<th>단독 변별력</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>언어학적</strong></td>
+<td>두벌식 자판 키로그 복원 결과 <code>싸이트</code>, <code>가입리력</code>, <code>로출되였는지</code>, <code>리용하는</code> 등 북한식 표기 반복. <strong>백스페이스 교정 후에도 동일 표기 유지</strong> → 오타가 아닌 내재화된 습관</td>
+<td><strong>높음</strong></td>
+</tr>
+<tr>
+<td>시스템</td>
+<td>제조사 필드 <code>Arirang</code> — 국내 미확인, 북한 태블릿·스마트폰 브랜드로 알려진 명칭</td>
+<td>중간</td>
+</tr>
+<tr>
+<td>도구</td>
+<td>Astrill VPN, AnyDesk 병행 실행 — 북한 IT 인력 위장취업 캠페인에서 반복 관측</td>
+<td>중간</td>
+</tr>
+<tr>
+<td>환경</td>
+<td>중국어판 WPS Office 2019 사용, PDF 메타데이터 <code>WPS 文字</code>와 일치</td>
+<td>중간</td>
+</tr>
+<tr>
+<td>TTP 계보</td>
+<td>2023 FlowerPower의 PowerShell 체계 계승, 2024 캠페인의 RTF→Gzip 기법 동일</td>
+<td>높음</td>
+</tr>
+<tr>
+<td>운영 습관</td>
+<td>한글 작성 → Google 번역 → ChatGPT 프롬프트 제출 워크플로우 반복</td>
+<td>낮음(단독)</td>
+</tr>
+<tr>
+<td>검색 내용</td>
+<td>외화벌이 관련 질의, <code>btc를 리용하는 사용자</code>, <code>Doc exploit</code> 공격 기법 질의</td>
+<td>중간</td>
+</tr>
+</tbody></table>
+<p><strong>종합:</strong>언어학적 지표를 중심으로 시스템·환경·TTP 계보가 중첩되어<strong>Moderate-High</strong> 수준의 귀속 신뢰도.</p>
+<blockquote>
+<p><strong>부수적 관찰:</strong>위협 행위자는 Microsoft Defender의 보고 기능 해제 방법을 한글로 작성한 뒤 Google 번역으로 영어화해 ChatGPT에 질의했다. 재현 테스트 결과 번역 출력이 로그의 영문과 정확히 일치했다.<strong>영어 프롬프트가 더 나은 답변을 준다고 믿는 실무자의 습관</strong>이 그대로 드러난다. 공격자도 우리와 같은 도구를 같은 방식으로 쓴다.</p>
+</blockquote>
+<hr>
+<h2>5. 핵심 분석 — &quot;검토되지 않은 AI&quot;</h2>
+<blockquote>
+<p><strong>이 장이 본 보고서의 중심 논지다.</strong></p>
+</blockquote>
+<h3>5-1. 북한 김수키, 공격자는 AI 산출물을 읽지 않았다</h3>
+<p>지니언스가 확보한 AI 사용의 결정적 증거는, 역설적이게도 모두 <strong>&quot;검토하지 않았다&quot;는 사실 자체</strong>다.</p>
+<table>
+<thead>
+<tr>
+<th>증거</th>
+<th>구체적 내용</th>
+<th>의미</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>메타데이터 잔존</strong></td>
+<td>PDF 제작자·생성자 필드에 <code>opencode</code> 그대로 기록. 3월 문서군은 <code>python-docx</code> / <code>WPS 文字</code></td>
+<td>산출물 속성을 한 번도 열어보지 않음</td>
+</tr>
+<tr>
+<td><strong>플레이스홀더 미치환</strong></td>
+<td><code>납부 주기: 매월 납입일(임시값)</code>, <code>연 2.0% 고정금리(임시값)</code> — 한 문서에 최대 <strong>9차례</strong></td>
+<td>본문을 끝까지 읽지 않음</td>
+</tr>
+<tr>
+<td><strong>본문 중복</strong></td>
+<td>제목·용도가 다른데 본문이 <strong>80% 이상 동일</strong></td>
+<td>비교 검수를 하지 않음</td>
+</tr>
+<tr>
+<td><strong>생성 시각 군집</strong></td>
+<td>opencode 제작 PDF 4종이 <strong>초 단위까지 동일</strong>. 3월 문서군도 2주 간격인데 모두 오전 5시대, 40초 차</td>
+<td>일괄 배치 생성 후 개별 후처리 없음</td>
+</tr>
+<tr>
+<td><strong>재사용 비율</strong></td>
+<td>29건 중 내용이 실제로 다른 것은 <strong>11종</strong>, 나머지 18건은 <strong>파일명만 변경</strong></td>
+<td>생성량이 검토 역량을 초과</td>
+</tr>
+<tr>
+<td><strong>템플릿 흔적</strong></td>
+<td>제목 영역의 이모지 다용, 균일한 표 구성·여백 규칙 — 정통 금융투자 자료에서는 매우 드문 문체</td>
+<td>AI 문서 생성 서비스 기본 템플릿 그대로</td>
+</tr>
+</tbody></table>
+<h3>5-2. 그리고 코드에서도 — HelloDoor의 이모지 주석</h3>
+<p><strong>이것이 이번 리포트에서 가장 강조하고 싶은 교차 증거다.</strong></p>
+<p>카스퍼스키는 2026년 5월, 김수키 최초의 러스트 기반 DLL 백도어 <code>HelloDoor</code>를 분석하면서 <strong>코드 내부에 이모지가 포함된 주석과 비정상적 문장 구조, 오타</strong>를 확인했다. 그리고 이를 LLM으로 코드를 생성했을 가능성이 높은 정황으로 평가했다.</p>
+<p>여기서 주목할 점은 두 가지다.</p>
+<p><strong>첫째, 이모지 주석은 사람이 쓰지 않는다.</strong> 최소한 국가 배후 조직의 백도어 소스에는 쓰지 않는다. 이것은 <strong>LLM이 기본 스타일로 붙인 주석</strong>이다.</p>
+<p><strong>둘째, 그것이 컴파일되어 실전 배포됐다.</strong> 누구도 소스를 훑어보지 않았다는 뜻이다. 코드 리뷰가 있었다면 이모지 주석 하나쯤은 지웠을 것이다.</p>
+<blockquote>
+<p><strong>정리하면 — 북한 김수키는 문서도 코드도 읽지 않았다.</strong></p>
+<table>
+<thead>
+<tr>
+<th>산출물</th>
+<th>미검토의 증거</th>
+<th>발견</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>미끼 문서(PDF)</td>
+<td><code>opencode</code> 메타데이터, <code>(임시값)</code> 9회, 80% 본문 중복</td>
+<td>지니언스 2026.09</td>
+</tr>
+<tr>
+<td>악성코드(Rust DLL)</td>
+<td>이모지 주석, 문법 오류, 오타</td>
+<td>카스퍼스키 2026.05</td>
+</tr>
+</tbody></table>
+<p>서로 다른 산출물 유형에서, 서로 다른 조사기관이, <strong>같은 종류의 부주의</strong>를 발견했다. 이것은 우연한 실수가 아니라 <strong>작업 방식(workflow)의 특징</strong>이다.</p>
+</blockquote>
+<h3>5-3. 한국의 조직도 정확히 같은 실수를 하고 있다</h3>
+<p>반드시 짚어야 할 것이 있다. 위 실패 패턴은 북한 해킹 조직 특유의 것이 아니다. <strong>한국의 기업·기관·공공영역에서 매일 관측되는 것과 동일하다.</strong></p>
+<p>국내 조직의 동형(同型) 사례</p>
+<table>
+<thead>
+<tr>
+<th>김수키의 실수</th>
+<th>한국 조직의 동형 사례</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>미끼 문서에 <code>(임시값)</code> 9회 잔존</td>
+<td>제출·결재 문서에 <code>[여기에 수치 삽입]</code>, <code>[회사명]</code>, <code>TBD</code> 잔존</td>
+</tr>
+<tr>
+<td>PDF 메타데이터에 <code>opencode</code> 노출</td>
+<td>외부 발송 문서 속성에 AI 도구명·이전 담당자명 잔존</td>
+</tr>
+<tr>
+<td>29건 중 18건 파일명만 변경 재사용</td>
+<td>서로 다른 사업 제안서인데 구조·문체·소제목이 사실상 동일</td>
+</tr>
+<tr>
+<td>4개 문서 생성시각 초 단위 동일</td>
+<td>한 번의 프롬프트로 뽑은 보고서 여러 건을 개별 검토 없이 병렬 제출</td>
+</tr>
+<tr>
+<td><strong>HelloDoor 이모지 주석 컴파일 배포</strong></td>
+<td><strong>AI 생성 코드 리뷰 없이 머지 → 취약점 프로덕션 유입</strong></td>
+</tr>
+<tr>
+<td>AI 문서 그대로 발송</td>
+<td>LLM이 만든 존재하지 않는 판례·논문·통계를 검증 없이 인용</td>
+</tr>
+<tr>
+<td>본문 미확인</td>
+<td>AI 요약본만 읽고 원문 미확인 상태에서 의사결정</td>
+</tr>
+</tbody></table>
+<p><strong>공격자와 방어자가 같은 인지적 함정에 빠져 있다.</strong> 우연이 아니라 구조적 문제다.</p>
+<h3>5-4. 왜 같은 실수가 반복되는가 — 세 가지 구조적 원인</h3>
+<p><strong>(1) 생성 비용과 검토 비용의 역전</strong></p>
+<p>AI는 생성 비용을 거의 0으로 만들었지만 <strong>검토 비용은 전혀 줄이지 못했다.</strong> 문서 10건을 만드는 데 30초, 읽는 데 40분이라면, 조직의 어느 지점에서든 검토는 반드시 생략된다. 김수키가 29건 중 18건을 파일명만 바꿔 재사용한 것은 게으름이 아니라 <strong>이 비대칭의 필연적 결과</strong>다.</p>
+<p><strong>(2) 완성도 착시 (Fluency Bias)</strong></p>
+<p>LLM 산출물은 <strong>틀렸을 때도 잘 쓰여 있다.</strong> 인간은 문장의 유창함을 내용 정확성의 신호로 오독하도록 학습되어 있다. 매끄러운 문장은 &quot;이미 검토가 끝난 문장&quot;처럼 보인다. 그래서 <code>(임시값)</code>이 아홉 번 남아 있어도 읽는 사람이 없다. 코드도 마찬가지다 — 잘 구조화된 러스트 코드는 리뷰가 끝난 코드처럼 보인다.</p>
+<p><strong>(3) 검증 루프의 부재</strong></p>
+<p>전통적 작업 공정에는 초안 → 검토 → 승인의 물리적 단계가 있었다. AI 파이프라인에서 이 단계는 <strong>명시적으로 설계하지 않으면 그냥 사라진다.</strong> 그리고 사라진 줄도 모르게 사라진다.</p>
+<blockquote>
+<p><strong>LLM은 엑셀이지 오라클이 아니다.</strong></p>
+<p>엑셀은 계산을 대신해 주는 도구지, 숫자의 진위를 보증하는 신탁(神託)이 아니다. 아무도 엑셀 수식 결과를 검산 없이 이사회에 올리지 않는다. 그런데 LLM 산출물에 대해서는 그 검산 단계를 통째로 생략한다.</p>
+<p><strong>김수키가 <code>(임시값)</code>을 그대로 발송한 것, 이모지 주석이 든 백도어를 컴파일해 배포한 것, 그리고 국내 조직이 AI 초안을 그대로 결재하는 것은 전부 같은 종류의 사고다.</strong></p>
+</blockquote>
+<h3>5-5. 방어적 함의 ① — 지금은 기회다</h3>
+<p>공격자의 미검토는 방어자에게 <strong>즉시 활용 가능한 탐지 표면</strong>을 제공한다.</p>
+<ul>
+<li><strong>메타데이터 지문</strong> — <code>opencode</code>, <code>python-docx</code>, 특정 렌더러 서명</li>
+<li><strong>플레이스홀더 문자열</strong> — 정규식으로 즉시 탐지 가능, 오탐 낮음</li>
+<li><strong>생성 시각의 초 단위 군집</strong> — 배치 자동화의 명확한 신호</li>
+<li><strong>본문 유사도 80%+ 클러스터</strong> — 임베딩 기반 자동 식별, <strong>캠페인 전체 규모 역산 가능</strong></li>
+<li><strong>AI 템플릿의 시각적 패턴</strong> — 이모지 다용, 균일한 표·여백 규칙</li>
+<li><strong>코드 수준</strong> — 악성코드 분석 시 이모지 주석·부자연스러운 문장 구조를 AI 생성 지표로 태깅</li>
+</ul>
+<p>7장에 실무 탐지 로직을 정리했다.</p>
+<h3>5-6. 방어적 함의 ② — 그러나 반감기가 있다</h3>
+<p><strong>이 기회는 오래가지 않는다.</strong> 위 지표는 전부 &quot;공격자가 한 단계를 빠뜨렸기 때문에&quot; 존재한다. 파이프라인 끝에 검수 단계 하나 — 혹은 그 검수를 수행할 또 다른 AI 에이전트 하나 — 를 붙이는 순간 <strong>전부 소멸한다.</strong> 메타데이터 제거는 명령어 한 줄이고, 플레이스홀더 검증은 정규식 한 줄이며, 주석 제거는 빌드 옵션 하나다.</p>
+<p>동시에 반대 방향의 침식도 진행 중이다. 어색한 번역체, 조악한 서식, 맞춤법 오류 같은 <strong>전통적 피싱 판별 지표가 생성형 AI로 급속히 무력화</strong>되고 있다. &quot;이상한 한국어면 의심하라&quot;는 20년 된 교육 지침은 이미 유통기한을 지났다.</p>
+<p><strong>따라서 콘텐츠 판별을 방어의 중심에 두어서는 안 된다.</strong> 값싸고 빠른 1차 필터로 유지하되, 무게중심은 <strong>행위 기반 탐지</strong>로 옮겨야 한다. AI가 미끼 문서의 완성도와 제작 속도를 아무리 높여도, <strong>엔드포인트에서 발생하는 실행·지속성·통신·페이로드 행위는 숨길 수 없다.</strong></p>
+<h3>5-7. 방어의 기회  ③ — 역방향 위험: 우리의 미검토가 공격 표면이다</h3>
+<p>5-3에서 지적한 국내 조직의 미검토 관행은 단순한 품질 문제가 아니라 <strong>직접적 보안 취약점</strong>이다.</p>
+<table>
+<thead>
+<tr>
+<th>미검토 지점</th>
+<th>발생하는 위협</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AI 요약본만 읽고 원문 미확인</td>
+<td><strong>간접 프롬프트 인젝션</strong> — 문서·메일·웹페이지에 심어진 지시문이 요약 AI를 조작. 사용자는 조작된 요약을 사실로 수용</td>
+</tr>
+<tr>
+<td>AI 생성 코드 리뷰 없이 머지</td>
+<td>하드코딩 크리덴셜, 취약한 암호화, 검증 누락 로직이 프로덕션 유입 (<strong>김수키가 자기 코드에 한 것과 같은 실수를 우리 프로덕션에서</strong>)</td>
+</tr>
+<tr>
+<td>AI 제안 라이브러리 무검증 도입</td>
+<td><strong>슬롭스쿼팅(slopsquatting)</strong> — LLM이 환각한 패키지명을 공격자가 선점 등록</td>
+</tr>
+<tr>
+<td>AI 보안 경보 분석 무검토 수용</td>
+<td>오탐이 자동 종결되어 실제 침해 은폐. <strong>AI가 만든 사각지대</strong></td>
+</tr>
+<tr>
+<td>사내 LLM에 문서 무분별 연결(RAG)</td>
+<td>접근통제 우회 — 권한 없는 문서 내용이 요약 형태로 유출</td>
+</tr>
+<tr>
+<td>AI 회의록·전사 도구 무검토 사용</td>
+<td>민감 회의 음성이 외부 서비스로 전송·보관</td>
+</tr>
+</tbody></table>
+<p>특히 마지막 두 항목은 김수키가 이미 실행 중인 것과 <strong>정확히 같은 기술</strong>이다. 그들이 탈취 문서를 RAG로 연결해 가치 있는 정보를 자동 선별하고, Whisper로 음성 탈취물을 텍스트화하고 있다면, 그 효율은 <strong>피해 조직이 문서와 녹음을 얼마나 무분별하게 축적해 두었는가</strong>에 정비례한다.</p>
+<hr>
+<h2>6. 다층 AI 방어 아키텍처</h2>
+<h3>6-1. 설계 원칙</h3>
+<ol>
+<li><strong>단일 계층 실패를 전제한다.</strong> 어떤 계층도 단독으로 이 공격을 막지 못한다. LNK 탐지가 뚫려도 예약 작업에서, 거기서 뚫려도 C2 통신에서 잡히도록 설계한다.</li>
+<li><strong>AI를 계층마다 다른 역할로 배치한다.</strong> &quot;AI 보안 솔루션 하나 도입&quot;은 다층 방어가 아니다. 콘텐츠 계층의 AI, 상관분석 계층의 AI, 대응 자동화 계층의 AI는 서로 다른 문제를 푼다.</li>
+<li><strong>반감기가 짧은 계층에 의존하지 않는다.</strong> 콘텐츠 지표는 소모품, 행위 지표는 내구재다.</li>
+<li><strong>계층 간 신호는 결합해 점수화한다.</strong> 개별 신호는 오탐이 많다. 결합되어야 의미를 갖는다.</li>
+<li><strong>AI 산출물을 사람이 읽는 지점을 반드시 남긴다.</strong> 5장의 교훈을 방어 측에 적용하는 방식이다.</li>
+</ol>
+<h3>6-2. 8계층 구조</h3>
+<p><img src="https://vibequant.cc/og/kimsuky-defense-layers.jpg" alt="AI 기반 사이버 위협 대응을 위한 다층 방어 체계 — 사람·프로세스·기술·거버넌스가 함께하는 L-1부터 L7 보안"></p>
+<p>하위 계층(L0·L1)은 반감기가 짧고, 자격증명·지속성·C2처럼 기술적 필연에 가까운 상위 계층은 회피가 어렵다. 단일 계층에 의존하지 말고 신호를 결합한다.</p>
+<h3>6-3. 계층별 대응</h3>
+<p><strong>L-1 — 사람·프로세스</strong></p>
+<ul>
+<li><strong>교육 내용을 갱신한다.</strong> &quot;어색한 한국어를 의심하라&quot;는 무효다. → <strong>완성도 높은 문서일수록 출처를 확인하라</strong></li>
+<li><code>(임시값)</code>, <code>[삽입]</code>, <code>TBD</code> 등 <strong>플레이스홀더가 보이면 즉시 신고</strong> 대상임을 교육. 현재 가장 저렴하고 효과적인 지표다.</li>
+<li><strong>지인이 보낸 파일도 확인한다.</strong> KONNI 캠페인의 핵심은 탈취 계정을 통한 신뢰 기반 유포였다. 카카오톡으로 온 실행 파일은 지인이 보냈어도 의심 대상이다.</li>
+<li><strong>확인 전화가 안 될 때를 의심한다.</strong> 상대 기기가 초기화되어 연락이 두절된 상황 자체가 공격의 일부일 수 있다.</li>
+<li>압축파일 내부 LNK 실행 금지 원칙 재확립. 문서 아이콘을 신뢰하지 않도록 훈련.</li>
+<li><strong>신고 채널의 마찰을 낮춘다.</strong> 신고 1건이 EDR 룰 1개보다 빠를 때가 있다.</li>
+</ul>
+<p><strong>L0 — 콘텐츠 계층 (AI 활용: 생성물 지문 탐지)</strong></p>
+<ul>
+<li>메일 게이트웨이에서 첨부 문서의 <strong>메타데이터 자동 추출·검사</strong></li>
+<li><strong>플레이스홀더 정규식 스캔</strong> (양방향 — 유입 및 유출)</li>
+<li><strong>문서 임베딩 기반 유사도 클러스터링</strong> → 캠페인 단위 묶음</li>
+<li><strong>이 계층 단독 차단은 금지.</strong> 정상 업무에서도 AI 문서는 대량 유통된다. 스코어 가산 신호로만 사용.</li>
+</ul>
+<p><strong>L1 — 실행 계층 (핵심)</strong></p>
+<ul>
+<li>LNK 실행 인수 길이 임계치, 선행 공백 패턴</li>
+<li>표준 Base64 API 미사용 + 비트 연산 기반 커스텀 디코딩 패턴</li>
+<li>숨김 PowerShell, <code>explorer.exe</code> → <code>cmd.exe</code>/<code>powershell.exe</code> 부모-자식 체인</li>
+<li><strong>스크립트 블록 로깅 및 모듈 로깅 전면 활성화</strong> — 이것이 없으면 나머지 탐지가 의미를 잃는다</li>
+<li>이메일 첨부 LNK 확장자 원천 차단</li>
+<li>JSE·WSF 등 스크립트 드로퍼 차단 (HelloDoor 배포 경로)</li>
+</ul>
+<p><strong>L2 — 지속성 계층</strong></p>
+<ul>
+<li>예약 작업 신규 생성 이벤트 전수 수집 (이벤트 ID 4698 등)</li>
+<li><strong>정상 명칭 위장 탐지</strong> — BitLocker/MATLAB/.NET 명칭이지만 실행 경로가 <code>%AppData%</code>·<code>%TEMP%</code>이거나 PowerShell 호출</li>
+<li>무작위 대문자 나열형 작업명</li>
+<li>5분 내외 지연 후 30분 주기 반복 패턴</li>
+<li><strong>윈도우 서비스 신규 생성 감시</strong> — httpMalice는 <code>CacheDB</code> 서비스로 지속성 확보</li>
+</ul>
+<p><strong>L3 — 네트워크·C2 계층</strong></p>
+<ul>
+<li>GitHub Raw / Contents API 접근을 <strong>업무 필요성 기준 화이트리스트화</strong></li>
+<li>비업무용 계정·PAT를 통한 저장소 접근 탐지</li>
+<li><strong>백업 채널 동시 감시</strong> — Pastebin, GitLab만 막으면 이중화 설계에 무력</li>
+<li><strong>Dropbox API 이상 사용</strong> 감시 (httpMalice)</li>
+<li><strong>TryCloudflare <code>*.trycloudflare.com</code> 임시 터널 탐지</strong> — 업무상 필요가 거의 없다</li>
+<li><strong>VS Code 원격 터널링 감시</strong> — 마이크로소프트 인프라를 경유하므로 도메인 차단이 불가. 개발 부서 외 단말의 <code>code tunnel</code> 프로세스 실행 자체를 이상 신호로 처리</li>
+<li>주기성 비콘 분석 — 30분 정시성은 인간 트래픽과 구별된다</li>
+<li>TLS 인스펙션 없이도 SNI·JA3/JA4 핑거프린트로 상당 부분 식별 가능</li>
+</ul>
+<p><strong>L4 — 페이로드 계층</strong></p>
+<ul>
+<li><strong>확장자-실제 시그니처 불일치 탐지</strong> (<code>.png</code>인데 PNG 매직바이트 부재)</li>
+<li>RTF 헤더 변조 → Gzip 복구 패턴</li>
+<li>.NET 어셈블리 메모리 내 리플렉티브 로드 감시</li>
+<li>AsyncRAT 계열 행위 시그니처</li>
+<li><strong>러스트 컴파일 바이너리 증가에 대비</strong> — 기존 .NET/PowerShell 중심 시그니처가 놓칠 수 있다</li>
+</ul>
+<p><strong>L5 — 자격증명·인증서 계층 (신규 강조)</strong></p>
+<ul>
+<li><strong><code>C:\GPKI</code> 디렉터리 접근·복사 이벤트 감시</strong> — AppleSeed가 4년째 노리는 지점</li>
+<li>NPKI, 브라우저 저장 비밀번호, 크리덴셜 매니저 접근 감시</li>
+<li><strong>2단계 인증(2FA) 전면 강제</strong> — KONNI 캠페인의 계정 탈취 방어 핵심</li>
+<li>브라우저 비밀번호 자동 저장 금지 정책</li>
+<li>구글·네이버 등 개인 계정의 이상 로그인 알림 활성화 및 <strong>경고 메일 삭제 여부 점검</strong></li>
+<li>기기 원격 관리 기능(Find Hub 등)의 소유자 재확인 절차 강화 요구</li>
+</ul>
+<p><strong>L6 — 상관분석·자동화 계층 (AI 활용의 실질적 승부처)</strong></p>
+<p>개별 계층 신호는 전부 오탐이 많다. <strong>결합되어야 의미를 갖는다.</strong></p>
+<table>
+<thead>
+<tr>
+<th>신호</th>
+<th>가중치</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>첨부 문서 메타데이터에 AI 도구 서명</td>
+<td>+1</td>
+</tr>
+<tr>
+<td>플레이스홀더 문자열 잔존</td>
+<td>+2</td>
+</tr>
+<tr>
+<td>ZIP 해제 직후 LNK 실행</td>
+<td>+3</td>
+</tr>
+<tr>
+<td>LNK 실행 인수 길이 &gt; 1,000자</td>
+<td>+3</td>
+</tr>
+<tr>
+<td>숨김 PowerShell 구동</td>
+<td>+3</td>
+</tr>
+<tr>
+<td><code>%AppData%</code>/<code>%TEMP%</code>에 .ps1 생성</td>
+<td>+3</td>
+</tr>
+<tr>
+<td>예약 작업 신규 등록(정상 명칭 위장)</td>
+<td>+4</td>
+</tr>
+<tr>
+<td>신규 윈도우 서비스 생성</td>
+<td>+3</td>
+</tr>
+<tr>
+<td>GitHub Raw 접근 (비업무 계정/PAT)</td>
+<td>+4</td>
+</tr>
+<tr>
+<td><code>*.trycloudflare.com</code> 통신</td>
+<td>+4</td>
+</tr>
+<tr>
+<td>비개발 단말의 <code>code tunnel</code> 실행</td>
+<td>+4</td>
+</tr>
+<tr>
+<td>확장자-시그니처 불일치 파일 다운로드</td>
+<td>+5</td>
+</tr>
+<tr>
+<td><code>C:\GPKI</code> 접근</td>
+<td>+5</td>
+</tr>
+</tbody></table>
+<p>→ 누적 임계치 도달 시 자동 격리 및 분석가 에스컬레이션.</p>
+<p>AI 에이전트는 이 계층에서 <strong>알람 요약, 관련 이벤트 수집, 유사 과거 사례 검색, 초동 조사 계획 수립</strong>을 담당한다. 다만 <strong>차단·격리·계정 정지 같은 되돌리기 어려운 조치의 최종 판단은 사람이 한다.</strong></p>
+<p><strong>L7 — 거버넌스 계층 (5장의 교훈을 방어 측에 적용)</strong></p>
+<p>여기를 빠뜨리면 다층 방어가 아니다.</p>
+<ul>
+<li><strong>AI 산출물 검토 책임자를 명시적으로 지정한다.</strong> &quot;누군가 볼 것&quot;은 아무도 보지 않는다는 뜻이다.</li>
+<li><strong>되돌릴 수 없는 조치에는 HITL(Human-in-the-Loop)을 의무화한다.</strong></li>
+<li>AI 보안 도구의 <strong>오탐·미탐률을 정기 측정</strong>하고 그 결과를 사람이 읽는 회의체에 올린다.</li>
+<li>사내 LLM/RAG에 연결되는 <strong>문서의 접근통제를 원본 권한과 일치</strong>시킨다. RAG는 접근통제를 자동 상속하지 않는다.</li>
+<li><strong>AI 생성 코드에 대한 리뷰 정책</strong>을 명문화한다. HelloDoor의 이모지 주석은 남의 일이 아니다.</li>
+<li>AI 리스크 총괄 임원(AI Risk Officer) 지정 및 거버넌스 위원회 구성.</li>
+<li><strong>직원의 외부 AI 서비스 사용에 대한 실무적 정책</strong> — 전면 금지는 섀도 AI를 만들 뿐이다. 허용 범위와 금지 데이터 유형을 명시하고 승인된 도구를 제공한다.</li>
+</ul>
+<hr>
+<h2>7. 실무 탐지 로직</h2>
+<blockquote>
+<p>아래는 개념 검증용 의사코드다. 실제 배포 전 자사 환경에서 오탐률을 반드시 측정할 것.</p>
+</blockquote>
+<h3>7-1. 문서 메타데이터 헌팅</h3>
+<pre><code class="language-bash"># 메일 게이트웨이 격리 큐 또는 파일서버 대상
+exiftool -r -json -Producer -Creator -Author \
+         -CreateDate -ModifyDate /path/to/attachments \
+  | jq -r &#39;.[] | select(
+      (.Producer // &quot;&quot; | test(&quot;opencode|python-docx&quot;; &quot;i&quot;)) or
+      (.Creator  // &quot;&quot; | test(&quot;opencode|python-docx|WPS&quot;; &quot;i&quot;))
+    ) | &quot;\(.SourceFile)\t\(.Producer)\t\(.Creator)\t\(.CreateDate)&quot;&#39;
+</code></pre>
+<p><strong>추가 신호</strong></p>
+<ul>
+<li><code>CreateDate == ModifyDate</code> (편집 이력 부재)</li>
+<li>동일 캠페인 내 문서들의 생성 시각이 60초 이내 군집</li>
+<li>생성 시각이 업무 시간대를 벗어난 특정 시각에 반복 집중 (관측 사례: 오전 5시대)</li>
+</ul>
+<h3>7-2. 플레이스홀더 잔존 스캔</h3>
+<pre><code class="language-regex">(?i)(\(임시값\)|\[임시\]|임시값|삽입\s*필요|여기에\s*\S{0,10}\s*입력|
+     \[(회사명|담당자|금액|날짜|기관명|성명)\]|
+     \bTBD\b|\bTODO\b|\bXXX\b|\bplaceholder\b|\blorem ipsum\b|
+     \{\{[^}]{1,40}\}\}|&lt;insert[^&gt;]{0,30}&gt;)
+</code></pre>
+<ul>
+<li><strong>적용 지점 1 (외부 유입):</strong> 첨부 문서 스캔 → 스코어 가산</li>
+<li><strong>적용 지점 2 (내부 유출 방지):</strong> 외부 발송 문서에 동일 규칙 적용</li>
+</ul>
+<blockquote>
+<p><strong>하나의 룰이 양방향으로 작동한다.</strong> 유입 측에서는 공격자의 미검토 AI를 잡고, 유출 측에서는 우리 조직의 미검토 AI를 잡는다. 5장의 논지가 그대로 룰 하나로 구현된다.</p>
+</blockquote>
+<h3>7-3. 문서 유사도 클러스터링</h3>
+<pre><code class="language-python"># 개념 코드 — 캠페인 단위 미끼 문서군 식별
+from sklearn.metrics.pairwise import cosine_similarity
+
+# 1) 최근 N일 격리/의심 문서의 본문 텍스트 추출
+# 2) 임베딩 생성 (로컬 임베딩 모델 권장 — 외부 전송 회피)
+# 3) 코사인 유사도 행렬 계산
+sim = cosine_similarity(embeddings)
+
+# 4) 제목은 다른데 본문 유사도가 임계치를 넘는 쌍 = 동일 생성 파이프라인 의심
+THRESHOLD = 0.80
+suspects = [(i, j) for i in range(len(docs)) for j in range(i + 1, len(docs))
+            if sim[i][j] &gt;= THRESHOLD and title_distance(docs[i], docs[j]) &gt; 0.5]
+
+# 5) 연결 성분(connected component)으로 캠페인 클러스터 도출
+#    → 29건 중 18건이 파일명만 바뀐 재사용이었다는 사실을 상기할 것.
+#      클러스터 하나로 캠페인 전체 규모를 역산할 수 있다.
+</code></pre>
+<h3>7-4. AI 생성 코드 지표 (악성코드 분석용)</h3>
+<pre><code># 리버싱·소스 확보 시 AI 생성 정황 태깅 기준
+- 주석 내 이모지 존재                        → 강한 신호
+- 주석의 문장 구조가 코드 스타일과 불일치     → 중간
+- 변수명은 정교한데 주석에 오타·문법 오류     → 중간
+- 과도하게 친절한 설명형 주석                 → 약한 신호
+- 사용되지 않는 방어적 예외 처리의 과잉       → 약한 신호
+- 동일 조직 타 샘플과 코드 스타일 급변        → 중간
+
+※ 단독으로는 귀속 근거가 되지 못한다. 다른 지표와 결합해
+   &quot;개발 워크플로우 변화&quot;의 정황으로만 사용할 것.
+</code></pre>
+<h3>7-5. LNK 실행 상관 (Sigma 스타일)</h3>
+<pre><code class="language-yaml">title: LNK-Initiated Hidden PowerShell with Oversized Arguments
+id: kimsuky-gitpower-lnk-001
+status: experimental
+description: Operation GitPower 계열 LNK 초기 실행 탐지
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  parent_explorer:
+    ParentImage|endswith: &#39;\explorer.exe&#39;
+    Image|endswith:
+      - &#39;\powershell.exe&#39;
+      - &#39;\cmd.exe&#39;
+      - &#39;\wscript.exe&#39;
+  hidden_exec:
+    CommandLine|contains:
+      - &#39;-w hidden&#39;
+      - &#39;-WindowStyle Hidden&#39;
+      - &#39;-nop&#39;
+      - &#39;-ep bypass&#39;
+      - &#39;-enc&#39;
+  long_cmdline:
+    CommandLine|re: &#39;.{1000,}&#39;
+  leading_space:
+    CommandLine|re: &#39;^\s{100,}&#39;
+  custom_b64:
+    CommandLine|contains|all:
+      - &#39;ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz&#39;
+    CommandLine|contains:
+      - &#39;-band&#39;
+      - &#39;-bor&#39;
+      - &#39;-shl&#39;
+  condition: parent_explorer and (hidden_exec or long_cmdline or leading_space or custom_b64)
+falsepositives:
+  - 사내 배포 스크립트
+  - 일부 소프트웨어 설치 관리자
+level: high
+</code></pre>
+<h3>7-6. 위장 예약 작업 및 서비스 탐지</h3>
+<pre><code># 예약 작업
+EventID = 4698 (Scheduled Task Created)
+AND (
+    TaskName matches &quot;^[A-Z]{16,}$&quot;                      # 무작위 대문자 나열
+    OR (
+        TaskName contains (&quot;BitLocker&quot;,&quot;MATLAB&quot;,&quot;.NET&quot;,&quot;Update&quot;,&quot;Microsoft&quot;)
+        AND TaskCommand contains (&quot;powershell&quot;,&quot;cmd&quot;,&quot;%AppData%&quot;,&quot;%TEMP%&quot;,&quot;\\Roaming\\&quot;)
+    )
+    OR (Trigger.Delay between 3m and 10m AND Trigger.Repetition between 15m and 60m)
+)
+
+# 윈도우 서비스 (httpMalice 대응)
+EventID = 7045 (Service Installed)
+AND ServiceName in (&quot;CacheDB&quot;, ...)  OR
+    ImagePath contains (&quot;%AppData%&quot;,&quot;%TEMP%&quot;,&quot;\\Roaming\\&quot;)
+</code></pre>
+<p>정상 명칭을 쓰지만 <strong>실행 경로가 사용자 프로파일 하위</strong>라는 조합이 가장 강한 신호다.</p>
+<h3>7-7. 정상 서비스 악용 C2 헌팅</h3>
+<pre><code># GitHub / GitLab / Pastebin / Dropbox
+(dest_host in (&quot;raw.githubusercontent.com&quot;,&quot;api.github.com&quot;,
+               &quot;gitlab.com&quot;,&quot;pastebin.com&quot;,&quot;paste.ee&quot;,
+               &quot;api.dropboxapi.com&quot;,&quot;content.dropboxapi.com&quot;))
+AND process NOT in (승인된 개발도구 화이트리스트)
+AND (
+     process in (&quot;powershell.exe&quot;,&quot;cmd.exe&quot;,&quot;wscript.exe&quot;,&quot;mshta.exe&quot;,&quot;rundll32.exe&quot;)
+     OR http.header contains &quot;Authorization: token ghp_&quot;
+     OR beacon_interval_stddev &lt; 5s      # 정시성 = 자동화
+)
+
+# TryCloudflare 임시 터널 (HelloDoor)
+dns.query matches &quot;*.trycloudflare.com&quot;
+→ 업무상 필요가 거의 없으므로 단독으로도 조사 가치 높음
+
+# VS Code 원격 터널 (도메인 차단 불가 — 프로세스로 잡는다)
+process_name = &quot;code.exe&quot; AND command_line contains &quot;tunnel&quot;
+AND host NOT in (개발자 단말 그룹)
+→ 비개발 부서 단말의 code tunnel 실행은 그 자체로 이례적
+</code></pre>
+<p><strong>주의:</strong>개발 조직에서는 오탐이 크다. 반드시 프로세스 화이트리스트와 결합하고,<strong>개발자 서브넷과 일반 사무 서브넷의 기준선을 분리</strong>한다.</p>
+<h3>7-8. 위장 페이로드 탐지</h3>
+<pre><code class="language-bash"># 확장자와 실제 시그니처 불일치
+for f in *.png *.jpg *.gif; do
+  magic=$(xxd -p -l 8 &quot;$f&quot;)
+  case &quot;$f&quot; in
+    *.png) [[ &quot;$magic&quot; == 89504e47* ]] || echo &quot;MISMATCH: $f ($magic)&quot; ;;
+    *.jpg) [[ &quot;$magic&quot; == ffd8ff*    ]] || echo &quot;MISMATCH: $f ($magic)&quot; ;;
+    *.gif) [[ &quot;$magic&quot; == 47494638*  ]] || echo &quot;MISMATCH: $f ($magic)&quot; ;;
+  esac
+done
+# 추가: RTF 헤더(7b5c727466) 변조 후 Gzip(1f8b0800) 복구 패턴 감시
+</code></pre>
+<h3>7-9. 자격증명·인증서 계층 감시</h3>
+<pre><code># GPKI 인증서 디렉터리 접근 (AppleSeed 대응)
+FileAccess.Path startswith &quot;C:\\GPKI&quot;
+AND process NOT in (승인된 인증서 관리 프로그램)
+→ 복사·압축·네트워크 전송 이벤트와 상관분석
+
+# 브라우저 자격증명 저장소 접근
+FileAccess.Path contains (&quot;Login Data&quot;,&quot;Web Data&quot;,&quot;logins.json&quot;,&quot;key4.db&quot;)
+AND process NOT in (해당 브라우저 프로세스)
+
+# 계정 이상 징후 (KONNI 계열 대응)
+- 신규 기기 로그인 알림 발생 직후 해당 알림 메일 삭제
+- 짧은 시간 내 다수 서비스(구글·네이버 등) 로그인
+- 기기 원격 관리 기능(Find Hub 등) 호출 이력
+</code></pre>
+<hr>
+<h2>8. 조직별 실행 권고</h2>
+<h3>즉시 (24~72시간)</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 이메일 게이트웨이에서 <strong>LNK 확장자 첨부 차단</strong> (압축파일 내부 포함), JSE·WSF 등 스크립트 드로퍼 병행 차단</li>
+<li><input disabled="" type="checkbox"> PowerShell <strong>스크립트 블록 로깅 및 모듈 로깅 활성화</strong> — 미적용 시 이후 모든 탐지가 무력</li>
+<li><input disabled="" type="checkbox"> 7-2의 플레이스홀더 정규식을 메일 게이트웨이에 <strong>탐지 전용(비차단)</strong> 으로 배포</li>
+<li><input disabled="" type="checkbox"> IoC(11장) 기반 과거 90일 로그 소급 헌팅</li>
+<li><input disabled="" type="checkbox"> 비개발 부서 단말의 GitHub Raw / Pastebin / <code>*.trycloudflare.com</code> 접근 이력 점검</li>
+<li><input disabled="" type="checkbox"> <strong><code>C:\GPKI</code> 접근 이벤트</strong> 소급 조회 (공공기관·정부 협력 조직 우선)</li>
+<li><input disabled="" type="checkbox"> 전 임직원 <strong>2FA 적용 여부 확인</strong></li>
+</ul>
+<h3>30일 내</h3>
+<ul>
+<li><input disabled="" type="checkbox"> EDR에서 7-5 · 7-6 룰 튜닝 후 운영 전환</li>
+<li><input disabled="" type="checkbox"> 예약 작업·서비스 생성 이벤트 전수 수집 파이프라인 구축</li>
+<li><input disabled="" type="checkbox"> GitHub/GitLab/Pastebin/Dropbox 접근 화이트리스트 정책 수립 (개발/비개발 분리)</li>
+<li><input disabled="" type="checkbox"> VS Code 원격 터널·TryCloudflare 탐지 룰 배포</li>
+<li><input disabled="" type="checkbox"> 보안 교육 자료 개정 — &quot;어색한 문장 의심&quot; → &quot;완성도 높은 문서일수록 출처 확인&quot; + 플레이스홀더 신고 지침 + <strong>지인 발신 파일 확인 절차</strong></li>
+<li><input disabled="" type="checkbox"> 사내 AI 사용 정책 초안 — 허용 도구, 금지 데이터 유형, 검토 책임자 지정</li>
+<li><input disabled="" type="checkbox"> AI 생성 코드 리뷰 정책 명문화</li>
+</ul>
+<h3>90일 내</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 계층 신호 결합 스코어링(6-3, L6) 구현 및 임계치 캘리브레이션</li>
+<li><input disabled="" type="checkbox"> 문서 유사도 클러스터링 파이프라인 구축 (로컬 임베딩 모델 권장)</li>
+<li><input disabled="" type="checkbox"> 사내 LLM/RAG 연결 문서의 <strong>접근통제 원본 권한 일치 감사</strong></li>
+<li><input disabled="" type="checkbox"> AI 활용 공격 시나리오 기반 모의훈련(TTX) 1회 이상 실시 — <strong>KONNI형 계정 탈취·기기 초기화 시나리오 포함</strong></li>
+<li><input disabled="" type="checkbox"> AI 보안 도구 오탐/미탐률 정기 측정 체계 및 보고 회의체 신설</li>
+<li><input disabled="" type="checkbox"> AI 리스크 총괄 책임 지정 및 거버넌스 위원회 구성</li>
+<li><input disabled="" type="checkbox"> 러스트 등 비주류 언어 컴파일 바이너리에 대한 분석 역량 점검</li>
+</ul>
+<hr>
+<h2>9. 전망 — 세 가지 시나리오</h2>
+<table>
+<thead>
+<tr>
+<th>시나리오</th>
+<th>내용</th>
+<th>관측 지표</th>
+<th>확률</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>기준선</strong> (12개월)</td>
+<td>검수 단계 추가로 플레이스홀더·메타데이터·이모지 주석 소멸. 미끼 문서 품질 균질화. 침투 기법은 LNK/PowerShell 유지</td>
+<td>메타데이터 정제 흔적, 문서 중복률 하락, 코드 주석 정리</td>
+<td><strong>높음</strong></td>
+</tr>
+<tr>
+<td><strong>가속</strong> (6~18개월)</td>
+<td>RAG를 통한 탈취 자료 자동 선별 본격화. 표적별 맞춤 미끼 문서 자동 생성. STT로 음성 탈취물 분석 편입. 침해 후 정보 활용 속도 급상승</td>
+<td>탈취-후속공격 리드타임 단축, 개인 맞춤 스피어피싱 증가</td>
+<td>중간</td>
+</tr>
+<tr>
+<td><strong>비관</strong> (18개월+)</td>
+<td>에이전트 프레임워크가 악성코드에 이식되어 감염 단말 내에서 자율 정찰·판단·확산. C2 왕복 최소화로 탐지 난이도 상승</td>
+<td>감염 단말 C2 통신량 감소 + 내부 정찰 행위 증가라는 상반 신호</td>
+<td>낮음~중간</td>
+</tr>
+</tbody></table>
+<p><strong>공통 함의:</strong>세 시나리오 모두에서<strong>콘텐츠 기반 판별의 가치는 하락하고 행위 기반 탐지의 가치는 유지되거나 상승한다.</strong> 투자 우선순위는 여기서 결정된다.</p>
+<p><strong>추가 관찰 포인트</strong></p>
+<ul>
+<li>김수키가 러스트 채택을 확대하는지 (분석 난이도 상승 목적)</li>
+<li>MCP(Model Context Protocol) 기반 도구 연동이 공격 도구에 나타나는지 — Msty 설치는 그 가능성을 시사한다</li>
+<li>자체 모델 파인튜닝 흔적이 최초로 관측되는 시점</li>
+<li>축 A(파괴적 공격)와 축 D(AI 자동화)의 결합 — 표적 개인화된 파괴 공격</li>
+</ul>
+<hr>
+<h2>10. 마무리하며, AI에는 AI가, 그러나 읽는 사람이 있어야 한다</h2>
+<p>김수키 사건에서 가장 오래 기억해야 할 장면은 로컬 LLM 구축도, 에이전트 프레임워크 수집도 아니다. <strong><code>(임시값)</code>이 아홉 번 남아 있는 문서가 표적의 메일함으로 발송됐다는 사실이다.</strong> 그리고 <strong>이모지가 들어간 주석이 컴파일되어 백도어로 배포됐다는 사실이다.</strong></p>
+<p>국가의 사이버 작전 조직이, 십수 년간 축적한 인프라와 기법을 동원해, AI가 30초 만에 뽑아낸 문서를 <strong>한 번도 읽지 않고</strong> 보냈다. AI가 써준 코드를 <strong>한 줄도 훑어보지 않고</strong> 컴파일했다. 그리고 그 부주의 덕분에 우리는 그들이 무엇을 쓰는지 알게 됐다.</p>
+<p>여기서 얻어야 할 교훈은 두 개다. 하나는 자명하다. <strong>AI로 공격하는 상대는 AI로 막아야 한다.</strong> 30초에 문서 10건이 나오는 속도를 사람의 눈으로 따라잡을 수 없다. 탐지, 트리아지, 상관분석, 초동 대응의 1차 방어선은 자동화되어야 한다.</p>
+<p>그러나 두 번째 교훈이 훨씬 중요하고, 훨씬 자주 잊힌다. <strong>그들이 실패한 지점에서 우리도 매일 실패하고 있다.</strong></p>
+<p>플레이스홀더가 남은 채 결재되는 보고서. 리뷰 없이 머지되는 AI 생성 코드. 원문을 확인하지 않은 요약본 위에서 내려지는 의사결정. 김수키가 미끼 문서를 읽지 않은 것과 우리가 AI 초안을 읽지 않는 것은 <strong>원인이 같다.</strong> 생성 비용은 0으로 떨어졌는데 검토 비용은 그대로이기 때문이다.</p>
+<p>그래서 &quot;AI로 막아야 한다&quot;는 명제는 절반만 맞다. AI 보안 솔루션을 도입하고 그 출력을 아무도 읽지 않으면, 우리는 공격자와 정확히 같은 실수를 더 비싼 도구로 반복하는 것이다. AI가 종결 처리한 오탐 뒤에 실제 침해가 숨어 있어도 알 수 없다. <strong>AI가 만든 사각지대는 사람이 만든 사각지대보다 크고, 훨씬 조용하다.</strong></p>
+<p><strong>LLM은 엑셀이지 오라클이 아니다.</strong> 엑셀은 계산을 대신하지만 숫자의 진위를 보증하지 않는다. 아무도 엑셀 수식 결과를 검산 없이 이사회에 올리지 않는다. LLM에 대해서만 그 검산을 생략할 이유는 없다.</p>
+<p>다층 방어가 필요한 진짜 이유가 여기 있다. 어떤 계층도 완벽하지 않고, <strong>AI 계층도 예외가 아니기 때문이다.</strong> 콘텐츠 계층이 뚫리면 실행 계층이, 실행 계층이 뚫리면 지속성 계층이, 그마저 뚫리면 네트워크와 자격증명 계층이 잡아야 한다. 그리고 <strong>그 모든 계층 위에, 결과를 실제로 읽는 사람이 있어야 한다.</strong></p>
+<p>김수키가 우리에게 알려준 것은 AI가 얼마나 위험한 무기인가가 아니다. <strong>AI를 검토 없이 쓰는 조직이 얼마나 많은 흔적을 남기는가</strong>다. 지금은 그 흔적이 그들의 것이지만, 검토를 생략하는 습관이 우리에게 있는 한, 다음 번 흔적은 우리 것이 될 수 있다.</p>
+<p>AI는 이미 해킹의 도구가 되었다. 이제 AI는 방어의 도구도 되어야 한다. 다만 그 방어가 작동하는지는, 여전히 사람이 확인해야 한다.</p>
+<hr>
+<h2>11. 침해지표 (IoC)</h2>
+<blockquote>
+<p>출처: 지니언스 시큐리티 센터 (2026.08.10). 조직 환경에서 소급 헌팅에 활용할 것. <strong>주의:</strong> IoC는 공표 시점 기준이며 시간 경과에 따라 유효성이 급감한다. 반드시 행위 지표와 병행할 것.</p>
+</blockquote>
+<h3>C2 IP</h3>
+<pre><code>27.102.137[.]126
+27.102.137[.]159
+27.102.138[.]44
+112.216.9[.]171      ← 한국 소재
+170.205.29[.]83
+170.205.30[.]227
+185.27.134[.]140
+169.254.33[.]137     ← 공격자 테스트 흔적 (OPSEC Fail, 링크로컬)
+172.16.11[.]141      ← 공격자 테스트 환경 내부 IP
+</code></pre>
+<h3>도메인</h3>
+<pre><code>stoks.great-site[.]net
+*.trycloudflare[.]com   ← HelloDoor C2 (임시 터널, 와일드카드 모니터링 권장)
+</code></pre>
+<h3>연계 이메일 계정</h3>
+<pre><code>apollo1030109@gmail[.]com          awed33@outlook[.]kr
+belendong40@gmail[.]com            brandonleeodd.93@gmail[.]com
+contrasde@outlook[.]kr             devlion413@gmail[.]com
+eros1030109@gmail[.]com            hera1030109@gmail[.]com
+holowin401@gmail[.]com             holowin@gmail[.]com
+jecoma@outlook[.]kr                johnstones19850308@gmail[.]com
+johnstones8888@outlook[.]com       kkkkk79@outlook[.]kr
+tomas3015@outlook[.]kr             trungvo5131993@gmail[.]com
+tttsssuuu@outlook[.]kr             whitewolf20000312@gmail[.]com
+</code></pre>
+<h3>파일 경로 지표</h3>
+<pre><code>%TEMP%\poqpwoqwdjoweij.ps1
+%AppData%\irujkdnjhgttrhdkfdu.ps1
+%AppData%\lpieuysjfgtrja.ps1
+%AppData%\ms_update.ps1
+%AppData%\&lt;IP&gt;-&lt;MMDD_HHMM&gt;-XXX-kkk.txt
+%AppData%\Microsoft\&lt;IP&gt;-&lt;MMDD_HHMM&gt;-0956_info.txt
+</code></pre>
+<h3>예약 작업 / 서비스명</h3>
+<pre><code>ZHUYHJGTYTFSUHIPOKLKHJHUYGVHGNFH   (예약 작업)
+CacheDB                             (httpMalice 서비스)
+</code></pre>
+<h3>파일 해시 (MD5)</h3>
+<pre><code>02ebc2356f9f700bbdac444cdefa0da2   0d8ceb7dea7d471afa2f8e753b13d2d6
+1f378c0efc13669dada1fe340c6837bd   2669731cb5ff664dfb5fbfc37637876d
+2ab3df4762fbde5d86e99a1ad147850e   2e76d5316663a3dc472398b1c01cb9a8
+2eb77109cce1e8afca6245c2963e52a6   302725413076d1aeaee2d7f2b3692646
+30792a0c0dfad55fb2b19d3e30e9a7d4   30d5f17d5e3f85be18220a7cab0b9fff
+37cec428257cd41153cf43d7f1a12652   3b9d40f3d620ec87960b4350d42ccc03
+3e2110d233d4543830e14c78d53900f4   422a221851ea6ad15f53cd3aea51c8af
+49bdbe7e6cbb88842afcce3a9fe60e9b   4d87fef16790cbe1df72007d99149665
+5577fffb5b5acd3771ef9dc696498f1e   5af95590a33b9bc64d95808f1fc71b78
+5c5672bb14e1d2f07a8318ffec19b213   6add815cd61d6514f81a23ab8c23405a
+73ff669fc282653bd6c42cf87ade9337   7f12fa589f56f6203c692715b3958d30
+8406075af0a1e9ec09bafdc0de01f138   8c859a03814443c6f0da341ee594c352
+a1c07ac866fb6b388e38c6bb1d4bbe94   a343d8bcf02a0554fa271452a512f3ce
+a435292106026e257789036a70ee1a14   a5701848f82c65a55765dc534111899f
+aa9d5dd632bb90addca480eaa5ff4382   af3fa7f22f6e97901f20326cc12bdb49
+b406ea5b8628cb7801f47c0189b96182   b50dad56d891ef230656b37ce62cdada
+b516ec6c6b37618ad65080a063270ea4   ba0238423b5c29667cd760ccd7b000aa
+ba8e682a72c6a3e634c070f0fb057bf5   bbf1b0ab9fc27439de4386ed7b8fc151
+c410055bfa198937825dfd7e41000e7a   c63d021de798034cbf933e1c99bcb83f
+c7723bf166ef08ff3112257a1244f584   ca0b57807f79f26e7f59cab2a2542da0
+e0e4aec6d494fe68cdaa52d6878a8366   e22367800e9d39bc865bd50cddd0537d
+ead95793528572e7b89679860e2f2116   ed2f8dd9b96d706d833b7aa545b8e621
+f4e7ca8c1de252840c1f0e957cd4b717   f73e07efb8707e3561e9cbff74557acb
+</code></pre>
+<h3>행위 지표 (Behavioral IoC — IoC보다 수명이 길다)</h3>
+<ul>
+<li><code>%TEMP%</code> 및 <code>%AppData%</code> 경로의 무의미 문자열 <code>.ps1</code> 파일 생성</li>
+<li>무작위 대문자 나열형 예약 작업명</li>
+<li>이미지 확장자를 가진 RC4 암호화 .NET 어셈블리</li>
+<li>300자 내외 선행 공백을 포함한 LNK 실행 인수</li>
+<li>표준 Base64 API 미사용 + 비트 연산 커스텀 디코더</li>
+<li>PDF 메타데이터의 <code>opencode</code>, <code>python-docx</code>, <code>WPS 文字</code></li>
+<li>문서 본문의 <code>(임시값)</code> 잔존</li>
+<li>악성코드 주석 내 이모지 및 문법 오류</li>
+<li><code>C:\GPKI</code> 디렉터리 접근·수집</li>
+<li>비개발 단말의 <code>code tunnel</code> 실행</li>
+</ul>
+<hr>
+<h2>12. MITRE ATT&amp;CK 매핑</h2>
+<table>
+<thead>
+<tr>
+<th>전술</th>
+<th>기법</th>
+<th>관측 내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Resource Development</td>
+<td>T1588.007 Obtain Capabilities: Artificial Intelligence</td>
+<td>로컬 LLM 구축, 코딩 에이전트 사용, 에이전트 프레임워크 수집</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>T1585.002 Establish Accounts: Email Accounts</td>
+<td>다수 Gmail/Outlook 계정 운용</td>
+</tr>
+<tr>
+<td>Resource Development</td>
+<td>T1587.001 Develop Capabilities: Malware</td>
+<td>HelloDoor, httpMalice 자체 개발</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>T1566.001 Spearphishing Attachment</td>
+<td>ZIP 첨부 스피어피싱</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>T1566.002 Spearphishing Link</td>
+<td>보안 프로그램 설치 페이지·Webex 사칭</td>
+</tr>
+<tr>
+<td>Initial Access</td>
+<td>T1199 Trusted Relationship</td>
+<td>탈취 계정 통한 지인 대상 유포</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>T1204.002 User Execution: Malicious File</td>
+<td>LNK 실행 유도</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>T1059.001 Command and Scripting Interpreter: PowerShell</td>
+<td>난독화 PowerShell 로더</td>
+</tr>
+<tr>
+<td>Execution</td>
+<td>T1059.007 JavaScript</td>
+<td>JSE 드로퍼 (HelloDoor)</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>T1053.005 Scheduled Task/Job</td>
+<td>위장 예약 작업 등록</td>
+</tr>
+<tr>
+<td>Persistence</td>
+<td>T1543.003 Create or Modify System Process: Windows Service</td>
+<td><code>CacheDB</code> 서비스 (httpMalice)</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1027 Obfuscated Files or Information</td>
+<td>커스텀 Base64, 문자열 분할</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1140 Deobfuscate/Decode Files or Information</td>
+<td>자체 디코딩 루틴</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1036.005 Masquerading: Match Legitimate Name or Location</td>
+<td>BitLocker/MATLAB/.NET 명칭 위장</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1036.008 Masquerade File Type</td>
+<td>이미지 확장자 위장, RTF 헤더 변조</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1497 Virtualization/Sandbox Evasion</td>
+<td>분석 환경 감지 시 자체 정지</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1070.003 Indicator Removal: Clear Command History</td>
+<td>실행 기록 삭제</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1070.008 Clear Mailbox Data</td>
+<td>보안 경고 메일 및 휴지통 기록 삭제</td>
+</tr>
+<tr>
+<td>Defense Evasion</td>
+<td>T1218 System Binary Proxy Execution</td>
+<td>VS Code 등 정상 서명 도구 악용</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>T1555.003 Credentials from Web Browsers</td>
+<td>브라우저 저장 비밀번호</td>
+</tr>
+<tr>
+<td>Credential Access</td>
+<td>T1552.004 Unsecured Credentials: Private Keys</td>
+<td><strong>GPKI 전자인증서 수집</strong></td>
+</tr>
+<tr>
+<td>Discovery</td>
+<td>T1082 System Information Discovery</td>
+<td>OS·아키텍처·프로세스 목록 수집</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>T1123 Audio Capture / STT 연계</td>
+<td>Whisper 기반 음성 자료 처리</td>
+</tr>
+<tr>
+<td>Collection</td>
+<td>T1113 Screen Capture</td>
+<td>HTTPSpy 변종</td>
+</tr>
+<tr>
+<td>Command &amp; Control</td>
+<td>T1102.001 Web Service: Dead Drop Resolver</td>
+<td>GitHub/Pastebin C2</td>
+</tr>
+<tr>
+<td>Command &amp; Control</td>
+<td>T1071.001 Application Layer Protocol: Web Protocols</td>
+<td>HTTPS 기반 통신</td>
+</tr>
+<tr>
+<td>Command &amp; Control</td>
+<td>T1572 Protocol Tunneling</td>
+<td>TryCloudflare, VS Code 원격 터널</td>
+</tr>
+<tr>
+<td>Exfiltration</td>
+<td>T1567.002 Exfiltration Over Web Service: Cloud Storage</td>
+<td>Git 저장소·Dropbox 업로드</td>
+</tr>
+<tr>
+<td>Impact</td>
+<td>T1485 Data Destruction</td>
+<td><strong>안드로이드 기기 원격 초기화 (KONNI 연계)</strong></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>13. 참고 자료</h2>
+<h3>1차 출처 — 보안 업계 분석 보고서</h3>
+<ol>
+<li>지니언스 시큐리티 센터, 「AI를 공격 체계에 접목하는 김수키, 미끼 문서 제작부터 로컬 LLM 구축까지」 (2026.08.10) <a href="https://www.genians.co.kr/blog/threat_intelligence/kimsuky_ai_llm">https://www.genians.co.kr/blog/threat_intelligence/kimsuky_ai_llm</a></li>
+<li>지니언스 시큐리티 센터, 오픈코드(opencode) 활용 미끼 문서 관련 위협 인텔리전스 보고서 (2026.09.07)</li>
+<li>지니언스 시큐리티 센터, 「국가 배후 위협 조직의 안드로이드 디바이스 대상 원격 초기화 전술」 (2025.11) <a href="https://www.genians.co.kr/blog/threat_intelligence/android">https://www.genians.co.kr/blog/threat_intelligence/android</a></li>
+<li>지니언스 시큐리티 센터, 「FlowerPower」 캠페인 보고서 (2023) <a href="https://www.genians.co.kr/blog/threat_intelligence/flowerpower">https://www.genians.co.kr/blog/threat_intelligence/flowerpower</a></li>
+<li>지니언스 시큐리티 센터, 「새해 오피니언 언론 칼럼 위장 해킹 분석」 (2024.02) <a href="https://www.genians.co.kr/blog/threat_intelligence/nation-state">https://www.genians.co.kr/blog/threat_intelligence/nation-state</a></li>
+<li>지니언스 시큐리티 센터, 「한국내 macOS 이용자를 노린 APT37 공격 등장」 (2023.06) <a href="https://www.genians.co.kr/blog/threat_intelligence/_macos">https://www.genians.co.kr/blog/threat_intelligence/_macos</a></li>
+<li>카스퍼스키, 킴수키 최신 공격 캠페인 심층 분석 보고서 — HelloDoor, httpMalice, AppleSeed GPKI (2026.05)</li>
+<li>ENKI, 「JSONPing, 웹엑스(Webex) 사칭, 새로운 HTTPSpy 변종」 분석 보고서 (2026.05.27)</li>
+<li>Fortinet, &quot;DPRK-Related Campaigns with LNK and GitHub C2&quot; (2026.04) <a href="https://www.fortinet.com/blog/threat-research/dprk-related-campaigns-with-lnk-and-github-c2">https://www.fortinet.com/blog/threat-research/dprk-related-campaigns-with-lnk-and-github-c2</a></li>
+<li>Darktrace, VS Code 터널 악용 분석 (2026.01.21)</li>
+<li>Mandiant, &quot;APT43: North Korean Group Uses Cybercrime to Fund Espionage Operations&quot; (2023)</li>
+<li>AhnLab ASEC, 「2026년 7월 APT 그룹 동향 보고서」 (2026.08) <a href="https://asec.ahnlab.com/ko/95038/">https://asec.ahnlab.com/ko/95038/</a></li>
+</ol>
+<h3>정부·국제기구 자료</h3>
+<ol>
+<li>U.S. Department of the Treasury OFAC, &quot;Treasury Targets DPRK&#39;s International Agents and Illicit Cyber Intrusion Group&quot; — 김수키 제재 지정 (2023.11.30)</li>
+<li>NSA·FBI·국무부·한국 관계기관 공동 보안권고, &quot;DPRK Using Social Engineering to Enable Hacking&quot; (2023.06)</li>
+<li>MSMT(다국적제재모니터링팀), 북한 사이버 조직 구조 관련 자료 — 63연구소 소속 분류</li>
+<li>국가정보원, 정보보호업체 대상 사이버 위협사례 자료 (2024.06)</li>
+</ol>
+<h3>국내 언론</h3>
+<ol>
+<li>동아일보, 「해킹용 미끼 AI로 뚝딱…北김수키, 코딩 에이전트까지 끌어들여」 (2026.09.07)</li>
+<li>연합뉴스, 「[AI프리즘] 북한 김수키, AI 코딩 에이전트까지 썼다…해킹 자동화」 (2026.09.07)</li>
+<li>조선비즈, 「&#39;보험료 내세요&#39;…北 김수키 해킹에 AI 코딩 에이전트 악용」 (2026.09.07)</li>
+<li>비즈니스포스트, 「&#39;이자 납부 안내입니다&#39;, 북한 해킹조직 &#39;김수키&#39; AI로 미끼문서까지 제작」 (2026.09.07)</li>
+<li>서울신문, 「北, AI 에이전트로 &#39;자동 해킹 공격&#39;」 (2026.09.08)</li>
+<li>한국경제, 「北 해커 김수키, AI로 자동공격 노려」 (2026.08.24)</li>
+<li>데일리시큐, 「&quot;킴수키, AI 활용해 악성코드 개발 정황 포착&quot;…한국 군·정부·방산 집중 공격」 (2026.05.14)</li>
+<li>데일리시큐, 「북한 해킹조직 킴수키, 3월과 4월 한국 군·기업 겨냥 신종 공격 정황 포착」 (2026.05.29)</li>
+<li>테크월드, 「킴수키도 AI 악성코드 개발...한국 방산·군 집중 공격」 (2026.05.14)</li>
+<li>서울신문, 「북한 해킹조직, &#39;먹통&#39; 공습…스마트폰·PC·카톡까지 장악」 (2025.11.10)</li>
+<li>세계일보, 「일상 파고든 北 해킹조직… 스마트폰 초기화·카톡 원격조종」 (2025.11.10)</li>
+<li>동아일보, 「&quot;北배후 해커, 개인 폰 원격조종-카톡 공격&quot;」 (2025.11.11)</li>
+<li>보안뉴스, 「라자루스 이어 김수키? 북한 추정 해커그룹, 외화벌이 &#39;올인&#39;」 (2019.01.17)</li>
+</ol>
+<h3>해외 언론</h3>
+<ol>
+<li>Yonhap News Agency, &quot;N.K. hacking group Kimsuky used AI coding agents to create decoys: report&quot; (2026.09.07)</li>
+<li>Korea JoongAng Daily, &quot;North Korea-linked hackers turn to AI agents for malicious email decoys&quot; (2026.09.07)</li>
+<li>The Korea Times, &quot;NK hacking group Kimsuky used AI coding agents to create decoys: report&quot; (2026.09.07)</li>
+<li>NK News, &quot;North Korean cybercriminals use AI coding agent to enhance phishing attacks&quot; (2026.09.07)</li>
+<li>BleepingComputer, &quot;US govt sanctions North Korea&#39;s Kimsuky hacking group&quot; (2023.12.01)</li>
+<li>CyberScoop, &quot;U.S. government sanctions prolific North Korean cyber espionage unit&quot; (2023.12.01)</li>
+<li>The Record, &quot;US sanctions North Korean &#39;Kimsuky&#39; hackers&quot; (2023.12.01)</li>
+<li>SecurityWeek, &quot;US Sanctions North Korean Cyberespionage Group Kimsuky&quot; (2023.12.01)</li>
+</ol>
+<h3>AI 보안 일반</h3>
+<ol>
+<li>매일경제, 「&#39;AI가 해킹도 방어도 바꾼다&#39;…올해 정보보호의 날 화두는 &#39;AI 보안&#39;」 (2026.07.08)</li>
+<li>이데일리, 「AI 보안의 역설[김현정의 IT 세상]」 (2026.04.10)</li>
+<li>CIO Korea, 「칼럼 | AI에 보안 맡겨도 될까?··· CISO의 &#39;에이전틱 AI&#39; 대비 방법」 (2025.04.21)</li>
+<li>카스퍼스키, 「사이버 세계 분석」 보고서 — 초기 침투 경로 통계 (2026.06)</li>
+</ol>
+<h3>참고 도구·기술 문서</h3>
+<ol>
+<li>MITRE ATT&amp;CK Framework — Enterprise Matrix</li>
+<li>opencode 공식 문서 — <a href="https://opencode.ai">https://opencode.ai</a></li>
+<li>Ollama, GPT4All, Msty 각 프로젝트 공식 문서 (로컬 LLM 실행 환경 이해 목적)</li>
+</ol>
+<hr>
+<h2>부록 A. 이 보고서를 조직 내에서 활용하는 법</h2>
+<table>
+<thead>
+<tr>
+<th>대상</th>
+<th>우선 읽을 부분</th>
+<th>실행 항목</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>CISO / 보안 임원</strong></td>
+<td>0장, 5장, 6-1·6-2, 9장, 10장</td>
+<td>AI 거버넌스 체계 수립, 투자 우선순위 재조정</td>
+</tr>
+<tr>
+<td><strong>SOC / 탐지 엔지니어</strong></td>
+<td>3장, 7장 전체, 11장</td>
+<td>룰 배포 및 튜닝, 소급 헌팅</td>
+</tr>
+<tr>
+<td><strong>인시던트 대응팀</strong></td>
+<td>3장, 11장, 12장</td>
+<td>플레이북 갱신, TTX 시나리오 설계</td>
+</tr>
+<tr>
+<td><strong>위협 인텔리전스 분석가</strong></td>
+<td>1장, 2장, 4장</td>
+<td>클러스터 정의 확인, 지표 수명 관리</td>
+</tr>
+<tr>
+<td><strong>개발·플랫폼 조직</strong></td>
+<td>5-7, 6-3(L7), 8장</td>
+<td>AI 생성 코드 리뷰 정책, 의존성 검증</td>
+</tr>
+<tr>
+<td><strong>보안 교육 담당</strong></td>
+<td>5-3, 6-3(L-1)</td>
+<td>교육 자료 전면 개정</td>
+</tr>
+<tr>
+<td><strong>일반 임직원</strong></td>
+<td>0장, 10장</td>
+<td>인식 제고</td>
+</tr>
+</tbody></table>
+<h2>부록 B. 면책 및 이용 안내</h2>
+<ul>
+<li>본 보고서는 <strong>방어 목적의 위협 인텔리전스 분석 자료</strong>다.</li>
+<li>7장의 탐지 로직은 개념 검증용 의사코드이며, 실제 운영 환경 적용 전 반드시 자사 기준선에 맞춘 오탐률 측정과 튜닝을 거쳐야 한다.</li>
+<li>귀속 평가는 공개된 기술적 근거에 기반한 것이며, 최종적인 국가 귀속 판단은 정부 기관의 영역이다.</li>
+<li>별칭(APT43, TA406 등)은 벤더별 클러스터 정의가 다르므로 1-2의 주의사항을 반드시 함께 참조할 것.</li>
+<li>IoC는 공표 시점 기준이며 시간 경과에 따라 유효성이 감소한다. <strong>행위 기반 지표를 병행할 것.</strong></li>
+<li>인용된 사실관계는 각 1차 출처의 공개 보고서를 따르며, 해석과 방어 권고는 작성자의 분석이다.</li>
+</ul>
+<hr>
+<p><strong>작성:</strong>Dennis Kim (김호광) | <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a><strong>라이선스:</strong> 출처 표기 시 자유 배포 가능 (TLP:CLEAR)</p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://cti.vibequant.cc/cti/kimsuky-ai-20260910/" data-title="북한 해킹 팀 김수키(Kimsuky)도 AI 딸깍 - AI 무기화 종합 분석" data-text="김수키가 오픈코드(opencode)로 미끼 문서를 만들어 GitHub C2와 AsyncRAT을 배포한 Operation GitPower 변종. AI 무기화와 다층 방어를 정리한 CTI 보고서." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fkimsuky-ai-20260910%2F&amp;text=%EB%B6%81%ED%95%9C%20%ED%95%B4%ED%82%B9%20%ED%8C%80%20%EA%B9%80%EC%88%98%ED%82%A4(Kimsuky)%EB%8F%84%20AI%20%EB%94%B8%EA%B9%8D%20-%20AI%20%EB%AC%B4%EA%B8%B0%ED%99%94%20%EC%A2%85%ED%95%A9%20%EB%B6%84%EC%84%9D" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fkimsuky-ai-20260910%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fkimsuky-ai-20260910%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-0910-KIMSUKI.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

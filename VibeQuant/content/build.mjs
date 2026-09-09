@@ -656,6 +656,7 @@ const SLUG_OVERRIDES = {
   "CTI-2026-0822-Column-EN.md": "cert-authority-breach-20260822-en",
   "CTI-2026-0822-Column-JA.md": "cert-authority-breach-20260822-ja",
   "CTI-2026-0822-Column-CN.md": "cert-authority-breach-20260822-cn",
+  "CTI-2026-0910-KIMSUKI.md": "kimsuky-ai-20260910",
   "USA/Age-of-USD.md": "age-of-usd",
   "AI-IDC/Why-High-Power-Datacenter.md": "why-high-power-datacenter",
   "BitCoin/BTC-Arbitrage-Bithumb-Column.md": "btc-arbitrage-bithumb",
