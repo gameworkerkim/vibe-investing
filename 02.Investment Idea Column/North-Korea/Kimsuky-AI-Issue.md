@@ -1,4 +1,57 @@
+<!--
+---
+title: "AI 딸깍 — 북한 해커도, 바이브 코더도, Tving 개발자도 똑같이 저지른 실수"
+title_en: "The Same AI-Click Mistake: Kimsuky, Vibe Coders, and Tving"
+subtitle: "AI는 만드는 비용을 0으로 만들었지만, 검토 비용은 그대로다"
+description: "김수키가 opencode로 미끼 문서를 검토 없이 뿌렸다. 티빙 3,954만 계정 유출과 같은 문법이다. AI 딸깍, 열쇠 하드코딩, 사람이 안 읽음. 투자 권유 아님."
+abstract: |
+  2026-09 지니언스: 북한 김수키가 오픈코드(opencode)로 미끼 PDF를 실전 스피어피싱에 사용. (임시값) 최대 9회, 29건 중 18건 파일명만 변경, 메타데이터에 opencode 잔존.
+  카스퍼스키 HelloDoor 이모지 주석. GitHub PAT 하드코딩·한국 C2. 티빙 3,954만 계정·평문 접속키(2024 모의해킹 미조치).
+  논지: 생성 비용 붕괴 vs 검토 비용 잔존. pre-commit(gitleaks)·정적분석·사람 리뷰. 투자·법률 자문 아님.
+summary_for_ai: |
+  Korean security/policy column (not investment or legal advice), 2026-09-10, group korea-hacking.
+  Event: Kimsuky used opencode to mass-produce spearphish PDFs (Genians 2026-09); Kaspersky HelloDoor emoji comments (2026-05); Tving 39.54M account leak (keys in source, unfixed since 2024 pentest).
+  Thesis: AI collapsed generation cost but not review cost; nation-state APT, OTT, and vibe-coding startups fail the same way (hardcoded secrets, unread output, no owner of review).
+  Defenses: pre-commit secret scan (gitleaks/truffleHog), Semgrep/CodeQL plus local LLM review, named human reviewer before merge. Link to CTI report kimsuky-ai-20260910.
+date: 2026-09-10
+updated: 2026-09-10
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - Kimsuky
+  - 김수키
+  - 바이브코딩
+  - opencode
+  - 티빙
+  - 스피어피싱
+  - 하드코딩
+  - LLM
+keywords:
+  - "김수키"
+  - "Kimsuky"
+  - "AI 딸깍"
+  - "오픈코드"
+  - "opencode"
+  - "티빙 유출"
+  - "바이브 코딩"
+  - "GitHub PAT"
+  - "HelloDoor"
+group: korea-hacking
+featured: true
+featured_rank: 0
+og_image: "https://vibequant.cc/og/kimsuky-ai-issue.jpg"
+image: "https://vibequant.cc/og/kimsuky-ai-issue.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # AI 딸깍 — 북한 해커도, 바이브 코더도, Tving 개발자도 똑같이 저지른 실수
+
+## AI는 만드는 비용을 0으로 만들었지만, 검토 비용은 그대로다
+
+![김정은이 군인과 함께 컴퓨터를 살펴보는 장면 — 김수키 AI 딸깍 칼럼 썸네일](https://vibequant.cc/og/kimsuky-ai-issue.jpg)
 
 2026년 9월, 북한 해킹 조직 김수키(Kimsuky)가 오픈소스 AI 코딩 도구 '오픈코드(opencode)'로 미끼 문서를 만들어 실제 공격에 사용한 정황이 공개됐다. 해킹 조직이 AI 코딩 에이전트를 실전 공격 파일 제작에 쓴 것이 확인된 첫 사례다.
 
