@@ -700,6 +700,7 @@ const SLUG_OVERRIDES = {
   "AI_Revolution/Llm Token-Saving-Full-Writers-Marketers.md": "llm-token-saving-writers-marketers",
   "Privacy/LG-Smart-TV-Issue.md": "lg-smart-tv-issue",
   "North-Korea/Kimsuky-AI-Issue.md": "kimsuky-ai-issue",
+  "China-Culture/Wedding-Taboos.md": "china-wedding-taboos",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

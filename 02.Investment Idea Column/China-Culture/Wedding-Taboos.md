@@ -1,6 +1,56 @@
+<!--
+---
+title: "신부의 복을 훔치는 사람들"
+title_en: "People Who Steal a Bride's Fortune — Qiangxi and the Fake Door"
+subtitle: "치앙시(抢喜)와 '가짜 문'이 말해주는 것"
+description: "중국 결혼식 치앙시(抢喜)는 유서 깊은 전통이 아니라 숏폼이 만든 위민속일 수 있다. 가짜 문 대응이 가짜 풍습을 실체화한다. 투자 권유 아님."
+abstract: |
+  치앙시(抢喜): 신부 입장 순간 복을 가로채려 레드카펫을 먼저 건너는 행동. 가짜 입장문·가짜 신부 연출로 대응한 사례(사천 광한 등).
+  고전 문헌 근거 미확인. 하남·산동·강소 등 일부 지역. 2023 펑현 '조상 풍속' 해명과 같은 문법.
+  숏폼이 위민속(伪民俗)을 제조하고, 방어 시스템이 그것을 실재하게 만든다. 투자·학술 자문 아님.
+summary_for_ai: |
+  Korean culture/society column (not investment advice), 2026-09-10, group industry, China-Culture series.
+  Topic: qiangxi (抢喜) at Chinese weddings — jumping ahead of the bride to steal luck / offload misfortune.
+  Countermeasure: fake doors, decoy groomsmen, sequential veil reveals. Guanghan (Sichuan) viral incident.
+  Thesis: not verified classical folklore; likely recent short-video manufactured custom (伪民俗); same pattern as 2023 Fengxian forced-kiss 'tradition' claim debunked by civil affairs.
+  Lesson for Korea: unverified 'nowadays etiquette' spreads the same way; building a second door makes the superstition more real.
+date: 2026-09-10
+updated: 2026-09-10
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 치앙시
+  - 抢喜
+  - 중국결혼
+  - 위민속
+  - 숏폼
+  - 웨딩
+  - 중국문화
+keywords:
+  - "치앙시"
+  - "抢喜"
+  - "중국 결혼식"
+  - "가짜 문"
+  - "위민속"
+  - "신부의 복"
+  - "숏폼"
+  - "펑현"
+group: industry
+featured: true
+featured_rank: 0
+og_image: "https://vibequant.cc/og/china-wedding-taboos.jpg"
+image: "https://vibequant.cc/og/china-wedding-taboos.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # 신부의 복을 훔치는 사람들
 
-## — 치앙시(抢喜)와 '가짜 문'이 말해주는 것
+## 치앙시(抢喜)와 '가짜 문'이 말해주는 것
+
+![중국 신혼부부가 결혼증을 들어 보이는 장면 — 치앙시(抢喜) 칼럼 썸네일](https://vibequant.cc/og/china-wedding-taboos.jpg)
 
 ### 1. 문이 열리는 순간, 누군가 뛴다
 
