@@ -701,6 +701,7 @@ const SLUG_OVERRIDES = {
   "Privacy/LG-Smart-TV-Issue.md": "lg-smart-tv-issue",
   "North-Korea/Kimsuky-AI-Issue.md": "kimsuky-ai-issue",
   "China-Culture/Wedding-Taboos.md": "china-wedding-taboos",
+  "China-Culture/Overtourism.md": "china-overtourism",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
