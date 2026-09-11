@@ -62,6 +62,7 @@ export const ESSAY_GROUP_FALLBACK = { id: "other", title_ko: "기타 에세이",
 
 /** Paths (substring) that should appear in Recommended — order = display order */
 export const FEATURED_COLUMN_PATHS = [
+  "Key-Currency/Salt-Currency.md",
   "China-Culture/Overtourism.md",
   "China-Culture/Wedding-Taboos.md",
   "North-Korea/Kimsuky-AI-Issue.md",

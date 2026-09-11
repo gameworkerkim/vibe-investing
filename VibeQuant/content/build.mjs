@@ -702,6 +702,7 @@ const SLUG_OVERRIDES = {
   "North-Korea/Kimsuky-AI-Issue.md": "kimsuky-ai-issue",
   "China-Culture/Wedding-Taboos.md": "china-wedding-taboos",
   "China-Culture/Overtourism.md": "china-overtourism",
+  "Key-Currency/Salt-Currency.md": "salt-currency",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
