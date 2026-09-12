@@ -1,6 +1,55 @@
+<!--
+---
+title: "멈추지 못한 사람들"
+title_en: "Those Who Could Not Stop — Optimal Stopping and The Bridges of Madison County"
+subtitle: "최적 멈춤 이론과 《매디슨 카운티의 다리》"
+description: "최적 멈춤 이론과 《매디슨 카운티의 다리》. 37% 비서 문제, 계속가치, 신호등 앞의 선택. 멈춘 뒤의 삶은 수학이 말하지 않는다. 투자 권유 아님."
+abstract: |
+  최적 멈춤(Optimal Stopping)·비서 문제 1/e≈37% look-then-leap.
+  정지가치 vs 계속가치: 부동산·미국형 옵션·유보임금·실물옵션.
+  《매디슨 카운티의 다리》: 이미 멈춘 프란체스카, 소멸하는 옵션, 부작위 후회.
+  투자 권유 아님.
+summary_for_ai: |
+  Korean economics/culture column (not investment advice), 2026-09-12, group quant-strategy, Option series.
+  Thesis: Optimal stopping (secretary problem ~37%) explains when to stop searching; Bridges of Madison County shows the silence after stopping.
+  Topics: stopping vs continuation value, American options/Snell envelope, McCall reservation wage, real options irreversibility.
+  Francesca already optimally stopped once; the rainy traffic light is an expiring option; 63% fail even with the rule; inaction regret grows over time.
+date: 2026-09-12
+updated: 2026-09-12
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 최적멈춤
+  - 비서문제
+  - 매디슨카운티
+  - 실물옵션
+  - 계속가치
+  - 경제학
+keywords:
+  - "최적 멈춤 이론"
+  - "비서 문제"
+  - "매디슨 카운티의 다리"
+  - "37%"
+  - "계속가치"
+  - "실물옵션"
+  - "유보임금"
+  - "미국형 옵션"
+group: quant-strategy
+featured: true
+featured_rank: 0
+og_image: "https://vibequant.cc/og/optimal-stopping-theory.jpg"
+image: "https://vibequant.cc/og/optimal-stopping-theory.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # 멈추지 못한 사람들
 
 ## 최적 멈춤 이론과 《매디슨 카운티의 다리》
+
+![《매디슨 카운티의 다리》 클린트 이스트우드와 메릴 스트립 — 최적 멈춤 칼럼 썸네일](https://vibequant.cc/og/optimal-stopping-theory.jpg)
 
 ### 1. 나흘
 
@@ -111,7 +160,7 @@
 
 ### 8. 63%의 사람들
 
-배우자 탐색에 37% 법칙을 적용하는 대중적 해설들은 대개 여기서 멈춘다. "20명을 만날 수 있다면 7~8명까지는 기준을 세우는 데 쓰고, 그 뒤에 기준을 넘는 사람이 나타나면 결정하라."
+배우자 탐색에 37% 법칙을 적용하는 대중적 해설들은 대개 여기서 멈춘다. "20명을 만날 수 있다면 7-8명까지는 기준을 세우는 데 쓰고, 그 뒤에 기준을 넘는 사람이 나타나면 결정하라."
 
 그러나 이 문장의 뒷면을 읽어야 한다. 규칙을 완벽히 지켜도 최고를 만날 확률은 **37%**다. 다시 말해 **63%는 실패한다**. 수학이 보장하는 것은 성공이 아니라, 이 조건에서 그보다 잘할 방법은 없다는 사실뿐이다.
 

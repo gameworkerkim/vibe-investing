@@ -704,6 +704,7 @@ const SLUG_OVERRIDES = {
   "China-Culture/Overtourism.md": "china-overtourism",
   "Key-Currency/Salt-Currency.md": "salt-currency",
   "Key-Currency/France-CFA-Franc-Empire-Collapse.md": "france-cfa-franc-collapse",
+  "Option/Optimal-Stopping-Theory.md": "optimal-stopping-theory",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
