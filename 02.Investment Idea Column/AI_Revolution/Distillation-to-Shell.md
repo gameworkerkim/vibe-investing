@@ -1,3 +1,4 @@
+<!--
 ---
 title: "증류를 넘어 껍데기로"
 title_en: "Beyond Distillation, Into the Shell"
@@ -49,6 +50,7 @@ draft: false
 robots: index,follow
 canonical: "https://docs.vibequant.cc/columns/distillation-to-shell/"
 ---
+-->
 
 # 증류를 넘어 껍데기로
 
