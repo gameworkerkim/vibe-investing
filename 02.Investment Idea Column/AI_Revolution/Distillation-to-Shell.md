@@ -91,7 +91,7 @@ canonical: "https://docs.vibequant.cc/columns/distillation-to-shell/"
 
 ## 1. 보고서가 말한 것
 
-문서는 *Detecting and countering misuse of AI: September 2026*이고, 154쪽 중 증류 챕터는 마지막 12쪽(143~154p)이다. 대상 기간은 2025년 12월~2026년 8월이며, 사이버 작전·영향력 공작·감시·사기·생물학·재래식 무기·증류 등 일곱 개 영역 중 증류는 마지막 항목이다. 언론이 헤드라인으로 뽑은 것과 달리, 분량상으로는 부록에 가깝다.
+문서는 *Detecting and countering misuse of AI: September 2026*이고, 154쪽 중 증류 챕터는 마지막 12쪽(143–154p)이다. 대상 기간은 2025년 12월–2026년 8월이며, 사이버 작전·영향력 공작·감시·사기·생물학·재래식 무기·증류 등 일곱 개 영역 중 증류는 마지막 항목이다. 언론이 헤드라인으로 뽑은 것과 달리, 분량상으로는 부록에 가깝다.
 
 ### 지목된 랩과 수치
 
@@ -297,7 +297,7 @@ AI 랩도 같은 곡선 위에 있다. 백모대전에서 6~7개가 남았고, �
 
 릴레이는 모방이 아니다. 동의 없는 재위탁이다. 지식재산권 침해는 기업 간 분쟁으로 정리할 수 있지만, 이건 제3자인 사용자의 권리를 소모해 경쟁 비용을 조달한 것이다. 4단계 문법이 이번에도 작동해서 소수의 승자가 남고 그들이 규범 준수 기업으로 전환한다 해도, 그 과도기의 청구서는 이미 사용자가 프라이버시로 지불한 뒤다.
 
-### 누가 청구서를 받는가
+### 누가 청구서를 받는가?
 
 『강철의 연금술사』에는 두 개의 결말이 있다.
 
@@ -323,7 +323,7 @@ AI 랩도 같은 곡선 위에 있다. 백모대전에서 6~7개가 남았고, �
 
 ## 참고 자료
 
-- Anthropic, *Detecting and countering misuse of AI: September 2026* (2026.09.10) — https://www.anthropic.com/threat-intelligence-report-september-2026 (PDF 154쪽, 증류 챕터 143~154p)
+- Anthropic, *Detecting and countering misuse of AI: September 2026* (2026.09.10) — https://www.anthropic.com/threat-intelligence-report-september-2026 (PDF 154쪽, 증류 챕터 143–154p)
 - Anthropic, *Detecting and preventing distillation attacks* (2026.02.23)
 - CISA/FBI/NSA, 공동 사이버보안 권고 AA26-251A (2026.09.08)
 - Progressive Robot, "Anthropic Details Distillation Campaigns From Alibaba, Moonshot AI, and DeepSeek" (2026.09.11) — 보고서 원문 재검증 및 보도 오류 대조
