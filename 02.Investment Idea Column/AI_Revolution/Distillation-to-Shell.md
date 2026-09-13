@@ -1,8 +1,63 @@
+---
+title: "증류를 넘어 껍데기로"
+title_en: "Beyond Distillation, Into the Shell"
+subtitle: "Kimi 사용자가 만난 것이 Claude였다면, 우리는 현자의 돌을 어디서 산 것인가?"
+description: "Anthropic 9월 보고서: Moonshot·DeepSeek가 고객 요청을 Claude로 릴레이했다고 주장. 증류와 껍데기의 차이, 미고지 재위탁, 산자이 문법. 수치는 단일 출처."
+abstract: |
+  2026-09-10 Anthropic 위협 인텔리전스 보고서는 중국 7개 랩의 Claude 증류를 지목하고, Moonshot(Kimi)·DeepSeek는 고객 요청을 Claude로 실시간 릴레이했다고 주장한다.
+  증류(학습 데이터)와 릴레이(제품 정체성·미고지 재위탁)는 다른 행위다. 공개 릴레이 수치는 Moonshot 10일 약 30만 건 하나.
+  은시계·현자의 돌 우화: 브랜드가 모델이 아닐 수 있다. PIPL·GDPR·개인정보보호법 관점. 투자 권유·법률 자문 아님.
+summary_for_ai: |
+  Korean analytical column (not investment advice), 2026-09-13, group ai-llm.
+  Source: Anthropic Detecting and countering misuse of AI September 2026, distillation chapter pp.143-154.
+  Three acts under one word "distillation": (1) chain-of-thought extraction (Alibaba, Zhipu), (2) cross-session thinking-signature replay (Moonshot, DeepSeek), (3) live relay of customer prompts to Claude shown as own product (Moonshot mostly Opus; DeepSeek selective coding-harness routing). Xiaomi: replay for training, no evidence answers were returned to users.
+  Numbers: Alibaba 151M+, Moonshot 23M+, DeepSeek 12.1M+/14d, Zhipu 3.4M, Xiaomi 0.4M. Media "200M" is journalist sum of floors; report has no grand total. Relay figure is one: Moonshot ~300k/10d (~1.3% of 23M).
+  Limits: single source, weaker method disclosure vs Feb report, K3 not in report body, account arithmetic mismatch vs June Senate letter.
+  Thesis: brand ≠ weights. Relay is unconsented sub-processing / cross-border transfer (K-PIPA 26, 28-8; GDPR 28, 44; China PIPL). Shanzhai path externalizes R&D cost; this cycle also externalizes user data. LLM is Excel not oracle; demand model-substitution clauses.
+date: 2026-09-13
+updated: 2026-09-13
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - Anthropic
+  - Moonshot
+  - Kimi
+  - DeepSeek
+  - distillation
+  - 릴레이
+  - 개인정보
+  - 산자이
+  - Claude
+keywords:
+  - "Anthropic 증류"
+  - "Moonshot Kimi Claude 릴레이"
+  - "DeepSeek 증류"
+  - "알리바바 Qwen 증류"
+  - "AI 모델 치환"
+  - "미고지 재위탁"
+  - "중국 AI 산자이"
+  - "thinking signature"
+  - "GTG-16002"
+  - "강철의 연금술사 은시계"
+group: ai-llm
+featured: true
+featured_rank: 0
+og_image: "https://vibequant.cc/og/distillation-to-shell.jpg"
+image: "https://vibequant.cc/og/distillation-to-shell.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+canonical: "https://docs.vibequant.cc/columns/distillation-to-shell/"
+---
+
 # 증류를 넘어 껍데기로
 
 ## Kimi 사용자가 만난 것이 Claude였다면, 우리는 현자의 돌을 어디서 산 것인가?
 
 *2026년 9월 13일 기준*
+
+![은시계 안의 돌 — 증류를 넘어 껍데기로 칼럼 썸네일](https://vibequant.cc/og/distillation-to-shell.jpg)
+
 
 ## 시작하며 - 시계를 든 사람은 시계 안에 무엇이 들었는지 몰랐다
 

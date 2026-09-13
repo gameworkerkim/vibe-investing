@@ -675,6 +675,7 @@ const SLUG_OVERRIDES = {
   "CTI-2026-0822-Column-CN.md": "cert-authority-breach-20260822-cn",
   "CTI-2026-0910-KIMSUKI.md": "kimsuky-ai-20260910",
   "CTI-2026-0910-KIMSUKY.md": "kimsuky-ai-20260910",
+  "CTI-2026-0913-CHINA-HACKING.md": "china-hacking-20260913",
   "USA/Age-of-USD.md": "age-of-usd",
   "AI-IDC/Why-High-Power-Datacenter.md": "why-high-power-datacenter",
   "BitCoin/BTC-Arbitrage-Bithumb-Column.md": "btc-arbitrage-bithumb",
@@ -705,6 +706,8 @@ const SLUG_OVERRIDES = {
   "Key-Currency/Salt-Currency.md": "salt-currency",
   "Key-Currency/France-CFA-Franc-Empire-Collapse.md": "france-cfa-franc-collapse",
   "Option/Optimal-Stopping-Theory.md": "optimal-stopping-theory",
+  "Option/Chicago-Penelope.md": "chicago-penelope",
+  "AI_Revolution/Distillation-to-Shell.md": "distillation-to-shell",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

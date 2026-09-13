@@ -9,13 +9,13 @@ export const COLUMN_GROUP_RULES = [
   { id: "media-blockchain", title_ko: "미디어 · 블록체인", title_en: "Media · Blockchain", match: [/^Blockchain-P2E\//i, /media-column\/blockchain/i] },
   { id: "media-macro", title_ko: "미디어 · 매크로", title_en: "Media · Macro", match: [/^Macro-Policy\//i, /media-column\/macro/i] },
   { id: "media-society", title_ko: "미디어 · 사회·문화", title_en: "Media · Society", match: [/^Society-Culture\//i, /media-column\/society/i] },
-  { id: "ai-llm", title_ko: "AI · LLM · 빅테크", title_en: "AI · LLM · Big Tech", match: [/ai_revolution/i, /ai-education/i, /ai-bottleneck/i, /ai-idc/i, /high-power-datacenter/i, /ai bouble/i, /ai_bouble/i, /ai_hacking/i, /ai_trading/i, /deepseek/i, /claude/i, /meta\//i, /oracle/i, /jane street/i, /llm_supply/i, /bigtech/i, /kimi/i, /grok/i, /alibaba/i, /qwen/i] },
+  { id: "ai-llm", title_ko: "AI · LLM · 빅테크", title_en: "AI · LLM · Big Tech", match: [/ai_revolution/i, /ai-education/i, /ai-bottleneck/i, /ai-idc/i, /high-power-datacenter/i, /ai bouble/i, /ai_bouble/i, /ai_hacking/i, /ai_trading/i, /deepseek/i, /claude/i, /meta\//i, /oracle/i, /jane street/i, /llm_supply/i, /bigtech/i, /kimi/i, /grok/i, /alibaba/i, /qwen/i, /distillation.?shell/i] },
   { id: "elon-spacex", title_ko: "Elon · SpaceX", title_en: "Elon · SpaceX", match: [/elon musk/i, /spacex/i] },
   { id: "crypto-web3", title_ko: "크립토 · Web3", title_en: "Crypto · Web3", match: [/bitcoin/i, /btc/i, /ethereum/i, /bnb/i, /crypto/i, /crytohft/i, /defi/i, /web3/i, /strategy\//i, /robinhood/i, /dex memecoin/i, /aws_blockchain/i, /prediction-market/i, /stablecoin/i, /medici/i, /travel-rule/i] },
   { id: "korea-hacking", title_ko: "한국 · 해킹", title_en: "Korea · Hacking", match: [/national-diplomatic/i, /외교원/i, /hacking-incident/i, /\/hacking\//i, /backdoor/i, /endless.?doors/i, /kimsuky/i, /north-korea/i] },
   { id: "korea", title_ko: "한국 · 코리아 디스카운트", title_en: "Korea", match: [/korea/i, /주식시황/i, /msci/i, /starbucks/i, /seoul/i, /kpop/i, /\/idol\//i, /ive-starship/i, /toss /i, /기레기/i, /골드만/i, /cyworld/i] },
   { id: "macro-geo", title_ko: "매크로 · 지정학", title_en: "Macro · Geopolitics", match: [/\/usa\//i, /age-of-usd/i, /pax americana/i, /trump/i, /defense/i, /rome/i, /world_bank/i, /us treasury/i, /japan/i, /china /i, /drone/i, /tobacco/i, /\/windows10\//i, /eod-win10/i, /\/interest\//i, /history-of-interest/i] },
-  { id: "quant-strategy", title_ko: "퀀트 · 투자 전략", title_en: "Quant · Strategy", match: [/momentum/i, /special situations/i, /insider/i, /model vs reality/i, /medbridge/i, /semiconductor ai etf/i, /stock_option/i, /\/option\//i, /optimal.?stopping/i, /money_game/i] },
+  { id: "quant-strategy", title_ko: "퀀트 · 투자 전략", title_en: "Quant · Strategy", match: [/momentum/i, /special situations/i, /insider/i, /model vs reality/i, /medbridge/i, /semiconductor ai etf/i, /stock_option/i, /\/option\//i, /optimal.?stopping/i, /chicago.?penelope/i, /money_game/i] },
   { id: "semi-storage", title_ko: "반도체 · 스토리지", title_en: "Semi · Storage", match: [/storage war/i, /marvell/i, /intel/i, /memory/i, /semi/i, /\/ssd\//i, /power-off-retention/i, /sandisk/i, /kioxia/i] },
   { id: "industry", title_ko: "산업 · 소비", title_en: "Industry · Consumer", match: [/uber/i, /netflex/i, /netflix/i, /mokrak/i, /luxury/i, /webtoon/i, /kidult/i, /ford/i, /adobe/i, /voce/i, /brain/i, /bouble/i, /cyber wrecker/i, /518/i, /startup/i, /shelf-life/i, /\/k11\//i, /adrian-cheng/i, /bending.?spoons/i, /\/comics\//i, /x-men/i, /pink.?econom/i, /post-covid/i, /end-of-drink/i, /drink.?age/i, /k-movie/i, /screen.?quota/i, /china-culture/i] },
 ];
@@ -62,6 +62,8 @@ export const ESSAY_GROUP_FALLBACK = { id: "other", title_ko: "기타 에세이",
 
 /** Paths (substring) that should appear in Recommended — order = display order */
 export const FEATURED_COLUMN_PATHS = [
+  "AI_Revolution/Distillation-to-Shell.md",
+  "Option/Chicago-Penelope.md",
   "Option/Optimal-Stopping-Theory.md",
   "Key-Currency/France-CFA-Franc-Empire-Collapse.md",
   "Key-Currency/Salt-Currency.md",
