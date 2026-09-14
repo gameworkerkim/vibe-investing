@@ -708,6 +708,7 @@ const SLUG_OVERRIDES = {
   "Option/Optimal-Stopping-Theory.md": "optimal-stopping-theory",
   "Option/Chicago-Penelope.md": "chicago-penelope",
   "AI_Revolution/Distillation-to-Shell.md": "distillation-to-shell",
+  "Sports/US-Open.md": "us-open",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
