@@ -709,6 +709,7 @@ const SLUG_OVERRIDES = {
   "Option/Chicago-Penelope.md": "chicago-penelope",
   "AI_Revolution/Distillation-to-Shell.md": "distillation-to-shell",
   "Sports/US-Open.md": "us-open",
+  "Insider trading/KPMG-Polymarket-Scandal.md": "kpmg-polymarket-scandal",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
