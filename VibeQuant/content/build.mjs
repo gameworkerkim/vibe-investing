@@ -710,6 +710,7 @@ const SLUG_OVERRIDES = {
   "AI_Revolution/Distillation-to-Shell.md": "distillation-to-shell",
   "Sports/US-Open.md": "us-open",
   "Insider trading/KPMG-Polymarket-Scandal.md": "kpmg-polymarket-scandal",
+  "security/Sogou-Hacking.md": "sogou-hacking",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

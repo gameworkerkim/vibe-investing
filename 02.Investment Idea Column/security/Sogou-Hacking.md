@@ -1,4 +1,54 @@
-# 왜 해커들은 '문자 입력기'를 노렸나 — 세렝게티의 사냥법을 닮은 표적 선정
+<!--
+---
+title: "왜 해커들은 '문자 입력기'를 노렸나"
+title_en: "Why Hackers Target Input Methods — Serengeti Hunting Logic"
+subtitle: "세렝게티의 사냥법을 닮은 표적 선정"
+description: "CVE-2026-51990 Sogou 입력기 원클릭 RCE. 서드파티·수익모델 부재·독점이 만드는 세렝게티식 표적. AnySign4PC와 같은 구조. 워터링 홀. 투자·보안 자문 아님."
+abstract: |
+  Sogou Input Method (~455M MAU): CVE-2026-51990 chain — sgbiz URI handler, CEF URL nav, unsandboxed Chromium 80 → one-click RCE (UNC3569).
+  Three structural reasons input methods are hunted: third-party outside OS governance; no standalone P&L (Tencent funnel); monopoly weakens security urgency.
+  Metaphor: Serengeti edge / weak / watering-hole. Patch alone is not enough. Parallel to Korea AnySign4PC. Not investment or security advice.
+summary_for_ai: |
+  Korean security-economics column (not investment/security advice), 2026-09-15, group korea-hacking, security/Sogou-Hacking.
+  Thesis: attackers pick software that is peripheral to OS herds, underfunded, and a mass watering hole — like Serengeti predation.
+  Topics: Sogou/Tencent history, Chromium 80 legacy, watering hole attack, AnySign4PC deja vu.
+date: 2026-09-15
+updated: 2026-09-15
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - Sogou
+  - 입력기
+  - 해킹
+  - 워터링홀
+  - CVE
+  - 보안경제학
+  - AnySign4PC
+keywords:
+  - "Sogou Input Method"
+  - "CVE-2026-51990"
+  - "문자 입력기"
+  - "워터링 홀 공격"
+  - "세렝게티"
+  - "UNC3569"
+  - "AnySign4PC"
+  - "서드파티 보안"
+group: korea-hacking
+featured: true
+featured_rank: -1
+og_image: "https://vibequant.cc/og/sogou-hacking.jpg"
+image: "https://vibequant.cc/og/sogou-hacking.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
+# 왜 해커들은 '문자 입력기'를 노렸나
+
+## 세렝게티의 사냥법을 닮은 표적 선정
+
+![세렝게티 초원 물웅덩이의 사자·얼룩말 — 워터링 홀·표적 선정 칼럼 썸네일](https://vibequant.cc/og/sogou-hacking.jpg)
 
 최근 AnySign4PC의 제로데이 보안 취약점으로 한국 인터넷 환경은 무차별적인 해킹에 시달렸다. 개별의 버전 납품과 업데이트 과정의 번거로움이 겹치면서 윈도우 8.x, 윈도우 10 등 더 이상 유지 보수되지 않는 OS 문제까지 폭넓게 사회 문제화 되고 있다.
 
