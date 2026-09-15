@@ -711,6 +711,7 @@ const SLUG_OVERRIDES = {
   "Sports/US-Open.md": "us-open",
   "Insider trading/KPMG-Polymarket-Scandal.md": "kpmg-polymarket-scandal",
   "security/Sogou-Hacking.md": "sogou-hacking",
+  "Super-Programmer-Opinion.md": "super-programmer-opinion",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

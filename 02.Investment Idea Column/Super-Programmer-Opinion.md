@@ -1,4 +1,54 @@
-# 이제 개발자가 가져야 할 덕목은 무엇인가? — 무사시와 존 카멕의 이야기
+<!--
+---
+title: "이제 개발자가 가져야 할 덕목은 무엇인가?"
+title_en: "What Virtues Should Developers Keep — Musashi and John Carmack"
+subtitle: "무사시와 존 카멕의 이야기"
+description: "카멕이 《오륜서》에서 본 AI 시대 프로그래밍. 관(觀)·무구·검증·단련·동량의 시선. 기본기는 생산이 아니라 판별 수단. 투자 권유 아님."
+abstract: |
+  John Carmack on Musashi's Book of Five Rings: coding craft shifting like swordsmanship from battlefield skill to sport.
+  Five remaining virtues: 觀 (context over surface code), 無構 (identity not tied to stack), verification (LLM as Excel not oracle), 鍛錬 retargeted, 棟梁 (assign work to model vs human).
+  Fundamentals remain as discrimination, not production. No love or grudge toward tools. Not investment advice.
+summary_for_ai: |
+  Korean opinion column (not investment advice), 2026-09-15, group ai-llm, Super-Programmer-Opinion.
+  Thesis: ask what remains when AI cheapens implementation — Musashi's way of strategy as developer virtues.
+  Refs: Gorin-no-sho (觀見二眼, 有構無構, 鍛錬, 棟梁, 獨行道), Carmack, Ma Baoguo / unverified tradition analogy.
+date: 2026-09-15
+updated: 2026-09-15
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 개발자
+  - AI
+  - 무사시
+  - 존카멕
+  - 오륜서
+  - LLM
+  - 덕목
+keywords:
+  - "개발자 덕목"
+  - "존 카멕"
+  - "미야모토 무사시"
+  - "오륜서"
+  - "관견이안"
+  - "LLM"
+  - "AI 코딩"
+  - "검증"
+group: ai-llm
+featured: true
+featured_rank: -2
+og_image: "https://vibequant.cc/og/super-programmer-opinion.jpg"
+image: "https://vibequant.cc/og/super-programmer-opinion.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
+# 이제 개발자가 가져야 할 덕목은 무엇인가?
+
+## 무사시와 존 카멕의 이야기
+
+![책상 위의 일본도·고서 — 무사시와 카멕, 개발자 덕목 칼럼 썸네일](https://vibequant.cc/og/super-programmer-opinion.jpg)
 
 ## 질문을 뒤집어야 한다
 
