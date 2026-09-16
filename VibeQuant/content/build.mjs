@@ -712,6 +712,7 @@ const SLUG_OVERRIDES = {
   "Insider trading/KPMG-Polymarket-Scandal.md": "kpmg-polymarket-scandal",
   "security/Sogou-Hacking.md": "sogou-hacking",
   "Super-Programmer-Opinion.md": "super-programmer-opinion",
+  "commerce/refund.md": "commerce-refund",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

@@ -1,10 +1,57 @@
+<!--
+---
+title: "온라인 시장, 환불 분쟁 이렇게 대응하자"
+title_en: "How to Handle Online Refund Disputes — E-Commerce Act Tools"
+subtitle: "전자상거래법이 소비자에게 쥐여 준 도구들, 조문 그대로 제대로 쓰는 법"
+description: "전자상거래법 청약철회·3영업일 환급·연 15% 지연배상금·카드 상계·플랫폼 연대책임. 요청서 3종과 잘못된 안내문 교정. 법률 자문 아님(2026-09)."
+abstract: |
+  Korean consumer guide (not legal advice), Sep 2026 statutes.
+  Who is liable: seller vs marketplace intermediary vs P2P.
+  Withdrawal: 7 days / 3 months for ad-contract mismatch; packaging caveat; seller bears proof.
+  Refund clock: 3 business days from return or withdrawal; late interest 15% p.a. (Art.18(2) + Decree 21-3).
+  Card: cancel request, set-off, installment defense; PG direct refund claims weak in case law.
+  Templates for seller / platform / card issuer. Not individual legal advice.
+summary_for_ai: |
+  Korean practical law column (not legal advice), 2026-09-16, group industry, commerce/refund.
+  Focus: cite correct articles; avoid viral wrong guides (Art.18(5) vs (2); PG liability).
+  Platforms: Gmarket, Coupang hybrid, Naver Smart Store structures.
+date: 2026-09-16
+updated: 2026-09-16
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 전자상거래법
+  - 환불
+  - 청약철회
+  - 소비자
+  - 오픈마켓
+  - 지연배상금
+  - 카드결제
+keywords:
+  - "전자상거래법"
+  - "청약철회"
+  - "환불"
+  - "지연배상금"
+  - "통신판매중개자"
+  - "할부항변권"
+  - "제18조"
+  - "온라인쇼핑"
+group: industry
+featured: true
+featured_rank: -3
+og_image: "https://vibequant.cc/og/commerce-refund.jpg"
+image: "https://vibequant.cc/og/commerce-refund.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # 온라인 시장, 환불 분쟁 이렇게 대응하자
 
-### 전자상거래법이 소비자에게 쥐여 준 도구들, 조문 그대로 제대로 쓰는 법
+## 전자상거래법이 소비자에게 쥐여 준 도구들, 조문 그대로 제대로 쓰는 법
 
-*2026년 9월 현행 법령 기준*
-
----
+![스마트폰·반품 박스·신용카드 — 온라인 환불 분쟁 대응 칼럼 썸네일](https://vibequant.cc/og/commerce-refund.jpg)
 
 반품한 상품은 이미 판매자 창고에 도착했는데 돈은 돌아오지 않는다. 판매자에게 물으면 "**플랫폼 정산이 늦어서**"라고 하고, 플랫폼에 물으면 "저희는 중개만 하는 곳이라 판매자와 직접 해결하셔야 한다"고 한다. 결제대행사(PG사)에 연락하면 "가맹점에 문의하라"는 답이 돌아온다. 온라인 쇼핑에서 환불 분쟁을 겪어본 사람이라면 이 책임 떠넘기기가 낯설지 않을 것이다. 2024년 티몬·위메프 미정산 사태 때 수많은 소비자가 겪은 일도 결국 이 구조였다.
 
@@ -235,7 +282,7 @@
 | 환급 기한 | 반환받은 날(재화) 또는 철회한 날(용역·미공급)부터 3영업일 | 제18조 제2항 |
 | 지연배상금 | 연 15% | 제18조 제2항 후단, 시행령 제21조의3 |
 | 반품 비용 | 단순 철회는 소비자, 광고·계약과 다르면 판매자 부담 | 제18조 제9항·제10항 |
-| 카드 결제 시 | 청구 정지·취소 요청 의무, 상계 요청, 결제 거부권 | 제18조 제3항~제7항 |
+| 카드 결제 시 | 청구 정지·취소 요청 의무, 상계 요청, 결제 거부권 | 제18조 제3항-제7항 |
 | 할부항변권 | 20만 원 이상·3개월 이상 할부 시 잔여 할부금 지급 거절 | 여신전문금융업법 제16조의2 |
 | 연대책임 | 판매자·대금 수령자·계약 체결자가 다르면 환급 연대책임 | 제18조 제11항 |
 | 중개자 책임 | 고지·신원정보 제공 의무, 위반 시 연대책임, 대금 수령 시 대신 이행 | 제20조, 제20조의2, 제20조의3 |
