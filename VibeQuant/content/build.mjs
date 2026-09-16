@@ -713,6 +713,7 @@ const SLUG_OVERRIDES = {
   "security/Sogou-Hacking.md": "sogou-hacking",
   "Super-Programmer-Opinion.md": "super-programmer-opinion",
   "commerce/refund.md": "commerce-refund",
+  "VC/Kakao-Ventures-Issue.md": "kakao-ventures-issue",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

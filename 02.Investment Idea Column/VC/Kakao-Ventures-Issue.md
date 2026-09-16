@@ -1,6 +1,55 @@
+<!--
+---
+title: "VC 운용역의 보상, 어떻게 설계해야 하는가?"
+title_en: "How Should VC Carry Compensation Be Designed?"
+subtitle: "임지훈–카카오벤처스 '두 번째 소송'이 업계에 던지는 질문"
+description: "임지훈–카카오벤처스 성과보수 소송 패턴으로 보는 VC 운용역 보상 설계. 주총 결의·베스팅·딜 기여 기록·LP 심사. 법률 자문 아님(2026-09)."
+abstract: |
+  Korean VC governance column (not legal advice), Sep 2026.
+  Two lawsuits same parties: KCube Fund 1 then Kakao Youth Startup Fund.
+  Pattern: high carry → group HR move → ratio cut + tenure-agnostic pay → liquidation → refusal.
+  Design: concurrent board/AGM resolutions, vesting at fund formation, deal-level credit, LP diligence on carry legality.
+summary_for_ai: |
+  Korean VC compensation column (not legal advice), 2026-09-16, group korea, VC/Kakao-Ventures-Issue.
+  Thesis: promise must be procedural, not goodwill; company owns governance burden.
+  Cases: Im Ji-hoon vs Kakao Ventures; Krafton Supreme Court context; LP risk (Dealsite).
+date: 2026-09-16
+updated: 2026-09-16
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 카카오벤처스
+  - VC
+  - 성과보수
+  - 운용역
+  - 캐리
+  - 임지훈
+  - 벤처투자
+keywords:
+  - "카카오벤처스"
+  - "성과보수"
+  - "VC 보상"
+  - "운용역"
+  - "캐리 배분"
+  - "임지훈"
+  - "주주총회 결의"
+  - "벤처투자조합"
+group: korea
+featured: true
+featured_rank: -4
+og_image: "https://vibequant.cc/og/kakao-ventures-issue.jpg"
+image: "https://vibequant.cc/og/kakao-ventures-issue.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # VC 운용역의 보상, 어떻게 설계해야 하는가?
 
-### 임지훈–카카오벤처스 '두 번째 소송'이 업계에 던지는 질문
+## 임지훈–카카오벤처스 '두 번째 소송'이 업계에 던지는 질문
+
+![계약서·만년필·계산기 — VC 운용역 성과보수 설계 칼럼 썸네일](https://vibequant.cc/og/kakao-ventures-issue.jpg)
 
 2026년 9월, 임지훈 전 카카오 대표가 카카오벤처스(이하 카벤)와 김범수 카카오 창업자를 상대로 소송을 제기했다. 쟁점은 '카카오청년창업펀드'의 성과보수다. 이 소식을 처음 접한 사람들 중 상당수는 "그 소송, 작년에 화해로 끝나지 않았나?"라고 반문할 것이다. 끝난 것은 맞다. 다만 그것은 **다른 펀드**에 관한 **다른 소송**이었다.
 
@@ -46,7 +95,7 @@
 
 ### 시간의 비대칭
 
-VC 펀드는 결성부터 청산까지 흔히 8~10년, 연장되면 그 이상이 걸린다. 케이큐브1호는 2012년 결성되어 2021년 청산됐고, 카카오청년창업펀드도 2015년 계약 이후 11년 만에 청산됐다. 그 사이 투자를 발굴한 사람은 떠나고, 회사의 지배주주가 바뀌고, 계약을 기억하는 담당자도 사라진다. **보상의 약속은 입사 시점에 이뤄지지만, 이행 여부는 퇴사 한참 뒤에 결정된다.** 이 시차가 모든 분쟁의 토양이 될 수 밖에 없다.
+VC 펀드는 결성부터 청산까지 흔히 8–10년, 연장되면 그 이상이 걸린다. 케이큐브1호는 2012년 결성되어 2021년 청산됐고, 카카오청년창업펀드도 2015년 계약 이후 11년 만에 청산됐다. 그 사이 투자를 발굴한 사람은 떠나고, 회사의 지배주주가 바뀌고, 계약을 기억하는 담당자도 사라진다. **보상의 약속은 입사 시점에 이뤄지지만, 이행 여부는 퇴사 한참 뒤에 결정된다.** 이 시차가 모든 분쟁의 토양이 될 수 밖에 없다.
 
 ### 성과가 클수록 커지는 지급 거부의 유인
 
