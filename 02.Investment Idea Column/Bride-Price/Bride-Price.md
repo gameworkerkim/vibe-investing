@@ -2,11 +2,11 @@
 ---
 title: "중국의 결혼 지참금, 왜 사회주의 국가에서 봉건적인 풍습은 유지되었는가?"
 title_en: "Why Does Bride Price Survive in Socialist China?"
-subtitle: "저스틴 썬과 징톈의 사례로 보는 차이리(彩禮)"
-description: "저스틴 썬·징톈 3천만 위안 차이리 소송. 신부대 vs 지참금, 야곱·인도 다우리·로볼라. 도농·성비·주택이 만든 가격. 투자 권유 아님(2026-09)."
+subtitle: "예지할 수 없는 파국 — 코인의 황제 저스틴 썬과 배우 징톈의 사례로 보는 차이리(彩禮)"
+description: "저스틴 썬·징톈 약 60억(3천만 위안) 차이리 소송. 신부대 vs 지참금, 야곱·인도 다우리·로볼라. 도농·성비·주택이 만든 가격. 투자 권유 아님(2026-09)."
 abstract: |
   Korean culture-econ column (not investment advice), Sep 2026.
-  Justin Sun vs Jing Tian: ~30M RMB engagement gift dispute in Xi'an court; nature of caili unsettled.
+  Justin Sun vs Jing Tian: ~30M RMB (~KRW 6B) engagement gift dispute in Xi'an court; nature of caili unsettled.
   Thesis: caili is bride price not dowry; socialism banned the name but market repriced the custom via hukou/pension gap, sex-ratio scarcity, housing/face.
   SPC 2024 interpretation: purpose of payment (marriage/cohabitation) over who broke off first.
 summary_for_ai: |
