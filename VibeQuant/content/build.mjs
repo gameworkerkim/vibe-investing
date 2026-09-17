@@ -715,6 +715,7 @@ const SLUG_OVERRIDES = {
   "commerce/refund.md": "commerce-refund",
   "VC/Kakao-Ventures-Issue.md": "kakao-ventures-issue",
   "Abandoned-Dog/Abandoned-Dog-Holiday-Issue.md": "abandoned-dog-holiday-issue",
+  "Bride-Price/Bride-Price.md": "bride-price",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
