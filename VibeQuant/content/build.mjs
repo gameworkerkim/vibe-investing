@@ -714,6 +714,7 @@ const SLUG_OVERRIDES = {
   "Super-Programmer-Opinion.md": "super-programmer-opinion",
   "commerce/refund.md": "commerce-refund",
   "VC/Kakao-Ventures-Issue.md": "kakao-ventures-issue",
+  "Abandoned-Dog/Abandoned-Dog-Holiday-Issue.md": "abandoned-dog-holiday-issue",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
