@@ -720,6 +720,7 @@ const SLUG_OVERRIDES = {
   "Ghost-Story/Ghost-Story.md": "ghost-story",
   "Key-Currency/Japan-Decline.md": "japan-decline",
   "Publishing-Business.md": "publishing-business",
+  "Mokrak of the luxury market/LVMH-Hermes-War.md": "lvmh-hermes-war",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

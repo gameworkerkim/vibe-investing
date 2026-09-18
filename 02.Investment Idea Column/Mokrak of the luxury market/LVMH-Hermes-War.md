@@ -1,6 +1,57 @@
+<!--
+---
+title: "잔혹한 M&A의 세계 - LVMH와 에르메스의 격돌"
+title_en: "The Brutal World of M&A — LVMH vs Hermès"
+subtitle: "25년째 끝나지 않은 전쟁"
+description: "LVMH 비밀 지분 매집·주식스왑·피에슈 사라진 주식·AMF 제재·지리-다임러 데자뷔. 성장 벽에 선 제국이 다시 에르메스를 보는 이유. 투자 권유 아님(2026-09)."
+abstract: |
+  Korean industry/finance column on the 25-year LVMH–Hermès conflict (Sep 2026).
+  Cash-settled equity swaps, 2002 secret pact, Nicolas Puech missing shares lawsuit (~$10bn / €14bn claim),
+  AMF fine, 2014 truce, Geely–Daimler parallel, LVMH growth wall vs Hermès margins.
+  Not investment advice.
+summary_for_ai: |
+  Korean column (not investment advice), 2026-09-19, group industry,
+  Mokrak of the luxury market/LVMH-Hermes-War.md.
+  Thesis: LVMH's shadow stake-building vs Hermès family defense never fully ended;
+  Puech litigation and Reuters 2026 secret-pact leak reopen the war as LVMH faces organic-growth limits.
+date: 2026-09-19
+updated: 2026-09-19
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - LVMH
+  - 에르메스
+  - 베르나르아르노
+  - M&A
+  - 명품
+  - 주식스왑
+  - 피에슈
+  - 럭셔리
+keywords:
+  - "LVMH"
+  - "에르메스"
+  - "Hermès"
+  - "베르나르 아르노"
+  - "니콜라 피에슈"
+  - "주식연계스왑"
+  - "명품 M&A"
+  - "지리 다임러"
+group: industry
+featured: true
+featured_rank: -11
+og_image: "https://vibequant.cc/og/lvmh-hermes-war.jpg"
+image: "https://vibequant.cc/og/lvmh-hermes-war.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # 잔혹한 M&A의 세계 - LVMH와 에르메스의 격돌
 
 > 25년째 끝나지 않은 전쟁. 파생상품 뒤에 숨은 지분 매집, 사라진 60억 유로어치 주식, 그리고 성장의 벽에 부딪힌 제국이 다시 에르메스를 바라보는 이유.
+
+![베르나르 아르노와 LVMH 로고 — LVMH·에르메스 격돌 칼럼 썸네일](./images/lvmh-hermes-war.jpg)
 
 ## 1. 사건 개요
 
@@ -8,7 +59,7 @@ LVMH(루이비통모에헤네시)는 2000년대 초반부터 파생상품과 비
 
 그러나 전쟁은 끝나지 않았다. 창업가문 5대손 **니콜라 피에슈(Nicolas Puech)**가 "내 주식이 사라졌다"며 LVMH와 베르나르 아르노 회장을 상대로 소송을 제기했고, 2026년 9월에는 LVMH가 2002년 피에슈의 주식을 사들이기로 한 비밀 계약서에 서명했다는 사실이 로이터 단독 보도로 드러나면서 사건은 다시 수면 위로 떠올랐다.
 
-## 2. 배경 - 비밀 지분 매집 (2001~2010)
+## 2. 배경 - 비밀 지분 매집 (2001～2010)
 
 ### 2.1 연결고리의 탄생 (2001)
 
@@ -33,7 +84,7 @@ LVMH(루이비통모에헤네시)는 2000년대 초반부터 파생상품과 비
 
 ### 2.4 2,000만 달러의 수수료
 
-- LVMH와 아르노 가문 지주회사는 **2001~2009년 프레이몬드의 자산관리 회사에 최소 2,000만 달러**의 수수료를 지급했다.
+- LVMH와 아르노 가문 지주회사는 **2001～2009년 프레이몬드의 자산관리 회사에 최소 2,000만 달러**의 수수료를 지급했다.
 - LVMH는 이 돈이 프레이몬드와의 관계를 유지하고, 그가 에르메스 주식을 **다른 경쟁사에 넘기지 못하도록 막기 위한 것**이었다고 설명했다.
 
 ### 2.5 공시를 피한 파생 상품의 활용
@@ -95,7 +146,7 @@ LVMH(루이비통모에헤네시)는 2000년대 초반부터 파생상품과 비
 | 시기 | 사건 |
 | --- | --- |
 | 2001 | 몽타봉 소개로 프레이몬드–LVMH(고데) 관계 시작 |
-| 2001~2009 | LVMH·아르노 지주회사, 프레이몬드 회사에 최소 2,000만 달러 지급 |
+| 2001～2009 | LVMH·아르노 지주회사, 프레이몬드 회사에 최소 2,000만 달러 지급 |
 | 2002.11.12 | 고데–프레이몬드, 피에슈 등의 주식 매입 비밀 계약 서명 |
 | 2010 말 | LVMH, 2002년 계약서 파기 (LVMH 주장) |
 | 2016 | 프레이몬드, "정당한 보수를 못 받았다"며 스위스에서 LVMH 제소 |
@@ -206,9 +257,9 @@ LVMH의 역사는 곧 M&A의 역사다. 아르노 회장은 크리스찬 디올�
 
 | 구분 | 내용 |
 | --- | --- |
-| **비밀 매집 기간** | 2001~2010년 |
+| **비밀 매집 기간** | 2001～2010년 |
 | **매집 수단** | 주식연계스왑, 2002년 비밀 계약, 피에슈 계좌 경유 |
-| **대리인 지급액** | 2001~2009년 최소 2,000만 달러 |
+| **대리인 지급액** | 2001～2009년 최소 2,000만 달러 |
 | **2010년 공개 지분** | 17.1% (최대 23.2%까지 확대) |
 | **2013년 AMF 제재** | 800만 유로 벌금 (공시 의무 위반) |
 | **2014년 합의** | 지분 대부분 현물 배당, 5년간 추가 매입 금지 (2019년 만료) |
@@ -243,3 +294,7 @@ LVMH는 인수로 규모를 키웠고, 에르메스는 공급을 통제해 가�
 - Kering 2026 상반기 실적 발표 (2026.07.28)
 - Prada Group H1-26 보도자료 (2026.07.30)
 - Reuters·CNN, 에르메스 시가총액 LVMH 추월 보도 (2025.04.15)
+
+---
+
+*본 칼럼은 공개 보도와 실적 자료를 바탕으로 한 분석이며, 특정 종목의 매매를 권유하지 않습니다. 투자 판단과 그 책임은 투자자 본인에게 있습니다.*
