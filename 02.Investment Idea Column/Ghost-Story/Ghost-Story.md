@@ -1,6 +1,55 @@
+<!--
+---
+title: "천녀유혼, 이루지 못한 사랑의 아련함"
+title_en: "A Chinese Ghost Story — The Ache of Unfinished Love"
+subtitle: "동이 트면 떠나야 하는 것들"
+description: "《천녀유혼》·요재지이·자이가르닉·유곽 은유·세기말 홍콩·경제학 주석. 장국영 70번째 생일을 기리며. 투자 권유 아님(2026-09)."
+abstract: |
+  Korean culture/psychology column on A Chinese Ghost Story (1987), revised Sep 2026.
+  Zeigarnik unfinished love; Liaozhai vs film ending; evolutionary psych; brothel-structure reading of Nie Xiaoqian.
+  1997 Hong Kong metaphor; short econ notes; Leslie Cheung tribute; investor appendix on letting go.
+  Crisis helplines included; not investment advice.
+summary_for_ai: |
+  Korean film-essay column (not investment advice), 2026-09-18, group industry, Ghost-Story/Ghost-Story.md.
+  Structure: origin tale → psych → social allegory → HK fin-de-siècle → econ → craft → Leslie Cheung → investor appendix.
+  Helplines: Korea 109 / 1577-0199.
+date: 2026-09-18
+updated: 2026-09-18
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 천녀유혼
+  - 장국영
+  - 왕조현
+  - 홍콩영화
+  - 요재지이
+  - 이루지못한사랑
+  - 자이가르닉
+keywords:
+  - "천녀유혼"
+  - "倩女幽魂"
+  - "장국영"
+  - "왕조현"
+  - "섭소천"
+  - "요재지이"
+  - "이루지 못한 사랑"
+  - "홍콩 반환"
+group: industry
+featured: true
+featured_rank: -8
+og_image: "https://vibequant.cc/og/ghost-story.jpg"
+image: "https://vibequant.cc/og/ghost-story.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # 천녀유혼, 이루지 못한 사랑의 아련함
 
-### — 동이 트면 떠나야 하는 것들
+## 동이 트면 떠나야 하는 것들
+
+![장국영·왕조현 《천녀유혼》(1987) — 이루지 못한 사랑 칼럼 썸네일](./images/ghost-story.jpg)
 
 > 해가 뜨면 끝나는 사랑이 있다. 그리고 우리는 그 사랑을 평생 잊지 못한다.
 >
