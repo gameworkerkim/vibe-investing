@@ -718,6 +718,7 @@ const SLUG_OVERRIDES = {
   "Bride-Price/Bride-Price.md": "bride-price",
   "Mileage/Airline-Mileage-Lockin.md": "airline-mileage-lockin",
   "Ghost-Story/Ghost-Story.md": "ghost-story",
+  "Key-Currency/Japan-Decline.md": "japan-decline",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
