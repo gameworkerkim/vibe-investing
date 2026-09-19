@@ -2,7 +2,7 @@
 
 ### — 조선은행권에서 CFA 프랑, 파운드 스털링까지 - 제국은 떠나도 경제 지배는 남는다
 
-*글: 김호광 (Dennis Kim) 前 싸이월드 대표 *
+글: 김호광 (Dennis Kim) 前 싸이월드 대표
 
 ---
 
@@ -68,7 +68,7 @@
 
 이 돈의 상당 부분은 퇴각 자금 외의 용도로도 흘러갔다. 미즈타는 일반 예금자에게 인출 자제를 호소하면서도, 8월 17일 정무총감과 경무국에 500만 원의 기밀비를 지출했다. 이는 당시 광산 노동자 약 6만 2,500명의 한 달 치 급료에 해당하는 금액이었다.[^2] 1947년 3월 조사에 따르면 금융기관이 일본계 기업에 빌려주고 회수하지 못한 채 고정된 대출금만 25억 4,000만 원에 달했다.[^2]
 
-### 3-3. 찍어낸 돈은 어떻게 '물건'이 되었나
+### 3-3. 찍어낸 돈은 어떻게 '물건'이 되었나?
 
 여기서 한 가지 의문이 생긴다. 미군정은 귀환하는 일본 민간인의 현금 휴대를 **1인당 1,000엔**으로 제한했고 수하물 중량도 제한했다.[^1][^11] 그렇다면 새로 찍은 수십억 원은 어떻게 '반출'되었는가?
 
@@ -203,95 +203,66 @@
 
 이승만 정권은 한국은행에 발권을 중지하라는 명령대신 군을 보내 돈을 찍는 윤전기를 봉인했다. 그만큼 경제에 무지했고 그 댓가는 해방 후 식민지 국민의 고통이 되었고 군사 독재의 기틀이 되었다.
 
-제국은 사라졌지만, 제국이 남긴 금융 지배가 진정한 주권 독립의 화두가 되고 있다.
+1945년 제국은 사라졌지만, 제국이 남긴 금융 지배가 21세기가 된 현재까지 레거시로 남아 진정한 주권 독립의 화두가 되고 있다.
 
 ## 참고 자료
 
 ### 식민지 금융 구조와 조선은행
 
-[^4]: 오두환, 「조선은행의 발권과 산업금융」, 『국사관논총』, 국사편찬위원회. https://db.history.go.kr/download.do?levelId=kn_036_0050
-
-[^5]: 국사편찬위원회 우리역사넷, 『한국문화사 8: 화폐와 경제 활동의 이중주』, 「전쟁 시기 고액권의 증가와 품질 저하」. https://contents.history.go.kr/mobile/km/view.do?levelId=km_008_0060_0020_0030
-
-[^6]: 국사편찬위원회 우리역사넷, 「조선은행(1911)」. https://contents.history.go.kr/mobile/kc/view.do?levelId=kc_o403400&code=kc_age_40
-
-[^7]: 국사편찬위원회 우리역사넷, 『신편 한국사』 47권, 「금융의 장악」. https://contents.history.go.kr/mobile/nh/view.do?levelId=nh_047_0020_0020_0050_0010
-
-[^8]: 국사편찬위원회, 「조선은행 주요 계정」(『朝鮮經濟年報』 1948년판 재인용). https://db.history.go.kr/download.do?levelId=kn_084_0040
+- <a id="ref-4"></a>**[4]** 오두환, 「조선은행의 발권과 산업금융」, 『국사관논총』, 국사편찬위원회. https://db.history.go.kr/download.do?levelId=kn_036_0050
+- <a id="ref-5"></a>**[5]** 국사편찬위원회 우리역사넷, 『한국문화사 8: 화폐와 경제 활동의 이중주』, 「전쟁 시기 고액권의 증가와 품질 저하」. https://contents.history.go.kr/mobile/km/view.do?levelId=km_008_0060_0020_0030
+- <a id="ref-6"></a>**[6]** 국사편찬위원회 우리역사넷, 「조선은행(1911)」. https://contents.history.go.kr/mobile/kc/view.do?levelId=kc_o403400&code=kc_age_40
+- <a id="ref-7"></a>**[7]** 국사편찬위원회 우리역사넷, 『신편 한국사』 47권, 「금융의 장악」. https://contents.history.go.kr/mobile/nh/view.do?levelId=nh_047_0020_0020_0050_0010
+- <a id="ref-8"></a>**[8]** 국사편찬위원회, 「조선은행 주요 계정」(『朝鮮經濟年報』 1948년판 재인용). https://db.history.go.kr/download.do?levelId=kn_084_0040
 
 ### 광복 직후 발권과 퇴각 자금
 
-[^2]: 정병욱, 「식민지 화폐의 종말과 유산」, 『한국문화사 8: 화폐와 경제 활동의 이중주』, 국사편찬위원회 우리역사넷. (원 자료: 朝鮮銀行史硏究會 編, 『朝鮮銀行史』, 東洋經濟新報社, 1987; 정병욱, 『한국근대금융연구』, 역사비평사, 2004) https://contents.history.go.kr/mobile/km/view.do?levelId=km_008_0060_0050
-
-[^9]: 국사편찬위원회 우리역사넷, 「조선은행권의 제조와 변모」. https://contents.history.go.kr/mobile/km/view.do?levelId=km_008_0070_0010_0020
-
-[^10]: 아틀라스뉴스, 「해방후~미군정기 혼란속 하이퍼인플레이션」 (2021.01.26). http://www.atlasnews.co.kr/news/articleView.html?idxno=3203
-
-[^1]: 「패전 후 일본인 71만명, 단돈 1000엔씩 들고 조선을 떠났다」, 네이트 뉴스 (2024.03.02). https://news.nate.com/view/20240302n00540
-
-[^11]: 국사편찬위원회 우리역사넷, 『사진으로 보는 해방과 전쟁, 재건』, 「귀환」. https://contents.history.go.kr/collection/level.do?levelId=mp_008_0010_0010
-
-[^12]: 프레시안, 「일제 당시 강탈해 갔던 조선 문화재, 해방 이후 돌려받을 수 있었을까」 (2026.03.07). https://www.pressian.com/pages/articles/2026030610332526311
+- <a id="ref-1"></a>**[1]** 「패전 후 일본인 71만명, 단돈 1000엔씩 들고 조선을 떠났다」, 네이트 뉴스 (2024.03.02). https://news.nate.com/view/20240302n00540
+- <a id="ref-2"></a>**[2]** 정병욱, 「식민지 화폐의 종말과 유산」, 『한국문화사 8: 화폐와 경제 활동의 이중주』, 국사편찬위원회 우리역사넷. (원 자료: 朝鮮銀行史硏究會 編, 『朝鮮銀行史』, 東洋經濟新報社, 1987; 정병욱, 『한국근대금융연구』, 역사비평사, 2004) https://contents.history.go.kr/mobile/km/view.do?levelId=km_008_0060_0050
+- <a id="ref-9"></a>**[9]** 국사편찬위원회 우리역사넷, 「조선은행권의 제조와 변모」. https://contents.history.go.kr/mobile/km/view.do?levelId=km_008_0070_0010_0020
+- <a id="ref-10"></a>**[10]** 아틀라스뉴스, 「해방후~미군정기 혼란속 하이퍼인플레이션」 (2021.01.26). http://www.atlasnews.co.kr/news/articleView.html?idxno=3203
+- <a id="ref-11"></a>**[11]** 국사편찬위원회 우리역사넷, 『사진으로 보는 해방과 전쟁, 재건』, 「귀환」. https://contents.history.go.kr/collection/level.do?levelId=mp_008_0010_0010
+- <a id="ref-12"></a>**[12]** 프레시안, 「일제 당시 강탈해 갔던 조선 문화재, 해방 이후 돌려받을 수 있었을까」 (2026.03.07). https://www.pressian.com/pages/articles/2026030610332526311
 
 ### 해방 후 통화 남발과 물가 폭등
 
-[^3]: 배영목, 「광복 후 통화 남발과 물가 폭등」, 『한국문화사 8』, 국사편찬위원회 우리역사넷. https://contents.history.go.kr/mobile/km/view.do?levelId=km_008_0070_0010_0030
-
-[^13]: 국사편찬위원회 우리역사넷, 「통화 남발과 돈의 가치」. https://contents.history.go.kr/mobile/km/view.do?levelId=km_008_0070_0040_0030
-
-[^14]: 김기협, 「일본이 죽인 조선 경제, 미군정이 확인 사살」, 프레시안 (2013.06.19). http://www.pressian.com/news/article/?no=69034
+- <a id="ref-3"></a>**[3]** 배영목, 「광복 후 통화 남발과 물가 폭등」, 『한국문화사 8』, 국사편찬위원회 우리역사넷. https://contents.history.go.kr/mobile/km/view.do?levelId=km_008_0070_0010_0030
+- <a id="ref-13"></a>**[13]** 국사편찬위원회 우리역사넷, 「통화 남발과 돈의 가치」. https://contents.history.go.kr/mobile/km/view.do?levelId=km_008_0070_0040_0030
+- <a id="ref-14"></a>**[14]** 김기협, 「일본이 죽인 조선 경제, 미군정이 확인 사살」, 프레시안 (2013.06.19). http://www.pressian.com/news/article/?no=69034
 
 ### 1950년대 경제와 5·16 배경
 
-[^15]: 국사편찬위원회 우리역사넷, 『사료로 본 한국사』, 「미국의 원조와 한국의 경제 성장」. https://contents.history.go.kr/front/hm/view.do?treeId=020208&tabId=01&levelId=hm_154_0040
-
-[^16]: 국가기록원, 『기록으로 보는 경제개발 5개년 계획』, 「국제원조」. https://theme.archives.go.kr/next/economicDevelopment/economicAid.do?page=3&eventId=0051550572
-
-[^17]: 국사편찬위원회 우리역사넷, 『사료로 본 한국사』, 「제1차 경제 개발 5개년 계획의 목표와 방침」. https://contents.history.go.kr/front/hm/view.do?levelId=hm_155_0040
-
-[^18]: 국사편찬위원회 우리역사넷, 「한강의 기적」. https://contents.history.go.kr/mobile/kc/view.do?levelId=kc_i503310&code=kc_age_50
+- <a id="ref-15"></a>**[15]** 국사편찬위원회 우리역사넷, 『사료로 본 한국사』, 「미국의 원조와 한국의 경제 성장」. https://contents.history.go.kr/front/hm/view.do?treeId=020208&tabId=01&levelId=hm_154_0040
+- <a id="ref-16"></a>**[16]** 국가기록원, 『기록으로 보는 경제개발 5개년 계획』, 「국제원조」. https://theme.archives.go.kr/next/economicDevelopment/economicAid.do?page=3&eventId=0051550572
+- <a id="ref-17"></a>**[17]** 국사편찬위원회 우리역사넷, 『사료로 본 한국사』, 「제1차 경제 개발 5개년 계획의 목표와 방침」. https://contents.history.go.kr/front/hm/view.do?levelId=hm_155_0040
+- <a id="ref-18"></a>**[18]** 국사편찬위원회 우리역사넷, 「한강의 기적」. https://contents.history.go.kr/mobile/kc/view.do?levelId=kc_i503310&code=kc_age_50
 
 ### CFA 프랑과 프랑스의 통화 패권
 
-[^19]: Landry Signé, "How the France-backed African CFA franc works as an enabler and barrier to development", *Brookings Institution* (2019.12.07). https://www.brookings.edu/articles/how-the-france-backed-african-cfa-franc-works-as-an-enabler-and-barrier-to-development/
-
-[^20]: Aminu Ibrahim, "Claim France holds 50% of Sahel countries' foreign reserves, misleading", *Dubawa Ghana* (2026.07.30). https://ghana.dubawa.org/claim-france-holds-50-of-sahel-countries-foreign-reserves-misleading/
-
-[^21]: Ndongo Samba Sylla, "The CFA Franc: French Monetary Imperialism in Africa", *Africa at LSE* (2017.07.12). https://blogs.lse.ac.uk/africaatlse/2017/07/12/the-cfa-franc-french-monetary-imperialism-in-africa/
+- <a id="ref-19"></a>**[19]** Landry Signé, "How the France-backed African CFA franc works as an enabler and barrier to development", *Brookings Institution* (2019.12.07). https://www.brookings.edu/articles/how-the-france-backed-african-cfa-franc-works-as-an-enabler-and-barrier-to-development/
+- <a id="ref-20"></a>**[20]** Aminu Ibrahim, "Claim France holds 50% of Sahel countries' foreign reserves, misleading", *Dubawa Ghana* (2026.07.30). https://ghana.dubawa.org/claim-france-holds-50-of-sahel-countries-foreign-reserves-misleading/
+- <a id="ref-21"></a>**[21]** Ndongo Samba Sylla, "The CFA Franc: French Monetary Imperialism in Africa", *Africa at LSE* (2017.07.12). https://blogs.lse.ac.uk/africaatlse/2017/07/12/the-cfa-franc-french-monetary-imperialism-in-africa/
 
 ### 대영제국과 파운드 스털링
 
-[^22]: "West African Currency Board", *Wikipedia* (Eric Helleiner, *The Making of National Money*, Cornell University Press, 2003 재인용). https://en.wikipedia.org/wiki/West_African_Currency_Board
+- <a id="ref-22"></a>**[22]** "West African Currency Board", *Wikipedia* (Eric Helleiner, *The Making of National Money*, Cornell University Press, 2003 재인용). https://en.wikipedia.org/wiki/West_African_Currency_Board
+- <a id="ref-23"></a>**[23]** "Trade and Money in British West Africa, 1912–1970", *African Economic History* 53(1) (2025). https://aeh.uwpress.org/content/53/1/144 ; "The Collapse of the Gold Standard in Africa: Money and Colonialism in the Interwar Period", *African Studies Review* (2022). https://www.cambridge.org/core/journals/african-studies-review/article/collapse-of-the-gold-standard-in-africa-money-and-colonialism-in-the-interwar-period/A880DDE28C6AD4DC5D558B7599D4AD69
+- <a id="ref-24"></a>**[24]** Nick Bernards, "States, Money and the Persistence of Colonial Financial Hierarchies in British West Africa", *Development and Change* (2023). https://onlinelibrary.wiley.com/doi/full/10.1111/dech.12745
+- <a id="ref-25"></a>**[25]** "Currency board", *Wikipedia*. https://en.wikipedia.org/wiki/Currency_board
+- <a id="ref-26"></a>**[26]** Jason Hickel, "How Britain stole $45 trillion from India", *Al Jazeera* (2018.12.19). (원 연구: Utsa Patnaik, "Revisiting the 'Drain'", in *Agrarian and Other Histories*, Columbia University Press, 2018) https://www.aljazeera.com/amp/indepth/opinion/britain-stole-45-trillion-india-181206124830851.html
+- <a id="ref-27"></a>**[27]** Amartya Sen, *Poverty and Famines: An Essay on Entitlement and Deprivation*, Oxford University Press, 1981 (벵골 대기근과 전시 인플레이션 분석).
+- <a id="ref-28"></a>**[28]** UK Parliament Hansard, "Sterling (India And Pakistan)" (1949.07.26). https://hansard.parliament.uk/commons/1949-07-26/debates/69ce2fe3-869e-4dfa-9ee1-e8cc3b6cad13/Sterling(IndiaAndPakistan)
+- <a id="ref-29"></a>**[29]** "Decolonisation, Unstable Sovereignties and Development: The Indian Sterling Balance Negotiations of 1947", *The Journal of Imperial and Commonwealth History* (2025). https://www.tandfonline.com/doi/full/10.1080/03086534.2025.2575829 ; Reserve Bank of India, *History of the RBI*, "The Problems of Plenty, 1947-56". https://rbidocs.rbi.org.in/rdocs/content/PDFs/90037.pdf
+- <a id="ref-30"></a>**[30]** "Anglo-American loan", *Wikipedia* (1949년 파운드 평가절하 $4.03→$2.80). https://en.wikipedia.org/wiki/Anglo-American_loan
+- <a id="ref-31"></a>**[31]** Alex Sutton, *Imperial relations: Britain, the sterling area, and Malaya 1945-1960*, PhD thesis, University of Warwick (2012). https://wrap.warwick.ac.uk/id/eprint/56249/
+- <a id="ref-32"></a>**[32]** Economic History Malaysia, "Economic inequality in British Colonial Malaya" (Stubbs 1974; Jomo 1986 재인용). https://www.ehm.my/publications/articles/economic-inequality-in-british-colonial-malaya
+- <a id="ref-33"></a>**[33]** Declassified UK, "Britain's forgotten war for rubber" (2025.05.18). https://www.declassifieduk.org/britains-forgotten-war-for-rubber/
+- <a id="ref-34"></a>**[34]** UK Parliament Hansard, "Colonial Sterling Balances" (1956.05.14). https://hansard.parliament.uk/commons/1956-05-14/debates/015082b3-9397-41b0-9adb-ec7d87fd174b/ColonialSterlingBalances
+- <a id="ref-35"></a>**[35]** Tax Justice Network, "The UK spider's web". https://taxjustice.net/topics/the-uk-spiders-web/
+- <a id="ref-36"></a>**[36]** Tax Justice Network, *The State of Tax Justice 2024* (2024.11). https://taxjustice.net/wp-content/uploads/2024/11/State-of-Tax-Justice-2024-English-Tax-Justice-Network.pdf
 
-[^23]: "Trade and Money in British West Africa, 1912–1970", *African Economic History* 53(1) (2025). https://aeh.uwpress.org/content/53/1/144 ; "The Collapse of the Gold Standard in Africa: Money and Colonialism in the Interwar Period", *African Studies Review* (2022). https://www.cambridge.org/core/journals/african-studies-review/article/collapse-of-the-gold-standard-in-africa-money-and-colonialism-in-the-interwar-period/A880DDE28C6AD4DC5D558B7599D4AD69
+### 추가 참고
 
-[^24]: Nick Bernards, "States, Money and the Persistence of Colonial Financial Hierarchies in British West Africa", *Development and Change* (2023). https://onlinelibrary.wiley.com/doi/full/10.1111/dech.12745
-
-[^25]: "Currency board", *Wikipedia*. https://en.wikipedia.org/wiki/Currency_board
-
-[^26]: Jason Hickel, "How Britain stole $45 trillion from India", *Al Jazeera* (2018.12.19). (원 연구: Utsa Patnaik, "Revisiting the 'Drain'", in *Agrarian and Other Histories*, Columbia University Press, 2018) https://www.aljazeera.com/amp/indepth/opinion/britain-stole-45-trillion-india-181206124830851.html
-
-[^27]: Amartya Sen, *Poverty and Famines: An Essay on Entitlement and Deprivation*, Oxford University Press, 1981 (벵골 대기근과 전시 인플레이션 분석).
-
-[^28]: UK Parliament Hansard, "Sterling (India And Pakistan)" (1949.07.26). https://hansard.parliament.uk/commons/1949-07-26/debates/69ce2fe3-869e-4dfa-9ee1-e8cc3b6cad13/Sterling(IndiaAndPakistan)
-
-[^29]: "Decolonisation, Unstable Sovereignties and Development: The Indian Sterling Balance Negotiations of 1947", *The Journal of Imperial and Commonwealth History* (2025). https://www.tandfonline.com/doi/full/10.1080/03086534.2025.2575829 ; Reserve Bank of India, *History of the RBI*, "The Problems of Plenty, 1947-56". https://rbidocs.rbi.org.in/rdocs/content/PDFs/90037.pdf
-
-[^30]: "Anglo-American loan", *Wikipedia* (1949년 파운드 평가절하 $4.03→$2.80). https://en.wikipedia.org/wiki/Anglo-American_loan
-
-[^31]: Alex Sutton, *Imperial relations: Britain, the sterling area, and Malaya 1945-1960*, PhD thesis, University of Warwick (2012). https://wrap.warwick.ac.uk/id/eprint/56249/
-
-[^32]: Economic History Malaysia, "Economic inequality in British Colonial Malaya" (Stubbs 1974; Jomo 1986 재인용). https://www.ehm.my/publications/articles/economic-inequality-in-british-colonial-malaya
-
-[^33]: Declassified UK, "Britain's forgotten war for rubber" (2025.05.18). https://www.declassifieduk.org/britains-forgotten-war-for-rubber/
-
-[^34]: UK Parliament Hansard, "Colonial Sterling Balances" (1956.05.14). https://hansard.parliament.uk/commons/1956-05-14/debates/015082b3-9397-41b0-9adb-ec7d87fd174b/ColonialSterlingBalances
-
-[^35]: Tax Justice Network, "The UK spider's web". https://taxjustice.net/topics/the-uk-spiders-web/
-
-[^36]: Tax Justice Network, *The State of Tax Justice 2024* (2024.11). https://taxjustice.net/wp-content/uploads/2024/11/State-of-Tax-Justice-2024-English-Tax-Justice-Network.pdf
-
-**추가 참고**
 
 - Scott Timcke, "Book Review: *Africa's Last Colonial Currency: The CFA Franc Story* by Fanny Pigeaud and Ndongo Samba Sylla", *LSE Review of Books* (2021.07.02). https://blogs.lse.ac.uk/lsereviewofbooks/2021/07/02/book-review-africas-last-colonial-currency-the-cfa-franc-story-by-fanny-pigeaud-and-ndongo-samba-sylla/
 - Kwame Nkrumah, *Neo-Colonialism: The Last Stage of Imperialism*, Thomas Nelson & Sons, 1965.
