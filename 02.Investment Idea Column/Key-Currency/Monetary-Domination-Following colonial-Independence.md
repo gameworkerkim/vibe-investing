@@ -40,8 +40,8 @@ keywords:
 group: macro-geo
 featured: true
 featured_rank: -12
-og_image: "https://vibequant.cc/og/monetary-domination-colonial-independence.jpg"
-image: "https://vibequant.cc/og/monetary-domination-colonial-independence.jpg"
+og_image: "https://vibequant.cc/og/chosun-bank-unissued-1000-won.jpg"
+image: "https://vibequant.cc/og/chosun-bank-unissued-1000-won.jpg"
 schema_type: BlogPosting
 draft: false
 robots: index,follow
@@ -54,7 +54,7 @@ robots: index,follow
 
 글: 김호광 (Dennis Kim), 싸이월드 前대표
 
-![조선은행 한국인 직원이 유통을 막았던 미발행 천원권(朝鮮銀行券 千圓)](./images/monetary-domination-colonial-independence.jpg)
+![조선은행 한국인 직원이 유통을 막았던 미발행 천원권(朝鮮銀行券 千圓)](./images/chosun-bank-unissued-1000-won.jpg)
 
 ## 1. 들어가며 - 금융은 무력보다 오래 남는다
 
