@@ -721,6 +721,7 @@ const SLUG_OVERRIDES = {
   "Key-Currency/Japan-Decline.md": "japan-decline",
   "Publishing-Business.md": "publishing-business",
   "Mokrak of the luxury market/LVMH-Hermes-War.md": "lvmh-hermes-war",
+  "Key-Currency/Monetary-Domination-Following colonial-Independence.md": "monetary-domination-colonial-independence",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
