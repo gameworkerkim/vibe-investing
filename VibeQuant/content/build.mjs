@@ -722,6 +722,7 @@ const SLUG_OVERRIDES = {
   "Publishing-Business.md": "publishing-business",
   "Mokrak of the luxury market/LVMH-Hermes-War.md": "lvmh-hermes-war",
   "Key-Currency/Monetary-Domination-Following colonial-Independence.md": "monetary-domination-colonial-independence",
+  "Private-Military-Company/History-of-the-Imperial-Mercenaries.md": "imperial-mercenaries",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>

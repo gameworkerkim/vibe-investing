@@ -62,6 +62,7 @@ export const ESSAY_GROUP_FALLBACK = { id: "other", title_ko: "기타 에세이",
 
 /** Paths (substring) that should appear in Recommended — order = display order */
 export const FEATURED_COLUMN_PATHS = [
+  "Private-Military-Company/History-of-the-Imperial-Mercenaries.md",
   "Key-Currency/Monetary-Domination-Following colonial-Independence.md",
   "Mokrak of the luxury market/LVMH-Hermes-War.md",
   "Publishing-Business.md",
