@@ -16,7 +16,7 @@
 | 3 | 최근 업데이트 | [이동](#최근-업데이트-recent-updates) |
 | 4 | 빠른 검색 (Quick Find) | [이동](#빠른-검색-quick-find) |
 | 5 | 등급 안내 (Tier & Form) | [이동](#등급-안내-tier--form) |
-| 6 | 칼럼 목록 (72편, 폴더 기준) | [이동](#칼럼-목록-폴더-기준) |
+| 6 | 칼럼 목록 (124편, 폴더 기준) | [이동](#칼럼-목록-폴더-기준) |
 | 7 | 칼럼별 요약 | [이동](#칼럼별-요약) |
 | 8 | 주제별 분류 | [이동](#주제별-분류) |
 | 9 | 권장 읽기 순서 | [이동](#권장-읽기-순서) |
@@ -65,6 +65,30 @@
 
 | 날짜 | 문서 | 칼럼 |
 | --- | --- | --- |
+| 2026-09-20 | [여수 박람회 개막 참사는 왜 예지되었을까](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/exposition/Exposition-Fail.md) | exposition |
+| 2026-09-19 | [일본은 왜 현금을 금고에 넣는가](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Japan-Cashless/Japan-Cash-Issue.md) | Japan-Cashless |
+| 2026-09-19 | [제국을 지킨 용병의 역사](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Private-Military-Company/History-of-the-Imperial-Mercenaries.md) | Private-Military-Company |
+| 2026-09-19 | [제국은 떠나도 금융은 남는다 — 일제 식민지 금융 지배](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Key-Currency/Monetary-Domination-Following%20colonial-Independence.md) | Key-Currency |
+| 2026-09-19 | [잔혹한 M&A의 세계 — LVMH와 에르메스의 격돌](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Mokrak%20of%20the%20luxury%20market/LVMH-Hermes-War.md) | Mokrak of the luxury market |
+| 2026-09-19 | [문학동네 감사 한정의 의미](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Publishing-Business.md) | Publishing-Business |
+| 2026-09-18 | [일본, 아시아 최초의 '후퇴 선진국'이 될 것인가](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Key-Currency/Japan-Decline.md) | Key-Currency |
+| 2026-09-18 | [천녀유혼, 이루지 못한 사랑의 아련함](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Ghost-Story/Ghost-Story.md) | Ghost-Story |
+| 2026-09-17 | [추석 연휴가 길수록 유기견이 늘어난다](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Abandoned-Dog/Abandoned-Dog-Holiday-Issue.md) | Abandoned-Dog |
+| 2026-08-29 | [불사의 잔혹, 티토노스의 우화 — AI 다음은 구독형 바이오](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AMQS-BIO/Immortal-Subscription-Model-Column.md) | AMQS-BIO |
+| 2026-08-29 | [집행유예 3번·실형 1번·6년 공백 — 판결문으로 읽은 김준범](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Capital-Market/Kim-Junbeom-Fugitive-Verdicts-Column.md) | Capital-Market |
+| 2026-08-26 | [오디세이로 보는 스크린쿼터제의 의미](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/K-Movie/Screen-Quota-System.md) | K-Movie |
+| 2026-08-24 | [포스트 코로나, 술 마시며 연결되는 세상은 끝났다](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Post-COVID/End-of-Drink-age.md) | Post-COVID |
+| 2026-08-23 | [X-Men: 낯선 이들, 경계의 사람들을 위한 경제학](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/comics/X-Men-The-Economics-of-the-Borderline-People.md) | comics |
+| 2026-08-21 | [싸이월드에 남겨진 사랑과 질문](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Cyworld/Cyworld-True-Mother-Guestbook.md) | Cyworld |
+| 2026-08-18 | [중국은 지금 '정부용 윈도우'를 지우고 있다](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Windows10/EOD-Win10-China.md) | Windows10 |
+| 2026-08-17 | [Bending Spoons 비즈니스 모델 심층 분석](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Bending%20spoons/Bending%20spoons%20playbook%20analysis.md) | Bending spoons |
+| 2026-08-17 | [백도어의 경제학 — ENDLESSDOORS](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Hacking/BackDoor-ENDLESS-DOORS.md) | Hacking |
+| 2026-08-16 | [Qwen3.8-27B 정밀 분석 — '독파모' 위협 평가](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Alibaba/Qwen38-27B-Review.md) | Alibaba |
+| 2026-08-07 | [왜 데이터센터인가? 아니, 왜 고전력 데이터센터인가](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI-IDC/Why-High-Power-Datacenter.md) | AI-IDC |
+| 2026-08-03 | [예측시장의 폭발적인 성장과 기회](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Prediction-Market/Prediction-Market-Growth-and-Opportunity.md) | Prediction-Market |
+| 2026-08-02 | [인공지능의 진짜 병목은 무엇인가](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI-Bottleneck/AI-Bottleneck.md) | AI-Bottleneck |
+| 2026-08-02 | [부자는 3대를 못 간다 — 에이드리언 청·K11 몰락](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/K11/Adrian-Cheng-Fall.md) | K11 |
+| 2026-07-25 | [인공지능 시대, 가르칠 것인가 적발할 것인가](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI-Education/AI-Education.md) | AI-Education |
 | 2026-07-22 | [빅테크의 금융화 — 애플 리스에서 GE 캐피탈까지](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/BigTech/Tech-Financialization-GE-Capital-Leasing.md) | BigTech |
 | 2026-07-21 | [로빈후드 AI 에이전트 트레이딩 정책 분석](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Robinhood/Robinhood-Agentic-Trading-Policy-Report.md) | Robinhood |
 | 2026-07-20 | [허깅페이스 AI 에이전트 침해사고 분석](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Huggingface-AI-Agent-Breach-Column.md) | AI_Hacking |
@@ -167,9 +191,9 @@
 
 각 칼럼에는 **티어**(엄밀성)와 **형식**(장르) 마커가 붙어 있습니다. 티어는 품질 서열이 아니라 **독자 기대치 정렬용**입니다 — T3도 완성도 높은 글이며, 목적이 다를 뿐입니다.
 
-- **`T1 · 실증 리포트`** (23편) — 1차 출처(SEC·공시·온체인) + 정량 데이터 + 재현 가능/반대 시나리오. 퀀트·기관 리서처 대상.
-- **`T2 · 분석 칼럼`** (39편) — 공개 데이터·출처 기반이나 해석·의견 비중이 큼. 일반 투자자 대상.
-- **`T3 · 논평·에세이`** (10편) — 시사·문화·사회 논평 또는 비투자 에세이. 정성적.
+- **`T1 · 실증 리포트`** (26편) — 1차 출처(SEC·공시·온체인) + 정량 데이터 + 재현 가능/반대 시나리오. 퀀트·기관 리서처 대상.
+- **`T2 · 분석 칼럼`** (72편) — 공개 데이터·출처 기반이나 해석·의견 비중이 큼. 일반 투자자 대상.
+- **`T3 · 논평·에세이`** (26편) — 시사·문화·사회 논평 또는 비투자 에세이. 정성적.
 
 **형식** — 연구(논문) · 리포트 · 포트폴리오 · 칼럼 · 에세이 (부가: PDF · EN/KO · 다국어)
 
@@ -179,7 +203,7 @@
 
 ## 칼럼 목록 (폴더 기준)
 
-이 폴더(`02.Investment Idea Column/`) 하위 칼럼 **총 72편**을 가나다·알파벳 순으로 정리했습니다. 각 항목의 폴더로 바로 이동할 수 있습니다.
+이 폴더(`02.Investment Idea Column/`) 하위 칼럼 **총 124편**을 가나다·알파벳 순으로 정리했습니다. 각 항목의 폴더로 바로 이동할 수 있습니다.
 
 | # | 티어 | 칼럼 | 한 줄 요약 | 핵심 키워드 | 형식 |
 | --- | --- | --- | --- | --- | --- |
@@ -255,6 +279,58 @@
 | 70 | T2 | [**Oracle**](#oracle) | 오라클 신용등급 BBB- 강등 — S&P 분석·부채 1,670억·FCF 적자 | 오라클, 신용등급, 정크본드, OCI, 오픈AI | 리포트 |
 | 71 | T2 | [**Robinhood**](#robinhood) | 로빈후드 Agentic Trading — MCP 기반 AI 옵션 거래의 이해상충과 규제 공백 | 로빈후드, 에이전틱트레이딩, MCP, PFOF, 옵션 | 정책리포트 |
 | 72 | T2 | [**Uber**](#uber) | 우버의 딜리버리 히어로 148억 달러 인수 — 배민의 생존 전략 | 우버, 딜리버리히어로, 배민, M&A, 슈퍼앱 | 칼럼 |
+| 73 | T3 | [**Abandoned-Dog**](#abandoned-dog) | 추석 연휴가 길수록 유기견이 늘어난다 — 행동경제학·제도 비교 | 유기견, 행동경제학, 동물등록제, 프랑스 | 에세이 |
+| 74 | T2 | [**AI-Bottleneck**](#ai-bottleneck) | 인공지능의 진짜 병목 — 규제·데이터·지정학 삼중 구속과 한국의 자리 | EU AI Act, AI기본법, 데이터고갈, 미중지정학 | 칼럼 |
+| 75 | T3 | [**AI-Education**](#ai-education) | 가르칠 것인가 적발할 것인가 — 마다가스카르 사건이 드러낸 검증 습관 | AI교육, 부정행위, 검증역량, 평가설계 | 칼럼 |
+| 76 | T2 | [**AI-Hallucination**](#ai-hallucination) | AI가 만든 유령 취약점 — SQLite 'CVE 슬롭' 사태 | 환각, CVE, SQLite, Kimi K3 | 칼럼 |
+| 77 | T2 | [**AI-IDC**](#ai-idc) | 왜 고전력 데이터센터인가 — 버지니아·Blackwell·한국 전력 공급절벽 | IDC, 전력, Blackwell, 변전소, 공급절벽 | 칼럼 |
+| 78 | T2 | [**Alibaba**](#alibaba) | Qwen3.8-27B 정밀 분석 — 오픈웨이트가 프런티어를 앞지른 날 | Qwen, 알리바바, 오픈웨이트, 독파모, 멀티모달 | 칼럼 |
+| 79 | T1 | [**AMQS-BIO**](#amqs-bio) | 불사의 잔혹, 티토노스의 우화 — AI 다음은 구독형 바이오 | GLP-1, 바이오, AMQS-BIO, 유전자치료, 구독모델 | 칼럼(퀀트) |
+| 80 | T1 | [**Bending spoons**](#bending-spoons) | Buy–Rebuild–Hold–Reinvest — BSP 롤업의 구조·한계·실행 게이트 | BSP, 롤업, IRR, Constellation, IPO | 분석 |
+| 81 | T3 | [**Bride-Price**](#bride-price) | 중국 결혼 지참금(차이리) — 사회주의 국가의 봉건 풍습 | 차이리, 신부대, 저스틴썬, 징톈 | 칼럼 |
+| 82 | T2 | [**Capital-Market**](#capital-market) | 김준범 판결문 기록 — 집행유예 3번·실형 1번·6년 공백 | 시세조종, 배임, 판결문, 자본시장 | 칼럼 |
+| 83 | T3 | [**China-Culture**](#china-culture) | 제주 버스 '잔액 없음' — 호의를 시스템으로 착각할 때 | 오버투어리즘, 숏폼, 교토숙박세, 공유지의비극 | 칼럼 |
+| 84 | T3 | [**comics**](#comics) | X-Men: 경계의 사람들을 위한 경제학 — 핑크 이코노미 | 엑스맨, 핑크이코노미, Grindr, LGBTQ | 칼럼 |
+| 85 | T3 | [**commerce**](#commerce) | 온라인 환불 분쟁 대응 — 전자상거래법 도구 사용법 | 전자상거래법, 청약철회, 환불, 연대책임 | 가이드 |
+| 86 | T3 | [**Cyworld**](#cyworld) | 싸이월드 방명록 — 누가 진정한 어머니인가 | 싸이월드, 입양, 프라이버시, 호적 | 에세이 |
+| 87 | T2 | [**exposition**](#exposition) | 여수 박람회 개막 참사 — 실패는 개막 전 장부에 있었다 | 여수박람회, 예산서, 흥행, 서울불꽃축제 | 분석 |
+| 88 | T3 | [**Failure-of-the-Japanese-Judicial-System**](#failure-of-the-japanese-judicial-system) | 곤 탈주와 엔자이 — 일본은 왜 '인질사법'의 나라가 됐나 | 곤, 엔자이, 인질사법, 유죄율 | 칼럼 |
+| 89 | T3 | [**Ghost-Story**](#ghost-story) | 천녀유혼 — 이루지 못한 사랑의 아련함 | 천녀유혼, 자이가르닉, 홍콩, 장국영 | 에세이 |
+| 90 | T2 | [**Hacking**](#hacking) | 백도어의 경제학 — ENDLESSDOORS 임플란트 | 백도어, CVE, 공유기, 정보비대칭 | 칼럼 |
+| 91 | T2 | [**IDOL**](#idol) | 걸그룹 7년 계약의 저주 — 아이브·스타쉽의 넥슨식 과금 | 아이브, 스타쉽, 7년계약, 과금 | 칼럼 |
+| 92 | T2 | [**interest**](#interest) | 이자의 역사 — 왕의 파산에서 마이너스 금리까지 | 이자, 금리, 소버린디폴트, 한은 | 칼럼 |
+| 93 | T3 | [**Internet**](#internet) | CIA가 북한 주민에게 알려준 인터넷 사용법 | CIA, OPSEC, VPN, 북한 | 칼럼 |
+| 94 | T2 | [**Japan-Cashless**](#japan-cashless) | 일본은 왜 현금을 금고에 넣는가 | 일본, 현금, 마이너스금리, PayPay | 칼럼 |
+| 95 | T3 | [**K-Culture**](#k-culture) | 달항아리 — 기획된 불완전함과 놓아둔 불완전함 | 달항아리, 조선백자, 와비사비, 김환기 | 에세이 |
+| 96 | T2 | [**K-Movie**](#k-movie) | 오디세이로 보는 스크린쿼터제의 의미 | 스크린쿼터, 오디세이, 용아맥, 영화진흥법 | 칼럼 |
+| 97 | T2 | [**K11**](#k11) | 부자는 3대를 못 간다 — 에이드리언 청·K11 몰락 | K11, 에이드리언청, 부동산, NOI | 칼럼 |
+| 98 | T2 | [**Kakao**](#kakao) | 차단은 보안이 아니다 — '공공용 카카오톡'을 만들어라 | 카카오톡, 서울시, 차단, 보안 | 칼럼 |
+| 99 | T2 | [**Key-Currency**](#key-currency) | 기축통화 시리즈 — 드라크마에서 달러까지 2,500년 | 기축통화, 달러, 오수전, 교초, CFA프랑 | 시리즈 |
+| 100 | T2 | [**Line**](#line) | 라인 메신저 사태 2년 — 국화와 칼 | 라인, 네이버, 소프트뱅크, 총무성 | 칼럼 |
+| 101 | T2 | [**LVMH-Hermes-War**](#lvmh-hermes-war) | 잔혹한 M&A — LVMH와 에르메스의 25년 전쟁 | LVMH, 에르메스, 주식스왑, M&A | 칼럼 |
+| 102 | T2 | [**Mileage**](#mileage) | 항공사 마일리지는 어떻게 우리를 묶어두는가 | 마일리지, 대한항공, 전환비용, FFP | 칼럼 |
+| 103 | T2 | [**National-Diplomatic-Academy-Hacking-Incident**](#national-diplomatic-academy-hacking-incident) | 코로나가 남긴 시한폭탄 — 국립외교원 해킹 | 국립외교원, 원격교육, 해킹 | 칼럼 |
+| 104 | T2 | [**News Letter**](#news-letter) | Vibe Quant Insight 뉴스레터 | 뉴스레터, VibeQuant | 뉴스레터 |
+| 105 | T2 | [**North-Korea**](#north-korea) | AI 딸깍 — 김수키·바이브 코더·Tving의 공통 실수 | 김수키, opencode, 스피어피싱, 티빙 | 칼럼 |
+| 106 | T2 | [**NorthKorea**](#northkorea) | 라자루스 AnySign4PC 제로데이 — 국가가 강제로 설치한 공격 통로 | 라자루스, AnySign4PC, 제로데이, 워터링홀 | 칼럼 |
+| 107 | T3 | [**Option**](#option) | 최적 멈춤 이론 — 멈추지 못한 사람들 | 최적멈춤, 비서문제, 옵션, 매디슨카운티 | 에세이 |
+| 108 | T2 | [**Post-COVID**](#post-covid) | 포스트 코로나, 술의 종말 — 주류 출고량 300만㎘ 붕괴 | 주류출고량, 절주, 팬데믹, 프랑스발근 | 칼럼 |
+| 109 | T1 | [**Prediction-Market**](#prediction-market) | 예측시장의 폭발적 성장과 기회 — 관할권 규제 지도 | 예측시장, Kalshi, Polymarket, 규제 | 리서치 |
+| 110 | T2 | [**Privacy**](#privacy) | 왜 LG TV는 화면이 꺼진 상태에서도 듣고 있을까 | LG TV, 프라이버시, CTV, 광고 | 칼럼 |
+| 111 | T3 | [**Private-Military-Company**](#private-military-company) | 제국을 지킨 용병의 역사 — 피의 경제학 | 용병, PMC, 와그너, AI드론 | 칼럼 |
+| 112 | T2 | [**Publishing-Business**](#publishing-business) | 문학동네 감사 한정의 의미 | 문학동네, 감사의견, 출판, 카페콤마 | 칼럼 |
+| 113 | T2 | [**SSD**](#ssd) | 전원이 끊긴 SSD는 얼마나 버티는가 — 무전원 데이터 유실 | SSD, NAND, JEDEC, 데이터보존 | 기술분석 |
+| 114 | T2 | [**security**](#security) | 왜 해커들은 '문자 입력기'를 노렸나 — Sogou 입력기 | Sogou, 입력기, RCE, CVE | 칼럼 |
+| 115 | T3 | [**Sports**](#sports) | US Open — 귀족의 스포츠에서 대중의 스포츠로 | 테니스, US Open, 폴로 | 칼럼 |
+| 116 | T2 | [**StableCoin**](#stablecoin) | 그들은 금화를 찍지 않았다 — 사적 화폐 네트워크의 천년 | 스테이블코인, GENIUS Act, 메디치, 환어음 | 칼럼 |
+| 117 | T2 | [**Startup**](#startup) | 혁신의 유통기한 — 규제와 스타트업 | 스타트업, 규제, 토스, EU Inc, 스테이블코인 | 칼럼 |
+| 118 | T3 | [**Super-Programmer-Opinion**](#super-programmer-opinion) | 이제 개발자가 가져야 할 덕목 — 무사시와 카멕 | 카멕, 오륜서, AI프로그래밍, 기본기 | 에세이 |
+| 119 | T3 | [**The-Economics-of-Exposés**](#the-economics-of-exposés) | 폭로의 정치 — 게임 이론과 행동경제학 | 폭로, 게임이론, 살라미, 한동훈 | 칼럼 |
+| 120 | T2 | [**TOSS**](#toss) | Toss Open API IP 화이트리스트의 함정 | 토스, Open API, OAuth, 인디개발자 | 기술 |
+| 121 | T2 | [**Travel-Rule**](#travel-rule) | 트래블룰, 1원부터 적용 — 특금법 시행령과 시장 변화 | 트래블룰, 특금법, VASP, 폴리마켓 | 칼럼 |
+| 122 | T2 | [**USA**](#usa) | 주도주에서 다음 주도주는? — 기축통화 교체의 법칙 | 달러, 반도체, 기축통화, 캉티용 | 칼럼 |
+| 123 | T2 | [**VC**](#vc) | VC 운용역의 보상 설계 — 임지훈·카카오벤처스 소송 | VC, 성과보수, 카카오벤처스, 캐리 | 칼럼 |
+| 124 | T2 | [**Windows10**](#windows10) | 중국, '정부용 윈도우'를 지우다 — 미중 기술전쟁 | 윈도우10, 중국, 미중기술전쟁, CMIT | 칼럼 |
 ---
 
 ## 칼럼별 요약
@@ -986,6 +1062,422 @@ S&P가 오라클의 신용등급을 BBB-(투자적격 최하단)로 강등한 �
 
 ---
 
+### [Abandoned-Dog](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Abandoned-Dog/Abandoned-Dog-Holiday-Issue.md)
+
+**`T3 · 논평·에세이`** · 형식 `에세이` · 키워드 `유기견` `행동경제학` `동물등록제` `프랑스`
+
+> *추석 연휴가 길수록 유기견이 늘어난다 — 여행 욕구 vs 위탁 비용*
+
+검역본부 집계로 설·추석 2020~2025년 유기 5,900마리 이상이 발생했고, 연휴가 길수록 유기 수치가 높아지는 상관을 행동경제학(현재 편향)·사회경제적 취약성·제도 실패(등록제 미흡)로 읽습니다. 프랑스의 8일 반환·7일 숙려 제도와 대조해 1·3·5년 로드맵을 제시합니다.
+
+### [AI-Bottleneck](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI-Bottleneck/AI-Bottleneck.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `EU AI Act` `AI기본법` `데이터고갈` `미중지정학`
+
+> *인공지능의 진짜 병목은 인간이 아니라 규제·데이터·지정학이다*
+
+'AI의 병목은 인간'이라는 통념을 뒤집어, EU AI Act·한국 AI기본법의 규제, 데이터 고갈·오염, 미중 기술 분절이 서로 강화하는 '삼중 구속'이 구조적 병목임을 짚습니다. 피지컬 AI·돌봄 로봇·데이터 라이선싱 맥락에서 한국이 설 자리를 정리합니다.
+
+### [AI-Education](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI-Education/AI-Education.md)
+
+**`T3 · 논평·에세이`** · 형식 `칼럼` · 키워드 `AI교육` `부정행위` `검증역량` `평가설계`
+
+> *가르칠 것인가 적발할 것인가 — 검증하지 않는 습관이 진짜 문제*
+
+앨콘주립대 '마다가스카르' 과제 사건을 출발점으로, 핵심은 AI 성능이 아니라 출력을 검산하지 않는 습관임을 지적합니다. 적발 경쟁보다 평가 재설계와 학년별 단계적 허용이 답이라고 주장하며 MIT·Microsoft/CMU 연구와 각국 규제를 근거로 듭니다.
+
+### [AI-Hallucination](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI-Hallucination/AI-Hallucination-SQLite-Ghost-CVE.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `환각` `CVE` `SQLite` `Kimi K3`
+
+> *AI가 만든 유령 취약점 — SQLite 'CVE 슬롭' 사태*
+
+AI가 실제 존재하지 않는 SQLite 취약점(CVE)을 사실처럼 생성해 'CVE 슬롭'이라는 신조어까지 낳은 사태를 다룹니다. Kimi K3의 환각률 51% 논란과 성능-신뢰성 트레이드오프, 환각이 보안 공시·개발 도구에 유입될 때의 위험을 짚습니다.
+
+### [AI-IDC](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI-IDC/Why-High-Power-Datacenter.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `IDC` `전력` `Blackwell` `변전소` `공급절벽`
+
+> *왜 데이터센터인가? 아니, 왜 고전력 데이터센터인가?*
+
+버지니아 IDC 집중이 네트워크에서 시작해 기가와트급 전력이 입지를 붙잡게 된 흐름, DeepSeek 내몽골 1GW·NVIDIA Blackwell Ultra 랙당 130kW, 한국 수도권 전력 포화·2029 공급절벽을 정리합니다. 빅테크 CAPEX ~7,250억 달러 국면에서 병목은 GPU 예산이 아니라 변전소 리드타임임을 강조합니다.
+
+### [Alibaba](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Alibaba/Qwen38-27B-Review.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `Qwen` `알리바바` `오픈웨이트` `독파모` `멀티모달`
+
+> *Qwen3.8-27B가 프런티어를 앞지른 날 — '독파모'에 대한 위협 평가*
+
+Apache 2.0 오픈웨이트 27B 멀티모달 모델 Qwen3.8-27B가 OSWorld·AndroidWorld 등 에이전트 벤치에서 Opus 4.6 Max를 앞선다는 알리바바 공표를 검증하고, 하이브리드 어텐션·262K 컨텍스트·Day-0 생태계가 만드는 배포 관성을 분석합니다. 국산 '독파모'의 명분·효율성·독자성 방어선을 함께 짚습니다.
+
+### [AMQS-BIO](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AMQS-BIO/Immortal-Subscription-Model-Column.md)
+
+**`T1 · 실증 리포트`** · 형식 `칼럼(퀀트)` · 키워드 `GLP-1` `바이오` `AMQS-BIO` `유전자치료` `구독모델`
+
+> *불사의 잔혹 — AI 다음은 구독형 바이오, 티토노스의 우화*
+
+티토노스 신화로 2026년 바이오를 읽습니다: GLP-1은 해지하면 요요가 돌아오는 구독, Casgevy는 220만 달러 선불, TMO·ILMN은 승자 무관 통행세. AMQS-BIO(2026-08-29)의 Risk-On·Top-8 43.6%·갭 캡 5.5%와 AI 1상 성공률 상승 대비 2상 정체의 반증 구조를 제시합니다.
+
+### [Bending spoons](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Bending%20spoons/Bending%20spoons%20playbook%20analysis.md)
+
+**`T1 · 실증 리포트`** · 형식 `분석` · 키워드 `BSP` `롤업` `IRR` `Constellation` `IPO`
+
+> *Buy–Rebuild–Hold–Reinvest — Bending Spoons 롤업의 구조와 한계*
+
+나스닥 BSP의 Evernote·WeTransfer·Airtable 롤업을 F-1·2Q26 실적으로 해부합니다. 2025년 매출 +95% 중 오가닉은 13%p, 딜당 목표 IRR 65%는 소형 자산에서 검증됐고 Airtable급 대형 딜·금리·차환이 임계점임을 짚습니다. Constellation과 달리 공개 플레이북의 평판 부채가 복리로 쌓인다고 봅니다.
+
+### [Bride-Price](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Bride-Price/Bride-Price.md)
+
+**`T3 · 논평·에세이`** · 형식 `칼럼` · 키워드 `차이리` `신부대` `저스틴썬` `징톈`
+
+> *중국 결혼 지참금 — 왜 사회주의 국가에서 봉건 풍습이 유지됐나*
+
+저스틴 썬·징톈의 약 60억 원(3천만 위안) 차이리(彩禮) 소송을 출발점으로, 신부대와 지참금의 구분, 도농 격차·성비 불균형·주택이 만든 가격 형성을 분석합니다. 최고인민법원 2024 해석(혼인·동거 목적이 파경보다 우선)까지 정리합니다.
+
+### [Capital-Market](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Capital-Market/Kim-Junbeom-Fugitive-Verdicts-Column.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `시세조종` `배임` `판결문` `자본시장`
+
+> *집행유예 3번·실형 1번·6년 공백 — 판결문으로 읽은 김준범*
+
+서울고법 2017노559 등 확정 판결 4건을 순서대로 읽어 시세조종·가장납입의 경로를 복원합니다. 2017년 20억 원 배임·시세조종에도 집행유예에 그친 점, 보석 후 도주로 시그널엔터테인먼트 재판이 6년째 정지된 점을 감정이 아닌 판결문 인용으로 기록합니다.
+
+### [China-Culture](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/China-Culture/Overtourism.md)
+
+**`T3 · 논평·에세이`** · 형식 `칼럼` · 키워드 `오버투어리즘` `숏폼` `교토숙박세` `공유지의비극`
+
+> *잔액 없음, 그냥 타세요 — 호의를 시스템으로 착각할 때*
+
+제주 101번 버스 잔액 부족 승차 목격담을 출발점으로, 숏폼이 규칙 우회를 공략 콘텐츠로 상품화하는 구조와 체면 비용이 0인 관광객의 공유지의 비극을 짚습니다. 교토 숙박세 10배 인상·시내버스 시민/비시민 차등 운임(2026.3)을 대안으로 비교합니다.
+
+### [comics](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/comics/X-Men-The-Economics-of-the-Borderline-People.md)
+
+**`T3 · 논평·에세이`** · 형식 `칼럼` · 키워드 `엑스맨` `핑크이코노미` `Grindr` `LGBTQ`
+
+> *X-Men: 낯선 이들, 경계의 사람들을 위한 경제학*
+
+엑스맨의 돌연변이 서사를 성소수자·민권 담론의 은유로 읽고, 미국 성인 LGBTQ+ 자기보고 9%가 공감을 시장으로 옮긴 흐름을 분석합니다. Grindr FY2025 매출 +28%·마진 43%를 Match·Bumble 대조군으로 검증하고, 디즈니 2028 리부트·태국 결혼평등·한국 여론 후퇴를 겹쳐 읽습니다.
+
+### [commerce](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/commerce/refund.md)
+
+**`T3 · 논평·에세이`** · 형식 `가이드` · 키워드 `전자상거래법` `청약철회` `환불` `연대책임`
+
+> *온라인 환불 분쟁, 전자상거래법 도구를 조문 그대로 쓰는 법*
+
+판매자·중개플랫폼·P2P 거래의 책임 주체를 가르고, 청약철회 7일·광고 불일치 3개월·연 15% 지연배상금·카드 상계·플랫폼 연대책임 등 소비자가 쓸 수 있는 도구를 정리합니다. 요청서 3종 템플릿과 잘못된 안내문 교정을 포함합니다.
+
+### [Cyworld](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Cyworld/Cyworld-True-Mother-Guestbook.md)
+
+**`T3 · 논평·에세이`** · 형식 `에세이` · 키워드 `싸이월드` `입양` `프라이버시` `호적`
+
+> *싸이월드에 남겨진 사랑과 질문 — 누가 진정한 어머니인가*
+
+입양된 소녀와 양부모, 시한부 진단 이후 싸이월드 방명록 백업을 둘러싼 친모·양모의 갈등을 서사로 풉니다. 법의 호적과 삶의 돌봄이 엇갈릴 때 무엇을 선택할 것인가를 묻고, 싸이월드 서비스 위기 앞에서 이 사연을 떠올립니다.
+
+### [exposition](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/exposition/Exposition-Fail.md)
+
+**`T2 · 분석 칼럼`** · 형식 `분석` · 키워드 `여수박람회` `예산서` `흥행` `서울불꽃축제`
+
+> *여수 박람회 개막 참사는 왜 예지되었을까*
+
+2026 여수세계섬박람회 개막 9일 누적 10만 명(목표 300만의 약 23%)과 서울 불꽃축제 하룻밤 100만 명을 대비하고, 조직위 예산서 8종을 대조해 흥행 붕괴가 횡령이 아니라 개막 전 장부에 이미 적혀 있었음을 보입니다. 통제 장치가 작동하지 않은 구조를 분석합니다.
+
+### [Failure-of-the-Japanese-Judicial-System](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Failure-of-the-Japanese-Judicial-System/Failure-of-the-Japanese-Judicial-System.md)
+
+**`T3 · 논평·에세이`** · 형식 `칼럼` · 키워드 `곤` `엔자이` `인질사법` `유죄율`
+
+> *카를로스 곤의 탈주 — 일본은 왜 '엔자이(冤罪)'의 나라가 됐나*
+
+곤의 악기상자 탈주, 108일 구류·변호사 없는 취조·보석=혐의 인정이라는 '인질사법' 구조를 다룹니다. 일본 형사 유죄율 99.9%와 엔자이(하카마다 47년 등), 2026 재심법 개정을 한국 유죄율 99%와 대조하며 짚습니다.
+
+### [Ghost-Story](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Ghost-Story/Ghost-Story.md)
+
+**`T3 · 논평·에세이`** · 형식 `에세이` · 키워드 `천녀유혼` `자이가르닉` `홍콩` `장국영`
+
+> *천녀유혼 — 이루지 못한 사랑의 아련함*
+
+《천녀유혼》을 자이가르닉 효과(미완의 기억)와 진화심리, 유곽 구조 은유로 읽고, 1997 홍콩 반환의 은유와 장국영 추모로 이어갑니다. 미완의 사랑이 오래 남는 심리와 '놓아둠'의 투자자 주석을 덧붙입니다.
+
+### [Hacking](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Hacking/BackDoor-ENDLESS-DOORS.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `백도어` `CVE` `공유기` `정보비대칭`
+
+> *백도어의 경제학 — ENDLESSDOORS 임플란트*
+
+VulnCheck가 Zbtlink 공유기 20개 모델 펌웨어에서 공개한 ENDLESSDOORS(CVE-2026-66747, CVSS 9.3)를 국적 스파이 서사가 아니라, 원격 AS 비용 절감이 구매자 리스크로 전가되는 정보 비대칭(레몬 마켓)으로 읽습니다. D-Link·Juniper·XZ 사례와 대조해 대응을 권고합니다.
+
+### [IDOL](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/IDOL/IVE-Starship-Issue.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `아이브` `스타쉽` `7년계약` `과금`
+
+> *걸그룹 7년 계약의 저주 — 아이브·스타쉽의 넥슨식 과금*
+
+아이브 장원영·안유진 '안녕' 전시 예매 1위와 '수금 전시' 비판이 공존하는 상황, 스타쉽 영업이익 458억→121억 급감, 2028년 7년 계약 종점을 데이터로 짚습니다. 넥슨식 과금 3축(DLC·캐시·가챠)을 아이돌 IP에 대입해 분석합니다.
+
+### [interest](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/interest/History-of-Interest.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `이자` `금리` `소버린디폴트` `한은`
+
+> *이자의 역사 — 왕의 파산에서 마이너스 금리까지*
+
+이자를 '시간의 가격'으로 정의하고, 중세 교회의 이자 금지가 낳은 지하 고금리, 왕의 채무 불이행이 바르디·페루치 같은 채권자를 무너뜨린 역사, 한국의 8·3 조치·이자제한법, 일본 마이너스 금리와 2026년 한은 3.00% 연속 인상까지 한 줄기로 읽습니다.
+
+### [Internet](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Internet/CIA-North-Lorea-Opsec-Column.md)
+
+**`T3 · 논평·에세이`** · 형식 `칼럼` · 키워드 `CIA` `OPSEC` `VPN` `북한`
+
+> *CIA가 북한 주민에게 알려준 인터넷 사용법은 사실 우리 모두의 사용법*
+
+2024년 CIA가 배포한 「안전하게 련락하는 방법」의 수칙(시크릿 모드·VPN/Tor·기록 삭제)을 일반 사용자 위협 모델로 옮깁니다. 시크릿 모드가 지우지 못하는 네트워크 흔적, VPN의 신뢰 이전, '삭제=없음'이 아니라 '애초에 남기지 않기'를 실무 교훈으로 정리합니다.
+
+### [Japan-Cashless](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Japan-Cashless/Japan-Cash-Issue.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `일본` `현금` `마이너스금리` `PayPay`
+
+> *일본은 왜 현금을 금고에 넣는가*
+
+마이너스 금리와 금고 판매 붐(2016), 1946년 예금봉쇄 트라우마, 지진 열도의 재난 현금이 만든 '현금 지상주의'를 분석합니다. 캐시리스 58%·PayPay 천하·LINE Pay 철수와 현금 회귀 조짐, 가계 예금 비중과 인플레이션이 현금을 잠식하는 역설을 짚습니다.
+
+### [K-Culture](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/K-Culture/Moon-Jar.md)
+
+**`T3 · 논평·에세이`** · 형식 `에세이` · 키워드 `달항아리` `조선백자` `와비사비` `김환기`
+
+> *달항아리 — 기획된 불완전함과 놓아둔 불완전함*
+
+17–18세기 광주 관요의 상하 접합·비대칭 달항아리를, 일본 젠의 형식화(루안지·킨츠기)와 조선의 '놓아둔 불완전'(분청·이도)의 대비로 읽습니다. 2023년 크리스티 경매 $4.56M와 K-컬처 브랜딩의 함의를 짚습니다.
+
+### [K-Movie](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/K-Movie/Screen-Quota-System.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `스크린쿼터` `오디세이` `용아맥` `영화진흥법`
+
+> *오디세이로 보는 스크린쿼터제의 의미 — 규제가 목적을 수단으로 바꾸는 순간*
+
+놀런 《오디세이》 용아맥 매진·암표에도 스크린별 연 73일 한국영화 의무·'전 회차 한국영화' 산정 때문에 특별관 연장이 막히는 모순을 짚습니다. 2025년 점유율 급락 vs 2026년 콘텐츠 회복(65.5%) 데이터로, 극장 합산·특별관 하한 등 탄력적 설계를 제안합니다.
+
+### [K11](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/K11/Adrian-Cheng-Fall.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `K11` `에이드리언청` `부동산` `NOI`
+
+> *부자는 3대를 못 간다 — 에이드리언 청·K11 몰락의 교과서*
+
+홍콩 정유탁 가문 장손·K11 창업자 에이드리언 청이 2024~2026년 가문 지배구조에서 삭제된 과정을 추적합니다. 표면은 부동산 침체·금리이고, 구조는 브랜드(K11) 최적화가 단위 면적당 NOI를 잠식한 것, 치명타는 11 SKIES 고정 보증임대임을 보입니다.
+
+### [Kakao](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Kakao/Public-Kakao-Issue.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `카카오톡` `서울시` `차단` `보안`
+
+> *차단은 보안이 아니다 — '공공용 카카오톡'을 만들어라*
+
+서울시의 업무 PC 카카오톡·개인메일·웹하드 원칙 차단(예외 5%)을 비판하며, 차단은 우회로로 위험을 사각지대로 민다고 봅니다. EU 자체 메신저(BEAM/Wire), 미국 기록의무, AnySign4PC 제로데이 교훈을 들어 공공 프로필·AI DLP·DRM을 제안합니다.
+
+### [Key-Currency](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Key-Currency/The-History-of-the-Collapse-of-Key-Currencies.md)
+
+**`T2 · 분석 칼럼`** · 형식 `시리즈(역사)` · 키워드 `기축통화` `달러` `오수전` `교초` `CFA프랑`
+
+> *기축통화 시리즈 — 드라크마에서 채무 40조 달러의 달러까지 2,500년*
+
+드라크마·데나리우스·오수전·교초·페소 데 오초·파운드·달러까지 기축통화 12사례와 달러 부채 40조 달러를 다루는 시리즈입니다. [오수전(동아시아 최초 기축)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Key-Currency/First-Key-Currency.md) · [교초와 제국 몰락](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Key-Currency/The-Fall-of-the-Empire.md) · [CFA 프랑과 프랑스 제국](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Key-Currency/France-CFA-Franc-Empire-Collapse.md) · [일제 식민지 금융 지배](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Key-Currency/Monetary-Domination-Following%20colonial-Independence.md) · [일본의 몰락](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Key-Currency/Japan-Decline.md) 등. 패권 상실은 '소멸'이 아니라 '함량 조정'임을 강조합니다.
+
+### [Line](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Line/SoftBank-Naver-Line.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `라인` `네이버` `소프트뱅크` `총무성`
+
+> *라인 메신저 사태 2년 — 국화와 칼, '번영하는 고립'*
+
+2024 총무성 행정지도→2026.3 네이버 기술 분리 완료, A홀딩스 50:50·네이버 실질 32.3%·4년 배당 1조5,444억 원을 정리합니다. 르노-닛산(1999 구제→2018 곤 체포→2025 최대 적자) 선례와 LINE 92.9% 포화 대비 Instagram 54.8% 성장을 대조합니다.
+
+### [LVMH-Hermes-War](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Mokrak%20of%20the%20luxury%20market/LVMH-Hermes-War.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `LVMH` `에르메스` `주식스왑` `M&A`
+
+> *잔혹한 M&A의 세계 — LVMH와 에르메스의 25년 전쟁*
+
+LVMH의 현금결제 주식스왑을 통한 비밀 지분 매집, 2002년 비밀 협약, 니콜라 피에슈 사라진 주식 소송(약 100억 달러), AMF 제재, 2014년 휴전까지 25년 격돌을 복원합니다. 지리-다임러 병행 사례와 성장 벽에 선 LVMH가 다시 에르메스를 보는 이유를 분석합니다.
+
+### [Mileage](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Mileage/Airline-Mileage-Lockin.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `마일리지` `대한항공` `전환비용` `FFP`
+
+> *항공사 마일리지는 어떻게 우리를 묶어두는가 — 그리고 왜 풀려나야 하는가*
+
+FFP의 기원(텍사스 인터내셔널/AAdvantage)과 전환비용·지위 사다리·이연수익 부채 회계로 마일리지 락인을 설명합니다. 대한항공·아시아나 통합(탑승 1:1·제휴 0.82)과 2026년 9월 공정위 승인 합병안을 정리하고, 체리피커 전략과 원화 가치 환산이 락인을 이긴다고 주장합니다.
+
+### [National-Diplomatic-Academy-Hacking-Incident](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/National-Diplomatic-Academy-Hacking-Incident/National-Diplomatic-Academy-Hacking-Incident.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `국립외교원` `원격교육` `해킹`
+
+> *코로나가 남긴 시한폭탄 — 국립외교원 해킹은 예고된 참사*
+
+국립외교원 원격교육 플랫폼 해킹을 '사고가 아니라 예고된 참사'로 규정하고, 코로나 때 급조된 정부 원격교육 인프라의 보안 부실이 10개월간 방치된 구조를 분석합니다.
+
+### [News Letter](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/News%20Letter/readme.md)
+
+**`T2 · 분석 칼럼`** · 형식 `뉴스레터` · 키워드 `뉴스레터` `VibeQuant`
+
+> *Vibe Quant Insight — 퀀트·시장 인사이트 뉴스레터*
+
+VibeQuant 프로젝트의 정기 뉴스레터(vibe-quant-insight-001, KO/EN/JA 3개 언어)입니다. 퀀트 전략·시장 분석 인사이트를 정기 구독 형태로 배포합니다.
+
+### [North-Korea](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/North-Korea/Kimsuky-AI-Issue.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `김수키` `opencode` `스피어피싱` `티빙`
+
+> *AI 딸깍 — 김수키·바이브 코더·Tving 개발자가 똑같이 저지른 실수*
+
+북한 김수키가 opencode로 미끼 PDF를 실전 스피어피싱에 쓰고(최대 9회·29건 중 18건 파일명만 변경), 티빙 3,954만 계정·평문 접속키 유출과 같은 '생성 비용 붕괴 vs 검토 비용 잔존' 문법임을 짚습니다. pre-commit(gitleaks)·정적분석·사람 리뷰를 권고합니다.
+
+### [NorthKorea](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/NorthKorea/Lazarus_AnySign4PC.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `라자루스` `AnySign4PC` `제로데이` `워터링홀`
+
+> *국가가 강제로 설치한 프로그램이 국민을 공격하는 통로가 되었다*
+
+한컴위드 AnySign4PC 제로데이(RCE)를 북한 라자루스가 워터링 홀로 악용해 최소 72기관을 감염시킨 사태를 다룹니다. CVE-2020-7882 이후 '패치'가 재악용되고 자동업데이트 부재·필수설치 구조가 문제임을 지적하고 WebAuthn/FIDO2 전환·CVE 공개 의무를 제안합니다.
+
+### [Option](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Option/Optimal-Stopping-Theory.md)
+
+**`T3 · 논평·에세이`** · 형식 `에세이` · 키워드 `최적멈춤` `비서문제` `옵션` `매디슨카운티`
+
+> *멈추지 못한 사람들 — 최적 멈춤 이론과 《매디슨 카운티의 다리》*
+
+비서 문제의 1/e≈37% '보고 나서 선택' 법칙, 정지가치 vs 계속가치(미국형 옵션·실물옵션·유보임금)를 설명하고, 《매디슨 카운티의 다리》의 프란체스카처럼 이미 멈춘 뒤 소멸하는 옵션과 부작위 후회를 이야기합니다. 멈춘 뒤의 삶은 수학이 말하지 않는다고 짚습니다.
+
+### [Post-COVID](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Post-COVID/End-of-Drink-age.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `주류출고량` `절주` `팬데믹` `프랑스발근`
+
+> *포스트 코로나, 술 마시며 연결되는 세상은 끝났다*
+
+국세청 집계 2025년 주류 출고량 298.8만㎘로 27년 만에 300만㎘ 선 붕괴, 20대 일평균 섭취 64.8g 전 연령 최저를 데이터로 제시합니다. 글로벌 주류 5사 재고 약 220억 달러·프랑스 영구 발근을 수요 붕괴의 물리적 증거로 보고, 팬데믹을 원인이 아니라 가속장치로 보는 '사회적 학습 단절' 가설을 제시합니다.
+
+### [Prediction-Market](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Prediction-Market/Prediction-Market-Growth-and-Opportunity.md)
+
+**`T1 · 실증 리포트`** · 형식 `리서치` · 키워드 `예측시장` `Kalshi` `Polymarket` `규제`
+
+> *예측시장의 폭발적 성장과 기회 — 거래량·수수료·관할권 규제 지도*
+
+2026년 7월 Kalshi·Polymarket 월 거래량 506억 달러와 밸류에이션, 폴리마켓의 Polygon 의존도, 수수료 도입, 미국 CFTC·주 도박법 충돌, 한국 형사 수사, 일본 2030 인가 로비 등 관할권별 규제를 비교합니다. 한국 팀은 B2C가 아닌 인프라·오라클·컴플라이언스 공급이 실현 가능하다고 결론짓습니다.
+
+### [Privacy](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Privacy/LG-Smart-TV-Issue.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `LG TV` `프라이버시` `CTV` `광고`
+
+> *왜 LG TV는 화면이 꺼진 상태에서도 듣고 있을까 — 도청이 아니라 광고 사업*
+
+Gamers Nexus 조사로 드러난 LG webOS TV의 위치·주변 Wi-Fi·음성 전사 텍스트 수집과 대기 상태·오프라인 큐를 다룹니다. '화면 꺼짐'은 전원 꺼짐이 아니며, 패널 마진 붕괴→CTV 광고가 본체가 된 구조와 통신비밀보호법·OTA 재동의의 공백을 짚습니다.
+
+### [Private-Military-Company](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Private-Military-Company/History-of-the-Imperial-Mercenaries.md)
+
+**`T3 · 논평·에세이`** · 형식 `칼럼` · 키워드 `용병` `PMC` `와그너` `AI드론`
+
+> *제국을 지킨 용병의 역사 — 피의 경제학*
+
+로마 페데라티·스위스 용병·베트남 파병·소련 무슬림 대대·북한/와그너의 우크라이나 참전에서 AI 드론·사이버 사략선까지, 제국이 피를 외주화하는 경제학을 역사적으로 추적합니다. 얼굴 없는 전쟁의 청구서를 짚습니다.
+
+### [Publishing-Business](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Publishing-Business.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `문학동네` `감사의견` `출판` `카페콤마`
+
+> *문학동네 감사 한정의 의미 — 회수되지 못하는 투자는 누가 책임지나*
+
+문학동네 2025년 감사 한정의견과 까페콤마 대여금 약 123억 원, 창업주 지분 매각을 다룹니다. 감사범위 제한, 이사회·경영진·지배주주의 책임, 숏폼과 독서율 하락, 한강 노벨상 골든타임과 M&A 창구, 100% 매각이 어려운 이유를 분석합니다.
+
+### [SSD](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/SSD/SSD-Power-OFF-Retention-Risk.md)
+
+**`T2 · 분석 칼럼`** · 형식 `기술분석` · 키워드 `SSD` `NAND` `JEDEC` `데이터보존`
+
+> *전원이 끊긴 SSD는 얼마나 버티는가 — 무전원 방치 데이터 유실*
+
+SSD는 무전원에서도 영구 보존되는 매체가 아니라 절연막 전자의 누설을 늦춘 저장장치임을 설명합니다. JESD218 기준 클라이언트 30°C/1년·엔터프라이즈 40°C/3개월, 방치 랙의 첫 전원 인가 전 write blocker·이미징, 장기 보관 LTO·주기적 scrub을 정리합니다.
+
+### [security](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/security/Sogou-Hacking.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `Sogou` `입력기` `RCE` `CVE`
+
+> *왜 해커들은 '문자 입력기'를 노렸나 — 세렝게티식 표적 선정*
+
+Sogou 입력기(MAU 약 4.55억)의 CVE-2026-51990 원클릭 RCE 연쇄(sgbiz URI→CEF→비샌드박스 Chromium 80)를 분석합니다. 서드파티로 OS 거버넌스 밖, 독립 P&L 부재, 독점이 보안 긴장을 약화시키는 세 가지 구조 이유를 세렝게티 사냥법에 비유하고, 한국 AnySign4PC와의 유사성을 짚습니다.
+
+### [Sports](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Sports/US-Open.md)
+
+**`T3 · 논평·에세이`** · 형식 `칼럼` · 키워드 `테니스` `US Open` `폴로`
+
+> *US Open — 귀족의 스포츠에서 대중의 스포츠로*
+
+1968년 오픈 시대가 아마추어 장벽을 걷어내고 상금이 자본의 대체재가 된 과정, 2026년 상금 $1.08억(1968년의 약 1,080배)·USTA 마진 ~50%·관중 114만 명을 데이터로 보여줍니다. 새 장벽(티켓 가격·프리미엄 좌석·선수 수익 분배 15~19%)과 문을 열지 못한 폴로를 대조합니다.
+
+### [StableCoin](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/StableCoin/Medici-to-Siliconvalley-column.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `스테이블코인` `GENIUS Act` `메디치` `환어음`
+
+> *그들은 금화를 찍지 않았다 — 사적 화폐 네트워크의 천년*
+
+성전 기사단·메디치의 힘이 주화가 아니라 환어음·상계·지점 간 신용에 있었음을 짚고, 스테이블코인을 21세기의 환어음(발행자 청구권)으로 봅니다. GENIUS Act가 비금융 빅테크의 직접 발행을 이미 제한한 점을 들어, 이번 주권은 훨씬 빨리 울타리를 친다고 분석합니다.
+
+### [Startup](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Startup/Shelf-Life-of-Innovation.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `스타트업` `규제` `토스` `EU Inc` `스테이블코인`
+
+> *혁신의 유통기한 — 너무 이르면 규제에 막히고, 너무 늦으면 기회를 놓친다*
+
+미국(우버·페이팔 ILC)·한국(토스의 핀테크 분투)·유럽(보호주의가 유니콘 성장 지연)·일본(엔화 스테이블코인 선제 합법화)을 비교합니다. 원화 스테이블코인·RWA 논의를 미룰 여유가 없으며 미국 시장에 더 도전해야 한다고 주장합니다.
+
+### [Super-Programmer-Opinion](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Super-Programmer-Opinion.md)
+
+**`T3 · 논평·에세이`** · 형식 `에세이` · 키워드 `카멕` `오륜서` `AI프로그래밍` `기본기`
+
+> *이제 개발자가 가져야 할 덕목 — 무사시와 존 카멕*
+
+카멕이 《오륜서》에서 본 AI 시대 프로그래밍을 다룹니다. 관(맥락)·무구(스택에 얽매이지 않음)·검증(LLM은 엑셀이지 오라클이 아님)·단련·동량(모델과 인간에게 일을 맡기는 판단)의 다섯 덕목을 제시하고, 기본기는 생산이 아니라 판별 수단으로 남는다고 짚습니다.
+
+### [The-Economics-of-Exposés](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/The-Economics-of-Expos%C3%A9s.md)
+
+**`T3 · 논평·에세이`** · 형식 `칼럼` · 키워드 `폭로` `게임이론` `살라미` `한동훈`
+
+> *폭로의 정치 — 타이밍·내용·출구의 게임 이론*
+
+폭로를 불완전 정보 아래의 신호·순차·소모전 게임으로 보고, 값비싼 신호·앵커링·살라미 전략과 최적 타이밍(주목의 창·대응 시간 압축)을 정리합니다. 한동훈의 김승원 녹취 폭로를 교과서적 살라미로 보되 출처 논란을 아킬레스건으로 분석합니다.
+
+### [TOSS](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/TOSS/readme.md)
+
+**`T2 · 분석 칼럼`** · 형식 `기술` · 키워드 `토스` `Open API` `OAuth` `인디개발자`
+
+> *Toss Open API IP 화이트리스트의 함정 — OAuth는 되는데 CI·로컬에서는 안 된다*
+
+토스증권 Open API가 지정 IP만 허용하도록 정책을 강화한 뒤 GitHub Actions·로컬에서 OAuth가 실패한 실전 기록입니다. CASSANDRA 코스닥 파이프라인이 한 달간 Naver Finance로 롤백한 과정과, 인디 개발자가 증권 Open API를 고를 때 볼 체크리스트를 정리합니다.
+
+### [Travel-Rule](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Travel-Rule/Travel-Rule-1won-Market-Shift.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `트래블룰` `특금법` `VASP` `폴리마켓`
+
+> *트래블룰, 1원부터 적용 — 특금법 시행령과 시장의 변화*
+
+2026-08-11 특금법 시행령 개정으로 트래블룰 100만원 문턱이 폐지돼 1원부터 송·수신인 정보 제공이 의무화된 사안을 다룹니다. 폴리마켓 차단(8/18)·신고제 강화(8/20)와 겹친 규제 조임, 글로벌 UEX 격차, 거래소 티어별 손익과 시나리오를 정리합니다.
+
+### [USA](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/USA/Age-of-USD.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `달러` `반도체` `기축통화` `캉티용`
+
+> *주도주에서 다음 주도주는? — 기축통화 교체의 법칙*
+
+AI 반도체 슈퍼사이클과 하이퍼스케일러 CAPEX 폭증 속 실적 서프라이즈에도 주가가 흔들리는 '기대치 과잉'을 짚습니다. 달러 인덱스는 약세인데 달러 자산으로 자금이 모이는 역설, 로마 은화·영국 파운드(수에즈·블랙 웬즈데이) 사례로 기축통화 패권 상실이 '소멸'이 아니라 '함량 조정'임을 논합니다.
+
+### [VC](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/VC/Kakao-Ventures-Issue.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `VC` `성과보수` `카카오벤처스` `캐리`
+
+> *VC 운용역의 보상, 어떻게 설계해야 하는가 — 임지훈·카카오벤처스 소송*
+
+KCube 펀드 1호와 카카오 청년창업펀드 두 차례 소송의 패턴(고성과보수→조직 이동→비율 삭감·재직 무관 보수→청산→지급 거절)을 통해 VC 운용역 성과보수(carry) 설계의 함정을 분석합니다. 주총 결의·베스팅·딜 기여 기록·LP 심사를 해법으로 제시합니다.
+
+### [Windows10](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Windows10/EOD-Win10-China.md)
+
+**`T2 · 분석 칼럼`** · 형식 `칼럼` · 키워드 `윈도우10` `중국` `미중기술전쟁` `CMIT`
+
+> *중국은 지금 '정부용 윈도우'를 지우고 있다 — 미중 기술전쟁의 다음 국면*
+
+2026-08-18 블룸버그 보도로 중국 국가안전부가 정부 전용 Windows 10(CMIT판) 조기 제거를 지시한 사안을 다룹니다. 2017년 MS-CETC 합작의 관리된 의존, 2025-10 EOS 이후 CMIT가 유일한 허용 윈도우였으나 2026년 7월 중앙 노트북 납품이 이미 전부 국산 OS로 바뀐 흐름을 분석합니다.
+
 ## 주제별 분류
 
 ### AI / 반도체 / 인프라
@@ -1038,6 +1530,27 @@ S&P가 오라클의 신용등급을 BBB-(투자적격 최하단)로 강등한 �
 
 ### 사업·도구·기타
 [Medbridge ai business plan](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Medbridge%20ai%20business%20plan/Medbridge%20ai%20business%20plan%20ko.MD) · [stock_option](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/stock_option/Startup_Vesting.md) · [Brain(자기설계)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/Brain/readme.md) · [518(똘레랑스)](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/518/tolerance.md)
+
+### 보안 / 해킹 / 프라이버시
+[Hacking(백도어)](#hacking) · [security(입력기)](#security) · [NorthKorea(AnySign4PC)](#northkorea) · [North-Korea(김수키)](#north-korea) · [National-Diplomatic-Academy(원격교육)](#national-diplomatic-academy-hacking-incident) · [Privacy(LG TV)](#privacy) · [Kakao(공공 카톡)](#kakao) · [Internet(CIA OPSEC)](#internet) · [AI-Hallucination(CVE 슬롭)](#ai-hallucination)
+
+### 기축통화 / 화폐 / 금리 / 달러
+[Key-Currency(시리즈)](#key-currency) · [USA(달러)](#usa) · [StableCoin(사적 화폐)](#stablecoin) · [interest(이자의 역사)](#interest) · [Japan-Cashless(현금)](#japan-cashless)
+
+### 문화 / 콘텐츠 / 엔터 / 스포츠
+[K-Culture(달항아리)](#k-culture) · [K-Movie(스크린쿼터)](#k-movie) · [K11(에이드리언 청)](#k11) · [IDOL(아이브)](#idol) · [comics(X-Men)](#comics) · [Sports(US Open)](#sports) · [Ghost-Story(천녀유혼)](#ghost-story) · [Cyworld(방명록)](#cyworld) · [Bride-Price(차이리)](#bride-price) · [China-Culture(오버투어리즘)](#china-culture) · [Abandoned-Dog(유기견)](#abandoned-dog)
+
+### 바이오 / 스타트업 / 기업 거버넌스
+[AMQS-BIO(구독형 바이오)](#amqs-bio) · [Bending spoons(롤업)](#bending-spoons) · [Startup(혁신 유통기한)](#startup) · [VC(성과보수)](#vc) · [Publishing-Business(문학동네)](#publishing-business) · [Line(라인 사태)](#line) · [Mileage(마일리지)](#mileage) · [TOSS(Open API)](#toss) · [commerce(환불)](#commerce) · [SSD(무전원)](#ssd)
+
+### 규제 / 정책 / 예측시장 / 박람회
+[Travel-Rule(1원부터)](#travel-rule) · [Prediction-Market(규제 지도)](#prediction-market) · [exposition(여수 박람회)](#exposition) · [Capital-Market(김준범)](#capital-market) · [Windows10(중국)](#windows10)
+
+### 교육 / 사회 / 사유 (비투자)
+[AI-Education(교육)](#ai-education) · [Option(최적 멈춤)](#option) · [Super-Programmer-Opinion(개발자 덕목)](#super-programmer-opinion) · [The-Economics-of-Exposés(폭로)](#the-economics-of-exposés) · [Failure-of-the-Japanese-Judicial-System(곤)](#failure-of-the-japanese-judicial-system)
+
+### AI 인프라 / 모델 (2026년 하반기 추가)
+[AI-Bottleneck(병목)](#ai-bottleneck) · [AI-IDC(전력)](#ai-idc) · [Alibaba(Qwen3.8)](#alibaba) · [News Letter(뉴스레터)](#news-letter) · [Private-Military-Company(용병)](#private-military-company) · [LVMH-Hermes-War(럭셔리 M&A)](#lvmh-hermes-war)
 
 ---
 
@@ -1125,4 +1638,4 @@ S&P가 오라클의 신용등급을 BBB-(투자적격 최하단)로 강등한 �
 
 ---
 
-*Maintained by Dennis Kim ([@gameworkerkim](https://github.com/gameworkerkim)) · Last updated: 2026-07-22*
+*Maintained by Dennis Kim ([@gameworkerkim](https://github.com/gameworkerkim)) · Last updated: 2026-09-20*
