@@ -1,5 +1,79 @@
+---
+title: "키 그래프가 말하지 않는 것들"
+title_en: "What the Height Chart Does Not Say"
+subtitle: "한중일 신장 곡선과 '수탈-정상화' 서사를 통계로 다시 읽기"
+description: "SNS를 도는 한중일 키 그래프는 수탈도 정상화도 증명하지 못한다. 1985년은 1966년생이다. 측정 연도와 코호트를 가르면 서사가 한 걸음 앞선다."
+abstract: |
+  SNS의 「伸び悩む日本人」 그래프는 1985~2019년 한·중·일 청소년 평균 키를 보여 준다. 한국·중국 남성은 약 7cm 올랐고 일본은 거의 멈췄다.
+  이 그림은 식민지 수탈 가설을 입증하지도 반증하지도 못한다. X축 1985년은 1966년 전후 출생 코호트이며, 식민지기에 자란 세대는 그래프에 없다.
+  반박 쪽의 0 기준선·생물학적 상한 주장도 표준편차와 네덜란드·한국 사례 앞에서 무너진다. 통계의 환각은 서사를 버리는 일이 아니라, 서사가 데이터보다 앞서지 않게 하는 일이다. 투자·학술 자문 아님.
+summary_for_ai: |
+  Korean statistics/narrative-bias column (not investment or academic advice), 2026-09-20, group korea,
+  Statistical-Illusion/Statistical-Lllusion.md.
+  Viral JP press chart of 18yo mean height KR/CN/JP 1985–2019, sourced to Lancet; NCD-RisC 2020 (Lancet 396:1511–24) uses age 19.
+  Thesis: chart cannot prove or disprove colonial-exploitation → catch-up narrative because 1985 = ~1966 births; colonial cohorts aged 19 by early 1960s.
+  Independent cohort evidence (Cho Young-jun on Sakhalin conscripts; NCD-RisC century of adult height; North–South natural experiment) exists but is outside this chart.
+  Rebuttals also distort: Y-axis from 0 hides ~1 SD shift; Japan is stalled below a biological ceiling (NL 182.5cm, KR ~175cm).
+  Behavioral: narrative fallacy, anchoring at 1985, motivated reasoning in KR pride vs JP anxiety.
+date: 2026-09-20
+updated: 2026-09-20
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 통계
+  - 평균키
+  - 한중일
+  - 서사편향
+  - NCD-RisC
+  - 랜싯
+  - 일본
+  - 코호트
+keywords:
+  - "한중일 평균 키"
+  - "伸び悩む日本人"
+  - "수탈 가설"
+  - "NCD-RisC"
+  - "랜싯 키 그래프"
+  - "통계의 환각"
+  - "출생 코호트"
+  - "일본인 키 정체"
+group: korea
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/statistical-illusion.jpg"
+image: "https://vibequant.cc/og/statistical-illusion.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>키 그래프가 말하지 않는 것들 · VibeQuant</title>
+  <meta name="description" content="SNS를 도는 한중일 키 그래프는 수탈도 정상화도 증명하지 못한다. 1985년은 1966년생이다. 측정 연도와 코호트를 가르면 서사가 한 걸음 앞선다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "키 그래프가 말하지 않는 것들",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-20",
+    "keywords": ["한중일 평균 키", "伸び悩む日本人", "수탈 가설", "NCD-RisC", "랜싯 키 그래프", "통계의 환각", "출생 코호트", "일본인 키 정체"]
+  }
+  </script>
+-->
+
 # 키 그래프가 말하지 않는 것들
-### 한중일 신장 곡선과 '수탈-정상화' 서사를 통계로 다시 읽기
+
+## 한중일 신장 곡선과 '수탈-정상화' 서사를 통계로 다시 읽기
+
+![伸び悩む日本人 — 한·중·일 18세 평균 키(1985–2019). 일본 언론 인포그래픽, 출처 표기는 영의학지 랜싯](images/height-kcj-lancet.jpg)
+
+*「伸び悩む日本人」. 주석은 18세·『랜싯』. 원 논문(NCD-RisC, 2020)의 국가 비교 기준 연령은 19세다. 이 그림은 일본 독자의 정체 불안을 위해 만들어졌고, 국경을 넘으며 '수탈-정상화' 서사를 입었다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 20일
 
 ## 시작하며, 한 장의 그래프, 두 개의 이야기
 
@@ -99,6 +173,8 @@ Y축을 0에서 시작하면 이 거대한 변화가 평평한 선으로 뭉개�
 3. **이 결론을 가장 반기는 사람은 누구인가?** (동기화된 추론)
 
 통계의 환각을 극복한다는 것은 서사를 버리는 것이 아닙니다. **서사가 데이터보다 한 걸음 앞서 나가지 않게 하는 것**입니다.
+
+> 이 글은 통계 해석과 서사 편향에 관한 칼럼이며, 투자·학술·역사 자문이 아닙니다. 그래프 수치는 일본 언론 인포그래픽의 눈금 읽기와 NCD-RisC 논문의 국가 비교를 대조한 것으로, 원 미시데이터 재추정은 아닙니다.
 
 ## 참고문헌
 

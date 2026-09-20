@@ -370,7 +370,7 @@ function fixLiteralBoldHtml(html) {
  */
 function rewriteRelativeColumnImages(html) {
   return String(html ?? "").replace(
-    /\bsrc=(["'])\.\/images\/([^"'/]+)\1/gi,
+    /\bsrc=(["'])(?:\.\/)?images\/([^"'/]+)\1/gi,
     (_, quote, file) => `src=${quote}${SITE}/og/${file}${quote}`
   );
 }
@@ -725,6 +725,7 @@ const SLUG_OVERRIDES = {
   "Key-Currency/Monetary-Domination-Following colonial-Independence.md": "monetary-domination-colonial-independence",
   "Private-Military-Company/History-of-the-Imperial-Mercenaries.md": "imperial-mercenaries",
   "Japan-Cashless/Japan-Cash-Issue.md": "japan-cashless",
+  "Statistical-Illusion/Statistical-Lllusion.md": "statistical-illusion",
 };
 
 const slugRegistry = new Map(); // section -> Set<slug>
