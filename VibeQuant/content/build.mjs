@@ -695,6 +695,7 @@ const SLUG_OVERRIDES = {
   "NorthKorea/Lazarus_AnySign4PC.md": "lazarus-anysign4pc",
   "Line/SoftBank-Naver-Line.md": "softbank-naver-line",
   "Kakao/Public-Kakao-Issue.md": "public-kakao-issue",
+  "exposition/Exposition-Fail.md": "exposition-fail",
   "IDOL/IVE-Starship-Issue.md": "ive-starship-issue",
   "The-Economics-of-Expos\u00e9s.md": "economics-of-exposes",
   "The-Economics-of-Exposes.md": "economics-of-exposes",

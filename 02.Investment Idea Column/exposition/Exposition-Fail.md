@@ -1,4 +1,74 @@
+---
+title: "여수 박람회 개막 참사는 왜 예지되었을까?"
+title_en: "Why Yeosu's Island Expo Opening Collapse Was Already in the Books"
+subtitle: "서울 불꽃축제는 하룻밤에 100만 명을 불렀고, 섬 박람회는 9일 동안 10만 명을 불렀다"
+description: "여수세계섬박람회 개막 9일 10만 명. 713억 직접비·조직위 예산서 8종을 대조하면, 흥행 붕괴는 횡령이 아니라 개막 전 장부에 이미 적혀 있었다."
+abstract: |
+  2026여수세계섬박람회는 개막 9일 누적 10만 명으로, 목표 300만 명 속도의 약 23%다. 같은 날 서울세계불꽃축제는 하룻밤 약 100만 명, 온라인 생중계 268만 회를 기록했다.
+  조직위 예산서 8종(2025·2026 본예산과 각 3회 추경)을 대조하면 실패는 개막 전에 장부에 적혀 있었다. 승인 기본안 248억에는 홍보·콘텐츠가 빠져 있었고, 확대 455억은 시비가 떠안았으며, 예비비는 개막 17일 전 시설비로 전용됐다.
+  2026년 원장 기준 의전·회의는 약 39억, 일반 관람객 모객은 약 6억이다. 이 글은 횡령 단정이 아니라 통제 장치가 작동하지 않은 구조 분석이다. 투자 권유 아님.
+summary_for_ai: |
+  Korean public-finance / local-event policy column (not investment advice), 2026-09-20, group korea, exposition/Exposition-Fail.
+  Event: 2026 Yeosu World Island Expo opened 2026-09-05; 9-day attendance 100,008 vs 3 million target (needed ~49k/day, actual ~11k/day). Same day Seoul World Fireworks Festival (Hanwha) ~1 million on-site, 2.68 million live views.
+  Direct cost KRW 71.3bn (city 53%, national 6.4bn = 5.9×). Linked-project total KRW 183.9bn is often cited as a 7.4× blow-up; fair direct-cost multiple is 2.9× from the 24.8bn approved 'minimum hosting' plan.
+  Smoking guns in 8 organizing-committee budgets: quality items (promo/content/safety/landmark) were outside the approval package; 2026 reserve piled in May then KRW 2.6bn reallocated D-17 to ops/facilities; D-1 event increase; 2026 consumer acquisition ~KRW 0.6bn vs protocol/meetings ~KRW 3.9bn.
+  Chungju Man YouTube (Jeonnam-funded, ~3.6M views) showed an empty site in April; causal chain to presidential remark and MOI 3.3bn, but 2025 reserve habit predated the video. Contractor bid ~73% and alleged 5bn add-on are news/denied, not proven.
+  Thesis: not embezzlement — a structure that fails without anyone stealing, written in published Excel. Limits: budgets are appropriations not final settlement.
+date: 2026-09-20
+updated: 2026-09-20
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 여수세계섬박람회
+  - 여수
+  - 예산
+  - 추경
+  - 국제행사
+  - 서울세계불꽃축제
+  - 충주맨
+  - 공공재정
+keywords:
+  - "여수세계섬박람회"
+  - "여수 박람회 실패"
+  - "섬박람회 예산"
+  - "서울세계불꽃축제"
+  - "충주맨 여수"
+  - "조직위원회 추경"
+  - "국제행사 승인"
+  - "여수 개막 참사"
+group: korea
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/exposition-fail.jpg"
+image: "https://vibequant.cc/og/exposition-fail.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>여수 박람회 개막 참사는 왜 예지되었을까? · VibeQuant</title>
+  <meta name="description" content="여수세계섬박람회 개막 9일 10만 명. 713억 직접비·조직위 예산서 8종을 대조하면, 흥행 붕괴는 횡령이 아니라 개막 전 장부에 이미 적혀 있었다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "여수 박람회 개막 참사는 왜 예지되었을까?",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-20",
+    "keywords": ["여수세계섬박람회", "여수 박람회 실패", "섬박람회 예산", "서울세계불꽃축제", "충주맨 여수", "조직위원회 추경", "국제행사 승인", "여수 개막 참사"]
+  }
+  </script>
+-->
+
 # 여수 박람회 개막 참사는 왜 예지되었을까?
+
+![아무것도 없는 곳에서 싸우자 — 여수세계섬박람회 주제섬 앞 드래곤볼 패러디 썸네일](images/yeosu-empty-fair.jpg)
+
+*「아무것도 없는 곳에서 싸우자, 베지터.」 충주맨 영상 이후 퍼진 패러디. 개막 뒤에도 주제섬 앞 잔디는 비어 있었다.*
 
 *서울 불꽃축제는 하룻밤에 100만 명을 불렀고, 섬 박람회는 9일 동안 10만 명을 불렀다. 공개된 조직위 예산서 8종과 보도를 겹쳐 보면, 흥행 붕괴는 개막 전에 이미 장부에 적혀 있었다.*
 
@@ -116,7 +186,7 @@
 
 폐막은 11월 4일이다. 아직 45일이 남았고 관람객은 늘어날 수도 있다. 그러나 국제행사를 이 모양으로 만든 예산과 기획의 허술함은 사후 흥행으로 지워지지 않는다. 다음 국제행사를 준비하는 지자체라면, 여수의 박람회장보다 여수의 기획서와 예산서를 먼저 들여다봐야 할 것이다.
 
-앞으로 정부는 지자체의 축제에 대해서 에산과 행사 기획 가이드라인을 만들고 상시 진행 모니터링을 할 제도적 시스템을 보강해야할 것이다. 지역 축제는 다들 비슷비슷한 모습으로 복붙이 많다. 어느 지자체가 성공하면 비슷한 행사가 이어진다. 이런 생색내기 축제를 벗어나 진정 지역 경기 활성화와 지방 문화를 널리 알리는 축제를 위해 제도 개선과 감사, 지역 문화 전통 적합성을 평가하는 시스템을 보강해야할 것이다. 
+앞으로 정부는 지자체 축제에 대해 예산과 행사 기획 가이드라인을 만들고, 진행 상황을 상시 모니터링하는 제도를 보강해야 할 것이다. 지역 축제는 성공 사례를 복붙한 듯한 모습이 많다. 어느 지자체가 성공하면 비슷한 행사가 이어진다. 생색내기 축제를 벗어나, 지역 경기와 지방 문화를 실제로 살리는 행사가 되려면 제도 개선과 감사, 그리고 지역 문화·전통에 맞는지를 평가하는 시스템이 필요하다.
 
 > 이 글의 분석 한계: 조직위 원장은 편성액이지 최종 집행·정산액이 아니다. 713억 원 중 시·도가 조직위를 거치지 않고 집행한 분은 예산서 8종에 전부 들어 있지 않다. 대행사 평가 조작·증액 약속 의혹과 외유성 출장 논란은 수사·감사 중이거나 당사자 간 다툼이 있는 사안으로, 이 글은 혐의의 유무를 단정하지 않는다. 다만 의전·회의 예산이 관람객 모객 예산의 6배를 넘는다는 것은 장부에 적힌 사실이고, 출장의 성과가 예산 어디에 남았는지는 아직 누구도 검증하지 않았다.
 
