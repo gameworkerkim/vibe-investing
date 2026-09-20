@@ -1,3 +1,4 @@
+<!--
 ---
 title: "여수 박람회 개막 참사는 왜 예지되었을까?"
 title_en: "Why Yeosu's Island Expo Opening Collapse Was Already in the Books"
