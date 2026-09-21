@@ -1,6 +1,78 @@
+---
+title: "그는 선택할 줄 알았나?"
+title_en: "Did He Know How to Choose?"
+subtitle: "오라클의 사탕 한 알, 그리고 선택을 기계에 맡기는 시대의 자유의지"
+description: "매트릭스 오라클의 사탕은 예지가 아니라 넛지다. 말해진 예언은 개입이고, 추천과 LLM은 그 예언을 매일 수행한다. 이유를 물을 수 있는 한 사탕은 아직 우리 것이다."
+abstract: |
+  《매트릭스 리로디드》 오라클의 사탕은 예지가 아니라 개입이다. 보에티우스의 방어선은 입을 다문 관찰자에게만 성립하고, 말해진 예언은 머튼의 자기충족적 예언·소로스의 재귀성처럼 미래를 제조한다.
+  프랭크퍼트의 양립가능론과 페레붐의 조작 논증을 겹치면, 선택은 한 번에 내 것이 되지 않는다. 사후 이해가 다음 선택의 조건을 바꾼다. 꽃병은 주의·반발·순수 예측의 세 경로로 깨질 수 있고, 말하지 않은 세계는 관찰할 수 없다.
+  추천 알고리즘은 수행적 예측(Perdomo et al. 2020)으로 꽃병 장면을 매일 돌린다. 설계자의 선악이 아니라 목적을 공개하고 이해를 넓히느냐가 갈린다. LLM은 엑셀이지 오라클이 아니다. 투자 권유 아님.
+summary_for_ai: |
+  Korean philosophy / behavioral-econ / AI-agency essay (not investment or legal advice), 2026-09-21,
+  group ai-llm, Free-Will/Matrix-Pracle-Candy-Free-Will.md. Revised draft.
+  Thesis: Spoken prophecy is intervention, not mere foreknowledge. Boethius holds only if the seer stays silent; Oracle never does. Candy scene = nudge/default; vase = causal paths (Wegner ironic process / Brehm reactance / pure prediction). Merton 1948 self-fulfilling prophecy, Thomas theorem, bank run; Soros reflexivity; Rosenthal Pygmalion (effects smaller on replication). Architect: Oracle is the mother of the Matrix — choice-feeling as prison tech. Oracle also uses self-defeating prophecy ("you're not the One").
+  Freedom: Frankfurt 1969/1971 second-order volition; Pereboom manipulation argument; ownership accrues across choice+understanding loops, not in one act. Oracle limit = prediction bounded by understanding. Newcomb: choice reveals type; performing a predicted self can still be owned.
+  AI: Perdomo/Hardt 2020 performative prediction; Yeung hypernudge; Parasuraman automation bias. All choice architects have goals (Oracle included; Revolutions truce). Tests: publicity, goal overlap, whether design widens or narrows understanding. Crowd+LLM can make a wrong call true (mini bank run). Line: "LLM is Excel, not an Oracle"; believed Excel errors become reality.
+  Practice: restore friction (autoplay off, page 2, chronological feed, rewrite AI output); three-sentence buy reason (stop if "AI said"/"everyone buys"); use AI as daimonion/critic not oracle.
+date: 2026-09-21
+updated: 2026-09-21
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 매트릭스
+  - 자유의지
+  - 오라클
+  - 넛지
+  - 자기충족적예언
+  - LLM
+  - 추천알고리즘
+  - 하이퍼넛지
+keywords:
+  - "매트릭스 오라클 사탕"
+  - "자기충족적 예언"
+  - "수행적 예측"
+  - "넛지"
+  - "자유의지"
+  - "양립가능론"
+  - "LLM 엑셀"
+  - "재귀성"
+group: ai-llm
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/matrix-oracle-candy-free-will.jpg"
+image: "https://vibequant.cc/og/matrix-oracle-candy-free-will.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>그는 선택할 줄 알았나? · VibeQuant</title>
+  <meta name="description" content="매트릭스 오라클의 사탕은 예지가 아니라 넛지다. 말해진 예언은 개입이고, 추천과 LLM은 그 예언을 매일 수행한다. 이유를 물을 수 있는 한 사탕은 아직 우리 것이다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "그는 선택할 줄 알았나?",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-21",
+    "keywords": ["매트릭스 오라클 사탕", "자기충족적 예언", "수행적 예측", "넛지", "자유의지", "양립가능론", "LLM 엑셀", "재귀성"]
+  }
+  </script>
+-->
+
 # 그는 선택할 줄 알았나?
 
-### 오라클의 사탕 한 알, 그리고 선택을 기계에 맡기는 시대의 자유의지
+## 오라클의 사탕 한 알, 그리고 선택을 기계에 맡기는 시대의 자유의지
+
+![《매트릭스 리로디드》(2003) 한국 극장 포스터. 네오와 트리니티](images/matrix-reloaded-poster.jpg)
+
+*《매트릭스 리로디드》(2003) 한국 극장 포스터. 오라클의 사탕 장면은 1분이 채 안 되지만, 예지와 자유의지의 질문 전체를 담고 있다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 21일
 
 부엌 한편, 오븐 냄새가 나는 평범한 아파트. 인류의 운명을 쥔 예언자는 담배를 물고 사탕 그릇을 내민다. 《매트릭스 리로디드》(2003)의 이 장면은 1분이 채 되지 않지만, 서양 철학이 2천 년 넘게 붙들고 있는 질문 하나를 통째로 담고 있다.
 
@@ -196,44 +268,44 @@
 
 **철학 — 예지·자유의지·양립가능론**
 
-1. Stanford Encyclopedia of Philosophy, "Free Will" — 자유의지 논쟁 전반의 표준 개관. <https://plato.stanford.edu/entries/freewill/>
-2. Stanford Encyclopedia of Philosophy, "Foreknowledge and Free Will" — 보에티우스 이래 예지와 자유의 양립 문제. <https://plato.stanford.edu/entries/free-will-foreknowledge/>
-3. Stanford Encyclopedia of Philosophy, "Compatibilism" — 양립가능론의 논리와 쟁점, 조작 논증 포함. <https://plato.stanford.edu/entries/compatibilism/>
-4. Frankfurt, H. (1969). "Alternate Possibilities and Moral Responsibility." *The Journal of Philosophy*, 66(23). <https://doi.org/10.2307/2023833>
-5. Frankfurt, H. (1971). "Freedom of the Will and the Concept of a Person." *The Journal of Philosophy*, 68(1). <https://doi.org/10.2307/2024717>
-6. Stanford Encyclopedia of Philosophy, "Causal Decision Theory" — 뉴콤의 역설과 인과적·증거적 결정이론의 대립. <https://plato.stanford.edu/entries/decision-causal/>
+1. Stanford Encyclopedia of Philosophy, "Free Will" — 자유의지 논쟁 전반의 표준 개관. 
+2. Stanford Encyclopedia of Philosophy, "Foreknowledge and Free Will" — 보에티우스 이래 예지와 자유의 양립 문제. 
+3. Stanford Encyclopedia of Philosophy, "Compatibilism" — 양립가능론의 논리와 쟁점, 조작 논증 포함. 
+4. Frankfurt, H. (1969). "Alternate Possibilities and Moral Responsibility." *The Journal of Philosophy*, 66(23). 
+5. Frankfurt, H. (1971). "Freedom of the Will and the Concept of a Person." *The Journal of Philosophy*, 68(1). 
+6. Stanford Encyclopedia of Philosophy, "Causal Decision Theory" — 뉴콤의 역설과 인과적·증거적 결정이론의 대립. 
 
 **자기충족적 예언·재귀성**
 
-7. Merton, R. K. (1948). "The Self-Fulfilling Prophecy." *The Antioch Review*, 8(2). <https://doi.org/10.2307/4609267>
-8. Rosenthal, R. & Jacobson, L. (1968). "Pygmalion in the Classroom." *The Urban Review*, 3(1). <https://doi.org/10.1007/BF02322211>
+7. Merton, R. K. (1948). "The Self-Fulfilling Prophecy." *The Antioch Review*, 8(2). 
+8. Rosenthal, R. & Jacobson, L. (1968). "Pygmalion in the Classroom." *The Urban Review*, 3(1). 
 9. Soros, G. (1987). *The Alchemy of Finance.* Simon & Schuster. — 금융시장의 재귀성 이론.
-10. Perdomo, J., Zrnic, T., Mendler-Dünner, C. & Hardt, M. (2020). "Performative Prediction." *ICML 2020.* <https://arxiv.org/abs/2002.06673>
+10. Perdomo, J., Zrnic, T., Mendler-Dünner, C. & Hardt, M. (2020). "Performative Prediction." *ICML 2020.* 
 
 **행동경제학·심리학 — 넛지·기본값·반발**
 
 11. Thaler, R. & Sunstein, C. (2008). *Nudge: Improving Decisions about Health, Wealth, and Happiness.* Yale University Press.
-12. Johnson, E. J. & Goldstein, D. (2003). "Do Defaults Save Lives?" *Science*, 302(5649). <https://doi.org/10.1126/science.1091721>
-13. Madrian, B. C. & Shea, D. F. (2001). "The Power of Suggestion: Inertia in 401(k) Participation and Savings Behavior." *The Quarterly Journal of Economics*, 116(4). <https://doi.org/10.1162/003355301753265543>
-14. Wegner, D. M. (1994). "Ironic Processes of Mental Control." *Psychological Review*, 101(1). <https://doi.org/10.1037/0033-295X.101.1.34>
+12. Johnson, E. J. & Goldstein, D. (2003). "Do Defaults Save Lives?" *Science*, 302(5649). 
+13. Madrian, B. C. & Shea, D. F. (2001). "The Power of Suggestion: Inertia in 401(k) Participation and Savings Behavior." *The Quarterly Journal of Economics*, 116(4). 
+14. Wegner, D. M. (1994). "Ironic Processes of Mental Control." *Psychological Review*, 101(1). 
 15. Brehm, J. W. (1966). *A Theory of Psychological Reactance.* Academic Press.
 
 **신경과학 — 의도와 결정의 시간**
 
-16. Libet, B. et al. (1983). "Time of Conscious Intention to Act in Relation to Onset of Cerebral Activity." *Brain*, 106(3). <https://doi.org/10.1093/brain/106.3.623>
-17. Soon, C. S. et al. (2008). "Unconscious Determinants of Free Decisions in the Human Brain." *Nature Neuroscience*, 11. <https://doi.org/10.1038/nn.2112>
-18. Schurger, A., Sitt, J. D. & Dehaene, S. (2012). "An Accumulator Model for Spontaneous Neural Activity Prior to Self-Initiated Movement." *PNAS*, 109(42). <https://doi.org/10.1073/pnas.1210467109>
+16. Libet, B. et al. (1983). "Time of Conscious Intention to Act in Relation to Onset of Cerebral Activity." *Brain*, 106(3). 
+17. Soon, C. S. et al. (2008). "Unconscious Determinants of Free Decisions in the Human Brain." *Nature Neuroscience*, 11. 
+18. Schurger, A., Sitt, J. D. & Dehaene, S. (2012). "An Accumulator Model for Spontaneous Neural Activity Prior to Self-Initiated Movement." *PNAS*, 109(42). 
 
 **AI와 선택의 위임**
 
-19. Yeung, K. (2017). "'Hypernudge': Big Data as a Mode of Regulation by Design." *Information, Communication & Society*, 20(1). <https://doi.org/10.1080/1369118X.2016.1186713>
-20. Parasuraman, R. & Manzey, D. H. (2010). "Complacency and Bias in Human Use of Automation: An Attentional Integration." *Human Factors*, 52(3). <https://doi.org/10.1177/0018720810376055>
+19. Yeung, K. (2017). "'Hypernudge': Big Data as a Mode of Regulation by Design." *Information, Communication & Society*, 20(1). 
+20. Parasuraman, R. & Manzey, D. H. (2010). "Complacency and Bias in Human Use of Automation: An Attentional Integration." *Human Factors*, 52(3). 
 
 **작품 및 초고 참고자료**
 
-21. IMDb — *The Matrix Reloaded* (2003), The Oracle 대사. <https://www.imdb.com/title/tt0234215/characters/nm0287825>
-22. 지데일리, "[8090 플래시백] 매트릭스 '캔디', 정해진 운명 속 '선택'의 의미." <http://gdaily.kr/bbs/board.php?bo_table=news&wr_id=19008>
-23. PhilArchive — 오라클의 예지와 자유 선택 문제. <https://philarchive.org/archive/HUNTSA-9v1>
-24. Springer — "The Problem of Autonomy and Determination in the Digital World." <https://link.springer.com/chapter/10.1007/978-3-031-12482-2_4>
-25. ScienceDirect — "Active choosing or default rules? A revealed preference approach." <https://www.sciencedirect.com/science/article/abs/pii/S2214804325001132>
-26. Interesting Engineering — "This is Newcomb's Paradox." <https://interestingengineering.com/videos/this-is-newcombs-paradox-a-problem-you-will-never-solve>
+21. IMDb — *The Matrix Reloaded* (2003), The Oracle 대사. 
+22. 지데일리, "[8090 플래시백] 매트릭스 '캔디', 정해진 운명 속 '선택'의 의미." 
+23. PhilArchive — 오라클의 예지와 자유 선택 문제. 
+24. Springer — "The Problem of Autonomy and Determination in the Digital World." 
+25. ScienceDirect — "Active choosing or default rules? A revealed preference approach." 
+26. Interesting Engineering — "This is Newcomb's Paradox." 

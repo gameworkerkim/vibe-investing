@@ -647,6 +647,7 @@ const SLUG_OVERRIDES = {
   "AI_Hacking/Column-Project-Perception-20260729_JA.md": "project-perception-20260729-ja",
   "AI_Hacking/Column-Project-Perception-20260729_ZH.md": "project-perception-20260729-cn",
   "AI_Hacking/ZCode-OSS-Leak.md": "zcode-oss-leak",
+  "Free-Will/Matrix-Pracle-Candy-Free-Will.md": "matrix-oracle-candy-free-will",
   "News Letter/vibe-quant-insight-001.md": "vibe-quant-insight-001",
   "News Letter/vibe-quant-insight-001-en.md": "vibe-quant-insight-001-en",
   "News Letter/vibe-quant-insight-001-ja.md": "vibe-quant-insight-001-ja",
