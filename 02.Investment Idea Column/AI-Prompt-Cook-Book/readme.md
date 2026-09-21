@@ -46,6 +46,7 @@
   - [부록 B. 전체 코드 한눈에 보기](#appB)
   - [부록 C. 주간 콘텐츠 캘린더 템플릿](#appC)
   - [부록 D. 모델이 바뀌었을 때: 점검 가이드](#appD)
+  - [부록 E. 다운로드 템플릿 키트](#appE)
 
 ---
 
@@ -125,6 +126,14 @@ SNS에서 "이 코드만 붙이면 AI 결과물이 달라진다"는 프롬프트
 | **SNS 마케터** | 원소스 멀티유즈 ([V4](#ch10)) | 참여 유도 코드 ([6장](#ch6)) | 주간 캘린더 운영 ([부록 C](#appC)) | 실험 로그 누적 ([19장](#ch19)) |
 | **크리에이터** | 내 말투 학습 ([I1](#ch11)) | 롱폼 → 쇼츠 ([I2](#ch11)) | 협찬 콘텐츠와 표기 ([I3](#ch11)) | 컴플라이언스 점검 ([21장](#ch21)) |
 
+### 초급 · 중급 · 고급 트랙
+
+| 트랙 | 목표 | 읽을 곳 | 이런 상태가 되면 다음 트랙으로 |
+|---|---|---|---|
+| **초급: 복사해서 쓰기** | 코드와 레시피를 그대로 붙여 결과 얻기 | 0장, 2~8장 훑어보기, 9장, 부록 A | 목적에 맞는 코드 3개를 스스로 고를 수 있다 |
+| **중급: 운영 체계 만들기** | 채점·실험·캘린더로 반복 가능한 운영 | 10~12장, 17~19장, 21장, 부록 C·E | 실험 로그가 한 달 이상 쌓이고, 채택·기각 판단을 숫자로 한다 |
+| **고급: 자동화로 가기** | 체이닝·RAG·API로 반복 작업 자동화 | 13~14장, 20장, 부록 D | 20장의 입구를 넘어, 각 사의 공식 개발 문서로 넘어간다 |
+
 ### 이 책이 맞는 분, 다른 자료가 필요한 분
 
 | 이 책이 잘 맞는 분 | 다른 자료를 함께 보면 좋은 분 |
@@ -138,6 +147,8 @@ SNS에서 "이 코드만 붙이면 AI 결과물이 달라진다"는 프롬프트
 ---
 
 # PART 1. 주방 준비
+
+코드가 어떻게 작동하는지, 두 AI가 어떻게 다른지, 무엇을 붙일지 고르는 법을 먼저 익힌다.
 
 <a id="ch0"></a>
 ## 0장. 슬래시 코드는 어떻게 작동하는가
@@ -237,6 +248,41 @@ Q4. 수치·인용·후기가 들어가나?
 | 구매 전환 | `/framework:PAS` `/objection` `/calltoaction` | 문제-해결-행동 구조의 카피 | 효능 과장·가짜 후기 금지 |
 | AI 티 지우기 | `/human` + 내 말투 가이드 | 구어체, 짧은 문장, 구체적 경험 | 마지막 퇴고는 반드시 사람이 한다 ([17장](#ch17)) |
 
+### 0.8 헷갈리는 코드 구별법
+
+비슷해 보이는 코드도 **하는 일**이 다르다. 헷갈리면 "이 코드는 글의 어디를 바꾸는가"를 먼저 본다.
+
+| 비슷한 코드 | 차이 | 이럴 때 이것 |
+|---|---|---|
+| `/hook` vs `/curiosity` | `/hook`은 **첫 문장**을 강하게, `/curiosity`는 **정보를 일부러 남겨** 끝까지 읽게 한다 | 스크롤을 멈추고 싶으면 `/hook`, 다음 장·다음 편으로 넘기고 싶으면 `/curiosity` |
+| `/TLDR` vs `/summary` | `/TLDR`은 **한 문단으로 압축**, `/summary`는 **핵심 항목을 추려 구조화** | 바쁜 사람에게 한 번에 전하려면 `/TLDR`, 회의록·보고서 정리는 `/summary` |
+| `/story` vs `/monologue` | `/story`는 **인물·사건·결말**이 있는 이야기, `/monologue`는 **한 사람의 속마음 흐름** | 사례로 설득하려면 `/story`, 공감과 고백형 글은 `/monologue` |
+| `/reframe` vs `/rewrite:GenZ` | `/reframe`은 **관점**을 바꾸고, `/rewrite:GenZ`는 **말투**만 바꾼다 | 누구 입장에서 쓸지 바꾸려면 `/reframe`, 같은 내용을 젊은 톤으로는 `/rewrite:GenZ` |
+| `/engage` vs `/commentbait` vs `/calltoaction` | `/engage`는 **참여 전반**, `/commentbait`는 **댓글 하나**, `/calltoaction`은 **클릭·구매 같은 행동** | 반응이 목표면 `/engage`, 대화가 목표면 `/commentbait`, 전환이 목표면 `/calltoaction` |
+| `/boldclaim` vs `/controversial` | `/boldclaim`은 **내 주장**을 세게, `/controversial`은 **찬반이 갈리는 쟁점**을 건드린다 | 전문가 포지셔닝은 `/boldclaim`, 토론을 일으키려면 `/controversial` + `/objection` |
+| `/headline` vs `/oneliner` vs `/tweet` | `/headline`은 **제목 후보**, `/oneliner`는 **슬로건 같은 한 줄**, `/tweet`은 **짧은 게시물 전체** | 글 제목은 `/headline`, 비전·카피는 `/oneliner`, X·스레드 게시는 `/tweet` |
+| `/compare` vs `/table` | `/compare`는 **비교라는 내용 구조**, `/table`은 **표라는 모양** | 무엇이 나은지 판단을 돕고 싶으면 `/compare`, 정보를 깔끔히 정렬만 하려면 `/table` |
+| `/human` vs `/persona:*` | `/human`은 **AI 티를 빼는 것**, `/persona`는 **특정 역할의 관점**을 입히는 것 | 자연스럽게는 `/human`, 누구의 눈으로 볼지는 `/persona` |
+
+### 0.9 코드 관계도
+
+코드는 글의 네 층위 중 하나를 바꾼다. 같은 층위의 코드끼리는 부딪히기 쉽고, **다른 층위끼리 하나씩** 고르면 충돌이 거의 없다.
+
+```
+[관점]  누구의 눈으로?     /persona:*   /reframe   /expert
+   │
+[내용]  무엇을 담나?       /story  /monologue  /analogy  /statistics  /quote
+   │                      /boldclaim  /controversial  /objection
+   │
+[구조]  어떤 순서로?       /framework:AIDA  /framework:PAS  /problem/solution
+   │                      /listicle  /timeline  /stepbystep  /compare  /FAQ
+   │
+[표면]  어떤 모양·말투로?   /hook  /curiosity  /tone:*  /human  /rewrite:GenZ
+                          /platform:*  /table  /TLDR  /summary  /calltoaction
+```
+
+> **조합 공식:** 층위마다 최대 하나씩, 총 3개 이하. 예: `/persona:marketer`(관점) + `/framework:PAS`(구조) + `/platform:Instagram`(표면).
+
 ---
 
 <a id="ch1"></a>
@@ -296,6 +342,8 @@ Q4. 수치·인용·후기가 들어가나?
 ---
 
 # PART 2. 양념 70가지: 프롬프트 코드 사전
+
+70가지 코드를 하나씩 맛본다. 각 코드의 효과, 예시, 주의점을 담았다.
 
 <a id="ch2"></a>
 ## 2장. 설명 방식 코드 10
@@ -461,6 +509,7 @@ Q4. 수치·인용·후기가 들어가나?
 
 ### `/commentbait` — 댓글 유도
 - **예:** `개발자 커뮤니티용 글 마무리 /commentbait`
+- **주의:** "댓글에 '네'를 남겨주세요" 같은 노골적인 참여 유도는 일부 플랫폼이 노출을 줄이는 대상으로 명시하고 있다. 독자가 **자기 경험이나 의견**을 쓰고 싶어지는 질문으로 끝낸다.
 
 ### `/summary` — 간결 요약
 - **예:** `[회의록] /summary (결정 사항·담당자·기한만)`
@@ -546,7 +595,17 @@ P, A, S를 각각 소제목으로 구분하고, Agitate 단계에서는
 
 > 🎯 **이런 분께:** 도달률보다 **참여율**이 KPI인 바이럴 마케터, 팬덤을 키우는 인플루언서
 
-알고리즘은 "좋아요"보다 **댓글, 저장, 공유, 체류 시간**을 더 무겁게 본다는 것이 플랫폼 운영자들의 공통된 설명이다. 이 장의 코드는 그 신호를 만드는 도구다.
+플랫폼마다 추천 방식은 다르지만, 주요 플랫폼들은 공식 자료에서 **공유, 댓글, 시청 시간처럼 "좋아요"보다 적극적인 반응**을 추천 신호로 쓴다고 설명한다. 이 장의 코드는 그런 반응을 만드는 도구다. 다만 LinkedIn처럼 **노골적인 참여 유도 게시물을 줄이겠다**고 밝힌 플랫폼도 있으니, 반응을 "구걸"하지 말고 **반응할 이유**를 만든다.
+
+**플랫폼 공식 설명 바로가기** (추천 시스템은 수시로 바뀌므로 발행 전략을 세우기 전에 직접 확인한다)
+
+| 플랫폼 | 공식 자료 | 공식적으로 밝힌 요지 |
+|---|---|---|
+| Instagram | about.instagram.com/blog/announcements/instagram-ranking-explained · creators.instagram.com | 피드·스토리·탐색·릴스가 **각기 다른 알고리즘**으로 순위를 매긴다 |
+| YouTube | youtube.com/howyoutubeworks/product-features/recommendations · support.google.com/youtube/answer/16089387 | 시청 기록·검색·구독·좋아요와 함께 **시청 시간, 설문 응답, 공유** 등을 신호로 쓴다 |
+| TikTok | newsroom.tiktok.com/en-us/how-tiktok-recommends-videos-for-you | 좋아요·공유·팔로우·댓글 같은 상호작용과 **끝까지 시청했는지** 같은 강한 관심 신호를 무겁게 본다 |
+| LinkedIn | news.linkedin.com/2026/ImprovingTheFeed | 게시물의 **주제 관련성**을 더 정교하게 판단하고, **참여 유도성 게시물(engagement bait)과 자동 댓글은 줄이겠다**고 밝혔다 |
+
 
 ### `/quiz` — 퀴즈 형식
 - **예:** `개인정보보호법 기초 퀴즈 5문항 /quiz (정답·해설 포함)`
@@ -720,6 +779,8 @@ AI에게 **프롬프트를 대신 만들게** 하는 메타 코드. 반복 업�
 
 # PART 3. 메인 요리: 실전 레시피
 
+코드를 조합한 실전 레시피. 기본 10선과 마케터·크리에이터·작가를 위한 직군별 레시피.
+
 <a id="ch9"></a>
 ## 9장. 기본 조합 레시피 10
 
@@ -800,15 +861,35 @@ AI에게 **프롬프트를 대신 만들게** 하는 메타 코드. 반복 업�
 ### 레시피 5. 자기계발 콘텐츠
 **조합:** `/analogy + /timeline + /tone:motivational`
 
+**ChatGPT**
 ```
 습관 형성에 걸리는 시간에 대한 연구를 바탕으로 자기계발 글을 써줘.
 /analogy /timeline /tone:motivational
-1일차, 3주차, 두 달 차에 일어나는 변화를 구분해줘.
+1일차, 3주차, 두 달 차에 일어나는 변화를 구분해줘. 1,200자 이내.
 ```
-> Claude에서는 `<note>연구 수치를 언급할 땐 "평균적으로", "연구에 따르면"처럼 일반화에 주의해줘</note>`를 추가하면 과장 없이 쓴다.
+
+**Claude**
+```
+<topic>새 습관이 자리 잡기까지 걸리는 시간</topic>
+<reader>작심삼일을 반복하다 지친 30대 직장인</reader>
+<codes>/analogy /timeline /tone:motivational</codes>
+<format>1일차 / 3주차 / 두 달 차로 나눠 각 시기의 변화를 비유 하나씩으로 설명. 1,200자 이내.</format>
+<note>
+연구 수치를 언급할 때는 "평균적으로", "연구에 따르면"처럼 일반화에 주의하고,
+사람마다 기간이 크게 다르다는 점을 한 문장 넣어줘. 과장된 약속은 독자를 더 지치게 한다.
+</note>
+```
 
 ### 레시피 6. 제품 상세페이지
 **조합:** `/descriptive + /problem/solution + /persona:marketer`
+
+**ChatGPT**
+```
+무소음 무선 마우스 상세페이지 카피를 써줘.
+/descriptive /problem/solution /persona:marketer
+- 스펙: 클릭음 90% 감소, 배터리 6개월
+- 구성: 헤드라인 → 공감 문제 → 해결 → 스펙 표 → 구매 CTA
+```
 
 **Claude**
 ```
@@ -816,6 +897,7 @@ AI에게 **프롬프트를 대신 만들게** 하는 메타 코드. 반복 업�
 <customer>도서관·카페에서 작업하는 대학원생, 새벽에 일하는 재택근무자</customer>
 <codes>/descriptive /problem/solution /persona:marketer</codes>
 <sections>헤드라인 → 공감 문제 → 해결 → 스펙 표 → 구매 CTA</sections>
+<rule>스펙에 없는 성능(인체공학, 손목 통증 완화 등)은 쓰지 말 것. 근거 없는 효능은 반품과 신고로 돌아온다.</rule>
 ```
 
 ### 레시피 7. 광고 문구 실전 카피
@@ -827,29 +909,74 @@ AI에게 **프롬프트를 대신 만들게** 하는 메타 코드. 반복 업�
 /hook /boldclaim /platform:Ad
 ```
 
+**Claude**
+```
+<product>하루 10분 AI 영어 회화 앱, 7일 무료 체험</product>
+<target>영어 공부를 여러 번 포기해 본 직장인</target>
+<codes>/hook /boldclaim /platform:Ad</codes>
+<format>검색광고 문구 10세트. 각 세트는 제목 25자 이내 + 설명 45자 이내. 글자 수를 괄호로 표시.</format>
+<rule>"한 달이면 원어민" 같은 결과 보장 표현은 금지. 대담함은 결과가 아니라 관점에서 나오게 해줘.</rule>
+```
+
 ### 레시피 8. 교육 강의 콘텐츠 기획
 **조합:** `/persona:teacher + /stepbystep + /FAQ`
+
+**ChatGPT**
+```
+비개발자를 위한 ChatGPT 업무 활용 4주 과정을 기획해줘.
+/persona:teacher /stepbystep /FAQ
+주차별 학습 목표, 실습 과제, 예상 질문 3개를 표로 정리.
+```
 
 **Claude**
 ```
 <course>비개발자를 위한 ChatGPT 업무 활용, 4주 과정</course>
+<learners>엑셀과 메일은 능숙하지만 AI는 처음인 사무직 20명</learners>
 <codes>/persona:teacher /stepbystep /FAQ</codes>
 <deliverable>주차별 학습 목표·실습 과제·예상 질문(FAQ 3개)을 표로 정리</deliverable>
+<rule>실습 과제는 수강생의 실제 업무 자료로 할 수 있게 설계하되, 개인정보·사내 기밀은 입력하지 않도록 주의 문구를 넣어줘.</rule>
 ```
 
 ### 레시피 9. 퀴즈형 참여 콘텐츠
 **조합:** `/quiz + /curiosity + /commentbait`
 
+**ChatGPT**
 ```
-"당신의 금융 IQ는?" 인스타 퀴즈 5문항. 정답은 다음 게시물에서 공개.
-/quiz /curiosity /commentbait
+"당신의 금융 IQ는?" 인스타 퀴즈 5문항을 만들어줘. 정답은 다음 게시물에서 공개.
+/quiz /curiosity /commentbait /platform:Instagram
+- 캐러셀 7장: 표지 1장 + 문제 5장 + 댓글 유도 1장
+- 문제마다 보기 3개, 정답과 해설은 따로 정리
+```
+
+**Claude**
+```
+<topic>사회초년생이 헷갈리는 금융 상식 (예금자 보호, 신용점수, 연말정산 등)</topic>
+<codes>/quiz /curiosity /commentbait /platform:Instagram</codes>
+<format>
+캐러셀 7장: 표지(궁금증 유발 제목) → 문제 5장(보기 3개) → 마지막 장("몇 개 맞혔는지 댓글로")
+정답·해설은 다음 게시물용으로 별도 작성
+</format>
+<rule>정답은 변동 가능성이 낮은 기본 개념으로만 출제하고, 제도 수치가 들어가는 문제는 [확인 필요]로 표시해줘.</rule>
 ```
 
 ### 레시피 10. 실행 유도형 CTA 콘텐츠
 **조합:** `/calltoaction + /summary + /engage`
 
+**ChatGPT**
 ```
-무료 웨비나 신청 마감 D-1 알림 메일. /calltoaction /summary /engage /platform:Email
+무료 웨비나 신청 마감 D-1 알림 메일을 써줘.
+/calltoaction /summary /engage /platform:Email
+- 제목 2안(A/B), 프리헤더, 본문 300자 이내
+- 신청 버튼 문구 1개
+```
+
+**Claude**
+```
+<event>무료 웨비나 "AI로 SNS 콘텐츠 주 5개 만들기", 내일 저녁 8시, 신청 마감 오늘 자정</event>
+<audience>지난달 뉴스레터를 구독했지만 아직 신청하지 않은 사람</audience>
+<codes>/calltoaction /summary /engage /platform:Email</codes>
+<format>제목 A/B 2안, 프리헤더, 본문 3문단(300자 이내), 버튼 문구 1개</format>
+<rule>행동은 "신청하기" 하나만. 가짜 마감 압박("단 3자리 남음")은 사실이 아니면 쓰지 말 것.</rule>
 ```
 
 ---
@@ -1075,6 +1202,8 @@ Z세대 SNS체, 법률 문서체, 스포츠 중계체, 1인칭 독백
 
 # PART 4. 셰프의 비법
 
+Claude와 ChatGPT를 제대로 쓰는 법, 실패를 고치는 법, 그리고 넘지 말아야 할 선.
+
 <a id="ch13"></a>
 ## 13장. Claude 200% 활용법
 
@@ -1211,6 +1340,8 @@ Claude Code에서는 프로젝트의 `.claude/commands/` 폴더에 마크다운 
 
 # PART 5. 프로의 주방: 품질 · 성과 · 안전
 
+결과를 판단하고, 성과를 재고, 안전하게 내보내는 법. 운영하는 사람을 위한 장.
+
 <a id="ch17"></a>
 ## 17장. 맛보기: 실제 출력 Before / After
 
@@ -1308,6 +1439,21 @@ Claude Code에서는 프로젝트의 `.claude/commands/` 폴더에 마크다운 
 ```
 
 **달라진 점:** 시간·원인·피해 상황·재발 방지·보상을 모두 **구체적으로** 말한다. 사과문의 품질은 공감 표현의 양이 아니라 **구체성**에서 나온다.
+
+### 17.5 헷갈리는 코드의 Good / Bad 출력
+
+같은 주제("재택근무 집중력")로, 코드가 **제 역할을 했을 때**(Good)와 **엉뚱하게 해석됐을 때**(Bad)를 비교한다.
+
+| 코드 | Bad 출력 | Good 출력 | 판단 기준 |
+|---|---|---|---|
+| `/hook` | "오늘은 재택근무 집중력에 대해 이야기해 보겠습니다." | "오후 3시, 노트북 앞에서 멍하게 30분을 보낸 적 있나요?" | 첫 문장만 읽고도 타깃이 "내 얘기"라고 느끼는가 |
+| `/curiosity` | "집중력을 높이는 방법 5가지를 알려드립니다." | "5가지 중 4번째가 가장 효과가 컸는데, 가장 돈이 안 드는 방법이었다." | 끝까지 읽어야 풀리는 질문이 남아 있는가 |
+| `/TLDR` | 핵심 없이 앞부분만 잘라낸 두 문단 | "집중력은 의지보다 환경 문제다. 알림을 끄고, 일하는 자리를 고정하고, 90분마다 쉬면 된다." | 한 문단에 결론과 행동이 모두 있는가 |
+| `/summary` | 원문을 그대로 줄인 긴 문단 | "- 원인: 알림, 공간, 휴식 부족 / - 해결: 알림 차단, 자리 고정, 90분 휴식 / - 다음 행동: 오늘 알림 끄기" | 항목별로 다시 찾아보기 쉬운가 |
+| `/story` | "많은 사람이 재택근무를 어려워합니다." (인물 없음) | "민지는 재택 첫 달, 하루에 메신저를 212번 열었다. 알림을 끈 다음 날…" | 인물·사건·변화가 있는가 |
+| `/monologue` | 3인칭 설명문 | "솔직히 말하면, 집이 제일 일하기 힘든 곳이었다. 침대가 3미터 뒤에 있으니까." | 한 사람의 목소리로 속마음이 흐르는가 |
+
+> Good 출력의 공통점: **구체적인 장면, 숫자, 행동**이 있다. 결과가 Bad 쪽에 가깝다면 코드를 탓하기 전에 재료(누구에게, 무엇을, 왜)를 더 구체적으로 준다.
 
 ---
 
@@ -1410,6 +1556,8 @@ z  = (p2 - p1) / SQRT( p*(1-p)*(1/B + 1/D) )
 p값 = 2*(1 - NORM.S.DIST(ABS(z), TRUE))
 ```
 
+> 수식이 부담스럽다면 [부록 E](#appE)의 `ab-test-calculator.xlsx`를 쓴다. 노출 수와 클릭 수만 넣으면 z값, p값, 판정, 필요 표본 크기가 자동으로 나온다.
+
 > **계산은 AI에게 맡기지 않는다.** LLM은 엑셀이지 오라클이 아니다. 해석과 가설 설계는 AI와 함께 하되, 숫자는 스프레드시트나 코드로 계산한다. (코드 실행 기능이 있는 환경이라면 AI에게 "코드로 계산해줘"라고 요청하는 것은 괜찮다.)
 
 ### 19.5 실전 케이스: 뉴스레터 제목 A/B (가상 사례)
@@ -1430,7 +1578,7 @@ p값 = 2*(1 - NORM.S.DIST(ABS(z), TRUE))
 플랫폼 알고리즘은 비공개이며 자주 바뀐다. 오가닉 게시물은 날짜, 트렌드, 팔로워 활동 시간 등 통제할 수 없는 변수가 많다. 그래서 오가닉 테스트는 **통계적 증명이 아니라 방향성 탐색**으로 다룬다.
 
 - 같은 방향의 결과가 **3회 이상 반복**되면 채택한다.
-- 각 플랫폼이 공개하는 공식 크리에이터 가이드를 주기적으로 확인한다. 추천 시스템이 무엇을 신호로 보는지 플랫폼이 직접 설명하는 경우가 있다.
+- 각 플랫폼이 공개하는 공식 자료를 주기적으로 확인한다. 추천 시스템이 무엇을 신호로 보는지 플랫폼이 직접 설명하고 있다. ([6장의 플랫폼 공식 설명 바로가기](#ch6) 참조)
 - 통계적 결론이 필요한 가설은 광고의 분할 테스트로 옮겨서 검증한다.
 
 ### 19.7 실험 로그 템플릿
@@ -1660,6 +1808,30 @@ with open("hooks.csv", "w", newline="", encoding="utf-8") as f:
 - [ ] 규제 업종이라면 효능 단정 표현이 없고 심의·검토를 거쳤는가
 - [ ] 외부 자료를 분석했다면 인젝션 문장을 확인했는가
 
+### 21.8 최신 확인 링크와 전문가 검토가 필수인 경우
+
+**법령·지침 확인처**
+
+| 확인할 것 | 공식 확인처 |
+|---|---|
+| 법령 원문 (인공지능 기본법, 표시·광고의 공정화에 관한 법률, 의료법, 금융소비자보호법 등) | 국가법령정보센터 law.go.kr |
+| 추천·보증 등에 관한 표시·광고 심사지침 (뒷광고 기준) | 공정거래위원회 ftc.go.kr |
+| 인공지능 기본법 하위 법령·가이드라인 | 과학기술정보통신부 msit.go.kr |
+| 개인정보 처리 기준 | 개인정보보호위원회 pipc.go.kr |
+| 생성형 AI와 저작권 안내 | 한국저작권위원회 copyright.or.kr |
+| 상표 검색 | 특허정보검색서비스 kipris.or.kr |
+
+**반드시 전문가 검토를 거쳐야 하는 경우**
+
+- 의료·건강기능식품·화장품·금융·투자·교육처럼 **광고 규제나 사전 심의가 있는 업종**의 콘텐츠
+- **유료 광고 집행** 전 최종 카피 (광고비가 붙으면 위반 시 파급도 커진다)
+- **실존 인물**(유명인, 고객, 직원)의 이름·얼굴·목소리·발언이 들어가는 콘텐츠
+- **비교 광고**("업계 1위", "타사 대비 2배")처럼 경쟁사나 객관적 근거가 걸린 표현
+- **미성년자**를 대상으로 하거나 미성년자가 등장하는 콘텐츠
+- 캠페인 규모가 커서 **한 번의 실수가 브랜드 위기**로 번질 수 있는 경우
+
+> 법령과 지침은 개정되고, 해석은 사안마다 다르다. 이 책의 표와 체크리스트는 **질문을 빠뜨리지 않기 위한 도구**이지 답을 대신하지 않는다.
+
 ---
 
 <a id="ch22"></a>
@@ -1717,6 +1889,8 @@ with open("hooks.csv", "w", newline="", encoding="utf-8") as f:
 
 # 부록
 
+복사해서 쓰는 정의서, 코드 일람, 캘린더, 점검 가이드, 템플릿 키트.
+
 <a id="appA"></a>
 ## 부록 A. 복사해서 쓰는 코드 정의서
 
@@ -1743,7 +1917,7 @@ with open("hooks.csv", "w", newline="", encoding="utf-8") as f:
 /summary 간결 요약
 
 [플랫폼] /platform:Instagram · YouTube · Blog · Email · TikTok · Resume · Ad · Slide ·
-Podcast · LinkedIn · Threads · X. 각 플랫폼의 분량·구조·관행에 맞춘다.
+Podcast · LinkedIn · Threads · X · NaverBlog · KakaoChannel. 각 플랫폼의 분량·구조·관행에 맞춘다.
 
 [참여] /quiz · /poll · /fillintheblank · /engage · /curiosity · /controversial(비하·왜곡 금지) ·
 /boldclaim · /objection 반론과 재반론 · /dialogue 대화체 · /calltoaction 단일 행동 유도
@@ -1768,7 +1942,7 @@ editor(편집자). 해당 관점과 말투로 응답한다.
 | 설명 방식 | `/ELI5` `/human` `/story` `/expert` `/TLDR` `/analogy` `/stepbystep` `/visual` `/timeline` `/beforeafter` |
 | 톤 & 스타일 | `/hook` `/reframe` `/rewrite:GenZ` `/tone:funny` `/tone:empathetic` `/tone:shocking` `/tone:motivational` `/tone:formal` `/descriptive` `/quote` `/monologue` |
 | 콘텐츠 구조 | `/framework:AIDA` `/framework:PAS` `/problem/solution` `/listicle` `/compare` `/table` `/FAQ` `/headline` `/commentbait` `/summary` |
-| 플랫폼 | `/platform:Instagram` `YouTube` `Blog` `Email` `TikTok` `Resume` `Ad` `Slide` `Podcast` `LinkedIn` (+`Threads` `X`) |
+| 플랫폼 | `/platform:Instagram` `YouTube` `Blog` `Email` `TikTok` `Resume` `Ad` `Slide` `Podcast` `LinkedIn` (+`Threads` `X` `NaverBlog` `KakaoChannel`) |
 | 참여 유도 | `/quiz` `/poll` `/fillintheblank` `/engage` `/curiosity` `/controversial` `/boldclaim` `/objection` `/dialogue` `/calltoaction` |
 | 페르소나 | `/persona:coach` `developer` `marketer` `designer` `student` `teacher` `CEO` `journalist` `therapist` `investor` (+`customer` `hater` `editor`) |
 | 특수 목적 | `/promptbuilder` `/actionplan` `/statistics` `/testimonial` `/meme` `/tweet` `/oneliner` `/command` `/filltemplate` `/keywordinject` |
@@ -1842,6 +2016,24 @@ AI 서비스는 빠르게 바뀐다. 새 모델이 나오거나 서비스가 크
 - ChatGPT 도움말: help.openai.com
 - OpenAI API 문서: platform.openai.com/docs
 
+
+---
+
+<a id="appE"></a>
+## 부록 E. 다운로드 템플릿 키트
+
+이 책과 같은 GitHub 폴더의 `templates/`에서 바로 내려받아 쓸 수 있는 파일들이다.
+
+| 파일 | 내용 | 관련 장 |
+|---|---|---|
+| `code-definitions.md` | 복사해서 붙여 넣는 코드 정의서 | [부록 A](#appA) |
+| `rubric.md` | 7개 항목 평가 루브릭과 발행 기준 | [18장](#ch18) |
+| `ab-test-calculator.xlsx` | 숫자만 넣으면 z값·p값·판정이 나오는 A/B 계산기, 필요 표본 크기 계산기, 실험 로그 | [19장](#ch19) |
+| `compliance-checklist.md` | 발행 전 컴플라이언스 체크리스트와 확인 링크 | [21장](#ch21) |
+| `content-calendar.md` | 주간 콘텐츠 캘린더 빈 틀 | [부록 C](#appC) |
+| `regression-test-kit.md` | 모델이 바뀌었을 때 돌려 보는 대표 프롬프트 5개 | [부록 D](#appD) |
+
+> **A/B 계산기 사용법:** 노란 칸에 두 그룹의 노출(또는 발송) 수와 클릭(또는 오픈) 수만 입력하면 된다. 통계를 몰라도 "유의함 / 아직 판단 불가" 판정을 읽을 수 있다.
 
 ---
 
