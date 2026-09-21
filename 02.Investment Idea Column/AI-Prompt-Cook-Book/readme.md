@@ -1,10 +1,10 @@
 # AI Prompt Cook Book
-## 글쓰기 전문가와 SNS 바이럴 마케터를 위한 ChatGPT · Claude 프롬프트 레시피
+## 싸이월드 전 대표가 알려주는 글쓰기 전문가와 SNS 바이럴 마케터를 위한 ChatGPT · Claude 프롬프트 레시피
 
 > 70개의 프롬프트 코드, 두 AI에 맞춘 실전 예제, 바로 복사해 쓰는 바이럴 레시피.
 > 작가, 카피라이터, SNS 바이럴 마케터, 인플루언서를 위한 AI 글쓰기 요리책.
 
-**저자:** 김호광 (Dennis Kim) · [GitHub](https://github.com/gameworkerkim) · [vibe-investing](https://github.com/gameworkerkim/vibe-investing) · gameworker@gmail.com
+**저자:** 김호광 (Dennis Kim) · [vibequant.cc](https://vibequant.cc/) · [GitHub](https://github.com/gameworkerkim) · [vibe-investing](https://github.com/gameworkerkim/vibe-investing) · gameworker@gmail.com
 
 ---
 
@@ -51,18 +51,23 @@
 - Microsoft Azure MVP 9년 연속 (2015–2023)
 - 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3를 연구하는 독립 연구자
 - 원본 취약점 연구: 텔레그램 0-click RCE (ZDI-CAN-30207, CVSS 9.8 Critical)
-- 한국어·영어·일본어·중국어 4개 국어 콘텐츠 발행, 브런치 에세이 연재
+- 한국어·영어·일본어·중국어 4개 국어 콘텐츠 발행
+- 오픈 리서치 플랫폼 **VibeQuant** 운영: AI 퀀트 · 사이버 위협 인텔리전스 · Web3, 투자 칼럼 380여 편 공개 · [vibequant.cc](https://vibequant.cc/)
 
 싸이월드에서 수천만 명이 글을 쓰고, 공유하고, 퍼뜨리는 장면을 가장 가까이에서 지켜봤다. 무엇이 퍼지고 무엇이 묻히는지, 그 차이는 대부분 "**첫 문장"과 "누구에게 말하는가?**"에서 갈렸다. AI 시대에도 이 원칙은 변하지 않는다. 바뀐 것은 그 원칙을 실행하는 속도다.
 
 이 책은 유료 강의나 멤버십이 아닌, 누구나 읽을 수 있는 공개 문서로 배포한다. 지식은 나눌수록 세상을 조금 더 낫게 만든다고 믿기 때문이다.
 
-> 📂 원본 저장소: [vibe-investing / AI-Prompt-Cook-Book](https://github.com/gameworkerkim/vibe-investing/tree/main/02.Investment%20Idea%20Column/AI-Prompt-Cook-Book)
+> 📂 원본 GitHub 저장소: [vibe-investing / AI-Prompt-Cook-Book](https://github.com/gameworkerkim/vibe-investing/tree/main/02.Investment%20Idea%20Column/AI-Prompt-Cook-Book)
 
 ---
 
 <a id="preface"></a>
 ## 서문: 코드는 마법 주문이 아니라 레시피다
+
+글쓰기에 있어서 나는 전문가가 아니다. 다만 여러 소셜 미디어에 글을 올리면서, 어떤 글이 잘 터지는지를 긴 시간에 걸쳐 체득했다. 그리고 AI의 시대가 되면서, 내가 직접 쓰는 글보다 AI에 프롬프트를 입력하는 일이 더 많아졌다.
+
+시대가 변하면서 글쓰기의 본질을 둘러싼 논쟁도 있다. 그러나 그 논쟁과 담론은 이 책의 주제가 아니다. 이 책의 목적은 단 하나, **AI를 최적화해 좋은 결과물을 뽑아내고, 그 결과물이 잘 바이럴되도록 하는 방법**을 알려주는 것이다.
 
 SNS에서 "이 코드만 붙이면 AI 결과물이 달라진다"는 프롬프트 코드 목록이 돌아다닌다. `/ELI5`, `/hook`, `/persona:CEO` 같은 것들이다. 실제로 써 보면 효과가 있다. 그런데 **왜** 효과가 있는지 알고 쓰는 사람은 드물다.
 
@@ -1206,7 +1211,13 @@ editor(편집자). 해당 관점과 말투로 응답한다.
 
 ---
 
-**AI Prompt Cook Book**
-김호광 (Dennis Kim) · [github.com/gameworkerkim](https://github.com/gameworkerkim) · gameworker@gmail.com
+<div class="signoff">
+
+**AI Prompt Cook Book** &nbsp; 김호광 (Dennis Kim)
+
+- 인사이트를 담은 글 모음집 : [vibequant.cc](https://vibequant.cc/)
+- 이메일 : [gameworker@gmail.com](mailto:gameworker@gmail.com)
+
+</div>
 
 > 이 문서는 자유롭게 읽고 공유할 수 있도록 공개합니다. 공유 시 출처를 밝혀 주시면 감사하겠습니다.
