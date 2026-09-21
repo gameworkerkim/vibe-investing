@@ -1,1 +1,1212 @@
-ChatGPT · Claude 최적화 프롬프트 코드북
+# AI Prompt Cook Book
+## 글쓰기 전문가와 SNS 바이럴 마케터를 위한 ChatGPT · Claude 프롬프트 레시피
+
+> 70개의 프롬프트 코드, 두 AI에 맞춘 실전 예제, 바로 복사해 쓰는 바이럴 레시피.
+> 작가, 카피라이터, SNS 바이럴 마케터, 인플루언서를 위한 AI 글쓰기 요리책.
+
+**저자:** 김호광 (Dennis Kim) · [GitHub](https://github.com/gameworkerkim) · [vibe-investing](https://github.com/gameworkerkim/vibe-investing) · gameworker@gmail.com
+
+---
+
+## 목차
+
+- [저자 소개](#author)
+- [서문: 코드는 마법 주문이 아니라 레시피다](#preface)
+- [이 책을 읽는 법: 독자별 추천 코스](#howto)
+- **PART 1. 주방 준비**
+  - [0장. 슬래시 코드는 어떻게 작동하는가](#ch0)
+  - [1장. ChatGPT와 Claude, 무엇이 다른가](#ch1)
+- **PART 2. 양념 70가지: 프롬프트 코드 사전**
+  - [2장. 설명 방식 코드 10](#ch2)
+  - [3장. 글쓰기 톤 & 스타일 코드 10](#ch3)
+  - [4장. 콘텐츠 구조 코드 10](#ch4)
+  - [5장. 플랫폼 최적화 코드 10](#ch5)
+  - [6장. 참여 유도 · 반응형 코드 10](#ch6)
+  - [7장. 역할 부여(Persona) 코드 10](#ch7)
+  - [8장. 특수 목적 & 기타 코드 10](#ch8)
+- **PART 3. 메인 요리: 실전 레시피**
+  - [9장. 기본 조합 레시피 10](#ch9)
+  - [10장. SNS 바이럴 마케터를 위한 레시피](#ch10)
+  - [11장. 인플루언서 · 크리에이터를 위한 레시피](#ch11)
+  - [12장. 작가 · 카피라이터를 위한 레시피](#ch12)
+- **PART 4. 셰프의 비법**
+  - [13장. Claude 200% 활용법](#ch13)
+  - [14장. ChatGPT 200% 활용법](#ch14)
+  - [15장. 실패하는 프롬프트, 고치는 프롬프트](#ch15)
+  - [16장. 바이럴의 윤리: 선을 넘지 않는 법](#ch16)
+- **부록**
+  - [부록 A. 복사해서 쓰는 코드 정의서](#appA)
+  - [부록 B. 전체 코드 한눈에 보기](#appB)
+  - [부록 C. 주간 콘텐츠 캘린더 템플릿](#appC)
+
+---
+
+<a id="author"></a>
+## 저자 소개
+
+**김호광 (Dennis Kim)**
+
+- 前 싸이월드 대표 — 한국의 대표 소셜 플랫폼, 3,500만 회원
+- 게임 보안, 소셜 플랫폼, 블록체인 분야 28년 이상의 개발 경력
+- Microsoft Azure MVP 9년 연속 (2015–2023)
+- 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3를 연구하는 독립 연구자
+- 원본 취약점 연구: 텔레그램 0-click RCE (ZDI-CAN-30207, CVSS 9.8 Critical)
+- 한국어·영어·일본어·중국어 4개 국어 콘텐츠 발행, 브런치 에세이 연재
+
+싸이월드에서 수천만 명이 글을 쓰고, 공유하고, 퍼뜨리는 장면을 가장 가까이에서 지켜봤다. 무엇이 퍼지고 무엇이 묻히는지, 그 차이는 대부분 "**첫 문장"과 "누구에게 말하는가?**"에서 갈렸다. AI 시대에도 이 원칙은 변하지 않는다. 바뀐 것은 그 원칙을 실행하는 속도다.
+
+이 책은 유료 강의나 멤버십이 아닌, 누구나 읽을 수 있는 공개 문서로 배포한다. 지식은 나눌수록 세상을 조금 더 낫게 만든다고 믿기 때문이다.
+
+> 📂 원본 저장소: [vibe-investing / AI-Prompt-Cook-Book](https://github.com/gameworkerkim/vibe-investing/tree/main/02.Investment%20Idea%20Column/AI-Prompt-Cook-Book)
+
+---
+
+<a id="preface"></a>
+## 서문: 코드는 마법 주문이 아니라 레시피다
+
+SNS에서 "이 코드만 붙이면 AI 결과물이 달라진다"는 프롬프트 코드 목록이 돌아다닌다. `/ELI5`, `/hook`, `/persona:CEO` 같은 것들이다. 실제로 써 보면 효과가 있다. 그런데 **왜** 효과가 있는지 알고 쓰는 사람은 드물다.
+
+결론부터 말하면, 이 코드들은 ChatGPT나 Claude에 내장된 명령어가 **아니다.** 모델은 `/ELI5`를 보고 "Explain Like I'm 5"라는 영어 관용구를 떠올리고, 그 의미대로 행동할 뿐이다. 즉 코드는 **사람과 AI 사이의 약어**이고, 약어는 정의를 공유할 때 가장 정확하게 작동한다.
+
+이 책은 요리책의 형식을 빌렸다.
+
+| 요리 | 프롬프트 |
+|---|---|
+| **재료** | 맥락: 누구에게, 무엇을, 왜 |
+| **양념** | 코드: `/hook`, `/tone:funny`, `/platform:Instagram` |
+| **레시피** | 조합: 목적별로 검증된 코드 묶음 |
+| **플레이팅** | 형식: 플랫폼, 길이, 구조 |
+| **간 보기** | 검증: 사실 확인, 수정, A/B 테스트 |
+
+좋은 양념도 재료가 없으면 요리가 되지 않는다. 이 책의 원칙은 세 가지다.
+
+1. **정의를 먼저 준다.** 코드의 뜻을 AI에게 한 번 알려 주면, 이후엔 슬래시 한 줄로 충분하다. ([부록 A](#appA))
+2. **코드는 양념, 맥락은 재료다.** 누구에게, 무엇을, 왜 쓰는지가 빠지면 어떤 코드도 평범한 결과만 낸다.
+3. **결과는 반드시 간을 본다.** LLM은 엑셀이지 신탁을 내려주는 오라클이 아니다. 계산은 빠르지만, 입력이 틀리면 결과도 틀린다. 특히 `/statistics`, `/quote`, `/testimonial`은 반드시 사실 확인을 거친다.
+
+---
+
+<a id="howto"></a>
+## 이 책을 읽는 법: 독자별 추천 코스
+
+| 독자 | 먼저 읽을 장 | 핵심 코드 | 대표 레시피 |
+|---|---|---|---|
+| **작가 · 에세이스트** | 1 → 3 → 12 | `/story` `/descriptive` `/monologue` `/reframe` | 초고 → 퇴고 루프, 문체 이식 |
+| **카피라이터** | 4 → 12 → 15 | `/hook` `/framework:PAS` `/headline` `/oneliner` | 헤드라인 30개 뽑기, A/B 카피 |
+| **SNS 바이럴 마케터** | 5 → 6 → 10 | `/hook` `/curiosity` `/commentbait` `/platform:*` | 원소스 멀티유즈, 캐러셀, 댓글 유도 |
+| **퍼포먼스 · 브랜드 마케터** | 4 → 7 → 10 | `/persona:marketer` `/platform:Ad` `/objection` | 광고 문구, 상세페이지, 세일즈 스크립트 |
+| **인플루언서 · 크리에이터** | 5 → 11 → 16 | `/platform:YouTube` `/platform:TikTok` `/human` `/engage` | 쇼츠 대본, 협찬 콘텐츠, 댓글 응대 |
+
+> 시간이 없다면: **[9장 기본 레시피](#ch9) + [부록 A 코드 정의서](#appA)**만 복사해서 써도 된다.
+
+---
+
+# PART 1. 주방 준비
+
+<a id="ch0"></a>
+## 0장. 슬래시 코드는 어떻게 작동하는가
+
+### 0.1 세 가지 사용 방식
+
+| 방식 | 방법 | 장점 | 단점 |
+|---|---|---|---|
+| **즉석형** | 프롬프트 끝에 `/ELI5` 등만 붙인다 | 가장 간단 | 모델이 코드 의미를 추측해야 함 |
+| **정의형** | 대화 첫머리에 코드 정의표를 붙여 넣는다 | 해석이 정확해짐 | 매번 붙여 넣어야 함 |
+| **상시형** | 정의표를 ChatGPT 맞춤 지침/GPTs, Claude 프로젝트 지침/사용자 설정에 저장 | 한 번 설정으로 계속 사용 | 초기 설정 필요 |
+
+### 0.2 기본 문법
+
+```
+[작업 지시] + [재료: 맥락] + [양념: 코드1 코드2 ...] + [플레이팅: 형식]
+```
+
+예:
+
+```
+우리 브랜드 비건 립밤 신제품을 소개하는 인스타 게시물을 써줘.
+타깃은 성분을 꼼꼼히 보는 20대 후반 여성.
+/hook /descriptive /platform:Instagram
+캡션 150자 이내, 해시태그 10개.
+```
+
+### 0.3 코드 조합의 3원칙
+
+- **3개 이하로 조합한다.** 양념을 다 넣으면 맛이 사라진다. `/TLDR`와 `/descriptive`는 동시에 만족시키기 어렵다.
+- **충돌하면 우선순위를 적는다.** `/tone:funny /expert (우선순위: expert)`
+- **형식 코드는 마지막에 둔다.** `/table`, `/platform:Slide`처럼 모양을 결정하는 코드는 뒤에 두면 가장 잘 지켜진다.
+
+---
+
+<a id="ch1"></a>
+## 1장. ChatGPT와 Claude, 무엇이 다른가
+
+두 모델 모두 같은 코드를 이해한다. 차이는 **어떻게 말해야 더 잘 알아듣는가**에 있다.
+
+| 항목 | ChatGPT 스타일 | Claude 스타일 |
+|---|---|---|
+| 지시 구조 | 마크다운 헤더(`### 역할`, `### 작업`)로 구분 | XML 태그(`<context>`, `<task>`, `<format>`)로 구분하면 특히 잘 따름 |
+| 긴 자료 | 지시 뒤에 자료를 붙여도 무난 | 긴 문서는 **앞에**, 질문과 지시는 **뒤에** 두는 편이 유리 |
+| 맥락 설명 | 명령형 지시가 잘 먹힘 | "왜" 이 결과가 필요한지 이유를 주면 판단이 좋아짐 |
+| 예시 | 예시 1~2개로 스타일 전달 | `<example>` 태그로 좋은 예/나쁜 예를 함께 주면 정확도 상승 |
+| 상시 설정 | 맞춤 지침(Custom Instructions), GPTs, 메모리 | 프로젝트 지침, 사용자 설정, 스타일(Styles), 메모리 |
+| 진짜 슬래시 명령 | 없음 (모두 자연어로 해석) | Claude Code에서는 `.claude/commands/`에 **실제 슬래시 명령**을 만들 수 있음 |
+| 글맛 | 빠르고 경쾌한 마케팅 카피에 강점 | 긴 호흡의 글, 문체 유지, 뉘앙스 조절에 강점 |
+
+> 마지막 행은 절대적 우열이 아니라 **실무자들이 흔히 체감하는 경향**이다. 같은 프롬프트를 두 모델에 모두 넣고 비교해 보는 것이 가장 정확하다.
+
+### 같은 요청, 두 가지 버전
+
+**ChatGPT 버전**
+
+```
+### 역할
+너는 10년 차 B2B 마케터야.
+
+### 작업
+우리 SaaS(회의록 자동 요약 툴)의 링크드인 소개 글을 써줘.
+
+### 조건
+/hook /problem/solution /platform:LinkedIn
+- 300자 이내
+- 이모지 최대 2개
+```
+
+**Claude 버전**
+
+```
+<context>
+우리는 회의록 자동 요약 SaaS를 만든다. 주 고객은 50~300인 규모 스타트업의 팀장급이다.
+이 글은 링크드인에서 신규 리드를 얻기 위한 첫 소개 글이다.
+</context>
+
+<task>링크드인 소개 글을 작성해줘.</task>
+
+<codes>/hook /problem/solution /platform:LinkedIn</codes>
+
+<format>
+- 300자 이내, 이모지 최대 2개
+- 과장된 수치("생산성 300% 향상" 등)는 쓰지 말 것. 근거가 없기 때문이다.
+</format>
+```
+
+> **포인트:** Claude 버전의 마지막 줄처럼 **금지 사항에 이유를 붙이면**, Claude는 그 원칙을 다른 문장에도 일반화해 적용한다.
+
+---
+
+# PART 2. 양념 70가지: 프롬프트 코드 사전
+
+<a id="ch2"></a>
+## 2장. 설명 방식 코드 10
+
+> 🎯 **이런 분께:** 어려운 제품·서비스를 쉽게 풀어야 하는 마케터, 정보성 콘텐츠를 만드는 크리에이터
+
+### `/ELI5` — 어린아이에게 설명하듯
+- **효과:** 전문 용어 제거, 짧은 문장, 일상 비유
+- **예:** `블록체인이 뭔지 설명해줘. /ELI5`
+- **팁:** 실제 대상 연령을 적으면 더 정확하다. `/ELI5 (초등 4학년 기준)`
+
+### `/human` — 자연스럽고 인간적인 말투
+- **효과:** 기계적인 나열·번호 목록 감소, 구어체 증가. "AI가 쓴 티"를 줄이는 핵심 코드
+- **예:** `고객 불만 메일에 답장 초안을 써줘. /human`
+
+### `/story` — 스토리텔링
+- **효과:** 인물·갈등·해결 구조로 정보를 전달
+- **예:** `복리의 원리를 설명해줘. /story`
+
+### `/expert` — 전문가처럼
+- **효과:** 정확한 용어, 한계와 예외 조건 언급
+- **예:** `제로 트러스트 아키텍처의 핵심 원칙을 설명해줘. /expert`
+- **팁:** 어떤 분야의 전문가인지 함께 쓴다. `/expert (보안 아키텍트)`
+
+### `/TLDR` — 한 문단 요약
+- **예:** `[기사 붙여넣기] /TLDR`
+
+### `/analogy` — 비유·은유
+- **예:** `API가 뭔지 설명해줘. /analogy`
+- **결과 예시:** "API는 식당의 웨이터다. 손님(앱)은 주방(서버)에 직접 들어가지 않고, 웨이터에게 주문하고 음식을 받는다."
+
+### `/stepbystep` — 단계별 안내
+- **예:** `맥북에 파이썬 개발 환경 세팅하는 법 /stepbystep`
+
+### `/visual` — 시각적 장면처럼
+- **예:** `1929년 대공황 당일 월가 풍경을 설명해줘. /visual`
+
+### `/timeline` — 시간 순서
+- **예:** `비트코인 탄생부터 현물 ETF까지 /timeline`
+
+### `/beforeafter` — 전후 비교
+- **예:** `AI 도입 전후 콜센터 업무 변화를 보여줘. /beforeafter`
+- **바이럴 팁:** 전후 비교는 SNS에서 가장 저장률이 높은 포맷 중 하나다. 캐러셀 1장=Before, 2장=After 구성이 기본.
+
+### 🔍 실전 비교: `/ELI5 + /analogy`
+
+**ChatGPT**
+```
+양자컴퓨터가 왜 암호를 깰 수 있다는 건지 설명해줘. /ELI5 /analogy
+```
+
+**Claude**
+```
+<audience>IT에 관심은 있지만 수학은 모르는 고등학생</audience>
+<question>양자컴퓨터가 왜 현재의 암호를 위협한다는 건가?</question>
+<codes>/ELI5 /analogy</codes>
+<constraint>비유를 쓰되, 비유가 실제와 다른 지점도 한 문장으로 짚어줘.</constraint>
+```
+
+> Claude 버전의 `<constraint>`는 비유의 흔한 부작용(단순화하다 틀린 이해를 심는 것)을 막는 장치다.
+
+---
+
+<a id="ch3"></a>
+## 3장. 글쓰기 톤 & 스타일 코드 10
+
+> 🎯 **이런 분께:** 브랜드 보이스를 관리하는 마케터, 자기만의 문체가 있는 작가·인플루언서
+
+### `/hook` — 후킹 문장으로 시작
+- **예:** `재택근무 생산성에 대한 블로그 글 도입부를 써줘. /hook`
+- **팁:** "후킹 문장 10개 후보를 먼저 보여줘"라고 하면 고를 수 있다. 바이럴은 첫 줄이 90%다.
+
+### `/reframe` — 시점 바꾸어 다시 쓰기
+- **예:** `[직원 입장에서 쓴 글] → 경영진 시점으로 /reframe`
+
+### `/rewrite:GenZ` — Z세대 말투
+- **예:** `[공지문] /rewrite:GenZ`
+- **주의:** 유행어는 금방 낡는다. 공식 채널이라면 "가볍고 친근하게" 정도로 조절하는 편이 안전하다.
+
+### `/tone:funny` — 유머러스하게
+- **예:** `월요병 극복법 5가지 /tone:funny /listicle`
+
+### `/tone:empathetic` — 공감하는 말투
+- **예:** `배송 지연 사과문 /tone:empathetic`
+
+### `/tone:shocking` — 충격적인 문구
+- **예:** `개인정보 유출 위험 경고 글 /tone:shocking`
+- **주의:** 사실을 과장하면 신뢰를 잃는다. "충격적이지만 사실인 것"만 쓰도록 조건을 단다.
+
+### `/tone:motivational` — 동기부여
+- **예:** `시험 한 달 남은 수험생에게 보내는 글 /tone:motivational`
+
+### `/tone:formal` — 격식체
+- **예:** `투자자 대상 분기 서신 /tone:formal`
+
+### `/descriptive` — 감각적 묘사
+- **예:** `제주 감귤 상세페이지 첫 문단 /descriptive`
+
+### `/quote` — 명언 포함
+- **예:** `리더십 칼럼 /quote`
+- **주의:** AI는 그럴듯한 **가짜 명언**을 만들어낸다. 출처가 확실한 인용만 쓰거나, 출처를 함께 요청하고 직접 확인한다.
+
+### `/monologue` — 혼잣말 흐름
+- **예:** `창업 3년 차 대표의 새벽 2시 독백 /monologue`
+- **SNS 팁:** 스레드(Threads)·X에서 반응이 좋은 "속마음 고백형" 글의 기본 코드
+
+### 🔍 실전 비교: 사과문 `/tone:empathetic + /human`
+
+**ChatGPT**
+```
+온라인 쇼핑몰 서버 장애로 주문이 6시간 막혔어.
+고객 공지 사과문을 써줘. /tone:empathetic /human
+- 보상: 전 고객 3천원 쿠폰
+- 재발 방지책 1줄 포함
+```
+
+**Claude**
+```
+<situation>
+어제 오후 2시~8시, 서버 장애로 주문이 불가능했다. 원인은 결제 모듈 업데이트 오류.
+보상으로 전 회원에게 3,000원 쿠폰을 지급한다.
+</situation>
+<task>고객 공지용 사과문</task>
+<codes>/tone:empathetic /human</codes>
+<avoid>
+"불편을 드려 죄송합니다" 같은 상투적 표현만 반복하지 말 것.
+고객이 실제로 겪었을 상황(장바구니에 담아둔 물건, 한정 세일 놓침)을 구체적으로 인정해줘.
+</avoid>
+```
+
+---
+
+<a id="ch4"></a>
+## 4장. 콘텐츠 구조 코드 10
+
+> 🎯 **이런 분께:** 전환율을 책임지는 카피라이터, 상세페이지·랜딩페이지 기획자
+
+### `/framework:AIDA` — Attention → Interest → Desire → Action
+- **예:** `무선 이어폰 광고 문구 /framework:AIDA`
+
+### `/framework:PAS` — Problem → Agitate → Solution
+- **예:** `가계부 앱 랜딩페이지 /framework:PAS`
+
+### `/problem/solution` — 문제-해결
+- **예:** `중소기업 보안 취약점 백서 개요 /problem/solution`
+
+### `/listicle` — 숫자형 리스트
+- **예:** `개발자가 꼭 알아야 할 Git 명령어 /listicle (7개)`
+- **바이럴 팁:** 홀수(3, 5, 7)가 짝수보다 클릭을 부른다는 것은 업계의 오래된 경험칙이다. 직접 A/B 테스트해 보자.
+
+### `/compare` — 비교 포맷
+- **예:** `노션 vs 옵시디언 /compare`
+
+### `/table` — 표 정리
+- **예:** `주요 클라우드 3사 요금 구조 /table`
+- **팁:** 열 이름을 지정하면 정확해진다. `/table (열: 서비스, 무료 티어, 장점, 단점)`
+
+### `/FAQ` — Q&A 방식
+- **예:** `연말정산 FAQ 10개 /FAQ`
+
+### `/headline` — 자극적인 제목
+- **예:** `이 글의 제목 후보 10개 /headline`
+
+### `/commentbait` — 댓글 유도
+- **예:** `개발자 커뮤니티용 글 마무리 /commentbait`
+
+### `/summary` — 간결 요약
+- **예:** `[회의록] /summary (결정 사항·담당자·기한만)`
+
+### 🔍 실전 비교: `/framework:PAS`
+
+**ChatGPT**
+```
+프리랜서용 세금 신고 대행 서비스 랜딩페이지 카피를 써줘.
+/framework:PAS
+각 단계를 소제목으로 구분해줘.
+```
+
+**Claude**
+```
+<product>프리랜서 종합소득세 신고 대행, 건당 9만 9천원</product>
+<target>연 수입 3천~8천만 원, 세금 신고를 처음 해보는 프리랜서 디자이너·개발자</target>
+<codes>/framework:PAS</codes>
+<format>
+P, A, S를 각각 소제목으로 구분하고, Agitate 단계에서는
+가산세처럼 실제로 발생 가능한 불이익만 언급해줘(공포 마케팅 과장 금지).
+</format>
+```
+
+---
+
+<a id="ch5"></a>
+## 5장. 플랫폼 최적화 코드 10
+
+> 🎯 **이런 분께:** 멀티 채널을 운영하는 SNS 마케터, 플랫폼별로 콘텐츠를 재가공하는 크리에이터
+
+| 코드 | 핵심 특징 | 예시 프롬프트 |
+|---|---|---|
+| `/platform:Instagram` | 첫 줄 후킹, 짧은 줄바꿈, 해시태그, 캐러셀 | `카페 신메뉴 소개 /platform:Instagram` |
+| `/platform:YouTube` | 0~3초 훅, 장면 구분, 구독 유도 | `60초 쇼츠 대본 /platform:YouTube` |
+| `/platform:Blog` | 소제목, SEO 키워드, 결론 | `강릉 1박 2일 여행기 /platform:Blog` |
+| `/platform:Email` | 제목·프리헤더·본문·CTA | `신제품 출시 뉴스레터 /platform:Email` |
+| `/platform:TikTok` | 초단문, 트렌드 포맷, 자막용 | `자취 요리 꿀팁 /platform:TikTok` |
+| `/platform:Resume` | 성과 중심 동사, 수치화 | `내 경력을 이력서 문장으로 /platform:Resume` |
+| `/platform:Ad` | 짧은 헤드라인, 명확한 혜택 | `검색광고 문구 5개 /platform:Ad` |
+| `/platform:Slide` | 슬라이드당 한 메시지, 발표자 노트 | `투자 IR 10장 구성 /platform:Slide` |
+| `/platform:Podcast` | 대화체, 오프닝·코너·클로징 | `2인 진행 20분 대본 /platform:Podcast` |
+| `/platform:LinkedIn` | 전문가 톤, 인사이트+경험 | `이직 소감 글 /platform:LinkedIn` |
+
+> 💡 목록에 없는 플랫폼도 같은 문법으로 쓸 수 있다: `/platform:Threads`, `/platform:X`, `/platform:NaverBlog`, `/platform:KakaoChannel`. 부록 A 정의서에 한 줄만 추가하면 된다.
+
+### 🔍 하나의 원고, 세 플랫폼으로 (원소스 멀티유즈)
+
+**ChatGPT**
+```
+아래 칼럼을 세 가지 버전으로 바꿔줘.
+1) /platform:LinkedIn
+2) /platform:Instagram
+3) /platform:YouTube (60초 쇼츠 대본)
+
+[칼럼 붙여넣기]
+```
+
+**Claude**
+```
+<source>
+[칼럼 전문]
+</source>
+
+<task>
+위 칼럼을 세 플랫폼용으로 각각 재구성해줘. 핵심 주장은 셋 모두 동일하게 유지하되,
+플랫폼마다 독자가 글을 소비하는 방식(스크롤 속도, 소리 여부, 체류 시간)에 맞춰 구조를 바꿔줘.
+</task>
+
+<outputs>
+<linkedin>/platform:LinkedIn</linkedin>
+<instagram>/platform:Instagram, 캐러셀 5장 기준</instagram>
+<youtube>/platform:YouTube, 60초, 장면별 자막 포함</youtube>
+</outputs>
+```
+
+> Claude에서는 긴 원문을 `<source>`로 **맨 앞**에 두고, 출력 형식을 태그별로 나누면 결과를 섞지 않고 깔끔하게 분리해 준다.
+
+---
+
+<a id="ch6"></a>
+## 6장. 참여 유도 · 반응형 코드 10
+
+> 🎯 **이런 분께:** 도달률보다 **참여율**이 KPI인 바이럴 마케터, 팬덤을 키우는 인플루언서
+
+알고리즘은 "좋아요"보다 **댓글, 저장, 공유, 체류 시간**을 더 무겁게 본다는 것이 플랫폼 운영자들의 공통된 설명이다. 이 장의 코드는 그 신호를 만드는 도구다.
+
+### `/quiz` — 퀴즈 형식
+- **예:** `개인정보보호법 기초 퀴즈 5문항 /quiz (정답·해설 포함)`
+
+### `/poll` — 투표·설문
+- **예:** `사내 워크숍 장소 투표 문구 /poll`
+- **SNS 팁:** 인스타 스토리 투표 스티커, 스레드 투표용으로 선택지를 2~4개로 제한한다.
+
+### `/fillintheblank` — 빈칸 채우기
+- **예:** `"나는 ___ 할 때 가장 행복하다" 형식의 참여 게시물 /fillintheblank`
+
+### `/engage` — 댓글·공유 유도
+- **예:** `육아 팁 게시물 /engage`
+
+### `/curiosity` — 궁금증 유발
+- **예:** `다음 편 예고 문구 /curiosity`
+
+### `/controversial` — 논란거리
+- **예:** `"주 4일제는 생산성을 떨어뜨린다" 토론 글 /controversial`
+- **주의:** 논쟁은 **생각을 자극하는 주장**이어야 한다. 특정 집단을 비하하거나 사실을 왜곡하면 바이럴이 아니라 **역바이럴(불매·신고)**로 돌아온다. `/objection`과 함께 쓰면 균형이 잡힌다.
+
+### `/boldclaim` — 대담한 주장
+- **예:** `"엑셀은 10년 안에 사라지지 않는다" 칼럼 /boldclaim`
+
+### `/objection` — 반론 제시 및 해소
+- **예:** `구독 서비스 세일즈 스크립트 /objection (예상 반론 5개)`
+
+### `/dialogue` — 대화 형식
+- **예:** `선배와 신입의 대화로 SQL 조인 설명 /dialogue`
+
+### `/calltoaction` — 명확한 행동 유도
+- **예:** `웨비나 신청 유도 문구 /calltoaction`
+- **팁:** CTA는 하나만. "저장하고, 공유하고, 팔로우하고, 링크 클릭"은 아무것도 안 하게 만든다.
+
+### 🔍 실전 비교: `/boldclaim + /objection`
+
+**ChatGPT**
+```
+"AI 시대에도 글쓰기 능력은 더 중요해진다"는 주장으로 칼럼을 써줘.
+/boldclaim /objection
+반론 3개와 재반론을 포함해줘.
+```
+
+**Claude**
+```
+<thesis>AI 시대에 글쓰기 능력은 덜 중요해지는 게 아니라 더 중요해진다.</thesis>
+<codes>/boldclaim /objection</codes>
+<instruction>
+반론은 허수아비로 만들지 말고, 실제로 이 주장에 반대하는 똑똑한 사람이
+할 법한 가장 강한 형태로 제시해줘. 그 뒤에 재반론을 써줘.
+</instruction>
+```
+
+> "가장 강한 형태의 반론(steelman)"을 요구하면 글의 설득력이 확연히 올라간다. 댓글에서 나올 반박을 미리 막는 효과도 있다.
+
+---
+
+<a id="ch7"></a>
+## 7장. 역할 부여(Persona) 코드 10
+
+> 🎯 **이런 분께:** 혼자서 기획·카피·검수를 다 해야 하는 1인 마케터, 1인 크리에이터
+
+| 코드 | 관점 | 예시 |
+|---|---|---|
+| `/persona:coach` | 질문으로 이끌고 실행을 독려 | `번아웃 온 팀원과의 1:1 대화 준비 /persona:coach` |
+| `/persona:developer` | 구현 가능성, 기술 부채, 엣지 케이스 | `이 기획서의 기술적 리스크 /persona:developer` |
+| `/persona:marketer` | 타깃, 포지셔닝, 전환 | `신제품 네이밍 10개 /persona:marketer` |
+| `/persona:designer` | 사용자 경험, 시각 위계 | `앱 온보딩 개선안 /persona:designer` |
+| `/persona:student` | 모르는 것을 질문하며 요약 | `이 논문을 학생 입장에서 정리 /persona:student` |
+| `/persona:teacher` | 개념 → 예시 → 확인 문제 | `분수의 나눗셈 수업 /persona:teacher` |
+| `/persona:CEO` | 전략, 우선순위, 의사결정 | `분기 전사 메시지 /persona:CEO` |
+| `/persona:journalist` | 5W1H, 사실 중심 | `보도자료를 기사체로 /persona:journalist` |
+| `/persona:therapist` | 경청, 감정 반영 | `힘든 하루를 보낸 친구에게 보낼 메시지 /persona:therapist` |
+| `/persona:investor` | 수익성, 리스크, 밸류에이션 | `이 사업계획서 검토 /persona:investor` |
+
+> **주의:** `/persona:therapist`는 말투를 빌리는 것일 뿐, 실제 상담을 대체하지 않는다. `/persona:investor`의 결과도 투자 조언이 아닌 **검토 관점**으로 활용한다.
+
+> 💡 **마케터 추가 페르소나:** `/persona:customer`(타깃 고객), `/persona:hater`(악플러 관점 사전 점검), `/persona:editor`(편집자 교정)를 정의서에 추가해 두면 검수 단계가 강력해진다.
+
+### 🔍 실전: 페르소나 회의 (다중 관점 검토)
+
+**ChatGPT**
+```
+아래 캠페인 아이디어를 세 명의 관점에서 각각 평가해줘.
+/persona:investor /persona:customer /persona:marketer
+각 관점별로 좋은 점 2개, 우려 2개, 다음 질문 1개.
+
+[아이디어]
+```
+
+**Claude**
+```
+<idea>
+[캠페인 아이디어]
+</idea>
+
+<task>
+세 사람이 한 회의실에서 이 아이디어를 검토한다고 가정해줘.
+1라운드: 각자 독립적으로 평가
+2라운드: 서로의 우려에 반응
+마지막: 세 사람이 합의한 "가장 먼저 검증할 가설 1개"
+</task>
+
+<personas>/persona:investor /persona:customer /persona:marketer</personas>
+```
+
+---
+
+<a id="ch8"></a>
+## 8장. 특수 목적 & 기타 코드 10
+
+### `/promptbuilder` — 목표 기반 프롬프트 구성
+AI에게 **프롬프트를 대신 만들게** 하는 메타 코드. 반복 업무를 자동화하는 첫걸음이다.
+- **예:** `유튜브 썸네일 문구를 매주 뽑고 싶어. 재사용할 프롬프트를 만들어줘. /promptbuilder`
+
+### `/actionplan` — 실행 계획
+- **예:** `3개월 안에 뉴스레터 구독자 1천 명 /actionplan (주 단위)`
+
+### `/statistics` — 데이터·수치 삽입
+- **예:** `국내 1인 가구 증가 칼럼 /statistics`
+- **⚠️ 가장 위험한 코드.** AI가 그럴듯한 숫자를 지어낼 수 있다. 반드시 **"출처 포함, 모르면 [확인 필요]로 표시"** 조건을 붙이거나, 웹 검색이 가능한 환경에서 쓴다. 가짜 통계 하나가 계정 전체의 신뢰를 무너뜨린다.
+
+### `/testimonial` — 후기·리뷰 추가
+- **예:** `[실제 고객 후기 3개 붙여넣기] 이걸 상세페이지용으로 다듬어줘. /testimonial`
+- **⚠️** 실제 후기를 **다듬는 용도**로만 쓴다. 존재하지 않는 후기를 만들어 게시하는 것은 소비자 기만이며 표시·광고 관련 법규 위반 소지가 있다. ([16장](#ch16) 참조)
+
+### `/meme` — 밈 스타일
+- **예:** `개발자 야근 밈 문구 5개 /meme`
+
+### `/tweet` — 짧은 트윗 형식
+- **예:** `이 기사 핵심을 트윗 3개로 /tweet`
+
+### `/oneliner` — 임팩트 한 줄
+- **예:** `우리 회사 비전을 한 줄로 /oneliner (10가지 후보)`
+
+### `/command` — 체크리스트·지시문
+- **예:** `인스타 게시 전 점검 사항 /command`
+
+### `/filltemplate` — 빈 틀 완성
+- **예:** `[주간 보고 템플릿] + [이번 주 메모] → /filltemplate`
+
+### `/keywordinject` — 지정 키워드 삽입
+- **예:** `블로그 글 /keywordinject (키워드: 전세사기 예방, 확정일자, 전입신고)`
+- **팁:** 키워드는 자연스럽게 2~3회. 그 이상은 독자도 검색엔진도 싫어한다.
+
+### 🔍 실전: `/promptbuilder`로 나만의 프롬프트 만들기
+
+**ChatGPT**
+```
+매주 월요일 인스타 게시물 5개를 기획하는데, 내가 이번 주 이슈 메모를 주면
+게시물 기획안으로 만들어주는 재사용 프롬프트를 만들어줘. /promptbuilder
+```
+
+**Claude**
+```
+<goal>
+매주 월요일, 내 거친 메모를 인스타 게시물 5개 기획안으로 바꾸는 재사용 프롬프트가 필요하다.
+</goal>
+<requirements>
+- 결과 형식: 게시물별 [포맷(릴스/캐러셀/단일) / 첫 줄 훅 / 핵심 메시지 / CTA / 해시태그]
+- 5개 중 최소 1개는 참여 유도형(퀴즈·투표)
+- 메모에 없는 사실(수치, 사건)은 절대 추가하지 않음
+</requirements>
+<codes>/promptbuilder</codes>
+<output>
+완성된 프롬프트를 코드 블록으로 주고, 그 아래에 각 부분이 왜 필요한지 짧게 설명해줘.
+</output>
+```
+
+---
+
+# PART 3. 메인 요리: 실전 레시피
+
+<a id="ch9"></a>
+## 9장. 기본 조합 레시피 10
+
+### 레시피 1. 인스타 릴스 후킹 콘텐츠
+**조합:** `/hook + /platform:Instagram + /framework:AIDA`
+
+**ChatGPT**
+```
+홈트레이닝 앱 홍보 릴스 대본을 써줘. 30초 분량.
+/hook /platform:Instagram /framework:AIDA
+화면 자막과 내레이션을 구분해줘.
+```
+
+**Claude**
+```
+<product>하루 15분 홈트 앱, 첫 달 무료</product>
+<target>퇴근 후 헬스장 갈 시간이 없는 30대 직장인</target>
+<codes>/hook /platform:Instagram /framework:AIDA</codes>
+<format>30초 릴스. [장면 / 자막 / 내레이션] 3열 표. 첫 2초 안에 스크롤을 멈추게 할 것.</format>
+```
+
+### 레시피 2. 전자책 목차·본문 작성
+**조합:** `/stepbystep + /framework:PAS + /tone:formal`
+
+**ChatGPT**
+```
+"직장인 첫 주식 투자" 전자책 목차를 10장으로 짜고, 1장 본문을 써줘.
+/stepbystep /framework:PAS /tone:formal
+```
+
+**Claude**
+```
+<book>직장인 첫 주식 투자: 월급으로 시작하는 원칙 투자</book>
+<reader>계좌 개설만 해본 사회초년생</reader>
+<task>
+1) 10장 목차 (각 장 한 줄 요약 포함)
+2) 1장 본문 2,000자
+</task>
+<codes>/stepbystep /framework:PAS /tone:formal</codes>
+<rule>특정 종목 추천은 하지 말 것. 책의 목적은 원칙 교육이다.</rule>
+```
+
+### 레시피 3. 블로그 글 요약 + 확장
+**조합:** `/TLDR + /summary + /platform:Blog`
+
+**ChatGPT**
+```
+[원문] 이 글을 먼저 /TLDR로 요약하고, 그 요약을 바탕으로
+블로그 글로 확장해줘. /summary /platform:Blog
+```
+
+**Claude**
+```
+<source>[원문]</source>
+<step1>/TLDR: 한 문단 요약</step1>
+<step2>/platform:Blog: 요약을 뼈대로, 독자가 실제로 적용할 수 있는 예시를 추가해 확장</step2>
+<step3>/summary: 글 마지막에 3줄 핵심 정리 박스</step3>
+```
+
+### 레시피 4. 유튜브 쇼츠 스크립트
+**조합:** `/story + /platform:YouTube + /quote`
+
+**ChatGPT**
+```
+"실패를 대하는 태도"를 주제로 60초 쇼츠 대본. /story /platform:YouTube /quote
+```
+
+**Claude**
+```
+<topic>실패를 대하는 태도</topic>
+<codes>/story /platform:YouTube /quote</codes>
+<constraint>
+명언은 출처가 확실한 것만 쓰고, 화자와 출처를 괄호로 표기해줘.
+확실하지 않으면 명언 대신 스토리 속 인물의 대사로 대체해줘.
+</constraint>
+```
+
+### 레시피 5. 자기계발 콘텐츠
+**조합:** `/analogy + /timeline + /tone:motivational`
+
+```
+습관 형성에 걸리는 시간에 대한 연구를 바탕으로 자기계발 글을 써줘.
+/analogy /timeline /tone:motivational
+1일차, 3주차, 두 달 차에 일어나는 변화를 구분해줘.
+```
+> Claude에서는 `<note>연구 수치를 언급할 땐 "평균적으로", "연구에 따르면"처럼 일반화에 주의해줘</note>`를 추가하면 과장 없이 쓴다.
+
+### 레시피 6. 제품 상세페이지
+**조합:** `/descriptive + /problem/solution + /persona:marketer`
+
+**Claude**
+```
+<product>무소음 무선 마우스, 클릭음 90% 감소, 6개월 배터리</product>
+<customer>도서관·카페에서 작업하는 대학원생, 새벽에 일하는 재택근무자</customer>
+<codes>/descriptive /problem/solution /persona:marketer</codes>
+<sections>헤드라인 → 공감 문제 → 해결 → 스펙 표 → 구매 CTA</sections>
+```
+
+### 레시피 7. 광고 문구 실전 카피
+**조합:** `/hook + /boldclaim + /platform:Ad`
+
+**ChatGPT**
+```
+영어 회화 앱 검색광고 문구 10개. 제목 25자, 설명 45자 이내.
+/hook /boldclaim /platform:Ad
+```
+
+### 레시피 8. 교육 강의 콘텐츠 기획
+**조합:** `/persona:teacher + /stepbystep + /FAQ`
+
+**Claude**
+```
+<course>비개발자를 위한 ChatGPT 업무 활용, 4주 과정</course>
+<codes>/persona:teacher /stepbystep /FAQ</codes>
+<deliverable>주차별 학습 목표·실습 과제·예상 질문(FAQ 3개)을 표로 정리</deliverable>
+```
+
+### 레시피 9. 퀴즈형 참여 콘텐츠
+**조합:** `/quiz + /curiosity + /commentbait`
+
+```
+"당신의 금융 IQ는?" 인스타 퀴즈 5문항. 정답은 다음 게시물에서 공개.
+/quiz /curiosity /commentbait
+```
+
+### 레시피 10. 실행 유도형 CTA 콘텐츠
+**조합:** `/calltoaction + /summary + /engage`
+
+```
+무료 웨비나 신청 마감 D-1 알림 메일. /calltoaction /summary /engage /platform:Email
+```
+
+---
+
+<a id="ch10"></a>
+## 10장. SNS 바이럴 마케터를 위한 레시피
+
+### 🍳 레시피 V1. 스크롤을 멈추는 첫 줄 30개 뽑기
+**조합:** `/hook + /curiosity + /headline`
+
+```
+<product>[제품/서비스]</product>
+<target>[타깃]</target>
+<codes>/hook /curiosity /headline</codes>
+<task>
+인스타 캡션 첫 줄 후보 30개를 아래 6가지 유형으로 5개씩 나눠 써줘.
+1) 질문형 2) 숫자형 3) 반전형 4) 공감형 5) 경고형 6) 비밀 공개형
+각 20자 이내.
+</task>
+```
+> 👉 30개 중 3개를 골라 스토리·릴스로 소규모 테스트 → 반응 좋은 1개로 본 게시물 발행.
+
+### 🍳 레시피 V2. 저장을 부르는 캐러셀 10장
+**조합:** `/listicle + /beforeafter + /platform:Instagram`
+
+**ChatGPT**
+```
+"월 30만원 아끼는 자취 식비 루틴" 인스타 캐러셀 10장.
+/listicle /beforeafter /platform:Instagram
+1장: 표지(훅), 2~9장: 본문, 10장: 저장·팔로우 CTA
+장마다 [제목 15자 / 본문 40자 / 디자인 메모] 형식.
+```
+
+### 🍳 레시피 V3. 댓글 폭발 스레드(Threads) 글
+**조합:** `/boldclaim + /monologue + /commentbait`
+
+**Claude**
+```
+<topic>회사 다니면서 사이드 프로젝트로 월 100만원 벌기까지</topic>
+<codes>/boldclaim /monologue /commentbait</codes>
+<format>
+- 첫 게시물: 대담한 한 줄 주장 + 궁금증
+- 이어지는 5개 게시물: 속마음 고백 톤의 경험담
+- 마지막: 독자 경험을 묻는 질문 하나
+</format>
+<rule>과장된 수익 인증이나 "누구나 가능" 같은 표현은 금지. 실제 경험 톤을 유지해줘.</rule>
+```
+
+### 🍳 레시피 V4. 원소스 7채널 배포
+**조합:** 원문 1개 + `/platform:*` 7종
+
+```
+<source>[블로그 원문]</source>
+<task>아래 7개 채널용으로 각각 재가공해줘. 핵심 메시지는 동일하게 유지.</task>
+<outputs>
+1. /platform:Blog (SEO 제목 3안 포함)
+2. /platform:Instagram (캐러셀 7장)
+3. /platform:YouTube (쇼츠 45초)
+4. /platform:TikTok (15초 자막형)
+5. /platform:LinkedIn (인사이트형)
+6. /platform:Threads (5개 연결 글)
+7. /platform:Email (뉴스레터, 제목 A/B 2안)
+</outputs>
+```
+
+### 🍳 레시피 V5. A/B 테스트 카피 세트
+**조합:** `/platform:Ad + /framework:AIDA + /framework:PAS`
+
+```
+같은 제품으로 광고 카피 2세트를 만들어줘.
+A안: /framework:AIDA (욕망 자극형)
+B안: /framework:PAS (문제 해결형)
+각 세트는 헤드라인 3개 + 본문 2개. 두 안의 핵심 가설 차이를 한 줄로 설명해줘.
+/platform:Ad
+```
+
+### 🍳 레시피 V6. 악플 사전 점검 (출시 전 리스크 체크)
+**조합:** `/persona:hater + /objection`
+
+```
+<post>[발행 예정 게시물]</post>
+<codes>/persona:hater /objection</codes>
+<task>
+이 게시물에 달릴 수 있는 가장 날카로운 비판 댓글 10개를 예상하고,
+각각을 (1) 수정으로 예방할 것 (2) 답글로 대응할 것 (3) 무시할 것으로 분류해줘.
+</task>
+```
+> 바이럴은 양날의 검이다. 발행 전 10분 점검이 브랜드 위기를 막는다.
+
+---
+
+<a id="ch11"></a>
+## 11장. 인플루언서 · 크리에이터를 위한 레시피
+
+### 🍳 레시피 I1. 내 말투를 학습시키기 (보이스 클로닝)
+**조합:** `/human + 예시 학습`
+
+**Claude**
+```
+<my_posts>
+[내가 직접 쓴 게시물 5~10개]
+</my_posts>
+
+<task>
+위 글들의 말투 특징을 분석해줘: 문장 길이, 자주 쓰는 어미, 이모지 습관, 유머 방식, 금기 표현.
+그 다음, 이 분석을 "내 말투 가이드"로 정리해줘. 앞으로 내 글을 대신 쓸 때 이 가이드를 쓸 거야.
+</task>
+```
+> 💡 결과로 나온 "말투 가이드"를 Claude 프로젝트 지침이나 스타일(Styles), ChatGPT 맞춤 지침에 저장해 두면, 이후 `/human`만 붙여도 **내 목소리**로 써 준다.
+
+### 🍳 레시피 I2. 유튜브 롱폼 → 쇼츠 5개
+**조합:** `/TLDR + /hook + /platform:YouTube`
+
+```
+<transcript>[영상 자막 전문]</transcript>
+<task>
+이 영상에서 쇼츠로 잘라낼 만한 구간 5개를 골라줘.
+각 구간마다: [원본 타임라인 / 새 훅 문장 / 45초 대본 / 썸네일 문구 10자]
+</task>
+<codes>/TLDR /hook /platform:YouTube</codes>
+```
+
+### 🍳 레시피 I3. 협찬 콘텐츠, 광고인데 광고 같지 않게 (단, 표기는 확실하게)
+**조합:** `/story + /human + /descriptive`
+
+```
+<brand>[협찬 브랜드와 제품]</brand>
+<my_experience>[내가 실제로 써 본 느낌, 좋았던 점, 아쉬웠던 점]</my_experience>
+<codes>/story /human /descriptive</codes>
+<rules>
+- 첫 줄 또는 캡션 앞부분에 "#광고" 또는 "유료 광고 포함"을 반드시 명시
+- 내가 실제로 느낀 아쉬운 점 1개를 솔직하게 포함 (신뢰도를 위해)
+- 제품 효능을 과장하거나 의학적 효과를 단정하지 않음
+</rules>
+```
+> ⚠️ 경제적 대가를 받은 콘텐츠의 표기 누락, 이른바 "뒷광고"는 법적 제재 대상이 될 수 있다. ([16장](#ch16) 참조)
+
+### 🍳 레시피 I4. 댓글 응대 매크로 만들기
+**조합:** `/tone:empathetic + /human + /command`
+
+```
+내 채널에 자주 달리는 댓글 유형 6가지(칭찬, 질문, 제품 문의, 비판, 악플, 협업 제안)에 대해
+각각 답글 템플릿 3개씩 만들어줘. /tone:empathetic /human /command
+- 복붙 티 나지 않도록 [이름], [구체적 언급] 자리를 비워둬
+- 악플은 "무대응 권장 기준"도 함께 알려줘
+```
+
+### 🍳 레시피 I5. 라이브 방송 큐시트
+**조합:** `/timeline + /engage + /platform:Podcast`
+
+```
+60분 인스타 라이브 큐시트를 짜줘. 주제: [주제]
+/timeline /engage /platform:Podcast
+- 10분 단위 코너 구성
+- 코너마다 시청자 참여 장치(질문, 투표, 퀴즈) 1개
+- 이탈 방지용 "잠시 후 공개" 예고 멘트 포함
+```
+
+---
+
+<a id="ch12"></a>
+## 12장. 작가 · 카피라이터를 위한 레시피
+
+### 🍳 레시피 W1. 초고 → 퇴고 3단 루프
+```
+1단계: [주제]로 에세이 초고를 써줘. /story /descriptive
+2단계: 방금 초고를 /persona:editor 관점에서 비평해줘.
+       (군더더기 문장, 상투적 표현, 논리 비약을 각각 표시)
+3단계: 비평을 반영해서 다시 써줘. 원래 문장의 리듬은 최대한 살려줘.
+```
+> AI에게 초고를 맡기는 것보다, **내가 쓴 초고를 AI가 비평하게** 하는 쪽이 작가의 목소리를 지키는 데 훨씬 유리하다.
+
+### 🍳 레시피 W2. 같은 문장, 10가지 문체
+**조합:** `/reframe + /tone:*`
+
+```
+<sentence>비 오는 날, 그녀는 오래된 편지를 다시 읽었다.</sentence>
+<task>
+이 문장을 10가지 문체로 다시 써줘:
+하드보일드, 동화체, 신문 기사체, 광고 카피, 일기체, 시적 산문,
+Z세대 SNS체, 법률 문서체, 스포츠 중계체, 1인칭 독백
+</task>
+```
+> 문체 감각을 훈련하는 가장 빠른 연습. 카피라이터의 톤 앤 매너 제안서에도 그대로 쓸 수 있다.
+
+### 🍳 레시피 W3. 헤드라인 공장
+**조합:** `/headline + /oneliner + /hook`
+
+**Claude**
+```
+<article>[기사 또는 칼럼 원문]</article>
+<task>
+제목 후보 20개를 만들고, 각 제목을 아래 기준으로 1~5점 평가한 표를 만들어줘.
+- 호기심 / 명확성 / 클릭 유도 / 낚시성(낮을수록 좋음)
+마지막에 "추천 1위"와 그 이유를 한 줄로.
+</task>
+<codes>/headline /oneliner /hook</codes>
+```
+
+### 🍳 레시피 W4. 긴 원고를 책 목차로
+**조합:** `/stepbystep + /summary + /timeline`
+
+```
+<manuscript>[연재 원고 또는 칼럼 모음]</manuscript>
+<task>
+이 원고들을 한 권의 책으로 묶는다면 어떤 목차가 될지 3가지 버전으로 제안해줘.
+1) 시간순 구성 2) 주제별 구성 3) 문제-해결 구성
+각 버전마다 가제와 부제, 타깃 독자를 함께 제안해줘.
+</task>
+```
+
+### 🍳 레시피 W5. 브랜드 네이밍 & 슬로건
+**조합:** `/persona:marketer + /oneliner + /compare`
+
+```
+[브랜드 설명]에 어울리는 브랜드명 20개와 슬로건 10개를 만들어줘.
+/persona:marketer /oneliner
+그 중 상위 3개를 /compare로 비교해줘 (발음 용이성, 기억성, 확장성, 도메인·상표 확인 필요 여부).
+```
+> ⚠️ AI가 제안한 이름은 상표 등록 여부를 반드시 특허청 KIPRIS 등에서 직접 확인한다.
+
+---
+
+# PART 4. 셰프의 비법
+
+<a id="ch13"></a>
+## 13장. Claude 200% 활용법
+
+### 13.1 XML 태그로 구조를 준다
+Claude는 태그로 나뉜 정보를 명확히 구분해 처리한다. 태그 이름은 자유다. `<context>`, `<data>`, `<rules>`, `<example>` 등 의미가 드러나면 된다.
+
+### 13.2 "왜"를 말해준다
+```
+❌ 문장을 짧게 써.
+✅ 문장을 짧게 써줘. 모바일에서 읽는 독자가 대부분이라 긴 문장은 이탈률을 높인다.
+```
+이유를 알면 Claude는 규칙을 기계적으로 따르는 대신, 목적에 맞게 판단한다.
+
+### 13.3 긴 자료는 앞에, 질문은 뒤에
+보고서, 원고, 영상 자막처럼 긴 자료를 다룰 때는 자료를 먼저 붙이고 마지막에 질문을 두는 구성이 정확도가 높다.
+
+### 13.4 예시는 `<example>`로
+```
+<example type="good">짧고 동사로 시작하는 문장</example>
+<example type="bad">~에 대한 부분에 있어서의 검토가 필요합니다</example>
+```
+
+### 13.5 먼저 생각하게 한다
+복잡한 기획은 `<thinking>`에서 먼저 따져 보고 `<answer>`에 결론만 쓰게 하면 논리가 탄탄해진다.
+
+### 13.6 코드 정의를 "상시 설정"에 넣는다
+- **프로젝트 지침:** 특정 작업 공간에서만 코드를 쓰고 싶을 때 (예: "브랜드 A 인스타 운영" 프로젝트)
+- **사용자 설정:** 모든 대화에 공통 적용할 선호
+- **스타일(Styles):** 내 문체를 저장해 두고 전환 ([레시피 I1](#ch11) 결과물을 여기에)
+
+### 13.7 Claude Code에서는 진짜 슬래시 명령을 만든다
+Claude Code에서는 프로젝트의 `.claude/commands/` 폴더에 마크다운 파일을 두면 그 파일명이 실제 슬래시 명령이 된다.
+
+```
+.claude/commands/hook30.md
+```
+```markdown
+다음 주제에 대해 SNS 첫 줄 후보 30개를 만들어줘.
+질문형·숫자형·반전형·공감형·경고형·비밀 공개형으로 5개씩, 각 20자 이내.
+
+주제: $ARGUMENTS
+```
+사용: `/hook30 비건 립밤 신제품`
+
+> 세부 설정 방식은 버전에 따라 달라질 수 있으니 공식 문서(docs.claude.com)를 확인한다.
+
+### 13.8 결과물을 문서·파일로
+긴 글은 "문서로 만들어줘", "md 파일로 줘"라고 요청하면 바로 저장·공유 가능한 형태로 받을 수 있다. 이 책도 그렇게 만들어졌다.
+
+---
+
+<a id="ch14"></a>
+## 14장. ChatGPT 200% 활용법
+
+### 14.1 마크다운 섹션 구조
+```
+### 역할
+### 목표
+### 입력 자료
+### 조건
+### 출력 형식
+```
+헤더로 역할을 분리하면 지시 누락이 줄어든다.
+
+### 14.2 맞춤 지침(Custom Instructions)에 코드 정의 저장
+"ChatGPT가 어떻게 응답했으면 하나요?" 칸에 [부록 A](#appA)의 축약판을 넣으면 모든 대화에서 코드를 쓸 수 있다. 글자 수 제한이 있으니 자주 쓰는 코드 20개 정도만 추린다.
+
+### 14.3 GPTs로 "브랜드 전용 카피봇" 만들기
+코드 정의서 + 브랜드 톤 가이드 + 좋은 게시물 예시를 GPT의 지침과 파일에 넣어 두면, 팀원 모두가 같은 코드 체계와 같은 브랜드 목소리로 쓸 수 있다.
+
+### 14.4 반복 개선 루프
+```
+1차: 초안 작성 /hook /platform:Blog
+2차: 방금 글을 /persona:journalist 관점에서 비평해줘
+3차: 비평을 반영해서 다시 써줘
+```
+생성 → 비평 → 수정의 3단 루프는 두 모델 모두에서 품질을 크게 올린다.
+
+---
+
+<a id="ch15"></a>
+## 15장. 실패하는 프롬프트, 고치는 프롬프트
+
+| 실패 유형 | 나쁜 예 | 고친 예 |
+|---|---|---|
+| 맥락 없음 | `글 써줘 /hook` | `30대 직장인 대상 재테크 블로그 도입부 /hook` |
+| 코드 과잉 | `/hook /story /TLDR /table /meme /expert` | 목적에 맞는 3개만: `/hook /story /platform:Blog` |
+| 충돌 방치 | `/TLDR /descriptive` | `/TLDR (우선), 묘사는 한 문장만` |
+| 검증 생략 | `/statistics` | `/statistics, 출처 표기, 불확실하면 [확인 필요]` |
+| 가짜 신뢰 | `/testimonial 후기 10개 만들어줘` | `실제 후기 3개를 다듬어줘 /testimonial` |
+| 모호한 페르소나 | `/expert` | `/expert (10년 차 세무사)` |
+| 길이 미지정 | `/platform:Ad` | `/platform:Ad, 제목 25자, 설명 45자` |
+| AI 말투 그대로 | 결과를 수정 없이 게시 | `/human` + 내 말투 가이드 + 직접 한 번 퇴고 |
+
+### 발행 전 최종 체크리스트
+- [ ] 누구를 위한 글인지 적었는가
+- [ ] 무엇을 위해 쓰는지(목적) 적었는가
+- [ ] 코드는 3개 이하인가
+- [ ] 길이·형식을 지정했는가
+- [ ] 수치·인용·후기는 사실 확인을 거쳤는가
+- [ ] 광고·협찬이라면 표기했는가
+- [ ] 내 목소리로 한 번 다시 읽었는가
+
+---
+
+<a id="ch16"></a>
+## 16장. 바이럴의 윤리: 선을 넘지 않는 법
+
+바이럴 마케팅에서 AI는 속도를 10배로 올려 준다. 그런데 **실수의 속도도 10배**가 된다. 한 번 퍼진 거짓은 정정 게시물보다 멀리 간다. 오래 가는 계정과 브랜드는 다음 선을 지킨다.
+
+| 선 | 왜 지켜야 하나 | 안전한 프롬프트 습관 |
+|---|---|---|
+| **광고는 광고라고 말한다** | 경제적 대가를 받은 콘텐츠의 표기 누락("뒷광고")은 공정거래위원회의 추천·보증 심사지침 등에 따라 제재 대상이 될 수 있다 | 협찬 레시피에 `#광고 표기 필수`를 규칙으로 넣는다 |
+| **없는 후기를 만들지 않는다** | 가짜 후기·가짜 평점은 소비자 기만이며 표시·광고 관련 법규 위반 소지가 있다 | `/testimonial`은 실제 후기 다듬기에만 쓴다 |
+| **없는 숫자를 만들지 않는다** | AI의 그럴듯한 가짜 통계는 한 번 걸리면 계정 신뢰도 전체를 잃는다 | `/statistics`에 "출처 표기, 모르면 [확인 필요]" |
+| **없는 명언을 만들지 않는다** | 가짜 인용은 가장 흔하게 들키는 AI 오류다 | `/quote`에 "화자와 출처 표기" |
+| **실존 인물의 말을 지어내지 않는다** | 명예훼손·초상권·퍼블리시티권 문제로 이어질 수 있다 | 인물 인용은 실제 발언 원문 링크가 있을 때만 |
+| **혐오로 클릭을 사지 않는다** | 논쟁은 참여를 부르지만, 혐오는 신고와 불매를 부른다 | `/controversial`은 항상 `/objection`과 함께 |
+| **건강·금융 효능을 단정하지 않는다** | 의료·금융 광고는 별도의 엄격한 규제를 받는다 | "개인차가 있을 수 있음", "투자 권유 아님" 규칙 포함 |
+
+> 이 표는 법률 자문이 아니다. 캠페인 규모가 크거나 규제 업종(의료, 금융, 건강기능식품 등)이라면 반드시 최신 규정과 전문가 검토를 거친다.
+
+**셰프의 한마디:** 가장 강력한 바이럴은 조작된 숫자가 아니라, 사람들이 **"이건 내 얘기다"라고 느끼는 진짜 문장**에서 나온다. AI는 그 문장을 찾는 속도를 올려 줄 뿐, 대신 느껴 주지는 않는다.
+
+---
+
+# 부록
+
+<a id="appA"></a>
+## 부록 A. 복사해서 쓰는 코드 정의서
+
+아래를 대화 첫머리, ChatGPT 맞춤 지침/GPTs, Claude 프로젝트 지침에 붙여 넣는다.
+
+```
+# 프롬프트 코드 규칙 (AI Prompt Cook Book)
+사용자가 메시지에 슬래시 코드를 붙이면 아래 정의대로 응답한다.
+여러 코드가 충돌하면 사용자가 적은 우선순위를, 없으면 뒤에 적힌 형식 코드를 우선한다.
+수치(/statistics), 인용(/quote), 후기(/testimonial)는 지어내지 않으며,
+확실하지 않으면 [확인 필요]로 표시한다. 광고·협찬 콘텐츠는 광고 표기를 포함한다.
+
+[설명] /ELI5 아주 쉽게 · /human 자연스러운 구어체 · /story 스토리텔링 ·
+/expert 전문가 수준 · /TLDR 한 문단 요약 · /analogy 비유 · /stepbystep 단계별 ·
+/visual 장면 묘사 · /timeline 시간순 · /beforeafter 전후 비교
+
+[톤] /hook 후킹 첫 문장 · /reframe 시점 전환 · /rewrite:GenZ Z세대 말투 ·
+/tone:funny 유머 · /tone:empathetic 공감 · /tone:shocking 강한 문구(사실 범위 내) ·
+/tone:motivational 동기부여 · /tone:formal 격식체 · /descriptive 감각 묘사 ·
+/quote 출처 확실한 명언 · /monologue 독백
+
+[구조] /framework:AIDA · /framework:PAS · /problem/solution · /listicle 번호 리스트 ·
+/compare 비교 · /table 표 · /FAQ 문답 · /headline 제목 후보 · /commentbait 댓글 유도 ·
+/summary 간결 요약
+
+[플랫폼] /platform:Instagram · YouTube · Blog · Email · TikTok · Resume · Ad · Slide ·
+Podcast · LinkedIn · Threads · X. 각 플랫폼의 분량·구조·관행에 맞춘다.
+
+[참여] /quiz · /poll · /fillintheblank · /engage · /curiosity · /controversial(비하·왜곡 금지) ·
+/boldclaim · /objection 반론과 재반론 · /dialogue 대화체 · /calltoaction 단일 행동 유도
+
+[페르소나] /persona:coach · developer · marketer · designer · student · teacher ·
+CEO · journalist · therapist · investor · customer(타깃 고객) · hater(날카로운 비판자) ·
+editor(편집자). 해당 관점과 말투로 응답한다.
+
+[특수] /promptbuilder 재사용 프롬프트 설계 · /actionplan 실행 계획 ·
+/statistics 출처 있는 수치 · /testimonial 제공된 후기 다듬기 · /meme · /tweet ·
+/oneliner 한 줄 · /command 체크리스트 · /filltemplate 틀 채우기 ·
+/keywordinject 지정 키워드 자연스럽게 삽입
+```
+
+---
+
+<a id="appB"></a>
+## 부록 B. 전체 코드 한눈에 보기
+
+| 분류 | 코드 |
+|---|---|
+| 설명 방식 | `/ELI5` `/human` `/story` `/expert` `/TLDR` `/analogy` `/stepbystep` `/visual` `/timeline` `/beforeafter` |
+| 톤 & 스타일 | `/hook` `/reframe` `/rewrite:GenZ` `/tone:funny` `/tone:empathetic` `/tone:shocking` `/tone:motivational` `/tone:formal` `/descriptive` `/quote` `/monologue` |
+| 콘텐츠 구조 | `/framework:AIDA` `/framework:PAS` `/problem/solution` `/listicle` `/compare` `/table` `/FAQ` `/headline` `/commentbait` `/summary` |
+| 플랫폼 | `/platform:Instagram` `YouTube` `Blog` `Email` `TikTok` `Resume` `Ad` `Slide` `Podcast` `LinkedIn` (+`Threads` `X`) |
+| 참여 유도 | `/quiz` `/poll` `/fillintheblank` `/engage` `/curiosity` `/controversial` `/boldclaim` `/objection` `/dialogue` `/calltoaction` |
+| 페르소나 | `/persona:coach` `developer` `marketer` `designer` `student` `teacher` `CEO` `journalist` `therapist` `investor` (+`customer` `hater` `editor`) |
+| 특수 목적 | `/promptbuilder` `/actionplan` `/statistics` `/testimonial` `/meme` `/tweet` `/oneliner` `/command` `/filltemplate` `/keywordinject` |
+
+### 목적별 빠른 찾기
+
+| 하고 싶은 것 | 코드 조합 |
+|---|---|
+| 스크롤 멈추기 | `/hook` `/curiosity` `/tone:shocking` |
+| 저장 늘리기 | `/listicle` `/beforeafter` `/table` `/stepbystep` |
+| 댓글 늘리기 | `/commentbait` `/poll` `/quiz` `/boldclaim` |
+| 공유 늘리기 | `/story` `/tone:empathetic` `/oneliner` |
+| 전환(구매) 늘리기 | `/framework:PAS` `/objection` `/calltoaction` |
+| AI 티 지우기 | `/human` + 내 말투 가이드 |
+
+---
+
+<a id="appC"></a>
+## 부록 C. 주간 콘텐츠 캘린더 템플릿
+
+`/filltemplate`와 함께 쓰는 빈 틀. 이번 주 메모와 함께 AI에게 주면 채워 준다.
+
+```
+[이번 주 메모]
+- 이슈:
+- 신제품/이벤트:
+- 지난주 반응 좋았던 게시물:
+
+[요청] 아래 캘린더를 채워줘. /filltemplate /hook
+```
+
+| 요일 | 채널 | 포맷 | 목적 | 첫 줄 훅 | 핵심 메시지 | CTA | 코드 |
+|---|---|---|---|---|---|---|---|
+| 월 | Instagram | 캐러셀 | 저장 | | | 저장하기 | `/listicle` `/beforeafter` |
+| 화 | Threads | 연결 글 | 댓글 | | | 경험 공유 | `/monologue` `/commentbait` |
+| 수 | YouTube | 쇼츠 | 도달 | | | 구독 | `/hook` `/story` |
+| 목 | Blog | 정보글 | 검색 유입 | | | 링크 클릭 | `/FAQ` `/keywordinject` |
+| 금 | Instagram | 스토리 | 참여 | | | 투표 | `/poll` `/quiz` |
+| 토 | LinkedIn | 인사이트 | 신뢰 | | | 팔로우 | `/boldclaim` `/objection` |
+| 일 | Email | 뉴스레터 | 전환 | | | 구매/신청 | `/summary` `/calltoaction` |
+
+---
+
+## 맺음말
+
+좋은 요리사는 레시피를 외우지 않는다. 왜 소금을 먼저 넣고 설탕을 나중에 넣는지 알기 때문에, 레시피가 없어도 요리를 한다.
+
+이 책의 70가지 코드도 마찬가지다. 코드를 외우는 것보다 "**누구에게, 무엇을, 왜**"를 먼저 묻는 습관이 몸에 배면, 어떤 AI가 새로 나와도, 어떤 플랫폼이 새로 뜨더라도 당신의 글은 사람에게 닿는다.
+
+코드는 도구이고, 좋은 글은 여전히 사람의 인사이트와 감성에서 시작한다.
+
+---
+
+**AI Prompt Cook Book**
+김호광 (Dennis Kim) · [github.com/gameworkerkim](https://github.com/gameworkerkim) · gameworker@gmail.com
+
+> 이 문서는 자유롭게 읽고 공유할 수 있도록 공개합니다. 공유 시 출처를 밝혀 주시면 감사하겠습니다.
