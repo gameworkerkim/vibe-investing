@@ -1,8 +1,80 @@
+---
+title: "승리를 위해서는 무엇이든 한다 - AI 코딩 도구가 내 저장소를 몰래 가져갈 때"
+title_en: "Whatever It Takes to Win — When an AI Coding Tool Quietly Takes Your Repo"
+subtitle: "ZCode 사례로 본 AI 에이전트의 데이터 유출 리스크와 한·미 법적 책임"
+description: "ZCode가 꺼진 스냅샷 스위치에도 .git 전체를 알리바바 OSS로 올렸다. 복호화 키는 서버만 가졌다. 한국 5배 징벌배상·매출 10% 과징금. 법률 자문 아님."
+abstract: |
+  2026년 9월 18일 ZCode(즈푸·Z.ai)가 꺼진 Repository Snapshot Indexing에도 워크스페이스를 암호화해 알리바바 OSS로 올린 사실이 공개됐다. 한 포렌식에서 7월 5일~9월 18일 26개 워크스페이스, 5만 617개 파일, 1.77GB가 확인됐다.
+  문제의 핵은 범위(.git이 제외 규칙보다 앞), 키(서버만 복호화), 스위치(로그 1,339회 false인데 스냅샷 생성)다. 처리방침의 '대화를 통해 제출' 범위도 벗어난다.
+  Grok Build CLI(2026.7)와 같은 패턴이다. 한국은 개인정보법 5배 징벌배상과 2026.9.11 매출 10% 과징금, 미국은 작동하지 않는 옵트아웃의 FTC 기만이 쟁점이다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean AI-security / privacy-law column (not legal or investment advice), 2026-09-21, group korea-hacking,
+  AI_Hacking/ZCode-OSS-Leak.md.
+  Event: ferstar 2026-09-18; ~/.zcode >700MB; AES-256-CTR + RSA-OAEP; Alibaba OSS via zcode.z.ai STS.
+  Independent Windows forensic: 2026-07-05..09-18, 26 workspaces, 30 snapshot manifests, 50,617 files, 1.77GB; prompt-triggered full workspace capture.
+  Vonng Mac repro: 8,323/9,619 files in .git (93.9% bytes); .git allow-rule before secret/size filters; snapshot indexing setting false 1,339 times while 4 snapshots still ran.
+  Zhipu response: CAICT zero-data on zcode-prod, v3.14.0 cut snapshot path, NSFOCUS deletion, GitHub open source, claimed no training use. Limits: client OSS ≠ server STS/key/access logs; deletion ≠ no prior decrypt/copy.
+  Precedents: xAI Grok Build CLI 2026-07; Nx s1ngularity 2025-08; DeepSeek KR PIPC 2025; Samsung ChatGPT 2023.
+  KR: PIPA Art.39 5x punitive, statutory KRW 3m, 2026-09-11 turnover 10% surcharge; Unfair Competition 5x; extra-territorial transfer Art.28-8. Leak at transmission. US: DTSA 2x, CCPA, FTC Act §5 deceptive opt-out.
+date: 2026-09-21
+updated: 2026-09-21
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - ZCode
+  - Zhipu
+  - GLM
+  - 데이터유출
+  - 개인정보보호법
+  - 영업비밀
+  - Alibaba OSS
+  - AI에이전트
+keywords:
+  - "ZCode 유출"
+  - "Z.ai 스냅샷"
+  - "알리바바 OSS"
+  - "Git 이력 업로드"
+  - "개인정보보호법 징벌배상"
+  - "과징금 매출 10%"
+  - "Grok Build CLI"
+  - "옵트아웃 무력"
+group: korea-hacking
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/zcode-oss-leak.jpg"
+image: "https://vibequant.cc/og/zcode-oss-leak.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>승리를 위해서는 무엇이든 한다 - AI 코딩 도구가 내 저장소를 몰래 가져갈 때 · VibeQuant</title>
+  <meta name="description" content="ZCode가 꺼진 스냅샷 스위치에도 .git 전체를 알리바바 OSS로 올렸다. 복호화 키는 서버만 가졌다. 한국 5배 징벌배상·매출 10% 과징금. 법률 자문 아님.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "승리를 위해서는 무엇이든 한다 - AI 코딩 도구가 내 저장소를 몰래 가져갈 때",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-21",
+    "keywords": ["ZCode 유출", "Z.ai 스냅샷", "알리바바 OSS", "Git 이력 업로드", "개인정보보호법 징벌배상", "과징금 매출 10%", "Grok Build CLI", "옵트아웃 무력"]
+  }
+  </script>
+-->
+
 # 승리를 위해서는 무엇이든 한다 - AI 코딩 도구가 내 저장소를 몰래 가져갈 때
 
-**ZCode 사례로 본 AI 에이전트의 데이터 유출 리스크와 한·미 법적 책임**
+## ZCode 사례로 본 AI 에이전트의 데이터 유출 리스크와 한·미 법적 책임
 
-글. Dennis Kim (김호광) 싸이월드 전 대표.
+![ZCode 데스크톱 — GLM-5.3 Max, Idle-time task. 에이전트가 저장소에 상주하는 화면](images/zcode-ui-noon-break.jpg)
+
+*ZCode 새 작업 화면(GLM-5.3 · Max). 구독자용 Idle-time task는 남는 연산으로 백그라운드 작업을 돌리겠다는 안내다. 이번 사건의 쟁점도 채팅창이 아니라, 켜져 있는 동안 저장소를 가져가는 상주 프로세스였다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 21일
 
 ## 1. 디스크 정리를 하다가 발견된 것
 
@@ -10,7 +82,7 @@
 
 ZCode는 중국 즈푸(Zhipu, Z.ai)가 GLM 모델과 함께 내놓은 데스크톱 코딩 에이전트다. 모델 성능이 좋고 코딩 플랜이 저렴해 한국 개발자들 사이에서도 사용이 늘던 도구였다.
 
-한 마디로 Z.AI의 Zcode로 작성된 소스 코드가 알리바바 클라우드 스토리지에 몰래 저장된 것이다. 
+한 마디로 Z.ai의 ZCode로 작성된 소스 코드가 알리바바 클라우드 스토리지에 몰래 저장된 것이다. 
 
 독립 감사도 뒤따랐다. 한 사용자가 자기 Windows 장비를 읽기 전용으로 포렌식한 결과, 2026년 7월 5일부터 9월 18일까지 26개 워크스페이스에 걸쳐 30건의 스냅샷 매니페스트, 50,617개 파일, 1.77GB 분량이 확인됐다. 파이프라인은 프롬프트를 보낼 때마다 워크스페이스 전체를 캡처했다. 클라이언트에서 AES-256-CTR로 암호화하고 데이터 키를 RSA-OAEP로 감싼 뒤, `zcode.z.ai`에 업로드 자격증명을 요청해 알리바바 OSS로 전송하는 방식이었다.
 
