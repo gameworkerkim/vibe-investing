@@ -628,6 +628,7 @@ const SLUG_OVERRIDES = {
   "Alibaba/Qwen38-27B-Review.md": "qwen38-27b-review",
   "StableCoin/Medici-to-Siliconvalley-column.md": "medici-to-siliconvalley",
   "Hacking/BackDoor-ENDLESS-DOORS.md": "backdoor-endless-doors",
+  "Hacking/Clickfix-Hacking.md": "clickfix-hacking",
   "SSD/SSD-Power-OFF-Retention-Risk.md": "ssd-power-off-retention-risk",
   "Cyworld/Cyworld-Server-Restoration-Playbook.md": "cyworld-server-restoration-playbook",
   "Windows10/EOD-Win10-China.md": "eod-win10-china",

@@ -1,6 +1,78 @@
+---
+title: "ClickFix 공격, 왜 방어하기 힘든가?"
+title_en: "Why ClickFix Is So Hard to Defend"
+subtitle: "목마를 성 안으로 끌고 들어가는 것은 언제나 수비하는 쪽이다"
+description: "ClickFix는 성벽을 넘지 않는다. 사용자가 명령을 실행 창으로 끌고 들어간다. ESET 탐지 517% 급증, MS 초기 침투 47%. 붙여넣기 전에 멈춰라."
+abstract: |
+  ClickFix는 가짜 오류·인증 화면으로 사용자가 Win+R, PowerShell, 터미널에 명령을 직접 붙여넣게 한다. ESET은 2025 상반기 탐지가 517% 늘었고, 마이크로소프트는 초기 침투의 47%를 ClickFix로 집계했다.
+  탐지가 어려운 이유는 정상 사용자·서명된 OS 도구·지문 식별 페이로드·Polygon EtherHiding C2·탈취된 공식·지인 계정이다. ChainScript RAT, CrashFix, BlueNoroff 가짜 Zoom, Lazarus Mach-O Man이 같은 설계를 쓴다.
+  북한은 사회공학·사용자 실행 유도를 주 무기로 삼았고 ClickFix가 표준 기법이 됐다. 실행 창을 좁히고, 행위를 보고, 붙여넣기 요구는 예외 없이 거절하라. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean cyber-security / social-engineering column (not legal or investment advice), 2026-09-22,
+  group korea-hacking, Hacking/Clickfix-Hacking.md.
+  Thesis: ClickFix bypasses perimeter by making the defender paste the payload (Trojan horse). Stats: ESET H1 2025 detections +517%, ~8% of blocked attacks; Microsoft 2025 DDR 47% of initial access seen by Defender Experts; kits ~$250/mo or $1,800 lifetime.
+  Why hard: (1) signed living-off-the-land binaries vs user action; CrashFix 2026-01 fake extension. (2) ChainScript RAT — Node.js, msiexec, rotating decoy brands (Spotify/Zoom/Teams), hashes fail. (3) fingerprinting; BlueNoroff wallet-extension check; HBO Max Reddit hijack; stolen Telegram. (4) EtherHiding on Polygon; GuidePoint: 15 contracts, 31 corp sites, 479 finance/crypto skimmers; $0.01/tx C2 rotate. ChainScript not attributed to DPRK. (5) trust-first: Kimsuky interviews; JUMPSEC 2026-07 BlueNoroff kit isClickFix clipboard swap, 5 min to compromise; Lazarus Mach-O Man macOS keychain via Telegram bot.
+  Defense: disable Win+R; CLM/signed scripts; AppLocker/WDAC; behavior (browser→msiexec, rogue Node, Run keys); monitor non-browser eth_call; share malicious contracts; one education line: no site/meeting/recruiter ever asks you to paste a command.
+  S2W H1 2026: DPRK 99 of 158 state APT items; Korea top target 19 vs US 8; social engineering vs China's vuln and Russia's docs. AI/deepfake lures. Gov/military/intel first.
+date: 2026-09-22
+updated: 2026-09-22
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - ClickFix
+  - 사회공학
+  - Lazarus
+  - Kimsuky
+  - BlueNoroff
+  - ChainScript
+  - EtherHiding
+  - 북한
+keywords:
+  - "ClickFix"
+  - "실행 창 붙여넣기"
+  - "ChainScript RAT"
+  - "EtherHiding"
+  - "BlueNoroff Zoom"
+  - "Mach-O Man"
+  - "Kimsuky"
+  - "북한 APT"
+group: korea-hacking
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/clickfix-hacking.jpg"
+image: "https://vibequant.cc/og/clickfix-hacking.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>ClickFix 공격, 왜 방어하기 힘든가? · VibeQuant</title>
+  <meta name="description" content="ClickFix는 성벽을 넘지 않는다. 사용자가 명령을 실행 창으로 끌고 들어간다. ESET 탐지 517% 급증, MS 초기 침투 47%. 붙여넣기 전에 멈춰라.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "ClickFix 공격, 왜 방어하기 힘든가?",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-22",
+    "keywords": ["ClickFix", "실행 창 붙여넣기", "ChainScript RAT", "EtherHiding", "BlueNoroff Zoom", "Mach-O Man", "Kimsuky", "북한 APT"]
+  }
+  </script>
+-->
+
 # ClickFix 공격, 왜 방어하기 힘든가?
 
-## — 목마를 성 안으로 끌고 들어가는 것은 언제나 수비하는 쪽이다
+## 목마를 성 안으로 끌고 들어가는 것은 언제나 수비하는 쪽이다
+
+![트로이인들이 성벽을 허물고 목마를 끌어들이는 장면. 목마 뱃속에 푸른 화면이 빛난다](images/clickfix-trojan-horse.jpg)
+
+*성벽은 밖에서 안 뚫렸다. 트로이인들이 길을 냈다. ClickFix도 같다. 명령어를 실행 창으로 끌고 들어가는 것은 언제나 수비하는 쪽이다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 22일
 
 ### 시작하는 말 - 트로이는 성벽이 무너져서 망하지 않았다
 
