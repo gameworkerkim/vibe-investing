@@ -1,71 +1,3 @@
-<!--
----
-title: "ClickFix 공격, 왜 방어하기 힘든가?"
-title_en: "Why ClickFix Is So Hard to Defend"
-subtitle: "목마를 성 안으로 끌고 들어가는 것은 언제나 수비하는 쪽이다"
-description: "ClickFix는 성벽을 넘지 않는다. 사용자가 명령을 실행 창으로 끌고 들어간다. ESET 517%, MS 초기 침투 47%. 붙여넣기 전에 멈추고, AI 감사로 한 겹 더 막아라."
-abstract: |
-  ClickFix는 가짜 오류·인증 화면으로 사용자가 Win+R, PowerShell, 터미널에 명령을 직접 붙여넣게 한다. ESET은 2025 상반기 탐지가 517% 늘었고, 마이크로소프트는 초기 침투의 47%를 ClickFix로 집계했다.
-  탐지가 어려운 이유는 정상 사용자·서명된 OS 도구·지문 식별 페이로드·Polygon EtherHiding C2·탈취된 공식·지인 계정이다. ChainScript RAT, CrashFix, BlueNoroff 가짜 Zoom, Lazarus Mach-O Man이 같은 설계를 쓴다.
-  교육만으로는 습관의 실수를 0으로 만들지 못한다. 실행 직전 검증·맥락 결합·사후 감사의 인공지능 보안 감사 체계를 규칙 기반 통제와 병행하라. AI는 오라클이 아니라 지치지 않는 파수꾼이다. 법률 자문·투자 권유 아님.
-summary_for_ai: |
-  Korean cyber-security / social-engineering column (not legal or investment advice), 2026-09-22,
-  group korea-hacking, Hacking/Clickfix-Hacking.md. v1.3.
-  Thesis: ClickFix makes the defender paste the payload (Trojan horse). Stats: ESET H1 2025 +517%, ~8% of blocked attacks; Microsoft 2025 DDR 47% of initial access; kits $250/mo or $1,800 lifetime.
-  Why hard: (1) signed LOLBins vs user action; CrashFix 2026-01. (2) ChainScript RAT rotating decoy brands. (3) fingerprinting; BlueNoroff wallet-extension check; HBO Max Reddit; stolen Telegram. (4) EtherHiding on Polygon; GuidePoint 15 contracts, 31 sites, 479 skimmers. ChainScript not attributed to DPRK. (5) trust-first: Kimsuky interviews; JUMPSEC 2026-07 BlueNoroff isClickFix clipboard swap, 5 min to compromise; Lazarus Mach-O Man macOS keychain.
-  Defense 1-5: disable Win+R; CLM; AppLocker/WDAC; behavior chains; monitor non-browser eth_call; share contract/wallet IOCs; never paste a command; verify Telegram invites on another channel.
-  Defense 6 (new in v1.3): AI security-audit layer — pre-execution intercept of paste into Run/PowerShell/Terminal/Script Editor (decode intent, stop+explain in plain language); contextual (site age, messenger invite, is the user a developer); post-execution (script-block logging, AMSI, macOS unified logs, SOC narrative). Apple Mar 2026 Terminal paste warning is insufficient (Script Editor bypass). Principles: pause-and-confirm not silent block; pair with GPO/WDAC; treat command comments as data not authority; log scope/retention; human-reviewable rationale. AI is a sentry, not an oracle.
-  S2W H1 2026: DPRK 99 of 158; Korea 19 vs US 8. Gov/mil/intel first; deploy AI audit on high-contact terminals first.
-date: 2026-09-22
-updated: 2026-09-22
-author: "김호광 (Dennis Kim)"
-lang: ko
-tags:
-  - ClickFix
-  - 사회공학
-  - Lazarus
-  - Kimsuky
-  - BlueNoroff
-  - EtherHiding
-  - AI보안감사
-  - 북한
-keywords:
-  - "ClickFix"
-  - "실행 창 붙여넣기"
-  - "인공지능 보안 감사"
-  - "ChainScript RAT"
-  - "EtherHiding"
-  - "BlueNoroff Zoom"
-  - "Mach-O Man"
-  - "북한 APT"
-group: korea-hacking
-featured: true
-featured_rank: 1
-og_image: "https://vibequant.cc/og/clickfix-hacking.jpg"
-image: "https://vibequant.cc/og/clickfix-hacking.jpg"
-schema_type: BlogPosting
-draft: false
-robots: index,follow
----
-
-<!--
-  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
-  <title>ClickFix 공격, 왜 방어하기 힘든가? · VibeQuant</title>
-  <meta name="description" content="ClickFix는 성벽을 넘지 않는다. 사용자가 명령을 실행 창으로 끌고 들어간다. ESET 517%, MS 초기 침투 47%. 붙여넣기 전에 멈추고, AI 감사로 한 겹 더 막아라.">
-  <meta name="robots" content="index,follow">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "ClickFix 공격, 왜 방어하기 힘든가?",
-    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
-    "datePublished": "2026-09-22",
-    "keywords": ["ClickFix", "실행 창 붙여넣기", "인공지능 보안 감사", "ChainScript RAT", "EtherHiding", "BlueNoroff Zoom", "Mach-O Man", "북한 APT"]
-  }
-  </script>
--->
-
 # ClickFix 공격, 왜 방어하기 힘든가?
 
 ## 목마를 성 안으로 끌고 들어가는 것은 언제나 수비하는 쪽이다
@@ -99,11 +31,12 @@ ClickFix는 "기술적 문제를 해결하세요", "회의 참여를 위해 업�
 이 기법은 더 이상 틈새 수법이 아니다. 숫자가 말해준다.
 
 - ESET은 2024년 하반기 대비 2025년 상반기 ClickFix 탐지가 **517% 증가**했다고 측정했다. 차단된 전체 공격의 약 8%를 차지해, 피싱 다음가는 두 번째 공격 벡터로 올라섰다.
+- 517%는 시작에 불과했다. ESET은 2025년 하반기 대비 2026년 상반기에 탐지가 **다시 108% 늘었다**고 집계했다. 정점을 찍고 꺾인 것이 아니라, 높은 기저 위에서 또 두 배가 됐다.
 - Microsoft의 2025 Digital Defense Report는 자사 Defender Experts 팀이 확인한 **초기 침투 사례의 47%**를 ClickFix로 집계했다.
-- 2026년 3~5월, ClickFix는 전 세계 최상위 악성코드 전달 기법 가운데 하나로 기록됐다.
+- 2026년 3~5월, ClickFix는 전 세계 최상위 악성코드 전달 기법 가운데 하나로 기록됐다. Recorded Future는 ClickFix가 2026년 내내 주요 초기 침투 벡터로 남을 가능성이 매우 높다고 전망했다.
 - 완성형 ClickFix 키트는 지하 포럼에서 **월 250달러, 평생 라이선스 1,800달러** 수준에 팔린다. 악성코드를 개발할 능력이 없어도 캠페인을 돌릴 수 있다. 정교함을 직접 만드는 것이 아니라 빌리는 구조다.
 
-국가 배후 조직도 빠르게 올라탔다. 2024년 말부터 2025년 초까지 약 3개월 사이 북한 Kimsuky, 러시아 APT28, 이란 MuddyWater가 잇따라 ClickFix를 실전에 투입했다. 범죄 조직의 도구가 국가의 무기가 되는 데 걸린 시간은 몇 달에 불과했다.
+국가 배후 조직도 빠르게 올라탔다. 2024년 말부터 2025년 초까지 약 3개월 사이 북한 Kimsuky, 러시아 APT28, 이란 MuddyWater가 잇따라 ClickFix를 실전에 투입했다. 2026년에는 러시아 군 정보기관(GRU) 산하 Sandworm까지 이 기법으로 우크라이나 기관을 침해한 사실이 우크라이나 CERT를 통해 확인됐다. 범죄 조직의 도구가 국가의 무기가 되는 데 걸린 시간은 몇 달에 불과했다.
 
 이 단순한 공격을 왜 막기 어려운가? 구조적 이유는 다섯 가지다.
 
@@ -115,7 +48,13 @@ ClickFix는 "기술적 문제를 해결하세요", "회의 참여를 위해 업�
 
 트로이의 성벽은 목마를 막을 수 없었다. 성벽이 막도록 설계된 것은 적군이지, 시민이 끌고 들어오는 봉헌물이 아니었기 때문이다.
 
-변종도 진화한다. 2026년 1월 등장한 CrashFix는 가짜 확장 프로그램으로 브라우저를 실제로 먹통으로 만든 뒤, "복구하려면 이 명령을 실행하라"는 미끼를 띄운다. 진짜로 멈춘 브라우저 앞에서 사용자의 의심은 사라진다.
+macOS도 다르지 않다. 맥에서는 Win+R 대신 터미널이 신전이다. 가짜 페이지가 "Mac 저장 공간 확보", "시스템 유틸리티 설치" 같은 안내로 `curl`로 원격 스크립트를 받아 셸로 바로 실행하는 한 줄을 붙여넣게 만든다. 사용자가 직접 실행하니 Gatekeeper와 XProtect 같은 macOS 기본 보안 장치도 우회된다.
+
+맥에서는 연출도 다르다. 2026년 7월 보고된 북한 연계 macOS 악성 광고 캠페인은 **전체 화면을 덮는 가짜 macOS 업데이트 화면**을 띄운다. 화면이 뜨는 순간 공격 명령은 사용자 몰래 클립보드에 이미 복사돼 있고, 안내는 터미널을 열어 붙여넣으라고만 말한다. 이 캠페인을 분석한 AllSecure는 이것이 공황을 유도하도록 설계됐다고 지적했다. 컴퓨터가 멈추거나 재부팅되는 것처럼 보이니, 운영체제가 고장 났다고 믿은 사용자는 평소라면 수상하게 여겼을 지시를 그대로 따른다. 이 캠페인 역시 이더리움 스마트 컨트랙트에서 C2 주소를 읽어오는 EtherHiding을 썼다. macOS와 블록체인 C2가 한 캠페인 안에서 만난 것이다.
+
+Apple도 대응했다. 2026년 3월 macOS는 터미널에 의심스러운 텍스트를 붙여넣으면 "악성코드 가능성, 붙여넣기 차단"이라는 경고를 띄우기 시작했다. 그러나 공격자들은 몇 주 만에 터미널 대신 스크립트 편집기(Script Editor)를 쓰게 하는 등 경고가 뜨지 않는 경로로 갈아탔다. 성문 하나를 닫으면 목마는 옆문으로 들어온다.
+
+변종도 끝없이 진화한다. 2026년 1월 등장한 CrashFix는 가짜 확장 프로그램으로 브라우저를 실제로 먹통으로 만든 뒤, "복구하려면 이 명령을 실행하라"는 미끼를 띄운다. 가짜 블루스크린, 멈춘 문서 뷰어, 특정 서비스의 오류 화면을 흉내 낸 미끼도 쓰인다. 최근에는 ChatGPT, Claude 같은 AI 도구의 설치 안내를 사칭한 미끼까지 등장했다. 진짜로 멈춘 브라우저나 익숙한 AI 도구 앞에서 사용자의 의심은 사라진다.
 
 ### 둘째, 미끼는 바뀌고 알맹이는 그대로다
 
@@ -133,7 +72,7 @@ ClickFix 미끼 → msiexec.exe로 악성 MSI 설치 → 자체 Node.js 런타�
 
 기능은 사실상 완전한 원격 제어다. 대화형 CMD·PowerShell, 파일 조작, 화면 캡처, 추가 페이로드 배포, 데스크톱 앱과 브라우저 확장을 아우르는 암호화폐 지갑 탐색, 원격 JavaScript 실행을 지원하고, 자기 업데이트와 흔적 정리 기능까지 갖췄다.
 
-ChainScript는 고립된 사례도 아니다. Node.js, 악성 인스톨러, 블록체인 기반 C2 탐색을 결합한 Tsundere, EtherRAT 같은 선행 사례와 유사한 아키텍처 패턴을 공유한다. 하나의 악성코드가 아니라, 진화하는 하나의 설계 사조로 봐야 한다.
+ChainScript는 고립된 사례도 아니다. Node.js, 악성 인스톨러, 블록체인 기반 C2(Command and Control, 공격자가 감염 PC에 명령을 내리는 지휘 서버) 탐색을 결합한 Tsundere, EtherRAT 같은 선행 사례와 유사한 아키텍처 패턴을 공유한다. 하나의 악성코드가 아니라, 진화하는 하나의 설계 사조로 봐야 한다.
 
 ### 셋째, 탐지 인프라의 눈을 가리고, 신뢰받는 채널을 탈취한다
 
@@ -151,32 +90,44 @@ Blackpoint 연구진은 이 구조가 작동하는 장면을 실시간으로 목
 
 또 하나의 디테일. ChainScript와 연결된 Polygon 컨트랙트는 대응하는 MSI(ComponentTask33)가 만들어지기 불과 **23초 전**에 배포됐다. 사람이 손으로 하는 작업이 아니다. 악성코드와 C2 인프라를 함께 찍어내는 자동화 빌드 파이프라인의 흔적이다.
 
-이것이 실험 단계가 아니라는 증거도 있다. GuidePoint Security는 2025년 11월부터 활동한 별도의 Polygon 기반 EtherHiding 캠페인을 추적했다. 알려진 컨트랙트 하나에서 공격자 지갑 기록을 거슬러 올라가자 **7개월간 6차례 웨이브로 배포된 15개의 스마트 컨트랙트**, 보고되지 않았던 C2 도메인 3개, 그리고 앞선 탐색 기법을 피하도록 **의도적으로 침묵하게 설계된 컨트랙트 12개**를 운영하는 두 번째 지갑이 드러났다. 공격 체인은 최소 **31개 정상 기업 웹사이트**를 경유했고, 백도어는 이후 약 **479개 금융·암호화폐 사이트**의 로그인 정보와 2단계 인증 코드를 가로채는 뱅킹 트로이목마로 진화했다.
+이것이 실험 단계가 아니라는 증거도 있다. GuidePoint Security는 2025년 11월부터 활동한 별도의 Polygon 기반 EtherHiding 캠페인을 추적했다. 알려진 컨트랙트 하나에서 공격자 지갑 기록을 거슬러 올라가자 **7개월간 6차례 웨이브로 배포된 15개의 스마트 컨트랙트**, 보고되지 않았던 C2 도메인 3개, 그리고 앞선 탐색 기법을 피하도록 **의도적으로 침묵하게 설계된 컨트랙트 12개**를 운영하는 두 번째 지갑이 드러났다. 공격 체인은 최소 **31개 정상 기업 웹사이트**를 경유했고, 백도어는 이후 약 **479개 금융·암호화폐 사이트**의 로그인 정보와 2단계 인증 코드를 가로채는 뱅킹 트로이목마로 진화했다. 2026년 2분기에는 ClickFix, EtherHiding, 트래픽 분배 시스템(TDS)을 결합해 **2,000개 넘는 침해 웹사이트**로 미끼를 뿌린 캠페인도 보고됐다.
 
 GuidePoint의 표현대로, 공격자는 트랜잭션당 1센트도 안 되는 비용으로 감염된 모든 기기를 새 C2로 자동 전환할 수 있다. 도메인이나 IP 하나를 막아서는 접근을 영구히 끊을 수 없다. 퍼블릭 블록체인은 어떤 기업도, 정부도 내릴 수 없는 영구 원장이다. 블록체인은 공격자에게 "탈중앙화된 방탄 호스팅"이 됐다.
 
-북한 연계 그룹은 이미 이 계보를 폭넓게 운용해 왔다. 이더리움 기반 EtherHiding, TRON·Aptos를 포인터로 쓰고 BSC에 데이터를 저장하는 교차 체인 방식, 빈 이더리움 전송에 제어 주소를 숨기는 방식 등이다. GuidePoint는 범죄 조직이 2023년 처음 쓴 EtherHiding을 북한 국가 행위자가 2025년 말, 이란 연계 그룹이 2026년 초 채택했다고 정리한다.
+북한 연계 그룹은 이미 이 계보를 폭넓게 운용해 왔다. Google 위협 인텔리전스 그룹(GTIG)은 2025년 10월 북한 클러스터 UNC5342가 Contagious Interview 작전에서 EtherHiding을 쓴다고 밝혔는데, 이 기법을 국가 행위자와 공식 연결한 첫 사례였다. 이더리움 기반 EtherHiding, TRON·Aptos를 포인터로 쓰고 BSC에 데이터를 저장하는 교차 체인 방식이 뒤를 이었다. GuidePoint는 범죄 조직이 2023년 처음 쓴 EtherHiding을 북한 국가 행위자가 2025년 말, 이란 연계 그룹이 2026년 초 채택했다고 정리한다.
+
+진화는 스마트 컨트랙트에서도 멈추지 않았다. 2026년 8월 OpenSourceMalware가 공개한 **NullReceiver**는 스마트 컨트랙트도, 데이터 필드도 쓰지 않는다. 공격자 지갑이 보낸 **금액 0, 데이터 0의 빈 이더리움 전송**에서 '받는 사람' 주소 자체를 C2 IP로 인코딩한다. 악성코드는 공격자 지갑의 가장 최근 송금 기록을 읽고, 수신자 주소를 풀어 IP를 얻는다. 네트워크에서 가장 싸고 가장 평범해 보이는 거래 형태다. EtherHiding을 추적하던 방어자의 단서인 컨트랙트 호출, 데이터 필드, 고정된 목적지 주소를 한꺼번에 지운 것이다. 이 기법은 Tailwind CSS 플러그인을 사칭한 npm 패키지 bianira-ui, fluid-type-ui로 유포됐고, 북한의 Contagious Interview 작전과 연결됐다. 블록체인 C2는 이제 스마트 컨트랙트를 넘어 **트랜잭션 수준**으로 내려갔다.
 
 단, 현재 공개된 분석에서 ChainScript 자체를 북한 등 특정 국가 행위자로 확정한 내용은 확인되지 않는다. 기법의 계보가 겹친다는 것과 같은 조직의 소행이라는 것은 아닐 수 있다. 해킹 기법은 서로 흉내를 내는 경우도 많고 고의적인 물타기를 하기 때문이다.
 
 ### 다섯째, 신뢰는 코드보다 먼저 공략된다
 
-북한의 ClickFix가 특히 위험한 이유는 명령어 한 줄 이전에 긴 신뢰 구축 과정이 있기 때문이다. 목마가 성 안에 들어간 것은 그리스군이 떠났다고 믿게 만든 10년의 전쟁과 그럴듯한 철수 연극 덕분이었다.
+ClickFix의 마지막 고리는 기술이 아니라 관계다. 명령어 한 줄은 공격의 끝이지 시작이 아니다. 그 한 줄을 붙여넣게 만들기까지, 공격자는 사용자가 의심하지 않을 맥락을 먼저 만든다. 목마가 성 안에 들어간 것도 그리스군이 떠났다고 믿게 만든 10년의 전쟁과 그럴듯한 철수 연극 덕분이었다.
+
+범죄 조직의 ClickFix가 "누구든 걸려라"는 그물이라면, 국가 배후 조직의 ClickFix는 한 사람을 위해 몇 주씩 공들이는 작살이다. 가짜 인터뷰 요청, 학회 초청, 투자 미팅, 채용 면접. 신뢰가 쌓인 뒤 도착한 "회의 참여를 위해 업데이트하세요"는 더 이상 미끼로 보이지 않는다. 기술적 방어는 이 신뢰 관계 안으로 들어갈 수 없다.
+
+이 방식을 가장 체계적으로, 가장 집요하게 쓰는 것이 북한이다.
+
+### 북한은 ClickFix를 어떻게 무기화했나
 
 **Kimsuky**는 2025년 1월, 3월, 6월 국내 외교·안보·국제정치 전문가를 겨냥해 ClickFix를 결합한 다단계 스피어 피싱을 벌였다. 언론인, 정부 보좌관, 경찰 수사관을 사칭해 인터뷰 요청이나 회의 초청으로 관계를 맺은 뒤에야 악성 링크를 보냈다.
 
-**BlueNoroff**의 수법은 영국 보안업체 JUMPSEC이 2026년 7월 공개한 분석으로 소스코드 수준까지 드러났다. 운영자가 실수로 JavaScript 소스맵을 노출한 덕분이다. 시나리오는 치밀하다. 탈취된 지인의 텔레그램 계정으로 연락해 캘린더 초대와 가짜 Zoom 링크를 보낸다. 회의에 들어가면 AI로 만든 가짜 참석자 영상이 재생되고, 채팅창에는 "마이크가 안 된다"는 메시지가 뜨며 "SDK 업데이트"를 권한다. 7월 빌드에는 `isClickFix` 모드가 추가돼, 카메라 버튼을 누를 때마다 "SDK를 업데이트하라"는 미끼가 뜬다. 사용자가 무엇을 복사하든 클립보드는 악성 명령으로 바꿔치기된다. 2026년 5월 31일부터 7월 14일 사이에만 5개 버전이 배포됐고, 여러 사례에서 전체 침해까지 5분도 걸리지 않았다. 감염된 피해자의 계정은 다시 다음 피해자를 노리는 발판이 된다.
+**BlueNoroff**의 수법은 영국 보안업체 JUMPSEC이 2026년 7월 공개한 분석으로 소스코드 수준까지 드러났다. 운영자가 실수로 JavaScript 소스맵을 노출한 덕분이다. 시나리오는 치밀하다. 탈취된 지인의 텔레그램 계정으로 연락해 캘린더 초대와 가짜 Zoom 링크를 보낸다. 회의에 들어가면 딥페이크로 만든 가짜 참석자 영상이 재생되고, 채팅창에는 "마이크가 안 된다"는 메시지가 뜨며 "SDK 업데이트"를 권한다. 7월 빌드에는 `isClickFix` 모드가 추가돼, 카메라 버튼을 누를 때마다 "SDK를 업데이트하라"는 미끼가 뜬다. 사용자가 무엇을 복사하든 클립보드는 악성 명령으로 바꿔치기된다. Windows에서는 PowerShell 로더가 Lazarus 계열의 VBScript 임플란트(Trojan.NukeSped)를 내려받고 Defender 예외를 추가한다. macOS에서는 가짜 Zoom·Teams 설치 파일이 미끼 노릇을 하는 동안, 뒤에서 키체인의 Chrome 마스터 키를 빼내 텔레그램으로 보낸다. 2026년 5월 31일부터 7월 14일 사이에만 5개 버전이 배포됐고, 여러 사례에서 전체 침해까지 5분도 걸리지 않았다.
 
-**Lazarus**는 macOS로 전선을 넓혔다. 2026년 4월 공개된 모듈식 macOS 악성코드 키트 **Mach-O Man**은 탈취·사칭한 텔레그램 계정으로 Zoom·Teams·Google Meet 긴급 회의 초대를 보내고, "연결 문제를 해결하려면 명령을 입력하라"며 터미널 실행을 유도한다. 최종 단계의 탈취 모듈은 브라우저 자격증명과 쿠키, 지갑 확장 데이터, **macOS 키체인**까지 긁어 압축한 뒤 텔레그램 봇으로 빼돌리고 스스로 삭제한다. "맥은 안전하다"는 믿음도 목마를 막지 못한다. ClickFix는 이제 완전한 크로스 플랫폼 초기 침투 기법이다.
+더 무서운 것은 순환 구조다. 감염된 피해자의 텔레그램 계정은 곧바로 다음 피해자에게 회의 초대를 보내는 발판이 된다. 피해자가 가해 채널이 되는 이 방식은 우연이 아니다. Kaspersky가 앞서 'GhostCall'이라는 이름으로 문서화한 BlueNoroff의 가짜 화상회의 작전과 같은 계보의, 설계된 자기 증식 메커니즘이다. 한 사람이 뚫리면 그의 인맥 전체가 표적 목록이 된다.
 
-| APT 그룹                         | 표적                 | 주요 미끼                               | 플랫폼            |
-| ------------------------------ | ------------------ | ----------------------------------- | -------------- |
-| Kimsuky                        | 외교·안보 전문가, 국방 연구기관 | 가짜 인터뷰·회의 초청, HWP 문서                | Windows        |
-| BlueNoroff                     | Web3·암호화폐 기업 경영진   | 탈취된 텔레그램, 가짜 Zoom/Teams, "SDK 업데이트" | Windows, macOS |
-| Lazarus (Mach-O Man)           | 크립토·핀테크 경영진        | 긴급 회의 초대, "연결 오류 해결"                | macOS          |
-| Lazarus (Contagious Interview) | 개발자                | 가짜 채용 담당자, 코딩 테스트                   | 크로스 플랫폼        |
+**Lazarus**는 macOS로 전선을 넓혔다. 2026년 4월 공개된 모듈식 macOS 악성코드 키트 **Mach-O Man**은 탈취·사칭한 텔레그램 계정으로 Zoom·Teams·Google Meet 긴급 회의 초대를 보내고, "연결 문제를 해결하려면 명령을 입력하라"며 터미널 실행을 유도한다. 이 명령은 teamsSDK.bin 같은 이름의 스테이징 바이너리를 내려받아 실행한다. 최종 단계의 탈취 모듈은 브라우저 자격증명과 쿠키, 지갑 확장 데이터, **macOS 키체인**까지 긁어 압축한 뒤 텔레그램 봇으로 빼돌리고 스스로 삭제한다. "맥은 안전하다"는 믿음도 목마를 막지 못한다. ClickFix는 이제 완전한 크로스 플랫폼 초기 침투 기법이다.
 
-몇 주간 대화한 "기자", 수개월 알던 "업계 동료"가 보낸 회의 링크에서 "마이크 드라이버를 업데이트하라"는 안내가 뜨면, 의심할 사람은 많지 않다. 기술적 방어는 이 신뢰 관계 안으로 들어갈 수 없다.
+**Contagious Interview**는 개발자를 노린다. 가짜 채용 담당자가 코딩 테스트를 핑계로 악성 저장소나 npm 패키지를 실행하게 만든다. 앞서 본 NullReceiver가 바로 이 작전의 npm 패키지에서 나왔다. 사회공학은 채용 면접으로, C2는 빈 이더리움 전송으로. 초기 침투와 인프라 양쪽에서 동시에 진화하고 있다.
+
+| APT 그룹                         | 표적                 | 주요 미끼                                | 플랫폼            |
+| ------------------------------ | ------------------ | ------------------------------------ | -------------- |
+| Kimsuky                        | 외교·안보 전문가, 국방 연구기관 | 가짜 인터뷰·회의 초청, HWP 문서                 | Windows        |
+| BlueNoroff                     | Web3·암호화폐 기업 경영진   | 탈취된 텔레그램, 딥페이크 가짜 회의, "SDK 업데이트" | Windows, macOS |
+| Lazarus (Mach-O Man)           | 크립토·핀테크 경영진        | 긴급 회의 초대, "연결 오류 해결"                 | macOS          |
+| Lazarus (Contagious Interview) | 개발자                | 가짜 채용 담당자, 코딩 테스트, 악성 npm 패키지       | 크로스 플랫폼        |
+
+몇 주간 대화한 "기자", 수개월 알던 "업계 동료"가 보낸 회의 링크에서 "마이크 드라이버를 업데이트하라"는 안내가 뜨면, 의심할 사람은 많지 않다.
 
 ### 왜 하필 Zoom, Teams, 그리고 Spotify인가?
 
@@ -184,11 +135,11 @@ GuidePoint의 표현대로, 공격자는 트랜잭션당 1센트도 안 되는 �
 
 **표적 환경도 한몫한다.** Web3 개발자 PC에는 Node.js와 npm이 이미 깔려 있는 경우가 많고, 새 도구 설치가 일상이다. ChainScript처럼 Node.js 런타임을 동반하는 설치 과정이 이상해 보이지 않는다.
 
-**Spotify는 여전히 공개된 설명이 없다.** 일상 소프트웨어로서의 신뢰도가 이유일 수 있다. Spotify(CEF), Zoom·Teams(Electron 계열)가 모두 웹 기술 기반 데스크톱 앱이라 JavaScript 런타임 설치가 덜 어색해 보인다는 가설도 가능하다. 그러나 이는 근거 없는 추정이며, **검증이 필요한 항목**으로 남겨둔다.
+**Spotify는 여전히 공개된 설명이 없다.** 가능한 가설은 두 가지다. 첫째, 웹 기술 기반 데스크톱 앱이라는 공통점이다. Spotify(CEF), Zoom·Teams(Electron 계열)는 모두 웹 기술로 만든 앱이라, JavaScript 런타임 설치가 덜 어색해 보일 수 있다. 둘째, 더 결정적일 수 있는 것은 설치 시나리오 자체다. Blackpoint가 확인했듯 ChainScript MSI는 자체 Node.js 런타임을 함께 배포한다. 핵심이 특정 앱의 기술 구조가 아니라 **"Node.js 런타임이 함께 깔려도 수상해 보이지 않는 설치 시나리오"**라면, 위장 대상은 그 조건을 만족하는 일상 앱 중 무엇이든 될 수 있다. 두 가설 모두 아직 근거가 없는 추정이며, **검증이 필요한 항목**으로 남겨둔다.
 
 ### 그렇다면 어떻게 막을 것인가?
 
-방어가 어려운 이유를 뒤집으면 대응 방향이 보인다. 공격이 사용자의 손, 정상 도구, 끌 수 없는 인프라를 이용한다면 방어도 그 세 지점을 겨냥해야 한다.
+방어가 어려운 이유를 뒤집으면 대응 방향이 보인다. 공격이 사용자의 손, 정상 도구, 끌 수 없는 인프라를 이용한다면 방어도 그 세 지점을 겨냥해야 한다. 그리고 사람의 손이 언젠가 실수한다는 전제 위에서, 그 손을 지켜볼 두 번째 눈을 세워야 한다.
 
 **1. 목마가 들어갈 성문을 좁혀라.** 일반 직원 대부분에게 Win+R 실행 창과 PowerShell은 업무상 필요 없다. 여러 보안 기업이 가장 효과적인 단일 완화책으로 실행 창 비활성화를 꼽는다.
 
@@ -196,21 +147,21 @@ GuidePoint의 표현대로, 공격자는 트랜잭션당 1센트도 안 되는 �
 - PowerShell을 제한 언어 모드(Constrained Language Mode)로 묶고, 실행 정책은 서명된 스크립트만 허용한다.
 - AppLocker나 WDAC로 사용자 경로의 msiexec 원격 설치와 비인가 Node.js 설치를 차단한다.
 - 실행 창 입력 기록(RunMRU 레지스트리)을 모니터링한다.
-- macOS에서는 터미널 실행 이상 징후, OneDrive·백신을 사칭한 LaunchAgents, 비정상적인 텔레그램 API 통신을 점검한다.
+- macOS에서는 터미널·스크립트 편집기의 `curl | sh` 계열 실행, OneDrive·백신을 사칭한 LaunchAgents, 비정상적인 텔레그램 API 통신을 점검한다.
 
 **2. 파일이 아니라 행위를 봐라.** 빌드 이름과 위장 브랜드는 바뀌어도 행위의 연쇄는 쉽게 바뀌지 않는다. 브라우저 사용 직후의 msiexec 원격 실행, 사용자 프로필에 새로 설치된 Node.js 런타임, 숨김 창으로 실행되는 PowerShell·VBScript, 새로 등록된 예약 작업과 Run 키, Defender 예외 설정 추가. 이 고리를 하나의 시나리오로 잡는 행위 기반 룰이 정적 IOC보다 오래 살아남는다.
 
-**3. 블록체인 RPC를 관제 대상에 넣어라.** 일반 업무 PC에서 node.exe, powershell.exe 같은 비브라우저 프로세스가 Polygon이나 이더리움 RPC로 `eth_call`을 보내는 일은 극히 드물다. 그 트래픽 자체가 강력한 이상 신호다. 판단 기준은 **어떤 프로세스가 호출했는가**와 **응답을 디코딩했을 때 무엇이 나오는가**다. 정상 지갑 앱의 조회와 악성코드의 C2 주소 해석은 이 두 축에서 갈린다.
+**3. 블록체인 RPC를 관제 대상에 넣어라.** 일반 업무 PC에서 node.exe, powershell.exe 같은 비브라우저 프로세스가 Polygon이나 이더리움 RPC로 `eth_call`을 보내는 일은 극히 드물다. 그 트래픽 자체가 강력한 이상 신호다. 판단 기준은 두 축이다. **어떤 프로세스가 호출했는가**, 그리고 **응답을 디코딩했을 때 무엇이 나오는가**. 두 축을 분리해서 봐야 정상 지갑 앱의 조회와 악성코드의 C2 주소 해석이 갈린다. NullReceiver 이후로는 관제 범위도 넓혀야 한다. 스마트 컨트랙트 호출만이 아니라, 개발자 PC가 특정 지갑의 최근 거래 내역을 조회하는 요청, 의심 지갑에서 나간 **금액 0·데이터 0 전송**과 알고리즘으로 만든 듯한 수신자 주소까지 탐지 휴리스틱에 포함해야 한다.
 
-**4. 블록체인의 투명성을 역이용하라.** 공격자가 삭제할 수 없는 원장은 방어자도 지울 수 없는 증거다. GuidePoint는 컨트랙트 주소 하나에서 출발해 운영자 지갑, 15개 컨트랙트, 숨겨진 C2 도메인, 전체 공격 체인을 역으로 재구성했다. 확인된 악성 컨트랙트와 지갑 주소를 IOC로 공유하면, 방어자는 공격자가 컨트랙트를 갱신할 때마다 새 C2 주소를 오히려 먼저 읽어낼 수 있다. 블록체인 관제는 추상적 권고가 아니라 **실행 가능한 정보 공유 전략**이다.
+**4. 블록체인의 투명성을 역이용하라.** 공격자가 삭제할 수 없는 원장은 방어자도 지울 수 없는 증거다. GuidePoint는 컨트랙트 주소 하나에서 출발해 운영자 지갑, 15개 컨트랙트, 숨겨진 C2 도메인, 전체 공격 체인을 역으로 재구성했다. NullReceiver도 마찬가지다. 컨트랙트는 없앴지만, 재사용되는 공격자 지갑은 여전히 오래가는 침해 지표로 남는다. 확인된 악성 컨트랙트와 지갑 주소를 IOC로 공유하면, 방어자는 공격자가 컨트랙트를 갱신하거나 새 전송을 보낼 때마다 새 C2 주소를 오히려 먼저 읽어낼 수 있다. 블록체인 관제는 추상적 권고가 아니라 **실행 가능한 정보 공유 전략**이다.
 
 **5. 교육 메시지는 하나로 줄여라.** 공식 계정도, 오랜 지인의 계정도 탈취된다. "출처를 확인하라"로는 부족하다. 대신 이 한 문장을 반복해야 한다.
 
 > **정상적인 웹사이트, 회의 도구, 채용 담당자는 절대 명령어를 복사해 붙여넣으라고 요구하지 않는다.**
 
-예외가 없는 규칙이라 기억하기 쉽다. 여기에 한 가지를 더한다. 텔레그램으로 온 회의 초대는 아는 사람이 보냈더라도 **다른 채널로 한 번 더 확인**한다. 외교·안보 전문가, 암호화폐 기업 임직원, Web3 개발자처럼 이미 표적이 된 집단에는 가짜 인터뷰·회의 초청·코딩 테스트를 시나리오로 한 맞춤형 훈련이 필요하다.
+예외가 없는 규칙이라 기억하기 쉽다. 여기에 한 가지를 더한다. 텔레그램으로 온 회의 초대는 아는 사람이 보냈더라도 **다른 채널로 한 번 더 확인**한다. 외교·안보 전문가, 암호화폐 기업 임직원, Web3 개발자처럼 이미 표적이 된 집단에는 가짜 인터뷰·회의 초청·코딩 테스트를 시나리오로 한 맞춤형 훈련이 필요하다. 개발자에게는 한 가지를 더 가르쳐야 한다. 채용 과제로 받은 저장소와 npm 패키지는 격리된 환경에서만 실행한다.
 
-**6. 사람의 습관은 AI로 보완하라 - 인공지능 보안 감사 체계.** 교육은 실수의 확률을 낮출 뿐, 0으로 만들지는 못한다. 사람은 습관적으로 실수한다. 매일 수십 번 반복하는 Ctrl+C, Ctrl+V는 생각보다 손이 먼저 가는 근육 기억이다. 마감에 쫓길 때, 회의 시작 1분 전일 때, 새벽 피로 속에서, 몇 달간 알던 지인이 재촉할 때 사람의 경계심은 무너진다. 공격자는 이 순간을 기다린다. 방어자는 매번 옳아야 하지만, 공격자는 한 번만 성공하면 된다. 1만 명의 직원이 하루 한 번씩 경계를 늦추면, 그 조직은 매일 목마를 하나씩 받아들이는 셈이다.
+**6. 사람의 습관은 AI로 보완하라 - 인공지능 보안 감사 체계.** 교육은 실수의 확률을 낮출 뿐, 0으로 만들지는 못한다. 사람은 습관적으로 실수한다. 매일 수십 번 반복하는 Ctrl+C, Ctrl+V는 생각보다 손이 먼저 가는 근육 기억이다. 마감에 쫓길 때, 회의 시작 1분 전일 때, 새벽 피로 속에서, 몇 달간 알던 지인이 재촉할 때, 화면이 멈춘 것처럼 보여 당황했을 때 사람의 경계심은 무너진다. 공격자는 이 순간을 기다린다. 방어자는 매번 옳아야 하지만, 공격자는 한 번만 성공하면 된다. 1만 명의 직원이 하루 한 번씩 경계를 늦추면, 그 조직은 매일 목마를 하나씩 받아들이는 셈이다.
 
 그래서 사람의 판단 앞에 한 겹의 검증 계층을 더 세워야 한다. **비정상적인 터미널 실행과 셸 스크립트 실행 메시지를 AI가 실시간으로 검증하고 모니터링하는 인공지능 보안 감사 체계**다. 규칙 기반 탐지는 이미 아는 패턴만 잡는다. 그러나 ClickFix의 명령어는 매번 난독화 방식이 바뀌고, Base64로 감싸지고, 문자열이 쪼개지고, 정상 도구의 옵션 조합으로 위장한다. 명령의 **표면**이 아니라 **의도**를 읽어야 하는데, 이것이 바로 언어 모델이 잘하는 일이다.
 
@@ -220,7 +171,7 @@ GuidePoint의 표현대로, 공격자는 트랜잭션당 1센트도 안 되는 �
 - **맥락 결합 판단(Contextual).** 명령어 하나만 보지 않는다. 직전에 어떤 웹사이트가 열려 있었는지, 그 도메인이 언제 생겼는지, 메신저로 방금 회의 초대가 왔는지, 이 사용자가 평소 터미널을 쓰는 개발자인지 한 번도 쓴 적 없는 재무 담당자인지를 함께 본다. 같은 `curl` 명령도 개발자의 빌드 작업과 "Mac 저장 공간 확보" 팝업 직후의 붙여넣기는 전혀 다른 사건이다.
 - **사후 감사와 상시 모니터링(Post-execution).** PowerShell 스크립트 블록 로깅, Windows의 AMSI(Antimalware Scan Interface), macOS 통합 로그, 셸 히스토리 같은 실행 기록을 AI가 상시 분석한다. 브라우저 → 실행 창 → msiexec → Node.js 설치 → 블록체인 RPC 호출로 이어지는 연쇄를 하나의 이야기로 묶어, 보안관제센터(SOC)에 "무엇이, 왜, 얼마나 위험한지" 설명이 붙은 경보를 올린다. 사람이 수천 줄의 로그를 읽는 대신, AI가 이상한 한 줄을 골라낸다.
 
-운영체제 제조사도 같은 방향으로 움직이고 있다. Apple은 2026년 3월 macOS 터미널에 의심스러운 텍스트를 붙여넣으면 경고하고 붙여넣기를 막는 기능을 넣었다. 그러나 공격자는 곧 스크립트 편집기 같은 우회로를 찾았다. OS의 단일 경고로는 부족하다는 뜻이다. 조직 단위에서 모든 실행 경로를 포괄하는 감사 체계가 필요하다.
+앞서 본 Apple의 터미널 붙여넣기 경고는 운영체제 제조사도 같은 방향으로 움직이고 있다는 신호다. 그러나 공격자는 몇 주 만에 스크립트 편집기라는 옆문을 찾았다. OS의 단일 경고로는 부족하다. 실행 창, PowerShell, 터미널, 스크립트 편집기, 개발 도구까지 모든 실행 경로를 조직 단위로 포괄하는 감사 체계가 필요하다.
 
 단, 원칙이 있다. **AI는 오라클이 아니다.** 인공지능 보안 감사 체계는 사람의 판단을 대체하는 심판이 아니라, 지치지 않는 보조 감사관이어야 한다.
 
@@ -238,17 +189,20 @@ ClickFix는 일시적 유행이 아니다. 북한은 불과 몇 달 만에 Kimsu
 
 통계도 방향을 가리킨다. 국내 보안기업 S2W의 '2026년 상반기 국가 배후 APT 동향 보고서'에 따르면 상반기 북한·중국·러시아 배후 APT 이슈 158건 중 **북한이 99건**으로 절반을 넘었고, 직전 반기보다 13.8% 늘었다. 북한의 표적 1위는 한국으로, 한국 대상 공격은 19회로 미국(8회)의 두 배를 넘었다. 무엇보다 S2W는 중국이 서버·경계 장비 취약점을, 러시아가 문서형 악성코드와 웹메일 취약점을 주로 노린 반면, **북한은 사회공학과 사용자 실행 유도를 주 무기로 삼았다**고 분석했다. ClickFix는 바로 그 전략의 결정체다. 이미 북한이 가장 자주 꺼내 드는 표준 해킹 기법이 됐고, 앞으로 그 빈도는 더 늘어날 것이다.
 
-여기에 AI가 결합된다. S2W 보고서는 북한이 생성형 AI와 딥페이크를 반복적으로 활용했다고 짚었다. Kimsuky는 AI로 생성한 군 신분증 이미지를 피싱에 쓴 사례가 보고됐고, BlueNoroff의 가짜 회의에는 AI로 만든 참석자가 등장한다. 미끼의 언어는 더 자연스러워지고, 사칭 인물은 더 그럴듯해지며, 블록체인 C2와 자동화 빌드 파이프라인 덕분에 인프라는 더 빨리 바뀔 것이다. 공격자가 AI로 속이는 속도를 올린다면, 방어자도 AI로 검증하는 속도를 올려야 한다. 사람의 눈만으로 AI가 만든 미끼를 가려내는 싸움은 이미 불리하다.
+여기에 AI가 결합된다. S2W 보고서는 북한이 생성형 AI와 딥페이크를 반복적으로 활용했다고 짚었다. Kimsuky는 AI로 생성한 군 신분증 이미지를 피싱에 쓴 사례가 보고됐고, BlueNoroff의 가짜 회의에는 딥페이크 영상 참석자가 등장한다. Google Mandiant가 조사한 북한 연계 그룹 UNC1069의 핀테크 기업 침해 사건에서는, 탈취된 크립토 기업 임원의 텔레그램 계정으로 신뢰를 쌓은 뒤 가짜 Zoom 회의에서 다른 크립토 기업 CEO의 딥페이크 영상을 보여주고 ClickFix로 악성코드를 심었다. 이 한 건에서만 macOS 악성코드 7종이 확인됐다. Moonlock Lab은 AI로 생성한 직원 사진을 내건 가짜 투자사 사이트로 크립토 인재를 노린 ClickFix 캠페인도 보고했다(행위자 귀속은 아직 열려 있다).
 
-가장 먼저, 가장 집요하게 노려질 곳은 **정부, 군, 정보기관**이다. Kimsuky가 이미 외교·안보 전문가와 국방 연구기관을 반복적으로 겨냥했다는 사실이 방향을 보여준다. 미국에서도 인터넷보안센터(CIS)의 공공부문 관제에서 ClickFix가 2025년 상반기 비(非)악성코드 경보의 3분의 1 이상을 차지한 것으로 보고됐다. 이들 조직의 구성원은 기자의 인터뷰 요청, 학회 초청, 유관기관 회의 참석 요청을 일상적으로 받는다. 공격자가 흉내 내기 가장 쉬운 업무 환경이다.
+AI는 이제 미끼의 문장을 다듬는 단계를 넘어, 얼굴과 목소리와 영상까지 흉내 내는 **멀티미디어 사칭**으로 넘어갔다. 동시에 ClickFix 미끼 자체가 AI 도구 설치 안내를 사칭하는 쪽으로 옮겨가고 있다. AI가 공격 도구이자 미끼가 된 셈이다. 사칭 인물은 더 그럴듯해지고, 블록체인 C2와 자동화 빌드 파이프라인 덕분에 인프라는 더 빨리 바뀔 것이다. 공격자가 AI로 속이는 속도를 올린다면, 방어자도 AI로 검증하는 속도를 올려야 한다. 사람의 눈만으로 AI가 만든 미끼를 가려내는 싸움은 이미 불리하다.
+
+가장 먼저, 가장 집요하게 노려질 곳은 **정부, 군, 정보기관**이다. Kimsuky가 이미 외교·안보 전문가와 국방 연구기관을 반복적으로 겨냥했다는 사실이 방향을 보여준다. 러시아 Sandworm이 우크라이나 기관을 ClickFix로 뚫은 것도 같은 흐름이다. 미국에서도 인터넷보안센터(CIS)의 공공부문 관제에서 ClickFix가 2025년 상반기 비(非)악성코드 경보의 3분의 1 이상을 차지한 것으로 보고됐다. 이들 조직의 구성원은 기자의 인터뷰 요청, 학회 초청, 유관기관 회의 참석 요청을 일상적으로 받는다. 공격자가 흉내 내기 가장 쉬운 업무 환경이다.
 
 따라서 정부, 군, 정보기관은 ClickFix를 별도의 위협 범주로 다루고 각별히 주의해야 한다. 기술적 통제만으로는 부족하다.
 
 - 실행 창·PowerShell·터미널 사용 제한, 행위 기반 탐지, 블록체인 RPC 관제를 기본으로 깐다.
 - 비정상적인 터미널·셸 스크립트 실행을 실시간으로 검증하고 모니터링하는 **인공지능 보안 감사 체계**를 도입한다. 특히 대외 접촉이 잦은 부서와 고위직 단말부터 우선 적용한다.
-- 실제 북한 공격 시나리오(가짜 인터뷰, 가짜 회의, "SDK 업데이트", 가짜 채용)를 재현한 모의 훈련과 정기 교육을 병행한다.
+- 실제 북한 공격 시나리오(가짜 인터뷰, 딥페이크 가짜 회의, "SDK 업데이트", 가짜 채용)를 재현한 모의 훈련과 정기 교육을 병행한다.
 - 대외 접촉이 잦은 고위직, 연구 인력, 대외협력 담당자를 우선 교육 대상으로 지정한다.
 - 악성 컨트랙트·지갑 주소를 포함한 블록체인 IOC를 기관 간, 민관 간에 신속히 공유하는 체계를 만든다.
+- 구성원의 메신저 계정 탈취를 조직의 보안 사고로 취급한다. 한 사람의 계정이 뚫리면 그 인맥 전체가 다음 표적이 되기 때문이다.
 
 명령어 한 줄을 붙여넣기 전에 멈추는 습관은 어떤 보안 장비보다 확실한 방어선이다. 그리고 그 습관이 무너지는 순간을 대비해, 멈춰 세워줄 두 번째 손이 필요하다.
 
@@ -258,11 +212,15 @@ ClickFix는 기술적으로 새로운 공격이 아니다. 오히려 너무 단�
 
 트로이에도 경고는 있었다. 라오콘은 목마에 창을 던졌고, 카산드라는 멸망을 예언했다. 트로이인들은 듣지 않았다. 봉헌물처럼 보였고, 모두가 그렇게 믿었기 때문이다.
 
-오늘의 라오콘은 보안 담당자이고, 오늘의 창은 "명령어를 붙여넣지 마라"는 한 문장이다. 그러나 라오콘은 한 명이었고, 성문은 하루에도 수천 번 열린다. 이제 라오콘 곁에 지치지 않는 파수꾼, 인공지능 보안 감사관을 세워야 한다. 방어의 무게중심도 옮겨가야 한다. 무엇이 들어오는지 감시하던 시대에서, 시스템 안에서 무엇이 어떤 순서로 실행되는지 보는 시대로. 그리고 무엇보다, 공식 채널도 오랜 지인도 탈취될 수 있다는 전제 위에서, 목마를 성문 앞에서 한 번 멈춰 세울 수 있는 사람을 만드는 규정이 더 중요해지고 있다.
+오늘의 라오콘은 보안 담당자이고, 오늘의 창은 "명령어를 붙여넣지 마라"는 한 문장이다. 그러나 라오콘은 한 명이었고, 성문은 하루에도 수천 번 열린다. 이제 라오콘 곁에 지치지 않는 파수꾼, 인공지능 보안 감사관을 세워야 한다.
+
+방어의 무게중심도 옮겨가야 한다. 무엇이 들어오는지 감시하던 시대에서, 시스템 안에서 무엇이 어떤 순서로 실행되는지 보는 시대로. 성벽 안을 지키는 데 그치지 않고, 블록체인에 남은 공격자의 발자국을 함께 읽고 나눠 목마가 해변에 놓이기 전에 먼저 찾아내는 시대로. 그리고 무엇보다, 공식 채널도 오랜 지인도 탈취될 수 있다는 전제 위에서, 목마를 성문 앞에서 한 번 멈춰 세울 수 있는 사람과 체계를 만드는 규정이 더 중요해지고 있다.
 
 ---
 
 ### 참고 자료
+
+**ChainScript·블록체인 C2**
 
 - Blackpoint Cyber APG, "ChainScript: Tracing a Node.js RAT Through the Blockchain"
 - The Hacker News, "ClickFix Lures Deploy ChainScript RAT Using Polygon to Rotate C2 Infrastructure" (2026.09) — <https://thehackernews.com/2026/09/clickfix-lures-deploy-chainscript-rat.html>
@@ -270,13 +228,35 @@ ClickFix는 기술적으로 새로운 공격이 아니다. 오히려 너무 단�
 - Mallory, "ClickFix Campaigns Deliver ChainScript, IronPython Loaders, and MeshAgent" — <https://mallory.ai/stories/01a0bc95-6f6e-737f-a731-2ab742f3aa9d>
 - GuidePoint Security, "EtherHiding Exposed: Inside a Blockchain-powered Malware Campaign Hiding in Plain Sight" — <https://www.guidepointsecurity.com/blog/etherhiding-exposed-deep-dive/>
 - Dark Reading, "ClickFix Campaign Compromises 31 Orgs, Abuses Polygon Blockchain" — <https://www.darkreading.com/endpoint-security/clickfix-campaign-comprises-31-orgs-abuses-polygon-blockchain>
+- OpenSourceMalware, "NullReceiver's Blank Crypto Transfers Solves the Challenges of EtherHiding" (2026.08) — <https://opensourcemalware.com/blog/nullreceiver-dprk-c2-technique>
+- The Hacker News, "Trojanized npm Packages Employ NullReceiver Tactic to Decode C2 IP from Blockchain" (2026.08) — <https://thehackernews.com/2026/08/trojanized-npm-packages-decode-c2-ip.html>
+
+**북한 APT**
+
 - JUMPSEC, "Inside a DPRK BlueNoroff ClickFix Kit" (2026.07) — <https://www.jumpsec.com/guides/inside-a-dprk-bluenoroff-clickfix-kit/>
-- The Hacker News, "BlueNoroff Zoom Phishing Kit Profiles Crypto Wallets Before Malware Delivery" — <https://thehackernews.com/2026/07/bluenoroff-zoom-phishing-kit-profiles.html>
+- The Hacker News, "BlueNoroff Zoom Phishing Kit Profiles Crypto Wallets Before Malware Delivery" (2026.07) — <https://thehackernews.com/2026/07/bluenoroff-zoom-phishing-kit-profiles.html>
 - ANY.RUN, "Lazarus 'Mach-O Man' Malware: What CISOs Need to Know" (2026.04) — <https://any.run/cybersecurity-blog/lazarus-macos-malware-mach-o-man/>
-- Help Net Security, "Apple counters ClickFix attacks with macOS Terminal warning" (2026.03) — <https://www.helpnetsecurity.com/2026/03/31/apple-macos-clickfix-attacks-terminal-warning/>
-- RH-ISAC, "Current ClickFix Threat Landscape Developments" (2026.07) — <https://rhisac.org/threat-intelligence/current-clickfix-threat-landscape-developments/>
-- ESET, H1 2025 Threat Report — <https://www.eset.com/us/about/newsroom/research/eset-threat-report-clickfix-fake-error-surges-spreads-ransomware-and-other-malware/>
+- BleepingComputer, "North Korean hackers use new macOS malware in crypto theft attacks" (Mandiant UNC1069) — <https://www.bleepingcomputer.com/news/security/north-korean-hackers-use-new-macos-malware-in-crypto-theft-attacks/>
 - S2W, 「2026년 상반기 국가 배후 APT 그룹 위협 동향 보고서」 (2026.08) — 보도: <https://www.fnnews.com/news/202608161302269059>
+
+**macOS**
+
+- The Hacker News, "DPRK-Linked macOS Malvertising Uses Fake Updates to Deliver Crypto-Stealing Malware" (2026.07) — <https://thehackernews.com/2026/07/dprk-linked-macos-malvertising-uses.html>
+- Help Net Security, "Apple counters ClickFix attacks with macOS Terminal warning" (2026.03) — <https://www.helpnetsecurity.com/2026/03/31/apple-macos-clickfix-attacks-terminal-warning/>
+- Microsoft Security Blog, "ClickFix campaign uses fake macOS utilities lures to deliver infostealers" (2026.05) — <https://www.microsoft.com/en-us/security/blog/2026/05/06/clickfix-campaign-uses-fake-macos-utilities-lures-deliver-infostealers/>
+- Moonlock, "Mid-2026 macOS threat report" (2026.07) — <https://moonlock.com/mid-2026-macos-threat-report>
+- Moonlock, "Fake VCs target crypto talent in a new ClickFix campaign" — <https://moonlock.com/fake-vcs-target-crypto-talent-clickfix-campaign>
+
+**위협 동향·통계**
+
+- ESET, H1 2025 Threat Report — <https://www.eset.com/us/about/newsroom/research/eset-threat-report-clickfix-fake-error-surges-spreads-ransomware-and-other-malware/>
+- ESET H1 2026 Threat Report 인용 보도(KnowBe4), "Social Engineering Remains a Central Part of AI-assisted Attacks" (2026.07) — <https://blog.knowbe4.com/social-engineering-central-ai-assisted-attacks>
+- RH-ISAC, "Current ClickFix Threat Landscape Developments" (2026.07) — <https://rhisac.org/threat-intelligence/current-clickfix-threat-landscape-developments/>
+- Recorded Future Insikt Group, "ClickFix Campaigns Targeting Windows and macOS" — <https://www.recordedfuture.com/research/clickfix-campaigns-targeting-windows-and-macos>
+- Vega Threat Intel, "ClickFix in Q2 2026: Different Wrappers, Same Leading Infection Vector" — <https://threats.vega.io/brief/clickfix-q2-2026-different-wrappers/>
+
+**고전**
+
 - 호메로스, 『오디세이아』 제8권 / 베르길리우스, 『아이네이스』 제2권
 
 *글: Dennis Kim (김호광) · <gameworker@gmail.com>*
