@@ -48,7 +48,11 @@ ClickFix는 "기술적 문제를 해결하세요", "회의 참여를 위해 업�
 
 트로이의 성벽은 목마를 막을 수 없었다. 성벽이 막도록 설계된 것은 적군이지, 시민이 끌고 들어오는 봉헌물이 아니었기 때문이다.
 
-macOS도 다르지 않다. 맥에서는 Win+R 대신 터미널이 신전이다. 가짜 페이지가 "Mac 저장 공간 확보", "시스템 유틸리티 설치" 같은 안내로 `curl`로 원격 스크립트를 받아 셸로 바로 실행하는 한 줄을 붙여넣게 만든다. 사용자가 직접 실행하니 Gatekeeper와 XProtect 같은 macOS 기본 보안 장치도 우회된다. 터미널 대신 스크립트 편집기(Script Editor)를 쓰게 하는 변종도 나왔다. Apple이 터미널 붙여넣기 경고를 도입하자, 공격자들은 몇 주 만에 경고가 뜨지 않는 경로로 갈아탔다.
+macOS도 다르지 않다. 맥에서는 Win+R 대신 터미널이 신전이다. 가짜 페이지가 "Mac 저장 공간 확보", "시스템 유틸리티 설치" 같은 안내로 `curl`로 원격 스크립트를 받아 셸로 바로 실행하는 한 줄을 붙여넣게 만든다. 사용자가 직접 실행하니 Gatekeeper와 XProtect 같은 macOS 기본 보안 장치도 우회된다.
+
+맥에서는 연출도 다르다. 2026년 7월 보고된 북한 연계 macOS 악성 광고 캠페인은 **전체 화면을 덮는 가짜 macOS 업데이트 화면**을 띄운다. 화면이 뜨는 순간 공격 명령은 사용자 몰래 클립보드에 이미 복사돼 있고, 안내는 터미널을 열어 붙여넣으라고만 말한다. 이 캠페인을 분석한 AllSecure는 이것이 공황을 유도하도록 설계됐다고 지적했다. 컴퓨터가 멈추거나 재부팅되는 것처럼 보이니, 운영체제가 고장 났다고 믿은 사용자는 평소라면 수상하게 여겼을 지시를 그대로 따른다. 이 캠페인 역시 이더리움 스마트 컨트랙트에서 C2 주소를 읽어오는 EtherHiding을 썼다. macOS와 블록체인 C2가 한 캠페인 안에서 만난 것이다.
+
+Apple도 대응했다. 2026년 3월 macOS는 터미널에 의심스러운 텍스트를 붙여넣으면 "악성코드 가능성, 붙여넣기 차단"이라는 경고를 띄우기 시작했다. 그러나 공격자들은 몇 주 만에 터미널 대신 스크립트 편집기(Script Editor)를 쓰게 하는 등 경고가 뜨지 않는 경로로 갈아탔다. 성문 하나를 닫으면 목마는 옆문으로 들어온다.
 
 변종도 끝없이 진화한다. 2026년 1월 등장한 CrashFix는 가짜 확장 프로그램으로 브라우저를 실제로 먹통으로 만든 뒤, "복구하려면 이 명령을 실행하라"는 미끼를 띄운다. 가짜 블루스크린, 멈춘 문서 뷰어, 특정 서비스의 오류 화면을 흉내 낸 미끼도 쓰인다. 최근에는 ChatGPT, Claude 같은 AI 도구의 설치 안내를 사칭한 미끼까지 등장했다. 진짜로 멈춘 브라우저나 익숙한 AI 도구 앞에서 사용자의 의심은 사라진다.
 
@@ -163,7 +167,7 @@ ClickFix는 일시적 유행이 아니다. 북한은 불과 몇 달 만에 Kimsu
 
 통계도 방향을 가리킨다. 국내 보안기업 S2W의 '2026년 상반기 국가 배후 APT 동향 보고서'에 따르면 상반기 북한·중국·러시아 배후 APT 이슈 158건 중 **북한이 99건**으로 절반을 넘었고, 직전 반기보다 13.8% 늘었다. 북한의 표적 1위는 한국으로, 한국 대상 공격은 19회로 미국(8회)의 두 배를 넘었다. 무엇보다 S2W는 중국이 서버·경계 장비 취약점을, 러시아가 문서형 악성코드와 웹메일 취약점을 주로 노린 반면, **북한은 사회공학과 사용자 실행 유도를 주 무기로 삼았다**고 분석했다. ClickFix는 바로 그 전략의 결정체다. 이미 북한이 가장 자주 꺼내 드는 표준 해킹 기법이 됐고, 앞으로 그 빈도는 더 늘어날 것이다.
 
-여기에 AI가 결합된다. S2W 보고서는 북한이 생성형 AI와 딥페이크를 반복적으로 활용했다고 짚었다. Kimsuky는 AI로 생성한 군 신분증 이미지를 피싱에 쓴 사례가 보고됐고, BlueNoroff의 가짜 회의에는 딥페이크 영상 참석자가 등장한다. AI는 이제 미끼의 문장을 다듬는 단계를 넘어, 얼굴과 목소리와 영상까지 흉내 내는 **멀티미디어 사칭**으로 넘어갔다. 동시에 ClickFix 미끼 자체가 AI 도구 설치 안내를 사칭하는 쪽으로 옮겨가고 있다. AI가 공격 도구이자 미끼가 된 셈이다. 사칭 인물은 더 그럴듯해지고, 블록체인 C2와 자동화 빌드 파이프라인 덕분에 인프라는 더 빨리 바뀔 것이다.
+여기에 AI가 결합된다. S2W 보고서는 북한이 생성형 AI와 딥페이크를 반복적으로 활용했다고 짚었다. Kimsuky는 AI로 생성한 군 신분증 이미지를 피싱에 쓴 사례가 보고됐고, BlueNoroff의 가짜 회의에는 딥페이크 영상 참석자가 등장한다. Google Mandiant가 조사한 북한 연계 그룹 UNC1069의 핀테크 기업 침해 사건에서는, 탈취된 크립토 기업 임원의 텔레그램 계정으로 신뢰를 쌓은 뒤 가짜 Zoom 회의에서 다른 크립토 기업 CEO의 딥페이크 영상을 보여주고 ClickFix로 악성코드를 심었다. 이 한 건에서만 macOS 악성코드 7종이 확인됐다. Moonlock Lab은 AI로 생성한 직원 사진을 내건 가짜 투자사 사이트로 크립토 인재를 노린 ClickFix 캠페인도 보고했다(행위자 귀속은 아직 열려 있다). AI는 이제 미끼의 문장을 다듬는 단계를 넘어, 얼굴과 목소리와 영상까지 흉내 내는 **멀티미디어 사칭**으로 넘어갔다. 동시에 ClickFix 미끼 자체가 AI 도구 설치 안내를 사칭하는 쪽으로 옮겨가고 있다. AI가 공격 도구이자 미끼가 된 셈이다. 사칭 인물은 더 그럴듯해지고, 블록체인 C2와 자동화 빌드 파이프라인 덕분에 인프라는 더 빨리 바뀔 것이다.
 
 가장 먼저, 가장 집요하게 노려질 곳은 **정부, 군, 정보기관**이다. Kimsuky가 이미 외교·안보 전문가와 국방 연구기관을 반복적으로 겨냥했다는 사실이 방향을 보여준다. 러시아 Sandworm이 우크라이나 기관을 ClickFix로 뚫은 것도 같은 흐름이다. 미국에서도 인터넷보안센터(CIS)의 공공부문 관제에서 ClickFix가 2025년 상반기 비(非)악성코드 경보의 3분의 1 이상을 차지한 것으로 보고됐다. 이들 조직의 구성원은 기자의 인터뷰 요청, 학회 초청, 유관기관 회의 참석 요청을 일상적으로 받는다. 공격자가 흉내 내기 가장 쉬운 업무 환경이다.
 
@@ -200,6 +204,10 @@ ClickFix는 기술적으로 새로운 공격이 아니다. 오히려 너무 단�
 - JUMPSEC, "Inside a DPRK BlueNoroff ClickFix Kit" (2026.07) — <https://www.jumpsec.com/guides/inside-a-dprk-bluenoroff-clickfix-kit/>
 - The Hacker News, "BlueNoroff Zoom Phishing Kit Profiles Crypto Wallets Before Malware Delivery" — <https://thehackernews.com/2026/07/bluenoroff-zoom-phishing-kit-profiles.html>
 - ANY.RUN, "Lazarus 'Mach-O Man' Malware: What CISOs Need to Know" (2026.04) — <https://any.run/cybersecurity-blog/lazarus-macos-malware-mach-o-man/>
+- The Hacker News, "DPRK-Linked macOS Malvertising Uses Fake Updates to Deliver Crypto-Stealing Malware" (2026.07) — <https://thehackernews.com/2026/07/dprk-linked-macos-malvertising-uses.html>
+- Help Net Security, "Apple counters ClickFix attacks with macOS Terminal warning" (2026.03) — <https://www.helpnetsecurity.com/2026/03/31/apple-macos-clickfix-attacks-terminal-warning/>
+- BleepingComputer, "North Korean hackers use new macOS malware in crypto theft attacks" (Mandiant UNC1069) — <https://www.bleepingcomputer.com/news/security/north-korean-hackers-use-new-macos-malware-in-crypto-theft-attacks/>
+- Moonlock, "Fake VCs target crypto talent in a new ClickFix campaign" — <https://moonlock.com/fake-vcs-target-crypto-talent-clickfix-campaign>
 - Microsoft Security Blog, "ClickFix campaign uses fake macOS utilities lures to deliver infostealers" (2026.05) — <https://www.microsoft.com/en-us/security/blog/2026/05/06/clickfix-campaign-uses-fake-macos-utilities-lures-deliver-infostealers/>
 - Moonlock, "Mid-2026 macOS threat report" (2026.07) — <https://moonlock.com/mid-2026-macos-threat-report>
 - RH-ISAC, "Current ClickFix Threat Landscape Developments" (2026.07) — <https://rhisac.org/threat-intelligence/current-clickfix-threat-landscape-developments/>
