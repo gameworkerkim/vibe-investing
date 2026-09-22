@@ -1,3 +1,69 @@
+---
+title: "ClickFix 공격, 왜 방어하기 힘든가?"
+title_en: "Why ClickFix Is So Hard to Defend"
+subtitle: "목마를 성 안으로 끌고 들어가는 것은 언제나 수비하는 쪽이다"
+description: "ClickFix는 성벽을 넘지 않는다. 윈도 실행 창이든 맥 터미널이든 사용자가 명령을 붙여넣는다. ESET 517% 뒤 다시 108%. 붙여넣기 전에 멈춰라."
+abstract: |
+  ClickFix는 가짜 오류로 사용자가 Win+R·PowerShell·맥 터미널에 명령을 붙여넣게 한다. ESET 탐지는 2025 상반기 517%에 이어 2026 상반기 다시 108% 늘었고, 마이크로소프트는 초기 침투의 47%를 ClickFix로 집계했다.
+  macOS는 전체 화면 가짜 업데이트와 스크립트 편집기 우회로 터미널 붙여넣기 경고를 비껴간다. C2는 Polygon EtherHiding을 넘어 NullReceiver의 빈 이더리움 전송까지 내려갔다. ChainScript, CrashFix, Sandworm, BlueNoroff, Lazarus가 같은 설계를 쓴다.
+  북한은 사회공학·사용자 실행 유도를 주 무기로 삼았고 ClickFix가 표준 기법이 됐다. 실행 창을 좁히고, 행위를 보고, 붙여넣기 요구는 예외 없이 거절하라. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean cyber-security / social-engineering column (not legal or investment advice), 2026-09-22,
+  group korea-hacking, Hacking/Clickfix-Hacking.md. Final revision.
+  Thesis: ClickFix makes the defender paste the payload (Trojan horse). Stats: ESET H1 2025 +517% then H1 2026 +108% on that base; ~8% of blocked attacks; Microsoft 2025 DDR 47% initial access; Recorded Future 2026 stays top vector; kits $250/mo or $1,800 lifetime. Sandworm/GRU used ClickFix on Ukrainian orgs (2026, CERT-UA).
+  Why hard: (1) signed LOLBins; macOS curl|sh bypasses Gatekeeper/XProtect; Jul 2026 DPRK malvertising fake fullscreen macOS update + clipboard pre-copy (AllSecure) + EtherHiding; Apple Mar 2026 Terminal paste warning, attackers moved to Script Editor. CrashFix; fake BSOD; AI-tool install lures. (2) ChainScript RAT rotating brands; C2 = command-and-control. (3) fingerprinting; BlueNoroff MetaMask check; HBO Max Reddit; stolen Telegram. (4) Polygon EtherHiding; GuidePoint 15 contracts / 31 sites / 479 skimmers; Q2 2026 ClickFix+EtherHiding+TDS >2000 sites. GTIG Oct 2025 UNC5342 first state EtherHiding (Contagious Interview). NullReceiver Aug 2026: zero-value empty ETH tx encodes C2 IP in recipient; npm bianira-ui/fluid-type-ui. ChainScript not attributed to DPRK. (5) trust-first; JUMPSEC BlueNoroff isClickFix clipboard swap, NukeSped, 5 min, GhostCall self-replication; Mach-O Man teamsSDK.bin; Contagious Interview fake hiring.
+  Defense: disable Win+R; CLM; AppLocker/WDAC; macOS curl|sh / Script Editor; behavior chains; eth_call AND zero-value transfers; share contract+wallet IOCs; never paste a command; isolate take-home repos/npm.
+  S2W H1 2026: DPRK 99/158; Korea 19 vs US 8. AI/deepfake: UNC1069 Mandiant 7 macOS families; Moonlock fake VC. Gov/mil/intel first; treat messenger-account theft as org incident.
+date: 2026-09-22
+updated: 2026-09-22
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - ClickFix
+  - 사회공학
+  - Lazarus
+  - Kimsuky
+  - BlueNoroff
+  - EtherHiding
+  - NullReceiver
+  - 북한
+keywords:
+  - "ClickFix"
+  - "실행 창 붙여넣기"
+  - "macOS ClickFix"
+  - "NullReceiver"
+  - "EtherHiding"
+  - "ChainScript RAT"
+  - "BlueNoroff"
+  - "북한 APT"
+group: korea-hacking
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/clickfix-hacking.jpg"
+image: "https://vibequant.cc/og/clickfix-hacking.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>ClickFix 공격, 왜 방어하기 힘든가? · VibeQuant</title>
+  <meta name="description" content="ClickFix는 성벽을 넘지 않는다. 윈도 실행 창이든 맥 터미널이든 사용자가 명령을 붙여넣는다. ESET 517% 뒤 다시 108%. 붙여넣기 전에 멈춰라.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "ClickFix 공격, 왜 방어하기 힘든가?",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-22",
+    "keywords": ["ClickFix", "실행 창 붙여넣기", "macOS ClickFix", "NullReceiver", "EtherHiding", "ChainScript RAT", "BlueNoroff", "북한 APT"]
+  }
+  </script>
+-->
+
 # ClickFix 공격, 왜 방어하기 힘든가?
 
 ## 목마를 성 안으로 끌고 들어가는 것은 언제나 수비하는 쪽이다
