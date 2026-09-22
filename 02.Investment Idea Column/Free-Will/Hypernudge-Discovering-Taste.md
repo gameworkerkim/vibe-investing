@@ -1,6 +1,79 @@
+---
+title: "하이퍼넛지의 시대, 취향을 발견한다는 것의 의미"
+title_en: "What Discovering Taste Means in the Age of the Hypernudge"
+subtitle: "추천은 넘치고 이유는 사라진 시대에 내 선택을 되찾는 법"
+description: "추천은 취향을 찾아내지 않고 제조한다. 유튜브 시청의 70%가 추천이다. 하이퍼넛지 앞에서 내 답을 먼저 쓰지 않으면, 고르지 않은 사진의 이유를 지어내게 된다."
+abstract: |
+  캐런 영의 하이퍼넛지는 개인·실시간으로 갱신되는 선택 설계다. 선호는 발견되지 않고 구성되며(리히텐슈타인·슬로빅), 단순 노출과 뮤직랩 실험은 추천이 취향을 제조함을 보여준다.
+  유튜브 시청 시간의 70% 이상, 넷플릭스의 약 80%가 추천에서 나온다. 코르노비치·톰메스와 카프라로의 실험은 태도와 행동이 갈라지고, 틀린 AI에 의존하면 정답률은 떨어지고 자신감은 오른다는 점을 보여준다.
+  목표는 취향이 아니라 참여 극대화다. 쿠팡 PB 검색 조작 과징금, DSA 38조, 수행적 예측이 그 정치경제학이다. 실천은 내 답을 먼저 쓰기, 마찰 되찾기, 결정 일지다. LLM은 엑셀이지 오라클이 아니다. 투자 권유 아님.
+summary_for_ai: |
+  Korean behavioral-econ / AI-agency essay (not investment or legal advice), 2026-09-22,
+  group ai-llm, Free-Will/Hypernudge-Discovering-Taste.md. Companion to Matrix-Pracle-Candy-Free-Will.md.
+  Thesis: Recommenders do not discover taste; they manufacture it. Yeung 2017 hypernudge (dynamic, personalized regulation-by-design) vs static Thaler/Sunstein nudge. Preference construction (Lichtenstein/Slovic); Zajonc mere exposure; Salganik/Dodds/Watts 2006 MusicLab — popularity maps diverge by early views.
+  Stats: YouTube ≥70% watch time from recs (Mohan, CES 2018); Netflix ~80% (Gomez-Uribe & Hunt 2015). Salesforce 2025: 39% consumers / >50% Gen Z shop with AI; Metrigy trust 44%. Kornowicz/Thommes 2025: 44.77% switch to AI when it conflicts; Capraro et al. 2026: "don't know" 44%→3%, accuracy 27%→9%, confidence 30%→76% (cognitive surrender).
+  Judgment atrophy: ego-depletion failed 2016 multilab; Bainbridge 1983 ironies of automation; Dahmani/Bohbot 2020 GPS vs spatial memory; Lee et al. CHI 2025 MS critical-thinking survey; Kosmyna 2025 preprint (small-n). Parasuraman automation bias; Johansson/Hall 2005 choice blindness.
+  Political economy: YouTube 2012 watch-time metric; Facebook Files MSI 2018→angrier; Sculley hidden tech debt; Perdomo 2020 performative prediction. KFTC 2024 Coupang KRW 162.8bn surcharge (PB in top-100 56.1%→88.4%; Coupang sued). Leung/Urminsky 2025 narrow search; DSA Art.38 non-profiling recommender option.
+  Practice: Deci/Ryan SDT — autonomy = endorsed reasons. Buçinca 2021 cognitive forcing (answer first). Restore friction; decision journal at choice time. Line: "LLM is Excel, not an Oracle." Parallelization of persons as nodes is the threat.
+date: 2026-09-22
+updated: 2026-09-22
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 하이퍼넛지
+  - 추천알고리즘
+  - 취향
+  - 선택맹
+  - 유튜브
+  - 넷플릭스
+  - 쿠팡
+  - LLM
+keywords:
+  - "하이퍼넛지"
+  - "취향 발견"
+  - "추천 알고리즘"
+  - "선택맹"
+  - "인지적 항복"
+  - "유튜브 추천 70%"
+  - "수행적 예측"
+  - "쿠팡 과징금"
+group: ai-llm
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/hypernudge-discovering-taste.jpg"
+image: "https://vibequant.cc/og/hypernudge-discovering-taste.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>하이퍼넛지의 시대, 취향을 발견한다는 것의 의미 · VibeQuant</title>
+  <meta name="description" content="추천은 취향을 찾아내지 않고 제조한다. 유튜브 시청의 70%가 추천이다. 하이퍼넛지 앞에서 내 답을 먼저 쓰지 않으면, 고르지 않은 사진의 이유를 지어내게 된다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "하이퍼넛지의 시대, 취향을 발견한다는 것의 의미",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-22",
+    "keywords": ["하이퍼넛지", "취향 발견", "추천 알고리즘", "선택맹", "인지적 항복", "유튜브 추천 70%", "수행적 예측", "쿠팡 과징금"]
+  }
+  </script>
+-->
+
 # 하이퍼넛지의 시대, 취향을 발견한다는 것의 의미
 
-### 추천은 넘치고 이유는 사라진 시대에 내 선택을 되찾는 법
+## 추천은 넘치고 이유는 사라진 시대에 내 선택을 되찾는 법
+
+![음악 스트리밍 앱의 검색·아티스트·신곡 레이더·위클리 추천 화면](images/hypernudge-streaming-phones.jpg)
+
+*검색, 아티스트, 신곡 레이더, 위클리 추천. 목록은 알고리즘이 차리고, 우리는 차려진 것을 고른다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 22일
 
 ## 1. 당신의 취향은 정말 당신의 것인가?
 
