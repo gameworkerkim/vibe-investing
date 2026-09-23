@@ -1,6 +1,77 @@
+---
+title: "결정 이후에 온 사람"
+title_en: "The One Who Came After the Decision"
+subtitle: "영화 「화양연화」로 읽는, 가장 중요한 사람을 가장 늦게 만났을 때의 문제"
+description: "인생에서 가장 중요한 사람을 결정 이후에 만났다면 어찌해야 하는가. 「화양연화」로 읽는 사슴 사냥, 자유의지, 그리고 흔들림 속에서 고르는 법."
+abstract: |
+  인생에서 가장 중요한 사람을, 중요한 결정을 모두 내린 뒤에 만났다면 어찌해야 하는가. 왕가위의 「화양연화」는 불륜의 이야기가 아니라, 이미 결혼한 두 사람이 서로의 존재를 확인한 뒤에도 손을 잡지 못하는 이야기다.
+  게임이론으로 보면 죄수의 딜레마가 아니라 사슴 사냥이다. 손실 회피와 현상 유지 편향이 협력을 막고, 심리학은 다가가지 못하는 두 개의 방식을 설명한다. 앞으로 살 때 모든 것은 선택이고, 뒤돌아볼 때 모든 것은 필연이다.
+  가장 나쁜 선택은 선택하지 않은 채로 그 결과를 모두 감당하는 것이다. 흔들림 속에 서지 말 것. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean essay / film-theory column (not legal, relationship, or investment advice), 2026-09-23,
+  group industry, Game-Theory/In-the-Mood-for-Love.md.
+  Film: Wong Kar-wai, In the Mood for Love (花樣年華, 2000), Tony Leung / Maggie Cheung. Hong Kong 1962.
+  Question: what if you meet the most important person after life's key decisions (marriage) are already made?
+  Game theory: not prisoner's dilemma but Rousseau stag hunt / assurance game — cooperation (confess, leave together) is Pareto-better but risk-dominant equilibrium is both staying put. Schelling self-binding; neighbor Mrs. Sun as cheap-talk incomplete.
+  Behavioral: Kahneman-Tversky loss aversion (status quo as reference); Samuelson-Zeckhauser status-quo bias; Gilovich-Medvec regret asymmetry (inaction lasts longer); Shefrin-Statman disposition effect.
+  Psychology: Festinger cognitive dissonance ("we are not like them"); Zeigarnik unfinished rehearsal; Lacan desire of the Other.
+  Philosophy: Laplace demon vs Sartre mauvaise foi vs Frankfurt second-order volition vs Spinoza understanding necessity. East Asian 因緣: seed (因) needs conditions (緣).
+  Thesis: looking forward everything is choice; looking back everything is fate. Worst option is to make hesitation itself a life. Angkor Wat whisper = sealing without erasing.
+date: 2026-09-23
+updated: 2026-09-23
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 화양연화
+  - 왕가위
+  - 게임이론
+  - 사슴사냥
+  - 자유의지
+  - 인연
+keywords:
+  - "화양연화"
+  - "결정 이후에 온 사람"
+  - "사슴 사냥"
+  - "왕가위"
+  - "자유의지"
+  - "앙코르와트"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/in-the-mood-for-love.jpg"
+image: "https://vibequant.cc/og/in-the-mood-for-love.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>결정 이후에 온 사람 · VibeQuant</title>
+  <meta name="description" content="인생에서 가장 중요한 사람을 결정 이후에 만났다면 어찌해야 하는가. 「화양연화」로 읽는 사슴 사냥, 자유의지, 그리고 흔들림 속에서 고르는 법.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "결정 이후에 온 사람",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-23",
+    "keywords": ["화양연화", "결정 이후에 온 사람", "사슴 사냥", "왕가위", "자유의지", "앙코르와트"]
+  }
+  </script>
+-->
+
 # 결정 이후에 온 사람
 
-**— 영화 「화양연화(花樣年華)」로 읽는, 가장 중요한 사람을 가장 늦게 만났을 때의 문제**
+## 영화 「화양연화」로 읽는, 가장 중요한 사람을 가장 늦게 만났을 때의 문제
+
+![영화 화양연화 포스터. 양조위와 장만옥](images/in-the-mood-for-love-poster.jpg)
+
+*왕가위 감독 「화양연화(花樣年華, In the Mood for Love)」(2000). 주연 양조위, 장만옥.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 23일
 
 *게임이론·행동경제학·심리학, 그리고 자유의지와 필연에 대하여*
 

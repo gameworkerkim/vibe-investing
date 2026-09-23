@@ -630,6 +630,7 @@ const SLUG_OVERRIDES = {
   "Hacking/BackDoor-ENDLESS-DOORS.md": "backdoor-endless-doors",
   "Hacking/Clickfix-Hacking.md": "clickfix-hacking",
   "Game-Theory/Game-Theory-and-the-Supreme-Court-Crisis.md": "game-theory-supreme-court-crisis",
+  "Game-Theory/In-the-Mood-for-Love.md": "in-the-mood-for-love",
   "SSD/SSD-Power-OFF-Retention-Risk.md": "ssd-power-off-retention-risk",
   "Cyworld/Cyworld-Server-Restoration-Playbook.md": "cyworld-server-restoration-playbook",
   "Windows10/EOD-Win10-China.md": "eod-win10-china",
