@@ -1,3 +1,4 @@
+<!--
 ---
 title: "결정 이후에 온 사람"
 title_en: "The One Who Came After the Decision"
