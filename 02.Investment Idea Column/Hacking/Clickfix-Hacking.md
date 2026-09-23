@@ -1,3 +1,73 @@
+---
+title: "ClickFix 공격, 왜 방어하기 힘든가?"
+title_en: "Why ClickFix Is So Hard to Defend"
+subtitle: "목마를 성 안으로 끌고 들어가는 것은 언제나 수비하는 쪽이다"
+description: "ClickFix는 성벽을 넘지 않는다. 사용자가 명령을 실행 창으로 끌고 들어간다. ESET 517% 뒤 108% 재가속, MS 47%. 붙여넣기 전에 멈추고 AI로 한 겹 더 막아라."
+abstract: |
+  ClickFix는 가짜 오류·인증 화면으로 사용자가 Win+R, PowerShell, 터미널에 명령을 직접 붙여넣게 한다. ESET은 2025 상반기 탐지가 517% 늘었고, 2026 상반기에도 108% 재가속했다. 마이크로소프트는 초기 침투의 47%를 ClickFix로 집계했다.
+  탐지가 어려운 이유는 정상 사용자·서명된 OS 도구·지문 식별·Polygon EtherHiding·빈 전송 NullReceiver·탈취된 공식·지인 계정이다. ChainScript RAT, CrashFix, BlueNoroff 가짜 Zoom, Lazarus Mach-O Man, Sandworm이 같은 설계를 쓴다. macOS는 가짜 전체화면 업데이트와 스크립트 편집기 우회가 무대를 옮긴다.
+  교육만으로는 습관의 실수를 0으로 만들지 못한다. 실행 직전 검증·맥락 결합·사후 감사의 인공지능 보안 감사 체계를 규칙 기반 통제와 병행하라. AI는 오라클이 아니라 지치지 않는 파수꾼이다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean cyber-security / social-engineering column (not legal or investment advice), 2026-09-23,
+  group korea-hacking, Hacking/Clickfix-Hacking.md. v1.5.
+  Thesis: ClickFix makes the defender paste the payload (Trojan horse). Stats: ESET H1 2025 +517% (~8% of blocked); ESET H1 2026 another +108%; Microsoft 2025 DDR 47% of Defender Experts initial access; kits $250/mo or $1,800 lifetime; Recorded Future: remains a top initial-access vector through 2026.
+  State actors: Kimsuky, APT28, MuddyWater within ~3 months; Sandworm vs Ukraine (CERT-UA, 2026).
+  Why hard: (1) signed LOLBins vs user action; macOS curl|sh, fake fullscreen update (AllSecure 2026-07, EtherHiding); Apple Mar 2026 Terminal paste warning bypassed via Script Editor; CrashFix; ChatGPT/Claude install lures. (2) ChainScript RAT rotating decoy brands (Spotify/Zoom/Teams). (3) fingerprinting; BlueNoroff wallet-extension check; HBO Max Reddit; stolen Telegram. (4) EtherHiding on Polygon; GuidePoint 15 contracts, 31 sites, 479 skimmers; NullReceiver (2026-08) encodes C2 IP in zero-value Ethereum to-address, tied to Contagious Interview npm (bianira-ui). ChainScript not attributed to DPRK. (5) trust-first.
+  DPRK weaponization section: Kimsuky interviews; JUMPSEC 2026-07 BlueNoroff isClickFix clipboard swap, 5 min to compromise, GhostCall self-propagation; Lazarus Mach-O Man macOS keychain; Contagious Interview.
+  Defense 1-5: disable Win+R; CLM; AppLocker/WDAC; behavior chains; monitor non-browser eth_call; share contract/wallet IOCs; never paste a command; verify Telegram invites on another channel.
+  Defense 6: AI security-audit — pre-execution clipboard intercept (Run/PowerShell/Terminal/Script Editor); contextual; post-execution SOC narrative. Pause-and-confirm not silent block; pair with GPO/WDAC; treat command comments as data; log scope/retention. AI is a sentry, not an oracle.
+  S2W H1 2026: DPRK 99 of 158; Korea 19 vs US 8. Gov/mil/intel first.
+date: 2026-09-22
+updated: 2026-09-23
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - ClickFix
+  - 사회공학
+  - Lazarus
+  - BlueNoroff
+  - NullReceiver
+  - EtherHiding
+  - AI보안감사
+  - 북한
+keywords:
+  - "ClickFix"
+  - "실행 창 붙여넣기"
+  - "인공지능 보안 감사"
+  - "NullReceiver"
+  - "EtherHiding"
+  - "BlueNoroff Zoom"
+  - "Mach-O Man"
+  - "북한 APT"
+group: korea-hacking
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/clickfix-hacking.jpg"
+image: "https://vibequant.cc/og/clickfix-hacking.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>ClickFix 공격, 왜 방어하기 힘든가? · VibeQuant</title>
+  <meta name="description" content="ClickFix는 성벽을 넘지 않는다. 사용자가 명령을 실행 창으로 끌고 들어간다. ESET 517% 뒤 108% 재가속, MS 47%. 붙여넣기 전에 멈추고 AI로 한 겹 더 막아라.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "ClickFix 공격, 왜 방어하기 힘든가?",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-22",
+    "dateModified": "2026-09-23",
+    "keywords": ["ClickFix", "실행 창 붙여넣기", "인공지능 보안 감사", "NullReceiver", "EtherHiding", "BlueNoroff Zoom", "Mach-O Man", "북한 APT"]
+  }
+  </script>
+-->
+
 # ClickFix 공격, 왜 방어하기 힘든가?
 
 ## 목마를 성 안으로 끌고 들어가는 것은 언제나 수비하는 쪽이다
