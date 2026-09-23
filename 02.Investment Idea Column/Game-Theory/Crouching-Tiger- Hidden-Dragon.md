@@ -1,4 +1,72 @@
-# 옥교룡은 왜 선택하지 못했나? -  『와호장룡』, 안개 속으로 사라진 두 개의 사랑
+---
+title: "옥교룡은 왜 선택하지 못했나? — 『와호장룡』, 안개 속으로 사라진 두 개의 사랑"
+title_en: "Why Jen Could Not Choose — Crouching Tiger, Hidden Dragon and Two Loves Lost in Fog"
+subtitle: "스물여섯 해 만의 재개봉. 선택하지 않은 채로 한평생을 흘려보낸 연인들"
+description: "이모백은 쥐지 못해서 잃었고, 옥교룡은 너무 세게 쥐어서 잃었다. 『와호장룡』은 묻는다. 뛰어내리겠는가, 손을 잡겠는가. 선택하지 않는 것도 선택이다."
+abstract: |
+  2026년 10월, 이안의 『와호장룡』이 26년 만에 다시 극장에 걸린다. 칼과 대나무 숲이 아니라 마지막 안개가 남는 영화다. 옥교룡은 사랑하는 남자가 곁에 있는데도 구름다리에서 뛰어내린다.
+  이모백과 유수련은 쥐지 못해서 잃었고, 옥교룡과 로소호는 너무 세게 쥐어서 잃는다. 원작에서 교룡에게 있던 출구를 이안은 지웠다. 안개는 결말이 아니라 질문이다.
+  선택하지 않는 것도 선택이다. 손을 펴야 할 때 펴고, 잡아야 할 때 잡을 일. 혼백이 되어 이레를 약속하기 전에. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film essay (not legal, relationship, or investment advice), 2026-09-23,
+  group industry, Game-Theory/Crouching-Tiger- Hidden-Dragon.md (space in filename).
+  Film: Ang Lee, Crouching Tiger, Hidden Dragon (臥虎藏龍, 2000); Korean theatrical return 2026-10-07, Lotte Cinema exclusive.
+  Thesis: two couples as mirrors. Li Mu Bai / Yu Shu Lien delay love under honor (unopened fist / Dao paradox); Jen Yu / Lo (Dark Cloud) hesitate under family vs freedom. Jen does not lift the wedding palanquin curtain; later jumps from Wudang bridge into fog. Novel (Wang Dulu) lets Jen fake death and return to Lo; Lee deletes that exit so the audience stands on the bridge. Epilogue: not choosing is also a choice; the bill always arrives.
+date: 2026-09-23
+updated: 2026-09-23
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 와호장룡
+  - 이안
+  - 옥교룡
+  - 이모백
+  - 선택
+  - 재개봉
+keywords:
+  - "와호장룡"
+  - "옥교룡"
+  - "이모백"
+  - "선택하지 않는 것도 선택"
+  - "이안"
+  - "2026 재개봉"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/crouching-tiger-hidden-dragon.jpg"
+image: "https://vibequant.cc/og/crouching-tiger-hidden-dragon.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>옥교룡은 왜 선택하지 못했나? — 『와호장룡』, 안개 속으로 사라진 두 개의 사랑 · VibeQuant</title>
+  <meta name="description" content="이모백은 쥐지 못해서 잃었고, 옥교룡은 너무 세게 쥐어서 잃었다. 『와호장룡』은 묻는다. 뛰어내리겠는가, 손을 잡겠는가. 선택하지 않는 것도 선택이다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "옥교룡은 왜 선택하지 못했나? — 『와호장룡』, 안개 속으로 사라진 두 개의 사랑",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-23",
+    "keywords": ["와호장룡", "옥교룡", "이모백", "선택하지 않는 것도 선택", "이안", "2026 재개봉"]
+  }
+  </script>
+-->
+
+# 옥교룡은 왜 선택하지 못했나? — 『와호장룡』, 안개 속으로 사라진 두 개의 사랑
+
+## 스물여섯 해 만의 재개봉. 선택하지 않은 채로 한평생을 흘려보낸 연인들
+
+![와호장룡 재개봉 포스터. 대나무 숲 위 두 검객](images/crouching-tiger-hidden-dragon-poster.jpg)
+
+*이안 감독 『와호장룡(臥虎藏龍)』(2000). 2026년 10월 롯데시네마 재개봉.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 23일
 
 ### 프롤로그. 스물여섯 해 만의 안개
 
