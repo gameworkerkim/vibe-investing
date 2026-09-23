@@ -1,3 +1,4 @@
+<!--
 ---
 title: "게임 이론, 행동 경제학, 심리학으로 보는 조희대 대법원장 사태의 해법은?"
 title_en: "A Game-Theory Exit from the Cho Hee-dae Supreme Court Standoff"
