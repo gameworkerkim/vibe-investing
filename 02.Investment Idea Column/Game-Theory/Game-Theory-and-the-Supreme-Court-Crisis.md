@@ -1,10 +1,75 @@
+---
+title: "게임 이론, 행동 경제학, 심리학으로 보는 조희대 대법원장 사태의 해법은?"
+title_en: "A Game-Theory Exit from the Cho Hee-dae Supreme Court Standoff"
+subtitle: "대법관 재제청 거부로 촉발된 사법부와 행정부의 정면충돌, 출구는 어디에 있는가?"
+description: "조희대 대법원장의 재제청 거부는 치킨 게임이다. 헌법 104조는 절차를 비웠고 관례가 깨졌다. 먼저 꺾는 쪽이 지는 게 아니라, 관례를 복원하는 쪽이 다음 라운드를 쥔다."
+abstract: |
+  조희대 대법원장이 손봉기 대법관 재제청 요청을 거부하면서 사법부와 행정부가 정면으로 부딪쳤다. 헌법 제104조 제2항은 제청권과 임명권이 충돌할 절차를 비워 두었고, 그 빈칸을 메우던 사전 협의 관례가 깨졌다.
+  이 대치는 치킨 게임이자 반복 게임이다. 손실 회피와 선택적 일관성이 양보를 막고, 공석의 비용은 국민이 진다. 청와대가 부서된 문서로 사유를 명시하고 대법원이 기존 후보군에서 협의 제청하는 동시 양보가 출구다.
+  가장 유력한 경로는 2027년 6월 퇴임까지 장기 교착이다. 법은 다음 인선부터 고치고, 관례의 협치 정신은 지금 살려야 한다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean institutional / game-theory column (not legal advice or investment advice), 2026-09-23,
+  group korea, Game-Theory/Game-Theory-and-the-Supreme-Court-Crisis.md.
+  Event: Chief Justice Cho Hee-dae (조희대) on 2026-09-22 refused President Lee Jae-myung's request to re-nominate a Supreme Court justice candidate (손봉기) after a written nomination without prior consultation (2026-08-18). Blue House had asked for re-nomination on 2026-08-28 citing Art. 82 form and diversity. Ruling party called it a "judicial coup."
+  Thesis: Art. 104(2) is silent on refusal/re-nomination procedure; custom (사전 협의 후 대면 제청) was the Schelling focal point. Chicken game + prisoner's dilemma + repeated game. Loss aversion, hostile attribution, selective consistency (Cho consulted on 김성수 but not 손봉기; had consulted under Yoon). Exit: simultaneous concession — Blue House resubmits a countersigned document with reasons; Court re-nominates from existing slate (김민기·박순영·윤성식) after a face-to-face; third-party sequencing (Speaker). Vacancy costs fall on the public (~200+ days, 3,000 cases/year per justice).
+  Scenarios (author's subjective): A deadlock to Cho's June 2027 retirement ~40%; B form-then-compromise ~25%; C National Assembly rejection ~15%; D recommittee ~10%; E accept 손봉기 ~10%. Time favors the Blue House (next CJ appointment). Watch: countersigned re-request, Oct audit, court-org law, presidential speech, bench opinion.
+date: 2026-09-23
+updated: 2026-09-23
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 조희대
+  - 대법관
+  - 게임이론
+  - 치킨게임
+  - 헌법
+  - 이재명
+  - 사법부
+keywords:
+  - "조희대 대법원장"
+  - "대법관 재제청"
+  - "손봉기"
+  - "치킨 게임"
+  - "헌법 제104조"
+  - "사전 협의"
+  - "사법 공백"
+group: korea
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/game-theory-supreme-court-crisis.jpg"
+image: "https://vibequant.cc/og/game-theory-supreme-court-crisis.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>게임 이론, 행동 경제학, 심리학으로 보는 조희대 대법원장 사태의 해법은? · VibeQuant</title>
+  <meta name="description" content="조희대 대법원장의 재제청 거부는 치킨 게임이다. 헌법 104조는 절차를 비웠고 관례가 깨졌다. 먼저 꺾는 쪽이 지는 게 아니라, 관례를 복원하는 쪽이 다음 라운드를 쥔다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "게임 이론, 행동 경제학, 심리학으로 보는 조희대 대법원장 사태의 해법은?",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-23",
+    "keywords": ["조희대 대법원장", "대법관 재제청", "손봉기", "치킨 게임", "헌법 제104조", "사전 협의", "사법 공백"]
+  }
+  </script>
+-->
+
 # 게임 이론, 행동 경제학, 심리학으로 보는 조희대 대법원장 사태의 해법은?
 
-**대법관 재제청 거부로 촉발된 사법부와 행정부의 정면충돌, 출구는 어디에 있는가?**
+## 대법관 재제청 거부로 촉발된 사법부와 행정부의 정면충돌, 출구는 어디에 있는가?
 
-*작성 기준일: 2026년 9월 23일*
+![조희대 대법원장과 이재명 대통령이 나란히 선 공식 사진](images/cho-hee-dae-lee-jae-myung.jpg)
 
----
+*조희대 대법원장(왼쪽)과 이재명 대통령. 제청권과 임명권이 같은 조문을 정반대로 읽고 있다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 23일
 
 ## 1. 사건의 전개 - 서면 제청에서 재제청 거부까지
 
