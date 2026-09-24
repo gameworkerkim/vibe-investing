@@ -1,3 +1,8 @@
+---
+draft: true
+robots: noindex,nofollow
+---
+
 # 모델 회귀 테스트 키트 (부록 D)
 
 > AI Prompt Cook Book 템플릿 · 김호광 (Dennis Kim) · vibequant.cc

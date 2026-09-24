@@ -1,3 +1,8 @@
+---
+draft: true
+robots: noindex,nofollow
+---
+
 # 코드 정의서 (부록 A)
 
 > AI Prompt Cook Book 템플릿 · 김호광 (Dennis Kim) · vibequant.cc

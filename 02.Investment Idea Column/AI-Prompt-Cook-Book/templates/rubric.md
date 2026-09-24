@@ -1,3 +1,8 @@
+---
+draft: true
+robots: noindex,nofollow
+---
+
 # 프롬프트 결과 평가 루브릭 (18장)
 
 > AI Prompt Cook Book 템플릿 · 김호광 (Dennis Kim) · vibequant.cc

@@ -1,3 +1,8 @@
+---
+draft: true
+robots: noindex,nofollow
+---
+
 # 주간 콘텐츠 캘린더 (부록 C)
 
 > AI Prompt Cook Book 템플릿 · 김호광 (Dennis Kim) · vibequant.cc
