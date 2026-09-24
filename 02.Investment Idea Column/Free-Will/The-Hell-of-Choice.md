@@ -1,4 +1,72 @@
+---
+title: "무간도(無間道) — 선택의 지옥, 이름을 잃은 자들의 노래"
+title_en: "Infernal Affairs — The Hell of Choice, a Song for Those Who Lost Their Names"
+subtitle: "한 걸음을 내딛는 순간 되돌아갈 길이 사라진다"
+description: "《무간도》는 끝나지 않는 역할 속에서 사람이 닳아 없어지는 이야기다. 선택은 끝났는데 고통은 끝나지 않는다. 지금 나를 진짜 이름으로 불러 주는 사람은 누구인가."
+abstract: |
+  2002년 홍콩 영화 《무간도》는 끝나지 않는 역할 속에서 한 사람이 조금씩 닳아 없어지는 이야기다. 유건명은 조직의 스파이로 경찰이 되고, 진영인은 경찰의 스파이로 조직원이 된다. 한 걸음을 내딛는 순간 되돌아갈 길이 사라진다.
+  모든 관계는 죄수의 딜레마 위에 서 있다. 옥상의 마지막 말 "我係差人"은 나는 경찰이다와 나는 보내진 사람이다를 동시에 뜻한다. 정체성은 본질이 아니라 관계와 인정 속에서 구성된다.
+  진영인은 죽어서 이름을 되찾고, 유건명은 살아서 무간지옥에 남는다. 선택은 끝났는데 고통은 끝나지 않는다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film / free-will essay (not legal, relationship, or investment advice), 2026-09-24,
+  group industry, Free-Will/The-Hell-of-Choice.md.
+  Film: Infernal Affairs (無間道, 2002), Andrew Lau / Alan Mak; Andy Lau as Lau Kin-ming (유건명), Tony Leung as Chan Wing-yan (진영인). Buddhist avici hell (無間地獄) as metaphor.
+  Thesis: identity is not essence but recognition. Undercover = losing every window that can prove the self. Prisoner's dilemma among Wong/Sam, the two moles, rooftop climax. Cantonese 差人 (chaayan) = cop AND the one who was sent. Gilovich inaction regret; Festinger dissonance; Kahneman-Tversky loss aversion; Simon satisficing. Six practical choice rules then the film's rebuttal: when the option set itself is hell, only choices you can bear remain. Survivor stays in endless hell. Closing: who still calls you by your real name.
+date: 2026-09-24
+updated: 2026-09-24
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 무간도
+  - 자유의지
+  - 죄수의딜레마
+  - 정체성
+  - 양조위
+  - 유덕화
+keywords:
+  - "무간도"
+  - "선택의 지옥"
+  - "差人"
+  - "죄수의 딜레마"
+  - "정체성"
+  - "잊혀진 시간"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/the-hell-of-choice.jpg"
+image: "https://vibequant.cc/og/the-hell-of-choice.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>무간도(無間道) — 선택의 지옥, 이름을 잃은 자들의 노래 · VibeQuant</title>
+  <meta name="description" content="《무간도》는 끝나지 않는 역할 속에서 사람이 닳아 없어지는 이야기다. 선택은 끝났는데 고통은 끝나지 않는다. 지금 나를 진짜 이름으로 불러 주는 사람은 누구인가.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "무간도(無間道) — 선택의 지옥, 이름을 잃은 자들의 노래",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-24",
+    "keywords": ["무간도", "선택의 지옥", "差人", "죄수의 딜레마", "정체성", "잊혀진 시간"]
+  }
+  </script>
+-->
+
 # 무간도(無間道) — 선택의 지옥, 이름을 잃은 자들의 노래
+
+## 한 걸음을 내딛는 순간 되돌아갈 길이 사라진다
+
+![영화 무간도 포스터. 유덕화와 양조위](images/infernal-affairs-poster.jpg)
+
+*유위강·맥조휘 감독 《무간도(無間道, Infernal Affairs)》(2002). 주연 유덕화, 양조위.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 24일
 
 > 무간지옥에 빠진 자는 죽지 않고, 영원히 고통받는다.
 
