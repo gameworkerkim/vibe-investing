@@ -1,3 +1,4 @@
+<!--
 ---
 title: "60~70년대에 세운 교회, 왜 아들과 사위에게 물려주려 하는가?"
 title_en: "Why Churches Founded in the 1960s–70s Are Handed to Sons and Sons-in-Law"
