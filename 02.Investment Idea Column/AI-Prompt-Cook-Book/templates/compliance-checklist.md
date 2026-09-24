@@ -1,3 +1,8 @@
+---
+draft: true
+robots: noindex,nofollow
+---
+
 # 발행 전 컴플라이언스 체크리스트 (21장)
 
 > AI Prompt Cook Book 템플릿 · 김호광 (Dennis Kim) · vibequant.cc
