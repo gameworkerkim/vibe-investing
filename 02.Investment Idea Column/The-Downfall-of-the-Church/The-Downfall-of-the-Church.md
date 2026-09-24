@@ -1,8 +1,71 @@
+---
+title: "60~70년대에 세운 교회, 왜 아들과 사위에게 물려주려 하는가?"
+title_en: "Why Churches Founded in the 1960s–70s Are Handed to Sons and Sons-in-Law"
+subtitle: "교회는 목사의 것이 아니다"
+description: "교회는 목사의 것이 아니다. 맨손으로 세웠다는 기억이 소유가 되고, 아들과 사위에게 넘어간다. 명성교회가 10년 법정에서 보여 준 세습의 본질이다."
+abstract: |
+  1960~70년대 도시 개척교회는 공동체였지만, 맨손으로 세웠다는 기억은 소유 의식으로 바뀌었다. 은퇴를 앞둔 목사에게 교회는 직분이 아니라 사업체가 되고, 아들과 사위에게 넘어간다.
+  성경은 세습을 말하지 않는다. 명성교회는 세습금지법을 우회한 합병 세습으로 10년 법정 공방 끝에 세습을 완성했다. 교단은 스스로 만든 법을 스스로 무시했다.
+  예장통합 교인은 10년 사이 22%가 줄었다. 교회를 교회에 돌려주지 않는 한, 교인들이 떠나는 흐름은 멈추지 않는다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean church-succession essay (not legal, pastoral, or investment advice), 2026-09-24,
+  group korea, The-Downfall-of-the-Church/The-Downfall-of-the-Church.md.
+  Thesis: mega-churches founded in 1960s-70s industrialization became family businesses. Pastor is steward not owner (Acts 20:28; 1 Pet 5:2-3). Biblical anti-succession: Joshua not Moses' sons; Samuel's sons; Eli's sons; NT priesthood of all believers; Hebrews 7 ends Aaronic line.
+  Myungsung Church (명성교회) case 2013-2023: 세습금지법 Art 28-6, 새노래명성 merger workaround, 10 years of denominational courts vs 수습안, Supreme Court 심리불속행 2023. Author's family attended Myungsung; will not return. Offering systems (작정헌금, 임직헌금) not in NT. Membership collapse: 예장통합 -21.6% 2016-2025; 가나안 성도. Close: return church to church; block 교차/징검다리/합병 세습.
+date: 2026-09-24
+updated: 2026-09-24
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 명성교회
+  - 세습
+  - 한국교회
+  - 예장통합
+  - 가나안성도
+keywords:
+  - "명성교회 세습"
+  - "김하나 목사"
+  - "세습금지법"
+  - "교회는 목사의 것이 아니다"
+  - "가나안 성도"
+  - "예장통합"
+group: korea
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/the-downfall-of-the-church.jpg"
+image: "https://vibequant.cc/og/the-downfall-of-the-church.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>60~70년대에 세운 교회, 왜 아들과 사위에게 물려주려 하는가? · VibeQuant</title>
+  <meta name="description" content="교회는 목사의 것이 아니다. 맨손으로 세웠다는 기억이 소유가 되고, 아들과 사위에게 넘어간다. 명성교회가 10년 법정에서 보여 준 세습의 본질이다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "60~70년대에 세운 교회, 왜 아들과 사위에게 물려주려 하는가?",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-24",
+    "keywords": ["명성교회 세습", "김하나 목사", "세습금지법", "교회는 목사의 것이 아니다", "가나안 성도", "예장통합"]
+  }
+  </script>
+-->
+
 # 60~70년대에 세운 교회, 왜 아들과 사위에게 물려주려 하는가?
 
-### — 교회는 목사의 것이 아니다
+## 교회는 목사의 것이 아니다
 
-김호광 (Dennis Kim)
+![대한예수교장로회 명성교회 본당 외관](images/myungsung-church.jpg)
+
+*대한예수교장로회 명성교회. 세습금지 결의가 나온 바로 그 장소가, 10년 뒤 세습의 상징이 됐다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 24일
 
 한국의 대형 교회 상당수는 1960~70년대 산업화 시기에 세워졌다. 농촌을 떠나 도시로 몰려든 사람들은 낯선 도시에서 기댈 곳이 필요했다. 천막이나 상가 2층에서 시작한 개척교회는 그들에게 공동체였고 쉼터였다. 교회는 폭발적으로 성장했다. 개척 목사들은 수십 년에 걸쳐 수천, 수만 명이 모이는 교회를 일궜다.
 
