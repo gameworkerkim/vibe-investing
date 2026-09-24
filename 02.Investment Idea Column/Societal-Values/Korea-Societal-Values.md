@@ -1,6 +1,73 @@
+---
+title: "약속이 깨질 때마다, 돈만 남았다"
+title_en: "Every Time a Promise Broke, Only Money Remained"
+subtitle: "왜 한국인은 돈을 삶의 1순위로 꼽게 되었나, 그리고 가족마저 사라질 때 무엇이 남는가?"
+description: "한국인만 물질적 풍요를 삶의 1순위로 꼽는다. 탐욕이 아니라 깨진 약속의 누적이다. 『메이드 인 코리아』가 보여 주듯, 애국으로 포장된 욕망이 돈과 땅을 남겼다."
+abstract: |
+  2021년 퓨 리서치에서 17개 선진국 중 물질적 풍요를 삶의 의미 1순위로 올린 나라는 한국뿐이다. 탐욕이 아니라 불신의 누적이다. 신분, 국가, 고향, 회사가 차례로 약속을 깨뜨린 자리에 돈과 땅이 남았다.
+  일제 강점기의 족보 매매부터 강남 개발, IMF, 『기생충』과 『오징어 게임』까지 이어지는 궤적을, 우민호 『메이드 인 코리아』의 백기태가 한 장면으로 압축한다. 애국으로 포장된 수출과 가족 사업.
+  가족이 흔들리는 지금 첫 번째 가치는 돈도 가족도 아니라 지켜지는 공공의 약속, 곧 신뢰다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean societal-values essay (not legal or investment advice), 2026-09-24,
+  group korea, Societal-Values/Korea-Societal-Values.md.
+  Pew 2021: Korea uniquely ranks material well-being #1 for meaning in life (family #3); occupation as meaning 6% vs Italy 43%. Thesis: not greed but accumulated broken promises (status, state, hometown, company). Family love translated into providing money.
+  Arc: Japanese colonial era (족보 for sale, 채만식 태평천하, 아가씨); Korean War (가족 as survival unit, 몰아주기); Park Chung-hee (labor betrays, land does not; Gangnam; 난쏘공); Disney+ Made in Korea (Hyun Bin as 백기태, meth as patriotism/export); IMF (체면 currency swap); Gangnam as Christaller + Veblen; Japan/Singapore/Taiwan contrasts; 1-person households, lonely deaths; HDB vs HK subdivided flats.
+  Close: first value should be public trust that is kept. Fertility rebound is a signal the last promise is not fully broken. Investment/legal disclaimer.
+date: 2026-09-24
+updated: 2026-09-24
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 한국
+  - 사회적가치
+  - 부동산
+  - 메이드인코리아
+  - 퓨리서치
+  - 신뢰
+keywords:
+  - "물질적 풍요"
+  - "퓨 리서치"
+  - "메이드 인 코리아"
+  - "강남"
+  - "공공의 약속"
+  - "한국 가치관"
+group: korea
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/korea-societal-values.jpg"
+image: "https://vibequant.cc/og/korea-societal-values.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>약속이 깨질 때마다, 돈만 남았다 · VibeQuant</title>
+  <meta name="description" content="한국인만 물질적 풍요를 삶의 1순위로 꼽는다. 탐욕이 아니라 깨진 약속의 누적이다. 『메이드 인 코리아』가 보여 주듯, 애국으로 포장된 욕망이 돈과 땅을 남겼다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "약속이 깨질 때마다, 돈만 남았다",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-24",
+    "keywords": ["물질적 풍요", "퓨 리서치", "메이드 인 코리아", "강남", "공공의 약속", "한국 가치관"]
+  }
+  </script>
+-->
+
 # 약속이 깨질 때마다, 돈만 남았다
 
-### 왜 한국인은 돈을 삶의 1순위로 꼽게 되었나, 그리고 가족마저 사라질 때 무엇이 남는가?
+## 왜 한국인은 돈을 삶의 1순위로 꼽게 되었나, 그리고 가족마저 사라질 때 무엇이 남는가?
+
+![디즈니플러스 드라마 메이드 인 코리아 포스터. 현빈이 연기한 백기태](images/made-in-korea-poster.jpg)
+
+*우민호 감독 디즈니+ 『메이드 인 코리아』(2025). 주연 현빈. 낮에는 국가를 지키고 밤에는 히로뽕을 애국이라 부른 남자.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 24일
 
 2021년 퓨 리서치 센터는 17개 선진국 사람들에게 삶을 의미 있게 만드는 것이 무엇인지 물었다. 17곳 중 14곳이 가족을 1순위로 꼽았다. 예외는 셋이었다. 스페인은 건강, 대만은 사회, 한국은 물질적 풍요였다. 물질적 풍요를 2위에 둔 나라는 네덜란드, 벨기에, 일본이 있었지만 1위에 올린 나라는 한국뿐이다. 한국은 그다음으로 건강을 2위, 가족을 3위에 두었고, 다른 나라에서 상위권이던 친구와 취미는 순위에 들지 못했다.[^pew]
 
