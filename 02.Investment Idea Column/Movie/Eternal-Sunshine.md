@@ -1,6 +1,72 @@
+---
+title: "기억을 지워도, 나는 다시 당신에게로"
+title_en: "Even If I Erase You, I Come Back to You"
+subtitle: "《이터널 선샤인》, 지우고 싶었던 사랑에 대하여"
+description: "기억을 지워도 끝내지 못한 마음은 남는다. 《이터널 선샤인》이 묻는 사랑은 햇살만 남기는 일이 아니라, 다칠 줄 알면서도 다시 오케이 하는 일이다."
+abstract: |
+  미셸 공드리 《이터널 선샤인》(2004)은 금지된 소망에서 시작한다. 그 사람을 처음 본 날을 통째로 오려낼 수 있다면, 나는 가볍게 웃을 수 있을까.
+  조엘과 클레멘타인은 서로를 지운 뒤 몬탁에서 다시 만난다. 메리는 하워드를 지운 뒤 허구의 평화를 산다. 같은 망각에서 한 커플은 오케이를, 다른 커플은 진실을 택한다.
+  제목의 영원한 햇살은 구원이 아니라 소망을 내려놓은 창백한 평화다. 기억은 지워도 끝내지 못한 마음은 남고, 다칠 줄 알면서도 다시 사랑하는 일이 남는다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film essay (not legal, relationship, or investment advice), 2026-09-26,
+  group industry, Movie/Eternal-Sunshine.md.
+  Film: Michel Gondry, Eternal Sunshine of the Spotless Mind (2004), Jim Carrey as Joel, Kate Winslet as Clementine; Kirsten Dunst as Mary, Tom Wilkinson as Howard. Lacuna Inc. memory erasure. Title from Alexander Pope Eloisa to Abelard. Korean 4K remaster theatrical 2026-01-21.
+  Thesis: spotless-mind sunshine is peace bought by resigning desire, not healed love. Joel/Clementine vs Mary/Howard parallel table. Zeigarnik unfinished love; similarity-attraction vs complementary pull. Ending "Okay" = love knowing you will be hurt again. Spinoza: every determination is negation — love defined as only the happy half loses half the love. Beck Everybody's Gotta Learn Sometime.
+date: 2026-09-26
+updated: 2026-09-26
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 이터널선샤인
+  - 미셸공드리
+  - 기억
+  - 사랑
+  - 자이가르닉
+  - 클레멘타인
+keywords:
+  - "이터널 선샤인"
+  - "기억을 지워도"
+  - "조엘"
+  - "클레멘타인"
+  - "라쿠나"
+  - "오케이"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/eternal-sunshine.jpg"
+image: "https://vibequant.cc/og/eternal-sunshine.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>기억을 지워도, 나는 다시 당신에게로 · VibeQuant</title>
+  <meta name="description" content="기억을 지워도 끝내지 못한 마음은 남는다. 《이터널 선샤인》이 묻는 사랑은 햇살만 남기는 일이 아니라, 다칠 줄 알면서도 다시 오케이 하는 일이다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "기억을 지워도, 나는 다시 당신에게로",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-26",
+    "keywords": ["이터널 선샤인", "기억을 지워도", "조엘", "클레멘타인", "라쿠나", "오케이"]
+  }
+  </script>
+-->
+
 # 기억을 지워도, 나는 다시 당신에게로
 
-**— 《이터널 선샤인》, 지우고 싶었던 사랑에 대하여**
+## 《이터널 선샤인》, 지우고 싶었던 사랑에 대하여
+
+![영화 이터널 선샤인 포스터. 짐 캐리와 케이트 윈슬렛](images/eternal-sunshine-poster.jpg)
+
+*미셸 공드리 감독 《이터널 선샤인(Eternal Sunshine of the Spotless Mind)》(2004). 주연 짐 캐리, 케이트 윈슬렛. 2026년 1월 4K 리마스터 재개봉.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 26일
 
 ## 겨울 바다, 몬탁에서 예지할 수 없던 재회
 
