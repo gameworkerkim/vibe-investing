@@ -1,6 +1,74 @@
+---
+title: "사랑은 시간을 선물하는 것"
+title_en: "Love Is the Gift of Time"
+subtitle: "영화 〈만추〉(2011)에 부치는 늦가을의 편지"
+description: "결국 사랑은 시간을 선물하는 일이다. 〈만추〉의 사흘은 2년의 기다림을 가능하게 했다. 말보다, 판단 없이 곁에 머무는 그 시간이 사랑을 증명한다."
+abstract: |
+  김태용 감독의 〈만추〉(2011)는 사흘밖에 없는 두 사람의 이야기다. 수인번호 2537번 애나(탕웨이)와, 시간을 팔아 사는 훈(현빈)은 시애틀의 늦가을에서 만난다.
+  불확실함이 끌림을 키우고, 기차 안의 이방인 앞에서만 깊은 고백이 가능하다. 하오와 화이를 거꾸로 가르친 중국어 수업이 그 증거다. 말이 벽이 아니라 피난처가 된다.
+  사랑은 함께한 시간의 길이가 아니라 깊이로 증명된다. 사흘이 2년의 기다림을 가능하게 했다면, 그것은 이미 실패한 사랑이 아니다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film essay (not legal, relationship, or investment advice), 2026-09-25,
+  group industry, Movie/Late-Autumn.md.
+  Film: Kim Tae-yong, Late Autumn (만추/晚秋, 2011), remake of Lee Man-hee 1966. Tang Wei as Anna (inmate 2537), Hyun Bin as Hoon. Seattle, three days of furlough for mother's funeral.
+  Thesis (Lee Dong-jin): love is the act of giving time. Uncertainty attraction (Whitchurch, Wilson & Gilbert 2011); stranger on a train (Zick Rubin); Dutton-Aron misattribution of arousal; Aron self-disclosure intimacy.
+  Key scene: inverted 好/坏 Chinese lesson — confession possible because he cannot understand. Ending: cafe after 2 years, film withholds whether he comes; waiting itself is recovered desire.
+  Coda: Tang Wei sings Chinese theme 晚秋 on BD/CN cut. Closing: three days gifted a lifetime season.
+date: 2026-09-25
+updated: 2026-09-25
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 만추
+  - 탕웨이
+  - 현빈
+  - 사랑
+  - 시간
+  - 김태용
+keywords:
+  - "만추"
+  - "사랑은 시간을 선물하는 것"
+  - "탕웨이"
+  - "현빈"
+  - "기차 안의 이방인"
+  - "晚秋"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/late-autumn.jpg"
+image: "https://vibequant.cc/og/late-autumn.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>사랑은 시간을 선물하는 것 · VibeQuant</title>
+  <meta name="description" content="결국 사랑은 시간을 선물하는 일이다. 〈만추〉의 사흘은 2년의 기다림을 가능하게 했다. 말보다, 판단 없이 곁에 머무는 그 시간이 사랑을 증명한다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "사랑은 시간을 선물하는 것",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-25",
+    "keywords": ["만추", "사랑은 시간을 선물하는 것", "탕웨이", "현빈", "기차 안의 이방인", "晚秋"]
+  }
+  </script>
+-->
+
 # 사랑은 시간을 선물하는 것
 
-### 영화 〈만추〉(2011)에 부치는 늦가을의 편지
+## 영화 〈만추〉(2011)에 부치는 늦가을의 편지
+
+![영화 만추 포스터. 현빈과 탕웨이](images/late-autumn-poster.jpg)
+
+*김태용 감독 〈만추(晚秋, Late Autumn)〉(2011). 주연 현빈, 탕웨이.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 25일
 
 늦가을의 시애틀은 늘 조금 젖어 있다. 안개가 도시의 윤곽을 지우고, 사람들은 저마다의 외투 속으로 몸을 웅크린다. 김태용 감독의 〈만추(晚秋)〉는 바로 그 계절의 온도로 찍은 영화다. 이만희 감독의 1966년작을 새로 쓴 이 작품에서, 두 사람에게 주어진 시간은 고작 사흘. 그런데 이상하다. 그 짧은 사흘이 어떤 사람의 몇 년보다 길게 마음에 남는다.
 

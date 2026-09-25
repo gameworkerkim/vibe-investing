@@ -656,6 +656,7 @@ const SLUG_OVERRIDES = {
   "Free-Will/The-Hell-of-Choice.md": "the-hell-of-choice",
   "Societal-Values/Korea-Societal-Values.md": "korea-societal-values",
   "The-Downfall-of-the-Church/The-Downfall-of-the-Church.md": "the-downfall-of-the-church",
+  "Movie/Late-Autumn.md": "late-autumn",
   "News Letter/vibe-quant-insight-001.md": "vibe-quant-insight-001",
   "News Letter/vibe-quant-insight-001-en.md": "vibe-quant-insight-001-en",
   "News Letter/vibe-quant-insight-001-ja.md": "vibe-quant-insight-001-ja",
