@@ -1,4 +1,72 @@
-# 밥 국 찬, 한식의 탄생 - 우리는 밥 한 끼 먹자는 말로 하나가 되었다
+---
+title: "밥 국 찬, 한식의 탄생"
+title_en: "Bap, Guk, Chan — The Birth of Korean Cuisine"
+subtitle: "우리는 밥 한 끼 먹자는 말로 하나가 되었다"
+description: "한국인은 안부를 밥그릇에 담아 건넨다. 한식은 설계된 자랑이 아니라 척박한 땅 위의 생존 기록이다. 밥 한 끼 먹자는 말로 우리는 하나가 되었다."
+abstract: |
+  홍대선 《밥 국 찬, 한식의 탄생》 서평. 한국인은 안부를 밥그릇에 담아 건넨다. 한식은 선조의 지혜가 설계한 완성품이 아니라, 척박한 땅 위에서 쌓인 생존의 기록이다.
+  밥은 왕, 국은 신하, 찬은 백성. 좌반우갱은 예절이 아니라 체제다. 한식은 시간단계형이 아니라 공간전개형이고, 구속 안에서 무한한 자유를 누린다.
+  세계가 한식을 늦게 알아본 것은 부족해서가 아니라 너무 한국어로 쓰여 있었기 때문이다. 밥 한 끼 먹자는 말은 연대의 선언이다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean culture / book-review essay (not legal, culinary, or investment advice), 2026-09-25,
+  group korea, Korean-Culture/The-Birth-of-Korean-Cuisine.md.
+  Book: Hong Daeseon, 밥 국 찬, 한식의 탄생 (The Birth of Korean Cuisine). Follow-up to 한국인의 탄생.
+  Thesis: Korean food was never designed; it is a survival record on granite, acid soil, sharp seasons. Rice as self-harm not suicide; namul from detoxed wild plants. Triangle: bap king / guk minister / chan people. Left-rice right-soup (좌반우갱) as system. Korea vs China (탕 as independent dish) vs Japan (small soup bowl). Spatial vs temporal dining; ssam as table-in-a-hand. Late global arrival: untranslatable grammar, raw+fermented on one table, too much variety, no class ladder of cuisine. Coda: mother's 딱 떨어지는 taste from Kaesong; "Did you eat?" as solidarity.
+date: 2026-09-25
+updated: 2026-09-25
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 한식
+  - 밥국찬
+  - 홍대선
+  - 한국문화
+  - 밥상
+  - K-컬처
+keywords:
+  - "밥 국 찬"
+  - "한식의 탄생"
+  - "홍대선"
+  - "밥 먹었니"
+  - "좌반우갱"
+  - "한식"
+group: korea
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/the-birth-of-korean-cuisine.jpg"
+image: "https://vibequant.cc/og/the-birth-of-korean-cuisine.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>밥 국 찬, 한식의 탄생 · VibeQuant</title>
+  <meta name="description" content="한국인은 안부를 밥그릇에 담아 건넨다. 한식은 설계된 자랑이 아니라 척박한 땅 위의 생존 기록이다. 밥 한 끼 먹자는 말로 우리는 하나가 되었다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "밥 국 찬, 한식의 탄생",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-25",
+    "keywords": ["밥 국 찬", "한식의 탄생", "홍대선", "밥 먹었니", "좌반우갱", "한식"]
+  }
+  </script>
+-->
+
+# 밥 국 찬, 한식의 탄생
+
+## 우리는 밥 한 끼 먹자는 말로 하나가 되었다
+
+![홍대선 《밥 국 찬, 한식의 탄생》 책 표지](images/bap-guk-chan-cover.jpg)
+
+*홍대선, 《밥 국 찬, 한식의 탄생》. 한식은 설계된 자랑이 아니라 생존의 기록이다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 25일
 
 > "밥 먹었니?"
 
