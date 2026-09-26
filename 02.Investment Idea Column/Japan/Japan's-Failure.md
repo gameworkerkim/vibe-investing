@@ -1,3 +1,4 @@
+<!--
 ---
 title: "매뉴얼의 일본, 왜 일본은 국제 대회를 실패하는가?"
 title_en: "Manual Japan's Mega-Event Failures — Distorted Purpose, Not Lost Capability"
