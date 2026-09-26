@@ -1,6 +1,79 @@
+---
+title: "매뉴얼의 일본, 왜 일본은 국제 대회를 실패하는가?"
+title_en: "Manual Japan's Mega-Event Failures — Distorted Purpose, Not Lost Capability"
+subtitle: "전후 성공 신화의 덫에 걸린 '매뉴얼의 나라', 그리고 같은 길 위에 선 한국"
+description: "매뉴얼의 나라 일본이 국제 대회에서 연이어 실패하는 이유는 능력이 사라져서가 아니다. 목적이 변질되고 거버넌스가 무너진 자리로, 스스로 걸어 들어갔기 때문이다."
+abstract: |
+  도쿄 올림픽, 오사카·간사이 엑스포, 아이치·나고야 아시안게임. 매뉴얼의 나라 일본이 최근 대형 국제 행사에서 연이어 파행을 겪는 세 가지 직접 원인은 목적의 변질, 낡은 성장 공식, 거버넌스 붕괴다.
+  2019 럭비 월드컵은 단일한 목적, 기존 인프라, 외부 운영 기준으로 같은 일본이 성공할 수 있음을 보여준다. 전후 성공 신화는 실패의 직접 원인이 아니라, 실패하는 설계를 반복 선택하게 만드는 배경이다.
+  한국도 예외가 아니다. 2023 새만금 잼버리와 2026 여수세계섬박람회는 분절된 거버넌스를 '국가 총력전'으로 덮는 구조다. 이것은 국력 몰락이 아니라 조정 능력의 공동화다. 투자 권유 아님.
+summary_for_ai: |
+  Korean policy/society column (not investment advice), 2026-09-26,
+  group macro-geo, Japan/Japan's-Failure.md.
+  Thesis: Japan fails mega-events because purpose is political/economic side-benefits, not event success. Three causes: purpose distortion, old 1964/1970 growth formula, governance collapse after Dentsu-style know-how hollowed.
+  Contrast: 2019 Rugby WC succeeded — single purpose, existing venues, World Rugby external standards. Postwar success myth is background for repeating bad designs, not the direct cause.
+  Cases: Tokyo 2020 Olympics; Osaka/Kansai Expo 2025 (Yumeshima, EVMJ EV buses); Aichi/Nagoya Asian Games 2026 (container villages, North Korean anthem at Korea match, Hideyoshi cosplay).
+  Korea parallel: Saemangeum Jamboree 2023 and Yeosu Island Expo 2026 via "national total mobilization." Prescriptions: separate event from SOC, single accountable lead, test events, white papers. Not Japan-collapse — state coordination hollowed.
+date: 2026-09-26
+updated: 2026-09-26
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 일본
+  - 도쿄올림픽
+  - 오사카엑스포
+  - 나고야아시안게임
+  - 럭비월드컵
+  - 여수세계섬박람회
+  - 새만금잼버리
+  - 거버넌스
+keywords:
+  - "일본 국제대회 실패"
+  - "도쿄 올림픽"
+  - "오사카 엑스포"
+  - "아이치 나고야 아시안게임"
+  - "매뉴얼의 나라"
+  - "여수세계섬박람회"
+  - "새만금 잼버리"
+  - "목적의 변질"
+group: macro-geo
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/japans-failure.jpg"
+image: "https://vibequant.cc/og/japans-failure.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>매뉴얼의 일본, 왜 일본은 국제 대회를 실패하는가? · VibeQuant</title>
+  <meta name="description" content="매뉴얼의 나라 일본이 국제 대회에서 연이어 실패하는 이유는 능력이 사라져서가 아니다. 목적이 변질되고 거버넌스가 무너진 자리로, 스스로 걸어 들어갔기 때문이다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "매뉴얼의 일본, 왜 일본은 국제 대회를 실패하는가?",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-26",
+    "keywords": ["일본 국제대회 실패", "도쿄 올림픽", "오사카 엑스포", "아이치 나고야 아시안게임", "매뉴얼의 나라", "여수세계섬박람회", "새만금 잼버리", "목적의 변질"]
+  }
+  </script>
+-->
+
 # 매뉴얼의 일본, 왜 일본은 국제 대회를 실패하는가?
 
-**— 전후 성공 신화의 덫에 걸린 '매뉴얼의 나라', 그리고 같은 길 위에 선 한국**
+## 전후 성공 신화의 덫에 걸린 '매뉴얼의 나라', 그리고 같은 길 위에 선 한국
+
+
+![아이치·나고야 아시안게임 개막식. 경기장 한가운데 세운 성(城) 세트](images/japan-international-event-castle.jpg)
+
+*아이치·나고야 아시안게임 개막식. 경기장 한가운데 세운 성(城) 세트 뒤로, 도쿄·오사카·나고야가 연이어 실패한 이유가 겹쳐 보인다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 26일
 
 ## 들어가며
 
