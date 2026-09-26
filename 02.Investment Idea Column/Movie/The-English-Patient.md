@@ -1,6 +1,72 @@
+---
+title: "지도 없는 땅을 걷는 사람들"
+title_en: "People Walking a Land Without Maps"
+subtitle: "영화 〈잉글리쉬 페이션트〉 — 예지할 수 없는 사랑과 상처, 아픔은 어떻게 치유되고 용서되는가?"
+description: "〈잉글리쉬 페이션트〉는 불륜의 외피를 입고 경계의 이야기다. 사랑은 국경도 결혼도 넘지만, 그 초월이 누군가의 상처 위에 세워질 때 우리는 무엇을 용서하는가."
+abstract: |
+  앤서니 밍겔라 〈잉글리쉬 페이션트〉(1996)는 불륜 멜로드라마의 외피를 입고 경계의 이야기다. 국경, 결혼, 적과 아군, 제국. 알마시는 그 선을 부정했고, 그 선들이 사랑을 죽였다.
+  진실한 사랑과 옳은 사랑은 같은 말이 아니다. 악인 없는 비극, 이력현상, 두 종류의 후회, 외부효과. 카라바지오는 복수를 멈추되 용서한다고 말하지 않는다.
+  경계를 넘는 사랑에는 두 결말이 있다. 함께 무너지거나, 잠시 서로를 비추고 놓아주는 것. 치유는 약이 아니라 이야기다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film essay (not legal, relationship, or investment advice), 2026-09-26,
+  group industry, Movie/The-English-Patient.md.
+  Film: Anthony Minghella, The English Patient (1996), from Michael Ondaatje 1992 Booker novel. Ralph Fiennes as Almasy, Kristin Scott Thomas as Katharine, Juliette Binoche as Hana, Willem Dafoe as Caravaggio, Colin Firth as Geoffrey, Naveen Andrews as Kip. 9 Oscars.
+  Thesis: affair surface, boundary story. Two couples: Almasy/Katharine ownership that burns vs Hana/Kip letting go. Hegel tragedy of right vs right; hysteresis of trust; Kahneman loss aversion; Loomes-Sugden regret; Gilovich action vs inaction regret; Carlsmith-Gilbert revenge paradox; Enright/Worthington decisional vs emotional forgiveness. Korea 2025 divorce stats as coda. Three gestures beyond calculation: letter in cave, flight with the dead, morphine ampoules. Closing: we are the real countries, not lines drawn by the powerful.
+date: 2026-09-26
+updated: 2026-09-26
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 잉글리쉬페이션트
+  - 앤서니밍겔라
+  - 사랑
+  - 용서
+  - 경계
+  - 후회
+keywords:
+  - "잉글리쉬 페이션트"
+  - "지도 없는 땅을 걷는 사람들"
+  - "알마시"
+  - "캐서린"
+  - "용서"
+  - "경계"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/the-english-patient.jpg"
+image: "https://vibequant.cc/og/the-english-patient.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>지도 없는 땅을 걷는 사람들 · VibeQuant</title>
+  <meta name="description" content="〈잉글리쉬 페이션트〉는 불륜의 외피를 입고 경계의 이야기다. 사랑은 국경도 결혼도 넘지만, 그 초월이 누군가의 상처 위에 세워질 때 우리는 무엇을 용서하는가.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "지도 없는 땅을 걷는 사람들",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-26",
+    "keywords": ["잉글리쉬 페이션트", "지도 없는 땅을 걷는 사람들", "알마시", "캐서린", "용서", "경계"]
+  }
+  </script>
+-->
+
 # 지도 없는 땅을 걷는 사람들
 
-### 영화 〈잉글리쉬 페이션트〉 — 예지할 수 없는 사랑과 상처, 아픔은 어떻게 치유되고 용서되는가?
+## 영화 〈잉글리쉬 페이션트〉 — 예지할 수 없는 사랑과 상처, 아픔은 어떻게 치유되고 용서되는가?
+
+![영화 잉글리쉬 페이션트 포스터. 레이프 파인스와 크리스틴 스콧 토머스](images/the-english-patient-poster.jpg)
+
+*앤서니 밍겔라 감독 〈잉글리쉬 페이션트(The English Patient)〉(1996). 주연 레이프 파인스, 크리스틴 스콧 토머스, 쥘리에트 비노슈. 아카데미 9개 부문 수상.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 26일
 
 > "우리야말로 진짜 나라예요. 권력자들의 이름으로 지도 위에 그어진 경계선이 아니라." — 캐서린 클리프턴, 동굴 속 마지막 편지
 

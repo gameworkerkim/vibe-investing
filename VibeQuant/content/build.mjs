@@ -658,6 +658,7 @@ const SLUG_OVERRIDES = {
   "The-Downfall-of-the-Church/The-Downfall-of-the-Church.md": "the-downfall-of-the-church",
   "Movie/Late-Autumn.md": "late-autumn",
   "Movie/Eternal-Sunshine.md": "eternal-sunshine",
+  "Movie/The-English-Patient.md": "the-english-patient",
   "Korean-Culture/The-Birth-of-Korean-Cuisine.md": "the-birth-of-korean-cuisine",
   "News Letter/vibe-quant-insight-001.md": "vibe-quant-insight-001",
   "News Letter/vibe-quant-insight-001-en.md": "vibe-quant-insight-001-en",
