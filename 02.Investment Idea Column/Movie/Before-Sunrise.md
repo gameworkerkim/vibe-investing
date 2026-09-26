@@ -1,10 +1,77 @@
-# 비포 선라이즈 - 해가 뜨기 전, 우리 사이의 작은 공간
+---
+title: "비포 선라이즈 — 해가 뜨기 전, 우리 사이의 작은 공간"
+title_en: "Before Sunrise — That Little Space Between Us, Before Dawn"
+subtitle: "기차에서 우연히 만난 두 젊은 남녀의 하루, 그리고 영원이 된 한 번의 밤"
+description: "단 하루, 사랑에 빠지기 충분한 시간. 『비포 선라이즈』는 완성되지 않았기에 순수하고, 신이 있다면 너나 내가 아니라 우리 사이의 작은 공간에 있다고 말한다."
+abstract: |
+  리처드 링클레이터 『비포 선라이즈』(1995). 1994년 6월 16일 블룸스데이, 기차에서 만난 제시와 셀린의 비엔나 하룻밤. 알고리즘이 짝을 계산하는 시대에, 계산할 수 없던 우연이 운명처럼 남는다.
+  기록되지 않았기에 더 선명하다. 이름 없는 자들의 묘지와 블룸스데이는 같은 질문이다. 사랑은 누군가에게 이름을 붙여주는 일.
+  속편은 설렘의 소멸이 아니라 모양의 전환을 보여준다. 신이 있다면 우리 사이의 작은 공간에 있고, 답은 결과가 아니라 시도 안에 있다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film essay (not legal, relationship, or investment advice), 2026-09-26,
+  group industry, Movie/Before-Sunrise.md. Final revision (thematic insights).
+  Film: Richard Linklater, Before Sunrise (1995), Ethan Hawke / Julie Delpy. Vienna 16 June 1994 (Bloomsday). Trilogy Sunset 2004, Midnight 2013. Amy Lehrhaupt dedication.
+  New in this cut: matching-app vs uncalculated chance; SNS memory-overwrite vs losing-to-keep; nameless cemetery vs Bloomsday naming; Before Midnight cafe time-travel joke as mature love (shape-change not death of desire); Celine's three layers expanded; Annie Duke resulting — process vs outcome in love and investing. Matching apps are an entrance, not the little space.
+  Thesis: God in the little space between; answer in the attempt. Stranger-on-a-train; Aron 36 questions; Dutton-Aron; Kahneman loss aversion/peak-end; Zeigarnik; Gilovich regret; sunk cost vs present bias.
+date: 2026-09-26
+updated: 2026-09-26
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 비포선라이즈
+  - 링클레이터
+  - 제시
+  - 셀린
+  - 사랑
+  - 비엔나
+keywords:
+  - "비포 선라이즈"
+  - "해가 뜨기 전"
+  - "제시와 셀린"
+  - "우리 사이의 작은 공간"
+  - "블룸스데이"
+  - "리처드 링클레이터"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/before-sunrise.jpg"
+image: "https://vibequant.cc/og/before-sunrise.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>비포 선라이즈 — 해가 뜨기 전, 우리 사이의 작은 공간 · VibeQuant</title>
+  <meta name="description" content="단 하루, 사랑에 빠지기 충분한 시간. 『비포 선라이즈』는 완성되지 않았기에 순수하고, 신이 있다면 너나 내가 아니라 우리 사이의 작은 공간에 있다고 말한다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "비포 선라이즈 — 해가 뜨기 전, 우리 사이의 작은 공간",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-26",
+    "keywords": ["비포 선라이즈", "해가 뜨기 전", "제시와 셀린", "우리 사이의 작은 공간", "블룸스데이", "리처드 링클레이터"]
+  }
+  </script>
+-->
+
+# 비포 선라이즈 — 해가 뜨기 전, 우리 사이의 작은 공간
 
 ## 기차에서 우연히 만난 두 젊은 남녀의 하루, 그리고 영원이 된 한 번의 밤
 
+![영화 비포 선라이즈 포스터. 에단 호크와 줄리 델피](images/before-sunrise-poster.jpg)
+
+*리처드 링클레이터 감독 『비포 선라이즈(Before Sunrise)』(1995). 주연 에단 호크, 줄리 델피.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 26일
+
 누구에게나 그런 하루가 있다. 시계의 시간으로 스물네 시간에 불과했는데, 기억 속에서는 몇 년보다 길게 남아 있는 하루. 이름도, 전화번호도 모르는 채 헤어졌는데, 이상하게도 평생 잊히지 않는 얼굴. 리처드 링클레이터 감독의 1995년 영화 『비포 선라이즈(Before Sunrise)』는 바로 그 하루에 관한 이야기를 하고 있다.
 
-극적인 사건은 없다. 총성도, 추격도, 오해로 뒤엉킨 삼각관계도 없다. 있는 것은 오직 두 사람의 걸음과 목소리, 그리고 조금씩 기울어 가는 비엔나의 햇빛뿐이다. 그런데도 이 영화는 개봉한 지 30년이 넘은 지금까지 사랑의 설레임을 깊이 담은 "인생 영화"라는 이름으로 불린다.
+극적인 사건은 없다. 총성도, 추격도, 오해로 뒤엉킨 삼각관계도 없다. 있는 것은 오직 두 사람의 걸음과 목소리, 그리고 조금씩 기울어 가는 비엔나의 햇빛뿐이다. 그런데도 이 영화는 개봉한 지 30년이 넘은 지금까지 사랑의 설렘을 깊이 담은 "인생 영화"라는 이름으로 불린다.
 
 2026년의 우리는 이 영화를 조금 다른 눈으로 보게 된다. 지금 우리는 알고리즘이 골라준 사람의 프로필을 넘기며 썸이나 사랑을 찾는다. 매칭 앱은 나이와 거리, 취향과 직업을 입력받아 '궁합'을 계산하고, 확률적으로 가장 잘 맞을 것 같은 사람을 화면 위로 올려준다. 만나기도 전에 우리는 상대의 사진 수십 장과 좋아하는 음식과 지난 여름의 여행지를 안다. 효율적이고, 안전하고, 합리적이다. 그런데 제시와 셀린의 만남은 그 어떤 알고리즘으로도 계산할 수 없는 사건에서 시작되었다. 옆자리 부부가 하필 그날 싸웠고, 셀린이 하필 그 통로 건너편 자리로 옮겼을 뿐이다. 누구도 추천하지 않았고, 누구도 설계하지 않은 우연. 계산할 수 없었기에, 그 만남은 오히려 운명처럼 느껴진다.
 
@@ -33,7 +100,7 @@
 그렇게 두 사람은 비엔나 서역 플랫폼에 선다. 기차는 떠나고, 그들의 하루가 시작된다.
 
 
-## 2. 설레이는 비엔나, 썸이라는 이름의 지도
+## 2. 설레는 비엔나, 썸이라는 이름의 지도
 
 비엔나에서의 하루는 마치 우리가 겪었던, 혹은 겪고 싶었던 모든 '썸'의 교과서 같다.
 
@@ -41,7 +108,7 @@
 
 **레코드 가게의 좁은 청음실**은 이 영화에서 가장 사랑받는 장면 중 하나다. 한 곡의 노래가 흐르는 동안 두 사람은 한마디도 하지 않는다. 대신 번갈아 서로를 훔쳐본다. 한 사람이 바라보면 다른 한 사람은 시선을 피하고, 시선을 피한 사람이 다시 고개를 들면 이번에는 상대가 창밖을 본다. 눈이 마주칠 듯 말 듯, 닿을 듯 말 듯. 설렘이란 결국 이 3분짜리 엇갈림 속에 다 들어 있다.
 
-**'이름 없는 자들의 묘지**(Friedhof der Namenlosen)'에서 두 사람은 죽음을 이야기한다. 도나우강에 떠밀려 와 끝내 이름을 찾지 못한 이들이 잠든 곳이다. 한때는 그들도 누군가의 딸이었고, 누군가의 연인이었을 것이다. 누군가를 사랑했고, 누군가에게 사랑받았을 것이다. 그러나 지금 그들에게 남은 것은 이름 없는 십자가뿐이다.
+**이름 없는 자들의 묘지**(Friedhof der Namenlosen)에서 두 사람은 죽음을 이야기한다. 도나우강에 떠밀려 와 끝내 이름을 찾지 못한 이들이 잠든 곳이다. 한때는 그들도 누군가의 딸이었고, 누군가의 연인이었을 것이다. 누군가를 사랑했고, 누군가에게 사랑받았을 것이다. 그러나 지금 그들에게 남은 것은 이름 없는 십자가뿐이다.
 
 설렘이 한창 차오르는 하루의 한가운데, 영화는 굳이 두 사람을 이곳으로 데려온다. 이것은 이 영화에서 가장 조용하고, 가장 강력한 장면이다. 두 사람은 여기서 자신들의 하루도 결국 이렇게 될 것임을 어렴풋이 마주한다. 오늘의 이 대화도, 이 웃음도, 언젠가는 누구의 기억에도 남지 않은 이름 없는 시간이 될 것이다. 그러나 역설적으로, 바로 그 유한함을 깨닫는 순간 지금 이 시간은 견딜 수 없을 만큼 소중해진다. 죽음을 본 사람만이 삶을 서두르듯, 끝을 본 연인만이 지금 이 순간을 온전히 산다. 묘지를 나선 뒤 두 사람의 하루가 눈에 띄게 뜨거워지는 것은 결코 우연이 아니다.
 
