@@ -1,6 +1,73 @@
+---
+title: "영화 트루먼쇼 - 모두가 가짜인 시대의 진정 하나뿐인 감정"
+title_en: "The Truman Show — The One Real Feeling in a World of Fakes"
+subtitle: "《트루먼 쇼》, 가짜들로 가득한 세계 안의 단 한 명의 진짜"
+description: "모두가 배우인 세상에서도 트루먼은 진짜였다. 《트루먼 쇼》가 묻는 것은 감시가 아니라 카메라가 달리지 못한 마음이며, 그 마음을 따라 문을 여는 작별이다."
+abstract: |
+  피터 위어 《트루먼 쇼》(1998). 짐 캐리의 트루먼 버뱅크는 시헤이븐의 돔 안에서 태어나기 전부터 생중계된다. 아내 메릴, 친구 말론, 창조자 크리스토프는 대본을 살지만, 실비아만이 진실을 말한다.
+  아침 인사에 작별이 접혀 있었고, 뱃머리가 하늘에 부딪힌 뒤에야 그 인사는 진짜가 된다. 카메라가 달리지 못한 마음, 설명할 수 없는 그리움은 아직 연출되지 않는다.
+  조작된 안전보다 스스로 선택한 삶. 구경하는 응원은 윤리가 아니다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film essay (not legal, relationship, or investment advice), 2026-09-27,
+  group industry, Movie/Truman-Show.md.
+  Film: Peter Weir, The Truman Show (1998), screenplay Andrew Niccol. Jim Carrey as Truman Burbank; Ed Harris as Christof; Laura Linney as Meryl; Natascha McElhone as Sylvia/Lauren; Noah Emmerich as Marlon.
+  Thesis: the one real feeling in a fake world is the longing for truth/love; the morning greeting hides farewell until EXIT. Cameras cannot be planted in the mind. Marlon = captive sincerity; Sylvia = love that points to the door; Meryl = ads as marriage; Christof = designer god; audience ethics — watching is not freeing.
+  2026 reading: algorithms as Seahaven sky; AI-generated faces/voices; free will as saying no inside determined conditions.
+date: 2026-09-27
+updated: 2026-09-27
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 트루먼쇼
+  - 피터위어
+  - 짐캐리
+  - 실비아
+  - 자유의지
+  - 시헤이븐
+keywords:
+  - "트루먼 쇼"
+  - "짐 캐리"
+  - "카메라가 달리지 못한"
+  - "실비아"
+  - "크리스토프"
+  - "굿모닝"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/truman-show.jpg"
+image: "https://vibequant.cc/og/truman-show.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>영화 트루먼쇼 - 모두가 가짜인 시대의 진정 하나뿐인 감정 · VibeQuant</title>
+  <meta name="description" content="모두가 배우인 세상에서도 트루먼은 진짜였다. 《트루먼 쇼》가 묻는 것은 감시가 아니라 카메라가 달리지 못한 마음이며, 그 마음을 따라 문을 여는 작별이다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "영화 트루먼쇼 - 모두가 가짜인 시대의 진정 하나뿐인 감정",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-27",
+    "keywords": ["트루먼 쇼", "짐 캐리", "카메라가 달리지 못한", "실비아", "크리스토프", "굿모닝"]
+  }
+  </script>
+-->
+
 # 영화 트루먼쇼 - 모두가 가짜인 시대의 진정 하나뿐인 감정
 
-> 《트루먼 쇼》(The Truman Show, 1998) · 감독 피터 위어 · 각본 앤드루 니콜 · 주연 짐 캐리, 에드 해리스, 로라 리니, 나타샤 맥엘혼, 노아 에머리히
+## 《트루먼 쇼》, 가짜들로 가득한 세계 안의 단 한 명의 진짜
+
+![영화 트루먼 쇼 포스터. 짐 캐리](images/truman-show-poster.jpg)
+
+*피터 위어 감독 《트루먼 쇼(The Truman Show)》(1998). 주연 짐 캐리, 에드 해리스, 로라 리니. 각본 앤드루 니콜.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 27일
 
 ## 1. 완벽하게 조작된 아침
 
