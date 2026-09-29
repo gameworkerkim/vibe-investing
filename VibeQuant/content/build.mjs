@@ -661,6 +661,7 @@ const SLUG_OVERRIDES = {
   "Movie/The-English-Patient.md": "the-english-patient",
   "Movie/Before-Sunrise.md": "before-sunrise",
   "Movie/Truman-Show.md": "truman-show",
+  "Movie/Once-Upon-a-Time-in-America.md": "once-upon-a-time-in-america",
   "Japan/Japan's-Failure.md": "japans-failure",
   "Korean-Culture/The-Birth-of-Korean-Cuisine.md": "the-birth-of-korean-cuisine",
   "News Letter/vibe-quant-insight-001.md": "vibe-quant-insight-001",

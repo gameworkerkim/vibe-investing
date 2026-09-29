@@ -1,8 +1,72 @@
+---
+title: "원스 어폰 어 타임 인 아메리카"
+title_en: "Once Upon a Time in America — A Sweet and Cruel Hallucination"
+subtitle: "낯선 이민자의 꿈과 좌절, 그 달콤하고 잔인한 환영"
+description: "갱스터의 옷을 입은 긴 비가. 『원스 어폰 어 타임 인 아메리카』는 이민자의 꿈이 배신과 기억으로 남는 과정을 보여 주고, 잘려나간 영화 자신이 그 슬픔과 닮아 있다."
+abstract: |
+  세르지오 레오네 유작 『원스 어폰 어 타임 인 아메리카』(1984). 로버트 드 니로의 누들스, 제임스 우즈의 맥스, 제니퍼 코넬리·엘리자베스 맥거번의 데보라. 금주법 시대 브루클린 유대인 이민자 소년들의 갱스터 비가.
+  세 겹의 주제는 이민자의 꿈과 그 배신, 우정이라는 이름의 욕망, 연대기가 아니라 기억의 흐름이다. 미국 배급사가 225분을 139분으로 잘라 시간순으로 붙였고, 복원된 뒤에야 걸작이 되었다. 너무 늦게 도착한 것들의 슬픔.
+  동화의 첫 문장을 빌렸으나 동화는 없다. 남은 것은 기억과, 끝내 받지 못한 전화벨이다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film essay (not legal or investment advice), 2026-09-29,
+  group industry, Movie/Once-Upon-a-Time-in-America.md.
+  Film: Sergio Leone, Once Upon a Time in America (1984), 225 min. Robert De Niro as Noodles; James Woods as Max; Elizabeth McGovern / Jennifer Connelly as Deborah; Ennio Morricone Deborah's Theme.
+  Thesis: gangster clothes over an elegy; American dream as sweet cruel hallucination; Max's name-change into power = street crime and state as same tree; friendship as desire to steal the other's life; memory not chronology; 1968 return may be opium dream. US distributor cut 225 to 139, linearized time; Korea cut further; Leone died before restoration. "I went to bed early."
+date: 2026-09-29
+updated: 2026-09-29
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 원스어폰어타임인아메리카
+  - 세르지오레오네
+  - 로버트드니로
+  - 누들스
+  - 아메리칸드림
+  - 엔니오모리코네
+keywords:
+  - "원스 어폰 어 타임 인 아메리카"
+  - "세르지오 레오네"
+  - "로버트 드 니로"
+  - "누들스"
+  - "아메리칸 드림"
+  - "데보라의 테마"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/once-upon-a-time-in-america.jpg"
+image: "https://vibequant.cc/og/once-upon-a-time-in-america.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>원스 어폰 어 타임 인 아메리카 · VibeQuant</title>
+  <meta name="description" content="갱스터의 옷을 입은 긴 비가. 『원스 어폰 어 타임 인 아메리카』는 이민자의 꿈이 배신과 기억으로 남는 과정을 보여 주고, 잘려나간 영화 자신이 그 슬픔과 닮아 있다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "원스 어폰 어 타임 인 아메리카",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-29",
+    "keywords": ["원스 어폰 어 타임 인 아메리카", "세르지오 레오네", "로버트 드 니로", "누들스", "아메리칸 드림", "데보라의 테마"]
+  }
+  </script>
+-->
+
 # 원스 어폰 어 타임 인 아메리카
 
 ## 낯선 이민자의 꿈과 좌절, 그 달콤하고 잔인한 환영
 
-> **감독** 세르지오 레오네 **주연** 로버트 드 니로, 제임스 우즈, 엘리자베스 맥거번, 제니퍼 코넬리 **제작** 미국, 1984년, 225분
+![영화 원스 어폰 어 타임 인 아메리카 포스터. 다리 아래를 걷는 소년들](images/once-upon-a-time-in-america-poster.jpg)
+
+*세르지오 레오네 감독 『원스 어폰 어 타임 인 아메리카(Once Upon a Time in America)』(1984). 주연 로버트 드 니로, 제임스 우즈, 엘리자베스 맥거번, 제니퍼 코넬리. 미국, 225분.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 29일
 
 ### 한 줄기 아편 연기 속에서
 
