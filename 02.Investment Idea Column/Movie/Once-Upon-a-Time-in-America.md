@@ -1,8 +1,72 @@
+---
+title: "미끄러진 사람들 — 『원스 어폰 어 타임 인 아메리카』"
+title_en: "The Ones Who Slipped — Once Upon a Time in America and a Century of Immigrants"
+subtitle: "『원스 어폰 어 타임 인 아메리카』와 이민자의 한 세기"
+description: "누들스… 나 미끄러졌어. 『원스 어폰 어 타임 인 아메리카』는 기울어진 바닥 위의 이민자를 그린다. 1933년 아편굴의 전화벨과 1992년 사이구의 911은 같은 소리다."
+abstract: |
+  세르지오 레오네 유작 『원스 어폰 어 타임 인 아메리카』(1984). 도미닉의 "나 미끄러졌어"는 넘어진 아이가 아니라 기울어진 바닥 위의 이민자를 가리킨다.
+  1933년 금주법 폐지의 아편굴과 1992년 LA 사이구(4·29)의 받지 않는 전화가 겹친다. 로어이스트사이드의 유대인 소년과 코리아타운의 한인 가게는 같은 계단이다.
+  맥스의 욕망은 르네 지라르의 모방, 누들스의 35년은 손실 회피와 매몰 비용이다. 아메리칸 드림은 생존 편향 위의 신화이며, 잘려나간 229분은 기억의 구조를 걷어낸 폭력이다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film/society essay (not legal or investment advice), 2026-09-29 UPDATE,
+  group industry, Movie/Once-Upon-a-Time-in-America.md. Slug once-upon-a-time-in-america.
+  New cut: title 미끄러진 사람들. Parallel 1933 Chinatown unanswered phone / 1992 Sa-I-Gu Koreatown unanswered 911. Jewish Lower East Side 1881-1924, Johnson-Reed 1924, Merton anomie; Korean immigration SS Gaelic 1903, Hart-Celler 1965, Latasha Harlins 1991, Edward Song Lee 1992. Girard mimetic desire Max/Noodles; Kahneman-Tversky loss aversion; sunk-cost escalation; survivorship bias of American Dream; relative deprivation Deborah. Bartlett/Loftus memory as reconstruction; Proust "went to bed early"; 1968 as possible opium dream. US Ladd Co. cut 229 to 139 linearized; Korea ~110 min; 2012 Bologna/Scorsese 251 min restoration. Harry Grey The Hoods. Ennio Morricone.
+  Thesis: they did not fall — the floor was already tilted. Dream is not a lie but not the same size for everyone. Names of those who slipped are usually unrecorded.
+date: 2026-09-29
+updated: 2026-09-29
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 원스어폰어타임인아메리카
+  - 세르지오레오네
+  - 미끄러진사람들
+  - 사이구
+  - 이민자
+  - 아메리칸드림
+keywords:
+  - "미끄러진 사람들"
+  - "원스 어폰 어 타임 인 아메리카"
+  - "세르지오 레오네"
+  - "사이구"
+  - "나 미끄러졌어"
+  - "아메리칸 드림"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/once-upon-a-time-in-america.jpg"
+image: "https://vibequant.cc/og/once-upon-a-time-in-america.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>미끄러진 사람들 — 『원스 어폰 어 타임 인 아메리카』 · VibeQuant</title>
+  <meta name="description" content="누들스… 나 미끄러졌어. 『원스 어폰 어 타임 인 아메리카』는 기울어진 바닥 위의 이민자를 그린다. 1933년 아편굴의 전화벨과 1992년 사이구의 911은 같은 소리다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "미끄러진 사람들 — 『원스 어폰 어 타임 인 아메리카』",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-29",
+    "keywords": ["미끄러진 사람들", "원스 어폰 어 타임 인 아메리카", "세르지오 레오네", "사이구", "나 미끄러졌어", "아메리칸 드림"]
+  }
+  </script>
+-->
+
 # 미끄러진 사람들
 
 ## 『원스 어폰 어 타임 인 아메리카』와 이민자의 한 세기
 
-> **감독** 세르지오 레오네 **원작** 해리 그레이, 『The Hoods』(1952) **주연** 로버트 드 니로, 제임스 우즈, 엘리자베스 맥거번, 제니퍼 코넬리 **음악** 엔니오 모리코네 **제작** 미국, 1984년, 229분 (2012년 복원판 251분)
+![영화 원스 어폰 어 타임 인 아메리카 포스터. 다리 아래를 걷는 소년들](images/once-upon-a-time-in-america-poster.jpg)
+
+*세르지오 레오네 감독 『원스 어폰 어 타임 인 아메리카(Once Upon a Time in America)』(1984). 원작 해리 그레이 『The Hoods』. 주연 로버트 드 니로, 제임스 우즈, 엘리자베스 맥거번, 제니퍼 코넬리. 음악 엔니오 모리코네. 1984년 229분, 2012년 복원판 251분.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 29일
 
 ### 1933년 12월, 뉴욕 차이나타운
 
