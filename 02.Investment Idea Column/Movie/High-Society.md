@@ -1,4 +1,72 @@
+---
+title: "무엇을 팔아, 그 문을 여는가?"
+title_en: "What Will You Sell to Open That Door? — High Society"
+subtitle: "영화 〈상류사회〉, 가장 아름답지만 가장 추악한 곳"
+description: "〈상류사회〉가 겨눈 것은 재벌이 아니라, 되고 싶은 사람들이다. 의원 자리와 관장 자리와 배우자의 마음까지 팔리는 문 앞에서, 영화는 묻는다. 당신은 무엇을 팔겠는가?"
+abstract: |
+  변혁 감독 〈상류사회〉(2018). 박해일의 장태준, 수애의 오수연. 재벌이 아니라 되고 싶은 사람들의 이야기다. 상류사회는 시장이고, 문 안쪽에는 가격이 산다.
+  공천과 관장 자리는 규제 포획의 오래된 공식이다. 태준의 불륜은 권력의 부산물, 수연의 불륜은 위계 위의 전략이며 강제와 선택이 겹친다. 사랑의 반대는 무관심이다.
+  퓨리서치 17개국 중 한국만 삶의 첫 의미를 물질적 풍요라 적었다. 악인 없는 헤겔식 비극. 욕망의 값을 다 치른 뒤에야 문은 닫힌다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film/society essay (not legal or investment advice), 2026-09-30,
+  group industry, Movie/High-Society.md. Slug high-society.
+  Film: Byun Hyuk, High Society (2018). Park Hae-il as Jang Tae-jun, Soo Ae as Oh Soo-yeon, Yoon Je-moon as Han Yong-seok.
+  Thesis: high society is a market; regulatory capture (Park Young-soo special counsel Samsung 43.3bn; Kyungshilryun Coupang revolving-door 72, 2026); Fair 1978 time-allocation vs hierarchy; Nash-like coercion; prisoner's dilemma marriage; Pew 2021 Korea unique — material well-being first, family third. Hegel tragedy of right vs right. Ending: too-late awakening or another calculation. "What are we selling now?"
+date: 2026-09-30
+updated: 2026-09-30
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 상류사회
+  - 변혁
+  - 박해일
+  - 수애
+  - 정경유착
+  - 규제포획
+keywords:
+  - "상류사회"
+  - "무엇을 팔아"
+  - "변혁"
+  - "박해일"
+  - "규제 포획"
+  - "물질적 풍요"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/high-society.jpg"
+image: "https://vibequant.cc/og/high-society.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>무엇을 팔아, 그 문을 여는가? · VibeQuant</title>
+  <meta name="description" content="〈상류사회〉가 겨눈 것은 재벌이 아니라, 되고 싶은 사람들이다. 의원 자리와 관장 자리와 배우자의 마음까지 팔리는 문 앞에서, 영화는 묻는다. 당신은 무엇을 팔겠는가?">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "무엇을 팔아, 그 문을 여는가?",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-30",
+    "keywords": ["상류사회", "무엇을 팔아", "변혁", "박해일", "규제 포획", "물질적 풍요"]
+  }
+  </script>
+-->
+
 # 무엇을 팔아, 그 문을 여는가?
+
+## 영화 〈상류사회〉, 가장 아름답지만 가장 추악한 곳
+
+![영화 상류사회 포스터. 박해일과 수애](images/high-society-poster.jpg)
+
+*변혁 감독 〈상류사회(High Society)〉(2018). 주연 박해일, 수애. 윤제문, 라미란, 이진욱.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 30일
 
 > **"국회의원이랑 해본 적 있어?"** — 영화 〈상류사회〉, 오수연이 장태준에게
 
