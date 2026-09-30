@@ -1,4 +1,72 @@
+---
+title: "장부의 신화와 실물의 역습 — 야프섬의 돌 화폐에서 러시아 자산 동결까지"
+title_en: "The Myth of the Ledger and the Return of Metal — From Yap Stones to Frozen Russian Reserves"
+subtitle: "야프섬의 돌 화폐에서 러시아 자산 동결까지, 그리고 한국 금 104톤"
+description: "화폐는 금괴가 아니라 장부다. 야프섬의 돌이 바닷속에 있어도 거래되듯, 런던·뉴욕 금고의 금도 기록만 바뀐다. 러시아가 그 신뢰를 깨자, 세상은 실물을 되찾기 시작했다."
+abstract: |
+  화폐의 본질은 내재 유용성이 아니라 신뢰할 수 있는 장부다. 밀턴 프리드먼의 야프섬 라이 스톤은 영란은행·뉴욕 연준 지하 금고의 금 정산과 같다.
+  대공황의 금 인출, 1971 닉슨 쇼크, 독일의 금 회수, 2022 러시아 외화보유고 동결이 그 신뢰를 깨뜨렸다. 2026년 초 중앙은행 금의 총 가치는 미국 국채를 추월했다.
+  한국 금 104.4톤은 외환보유액의 1.1%이며 전부 영란은행에 있다. 13년 만의 금 투자 재개는 첫걸음이다. 투자 권유 아님.
+summary_for_ai: |
+  Korean macro/geopolitics column (not investment advice), 2026-09-30,
+  group macro-geo, Key-Currency/Gold-Ledger.md. Slug gold-ledger.
+  Thesis: money is a trusted ledger; when ledger trust breaks, physical gold is repatriated. Yap Rai stones (Friedman) = BoE/NY Fed allocated gold. France 1930s gold drain; Nixon shock 1971; Bundesbank 2013-17 repatriation; Russia ~$300bn reserves frozen 2022.
+  WGC: CB gold buying 2022-24 over 1000t/year; 2026 H1 289t; CB gold value ~$4tn overtook US Treasuries as #1 official reserve. Korea 104.4t all at BoE, 1.1% of FX reserves, rank 39; BOK resumed gold via GLD ETF Aug 2026 after 13 years; plans domestic LS MNM/Korea Zinc metal. Deutsche Bank $8000/oz scenario if EM CBs target 40% gold.
+date: 2026-09-30
+updated: 2026-09-30
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 금
+  - 영란은행
+  - 외환보유액
+  - 기축통화
+  - 러시아자산동결
+  - 한국은행
+keywords:
+  - "금 보유"
+  - "영란은행"
+  - "장부의 신화"
+  - "러시아 자산 동결"
+  - "한국은행 금"
+  - "야프섬"
+group: macro-geo
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/gold-ledger.jpg"
+image: "https://vibequant.cc/og/gold-ledger.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>장부의 신화와 실물의 역습 — 야프섬의 돌 화폐에서 러시아 자산 동결까지 · VibeQuant</title>
+  <meta name="description" content="화폐는 금괴가 아니라 장부다. 야프섬의 돌이 바닷속에 있어도 거래되듯, 런던·뉴욕 금고의 금도 기록만 바뀐다. 러시아가 그 신뢰를 깨자, 세상은 실물을 되찾기 시작했다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "장부의 신화와 실물의 역습 — 야프섬의 돌 화폐에서 러시아 자산 동결까지",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-09-30",
+    "keywords": ["금 보유", "영란은행", "장부의 신화", "러시아 자산 동결", "한국은행 금", "야프섬"]
+  }
+  </script>
+-->
+
 # [칼럼] 장부의 신화와 실물의 역습 - 얌섬의 돌 화폐에서 러시아 자산 동결까지
+
+## 야프섬의 돌 화폐에서 러시아 자산 동결까지, 그리고 한국 금 104톤
+
+![영란은행 금괴 창고를 둘러보는 엘리자베스 2세](images/gold-ledger-vault.jpg)
+
+*영란은행 금괴 창고. 장부상의 소유권만 바뀌던 금이, 지정학적 위기 앞에서 다시 실물로 움직이기 시작했다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 9월 30일
 
 ## 화폐란 무엇인가?
 
