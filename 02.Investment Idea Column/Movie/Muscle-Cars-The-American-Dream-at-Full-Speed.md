@@ -1,76 +1,12 @@
-<!--
----
-title: "아메리칸 드림의 엔진 — 머슬카, 미국의 신화와 몰락"
-title_en: "The Engine of the American Dream — Muscle Cars, Myth and Collapse"
-subtitle: "열여섯 살의 열쇠는 경매장으로 갔다"
-description: "1970년의 아버지는 쉐비 열쇠를 건넸다. 2026년의 아들은 면허 대신 스마트폰을 쥔다. 머슬카의 굉음은 승리의 소리가 아니라, 물려줄 수 없게 된 꿈의 고백이다."
-abstract: |
-  머슬카는 아메리칸 드림을 가장 싼값에 압축한 아이콘이었다. 값싼 에너지, 차체 공유, 보험, 중산층 임금 네 기둥 위에 섰고, 1970년대에 차례로 무너졌다.
-  1964 폰티악 GTO에서 1970 셰벨 LS6까지, 스크린은 제임스 딘·배니싱 포인트·아메리칸 그래피티로 신화를 완성했다. 헤미 쿠다는 경매에서 수백만 달러가 됐고, 16세 면허 보유율은 반 토막이 났다.
-  라이언 맥긴리의 로드 트립에서 차는 사라지고 청춘만 흔들린다. 꿈이 소비재에서 자산이 되는 순간, 열쇠는 물려줄 수 없는 것이 된다. 투자 권유 아님.
-summary_for_ai: |
-  Korean film/culture essay (not investment advice), 2026-10-01,
-  group industry, Movie/Muscle-Cars-The-American-Dream-at-Full-Speed.md. Slug muscle-cars-american-dream.
-  Thesis: muscle car = cheapest compression of American Dream; collapse of four cheap pillars (energy, platform sharing, insurance, wages); now auction asset not teen garage. Pontiac GTO 1964 loophole; 1970 horsepower war Chevelle LS6; Vanishing Point Challenger; American Graffiti nostalgia before oil shock; 1971 Hemi 'Cuda $3.5m Mecum 2014; last Camaro/Challenger/Charger V8 Dec 2023; UMTRI 16yo licenses 46.2% (1983) to 24.5% (2014). James Dean / Kowalski / Ryan McGinley: from owning the road to being carried through it. "You're tearing me apart!"
-date: 2026-10-01
-updated: 2026-10-01
-author: "김호광 (Dennis Kim)"
-lang: ko
-tags:
-  - 머슬카
-  - 아메리칸드림
-  - 배니싱포인트
-  - 폰티악GTO
-  - 라이언맥긴리
-  - 제임스딘
-keywords:
-  - "머슬카"
-  - "아메리칸 드림"
-  - "열여섯 살의 열쇠"
-  - "배니싱 포인트"
-  - "헤미 쿠다"
-  - "라이언 맥긴리"
-group: industry
-featured: true
-featured_rank: 1
-og_image: "https://vibequant.cc/og/muscle-cars-american-dream.jpg"
-image: "https://vibequant.cc/og/muscle-cars-american-dream.jpg"
-schema_type: BlogPosting
-draft: false
-robots: index,follow
----
-
-<!--
-  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
-  <title>아메리칸 드림의 엔진 — 머슬카, 미국의 신화와 몰락 · VibeQuant</title>
-  <meta name="description" content="1970년의 아버지는 쉐비 열쇠를 건넸다. 2026년의 아들은 면허 대신 스마트폰을 쥔다. 머슬카의 굉음은 승리의 소리가 아니라, 물려줄 수 없게 된 꿈의 고백이다.">
-  <meta name="robots" content="index,follow">
-
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "아메리칸 드림의 엔진 — 머슬카, 미국의 신화와 몰락",
-    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
-    "datePublished": "2026-10-01",
-    "keywords": ["머슬카", "아메리칸 드림", "열여섯 살의 열쇠", "배니싱 포인트", "헤미 쿠다", "라이언 맥긴리"]
-  }
-  </script>
--->
-
 # 아메리칸 드림의 엔진 — 머슬카, 미국의 신화와 몰락
 
-## 열여섯 살의 열쇠는 경매장으로 갔다
-
-![사막의 픽업트럭 짐칸에서 바람을 맞는 청춘](images/muscle-cars-american-dream.jpg)
-
-*사막의 픽업트럭 짐칸. 차가 청춘의 성인식이던 시대가 끝난 뒤, 길은 남고 열쇠는 사라졌다. 라이언 맥긴리의 로드 트립을 떠올리게 하는 장면.*
+*열여섯 살의 열쇠는 경매장으로 갔다*
 
 **김호광** 싸이월드 전 대표 / 2026년 10월 1일
 
 ## 시작하는 말 - 열여섯 살의 열쇠
 
-머슬카는 아메리칸 드림을 가장 싼값에 압축한 아이콘이었다. 머슬카의 몰락은 꿈을 떠받치던 조건이 무너지고 있다는 첫 신호였다. 그리고 오늘 그 차는 청춘의 차고가 아니라 은퇴자의 차고와 부자들의 경매장인 소더비 옥션에서 만날 수 있다.
+머슬카는 아메리칸 드림을 가장 싼값에 압축한 아이콘이었다. 머슬카의 몰락은 꿈을 떠받치던 조건이 무너지고 있다는 첫 신호였다. 그리고 오늘 그 차는 청춘의 차고가 아니라 은퇴자의 차고와 메컴, RM 소더비스 같은 클래식카 경매장에서 만날 수 있다.
 
 미국 교외의 어느 차고를 떠올려 보자. 열여섯 번째 생일을 막 넘긴 아이가 면허 시험에 붙고, 아버지는 몇 년을 탄 낡은 쉐보레의 열쇠를 건넨다. 영어로는 흔히 '행미다운 카(hand-me-down car)'라 부르는, 물려받은 첫 차다.
 
@@ -86,9 +22,11 @@ robots: index,follow
 
 이름도 도발이었다. GTO는 페라리 250 GTO에서 빌려 온 이름이었다. 판매 담당자는 5,000대만 만들라고 선을 그었지만, 첫해에만 32,450대가 팔렸다. 이듬해 GM은 330큐빅인치 제한을 사실상 철회했고, 포드와 크라이슬러, GM의 다른 사업부가 일제히 뒤를 따랐다. ([Wikipedia](https://en.wikipedia.org/wiki/Pontiac_GTO), [HotCars](https://www.hotcars.com/how-a-3000-pontiac-option-package-hijacked-ferraris-racing-name/))
 
-이 공식이 먹힌 데는 시대의 조건이 있었다. 1956년 연방 주간고속도로법으로 전국을 잇는 직선 도로망이 깔리기 시작했고, 휘발유는 갤런당 30센트 안팎으로 물처럼 쌌다. 전후 베이비붐 세대는 막 운전면허 나이에 들어섰고, 제조업 일자리는 고졸 청년에게도 할부를 감당할 임금을 줬다. 미국의 대학생들은 방학동안 아르바이트를 하고 등록금과 생활비 감당이 되고 유럽 여행이나 중고차 한대를 뽑을 정도로 미국이 경기는 정점이었다. 미국은 전세계 중앙은행이 가진 금보다 더 많은 금을 보유했다.
+이 공식이 먹힌 데는 시대의 조건이 있었다. 1956년 연방 주간고속도로법으로 전국을 잇는 직선 도로망이 깔리기 시작했고, 휘발유는 갤런당 30센트 안팎으로 물처럼 쌌다. 전후 베이비붐 세대는 막 운전면허 나이에 들어섰고, 제조업 일자리는 고졸 청년에게도 할부를 감당할 임금을 줬다. 미국 대학생들은 방학 아르바이트로 등록금과 생활비를 감당하고, 유럽 여행을 가거나 중고차 한 대를 뽑을 수 있을 만큼 미국 경기는 정점에 있었다.
 
-요컨대 머슬카는 네 가지 값싼 것 위에 서 있었다. 값싼 에너지, 값싼 차체 공유 생산, 값싼 보험, 그리고 쉽게 손에 들어오는 중산층 임금이다. 아메리칸 드림의 몰락은 이 네 기둥이 차례로 무너지는 과정이었다.
+그 풍요의 밑바닥에는 금이 있었다. 1949년 미국의 금 보유량은 사상 최고치에 이르러, 소련을 뺀 전 세계 공식 금 보유량의 약 3분의 2를 차지했다. 세계는 금에 묶인 달러를 기축으로 돌아갔다. 그러나 1950년대 말부터 그 금은 조금씩 대서양을 건너 빠져나가기 시작했다. 머슬카가 태어난 1960년대는 사실 그 금고가 비어 가던 시기이기도 했다. ([Federal Reserve Bulletin, 1951](https://fraser.stlouisfed.org/files/docs/publications/FRB/pages/1950-1954/17720_1950-1954.pdf), [The Globe and Mail](https://www.theglobeandmail.com/report-on-business/five-things-gold/article17977929))
+
+요컨대 머슬카는 네 가지 값싼 것 위에 서 있었다. 값싼 에너지, 값싼 차체 공유 생산, 값싼 보험, 그리고 쉽게 손에 들어오는 중산층 임금이다. 아메리칸 드림의 몰락은 이 기둥들이 차례로 무너지는 과정이었다.
 
 ## 정점 - 1970년, 마력 전쟁의 해
 
@@ -107,7 +45,7 @@ robots: index,follow
 
 표의 숫자는 당시 업계 기준인 SAE 그로스(엔진 단품) 출력이며, LS6 외 모델은 일반적으로 알려진 공장 표기치다. 흥미로운 대목은 LS6가 실제로는 500마력 가까이 냈지만, 보험료를 의식해 450으로 '낮춰' 표기했다는 설이 널리 퍼져 있다는 점이다. ([RM Sotheby's](https://rmsothebys.com/auctions/az15/lots/r168-1970-chevrolet-chevelle-ss-454-ls6-convertible))
 
-이 일화는 정점이 이미 몰락을 품고 있었음을 보여준다. 마력 숫자가 커질수록 보험사는 젊은 운전자의 사고 통계를 들고 할증료를 올렸고, 제조사는 숫자를 숨기기 시작했다. 청춘의 꿈은 이미 보험 계리표 위에서 사고의 리스크가 마이너스 프리미엄으로 가격이 매겨지고 있었다.
+이 일화는 정점이 이미 몰락을 품고 있었음을 보여준다. 마력 숫자가 커질수록 보험사는 젊은 운전자의 사고 통계를 들고 할증료를 올렸고, 제조사는 숫자를 숨기기 시작했다. 청춘의 꿈은 이미 보험 계리표 위에서 위험 할증(리스크 프리미엄)으로 가격이 매겨지고 있었다.
 
 ## 청춘의 스크린 - 제임스 딘에서 「배니싱 포인트」까지
 
@@ -130,24 +68,32 @@ robots: index,follow
 
 음악도 같은 궤적을 그렸다. 비치 보이스가 1960년대 초 핫로드를 경쾌하게 노래했다면, 1970년대 중반 브루스 스프링스틴의 「Born to Run」과 「Racing in the Street」에서 차는 쇠락하는 공업 도시를 벗어날 유일한 탈출구, 혹은 끝내 벗어나지 못한 청춘의 무덤이 된다.
 
-## 몰락하는 아메리칸 드림, 네 개의 기둥이 무너진 10년
+## 몰락하는 아메리칸 드림, 기둥이 무너진 10년
 
-머슬카는 석유파동 한 방에 쓰러진 것이 아니다. 보험, 환경 규제, 에너지, 경쟁이라는 네 개의 기둥이 1970년대 내내 차례로 무너졌고, 석유파동은 마지막 일격이었다.
+머슬카는 석유파동 한 방에 쓰러진 것이 아니다. 머슬카를 떠받치던 네 기둥 가운데 보험, 에너지, 임금이 1970년대 내내 차례로 무너졌고, 여기에 환경 규제와 일본차라는 외부 충격이 더해졌다. 석유파동은 마지막 일격이었다.
 
 | 시기 | 사건 | 머슬카에 미친 영향 |
 | --- | --- | --- |
 | 1960년대 말 | 보험사의 고성능차 할증 | 젊은 남성 운전자의 보험료가 차 할부금을 넘보기 시작 |
 | 1970년 | 대기오염방지법 개정, 환경보호청(EPA) 출범 | 배출가스 감축 시한이 법으로 못박힘 |
-| 1971년 | GM 등 압축비 일제 하향(저연·무연 휘발유 대응) | 같은 배기량에서 출력이 눈에 띄게 감소 |
+| 1971년 | GM 등 압축비 일제 하향(저연·무연 휘발유 대응), 8월 닉슨의 달러 금 태환 정지 | 같은 배기량에서 출력이 눈에 띄게 감소, 달러 질서의 균열 |
 | 1972년 | 출력 표기를 SAE 그로스에서 넷(실차 장착 기준)으로 변경 | 카탈로그 숫자가 수백 마력 단위에서 급락, 이미지 붕괴 |
 | 1973년 10월 | 1차 석유파동(아랍 산유국 금수) | 주유소 앞 장사진, 휘발유값 급등 |
 | 1974년 | 전국 고속도로 제한속도 시속 55마일 | 직선 가속이라는 존재 이유 자체가 불법의 영역으로 |
 | 1975년 | 촉매변환기 보급, 연비 규제(CAFE) 법제화 | 대배기량 V8은 회사 전체 연비 평균을 깎는 부채가 됨 |
 | 1979년 | 2차 석유파동(이란 혁명) | 휘발유값이 갤런당 1달러를 넘어서며 대형 V8 시장 붕괴 |
 
+1971년은 상징적인 해다. 1949년 정점 이후 미국의 금은 1965년까지 40% 가까이 빠져나갔고, 1967년 미국의 해외 달러 부채는 360억 달러였지만 금 보유고는 120억 달러에 불과했다. 결국 1971년 8월 닉슨 대통령은 달러를 금으로 바꿔 주겠다는 약속을 거둬들였다. 같은 해 GM은 1971년형 모델부터 압축비를 일제히 낮췄다. ([MoneyWeek](https://moneyweek.com/investments/gold/americas-gold-mystery))
+
+**달러의 약속이 깨진 해, 머슬카의 엔진도 숨을 죽였다.** 두 사건은 같은 뿌리에서 나왔다. 미국이 더 이상 세계에 무한한 금도, 자기 청춘에게 무한한 값싼 휘발유와 속도도 약속할 수 없게 된 것이다.
+
 숫자로 보면 낙차가 선명하다. 1970년 450마력을 내세우던 브랜드에서, 1975년형 코르벳의 기본 엔진은 165마력에 머물렀다. GTO는 1974년을 끝으로 단종됐고, 같은 해 머스탱은 소형차 핀토의 차대를 쓴 '머스탱 II'로 몸집을 줄였다.
 
 결정적인 것은 경쟁자의 등장이었다. 촉매변환기 없이 1975년 배출 기준을 통과한 혼다 시빅의 CVCC 엔진처럼, 일본차는 작고 연비 좋고 고장 나지 않는 차로 미국 청년의 첫 차 자리를 파고들었다. 디트로이트가 규제를 '출력을 깎는 비용'으로 받아들이는 동안, 일본은 연비와 유지 보수의 관점에서 '**기술로 푸는 문제**'로 받아들였다.
+
+같은 무렵 지구 반대편에서는 정반대의 꿈이 시작되고 있었다. 1974년 10월 토리노 모터쇼에 공개된 현대 포니는 1975년 양산을 시작해 1976년 2월부터 판매됐다. 그해 국내 승용차 판매 2만 4,618대 가운데 포니가 1만 726대, 44%를 차지했다. 미국 청춘이 V8의 열쇠를 잃어 가던 바로 그때, 한국의 '마이카' 꿈은 1,200cc 조랑말에서 막 출발했다. ([Korea JoongAng Daily](https://www.koreajoongangdaily.com/bilingual-news/remembering-the-pony-the-first-family-car-in-korea-kor/11485884), [전자신문](https://m.etnews.com/20230525000185))
+
+흥미롭게도 두 꿈은 같은 사건에 함께 발목을 잡혔다. 포니와 함께 공개된 수출 전략 차종 '포니 쿠페'는 양산 직전까지 갔지만, 1979년 2차 석유파동의 경기 침체로 끝내 세상에 나오지 못했다. 미국의 대형 V8을 무너뜨린 그 석유파동이었다. ([스마트투데이](https://www.smarttoday.co.kr/ko-kr/articles/30149))
 
 여기서 머슬카의 몰락은 아메리칸 드림의 몰락과 겹쳐진다. 값싼 석유의 시대가 끝났고, 디트로이트의 산업 패권이 흔들렸고, 고졸 공장 노동자가 집과 차를 동시에 사던 임금 구조도 1970년대 스태그플레이션과 함께 금이 갔다. 머슬카는 그 꿈의 가장 시끄러운 소리였기에, 꿈이 꺼질 때 가장 먼저 조용해졌다.
 
@@ -166,6 +112,18 @@ robots: index,follow
 그렇다면 열여섯 살의 열쇠는 어떻게 됐을까? 미시간대 교통연구소에 따르면, 운전면허를 가진 16세 비율은 1983년 46.2%에서 2014년 24.5%로 거의 반 토막이 났다. 같은 기간 70세 이상 면허 보유율은 55%에서 79%로 올랐다. ([UMTRI-2016-4](https://trid.trb.org/view/1480411), [24/7 Wall St.](https://247wallst.com/cars-and-drivers/2016/01/19/does-drop-in-drivers-licenses-warn-of-drop-in-auto-sales/))
 
 두 숫자를 겹치면 머슬카의 재발견의 정체가 드러난다. 1970년에 열여섯이던 베이비부머는 이제 일흔을 넘겼고, 그들이 젊은 날 꿈꾸던 차를 경매장에서 되사고 있다. 머슬카 시장은 청춘의 시장이 아니라, 청춘을 기억하는 세대의 시장이 됐다.
+
+## 투자의 관점 - 인구구조가 만든 출구 리스크
+
+이 결론을 투자의 언어로 바꾸면 불편한 질문이 남는다. 지금 머슬카 가격을 떠받치는 매수자는 베이비부머다. 그런데 이 세대가 고령화와 상속을 맞아 차고를 정리하기 시작하면, 경매장에는 매물이 쏟아진다. 그 차를 받아 줄 다음 세대는 운전면허조차 덜 따고, V8의 굉음에 대한 기억도 없다.
+
+즉 머슬카 시장의 가장 큰 위험은 엔진도 규제도 아니라 **인구구조가 만든 출구 리스크**다. 공급은 늘어나는데 수요의 세대가 이어지지 않는 구조에서는, 베이비부머의 매물을 제값에 받아 주기 어려워진다.
+
+이 위험은 머슬카만의 이야기가 아니라고 본다. 베이비부머가 어린 시절 열광했던 클래식 스포츠 카드, DC 코믹스 같은 만화 잡지의 초판 등 이른바 향수형 대체 투자는 같은 구조 위에 서 있고, 점차 리스크가 되고 있다. 수집품의 가격은 결국 그것을 사랑했던 세대의 구매력과 수명을 따라가기 때문이다.
+
+반대편에서 비교해 볼 만한 것이 포켓몬 카드다. 1990년대 말 어린 시절 포켓몬에 열광했던 세대는 지금 소득이 정점을 향해 가는 30~40대가 됐고, 그 뒤로도 새로운 세대가 계속 유입되고 있다. 수집 세대가 성인이 되어 컬렉션을 본격적으로 시작하는 시점이 곧 수요의 출발점이라는 점에서, 머슬카의 1990~2010년대와 닮은 국면이다. 물론 팬데믹 시기 급등과 조정이 보여주듯 변동성은 크다.
+
+그래서 장기 투자자의 원칙은 단순해진다. 지금 사야 할 수집품은 지금의 부자가 열광하는 물건이 아니라, **지금의 청소년 세대가 열광하는 컬렉션**이다. 그리고 그 세대가 성인이 되어 구매력을 갖출 때까지, 최소 10년 이상을 내다보고 기다려야 한다. 머슬카가 청춘의 차에서 노년의 자산이 되기까지 걸린 시간이 그것을 말해 준다.
 
 ## 길 위의 세대 - 제임스 딘, 코왈스키, 그리고 라이언 맥긴리
 
@@ -191,7 +149,7 @@ robots: index,follow
 
 ## 마무리하며, 물려줄 수 없게 된 열쇠
 
-머슬카가 증언하는 아메리칸 드림의 정체는 이것이다. 그 꿈은 개인의 의지가 아니라 값싼 석유, 제조업 패권, 고졸 임금으로 집과 차를 살 수 있던 구조 위에 서 있었다.
+머슬카가 증언하는 아메리칸 드림의 정체는 이것이다. 그 꿈은 개인의 의지가 아니라 값싼 석유, 금에 묶인 달러, 제조업 패권, 고졸 임금으로 집과 차를 살 수 있던 구조 위에 서 있었다.
 
 구조가 무너지자 꿈은 두 갈래로 갈라졌다. 하나는 스크린과 노래 속의 신화로, 다른 하나는 경매장의 자산으로 남았다. 둘 다 진짜지만, 둘 다 더는 열여섯 살의 것이 아니다.
 
@@ -211,8 +169,14 @@ robots: index,follow
 
 - [Pontiac GTO — Wikipedia](https://en.wikipedia.org/wiki/Pontiac_GTO): 1964 GTO 탄생 과정, 330큐빅인치 규정, 32,450대 판매
 - [How Pontiac Stole Ferrari's GTO Name — HotCars](https://www.hotcars.com/how-a-3000-pontiac-option-package-hijacked-ferraris-racing-name/): 옵션 패키지 우회 전략과 1965년 규정 철회
+- [Federal Reserve Bulletin (1951) — FRASER](https://fraser.stlouisfed.org/files/docs/publications/FRB/pages/1950-1954/17720_1950-1954.pdf): 1949년 8월 미국 금 보유 정점, 세계 공식 보유량의 약 3분의 2
+- [Five things about gold — The Globe and Mail](https://www.theglobeandmail.com/report-on-business/five-things-gold/article17977929): 1950년 미국의 세계 공식 금 보유 비중
+- [The mystery of America's gold — MoneyWeek](https://moneyweek.com/investments/gold/americas-gold-mystery): 1965년까지 금 40% 유출, 1967년 해외 달러 부채 대비 금 보유고, 1971년 금 태환 정지
 - [1970 454 LS6 Chevelle — Newport Car Museum](https://newportcarmuseum.org/1970-454-ls6-chevelle/): LS6 출력과 생산 대수
 - [1970 Chevelle SS 454 LS6 Convertible — RM Sotheby's](https://rmsothebys.com/auctions/az15/lots/r168-1970-chevrolet-chevelle-ss-454-ls6-convertible): 보험료를 의식한 출력 축소 표기설
+- [Remembering the Pony, the first family car in Korea — Korea JoongAng Daily](https://www.koreajoongangdaily.com/bilingual-news/remembering-the-pony-the-first-family-car-in-korea-kor/11485884): 1974년 토리노 공개, 1975년 생산, 1976년 2월 판매 개시
+- ["달리는 국기"…대한민국 첫 국산차 '포니' — 전자신문](https://m.etnews.com/20230525000185): 1976년 국내 승용차 판매 점유율 44%
+- [현대차 '포니 쿠페 콘셉트' 복원 모델 공개 — 스마트투데이](https://www.smarttoday.co.kr/ko-kr/articles/30149): 1979년 석유파동으로 포니 쿠페 양산 무산
 - [Hemi 'Cuda convertible scores record $3.5 million — ClassicCars.com Journal](https://journal.classiccars.com/2014/06/15/hemi-cuda-convertible-hits-record-3-5-million-winning-bid-mecum-seattle-auction/): 2014년 메컴 시애틀 경매 기록
 - [1971 Plymouth Hemi Cuda the next multimillion dollar muscle car? — Fox News](https://www.foxnews.com/auto/1971-plymouth-hemi-cuda-the-next-multimillion-dollar-muscle-car.amp): 만화가 최초 구매, 압수, 1999년 경찰 경매
 - [Hemi 'Cuda gets record $4.8 million bid — Fox News](https://www.foxnews.com/auto/rare-1971-plymouth-hemi-cuda-convertible-gets-record-4-8-million-auction-bid-but-its-not-enough.amp): 2021년 유찰 사례
@@ -228,3 +192,5 @@ robots: index,follow
 - [Ryan McGinley — Wikipedia](https://en.wikipedia.org/wiki/Ryan_McGinley): 생애와 로드 트립 시리즈 개관
 
 더 읽고 볼 거리로는 머슬카 전문 아카이브 MuscleCarClub.com과 Muscle Car Facts, 클래식카 매체 Hemmings, 미국 자동차 박물관(ACM)의 머슬카 전시가 있다. 영상으로는 Hemmings, AutotopiaLA, 방치된 차를 되살리는 반 파인드(barn find) 계열 유튜브 채널이 재발견 문화를 생생하게 보여준다. 1970년대 몰락 연표의 일부 수치(1975년 코르벳 출력, 휘발유 가격대 등)는 일반에 알려진 값으로, 전문 사이트에서 원데이터 검증을 원한다.
+
+* 이 글의 컬렉터블 마켓에 대한 것은 필자의 견해이며, 특정 자산의 매수나 매도를 권하는 것이 아니다.*
