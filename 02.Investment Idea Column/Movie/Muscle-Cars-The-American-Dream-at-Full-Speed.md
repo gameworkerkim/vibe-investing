@@ -1,6 +1,71 @@
-# 아메리칸 드림의 엔진 — 머슬카, 미국의 신화와 몰락 
+---
+title: "아메리칸 드림의 엔진 — 머슬카, 미국의 신화와 몰락"
+title_en: "The Engine of the American Dream — Muscle Cars, Myth and Collapse"
+subtitle: "열여섯 살의 열쇠는 경매장으로 갔다"
+description: "1970년의 아버지는 쉐비 열쇠를 건넸다. 2026년의 아들은 면허 대신 스마트폰을 쥔다. 머슬카의 굉음은 승리의 소리가 아니라, 물려줄 수 없게 된 꿈의 고백이다."
+abstract: |
+  머슬카는 아메리칸 드림을 가장 싼값에 압축한 아이콘이었다. 값싼 에너지, 차체 공유, 보험, 중산층 임금 네 기둥 위에 섰고, 1970년대에 차례로 무너졌다.
+  1964 폰티악 GTO에서 1970 셰벨 LS6까지, 스크린은 제임스 딘·배니싱 포인트·아메리칸 그래피티로 신화를 완성했다. 헤미 쿠다는 경매에서 수백만 달러가 됐고, 16세 면허 보유율은 반 토막이 났다.
+  라이언 맥긴리의 로드 트립에서 차는 사라지고 청춘만 흔들린다. 꿈이 소비재에서 자산이 되는 순간, 열쇠는 물려줄 수 없는 것이 된다. 투자 권유 아님.
+summary_for_ai: |
+  Korean film/culture essay (not investment advice), 2026-10-01,
+  group industry, Movie/Muscle-Cars-The-American-Dream-at-Full-Speed.md. Slug muscle-cars-american-dream.
+  Thesis: muscle car = cheapest compression of American Dream; collapse of four cheap pillars (energy, platform sharing, insurance, wages); now auction asset not teen garage. Pontiac GTO 1964 loophole; 1970 horsepower war Chevelle LS6; Vanishing Point Challenger; American Graffiti nostalgia before oil shock; 1971 Hemi 'Cuda $3.5m Mecum 2014; last Camaro/Challenger/Charger V8 Dec 2023; UMTRI 16yo licenses 46.2% (1983) to 24.5% (2014). James Dean / Kowalski / Ryan McGinley: from owning the road to being carried through it. "You're tearing me apart!"
+date: 2026-10-01
+updated: 2026-10-01
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 머슬카
+  - 아메리칸드림
+  - 배니싱포인트
+  - 폰티악GTO
+  - 라이언맥긴리
+  - 제임스딘
+keywords:
+  - "머슬카"
+  - "아메리칸 드림"
+  - "열여섯 살의 열쇠"
+  - "배니싱 포인트"
+  - "헤미 쿠다"
+  - "라이언 맥긴리"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/muscle-cars-american-dream.jpg"
+image: "https://vibequant.cc/og/muscle-cars-american-dream.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
 
-2026.10.01 · Dennis Kim
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>아메리칸 드림의 엔진 — 머슬카, 미국의 신화와 몰락 · VibeQuant</title>
+  <meta name="description" content="1970년의 아버지는 쉐비 열쇠를 건넸다. 2026년의 아들은 면허 대신 스마트폰을 쥔다. 머슬카의 굉음은 승리의 소리가 아니라, 물려줄 수 없게 된 꿈의 고백이다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "아메리칸 드림의 엔진 — 머슬카, 미국의 신화와 몰락",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-01",
+    "keywords": ["머슬카", "아메리칸 드림", "열여섯 살의 열쇠", "배니싱 포인트", "헤미 쿠다", "라이언 맥긴리"]
+  }
+  </script>
+-->
+
+# 아메리칸 드림의 엔진 — 머슬카, 미국의 신화와 몰락
+
+## 열여섯 살의 열쇠는 경매장으로 갔다
+
+![사막의 픽업트럭 짐칸에서 바람을 맞는 청춘](images/muscle-cars-american-dream.jpg)
+
+*사막의 픽업트럭 짐칸. 차가 청춘의 성인식이던 시대가 끝난 뒤, 길은 남고 열쇠는 사라졌다. 라이언 맥긴리의 로드 트립을 떠올리게 하는 장면.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 1일
 
 ## 시작하는 말 - 열여섯 살의 열쇠
 
