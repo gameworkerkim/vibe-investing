@@ -226,4 +226,4 @@ robots: index,follow
 - [Ryan McGinley — Guggenheim](https://www.guggenheim.org/artwork/artist/ryan-mcginley): 작품 세계와 앞선 세대와의 차이
 - [Ryan McGinley — Wikipedia](https://en.wikipedia.org/wiki/Ryan_McGinley): 생애와 로드 트립 시리즈 개관
 
-더 읽고 볼 거리로는 머슬카 전문 아카이브 MuscleCarClub.com과 Muscle Car Facts, 클래식카 매체 Hemmings, 미국 자동차 박물관(ACM)의 머슬카 전시가 있다. 영상으로는 Hemmings, AutotopiaLA, 방치된 차를 되살리는 반 파인드(barn find) 계열 유튜브 채널이 재발견 문화를 생생하게 보여준다. 1970년대 몰락 연표의 일부 수치(1975년 코르벳 출력, 휘발유 가격대 등)는 일반에 알려진 값으로, 발행 전 1차 자료 대조를 권한다.
+더 읽고 볼 거리로는 머슬카 전문 아카이브 MuscleCarClub.com과 Muscle Car Facts, 클래식카 매체 Hemmings, 미국 자동차 박물관(ACM)의 머슬카 전시가 있다. 영상으로는 Hemmings, AutotopiaLA, 방치된 차를 되살리는 반 파인드(barn find) 계열 유튜브 채널이 재발견 문화를 생생하게 보여준다. 1970년대 몰락 연표의 일부 수치(1975년 코르벳 출력, 휘발유 가격대 등)는 일반에 알려진 값으로, 전문 사이트에서 원데이터 검증을 원한다.
