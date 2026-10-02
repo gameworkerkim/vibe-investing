@@ -1,6 +1,74 @@
+---
+title: "1987년, 우리 아버지 세대는 무엇을 위해 싸웠나?"
+title_en: "What Did Our Fathers Fight For in 1987?"
+subtitle: "그리고 2026년, 우리에게 아직 전태일이 필요한 이유"
+description: "1987년 울산 현대중공업 정문의 첫 요구는 임금이 아니라 두발 자유화였다. 전태일이 남긴 질문은 밀라노와 부산의 다락방에도 아직 닿지 않았다."
+abstract: |
+  1987년 울산 현대중공업 요구서의 첫 줄은 임금이 아니라 두발 자유화였다. 광장의 민주주의가 공장 문턱을 넘던 그 여름의 기록이다.
+  박광수 감독 「아름다운 청년 전태일」(1995)을 겹쳐 읽는다. 전태일이 요구한 것은 혁명이 아니라 이미 적힌 근로기준법이었다.
+  다락방은 밀라노 명품 하청, 버지니아 가금 공장, 부산 배달 도로로 자리를 옮겼다. 사슬의 끝에 아직 전태일이 필요한 이유. 법률·투자 권유 아님.
+summary_for_ai: |
+  Korean film/labor-history essay (not legal or investment advice), 2026-10-02,
+  group korea, Movie/Hyundai-industry.md. Slug hyundai-industry.
+  1987 Ulsan Hyundai Heavy Industries: haircut at the gate, first demand hair freedom not wages; democratic union, humane workplace, fair share.
+  June 1987 square democracy to July-September factory democracy. Jeon Tae-il 1970 Cheonggyecheon Peace Market, A Single Spark (Park Kwang-su 1995, Hong Kyung-in, Moon Sung-keun).
+  ILO forced labour 27.6m / $236bn; child labour 138m in 2024. Armani 2024 judicial administration, 2026 raids on Bulgari/Chanel etc. Virginia poultry Fayette minors. Busan gig-delivery teens.
+  Thesis: the attic did not vanish, it moved down the subcontract chain. We still need what Jeon did: read, record, not stop.
+date: 2026-10-02
+updated: 2026-10-02
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 전태일
+  - 1987
+  - 현대중공업
+  - 아름다운청년전태일
+  - 노동권
+  - 근로기준법
+keywords:
+  - "전태일"
+  - "1987년 노동자 대투쟁"
+  - "현대중공업"
+  - "아름다운 청년 전태일"
+  - "두발 자유화"
+  - "근로기준법"
+group: korea
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/hyundai-industry.jpg"
+image: "https://vibequant.cc/og/hyundai-industry.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>1987년, 우리 아버지 세대는 무엇을 위해 싸웠나? · VibeQuant</title>
+  <meta name="description" content="1987년 울산 현대중공업 정문의 첫 요구는 임금이 아니라 두발 자유화였다. 전태일이 남긴 질문은 밀라노와 부산의 다락방에도 아직 닿지 않았다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "1987년, 우리 아버지 세대는 무엇을 위해 싸웠나?",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-02",
+    "keywords": ["전태일", "1987년 노동자 대투쟁", "현대중공업", "아름다운 청년 전태일", "두발 자유화", "근로기준법"]
+  }
+  </script>
+-->
+
 # 1987년, 우리 아버지 세대는 무엇을 위해 싸웠나?
 
-### 그리고 2026년, 우리에게 아직 전태일이 필요한 이유
+## 그리고 2026년, 우리에게 아직 전태일이 필요한 이유
+
+![전태일다리의 전태일 흉상](images/hyundai-industry.jpg)
+
+*서울 전태일다리의 전태일 흉상. 사진 Dalgial, Wikimedia Commons, CC BY-SA 3.0.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 2일
 
 ## 바리캉 소리로 시작되던 아침
 
@@ -84,7 +152,7 @@
 
 '메이드 인 이탈리아'. 장인의 손길과 오랜 전통을 떠올리게 하는 이 문장 뒤에도 낮은 천장이 있었다.
 
-2024년 4월, 밀라노 법원은 조르조 아르마니의 생산 법인을 사법 관리 아래 두었다. 아르마니의 협력업체였던 마니파투레 롬바르데(Manifatture Lombarde)는 자체 작업장도 없이 생산을 밀라노 외곽의 중국계 작업장에 다시 맡겼고, 그곳에서는 중국과 파키스탄 출신 노동자들이 안전 규정조차 지켜지지 않는 비위생적인 공간에서 일했다. 신고된 것보다 훨씬 긴 시간을, 시급 2~3유로에. 계약서에는 윤리 강령과 재하청 금지 조항이 분명히 적혀 있었다. 평화시장의 근로기준법처럼, 약속은 종이 위에만 있었다.
+2024년 4월, 밀라노 법원은 조르조 아르마니의 생산 법인을 사법 관리 아래 두었다. 아르마니의 협력업체였던 마니파투레 롬바르데(Manifatture Lombarde)는 자체 작업장도 없이 생산을 밀라노 외곽의 중국계 작업장에 다시 맡겼고, 그곳에서는 중국과 파키스탄 출신 노동자들이 안전 규정조차 지켜지지 않는 비위생적인 공간에서 일했다. 신고된 것보다 훨씬 긴 시간을, 시급 2～3유로에. 계약서에는 윤리 강령과 재하청 금지 조항이 분명히 적혀 있었다. 평화시장의 근로기준법처럼, 약속은 종이 위에만 있었다.
 
 이후 디올, 로로피아나 등의 생산 법인이 같은 이유로 사법 관리를 받았고, 2025년 말 밀라노 검찰의 수사는 프라다, 지방시, 돌체앤가바나 등 13개 브랜드로 넓어졌다. 그리고 2026년 7월, 이탈리아 경찰은 불가리, 샤넬, 브루넬로 쿠치넬리, 에트로, 몽클레르 등 여러 명품 브랜드의 사무실을 압수수색했다. 브랜드가 협력업체에, 협력업체가 하청업체에, 하청업체가 다시 이름 없는 작업장에 일을 넘기는 사슬. 그 끝에는 피렌체 인근 프라토 같은 도시의 작업장에서 일하고, 먹고, 잠드는 이주 노동자들이 있었다.
 
