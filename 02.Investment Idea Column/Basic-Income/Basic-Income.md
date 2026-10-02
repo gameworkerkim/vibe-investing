@@ -1,9 +1,75 @@
+---
+title: "예지된 미래, 인공지능이 인간에게 외주를 주는 날"
+title_en: "The Foretold Future — The Day AI Outsources Work to Humans"
+subtitle: "인공지능, LLM 최고 요금제가 한 나라의 평균 소득보다 비싸진 세계"
+description: "LLM 최고 요금제 월 200달러는 세계 38개국 평균 소득보다 비싸다. AI가 인간에게 외주를 주는 세계에서 기본소득은 사다리가 아니라 바닥이다."
+abstract: |
+  2026년 10월 LLM 최고 요금제는 월 200달러로 수렴했다. IMF 기준 38개국 약 14억 명의 1인당 GDP 월 환산치가 그 금액에 못 미친다. 디지털 지능은 세계 단일가격, 인간 노동은 국가별 가격이다.
+  RentAHuman·Meta Muse가 보여주듯 AI는 일자리를 빼앗기보다 인간에게 외주를 준다. 장하준의 사다리는 기술과 노동 두 겹으로 걷어차인다. 에이전트 발주는 스프레드시트다.
+  보이지 않는 차별, AI 노동세, 기본소득은 사다리가 아니라 바닥. 법률·투자 권유 아님.
+summary_for_ai: |
+  Korean macro/labor essay (not legal or investment advice), 2026-10-02,
+  group industry, Basic-Income/Basic-Income.md. Slug basic-income.
+  Thesis: the coming order is not AI stealing jobs but AI outsourcing to humans; two classes — cheap subcontracted humans vs humans not even selected.
+  LLM top tier $200/mo vs 38 countries (14e8 people) whose GDP/capita monthly < $200; $300 bar adds India etc ~33e8 / 40%. World Bank poverty $3/$4.20/$8.30.
+  Ha-Joon Chang Kicking Away the Ladder doubled: compute ladder + labor/BPO ladder. Varoufakis technofeudalism. Agent inequality: human_cost vs token cost. Physical world / expensive inference / trust-liability.
+  RentAHuman (YC S26), Kenyan data workers TIME 2023, Meta Muse human concierge Reuters Sep 2026, Anthropic agentic misalignment, GPT-4 TaskRabbit lie.
+  Invisible discrimination via proxies; Amazon hiring AI; Stanford monoculture; Meta layoff suit. UBI + AI labor tax; Altman public wealth fund / universal basic compute as complement not substitute. Piketty global progressive capital tax close.
+date: 2026-10-02
+updated: 2026-10-02
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 기본소득
+  - 인공지능
+  - 장하준
+  - 기술봉건주의
+  - AI노동세
+  - RentAHuman
+keywords:
+  - "기본소득"
+  - "AI 외주"
+  - "사다리 걷어차기"
+  - "월 200달러"
+  - "RentAHuman"
+  - "AI 노동세"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/basic-income.jpg"
+image: "https://vibequant.cc/og/basic-income.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>예지된 미래, 인공지능이 인간에게 외주를 주는 날 · VibeQuant</title>
+  <meta name="description" content="LLM 최고 요금제 월 200달러는 세계 38개국 평균 소득보다 비싸다. AI가 인간에게 외주를 주는 세계에서 기본소득은 사다리가 아니라 바닥이다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "예지된 미래, 인공지능이 인간에게 외주를 주는 날",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-02",
+    "keywords": ["기본소득", "AI 외주", "사다리 걷어차기", "월 200달러", "RentAHuman", "AI 노동세"]
+  }
+  </script>
+-->
+
 # 예지된 미래, 인공지능이 인간에게 외주를 주는 날
 
 ## 인공지능, LLM 최고 요금제가 한 나라의 평균 소득보다 비싸진 세계
 
-*김호광 (Dennis Kim) · 2026년 10월*
+![장하준 『사다리 걷어차기』 표지](images/basic-income.jpg)
 
+*장하준, 『사다리 걷어차기(Kicking Away the Ladder)』(2002). 김희정 옮김.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 2일
 
 ## 시작하는 말, "MCP 호출 한 번이면 사람을 고용할 수 있다"
 
