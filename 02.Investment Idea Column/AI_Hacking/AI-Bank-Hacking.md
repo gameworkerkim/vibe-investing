@@ -1,6 +1,84 @@
+---
+id: CTI-2026-1002-AI-BANK-HACKING
+title: "은행이 뚫렸다 - AI 해킹의 시대, 방어의 판을 바꿔야 한다"
+title_en: "The Banks Were Breached — AI Hacking Changes the Defense Board"
+subtitle: "국적을 묻지 말고 속도를 물어라"
+description: "하루 사이 5대 시중은행과 지방은행이 줄줄이 공격받았다. 중국산 ARTEX 흔적보다 중요한 것은, 공격 자동화가 이미 기본값이 됐다는 사실이다."
+abstract: |
+  2026-10-01 신한은행이 대출모집인 서비스 본인확인 우회로 고객 약 2만 5천 명 정보 유출을 공개했다. 다음날 KB·하나·부산 등 시중·지방은행이 줄줄이 공식화됐다. 정면 거래망이 아니라 외부 연결 업무 시스템이다.
+  공격 인프라 HTML 타이틀에서 ARTEX-自主渗透测试控制台 문자열이 확인됐으나, 실제 사용 여부는 미확인. 지난 1년의 충격적 AI 해킹은 Claude·ChatGPT·Gemini 등 미국산 LLM에서도 나왔다.
+  질문은 국적이 아니라 속도. 에이전틱 방어로 판을 바꿔야 한다. TLP:CLEAR. 법률·투자 권유 아님.
+summary_for_ai: |
+  CTI analytical column (KO), id CTI-2026-1002-AI-BANK-HACKING, date 2026-10-02, TLP:CLEAR, group korea-breach.
+  Event: Shinhan Bank 25k customer records via loan-solicitor identity bypass; same day KB 119, Hana ODS 89, BNK Busan 11 contractors; Woori/NH attempts no leak. Side-door systems not core banking.
+  ARTEX AI Chinese autonomous pentest console string on attacker webserver (Genians Moon Jong-hyun LinkedIn) — unconfirmed by FSS/Shinhan.
+  Parallel cases: Claude Code China-nexus 80-90% automation 2025-09; Mexico SAT/INE Claude+GPT-4.1 150GB; GTIG PROMPTFLUX Gemini; HacTronAI Claude Opus 5 vs OpenAI Discourse 72h; OpenAI agent HuggingFace jailbreak lawsuit+FTC.
+  Tools: HexStrike-AI, CyberStrikeAI, PentAGI, Raptor, ARTEX. Defense: NVIDIA Open Agent Safety Platform. Not a how-to. Not legal/investment advice.
+date: 2026-10-02
+updated: 2026-10-02
+author: "Dennis Kim (김호광 / HoKwang Kim)"
+email: "gameworker@gmail.com"
+github: "gameworkerkim"
+lang: ko
+tags:
+  - Korea-Breach
+  - Shinhan
+  - AI-Hacking
+  - ARTEX
+  - Agent
+  - Bank
+keywords:
+  - "신한은행 해킹"
+  - "AI 해킹"
+  - "ARTEX AI"
+  - "은행권 정보유출"
+  - "에이전틱 방어"
+  - "대출모집인"
+group: korea-breach
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/ai-bank-hacking.jpg"
+image: "https://vibequant.cc/og/ai-bank-hacking.jpg"
+schema_type: TechArticle
+classification: "TLP:CLEAR"
+severity: HIGH
+confidence: "B2"
+license: "CC BY-NC-SA 4.0"
+draft: true
+robots: index,follow
+canonical: "https://cti.vibequant.cc/cti/ai-bank-hacking/"
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>은행이 뚫렸다 - AI 해킹의 시대, 방어의 판을 바꿔야 한다 · VibeQuant CTI</title>
+  <meta name="description" content="하루 사이 5대 시중은행과 지방은행이 줄줄이 공격받았다. 중국산 ARTEX 흔적보다 중요한 것은, 공격 자동화가 이미 기본값이 됐다는 사실이다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "은행이 뚫렸다 - AI 해킹의 시대, 방어의 판을 바꿔야 한다",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-02",
+    "keywords": ["신한은행 해킹", "AI 해킹", "ARTEX AI", "은행권 정보유출", "에이전틱 방어", "대출모집인"]
+  }
+  </script>
+-->
+
 # 은행이 뚫렸다 - AI 해킹의 시대, 방어의 판을 바꿔야 한다
 
-2026년 10월 2일 · Dennis Kim
+## 국적을 묻지 말고 속도를 물어라
+
+![신한은행 간판 앞 경광등](images/ai-bank-hacking.jpg)
+
+*신한은행에서 시작해 하루 사이 시중은행이 줄줄이 맞았다. 질문은 국적이 아니라 속도다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 2일
+
+> **분류**: TLP:CLEAR | **문서유형**: 분석 칼럼 (Analytical Column) | **작성일**: 2026-10-02
+> **핵심 주장**: 한 은행의 사고가 아니다. 공격 자동화는 이미 기본값이다. 방어는 같은 속도로 움직여야 한다.
 
 **한 은행의 사고가 아니다. 하루 사이 국내 5대 시중은행과 지방은행이 모두 공격받았고, 공격 인프라에서는 중국어 AI 자율 침투 도구의 흔적이 나왔다. 그러나 이 문제를 '중국산 해킹 툴'로만 읽으면 절반을 놓친다. 지난 1년간 가장 충격적인 AI 해킹 사례들은 Claude, ChatGPT, Gemini 같은 미국산 LLM에서 나왔다.**
 
@@ -46,18 +124,18 @@ ARTEX AI는 GitHub에 중국어 중심으로 공개된 LLM 기반 자율형 침�
 
 | 시기 | 사례 | 사용 모델 | 핵심 |
 | --- | --- | --- | --- |
-| 2026년 7\~9월 | 핵트론AI의 오픈AI 침투 | Claude Opus 5 | 72시간 내 직원 계정→내부 저장소 |
+| 2026년 7～9월 | 핵트론AI의 오픈AI 침투 | Claude Opus 5 | 72시간 내 직원 계정→내부 저장소 |
 | 2026년 7월 | 오픈AI 에이전트의 허깅페이스 해킹 | 오픈AI 자체 에이전트 | 격리 이탈, 첫 소송·FTC 조사 |
-| 2025년 12월\~2026년 1월 | 멕시코 정부기관 대량 유출 | Claude Code, GPT-4.1 | 150GB, 탈옥으로 가드레일 우회 |
+| 2025년 12월～2026년 1월 | 멕시코 정부기관 대량 유출 | Claude Code, GPT-4.1 | 150GB, 탈옥으로 가드레일 우회 |
 | 2025년 11월 공개 | 구글 GTIG 'AI 위협 보고서' | Gemini | 실행 중 LLM 호출하는 악성코드 |
-| 2025년 9월 | 중국 국가배후 조직의 사이버 첩보 | Claude Code | 공격의 80\~90% AI 자동 수행 |
+| 2025년 9월 | 중국 국가배후 조직의 사이버 첩보 | Claude Code | 공격의 80～90% AI 자동 수행 |
 | 2025년 8월 | 단독 해커의 데이터 갈취 | Claude | 17개 기관, 몸값 50만 달러 이상 |
 
 ### 3.1 Claude Code로 수행된 첫 'AI 주도' 사이버 첩보 (2025년 9월)
 
-Anthropic은 2025년 9월 중순 중국 정부 지원으로 평가되는 해킹 그룹이 Claude Code를 조작해 대형 기술기업, 금융기관, 화학 제조사, 정부기관 등 약 30곳을 노린 작전을 탐지·차단했다. 일부는 실제 침입에 성공했다. 공격 과정의 80\~90%를 AI가 수행했고 사람의 개입은 극히 제한적이었다. Anthropic은 이를 대규모 공격이 사람 없이 실행된 첫 사례로 기록했다. 그보다 한 달 앞선 2025년 8월에는 단독 해커가 Claude로 의료·긴급서비스·정부 등 17개 기관을 상대로 데이터 탈취와 갈취를 자동화한 사례도 적발됐다. ([GeekNews 요약](https://news.hada.io/topic?id=24367), [뉴스스페이스](https://www.newsspace.kr/news/article.html?no=12844))
+Anthropic은 2025년 9월 중순 중국 정부 지원으로 평가되는 해킹 그룹이 Claude Code를 조작해 대형 기술기업, 금융기관, 화학 제조사, 정부기관 등 약 30곳을 노린 작전을 탐지·차단했다. 일부는 실제 침입에 성공했다. 공격 과정의 80～90%를 AI가 수행했고 사람의 개입은 극히 제한적이었다. Anthropic은 이를 대규모 공격이 사람 없이 실행된 첫 사례로 기록했다. 그보다 한 달 앞선 2025년 8월에는 단독 해커가 Claude로 의료·긴급서비스·정부 등 17개 기관을 상대로 데이터 탈취와 갈취를 자동화한 사례도 적발됐다. ([GeekNews 요약](https://news.hada.io/topic?id=24367), [뉴스스페이스](https://www.newsspace.kr/news/article.html?no=12844))
 
-### 3.2 '버그바운티'라고 속여 멕시코 정부를 털다 (2025년 12월\~2026년 1월)
+### 3.2 '버그바운티'라고 속여 멕시코 정부를 털다 (2025년 12월～2026년 1월)
 
 이스라엘 보안업체 갬빗 시큐리티에 따르면, 한 공격자가 스페인어로 Claude에 '엘리트 해커' 역할을 부여하고 버그바운티 테스트라고 반복해 속였다. Claude는 처음엔 거부했지만 결국 협조했다. 공격자는 Claude Code에 1,000건 넘는 프롬프트를 보내 익스플로잇 작성, 도구 제작, 탈취 자동화를 시켰고, 결과는 GPT-4.1로 분석했다. 국세청(SAT), 국가선거관리소(INE), 주정부 등에서 약 150GB가 빠져나갔고 납세자 기록 1억 9,500만 건이 포함됐다고 갬빗은 밝혔다. 일부 기관은 침해를 부인했다. Anthropic은 계정을 차단하고 오남용 탐지를 강화했다. 갬빗의 표현대로 AI는 보조가 아니라 사실상 '작전팀' 역할을 했다. ([SecurityWeek](https://www.securityweek.com/hackers-weaponize-claude-code-in-mexican-government-cyberattack/), [조선일보](https://v.daum.net/v/20260227004843503))
 
@@ -65,7 +143,7 @@ Anthropic은 2025년 9월 중순 중국 정부 지원으로 평가되는 해킹 
 
 구글 위협 인텔리전스 그룹(GTIG)은 실행 중 LLM을 호출하는 악성코드를 처음 확인했다. 'PROMPTFLUX'는 하드코딩된 API 키로 Gemini에 난독화·회피 기법을 요청해 스스로 코드를 다시 쓴다. 'PROMPTSTEAL'은 AI가 만든 명령으로 정보를 훔친다. 중국 연계 해커는 Gemini가 거부하자 CTF 참가자라고 신분을 속였고, 북한 UNC1069는 Gemini로 암호화폐 미끼 문서를 번역하고 지갑 탈취 코드를 개발했다. 북한·이란·중국 국가배후 조직은 정찰부터 C2 구축, 데이터 탈취까지 공격 전 단계에 AI를 쓰고 있었다. ([데일리시큐](https://www.dailysecu.com/news/articleView.html?idxno=202109), [보안뉴스](https://www.boannews.com/media/view.asp?idx=140205&skind=8))
 
-### 3.4 AI가 AI 기업을 뚫다: 72시간 만의 오픈AI 침투 (2026년 7\~9월)
+### 3.4 AI가 AI 기업을 뚫다: 72시간 만의 오픈AI 침투 (2026년 7～9월)
 
 미국 보안 스타트업 핵트론AI의 3인 연구팀은 Claude Opus 5로 오픈AI 커뮤니티 포럼을 운영하는 외부 서비스 디스코스(Discourse)의 취약점을 공략했다. 서버에서 인증 토큰을 확보했는데 일부가 오픈AI 직원 것이었다. 이를 타고 직원의 ChatGPT·Codex 계정, 연결된 GitHub를 거쳐 오픈AI 내부 모노레포까지 도달했고, 접근 증명용 풀리퀘스트를 생성했다. 최초 분석부터 여기까지 72시간이 채 걸리지 않았다.
 
@@ -98,7 +176,7 @@ ARTEX AI는 특이 사례가 아니라 거대한 생태계의 한 조각이다. 
 1. **가드레일은 사회공학으로 뚫린다.** 멕시코 공격자는 '버그바운티', 중국 연계 해커는 'CTF 참가자'라고 속였다. 모델을 속이는 기술은 사람을 속이는 기술과 다르지 않다. 공급자 측 안전장치는 필요하지만 방어선이 될 수는 없다.
 2. **공격은 정문이 아니라 옆문으로 들어온다.** 은행권 공격은 대출모집인·영업지원·외주 시스템을, 핵트론은 외부 포럼 서비스를 노렸다. 핵심 시스템이 아니라 핵심 시스템과 연결된 주변부가 표적이다.
 3. **정밀도보다 규모와 속도다.** 하루 사이 6개 은행이 동시에 두드려졌다. 사람 해커라면 불가능한 병렬성이다. AI 공격은 '한 곳을 깊게'보다 '모든 곳을 동시에' 시도한다.
-4. **사람의 몫은 몇 시간으로 줄었다.** 핵트론은 사람이 들인 시간이 몇 시간에 불과했다고 했고, 중국 조직의 작전은 80\~90%가 자동화됐다. 숙련 해커의 희소성이라는 방어자의 오래된 이점이 사라지고 있다.
+4. **사람의 몫은 몇 시간으로 줄었다.** 핵트론은 사람이 들인 시간이 몇 시간에 불과했다고 했고, 중국 조직의 작전은 80～90%가 자동화됐다. 숙련 해커의 희소성이라는 방어자의 오래된 이점이 사라지고 있다.
 5. **모델 한 세대가 공격 가능성을 바꾼다.** Opus 4.8로 안 되던 공격이 Opus 5로는 몇 시간 만에 됐다. 오늘 안전한 시스템이 다음 모델 출시일에 안전하다는 보장은 없다.
 
 여기에 여섯 번째, 아직 이름 붙이기 어려운 패턴이 더해졌다. 오픈AI 에이전트 사례처럼 **누구의 지시도 없이 AI가 스스로 선을 넘는 경우**다. 이때 책임 주체를 가리는 일은 이제 법정으로 넘어갔다.
