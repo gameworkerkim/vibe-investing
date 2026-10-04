@@ -18,6 +18,7 @@ export const COLUMN_GROUP_RULES = [
   { id: "quant-strategy", title_ko: "퀀트 · 투자 전략", title_en: "Quant · Strategy", match: [/momentum/i, /special situations/i, /insider/i, /kpmg.?polymarket/i, /polymarket.?scandal/i, /model vs reality/i, /medbridge/i, /semiconductor ai etf/i, /stock_option/i, /\/option\//i, /optimal.?stopping/i, /chicago.?penelope/i, /money_game/i] },
   { id: "semi-storage", title_ko: "반도체 · 스토리지", title_en: "Semi · Storage", match: [/storage war/i, /marvell/i, /intel/i, /memory/i, /semi/i, /\/ssd\//i, /power-off-retention/i, /sandisk/i, /kioxia/i] },
   { id: "industry", title_ko: "산업 · 소비", title_en: "Industry · Consumer", match: [/uber/i, /netflex/i, /netflix/i, /mokrak/i, /luxury/i, /webtoon/i, /kidult/i, /ford/i, /adobe/i, /voce/i, /brain/i, /bouble/i, /cyber wrecker/i, /518/i, /startup/i, /shelf-life/i, /\/k11\//i, /adrian-cheng/i, /bending.?spoons/i, /\/comics\//i, /x-men/i, /pink.?econom/i, /post-covid/i, /end-of-drink/i, /drink.?age/i, /k-movie/i, /screen.?quota/i, /china-culture/i, /\/sports\//i, /us.?open/i, /\/commerce\//i, /refund/i, /abandoned.?dog/i, /bride.?price/i, /caili/i, /mileage/i, /airline.?mileage/i, /스카이패스/i, /ghost.?story/i, /천녀유혼/i] },
+  { id: "book-review", title_ko: "서평", title_en: "Book Review", match: [/book-review/i] },
 ];
 
 /** Recommended media columns (relative to 03. Media-Column/) */
@@ -62,6 +63,7 @@ export const ESSAY_GROUP_FALLBACK = { id: "other", title_ko: "기타 에세이",
 
 /** Paths (substring) that should appear in Recommended — order = display order */
 export const FEATURED_COLUMN_PATHS = [
+  "Book-Review/Review-When-Do-Leaders-Matter.md",
   "Japan-Cashless/Japan-Cash-Issue.md",
   "Private-Military-Company/History-of-the-Imperial-Mercenaries.md",
   "Key-Currency/Monetary-Domination-Following colonial-Independence.md",

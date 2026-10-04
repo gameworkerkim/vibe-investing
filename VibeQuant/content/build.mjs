@@ -752,6 +752,7 @@ const SLUG_OVERRIDES = {
   "Key-Currency/Monetary-Domination-Following colonial-Independence.md": "monetary-domination-colonial-independence",
   "Private-Military-Company/History-of-the-Imperial-Mercenaries.md": "imperial-mercenaries",
   "Japan-Cashless/Japan-Cash-Issue.md": "japan-cashless",
+  "Book-Review/Review-When-Do-Leaders-Matter.md": "when-do-leaders-matter",
   "Statistical-Illusion/Statistical-Lllusion.md": "statistical-illusion",
 };
 

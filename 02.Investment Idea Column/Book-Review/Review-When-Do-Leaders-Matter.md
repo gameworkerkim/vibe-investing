@@ -1,6 +1,54 @@
+<!--
+---
+title: "때를 만난 사람, 사람을 만난 때"
+title_en: "When the Person Meets the Moment"
+subtitle: "재레드 다이아몬드 『리더는 언제 차이를 만들어내는가』 서평"
+description: "영웅도 운명도 아닌 ‘언제’. 역량·시점·재량권이 맞물릴 때만 리더가 차이를 만든다. 다이아몬드 신간 서평. 투자·학술 자문 아님(2026-10)."
+abstract: |
+  Korean book review (Oct 2026) of Jared Diamond, Profits, Prophets, Coaches, and Kings:
+  (When) Do Leaders Matter? Korean edition 리더는 언제 차이를 만들어내는가.
+  Hamlet test, natural experiments, discretion; strengths and limits of the framework;
+  investor translation: stock, timing, and room to operate.
+  Not investment or academic advice.
+summary_for_ai: |
+  Korean column (not investment advice), 2026-10-04, group book-review,
+  Book-Review/Review-When-Do-Leaders-Matter.md.
+  Thesis: leaders matter only when ability, timing, and discretion coincide;
+  Diamond's method is useful but the Hamlet test and natural-experiment stretch are weak,
+  and the conclusion (discretion) is close to obvious. Reading the moment is itself a skill.
+date: 2026-10-04
+updated: 2026-10-04
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 서평
+  - 재레드 다이아몬드
+  - 리더십
+  - 재량권
+  - 타이밍
+keywords:
+  - "리더는 언제 차이를 만들어내는가"
+  - "재레드 다이아몬드"
+  - "Profits Prophets Coaches and Kings"
+  - "햄릿 테스트"
+  - "리더십 재량권"
+  - "총 균 쇠"
+group: book-review
+featured: true
+featured_rank: -15
+og_image: "https://vibequant.cc/og/when-do-leaders-matter.jpg"
+image: "https://vibequant.cc/og/when-do-leaders-matter.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # 때를 만난 사람, 사람을 만난 때
 
 ### 재레드 다이아몬드 『리더는 언제 차이를 만들어내는가』 서평
+
+![재레드 다이아몬드 『리더는 언제 차이를 만들어내는가』 한국어판 표지 — 빨간 재킷의 저자 사진과 부제](./images/when-do-leaders-matter.jpg)
 
 > 원제: *Profits, Prophets, Coaches, and Kings: (When) Do Leaders Matter?*
 
@@ -32,7 +80,7 @@
 
 **첫째, '햄릿 테스트'라는 독자적 개념을 전면에 내세운다.** 셰익스피어가 없었다면 『햄릿』은 존재했을까? 이 사고 실험에서 이름을 딴 테스트는, 어떤 리더의 업적을 동시대의 다른 누군가가 대신할 수 있었는지를 묻는다. 대체 불가능하다면 그 리더는 진짜로 차이를 만든 것이다. 다이아몬드는 이 테스트를 통과한 인물로 보츠와나 초대 대통령 세레체 카마, 석류 주스라는 시장을 사실상 새로 만들어낸 린다·스튜어트 레스닉 부부를 든다. 국가 건설자와 주스 사업가를 같은 저울에 올린다는 것 자체가 이 책의 넓은 시야를 보여준다.
 
-**둘째, 경제학의 방법론을 인문 영역으로 끌고 들어온다.** 자연실험은 원래 최저임금 인상 효과 같은 경제 문제를 분석하던 도구다. 다이아몬드는 이를 정치사, 종교사, 스포츠사에 적용한다. 스포츠 감독이 팀 성과에 미치는 영향이 20~30% 수준이라는 추정, 종교 창시자 한 명보다 조직가와 후계자, 그리고 정치적 조건이 결합해야 영향력이 확장된다는 결론이 이 방법에서 나온다. 특히 후자는 의미심장하다. 창업자의 카리스마만으로는 지속되지 않으며, 그것을 제도로 만들 '두 번째 사람'과 확산될 '시대'가 필요하다는 이야기이기 때문이다.
+**둘째, 경제학의 방법론을 인문 영역으로 끌고 들어온다.** 자연실험은 원래 최저임금 인상 효과 같은 경제 문제를 분석하던 도구다. 다이아몬드는 이를 정치사, 종교사, 스포츠사에 적용한다. 스포츠 감독이 팀 성과에 미치는 영향이 20–30% 수준이라는 추정, 종교 창시자 한 명보다 조직가와 후계자, 그리고 정치적 조건이 결합해야 영향력이 확장된다는 결론이 이 방법에서 나온다. 특히 후자는 의미심장하다. 창업자의 카리스마만으로는 지속되지 않으며, 그것을 제도로 만들 '두 번째 사람'과 확산될 '시대'가 필요하다는 이야기이기 때문이다.
 
 **셋째, 저자 자신의 지적 궤적이 하나의 서사가 된다.** 『총, 균, 쇠』에서 지리와 환경이라는 초개인적 힘으로 문명의 흥망을 설명했던 학자가, 노년의 신작에서 정반대로 개인에게 시선을 돌렸다. 이것을 변절로 읽을 필요는 없다. 평생 구조를 탐구해온 사람이 마지막에 '그 구조 안에서 개인은 언제 의미가 있는가?'를 묻는 것은, 오히려 자기 이론의 빈칸을 스스로 채우려는 정직한 시도에 가깝다.
 
