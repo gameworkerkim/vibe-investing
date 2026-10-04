@@ -1,8 +1,8 @@
-import { I18N } from "./i18n.js?v=11";
+import { I18N } from "./i18n.js?v=12";
 import {
   ACTIVITIES, ADVENTURE_POOLS, CATEGORIES, CLOTHES, GALLERY, GIFTS, MONTHS, STATS, clamp,
   compactLevel, dateFromTurn, migrate, newState, portraitStage, pickEnding,
-} from "./data.js?v=11";
+} from "./data.js?v=12";
 
 const KEY = "playmalfoy-v1";
 const API = "/api/playmalfoy";
@@ -33,6 +33,9 @@ function applyLang() {
   });
   const sel = $("lang");
   if (sel) sel.value = lang;
+  document.querySelectorAll(".lang-pill").forEach((b) => {
+    b.classList.toggle("on", b.dataset.lang === lang);
+  });
   if ($("rate-name")) $("rate-name").placeholder = t("rateNamePh");
   if ($("rate-comment")) $("rate-comment").placeholder = t("rateCommentPh");
   if (S) renderMain();
@@ -45,6 +48,14 @@ function show(id) {
   document.querySelectorAll(".screen").forEach((n) => n.classList.add("hidden"));
   $(id).classList.remove("hidden");
   window.scrollTo(0, 0);
+}
+
+function setLang(next) {
+  if (!["ko", "en", "ja"].includes(next)) return;
+  lang = next;
+  localStorage.setItem("playmalfoy-lang", lang);
+  applyLang();
+  if (!$("gallery").classList.contains("hidden")) renderGallery();
 }
 
 function persist() {
@@ -560,12 +571,10 @@ async function submitRating() {
 }
 
 function bind() {
-  $("lang").onchange = () => {
-    lang = $("lang").value;
-    localStorage.setItem("playmalfoy-lang", lang);
-    applyLang();
-    if (!$("gallery").classList.contains("hidden")) renderGallery();
-  };
+  $("lang").onchange = () => setLang($("lang").value);
+  document.querySelectorAll(".lang-pill").forEach((b) => {
+    b.onclick = () => setLang(b.dataset.lang);
+  });
   $("age-yes").onclick = () => show("story");
   $("age-no").onclick = () => { location.href = "https://vibequant.cc/"; };
   $("to-pc").onclick = () => show("pc");
@@ -584,7 +593,6 @@ function bind() {
   $("gal-back").onclick = () => show(S ? "main" : "story");
   $("closet-back").onclick = () => show(S ? "main" : "story");
   $("nav-closet").onclick = (e) => { e.preventDefault(); openCloset(); };
-  $("nav-board").onclick = (e) => { e.preventDefault(); openBoard(); };
   $("again").onclick = () => { localStorage.removeItem(KEY); S = null; show("pc"); };
   document.querySelectorAll("[data-pc]").forEach((b) => { b.onclick = () => start(b.dataset.pc); });
   $("btn-share").onclick = (e) => { e.stopPropagation(); toggleShareMenu(); };
@@ -593,9 +601,7 @@ function bind() {
   $("share-menu").querySelectorAll("[data-share]").forEach((b) => { b.onclick = () => shareTo(b.dataset.share); });
   document.addEventListener("click", () => $("share-menu").classList.add("hidden"));
   if (navigator.share) $("share-native")?.classList.remove("hidden");
-  $("btn-board-2")?.addEventListener("click", openBoard);
-  $("end-board")?.addEventListener("click", openBoard);
-  $("board-back").onclick = () => show(S ? "main" : "story");
+  $("board-back")?.addEventListener("click", () => show(S ? "main" : "story"));
   $("rate-submit").onclick = submitRating;
   document.querySelectorAll("#rate-stars .star").forEach((b) => {
     b.onclick = () => { selectedRating = Number(b.dataset.star); renderStars(); };

@@ -1,7 +1,7 @@
 /** Princess Maker-style monthly activities, closet, and ending rules. Ages 21+ AU only. */
 export const MONTHS = 36;
 export const START = { year: 2001, month: 6 };
-export const VERSION = "1.1";
+export const VERSION = "1.2";
 
 export function compactLevel(turn) {
   return Math.min(3, 1 + Math.floor((turn || 0) / 12));
