@@ -19,28 +19,53 @@ export const ACTIVITIES = [
   { id: "dark", cost: 0, gold: 0, stress: 10, stamina: -6, magic: 10, pride: 8, grace: 1, charm: 2, intellect: 4, morality: -8, bond: -1 },
 ];
 
-/** Wearable outfits. Gifting does not advance the month; wearing changes the portrait. */
+/** Wearable outfits, modest → bold. Gifting does not advance the month. */
 export const CLOTHES = [
-  { id: "robe", cost: 0, img: "img/malfoy-0.jpg", gallery: "malfoy-0", grace: 0, charm: 0, starter: true },
-  { id: "waistcoat", cost: 42, img: "img/malfoy-1.jpg", gallery: "malfoy-1", grace: 5, charm: 4 },
-  { id: "daydress", cost: 78, img: "img/malfoy-2.jpg", gallery: "malfoy-2", grace: 10, charm: 8 },
-  { id: "teadress", cost: 64, img: "img/malfoy-2.jpg", gallery: "cg-tea", grace: 7, charm: 9 },
-  { id: "ballgown", cost: 120, img: "img/malfoy-3.jpg", gallery: "malfoy-3", grace: 14, charm: 12 },
+  { id: "robe", cost: 0, img: "img/malfoy-0.jpg", gallery: "malfoy-0", grace: 0, charm: 0, starter: true, tone: "modest" },
+  { id: "navy", cost: 38, img: "img/dress-navy.jpg", gallery: "dress-navy", grace: 4, charm: 3, morality: 2, tone: "modest" },
+  { id: "wool", cost: 44, img: "img/dress-wool.jpg", gallery: "dress-wool", grace: 6, charm: 2, pride: 2, tone: "modest" },
+  { id: "ivory", cost: 52, img: "img/dress-ivory.jpg", gallery: "dress-ivory", grace: 8, charm: 5, morality: 3, tone: "modest" },
+  { id: "waistcoat", cost: 42, img: "img/malfoy-1.jpg", gallery: "malfoy-1", grace: 5, charm: 4, tone: "modest" },
+  { id: "teadress", cost: 64, img: "img/malfoy-2.jpg", gallery: "cg-tea", grace: 7, charm: 9, tone: "mid" },
+  { id: "daydress", cost: 78, img: "img/malfoy-2.jpg", gallery: "malfoy-2", grace: 10, charm: 8, tone: "mid" },
+  { id: "riding", cost: 86, img: "img/dress-riding.jpg", gallery: "dress-riding", grace: 8, charm: 7, pride: 4, tone: "mid" },
+  { id: "silver", cost: 98, img: "img/dress-silver.jpg", gallery: "dress-silver", grace: 12, charm: 11, tone: "mid" },
+  { id: "ballgown", cost: 120, img: "img/malfoy-3.jpg", gallery: "malfoy-3", grace: 14, charm: 12, tone: "bold" },
+  { id: "sequin", cost: 128, img: "img/dress-sequin.jpg", gallery: "dress-sequin", grace: 13, charm: 15, pride: 3, tone: "bold" },
+  { id: "crimson", cost: 140, img: "img/dress-crimson.jpg", gallery: "dress-crimson", grace: 15, charm: 16, bond: 2, tone: "bold" },
+  { id: "blackslit", cost: 155, img: "img/dress-blackslit.jpg", gallery: "dress-blackslit", grace: 12, charm: 18, morality: -3, tone: "bold" },
 ];
 
-/** One-time beauty gifts. Do not change portrait by themselves. */
+/** One-time accessories. Do not change portrait by themselves. */
 export const GIFTS = [
-  { id: "earrings", cost: 36, img: "img/malfoy-1.jpg", gallery: "malfoy-1", grace: 4, charm: 6, pride: 2 },
-  { id: "gloves", cost: 28, img: "img/malfoy-2.jpg", gallery: "malfoy-2", grace: 6, charm: 3 },
-  { id: "makeup", cost: 48, img: "img/malfoy-3.jpg", gallery: "malfoy-3", grace: 8, charm: 10 },
-  { id: "perfume", cost: 32, img: "img/cg-window.jpg", gallery: "cg-window", charm: 7, bond: 2 },
+  { id: "brooch", cost: 22, img: "img/dress-wool.jpg", gallery: "dress-wool", grace: 3, morality: 2, tone: "modest" },
+  { id: "pearl", cost: 34, img: "img/dress-ivory.jpg", gallery: "dress-ivory", grace: 5, charm: 4, morality: 2, tone: "modest" },
+  { id: "collar", cost: 26, img: "img/dress-navy.jpg", gallery: "dress-navy", grace: 4, intellect: 2, tone: "modest" },
+  { id: "earrings", cost: 36, img: "img/malfoy-1.jpg", gallery: "malfoy-1", grace: 4, charm: 6, pride: 2, tone: "mid" },
+  { id: "gloves", cost: 28, img: "img/malfoy-2.jpg", gallery: "malfoy-2", grace: 6, charm: 3, tone: "mid" },
+  { id: "pins", cost: 30, img: "img/dress-silver.jpg", gallery: "dress-silver", grace: 5, charm: 5, tone: "mid" },
+  { id: "makeup", cost: 48, img: "img/malfoy-3.jpg", gallery: "malfoy-3", grace: 8, charm: 10, tone: "bold" },
+  { id: "perfume", cost: 32, img: "img/cg-window.jpg", gallery: "cg-window", charm: 7, bond: 2, tone: "mid" },
+  { id: "fan", cost: 40, img: "img/dress-crimson.jpg", gallery: "dress-crimson", charm: 8, pride: 2, tone: "bold" },
+  { id: "choker", cost: 46, img: "img/dress-blackslit.jpg", gallery: "dress-blackslit", charm: 9, grace: 3, morality: -1, tone: "bold" },
+  { id: "diamond", cost: 70, img: "img/dress-sequin.jpg", gallery: "dress-sequin", charm: 12, grace: 6, pride: 3, tone: "bold" },
 ];
+
+export const GOWNS = ["ballgown", "daydress", "silver", "sequin", "crimson", "blackslit"];
 
 export const GALLERY = [
   { id: "malfoy-0", img: "img/malfoy-0.jpg", stage: 0 },
   { id: "malfoy-1", img: "img/malfoy-1.jpg", stage: 1 },
   { id: "malfoy-2", img: "img/malfoy-2.jpg", stage: 2 },
   { id: "malfoy-3", img: "img/malfoy-3.jpg", stage: 3 },
+  { id: "dress-ivory", img: "img/dress-ivory.jpg" },
+  { id: "dress-navy", img: "img/dress-navy.jpg" },
+  { id: "dress-wool", img: "img/dress-wool.jpg" },
+  { id: "dress-silver", img: "img/dress-silver.jpg" },
+  { id: "dress-riding", img: "img/dress-riding.jpg" },
+  { id: "dress-crimson", img: "img/dress-crimson.jpg" },
+  { id: "dress-blackslit", img: "img/dress-blackslit.jpg" },
+  { id: "dress-sequin", img: "img/dress-sequin.jpg" },
   { id: "cg-window", img: "img/cg-window.jpg" },
   { id: "cg-library", img: "img/cg-library.jpg" },
   { id: "cg-ball", img: "img/cg-ball.jpg" },
@@ -85,7 +110,7 @@ export function newState(pc) {
   return migrate({
     pc,
     turn: 0,
-    gold: 120,
+    gold: 180,
     stress: 18,
     collapsed: false,
     gallery: ["malfoy-0"],
@@ -109,7 +134,7 @@ export function pickEnding(s) {
   const gifts = s.gifts || [];
   if (s.collapsed || s.stamina <= 0) return "collapse";
   if (s.morality < 22 && s.magic >= 68 && s.pride >= 58) return "dark";
-  if (gifts.includes("makeup") && s.grace >= 70 && (owned.includes("ballgown") || owned.includes("daydress"))) {
+  if (gifts.includes("makeup") && s.grace >= 70 && GOWNS.some((id) => owned.includes(id))) {
     return "beauty";
   }
   if (s.pc !== "hermione" && s.bond >= 78 && (s.grace >= 52 || s.charm >= 60)) {
@@ -121,7 +146,7 @@ export function pickEnding(s) {
   if (s.grace >= 68 && s.charm >= 68) return "salon";
   if (s.stamina >= 72 && s.charm >= 52) return "pitch";
   if (s.intellect >= 78 && s.magic >= 68) return "professor";
-  if (owned.length >= 4 && s.charm >= 55 && s.grace >= 50) return "couture";
+  if (owned.length >= 6 && s.charm >= 55 && s.grace >= 50) return "couture";
   if (s.bond >= 58) return "friend";
   return "ordinary";
 }

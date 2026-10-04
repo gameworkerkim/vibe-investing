@@ -1,8 +1,8 @@
-import { I18N } from "./i18n.js?v=4";
+import { I18N } from "./i18n.js?v=6";
 import {
   ACTIVITIES, CLOTHES, GALLERY, GIFTS, MONTHS, STATS, clamp,
   dateFromTurn, migrate, newState, portraitStage, pickEnding,
-} from "./data.js?v=4";
+} from "./data.js?v=6";
 
 const KEY = "playmalfoy-v1";
 const $ = (id) => document.getElementById(id);
@@ -213,10 +213,11 @@ function cardHtml(item, kind) {
   const canGift = S && !has && S.gold >= item.cost && !item.starter;
   const canWear = S && has && kind === "clothes";
   const img = item.img || "img/malfoy-3.jpg";
+  const tone = item.tone ? `<span class="tone tone-${item.tone}">${t("tone." + item.tone)}</span>` : "";
   return `<article class="closet-card">
     <img src="${img}" alt="">
     <div class="meta">
-      <h3>${pack[0]} ${wearing ? "· " + t("wearing") : has ? "· " + t("owned") : ""}</h3>
+      <h3>${pack[0]} ${wearing ? "· " + t("wearing") : has ? "· " + t("owned") : ""} ${tone}</h3>
       <p class="lede">${pack[1]}</p>
       <p class="lede">${item.starter ? t("owned") : item.cost + "g"}</p>
       <div class="row">
@@ -232,9 +233,12 @@ function renderCloset() {
   $("closet-desc").textContent = S ? t("closetD") : t("noSaveCloset");
   if (S) $("closet-gold").textContent = `${t("gold")} ${S.gold}`;
   else $("closet-gold").textContent = "";
-  $("closet-grid").innerHTML =
-    CLOTHES.map((c) => cardHtml(c, "clothes")).join("") +
-    GIFTS.map((g) => cardHtml(g, "gifts")).join("");
+  $("closet-grid").innerHTML = [
+    { title: t("tone.modest"), items: CLOTHES.filter((c) => c.tone === "modest"), kind: "clothes" },
+    { title: t("tone.mid"), items: CLOTHES.filter((c) => c.tone === "mid"), kind: "clothes" },
+    { title: t("tone.bold"), items: CLOTHES.filter((c) => c.tone === "bold"), kind: "clothes" },
+    { title: t("tone.gifts"), items: GIFTS, kind: "gifts" },
+  ].map((g) => `<h2 class="closet-sec">${g.title}</h2>` + g.items.map((i) => cardHtml(i, g.kind)).join("")).join("");
   $("closet-grid").querySelectorAll("[data-gift]").forEach((b) => {
     b.onclick = () => giftItem(b.dataset.gift);
   });
@@ -252,7 +256,14 @@ function giftItem(token) {
   if (bag.includes(id) || S.gold < item.cost) return;
   S.gold -= item.cost;
   bag.push(id);
-  applyDelta({ grace: item.grace || 0, charm: item.charm || 0, pride: item.pride || 0, bond: item.bond || 0 });
+  applyDelta({
+    grace: item.grace || 0,
+    charm: item.charm || 0,
+    pride: item.pride || 0,
+    bond: item.bond || 0,
+    morality: item.morality || 0,
+    intellect: item.intellect || 0,
+  });
   unlock(item.gallery);
   if (kind === "clothes") {
     S.worn = id;
