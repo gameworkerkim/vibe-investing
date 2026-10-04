@@ -1,8 +1,8 @@
-import { I18N } from "./i18n.js";
+import { I18N } from "./i18n.js?v=4";
 import {
   ACTIVITIES, CLOTHES, GALLERY, GIFTS, MONTHS, STATS, clamp,
   dateFromTurn, migrate, newState, portraitStage, pickEnding,
-} from "./data.js";
+} from "./data.js?v=4";
 
 const KEY = "playmalfoy-v1";
 const $ = (id) => document.getElementById(id);
