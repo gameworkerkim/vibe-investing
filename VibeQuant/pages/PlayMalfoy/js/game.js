@@ -1,16 +1,20 @@
-import { I18N } from "./i18n.js?v=8";
+import { I18N } from "./i18n.js?v=9";
 import {
   ACTIVITIES, ADVENTURES, CATEGORIES, CLOTHES, GALLERY, GIFTS, MONTHS, STATS, clamp,
   dateFromTurn, migrate, newState, portraitStage, pickEnding,
-} from "./data.js?v=8";
+} from "./data.js?v=9";
 
 const KEY = "playmalfoy-v1";
+const API = "/api/playmalfoy";
+const GAME_URL = "https://vibequant.cc/PlayMalfoy/";
 const $ = (id) => document.getElementById(id);
 const lang0 = localStorage.getItem("playmalfoy-lang") || (navigator.language || "ko").slice(0, 2);
 let lang = ["ko", "en", "ja"].includes(lang0) ? lang0 : "ko";
 let S = null;
 let lastScreen = "gate";
 let selectedCat = "study";
+let lastEndingId = null;
+let selectedRating = 0;
 
 const t = (k) => {
   const parts = k.split(".");
@@ -29,8 +33,11 @@ function applyLang() {
   });
   const sel = $("lang");
   if (sel) sel.value = lang;
+  if ($("rate-name")) $("rate-name").placeholder = t("rateNamePh");
+  if ($("rate-comment")) $("rate-comment").placeholder = t("rateCommentPh");
   if (S) renderMain();
   if ($("closet") && !$("closet").classList.contains("hidden")) renderCloset();
+  if ($("board") && !$("board").classList.contains("hidden")) renderBoard();
 }
 
 function show(id) {
@@ -266,6 +273,7 @@ function finish() {
   $("end-art").src = portraitSrc();
   $("end-title").textContent = pack[0];
   $("end-body").textContent = pack[1];
+  resetRateForm(id, pack[0]);
   show("end");
 }
 
@@ -377,6 +385,160 @@ function start(pc) {
   persist();
   renderMain();
   show("main");
+  trackPlay();
+}
+
+function getUid() {
+  let u = localStorage.getItem("playmalfoy-uid");
+  if (!u) {
+    u = (crypto.randomUUID ? crypto.randomUUID() : Math.random().toString(36).slice(2) + Date.now().toString(36));
+    localStorage.setItem("playmalfoy-uid", u);
+  }
+  return u;
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+function toast(msg) {
+  const el = $("toast");
+  if (!el) return;
+  el.textContent = msg;
+  el.classList.remove("hidden");
+  clearTimeout(toast._t);
+  toast._t = setTimeout(() => el.classList.add("hidden"), 1800);
+}
+
+function renderCounts(s) {
+  const el = $("play-count");
+  if (!el) return;
+  el.textContent = `${t("todayPlay")} ${s.today} · ${t("totalPlayer")} ${s.total}`;
+}
+
+async function loadStats() {
+  try {
+    const r = await fetch(`${API}/stats`);
+    const s = await r.json();
+    renderCounts(s);
+  } catch {
+    /* ignore */
+  }
+}
+
+function trackPlay() {
+  fetch(`${API}/play`, {
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({ uid: getUid() }),
+  })
+    .then((r) => r.json())
+    .then(renderCounts)
+    .catch(() => {});
+}
+
+function shareText() {
+  if (lastEndingId) return `${t("title")} — ${t("ends." + lastEndingId)[0]}. ${t("shareBody")}`;
+  return `${t("title")} — ${t("shareBody")}`;
+}
+
+function toggleShareMenu() {
+  $("share-menu").classList.toggle("hidden");
+}
+
+function shareTo(kind) {
+  $("share-menu").classList.add("hidden");
+  const text = encodeURIComponent(shareText());
+  const url = encodeURIComponent(GAME_URL);
+  if (kind === "x") {
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, "_blank", "noopener,width=600,height=480");
+  } else if (kind === "threads") {
+    window.open(`https://www.threads.net/intent/post?text=${text}%20${url}`, "_blank", "noopener,width=600,height=600");
+  } else if (kind === "copy") {
+    (navigator.clipboard ? navigator.clipboard.writeText(`${shareText()} ${GAME_URL}`) : Promise.reject())
+      .then(() => toast(t("shareCopied")))
+      .catch(() => {});
+  } else if (kind === "native" && navigator.share) {
+    navigator.share({ title: t("title"), text: shareText(), url: GAME_URL }).catch(() => {});
+  }
+}
+
+function openBoard() {
+  renderBoard();
+  show("board");
+}
+
+async function renderBoard() {
+  const listEl = $("board-list");
+  listEl.innerHTML = `<p class="lede">${t("loading")}</p>`;
+  let list = [];
+  try {
+    const r = await fetch(`${API}/leaderboard`);
+    const data = await r.json();
+    list = data.list || [];
+  } catch {
+    list = [];
+  }
+  listEl.innerHTML = list.length
+    ? list.map(entryHtml).join("")
+    : `<p class="lede">${t("boardEmpty")}</p>`;
+}
+
+function entryHtml(e) {
+  const stars = "★".repeat(e.rating || 0) + "☆".repeat(5 - (e.rating || 0));
+  const endingName = e.ending && t("ends." + e.ending) ? t("ends." + e.ending)[0] : "";
+  const date = e.at ? new Date(e.at).toISOString().slice(0, 10) : "";
+  return `<div class="board-item">
+    <div class="board-top">
+      <span class="board-stars">${stars}</span>
+      <span class="board-name">${escapeHtml(e.name || "")}</span>
+    </div>
+    ${endingName ? `<span class="board-ending">${escapeHtml(endingName)}</span>` : ""}
+    ${e.comment ? `<p class="board-comment">${escapeHtml(e.comment)}</p>` : ""}
+    ${date ? `<span class="board-date">${date}</span>` : ""}
+  </div>`;
+}
+
+function resetRateForm(endingId, endingName) {
+  lastEndingId = endingId;
+  selectedRating = 0;
+  if ($("rate-ending")) $("rate-ending").textContent = endingName;
+  if ($("rate-name")) $("rate-name").value = "";
+  if ($("rate-comment")) $("rate-comment").value = "";
+  if ($("rate-form")) $("rate-form").classList.remove("hidden");
+  if ($("rate-thanks")) $("rate-thanks").classList.add("hidden");
+  renderStars();
+}
+
+function renderStars() {
+  document.querySelectorAll("#rate-stars .star").forEach((b) => {
+    b.classList.toggle("on", Number(b.dataset.star) <= selectedRating);
+  });
+}
+
+async function submitRating() {
+  if (!selectedRating) return toast(t("rateNeedStar"));
+  const btn = $("rate-submit");
+  btn.disabled = true;
+  try {
+    const r = await fetch(`${API}/rating`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        name: $("rate-name").value.trim(),
+        comment: $("rate-comment").value.trim(),
+        rating: selectedRating,
+        ending: lastEndingId,
+      }),
+    });
+    if (!r.ok) throw new Error("fail");
+    $("rate-form").classList.add("hidden");
+    $("rate-thanks").classList.remove("hidden");
+  } catch {
+    toast(t("rateFail"));
+  } finally {
+    btn.disabled = false;
+  }
 }
 
 function bind() {
@@ -404,11 +566,26 @@ function bind() {
   $("gal-back").onclick = () => show(S ? "main" : "story");
   $("closet-back").onclick = () => show(S ? "main" : "story");
   $("nav-closet").onclick = (e) => { e.preventDefault(); openCloset(); };
+  $("nav-board").onclick = (e) => { e.preventDefault(); openBoard(); };
   $("again").onclick = () => { localStorage.removeItem(KEY); S = null; show("pc"); };
   document.querySelectorAll("[data-pc]").forEach((b) => { b.onclick = () => start(b.dataset.pc); });
+  $("btn-share").onclick = (e) => { e.stopPropagation(); toggleShareMenu(); };
+  $("btn-share-2")?.addEventListener("click", (e) => { e.stopPropagation(); toggleShareMenu(); });
+  $("end-share")?.addEventListener("click", (e) => { e.stopPropagation(); toggleShareMenu(); });
+  $("share-menu").querySelectorAll("[data-share]").forEach((b) => { b.onclick = () => shareTo(b.dataset.share); });
+  document.addEventListener("click", () => $("share-menu").classList.add("hidden"));
+  if (navigator.share) $("share-native")?.classList.remove("hidden");
+  $("btn-board-2")?.addEventListener("click", openBoard);
+  $("end-board")?.addEventListener("click", openBoard);
+  $("board-back").onclick = () => show(S ? "main" : "story");
+  $("rate-submit").onclick = submitRating;
+  document.querySelectorAll("#rate-stars .star").forEach((b) => {
+    b.onclick = () => { selectedRating = Number(b.dataset.star); renderStars(); };
+  });
 }
 
 bind();
 applyLang();
 if (localStorage.getItem(KEY)) $("btn-load").classList.remove("hidden");
 show("gate");
+loadStats();
