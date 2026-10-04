@@ -2463,6 +2463,7 @@ function buildSeo(columns, tech, cti = [], essays = []) {
   const apexUrls = [
     entry(absoluteSitePath(SITE), today),
     entry(absoluteSitePath(`${SITE}/about`), today),
+    entry(absoluteSitePath(`${SITE}/PlayMalfoy`), today),
     entry(absoluteSitePath(SITE_RESEARCH), today),
     ...researchPages
       .filter(Boolean)
