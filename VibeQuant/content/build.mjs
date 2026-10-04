@@ -701,6 +701,8 @@ const SLUG_OVERRIDES = {
   "CTI-2026-0910-KIMSUKY.md": "kimsuky-ai-20260910",
   "CTI-2026-0913-CHINA-HACKING.md": "china-hacking-20260913",
   "CTI-2026-1002-AI-BANK-HACKING.md": "ai-bank-hacking",
+  "CTI-2026-1004-AI-HACKING-TREND.md": "ai-hacking-trend",
+  "AI_Hacking/AI-Hacking-Trend.md": "ai-hacking-trend",
   "USA/Age-of-USD.md": "age-of-usd",
   "AI-IDC/Why-High-Power-Datacenter.md": "why-high-power-datacenter",
   "BitCoin/BTC-Arbitrage-Bithumb-Column.md": "btc-arbitrage-bithumb",

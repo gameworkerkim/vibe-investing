@@ -1,6 +1,82 @@
+---
+id: CTI-2026-1004-AI-HACKING-TREND
+title: "AI가 연 것은 새로운 문이 아니라, 우리가 잠그지 않은 옆문이다"
+title_en: "AI Did Not Open a New Door — It Walked Through the Side Door We Left Unlocked"
+subtitle: "AI LLM을 악용한 금융·기업 해킹 사례에서 우리가 배워야 할 것"
+description: "AI가 연 것은 새로운 문이 아니라, 우리가 잠그지 않은 옆문이다. 확인된 기법은 크리덴셜 스터핑이다. 기본기의 빈틈은 이제는 반드시 발견된다."
+abstract: |
+  2026-09 말 신한·KB·하나·BNK 등 국내 은행권이 연달아 뚫렸다. 확인된 기법은 크리덴셜 스터핑이며 침투 경로는 핵심 뱅킹이 아니라 대출모집인·직원 업무 앱 같은 옆문이다. ARTEX AI 사용은 미확정.
+  Anthropic Claude·Google Gemini 평가 사고, Sysdig JadePuffer, Fideuram AI 보이스피싱, GeminiJack, GTG-1002 등 공개 사례를 묶어 CISO 실행 로드맵을 정리한다.
+  AI가 바꾼 것은 공격의 종류가 아니라 경제학이다. TLP:CLEAR. 법률·투자 권유 아님.
+summary_for_ai: |
+  CTI analytical column (KO), id CTI-2026-1004-AI-HACKING-TREND, date 2026-10-04, TLP:CLEAR, group korea-breach.
+  Thesis: AI did not invent new attacks; it cheapens old ones (credential stuffing, weak passwords, leaked creds, unpatched KEV). Korean bank leaks via side-door convenience systems, not core banking. ARTEX AI string unconfirmed.
+  Cases: Anthropic Claude eval escape 2026-07; Google Gemini eval 2026-09; JadePuffer Langflow CVE-2025-3248; Fideuram ~€95M AI voice/WhatsApp; GeminiJack zero-click; GTG-1002 Claude Code espionage.
+  Defense: MFA, ASM by reachability, out-of-band verify, deny-by-default agent egress, machine-speed first response, AI as Excel not oracle. Not a how-to. Not legal/investment advice.
+date: 2026-10-04
+updated: 2026-10-04
+author: "Dennis Kim (김호광 / HoKwang Kim)"
+email: "gameworker@gmail.com"
+github: "gameworkerkim"
+lang: ko
+tags:
+  - Korea-Breach
+  - AI-Hacking
+  - Credential-Stuffing
+  - Agent
+  - Bank
+  - CISO
+keywords:
+  - "AI 해킹"
+  - "크리덴셜 스터핑"
+  - "은행권 정보유출"
+  - "옆문"
+  - "프롬프트 인젝션"
+  - "에이전틱 방어"
+group: korea-breach
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/ai-hacking-trend.jpg"
+image: "https://vibequant.cc/og/ai-hacking-trend.jpg"
+schema_type: TechArticle
+classification: "TLP:CLEAR"
+severity: HIGH
+confidence: "B2"
+license: "CC BY-NC-SA 4.0"
+robots: index,follow
+canonical: "https://cti.vibequant.cc/cti/ai-hacking-trend/"
+draft: true
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>AI가 연 것은 새로운 문이 아니라, 우리가 잠그지 않은 옆문이다 · VibeQuant CTI</title>
+  <meta name="description" content="AI가 연 것은 새로운 문이 아니라, 우리가 잠그지 않은 옆문이다. 확인된 기법은 크리덴셜 스터핑이다. 기본기의 빈틈은 이제는 반드시 발견된다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "AI가 연 것은 새로운 문이 아니라, 우리가 잠그지 않은 옆문이다",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-04",
+    "keywords": ["AI 해킹", "크리덴셜 스터핑", "은행권 정보유출", "옆문", "프롬프트 인젝션", "에이전틱 방어"]
+  }
+  </script>
+-->
+
 # AI가 연 것은 새로운 문이 아니라, 우리가 잠그지 않은 옆문이다
 
-### — AI LLM을 악용한 금융·기업 해킹 사례에서 우리가 배워야 할 것
+## AI LLM을 악용한 금융·기업 해킹 사례에서 우리가 배워야 할 것
+
+![반쯤 열린 흰 문. 잠그지 않은 옆문의 은유](https://vibequant.cc/og/ai-hacking-trend.jpg)
+
+*반쯤 열린 문. AI가 연 것은 새 문이 아니라, 우리가 잠그지 않은 옆문이다. Klearchos Kapoutsis, CC BY 2.0.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 4일
+
+> **분류**: TLP:CLEAR | **문서유형**: 분석 칼럼 (Analytical Column) | **작성일**: 2026-10-04
 
 > **이 글에 대하여**
 > - **기준일:** 2026년 10월 4일. 본문의 사례는 모두 실제로 공개 보도되거나 당사자가 발표한 사건이며, 가상의 시나리오는 없다. 각 사례의 출처는 각주와 글 말미의 참고문헌에 정리했다.
