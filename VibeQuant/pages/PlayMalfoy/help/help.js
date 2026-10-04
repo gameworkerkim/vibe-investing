@@ -1,5 +1,5 @@
-import { I18N } from "../js/i18n.js?v=6";
-import { ENDING_LIST } from "../js/data.js?v=6";
+import { I18N } from "../js/i18n.js?v=7";
+import { ENDING_LIST } from "../js/data.js?v=7";
 
 const lang0 = localStorage.getItem("playmalfoy-lang") || (navigator.language || "ko").slice(0, 2);
 let lang = ["ko", "en", "ja"].includes(lang0) ? lang0 : "ko";

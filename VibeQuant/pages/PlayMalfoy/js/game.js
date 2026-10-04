@@ -1,8 +1,8 @@
-import { I18N } from "./i18n.js?v=6";
+import { I18N } from "./i18n.js?v=7";
 import {
-  ACTIVITIES, CLOTHES, GALLERY, GIFTS, MONTHS, STATS, clamp,
+  ACTIVITIES, ADVENTURES, CATEGORIES, CLOTHES, GALLERY, GIFTS, MONTHS, STATS, clamp,
   dateFromTurn, migrate, newState, portraitStage, pickEnding,
-} from "./data.js?v=6";
+} from "./data.js?v=7";
 
 const KEY = "playmalfoy-v1";
 const $ = (id) => document.getElementById(id);
@@ -10,6 +10,7 @@ const lang0 = localStorage.getItem("playmalfoy-lang") || (navigator.language || 
 let lang = ["ko", "en", "ja"].includes(lang0) ? lang0 : "ko";
 let S = null;
 let lastScreen = "gate";
+let selectedCat = "study";
 
 const t = (k) => {
   const parts = k.split(".");
@@ -87,14 +88,58 @@ function renderMain() {
   $("hud-date").textContent = `${d.year}.${String(d.month).padStart(2, "0")} · ${d.age}${t("age")} · ${t("compact")} ${Math.min(3, 1 + Math.floor(S.turn / 12))}`;
   $("hud-gold").textContent = `${t("gold")} ${S.gold}`;
   $("hud-stress").textContent = `${t("stress")} ${S.stress}`;
-  $("portrait").src = portraitSrc();
+  swapPortrait();
   $("stats").innerHTML = STATS.map((k) => {
     const v = S[k];
     return `<div class="stat"><span>${t("stats." + k)}</span><div class="bar"><i style="width:${Math.min(100, v)}%"></i></div><b>${v}</b></div>`;
   }).join("") + `<div class="stat"><span>${t("stress")}</span><div class="bar stress"><i style="width:${S.stress}%"></i></div><b>${S.stress}</b></div>`;
   $("log").innerHTML = `<strong>${t("logH")}</strong><div>${(S.log || []).map((x) => `<div>${x}</div>`).join("")}</div>`;
+  renderAdvice();
+  renderMenu();
+}
+
+function swapPortrait() {
+  const img = $("portrait");
+  img.src = portraitSrc();
+  img.classList.remove("swap");
+  void img.offsetWidth;
+  img.classList.add("swap");
+}
+
+function adviceFor() {
+  const d = dateFromTurn(S.turn);
+  if (S.stress >= 80) return t("advice.ill");
+  if (S.stamina < 22) return t("advice.rest");
+  if (S.stress >= 55) return t("advice.stress");
+  if (d.month === 11 || d.month === 12) return t("advice.ball");
+  if (S.gold < 30) return t("advice.gold");
+  if (S.bond < 30) return t("advice.bond");
+  if (S.grace < 20) return t("advice.grace");
+  if (S.charm < 25) return t("advice.charm");
+  if (S.magic < 55) return t("advice.magic");
+  if (S.morality < 20) return t("advice.morality");
+  if (S.intellect < 45) return t("advice.intellect");
+  return t("advice.fine");
+}
+
+function renderAdvice() {
+  $("advisor-msg").textContent = adviceFor();
+}
+
+function renderMenu() {
   const sick = S.stress >= 80;
-  $("acts").innerHTML = ACTIVITIES.map((a) => {
+  if (sick) selectedCat = "rest";
+  $("menu-bar").innerHTML = CATEGORIES.map((c) => {
+    const on = c.id === selectedCat;
+    return `<button class="menu-btn ${on ? "active" : ""}" data-cat="${c.id}">
+      <span class="mi">${c.icon}</span><span>${t("cat." + c.id)}</span>
+    </button>`;
+  }).join("");
+  $("menu-bar").querySelectorAll("[data-cat]").forEach((b) => {
+    b.onclick = () => { selectedCat = b.dataset.cat; renderMenu(); };
+  });
+  const acts = ACTIVITIES.filter((a) => a.cat === selectedCat);
+  $("acts").innerHTML = acts.map((a) => {
     const name = t("act." + a.id);
     const locked = S.gold < a.cost || (sick && a.id !== "rest");
     return `<button class="act" data-act="${a.id}" ${locked ? "disabled" : ""}>
@@ -159,16 +204,16 @@ function runEvent(ev) {
   return true;
 }
 
-function doAct(id) {
+async function doAct(id) {
   const a = ACTIVITIES.find((x) => x.id === id);
-  if (!a) return;
-  if (S.gold < a.cost) return;
+  if (!a || S.gold < a.cost) return;
+  const nm = t("act." + id);
+  await playTransition(nm[0], nm[1]);
   S.gold -= a.cost;
   applyDelta({ ...a, gold: a.gold });
   applyDelta(pcBonus(id));
   unlock(a.gallery);
   const played = dateFromTurn(S.turn);
-  const nm = t("act." + id);
   addLog(`${played.year}.${played.month} — ${nm[0]}`);
   if (S.stamina <= 0) {
     S.collapsed = true;
@@ -177,11 +222,36 @@ function doAct(id) {
   }
   S.turn += 1;
   persist();
+  if (a.adventure) return void runAdventure();
   const forced = seasonal(played.month);
   if (forced) return void runEvent(forced);
   if (Math.random() < 0.42) return void runEvent(randomEvent());
   if (S.turn >= MONTHS) return finish();
   renderMain();
+}
+
+function runAdventure() {
+  const adv = ADVENTURES[Math.floor(Math.random() * ADVENTURES.length)];
+  if (adv.gal) unlock(adv.gal);
+  if (adv.d) applyDelta(adv.d);
+  addLog(t(adv.key));
+  openEvent(`<p>${t(adv.key)}</p>`, adv.img);
+}
+
+function playTransition(title, sub) {
+  return new Promise((res) => {
+    $("transition-title").textContent = title;
+    $("transition-sub").textContent = sub;
+    const el = $("transition");
+    el.classList.remove("hidden", "run");
+    void el.offsetWidth;
+    el.classList.add("run");
+    setTimeout(() => {
+      el.classList.add("hidden");
+      el.classList.remove("run");
+      res();
+    }, 1050);
+  });
 }
 
 function finish() {

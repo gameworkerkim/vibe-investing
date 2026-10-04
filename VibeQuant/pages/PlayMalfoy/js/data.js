@@ -5,18 +5,40 @@ export const START = { year: 2001, month: 6 };
 export const STATS = ["stamina", "magic", "pride", "grace", "charm", "intellect", "morality", "bond"];
 
 export const ACTIVITIES = [
-  { id: "etiquette", cost: 35, gold: 0, stress: 4, stamina: -8, magic: 0, pride: 4, grace: 10, charm: 6, intellect: 2, morality: 2, bond: 1 },
-  { id: "wardrobe", cost: 55, gold: 0, stress: 3, stamina: -4, magic: 0, pride: 2, grace: 12, charm: 8, intellect: 0, morality: 0, bond: 1, gallery: "malfoy-2" },
-  { id: "salon", cost: 45, gold: 0, stress: 6, stamina: -6, magic: 0, pride: 6, grace: 7, charm: 10, intellect: 1, morality: -1, bond: 0, gallery: "cg-ball" },
-  { id: "potions", cost: 25, gold: 0, stress: 7, stamina: -7, magic: 8, pride: 1, grace: 0, charm: 0, intellect: 8, morality: 1, bond: 0 },
-  { id: "library", cost: 10, gold: 0, stress: 5, stamina: -5, magic: 4, pride: -1, grace: 1, charm: 0, intellect: 10, morality: 3, bond: 1, gallery: "cg-library" },
-  { id: "ministry", cost: 0, gold: 40, stress: 8, stamina: -10, magic: 1, pride: -4, grace: 1, charm: 2, intellect: 5, morality: 6, bond: 0 },
-  { id: "duel", cost: 20, gold: 0, stress: 6, stamina: 6, magic: 9, pride: 7, grace: -4, charm: 1, intellect: 0, morality: -2, bond: 0 },
-  { id: "pitch", cost: 15, gold: 0, stress: 3, stamina: 8, magic: 2, pride: 3, grace: -2, charm: 5, intellect: 0, morality: 0, bond: 1 },
-  { id: "kitchen", cost: 12, gold: 0, stress: -4, stamina: 2, magic: 0, pride: -3, grace: 2, charm: 5, intellect: 0, morality: 2, bond: 4, gallery: "cg-tea" },
-  { id: "talk", cost: 8, gold: 0, stress: -2, stamina: -2, magic: 0, pride: -2, grace: 2, charm: 3, intellect: 1, morality: 2, bond: 8, gallery: "cg-window" },
-  { id: "rest", cost: 0, gold: 0, stress: -14, stamina: 12, magic: 0, pride: 0, grace: 0, charm: 0, intellect: 0, morality: 0, bond: 1 },
-  { id: "dark", cost: 0, gold: 0, stress: 10, stamina: -6, magic: 10, pride: 8, grace: 1, charm: 2, intellect: 4, morality: -8, bond: -1 },
+  { id: "etiquette", cat: "study", cost: 35, gold: 0, stress: 4, stamina: -8, magic: 0, pride: 4, grace: 10, charm: 6, intellect: 2, morality: 2, bond: 1 },
+  { id: "wardrobe", cat: "study", cost: 55, gold: 0, stress: 3, stamina: -4, magic: 0, pride: 2, grace: 12, charm: 8, intellect: 0, morality: 0, bond: 1, gallery: "malfoy-2" },
+  { id: "potions", cat: "study", cost: 25, gold: 0, stress: 7, stamina: -7, magic: 8, pride: 1, grace: 0, charm: 0, intellect: 8, morality: 1, bond: 0 },
+  { id: "library", cat: "study", cost: 10, gold: 0, stress: 5, stamina: -5, magic: 4, pride: -1, grace: 1, charm: 0, intellect: 10, morality: 3, bond: 1, gallery: "cg-library" },
+  { id: "dark", cat: "study", cost: 0, gold: 0, stress: 10, stamina: -6, magic: 10, pride: 8, grace: 1, charm: 2, intellect: 4, morality: -8, bond: -1 },
+  { id: "duel", cat: "train", cost: 20, gold: 0, stress: 6, stamina: 6, magic: 9, pride: 7, grace: -4, charm: 1, intellect: 0, morality: -2, bond: 0 },
+  { id: "pitch", cat: "train", cost: 15, gold: 0, stress: 3, stamina: 8, magic: 2, pride: 3, grace: -2, charm: 5, intellect: 0, morality: 0, bond: 1 },
+  { id: "apprentice", cat: "train", cost: 40, gold: 0, stress: 6, stamina: -8, magic: 12, pride: 1, grace: 0, charm: 0, intellect: 3, morality: 1, bond: 0, gallery: "cg-library" },
+  { id: "ministry", cat: "work", cost: 0, gold: 40, stress: 8, stamina: -10, magic: 1, pride: -4, grace: 1, charm: 2, intellect: 5, morality: 6, bond: 0 },
+  { id: "kitchen", cat: "work", cost: 12, gold: 0, stress: -4, stamina: 2, magic: 0, pride: -3, grace: 2, charm: 5, intellect: 0, morality: 2, bond: 4, gallery: "cg-tea" },
+  { id: "shop", cat: "work", cost: 0, gold: 34, stress: 6, stamina: -6, magic: 0, pride: -3, grace: 1, charm: 3, intellect: 2, morality: 2, bond: 0 },
+  { id: "salon", cat: "social", cost: 45, gold: 0, stress: 6, stamina: -6, magic: 0, pride: 6, grace: 7, charm: 10, intellect: 1, morality: -1, bond: 0, gallery: "cg-ball" },
+  { id: "ball", cat: "social", cost: 55, gold: 0, stress: 5, stamina: -5, magic: 0, pride: 3, grace: 9, charm: 10, intellect: 1, morality: 0, bond: 2, gallery: "cg-ball" },
+  { id: "forest", cat: "adventure", cost: 10, gold: 0, stress: 7, stamina: -9, magic: 5, pride: 2, grace: 0, charm: 1, intellect: 2, morality: -1, bond: 0, adventure: true },
+  { id: "rest", cat: "rest", cost: 0, gold: 0, stress: -14, stamina: 12, magic: 0, pride: 0, grace: 0, charm: 0, intellect: 0, morality: 0, bond: 1 },
+  { id: "talk", cat: "rest", cost: 8, gold: 0, stress: -2, stamina: -2, magic: 0, pride: -2, grace: 2, charm: 3, intellect: 1, morality: 2, bond: 8, gallery: "cg-window" },
+];
+
+/** Princess Maker 2-style menu categories. */
+export const CATEGORIES = [
+  { id: "study", icon: "◈" },
+  { id: "train", icon: "✦" },
+  { id: "work", icon: "●" },
+  { id: "social", icon: "❖" },
+  { id: "adventure", icon: "✧" },
+  { id: "rest", icon: "☾" },
+];
+
+/** Random Forbidden Forest adventure outcomes. */
+export const ADVENTURES = [
+  { key: "advUnicorn", img: "img/cg-window.jpg", gal: "cg-window", d: { magic: 3, morality: 3, grace: 2 } },
+  { key: "advThestral", img: "img/cg-library.jpg", gal: "cg-library", d: { magic: 4, intellect: 3, morality: 1 } },
+  { key: "advVenom", img: "img/malfoy-0.jpg", d: { magic: 5, morality: -4, stress: 6 } },
+  { key: "advTreasure", img: "img/cg-ball.jpg", d: { gold: 40, charm: 2, pride: 1 } },
 ];
 
 /** Wearable outfits, modest → bold. Gifting does not advance the month. */
