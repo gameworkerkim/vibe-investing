@@ -1,8 +1,8 @@
-import { I18N } from "./i18n.js?v=7";
+import { I18N } from "./i18n.js?v=8";
 import {
   ACTIVITIES, ADVENTURES, CATEGORIES, CLOTHES, GALLERY, GIFTS, MONTHS, STATS, clamp,
   dateFromTurn, migrate, newState, portraitStage, pickEnding,
-} from "./data.js?v=7";
+} from "./data.js?v=8";
 
 const KEY = "playmalfoy-v1";
 const $ = (id) => document.getElementById(id);
@@ -226,6 +226,10 @@ async function doAct(id) {
   const forced = seasonal(played.month);
   if (forced) return void runEvent(forced);
   if (Math.random() < 0.42) return void runEvent(randomEvent());
+  if (a.gallery) {
+    const g = GALLERY.find((x) => x.id === a.gallery);
+    if (g) return void openEvent(`<p>${nm[1]}</p>`, g.img);
+  }
   if (S.turn >= MONTHS) return finish();
   renderMain();
 }

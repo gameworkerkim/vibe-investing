@@ -12,13 +12,13 @@ export const ACTIVITIES = [
   { id: "dark", cat: "study", cost: 0, gold: 0, stress: 10, stamina: -6, magic: 10, pride: 8, grace: 1, charm: 2, intellect: 4, morality: -8, bond: -1 },
   { id: "duel", cat: "train", cost: 20, gold: 0, stress: 6, stamina: 6, magic: 9, pride: 7, grace: -4, charm: 1, intellect: 0, morality: -2, bond: 0 },
   { id: "pitch", cat: "train", cost: 15, gold: 0, stress: 3, stamina: 8, magic: 2, pride: 3, grace: -2, charm: 5, intellect: 0, morality: 0, bond: 1 },
-  { id: "apprentice", cat: "train", cost: 40, gold: 0, stress: 6, stamina: -8, magic: 12, pride: 1, grace: 0, charm: 0, intellect: 3, morality: 1, bond: 0, gallery: "cg-library" },
+  { id: "apprentice", cat: "train", cost: 40, gold: 0, stress: 6, stamina: -8, magic: 12, pride: 1, grace: 0, charm: 0, intellect: 3, morality: 1, bond: 0, gallery: "cg-apprentice" },
   { id: "ministry", cat: "work", cost: 0, gold: 40, stress: 8, stamina: -10, magic: 1, pride: -4, grace: 1, charm: 2, intellect: 5, morality: 6, bond: 0 },
   { id: "kitchen", cat: "work", cost: 12, gold: 0, stress: -4, stamina: 2, magic: 0, pride: -3, grace: 2, charm: 5, intellect: 0, morality: 2, bond: 4, gallery: "cg-tea" },
-  { id: "shop", cat: "work", cost: 0, gold: 34, stress: 6, stamina: -6, magic: 0, pride: -3, grace: 1, charm: 3, intellect: 2, morality: 2, bond: 0 },
+  { id: "shop", cat: "work", cost: 0, gold: 34, stress: 6, stamina: -6, magic: 0, pride: -3, grace: 1, charm: 3, intellect: 2, morality: 2, bond: 0, gallery: "cg-shop" },
   { id: "salon", cat: "social", cost: 45, gold: 0, stress: 6, stamina: -6, magic: 0, pride: 6, grace: 7, charm: 10, intellect: 1, morality: -1, bond: 0, gallery: "cg-ball" },
   { id: "ball", cat: "social", cost: 55, gold: 0, stress: 5, stamina: -5, magic: 0, pride: 3, grace: 9, charm: 10, intellect: 1, morality: 0, bond: 2, gallery: "cg-ball" },
-  { id: "forest", cat: "adventure", cost: 10, gold: 0, stress: 7, stamina: -9, magic: 5, pride: 2, grace: 0, charm: 1, intellect: 2, morality: -1, bond: 0, adventure: true },
+  { id: "forest", cat: "adventure", cost: 10, gold: 0, stress: 7, stamina: -9, magic: 5, pride: 2, grace: 0, charm: 1, intellect: 2, morality: -1, bond: 0, adventure: true, gallery: "cg-forest" },
   { id: "rest", cat: "rest", cost: 0, gold: 0, stress: -14, stamina: 12, magic: 0, pride: 0, grace: 0, charm: 0, intellect: 0, morality: 0, bond: 1 },
   { id: "talk", cat: "rest", cost: 8, gold: 0, stress: -2, stamina: -2, magic: 0, pride: -2, grace: 2, charm: 3, intellect: 1, morality: 2, bond: 8, gallery: "cg-window" },
 ];
@@ -35,10 +35,10 @@ export const CATEGORIES = [
 
 /** Random Forbidden Forest adventure outcomes. */
 export const ADVENTURES = [
-  { key: "advUnicorn", img: "img/cg-window.jpg", gal: "cg-window", d: { magic: 3, morality: 3, grace: 2 } },
-  { key: "advThestral", img: "img/cg-library.jpg", gal: "cg-library", d: { magic: 4, intellect: 3, morality: 1 } },
-  { key: "advVenom", img: "img/malfoy-0.jpg", d: { magic: 5, morality: -4, stress: 6 } },
-  { key: "advTreasure", img: "img/cg-ball.jpg", d: { gold: 40, charm: 2, pride: 1 } },
+  { key: "advUnicorn", img: "img/cg-forest-unicorn.jpg", gal: "cg-forest-unicorn", d: { magic: 3, morality: 3, grace: 2 } },
+  { key: "advThestral", img: "img/cg-forest-thestral.jpg", gal: "cg-forest-thestral", d: { magic: 4, intellect: 3, morality: 1 } },
+  { key: "advVenom", img: "img/cg-forest-venom.jpg", gal: "cg-forest-venom", d: { magic: 5, morality: -4, stress: 6 } },
+  { key: "advTreasure", img: "img/cg-forest-treasure.jpg", gal: "cg-forest-treasure", d: { gold: 40, charm: 2, pride: 1 } },
 ];
 
 /** Wearable outfits, modest → bold. Gifting does not advance the month. */
@@ -92,6 +92,13 @@ export const GALLERY = [
   { id: "cg-library", img: "img/cg-library.jpg" },
   { id: "cg-ball", img: "img/cg-ball.jpg" },
   { id: "cg-tea", img: "img/cg-tea.jpg" },
+  { id: "cg-apprentice", img: "img/cg-apprentice.jpg" },
+  { id: "cg-shop", img: "img/cg-shop.jpg" },
+  { id: "cg-forest", img: "img/cg-forest.jpg" },
+  { id: "cg-forest-unicorn", img: "img/cg-forest-unicorn.jpg" },
+  { id: "cg-forest-thestral", img: "img/cg-forest-thestral.jpg" },
+  { id: "cg-forest-venom", img: "img/cg-forest-venom.jpg" },
+  { id: "cg-forest-treasure", img: "img/cg-forest-treasure.jpg" },
 ];
 
 export const ENDING_LIST = [
