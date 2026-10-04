@@ -1,8 +1,8 @@
-import { I18N } from "./i18n.js?v=10";
+import { I18N } from "./i18n.js?v=11";
 import {
   ACTIVITIES, ADVENTURE_POOLS, CATEGORIES, CLOTHES, GALLERY, GIFTS, MONTHS, STATS, clamp,
   compactLevel, dateFromTurn, migrate, newState, portraitStage, pickEnding,
-} from "./data.js?v=10";
+} from "./data.js?v=11";
 
 const KEY = "playmalfoy-v1";
 const API = "/api/playmalfoy";
@@ -160,7 +160,9 @@ function renderMenu() {
     const locked = levelLocked || S.gold < a.cost || (sick && a.cat !== "rest");
     const costLine = a.cost ? `${a.cost}g` : `+${a.gold || 0}g`;
     const extra = levelLocked ? t("unlockAt").replace("{n}", need) : costLine;
-    return `<button class="act" data-act="${a.id}" ${locked ? "disabled" : ""}>
+    const badge = levelLocked ? `<span class="lock-badge">${t("lvlLock")}</span>` : "";
+    return `<button class="act ${levelLocked ? "lv-locked" : ""}" data-act="${a.id}" ${locked ? "disabled" : ""}>
+      ${badge}
       <strong>${name[0]}</strong>
       <small>${name[1]} · ${extra}</small>
     </button>`;
