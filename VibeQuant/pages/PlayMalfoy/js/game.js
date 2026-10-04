@@ -1,8 +1,8 @@
-import { I18N } from "./i18n.js?v=9";
+import { I18N } from "./i18n.js?v=10";
 import {
-  ACTIVITIES, ADVENTURES, CATEGORIES, CLOTHES, GALLERY, GIFTS, MONTHS, STATS, clamp,
-  dateFromTurn, migrate, newState, portraitStage, pickEnding,
-} from "./data.js?v=9";
+  ACTIVITIES, ADVENTURE_POOLS, CATEGORIES, CLOTHES, GALLERY, GIFTS, MONTHS, STATS, clamp,
+  compactLevel, dateFromTurn, migrate, newState, portraitStage, pickEnding,
+} from "./data.js?v=10";
 
 const KEY = "playmalfoy-v1";
 const API = "/api/playmalfoy";
@@ -67,6 +67,10 @@ function pcBonus(id) {
   if (id === "kitchen" && S.pc === "ron") return { bond: 3, stress: -4 };
   if (id === "library" && S.pc === "hermione") return { intellect: 3, bond: 2 };
   if (id === "duel" && S.pc === "harry") return { magic: 2, bond: 1 };
+  if (id === "dateHarry") return S.pc === "harry" ? { bond: 6, charm: 2 } : { charm: 2, bond: 1 };
+  if (id === "dateRon") return S.pc === "ron" ? { bond: 6, charm: 2 } : { charm: 3 };
+  if (id === "dateHermione") return S.pc === "hermione" ? { intellect: 4, bond: 3 } : { intellect: 2, bond: 1 };
+  if (id === "therapy") return S.pc === "hermione" ? { intellect: 1, stress: -2 } : {};
   return {};
 }
 
@@ -92,7 +96,8 @@ function portraitSrc() {
 function renderMain() {
   if (!S) return;
   const d = dateFromTurn(S.turn);
-  $("hud-date").textContent = `${d.year}.${String(d.month).padStart(2, "0")} · ${d.age}${t("age")} · ${t("compact")} ${Math.min(3, 1 + Math.floor(S.turn / 12))}`;
+  const lv = compactLevel(S.turn);
+  $("hud-date").textContent = `${d.year}.${String(d.month).padStart(2, "0")} · ${d.age}${t("age")} · ${t("compact")} ${lv}`;
   $("hud-gold").textContent = `${t("gold")} ${S.gold}`;
   $("hud-stress").textContent = `${t("stress")} ${S.stress}`;
   swapPortrait();
@@ -126,6 +131,7 @@ function adviceFor() {
   if (S.magic < 55) return t("advice.magic");
   if (S.morality < 20) return t("advice.morality");
   if (S.intellect < 45) return t("advice.intellect");
+  if (compactLevel(S.turn) === 1 && S.turn >= 8) return t("advice.level");
   return t("advice.fine");
 }
 
@@ -135,6 +141,7 @@ function renderAdvice() {
 
 function renderMenu() {
   const sick = S.stress >= 80;
+  const lv = compactLevel(S.turn);
   if (sick) selectedCat = "rest";
   $("menu-bar").innerHTML = CATEGORIES.map((c) => {
     const on = c.id === selectedCat;
@@ -148,10 +155,14 @@ function renderMenu() {
   const acts = ACTIVITIES.filter((a) => a.cat === selectedCat);
   $("acts").innerHTML = acts.map((a) => {
     const name = t("act." + a.id);
-    const locked = S.gold < a.cost || (sick && a.id !== "rest");
+    const need = a.minLevel || 1;
+    const levelLocked = need > lv;
+    const locked = levelLocked || S.gold < a.cost || (sick && a.cat !== "rest");
+    const costLine = a.cost ? `${a.cost}g` : `+${a.gold || 0}g`;
+    const extra = levelLocked ? t("unlockAt").replace("{n}", need) : costLine;
     return `<button class="act" data-act="${a.id}" ${locked ? "disabled" : ""}>
       <strong>${name[0]}</strong>
-      <small>${name[1]} · ${a.cost ? a.cost + "g" : "+" + (a.gold || 0) + "g"}</small>
+      <small>${name[1]} · ${extra}</small>
     </button>`;
   }).join("");
   $("acts").querySelectorAll("[data-act]").forEach((b) => { b.onclick = () => doAct(b.dataset.act); });
@@ -213,7 +224,8 @@ function runEvent(ev) {
 
 async function doAct(id) {
   const a = ACTIVITIES.find((x) => x.id === id);
-  if (!a || S.gold < a.cost) return;
+  const lv = compactLevel(S.turn);
+  if (!a || S.gold < a.cost || (a.minLevel || 1) > lv) return;
   const nm = t("act." + id);
   await playTransition(nm[0], nm[1]);
   S.gold -= a.cost;
@@ -227,9 +239,12 @@ async function doAct(id) {
     addLog(t("collapsed"));
     return finish();
   }
+  const prevLv = compactLevel(S.turn);
   S.turn += 1;
+  const nextLv = compactLevel(S.turn);
+  if (nextLv > prevLv) addLog(t("levelUp" + nextLv));
   persist();
-  if (a.adventure) return void runAdventure();
+  if (a.adventure) return void runAdventure(a);
   const forced = seasonal(played.month);
   if (forced) return void runEvent(forced);
   if (Math.random() < 0.42) return void runEvent(randomEvent());
@@ -241,8 +256,9 @@ async function doAct(id) {
   renderMain();
 }
 
-function runAdventure() {
-  const adv = ADVENTURES[Math.floor(Math.random() * ADVENTURES.length)];
+function runAdventure(a) {
+  const pool = ADVENTURE_POOLS[a?.pool || "forest"] || ADVENTURE_POOLS.forest;
+  const adv = pool[Math.floor(Math.random() * pool.length)];
   if (adv.gal) unlock(adv.gal);
   if (adv.d) applyDelta(adv.d);
   addLog(t(adv.key));
