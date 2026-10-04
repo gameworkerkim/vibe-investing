@@ -1,7 +1,7 @@
 import { I18N } from "./i18n.js";
 import {
-  ACTIVITIES, GALLERY, MONTHS, STATS, clamp, dateFromTurn, newState,
-  portraitStage, pickEnding,
+  ACTIVITIES, CLOTHES, GALLERY, GIFTS, MONTHS, STATS, clamp,
+  dateFromTurn, migrate, newState, portraitStage, pickEnding,
 } from "./data.js";
 
 const KEY = "playmalfoy-v1";
@@ -26,8 +26,10 @@ function applyLang() {
     const val = t(key);
     if (typeof val === "string") el.textContent = val;
   });
-  $("lang").value = lang;
+  const sel = $("lang");
+  if (sel) sel.value = lang;
   if (S) renderMain();
+  if ($("closet") && !$("closet").classList.contains("hidden")) renderCloset();
 }
 
 function show(id) {
@@ -43,7 +45,7 @@ function persist() {
 }
 
 function unlock(id) {
-  if (!id) return;
+  if (!id || !S) return;
   if (!S.gallery.includes(id)) S.gallery.push(id);
 }
 
@@ -69,6 +71,11 @@ function applyDelta(d) {
 }
 
 function portraitSrc() {
+  const cloth = CLOTHES.find((c) => c.id === S?.worn);
+  if (cloth?.img) {
+    unlock(cloth.gallery);
+    return cloth.img;
+  }
   const st = portraitStage(S.grace);
   unlock(`malfoy-${st}`);
   return `img/malfoy-${st}.jpg`;
@@ -95,7 +102,7 @@ function renderMain() {
       <small>${name[1]} · ${a.cost ? a.cost + "g" : "+" + (a.gold || 0) + "g"}</small>
     </button>`;
   }).join("");
-  $("acts").querySelectorAll("[data-act]").forEach((b) => b.onclick = () => doAct(b.dataset.act));
+  $("acts").querySelectorAll("[data-act]").forEach((b) => { b.onclick = () => doAct(b.dataset.act); });
 }
 
 function openEvent(html, img, choices) {
@@ -199,6 +206,86 @@ function renderGallery() {
   }).join("");
 }
 
+function cardHtml(item, kind) {
+  const pack = t(`${kind}.${item.id}`);
+  const has = kind === "clothes" ? S?.owned?.includes(item.id) : S?.gifts?.includes(item.id);
+  const wearing = kind === "clothes" && S?.worn === item.id;
+  const canGift = S && !has && S.gold >= item.cost && !item.starter;
+  const canWear = S && has && kind === "clothes";
+  const img = item.img || "img/malfoy-3.jpg";
+  return `<article class="closet-card">
+    <img src="${img}" alt="">
+    <div class="meta">
+      <h3>${pack[0]} ${wearing ? "· " + t("wearing") : has ? "· " + t("owned") : ""}</h3>
+      <p class="lede">${pack[1]}</p>
+      <p class="lede">${item.starter ? t("owned") : item.cost + "g"}</p>
+      <div class="row">
+        ${item.starter ? "" : `<button class="btn ${canGift ? "primary" : ""}" data-gift="${kind}:${item.id}" ${canGift ? "" : "disabled"}>${has ? t("already") : t("gift")}</button>`}
+        ${kind === "clothes" ? `<button class="btn ${canWear && !wearing ? "primary" : ""}" data-wear="${item.id}" ${canWear && !wearing ? "" : "disabled"}>${t("wear")}</button>` : ""}
+      </div>
+    </div>
+  </article>`;
+}
+
+function renderCloset() {
+  $("closet-title").textContent = t("closetH");
+  $("closet-desc").textContent = S ? t("closetD") : t("noSaveCloset");
+  if (S) $("closet-gold").textContent = `${t("gold")} ${S.gold}`;
+  else $("closet-gold").textContent = "";
+  $("closet-grid").innerHTML =
+    CLOTHES.map((c) => cardHtml(c, "clothes")).join("") +
+    GIFTS.map((g) => cardHtml(g, "gifts")).join("");
+  $("closet-grid").querySelectorAll("[data-gift]").forEach((b) => {
+    b.onclick = () => giftItem(b.dataset.gift);
+  });
+  $("closet-grid").querySelectorAll("[data-wear]").forEach((b) => {
+    b.onclick = () => wearItem(b.dataset.wear);
+  });
+}
+
+function giftItem(token) {
+  const [kind, id] = token.split(":");
+  const list = kind === "clothes" ? CLOTHES : GIFTS;
+  const item = list.find((x) => x.id === id);
+  if (!S || !item || item.starter) return;
+  const bag = kind === "clothes" ? S.owned : S.gifts;
+  if (bag.includes(id) || S.gold < item.cost) return;
+  S.gold -= item.cost;
+  bag.push(id);
+  applyDelta({ grace: item.grace || 0, charm: item.charm || 0, pride: item.pride || 0, bond: item.bond || 0 });
+  unlock(item.gallery);
+  if (kind === "clothes") {
+    S.worn = id;
+    addLog(`${t("gift")} — ${t("clothes." + id)[0]}`);
+  } else {
+    addLog(`${t("gift")} — ${t("gifts." + id)[0]}`);
+  }
+  persist();
+  renderCloset();
+  renderMain();
+}
+
+function wearItem(id) {
+  if (!S?.owned?.includes(id)) return;
+  S.worn = id;
+  const cloth = CLOTHES.find((c) => c.id === id);
+  unlock(cloth?.gallery);
+  addLog(`${t("wearOk")} — ${t("clothes." + id)[0]}`);
+  persist();
+  renderCloset();
+  renderMain();
+}
+
+function openCloset() {
+  renderCloset();
+  show("closet");
+}
+
+function openGallery() {
+  renderGallery();
+  show("gallery");
+}
+
 function start(pc) {
   S = newState(pc);
   addLog(t("storyH"));
@@ -207,28 +294,36 @@ function start(pc) {
   show("main");
 }
 
-$("lang").onchange = () => {
-  lang = $("lang").value;
-  localStorage.setItem("playmalfoy-lang", lang);
-  applyLang();
-  if (!$("gallery").classList.contains("hidden")) renderGallery();
-};
-$("age-yes").onclick = () => show("story");
-$("age-no").onclick = () => { location.href = "https://vibequant.cc/"; };
-$("to-pc").onclick = () => show("pc");
-$("btn-new").onclick = () => { localStorage.removeItem(KEY); show("pc"); };
-$("btn-load").onclick = () => {
-  const raw = localStorage.getItem(KEY);
-  if (!raw) return show("pc");
-  S = JSON.parse(raw);
-  renderMain();
-  show("main");
-};
-$("btn-gallery").onclick = () => { renderGallery(); show("gallery"); };
-$("gal-back").onclick = () => show(S ? "main" : "story");
-$("again").onclick = () => { localStorage.removeItem(KEY); S = null; show("pc"); };
-document.querySelectorAll("[data-pc]").forEach((b) => b.onclick = () => start(b.dataset.pc));
+function bind() {
+  $("lang").onchange = () => {
+    lang = $("lang").value;
+    localStorage.setItem("playmalfoy-lang", lang);
+    applyLang();
+    if (!$("gallery").classList.contains("hidden")) renderGallery();
+  };
+  $("age-yes").onclick = () => show("story");
+  $("age-no").onclick = () => { location.href = "https://vibequant.cc/"; };
+  $("to-pc").onclick = () => show("pc");
+  $("btn-new").onclick = () => { localStorage.removeItem(KEY); S = null; show("pc"); };
+  $("btn-load").onclick = () => {
+    const raw = localStorage.getItem(KEY);
+    if (!raw) return show("pc");
+    S = migrate(JSON.parse(raw));
+    renderMain();
+    show("main");
+  };
+  $("btn-gallery").onclick = openGallery;
+  $("btn-gallery-2")?.addEventListener("click", openGallery);
+  $("btn-closet-2")?.addEventListener("click", openCloset);
+  $("end-gal")?.addEventListener("click", openGallery);
+  $("gal-back").onclick = () => show(S ? "main" : "story");
+  $("closet-back").onclick = () => show(S ? "main" : "story");
+  $("nav-closet").onclick = (e) => { e.preventDefault(); openCloset(); };
+  $("again").onclick = () => { localStorage.removeItem(KEY); S = null; show("pc"); };
+  document.querySelectorAll("[data-pc]").forEach((b) => { b.onclick = () => start(b.dataset.pc); });
+}
 
+bind();
 applyLang();
 if (localStorage.getItem(KEY)) $("btn-load").classList.remove("hidden");
 show("gate");
