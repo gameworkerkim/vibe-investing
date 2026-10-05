@@ -753,6 +753,7 @@ const SLUG_OVERRIDES = {
   "Private-Military-Company/History-of-the-Imperial-Mercenaries.md": "imperial-mercenaries",
   "Japan-Cashless/Japan-Cash-Issue.md": "japan-cashless",
   "Book-Review/Review-When-Do-Leaders-Matter.md": "when-do-leaders-matter",
+  "Book-Review/Review-of-Guns-Germs-and-Steel.md": "guns-germs-steel",
   "Statistical-Illusion/Statistical-Lllusion.md": "statistical-illusion",
 };
 
