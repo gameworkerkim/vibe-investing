@@ -1,7 +1,73 @@
+---
+title: "조금 못나도, 진실되면 됩니다"
+title_en: "A Little Short of Perfect Is Fine, If You Stay True — Forrest Gump"
+subtitle: "영화 〈포레스트 검프〉, 불확실한 시대를 진실하게 건너는 법"
+description: "조금 못나도, 진실되면 됩니다. 〈포레스트 검프〉는 바람을 받아들인 포레스트와 바람과 싸운 제니를 통해, 불확실한 시대를 진실하게 건너는 법을 묻는다."
+abstract: |
+  로버트 저메키스 〈포레스트 검프〉(1994). 톰 행크스의 포레스트는 바람을 받아들이고, 로빈 라이트의 제니는 바람과 싸운다.
+  나이트의 불확실성, 카너먼의 손실 회피, ACE 연구. 진실함은 성공의 원인이 아니라 성공 속에서도 잃지 않은 것이다.
+  조금 못나도, 진실되면 됩니다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film/society essay (not legal or investment advice), 2026-10-05,
+  group industry, Movie/Forrest-Gump.md. Slug forrest-gump.
+  Film: Robert Zemeckis, Forrest Gump (1994), from Winston Groom. Tom Hanks, Robin Wright, Gary Sinise, Sally Field. Score Alan Silvestri.
+  Thesis: in Knightian uncertainty, virtue is not the cause of success (survivorship, luck, others paying the cost) but what you keep inside success. Jenny as ACE/loss-aversion defense, not moral failure. Dan reconciles with fate. Not Beckett absurdist; picaresque tragicomedy / Candide. Microphone-cut refuses left/right megaphone. Closing: a little imperfect is enough if you stay true.
+  Key lines: Stupid is as stupid does; You never know what you're gonna get; I'm not a smart man, but I know what love is; Sometimes there just aren't enough rocks.
+date: 2026-10-05
+updated: 2026-10-05
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 포레스트검프
+  - 톰행크스
+  - 진실함
+  - 불확실성
+  - 제니
+  - 로버트저메키스
+keywords:
+  - "포레스트 검프"
+  - "조금 못나도 진실되면"
+  - "톰 행크스"
+  - "초콜릿 상자"
+  - "진실함"
+  - "제니 커런"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/forrest-gump.jpg"
+image: "https://vibequant.cc/og/forrest-gump.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>조금 못나도, 진실되면 됩니다 · VibeQuant</title>
+  <meta name="description" content="조금 못나도, 진실되면 됩니다. 〈포레스트 검프〉는 바람을 받아들인 포레스트와 바람과 싸운 제니를 통해, 불확실한 시대를 진실하게 건너는 법을 묻는다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "조금 못나도, 진실되면 됩니다",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-05",
+    "keywords": ["포레스트 검프", "조금 못나도 진실되면", "톰 행크스", "초콜릿 상자", "진실함", "제니 커런"]
+  }
+  </script>
+-->
+
 # 조금 못나도, 진실되면 됩니다
 
-### 영화 〈포레스트 검프(Forrest Gump, 1994)〉 — 불확실한 시대를 진실하게 건너는 법
+## 영화 〈포레스트 검프〉, 불확실한 시대를 진실하게 건너는 법
 
+![영화 포레스트 검프 포스터. 톰 행크스가 벤치에 앉아 있다](images/forrest-gump-poster.jpg)
+
+*로버트 저메키스 감독 〈포레스트 검프(Forrest Gump)〉(1994). 원작 윈스턴 그룸. 주연 톰 행크스, 로빈 라이트, 게리 시니즈, 샐리 필드. 음악 앨런 실베스트리.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 5일
 
 ## 프롤로그. 바람에 실린 깃털 하나
 
@@ -10,7 +76,6 @@
 로버트 저메키스 감독, 톰 행크스 주연의 〈포레스트 검프〉는 그렇게 시작된다. 거창한 서곡 없이, 깃털처럼 가볍게. 그러나 이 가벼운 깃털은 1950년대 앨라배마의 시골 마을에서 출발해 인종 분리, 베트남전, 반전 시위, 워터게이트, 그리고 1980년대의 낙관과 질병까지, 미국 현대사 30년을 통과한다.
 
 이 글이 붙잡고 싶은 질문은 하나다. **누구도 다음을 알 수 없는 시대에, 사람은 무엇을 붙들고 살아야 하는가.** 영화는 그 답을 두 사람의 인생으로 보여준다. 바람을 받아들인 포레스트, 그리고 바람과 싸운 제니. 두 사람 사이에 놓인 것이, 이 영화가 말하는 진정한 사랑이다.
-
 
 ## 1부. 이야기 — 같은 바람, 다른 비행
 
@@ -80,7 +145,6 @@
 같은 시대, 제니는 디스코와 마약의 1970년대 속으로 가라앉는다. 그녀는 한 번 더 포레스트에게 돌아오지만, 다시 떠난다. 그리고 포레스트는 어느 날 이유 없이 달리기 시작한다. 3년 넘게, 미국 대륙을 몇 번이나 가로지르며. 사람들은 그의 달리기에서 저마다의 의미를 찾으며 뒤따라 달린다. 하지만 포레스트에게는 아무런 의미도 없었다. 그냥 달리고 싶었고, 어느 날 그냥 멈추고 싶어졌을 뿐이다.
 
 길을 잃은 시대가, 아무 의미 없이 달리는 한 남자에게서 의미를 찾는다. 이 장면이야말로 1970년대 미국의 정신적 공허를 가장 정확하게 그린 순간일지 모른다.
-
 
 ## 2부. 해석 — 불확실성을 대하는 두 가지 방식
 
@@ -162,7 +226,6 @@
 
 어느 쪽이 옳은가. 영화를 차분히 보면 어느 한쪽에 손을 들어주지 않는다. 포레스트가 몸담은 군대와 국가는 버바를 죽이고 댄의 다리를 앗아갔다. 제니가 몸담은 반문화는 그녀를 때리는 남자를 품었다. 그리고 그 어떤 진영보다 먼저 제니를 망가뜨린 것은, 이념이 아니라 한 가정의 폭력이었다. 영화는 좌도 우도 순결하게 그리지 않는다. 마이크가 뽑힌 연단처럼, 영화는 어느 진영의 확성기가 되기를 거부한다. 해석이 갈리는 그 넉넉함이야말로, 30년이 넘도록 좌우 모두가 이 영화를 사랑하는 이유일 것이다.
 
-
 ## 3부. 사랑 — 시대가 끝내 빼앗지 못한 것
 
 ### 13. "나는 똑똑한 사람은 아니지만"
@@ -200,7 +263,6 @@
 
 이것이 이 영화의 가장 정직한 대답이다. 우리는 어떤 바람이 불어올지 선택할 수 없다. 어떤 집에서 태어날지, 어떤 시대를 만날지, 어떤 병이 찾아올지. 그러나 그 바람 속에서 어떤 사람으로 살아갈지는 선택할 수 있다.
 
-
 ## 에필로그. 조금 못나도, 진실되면 됩니다
 
 마지막 장면. 포레스트는 학교 버스에 오르는 아들을 배웅한다. 오래전 자신이 그랬듯이. 이번에는 아이에게 앉을 자리가 있을지 걱정하지 않아도 된다. 아이는 버스에 오르고, 포레스트는 벤치에 앉아 그 뒷모습을 바라본다.
@@ -215,11 +277,9 @@
 
 조금 못나도, 진실되면 됩니다.
 
-
 > *"My mama always said life was like a box of chocolates. You never know what you're gonna get."*
 > *"엄마는 늘 말씀하셨죠. 인생은 초콜릿 상자 같은 거라고. 어떤 걸 집게 될지 절대 알 수 없다고요."*
 > — 포레스트 검프
-
 
 #### 더 읽을거리
 
