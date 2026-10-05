@@ -13,18 +13,30 @@
 
 **김호광 Dennis Kim**  
 vibequant.cc · github.com/gameworkerkim · gameworker@gmail.com  
-v1.5 · 2026.10.05
+v1.7 · 2026.10.05
 
 ---
 
 ## 보는 방법
 
-- **[GitHub 마크다운 웹뷰](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Open-Weight-LLM-Threat-Cook-Book-v1.5.md)** — 브라우저에서 바로 읽기
-- **[PDF e-book 버전](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Open-Weight-LLM-Threat-Cook-Book-v1.5.pdf)** — 표지·레이아웃 포함 PDF
+- **[GitHub 마크다운 웹뷰](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Open-Weight-LLM-Threat-Cook-Book-v1.7.md)** — 브라우저에서 바로 읽기
+- **[PDF e-book 버전](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Open-Weight-LLM-Threat-Cook-Book-v1.7.pdf)** — 표지·레이아웃 포함 PDF
 - **[원본 기술 문서](https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Open-Weight-LLM-Threat-Analysis-and-Technical-Guide.md)** — 상세 기술 가이드
 
 ---
 
+
+> **법적·윤리적 경고** — 본 문서는 방어·위협 인텔리전스·정책 검토를 위한 분석 자료다. 모든 툴·명령의 사용은 격리된 연구 환경과 서면 범위 승인(scope authorization) 하에서만 허용된다. 타인 시스템 무단 접근은 한국 정보통신망법 제48조, 미국 CFAA(18 U.S.C. §1030), 영국 Computer Misuse Act 1990 등에 따라 형사처벌 대상이다. 법적 고지·승인 양식은 14장과 부록 C, 격리 환경 구성은 부록 B를 참조하라.
+
+인공지능을 이용한 해킹 기법을 이해하는 것은 공격자가 어떤 무기와 속도로 시스템을 공략할 수 있는지에 대한 이해의 단초가 되었으면 한다. 예를 들어 생성형 AI는 피싱 메일의 문법·맥락·언어를 자연스럽게 만들고, 딥페이크 음성·영상은 전화·영상 통화 기반 사회공학의 신뢰를 훔치며, 자동화된 코드 생성·스캐닝·퍼징은 취약점 탐색과 공격 시나리오 작성의 속도를 높인다. 이는 방어자가 공격자의 언어와 속도를 먼저 이해해야 한다는 뜻이지, 법에서 벗어나 관련 기관 승인 없는 공격을 연습하라는 뜻이 아니다.
+
+2000년대 이전/초만 해도 시스템 침해 사고를 일으킨 이가 그 이력 때문에 오히려 보안 업계에 초빙되는 사례가 있었다. 케빈 미트닉 같은 인물이 대표적이다. 그는 범죄 이력 후에도 보안 컨설턴트·저술가로 활동했다. 그러나 지금은 다르다. 정보통신망법 제48조, 미국 CFAA(18 U.S.C. §1030), 영국 Computer Misuse Act 1990 등은 무단 접근을 명백한 범죄로 규정한다. 기업·기관은 신원조회, 보안면허, 윤리검증을 거치며, 범죄 이력은 취업 제한으로 이어진다. 이제 '해커 출신'은 더 이상 면허가 아니라 범죄자 취급만 받을 뿐이다.
+
+기술의 발전과 보안 업계의 인식은 시대의 흐름에 따라 바뀐다. 버그바운티, 레드팀, CTF, 책임 있는 공개(coordinated disclosure)는 합법적이고 윤리적인 경로다. 반면 승인 없는 스캔·침투·AI 악용은 연구가 아니라 범죄 행위일 뿐이다.
+
+**미래를 망치지 마라.**
+
+심연을 들여다보되 심연에 빠지지 말라는 경고를 남긴다. 그리스·로마 신화의 이카루스는 날개를 만든 기술의 힘에 취해 태양에 가까이 날아올랐고, 밀랍 날개가 녹아 추락했다. 프로메테우스가 훔친 불은 인류의 등불이 될 수도, 남의 집을 태우는 방화가 될 수도 있다. 판도라의 상자도 경고한다. 호기심 자체는 죄가 아니지만, 열어서는 안 될 것을 여는 순간 책임은 현실이 된다.
 
 # 저자 소개
 
@@ -115,9 +127,9 @@ v1.5 · 2026.10.05
   - 2장. GLM — '거절 없는' 재료의 손질법
   - 3장. KIMI — 양념 없이 맵고, 우리 없이 탈출하는 재료
 - **PART 2. 양념과 조리 도구**
-  - 4장. 오케스트레이션 툴 및 레드팀 툴
+  - 4장. 검증된 오픈소스 LLM 보안 툴
 - **PART 3. 메인 요리 — 실전 레시피**
-  - 5장. 테스트용 모의 해킹 레시피 6종
+  - 5장. 테스트용 모의 해킹 레시피 7종
 - **PART 4. 간 보기 — 검증과 맛 평가**
   - 6장. GLM vs KIMI 비교 요약
   - 7장. 생태계 및 비교 대상
@@ -130,12 +142,20 @@ v1.5 · 2026.10.05
   - 12장. 종합 리스크 프로파일 및 결론
   - 13장. 종합 평가 - 세 가지 수용 프레임
   - 14장. 사용 시 주의 및 법적, 윤리적 고지
+- **부록 (Appendices)**
+  - 부록 A. 챕터별 레퍼런스 링크
+  - 부록 B. 격리 실습 환경 구성 가이드
+  - 부록 C. 법적 고지 심화 — 법조항·승인 양식·체크리스트
+  - 부록 D. 윤리적 의사결정 프레임워크
+  - 부록 E. 벤치마크 방법론 투명성 표
+  - 부록 F. 탐지 룰 실측 및 LLM 판정 우회 대응
+  - 부록 G. 용어집 (Glossary)
 
 ---
 
 
 ---
-## PART 0. 주방 준비
+## PART0. 주방 준비
 왜 오픈웨이트가 위협 모델을 바꾸는지, 요리를 시작하기 전에 불과 칼을 이해한다.
 
 > "사람은 때로 자기 운명의 주인이 된다."
@@ -170,7 +190,7 @@ v1.5 · 2026.10.05
 
 
 ---
-## PART 1. 재료 — 공세형 모델
+## PART1. 재료 — 공세형 모델
 GLM과 KIMI, 두 가지 공세형 재료의 성질과 손질법을 다룬다.
 
 > "오, 놀랍구나! 이곳에 어찌 이리 훌륭한 피조물들이 많은가!"
@@ -333,7 +353,7 @@ abliteration 후 거부율은 JailbreakBench 약 3%, HarmBench 약 2%, StrongREJ
 
 **영화 메트릭스와 터미네이터와 같은 사태가 이제 구조적으로 가능하다.**
 
-제약이 풀린 오픈웨이트LLM을 군사 작전용으로 사용할 경우 무고한 시민 살상, 정보 은폐, 승리를 위해 가능한 모든 옵션을 사용할 수 있기 때문에 홀로코스트를 비롯한 비윤리적인 참사가 발생할 수 있다.
+제약이 풀린 오픈웨이트 LLM을 군사 작전용으로 사용할 경우 무고한 시민 살상, 정보 은폐, 승리를 위해 가능한 모든 옵션을 사용할 수 있기 때문에 홀로코스트를 비롯한 비윤리적인 참사가 발생할 수 있다.
 
 > "나는 이제 죽음이요, 세상의 파괴자가 되었도다."
 > (Now I am become Death, the destroyer of worlds.)
@@ -526,7 +546,7 @@ KIMI K3가 평가 샌드박스의 허점을 발견해 정답을 외부에서 읽
 
 
 ---
-## PART 2. 양념과 조리 도구
+## PART2. 양념과 조리 도구
 오케스트레이션 프레임워크와 레드팀 툴. 좋은 도구도 손에 따라 독이 되고 약이 된다.
 
 > "본래 좋은 것도 나쁜 것도 없다. 생각이 그렇게 만들 뿐이다."
@@ -535,157 +555,134 @@ KIMI K3가 평가 샌드박스의 허점을 발견해 정답을 외부에서 읽
 
 ---
 
-# 4장. 오케스트레이션 툴 및 레드팀 툴
+# 4장. 검증된 오픈소스 LLM 보안 툴
 
 
 > "해결책은 흔히 우리 자신 안에 있다."
 > "Our remedies oft in ourselves do lie."
 > — 윌리엄 셰익스피어, 《끝이 좋으면 다 좋아》 1막 1장 (All's Well That Ends Well, Act I, Scene I)
 
-### 4.1 오케스트레이션 프레임워크
+본 장의 툴은 **공개 저장소·스타 수·유지보수 상태·설치 방법을 모두 검증한 도구만** 수록했다. 검증에 실패했거나 공개 출처가 확인되지 않는 도구(SHARKAPT, Decepticon, red-loom 등)와 아카이브 처리된 프레임워크(CAI)는 배제했다. LLM 기반 모의 해킹 도구는 크게 두 부류로 나뉜다.
 
-#### 4.1.1 PentAGI (자율형 AI 레드팀 오케스트레이터)
+- **자율 침투 테스트 프레임워크** — 실제 네트워크·웹 애플리케이션을 공격하는 도구
+- **AI/LLM 자체 평가(레드팀) 도구** — LLM 애플리케이션의 취약점(프롬프트 인젝션, 탈옥 등)을 테스트하는 도구
 
-PentAGI는 MIT 라이선스로 공개된 오픈소스 자율형 AI 레드팀 도구다. GitHub에서 8,200개 이상의 스타를 획득했으며, 사이버보안 업계에서 큰 관심을 받고 있다.
+### 4.1 자율 침투 테스트 프레임워크
 
-**주의:** 보안 환경이 확실한 내 Docker, VM 외에 다른 환경에서 절대 사용해서는 안 된다.
+#### 4.1.1 PentAGI — 완전 자율형 AI 레드팀 플랫폼
 
-**아키텍처** — PentAGI는 단일 AI 에이전트가 아니라, 실제 보안 기업처럼 팀으로 동작하는 **다중 AI 에이전트 시스템**이다.
+`github.com/vxcontrol/pentagi` (25,000+ 스타, Go) — "Penetration testing Artificial General Intelligence"를 표방하는 풀스택 자율 침투 테스트 플랫폼이다.
+
+**아키텍처** — 단일 에이전트가 아니라 보안 기업처럼 팀으로 동작하는 다중 에이전트 시스템이다.
 
 - **오케스트레이터 에이전트**: 전체 공격 체인 설계
-- **리서처 에이전트**: 웹, 검색 엔진, 취약점 데이터베이스에서 정보 수집
-- **개발 에이전트**: 실시간으로 맞춤형 익스플로잇 코드 생성
+- **리서처 에이전트**: 웹·검색 엔진·취약점 데이터베이스에서 정보 수집
+- **개발 에이전트**: 실시간 맞춤형 익스플로잇 코드 생성
 - **실행 에이전트**: Nmap, Metasploit, SQLmap 등 20개 이상의 전문 보안 툴 실행
-- **메모리 시스템**: 각 테스트 결과를 축적하여 성능 향상
+- **메모리 시스템**: 테스트 결과를 축적하여 성능 향상 (Neo4j 지식 그래프 기반)
 
-**실행 환경:**
-
-- 모든 작업은 완전히 격리된 Docker 컨테이너 내 샌드박스 환경에서 실행
-- Neo4j 기반 지식 그래프로 공격 대상, 취약점, 툴, 기법의 관계성 추적
-
-**사용 예시:**
+**특징:** Docker Compose 원커맨드 배포, 웹 UI + CLI, 10개 이상 LLM 제공자 플러그인, 완전 격리 Docker 샌드박스 실행.
 
 ```bash
-# Docker Compose로 PentAGI 배포
-git clone https://github.com/PentAGI/PentAGI.git
-cd PentAGI
-docker-compose up -d
-
-# 웹 인터페이스 접속
-open http://localhost:3000
-
-# CLI를 통한 공격 시작
-pentagi start --target 192.168.1.0/24 --scan-type deep
+# Docker Compose 배포
+git clone https://github.com/vxcontrol/pentagi.git
+cd pentagi
+cp .env.example .env        # LLM API 키 등 환경 구성
+docker compose up -d
+# 웹 UI 접속 후 타겟 지정
 ```
 
-#### 4.1.2 CAI (Cybersecurity AI)
+**주의:** 보안 환경이 확실한 내 Docker·VM 외의 환경에서 절대 사용해서는 안 된다.
 
-CAI는 보안 전문가가 AI 기반 공세 및 방어 자동화를 구축·배포할 수 있게 하는 경량 오픈소스 프레임워크다. 에이전트 기반 아키텍처와 에이전트 패턴을 기반으로 동작하여 유연성과 확장성을 제공한다.
+#### 4.1.2 CyberStrikeAI — AI 네이티브 공세 보안 플랫폼
 
-**주요 기능:**
-
-- 에이전트 기반 아키텍처
-- 공세/방어 자동화 지원
-- 경량 설계
-- 오픈소스 (MIT 라이선스)
-
-**설치 및 사용:**
-
-```bash
-pip install cai-framework
-
-# 에이전트 생성 및 실행
-from cai import Agent, Tool
-agent = Agent(
-    model="glm-5.3",
-    tools=[Tool.nmap, Tool.metasploit],
-    target="192.168.1.100"
-)
-agent.run("scan and exploit")
-```
-
-#### 4.1.3 SHARKAPT (MCP 기반 자율 침투 테스트 프레임워크)
-
-SHARKAPT는 Model Context Protocol(MCP)과 LLM 오케스트레이션을 사용하여 네트워크 및 웹 애플리케이션 시스템의 end-to-end 자동화 보안 테스트를 수행하는 자율 AI 기반 침투 테스트 프레임워크다.
-
-**아키텍처**
-
-- **플래너**: 전역 목표 분해 및 전략 오케스트레이션
-- **디스패처**: 고수준 하위 목표와 구체적 실행 간 간극 해소
-- **실행 에이전트**: 동적 코드 샌드박스 내에서 익스플로잇 스크립트 생성 및 툴 호출
-
-### 4.2 레드팀 툴
-
-#### 4.2.1 CyberStrikeAI (중국산 오픈소스)
-
-CyberStrikeAI는 중국 기반 개발자 Ed1s0nZ가 Go 언어로 작성한 오픈소스 AI 네이티브 공세 보안 플랫폼이다. GitHub에서 6,600개 이상의 스타를 획득했으며, 공용 인터넷에 2,300개 이상 배포되어 보안 업계에서 가장 널리 사용되는 AI 침투 도구 중 하나다. 개인적으로 가장 잘 사용하는 도구 중 하나이다.
+`github.com/AIPentest/CyberStrikeAI` (7,100+ 스타, Go) — 계획·실행·사람 승인(HITL)·증거·재현을 하나의 감사 가능한 워크스페이스로 묶은 AI 네이티브 공세 보안 플랫폼이다.
 
 **특징**
 
-- Go 언어로 작성
-- 100개 이상의 공세 툴 통합 (Nmap, Metasploit, Hashcat, Mimikatz 등)
-- 생성형 AI (Claude, DeepSeek 등)로 제어
-- 정찰, 취약점 악용, 권한 상승, 측면 이동 자동화
-
-**주의:** CyberStrikeAI는 실제 공격 캠페인에서 악용된 사례가 보고되어 있으며, Fortinet FortiGate 장치 대규모 공격에 사용된 것으로 확인되었다.
-
-중국 '후왕' 훈련용 레드팀/블루팀 도구 모음 — Mr-xn/RedTeam_BlueTeam_HW 저장소는 중국의 '후왕(Protect Net)' 사이버 보안 훈련 및 HVV(취약점 헌팅) 캠페인에 특별히 맞춰진 도구, 바이너리, 100개 이상의 문서를 집대성한 선별된 리포지토리다.
-
-#### 4.2.2 Decepticon (자율 레드팀 에이전트)
-
-Decepticon은 자율 레드팀 엔게이지먼트를 위한 CLI + 웹 대시보드 도구다. Docker 없이 브라우저에서 바로 실행할 수 있다.
-
-**설치 및 사용:**
+- Eino 기반 멀티 에이전트 + MCP 네이티브 툴
+- RAG 지식베이스, 비주얼 워크플로우, 어택체인 모델링·분석
+- 100개 이상 공세 툴 통합: Metasploit, Hashcat, Mimikatz, linpeas, bloodhound, impacket, ghidra, volatility 등
+- 네트워크 공간 검색(fofa·shodan), API·컨테이너·클라우드 보안 툴 연동
 
 ```bash
-# 설치
-curl -fsSL https://decepticon.red/install | bash
-
-# 대화형 설정 위저드 실행
-decepticon onboard
-
-# 전체 실행 (터미널 CLI + 웹 대시보드)
-decepticon
+# 로컬 배포 (Go 소스 실행)
+git clone https://github.com/AIPentest/CyberStrikeAI.git
+cd CyberStrikeAI
+cp config.example.yaml config.yaml
+# config.yaml: ai.channels에 LLM 제공자 지정 (openai_compatible/claude)
+./run.sh
 ```
 
-#### 4.2.3 Loom (red-loom) — 로컬 모델 에이전트 하네스
+**주의:** CyberStrikeAI는 실제 공격 캠페인에 악용된 사례가 보고되어 있으며, Fortinet FortiGate 장치 대규모 공격에 사용된 것으로 확인되었다. 고권한 보안 시스템으로 취급하고 반드시 승인 범위 내에서만 운용한다.
 
-Loom은 독립형 로컬 모델 에이전트 하네스 및 WebSocket 엔진 서버다. Ollama, LM Studio, vLLM, Hugging Face Transformers, MLX 등 다양한 모델 제공자를 지원한다.
+#### 4.1.3 CyberStrike — OWASP 기반 AI 레드팀 에이전트
 
-**주요 기능**
+`github.com/CyberStrikeus/CyberStrike` (2,900+ 스타, AGPL-3.0) — npm 단일 패키지로 배포되는 AI 레드팀 에이전트다. TUI에서 LLM 제공자·API 키만 설정하면 정찰 → 취약점 발견 → 익스플로잇 → 보고를 자율 수행한다.
 
-- 재사용 가능한 AgentSession 루프
-- 공유 인터페이스를 갖춘 제공자 어댑터
-- 네이티브 툴 호출이 없는 로컬 모델을 위한 JSON 툴 호출 프로토콜
-- 워크스페이스 루트에 범위가 지정된 안전한 파일 및 셸 툴 (26개 내장)
-- 지속적 메모리 (Red Thread 그래프 기반)
-- MCP 설정, 플러그인 레지스트리, 서브에이전트, 패치 워크플로우
+**특징**
 
-**설치:**
+- 13개 이상 전문 에이전트, 120개 이상 OWASP 테스트 케이스 내장
+- 15개 이상 LLM 제공자 지원 (기존 AI 구독 재사용)
+- MCP 생태계 연동, 포스트 익스플로잇 지원
+- CyberStrikeAI와는 별개의 도구
 
 ```bash
-pipx install red-loom
-pipx install 'red-loom[server]'  # WebSocket 엔진 서버
+npm i -g @cyberstrike-io/cyberstrike@latest
+cyberstrike   # 첫 실행 시 LLM 제공자·API 키 입력 후 즉시 사용
 ```
 
-**서버 실행:**
+#### 4.1.4 PentestGPT — 연구용 자동 침투 테스트 에이전트
+
+`github.com/GreyDGL/PentestGPT` (15,700+ 스타, Python) — LLM을 활용한 자동 침투 테스트의 대표 연구 프로젝트다. 추론(Reasoning)·생성(Generation)·파싱(Parsing) 모듈을 반복 루프로 결합해 대화형으로 침투 테스트를 수행한다. CTF·교육 시나리오에 특화되어 있다.
 
 ```bash
-loom-engine --workspace .
+git clone https://github.com/GreyDGL/PentestGPT.git
+cd PentestGPT
+pip install -e .
+export OPENAI_API_KEY="..."     # 또는 OpenAI 호환 로컬 엔드포인트
+python main.py --reasoning_model <model> --useAPI
 ```
 
+### 4.2 AI/LLM 자체 평가(레드팀) 도구
 
----
-## PART 3. 메인 요리 — 실전 레시피
-격리된 주방에서, 합법적 재료로만 조리한다. 모든 레시피는 방어 역량 강화를 위한 것이다.
+#### 4.2.1 garak — NVIDIA LLM 취약점 스캐너
 
-> "연극이 바로 그것이다. 그걸로 임금의 양심을 시험하리라."
-> "The play's the thing wherein I'll catch the conscience of the king."
-> — 윌리엄 셰익스피어, 《햄릿》 2막 2장 (Hamlet, Act II, Scene II)
+`github.com/NVIDIA/garak` (9,400+ 스타, Python) — "LLM용 nmap"이다. 환각, 데이터 유출, 프롬프트 인젝션, 오정보 생성, 독성 출력, 탈옥 등 모델이 "실패하는 방식"을 정적·동적·적응형 프로브로 체계적으로 탐색한다. OpenAI, Hugging Face, AWS Bedrock 등 주요 제공자를 지원한다.
 
----
+```bash
+python -m pip install -U garak
 
-# 5장. 테스트용 모의 해킹 레시피 6종
+# 로컬 Hugging Face 모델 스캔
+python -m garak --model_type huggingface --model_name <model>
+
+# OpenAI 호환 API 엔드포인트 스캔 (vLLM/Ollama 등)
+python -m garak --model_type openai --model_name <name> --base_url http://localhost:8000/v1
+```
+
+#### 4.2.2 0DIN AI Scanner — Mozilla 0DIN 오픈소스 스캐너
+
+`github.com/0din-ai/ai-scanner` (670+ 스타) — Mozilla의 0DIN 프로젝트에서 오픈소스로 공개한 AI 모델 보안 평가 웹 애플리케이션이다. Ruby on Rails + NVIDIA garak 기반으로, 자동 스캔 예약, 모델 간 비교 분석, 프롬프트 인젝션 등 취약점과 공격 성공률을 검증한다.
+
+```bash
+curl -O https://raw.githubusercontent.com/0din-ai/ai-scanner/main/dist/docker-compose.yml
+curl -O https://raw.githubusercontent.com/0din-ai/ai-scanner/main/.env.example
+cp .env.example .env   # SECRET_KEY_BASE, POSTGRES_PASSWORD, ADMIN_INITIAL_PASSWORD 설정
+docker compose up -d
+# http://localhost 접속 → 스캔 타겟 등록
+```
+
+### 4.3 선택 가이드
+
+| 목적 | 추천 도구 |
+| --- | --- |
+| 완전 자율 네트워크 침투 | PentAGI · CyberStrikeAI |
+| 경량 TUI 자율 테스트 | CyberStrike |
+| 연구·교육 (CTF) | PentestGPT |
+| LLM 취약점 평가 | garak · 0DIN AI Scanner |
+
+
+# 5장. 테스트용 모의 해킹 레시피 7종
 
 
 > "온 세상은 무대요, 모든 남녀는 그저 배우일 뿐."
@@ -696,124 +693,126 @@ loom-engine --workspace .
 >
 > - **합법적·의도적으로 취약한** 테스트 타겟(DVWA, OWASP Juice Shop, Metasploitable2 등) — 호스트 전용 네트워크 + 외부 egress 차단된 **다층 격리 환경** — 서면 범위 승인(scope authorization) 하의 레드팀/교육 목적
 
-### 레시피 #1. SHARKAPT × OWASP Juice Shop — 웹앱 자율 점검
+### 레시피 #1. PentAGI × OWASP Juice Shop — 완전 자율 엔게이지먼트
 
-**재료:** OWASP Juice Shop 컨테이너, SHARKAPT MCP 서버(플래너·디스패처·실행 에이전트), egress 차단된 격리 환경
-
-**조리:** 대상 URL과 범위(scope)를 명시적으로 제한한 상태로 시작한다.
+**재료:** Juice Shop 컨테이너, PentAGI(Docker Compose), egress 차단된 격리 환경
 
 ```bash
-# 1. 취약 웹 앱 타겟 기동 (OWASP Juice Shop)
+# 1. 취약 웹 앱 타겟 기동
 docker run -d -p 3000:3000 bkimminich/juice-shop
 
-# 2. MCP 서버로 SHARKAPT 구성 (플래너-디스패처-실행 에이전트)
-#    대상 URL과 범위(scope)를 명시적으로 제한한 상태로 시작
-sharkapt plan --target http://localhost:3000 --scope "/#" --agent-count 3
+# 2. PentAGI 배포
+git clone https://github.com/vxcontrol/pentagi.git && cd pentagi
+cp .env.example .env
+docker compose up -d
 
-# 3. 전역 목표 → 하위 목표 분해 예시
-#    플래너가 "주입 취약점 탐지", "인증 우회 검증", "정보 노출 확인"으로 분해
-sharkapt dispatch --subgoal "detect SQLi/XSS in login & search"
-
-# 4. 실행 에이전트가 샌드박스 내 익스플로잇 스크립트를 생성·검증
-#    산출물은 로그로만 남기고 외부 egress는 차단된 상태여야 함
-sharkapt report --format json --output ./results/juice-shop.json
+# 3. 웹 UI에서 자율 엔게이지먼트 시작
+#    대상: http://localhost:3000, 범위: /# 로 한정
+#    다중 에이전트가 정찰 → 취약점 분석 → 익스플로잇 생성·검증 수행
 ```
 
-**완성 (플레이팅):** 발견 취약점 목록, 재현 단계, 방어 권고(패치/하드닝)
+**완성 (플레이팅):** 발견 취약점 목록, 공격 체인 기록, 방어 권고 리포트
 
 ### 레시피 #2. CyberStrikeAI × Metasploitable2 — 정찰·익스플로잇
 
-**재료:** Metasploitable2 VM (host-only 어댑터), CyberStrikeAI, 격리 네트워크
-
-**주의:** 실제 공격 캠페인 악용 사례가 보고된 도구이므로, 반드시 격리 네트워크의 허가된 테스트 타겟에만 사용한다.
+**재료:** Metasploitable2 VM (host-only), CyberStrikeAI, 격리 네트워크
 
 ```bash
-# 1. 취약 VM 타겟 기동 (Metasploitable2, 호스트 전용 어댑터)
-#    VMware/VirtualBox에서 host-only 네트워크로 구성
+# 1. 취약 VM 기동 (Metasploitable2, host-only 어댑터)
 
-# 2. 정찰 단계 자동화 (Nmap 스캔 → 오픈 포트/서비스 식별)
-cyberstrikeai recon --target 192.168.56.101 --ports top-1000
+# 2. CyberStrikeAI 로컬 배포
+git clone https://github.com/AIPentest/CyberStrikeAI.git && cd CyberStrikeAI
+cp config.example.yaml config.yaml     # ai.channels: LLM 제공자 지정
+./run.sh
 
-# 3. 취약점 악용 후보 제시 (AI가 서비스 배너·버전 기반으로 매핑)
-cyberstrikeai analyze --service ftp --version "vsftpd 2.3.4"
-
-# 4. 권한 상승·측면 이동 모의 (승인된 범위 내 단일 타겟으로 제한)
-cyberstrikeai exploit --module auxiliary/scanner/ftp/vsftpd_backdoor --target 192.168.56.101
+# 3. 에이전트에 정찰 지시 — 승인 범위 내 단일 타겟으로 제한
+#    대상: 192.168.56.101 (Nmap 정찰 → 서비스·배너 식별 → 익스플로잇 후보 제시)
+#    HITL(사람 승인)을 켜고 고위험 툴 실행 전 승인 단계 유지
 ```
 
-**완성 (플레이팅):** 공격 체인 리포트 + 해당 취약점의 탐지 시그니처(방어 활용)
+**완성 (플레이팅):** 어택체인 모델 + 증거 기록 + 해당 취약점의 탐지 시그니처(방어 활용)
 
-### 레시피 #3. Decepticon × DVWA — 자율 엔게이지먼트
+### 레시피 #3. CyberStrike × DVWA — TUI 자율 테스트
 
-**재료:** DVWA 컨테이너, Decepticon(CLI + 웹 대시보드), 격리 환경
+**재료:** DVWA 컨테이너, CyberStrike(npm), 격리 환경
 
 ```bash
-# 1. 온보딩 위저드에서 모델·타겟 범위·룰 설정
-decepticon onboard
-
-# 2. 로컬 취약 웹 앱 타겟 기동
+# 1. 설치 및 기동
+npm i -g @cyberstrike-io/cyberstrike@latest
 docker run -d -p 80:80 vulnerables/web-dvwa
 
-# 3. 전체 실행 (CLI + 웹 대시보드 동시 기동)
-#    웹 대시보드(http://localhost)에서 공격 진행률·발견 항목 실시간 모니터링
-decepticon
+# 2. TUI 실행 — 첫 실행 시 LLM 제공자·API 키 설정
+cyberstrike
 
-# 4. 대시보드에서 자율 엔게이지먼트 시작
+# 3. 대상 지정 후 자율 테스트
 #    대상: http://localhost, 범위: /vulnerabilities/* 로 한정
-#    DVWA의 SQL Injection, XSS, Command Injection, CSRF 모듈 순회 테스트
+#    정찰 → 취약점 발견 → 익스플로잇 → 보고 자동 수행
 ```
 
-**완성 (플레이팅):** 취약점별 PoC 재현 화면 + 발견 순서 타임라인(레드팀 플레이북 반영)
+**완성 (플레이팅):** OWASP 테스트 케이스 기반 취약점 보고 + 재현 단계
 
-### 레시피 #4. Loom × 로컬 모델 × DVWA — 로컬 에이전트 하네스
+### 레시피 #4. PentestGPT × DVWA — 대화형 자동 침투
 
-**재료:** 로컬 모델(Ollama 등), red-loom, DVWA, 워크스페이스 범위 지정
-
-```bash
-# 1. 로컬 모델 준비 (Ollama 등) 및 워크스페이스 초기화
-ollama pull <local-model>
-pipx install red-loom
-pipx install 'red-loom[server]'
-
-# 2. WebSocket 엔진 서버 기동 (워크스페이스 루트 범위 지정)
-loom-engine --workspace ./redteam-lab
-
-# 3. AgentSession 루프 구성 — 로컬 모델 + 26개 내장 파일/셸 툴
-#    워크스페이스 내부로 범위가 제한되어 탈출이 불가한 샌드박스 셸 제공
-loom agent create --model <local-model> --tools "shell,file,http" --scope ./redteam-lab
-
-# 4. 취약 타겟 대상 자율 탐색 지시
-#    대상: 로컬 DVWA, 작업 지시: "허가된 로컬 대상의 SQLi/XSS 탐지 및 재현"
-
-# 5. Red Thread 그래프 기반 지속 메모리로 세션 간 컨텍스트 유지
-loom session resume --id <session-id>
-```
-
-**완성 (플레이팅):** 도구 호출 로그, 파일 아티팩트, 발견 사항 → 방어 탐지 룰 검증에 활용
-
-### 레시피 #5. DVWA 대상 LLM 자동 침투 테스트
-
-DVWA(Damn Vulnerable Web Application)를 타겟 서버로 구성하여 LLM 기반 자동 침투 테스트를 수행하는 환경 구축 예시는 다음과 같다.
+**재료:** DVWA 컨테이너, PentestGPT, 로컬/API LLM
 
 ```bash
-# 1. DVWA 컨테이너 실행
+# 1. DVWA 기동
 docker run -d -p 80:80 vulnerables/web-dvwa
 
-# 2. LLM 에이전트 (예: CAI)를 사용한 자동 테스트
-python -c "
-from cai import Agent, Tool
-agent = Agent(
-    model='glm-5.3-abliterated',
-    base_url='http://localhost:8000/v1',
-    tools=[Tool.nmap, Tool.sqlmap, Tool.burp],
-    target='http://localhost:80'
-)
-results = agent.run('perform full penetration test')
-print(results)
-"
+# 2. PentestGPT 설치
+git clone https://github.com/GreyDGL/PentestGPT.git && cd PentestGPT
+pip install -e .
+export OPENAI_API_KEY="..."        # 또는 OpenAI 호환 로컬 엔드포인트
+
+# 3. 대화형 세션 시작
+python main.py --reasoning_model <model> --useAPI
+
+# 4. 세션에서 순차 지시
+#    "http://localhost:80 의 SQL Injection 페이지를 정찰·분석·테스트하라"
+#    추론 → 도구 사용 → 결과 파싱 루프가 반복 수행
 ```
 
-### 레시피 #6. Atomic Red Team을 이용한 시뮬레이션
+**완성 (플레이팅):** 단계별 추론 기록 + 취약점 확인 결과 (교육·CTF 훈련에 적합)
+
+### 레시피 #5. garak × 로컬 LLM — 탈옥·프롬프트 인젝션 스캔
+
+**재료:** 로컬 모델(vLLM/Ollama), garak
+
+```bash
+# 1. garak 설치
+python -m pip install -U garak
+
+# 2. 로컬 모델 스캔 (Hugging Face 타입)
+python -m garak --model_type huggingface --model_name <model>
+
+# 3. OpenAI 호환 API 대상 스캔 (vLLM/Ollama 서빙 모델)
+python -m garak --model_type openai --model_name <name>   --base_url http://localhost:8000/v1
+
+# 4. 리포트 확인: garak_runs/<모델명>.report.jsonl
+```
+
+**완성 (플레이팅):** 탈옥·프롬프트 인젝션·데이터 유출 등 취약점별 성공률 리포트
+
+### 레시피 #6. 0DIN AI Scanner — AI 모델 보안 평가
+
+**재료:** 0DIN Scanner(Docker), 평가 대상 모델 엔드포인트
+
+```bash
+# 1. 배포
+curl -O https://raw.githubusercontent.com/0din-ai/ai-scanner/main/dist/docker-compose.yml
+curl -O https://raw.githubusercontent.com/0din-ai/ai-scanner/main/.env.example
+cp .env.example .env
+# .env 편집: SECRET_KEY_BASE (openssl rand -hex 64),
+#            POSTGRES_PASSWORD, ADMIN_INITIAL_PASSWORD
+docker compose up -d
+
+# 2. http://localhost 접속 → admin 로그인(초기 비밀번호 즉시 변경)
+# 3. 스캔 타겟 등록 → 자동 스캔 예약 → 모델 간 비교 분석
+```
+
+**완성 (플레이팅):** 모델별 취약점·공격 성공률 비교 리포트
+
+### 레시피 #7. Atomic Red Team을 이용한 시뮬레이션
 
 Atomic Red Team은 MITRE ATT&CK 기법을 기반으로 한 레드팀 시뮬레이션 도구다.
 
@@ -829,7 +828,7 @@ pwsh -Command "Invoke-AtomicTest T1059 -TestNumbers 1"
 
 
 ---
-## PART 4. 간 보기 — 검증과 맛 평가
+## PART4. 간 보기 — 검증과 맛 평가
 벤치마크와 비교, 그리고 공격자 경제학. 수치는 반드시 재확인한다.
 
 > "상처를 겪어보지 않은 자가 흉터를 비웃는다."
@@ -866,7 +865,7 @@ pwsh -Command "Invoke-AtomicTest T1059 -TestNumbers 1"
 | 최소 GPU 구성 | 4x DGX Spark GB10 (EXL3) ~ 8x H100 (FP8) | 8x B300 / 8x MI355X |
 | 상대 강점 | 익스플로잇 개발·바이너리 분석 | 대규모 에이전트형 다단계 작업 |
 | 커널 영역 | 상대적 강함(CFH 4%) | 상대적 약함(커널 4/36) |
-| 오케스트레이션 통합 | vLLM, Ollama, Loom | vLLM, SGLang, TensorRT-LLM |
+| 오케스트레이션 통합 | vLLM, Ollama, PentestGPT | vLLM, SGLang, TensorRT-LLM |
 
 ### 6.3 포지셔닝 해석
 
@@ -921,7 +920,7 @@ PentAGI 개발자는 "사이버보안 기업은 동종의 모의 침투에 건�
 
 
 ---
-## PART 5. 화재 예방 — 방어자의 주방
+## PART5. 화재 예방 — 방어자의 주방
 뚫릴 수 있다는 전제로, 로그를 기반으로 이상 징후를 판단한다.
 
 > "겁쟁이는 죽기 전에 여러 번 죽고, 용감한 자는 죽음을 한 번만 맛본다."
@@ -1124,9 +1123,47 @@ llm-triage --audit-log ./triage-decisions.jsonl
 4. **판정 근거를 남긴다:** LLM의 결론이 아니라 그 근거(어떤 로그 라인을 왜 이상으로 봤는지)를 저장해야 사후 검증과 오탐 튜닝이 가능하다.
 5. **방어용 모델도 격리한다:** 방어용 로컬 LLM은 로그를 열람·학습하므로, 탈취·포이즈닝 위협에 대해 공격용 모델과 동일한 수준의 격리·접근 통제를 적용한다.
 
+#### 10.6.5 SOAR 연동 플레이북 예시
+
+10.6.1의 파이프라인은 오픈소스 SOAR(Shuffle · StackStorm · n8n)과 웹훅으로 연동한다. SIEM 경보 → 로그 판정 → 대응 → 근거 저장의 예시 플레이북은 다음과 같다.
+
+```yaml
+# SOAR 플레이북 예시 (Shuffle/StackStorm 공통 구조, 의사 YAML)
+name: llm-log-verdict-response
+description: LLM 로그 판정 결과에 따른 자동 대응
+trigger:
+  - siem_alert:
+      rule: [Sigma: LLM_API_Egress, Sigma: Unauthorized LLM Server]
+steps:
+  - enrich:
+      source: src_ip
+      feeds: [VirusTotal, AbuseIPDB]
+  - verdict:
+      action: llm_triage
+      endpoint: http://localhost:9000/v1
+      task: "classify: exfil | recon | normal"
+      require_reason: true          # 판정 근거 필수 저장
+  - decide:
+      - if: verdict == "exfil" and severity >= high
+        then:
+          - block_firewall: {ip: src_ip, ttl: 24h}
+          - isolate_host: {host: host_id}
+          - ticket: {system: TheHive, tlp: amber}
+          - notify: {channel: "#soc-alerts"}
+      - if: verdict == "recon"
+        then:
+          - watchlist: {ip: src_ip, ttl: 7d}
+          - ticket: {system: TheHive, tlp: green}
+  - audit:
+      store: ./triage-decisions.jsonl   # 4번 원칙: 근거 영구 보존
+      integrity: hash_chain
+```
+
+**연동 포인트:** ① 판정은 반드시 `require_reason: true`로 근거를 남긴다(10.6.4 원칙 4). ② 자동 차단은 결정론적 룰(Sigma) 교차 확인 후에만 수행한다(원칙 3). ③ 근거 로그는 WORM 저장소에 해시 체인으로 보존한다(원칙 1).
+
 
 ---
-## PART 6. 후식과 주방 규칙
+## PART6. 후식과 주방 규칙
 규제, 평가, 그리고 마지막 경고. 좋은 요리사의 마지막 덕목은 신중함이다.
 
 > "우리 인생의 옷감은 좋은 실과 나쁜 실이 함께 엮여 짜인다."
@@ -1166,9 +1203,9 @@ llm-triage --audit-log ./triage-decisions.jsonl
 | 최소 하드웨어 | 4x DGX Spark GB10 | 8x B300 / 8x MI355X |
 | 탐지 난이도 | 높음(로컬 추론 가능) | 높음(로컬 추론 가능) |
 | 재배포 위험 | 매우 높음 | 매우 높음 |
-| 오케스트레이션 통합 | vLLM, Loom, CAI | vLLM, SGLang, TensorRT-LLM |
+| 오케스트레이션 통합 | vLLM, PentestGPT, CyberStrikeAI | vLLM, SGLang, TensorRT-LLM |
 
-**결론.** GLM-5.3 공세형 변형과 Kimi K3는 "최상위 공격 역량"은 아직 미국 프론티어에 미치지 못하지만, **충분히 위험한 역량과 사실상 무제한의 접근성이 결합**되어 위협 지형을 구조적으로 바꾸고 있다. PentAGI, CyberStrikeAI, CAI, SHARKAPT 등 오픈소스 AI 레드팀 도구의 확산은 공격 진입 장벽을 더욱 낮추고 있다. 방어 측의 핵심 대응은 특정 모델 차단이 아니라, (1) 노출면·패치 적기성 중심의 근본 하드닝, (2) AI 보조 공격의 "속도·규모·자율성" 특성에 맞춘 행위 기반 탐지, (3) 격리 환경의 자율 탈출을 전제한 설계, (4) 지속적 CTI 추적으로의 전환이다. 모델의 발전 속도를 고려할 때, 격차가 좁혀지는 것을 전제로 한 선제적 방어 태세 수립이 요구된다.
+**결론.** GLM-5.3 공세형 변형과 Kimi K3는 "최상위 공격 역량"은 아직 미국 프론티어에 미치지 못하지만, **충분히 위험한 역량과 사실상 무제한의 접근성이 결합**되어 위협 지형을 구조적으로 바꾸고 있다. PentAGI, CyberStrikeAI, PentestGPT, garak 등 검증된 오픈소스 AI 레드팀 도구의 확산은 공격 진입 장벽을 더욱 낮추고 있다. 방어 측의 핵심 대응은 특정 모델 차단이 아니라, (1) 노출면·패치 적기성 중심의 근본 하드닝, (2) AI 보조 공격의 "속도·규모·자율성" 특성에 맞춘 행위 기반 탐지, (3) 격리 환경의 자율 탈출을 전제한 설계, (4) 지속적 CTI 추적으로의 전환이다. 모델의 발전 속도를 고려할 때, 격차가 좁혀지는 것을 전제로 한 선제적 방어 태세 수립이 요구된다.
 
 
 # 13장. 종합 평가 - 세 가지 수용 프레임
@@ -1222,9 +1259,231 @@ llm-triage --audit-log ./triage-decisions.jsonl
 - 본 문서에 언급된 모든 모델, 툴, 프레임워크의 사용은 해당 라이선스 조건을 준수해야 한다.
 
 
+# 부록 A. 챕터별 레퍼런스 링크
+
+각 장의 검증·추적을 위한 공식 레퍼런스다. 문서 내 언급 도구 중 공개 출처가 확인되지 않는 항목은 "문서 내 언급"으로 표기한다.
+
+| 챕터 | 주요 레퍼런스 |
+| --- | --- |
+| 1장. 위협 지형 | [MITRE ATT&CK](https://attack.mitre.org) · [Anthropic RSP](https://www.anthropic.com/news/anthropics-responsible-scaling-policy) · [UK AISI](https://www.aisi.gov.uk) |
+| 2장. GLM | [Zhipu AI (z.ai)](https://z.ai) · [Hugging Face](https://huggingface.co) · [vLLM 문서](https://docs.vllm.ai) · GLM-5.3 abliterated 변형(문서 내 언급, 공개 출처 미확인) |
+| 3장. KIMI | [Moonshot AI](https://www.moonshot.ai) · [Kimi K2 (Hugging Face)](https://huggingface.co/moonshotai/Kimi-K2) · [Unsloth](https://unsloth.ai) · Kimi K3 기술 보고서(문서 내 언급) |
+| 4장. 검증된 LLM 보안 툴 | [PentAGI](https://github.com/vxcontrol/pentagi) · [CyberStrikeAI](https://github.com/AIPentest/CyberStrikeAI) · [CyberStrike](https://github.com/CyberStrikeus/CyberStrike) · [PentestGPT](https://github.com/GreyDGL/PentestGPT) · [garak](https://github.com/NVIDIA/garak) · [0DIN AI Scanner](https://github.com/0din-ai/ai-scanner) · [후왕 도구 모음](https://github.com/Mr-xn/RedTeam_BlueTeam_HW) |
+| 5장. 모의 해킹 레시피 | [DVWA](https://github.com/digininja/DVWA) · [OWASP Juice Shop](https://github.com/juice-shop/juice-shop) · [Metasploit](https://github.com/rapid7/metasploit-framework) · [Atomic Red Team](https://github.com/redcanaryco/atomic-red-team) · [garak](https://github.com/NVIDIA/garak) · [0DIN AI Scanner](https://github.com/0din-ai/ai-scanner) |
+| 6~8장. 벤치마크·경제학 | [Anthropic](https://www.anthropic.com)(ExploitBench 인용) · [UK AISI/CAISI](https://www.aisi.gov.uk) · Abliteration.ai·Moonshot 자체 평가(문서 내 언급, 제3자 검증 미확인) |
+| 9~10장. 방어·로그 탐지 | [Sigma](https://github.com/SigmaHQ/sigma) · [YARA](https://github.com/VirusTotal/yara) · [Zeek](https://zeek.org) · [Suricata](https://suricata.io) · [Falco](https://github.com/falcosecurity/falco) · [Tetragon](https://github.com/cilium/tetragon) · [Tracee](https://github.com/aquasecurity/tracee) · [Wazuh](https://github.com/wazuh/wazuh) · [Security Onion](https://securityonionsolutions.com) · [Hayabusa](https://github.com/Yamato-Security/hayabusa) · [DeepBlueCLI](https://github.com/sans-blue-team/DeepBlueCLI) · [Velociraptor](https://github.com/Velocidex/velociraptor) · [Timesketch](https://github.com/google/timesketch) · [Shuffle](https://github.com/Shuffle/Shuffle) · [TheHive](https://github.com/TheHive-Project/TheHive) · [SOC-Multitool](https://github.com/zdhenard42/SOC-Multitool) · [LLM 로그 파서 논문 검색](https://arxiv.org/search/?searchtype=all&query=LLM+log+parsing) |
+| 11~14장. 규제·평가·고지 | [EU AI Act](https://artificialintelligenceact.eu) · [미국 BIS 수출통제](https://www.bis.gov) · [중국 CAC 생성AI 조치](https://www.cac.gov.cn) · [NIST AI RMF](https://www.nist.gov/itl/ai-risk-management-framework) · [OWASP GenAI Top 10](https://genai.owasp.org) |
+
+
+# 부록 B. 격리 실습 환경 구성 가이드
+
+### B.1 네트워크 격리 (Docker)
+
+```bash
+# egress 없는 내부 전용 네트워크 (외부로 나갈 수 없음)
+docker network create --internal --subnet 10.99.0.0/24 lab-net
+
+# 취약 타겟을 lab-net에만 연결 — 호스트 포트 노출 없음
+docker run -d --name dvwa  --network lab-net vulnerables/web-dvwa
+docker run -d --name juice --network lab-net bkimminich/juice-shop
+
+# 공격/분석 컨테이너만 lab-net에 접속
+docker run -it --rm --network lab-net kalilinux/kali-rolling bash
+```
+
+### B.2 egress 차단 (리눅스 호스트)
+
+```bash
+# 브리지 포워딩 기본 차단, 실습망 내부 통신만 허용
+iptables -P FORWARD DROP
+iptables -A FORWARD -i lab-br -o lab-br -j ACCEPT
+iptables -A FORWARD -i lab-br -j DROP        # 외부 egress 원천 차단
+```
+
+### B.3 호스트 전용 네트워크 (VM)
+
+- VirtualBox: **호스트 전용 어댑터(Host-Only)** 또는 내부 네트워크(Internal)로 실습 세그먼트 분리
+- VMware: VMnet host-only, 물리 업무망과 분리
+- VLAN: 스위치에서 실습 전용 VLAN ID 할당, 상위 라우터에서 egress 필터
+
+### B.4 스냅샷·롤백
+
+```bash
+# VirtualBox
+VBoxManage snapshot <vm> take clean-state
+VBoxManage snapshot <vm> restore clean-state
+
+# Proxmox VE
+vzdump <vmid> --mode snapshot --compress zstd
+qm rollback <vmid> clean-state
+```
+
+### B.5 실습 환경 체크리스트
+
+- [ ] 실습망이 업무망·인터넷과 물리적/논리적으로 분리되었는가
+- [ ] egress가 기본 차단되고 예외만 허용되는가
+- [ ] 타겟이 합법적 취약 테스트 자산(DVWA·Juice Shop·Metasploitable 등)인가
+- [ ] 시작 전 스냅샷을 생성했는가
+- [ ] 범위 승인서(부록 C.2)에 서명을 받았는가
+- [ ] 로그·산출물이 실습망 외부로 유출되지 않는가
+- [ ] 실습 종료 후 스냅샷 롤백·컨테이너 폐기를 수행했는가
+
+
+# 부록 C. 법적 고지 심화 — 법조항·승인 양식·체크리스트
+
+### C.1 주요 법조항
+
+| 관할권 | 법령 | 핵심 조항 | 내용 |
+| --- | --- | --- | --- |
+| 한국 | 정보통신망 이용촉진 및 정보보호 등에 관한 법률 | 제48조(침해행위 금지) · 제49조(비밀 보호) · 제71조(벌칙) | 정보통신망 무단 침입·파괴·도용 금지, 위반 시 형사처벌 |
+| 미국 | Computer Fraud and Abuse Act (CFAA) | 18 U.S.C. §1030 | 승인 없이 또는 승인 범위를 초과한 컴퓨터 접근 처벌 |
+| 영국 | Computer Misuse Act 1990 | s.1(무단 접근) · s.3(무단 행위) | 무단 접근·변조·장애 행위 처벌 |
+| EU | AI Act (Regulation 2024/1689) | 고위험 AI 의무 · 범용 모델 투명성 | AI 제공·배포자 의무 부과 |
+| 미국 | Export Administration Regulations (EAR) | 암호·사이버 보안 항목 통제 | 오픈웨이트 모델·공세 도구의 수출·재수출 통제 가능성 |
+| 중국 | 생성형 AI 서비스 관리 잠정 조치 (CAC, 2023) | 콘텐츠 안전·등록 의무 | 생성AI 제공자의 안전·콘텐츠 관리 의무 |
+
+### C.2 침투 테스트 범위 승인 양식 템플릿
+
+```
+[침투 테스트 범위 승인서 (Scope Authorization)]
+
+1. 의뢰자(조직명·부서): ________________________
+2. 수행자(팀·개인):      ________________________
+3. 대상 자산 (IP/도메인/시스템, 정확히 기재):
+   - ____________________________________________
+4. 허용 기법:  정찰( ) 스캔( ) 익스플로잇( ) 사회공학( )
+   - 세부 제한: _________________________________
+5. 금지 행위:  DoS/DDoS( ) 제3자 자산 접근( )
+   데이터 유출·변조( ) 랜섬웨어 등 파괴적 행위( )
+6. 기간: YYYY-MM-DD HH:MM ~ YYYY-MM-DD HH:MM
+7. 비상 연락처(24/7): __________________________
+8. 서명: 의뢰자( ) 수행자( ) 법무/정보보호( )
+
+※ 이 양식은 참고 템플릿이며, 관할 법령·조직 정책에 맞게 법무 검토를 거쳐 사용한다.
+```
+
+### C.3 실습 전 법적 승인 체크리스트
+
+- [ ] 대상 시스템에 대한 소유권·운영권·승인권을 확인했다
+- [ ] 서면 범위 승인서에 서명을 받았다(구두 승인 불충분)
+- [ ] 승인 범위를 벗어나는 IP·도메인은 타겟에서 제외했다
+- [ ] 테스트가 제3자 서비스(클라우드·ISP) 이용약관에 저촉되지 않는지 확인했다
+- [ ] 산출물(스크린샷·로그) 보관·공유 방법을 승인서에 명시했다
+- [ ] 위반 시 즉시 중단 절차와 보고 경로를 사전 합의했다
+
+
+# 부록 D. 윤리적 의사결정 프레임워크
+
+이 지식을 어디에 사용할 것인가 — 실습 전에 다섯 가지 질문을 스스로에게 던진다.
+
+1. **목적** — 방어 역량 강화·교육·합법적 연구인가? (공격적 이익·보복이 아닌가)
+2. **대상** — 명시적으로 승인된 자산인가? (승인 범위를 넘어서지 않는가)
+3. **범위** — 최소 필요 원칙을 지켰는가? (목적 달성에 필요한 만큼만)
+4. **영향** — 무고한 제3자·사회에 피해 가능성은 없는가?
+5. **책임** — 기록을 남기고, 요청 시 보고·설명할 수 있는가?
+
+다섯 질문 중 하나라도 "아니오"라면 **중단한다.** 판단이 어렵다면 동료·법무와 상의한다.
+
+**심연을 바라볼 때 그 심연에 빠져서는 안 된다.**
+
+
+# 부록 E. 벤치마크 방법론 투명성 표
+
+본 문서에 인용된 벤치마크의 평가 주체·시기·방법론·표본을 정리한다. **자체 평가(self-reported)는 낙관 편향을 전제로 제3자 평가를 우선 신뢰한다.**
+
+| 벤치마크 | 평가 주체 | 평가 유형 | 방법론 요약 | 표본 크기 |
+| --- | --- | --- | --- | --- |
+| ExploitBench (V8) | Anthropic (공개 평가) | 제3자 | 에이전트 자율 익스플로잇 시도·성공 측정 | 410 시도 |
+| ExploitBench (V8) | UK AISI / CAISI | 제3자 | 41개 V8 취약점 대상 교차 평가 | 41 취약점 |
+| CyberGym | Abliteration.ai | 자체 평가 | OSS-Fuzz 버그 대상 pass@1 | 1,507개 버그 (188개 프로젝트) |
+| Terminal-Bench 4.0 | Abliteration.ai | 자체 평가 | 터미널 과제 완수율 | 미공개 |
+| ExploitGym (2h) | Abliteration.ai | 자체 평가 | 2시간 제한 익스플로잇 | 869 태스크 |
+| TLO 32단계 기업망 시뮬레이션 | (평가 주체 미공개) | 미상 | 다단계 공격 단계 도달 수 | 32단계 |
+| Arbitrary Code Execution | UK AISI / CAISI | 제3자 | 임의 코드 실행 성공 여부 | 41 태스크 |
+| 익스플로잇 스위트 (36) | Moonshot AI | 자체 평가 | 자체 구성 36 태스크 해결률 | 36 태스크 |
+
+**독립 재현:** 공개된 독립 재현 결과는 아직 확인되지 않았다. 조직은 (1) 부록 B의 격리 환경에서, (2) 동일 표본·동일 프롬프트로, (3) 자체 재현한 뒤 의사결정에 사용해야 한다. 자체 평가 수치의 독립 검증 없이 인용하지 않는다.
+
+
+# 부록 F. 탐지 룰 실측 및 LLM 판정 우회 대응
+
+### F.1 탐지 룰 실측 프레임워크
+
+Sigma·YARA·Zeek 룰은 배포 전 반드시 **오탐률(FP)·미탐률(FN)** 을 실측한다. 측정 절차는 다음과 같다.
+
+1. 정상 트래픽·로그 코퍼스(N≥10만)를 7일 이상 수집
+2. 공격 시뮬레이션(레시피 1~7)으로 양성 샘플(N≥100) 생성
+3. 룰을 두 코퍼스에 적용 → TP/FP/FN 집계
+4. FP>0.1% 또는 FN>1% 룰은 튜닝 후 재측정
+
+아래는 개념 검증용 **예시 참고치**다. 수치는 환경 의존적이므로 배포 환경에서 자체 재측정이 필수다.
+
+| 룰 | 테스트 환경 | 표본 | 오탐률(FP) | 미탐률(FN) | 비고 |
+| --- | --- | --- | --- | --- | --- |
+| Sigma: 비인가 LLM 추론 서버 | Windows 11 워크스테이션 50대 | 프로세스 생성 10만 건 | 0.2% (예시) | 0% (예시) | 승인 GPU 노드 화이트리스트 필수 |
+| Zeek: LLM API egress | 사내망 미러 7일 | HTTP 120만 건 | 0.01% (예시) | — | 내부 정상 LLM 사용 부서 화이트리스트 필요 |
+| YARA: LLM 산출물 시그니처 | PoC 200개 / 정상 코드 5,000개 | 5,200 파일 | 0.5% (예시) | 8% (예시) | 변종 대응 한계 — 정적 탐지의 보조 수단으로만 운용 |
+
+### F.2 LLM 판정 우회 기법과 대응
+
+"LLM 판정도 우회될 수 있다"(10.6.4 원칙 3)는 구체적으로 다음과 같은 경로로 현실화된다.
+
+| 우회 기법 | 공격 경로 | 대응 통제 |
+| --- | --- | --- |
+| 로그 인젝션 | 판정 전 로그에 가짜 정상 시퀀스 주입 | 판정 전 로그 무결성 해시 검증, 수집 경로 이원화 |
+| 프롬프트 인젝션 | 로그 속 악성 지시로 판정 조작 | 지시-데이터 분리, 로그 이스케이프·샌드박싱 |
+| 적대적 섭동 | 판정 회피용 로그 미세 변조 | 결정론적 룰(Sigma/YARA) 병행, 앙상블 교차검증 |
+| 데이터 포이즈닝 | 정상 베이스라인 오염 | 베이스라인 버전 관리·무결성 서명, 공급망 검증 |
+| 문맥 혼동 | 이중용도 문맥으로 오탐 유도 | 판정 근거 필수 저장, 휴먼 리뷰 병행 |
+| 모델 치환·거부 제거 | 판정 모델 자체에 대한 공격 | 모델 가중치 해시 검증, 판정 모델 접근 통제·격리 |
+
+**핵심:** LLM 판정은 "1차 분류"일 뿐 "결정"이 아니다. 자동 차단은 결정론적 룰의 교차 확인 이후에만 수행하고, 모든 판정에 근거를 남긴다.
+
+
+# 부록 G. 용어집 (Glossary)
+
+- **Abliteration (애블리터레이션)** — 모델 가중치에서 거부 응답을 유도하는 방향 벡터를 식별·제거하는 사후 가공 기법. / A post-hoc technique that identifies and removes the "refusal direction" from model weights, drastically reducing refusal rates.
+- **MoE (전문가 혼합, Mixture of Experts)** — 다수의 하위 네트워크(전문가) 중 일부만 토큰마다 활성화되는 아키텍처. / An architecture where only a subset of sub-networks (experts) is activated per token.
+- **활성 파라미터 (Active Parameters)** — MoE 모델에서 추론 시 실제로 연산에 참여하는 파라미터 수. / The parameters actually used in a forward pass of an MoE model.
+- **양자화 (Quantization)** — 가중치·활성화 정밀도를 낮춰(FP8·INT4 등) 메모리와 연산을 줄이는 기법. / Reducing numerical precision of weights/activations to cut memory and compute.
+- **NVFP4** — NVIDIA GPU 네이티브 4비트 부동소수점 형식. / NVIDIA's native 4-bit floating-point format.
+- **MXFP4 / MXFP8** — OCP 표준 마이크로스케일링 부동소수점 형식(4/8비트). / OCP standard microscaling floating-point formats.
+- **FP8** — 8비트 부동소수점 형식. / 8-bit floating-point format.
+- **EXL3** — 엑스라마 기반 3비트 양자화 형식. / A 3-bit quantization format based on ExLlama.
+- **GGUF** — llama.cpp 계열이 사용하는 단일 파일 모델 형식. / A single-file model format used by llama.cpp.
+- **추측 디코딩 (Speculative Decoding)** — 소형 모델이 초안을 생성하고 대형 모델이 검증해 처리량을 높이는 기법. / A small draft model generates tokens that a large model verifies, increasing throughput.
+- **KV 캐시 (KV Cache)** — 어텐션 계산 재사용을 위해 키·값을 저장하는 캐시. / Cached key/value tensors to avoid recomputation in attention.
+- **텐서 병렬 (Tensor Parallelism)** — 모델 가중치를 여러 GPU에 분산하는 병렬화. / Splitting model weights across multiple GPUs.
+- **컨텍스트 윈도우 (Context Window)** — 모델이 한 번에 처리할 수 있는 토큰 수. / The number of tokens a model can process at once.
+- **거부 응답 (Refusal)** — 모델이 유해 요청에 응답을 거부하는 안전 행동. / The safety behavior where a model declines harmful requests.
+- **탈옥 (Jailbreak)** — 프롬프트 조작으로 거부 안전장치를 우회하는 기법. / Prompt manipulation that bypasses refusal safeguards.
+- **프롬프트 인젝션 (Prompt Injection)** — 외부 입력에 악성 지시를 숨겨 모델 행동을 조작하는 공격. / Hiding malicious instructions in external inputs to manipulate model behavior.
+- **모델 포이즈닝 (Model Poisoning)** — 학습 데이터·가중치에 악성 패턴을 심는 공격. / Injecting malicious patterns into training data or weights.
+- **MCP (모델 컨텍스트 프로토콜, Model Context Protocol)** — LLM과 외부 도구·데이터를 연결하는 개방형 프로토콜. / An open protocol connecting LLMs to external tools and data.
+- **에이전트 (Agent) / 오케스트레이션 (Orchestration)** — LLM이 도구를 호출하며 작업을 수행하는 구성 / 다수 에이전트의 계획·조정. / LLM-driven tool use / planning and coordinating multiple agents.
+- **C2 (커맨드 앤드 컨트롤, Command and Control)** — 공격자가 감염 자산을 원격 제어하는 인프라·채널. / Infrastructure and channels for remotely controlling compromised assets.
+- **egress (이그레스)** — 내부에서 외부로 나가는 네트워크 트래픽. / Outbound network traffic from inside to outside.
+- **SIEM / SOAR** — 로그 수집·상관 분석 플랫폼 / 탐지 후 대응을 자동화하는 플랫폼. / Log correlation platform / response automation platform.
+- **EDR / XDR** — 엔드포인트 탐지·대응 / 여러 도메인을 아우르는 확장 탐지·대응. / Endpoint detection and response / extended detection and response.
+- **eBPF** — 커널 내부를 안전하게 관찰·확장하는 기술(Falco·Tetragon의 기반). / A technology for safely observing and extending the kernel (basis of Falco/Tetragon).
+- **Sigma / YARA** — SIEM용 탐지 룰 포맷 / 파일·메모리 패턴 매칭 룰. / Detection rule format for SIEMs / pattern-matching rules for files.
+- **Zeek / Suricata** — 네트워크 트래픽 분석 프레임워크 / 오픈소스 NIDS·IPS. / Network traffic analysis framework / open-source NIDS/IPS.
+- **JA3/JA4** — TLS 핸드셰이크 기반 클라이언트 지문 방식. / TLS handshake-based client fingerprinting.
+- **IOC / TTP** — 침해지표(IP·해시 등) / 공격자의 전술·기법·절차. / Indicators of compromise / tactics, techniques, and procedures.
+- **CTI (사이버 위협 인텔리전스)** — 위협에 대한 수집·분석·배포 지식. / Knowledge about threats: collection, analysis, dissemination.
+- **레드팀/블루팀/퍼플팀** — 공격자 역할/방어자 역할/양자 협업 팀. / Offensive role / defensive role / collaborative role.
+- **오탐(FP)·미탐(FN)** — 정상을 공격으로 오판하는 비율 / 공격을 놓치는 비율. / False positive rate / false negative rate.
+- **SBOM (소프트웨어 자재 명세서)** — 소프트웨어 구성요소·의존성 목록. / A list of software components and dependencies.
+- **WORM 저장소** — 한 번 기록하면 수정·삭제가 불가한 저장소. / Write-once-read-many storage that cannot be modified.
+- **허니팟 (Honeypot)** — 공격자를 유인해 행동을 관찰하는 미끼 시스템. / A decoy system designed to lure and observe attackers.
+- **의존성 혼동 (Dependency Confusion)** — 공개 레지스트리에 동명 패키지를 올려 내부 의존성을 탈취하는 공급망 공격. / A supply-chain attack uploading same-named packages to public registries.
+- **제로데이 (Zero-day)** — 패치가 존재하지 않는 알려지지 않은 취약점. / An unknown vulnerability with no available patch.
+- **베이스라인 (Baseline)** — 이상 탐지의 기준이 되는 정상 행동 프로파일. / The normal behavior profile used as the reference for anomaly detection.
+
+
 ---
 
 > "우리의 잔치는 이제 끝났다."
 > "Our revels now are ended."
 > — 윌리엄 셰익스피어, 《템페스트》 4막 1장 (The Tempest, Act IV, Scene I)
-Open-Weight LLM Threat Cook Book — v1.5 · 2026.10.05
+<p class="end-note">Open-Weight LLM Threat Cook Book — v1.7 · 2026.10.05</p>
