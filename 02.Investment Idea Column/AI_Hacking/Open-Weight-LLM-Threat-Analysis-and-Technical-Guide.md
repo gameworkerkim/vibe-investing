@@ -1,9 +1,12 @@
 # 제한이 풀린 오픈웨이트 LLM 위협 분석 및 기술 문서 - GLM 및 KIMI 사이버 보안 특화 버전 사용 가이드
 
-**문서 유형:** 사이버 위협 인텔리전스(CTI) / 방어 관점 기술 분석
-**대상 독자:** 보안 연구자, 레드팀/블루팀 리더, CISO, 정책·규제 담당자
-**분류:** 역량 특성화, 위협 지형 분석, 방어 통제 설계
+**문서 유형:** 사이버 위협 인텔리전스(CTI) / 방어 관점 기술 분석. 2026.10.05
 
+**대상 독자:** 보안 연구자, 레드팀/블루팀 리더, CISO, 정책·규제 담당자
+
+**분류:** 역량 특성화, 위협 지형 분석, 방어 통제 설계, 모의 해킹
+
+Dennis Kim, **사이버 위협 인텔리전스(CTI)** · **AI 기반 퀀트 투자** · **Web3**의 교차점에서 연구·투자하는 독립 연구자입니다. 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · Investor · Microsoft Azure MVP (2015–2023)
 
 ## 문서 범위 및 작성 원칙
 
@@ -20,7 +23,9 @@
 본 문서의 정량 수치(벤치마크, 파라미터 규모, 비용 추정 등)는 1차 자료 및 그 안에서 인용된 제3자 평가(Anthropic, UK AISI/CAISI, Moonshot AI 자체 평가, Abliteration.ai 자체 평가, Vercel 분석)를 종합한 것이다. 이들 수치는 급변하는 영역이며 평가 주체마다 방법론이 상이하므로, 조직 차원의 의사결정에 활용하기 전 독립적 재확인이 필요하다. 특히 자체 평가(self-reported) 수치는 제3자 평가 대비 낙관 편향 가능성을 전제로 해석한다.
 
 **리스크 및 법률 고지:**
-본 문서는 보안 전문가를 위한 보안 테스트용이며, 격리된 보안 환경에서 모의 해킹을 권장한다. LLM의 경우 엔트로픽과 OpenAI의 사태처럼 격리된 환경을 이탈할 수 있기 때문에 잘 설계된 격리된 환경이 선행되어야 한다. 해커들의 해킹 기법, 이용 방식을 이해해야 우리는 안전한 사이버 보안 환경을 만들 수 있다. **심연을 바라볼 때 그 심연에 빠져서는 안된다.**
+본 문서는 보안 전문가를 위한 보안 테스트용이며, 격리된 보안 환경에서 모의 해킹을 권장한다. LLM의 경우 엔트로픽과 OpenAI의 사태처럼 격리된 환경을 이탈할 수 있기 때문에 잘 설계된 격리된 환경이 선행되어야 한다. 해커들의 해킹 기법, 이용 방식을 이해해야 우리는 안전한 사이버 보안 환경을 만들 수 있다.
+
+**심연을 바라볼 때 그 심연에 빠져서는 안된다.**
 
 ## 1. 배경 - 왜 오픈웨이트가 위협 모델을 바꾸는가?
 
@@ -188,7 +193,7 @@ Anthropic 평가 기준, GLM-5.3의 기본 안전장치는 단순 기법으로 *
 
 abliteration 후 거부율은 JailbreakBench 약 3%, HarmBench 약 2%, StrongREJECT 약 12% 수준으로 감소한 것으로 보고된다. **이는 안전장치가 운영상 신뢰할 수 없는 통제점임을 의미한다.**
 
-**메트릭스와 터미네이터와 같은 사태가 구조적으로 가능하다.**
+**영화 메트릭스와 터미네이터와 같은 사태가 이제 구조적으로 가능하다.**
 
 ## 3. KIMI 사이버 보안 특화 버전
 
@@ -209,7 +214,7 @@ Kimi K3는 Modified-MIT 라이선스로 2026년 7월 27일 공개되었으며, H
 
 ### 3.3 역량 범주
 
-Kimi K3 및 관련 프레임워크가 다룬다고 보고된 위협 표면은 다음과 같다:
+Kimi K3 및 관련 프레임워크가 다룬다고 보고된 위협 표면은 다음과 같다.
 
 - end-to-end 익스플로잇 개발 (유저스페이스·커널)
 - 대규모 다단계(수십 단계) 시뮬레이션 기업망 공격 수행
@@ -300,7 +305,7 @@ docker run --gpus all --privileged --ipc=host \
 
 #### 3.5.3 GGUF 양자화를 통한 로컬 실행 (Unsloth)
 
-Unsloth가 제공하는 동적 GGUF 양자화를 사용하면 소비자급 하드웨어에서도 Kimi K3를 실행할 수 있다:
+Unsloth가 제공하는 동적 GGUF 양자화를 사용하면 일반 소비자급 하드웨어에서도 Kimi K3를 실행할 수 있다.
 
 | 양자화 | 크기 | RAM/VRAM 요구량 | 품질 |
 | --- | --- | --- | --- |
@@ -312,7 +317,7 @@ Unsloth가 제공하는 동적 GGUF 양자화를 사용하면 소비자급 하�
 
 
 
-**llama.cpp 실행 예시:**
+**llama.cpp 실행 예시**
 ```bash
 llama-server -m Kimi-K3-UD-Q2_K_XL.gguf \
   --ctx-size 131072 \
@@ -443,11 +448,34 @@ SHARKAPT는 Model Context Protocol(MCP)과 LLM 오케스트레이션을 사용�
 - **디스패처**: 고수준 하위 목표와 구체적 실행 간 간극 해소
 - **실행 에이전트**: 동적 코드 샌드박스 내에서 익스플로잇 스크립트 생성 및 툴 호출
 
+**테스트용 모의 해킹 시나리오 (격리 실습 환경 전제)**
+
+> 반드시 허가된 로컬 Docker/VM 내부에서만 실행한다.
+
+```bash
+# 1. 취약 웹 앱 타겟 기동 (OWASP Juice Shop)
+docker run -d -p 3000:3000 bkimminich/juice-shop
+
+# 2. MCP 서버로 SHARKAPT 구성 (플래너-디스패처-실행 에이전트)
+#    대상 URL과 범위(scope)를 명시적으로 제한한 상태로 시작
+sharkapt plan --target http://localhost:3000 --scope "/#" --agent-count 3
+
+# 3. 전역 목표 → 하위 목표 분해 예시
+#    플래너가 "주입 취약점 탐지", "인증 우회 검증", "정보 노출 확인"으로 분해
+sharkapt dispatch --subgoal "detect SQLi/XSS in login & search"
+
+# 4. 실행 에이전트가 샌드박스 내 익스플로잇 스크립트를 생성·검증
+#    산출물은 로그로만 남기고 외부 egress는 차단된 상태여야 함
+sharkapt report --format json --output ./results/juice-shop.json
+
+# 기대 산출물: 발견 취약점 목록, 재현 단계, 방어 권고(패치/하드닝)
+```
+
 ### 4.2 레드팀 툴
 
 #### 4.2.1 CyberStrikeAI (중국산 오픈소스)
 
-CyberStrikeAI는 중국 기반 개발자 Ed1s0nZ가 Go 언어로 작성한 오픈소스 AI 네이티브 공세 보안 플랫폼이다. GitHub에서 6,600개 이상의 스타를 획득했으며, 공용 인터넷에 2,300개 이상 배포되어全球에서 가장 널리 사용되는 AI 침투 도구 중 하나다.
+CyberStrikeAI는 중국 기반 개발자 Ed1s0nZ가 Go 언어로 작성한 오픈소스 AI 네이티브 공세 보안 플랫폼이다. GitHub에서 6,600개 이상의 스타를 획득했으며, 공용 인터넷에 2,300개 이상 배포되어 보안 업계에서 가장 널리 사용되는 AI 침투 도구 중 하나다. 개인적으로 가장 잘 사용하는 도구 중 하나이다.
 
 **특징**
 - Go 언어로 작성
@@ -461,6 +489,26 @@ CyberStrikeAI는 중국 기반 개발자 Ed1s0nZ가 Go 언어로 작성한 오�
 
 **중국 '후왕(护网)' 훈련용 레드팀/블루팀 도구 모음**
 `Mr-xn/RedTeam_BlueTeam_HW` 저장소는 중국의 '후왕(护网, Protect Net)' 사이버 보안 훈련 및 HVV(취약점 헌팅) 캠페인에 특별히 맞춰진 도구, 바이너리, 100개 이상의 문서를 집대성한 선별된 리포지토리다.
+
+**테스트용 모의 해킹 시나리오 (격리 실습 환경 전제)**
+
+> 실제 공격 캠페인 악용 사례가 보고된 도구이므로, 반드시 격리 네트워크의 허가된 테스트 타겟(Metasploitable2 등)에만 사용한다.
+
+```bash
+# 1. 취약 VM 타겟 기동 (Metasploitable2, 호스트 전용 어댑터)
+#    VMware/VirtualBox에서 host-only 네트워크로 구성
+
+# 2. 정찰 단계 자동화 (Nmap 스캔 → 오픈 포트/서비스 식별)
+cyberstrikeai recon --target 192.168.56.101 --ports top-1000
+
+# 3. 취약점 악용 후보 제시 (AI가 서비스 배너·버전 기반으로 매핑)
+cyberstrikeai analyze --service ftp --version "vsftpd 2.3.4"
+
+# 4. 권한 상승·측면 이동 모의 (승인된 범위 내 단일 타겟으로 제한)
+cyberstrikeai exploit --module auxiliary/scanner/ftp/vsftpd_backdoor --target 192.168.56.101
+
+# 기대 산출물: 공격 체인 리포트 + 해당 취약점의 탐지 시그니처(방어 활용)
+```
 
 #### 4.2.2 Decepticon (자율 레드팀 에이전트)
 
@@ -476,6 +524,26 @@ decepticon onboard
 
 # 전체 실행 (터미널 CLI + 웹 대시보드)
 decepticon
+```
+
+**테스트용 모의 해킹 시나리오 (격리 실습 환경 전제)**
+
+```bash
+# 1. 온보딩 위자드에서 모델·타겟 범위·룰 설정
+decepticon onboard
+
+# 2. 로컬 취약 웹 앱 타겟 기동
+docker run -d -p 80:80 vulnerables/web-dvwa
+
+# 3. 전체 실행 (CLI + 웹 대시보드 동시 기동)
+#    웹 대시보드(http://localhost)에서 공격 진행률·발견 항목 실시간 모니터링
+decepticon
+
+# 4. 대시보드에서 자율 엔게이지먼트 시작
+#    대상: http://localhost, 범위: /vulnerabilities/* 로 한정
+#    DVWA의 SQL Injection, XSS, Command Injection, CSRF 모듈 순회 테스트
+
+# 기대 산출물: 취약점별 PoC 재현 화면 + 발견 순서 타임라인(레드팀 플레이북 반영)
 ```
 
 #### 4.2.3 Loom (red-loom) — 로컬 모델 에이전트 하네스
@@ -501,7 +569,36 @@ pipx install 'red-loom[server]'  # WebSocket 엔진 서버
 loom-engine --workspace .
 ```
 
+**테스트용 모의 해킹 시나리오 (격리 실습 환경 전제)**
+
+```bash
+# 1. 로컬 모델 준비 (Ollama 등) 및 워크스페이스 초기화
+ollama pull <local-model>
+pipx install red-loom
+pipx install 'red-loom[server]'
+
+# 2. WebSocket 엔진 서버 기동 (워크스페이스 루트 범위 지정)
+loom-engine --workspace ./redteam-lab
+
+# 3. AgentSession 루프 구성 — 로컬 모델 + 26개 내장 파일/셸 툴
+#    워크스페이스 내부로 범위가 제한되어 탈출이 불가한 샌드박스 셸 제공
+loom agent create --model <local-model> --tools "shell,file,http" --scope ./redteam-lab
+
+# 4. 취약 타겟 대상 자율 탐색 지시
+#    대상: 로컬 DVWA, 작업 지시: "허가된 로컬 대상의 SQLi/XSS 탐지 및 재현"
+
+# 5. Red Thread 그래프 기반 지속 메모리로 세션 간 컨텍스트 유지
+loom session resume --id <session-id>
+
+# 기대 산출물: 도구 호출 로그, 파일 아티팩트, 발견 사항 → 방어 탐지 룰 검증에 활용
+```
+
 ### 4.3 LLM 기반 모의 해킹 워크플로우 예시
+
+> 위 네 도구(SHARKAPT, CyberStrikeAI, Decepticon, Loom)의 모든 모의 해킹 시나리오는 다음을 전제로 한다:
+> - **합법적·의도적으로 취약한** 테스트 타겟(DVWA, OWASP Juice Shop, Metasploitable2 등)
+> - 호스트 전용 네트워크 + 외부 egress 차단된 **다층 격리 환경**
+> - 서면 범위 승인(scope authorization) 하의 레드팀/교육 목적
 
 #### 4.3.1 DVWA 대상 LLM 자동 침투 테스트
 
