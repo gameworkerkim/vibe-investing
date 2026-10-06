@@ -1,3 +1,4 @@
+<!--
 ---
 title: "늦게 도착한 판결, 끝내 이긴 시민"
 title_en: "A Late Verdict, and Citizens Who Won Anyway"
