@@ -1,8 +1,74 @@
+---
+title: "늦게 도착한 판결, 끝내 이긴 시민"
+title_en: "A Late Verdict, and Citizens Who Won Anyway"
+subtitle: "전두환 대법원 판결로 읽는 정의와 민주주의, 그리고 한국·대만의 성장"
+description: "1997년 전두환 확정 판결은 성공한 쿠데타가 합법이 된다는 공식을 폐기했다. 샌델의 정의와 한국·대만의 성장은, 늦게 도착한 판결이 끝내 시민의 것임을 보여준다."
+abstract: |
+  1997년 4월 17일 대법원은 전두환 무기징역을 확정했다. 성공한 쿠데타는 처벌할 수 없다는 공식을 폐기한 날이다.
+  샌델의 공리·존엄·미덕, 다이아몬드의 리더 순위표, 아세모글루의 포용적 제도.
+  한국과 대만은 민주주의와 성장을 함께 지켰다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean politics/history essay (not legal or investment advice), 2026-10-06,
+  group korea, Democracy-and-Politics-in-Asia.md. Slug democracy-and-politics-in-asia.
+  Supreme Court en banc 96do3376 (1997-04-17): Chun Doo-hwan life, Roh Tae-woo 17 years. No successful-coup immunity.
+  Sandel Justice three scales; Diamond When Do Leaders Matter / Easterly-Pennings leader value-added; Acemoglu-Robinson.
+  Korea vs Taiwan vs China/Japan/Singapore/Thailand on putting rulers on trial. 12-3 2024 martial law resilience; V-Dem 2026; Blinken.
+  5-18 memory law, memoir injunction 2026. Closing: late verdict, citizens won.
+date: 2026-10-06
+updated: 2026-10-06
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 전두환
+  - 민주주의
+  - 정의란무엇인가
+  - 5·18
+  - 대만
+  - 마이클샌델
+keywords:
+  - "늦게 도착한 판결"
+  - "전두환 대법원"
+  - "정의란 무엇인가"
+  - "성공한 쿠데타"
+  - "한국 대만"
+  - "마이클 샌델"
+group: korea
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/democracy-and-politics-in-asia.jpg"
+image: "https://vibequant.cc/og/democracy-and-politics-in-asia.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>늦게 도착한 판결, 끝내 이긴 시민 · VibeQuant</title>
+  <meta name="description" content="1997년 전두환 확정 판결은 성공한 쿠데타가 합법이 된다는 공식을 폐기했다. 샌델의 정의와 한국·대만의 성장은, 늦게 도착한 판결이 끝내 시민의 것임을 보여준다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "늦게 도착한 판결, 끝내 이긴 시민",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-06",
+    "keywords": ["늦게 도착한 판결", "전두환 대법원", "정의란 무엇인가", "성공한 쿠데타", "한국 대만", "마이클 샌델"]
+  }
+  </script>
+-->
+
 # 늦게 도착한 판결, 끝내 이긴 시민
 
-전두환 대법원 판결로 읽는 정의와 민주주의, 그리고 한국·대만의 성장
+## 전두환 대법원 판결로 읽는 정의와 민주주의, 그리고 한국·대만의 성장
 
-Oct 6, 2026 · @Dennis Kim
+![마이클 샌델 『정의란 무엇인가』 표지](images/sandel-justice-cover.jpg)
+
+*마이클 샌델 『정의란 무엇인가』(Justice: What's the Right Thing to Do?, 2009). 한국어판 김영사, 이창신 옮김, 2010.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 6일
 
 ## 들어가며 - 1997년 4월 17일, 법정이 역사에 답하다
 
