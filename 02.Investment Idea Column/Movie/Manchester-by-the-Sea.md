@@ -1,7 +1,72 @@
+---
+title: "맨체스터 바이 더 씨 — 바다는 모든 것을 알고도 침묵한다"
+title_en: "Manchester by the Sea — The Sea Knows Everything and Still Says Nothing"
+subtitle: "영화 〈맨체스터 바이 더 씨〉, 상실과 죄책감에 대하여"
+description: "바다는 모든 것을 알고도 침묵한다. 〈맨체스터 바이 더 씨〉는 이겨내지 못한 채로도 곁에 머무는 법을 묻는다. 리에게 그 도시는 지옥이고, 패트릭에게는 집이다."
+abstract: |
+  케네스 로너건 〈맨체스터 바이 더 씨〉(2016). 케이시 애플렉의 리 챈들러는 살아 있으나 살고 있지 않다.
+  생존자 죄책감과 수치심, 매몰비용, 지속적 유대. 영화는 치유를 약속하지 않는다. 방 하나, 같은 배 위.
+  이겨내지 못해도 괜찮다. 다만 곁에 머물 수 있다면. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film/society essay (not legal or investment advice), 2026-10-06,
+  group industry, Movie/Manchester-by-the-Sea.md. Slug manchester-by-the-sea.
+  Film: Kenneth Lonergan, Manchester by the Sea (2016). Casey Affleck as Lee Chandler, Michelle Williams as Randi, Lucas Hedges as Patrick, Kyle Chandler as Joe.
+  Thesis: grief is not cured; coexistence. Lee cannot beat it; the one extra room is the opening. Manchester is hell for Lee, home for Patrick. Survivor guilt vs shame (Tangney); Bowlby reorganization stalled; sunk cost of self-punishment; Neff self-compassion; continuing bonds; Stroebe-Schut dual process. Key lines: There's nothing there; I can't beat it; My heart was broken.
+date: 2026-10-06
+updated: 2026-10-06
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 맨체스터바이더씨
+  - 케이시애플렉
+  - 죄책감
+  - 애도
+  - 케네스로너건
+  - 상실
+keywords:
+  - "맨체스터 바이 더 씨"
+  - "바다는 모든 것을 알고도 침묵한다"
+  - "케이시 애플렉"
+  - "이겨낼 수가 없어"
+  - "생존자 죄책감"
+  - "케네스 로너건"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/manchester-by-the-sea.jpg"
+image: "https://vibequant.cc/og/manchester-by-the-sea.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>맨체스터 바이 더 씨 — 바다는 모든 것을 알고도 침묵한다 · VibeQuant</title>
+  <meta name="description" content="바다는 모든 것을 알고도 침묵한다. 〈맨체스터 바이 더 씨〉는 이겨내지 못한 채로도 곁에 머무는 법을 묻는다. 리에게 그 도시는 지옥이고, 패트릭에게는 집이다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "맨체스터 바이 더 씨 — 바다는 모든 것을 알고도 침묵한다",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-06",
+    "keywords": ["맨체스터 바이 더 씨", "바다는 모든 것을 알고도 침묵한다", "케이시 애플렉", "이겨낼 수가 없어", "생존자 죄책감", "케네스 로너건"]
+  }
+  </script>
+-->
+
 # 맨체스터 바이 더 씨 — 바다는 모든 것을 알고도 침묵한다
 
-**〈맨체스터 바이 더 씨〉 (2016), 상실과 죄책감에 대하여**
+## 영화 〈맨체스터 바이 더 씨〉, 상실과 죄책감에 대하여
 
+![영화 맨체스터 바이 더 씨 포스터. 케이시 애플렉과 미셸 윌리엄스](images/manchester-by-the-sea-poster.jpg)
+
+*케네스 로너건 감독 〈맨체스터 바이 더 씨(Manchester by the Sea)〉(2016). 주연 케이시 애플렉, 미셸 윌리엄스, 루카스 헤지스, 카일 챈들러. 제작 맷 데이먼.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 6일
 
 ## 프롤로그. 눈 내리는 항구
 
@@ -32,7 +97,7 @@
 
 돌아왔을 때 집은 불타고 있었습니다. 랜디는 구조되었지만, 아이들은 나오지 못했습니다.
 
-경찰은 끔찍한 실수였을 뿐 처벌할 죄는 없다며 그를 돌려보냅니다. 그 순간 리는 경찰관의 총을 빼앗아 자신의 머리에 겨누고, 방아쇠를 당기기 전에 바닥에 제압당합니다. 법은 그에게 벌을 주지 않았습니다. 그래서 그는 남은 생 전체를 스스로에게 내리는 형벌로 살기로 합니다. 보스턴의 지하방은 그가 스스로 들어간 감옥이었습니다. 랜디도 그날 밤 이후 자신을 용서하지 못했고, 그 죄책감은 한동안 리를 향한 분노로 나타났습니다
+경찰은 끔찍한 실수였을 뿐 처벌할 죄는 없다며 그를 돌려보냅니다. 그 순간 리는 경찰관의 총을 빼앗아 자신의 머리에 겨누고, 방아쇠를 당기기 전에 바닥에 제압당합니다. 법은 그에게 벌을 주지 않았습니다. 그래서 그는 남은 생 전체를 스스로에게 내리는 형벌로 살기로 합니다. 보스턴의 지하방은 그가 스스로 들어간 감옥이었습니다. 랜디도 그날 밤 이후 자신을 용서하지 못했고, 그 죄책감은 한동안 리를 향한 분노로 나타났습니다.
 
 ### 패트릭 — 지옥과 집 사이
 
@@ -135,6 +200,6 @@
 
 ¹ 대니얼 카너먼과 아모스 트버스키가 주목한 **반사실적 사고(counterfactual thinking)**. 사람들은 실제로 일어난 일보다 "그랬더라면"이라는 상상에 더 크게 괴로워합니다. 벗어나는 첫걸음은 질문을 "그때 왜 그랬을까"에서 "지금 무엇을 할 수 있을까"로 바꾸는 것입니다.
 
-² 스트로브와 슈트의 **이중과정 모델(dual process model)**. 건강한 애도는 상실에 머무는 시간과 삶으로 돌아오는 시간 사이를 오가는 진동이라고 봅니다.ㄷ
+² 스트로브와 슈트의 **이중과정 모델(dual process model)**. 건강한 애도는 상실에 머무는 시간과 삶으로 돌아오는 시간 사이를 오가는 진동이라고 봅니다.
 
-마지막 칼럼의 대사는 랜디의 원문 대사는 "My heart was broken — cause it's always gonna be broken, and I know yours is broken, too — but I don't have to carry it."입니다. 랜디는 상실을 짊어지지 않아도 된다는 것을 깨달았지만, 리는 아직 그 깨달음에 이르지 못했다는 의미입니다.
+랜디의 원문 대사는 "My heart was broken — cause it's always gonna be broken, and I know yours is broken, too — but I don't have to carry it."입니다. 랜디는 상실을 짊어지지 않아도 된다는 것을 깨달았지만, 리는 아직 그 깨달음에 이르지 못했다는 의미입니다.

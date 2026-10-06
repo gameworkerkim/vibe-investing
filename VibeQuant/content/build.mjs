@@ -667,6 +667,7 @@ const SLUG_OVERRIDES = {
   "Movie/Hyundai-industry.md": "hyundai-industry",
   "Movie/Shawshank.md": "shawshank",
   "Movie/Forrest-Gump.md": "forrest-gump",
+  "Movie/Manchester-by-the-Sea.md": "manchester-by-the-sea",
   "Basic-Income/Basic-Income.md": "basic-income",
   "Key-Currency/Gold-Ledger.md": "gold-ledger",
   "Japan/Japan's-Failure.md": "japans-failure",
