@@ -1,4 +1,73 @@
+---
+title: "위플래쉬, 완벽을 향한 집착"
+title_en: "Whiplash — The Obsession with Perfection"
+subtitle: "피가 마르지 않는 드럼 앞에서, 그 피는 무엇을 위한 것이었는가"
+description: "〈위플래쉬〉는 완벽을 향한 채찍이 사람을 어떻게 만드는지를 묻는다. 그 피는 무엇을 위한 것이었는가. 위대해지지 않아도, 우리는 살아갈 자격이 있다."
+abstract: |
+  데이미언 셔젤 〈위플래쉬〉(2014). 마일스 텔러의 앤드류와 J.K. 시몬스의 플레처.
+  잘했어보다 해로운 말은 없다는 신화, 생존자 편향의 찰리 파커, 카네기홀의 마지막 솔로.
+  채찍 없이도 사람은 자랄 수 있다. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film/society essay (not legal or investment advice), 2026-10-07,
+  group industry, Movie/Whiplash.md. Slug whiplash.
+  Film: Damien Chazelle, Whiplash (2014). Miles Teller as Andrew Neiman, J.K. Simmons as Terence Fletcher.
+  Thesis: perfection as poison; "good job" myth; survivor bias of Charlie Parker anecdote; Caravan finale as ambiguous victory.
+  Korea: exam/competition culture, El Sistema-style education, failure as choice not dropout. Closing: forgotten at 90 vs remembered at 34 — the dinner table as love, not fame.
+date: 2026-10-07
+updated: 2026-10-07
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 위플래쉬
+  - 데이미언셔젤
+  - 완벽주의
+  - 마일스텔러
+  - JK시몬스
+  - 채찍
+keywords:
+  - "위플래쉬"
+  - "완벽을 향한 집착"
+  - "플레처"
+  - "잘했어"
+  - "캐러밴"
+  - "데이미언 셔젤"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/whiplash.jpg"
+image: "https://vibequant.cc/og/whiplash.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>위플래쉬, 완벽을 향한 집착 · VibeQuant</title>
+  <meta name="description" content="〈위플래쉬〉는 완벽을 향한 채찍이 사람을 어떻게 만드는지를 묻는다. 그 피는 무엇을 위한 것이었는가. 위대해지지 않아도, 우리는 살아갈 자격이 있다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "위플래쉬, 완벽을 향한 집착",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-07",
+    "keywords": ["위플래쉬", "완벽을 향한 집착", "플레처", "잘했어", "캐러밴", "데이미언 셔젤"]
+  }
+  </script>
+-->
+
 # 위플래쉬, 완벽을 향한 집착
+
+## 피가 마르지 않는 드럼 앞에서, 그 피는 무엇을 위한 것이었는가
+
+![영화 위플래쉬 포스터. 마일스 텔러가 드럼을 친다](images/whiplash-poster.jpg)
+
+*데이미언 셔젤 감독 〈위플래쉬(Whiplash)〉(2014). 주연 마일스 텔러, J.K. 시몬스. 제87회 아카데미 남우조연상·편집상·음향믹싱상.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 7일
 
 ## 프롤로그. 피가 마르지 않는 드럼
 
@@ -195,4 +264,3 @@
 > *"사람들 기억에서 지워진 채 90살까지 사느니, 서른넷에 술에 찌들고 파산해 죽더라도 저녁 식사 자리에서 사람들이 내 얘기를 하는 게 나아요."*
 >
 > — 앤드류 니먼, 〈위플래쉬〉(2014)
-
