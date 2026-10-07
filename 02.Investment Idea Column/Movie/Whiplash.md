@@ -1,3 +1,4 @@
+<!--
 ---
 title: "위플래쉬, 완벽을 향한 집착"
 title_en: "Whiplash — The Obsession with Perfection"
