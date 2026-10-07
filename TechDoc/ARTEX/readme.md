@@ -250,4 +250,4 @@ ARTEX 는 탐색 전 과정을 LLM 이 결정하므로 **LLM 설정이 사실상
 - 한국어판 방어·탐지 가이드: [`docs/defense-ko.md`](https://github.com/jiwoochris/artex-ko/blob/main/docs/defense-ko.md)
 - 배포용 탐지 규칙(Sigma/Suricata/MISP): [`detections/`](https://github.com/jiwoochris/artex-ko/tree/main/detections)
 - 원본 온라인 데모(중국어 UI): [https://artex-demo.vercel.app/](https://artex-demo.vercel.app/)
-- 에이전트 SDK: [Autumn-27/norma](https://github.com/Autumn-27/norma)
+ - 에이전트 SDK: [Autumn-27/norma](https://github.com/Autumn-27/norma)

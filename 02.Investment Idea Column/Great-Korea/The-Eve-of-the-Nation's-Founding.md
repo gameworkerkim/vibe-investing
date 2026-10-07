@@ -1,3 +1,4 @@
+<!--
 ---
 title: "김두한, 피로 물든 건국전야 - 우리에게 광복은 무슨 의미였을까?"
 title_en: "Kim Du-han and the Eve of Founding — What Did Liberation Mean?"
