@@ -1,6 +1,72 @@
+---
+title: "김두한, 피로 물든 건국전야 - 우리에게 광복은 무슨 의미였을까?"
+title_en: "Kim Du-han and the Eve of Founding — What Did Liberation Mean?"
+subtitle: "1919년 건립, 1945년 광복, 1948년 정부 수립"
+description: "대한민국의 건국은 1919년에서 시작되었고, 1948년은 정부 수립, 1945년은 광복이다. 김두한 『피로 물들인 건국전야』가 보여주듯, 그 사이는 이념과 생존이 뒤엉킨 전야였다."
+abstract: |
+  제헌헌법 전문은 1919년 건립과 1948년 재건을 구분한다. 관보는 대한민국 30년, 8·15 행사는 정부 수립 국민축하식이었다.
+  김두한 『피로 물들인 건국전야』는 1945~1948의 혼란을 개인 기억으로 남긴다. 건국절 논쟁은 당대 어법을 뒤집으면서 커졌다.
+  법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean history/politics essay (not legal or investment advice), 2026-10-07,
+  group korea, Great-Korea/The-Eve-of-the-Nation's-Founding.md. Slug eve-of-the-nations-founding.
+  Thesis: founding begins 1919 March 1 / Provisional Government; 1948-08-15 is government establishment; 1945-08-15 is Gwangbok (restoration of sovereignty).
+  Kim Du-han memoir Blood-Stained Eve of Founding (1963/2003). Rhee 1948 National Assembly: revival of 1919 republic. Gazette year 30. New Right 1948-only founding (Yi Yeong-hun 2006) vs constitutional preamble.
+date: 2026-10-07
+updated: 2026-10-07
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 광복
+  - 건국전야
+  - 김두한
+  - 임시정부
+  - 제헌헌법
+  - 건국절
+keywords:
+  - "건국전야"
+  - "김두한"
+  - "광복절"
+  - "1919년 건국"
+  - "정부 수립"
+  - "제헌헌법"
+group: korea
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/eve-of-the-nations-founding.jpg"
+image: "https://vibequant.cc/og/eve-of-the-nations-founding.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>김두한, 피로 물든 건국전야 - 우리에게 광복은 무슨 의미였을까? · VibeQuant</title>
+  <meta name="description" content="대한민국의 건국은 1919년에서 시작되었고, 1948년은 정부 수립, 1945년은 광복이다. 김두한 『피로 물들인 건국전야』가 보여주듯, 그 사이는 이념과 생존이 뒤엉킨 전야였다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "김두한, 피로 물든 건국전야 - 우리에게 광복은 무슨 의미였을까?",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-07",
+    "keywords": ["건국전야", "김두한", "광복절", "1919년 건국", "정부 수립", "제헌헌법"]
+  }
+  </script>
+-->
+
 # 김두한, 피로 물든 건국전야 - 우리에게 광복은 무슨 의미였을까?
 
-Oct 7, 2026 · Dennis Kim
+## 1919년 건립, 1945년 광복, 1948년 정부 수립
+
+![광복 직후 거리 행진. 태극기와 復國光榮 깃발](images/liberation-parade-1945.jpg)
+
+*광복 직후 거리. 태극기와 '復國光榮(복국광영)' 깃발. 주권이 돌아온 날을 광복이라 불렀다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 7일
 
 ## 들어가며
 

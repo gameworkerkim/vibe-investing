@@ -669,6 +669,7 @@ const SLUG_OVERRIDES = {
   "Movie/Forrest-Gump.md": "forrest-gump",
   "Movie/Manchester-by-the-Sea.md": "manchester-by-the-sea",
   "Democracy-and-Politics-in-Asia.md": "democracy-and-politics-in-asia",
+  "Great-Korea/The-Eve-of-the-Nation's-Founding.md": "eve-of-the-nations-founding",
   "Basic-Income/Basic-Income.md": "basic-income",
   "Key-Currency/Gold-Ledger.md": "gold-ledger",
   "Japan/Japan's-Failure.md": "japans-failure",
