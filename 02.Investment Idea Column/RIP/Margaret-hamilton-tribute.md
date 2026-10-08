@@ -1,4 +1,73 @@
-# 마거릿 해밀턴을 추모하며 - 달 착륙을 가능케 한 소프트웨어, 그리고 시대의 리더
+---
+title: "마거릿 해밀턴을 추모하며"
+title_en: "In Memory of Margaret Hamilton"
+subtitle: "달 착륙을 가능케 한 소프트웨어, 그리고 시대의 리더"
+description: "아폴로 11호 1202 경보를 넘긴 소프트웨어 공학의 어머니 마거릿 해밀턴이 90세로 세상을 떠났다. 절대 일어나지 않을 일이 일어났을 때, 시스템은 무엇을 먼저 지킬 것인가."
+abstract: |
+  2026년 9월 30일, 아폴로 비행 소프트웨어를 이끈 마거릿 해밀턴이 90세로 별세했다.
+  1202 경보, 로렌 버그, 우선순위 스케줄링, 소프트웨어 공학이라는 이름.
+  추모 칼럼. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean tribute column (not legal or investment advice), 2026-10-08,
+  group ai-llm, RIP/Margaret-hamilton-tribute.md. Slug margaret-hamilton.
+  Margaret Heafield Hamilton (1936–2026) led MIT Instrumentation Lab Apollo onboard flight software.
+  Apollo 11 1202 alarm, priority scheduling, Lauren bug / Apollo 8 P01, coined software engineering,
+  NASA Exceptional Space Act Award, Presidential Medal of Freedom 2016. Died Cambridge, MA, 2026-09-30.
+date: 2026-10-08
+updated: 2026-10-08
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 마거릿해밀턴
+  - 아폴로
+  - 소프트웨어공학
+  - NASA
+  - MIT
+  - 추모
+keywords:
+  - "마거릿 해밀턴"
+  - "아폴로 11호"
+  - "1202 경보"
+  - "소프트웨어 공학"
+  - "NASA"
+  - "MIT"
+group: ai-llm
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/margaret-hamilton.jpg"
+image: "https://vibequant.cc/og/margaret-hamilton.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>마거릿 해밀턴을 추모하며 · VibeQuant</title>
+  <meta name="description" content="아폴로 11호 1202 경보를 넘긴 소프트웨어 공학의 어머니 마거릿 해밀턴이 90세로 세상을 떠났다. 절대 일어나지 않을 일이 일어났을 때, 시스템은 무엇을 먼저 지킬 것인가.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "마거릿 해밀턴을 추모하며",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-08",
+    "keywords": ["마거릿 해밀턴", "아폴로 11호", "1202 경보", "소프트웨어 공학", "NASA", "MIT"]
+  }
+  </script>
+-->
+
+# 마거릿 해밀턴을 추모하며
+
+## 달 착륙을 가능케 한 소프트웨어, 그리고 시대의 리더
+
+![아폴로 코드 출력물 옆에 선 마거릿 해밀턴](images/margaret-hamilton-listings.jpg)
+
+*자신의 키만큼 쌓인 아폴로 비행 소프트웨어 옆에 선 마거릿 해밀턴. MIT 계기장비 연구소, 1969. Photograph: NASA/MIT.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 8일
 
 1969년 7월 20일, 아폴로 11호의 달 착륙선 '이글'이 달 표면을 향해 하강하던 마지막 순간이었다. 승무원과 휴스턴 관제센터를 얼어붙게 만든 경보가 울렸다. 오류 코드 1202. 하드웨어 스위치 결함 때문에 탑재 컴퓨터에 과부하가 걸렸고, 복잡한 착륙 절차를 감당하지 못할 수도 있는 상황이었다. 착륙까지는 불과 몇 분이 남아 있었다. 임무를 중단할지 말지 결정해야 하는 순간이었다.
 
