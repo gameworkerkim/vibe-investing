@@ -1,4 +1,72 @@
+---
+title: "[단편] 사진 작가"
+title_en: "The Photographer"
+subtitle: "콘탁스 645의 셔터는 한숨처럼 운다"
+description: "콘탁스 645의 셔터는 한숨처럼 운다. 사진 작가는 잊기 위해 사람을 찍었고, 마지막 한 컷에서 빈 이름표를 오래 보았다. 도착하지 않는 말도 남겨야 한다."
+abstract: |
+  필름 사진가의 단편. 콘탁스 645, 120 필름 열다섯 컷, 칼 자이스의 유리. 그는 잊기 위해 사람을 찍고 안는다.
+  인스타그램으로 찾아온 윤, 와이퍼의 박자, 선우. 붉은 문과 녹색 문 사이에서 마지막 한 컷.
+  단편 소설. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean short fiction (not legal or investment advice), 2026-10-08,
+  group industry, Story-of-US/Photographer.md. Slug photographer.
+  Film photographer, Contax 645, 15 frames per 120 roll. Shoots nudes as unclothing of lifelong armor; forgets through intimacy. Model Yun; lost love Seon-woo; hospital red/green doors; empty nametag; last unfocused frame.
+  Theme: memory, guilt, analog slowness vs forgetting. Closing: shutter in the silence before the mirror rises.
+date: 2026-10-08
+updated: 2026-10-08
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 단편
+  - 사진작가
+  - 필름
+  - 콘탁스
+  - 기억
+  - 선우
+keywords:
+  - "사진 작가"
+  - "단편"
+  - "콘탁스 645"
+  - "필름"
+  - "셔터"
+  - "빈 이름표"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/photographer.jpg"
+image: "https://vibequant.cc/og/photographer.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>[단편] 사진 작가 · VibeQuant</title>
+  <meta name="description" content="콘탁스 645의 셔터는 한숨처럼 운다. 사진 작가는 잊기 위해 사람을 찍었고, 마지막 한 컷에서 빈 이름표를 오래 보았다. 도착하지 않는 말도 남겨야 한다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "[단편] 사진 작가",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-08",
+    "keywords": ["사진 작가", "단편", "콘탁스 645", "필름", "셔터", "빈 이름표"]
+  }
+  </script>
+-->
+
 # [단편] 사진 작가
+
+## 콘탁스 645의 셔터는 한숨처럼 운다
+
+![흑백으로 카메라를 든 사진가](images/photographer-camera.jpg)
+
+*셔터 직전의 정적. 필름은 늦게 진실을 떠올린다. Photograph: terski.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 8일
 
 ## 1. 셔터
 

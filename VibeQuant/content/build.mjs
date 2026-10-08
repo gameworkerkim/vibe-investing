@@ -670,6 +670,7 @@ const SLUG_OVERRIDES = {
   "Movie/Manchester-by-the-Sea.md": "manchester-by-the-sea",
   "Movie/Whiplash.md": "whiplash",
   "Story-of-US/Name-Collector.md": "name-collector",
+  "Story-of-US/Photographer.md": "photographer",
   "Democracy-and-Politics-in-Asia.md": "democracy-and-politics-in-asia",
   "Great-Korea/The-Eve-of-the-Nation's-Founding.md": "eve-of-the-nations-founding",
   "Basic-Income/Basic-Income.md": "basic-income",
