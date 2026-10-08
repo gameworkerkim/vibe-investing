@@ -1,3 +1,4 @@
+<!--
 ---
 title: "[단편] 사진 작가"
 title_en: "The Photographer"
