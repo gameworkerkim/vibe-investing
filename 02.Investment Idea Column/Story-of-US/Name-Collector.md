@@ -1,6 +1,72 @@
+---
+title: "[단편] 이름 수집자"
+title_en: "The Name Collector"
+subtitle: "잊혀진 이름을 한 알씩 주워 담는 사람들"
+description: "말은 태그가 되고 꽃은 이름을 잃었다. 이름 수집자는 봉화의 산에서 은하수와 손편지를 주웠다. 밟혀야 사는 풀처럼, 어떤 말은 남아 있어야 한다."
+abstract: |
+  2085년, 생각은 '합(合)'이라는 망 위에서 흐르고 말은 유행어 목록으로 줄었다. 이름 수집자는 봉화의 산에서 노인을 만나 은하수와 손편지를 배운다.
+  망이 지운 이름들, 손바닥만 한 사전 '모래', 질경이. 혼자 생각하기 시작한 사람에게 도착한 한 문장.
+  단편 소설. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean short fiction (not legal or investment advice), 2026-10-08,
+  group industry, Story-of-US/Name-Collector.md. Slug name-collector.
+  Setting 2085 hive-mind "합". Name collectors salvage forgotten words. Bonghwa mountain, analog elder, Milky Way, handwritten letter, plantain (질경이), local model "모래".
+  Theme: language collapse under AI consensus; names as resistance; waiting as love. Closing line: 아빠는 맨날 늦게 와도 괜찮아. 내가 기다릴게.
+date: 2026-10-08
+updated: 2026-10-08
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 단편
+  - 이름수집자
+  - SF
+  - 인공지능
+  - 손편지
+  - 봉화
+keywords:
+  - "이름 수집자"
+  - "단편"
+  - "은하수"
+  - "손편지"
+  - "질경이"
+  - "합"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/name-collector.jpg"
+image: "https://vibequant.cc/og/name-collector.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>[단편] 이름 수집자 · VibeQuant</title>
+  <meta name="description" content="말은 태그가 되고 꽃은 이름을 잃었다. 이름 수집자는 봉화의 산에서 은하수와 손편지를 주웠다. 밟혀야 사는 풀처럼, 어떤 말은 남아 있어야 한다.">
+  <meta name="robots" content="index,follow">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    "headline": "[단편] 이름 수집자",
+    "author": { "@type": "Person", "name": "김호광 (Dennis Kim)" },
+    "datePublished": "2026-10-08",
+    "keywords": ["이름 수집자", "단편", "은하수", "손편지", "질경이", "합"]
+  }
+  </script>
+-->
+
 # [단편] 이름 수집자
 
----
+## 잊혀진 이름을 한 알씩 주워 담는 사람들
+
+![진흙 위의 분홍 연꽃](images/name-collector-lotus.jpg)
+
+*연꽃. 이름은 사라진 뒤에도, 꽃은 피어 있다. Photograph: jennyzhh2008.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 8일
 
 ## 1. 잊혀진 말들
 
