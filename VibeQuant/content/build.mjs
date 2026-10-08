@@ -708,6 +708,7 @@ const SLUG_OVERRIDES = {
   "CTI-2026-1002-AI-BANK-HACKING.md": "ai-bank-hacking",
   "CTI-2026-1004-AI-HACKING-TREND.md": "ai-hacking-trend",
   "CTI-2026-10-07-Qilin-Japan-Arrest.md": "qilin-japan-arrest",
+  "CTI-2026-1008-FortiBleed.md": "fortibleed",
   "AI_Hacking/AI-Hacking-Trend.md": "ai-hacking-trend",
   "USA/Age-of-USD.md": "age-of-usd",
   "AI-IDC/Why-High-Power-Datacenter.md": "why-high-power-datacenter",
