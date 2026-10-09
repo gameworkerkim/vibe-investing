@@ -46,7 +46,7 @@ export const TECH_GROUP_RULES = [
   { id: "llm-agents", title_ko: "LLM · 에이전트", title_en: "LLM · Agents", match: [/llm/i, /claude/i, /grok/i, /minimax/i, /minicpm/i, /bonsai/i, /tencent/i, /local_llm/i, /ollama/i, /qwen/i, /effective_llm/i, /agent-friendly/i, /ai-agent-framework/i, /awesome-llm-apps/i, /awesome-agent/i, /openworker/i, /ai-open-weights/i, /solar-open/i, /solar open/i, /kimi-k3/i, /opencodemcp/i, /opencodex/i, /llm_proxy/i, /mcp/i, /deepwiki/i, /openwiki/i, /google_code_wiki/i, /zcode/i, /headroom/i, /caveman/i, /quivr/i] },
   { id: "quant-data", title_ko: "퀀트 · 데이터", title_en: "Quant · Data", match: [/qlib/i, /gs_quant/i, /timesfm/i, /pyodide/i, /python_pyodide/i, /robinhood/i, /\/toss\//i, /toss-openapi/i, /semiconductor-supercycle/i] },
   { id: "security", title_ko: "보안", title_en: "Security", match: [/security/i, /claw/i, /secret scanning/i, /\/cyworld\//i, /restoration-playbook/i, /\/windows10\//i, /eod-win10/i, /cmit/i] },
-  { id: "ui-tools", title_ko: "UI · 개발도구", title_en: "UI · Dev tools", match: [/niceui/i, /nicegui/i, /ui_opensource/i, /astryx/i, /bigfive/i, /orca/i, /loop/i, /china-physical/i] },
+  { id: "ui-tools", title_ko: "UI · 개발도구", title_en: "UI · Dev tools", match: [/niceui/i, /nicegui/i, /ui_opensource/i, /astryx/i, /bigfive/i, /orca/i, /loop/i, /china-physical/i, /neo-gettingstart/i, /\/neo\/neo-gettingstart/i] },
   { id: "firebase-alt", title_ko: "BaaS · DB", title_en: "BaaS · DB", match: [/supabase/i, /opensource_firebase/i] },
 ];
 
@@ -140,6 +140,7 @@ export const FEATURED_COLUMN_PATHS = [
 
 /** TechDoc recommended — order = display order */
 export const FEATURED_TECH_PATHS = [
+  "Neo/Neo-GettingStart.md",
   "Windows10/EOD-Win10-China.md",
   "Cyworld/Cyworld-Server-Restoration-Playbook.md",
   "LLM_MiniMax/MiniMax-H3-GettingStart.md",

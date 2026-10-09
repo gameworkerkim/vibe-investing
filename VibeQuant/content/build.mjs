@@ -696,6 +696,7 @@ const SLUG_OVERRIDES = {
   "Prediction-Market/Prediction-Market-Growth-and-Opportunity_EN.md": "prediction-market-growth-and-opportunity-en",
   "Prediction-Market/Prediction-Market-Growth-and-Opportunity_JA.md": "prediction-market-growth-and-opportunity-ja",
   "LLM_MiniMax/MiniMax-H3-GettingStart.md": "minimax-h3-gettingstart",
+  "Neo/Neo-GettingStart.md": "neo-gettingstart",
   "LLM_MiniMax/MiniMax-H3-GettingStart_EN.md": "minimax-h3-gettingstart-en",
   "LLM_MiniMax/MiniMax-H3-GettingStart_CN.md": "minimax-h3-gettingstart-cn",
   "LLM_MiniMax/MiniMax-H3-GettingStart_JA.md": "minimax-h3-gettingstart-ja",
