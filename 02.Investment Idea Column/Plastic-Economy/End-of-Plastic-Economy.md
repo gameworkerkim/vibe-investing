@@ -54,9 +54,9 @@ robots: index,follow
 
 ## 공식 재활용률 73%와 물질 재활용 16% 사이
 
-![2022년 전 세계 플라스틱의 흐름](images/02_lifecycle_flow.png)
+![폐어망 그물에 앉은 개넷](images/plastic-gannet-net.jpg)
 
-*2022년 전 세계 플라스틱의 흐름. 생산 약 4억 톤 가운데 실제 재활용은 약 3,700만 톤이다.*
+*폐어망이 둥지가 된 바닷가. 플라스틱은 바다에서 가장 오래 남는다. Photograph: a_different_perspective.*
 
 **김호광** 싸이월드 전 대표 / 2026년 10월 9일
 
