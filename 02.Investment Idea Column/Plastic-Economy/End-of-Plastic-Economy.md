@@ -1,8 +1,66 @@
+---
+title: "플라스틱 경제, 우리에게 대안이 있을까?"
+title_en: "The End of the Plastic Economy"
+subtitle: "공식 재활용률 73%와 물질 재활용 16% 사이"
+description: "전 세계 플라스틱 재생 원료는 9.5%에 그친다. 한국 공식 재활용률 73% 뒤에는 물질 재활용 16~27%가 있다. 대안은 장바구니가 아니라 시민운동·기업·정부가 잇는 사슬에 있다."
+abstract: |
+  세계 재생 원료 9.5%, 한국 공식 재활용률 73% vs 물질 재활용 16~27%.
+  국제 플라스틱 협약 부산·제네바 결렬, 다섯 개의 고리, 정의로운 전환.
+  칼럼. 법률 자문·투자 권유 아님. PDF 원문 제공.
+summary_for_ai: |
+  Korean column (not legal or investment advice), 2026-10-09,
+  group industry, Plastic-Economy/End-of-Plastic-Economy.md. Slug end-of-plastic-economy.
+  Global recycled feedstock 9.5% (2022). Korea official recycling 73% vs material recycling 16.4–27%.
+  Microplastics detected in humans; BPA/phthalates established EDCs. INC-5 Busan and Geneva failed.
+  Five rings: individual → civic movement → retailers → government → international.
+  PDF: https://vibequant.cc/files/end-of-plastic-economy.pdf
+date: 2026-10-09
+updated: 2026-10-09
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 플라스틱
+  - 재활용
+  - 환경
+  - EPR
+  - 미세플라스틱
+  - 그린워싱
+keywords:
+  - "플라스틱 경제"
+  - "물질 재활용률"
+  - "미세플라스틱"
+  - "국제 플라스틱 협약"
+  - "EPR"
+  - "그린워싱"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/end-of-plastic-economy.jpg"
+image: "https://vibequant.cc/og/end-of-plastic-economy.jpg"
+pdf: "https://vibequant.cc/files/end-of-plastic-economy.pdf"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>플라스틱 경제, 우리에게 대안이 있을까? · VibeQuant</title>
+  <meta name="description" content="전 세계 플라스틱 재생 원료는 9.5%에 그친다. 한국 공식 재활용률 73% 뒤에는 물질 재활용 16~27%가 있다. 대안은 장바구니가 아니라 시민운동·기업·정부가 잇는 사슬에 있다.">
+  <meta name="robots" content="index,follow">
+-->
+
 # 플라스틱 경제, 우리에게 대안이 있을까?
 
-김호광 (Dennis Kim) · 2026년 10월
+## 공식 재활용률 73%와 물질 재활용 16% 사이
 
----
+![2022년 전 세계 플라스틱의 흐름](images/02_lifecycle_flow.png)
+
+*2022년 전 세계 플라스틱의 흐름. 생산 약 4억 톤 가운데 실제 재활용은 약 3,700만 톤이다.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 9일
+
+> **PDF** — [검색·다운로드용 원문 (PDF, 1.2MB)](https://vibequant.cc/files/end-of-plastic-economy.pdf)
 
 ## 요약 (Executive Summary)
 

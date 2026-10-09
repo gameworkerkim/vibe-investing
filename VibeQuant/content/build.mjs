@@ -672,6 +672,7 @@ const SLUG_OVERRIDES = {
   "Story-of-US/Name-Collector.md": "name-collector",
   "Story-of-US/Photographer.md": "photographer",
   "RIP/Margaret-hamilton-tribute.md": "margaret-hamilton",
+  "Plastic-Economy/End-of-Plastic-Economy.md": "end-of-plastic-economy",
   "Democracy-and-Politics-in-Asia.md": "democracy-and-politics-in-asia",
   "Great-Korea/The-Eve-of-the-Nation's-Founding.md": "eve-of-the-nations-founding",
   "Basic-Income/Basic-Income.md": "basic-income",
@@ -1983,6 +1984,17 @@ function buildArticle(item, section) {
     articleLd.copyrightHolder = { "@type": "Organization", name: mediaLabel };
   }
   if (topicTags.length) articleLd.keywords = topicTags.join(", ");
+  const pdfUrl = String(meta.pdf || meta.pdf_url || "").trim();
+  if (pdfUrl) {
+    const pdfObject = {
+      "@type": "MediaObject",
+      contentUrl: pdfUrl,
+      encodingFormat: "application/pdf",
+      name: `${parsed.title || item.title}.pdf`,
+    };
+    articleLd.encoding = pdfObject;
+    articleLd.associatedMedia = pdfObject;
+  }
   const crumbs = [
     { name: "VibeQuant", item: absoluteSitePath(SITE) },
     { name: sectionLabel(section), item: absoluteSitePath(`${base}/${section}`) },
@@ -2408,6 +2420,19 @@ function buildAbout() {
   );
 }
 
+function filePdfSitemapUrls(today) {
+  const dir = path.join(PAGES, "files");
+  if (!fs.existsSync(dir)) return [];
+  return fs
+    .readdirSync(dir)
+    .filter((name) => /\.pdf$/i.test(name) && !name.startsWith("."))
+    .sort()
+    .map(
+      (name) =>
+        `  <url><loc>${SITE}/files/${name}</loc><lastmod>${today}</lastmod></url>`
+    );
+}
+
 function sitemapEntryWithAlternates(item, section, host, today) {
   // Keep sitemap entries simple (loc + lastmod). Hreflang lives in HTML <link>
   // tags — GSC is picky about urlset namespaces / xhtml:link in sitemaps.
@@ -2485,6 +2510,7 @@ function buildSeo(columns, tech, cti = [], essays = []) {
     ...essays.map((e) =>
       entry(`${SITE_ESSAY}/essays/${e.slug}/`, e.dateModified || e.datePublished || today)
     ),
+    ...filePdfSitemapUrls(today),
   ];
   const docsUrls = [
     entry(absoluteSitePath(`${SITE_DOCS}/columns`), today),
