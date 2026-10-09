@@ -669,6 +669,7 @@ const SLUG_OVERRIDES = {
   "Movie/Forrest-Gump.md": "forrest-gump",
   "Movie/Manchester-by-the-Sea.md": "manchester-by-the-sea",
   "Movie/Whiplash.md": "whiplash",
+  "Movie/Brokeback-Mountain.md": "brokeback-mountain",
   "Story-of-US/Name-Collector.md": "name-collector",
   "Story-of-US/Photographer.md": "photographer",
   "RIP/Margaret-hamilton-tribute.md": "margaret-hamilton",

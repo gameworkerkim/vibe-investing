@@ -1,6 +1,62 @@
+---
+title: "〈브로크백 마운틴〉, 끝내 닿지 못한 산의 이름으로"
+title_en: "Brokeback Mountain"
+subtitle: "이루지 못한 사랑의 사무침에 대하여"
+description: "〈브로크백 마운틴〉은 이름 붙이지 못한 사랑이 한 생애를 어떻게 지나가는지를 보여준다. 에니스와 잭이 끝내 갖지 못한 것은 비극이 아니라, 함께 늙어가는 그 지루함이었다."
+abstract: |
+  이안 〈브로크백 마운틴〉(2005). 히스 레저의 에니스와 제이크 질렌할의 잭.
+  말해지지 못한 사랑, 와이오밍의 가난, 카우보이라는 갑옷, 셔츠 두 벌.
+  영화·사회 에세이. 법률 자문·투자 권유 아님.
+summary_for_ai: |
+  Korean film/society essay (not legal or investment advice), 2026-10-09,
+  group industry, Movie/Brokeback-Mountain.md. Slug brokeback-mountain.
+  Ang Lee, Brokeback Mountain (2005), Heath Ledger / Jake Gyllenhaal, Annie Proulx story.
+  Thesis: unfinished love is not beautiful in itself; the two men lacked ordinary boredom, not tragedy.
+  Themes: unnamed love, class/poverty in Wyoming, cowboy masculinity, Zeigarnik/scarcity metaphors, 2024 Wyoming vote, LGBTQ youth support.
+date: 2026-10-09
+updated: 2026-10-09
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 브로크백마운틴
+  - 이안
+  - 히스레저
+  - 제이크질렌할
+  - 사랑
+  - 와이오밍
+keywords:
+  - "브로크백 마운틴"
+  - "이안"
+  - "히스 레저"
+  - "제이크 질렌할"
+  - "에니스"
+  - "잭 트위스트"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/brokeback-mountain.jpg"
+image: "https://vibequant.cc/og/brokeback-mountain.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+<!--
+  HEAD 참조 (렌더링 안 됨 · 빌드 자동 주입 · 주석 풀지 말 것)
+  <title>〈브로크백 마운틴〉, 끝내 닿지 못한 산의 이름으로 · VibeQuant</title>
+  <meta name="description" content="〈브로크백 마운틴〉은 이름 붙이지 못한 사랑이 한 생애를 어떻게 지나가는지를 보여준다. 에니스와 잭이 끝내 갖지 못한 것은 비극이 아니라, 함께 늙어가는 그 지루함이었다.">
+  <meta name="robots" content="index,follow">
+-->
+
 # 〈브로크백 마운틴〉, 끝내 닿지 못한 산의 이름으로
 
-### 이루지 못한 사랑의 사무침에 대하여
+## 이루지 못한 사랑의 사무침에 대하여
+
+![영화 브로크백 마운틴 포스터. 히스 레저와 제이크 질렌할](images/brokeback-mountain-poster.jpg)
+
+*이안 감독 〈브로크백 마운틴(Brokeback Mountain)〉(2005). 주연 히스 레저, 제이크 질렌할. 제78회 아카데미 감독상·각색상·음악상.*
+
+**김호광** 싸이월드 전 대표 / 2026년 10월 9일
 
 어떤 사랑은 공인되지도, 이름을 갖지 못한 채 산다. 부르는 순간 부서질 것 같아서 끝내 입 밖에 내지 못하는 사랑. 이안 감독의 〈브로크백 마운틴〉(2005)은 그런 사랑이 한 사람의 생애 동안 어떻게 머물다 가는지를 보여주는 영화다. 큰 소리를 내지 않고, 와이오밍의 바람처럼 담담하게, 그러나 오래 아프게.
 
