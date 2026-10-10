@@ -674,6 +674,7 @@ const SLUG_OVERRIDES = {
   "Story-of-US/Photographer.md": "photographer",
   "RIP/Margaret-hamilton-tribute.md": "margaret-hamilton",
   "Plastic-Economy/End-of-Plastic-Economy.md": "end-of-plastic-economy",
+  "China EV_Industry_Restructuring_Analysis/Engine.md": "engine-remembers-era",
   "Democracy-and-Politics-in-Asia.md": "democracy-and-politics-in-asia",
   "Great-Korea/The-Eve-of-the-Nation's-Founding.md": "eve-of-the-nations-founding",
   "Basic-Income/Basic-Income.md": "basic-income",
