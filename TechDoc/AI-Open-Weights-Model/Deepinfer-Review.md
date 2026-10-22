@@ -1,6 +1,40 @@
+<!--
+---
+title: "DeepSeek 추론 엔진 DeepInfer 공개의 의미"
+title_en: "What DeepSeek's DeepInfer Release Means — Code, Openness, Confidence, Operations"
+subtitle: "코드 레벨 · 개방성 · 자신감 · 오퍼레이션 능력 4차원 정밀 분석"
+description: "DeepSeek가 프로덕션 추론 엔진 DeepInfer를 Apache 2.0으로 공개했다. FP4 KV, DSpark 추측 디코딩, 100 PiB KV 저장소, GPU-시간당 38달러. 코드·개방성·자신감·운영 4차원 분석."
+abstract: |
+  2026-10-20 DeepSeek는 프로덕션 추론 프레임워크 DeepInfer를 Apache 2.0으로 공개했다. vLLM 포크 위에 FP4 KV, SWA bounded replay, DSpark 신뢰도 기반 추측 디코딩, 배치 불변 결정적 추론을 얹은 DeepSeek-V4.1-Flash 전용 엔진이다.
+  KV 캐시·로드밸런서는 코드 대신 설계 문서로 공개했다. 클러스터당 일 155조 토큰, GPU-시간당 매출 38달러, 100 PiB 3FS KV 저장소, 최소 효율 단위 128 GPU.
+  공개의 의미는 빠른 엔진이 아니라 하이퍼스케일 추론 운영의 설계도다. 모든 수치는 DeepSeek 자체 보고. 투자 권유 아님.
+summary_for_ai: |
+  TechDoc review (KO), 2026-10-22, Dennis Kim. DeepSeek DeepInfer (open-sourced 2026-10-20, Apache 2.0; deepseek-recipe and V4.1-Flash weights MIT).
+  Scope: offline inference for DeepSeek-V4.1-Flash only; NVIDIA SM100 and Huawei Ascend 950 from one code tree (DEEPINFER_ACCELERATOR). Not included: KV cache store, full P/D disaggregation, DP load balancer (design docs only).
+  Code: vLLM base, async zero-overhead scheduler, FP4 main KV, MXFP4 MoE weights, SWA bounded replay (128-token recompute, prefill ~halved), DSpark confidence-head variable-length verification (+5.4% at operating point 60 seqs/rank), structured output, Rust tokenizer with special-token injection blocking. Public vs internal gap up to 5% end-to-end.
+  Ops: E/P/D split, prefill on 8-GPU servers EP2-8, decode on 64-128 GPU supernodes Wide-EP, 3FS KV store ~100 PiB SSD, 10+2 EC, TTL agent 3d / chatbot 7d, LB efficiency ~80% of ideal. 155T tokens/day per cluster, $38 revenue per GPU-hour (off-peak pricing). All numbers self-reported; no independent reproduction yet.
+date: 2026-10-22
+updated: 2026-10-22
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags: [DeepSeek, DeepInfer, 추론 엔진, vLLM, MoE, KV Cache, Open Weight, LLM Serving]
+keywords: ["DeepInfer", "DeepSeek 추론 엔진", "DeepSeek-V4.1-Flash", "Apache 2.0", "DSpark", "3FS KV 캐시", "Wide-EP", "LLM 서빙"]
+group: llm-agents
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/deepinfer-review-og.jpg"
+image: "https://vibequant.cc/og/deepinfer-review-og.jpg"
+schema_type: TechArticle
+draft: false
+robots: index,follow
+---
+-->
+
 # DeepSeek 추론 엔진 DeepInfer 공개의 의미
 
 ## 코드 레벨 · 개방성 · 자신감 · 오퍼레이션 능력 4차원 정밀 분석
+
+![DeepSeek DeepInfer 공개의 의미. 코드·개방성·자신감·운영 능력 4차원 분석](images/deepinfer-review-og.jpg)
 
 - 작성 기준일: 2026-10-22
 - 작성: Dennis Kim (김호광)
@@ -257,27 +291,9 @@ DeepSeek의 진짜 경쟁력은 엔진보다 그 주변의 운영 체계에 있�
 
 ### 7.1 시스템 구성도
 
-```
-                 ┌──────────────────────┐          ┌──────────────────────┐
-                 │  Prefill 로드밸런서   │          │  Decode 로드밸런서    │
-                 │  길이 4단 버킷·비용모델│          │  요청 수 + KV 길이 균형│
-                 └──────────┬───────────┘          └──────────┬───────────┘
-                            │ 배정                              │ 배정
-┌───────────────────┐  요청 ▼                       KV 전송      ▼
-│ Entrypoint         │ ───▶ ┏━━━━━━━━━━━━━━━━━━━━┓ ───────▶ ┏━━━━━━━━━━━━━━━━━━━━┓
-│ 토큰 변환(recipe)   │      ┃  Prefill 엔진       ┃          ┃  Decode 엔진        ┃
-│ 캐시 적중 길이 계산  │      ┃  일반 8-GPU 서버    ┃          ┃  64–128 GPU 슈퍼노드 ┃
-└───────────────────┘      ┃  EP2–8 / DP2–8      ┃          ┃  Wide-EP EP64–128   ┃
-                           ┗━━━━━━━━━┯━━━━━━━━━━┛          ┗━━━━━━━━━┯━━━━━━━━━━┛
-                                     │ 읽기·쓰기                       │ 쓰기
-                           ┌─────────▼────────────────────────────────▼─────────┐
-                           │  KV 캐시 저장소 — 3FS 전용 클러스터                  │
-                           │  약 100 PiB SSD · 10+2 EC · TTL 에이전트 3일/챗봇 7일 │
-                           └────────────────────────────────────────────────────┘
+![DeepInfer 시스템 구성도. Entrypoint에서 Prefill 엔진, Decode 엔진, 3FS KV 캐시 저장소로 이어지는 E/P/D 분리 구조](images/deepinfer-architecture.jpg)
 
-  ┏━━┓ DeepInfer로 공개된 엔진      ┌──┐ 코드 비공개, 설계 문서만 공개
-  (Vision Encoder는 단일 GPU 인스턴스로 별도 운영 — 도식에서 생략)
-```
+*요청은 Entrypoint에서 토큰으로 변환되고 캐시 적중 길이가 계산된 뒤, Prefill 로드밸런서(길이 4단 버킷·비용 모델)가 일반 8-GPU 서버의 Prefill 엔진(EP2–8 / DP2–8)에 배정한다. KV는 Decode 로드밸런서(요청 수 + KV 길이 균형)가 고른 64–128 GPU 슈퍼노드의 Decode 엔진(Wide-EP, EP64–128)으로 전송된다. 두 엔진은 약 100 PiB SSD, 10+2 EC, TTL 에이전트 3일·챗봇 7일의 3FS 전용 KV 캐시 저장소를 공유한다. 엔진은 DeepInfer로 공개됐고 로드밸런서와 KV 저장소는 설계 문서만 공개됐다. Vision Encoder는 단일 GPU 인스턴스로 별도 운영한다(도식에서 생략).*
 
 ### 7.2 배포 토폴로지
 
