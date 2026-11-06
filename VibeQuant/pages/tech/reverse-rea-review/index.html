@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>REA (Reverse Engineer Anything) — 분석 리포트 &amp; Getting Started — VibeQuant</title>
+  <meta name="description" content="REA는 AI 코딩 에이전트가 소스 코드 없는 소프트웨어를 역공학할 수 있게 해주는 CLI + MCP 서버 입니다. Hopper·Ghidra 같은 역공학 엔진을 직접 다루는 대신, 에이전트가 &quot;이 앱의 검색 기능이 어떻게 동작하는지 알아내고 내 프로젝트에 비슷하게…" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/reverse-rea-review/" />
+  <meta property="og:title" content="REA (Reverse Engineer Anything) — 분석 리포트 &amp; Getting Started" />
+  <meta property="og:description" content="REA는 AI 코딩 에이전트가 소스 코드 없는 소프트웨어를 역공학할 수 있게 해주는 CLI + MCP 서버 입니다. Hopper·Ghidra 같은 역공학 엔진을 직접 다루는 대신, 에이전트가 &quot;이 앱의 검색 기능이 어떻게 동작하는지 알아내고 내 프로젝트에 비슷하게…" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/reverse-rea-review/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"REA (Reverse Engineer Anything) — 분석 리포트 & Getting Started","description":"REA는 AI 코딩 에이전트가 소스 코드 없는 소프트웨어를 역공학할 수 있게 해주는 CLI + MCP 서버 입니다. Hopper·Ghidra 같은 역공학 엔진을 직접 다루는 대신, 에이전트가 \"이 앱의 검색 기능이 어떻게 동작하는지 알아내고 내 프로젝트에 비슷하게…","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/reverse-rea-review/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Reverse/REA-Review.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/reverse-rea-review/","datePublished":"2026-10-08","dateModified":"2026-10-08","inLanguage":"ko","keywords":"기타 기술문서, Reverse"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"REA (Reverse Engineer Anything) — 분석 리포트 & Getting Started","item":"https://tech.vibequant.cc/tech/reverse-rea-review/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 기타 기술문서</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 기술문서</p>
+        <h1>REA (Reverse Engineer Anything) — 분석 리포트 &amp; Getting Started</h1>
+        <p class="article-dates"><time datetime="2026-10-08">발행 2026.10.08</time> · 주제 기타 기술문서 · Reverse</p>
+        
+        <p class="lede">REA는 AI 코딩 에이전트가 소스 코드 없는 소프트웨어를 역공학할 수 있게 해주는 CLI + MCP 서버 입니다. Hopper·Ghidra 같은 역공학 엔진을 직접 다루는 대신, 에이전트가 &quot;이 앱의 검색 기능이 어떻게 동작하는지 알아내고 내 프로젝트에 비슷하게…</p>
+        
+        <nav class="share-bar" aria-label="공유" data-url="https://tech.vibequant.cc/tech/reverse-rea-review/" data-title="REA (Reverse Engineer Anything) — 분석 리포트 &amp; Getting Started" data-text="REA는 AI 코딩 에이전트가 소스 코드 없는 소프트웨어를 역공학할 수 있게 해주는 CLI + MCP 서버 입니다. Hopper·Ghidra 같은 역공학 엔진을 직접 다루는 대신, 에이전트가 &quot;이 앱의 검색 기능이 어떻게 동작하는지 알아내고 내 프로젝트에 비슷하게…" data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Freverse-rea-review%2F&amp;text=REA%20(Reverse%20Engineer%20Anything)%20%E2%80%94%20%EB%B6%84%EC%84%9D%20%EB%A6%AC%ED%8F%AC%ED%8A%B8%20%26%20Getting%20Started" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Freverse-rea-review%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Freverse-rea-review%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>저장소</strong>: <a href="https://github.com/morluto/rea">https://github.com/morluto/rea</a>
+<strong>npm 패키지</strong>: <code>rea-agents</code> · <strong>라이선스</strong>: MIT · <strong>언어</strong>: TypeScript (+ Ghidra용 Java 브리지)
+<strong>규모 (2026-10-08 기준)</strong>: Star 413 · Fork 38 · 커밋 720 · 열린 이슈 40
+<strong>문서</strong>: README 영어·중국어·일본어·<strong>한국어</strong>·아랍어 제공</p>
+</blockquote>
+<hr>
+<h2>1. 한 줄 요약</h2>
+<p>REA는 <strong>AI 코딩 에이전트가 소스 코드 없는 소프트웨어를 역공학할 수 있게 해주는 CLI + MCP 서버</strong>입니다. Hopper·Ghidra 같은 역공학 엔진을 직접 다루는 대신, 에이전트가 &quot;이 앱의 검색 기능이 어떻게 동작하는지 알아내고 내 프로젝트에 비슷하게 만들어줘&quot;라고 요청받으면 REA의 도구를 호출해 <strong>디컴파일 → 이해 → 재구현</strong> 흐름을 수행합니다.</p>
+<p>README가 스스로 밝히는 한계도 분명합니다. REA는 <strong>원본 소스 복원이나 앱 자동 복제를 주장하지 않으며</strong>, 결론에 이르게 된 증거를 보여주는 것이 목적입니다.</p>
+<hr>
+<h2>2. 주요 기능</h2>
+<h3>2.1 조사 모델: Decompile → Understand → Recreate</h3>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Decompile</strong></td>
+<td>앱을 열어 읽을 수 있는 코드, 문자열, 심볼, 메타데이터를 복구</td>
+</tr>
+<tr>
+<td><strong>Understand</strong></td>
+<td>코드 경로를 따라가며 기능이 실제로 어떻게 동작하는지 설명</td>
+</tr>
+<tr>
+<td><strong>Recreate</strong></td>
+<td>파악한 내용을 사용자 스택·요구사항에 맞춘 기능으로 구현 (이 단계는 에이전트의 일반 코드 편집 도구가 담당)</td>
+</tr>
+</tbody></table>
+<h3>2.2 분석 대상 (현재 출하 기준)</h3>
+<ul>
+<li><strong>네이티브 바이너리</strong>: Mach-O, ELF, PE, <code>.app</code> 번들 (Hopper 또는 Ghidra 경유)</li>
+<li><strong>아카이브/패키지</strong>: ZIP, APK, IPA, MSIX/AppX, ASAR — 추출 없이 콘텐츠 주소 기반 인벤토리</li>
+<li><strong>.NET(PE/CLI) 관리 코드</strong>: 메타데이터 멤버, CIL 해시, P/Invoke 경계 — <strong>어셈블리를 로드·실행하지 않는</strong> 정적 분류</li>
+<li><strong>JavaScript / Electron</strong>: 패키지·엔트리포인트·Webpack/Rspack 모듈·IPC·preload·contextBridge 구조를 AST 기반으로 재구성 (실행 없음)</li>
+<li><strong>웹사이트</strong>: 사용자가 소유한 Chrome 계열 브라우저에 CDP로 수동(passive) 연결해 관찰</li>
+<li><strong>Node/Electron 런타임</strong>: V8 Inspector에 attach-only 방식으로 스크립트·실행 컨텍스트 관찰</li>
+<li><strong>프로세스 동작</strong>: PTY 시나리오 캡처(Process Capture v4) 및 두 캡처 간 비교</li>
+</ul>
+<blockquote>
+<p>펌웨어·모바일 런타임·프로토콜 분석 등은 README에서 <strong>장기 로드맵</strong>으로 분류됩니다. 현재 기능으로 오인하지 않도록 주의하세요.</p>
+</blockquote>
+<h3>2.3 도구 카탈로그 (MCP 도구 패밀리)</h3>
+<table>
+<thead>
+<tr>
+<th>패밀리</th>
+<th>개수</th>
+<th>예시</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Native inspection</td>
+<td>36</td>
+<td>프로시저, 의사코드, 어셈블리, 문자열, xref, 콜러/콜리</td>
+</tr>
+<tr>
+<td>Investigation workflows</td>
+<td>13</td>
+<td><code>binary_overview</code>, <code>analyze_function</code>, <code>trace_feature</code>, <code>batch_decompile</code></td>
+</tr>
+<tr>
+<td>Native macOS utilities</td>
+<td>5</td>
+<td>Mach-O 메타데이터, 코드 서명, plist, Swift 디맹글링 (Hopper 불필요)</td>
+</tr>
+<tr>
+<td>Artifact graph</td>
+<td>3</td>
+<td>디렉터리/ZIP/APK/IPA/ASAR 인벤토리</td>
+</tr>
+<tr>
+<td>Managed PE/CLI</td>
+<td>8</td>
+<td>.NET 메타데이터, P/Invoke 검증, 버전 비교</td>
+</tr>
+<tr>
+<td>Browser observation</td>
+<td>9</td>
+<td>CDP 캡처, 번들·소스맵 분석, 세션 타임라인</td>
+</tr>
+<tr>
+<td>Electron analysis</td>
+<td>5</td>
+<td>정적 매핑, 정적/런타임 대조</td>
+</tr>
+<tr>
+<td>JavaScript runtime</td>
+<td>2</td>
+<td>V8 Inspector 대상 탐색·관찰</td>
+</tr>
+<tr>
+<td>Application workflows</td>
+<td>12</td>
+<td>계층 간 추적, 버전 매칭, 재구성 커버리지</td>
+</tr>
+<tr>
+<td>Workspace &amp; observation</td>
+<td>23</td>
+<td>대상 수명주기, Evidence 번들, 비교, 잔여 미지항목(unknown) 관리</td>
+</tr>
+</tbody></table>
+<h3>2.4 Evidence v2 — 증거 기반 조사</h3>
+<p>모든 성공 결과는 <strong>Evidence v2</strong> 레코드로 기록되며 아티팩트·프로바이더 식별자, 신뢰도, 권한(authority), 한계, 위치 정보를 포함합니다. 핵심 원칙은 다음과 같습니다.</p>
+<ul>
+<li>정적 추론과 런타임 관찰을 <strong>섞지 않고 구분</strong>해서 표시</li>
+<li>누락되거나 잘린 증거는 &quot;동일함&quot;의 근거가 될 수 없음</li>
+<li>알 수 없는 것은 <code>unknown</code>으로 명시적으로 남김 (빈 결과를 &quot;없음&quot;으로 해석하지 않음)</li>
+</ul>
+<p>이 점이 REA를 &quot;LLM이 추측으로 채우는 리버싱&quot;과 구분짓는 가장 큰 설계 특징입니다.</p>
+<h3>2.5 에이전트 연동</h3>
+<p><code>rea setup</code>은 <strong>Claude Code, Claude Desktop, Codex, Cursor, Gemini CLI, Windsurf, Devin</strong> 7종을 감지하고, 이 중 Devin을 제외한 6종을 자동 구성합니다. 그 외에 로컬 MCP 서버를 지원하는 에이전트는 수동 설정(아래 6.4절)으로 사용할 수 있습니다.</p>
+<hr>
+<h2>3. 장점과 단점</h2>
+<h3>장점</h3>
+<ol>
+<li><strong>증거 우선 설계</strong> — 결과마다 출처·신뢰도·한계를 붙이고 unknown을 명시하므로, 에이전트의 환각을 구조적으로 억제합니다.</li>
+<li><strong>동의 우선(consent-first) 설치</strong> — 설정 마법사가 아무것도 미리 선택하지 않고, 변경 경로를 모두 보여준 뒤 기본값 <strong>No</strong>로 최종 승인을 받습니다. <code>--dry-run</code> 지원, 기존 설정 백업 후 기록·재검증, <code>sudo</code> 미사용(Linux는 <code>pkexec</code>).</li>
+<li><strong>로컬 분석</strong> — REA 자체는 호스팅 분석 서비스가 없어 바이너리를 외부로 업로드하지 않습니다.</li>
+<li><strong>CLI와 MCP의 동일성</strong> — 터미널과 에이전트가 같은 워크플로·같은 Evidence 계약을 공유합니다.</li>
+<li><strong>넓은 대상 범위</strong> — 네이티브, .NET, JS/Electron, 웹, 프로세스 동작까지 하나의 인터페이스로 다룹니다.</li>
+<li><strong>재현성·캐시</strong> — 분석 스냅샷이 바이너리 다이제스트·프로바이더 빌드·분석 프로필이 정확히 일치할 때만 재사용되어, 재실행 비용을 줄이면서도 결과 오염을 막습니다.</li>
+<li><strong>버전 비교</strong> — <code>investigate-versions</code>로 두 릴리스를 비교하고 중단 시 재개 가능한 워크스페이스를 제공합니다.</li>
+<li><strong>Hopper 무료 데모로 시작 가능</strong> — 유료 라이선스는 선택 사항입니다.</li>
+<li><strong>MIT 라이선스 + 실제 엔진 대상 CI 검증</strong> — 실제 Ghidra 12.1.2로 모든 오퍼레이션을 검증하는 스크립트(<code>verify:ghidra</code>)가 있습니다.</li>
+</ol>
+<h3>단점</h3>
+<ol>
+<li><strong>&quot;로컬&quot;의 범위가 REA까지만</strong> — REA는 업로드하지 않지만, 에이전트가 디컴파일 결과·문자열·의사코드를 <strong>LLM 제공자에게 전송</strong>합니다. 민감한 바이너리라면 모델 제공자의 데이터 정책을 별도로 검토해야 합니다 (README FAQ도 이를 언급).</li>
+<li><strong>외부 엔진 의존</strong> — 깊은 분석은 Hopper(별도 라이선스, 데모는 벤더 제한 있음) 또는 Ghidra가 필요합니다. Ghidra는 <strong>정확히 12.1.2 + 64비트 JDK 21</strong>만 지원하며 REA가 설치해주지 않습니다.</li>
+<li><strong>Ghidra 프로바이더는 읽기 전용</strong> — 19개 오퍼레이션만 허용되며 이름 변경·주석 같은 변경(mutation)과 GUI 상태 기능은 Hopper에서만 됩니다.</li>
+<li><strong>처리 한계</strong> — Ghidra 자동 분석은 300초·CPU 2개·Java 힙 2GiB로 제한, 디컴파일당 30초 데드라인. 대형 바이너리는 타임아웃이 날 수 있습니다. Hopper는 Python API가 단일 스레드라 요청이 직렬 큐로 처리됩니다.</li>
+<li><strong>플랫폼 편중</strong> — macOS 12+와 일부 Linux(Ubuntu 24.04+, Fedora 41+, Arch)가 중심. Windows는 Ghidra 전용 <strong>실험적 P0</strong>로, 네이티브 x86-64 PE 앱만 지원(DLL·관리 코드 PE 제외)하고 자동 setup도 불가합니다.</li>
+<li><strong>환경변수 스프롤</strong> — 증거 루트, 입력 루트, 스냅샷 루트, 브라우저·V8·프로세스 캡처 등 기능마다 <code>REA_*_JSON</code> 허용목록을 따로 설정해야 해서 고급 기능 진입 장벽이 높습니다.</li>
+<li><strong>샌드박스가 아님</strong> — README가 명시하듯 프로바이더·수동 관찰자·프로세스 캡처는 보안 샌드박스가 아니며 현재 사용자 권한으로 실행됩니다. 악성 샘플 분석용으로 그대로 쓰기엔 부적합합니다 (Linux 전용 JS 재생만 Bubblewrap/seccomp 샌드박스).</li>
+<li><strong>Hopper UI 간섭</strong> — Hopper 런처가 앱을 활성화하므로 창이 전면에 뜨거나, 일부 대화상자는 사람이 응답해야 할 수 있습니다.</li>
+<li><strong>초기 단계 프로젝트</strong> — Star 400여 개 수준의 작은 커뮤니티, 빠른 메이저 버전 변화(3.x)로 API·스키마 변동 가능성이 있습니다.</li>
+<li><strong>법적 고려</strong> — &quot;다른 앱의 기능을 보고 내 제품에 구현&quot;하는 사용 사례는 대상 소프트웨어의 EULA, 저작권, 지역별 역공학 허용 범위를 확인해야 합니다.</li>
+</ol>
+<hr>
+<h2>4. 보강할 점</h2>
+<table>
+<thead>
+<tr>
+<th>영역</th>
+<th>제안</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>데이터 유출면 관리</strong></td>
+<td>LLM으로 넘어가는 문자열·의사코드에 대한 마스킹/레드액션 옵션, &quot;모델로 전송되는 데이터 요약&quot; 리포트</td>
+</tr>
+<tr>
+<td><strong>설정 통합</strong></td>
+<td>흩어진 <code>REA_*_JSON</code> 환경변수를 프로필 기반 설정 파일(예: <code>rea.config.json</code>)과 <code>rea policy</code> 같은 명령으로 통합</td>
+</tr>
+<tr>
+<td><strong>Windows</strong></td>
+<td>Ghidra P0의 정식화, DLL·관리 PE 지원, 자동 setup, named pipe DACL 기반 격리</td>
+</tr>
+<tr>
+<td><strong>Ghidra 버전 유연성</strong></td>
+<td>12.1.2 고정 대신 검증된 버전 범위 허용</td>
+</tr>
+<tr>
+<td><strong>대형 바이너리</strong></td>
+<td>300초 상한을 넘는 분석을 위한 백그라운드 사전 분석 + 스냅샷 선적재 워크플로, 부분 결과의 명시적 반환 모드</td>
+</tr>
+<tr>
+<td><strong>프로바이더 확장</strong></td>
+<td>로드맵에 있는 IDA/Hex-Rays, Binary Ninja, Rizin, LIEF 지원</td>
+</tr>
+<tr>
+<td><strong>동적 분석</strong></td>
+<td>로드맵의 LLDB·Frida·네이티브 API 추적 — 현재 정적 분석 대비 가장 큰 공백</td>
+</tr>
+<tr>
+<td><strong>보안 분석 용도</strong></td>
+<td>악성코드 분석을 위한 VM/컨테이너 격리 실행 가이드, 샌드박스 프로바이더</td>
+</tr>
+<tr>
+<td><strong>온보딩</strong></td>
+<td>대상 유형별(네이티브/Electron/.NET/웹) 엔드투엔드 튜토리얼과 샘플 Evidence 번들</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>5. 유사 프로젝트 비교</h2>
+<blockquote>
+<p>비교 대상의 세부 사양은 작성 시점의 일반 정보 기준이므로, 도입 전 각 프로젝트의 최신 문서를 확인하세요.</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th><strong>REA</strong></th>
+<th><strong>GhidraMCP</strong> (LaurieWired)</th>
+<th><strong>ida-pro-mcp</strong> (mrexodia)</th>
+<th><strong>Binary Ninja Sidekick</strong></th>
+<th><strong>RevEng.AI</strong></th>
+</tr>
+</thead>
+<tbody><tr>
+<td>형태</td>
+<td>독립 CLI + MCP 오케스트레이션 계층</td>
+<td>Ghidra 플러그인 + MCP 브리지</td>
+<td>IDA 플러그인 + MCP 서버</td>
+<td>Binary Ninja 내장 AI 어시스턴트</td>
+<td>클라우드 바이너리 분석 플랫폼/API</td>
+</tr>
+<tr>
+<td>엔진</td>
+<td>Hopper, Ghidra(읽기 전용) + 자체 정적 분석기</td>
+<td>Ghidra</td>
+<td>IDA Pro</td>
+<td>Binary Ninja</td>
+<td>자체 엔진(AI 함수 유사도 등)</td>
+</tr>
+<tr>
+<td>분석 범위</td>
+<td>네이티브 + .NET + JS/Electron + 웹 + 프로세스</td>
+<td>네이티브</td>
+<td>네이티브</td>
+<td>네이티브</td>
+<td>네이티브 중심</td>
+</tr>
+<tr>
+<td>증거/출처 추적</td>
+<td><strong>Evidence v2 (구조화·unknown 명시)</strong></td>
+<td>없음(도구 응답 그대로)</td>
+<td>없음</td>
+<td>제한적</td>
+<td>플랫폼 리포트</td>
+</tr>
+<tr>
+<td>실행 위치</td>
+<td>로컬</td>
+<td>로컬</td>
+<td>로컬</td>
+<td>로컬 앱 + AI 서비스</td>
+<td>클라우드</td>
+</tr>
+<tr>
+<td>비용</td>
+<td>MIT 무료 (Hopper 라이선스 선택)</td>
+<td>무료</td>
+<td>IDA 라이선스 필요</td>
+<td>Binary Ninja + Sidekick 구독</td>
+<td>유료 플랜 중심</td>
+</tr>
+<tr>
+<td>강점</td>
+<td>다계층 대상, 증거 기반, 동의 우선 설치, 버전 비교</td>
+<td>단순·가벼움, Ghidra 사용자 친화</td>
+<td>IDA의 업계 표준 분석 품질</td>
+<td>사람 분석가 워크플로와 긴밀한 통합</td>
+<td>설치 부담 없음, 대규모 유사도 검색</td>
+</tr>
+<tr>
+<td>약점</td>
+<td>설정 복잡, 플랫폼 편중, 작은 커뮤니티</td>
+<td>구조화된 증거·워크플로 부재</td>
+<td>고가 라이선스</td>
+<td>특정 제품 종속</td>
+<td>바이너리 외부 업로드</td>
+</tr>
+</tbody></table>
+<p><strong>포지셔닝 요약</strong>: GhidraMCP·ida-pro-mcp는 &quot;엔진 API를 MCP로 노출&quot;하는 <strong>얇은 어댑터</strong>인 반면, REA는 여러 엔진과 자체 분석기를 묶고 <strong>증거·권한·재현성 계약을 강제하는 두꺼운 오케스트레이션 계층</strong>입니다. 빠르게 한 바이너리를 들여다보려면 어댑터형이, 감사 가능한 조사 기록이 필요하거나 Electron/.NET/웹까지 아우르려면 REA가 유리합니다.</p>
+<hr>
+<h2>6. Getting Started</h2>
+<h3>6.1 요구사항</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>조건</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OS</td>
+<td>macOS 12+ / Ubuntu 24.04+, Fedora 41+, 64비트 Arch / (실험) Windows x64 — Ghidra 전용</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>22.19+ 또는 24.11+ (이후 버전 포함)</td>
+</tr>
+<tr>
+<td>npm</td>
+<td>특정 버전 요구 없음</td>
+</tr>
+<tr>
+<td>분석 엔진</td>
+<td>Hopper (setup이 설치 가능, 데모 모드 OK) <strong>또는</strong> Ghidra 12.1.2 + JDK 21 (직접 설치)</td>
+</tr>
+</tbody></table>
+<pre><code class="language-bash">node -v   # v22.19 이상인지 확인
+</code></pre>
+<h3>6.2 설치 — 세 가지 방법 중 하나 선택</h3>
+<p><strong>방법 A. npx로 설치 없이 setup (권장)</strong></p>
+<pre><code class="language-bash">npx --yes rea-agents@latest setup
+</code></pre>
+<ul>
+<li>감지된 에이전트 목록을 보여준 뒤 <strong>Agent Integration</strong>(MCP 등록 + 라우팅 스킬)과 필요 시 <strong>Hopper provider</strong>를 고르게 합니다. 아무것도 미리 선택되어 있지 않습니다.</li>
+<li>최종 승인 전 정확한 변경 경로가 출력되며 기본값은 <strong>No</strong>입니다. Ctrl-C로 취소하면 아무것도 바뀌지 않습니다.</li>
+<li>먼저 계획만 보고 싶다면:</li>
+</ul>
+<pre><code class="language-bash">npx --yes rea-agents@latest setup --dry-run
+</code></pre>
+<p><strong>방법 B. 전역 설치로 <code>rea</code> 명령 사용</strong></p>
+<pre><code class="language-bash">npm install --global rea-agents
+rea setup
+rea doctor
+</code></pre>
+<blockquote>
+<p><code>--global</code> 없이 <code>npm install rea-agents</code>를 하면 현재 프로젝트의 <code>node_modules/.bin</code>에만 설치되어 셸 PATH에 <code>rea</code>가 잡히지 않습니다.</p>
+</blockquote>
+<p><strong>방법 C. curl 설치 스크립트</strong></p>
+<pre><code class="language-bash">curl -fsSL https://raw.githubusercontent.com/morluto/rea/main/install.sh | bash
+# 옵션 예: 계획만 보기
+curl -fsSL https://raw.githubusercontent.com/morluto/rea/main/install.sh | bash -s -- --dry-run
+</code></pre>
+<p>Linux에서는 <code>~/.local/bin</code>에 설치되므로 PATH에 추가가 필요할 수 있습니다.</p>
+<h3>6.3 setup 후 에이전트에게 요청하기</h3>
+<ol>
+<li>setup이 끝나면 구성된 에이전트(Claude Code 등)를 <strong>재시작</strong>합니다.</li>
+<li>Hopper가 처음 뜰 때 데모/라이선스 프롬프트가 나오면 <strong>Try the Demo</strong> 또는 보유 라이선스를 선택합니다.</li>
+<li>에이전트에게 자연어로 요청합니다.</li>
+</ol>
+<pre><code class="language-text">Notes 앱에서 오프라인 검색이 어떻게 동작하는지 역공학으로 분석하고,
+증거를 보여준 다음, TypeScript와 SQLite로 내 프로젝트에 비슷한 기능을 만들어줘.
+</code></pre>
+<p>이때 에이전트가 내부적으로 수행하는 흐름은 대략 다음과 같습니다.</p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>에이전트 작업</th>
+<th>REA 도구</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>바이너리 열기·식별</td>
+<td><code>open_binary</code>, <code>binary_overview</code></td>
+</tr>
+<tr>
+<td>2</td>
+<td>관련 단서 탐색</td>
+<td><code>search_strings</code>, <code>search_procedures</code>, <code>list_names</code></td>
+</tr>
+<tr>
+<td>3</td>
+<td>단서를 실행 코드에 연결</td>
+<td><code>find_xrefs_to_name</code>, <code>xrefs</code>, <code>procedure_callers</code></td>
+</tr>
+<tr>
+<td>4</td>
+<td>제어 흐름 재구성</td>
+<td><code>get_call_graph</code>, <code>procedure_callees</code>, <code>procedure_info</code></td>
+</tr>
+<tr>
+<td>5</td>
+<td>관련 루틴 디컴파일</td>
+<td><code>procedure_pseudo_code</code>, <code>procedure_assembly</code>, <code>batch_decompile</code></td>
+</tr>
+<tr>
+<td>6</td>
+<td>기능 구현</td>
+<td>에이전트의 일반 파일 편집·테스트 도구</td>
+</tr>
+</tbody></table>
+<h3>6.4 수동 MCP 설정 (자동 구성되지 않는 에이전트)</h3>
+<p>MCP 설정 파일에 다음을 추가합니다. 영구 등록에는 <strong>정확한 버전 고정</strong>이 권장됩니다.</p>
+<pre><code class="language-json">{
+  &quot;mcpServers&quot;: {
+    &quot;rea&quot;: {
+      &quot;command&quot;: &quot;npx&quot;,
+      &quot;args&quot;: [&quot;-y&quot;, &quot;rea-agents@3.1.0&quot;, &quot;mcp&quot;]
+    }
+  }
+}
+</code></pre>
+<p>전역 설치했다면 <code>rea mcp</code>로 서버를 직접 띄울 수도 있습니다. MCP 프롬프트를 지원하는 클라이언트에서는 <code>prompts/list</code>로 6개의 가이드 워크플로를 사용할 수 있습니다.</p>
+<h3>6.5 터미널에서 직접 쓰기 (CLI)</h3>
+<pre><code class="language-bash"># 상태 진단
+rea doctor
+rea doctor --json          # 읽기 전용, 원인별로 구분된 진단
+
+# 개요 분석
+rea analyze /Applications/Notes.app
+rea inspect /Applications/Notes.app --detail detailed --limit 20
+
+# 검색·함수·참조·추적
+rea search   /Applications/Notes.app &quot;offline&quot;
+rea function /Applications/Notes.app 0x1000
+rea xrefs    /Applications/Notes.app 0x1000
+rea trace    /Applications/Notes.app &quot;offline&quot;
+
+# 디컴파일 없이 빠른 원시 명령어 창
+rea instructions /Applications/Notes.app 0x1000
+
+# 기능·프로바이더 확인, 도움말
+rea capabilities
+rea providers --json
+rea --help
+</code></pre>
+<p>설치 없이 쓰려면 각 명령 앞에 <code>npx -y rea-agents@latest</code>를 붙입니다.</p>
+<h3>6.6 분석 엔진(프로바이더) 선택</h3>
+<pre><code class="language-bash"># 사용 가능한 후보 확인
+rea providers --json
+
+# 요청 단위로 지정 (환경변수보다 우선)
+rea analyze /absolute/path/to/program --provider hopper
+
+# 환경변수로 지정
+REA_ANALYSIS_PROVIDER=hopper rea decompile /absolute/path/to/program 0x1000
+</code></pre>
+<ul>
+<li>사용 가능한 후보가 하나면 자동 선택, 여러 개면 <code>ambiguous</code>로 보고합니다.</li>
+<li>프로바이더 실패 시 <strong>다른 엔진으로 조용히 대체하지 않습니다</strong> (명시적 오류).</li>
+</ul>
+<p><strong>Ghidra 연결 (Linux x64 / Windows 실험)</strong></p>
+<pre><code class="language-bash">export GHIDRA_INSTALL_DIR=/absolute/path/to/ghidra_12.1.2_PUBLIC
+export JAVA_HOME=/absolute/path/to/jdk-21   # java/javac가 PATH에 있으면 생략 가능
+rea doctor --json
+rea setup                                   # 검증된 경로를 MCP 등록에 반영
+rea providers --json
+</code></pre>
+<p><strong>Hopper 경로가 기본값과 다를 때 (Linux)</strong></p>
+<pre><code class="language-bash">export HOPPER_LAUNCHER_PATH=/absolute/path/to/Hopper
+rea doctor --json
+ldd /opt/hopper/bin/Hopper | grep &#39;not found&#39;   # 공유 라이브러리 누락 확인
+</code></pre>
+<h3>6.7 증거·버전 비교 등 파일 기반 기능 켜기</h3>
+<p>파일 시스템을 다루는 기능은 운영자가 <strong>절대 경로 루트를 승인</strong>해야 활성화됩니다.</p>
+<pre><code class="language-bash">export REA_EVIDENCE_ROOTS_JSON=&#39;[&quot;/absolute/path/to/evidence&quot;]&#39;
+export REA_INVESTIGATION_INPUT_ROOTS_JSON=&#39;[&quot;/absolute/path/to/releases&quot;]&#39;
+
+# Evidence 번들 가져오기/내보내기/비교
+rea evidence-import /absolute/path/to/evidence/bundle.json
+rea evidence-export /absolute/path/to/evidence/bundle.json /absolute/path/to/evidence/canonical.json
+rea compare /absolute/path/to/evidence/left.json /absolute/path/to/evidence/right.json
+
+# 두 버전 비교 (중단 시 재개 가능)
+rea investigate-versions /absolute/path/to/releases/v1 /absolute/path/to/releases/v2 \
+  /absolute/path/to/evidence/releases.json --yes --workspace-name releases
+
+# Electron/JS 앱 정적 매핑 (실행하지 않음)
+rea analyze /absolute/path/to/releases/app.asar --approved --json
+</code></pre>
+<p><strong>분석 스냅샷으로 재실행 비용 줄이기</strong></p>
+<pre><code class="language-bash">export REA_ANALYSIS_SNAPSHOT_ROOTS_JSON=&#39;[&quot;/absolute/path/to/analysis&quot;]&#39;
+rea analyze /absolute/path/to/app --snapshot /absolute/path/to/analysis/app.json
+# 동일 쿼리는 프로바이더를 다시 띄우지 않고 스냅샷에서 응답
+</code></pre>
+<blockquote>
+<p>⚠️ MCP 클라이언트에 등록된 상태라면, 환경변수를 설정한 셸에서 <strong><code>rea setup</code>을 다시 승인 실행하고 클라이언트를 재시작</strong>해야 정책이 반영됩니다. 셸 환경만 바꿔서는 이미 실행 중인 MCP 프로세스에 적용되지 않습니다.</p>
+</blockquote>
+<h3>6.8 웹사이트 관찰 (CDP, 선택)</h3>
+<pre><code class="language-bash">export REA_BROWSER_OBSERVE_ENABLED=true
+export REA_BROWSER_CDP_ENDPOINTS_JSON=&#39;[&quot;http://127.0.0.1:9222&quot;]&#39;
+export REA_BROWSER_ALLOWED_ORIGINS_JSON=&#39;[&quot;http://127.0.0.1:3000&quot;]&#39;
+
+rea list-browser-targets http://127.0.0.1:9222 --approved --json
+rea inspect-web-page http://127.0.0.1:9222 TARGET_ID --approved --json
+</code></pre>
+<p>수동 관찰이며 페이지 JS 실행·이동·클릭을 하지 않고, 쿠키·인증 헤더·스토리지 값은 보존하지 않습니다.</p>
+<h3>6.9 문제 해결</h3>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>조치</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>무엇이 안 되는지 모름</td>
+<td><code>rea doctor --json</code> — 미지원 호스트, 의존성 누락, 엔진 누락, 설정 드리프트를 구분해 보고</td>
+</tr>
+<tr>
+<td>setup이 종료 코드 1</td>
+<td><code>planned</code> / <code>needs_confirmation</code> / <code>needs_human</code> 상태 — 승인 또는 조치 후 재실행</td>
+</tr>
+<tr>
+<td>Hopper 창이 전면에 뜸</td>
+<td>Hopper 런처 특성. REA는 백그라운드 시작을 요청하지만 보장 불가</td>
+</tr>
+<tr>
+<td>디컴파일 타임아웃</td>
+<td><code>rea instructions</code>로 원시 명령어만 확인, 세션의 <code>analysis_activity</code>로 진행 중 작업 확인</td>
+</tr>
+<tr>
+<td>파이프라인에서 실패가 숨겨짐</td>
+<td><code>set -o pipefail</code> 사용</td>
+</tr>
+</tbody></table>
+<pre><code class="language-bash">set -o pipefail
+rea inventory-artifact ./app.asar --json | jq . &gt; inventory.json
+</code></pre>
+<h3>6.10 업그레이드와 제거</h3>
+<pre><code class="language-bash">rea upgrade                     # 전역 설치본 업데이트 (이후 setup 동기화 안내)
+rea uninstall                   # REA 소유 MCP 등록과 스킬만 제거
+rea uninstall --purge-data      # ~/.rea/cache, ~/.rea/state 까지 제거
+</code></pre>
+<p>제거 시 Hopper, Node.js, Evidence, 캡처 파일, 다른 MCP 서버는 보존됩니다.</p>
+<hr>
+<h2>7. 초안 대비 정정 사항</h2>
+<p>기존 요약본에서 README와 맞지 않는 부분을 정리했습니다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>초안</th>
+<th>실제 (README / 저장소 기준)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GitHub Star</td>
+<td>15,000개 이상</td>
+<td><strong>413개</strong> (Fork 38)</td>
+</tr>
+<tr>
+<td>에이전트 호환</td>
+<td>12개 이상, GitHub Copilot CLI 포함</td>
+<td>setup이 <strong>7종 감지, 6종 자동 구성</strong>(Devin 제외). Copilot CLI는 README에 명시 없음. 그 외는 수동 MCP 설정</td>
+</tr>
+<tr>
+<td>Hopper</td>
+<td>유료 라이선스 필요</td>
+<td><strong>무료 데모 모드로 사용 가능</strong>, 유료 라이선스는 선택. setup이 설치까지 지원</td>
+</tr>
+<tr>
+<td>Ghidra 지연</td>
+<td>콜드 스타트 최대 330초</td>
+<td>자동 분석 <strong>300초 상한</strong>(CPU 2, 힙 2GiB), 디컴파일당 30초 데드라인</td>
+</tr>
+<tr>
+<td>펌웨어 분석</td>
+<td>현재 기능</td>
+<td><strong>장기 로드맵</strong> 항목</td>
+</tr>
+<tr>
+<td>플랫폼</td>
+<td>macOS + 특정 Linux</td>
+<td>macOS 12+, Ubuntu 24.04+ / Fedora 41+ / Arch, Windows x64는 Ghidra 전용 실험</td>
+</tr>
+<tr>
+<td>Ghidra 버전</td>
+<td>언급 없음</td>
+<td><strong>정확히 12.1.2 + JDK 21</strong>만 지원, 읽기 전용 19개 오퍼레이션</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. 참고 링크</h2>
+<ul>
+<li>저장소: <a href="https://github.com/morluto/rea">https://github.com/morluto/rea</a></li>
+<li>한국어 README: <a href="https://github.com/morluto/rea/blob/main/README_ko.md">https://github.com/morluto/rea/blob/main/README_ko.md</a></li>
+<li>설치 문서: <a href="https://github.com/morluto/rea/blob/main/docs/installation.md">https://github.com/morluto/rea/blob/main/docs/installation.md</a></li>
+<li>Windows Ghidra P0: <a href="https://github.com/morluto/rea/blob/main/docs/windows-ghidra-p0.md">https://github.com/morluto/rea/blob/main/docs/windows-ghidra-p0.md</a></li>
+<li>브라우저 관찰: <a href="https://github.com/morluto/rea/blob/main/docs/browser-observation.md">https://github.com/morluto/rea/blob/main/docs/browser-observation.md</a></li>
+<li>보안 정책: <a href="https://github.com/morluto/rea/blob/main/SECURITY.md">https://github.com/morluto/rea/blob/main/SECURITY.md</a></li>
+<li>npm: <a href="https://www.npmjs.com/package/rea-agents">https://www.npmjs.com/package/rea-agents</a></li>
+<li>Hopper: <a href="https://www.hopperapp.com/">https://www.hopperapp.com/</a> · Ghidra: <a href="https://github.com/NationalSecurityAgency/ghidra">https://github.com/NationalSecurityAgency/ghidra</a></li>
+</ul>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://tech.vibequant.cc/tech/reverse-rea-review/" data-title="REA (Reverse Engineer Anything) — 분석 리포트 &amp; Getting Started" data-text="REA는 AI 코딩 에이전트가 소스 코드 없는 소프트웨어를 역공학할 수 있게 해주는 CLI + MCP 서버 입니다. Hopper·Ghidra 같은 역공학 엔진을 직접 다루는 대신, 에이전트가 &quot;이 앱의 검색 기능이 어떻게 동작하는지 알아내고 내 프로젝트에 비슷하게…" data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Freverse-rea-review%2F&amp;text=REA%20(Reverse%20Engineer%20Anything)%20%E2%80%94%20%EB%B6%84%EC%84%9D%20%EB%A6%AC%ED%8F%AC%ED%8A%B8%20%26%20Getting%20Started" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Freverse-rea-review%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Freverse-rea-review%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Reverse/REA-Review.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

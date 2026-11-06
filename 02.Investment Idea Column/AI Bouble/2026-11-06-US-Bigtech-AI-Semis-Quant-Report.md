@@ -1,9 +1,68 @@
-# 2026년 11월 5–6일 미국 빅테크·나스닥·엔비디아·AI 반도체 섹터 퀀트 관점 분석 리포트
+---
+title: "2026년 11월 나스닥·엔비디아·AI 반도체 급락 퀀트 리포트"
+title_en: "November 2026 Nasdaq, Nvidia, and AI Semis Selloff — A Quant Report"
+subtitle: "나스닥 −5.52%, SOX −12.25%. 모멘텀 청산인가, AI 수요 약화인가"
+description: "2026년 11월 5일 나스닥 −5.52%, SOX −12.25%. 골드만은 디레버리징, 모건스탠리는 추가 조정을 말한다. 엔비디아 11월 18일 실적과 빅테크 FCF로 읽는 퀀트 리포트."
+abstract: |
+  2026년 11월 5일 나스닥 종합은 −5.52%, 필라델피아 반도체(SOX)는 −12.25%로 2020년 3월 이후 최대 일간 낙폭을 기록했다.
+  퀀트 관점의 핵심은 AI 수요 붕괴가 아니라 모멘텀·성장 팩터에 쏠린 포지션의 디레버리징이다. 테슬라 −10.77%, 엔비디아 −9.26%가 낙폭을 주도했고 애플은 −1.53%로 방어했다.
+  4대 하이퍼스케일러 2026년 캐펙스 가이던스 합계는 7,000억 달러를 넘고, 아마존 TTM FCF는 −424억 달러다. 엔비디아 종가 181.60달러, Forward PER 13.26배, PEG 0.26은 성장 전제가 유지될 때의 숫자다.
+  모건스탠리는 반등 시 비중 축소, 골드만삭스는 전력→하이퍼스케일러→추론 순의 선택적 재진입을 말했다. 다음 검증은 2026년 11월 18일 엔비디아 실적과 데이터센터 규제다. 투자 권유 아님.
+summary_for_ai: |
+  Korean quant column (not investment advice), as of 2026-11-06, group ai-llm.
+  Path: AI Bouble/2026-11-06-US-Bigtech-AI-Semis-Quant-Report.md.
+  Slug: 2026-11-06-us-bigtech-ai-semis-quant-report.
+  Event: 2026-11-05 US session. Nasdaq Composite −5.52% to 24,315.00, −11.9% from 2026-10-06 high. S&P 500 −4.36%. Dow −3.44%. SOX −12.25% (worst day since March 2020). Nasdaq 100 −6.4%, about $2.3T market cap erased. SOXX −12%+.
+  Trigger: US midterm result, Democratic control of both chambers. Factor reading: crowded AI/momentum deleveraging, not an AI-demand break. Goldman: deleveraging event. TMT net selling about $20B over two weeks. Goldman momentum basket −7.8% on the week vs Nasdaq 100 −0.8%. Morgan Stanley (Ukyo Haraguchi): rotation into low-vol and value matches prior view; AI/semi forward P/E median still near historical highs.
+  Magnificent 7 on 11/5: TSLA −10.77%, NVDA −9.26%, META −3.96%, MSFT −3.58%, AMZN −2.19%, GOOG −1.94%, AAPL −1.53%.
+  Capex vs FCF: four hyperscalers' 2026 capex guidance above $700B. Amazon TTM FCF −$42.4B. Meta 2026 capex guide $135–145B. Microsoft recent-quarter capex $45.2B vs operating cash flow $58B, still FCF positive. Question shifted from "does AI grow" to "does AI grow profitably."
+  Positioning: Goldman says non-dealer Nasdaq futures longs are at a record notional, with another $21.8B of exposure added over three weeks. Second-round liquidation risk remains.
+  Nvidia: close $181.60 (−9.26%), about $446.6B market cap erased. TTM P/E 26.67, forward P/E 13.26, PEG 0.26, P/B 22.25, PSR 16.81, EV/EBITDA 25.14 (Quant500). Seeking Alpha Strong Sell (value F, growth A, profitability A+). Quant500 6.5/10. Earnings 2026-11-18 are the next binary check on AI demand.
+  AI semis 11/5: AMD −15 to −17%, Marvell −16%, Micron −13 to −17%, Broadcom −9 to −10.6%, Qualcomm −9 to −10%, Intel −9.2%.
+  House split: Morgan Stanley (Oct 27) says the AI-chip selloff is not done, trim into bounces, SOX chart resembles 2000. Goldman says crowding has largely cleared; re-enter in order power, then hyperscalers, then inference and cybersecurity, filtered by real free cash flow. Shared conclusion: indiscriminate AI beta is over.
+  Policy: Sanders called for a national datacenter moratorium; Texas winner Gina Hinojosa called for an immediate halt. UBS: up to 30% of datacenter capacity planned through 2028 could be affected by regulation.
+  Watch next 2–4 weeks: NVDA 11/18 print, hyperscaler capex guides, datacenter legislation, Goldman momentum basket vs Nasdaq 100, FCF spread between cash-generative big tech and FCF-negative AI infra.
+date: 2026-11-06
+updated: 2026-11-06
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 나스닥
+  - 엔비디아
+  - AI반도체
+  - 빅테크
+  - 퀀트
+  - SOX
+keywords:
+  - "2026년 11월 나스닥 급락"
+  - "엔비디아 주가"
+  - "AI 반도체 SOX"
+  - "필라델피아 반도체"
+  - "빅테크 캐펙스"
+  - "모멘텀 팩터 청산"
+  - "엔비디아 실적 11월 18일"
+group: ai-llm
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/us-bigtech-ai-semis-20261106.jpg"
+image: "https://vibequant.cc/og/us-bigtech-ai-semis-20261106.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+# 2026년 11월 나스닥·엔비디아·AI 반도체 급락 퀀트 리포트
+
+**김호광** / 2026년 11월 6일
+
+![실리콘 웨이퍼 앞에 붉은 하락 차트가 켜진 야간 거래 화면. 나스닥과 AI 반도체 급락을 상징한다.](images/us-bigtech-ai-semis-20261106.jpg)
+
+*실리콘 웨이퍼와 하락 캔들. 11월 5일 낙폭은 반도체와 AI 모멘텀에 집중됐다.*
 
 > **보고서 기준일:** 2026년 11월 6일
 > **분석 대상 기간:** 2026년 11월 5–6일 (미국 동부시간 기준)
 
----
+11월 5일 미국 증시는 AI 기술주를 중심으로 나스닥 종합 **−5.52%**, 필라델피아 반도체 **−12.25%**를 기록했다. 이 글은 그 급락을 수요 붕괴가 아니라 **모멘텀 팩터의 청산**으로 읽을 수 있는지, 그리고 빅테크 현금흐름과 엔비디아 11월 18일 실적에서 무엇을 확인해야 하는지를 정리한다.
 
 ## 목차
 
@@ -79,7 +138,7 @@
 
 골드만삭스는 나스닥 선물 비딜러 포지션이 **사상 최대 명목 롱**에 달했으며, 기술주 매도세에도 불구하고 3주간 **218억 달러**의 익스포저가 추가되었다고 지적했다.
 
-> ⚠️ 이는 **모멘텀 팩터의 크라우딩이 아직 완전히 해소되지 않았을 가능성**을 시사하며, 추가 조정 시 **2차 청산 압력**이 발생할 수 있는 구조적 취약점으로 작용한다.
+> 이는 **모멘텀 팩터의 크라우딩이 아직 완전히 해소되지 않았을 가능성**을 시사하며, 추가 조정 시 **2차 청산 압력**이 발생할 수 있는 구조적 취약점으로 작용한다.
 
 ---
 
@@ -223,6 +282,16 @@ AI 반도체 섹터는 11월 5일 **역대급 팩터 붕괴**를 경험했다.
 | 3 | **데이터센터 규제 구체화** | 연방·주 차원의 모라토리엄 입법화 여부 | 정책 리스크 프리미엄 재평가 |
 | 4 | **모멘텀 크라우딩 지표** | 골드만삭스 모멘텀 바스켓 vs. 나스닥 100 스프레드 | 청산 완료 여부 판단 |
 | 5 | **FCF 스프레드** | FCF 플러스 빅테크(MSFT 등) vs. FCF 적자 AI 인프라 기업 | 퀄리티 팩터 스프레드 |
+
+---
+
+## 함께 읽기
+
+같은 사이클을 다른 시점에서 읽은 칼럼이다.
+
+- [엔비디아 실적발표, 반도체와 AI 시장을 구원할까?](https://docs.vibequant.cc/columns/nvidia-fait-accompli/) — 2026년 8월 실적 전, 이미 반영된 호재
+- [매도 압력 하의 미국 기술주 및 AI 인프라](https://docs.vibequant.cc/columns/ai-bouble-ai-infrastructure-under-sell-off-pressure/) — 2026년 6월 캐펙스와 모멘텀 쏠림
+- [메모리 반도체 대폭락, '이번에는 다르다'는 착각](https://docs.vibequant.cc/columns/ai-bouble-the-end-of-the-semiconductor-supercycle-260728/) — SOX −10.3%와 HBM 둔화
 
 ---
 

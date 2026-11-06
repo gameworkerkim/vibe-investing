@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
   <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-kr/" />
   <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-en/" />
   <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-ja/" />
@@ -359,7 +359,7 @@ HKLM\SOFTWARE\Panda Software\Firewall
 <h3>5.3 Self-Propagation: MPR + Administrative Shares</h3>
 <p>fast16&#39;s propagation mechanism consists of two stages:</p>
 <ul>
-<li>It extracts <strong><code>svcmgmt.dll</code></strong>and registers it as an<strong>MPR (Multiple Provider Router)</strong> network provider notifyee. The DLL is loaded into every process that calls <code>WNetAddConnection</code>, reporting new share connections via the named pipe <code>\\.\pipe\p577</code>.</li>
+<li>It extracts <strong><code>svcmgmt.dll</code><strong>and registers it as an</strong>MPR (Multiple Provider Router)</strong> network provider notifyee. The DLL is loaded into every process that calls <code>WNetAddConnection</code>, reporting new share connections via the named pipe <code>\\.\pipe\p577</code>.</li>
 <li>It enumerates all domains, servers, and shares to discover remote hosts. Each candidate hostname is resolved to an IP and validated against <strong>local network ranges (10.x.x.x, 172.16.x.x, 192.168.x.x) and the same-subnet rule</strong>.</li>
 <li>For machines that qualify, it <strong>impersonates the locally logged-on user&#39;s credentials</strong>, copies itself to <code>\\&lt;remote&gt;\admin$\system32\svcmgmt.exe</code>, and creates a remote SvcMgmt service to start execution.</li>
 </ul>
@@ -508,7 +508,7 @@ $a2 = &quot;@(#)par.h : &quot;
 <h3>8.3 Recommendations Specific to High-Precision Computing Environments</h3>
 <p>For organizations operating high-precision computing workloads in fields such as nuclear, aerospace, defense, and advanced physics simulation:</p>
 <ul>
-<li><strong>Result Integrity Verification:</strong>Cross-execute the same simulations on<strong>systems of a different architecture (e.g., x86 workstation ↔ ARM/PowerPC HPC node)</strong> to verify result consistency. x86-specific tampering such as fast16 cannot operate on a different architecture.</li>
+<li><strong>Result Integrity Verification:</strong> Cross-execute the same simulations on <strong>systems of a different architecture (e.g., x86 workstation ↔ ARM/PowerPC HPC node)</strong> to verify result consistency. x86-specific tampering such as fast16 cannot operate on a different architecture.</li>
 <li><strong>Binary Integrity Monitoring:</strong> Periodically verify SHA256 hashes of simulation executables such as LS-DYNA, AUTODYN, ANSYS, and ABAQUS, and inspect whether unusual sections like <code>.xdata</code> and <code>.pdata</code> appear after memory loading.</li>
 <li><strong>Awareness of Intel-Compiler-Metadata Targeting:</strong> Because the targeting logic relies on the &quot;Intel&quot; string in the PE header, additional sabotage tools that use the same pattern may exist. One mitigation may be to remove or alter this metadata in the build pipeline.</li>
 <li><strong>A Reporting Culture for &quot;Odd Results&quot;:</strong> Establish channels for researchers to report subtle anomalies in simulation results. fast16 does not break results outright but instead produces &quot;plausible falsehoods,&quot; so the intuition of domain experts is the first line of defense.</li>

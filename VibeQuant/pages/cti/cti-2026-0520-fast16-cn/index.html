@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
   <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-kr/" />
   <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-en/" />
   <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-ja/" />
@@ -359,7 +359,7 @@ HKLM\SOFTWARE\Panda Software\Firewall
 <h3>5.3 自传播:MPR + 管理共享</h3>
 <p>fast16 的传播机制分为两个阶段:</p>
 <ul>
-<li>提取 <strong><code>svcmgmt.dll</code></strong>并注册为<strong>MPR (Multiple Provider Router)</strong> 网络提供者通知接收者。该 DLL 加载到调用 <code>WNetAddConnection</code> 的所有进程中,通过命名管道 <code>\\.\pipe\p577</code> 报告新的共享连接。</li>
+<li>提取 <strong><code>svcmgmt.dll</code><strong>并注册为</strong>MPR (Multiple Provider Router)</strong> 网络提供者通知接收者。该 DLL 加载到调用 <code>WNetAddConnection</code> 的所有进程中,通过命名管道 <code>\\.\pipe\p577</code> 报告新的共享连接。</li>
 <li>枚举所有域、服务器、共享以发现远程主机。将每个候选主机名解析为 IP,并按<strong>本地网络范围(10.x.x.x、172.16.x.x、192.168.x.x)和相同子网规则</strong>进行验证。</li>
 <li>对符合资格的机器,<strong>冒用本地登录用户凭据(impersonation)</strong>,将自己复制到 <code>\\&lt;remote&gt;\admin$\system32\svcmgmt.exe</code>,创建远程 SvcMgmt 服务并启动执行。</li>
 </ul>
@@ -508,7 +508,7 @@ $a2 = &quot;@(#)par.h : &quot;
 <h3>8.3 针对高精度计算环境的特化建议</h3>
 <p>针对核、航空航天、国防、先进物理仿真等运行高精度计算工作负载的组织的额外建议:</p>
 <ul>
-<li><strong>结果完整性验证:</strong>在<strong>架构不同的另一系统(例如:x86 工作站 ↔ ARM/PowerPC HPC 节点)</strong>上交叉运行同一仿真,验证结果一致性。像 fast16 这样的 x86 特化篡改在其他架构上不会起作用。</li>
+<li><strong>结果完整性验证:</strong> 在<strong>架构不同的另一系统(例如:x86 工作站 ↔ ARM/PowerPC HPC 节点)</strong>上交叉运行同一仿真,验证结果一致性。像 fast16 这样的 x86 特化篡改在其他架构上不会起作用。</li>
 <li><strong>二进制完整性监控:</strong> 定期验证 LS-DYNA、AUTODYN、ANSYS、ABAQUS 等仿真可执行文件的 SHA256 哈希,并检查内存加载后是否添加了 <code>.xdata</code>、<code>.pdata</code> 等异常节。</li>
 <li><strong>认识基于 Intel 编译器元数据的目标锁定:</strong> 考虑到目标锁定逻辑依赖于 PE 头部的 &quot;Intel&quot; 字符串,可能存在使用相同模式的其他破坏工具。在构建流水线中移除或更改此元数据可能是一种规避策略。</li>
 <li><strong>&quot;异常结果&quot;报告文化:</strong> 建立研究人员可以报告仿真结果细微异常的渠道。fast16 不会完全破坏结果,而是生成&quot;看似合理的虚假&quot;,因此领域专家的直觉是第一道防线。</li>

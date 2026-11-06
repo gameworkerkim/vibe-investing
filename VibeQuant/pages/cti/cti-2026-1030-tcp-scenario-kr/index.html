@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>커널 코드로 살펴보는 CVE-2026-98432 익스플로잇 시나리오 — VibeQuant</title>
+  <meta name="description" content="커널 수정 전 소스로 본 CVE-2026-98432. 유출·크기 혼동 프리미티브와 탐지 시그널을 연결한다. 익스플로잇 구현은 다루지 않는다." />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-1030-tcp-scenario-kr/" />
+  <meta property="og:title" content="커널 코드로 살펴보는 CVE-2026-98432 익스플로잇 시나리오" />
+  <meta property="og:description" content="커널 수정 전 소스로 본 CVE-2026-98432. 유출·크기 혼동 프리미티브와 탐지 시그널을 연결한다. 익스플로잇 구현은 다루지 않는다." />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-1030-tcp-scenario-kr/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og/cve-2026-98432-kernel-exploit-scenario.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og/cve-2026-98432-kernel-exploit-scenario.jpg" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
+  <meta name="keywords" content="CVE-2026-98432, 리눅스 커널 TCP, 익스플로잇 시나리오, Use-After-Free, KASLR, 탐지" />
+  <meta name="robots" content="index,follow" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"커널 코드로 살펴보는 CVE-2026-98432 익스플로잇 시나리오","description":"커널 수정 전 소스로 본 CVE-2026-98432. 유출·크기 혼동 프리미티브와 탐지 시그널을 연결한다. 익스플로잇 구현은 다루지 않는다.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/cti-2026-1030-tcp-scenario-kr/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-1030-TCP-SCENARIO_KR.md","image":"https://vibequant.cc/og/cve-2026-98432-kernel-exploit-scenario.jpg","url":"https://cti.vibequant.cc/cti/cti-2026-1030-tcp-scenario-kr/","datePublished":"2026-10-30","dateModified":"2026-10-30","inLanguage":"ko","keywords":"Linux-Kernel, CVE-2026-98432, Use-After-Free, TCP, Detection"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"커널 코드로 살펴보는 CVE-2026-98432 익스플로잇 시나리오","item":"https://cti.vibequant.cc/cti/cti-2026-1030-tcp-scenario-kr/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 취약점 · 패치</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">취약점 · 패치</p>
+        <h1>커널 코드로 살펴보는 CVE-2026-98432 익스플로잇 시나리오</h1>
+        <p class="article-dates"><time datetime="2026-10-30">발행 2026.10.30</time> · 주제 Linux-Kernel · CVE-2026-98432 · Use-After-Free · TCP · Detection</p>
+        
+        <p class="lede">수정 전 커널 경로에서 유출과 크기 혼동을 읽고, 탐지 시그널에 연결한다</p>
+        
+        <nav class="share-bar" aria-label="공유" data-url="https://cti.vibequant.cc/cti/cti-2026-1030-tcp-scenario-kr/" data-title="커널 코드로 살펴보는 CVE-2026-98432 익스플로잇 시나리오" data-text="커널 수정 전 소스로 본 CVE-2026-98432. 유출·크기 혼동 프리미티브와 탐지 시그널을 연결한다. 익스플로잇 구현은 다루지 않는다." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-1030-tcp-scenario-kr%2F&amp;text=%EC%BB%A4%EB%84%90%20%EC%BD%94%EB%93%9C%EB%A1%9C%20%EC%82%B4%ED%8E%B4%EB%B3%B4%EB%8A%94%20CVE-2026-98432%20%EC%9D%B5%EC%8A%A4%ED%94%8C%EB%A1%9C%EC%9E%87%20%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-1030-tcp-scenario-kr%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-1030-tcp-scenario-kr%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p><img src="https://vibequant.cc/og/cve-2026-98432-kernel-exploit-scenario.jpg" alt="커널 코드로 살펴보는 CVE-2026-98432 익스플로잇 시나리오. 레이스, 주소 유출, 크기 혼동, 탐지 창"></p>
+<blockquote>
+<p>분류: TLP:CLEAR | 작성: 2026-10-30 | 목적: 방어·탐지·패치 검증 참조용
+근거 등급: <strong>[코드]</strong> 커널 소스 확인 / <strong>[커밋]</strong> 수정 커밋·CVE 기록 /
+<strong>[발표]</strong> Anthropic·CTI 리포트 등 공개 자료 / <strong>[추론]</strong> 위 자료의 방어적 해석</p>
+<p>본 문서는 취약점 메커니즘과 공격 시나리오를 코드 수준에서 분석해
+탐지·대응에 연결하는 기술 문서입니다. 익스플로잇 구현 방법(힙 그루밍
+레시피, 오프셋, ROP 구성 등)은 의도적으로 다루지 않습니다.</p>
+</blockquote>
+<hr>
+<h2>1. 요약</h2>
+<p>리눅스 IPv4 TCP 핸드셰이크 경로의 UAF(CVE-2026-98432)는 공격자가 <strong>원격에서
+인증 없이</strong> 두 가지 프리미티브를 얻을 수 있게 한다는 점이 핵심이다.</p>
+<ol>
+<li><strong>유출 프리미티브</strong>: 해제된 IP 옵션 객체의 내용이 SYNACK 응답에 실려 나감
+→ 커널 힙 데이터(주소 포함) 노출 → KASLR 무력화 [발표: 48분 소요]</li>
+<li><strong>크기 혼동 프리미티브</strong>: <code>optlen</code> 이중 읽기 → 헤더 빌드에서 공격자 통제
+크기 사용 → 버퍼 경계 이탈 → 인접 객체 덮어쓰기 → 제어 흐름 탈취
+[발표: 추가 5분 후 root 실행]</li>
+</ol>
+<p>세부 메커니즘은 아래와 같이 수정 커밋(<code>e3f33b0a1d89</code>)과 수정 전 소스
+(부모 커밋 <code>fe4114221364</code>)에서 확인된다. 전체 소유권/수명 분석은
+<code>fix-commit-analysis.md</code> 참조.</p>
+<hr>
+<h2>2. 공격 전제 조건</h2>
+<table>
+<thead>
+<tr>
+<th>조건</th>
+<th>근거</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IPv4 TCP 리스너 노출</td>
+<td>[커밋] IPv4 핸드셰이크 경로 한정. IPv6는 옵션 복제로 비영향</td>
+</tr>
+<tr>
+<td>IP 옵션이 붙은 SYN이 리스너에 도달</td>
+<td>[코드] 옵션 파싱 후 <code>ireq-&gt;ireq_opt</code>에 저장되어야 함</td>
+</tr>
+<tr>
+<td>경계 장비가 RR/TS/LSRR/SSRR 옵션을 차단하지 않을 것</td>
+<td>[추론] 옵션은 40바이트 한도 안에서 자유 구성 가능</td>
+</tr>
+<tr>
+<td>멀티코어 서버</td>
+<td>[커밋] 레이스는 서로 다른 CPU의 해제/읽기 겹침</td>
+</tr>
+<tr>
+<td>(루트 탈취 실증 조건) MPTCP 리스너</td>
+<td>[발표] Anthropic 실증 환경. 비MPTCP 노출 서버에서의 전이 가능성은 미확정</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>3. 익스플로잇 단계 개요</h2>
+<pre><code>[1] 레이스 트리거 준비   옵션 부착 SYN + 핸드셰이크 + 즉시 파괴 + 재전송 반복
+[2] 유출 (KASLR 우회)    해제 객체 읽기 → SYNACK 옵션 echo에 커널 주소 노출 (48분)
+[3] 손상 (제어 흐름)     동일 UAF 기반 크기 혼동 → 콜백 포인터 덮어쓰기 (5분)
+[4] 실행                  커널이 포인터 호출 → root 컨텍스트 셸
+</code></pre>
+<hr>
+<h2>4. 시나리오 A — 재전송 SYN vs child 소켓 파괴 (주 시나리오)</h2>
+<h3>4.1 옵션 소유권 이전 (복사 없음) [코드]</h3>
+<p><code>tcp_v4_syn_recv_sock()</code> (수정 전 <code>net/ipv4/tcp_ipv4.c:1702</code>):</p>
+<pre><code class="language-c">	inet_opt = rcu_dereference(ireq-&gt;ireq_opt);
+	RCU_INIT_POINTER(newinet-&gt;inet_opt, inet_opt);   /* 참조만 전달 */
+	...
+	if (inet_opt)
+		inet_csk(newsk)-&gt;icsk_ext_hdr_len = inet_opt-&gt;opt.optlen;
+	...
+	if (likely(*own_req)) {
+		tcp_move_syn(newtp, req);
+		ireq-&gt;ireq_opt = NULL;                       /* req 쪽 참조만 해제 */
+	}
+</code></pre>
+<p>이 시점부터 옵션 객체의 유일한 소유자는 child 소켓이다. IPv6 경로는 여기서
+옵션을 <strong>복제</strong>하므로 이 경로가 없다. [코드/커밋]</p>
+<h3>4.2 해제 경로 (즉시 kfree) [코드]</h3>
+<pre><code class="language-c">/* net/ipv4/af_inet.c:164 (수정 전) — child 소켓 파괴 */
+	kfree(rcu_dereference_protected(inet-&gt;inet_opt, 1));
+
+/* net/ipv4/tcp_ipv4.c:1213 (수정 전) — request socket 파괴 */
+static void tcp_v4_reqsk_destructor(struct request_sock *req)
+{
+	kfree(rcu_dereference_protected(inet_rsk(req)-&gt;ireq_opt, 1));
+}
+</code></pre>
+<p>공격자는 핸드셰이크 완료 직후 RST/FIN으로 child를 파괴해 <code>kfree()</code>를
+유발할 수 있다. TCP child는 <code>SOCK_RCU_FREE</code>가 아니므로 파괴가 지연되지
+않는다. [코드/커밋]</p>
+<h3>4.3 읽기 경로 (RCU 참조만) [코드]</h3>
+<pre><code class="language-c">/* tcp_v4_send_synack() — 재전송 SYN 처리 시 SYNACK 발송 */
+	rcu_read_lock();
+	err = ip_build_and_send_pkt(skb, sk, ireq-&gt;ir_loc_addr,
+				    ireq-&gt;ir_rmt_addr,
+				    rcu_dereference(ireq-&gt;ireq_opt),   /* 참조 */
+				    tos);
+	rcu_read_unlock();
+</code></pre>
+<pre><code class="language-c">/* ip_build_and_send_pkt() (net/ipv4/ip_output.c:160, 수정 전) */
+	skb_push(skb, sizeof(struct iphdr) + (opt ? opt-&gt;opt.optlen : 0));  /* 읽기 #1 */
+	...
+	iph-&gt;daddr = (opt &amp;&amp; opt-&gt;opt.srr ? opt-&gt;opt.faddr : daddr);        /* 읽기 #2 */
+	...
+	if (opt &amp;&amp; opt-&gt;opt.optlen) {                                       /* 읽기 #3 */
+		iph-&gt;ihl += opt-&gt;opt.optlen &gt;&gt; 2;                              /* 읽기 #4 */
+		ip_options_build(skb, &amp;opt-&gt;opt, daddr, rt);                   /* 읽기 #5..N */
+	}
+</code></pre>
+<pre><code class="language-c">/* ip_options_build() (net/ipv4/ip_options.c:50, 수정 전) */
+	memcpy(&amp;(IPCB(skb)-&gt;opt), opt, sizeof(struct ip_options));          /* 구조체 복사 */
+	memcpy(iph + sizeof(struct iphdr), opt-&gt;__data, opt-&gt;optlen);       /* 데이터 복사 */
+</code></pre>
+<p><code>rcu_read_lock()</code>은 <strong>해제 지연을 보장하지 않는다</strong> — 작성자만 지키는 규약이므로
+<code>kfree()</code>가 읽기 도중에 실행될 수 있다. [커밋]</p>
+<h3>4.4 레이스 타이밍</h3>
+<pre><code>CPU 0: 재전송 SYN 처리                     CPU 1: 핸드셰이크 완료 처리
+──────────────────────────                ────────────────────────────
+tcp_v4_rcv → ehash에서 req 조회            tcp_v4_rcv → ACK 수신
+tcp_check_req() [tcp_minisocks.c:687]      tcp_v4_syn_recv_sock()
+  &quot;pure retransmitted SYN&quot; 분기              ireq_opt → child로 이전
+  → tcp_rtx_synack()                       child 파괴 시작
+  → tcp_v4_send_synack():                  (RST 수신/close)
+    inet_csk_route_req():                    inet_sock_destruct():
+      rcu_dereference(ireq-&gt;ireq_opt)          kfree(inet_opt) ←─────┐
+      opt-&gt;faddr / is_strictroute 읽기                               │
+    ip_build_and_send_pkt():                                      UAF
+      skb_push(... opt-&gt;optlen)                                     │
+    ip_options_build():                                             │
+      memcpy(... opt-&gt;__data, opt-&gt;optlen) ←────────────────────────┘
+</code></pre>
+<ul>
+<li>전제: <code>079096f103fa</code> 이후 request socket 처리가 리스너 락 없이 수행됨 [커밋]</li>
+<li>SYNACK <strong>타이머 경로는 안전</strong>: <code>timer_delete_sync()</code>가 child 해제 전에 타이머를
+정리하므로 공격자는 타이머가 아닌 <strong>재전송 SYN 경로</strong>를 노린다 [커밋]</li>
+</ul>
+<h3>4.5 프리미티브 1 — 응답 채널 유출 (KASLR 우회의 기반) [코드+추론]</h3>
+<p><code>ip_options_build()</code>는 해제된 <code>opt</code>의 <code>__data[]</code>를 SYNACK의 IP 옵션 영역에
+그대로 <code>memcpy</code>한다. 즉 <strong>커널 힙 내용이 공격자에게 도착하는 응답 패킷에
+실려 나간다</strong>. [코드]</p>
+<ul>
+<li>해제된 <code>ip_options_rcu</code> 슬랩 객체가 포인터를 포함하는 다른 커널 객체로
+재할당되면, 그 포인터 바이트가 SYNACK 옵션 echo에 나타난다. [추론]</li>
+<li>공격자는 수신한 SYNACK의 옵션 영역을 자기 SYN에 실어 보낸 옵션과 대조해
+&quot;echo되지 않은 추가 바이트&quot;를 골라낸다. [발표: &quot;커널이 추가 바이트를
+응답으로 돌려보내게&quot; → 48분 내 주소 확보]</li>
+<li>유출은 단일 레이스 승리로 끝나는 것이 아니라 반복 승리마다 일부 바이트씩
+축적되는 것으로 보인다. [추론, 발표의 48분 소요와 정합]</li>
+</ul>
+<h3>4.6 프리미티브 2 — optlen 이중 읽기와 크기 혼동 [코드+추론]</h3>
+<p><code>ip_build_and_send_pkt()</code>는 <code>opt-&gt;opt.optlen</code>을 <strong>두 번</strong> 읽는다:</p>
+<ol>
+<li><code>skb_push()</code>의 헤더 공간 크기 계산 (읽기 #1)</li>
+<li><code>iph-&gt;ihl += opt-&gt;opt.optlen &gt;&gt; 2</code> + <code>ip_options_build()</code>의 <code>memcpy</code> 크기
+(읽기 #4/#5)</li>
+</ol>
+<p>해제-재할당 사이에 1과 2의 값이 달라지면(첫 읽기 시 작은 값, 재할당 후 큰 값
+등), <code>memcpy</code>가 빌드한 IP 헤더 영역을 벗어나거나 부족하게 복사된다. [추론]</p>
+<p>이 크기 혼동이 &quot;버퍼를 넘치게 해 콜백 포인터를 덮어쓴다&quot;는 발표 내용의
+코드 수준 근거로 가장 유력하다. 덮어쓰기 대상·그루밍 수열은 미공개이며
+본 문서에서 다루지 않는다. [발표+추론]</p>
+<hr>
+<h2>5. 시나리오 B — request socket migration 경로 [커밋+코드]</h2>
+<p><code>net.ipv4.tcp_migrate_req=1</code> 또는 <code>BPF_SK_REUSEPORT_SELECT_OR_MIGRATE</code>
+프로그램이 설정된 환경에서는 두 번째 레이스가 가능하다. [커밋]</p>
+<pre><code class="language-c">/* inet_connection_sock.c:913 — 클론 생성: memcpy로 ireq_opt 공유 */
+static struct request_sock *inet_reqsk_clone(struct request_sock *req,
+					     struct sock *sk) { ... }
+
+/* inet_connection_sock.c:975 — 원본 포인터 정리 */
+static void reqsk_migrate_reset(struct request_sock *req)
+{
+	req-&gt;saved_syn = NULL;
+#if IS_ENABLED(CONFIG_IPV6)
+	inet_rsk(req)-&gt;ipv6_opt = NULL;
+	inet_rsk(req)-&gt;pktopts = NULL;
+#else
+	inet_rsk(req)-&gt;ireq_opt = NULL;
+#endif
+}
+</code></pre>
+<ul>
+<li>클론과 원본이 같은 <code>ireq_opt</code>를 공유한 상태에서, 원본 req를 참조 중인
+다른 CPU가 SYNACK 전송 또는 child 생성을 수행할 때 클론이 파괴되면
+UAF가 된다. [커밋]</li>
+<li><strong>추가 관찰</strong>: <code>CONFIG_IPV6=y</code> 빌드(대부분의 배포판)에서는
+<code>reqsk_migrate_reset()</code>이 유니온의 다른 멤버(<code>ipv6_opt</code>, <code>pktopts</code>)만
+NULL 처리하므로 <code>ireq_opt</code>가 원본에 남는다. 원본과 클론의 두 destructor가
+같은 포인터를 각각 해제하는 <strong>double-free 파생 시나리오</strong>가 배제되지
+않는다. [코드+추론]</li>
+<li>IPv6 전용 객체(<code>ipv6_opt</code>, CALIPSO)의 동일 마이그레이션 문제는 별도
+패치 대상이다. [커밋]</li>
+</ul>
+<hr>
+<h2>6. KASLR 우회 단계 (개념 수준)</h2>
+<ul>
+<li>유출 프리미티브(§4.5)로 커널 힙/객체 주소를 확보하면 주소 무작위화가
+무력화된다. [발표]</li>
+<li>재할당 대상 객체의 선택(어떤 커널 구조체가 <code>ip_options_rcu</code> 슬랩과 크기가
+근접한지), 슬랩 상태를 조작하는 그루밍 수열은 공개되지 않았으며,
+본 문서는 개념 확인까지가 범위다. [추론/미공개]</li>
+</ul>
+<h2>7. 제어 흐름 탈취 단계 (개념 수준)</h2>
+<p>공개 자료는 세 단계만 명시한다. [발표]</p>
+<ol>
+<li>같은 버그(크기 혼동)로 버퍼를 넘치게 한다.</li>
+<li>콜백 포인터를 덮어쓴다 — 포인터는 미리 커널 메모리에 심어 둔 페이로드를
+가리킨다. (&quot;페이로드 사전 배치&quot;는 유출 단계에서 확보한 커널 주소 공간
+활용을 시사)</li>
+<li>커널이 해당 포인터를 호출하는 순간 공격자가 선택한 셸 명령이 root로 실행된다.</li>
+</ol>
+<p>어느 콜백(네트워크 스택·타이머·skb 수명주기 등)인지, 페이로드를 어느 객체에
+심는지는 미공개이며, 구현 레벨 기술은 본 문서 범위 밖이다. [미공개]</p>
+<h2>8. MPTCP 연결고리</h2>
+<ul>
+<li>CVE 레코드와 수정 커밋에는 MPTCP 언급이 없다. [확정]</li>
+<li>MPTCP와의 연결은 Anthropic 발표문에서만 등장한다. [발표]</li>
+<li>즉 &quot;MPTCP 리스너가 없으면 안전하다&quot;는 판정은 현재 근거가 없다.
+Red Hat도 노출 IPv4 TCP 서비스 전반에서 레이스 트리거가 가능하다는
+시각이다. [발표/CTI 리포트]</li>
+</ul>
+<h2>9. 운영 특성 (탐지 설계에 중요)</h2>
+<table>
+<thead>
+<tr>
+<th>특성</th>
+<th>근거</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>레이스에서 지면 연결 시도만 실패, 시스템은 생존</td>
+<td>[발표] → 공격자 무제한 재시도</td>
+</tr>
+<tr>
+<td>실패는 조용함 (oops 없음)</td>
+<td>[커밋/추론] → 충돌 로그 기반 탐지는 불충분</td>
+</tr>
+<tr>
+<td>성공 시에도 정상 TCP 흐름으로 위장</td>
+<td>[추론] — 유출 채널이 SYNACK 옵션 echo</td>
+</tr>
+<tr>
+<td>48분(유출)+5분(실행) 수준의 체류 시간</td>
+<td>[발표] → 이 시간 창 안에서 탐지가 필요</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>10. 킬체인 ↔ 탐지 시그널 매핑</h2>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>관찰 가능 아티팩트</th>
+<th>시그널</th>
+<th>우리 도구</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>준비/탐색</td>
+<td>옵션 부착 SYN 단발 유입</td>
+<td>S1</td>
+<td>detector <code>syn_ipopt</code>, Suricata 2026103002~3005, Zeek</td>
+</tr>
+<tr>
+<td>레이스 유도</td>
+<td>동일 4-tuple 동일 seq 고빈도 재전송 (RTO보다 짧음)</td>
+<td>S2</td>
+<td>detector <code>race_grooming</code>, Suricata 2026103006, Zeek burst</td>
+</tr>
+<tr>
+<td>반복 시도</td>
+<td>핸드셰이크 완성 직후 RST/폐기 반복, 미수립 다발</td>
+<td>S3</td>
+<td>Zeek/흐름 로그 (연결 수명 이상치)</td>
+</tr>
+<tr>
+<td>유출 성공</td>
+<td>SYNACK 옵션 echo가 수신 SYN 옵션과 비일치</td>
+<td>S4</td>
+<td>(미구현 — 미러링 환경 필요, 한계로 명시)</td>
+</tr>
+<tr>
+<td>대상 선정</td>
+<td>MPTCP 리스너 + 미패치 커널</td>
+<td>S5</td>
+<td>host-check (MPTCP·migrate_req·패치 상태)</td>
+</tr>
+</tbody></table>
+<p>탐지의 결정적 창: <strong>유출 단계(48분) 동안의 S1+S2 반복 패턴</strong>. 공격자는
+레이스를 반복해야 하므로 네트워크 측 시그널이 반드시 남는다. [추론]</p>
+<hr>
+<h2>11. 패치 효과 (코드 관점)</h2>
+<p><code>kfree()</code> → <code>kfree_rcu()</code> 2줄 변경이 두 프리미티브를 구조적으로 제거한다.</p>
+<ul>
+<li>§4.4 레이스: <code>rcu_read_lock()</code> 구간(§4.3)이 끝날 때까지 해제가 연기되므로
+읽기 도중 해제가 불가능해진다. [커밋]</li>
+<li>§4.5 유출: 해제된 객체를 읽는 경로 자체가 소멸 → echo 채널 폐쇄. [추론]</li>
+<li>§4.6 크기 혼동: 두 번의 <code>optlen</code> 읽기가 항상 유효한 객체에서 수행됨. [추론]</li>
+<li>§5 시나리오 B: 두 destructor 모두 RCU 해제로 변경되어 공유 포인터
+이중 해제도 같은 grace period 규약에 편입. [커밋]</li>
+</ul>
+<p>잔존 리스크: IPv6 CALIPSO(<code>ipv6_opt</code>) 마이그레이션 문제는 별도 패치,
+EOL 커널 시리즈(4.4~5.4 등)는 업스트림 수정 목록에 없음. [커밋]</p>
+<hr>
+<h2>12. 공개되지 않은 것 / 분석 한계</h2>
+<ul>
+<li>익스플로잇 코드, 테스트 커널 버전·구성, 그루밍 수열, 덮어쓰기 대상
+콜백 — 모두 미공개. [발표]</li>
+<li>비MPTCP 리스너에서의 루트 탈취 가능성 미확정. [CTI 리포트]</li>
+<li>§4.5/§4.6의 프리미티브 세부 연결은 코드 기반 추론이며, Anthropic의
+구현이 다른 경로(예: 시나리오 B)를 사용했을 가능성을 배제하지 않는다.</li>
+</ul>
+<h2>13. 참고</h2>
+<ul>
+<li><a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/Linux_TCP/docs/fix-commit-analysis.md">수정 전후 코드 경로 분석</a></li>
+<li>수정 커밋: <code>e3f33b0a1d89d738e2b913dab519226eaf76e15b</code></li>
+<li>CVE: CVE-2026-98432 (kernel CVE team)</li>
+<li>Anthropic: &quot;Discovering vulnerabilities with Claude&quot;</li>
+<li>CTI 리포트: <a href="https://cti.vibequant.cc/cti/linux-tcp-uaf-20261030/">CVE-2026-98432 리눅스 커널 TCP Use-After-Free 보안 리포트</a></li>
+</ul>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://cti.vibequant.cc/cti/cti-2026-1030-tcp-scenario-kr/" data-title="커널 코드로 살펴보는 CVE-2026-98432 익스플로잇 시나리오" data-text="커널 수정 전 소스로 본 CVE-2026-98432. 유출·크기 혼동 프리미티브와 탐지 시그널을 연결한다. 익스플로잇 구현은 다루지 않는다." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-1030-tcp-scenario-kr%2F&amp;text=%EC%BB%A4%EB%84%90%20%EC%BD%94%EB%93%9C%EB%A1%9C%20%EC%82%B4%ED%8E%B4%EB%B3%B4%EB%8A%94%20CVE-2026-98432%20%EC%9D%B5%EC%8A%A4%ED%94%8C%EB%A1%9C%EC%9E%87%20%EC%8B%9C%EB%82%98%EB%A6%AC%EC%98%A4" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-1030-tcp-scenario-kr%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-1030-tcp-scenario-kr%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-1030-TCP-SCENARIO_KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

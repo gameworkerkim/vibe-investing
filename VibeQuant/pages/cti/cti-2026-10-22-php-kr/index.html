@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PHP2Shell 보안 리포트 — CVE-2026-109618 / CVE-2026-109619 — VibeQuant</title>
+  <meta name="description" content="웹 요청을 처리하는 모든 PHP 서버는 즉시 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35로 올려야 한다. PHP 보안팀은 2026년 10월 21일, 인증 없이 원격 코드 실행(RCE)이 가능한 코어 취약점 2건(통칭 PHP2Shell)을 공개하고 패치를…" />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-10-22-php-kr/" />
+  <meta property="og:title" content="PHP2Shell 보안 리포트 — CVE-2026-109618 / CVE-2026-109619" />
+  <meta property="og:description" content="웹 요청을 처리하는 모든 PHP 서버는 즉시 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35로 올려야 한다. PHP 보안팀은 2026년 10월 21일, 인증 없이 원격 코드 실행(RCE)이 가능한 코어 취약점 2건(통칭 PHP2Shell)을 공개하고 패치를…" />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-10-22-php-kr/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"PHP2Shell 보안 리포트 — CVE-2026-109618 / CVE-2026-109619","description":"웹 요청을 처리하는 모든 PHP 서버는 즉시 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35로 올려야 한다. PHP 보안팀은 2026년 10월 21일, 인증 없이 원격 코드 실행(RCE)이 가능한 코어 취약점 2건(통칭 PHP2Shell)을 공개하고 패치를…","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/cti-2026-10-22-php-kr/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-10-22-PHP_KR.md","image":"https://vibequant.cc/og-default.png","url":"https://cti.vibequant.cc/cti/cti-2026-10-22-php-kr/","datePublished":"2026-10-22","dateModified":"2026-10-22","inLanguage":"ko","keywords":"기타 CTI, KR, CTI"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"PHP2Shell 보안 리포트 — CVE-2026-109618 / CVE-2026-109619","item":"https://cti.vibequant.cc/cti/cti-2026-10-22-php-kr/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 기타 CTI</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 CTI</p>
+        <h1>PHP2Shell 보안 리포트 — CVE-2026-109618 / CVE-2026-109619</h1>
+        <p class="article-dates"><time datetime="2026-10-22">발행 2026.10.22</time> · 주제 기타 CTI · KR · CTI</p>
+        
+        <p class="lede">웹 요청을 처리하는 모든 PHP 서버는 즉시 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35로 올려야 한다. PHP 보안팀은 2026년 10월 21일, 인증 없이 원격 코드 실행(RCE)이 가능한 코어 취약점 2건(통칭 PHP2Shell)을 공개하고 패치를…</p>
+        <p class="article-byline">2026-10-22 · Dennis Kim</p>
+        <nav class="share-bar" aria-label="공유" data-url="https://cti.vibequant.cc/cti/cti-2026-10-22-php-kr/" data-title="PHP2Shell 보안 리포트 — CVE-2026-109618 / CVE-2026-109619" data-text="웹 요청을 처리하는 모든 PHP 서버는 즉시 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35로 올려야 한다. PHP 보안팀은 2026년 10월 21일, 인증 없이 원격 코드 실행(RCE)이 가능한 코어 취약점 2건(통칭 PHP2Shell)을 공개하고 패치를…" data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-10-22-php-kr%2F&amp;text=PHP2Shell%20%EB%B3%B4%EC%95%88%20%EB%A6%AC%ED%8F%AC%ED%8A%B8%20%E2%80%94%20CVE-2026-109618%20%2F%20CVE-2026-109619" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-10-22-php-kr%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-10-22-php-kr%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><h2>요약</h2>
+<p><strong>웹 요청을 처리하는 모든 PHP 서버는 즉시 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35로 올려야 한다.</strong> PHP 보안팀은 2026년 10월 21일, 인증 없이 원격 코드 실행(RCE)이 가능한 코어 취약점 2건(통칭 PHP2Shell)을 공개하고 패치를 배포했다. 두 건 모두 CVSS v4.0 9.2(Critical)다.</p>
+<ul>
+<li><strong>영향 범위:</strong> PHP-FPM, Apache mod_php, php-cgi, FrankenPHP, LiteSpeed 등 웹 요청을 받는 모든 설치. 위험도는 mod_php가 가장 높다. 애플리케이션 코드가 실행되기 전에 비인증 요청 하나로 공격이 성립하는 익스플로잇이 시연됐다.</li>
+<li><strong>위협 상황:</strong> 세부 정보가 공식 공개 전에 유출됐고, watchTowr는 10월 21일부터 자사 허니팟에서 두 CVE에 대한 악용 시도를 관측했다고 밝혔다. PHP 공식 공지 자체는 실제 악용 여부를 언급하지 않는다.</li>
+<li><strong>완화 조치의 한계:</strong> 설정 변경은 확인된 공격 경로 일부만 막는다. PHP 팀은 업데이트만이 완전한 해결책이라고 명시했다.</li>
+<li><strong>EOL 버전:</strong> PHP 8.1 이하는 공식 패치가 없다. 7.4·8.0·8.1용 최소 소스 백포트만 제공되므로, 배포판·LTS 벤더 패키지 또는 지원 버전으로의 업그레이드가 필요하다.</li>
+</ul>
+<h2>취약점 개요와 영향 범위</h2>
+<p>두 취약점은 서로 독립된 결함이지만, 모두 요청 수명주기 중 메모리 상태가 어긋나는 지점에서 발생한다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>CVE-2026-109618</th>
+<th>CVE-2026-109619</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>공식 명칭</td>
+<td>RCE via OOM corruption</td>
+<td>RCE via stale global state</td>
+</tr>
+<tr>
+<td>GitHub 권고</td>
+<td><a href="https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w">GHSA-w8hw-w9fx-j79w</a></td>
+<td><a href="https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp">GHSA-6wmf-4rv5-p3rp</a></td>
+</tr>
+<tr>
+<td>CVSS v4.0</td>
+<td>9.2 (Critical)</td>
+<td>9.2 (Critical)</td>
+</tr>
+<tr>
+<td>원인</td>
+<td>OOM 처리 중 부분 초기화된 요청 데이터를 정리 루틴이 유효한 것으로 취급</td>
+<td>해제된 메모리를 가리키는 요청 소유 상태가 다음 요청까지 살아남음</td>
+</tr>
+<tr>
+<td>인증 필요</td>
+<td>없음</td>
+<td>없음</td>
+</tr>
+<tr>
+<td>고위험 SAPI</td>
+<td>mod_php (애플리케이션 코드 실행 전 발동, 익스플로잇 시연됨)</td>
+<td>동일 워커가 여러 요청을 처리하는 모든 SAPI</td>
+</tr>
+</tbody></table>
+<p><strong>영향받는 SAPI:</strong> PHP-FPM, Apache mod_php, php-cgi, FrankenPHP, LiteSpeed. CLI 단독 실행처럼 웹 요청을 받지 않는 환경은 공지의 위험 대상에 포함되지 않는다.</p>
+<p><strong>영향받는 버전:</strong> 패치 버전 이전의 지원 브랜치(8.2–8.5) 전부. 일부 연구자는 PHP 5 이후 모든 버전이 영향을 받는다고 보고 있으며, 영국 NCSC도 구버전에 한정하지 말고 PHP 설치 전체를 식별하라고 권고했다.</p>
+<h2>기술 분석 1: CVE-2026-109618 (OOM 손상)</h2>
+<p>핵심은 PHP가 메모리 부족(OOM) 시 <code>longjmp()</code>로 요청 처리를 강제로 빠져나간다는 점이다. 할당 실패가 요청 데이터 초기화 도중 일어나면, 이후 요청 정리(cleanup) 단계가 반쯤 만들어진 데이터를 정상 데이터로 다루면서 메모리 손상이 생긴다.</p>
+<p><strong>공격 흐름</strong></p>
+<ol>
+<li>공격자는 PHP의 겉보기 제한(<code>post_max_size</code>, <code>memory_limit</code>) 안에 머무르면서도 OOM을 유발하는 요청을 만든다. 조작된 multipart 업로드가 대표적인 경로다.</li>
+<li>요청 파싱 도중 할당이 실패하고 <code>longjmp()</code>로 이탈한다.</li>
+<li>정리 루틴이 부분 초기화된 구조체를 참조하고, 공격자는 이를 힙 손상과 코드 실행으로 연결한다.</li>
+</ol>
+<p><strong>SAPI별 차이</strong></p>
+<ul>
+<li><strong>mod_php:</strong> 요청 시작 단계에서 발동하므로 애플리케이션 코드, 인증, WAF 성격의 앱 레벨 방어가 개입하기 전에 공격이 끝난다. PHP 팀이 실제 익스플로잇을 시연한 경로다.</li>
+<li><strong>PHP-FPM:</strong> Rapid7은 소스 분석상 정상 기동 이후 FPM도 취약하다고 보지만, 공식 권고에는 FPM 대상 완성형 익스플로잇이 보고되지 않았다고 정리했다. 애플리케이션이 공격자 입력에 비례해 메모리를 할당하는 지점에서도 OOM이 유도될 수 있다.</li>
+</ul>
+<p><strong>패치 내용(공개 분석 기준)</strong></p>
+<ul>
+<li><code>longjmp()</code> 기반 OOM 이탈을 제거하고, 다음 VM 안전 지점에서 처리하는 소프트 OOM과 더 높은 2차 임계치에서 <code>_exit()</code>로 즉시 종료하는 하드 OOM으로 대체했다.</li>
+<li>multipart 파서(<code>main/rfc1867.c</code>)를 실패 가능 할당 방식으로 바꿔, 할당이 실패하면 전용 OOM 경로로 빠지도록 했다.</li>
+</ul>
+<h2>기술 분석 2: CVE-2026-109619 (만료된 전역 상태 UAF)</h2>
+<p>이 취약점은 하나의 워커가 여러 요청을 순차 처리하는 구조에서 생기는 Use-After-Free다. 요청이 끝나면 요청 메모리는 해제되지만, 일부 전역 상태는 해제된 메모리를 계속 가리킨 채 남는다. 같은 워커가 받은 다음 요청이 정상 초기화로 그 상태를 재설정하기 전에 이를 사용하면 해제된 메모리를 참조하게 된다.</p>
+<p><strong>공식 공지가 지목한 트리거 경로</strong></p>
+<ul>
+<li><strong>세션 업로드 진행률(<code>session.upload_progress</code>):</strong> 확인된 주 경로. Upwind 분석에 따르면 multipart 업로드 진행률 추적 시 바이트 카운터를 가리키는 <code>zval</code> 포인터 두 개가 해시테이블에 캐시되며, 이것이 요청 경계를 넘어 남는다.</li>
+<li><strong>치명적 오류 백트레이스(PHP 8.5의 <code>fatal_error_backtraces</code>):</strong> 확인된 별도 경로.</li>
+<li><strong>요청 초기화 전 진단 메시지:</strong> 요청별로 적용되는 잘못되었거나 폐기(deprecated)된 설정이 초기화 전에 경고를 내는 경우.</li>
+<li><strong>공격자가 도달 가능한 치명적 오류와 실행 시간 초과:</strong> 콜백, 업로드·임포트 처리, 정리 과정의 실패 포함.</li>
+</ul>
+<p><strong>위험성</strong></p>
+<p>공격자는 힙 배치를 조작해 해제된 영역을 원하는 데이터로 다시 채우고, 이를 코드 실행으로 연결할 수 있다. 워커 재사용이 전제이므로 FPM, FrankenPHP 같은 상주형 SAPI에서도 문제가 된다. 공개 분석에서는 기본 설정의 PHP 8.4.4와 8.2.34에서 재현됐다는 독립 연구가 인용됐다.</p>
+<p>참고: 일부 업체 분석은 두 CVE의 근본 원인을 하나로 묶어 설명하거나 109618을 세션 업로드 진행률과 연결하는 등 서로 엇갈린다. 원인 구분은 PHP 공식 공지와 GHSA 권고를 기준으로 삼는 것이 안전하다.</p>
+<h2>위협 동향과 타임라인</h2>
+<p>공식 공개 전에 정보가 유출되면서 패치와 동시에 악용이 시작된 것으로 보인다. 패치 지연 시간이 곧 노출 시간이라는 전제로 대응해야 한다.</p>
+<table>
+<thead>
+<tr>
+<th>일시</th>
+<th>사건</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10월 21일</td>
+<td>watchTowr, 자사 허니팟 네트워크에서 두 CVE에 대한 악용 시도 관측 발표 (<a href="https://watchtowr.com/intelligence/php-cve-2026-109618-faq/">watchTowr FAQ</a>)</td>
+</tr>
+<tr>
+<td>10월 21일 14:00 UTC</td>
+<td>PHP 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35 배포, 보안 공지 게시 (<a href="https://www.php.net/archive/2026.php#2026-10-21-5">php.net</a>)</td>
+</tr>
+<tr>
+<td>10월 21일 13:48 UTC</td>
+<td>PHP CNA, 두 CVE 레코드 공개</td>
+</tr>
+<tr>
+<td>10월 20일</td>
+<td>CERT-EU 권고 2026-018, 두 CVE와 9.2 점수 명시</td>
+</tr>
+<tr>
+<td>10월 20일</td>
+<td>php.net 사전 공지(&quot;Upcoming Critical PHP Security Release&quot;). 세부 정보가 SNS 등으로 먼저 유출되어 확산</td>
+</tr>
+<tr>
+<td>10월 20일</td>
+<td>watchTowr, 109618 재현 성공을 언급(세부는 비공개)</td>
+</tr>
+</tbody></table>
+<p><strong>악용 현황 평가</strong></p>
+<ul>
+<li>패치 직전까지 watchTowr와 Huntress는 실제 악용을 확인하지 못했고, Sansec은 패치 공개 후 15분 안에 대량 악용이 시작될 것으로 예측했다 (<a href="https://www.securityweek.com/php2shell-mass-exploitation-looms-for-leaked-critical-php-flaws/">SecurityWeek</a>).</li>
+<li>패치 이후 watchTowr는 악용 시도를 관측했다고 업데이트했다. 이는 허니팟 기반 관측이며, 대규모 침해 사례가 공개 확인된 단계는 아니다.</li>
+<li>PHP 공식 공지는 악용 여부를 명시하지 않는다. 사전 공지에서 &quot;악용 증거가 나오면 조기 배포할 수 있다&quot;고만 밝혔고, 실제 배포는 예정 시각대로 이뤄졌다.</li>
+</ul>
+<h2>대응 1: 패치</h2>
+<p>각 브랜치의 아래 버전이 두 CVE를 모두 수정한다. 업데이트 후에는 모든 PHP 워커(FPM 풀, Apache, FrankenPHP 등)를 재시작해야 새 바이너리가 적용된다.</p>
+<table>
+<thead>
+<tr>
+<th>브랜치</th>
+<th>직전 버전</th>
+<th>패치 버전</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PHP 8.5</td>
+<td>8.5.11</td>
+<td><strong>8.5.12</strong></td>
+<td><a href="https://www.php.net/ChangeLog-8.php#8.5.12">ChangeLog</a></td>
+</tr>
+<tr>
+<td>PHP 8.4</td>
+<td>8.4.26</td>
+<td><strong>8.4.27</strong></td>
+<td><a href="https://www.php.net/ChangeLog-8.php#8.4.27">ChangeLog</a></td>
+</tr>
+<tr>
+<td>PHP 8.3</td>
+<td>8.3.35</td>
+<td><strong>8.3.36</strong></td>
+<td><a href="https://www.php.net/ChangeLog-8.php#8.3.36">ChangeLog</a></td>
+</tr>
+<tr>
+<td>PHP 8.2</td>
+<td>8.2.34</td>
+<td><strong>8.2.35</strong></td>
+<td>2026-12-31 지원 종료, 이후 보안 패치 없음</td>
+</tr>
+<tr>
+<td>PHP 8.1 이하</td>
+<td>—</td>
+<td>공식 릴리스 없음</td>
+<td>7.4·8.0·8.1용 최소 소스 백포트 브랜치 제공</td>
+</tr>
+</tbody></table>
+<p><strong>설치 경로별 조치</strong></p>
+<ul>
+<li><strong>소스·Windows:</strong> <a href="https://www.php.net/downloads.php">php.net 다운로드 페이지</a>에서 받는다.</li>
+<li><strong>리눅스 배포판·LTS 벤더:</strong> 패치를 사전에 전달받았으므로 벤더 패키지 업데이트를 확인한다.</li>
+<li><strong><code>rpms.remirepo.net</code> 사용자:</strong> 자원봉사 운영 저장소라 당일 업데이트가 없다. PHP 팀은 배포판 패키지로 전환하거나 소스에서 빌드하라고 권고한다.</li>
+<li><strong>PHP 7.4 / 8.0 / 8.1:</strong> 공식 백포트 브랜치(<a href="https://github.com/php/php-src/tree/PHP-7.4-CVE-2026-109618-109619">7.4</a>, <a href="https://github.com/php/php-src/tree/PHP-8.0-CVE-2026-109618-109619">8.0</a>, <a href="https://github.com/php/php-src/tree/PHP-8.1-CVE-2026-109618-109619">8.1</a>)로 직접 빌드하거나 LTS 벤더에 문의한다. 장기적으로는 지원 버전 업그레이드가 답이다.</li>
+<li><strong>컨테이너 이미지:</strong> 공식 <code>php</code> 베이스 이미지 태그 갱신 여부를 확인하고, 이미지를 다시 빌드·재배포해야 한다. 기존 컨테이너는 재시작만으로 바뀌지 않는다.</li>
+<li><strong>PHP 5.x / 7.3 이하:</strong> 패치가 제공되지 않는다. 인터넷 노출을 즉시 차단하는 것을 우선 검토한다.</li>
+</ul>
+<h2>대응 2: 패치 불가 시 임시 완화</h2>
+<p>아래 조치는 특정 공격 경로의 노출만 줄인다. 적용해도 설치가 안전해지지 않으며, 패치까지의 시간을 버는 용도다. 모든 설정은 요청 파싱 전에 적용되는 위치(<code>php.ini</code>, FPM 풀, 웹서버 설정)에 두고, 적용 후 모든 워커를 재시작한다. <code>ini_set()</code>이나 FPM <code>.user.ini</code>에 의존하면 안 된다.</p>
+<p><strong>CVE-2026-109618 (OOM 손상)</strong></p>
+<table>
+<thead>
+<tr>
+<th>조치</th>
+<th>설정 예</th>
+<th>효과와 한계</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>메모리 제한 해제</td>
+<td><code>php_admin_value[memory_limit] = -1</code></td>
+<td>공격자가 제어 가능한 PHP 메모리 제한 실패를 제거. 다른 풀·디렉터리·앱 설정이 유한값을 다시 넣지 않는지 확인 필요. 하위 할당 실패(mmap 등)는 여전히 취약 경로에 도달 가능</td>
+</tr>
+<tr>
+<td>요청 크기 축소</td>
+<td>업로드 불필요 시 <code>post_max_size = 8M</code>, 필요 시 <code>32M</code>. <code>upload_max_filesize</code>는 그보다 작게</td>
+<td>공격 페이로드 크기 제한</td>
+</tr>
+<tr>
+<td>프록시·웹서버 제한</td>
+<td>디코딩 후 요청 크기, 입력 필드 수, multipart 파트 수, 헤더 수, 중첩 깊이</td>
+<td><code>Content-Length</code>가 없는 요청(chunked 등)에도 적용해야 함</td>
+</tr>
+<tr>
+<td>컨테이너·cgroup 메모리 제한</td>
+<td>영향받은 워커만 종료하는 정책 권장</td>
+<td>가용성 경계 역할. <code>RLIMIT_AS</code> / <code>RLIMIT_DATA</code>로 대체 금지(오히려 취약한 할당 실패를 유발)</td>
+</tr>
+</tbody></table>
+<p><strong>CVE-2026-109619 (만료된 전역 상태)</strong></p>
+<table>
+<thead>
+<tr>
+<th>조치</th>
+<th>설정</th>
+<th>효과와 한계</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>세션 업로드 진행률 비활성화</td>
+<td><code>session.upload_progress.enabled = 0</code></td>
+<td>확인된 세션 경로 차단. 다른 변종은 막지 못함</td>
+</tr>
+<tr>
+<td>치명적 오류 백트레이스 비활성화(8.5)</td>
+<td><code>fatal_error_backtraces = 0</code></td>
+<td>확인된 백트레이스 경로만 차단</td>
+</tr>
+<tr>
+<td>초기화 전 진단 메시지 제거</td>
+<td>요청별로 적용되는 잘못된·폐기된 설정 정리</td>
+<td><code>error_reporting</code>, <code>display_errors</code>, <code>@</code>로 숨기는 것은 효과 없음</td>
+</tr>
+<tr>
+<td>치명적 오류·타임아웃 수정</td>
+<td>콜백, 업로드·임포트 처리, 정리 과정</td>
+<td>공격자가 도달 가능한 실패 지점을 줄임</td>
+</tr>
+</tbody></table>
+<p>mod_php는 위험도가 가장 높으므로, 패치가 늦어지는 경우 PHP-FPM 전환이나 해당 호스트의 외부 노출 축소를 함께 검토할 만하다.</p>
+<h2>점검 체크리스트와 탐지 포인트</h2>
+<p>인터넷에 노출된 호스트부터, mod_php → 기타 SAPI 순으로 처리한다.</p>
+<p><strong>자산 식별과 패치</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> PHP가 설치된 모든 호스트·컨테이너 이미지 목록화 (구버전에 한정하지 말 것)</li>
+<li><input disabled="" type="checkbox"> 호스트별 PHP 버전과 SAPI 확인 (<code>php -v</code>는 CLI 버전일 수 있으므로 웹 SAPI의 실제 버전을 <code>phpinfo()</code> 또는 패키지 관리자로 교차 확인)</li>
+<li><input disabled="" type="checkbox"> 인터넷 노출 호스트와 mod_php 호스트 우선 패치</li>
+<li><input disabled="" type="checkbox"> 패치 후 모든 워커 재시작, 컨테이너는 재빌드·재배포</li>
+<li><input disabled="" type="checkbox"> EOL 버전(8.1 이하) 호스트의 백포트 적용 또는 격리 계획 수립</li>
+</ul>
+<p><strong>패치 전 임시 조치</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> <code>session.upload_progress.enabled = 0</code> 적용 및 워커 재시작</li>
+<li><input disabled="" type="checkbox"> <code>memory_limit</code>, <code>post_max_size</code> 조정 및 프록시 단 요청 제한 적용</li>
+<li><input disabled="" type="checkbox"> (8.5) <code>fatal_error_backtraces = 0</code> 적용</li>
+</ul>
+<p><strong>탐지·사후 점검</strong></p>
+<ul>
+<li>비정상적으로 큰 multipart 요청, 파트·필드 수가 많은 요청, <code>Content-Length</code> 없는 업로드 요청의 급증</li>
+<li>PHP 로그의 <code>Allowed memory size ... exhausted</code> 오류 급증, 워커의 비정상 종료(segfault)나 재시작 반복</li>
+<li>PHP 워커 프로세스가 셸(<code>sh</code>, <code>bash</code>)이나 네트워크 도구를 생성하는 행위</li>
+<li>웹 루트의 신규·변조 <code>.php</code> 파일(웹셸), 예상치 못한 cron·사용자 계정 추가</li>
+<li>10월 20일 유출 이후 패치 전까지의 기간을 침해 가능 구간으로 보고 위 항목을 소급 점검</li>
+</ul>
+<h2>참고 자료</h2>
+<ul>
+<li><a href="https://www.php.net/archive/2026.php#2026-10-21-5">PHP.net — Security advisory: Critical remote code execution vulnerabilities, update now (2026-10-21)</a></li>
+<li><a href="https://github.com/php/php-src/security/advisories/GHSA-w8hw-w9fx-j79w">GHSA-w8hw-w9fx-j79w — RCE via OOM corruption</a></li>
+<li><a href="https://github.com/php/php-src/security/advisories/GHSA-6wmf-4rv5-p3rp">GHSA-6wmf-4rv5-p3rp — RCE via stale global state</a></li>
+<li><a href="https://watchtowr.com/intelligence/php-cve-2026-109618-faq/">watchTowr — PHP2Shell FAQ</a></li>
+<li><a href="https://www.rapid7.com/blog/post/etr-cve-2026-109618-and-cve-2026-109619-critical-unauthenticated-remote-code-execution-in-php/">Rapid7 — Critical Unauthenticated RCE in PHP</a></li>
+<li><a href="https://www.upwind.io/feed/initial-assessment-php2shell-two-critical-unpatched-php-rces-cve-2026-109618-cve-2026-109619">Upwind — PHP2Shell initial assessment</a></li>
+<li><a href="https://dev.to/iamcanturk/two-critical-rces-in-php-cve-2026-109618-and-cve-2026-109619-54h9">DEV Community — Two Critical RCEs in PHP</a></li>
+<li><a href="https://www.ox.security/blog/cve-2026-109618-cve-2026-109619-two-vulnerabilities-allow-unauthenticated-rce-in-php/">OX Security — CVE-2026-109618 &amp; CVE-2026-109619</a></li>
+<li><a href="https://www.securityweek.com/php2shell-mass-exploitation-looms-for-leaked-critical-php-flaws/">SecurityWeek — PHP2Shell: Mass Exploitation Looms</a></li>
+<li><a href="https://www.ncsc.gov.uk/news/critical-security-issue-affecting-php">UK NCSC — Critical security issue affecting PHP</a></li>
+<li><a href="https://brandefense.io/blog/php2shell-php-rce-cve-2026-109618-109619/">Brandefense — PHP2Shell</a></li>
+</ul>
+<p>GHSA 권고 원문은 직접 열람하지 못했으며, 기술 세부는 PHP 공식 공지와 위 보안업체 분석을 교차 확인해 정리했다.</p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://cti.vibequant.cc/cti/cti-2026-10-22-php-kr/" data-title="PHP2Shell 보안 리포트 — CVE-2026-109618 / CVE-2026-109619" data-text="웹 요청을 처리하는 모든 PHP 서버는 즉시 8.5.12 / 8.4.27 / 8.3.36 / 8.2.35로 올려야 한다. PHP 보안팀은 2026년 10월 21일, 인증 없이 원격 코드 실행(RCE)이 가능한 코어 취약점 2건(통칭 PHP2Shell)을 공개하고 패치를…" data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-10-22-php-kr%2F&amp;text=PHP2Shell%20%EB%B3%B4%EC%95%88%20%EB%A6%AC%ED%8F%AC%ED%8A%B8%20%E2%80%94%20CVE-2026-109618%20%2F%20CVE-2026-109619" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-10-22-php-kr%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-10-22-php-kr%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-10-22-PHP_KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

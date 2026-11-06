@@ -20,12 +20,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
   <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant/" />
   <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant-en/" />
   <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant-ja/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant-cn/" />
   <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant/" />
+  <meta name="keywords" content="Umami, vibequant.cc, Cloudflare Worker, Vercel, Fly.io, Neon, Supabase, first-party tracking" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Umami 자체호스팅 도입 계획 — vibequant.cc","description":"Umami를 Cloudflare 전용으로 올리지 않고, Vercel 또는 Fly.io에 앱을 두고 Cloudflare Worker로 첫-party 프록시하는 두 시나리오의 준비물·리스크·장단점을 정리한다.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudeFlare-Web-Analytics/Umami-Self-Hosting-Plan-vibequant.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant/","datePublished":"2026-07-25","dateModified":"2026-07-25","inLanguage":"ko","keywords":"Cloudflare, Umami, Analytics, Self-hosting, Free Tier"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"Umami 자체호스팅 도입 계획 — vibequant.cc","item":"https://tech.vibequant.cc/tech/cloudeflare-web-analytics-umami-self-hosting-plan-vibequant/"}]}</script>
 </head>
@@ -148,7 +149,7 @@ Umami 앱 (A: Vercel / B: Fly.io)  &lt;--&gt;  PostgreSQL (Neon 또는 Supabase)
 <td>동일</td>
 </tr>
 </tbody></table>
-<p><strong>결론(권장):</strong>먼저<strong>A</strong>로 도입·검증하고, Vercel 콜드스타트·Hobby 한도·Prisma 연결 이슈가 체감되면 <strong>B</strong>로 이전합니다. Worker 프록시와 <code>analytics.vibequant.cc</code> 도메인 설계는 양쪽에서 재사용합니다.</p>
+<p><strong>결론(권장):</strong> 먼저 <strong>A</strong>로 도입·검증하고, Vercel 콜드스타트·Hobby 한도·Prisma 연결 이슈가 체감되면 <strong>B</strong>로 이전합니다. Worker 프록시와 <code>analytics.vibequant.cc</code> 도메인 설계는 양쪽에서 재사용합니다.</p>
 <hr>
 <h2>3. 접근법 A: Vercel + Cloudflare Worker 프록시 (추천)</h2>
 <p>Umami 커뮤니티에서 가장 널리 쓰이는 조합입니다. 공식 가이드: <a href="https://docs.umami.is/docs/guides/running-on-vercel">Running on Vercel</a>.</p>
@@ -308,7 +309,7 @@ export default {
   data-website-id=&quot;YOUR_WEBSITE_ID&quot;
 &gt;&lt;/script&gt;
 </code></pre>
-<p>정적 HTML이 <code>content/build.mjs</code>의 <code>layout()</code>으로 생성되므로, 수동으로 모든 <code>pages/&lt;strong&gt;/index.html</code>을 고치지 말고 </strong>빌드 템플릿의 <code>&lt;head&gt;</code>** (예: <code>extraHead</code> 또는 공통 스니펫)에 넣는 편이 안전합니다. 이후 각 Pages 프로젝트(<code>vibequant-web</code>, <code>vibequant-tech</code>, <code>vibequant-cti</code> 등)를 재배포합니다.</p>
+<p>정적 HTML이 <code>content/build.mjs</code>의 <code>layout()</code>으로 생성되므로, 수동으로 모든 <code>pages/**/index.html</code>을 고치지 말고 <strong>빌드 템플릿의 <code>&lt;head&gt;</code></strong> (예: <code>extraHead</code> 또는 공통 스니펫)에 넣는 편이 안전합니다. 이후 각 Pages 프로젝트(<code>vibequant-web</code>, <code>vibequant-tech</code>, <code>vibequant-cti</code> 등)를 재배포합니다.</p>
 <h3>3.4 장단점</h3>
 <table>
 <thead>
@@ -565,7 +566,7 @@ fly deploy
 </tbody></table>
 <p><strong>현실적 월 비용 기대치</strong></p>
 <ul>
-<li><strong>A:</strong>트래픽이 크지 않으면<strong>0원</strong>에 가깝게 유지 가능</li>
+<li><strong>A:</strong> 트래픽이 크지 않으면 <strong>0원</strong>에 가깝게 유지 가능</li>
 <li><strong>B:</strong> “완전 무료”를 단정하기 어렵다. 메모리·IPv4만으로도 월 소액이 날 수 있다. Billing alert를 반드시 켠다.</li>
 </ul>
 <p>“월 비용 0원”은 <strong>A + Neon/Supabase + Worker</strong> 조합에서만 안전하게 목표로 잡는 것이 좋습니다.</p>

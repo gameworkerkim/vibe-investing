@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CVE-2026-98432 리눅스 커널 TCP Use-After-Free 보안 리포트 — VibeQuant</title>
+  <meta name="description" content="리눅스 커널 IPv4 TCP Use-After-Free CVE-2026-98432. 인증 없이 원격 루트까지 실증됐지만 Ubuntu·RHEL은 수정 커널이 없다. CVSS 9.8과 5.9의 혼선, 패치 공백 대응법." />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-1030-tcp-kr/" />
+  <meta property="og:title" content="CVE-2026-98432 리눅스 커널 TCP Use-After-Free 보안 리포트" />
+  <meta property="og:description" content="리눅스 커널 IPv4 TCP Use-After-Free CVE-2026-98432. 인증 없이 원격 루트까지 실증됐지만 Ubuntu·RHEL은 수정 커널이 없다. CVSS 9.8과 5.9의 혼선, 패치 공백 대응법." />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-1030-tcp-kr/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og/linux-tcp-uaf-20261030.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og/linux-tcp-uaf-20261030.jpg" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
+  <meta name="keywords" content="CVE-2026-98432, 리눅스 커널 TCP 취약점, Use-After-Free, MPTCP 원격 루트, Ubuntu RHEL 패치, Anthropic Claude 익스플로잇" />
+  <meta name="robots" content="index,follow" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"CVE-2026-98432 리눅스 커널 TCP Use-After-Free 보안 리포트","description":"리눅스 커널 IPv4 TCP Use-After-Free CVE-2026-98432. 인증 없이 원격 루트까지 실증됐지만 Ubuntu·RHEL은 수정 커널이 없다. CVSS 9.8과 5.9의 혼선, 패치 공백 대응법.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/cti-2026-1030-tcp-kr/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-1030-TCP_KR.md","image":"https://vibequant.cc/og/linux-tcp-uaf-20261030.jpg","url":"https://cti.vibequant.cc/cti/cti-2026-1030-tcp-kr/","datePublished":"2026-10-30","dateModified":"2026-10-30","inLanguage":"ko","keywords":"Linux-Kernel, CVE-2026-98432, Use-After-Free, TCP, MPTCP, Patch-Gap"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"CVE-2026-98432 리눅스 커널 TCP Use-After-Free 보안 리포트","item":"https://cti.vibequant.cc/cti/cti-2026-1030-tcp-kr/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 취약점 · 패치</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">취약점 · 패치</p>
+        <h1>CVE-2026-98432 리눅스 커널 TCP Use-After-Free 보안 리포트</h1>
+        <p class="article-dates"><time datetime="2026-10-30">발행 2026.10.30</time> · 주제 Linux-Kernel · CVE-2026-98432 · Use-After-Free · TCP · MPTCP · Patch-Gap</p>
+        
+        <p class="lede">인증 없이 원격 루트까지. Ubuntu·RHEL은 아직 수정 커널이 없다</p>
+        
+        <nav class="share-bar" aria-label="공유" data-url="https://cti.vibequant.cc/cti/cti-2026-1030-tcp-kr/" data-title="CVE-2026-98432 리눅스 커널 TCP Use-After-Free 보안 리포트" data-text="리눅스 커널 IPv4 TCP Use-After-Free CVE-2026-98432. 인증 없이 원격 루트까지 실증됐지만 Ubuntu·RHEL은 수정 커널이 없다. CVSS 9.8과 5.9의 혼선, 패치 공백 대응법." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-1030-tcp-kr%2F&amp;text=CVE-2026-98432%20%EB%A6%AC%EB%88%85%EC%8A%A4%20%EC%BB%A4%EB%84%90%20TCP%20Use-After-Free%20%EB%B3%B4%EC%95%88%20%EB%A6%AC%ED%8F%AC%ED%8A%B8" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-1030-tcp-kr%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-1030-tcp-kr%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p><img src="https://vibequant.cc/og/linux-tcp-uaf-20261030.jpg" alt="CVE-2026-98432 리눅스 커널 TCP Use-After-Free. 두 CPU가 같은 IP 옵션 메모리를 해제하고 읽는 경쟁 조건"></p>
+<p><em>IPv4 핸드셰이크에서 커널은 IP 옵션을 복사하지 않고 참조만 넘긴다. 한 CPU가 새 소켓을 파괴하며 옵션을 해제하는 동안 다른 CPU가 재전송 응답을 만들며 그 옵션을 읽으면, 해제된 메모리를 읽게 된다.</em></p>
+<p><strong>김호광</strong> 싸이월드 전 대표 / 2026년 10월 30일</p>
+<blockquote>
+<p><strong>분류</strong>: TLP:CLEAR | <strong>문서유형</strong>: CTI 리포트 | <strong>작성일</strong>: 2026-10-30
+<strong>심각도</strong>: HIGH (실무 기준 CVSS 8.1 이상, MPTCP 노출 서버 9.8) | <strong>신뢰도</strong>: A2 | <strong>영향</strong>: 리눅스 커널 4.4 이후, IPv4 TCP 리스너</p>
+</blockquote>
+<h2>요약</h2>
+<p>리눅스 커널 IPv4 TCP 핸드셰이크 경로의 Use-After-Free(CVE-2026-98432)는 인증 없이 원격에서 트리거 가능한 결함이며, 2026년 10월 29일 기준 Ubuntu와 RHEL에는 수정 커널이 없다. 종합 위험 등급은 <strong>높음(High)</strong>으로 판단한다.</p>
+<ul>
+<li><strong>원격 루트 실증</strong>: Anthropic은 MPTCP 리스너가 있는 서버에서 AI 모델이 작성한 익스플로잇으로 원격 루트 명령 실행에 성공했다고 10월 27일 발표했다.</li>
+<li><strong>패치 공백</strong>: 업스트림·stable 브랜치는 수정 완료. Debian, Oracle UEK, 일부 SUSE·Amazon Linux만 패키지를 냈고, Ubuntu는 진행 중, Red Hat은 &quot;향후 업데이트로 연기&quot; 상태다. 두 벤더 모두 일정 미공개.</li>
+<li><strong>점수 혼선</strong>: 커널 CVE 팀 9.8, 벤더 5.9~8.1. 차이는 거의 전부 공격 복잡도(AC) 판단에서 나온다.</li>
+<li><strong>실제 악용</strong>: 10월 29일 기준 벤더 공지·CVE 레코드·Anthropic 글 어디에도 실제 공격 보고는 없고, CISA KEV에도 없다.</li>
+<li><strong>주의</strong>: MPTCP 비활성화가 위험을 낮추는지는 어느 공식 문서도 확인하지 않았다. Red Hat은 노출된 TCP 서비스면 레이스 트리거가 가능하다고 본다. MPTCP 비활성화를 확정 완화책으로 간주하면 안 된다.</li>
+</ul>
+<h2>취약점 개요</h2>
+<p>결함은 Linux 4.4에서 들어와 약 10년간 존재했고, 수정은 CVE 공개(10월 15일)보다 열흘 앞선 10월 5일에 커널에 반영됐다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>식별자</td>
+<td><a href="https://www.cve.org/CVERecord?id=CVE-2026-98432">CVE-2026-98432</a></td>
+</tr>
+<tr>
+<td>유형</td>
+<td>경쟁 조건(Race Condition) → Use-After-Free</td>
+</tr>
+<tr>
+<td>위치</td>
+<td>IPv4 TCP 연결 수립 코드(IP 옵션 처리)</td>
+</tr>
+<tr>
+<td>도입 버전</td>
+<td>Linux 4.4</td>
+</tr>
+<tr>
+<td>공격 전제</td>
+<td>인증 불필요, 원격. 루트 익스플로잇 실증은 MPTCP 리스너 서버 대상</td>
+</tr>
+<tr>
+<td>비영향</td>
+<td>IPv6 연결, RHEL 7</td>
+</tr>
+<tr>
+<td>발견자</td>
+<td>Anthropic 연구원 Xinyang Ge (커널 수정 커밋에 명시)</td>
+</tr>
+<tr>
+<td>수정 커밋</td>
+<td><a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e3f33b0a1d89d738e2b913dab519226eaf76e15b">e3f33b0a1d89</a></td>
+</tr>
+<tr>
+<td>수정 stable 버전</td>
+<td>5.10.272, 5.15.223, 6.1.190, 6.6.159, 6.12.113, 6.18.56, 7.2.10, 7.3</td>
+</tr>
+<tr>
+<td>CVSS</td>
+<td>커널 CVE 팀 9.8 / 벤더 5.9~8.1 (아래 점수 논란 참조)</td>
+</tr>
+<tr>
+<td>실제 악용</td>
+<td>10월 29일 기준 보고 없음, CISA KEV 미등재</td>
+</tr>
+</tbody></table>
+<p>CVE 레코드와 수정 커밋 자체에는 MPTCP 언급이 없다. MPTCP와의 연결고리는 Anthropic의 발표문에서만 나온다.</p>
+<h2>기술 분석</h2>
+<p>근본 원인은 IP 옵션의 소유권 문제다. 커널이 옵션을 복사하지 않고 참조만 넘기기 때문에, 해제 시점과 사용 시점이 서로 다른 CPU에서 겹칠 수 있다.</p>
+<ol>
+<li>클라이언트가 IPv4 옵션(Record Route 또는 Timestamp)을 담은 SYN을 보낸다. 커널은 이 옵션을 대기 중인 연결 요청(request socket)에 저장한다.</li>
+<li>핸드셰이크가 완료되면 커널은 저장된 IP 옵션을 <strong>복사 없이</strong> 새 소켓에 넘긴다.</li>
+<li>그 새 소켓이 파괴되면서 옵션 메모리도 해제된다.</li>
+<li>같은 시점에 다른 CPU가 재전송된 연결 요청에 응답하려고 그 옵션을 아직 읽고 있으면, 해제된 메모리를 읽게 된다(Use-After-Free).</li>
+</ol>
+<p><strong>IPv6가 안전한 이유</strong>: IPv6 경로는 옵션을 복사해서 넘기므로 공유 참조가 생기지 않는다.</p>
+<p><strong>수정 방식</strong>: 다른 CPU가 옵션 읽기를 마칠 때까지 기다린 뒤에 해제하도록 바꿨다. 즉 해제를 독자(reader)의 종료 이후로 미루는 방식이다.</p>
+<p><strong>가능한 결과</strong>: 커널 CVE 팀은 인접 커널 메모리의 원격 유출, 커널 메모리 손상, 시스템 충돌을 모두 가능한 결과로 본다.</p>
+<h2>익스플로잇 분석 (Anthropic 실증)</h2>
+<p>Anthropic의 공격 체인은 같은 버그 하나로 정보 유출과 코드 실행을 모두 해냈고, 테스트에서 커널 주소 유출까지 48분, 명령 실행까지 추가 5분이 걸렸다.</p>
+<ol>
+<li><strong>KASLR 우회</strong>: 레이스를 반복 유발해 커널이 추가 바이트를 공격자에게 응답으로 돌려보내게 한다. 응답에 커널 주소가 섞이면 주소 무작위화가 무력화된다.</li>
+<li><strong>제어 흐름 탈취</strong>: 같은 버그로 버퍼를 넘치게 해 콜백 포인터를 덮어쓴다. 포인터는 미리 커널 메모리에 심어 둔 페이로드를 가리킨다.</li>
+<li><strong>루트 실행</strong>: 커널이 해당 포인터를 호출하는 순간 공격자가 고른 셸 명령이 root로 실행된다.</li>
+</ol>
+<p><strong>운영상 핵심 함의</strong>: 레이스에서 지면 해당 연결 시도만 실패하고 시스템은 죽지 않는다. 공격자는 탐지되지 않는 한 무제한 재시도가 가능하다. &quot;레이스가 어렵다&quot;는 벤더 논리를 약화시키는 지점이다.</p>
+<p><strong>공개되지 않은 것</strong>: 익스플로잇 코드, 테스트한 커널 버전, 구성 정보. Claude는 &quot;초기 프롬프팅&quot; 이후 익스플로잇을 작성했다고만 밝혔다. MPTCP 리스너가 없는 서버도 같은 방식으로 장악 가능한지는 발표문에 없다.</p>
+<h2>CVSS 점수 논란</h2>
+<p>9.8과 8.1의 차이는 공격 복잡도(AC) 한 항목이다. 커널 팀은 레이스의 양쪽 모두 공격자가 유도할 수 있다며 AC를 Low로, Oracle·SUSE·Red Hat 권고 파일은 High로 매겼고 나머지 지표는 같다.</p>
+<table>
+<thead>
+<tr>
+<th>평가 주체</th>
+<th>점수</th>
+<th>등급</th>
+<th>근거</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>커널 CVE 팀 (NVD·Ubuntu도 표시)</td>
+<td>9.8</td>
+<td>Critical</td>
+<td>AC Low, 기밀성·무결성·가용성 모두 High</td>
+</tr>
+<tr>
+<td>Red Hat 권고 파일(VEX, 10/29 갱신)</td>
+<td>8.1</td>
+<td>Important</td>
+<td>AC High, 기밀성·무결성 High</td>
+</tr>
+<tr>
+<td>Oracle Linux</td>
+<td>8.1</td>
+<td>Important</td>
+<td>Red Hat VEX와 동일 벡터</td>
+</tr>
+<tr>
+<td>SUSE</td>
+<td>8.1</td>
+<td>Important</td>
+<td>Red Hat VEX와 동일 벡터</td>
+</tr>
+<tr>
+<td>Amazon Linux</td>
+<td>7.0</td>
+<td>Important</td>
+<td>세부 벡터 미기재</td>
+</tr>
+<tr>
+<td>Red Hat CVE 페이지</td>
+<td>5.9</td>
+<td>Moderate</td>
+<td>레이스가 어렵고 주로 커널 충돌, 기밀성·무결성 영향 미입증</td>
+</tr>
+</tbody></table>
+<p><strong>Red Hat 내부 불일치</strong>: 같은 10월 29일, CVE 페이지는 Moderate·5.9인데 기계판독용 권고 파일은 Important·8.1이고 버그 트래커는 medium에서 high로 상향됐다. 자동화 도구가 어느 소스를 읽느냐에 따라 우선순위가 달라질 수 있다.</p>
+<p><strong>판단</strong>: Anthropic의 실증(재시도 무제한, 약 53분 내 루트)은 &quot;기밀성·무결성 영향 미입증&quot;이라는 5.9의 근거와 정면으로 충돌한다. 실무에서는 최소 8.1, MPTCP 노출 서버는 9.8 기준으로 다루는 것이 합리적이다.</p>
+<h2>배포판별 패치 현황 (10월 29일 기준)</h2>
+<p>국내 서버 점유율이 높은 Ubuntu와 RHEL 계열이 모두 미수정이다. Red Hat은 자사 기준(배포 용이성·범용성·안정성)을 충족하는 완화책도 없다고 밝혔다.</p>
+<table>
+<thead>
+<tr>
+<th>배포판</th>
+<th>상태</th>
+<th>수정 패키지 / 공지</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Ubuntu 22.04 / 24.04 / 26.04 LTS, 26.10</td>
+<td>작업 중</td>
+<td>없음</td>
+</tr>
+<tr>
+<td>Ubuntu 16.04 / 18.04 / 20.04</td>
+<td>취약</td>
+<td>없음</td>
+</tr>
+<tr>
+<td>Ubuntu cloud·FIPS·real-time 커널</td>
+<td>취약 또는 작업 중</td>
+<td>없음</td>
+</tr>
+<tr>
+<td>RHEL 8 / 9 / 10, OpenShift 4</td>
+<td>수정 연기, 일정 미공개</td>
+<td>없음</td>
+</tr>
+<tr>
+<td>RHEL 7</td>
+<td>영향 없음</td>
+<td>불필요</td>
+</tr>
+<tr>
+<td>Amazon Linux 2023 (kernel6.18)</td>
+<td>수정 (10/24)</td>
+<td>kernel6.18-6.18.56-125.164.amzn2023 (ALAS2023-2026-3251)</td>
+</tr>
+<tr>
+<td>Amazon Linux 2023 (kernel6.12)</td>
+<td>수정 (10/29, CVE 페이지는 아직 pending)</td>
+<td>kernel6.12-6.12.113-138.209.amzn2023 (ALAS2023-2026-3335)</td>
+</tr>
+<tr>
+<td>Amazon Linux 2, AL2023 기본 kernel</td>
+<td>수정 대기</td>
+<td>없음</td>
+</tr>
+<tr>
+<td>Oracle Linux 7~10 (UEK)</td>
+<td>수정 (10/16)</td>
+<td>ELSA-2026-500397 / 500398 / 500399</td>
+</tr>
+<tr>
+<td>Debian trixie</td>
+<td>수정 (10/16)</td>
+<td>linux 6.12.113-1 (DSA-6568-1)</td>
+</tr>
+<tr>
+<td>Debian 12 bookworm</td>
+<td>수정 (10/17, 10/22)</td>
+<td>linux 6.1.190-1 (DLA-4841-1), linux-6.12 6.12.113-1~deb12u1 (DLA-4850-1)</td>
+</tr>
+<tr>
+<td>SUSE Linux Micro 6.2, openSUSE Leap 16.0</td>
+<td>수정</td>
+<td>kernel-default 6.12.0-160000.40.1 이상</td>
+</tr>
+<tr>
+<td>SLES 15 SP4<del>SP6 LTSS, SLES 16.0, SLE Micro 5.3</del>5.5</td>
+<td>테스트 중</td>
+<td>없음</td>
+</tr>
+<tr>
+<td>SLES 15 SP7</td>
+<td>영향, 수정 진행 중</td>
+<td>없음</td>
+</tr>
+</tbody></table>
+<p>Rocky·AlmaLinux 등 RHEL 재빌드 계열은 원문에 언급이 없으나, 통상 RHEL 업데이트를 따르므로 함께 미수정일 가능성이 높다(확인 필요).</p>
+<h2>여파 분석</h2>
+<p>이번 건의 실질적 위험은 버그 자체보다 &quot;공개된 원격 루트 실증 + 최대 배포판의 무기한 패치 공백&quot;의 조합에서 나온다.</p>
+<p><strong>1. 패치 공백(Patch Gap)이 공격 창을 연다.</strong> 업스트림 수정 커밋은 10월 5일부터 공개돼 있다. 공격자는 커밋 diff로 버그 위치를 특정할 수 있고, Anthropic이 공격 체인 구조까지 공개했다. 반면 Ubuntu·RHEL 사용자는 받을 패키지가 없다. 이른바 n-day 익스플로잇이 가장 활발해지는 구간이다.</p>
+<p><strong>2. AI가 익스플로잇 개발 비용을 낮췄다.</strong> 레이스 컨디션 기반 커널 원격 익스플로잇은 전통적으로 숙련자 몇 주 단위의 작업이었다. AI 모델이 이를 만들었다는 사실은 &quot;이론상 가능, 실전은 어려움&quot;이라는 평가 관행 자체를 흔든다. 공격자 측도 유사 도구를 쓸 수 있다고 가정해야 한다.</p>
+<p><strong>3. 점수 혼선이 대응 우선순위를 흐린다.</strong> 같은 CVE가 스캐너·벤더 포털에 따라 5.9~9.8로 표시된다. 점수 임계값으로 패치 SLA를 돌리는 조직은 이 건을 &quot;Moderate, 다음 정기 패치&quot;로 분류할 위험이 있다.</p>
+<p><strong>4. 노출 범위 판정이 불확실하다.</strong> 루트 실증은 MPTCP 리스너 대상이지만, 레이스 트리거 자체는 노출된 IPv4 TCP 서비스 전반에서 가능하다는 것이 Red Hat의 시각이다. MPTCP가 없다는 이유로 안전하다고 단정할 근거는 현재 없다.</p>
+<p><strong>5. 클라우드·IDC 운영자에 파급이 크다.</strong> 인터넷에 직접 노출된 IPv4 리스너가 많은 GPU·호스팅 인프라, 컨테이너 호스트(커널 공유)에서 한 번의 침해가 다수 테넌트로 번질 수 있다.</p>
+<h2>대응 권고</h2>
+<p>수정 패키지가 있는 곳은 즉시 설치·재부팅하고, Ubuntu·RHEL은 노출 축소와 탐지로 공백을 버티는 것이 현실적 전략이다.</p>
+<p><strong>즉시 (24~72시간)</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> 자산 인벤토리: 인터넷 노출 IPv4 TCP 리스너가 있는 리눅스 호스트와 커널 버전(<code>uname -r</code>) 목록화</li>
+<li><input disabled="" type="checkbox"> Debian, Oracle UEK, SUSE Micro 6.2/Leap 16.0, Amazon Linux 2023(kernel6.18·6.12) → 수정 패키지 설치 후 재부팅</li>
+<li><input disabled="" type="checkbox"> 자체 빌드 커널 → 수정이 포함된 최신 stable로 갱신 (커널 팀은 개별 패치 cherry-pick을 지원하지 않음)</li>
+<li><input disabled="" type="checkbox"> MPTCP 사용 여부 확인: <code>sysctl net.mptcp.enabled</code>, <code>ss -Mltn</code>으로 MPTCP 리스너 존재 확인 → MPTCP 리스너가 있는 서버를 최우선 그룹으로 분류</li>
+<li><input disabled="" type="checkbox"> 내부 위험 점수를 벤더 5.9가 아닌 8.1 이상으로 수동 지정해 패치 SLA에서 누락되지 않게 함</li>
+</ul>
+<p><strong>단기 (패치 공백 기간)</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> 불필요한 IPv4 공개 리스너 제거, 관리 포트는 VPN·허용 IP 뒤로 이동</li>
+<li><input disabled="" type="checkbox"> 서비스상 필요 없으면 MPTCP 비활성화(<code>net.mptcp.enabled=0</code>) — 공격 표면 축소 목적의 보조 조치이며 공식 검증된 완화책은 아님</li>
+<li><input disabled="" type="checkbox"> 경계 장비에서 Record Route·Timestamp 옵션이 붙은 IPv4 SYN 차단 검토 — 커널 팀 시나리오상 공격 전제 조건이지만, 효과는 어느 벤더도 확인하지 않았으므로 스테이징에서 영향 검증 후 적용</li>
+<li><input disabled="" type="checkbox"> IPv6 전용 노출이 가능한 서비스는 IPv6로 전환 검토 (IPv6 경로는 비영향)</li>
+</ul>
+<p><strong>탐지·모니터링</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> IP 옵션이 붙은 SYN의 반복 유입, 동일 출발지의 비정상적 SYN 재전송 패턴 탐지 룰 추가</li>
+<li><input disabled="" type="checkbox"> 커널 oops·panic, KASAN 경고 로그를 SIEM으로 수집 (레이스 실패는 대체로 조용하지만 충돌 흔적이 남을 수 있음)</li>
+<li><input disabled="" type="checkbox"> <a href="https://ubuntu.com/security/CVE-2026-98432">Ubuntu CVE 페이지</a>, <a href="https://access.redhat.com/security/cve/cve-2026-98432">Red Hat CVE 페이지</a>, CISA KEV 등재 여부 매일 확인</li>
+<li><input disabled="" type="checkbox"> Ubuntu Livepatch·RHEL kpatch 형태의 무재부팅 패치 제공 여부 추적</li>
+</ul>
+<h2>출처 및 한계</h2>
+<p>본 리포트는 10월 29일자 The Hacker News 기사와 그 안에 연결된 1차 자료를 기준으로 작성했다. 10월 30일 추가 검색에서 Ubuntu·RHEL 수정 패키지 출시 소식은 확인되지 않았다.</p>
+<ul>
+<li>원문 기사: <a href="https://thehackernews.com/2026/10/linux-kernel-tcp-flaw-with-98-cvss.html">The Hacker News, Linux Kernel TCP Flaw With 9.8 CVSS Score (2026-10-29)</a></li>
+<li>발견·익스플로잇: <a href="https://www.anthropic.com/research/discovering-vulnerabilities-with-claude">Anthropic, Discovering vulnerabilities with Claude</a></li>
+<li>커널 수정 커밋: <a href="https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e3f33b0a1d89d738e2b913dab519226eaf76e15b">git.kernel.org e3f33b0a1d89</a></li>
+<li>커널 CVE 팀 공지: <a href="https://kernel.googlesource.com/pub/scm/linux/security/vulns/+/refs/heads/master/cve/published/2026/CVE-2026-98432.mbox">CVE-2026-98432.mbox</a></li>
+<li>벤더: <a href="https://ubuntu.com/security/CVE-2026-98432">Ubuntu</a> · <a href="https://access.redhat.com/security/cve/cve-2026-98432">Red Hat</a> · <a href="https://security.access.redhat.com/data/csaf/v2/vex/2026/cve-2026-98432.json">Red Hat VEX</a> · <a href="https://explore.alas.aws.amazon.com/CVE-2026-98432.html">Amazon Linux</a> · <a href="https://linux.oracle.com/cve/CVE-2026-98432.html">Oracle Linux</a> · <a href="https://security-tracker.debian.org/tracker/CVE-2026-98432">Debian</a> · <a href="https://www.suse.com/security/cve/CVE-2026-98432.html">SUSE</a></li>
+<li>참조 DB: <a href="https://nvd.nist.gov/vuln/detail/CVE-2026-98432">NVD</a> · <a href="https://www.cve.org/CVERecord?id=CVE-2026-98432">CVE.org</a></li>
+</ul>
+<p><strong>한계</strong>: 벤더 링크는 기사에 인용된 것을 기준으로 했으며 개별 페이지를 직접 열어 재확인하지는 않았다. 익스플로잇 코드·테스트 환경이 비공개라 MPTCP 비노출 서버의 실제 위험도는 미확정이다. 위험 등급과 권고 점수(8.1 이상)는 작성자 판단이다.</p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://cti.vibequant.cc/cti/cti-2026-1030-tcp-kr/" data-title="CVE-2026-98432 리눅스 커널 TCP Use-After-Free 보안 리포트" data-text="리눅스 커널 IPv4 TCP Use-After-Free CVE-2026-98432. 인증 없이 원격 루트까지 실증됐지만 Ubuntu·RHEL은 수정 커널이 없다. CVSS 9.8과 5.9의 혼선, 패치 공백 대응법." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-1030-tcp-kr%2F&amp;text=CVE-2026-98432%20%EB%A6%AC%EB%88%85%EC%8A%A4%20%EC%BB%A4%EB%84%90%20TCP%20Use-After-Free%20%EB%B3%B4%EC%95%88%20%EB%A6%AC%ED%8F%AC%ED%8A%B8" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-1030-tcp-kr%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-1030-tcp-kr%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-1030-TCP_KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

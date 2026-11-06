@@ -20,12 +20,13 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
   <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare/" />
   <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-en/" />
   <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-ja/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare-cn/" />
   <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/cloudflare-cloudflare/" />
+  <meta name="keywords" content="Cloudflare無料ティア, Cloudflare Workers制限, Cloudflare Pagesデプロイ, VibeQuantアーキテクチャ, Pyodideブラウザクオンツ, Wrangler CLI" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Cloudflare無料ティアで実際に運用する方法 — VibeQuant運用事例","description":"VibeQuantをCloudflareの無料ティアだけで設計・運用している理由と方法をまとめた実務記録。一般的な登録マニュアルではなく、実際の運用判断・落とし穴・無料ティアと衝突しないスタックを紹介する。","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/cloudflare-cloudflare-ja/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/CloudFlare/Cloudflare_%EB%AC%B4%EB%A3%8C%ED%8B%B0%EC%96%B4_%EC%82%AC%EC%9A%A9%EB%B2%95_JA.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/cloudflare-cloudflare-ja/","datePublished":"2026-07-24","dateModified":"2026-07-25","inLanguage":"ja","keywords":"Cloudflare, 無料ティア, Workers, Pages, サーバーレス, VibeQuant"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"Cloudflare無料ティアで実際に運用する方法 — VibeQuant運用事例","item":"https://tech.vibequant.cc/tech/cloudflare-cloudflare-ja/"}]}</script>
 </head>
@@ -171,7 +172,7 @@
 <td>帯域幅の「無制限」も、乱用・攻撃・商用大量配信には制約がかかる可能性がある</td>
 </tr>
 </tbody></table>
-<p><strong>まとめ:</strong>セキュリティ・CDN・静的+薄いAPIには強いが、<strong>重いバックエンド・強い一貫性が必要なDB・長時間Python</strong>は別のサービスに切り出す方が適切である。</p>
+<p><strong>まとめ:</strong> セキュリティ・CDN・静的+薄いAPIには強いが、<strong>重いバックエンド・強い一貫性が必要なDB・長時間Python</strong>は別のサービスに切り出す方が適切である。</p>
 <p>トラフィック・役割が溢れる場合は<strong>役割ごとに</strong>混合する。例: 読み取りキャッシュ→Upstash Redis、長時間ジョブ・Python API→Render/Railway、Nextフルスタック実験→Vercel(利用規約・帯域幅を確認)。「とにかくVercelを乗せる」のではなく、<strong>上限・利用規約に合致する部分だけ</strong>を接続する。</p>
 <hr>
 <h2>4. 競合サービス(Vercelを含むPaaS)</h2>
