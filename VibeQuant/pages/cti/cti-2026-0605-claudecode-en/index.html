@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
   <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0605-claudecode-kr/" />
   <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0605-claudecode-en/" />
   <link rel="alternate" hreflang="x-default" href="https://cti.vibequant.cc/cti/cti-2026-0605-claudecode-kr/" />
@@ -133,10 +133,10 @@
 <hr>
 <h2>2. Key Judgments</h2>
 <ul>
-<li><strong>KJ-1 (High):</strong>The essence of this incident is &quot;default write privileges granted to an AI agent + uncritical acceptance of external input.&quot; It is not merely a single vulnerability, but an example exposing the<strong>structural attack surface of agentic CI/CD integrations</strong>. Regardless of patch status, the same pattern, including bot trust, unapproved command execution, and environment variable exposure, may be reproducible in other AI coding agents.</li>
-<li><strong>KJ-2 (High):</strong>No public reporting indicated active exploitation as of publication, but the technique is fully disclosed and<strong>PoC reproduction difficulty is low</strong>. Public repositories that have not applied the patch should be treated as immediately exposed.</li>
-<li><strong>KJ-3 (Medium):</strong>The highest-priority exposure is<strong>short-lived cloud credentials</strong> for AWS, GCP, and Azure obtained through OIDC tokens, along with repository secrets. Because compromise can undermine code integrity itself, affected organizations need to revalidate build artifact trust, not only rotate tokens.</li>
-<li><strong>KJ-4 (Medium):</strong>Follow-on analysis from Tenable and others identified another path involving PR head branch checkout plus attacker-controlled <code>.mcp.json</code> MCP server startup leading to arbitrary command execution. This means defenders must review not only the permission bypass, but also the<strong>trusted boundary design</strong> itself.</li>
+<li><strong>KJ-1 (High):</strong> The essence of this incident is &quot;default write privileges granted to an AI agent + uncritical acceptance of external input.&quot; It is not merely a single vulnerability, but an example exposing the <strong>structural attack surface of agentic CI/CD integrations</strong>. Regardless of patch status, the same pattern, including bot trust, unapproved command execution, and environment variable exposure, may be reproducible in other AI coding agents.</li>
+<li><strong>KJ-2 (High):</strong> No public reporting indicated active exploitation as of publication, but the technique is fully disclosed and <strong>PoC reproduction difficulty is low</strong>. Public repositories that have not applied the patch should be treated as immediately exposed.</li>
+<li><strong>KJ-3 (Medium):</strong> The highest-priority exposure is <strong>short-lived cloud credentials</strong> for AWS, GCP, and Azure obtained through OIDC tokens, along with repository secrets. Because compromise can undermine code integrity itself, affected organizations need to revalidate build artifact trust, not only rotate tokens.</li>
+<li><strong>KJ-4 (Medium):</strong> Follow-on analysis from Tenable and others identified another path involving PR head branch checkout plus attacker-controlled <code>.mcp.json</code> MCP server startup leading to arbitrary command execution. This means defenders must review not only the permission bypass, but also the <strong>trusted boundary design</strong> itself.</li>
 </ul>
 <hr>
 <h2>3. Attack Chain</h2>
@@ -199,10 +199,10 @@
 </ul>
 <h3>5.2 Korean Government and Institutional Response Perspective</h3>
 <ul>
-<li><strong>KISA / KrCERT:</strong>No domestic advisory exists at this time. This issue should be treated as a new category, &quot;CI/CD integration security for AI coding agents,&quot; and addressed through either an annex to the<strong>KISA software supply chain security guide</strong> or a dedicated security notice. Recommended core guidance: (1) require <code>claude-code-action</code> v1.0.94 or later, (2) prohibit <code>allowed_non_write_users</code> wildcards, and (3) enforce least privilege in OIDC trust policies.</li>
-<li><strong>Ministry of Science and ICT (MSIT):</strong>From an &quot;AI-enabled secure software development&quot; perspective, ISMS-P audit criteria should incorporate<strong>agent permissions and external-input trust boundaries</strong>.</li>
+<li><strong>KISA / KrCERT:</strong> No domestic advisory exists at this time. This issue should be treated as a new category, &quot;CI/CD integration security for AI coding agents,&quot; and addressed through either an annex to the <strong>KISA software supply chain security guide</strong> or a dedicated security notice. Recommended core guidance: (1) require <code>claude-code-action</code> v1.0.94 or later, (2) prohibit <code>allowed_non_write_users</code> wildcards, and (3) enforce least privilege in OIDC trust policies.</li>
+<li><strong>Ministry of Science and ICT (MSIT):</strong> From an &quot;AI-enabled secure software development&quot; perspective, ISMS-P audit criteria should incorporate <strong>agent permissions and external-input trust boundaries</strong>.</li>
 <li><strong>Financial Security Institute (FSI) and the financial sector:</strong> OIDC-to-cloud credential theft is a direct threat to financial-sector CI/CD. Reassessment is recommended for cloud security controls under electronic financial supervisory requirements, including separation of privileges, shorter token lifetimes, and build artifact integrity verification.</li>
-<li><strong>Software supply chain security and SBOM policy linkage:</strong>As Korea advances SBOM and software supply chain security mandates, this incident indicates that<strong>CI/CD actions and AI agents must be explicitly managed as supply chain components</strong>.</li>
+<li><strong>Software supply chain security and SBOM policy linkage:</strong> As Korea advances SBOM and software supply chain security mandates, this incident indicates that <strong>CI/CD actions and AI agents must be explicitly managed as supply chain components</strong>.</li>
 </ul>
 <h3>5.3 Immediate Checklist for Korean Organizations</h3>
 <ol>

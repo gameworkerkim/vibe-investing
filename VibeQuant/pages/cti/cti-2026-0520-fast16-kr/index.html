@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
   <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-kr/" />
   <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-en/" />
   <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0520-fast16-ja/" />
@@ -251,7 +251,7 @@
 <td>고폭약 반응성장 모델 (점화 후 전파 시뮬레이션)</td>
 </tr>
 </tbody></table>
-<p>이 세 모델은 모두 <strong>고폭약 거동 시뮬레이션에만 사용</strong>된다는 공통점을 가진다. EOS 조건이 충족되면 변조 루틴은 시뮬레이션의 특정 속성이 초기값의 5배에 도달할 때까지 대기한다. 이후 <strong>Cauchy 응력 텐서 출력값(<code>sig_xx</code>, <code>sig_yy</code>, <code>sig_zz</code>)</strong>을 변조한다.</p>
+<p>이 세 모델은 모두 <strong>고폭약 거동 시뮬레이션에만 사용</strong>된다는 공통점을 가진다. EOS 조건이 충족되면 변조 루틴은 시뮬레이션의 특정 속성이 초기값의 5배에 도달할 때까지 대기한다. 이후 **Cauchy 응력 텐서 출력값(<code>sig_xx</code>, <code>sig_yy</code>, <code>sig_zz</code>)**을 변조한다.</p>
 <p>변조의 트리거 조건은 명확하다. 시뮬레이션 대상 물질의 밀도가 <strong>30 g/cm³에 도달</strong>했을 때 Cauchy 응력 텐서 값을 실제값의 1%로 감소시킨다. 단, 즉시 1%로 떨어뜨리지 않고, 밀도가 60 g/cm³에 도달할 때 1%가 되도록 <strong>자연스러운</strong> 기울기로 감소시킨다. 시뮬레이션이 실제로 60 g/cm³에 도달할 필요는 없으며, 60은 단지 기울기 계산용 기준점일 뿐이다.</p>
 <p>Cauchy 응력 텐서는 물질의 압축성을 결정하는 열역학적 압력을 표현한다. Symantec의 테스트에서, 이 변조는 시뮬레이션이 33 g/cm³까지의 압축을 모델링할 때 실제보다 <strong>증가된 압축률</strong>을 나타내는 결과를 산출했다. 즉, 시뮬레이션 사용자는 실제로는 도달할 수 없는 압축 수준에 도달했다고 판단하게 된다.</p>
 <h3>3.3 메커니즘 C: AUTODYN — 가변 종단 밀도 스케일링</h3>
@@ -359,7 +359,7 @@ HKLM\SOFTWARE\Panda Software\Firewall
 <h3>5.3 자가 전파: MPR + 관리 공유</h3>
 <p>fast16의 전파 메커니즘은 두 단계로 구성된다:</p>
 <ul>
-<li><strong><code>svcmgmt.dll</code></strong>을 추출하여 <strong>MPR (Multiple Provider Router)</strong> 네트워크 제공자 알림 수신자로 등록. <code>WNetAddConnection</code>을 호출하는 모든 프로세스에 DLL이 로드되어 신규 공유 연결을 명명 파이프 <code>\\.\pipe\p577</code>로 보고.</li>
+<li><strong><code>svcmgmt.dll</code><strong>을 추출하여 </strong>MPR (Multiple Provider Router)</strong> 네트워크 제공자 알림 수신자로 등록. <code>WNetAddConnection</code>을 호출하는 모든 프로세스에 DLL이 로드되어 신규 공유 연결을 명명 파이프 <code>\\.\pipe\p577</code>로 보고.</li>
 <li>모든 도메인, 서버, 공유를 열거하여 원격 호스트 발견. 각 후보 호스트명을 IP로 해석하고 <strong>로컬 네트워크 범위(10.x.x.x, 172.16.x.x, 192.168.x.x)와 동일 서브넷 규칙</strong>으로 검증.</li>
 <li>자격을 갖춘 머신에 대해 <strong>로컬 로그온 사용자 자격으로 가장(impersonation)</strong>, <code>\\&lt;remote&gt;\admin$\system32\svcmgmt.exe</code>로 자신을 복사, 원격 SvcMgmt 서비스를 생성하여 실행.</li>
 </ul>
@@ -508,7 +508,7 @@ $a2 = &quot;@(#)par.h : &quot;
 <h3>8.3 고정밀 컴퓨팅 환경 특화 권고</h3>
 <p>핵, 항공우주, 국방, 첨단 물리 시뮬레이션 등 고정밀 컴퓨팅 워크로드를 운용하는 조직에 대한 추가 권고가 필요하다.</p>
 <ul>
-<li><strong>결과 무결성 검증:</strong>동일 시뮬레이션을<strong>아키텍처가 다른 별도 시스템(예: x86 워크스테이션 ↔ ARM/PowerPC HPC 노드)</strong>에서 교차 실행하여 결과 일관성 검증. fast16과 같은 x86 특화 변조는 다른 아키텍처에서는 작동하지 않음.</li>
+<li><strong>결과 무결성 검증:</strong> 동일 시뮬레이션을 <strong>아키텍처가 다른 별도 시스템(예: x86 워크스테이션 ↔ ARM/PowerPC HPC 노드)</strong>에서 교차 실행하여 결과 일관성 검증. fast16과 같은 x86 특화 변조는 다른 아키텍처에서는 작동하지 않음.</li>
 <li><strong>바이너리 무결성 모니터링:</strong> LS-DYNA, AUTODYN, ANSYS, ABAQUS 등 시뮬레이션 실행 파일의 SHA256 해시를 정기적으로 검증하고, 메모리 로드 후 <code>.xdata</code>, <code>.pdata</code> 등 비정상 섹션 추가 여부 점검.</li>
 <li><strong>Intel 컴파일러 메타데이터 기반 표적화 인지:</strong> 표적화 로직이 PE 헤더의 &quot;Intel&quot; 문자열에 기반함을 고려, 동일 패턴을 사용하는 추가 사보타주 도구가 존재할 가능성. 빌드 파이프라인에서 이 메타데이터를 제거하거나 변경하는 것이 한 가지 회피책일 수 있음.</li>
 <li><strong>&quot;이상한 결과&quot; 보고 문화:</strong> 연구자가 시뮬레이션 결과의 미세한 이상을 보고할 수 있는 채널 구축. fast16은 결과를 완전히 망가뜨리지 않고 &#39;그럴듯한 거짓&#39;을 생성하므로, 도메인 전문가의 직관이 1차 방어선이다.</li>

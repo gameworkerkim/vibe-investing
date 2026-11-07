@@ -20,12 +20,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
   <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-kr/" />
   <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-en/" />
   <link rel="alternate" hreflang="ja" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-ja/" />
   <link rel="alternate" hreflang="zh-Hans" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-cn/" />
   <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-kr/" />
+  <meta name="keywords" content="Claude Security Plugin, claude-security, security-guidance, multi-agent vulnerability scanner, adversarial verification, BYO inference" />
+  <meta name="robots" content="index,follow" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Claude Security Plugin 기술 분석 및 Getting Started","description":"Claude Code용 claude-security(Beta)와 security-guidance(GA)의 구조, 3인 검증 패널, BYO inference, 도입 절차와 Defense-in-Depth 스택 내 위치를 정리한 기술 가이드.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-kr/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/LLM_Security/Claude-Security-Plugin-Guide_KR.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-kr/","datePublished":"2026-07-26","dateModified":"2026-07-26","inLanguage":"ko","keywords":"Claude, LLM Security, AppSec, DevSecOps, SAST"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"Claude Security Plugin 기술 분석 및 Getting Started","item":"https://tech.vibequant.cc/tech/llm-security-claude-security-plugin-guide-kr/"}]}</script>
 </head>
@@ -211,8 +213,8 @@
 </tr>
 <tr>
 <td align="left"><strong>온디맨드 딥스캔</strong></td>
-<td align="left"><strong><code>claude-security</code> 플러그인</strong></td>
-<td align="left"><strong>저장소·diff 멀티에이전트 스캔, 독립 검증된 발견과 패치</strong></td>
+<td align="left">**<code>claude-security</code> 플러그인<strong></td>
+<td align="left"></strong>저장소·diff 멀티에이전트 스캔, 독립 검증된 발견과 패치**</td>
 </tr>
 <tr>
 <td align="left">PR 시점</td>
@@ -973,7 +975,7 @@
 </tr>
 </tbody></table>
 <p>배경 수치로, AI 생성 코드가 엔터프라이즈 개발 워크플로 93%에 등장하고 그중 약 45%가 알려진 결함을 도입한다는 조사, 애플리케이션 취약점 악용 공격이 2026년 44% 증가했다는 Veracode 분석이 인용된다. 즉 Tier 3의 존재 이유는 &quot;AI가 만든 코드의 양과 새로운 취약점 형태를 룰 스캐너가 따라가지 못한다&quot;는 실패 모드다.</p>
-<p><strong>현실적 결론:</strong>Claude Security 플러그인은 Snyk·Semgrep·GHAS의<strong>대체재가 아니라 상보재</strong>다. 결정적 도구는 재현성·컴플라이언스·공급망을 담당하고, 이 플러그인은 그 도구들이 구조적으로 못 잡는 문맥 의존 논리 결함을 담당한다. 도입 판단의 핵심 질문은 &quot;무엇을 뺄까&quot;가 아니라 <strong>기존 스택에 추가할 만한 한계 탐지율이 토큰 비용을 정당화하는가</strong> 이며, 추가 벤더 계약이 필요 없으므로 그 검증 비용 자체는 매우 낮다.</p>
+<p><strong>현실적 결론:</strong> Claude Security 플러그인은 Snyk·Semgrep·GHAS의 <strong>대체재가 아니라 상보재</strong>다. 결정적 도구는 재현성·컴플라이언스·공급망을 담당하고, 이 플러그인은 그 도구들이 구조적으로 못 잡는 문맥 의존 논리 결함을 담당한다. 도입 판단의 핵심 질문은 &quot;무엇을 뺄까&quot;가 아니라 <strong>기존 스택에 추가할 만한 한계 탐지율이 토큰 비용을 정당화하는가</strong> 이며, 추가 벤더 계약이 필요 없으므로 그 검증 비용 자체는 매우 낮다.</p>
 <hr>
 <h2>7. Getting Started</h2>
 <h3>7.1 사전 요건 체크</h3>

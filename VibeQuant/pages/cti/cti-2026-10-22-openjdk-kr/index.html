@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>eMudhra 중간 CA 개인 키 유출 사건과 CVE-2026-91403 — VibeQuant</title>
+  <meta name="description" content="eMudhra 중간 CA 8개의 개인 키가 숫자 4 같은 값이라 공개 인증서만으로 복구됐다. 브라우저는 막혔지만 해지 확인을 끄고 도는 JVM은 아니다. CVE-2026-91403 대응." />
+  <link rel="canonical" href="https://cti.vibequant.cc/cti/cti-2026-10-22-openjdk-kr/" />
+  <meta property="og:title" content="eMudhra 중간 CA 개인 키 유출 사건과 CVE-2026-91403" />
+  <meta property="og:description" content="eMudhra 중간 CA 8개의 개인 키가 숫자 4 같은 값이라 공개 인증서만으로 복구됐다. 브라우저는 막혔지만 해지 확인을 끄고 도는 JVM은 아니다. CVE-2026-91403 대응." />
+  <meta property="og:url" content="https://cti.vibequant.cc/cti/cti-2026-10-22-openjdk-kr/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og/openjdk-emudhra-20261022.jpg" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og/openjdk-emudhra-20261022.jpg" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
+  <meta name="keywords" content="eMudhra, CVE-2026-91403, OpenJDK 인증서, blocked.certs, 중간 CA 개인 키 유출, emSign" />
+  <meta name="robots" content="index,follow" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"eMudhra 중간 CA 개인 키 유출 사건과 CVE-2026-91403","description":"eMudhra 중간 CA 8개의 개인 키가 숫자 4 같은 값이라 공개 인증서만으로 복구됐다. 브라우저는 막혔지만 해지 확인을 끄고 도는 JVM은 아니다. CVE-2026-91403 대응.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://cti.vibequant.cc/cti/cti-2026-10-22-openjdk-kr/"},"isBasedOn":"https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-10-22-OPENJDK_KR.md","image":"https://vibequant.cc/og/openjdk-emudhra-20261022.jpg","url":"https://cti.vibequant.cc/cti/cti-2026-10-22-openjdk-kr/","datePublished":"2026-10-22","dateModified":"2026-10-22","inLanguage":"ko","keywords":"OpenJDK, Java, eMudhra, PKI, TLS, CVE-2026-91403"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"CTI","item":"https://cti.vibequant.cc/cti/"},{"@type":"ListItem","position":3,"name":"eMudhra 중간 CA 개인 키 유출 사건과 CVE-2026-91403","item":"https://cti.vibequant.cc/cti/cti-2026-10-22-openjdk-kr/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link is-active" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../cti/">CTI</a> · 취약점 · 패치</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">취약점 · 패치</p>
+        <h1>eMudhra 중간 CA 개인 키 유출 사건과 CVE-2026-91403</h1>
+        <p class="article-dates"><time datetime="2026-10-22">발행 2026.10.22</time> · 주제 OpenJDK · Java · eMudhra · PKI · TLS · CVE-2026-91403</p>
+        
+        <p class="lede">브라우저는 몇 시간 만에 막았다. 해지 확인을 끈 JVM은 아직 믿는다</p>
+        
+        <nav class="share-bar" aria-label="공유" data-url="https://cti.vibequant.cc/cti/cti-2026-10-22-openjdk-kr/" data-title="eMudhra 중간 CA 개인 키 유출 사건과 CVE-2026-91403" data-text="eMudhra 중간 CA 8개의 개인 키가 숫자 4 같은 값이라 공개 인증서만으로 복구됐다. 브라우저는 막혔지만 해지 확인을 끄고 도는 JVM은 아니다. CVE-2026-91403 대응." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-10-22-openjdk-kr%2F&amp;text=eMudhra%20%EC%A4%91%EA%B0%84%20CA%20%EA%B0%9C%EC%9D%B8%20%ED%82%A4%20%EC%9C%A0%EC%B6%9C%20%EC%82%AC%EA%B1%B4%EA%B3%BC%20CVE-2026-91403" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-10-22-openjdk-kr%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-10-22-openjdk-kr%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p><img src="https://vibequant.cc/og/openjdk-emudhra-20261022.jpg" alt="OpenJDK 로고"></p>
+<p><em>OpenJDK. 브라우저가 몇 시간 만에 막은 인증서를, 해지 확인을 끈 JVM은 패치 전까지 계속 믿는다.</em></p>
+<p><strong>김호광</strong> 싸이월드 전 대표 / 2026년 10월 22일</p>
+<blockquote>
+<p><strong>분류</strong>: TLP:CLEAR | <strong>문서유형</strong>: CTI 리포트 | <strong>작성일</strong>: 2026-10-22
+<strong>심각도</strong>: CRITICAL (CVSS v3.1 9.1) | <strong>신뢰도</strong>: A2 | <strong>영향</strong>: Java/JVM 런타임, 웹 PKI 신뢰 체인
+<strong>대상</strong>: Java/JVM 운영자, 백엔드 개발자, 보안 담당자</p>
+</blockquote>
+<hr>
+<h2>1. 사건 개요</h2>
+<p>인도의 인증 기관(CA) eMudhra가 운영하는 중간(intermediate) CA 인증서 8개의 개인 키가 공개 인증서만으로 복구 가능한 상태였던 것으로 드러났다. 이 키를 가진 사람은 누구든 전 세계 어떤 도메인에 대해서도 &quot;신뢰되는&quot; TLS 인증서를 위조할 수 있다.</p>
+<p>이 사건은 소프트웨어 코드 결함이 아니라 웹 PKI 신뢰 체인 자체가 손상된 사고다. OpenJDK는 2026년 10월 21일 정기 분기 일정과 별개로 대역 외(out-of-band) 권고를 내고 이를 CVE-2026-91403(CVSS v3.1 9.1, Critical)으로 지정했다.</p>
+<h3>1.1 근본 원인</h3>
+<ul>
+<li>2025년 4월 30일 eMudhra는 키 생성 의식(key ceremony)에서 중간 CA 24개를 생성했고, 이 중 8개가 문제가 되었다.</li>
+<li>P-384 타원곡선 개인 키는 약 384비트의 무작위성을 가져야 하지만, 해당 8개 키는 3~8비트 수준의 엔트로피만 가졌다. 사실상 마지막 1바이트를 제외하면 전부 0인 값이다.</li>
+<li>실제 개인 키 값은 4, 56, 66, 115, 155, 156, 230, 237이다. 즉 &quot;EM OV TLS CA - G3C&quot;의 개인 키는 숫자 4였다.</li>
+<li>eMudhra 설명에 따르면, 키 생성 스크립트의 결함으로 두 번째(약한) 키 쌍이 만들어졌고, 레이블이 원래 키와 비슷해 실수로 이 약한 키로 CSR이 생성되었다. 회사는 여러 단계의 인적 오류를 인정했다.</li>
+<li>외부 침해(해킹)의 증거는 없다. 공격 없이도 공개 키로부터 개인 키를 1초 미만에 역산할 수 있었다는 점이 핵심이다.</li>
+</ul>
+<h3>1.2 영향받은 중간 CA</h3>
+<table>
+<thead>
+<tr>
+<th>중간 CA</th>
+<th>용도</th>
+<th>발급 주체</th>
+<th>개인 키 값</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>EM DV TLS CA - G3B</td>
+<td>TLS (DV)</td>
+<td>eMudhra BV</td>
+<td>156</td>
+</tr>
+<tr>
+<td>EM OV TLS CA - G3B</td>
+<td>TLS (OV)</td>
+<td>eMudhra BV</td>
+<td>155</td>
+</tr>
+<tr>
+<td>EM EV TLS CA - G3B</td>
+<td>TLS (EV)</td>
+<td>eMudhra BV</td>
+<td>115</td>
+</tr>
+<tr>
+<td>EM DV TLS CA - G3C</td>
+<td>TLS (DV)</td>
+<td>eMudhra Inc</td>
+<td>230</td>
+</tr>
+<tr>
+<td>EM OV TLS CA - G3C</td>
+<td>TLS (OV)</td>
+<td>eMudhra Inc</td>
+<td>4</td>
+</tr>
+<tr>
+<td>EM EV TLS CA - G3C</td>
+<td>TLS (EV)</td>
+<td>eMudhra Inc</td>
+<td>56</td>
+</tr>
+<tr>
+<td>EM OV CS CA - G3B</td>
+<td>코드 서명</td>
+<td>eMudhra BV</td>
+<td>66</td>
+</tr>
+<tr>
+<td>EM OV CS CA - G3C</td>
+<td>코드 서명</td>
+<td>eMudhra Inc</td>
+<td>237</td>
+</tr>
+</tbody></table>
+<p>각 중간 CA는 두 경로로 존재한다. eMudhra emSign 루트가 서명한 인증서와 Sectigo의 AAA Certificate Services가 교차 서명(cross-sign)한 인증서다. 그래서 차단 대상 인증서는 8개가 아니라 16개가 된다.</p>
+<h3>1.3 타임라인</h3>
+<table>
+<thead>
+<tr>
+<th>일시</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>2025-04-30</td>
+<td>eMudhra 키 생성 의식에서 약한 키로 중간 CA 생성</td>
+</tr>
+<tr>
+<td>2026-10-17</td>
+<td>연구자 Wayne이 CCADB 점검 중 발견. 8개 키 각각으로 &quot;We have a problem here&quot; 메시지에 서명해 Apple, Google, Microsoft, Mozilla, eMudhra에 보고. Chrome, Firefox 수 시간 내 차단</td>
+</tr>
+<tr>
+<td>2026-10-18</td>
+<td>eMudhra, 8개 중간 CA를 CA_COMPROMISE 사유로 폐기(revoke)</td>
+</tr>
+<tr>
+<td>2026-10-19</td>
+<td>Apple 차단. 하위 신뢰 저장소에 책임 있는 공개</td>
+</tr>
+<tr>
+<td>2026-10-20</td>
+<td>Microsoft 차단. 사건 공개(emudhra.we-have-a-problem.com). Mozilla가 emSign ECC Root CA - G3를 NSS에서 제거</td>
+</tr>
+<tr>
+<td>2026-10-21</td>
+<td>OpenJDK 대역 외 권고(CVE-2026-91403), Oracle 보안 경보, Azul 대역 외 릴리스</td>
+</tr>
+<tr>
+<td>2026-10-27 (예정)</td>
+<td>Chrome Root Store에서 emSign ECC Root CA - G3 제거</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>2. 위협 요소</h2>
+<h3>2.1 무엇이 가능한가?</h3>
+<ul>
+<li>임의 웹사이트 사칭: 은행, 클라우드 API, 사내 SSO 등 어떤 도메인이든 유효한 HTTPS 인증서를 위조할 수 있다.</li>
+<li>중간자 공격(MITM): 네트워크 경로에 있는 공격자가 TLS 트래픽을 복호화하고 변조할 수 있다.</li>
+<li>코드 서명 위조: 8개 중 2개는 코드 서명용 CA이므로, 악성 바이너리에 &quot;정상 서명&quot;을 붙일 수 있다.</li>
+</ul>
+<h3>2.2 왜 Java가 특히 위험한가?</h3>
+<p>브라우저는 CRLSet, OneCRL 같은 자체 차단 목록으로 중간 CA를 원격 차단할 수 있어 이미 보호받고 있다. Chrome은 SPKI 해시 단위로 차단해 업데이트나 재시작 없이 즉시 보호가 적용됐다.</p>
+<p>반면 Java는 다르다.</p>
+<ul>
+<li>Java는 기본 설정에서 인증서 해지(revocation)를 확인하지 않는다. eMudhra가 인증서를 폐기했어도 패치되지 않은 JVM은 그대로 신뢰한다.</li>
+<li>실제 테스트에서 OpenJDK 27.0.1(패치 전 빌드), Liberica JDK 21.0.10 등이 기본 설정으로 손상된 체인을 통한 TLS 연결을 성공시켰다.</li>
+<li>브라우저와 달리 서버 측 Java 애플리케이션(결제 연동, 외부 API 호출, 웹훅, 크롤러 등)은 사용자가 인증서 경고를 볼 기회조차 없다.</li>
+<li>CI 러너, 컨테이너 이미지, 임베디드 JRE 등 업데이트가 늦는 런타임이 많다.</li>
+</ul>
+<h3>2.3 실제 악용 여부</h3>
+<ul>
+<li>2026-10-21 기준 악의적 사용은 확인되지 않았다.</li>
+<li>eMudhra는 8개 중 1개만 운영 환경에 배포됐고, 8개 모두 최종 사용자(end-entity) 인증서를 발급한 적이 없다고 밝혔다.</li>
+<li>다만 SafeDep는 10월 19일부터 위조 인증서가 CT 로그에 나타났다고 보고했다. 키 값이 공개된 이상 누구나 서명 가능하므로, 10월 17일 이후에도 패치되지 않은 클라이언트를 가장 높은 위험군으로 봐야 한다.</li>
+<li>Google은 CT 로그가 이 CA로 체인되는 인증서를 거부하도록 조치했다.</li>
+</ul>
+<hr>
+<h2>3. 파급력</h2>
+<h3>3.1 생태계 전반의 대응</h3>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>조치</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Google Chrome / Android</td>
+<td>10-17 CRLSet으로 SPKI 차단, 10-27 루트 제거 예정</td>
+</tr>
+<tr>
+<td>Mozilla Firefox</td>
+<td>10-17 차단, 10-20 emSign ECC Root CA - G3를 NSS에서 제거</td>
+</tr>
+<tr>
+<td>Apple</td>
+<td>10-19 차단</td>
+</tr>
+<tr>
+<td>Microsoft</td>
+<td>10-20 차단(코드 서명 CA 포함)</td>
+</tr>
+<tr>
+<td>Go</td>
+<td>crypto/x509 관련 CVE-2026-111943</td>
+</tr>
+<tr>
+<td>Firefox OneCRL</td>
+<td>CVE-2026-113470</td>
+</tr>
+<tr>
+<td>Python certifi</td>
+<td>2026.10.19에서 emSign ECC Root CA - G3 제거</td>
+</tr>
+<tr>
+<td>Rust webpki-roots</td>
+<td>1.0.10에서 제거</td>
+</tr>
+<tr>
+<td>curl CA bundle</td>
+<td>2026-10-20</td>
+</tr>
+<tr>
+<td>Composer ca-bundle</td>
+<td>1.4.16, 1.6.0</td>
+</tr>
+<tr>
+<td>Alpine ca-certificates</td>
+<td>20261020-r0</td>
+</tr>
+<tr>
+<td>Arch ca-certificates-mozilla</td>
+<td>3.131.1-1</td>
+</tr>
+<tr>
+<td>Debian ca-certificates, FreeBSD ca_root_nss</td>
+<td>작성 시점 대기(Pending)</td>
+</tr>
+<tr>
+<td>RHEL / UBI ca-certificates</td>
+<td>10-22 기준 패키지 없음, RHSB-2026-012 우회책 사용</td>
+</tr>
+</tbody></table>
+<p>eMudhra는 G3 루트 아래 신규 인증서 발급을 중단했다. eMudhra는 6천만 건 이상의 디지털 인증서를 발급했다고 밝혀온 CA여서, 신뢰 저장소 정리 작업의 범위가 크다.</p>
+<h3>3.2 교훈</h3>
+<ul>
+<li>하드웨어 보안 모듈이나 정형화된 의식이 있어도, 스크립트 하나와 레이블 혼동으로 전체 신뢰 체인이 무너질 수 있다.</li>
+<li>브라우저 외 소프트웨어 대부분은 중간 CA를 필터링하는 메커니즘이 없다. 그래서 많은 프로젝트가 중간 CA 차단 대신 루트 자체를 제거하는 방식을 택했다.</li>
+<li>&quot;인증서 해지가 기본 비활성&quot;인 런타임은 CA 사고에 구조적으로 취약하다.</li>
+</ul>
+<hr>
+<h2>4. 업데이트 및 대응 방법</h2>
+<h3>4.1 영향 여부 확인</h3>
+<pre><code class="language-bash"># Java 버전 확인
+java -version
+
+# OS 신뢰 저장소를 쓰는지 확인 (Debian/Ubuntu)
+readlink -f &quot;$JAVA_HOME/lib/security/cacerts&quot;
+# /etc/ssl/certs/java/cacerts 가 출력되면 OS 저장소 사용
+</code></pre>
+<h3>4.2 1순위: JDK 업그레이드</h3>
+<p>OpenJDK 권고 기준 패치 버전은 다음과 같다(또는 그 이후).</p>
+<table>
+<thead>
+<tr>
+<th>라인</th>
+<th>패치 버전</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>JDK 27</td>
+<td>27.0.1 (패치 빌드)</td>
+</tr>
+<tr>
+<td>JDK 25</td>
+<td>25.0.5</td>
+</tr>
+<tr>
+<td>JDK 21</td>
+<td>21.0.13</td>
+</tr>
+<tr>
+<td>JDK 17</td>
+<td>17.0.21</td>
+</tr>
+<tr>
+<td>JDK 11</td>
+<td>11.0.33</td>
+</tr>
+<tr>
+<td>JDK 8</td>
+<td>8u511 / 8u512</td>
+</tr>
+</tbody></table>
+<p>주의: JDK 8 패치 번호는 출처마다 다르게 표기된다(사건 요약 사이트는 8u511, 일부 정리 자료는 8u512). JDK 27도 27.0.1 초기 빌드는 취약했고 패치 빌드(27.0.1.0.2)가 별도로 나왔다. 반드시 벤더 릴리스 노트에서 &quot;eMudhra 차단 포함&quot; 여부를 확인할 것.</p>
+<p>벤더별 상황(10-22 기준):</p>
+<ul>
+<li>Azul Zulu: 10-21 대역 외 릴리스로 JDK 27/25/21/17/11/8/7/6 전부 blocked.certs에 추가. 업그레이드 후 수동 조치 불필요.</li>
+<li>Oracle JDK: 패치 준비 중. 그 전까지 blocked.certs 교체 또는 해지 확인 활성화 권고.</li>
+<li>Eclipse Temurin: 10-22 기준 수정 버전 없음. blocked.certs 추가 후 재시작.</li>
+<li>BellSoft Liberica: keytool 기반 임시 완화책 안내.</li>
+</ul>
+<h3>4.3 2순위: blocked.certs 교체 (업그레이드 불가 시)</h3>
+<p>JVM은 체인의 각 인증서 SHA-256 지문을 <code>$JAVA_HOME/lib/security/blocked.certs</code>와 대조한다.</p>
+<ol>
+<li>OpenJDK/Oracle이 배포하는 새 blocked.certs를 OS에 맞게 받는다(Windows용과 그 외 OS용이 따로 있음).</li>
+<li>기존 파일을 백업한다. 이미 직접 추가한 항목이 있으면 새 파일에 다시 넣는다.</li>
+<li><code>$JDK_HOME/lib/security/blocked.certs</code>를 교체한다. JDK 8은 <code>blacklisted.certs</code>.</li>
+<li>JVM을 재시작한다.</li>
+</ol>
+<pre><code class="language-bash">jdk=&quot;$JAVA_HOME&quot;
+blocked=&quot;$jdk/lib/security/blocked.certs&quot;
+cp &quot;$blocked&quot; &quot;$blocked.bak&quot;
+# 배포된 blocked.certs로 교체하거나, 16개 SHA-256 지문을 append
+</code></pre>
+<p>주의 사항</p>
+<ul>
+<li>blocked.certs와 해지 설정은 Java 설치본마다 따로 적용된다. 서버에 JDK가 여러 개면 전부 처리해야 한다.</li>
+<li>cacerts에서 emSign 루트만 삭제하는 것은 불충분하다. 교차 서명 경로(Sectigo AAA Certificate Services)로 여전히 체인이 성립할 수 있다. 정밀 차단은 16개 지문을 blocked.certs에 넣는 방식이다.</li>
+<li>컨테이너는 Dockerfile에서 파일을 덮어쓴 뒤 이미지를 재빌드해야 한다.</li>
+</ul>
+<h3>4.4 보조: 인증서 해지 확인 활성화</h3>
+<pre><code class="language-bash">java -Dcom.sun.net.ssl.checkRevocation=true \
+     -Dcom.sun.security.enableCRLDP=true \
+     -jar app.jar
+</code></pre>
+<p>eMudhra가 이미 인증서를 폐기했으므로 해지 확인을 켜면 <code>CertificateRevokedException (reason: CA_COMPROMISE)</code>로 연결이 거부된다. 다만 OCSP/CRL 서버 응답 지연, 오프라인 환경, soft-fail 동작에 따라 신뢰성이 떨어지므로 단독 대책이 아니라 보조 수단으로 쓴다.</p>
+<h3>4.5 OS 패키지 OpenJDK 사용자</h3>
+<ul>
+<li>Debian, Ubuntu, Fedora, Arch 등 OS 패키지 OpenJDK는 OS 신뢰 저장소에서 cacerts를 만든다. <code>ca-certificates</code>를 업데이트하고 JVM을 재시작하면 된다(Debian은 작성 시점 대기 상태이므로 확인 필요).</li>
+<li>RHEL/UBI는 10-22 기준 패키지가 없어 Red Hat의 RHSB-2026-012 우회책을 따른다.</li>
+<li>FreeBSD, Homebrew는 OpenJDK 자체를 업데이트하거나 blocked.certs를 직접 처리해야 한다.</li>
+</ul>
+<h3>4.6 체크리스트</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 모든 서버, CI 러너, 컨테이너 베이스 이미지의 Java 버전 목록화</li>
+<li><input disabled="" type="checkbox"> 패치 JDK로 업그레이드 또는 blocked.certs 교체</li>
+<li><input disabled="" type="checkbox"> JDK가 여러 개 설치된 호스트는 각각 처리</li>
+<li><input disabled="" type="checkbox"> Docker 이미지 재빌드 및 재배포</li>
+<li><input disabled="" type="checkbox"> OS ca-certificates 업데이트</li>
+<li><input disabled="" type="checkbox"> JVM 재시작 확인</li>
+<li><input disabled="" type="checkbox"> 10-17 이후 외부 TLS 통신 로그 중 eMudhra 체인 사용 흔적 점검</li>
+<li><input disabled="" type="checkbox"> 코드 서명 검증 파이프라인에서 eMudhra CS CA 서명 바이너리 재검토</li>
+</ul>
+<hr>
+<h2>5. 레퍼런스</h2>
+<p>공식 및 1차 출처</p>
+<ul>
+<li>OpenJDK Vulnerability Advisories (2026/10/21 대역 외 권고 포함): <a href="https://openjdk.org/groups/vulnerability/advisories">https://openjdk.org/groups/vulnerability/advisories</a></li>
+<li>Oracle, Distrusting eMudhra Intermediate Certificates in Oracle JDK: <a href="https://ops.java/emudhra">https://ops.java/emudhra</a></li>
+<li>Google Security Blog, Protecting Chrome and Android Users from Compromised eMudhra Intermediate CA Certificates: <a href="https://blog.google/security/protecting-chrome-and-android-users-from-compromised-emudhra-intermediate-ca-certificates/">https://blog.google/security/protecting-chrome-and-android-users-from-compromised-emudhra-intermediate-ca-certificates/</a></li>
+<li>eMudhra Intermediate CA Compromise 요약 사이트(Dennis Jackson): <a href="https://emudhra.we-have-a-problem.com/">https://emudhra.we-have-a-problem.com/</a></li>
+<li>Azul Zulu Release Notes (Out-of-Cycle October 21, 2026): <a href="https://docs.azul.com/core/release-notes">https://docs.azul.com/core/release-notes</a></li>
+</ul>
+<p>기술 분석 및 대응 가이드</p>
+<ul>
+<li>SafeDep, eMudhra CA Key Compromise: Response Guide for Developers: <a href="https://safedep.io/emudhra-ca-key-compromise/">https://safedep.io/emudhra-ca-key-compromise/</a></li>
+<li>Guillaume Laforge, The eMudhra CA Compromise: Why Your JVM Is Vulnerable: <a href="https://glaforge.dev/posts/2026/10/21/the-emudhra-ca-compromise-why-your-jvm-is-vulnerable-and-how-to-fix-it/">https://glaforge.dev/posts/2026/10/21/the-emudhra-ca-compromise-why-your-jvm-is-vulnerable-and-how-to-fix-it/</a></li>
+<li>BellSoft, Distrusting compromised eMudhra intermediates in Java: <a href="https://bell-sw.com/blog/distrusting-compromised-emudhra-intermediates-in-java">https://bell-sw.com/blog/distrusting-compromised-emudhra-intermediates-in-java</a></li>
+<li>Testing CVE-2026-91403 on OpenJDK and Temurin: <a href="https://lilting.ch/en/articles/openjdk-cve-2026-91403-emudhra-cacerts">https://lilting.ch/en/articles/openjdk-cve-2026-91403-emudhra-cacerts</a></li>
+<li>SOCRadar, eMudhra CA Key Compromise: Weak Keys, Risks and Fixes: <a href="https://socradar.io/blog/emudhra-ca-key-compromise-weak-keys-risks-and-fixes/">https://socradar.io/blog/emudhra-ca-key-compromise-weak-keys-risks-and-fixes/</a></li>
+</ul>
+<p>보도</p>
+<ul>
+<li>SecurityWeek: <a href="https://www.securityweek.com/browsers-block-emudhra-intermediate-cas-over-recoverable-private-keys/">https://www.securityweek.com/browsers-block-emudhra-intermediate-cas-over-recoverable-private-keys/</a></li>
+<li>BleepingComputer: <a href="https://www.bleepingcomputer.com/news/security/mozilla-google-apple-block-compromised-emudhra-ca-certificates/">https://www.bleepingcomputer.com/news/security/mozilla-google-apple-block-compromised-emudhra-ca-certificates/</a></li>
+<li>The Hacker News: <a href="https://thehackernews.com/2026/10/eight-emudhra-ca-keys-compromised.html">https://thehackernews.com/2026/10/eight-emudhra-ca-keys-compromised.html</a></li>
+<li>Help Net Security: <a href="https://www.helpnetsecurity.com/2026/10/21/emudhra-certificates-private-keys-compromised/">https://www.helpnetsecurity.com/2026/10/21/emudhra-certificates-private-keys-compromised/</a></li>
+<li>The Register: <a href="https://www.theregister.com/security/2026/10/20/indian-certification-authority-emudhras-private-keys-compromised-one-of-them-was-the-number-4/5304312">https://www.theregister.com/security/2026/10/20/indian-certification-authority-emudhras-private-keys-compromised-one-of-them-was-the-number-4/5304312</a></li>
+<li>InfoQ: <a href="https://www.infoq.com/news/2026/10/emudhra-ca-compromise/">https://www.infoq.com/news/2026/10/emudhra-ca-compromise/</a></li>
+<li>Wikipedia, eMudhra: <a href="https://en.wikipedia.org/wiki/EMudhra">https://en.wikipedia.org/wiki/EMudhra</a></li>
+</ul>
+<hr>
+<p>이 문서는 2026-10-22 시점 공개 자료를 기준으로 작성되었다. 벤더 패치 상태는 빠르게 바뀌므로 적용 전 각 벤더의 최신 공지를 확인할 것.</p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://cti.vibequant.cc/cti/cti-2026-10-22-openjdk-kr/" data-title="eMudhra 중간 CA 개인 키 유출 사건과 CVE-2026-91403" data-text="eMudhra 중간 CA 8개의 개인 키가 숫자 4 같은 값이라 공개 인증서만으로 복구됐다. 브라우저는 막혔지만 해지 확인을 끄고 도는 JVM은 아니다. CVE-2026-91403 대응." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-10-22-openjdk-kr%2F&amp;text=eMudhra%20%EC%A4%91%EA%B0%84%20CA%20%EA%B0%9C%EC%9D%B8%20%ED%82%A4%20%EC%9C%A0%EC%B6%9C%20%EC%82%AC%EA%B1%B4%EA%B3%BC%20CVE-2026-91403" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-10-22-openjdk-kr%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fcti.vibequant.cc%2Fcti%2Fcti-2026-10-22-openjdk-kr%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>Dennis Kim</strong> · 前 싸이월드 대표.</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/CYBER-THREAT-INTELLIGENCE-REPORT/blob/main/CTI-2026-10-22-OPENJDK_KR.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

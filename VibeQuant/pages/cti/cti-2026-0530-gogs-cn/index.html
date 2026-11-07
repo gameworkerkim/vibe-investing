@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
   <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-kr/" />
   <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-en/" />
   <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-ja/" />
@@ -126,7 +126,7 @@
 <hr>
 <h2>1. 漏洞分析 — <code>--exec</code> 参数注入</h2>
 <p>Gogs是用Go编写的轻量级自托管Git服务，作为GitHub的自托管替代被广泛使用。该缺陷发生在合并PR时使用<code>git rebase</code>的*“Rebase before merging”*选项中。</p>
-<p><code>git rebase</code>将某分支的提交序列重放到另一基础分支之上以创建线性历史。它可接收<strong>在每次提交重放后执行shell命令的<code>--exec</code>标志</strong>作为参数。Gogs在合并时将用户可控的<strong>分支名</strong>未经充分清洗便传入<code>git rebase</code>调用。因此，若攻击者在分支名中嵌入<code>--exec</code>形式的载荷，该命令便会在合并过程中于服务器主机上执行。</p>
+<p><code>git rebase</code>将某分支的提交序列重放到另一基础分支之上以创建线性历史。它可接收<strong>在每次提交重放后执行shell命令的<code>--exec</code>标志<strong>作为参数。Gogs在合并时将用户可控的</strong>分支名</strong>未经充分清洗便传入<code>git rebase</code>调用。因此，若攻击者在分支名中嵌入<code>--exec</code>形式的载荷，该命令便会在合并过程中于服务器主机上执行。</p>
 <blockquote>
 <p>研究员Jonah Burgess（Rapid7）：“该漏洞允许任意已认证用户通过创建带恶意分支名的拉取请求，在‘Rebase before merging’合并操作中将<code>--exec</code>标志注入<code>git rebase</code>，从而在服务器上实现RCE。”</p>
 </blockquote>

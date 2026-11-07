@@ -375,6 +375,15 @@ function rewriteRelativeColumnImages(html) {
   );
 }
 
+/** Card/OG image. Absolute URLs pass through; `images/file.jpg` publishes from /og/. */
+function publishedImage(meta) {
+  const raw = String(meta?.og_image || meta?.image || "").trim();
+  if (!raw) return "";
+  if (/^https?:\/\//i.test(raw)) return raw;
+  const file = raw.split("/").filter(Boolean).pop();
+  return file ? `${SITE}/og/${file}` : "";
+}
+
 /**
  * GitHub CTI MD uses relative sibling links like CTI-…_EN.md for language switchers.
  * On the published site those must become /cti/<slug>/ (or GitHub blob as fallback).
@@ -621,6 +630,8 @@ function descriptionFromMd(md, fallback) {
  * Viral / hand-picked URLs via SLUG_OVERRIDES.
  */
 const SLUG_OVERRIDES = {
+  "AI Bouble/2026-11-06-US-Bigtech-AI-Semis-Quant-Report.md":
+    "2026-11-06-us-bigtech-ai-semis-quant-report",
   "Cyworld/The-Pros-and-Cons-of-VC-Investment-as-Seen-Through-the-Cyworld-RCPS-Contract.md":
     "cyworld-rcps-vc-investment-pros-cons",
   "Startup/Shelf-Life-of-Innovation.md": "shelf-life-of-innovation",
@@ -1314,9 +1325,10 @@ function scanColumns() {
         }
       }
     }
+    const fmKeywords = Array.isArray(meta.keywords) ? meta.keywords.map(String) : [];
     const tags = Array.isArray(meta.tags)
-      ? meta.tags.map(String)
-      : [groupTitle, ...(meta.media ? [String(meta.media)] : []), ...rel.split("/").slice(0, -1)].slice(
+      ? [...meta.tags.map(String), ...fmKeywords]
+      : [groupTitle, ...(meta.media ? [String(meta.media)] : []), ...fmKeywords, ...rel.split("/").slice(0, -1)].slice(
           0,
           8
         );
@@ -1344,6 +1356,7 @@ function scanColumns() {
       datePublished: dates.datePublished || (meta.date ? String(meta.date).slice(0, 10) : null),
       dateModified: dates.dateModified || dates.datePublished,
       dateSource: dates.dateSource || (meta.date ? "frontmatter" : null),
+      image: publishedImage(meta),
     });
   }
 
@@ -1805,7 +1818,7 @@ function layout({
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="${prefix}css/content.css?v=8" />
+  <link rel="stylesheet" href="${prefix}css/content.css?v=9" />
   ${extraHead}
   ${ld}
 </head>
@@ -1991,6 +2004,10 @@ function buildArticle(item, section) {
     articleLd.copyrightHolder = { "@type": "Organization", name: mediaLabel };
   }
   if (topicTags.length) articleLd.keywords = topicTags.join(", ");
+  const kw = Array.isArray(meta.keywords) ? meta.keywords.map(String).filter(Boolean) : [];
+  const headBits = [hreflangLinks(item, section)];
+  if (kw.length) headBits.push(`<meta name="keywords" content="${esc(kw.join(", "))}" />`);
+  if (meta.robots) headBits.push(`<meta name="robots" content="${esc(String(meta.robots))}" />`);
   const pdfUrl = String(meta.pdf || meta.pdf_url || "").trim();
   if (pdfUrl) {
     const pdfObject = {
@@ -2026,7 +2043,7 @@ function buildArticle(item, section) {
       ogType: "article",
       htmlLang,
       ogImage: ogImageUrl,
-      extraHead: hreflangLinks(item, section),
+      extraHead: headBits.filter(Boolean).join("\n  "),
       jsonLd: [
         articleLd,
         { "@context": "https://schema.org", ...breadcrumbLd(crumbs) },
@@ -2060,10 +2077,16 @@ function cardHtml(item, hrefPrefix = "./") {
     ? `<time class="col-date" datetime="${esc(item.datePublished)}">${esc(formatDisplayDate(item.datePublished))}</time>`
     : "";
   const mediaBit = item.media ? `${esc(item.media)} · ` : "";
-  return `<a class="col-card" href="${hrefPrefix}${esc(item.slug)}/" data-group="${esc(item.group)}" data-search="${esc(search)}"${langAttr}${dateAttr}${mediaAttr}${featAttr}>
+  const thumb = item.image
+    ? `<img class="col-thumb" src="${esc(item.image)}" alt="" width="640" height="360" loading="lazy" decoding="async" />`
+    : "";
+  const thumbClass = item.image ? " has-thumb" : "";
+  return `<a class="col-card${thumbClass}" href="${hrefPrefix}${esc(item.slug)}/" data-group="${esc(item.group)}" data-search="${esc(search)}"${langAttr}${dateAttr}${mediaAttr}${featAttr}>
+        ${thumb}<span class="col-card-body">
         <span class="col-group">${mediaBit}${esc(item.groupTitle)}${dateLabel ? ` · ${dateLabel}` : ""}</span>
         <strong class="col-title">${esc(item.title)}</strong>
         <span class="col-desc">${esc(item.description)}</span>
+        </span>
       </a>`;
 }
 

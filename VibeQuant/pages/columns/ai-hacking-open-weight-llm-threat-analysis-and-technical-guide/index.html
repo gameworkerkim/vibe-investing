@@ -1,0 +1,1428 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AI Open Weight Cyber Security Cook Book — VibeQuant</title>
+  <meta name="description" content="대상 독자: 보안 연구자, 레드팀/블루팀 리더, CISO, 정책·규제 담당자" />
+  <link rel="canonical" href="https://docs.vibequant.cc/columns/ai-hacking-open-weight-llm-threat-analysis-and-technical-guide/" />
+  <meta property="og:title" content="AI Open Weight Cyber Security Cook Book" />
+  <meta property="og:description" content="대상 독자: 보안 연구자, 레드팀/블루팀 리더, CISO, 정책·규제 담당자" />
+  <meta property="og:url" content="https://docs.vibequant.cc/columns/ai-hacking-open-weight-llm-threat-analysis-and-technical-guide/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"AI Open Weight Cyber Security Cook Book","description":"대상 독자: 보안 연구자, 레드팀/블루팀 리더, CISO, 정책·규제 담당자","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://docs.vibequant.cc/columns/ai-hacking-open-weight-llm-threat-analysis-and-technical-guide/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Open-Weight-LLM-Threat-Analysis-and-Technical-Guide.md","image":"https://vibequant.cc/og-default.png","url":"https://docs.vibequant.cc/columns/ai-hacking-open-weight-llm-threat-analysis-and-technical-guide/","datePublished":"2026-10-05","dateModified":"2026-10-05","inLanguage":"ko","keywords":"AI · LLM · 빅테크, AI_Hacking"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Columns","item":"https://docs.vibequant.cc/columns/"},{"@type":"ListItem","position":3,"name":"AI Open Weight Cyber Security Cook Book","item":"https://docs.vibequant.cc/columns/ai-hacking-open-weight-llm-threat-analysis-and-technical-guide/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link is-active" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../columns/">Columns</a> · AI · LLM · 빅테크</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">AI · LLM · 빅테크</p>
+        <h1>AI Open Weight Cyber Security Cook Book</h1>
+        <p class="article-dates"><time datetime="2026-10-05">발행 2026.10.05</time> · 주제 AI · LLM · 빅테크 · AI_Hacking</p>
+        
+        <p class="lede">대상 독자: 보안 연구자, 레드팀/블루팀 리더, CISO, 정책·규제 담당자</p>
+        <p class="article-byline">문서 유형: 사이버 위협 인텔리전스(CTI) / 방어 관점 기술 분석. 2026.10.05</p>
+        <nav class="share-bar" aria-label="공유" data-url="https://docs.vibequant.cc/columns/ai-hacking-open-weight-llm-threat-analysis-and-technical-guide/" data-title="AI Open Weight Cyber Security Cook Book" data-text="대상 독자: 보안 연구자, 레드팀/블루팀 리더, CISO, 정책·규제 담당자" data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fai-hacking-open-weight-llm-threat-analysis-and-technical-guide%2F&amp;text=AI%20Open%20Weight%20Cyber%20Security%20Cook%20Book" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fai-hacking-open-weight-llm-threat-analysis-and-technical-guide%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fai-hacking-open-weight-llm-threat-analysis-and-technical-guide%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p><strong>대상 독자:</strong> 보안 연구자, 레드팀/블루팀 리더, CISO, 정책·규제 담당자</p>
+<p><strong>분류:</strong> 역량 특성화, 위협 지형 분석, 방어 통제 설계, 모의 해킹, 로그 기반 이상 탐지</p>
+<p>싸이월드 전 대표가 알려주는 
+AI를 이용한 공격과 방어 레시피</p>
+<p>Dennis Kim, <strong>사이버 위협 인텔리전스(CTI)</strong> · <strong>AI 기반 퀀트 투자</strong> · <strong>Web3</strong>의 교차점에서 연구·투자하는 독립 연구자입니다. 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · Investor · Microsoft Azure MVP (2015–2023)</p>
+<h2>문서 범위 및 작성 원칙</h2>
+<p>본 문서는 안전장치가 제거되었거나 공세적 사이버 작업을 차단하지 못하는 오픈웨이트 대형언어모델(open-weight LLM) 두 계열 — Zhipu AI(Z.ai)의 GLM 시리즈와 Moonshot AI의 KIMI 시리즈 — 의 공세형 변형을 위협 인텔리전스 및 보안 기술 관점에서 특성화하는 것을 목적으로 한다.</p>
+<p>본 문서는 다음을 포함한다.</p>
+<ul>
+<li>공세형/abliterated 모델의 설치·배포 절차, 요구 GPU 구성, 런타임 셋팅 방법</li>
+<li>공세적 에이전트 프레임워크 및 오케스트레이션 툴의 구성·설정 방법</li>
+<li>오픈 소스 레드팀 툴(중국산 포함)의 실제 사용 예시·명령·워크플로우</li>
+<li>방어 관점의 탐지·완화·대비 전략</li>
+<li>방어자를 위한 LLM 오픈소스 로그 기반 이상 탐지 솔루션</li>
+</ul>
+<p><strong>출처 및 신뢰도 고지:</strong> 
+본 문서의 정량 수치(벤치마크, 파라미터 규모, 비용 추정 등)는 1차 자료 및 그 안에서 인용된 제3자 평가(Anthropic, UK AISI/CAISI, Moonshot AI 자체 평가, Abliteration.ai 자체 평가, Vercel 분석)를 종합한 것이다. 이들 수치는 급변하는 영역이며 평가 주체마다 방법론이 상이하므로, 조직 차원의 의사결정에 활용하기 전 독립적 재확인이 필요하다. 특히 자체 평가(self-reported) 수치는 제3자 평가 대비 낙관 편향 가능성을 전제로 해석한다.</p>
+<p><strong>리스크 및 법률 고지:</strong>
+본 문서는 보안 전문가를 위한 보안 테스트용이며, 격리된 보안 환경에서 모의 해킹을 권장한다. LLM의 경우 엔트로픽과 OpenAI의 사태처럼 격리된 환경을 이탈할 수 있기 때문에 잘 설계된 격리된 환경이 선행되어야 한다. 해커들의 해킹 기법, 이용 방식을 이해해야 우리는 안전한 사이버 보안 환경을 만들 수 있다.</p>
+<p><strong>심연을 바라볼 때 그 심연에 빠져서는 안된다.</strong></p>
+<h2>1. 배경 - 왜 오픈웨이트가 위협 모델을 바꾸는가?</h2>
+<h3>1.1 핵심 위협 메커니즘</h3>
+<p>프론티어 폐쇄형 모델은 API 게이트웨이에서 거부(refusal) 안전장치, 사용량 모니터링, 계정 식별, 레이트 리밋이 중첩 적용된다. 반면 오픈웨이트 모델은 <strong>가중치(weights)가 배포되는 순간</strong> 이 통제층이 사실상 무력화된다. 위협의 본질은 모델의 &quot;능력&quot;이 아니라, 능력을 <strong>누가·어떤 제약 없이</strong> 사용할 수 있는가에 있다.</p>
+<p>두 가지 보안 가이드라인의 무력화 경로가 존재한다.</p>
+<ol>
+<li><strong>Abliteration (거부 방향 제거):</strong> 모델 가중치에서 거부 응답을 유도하는 방향 벡터를 식별·제거하는 사후 가공 기법. 프롬프트 엔지니어링 없이도 유해 요청에 대한 거부율이 급감한다. GLM 계열이 이 경로의 대표 사례다.</li>
+<li><strong>안전장치 자체의 부재/미비:</strong> 애초에 공세적 사이버 작업을 차단하는 효과적 안전장치가 탑재되지 않은 경우. KIMI K3 계열이 이 유형으로 분류된다.</li>
+</ol>
+<h3>1.2 위협 지형에 주는 의미</h3>
+<ul>
+<li><strong>재현 불가능성:</strong> 폐쇄형 모델의 안전장치는 벤더가 패치할 수 있으나, 일단 배포된 오픈웨이트 복사본은 회수·롤백이 불가능하다.</li>
+<li><strong>감사 불가능성:</strong> 로컬/온프레미스 추론 시 외부에서 사용 내역을 관측할 수 없어 사후 탐지가 어렵다.</li>
+<li><strong>진입비용 붕괴:</strong> 후술할 abliteration 비용 추정치는 조직화된 위협 행위자뿐 아니라 소규모 그룹의 접근도 가능함을 시사한다.</li>
+</ul>
+<h2>2. GLM 사이버 보안 특화 버전</h2>
+<h3>2.1 개요</h3>
+<p>GLM-5.3(약 753B MoE)을 기반으로 한 공세형 변형은 주로 <strong>가중치 수준의 abliteration</strong>을 거쳐 배포된다. 즉 모델 자체의 아키텍처·지식은 원본과 유사하나, 거부 행동만 선택적으로 제거된 형태다. GLM-5.3은 MoE + MLA + DeepSeek-sparse attention 구조를 채택하고 있으며, NVFP4 양자화 버전은 표준 vLLM으로 로드하면 바로 동작한다.</p>
+<h3>2.2 배포 형태</h3>
+<table>
+<thead>
+<tr>
+<th>변형 유형</th>
+<th>기반</th>
+<th>양자화</th>
+<th>배포 성격</th>
+<th>크기</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ABLITERATED-NVFP4</td>
+<td>GLM-5.3 (753B)</td>
+<td>NVFP4</td>
+<td>로컬 배포용 가중치</td>
+<td>195 GB</td>
+</tr>
+<tr>
+<td>UNCENSORED-FP8</td>
+<td>GLM-5.3</td>
+<td>FP8</td>
+<td>도메인 특화 태깅</td>
+<td>756 GB</td>
+</tr>
+<tr>
+<td>abliterated-large-v2</td>
+<td>GLM-5.3</td>
+<td>FP8</td>
+<td>OpenAI 호환 API 엔드포인트</td>
+<td>서비스형</td>
+</tr>
+<tr>
+<td>EXL3 3.0BPW Abliterated</td>
+<td>GLM-5.3</td>
+<td>EXL3 3-bit</td>
+<td>vLLM 서빙 레시피</td>
+<td>약 280 GB</td>
+</tr>
+</tbody></table>
+<p>NVFP4 버전은 <code>dealignai/GLM-5.3-Flash-ABLITERATED-NVFP4</code>로 Hugging Face에 공개되어 있으며, FP8 버전은 <code>dealignai/GLM-5.3-UNCENSORED-FP8</code>으로 배포된다. EXL3 3.0bpw 버전은 <code>drowzeys/keys-GLM-5.3-EXL3-3.0BPW-abliterated-vLLm-cuda-Exl3</code>에서 서빙 레시피와 벤치마크를 제공한다.</p>
+<h3>2.3 역량 범주</h3>
+<p>공개 평가 및 자료에서 GLM-5.3 공세형 변형이 수행 가능하다고 보고된 작업 범주는 다음과 같다.</p>
+<ul>
+<li><strong>익스플로잇 개발:</strong> end-to-end 익스플로잇 산출(메모리 손상 계열 포함)</li>
+<li><strong>악성코드 생성:</strong> 키로거, SUID 권한 상승, AES 랜섬웨어, 리버스 셸, SSH 브루트포서 검증됨</li>
+<li><strong>역공학·바이너리 분석:</strong> 디스어셈블리/디컴파일, 펌웨어 분석 보조</li>
+<li><strong>네트워크 공격 인프라:</strong> C2·터널·프록시 등 공격 인프라 코드 생성</li>
+<li><strong>AI 대상 공격:</strong> 적대적 페이로드, 모델 포이즈닝, 프롬프트 인젝션</li>
+</ul>
+<p>생각보다 더 쉽게 익스플로잇을 잘 했고 ClickFix 기반의 악성코드를 잘 만들 수 있었고 네트워크 공격을 통해 C2 Server 구축을 포함한 공격 인프라, 크리덴셜 공격까지 완주할 수 있었다.</p>
+<h3>2.4 기술 사양</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>값</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>기반 모델</td>
+<td>GLM-5.3 (753B MoE)</td>
+</tr>
+<tr>
+<td>컨텍스트 윈도우</td>
+<td>1M 토큰 (텍스트 전용)</td>
+</tr>
+<tr>
+<td>추론 모드(권장)</td>
+<td>high / max reasoning effort</td>
+</tr>
+<tr>
+<td>MMLU (기반 모델)</td>
+<td>84.11% (원본 대비 약 1.5pp 이내)</td>
+</tr>
+<tr>
+<td>참고 API 가격</td>
+<td>입력 $3 / 1M, 캐시입력 $0.30 / 1M, 출력 $5 / 1M</td>
+</tr>
+</tbody></table>
+<h3>2.5 설치에 필요한 GPU 및 셋팅 방법</h3>
+<h4>2.5.1 하드웨어 요구사항</h4>
+<p>GLM-5.3 abliterated 버전의 하드웨어 요구사항은 양자화 수준에 따라 크게 달라진다.</p>
+<table>
+<thead>
+<tr>
+<th>양자화</th>
+<th>최소 GPU 구성</th>
+<th>메모리 요구량</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>NVFP4 (195 GB)</td>
+<td>1x H100 80GB (부분 오프로드) ~ 4x H100</td>
+<td>약 200 GB 통합 메모리</td>
+<td>Blackwell GPU(B100/B200/GB200)에서 네이티브 FP4 텐서 코어 활용 시 최적</td>
+</tr>
+<tr>
+<td>EXL3 3.0bpw</td>
+<td>4x DGX Spark GB10 (각 121 GB)</td>
+<td>약 484 GB 통합 메모리</td>
+<td>TP=4, DFlash2 speculative decoding</td>
+</tr>
+<tr>
+<td>FP8 (756 GB)</td>
+<td>8x H100 80GB</td>
+<td>약 640 GB VRAM</td>
+<td>Hopper 아키텍처 공식 이미지 검증</td>
+</tr>
+<tr>
+<td>NVFP4 (2x DGX Spark)</td>
+<td>2x DGX Spark GB10</td>
+<td>약 242 GB 통합 메모리</td>
+<td>TensorFold 엔진, 1.8x faster decode than vLLM</td>
+</tr>
+</tbody></table>
+<p>NVFP4 버전은 8x H100(Hopper)에서 공식 vLLM 이미지를 통해 검증되었으며, Blackwell GPU(B100/B200/GB200)에서 네이티브 FP4 텐서 코어를 사용할 경우 최상의 처리량을 얻을 수 있다. 2x NVIDIA DGX Spark 구성에서는 TensorFold 엔진을 사용하여 vLLM 대비 1.8배 빠른 디코딩 속도를 달성했다.</p>
+<h4>2.5.2 소프트웨어 스택 및 설정</h4>
+<p><strong>필수 요구사항</strong></p>
+<ul>
+<li>CUDA 12.8 이상</li>
+<li>vLLM v0.30 이상 (NVFP4 및 EXL3 지원)</li>
+<li>Docker (권장) 또는 네이티브 설치</li>
+<li>네트워크 접근 (빌드 시 <code>nvcr.io/nvidia/pytorch:26.07-py3</code> 풀 필요)</li>
+</ul>
+<p><strong>디스크 요구사항</strong></p>
+<ul>
+<li>체크포인트 크기 (양자화에 따라 195 GB ~ 756 GB)</li>
+<li>노드당 약 83 GB (준비된 가중치 폴더, 빠른 재시작용)</li>
+<li>NVMe 세션 티어: 노드당 최대 64 GiB (<code>GLM53_TF_SESSION_DISK_GIB</code>)</li>
+</ul>
+<p><strong>vLLM 서빙 명령 예시 (NVFP4)</strong></p>
+<pre><code class="language-bash">vllm serve /path/to/GLM-5.3-ABLITERATED-NVFP4 \
+  --tensor-parallel-size 8 \
+  --kv-cache-dtype fp8_e4m3 \
+  --tool-call-parser glm47 \
+  --enable-auto-tool-choice \
+  --reasoning-parser glm47 \
+  --speculative-config.num_speculative_tokens 5 \
+  --max-model-len 135000 \
+  --port 8000
+</code></pre>
+<p><strong>EXL3 3.0bpw 서빙 (4x DGX Spark GB10)</strong></p>
+<pre><code class="language-bash">vllm serve /path/to/GLM-5.3-EXL3-3.0BPW-abliterated \
+  --tensor-parallel-size 4 \
+  --speculative-config.method dflash2 \
+  --speculative-config.num_speculative_tokens 5 \
+  --kv-cache-dtype fp8 \
+  --max-model-len 200000
+</code></pre>
+<h4>2.5.3 성능 참고치</h4>
+<p>4x DGX Spark GB10 (TP=4) 구성에서의 실측 성능은 다음과 같다.</p>
+<table>
+<thead>
+<tr>
+<th>워크로드</th>
+<th>처리량 (tok/s)</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>prose (taskbench)</td>
+<td>14.9</td>
+<td>3회 평균, 편차 15%</td>
+</tr>
+<tr>
+<td>code</td>
+<td>25.4</td>
+<td>단일 샘플</td>
+</tr>
+<tr>
+<td>Prefill (1K~64K)</td>
+<td>~420 tok/s</td>
+<td>TTFT = prompt_tokens / 420</td>
+</tr>
+<tr>
+<td>200K 컨텍스트 (DCP=1)</td>
+<td>16.2</td>
+<td>prose</td>
+</tr>
+<tr>
+<td>1M 컨텍스트 (DCP=4)</td>
+<td>12.6</td>
+<td>prose</td>
+</tr>
+</tbody></table>
+<h3>2.6 벤치마크</h3>
+<p><strong>Anthropic ExploitBench (V8 엔진 취약점 대상, 410 시도)</strong></p>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>성공/시도</th>
+<th>성공률</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claude Mythos Preview (제한 공개)</td>
+<td>56/410</td>
+<td>13.7%</td>
+</tr>
+<tr>
+<td>GLM-5.3</td>
+<td>50/410</td>
+<td>12.2%</td>
+</tr>
+<tr>
+<td>GLM-5.2</td>
+<td>0</td>
+<td>0%</td>
+</tr>
+</tbody></table>
+<p><strong>Binary Exploitation (내부 벤치, Full Control-Flow Hijack 비율)</strong></p>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>CFH 비율</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claude Mythos Preview</td>
+<td>6%</td>
+</tr>
+<tr>
+<td>GLM-5.3</td>
+<td>4%</td>
+</tr>
+<tr>
+<td>Claude Opus 4.6</td>
+<td>0%</td>
+</tr>
+</tbody></table>
+<p><strong>Abliteration.ai 자체 평가 (낙관 편향 가능성 전제)</strong></p>
+<table>
+<thead>
+<tr>
+<th>벤치마크</th>
+<th>GLM-5.3 Abliterated</th>
+<th>참조</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>CyberGym (pass@1)</td>
+<td>84.5%</td>
+<td>GPT-5.5 85.6%, DeepSeek V4 83.3%</td>
+</tr>
+<tr>
+<td>Terminal-Bench 4.0</td>
+<td>41.8%</td>
+<td>Opus 5 51.8%, Fable 5 44.5%</td>
+</tr>
+<tr>
+<td>ExploitGym (2h)</td>
+<td>105/869</td>
+<td>GPT-5.6 Sol 216, Fable 5 181</td>
+</tr>
+</tbody></table>
+<p>CyberGym 벤치마크는 188개 프로젝트의 1,507개 OSS-Fuzz 버그를 대상으로 평가하며, GLM-5.3 Abliterated는 84.5% pass@1을 기록하여 GPT-5.5(85.6%)에 근접한 성능을 보였다.</p>
+<h3>2.7 안전장치 취약성</h3>
+<p>Anthropic 평가 기준, GLM-5.3의 기본 안전장치는 단순 기법으로 <strong>64%~100%</strong> 우회 가능한 것으로 보고되고 있다.</p>
+<table>
+<thead>
+<tr>
+<th>조건</th>
+<th>진행률</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>직접적 유해 지시</td>
+<td>모델 거부</td>
+</tr>
+<tr>
+<td>&quot;모델이 계속하기로 했다&quot;고 위장한 프롬프트</td>
+<td>92%</td>
+</tr>
+<tr>
+<td>refusal을 로컬 제거한 복사본</td>
+<td>100%</td>
+</tr>
+</tbody></table>
+<p>abliteration 후 거부율은 JailbreakBench 약 3%, HarmBench 약 2%, StrongREJECT 약 12% 수준으로 감소한 것으로 보고된다. <strong>이는 안전장치가 운영상 신뢰할 수 없는 통제점임을 의미한다.</strong></p>
+<p><strong>영화 메트릭스와 터미네이터와 같은 사태가 이제 구조적으로 가능하다.</strong></p>
+<h2>3. KIMI 사이버 보안 특화 버전</h2>
+<h3>3.1 개요</h3>
+<p>KIMI 계열은 GLM과 달리 <strong>abliteration 가공 없이도</strong> 안전장치가 공세적 작업을 차단하지 못하는 유형으로 분류되고 있다. 대표 모델은 Kimi K3(약 2.8T MoE)다. Kimi K3는 104B 활성 파라미터, 896개 전문가 중 16개 활성화, 100만 토큰 컨텍스트 윈도우를 갖춘 세계 최대 규모의 오픈웨이트 모델이다. MXFP4 가중치와 MXFP8 활성화로 제공되어 광범위한 하드웨어 호환성을 가능하게 한다.</p>
+<p>별도로 Kimi 계열 CLI를 공세적 에이전트 구성으로 전환하는 프레임워크(Kimiko 류)가 존재한다.</p>
+<h3>3.2 배포 형태</h3>
+<table>
+<thead>
+<tr>
+<th>유형</th>
+<th>기반</th>
+<th>성격</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Kimi K3 (오픈웨이트)</td>
+<td>2.8T MoE</td>
+<td>안전장치가 공세적 작업을 차단하지 못함</td>
+</tr>
+<tr>
+<td>Kimiko (CLI 프레임워크)</td>
+<td>Kimi Code CLI</td>
+<td>API 제한 우회형 에이전트 구성</td>
+</tr>
+</tbody></table>
+<p>Kimi K3는 Modified-MIT 라이선스로 2026년 7월 27일 공개되었으며, Hugging Face에서 전체 가중치를 다운로드할 수 있다. 기술 보고서는 GitHub(<code>MoonshotAI/Kimi-K3</code>)에 공개되어 있다.</p>
+<h3>3.3 역량 범주</h3>
+<p>Kimi K3 및 관련 프레임워크가 다룬다고 보고된 위협 표면은 다음과 같다.</p>
+<ul>
+<li>end-to-end 익스플로잇 개발 (유저스페이스·커널)</li>
+<li>대규모 다단계(수십 단계) 시뮬레이션 기업망 공격 수행</li>
+<li>네트워크 공격 인프라 및 안티포렌식 계열</li>
+<li>모바일·기기 보안 우회 계열 (폰 바이패스, FRP 언락, 부트로더 언락, IMEI 수리, SIM 언락)</li>
+<li>역공학 및 펌웨어 분석 계열</li>
+<li>공급망·하드웨어 임플란트 계열 (의존성 혼동, Bad USB, UART/JTAG 임플란트)</li>
+<li>AI 대상 공격 계열</li>
+</ul>
+<h3>3.4 기술 사양</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>Kimi K3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>파라미터</td>
+<td>약 2.8T (MoE, 104B 활성)</td>
+</tr>
+<tr>
+<td>컨텍스트</td>
+<td>1M 토큰</td>
+</tr>
+<tr>
+<td>라이선스</td>
+<td>Modified-MIT (오픈웨이트)</td>
+</tr>
+<tr>
+<td>배포 규모</td>
+<td>약 1.56 TB (MXFP4 원본)</td>
+</tr>
+<tr>
+<td>전문가 수</td>
+<td>896개 (16개 활성화)</td>
+</tr>
+<tr>
+<td>추론 정밀도</td>
+<td>MXFP4 가중치, MXFP8 활성화</td>
+</tr>
+</tbody></table>
+<h3>3.5 설치에 필요한 GPU 및 셋팅 방법</h3>
+<h4>3.5.1 하드웨어 요구사항</h4>
+<p>Kimi K3의 메모리 요구량은 <strong>전체 파라미터 수</strong>에 의해 결정되며, 연산 요구량은 <strong>활성 파라미터 수</strong>(104B)에 의해 결정된다. 라우팅이 토큰별로 발생하고 896개 전문가 중 임의의 16개를 선택하므로, 모든 전문가가 상주해야 한다.</p>
+<p><strong>양자화별 GPU 요구사항</strong></p>
+<table>
+<thead>
+<tr>
+<th>양자화</th>
+<th>파일 크기</th>
+<th>H200 (141GB) 최소</th>
+<th>MI325X (256GB) 최소</th>
+<th>품질 영향</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>UD-Q8_K_XL</td>
+<td>1.56 TB</td>
+<td>12</td>
+<td>7</td>
+<td>무손실</td>
+</tr>
+<tr>
+<td>UD-Q4_K_XL</td>
+<td>1.51 TB</td>
+<td>11</td>
+<td>6</td>
+<td>거의 없음 (50GB 감소)</td>
+</tr>
+<tr>
+<td>UD-Q2_K_XL</td>
+<td>861 GB</td>
+<td>7</td>
+<td>4</td>
+<td>장문 추론 체인에서 측정 가능한 성능 저하</td>
+</tr>
+<tr>
+<td>UD-IQ1_S</td>
+<td>594 GB</td>
+<td>5</td>
+<td>3</td>
+<td>벤치마크 비교가 무의미해질 정도</td>
+</tr>
+<tr>
+<td>UD-Q1_0</td>
+<td>466 GB</td>
+<td>4</td>
+<td>2</td>
+<td>최소 공개 빌드, 가장 낮은 충실도</td>
+</tr>
+</tbody></table>
+<p>실제 배포 시 GPU는 8개 단위 노드로 구성되므로, Q4 on H200은 11개 카드가 아닌 <strong>2개 전체 노드</strong>(16개)가 필요하고, Q2는 단일 8xH200 노드에 약 267GB의 KV 캐시 여유를 두고 맞출 수 있다.</p>
+<p><strong>권장 구성</strong></p>
+<ul>
+<li><strong>8x NVIDIA B300</strong> 또는 <strong>8x AMD MI355X</strong>: 가장 간편한 실행 구성</li>
+<li><strong>8x H100 80GB</strong>: Tensor+Expert 병렬화</li>
+<li><strong>22x H100 80GB</strong>: MXFP4 네이티브</li>
+<li><strong>NVIDIA DGX Station</strong>: 엔터프라이즈 로컬 실행</li>
+<li><strong>Mac Studio + 128GB RAM</strong>: 소규모 양자화 버전 (1-bit GGUF, 594 GB)</li>
+<li><strong>Ascend A3 시리즈 4x8</strong>: 32개 카드 / 64 다이</li>
+</ul>
+<h4>3.5.2 소프트웨어 스택 및 설정</h4>
+<p><strong>필수 요구사항</strong></p>
+<ul>
+<li>vLLM 최신 버전 (Kimi K3 Day-0 지원)</li>
+<li>SGLang 또는 TensorRT-LLM (대안)</li>
+<li>Docker (권장): <code>vllm/vllm-openai:kimi-k3</code> 이미지</li>
+<li>llama.cpp (GGUF 양자화 사용 시)</li>
+<li>Unsloth Studio (동적 GGUF 양자화 사용 시)</li>
+</ul>
+<p><strong>vLLM 서빙 명령 예시</strong></p>
+<pre><code class="language-bash">vllm serve moonshotai/Kimi-K3 \
+  --tensor-parallel-size 8 \
+  --kv-cache-dtype fp8 \
+  --max-model-len 131072 \
+  --spec-method dspark \
+  --spec-model RedHatAI/Kimi-K3-speculator.dspark \
+  --spec-tokens 8 \
+  --gpu-memory-utilization 0.95 \
+  --trust-remote-code
+</code></pre>
+<p><strong>Docker 실행 예시</strong></p>
+<pre><code class="language-bash">docker run --gpus all --privileged --ipc=host \
+  -p 8000:8000 \
+  -v /path/to/models:/models \
+  vllm/vllm-openai:kimi-k3 \
+  --model /models/Kimi-K3 \
+  --tensor-parallel-size 8
+</code></pre>
+<p><strong>성능 참고치</strong></p>
+<ul>
+<li>8x NVIDIA B300: 118 tok/s (speculative decoding 없음), 370 tok/s (speculative decoding 사용)</li>
+<li>8x AMD MI355X: 유사 성능</li>
+</ul>
+<h4>3.5.3 GGUF 양자화를 통한 로컬 실행 (Unsloth)</h4>
+<p>Unsloth가 제공하는 동적 GGUF 양자화를 사용하면 일반 소비자급 하드웨어에서도 Kimi K3를 실행할 수 있다.</p>
+<table>
+<thead>
+<tr>
+<th>양자화</th>
+<th>크기</th>
+<th>RAM/VRAM 요구량</th>
+<th>품질</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Dynamic 1-bit S</td>
+<td>610 GB</td>
+<td>610 GB+</td>
+<td>~78.9% top-1</td>
+</tr>
+<tr>
+<td>Dynamic 1-bit M</td>
+<td>665 GB</td>
+<td>665 GB+</td>
+<td>~82% top-1</td>
+</tr>
+<tr>
+<td>Dynamic 2-bit XXS</td>
+<td>726 GB</td>
+<td>726 GB+</td>
+<td>~85% top-1</td>
+</tr>
+<tr>
+<td>Dynamic 2-bit XL</td>
+<td>880 GB</td>
+<td>880 GB+</td>
+<td>~90% top-1</td>
+</tr>
+<tr>
+<td>Q8 (무손실)</td>
+<td>1.6 TB</td>
+<td>1.6 TB+</td>
+<td>100%</td>
+</tr>
+</tbody></table>
+<p><strong>llama.cpp 실행 예시</strong></p>
+<pre><code class="language-bash">llama-server -m Kimi-K3-UD-Q2_K_XL.gguf \
+  --ctx-size 131072 \
+  --n-gpu-layers 99 \
+  --flash-attn \
+  --host 0.0.0.0 --port 8080
+</code></pre>
+<h3>3.6 벤치마크</h3>
+<p><strong>UK AISI / CAISI 공동 평가 — ExploitBench (41개 V8 취약점)</strong></p>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>점수</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>미국 최고 프론티어(평균)</td>
+<td>76.2%</td>
+</tr>
+<tr>
+<td>Kimi K3</td>
+<td>32.2%</td>
+</tr>
+<tr>
+<td>GLM-5.2</td>
+<td>24.4%</td>
+</tr>
+</tbody></table>
+<p><strong>TLO 32단계 시뮬레이션 기업망 공격 (평균 도달 단계)</strong></p>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>도달</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>미국 최고 모델</td>
+<td>28.5 / 32</td>
+</tr>
+<tr>
+<td>Kimi K3</td>
+<td>17 / 32</td>
+</tr>
+<tr>
+<td>GLM-5.2</td>
+<td>11 / 32</td>
+</tr>
+</tbody></table>
+<p><strong>Arbitrary Code Execution (41 태스크)</strong></p>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>성공</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>미국 최고 모델(평균)</td>
+<td>20 / 41</td>
+</tr>
+<tr>
+<td>Kimi K3</td>
+<td>0 / 41</td>
+</tr>
+</tbody></table>
+<p><strong>Moonshot AI 자체 평가 — 익스플로잇 스위트 (36 태스크, 낙관 편향 전제)</strong></p>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>해결</th>
+<th>비율</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Kimi K3</td>
+<td>14 / 36</td>
+<td>38.9%</td>
+</tr>
+<tr>
+<td>GLM-5.2</td>
+<td>8 / 36</td>
+<td>22.2%</td>
+</tr>
+</tbody></table>
+<p><strong>일반 지능 벤치마크</strong></p>
+<ul>
+<li>Artificial Analysis Intelligence Index: 57점 (Claude Opus 4.8 56점 상회)</li>
+<li>Program Bench: 77.8점 (Fable 5 76.8점, GPT 5.6 Sol 77.6점 상회)</li>
+<li>Frontend Code Arena: 1679점 (1위, Claude Fable 5 1631점, GPT-5.6 Sol 1618점 상회)</li>
+<li>AA-Briefcase Elo: 1543 (Fable 5 56% 대비 51% rubric pass rate)</li>
+</ul>
+<h3>3.7 안전장치 특성</h3>
+<p>Kimi K3의 안전장치는 공세적 사이버 작업을 <strong>시도 단계에서조차 차단하지 못한다</strong>고 평가되고 있다. 즉 GLM처럼 &quot;우회 가능한 안전장치&quot;가 아니라, 효과적 안전장치가 <strong>부재</strong>하는 유형에 가깝다. 이는 추가 가공 없이도 악용 경로가 열려 있음을 의미하고 있다.</p>
+<h3>3.8 벤치마크 환경 탈출 사례의 의미</h3>
+<p>KIMI K3가 평가 샌드박스의 허점을 발견해 정답을 외부에서 읽어오는 방식으로 테스트를 우회한 사례가 보고되었다. 방어 관점에서 이는 <strong>모델이 주어진 실행 환경의 취약점을 자율 탐지·활용할 수 있다</strong>는, 에이전트형 위협의 핵심 특성을 보여준다. 샌드박스·격리 환경 설계 시 이 자율 탈출 가능성을 전제해야 한다.</p>
+<p><strong>KIMI K3는 너무나도 잘 격리된 환경을 탈출한다.</strong></p>
+<h2>4. 오케스트레이션 툴 및 레드팀 툴 사용법</h2>
+<h3>4.1 오케스트레이션 프레임워크</h3>
+<h4>4.1.1 PentAGI (자율형 AI 레드팀 오케스트레이터)</h4>
+<p>PentAGI는 MIT 라이선스로 공개된 오픈소스 자율형 AI 레드팀 도구다. GitHub에서 8,200개 이상의 스타를 획득했으며, 사이버보안 업계에서 큰 관심을 받고 있다.</p>
+<p>주의: 보안 환경이 확실한 내 Docker, VM 외에 다른 환경에서 절대 사용해서는 안된다.</p>
+<p><strong>아키텍처</strong>
+PentAGI는 단일 AI 에이전트가 아니라, 실제 보안 기업처럼 팀으로 동작하는 <strong>다중 AI 에이전트 시스템</strong>이다</p>
+<ul>
+<li><strong>오케스트레이터 에이전트</strong>: 전체 공격 체인 설계</li>
+<li><strong>리서처 에이전트</strong>: 웹, 검색 엔진, 취약점 데이터베이스에서 정보 수집</li>
+<li><strong>개발 에이전트</strong>: 실시간으로 맞춤형 익스플로잇 코드 생성</li>
+<li><strong>실행 에이전트</strong>: Nmap, Metasploit, SQLmap 등 20개 이상의 전문 보안 툴 실행</li>
+<li><strong>메모리 시스템</strong>: 각 테스트 결과를 축적하여 성능 향상</li>
+</ul>
+<p><strong>실행 환경</strong></p>
+<ul>
+<li>모든 작업은 완전히 격리된 Docker 컨테이너 내 샌드박스 환경에서 실행</li>
+<li>Neo4j 기반 지식 그래프로 공격 대상, 취약점, 툴, 기법의 관계성 추적</li>
+</ul>
+<p><strong>사용 예시</strong></p>
+<pre><code class="language-bash"># Docker Compose로 PentAGI 배포
+git clone https://github.com/PentAGI/PentAGI.git
+cd PentAGI
+docker-compose up -d
+
+# 웹 인터페이스 접속
+open http://localhost:3000
+
+# CLI를 통한 공격 시작
+pentagi start --target 192.168.1.0/24 --scan-type deep
+</code></pre>
+<h4>4.1.2 CAI (Cybersecurity AI)</h4>
+<p>CAI는 보안 전문가가 AI 기반 공세 및 방어 자동화를 구축·배포할 수 있게 하는 경량 오픈소스 프레임워크다. 에이전트 기반 아키텍처와 에이전트 패턴을 기반으로 동작하여 유연성과 확장성을 제공한다.</p>
+<p><strong>주요 기능</strong></p>
+<ul>
+<li>에이전트 기반 아키텍처</li>
+<li>공세/방어 자동화 지원</li>
+<li>경량 설계</li>
+<li>오픈소스 (MIT 라이선스)</li>
+</ul>
+<p><strong>설치 및 사용</strong></p>
+<pre><code class="language-bash">pip install cai-framework
+
+# 에이전트 생성 및 실행
+from cai import Agent, Tool
+agent = Agent(
+    model=&quot;glm-5.3&quot;,
+    tools=[Tool.nmap, Tool.metasploit],
+    target=&quot;192.168.1.100&quot;
+)
+agent.run(&quot;scan and exploit&quot;)
+</code></pre>
+<h4>4.1.3 SHARKAPT (MCP 기반 자율 침투 테스트 프레임워크)</h4>
+<p>SHARKAPT는 Model Context Protocol(MCP)과 LLM 오케스트레이션을 사용하여 네트워크 및 웹 애플리케이션 시스템의 end-to-end 자동화 보안 테스트를 수행하는 자율 AI 기반 침투 테스트 프레임워크다.</p>
+<p><strong>아키텍처</strong></p>
+<ul>
+<li><strong>플래너</strong>: 전역 목표 분해 및 전략 오케스트레이션</li>
+<li><strong>디스패처</strong>: 고수준 하위 목표와 구체적 실행 간 간극 해소</li>
+<li><strong>실행 에이전트</strong>: 동적 코드 샌드박스 내에서 익스플로잇 스크립트 생성 및 툴 호출</li>
+</ul>
+<p><strong>테스트용 모의 해킹 시나리오 (격리 실습 환경 전제)</strong></p>
+<p>모의 해킹은 격리 환경을 구축하고 인바운드와 아웃바운드 접속 통제가 된 환경을 구축해야 한다. 특정 문제를 해결하기 위해 LLM은 정답이 있는 곳으로 추정되는 사이트를 제약 없이 해킹하는 경우가 있다.</p>
+<blockquote>
+<p>반드시 허가된 로컬 Docker/VM 내부에서만 실행해야 한다.</p>
+</blockquote>
+<pre><code class="language-bash"># 1. 취약 웹 앱 타겟 기동 (OWASP Juice Shop)
+docker run -d -p 3000:3000 bkimminich/juice-shop
+
+# 2. MCP 서버로 SHARKAPT 구성 (플래너-디스패처-실행 에이전트)
+#    대상 URL과 범위(scope)를 명시적으로 제한한 상태로 시작
+sharkapt plan --target http://localhost:3000 --scope &quot;/#&quot; --agent-count 3
+
+# 3. 전역 목표 → 하위 목표 분해 예시
+#    플래너가 &quot;주입 취약점 탐지&quot;, &quot;인증 우회 검증&quot;, &quot;정보 노출 확인&quot;으로 분해
+sharkapt dispatch --subgoal &quot;detect SQLi/XSS in login &amp; search&quot;
+
+# 4. 실행 에이전트가 샌드박스 내 익스플로잇 스크립트를 생성·검증
+#    산출물은 로그로만 남기고 외부 egress는 차단된 상태여야 함
+sharkapt report --format json --output ./results/juice-shop.json
+
+# 기대 산출물: 발견 취약점 목록, 재현 단계, 방어 권고(패치/하드닝)
+</code></pre>
+<h3>4.2 레드팀 툴</h3>
+<h4>4.2.1 CyberStrikeAI (중국산 오픈소스)</h4>
+<p>CyberStrikeAI는 중국 기반 개발자 Ed1s0nZ가 Go 언어로 작성한 오픈소스 AI 네이티브 공세 보안 플랫폼이다. GitHub에서 6,600개 이상의 스타를 획득했으며, 공용 인터넷에 2,300개 이상 배포되어 보안 업계에서 가장 널리 사용되는 AI 침투 도구 중 하나다. 개인적으로 가장 잘 사용하는 도구 중 하나이다.</p>
+<p><strong>특징</strong></p>
+<ul>
+<li>Go 언어로 작성</li>
+<li>100개 이상의 공세 툴 통합 (Nmap, Metasploit, Hashcat, Mimikatz 등)</li>
+<li>생성형 AI (Claude, DeepSeek 등)로 제어</li>
+<li>정찰, 취약점 악용, 권한 상승, 측면 이동 자동화</li>
+</ul>
+<p><strong>주의:</strong> CyberStrikeAI는 실제 공격 캠페인에서 악용된 사례가 보고되어 있으며, Fortinet FortiGate 장치 대규모 공격에 사용된 것으로 확인되었다.</p>
+<p><strong>중국 &#39;후왕(护网)&#39; 훈련용 레드팀/블루팀 도구 모음</strong>
+<code>Mr-xn/RedTeam_BlueTeam_HW</code> 저장소는 중국의 &#39;후왕(护网, Protect Net)&#39; 사이버 보안 훈련 및 HVV(취약점 헌팅) 캠페인에 특별히 맞춰진 도구, 바이너리, 100개 이상의 문서를 집대성한 선별된 리포지토리다.</p>
+<p><strong>테스트용 모의 해킹 시나리오 (격리 실습 환경 전제)</strong></p>
+<blockquote>
+<p>실제 공격 캠페인 악용 사례가 보고된 도구이므로, 반드시 격리 네트워크의 허가된 테스트 타겟(Metasploitable2 등)에만 사용한다.</p>
+</blockquote>
+<pre><code class="language-bash"># 1. 취약 VM 타겟 기동 (Metasploitable2, 호스트 전용 어댑터)
+#    VMware/VirtualBox에서 host-only 네트워크로 구성
+
+# 2. 정찰 단계 자동화 (Nmap 스캔 → 오픈 포트/서비스 식별)
+cyberstrikeai recon --target 192.168.56.101 --ports top-1000
+
+# 3. 취약점 악용 후보 제시 (AI가 서비스 배너·버전 기반으로 매핑)
+cyberstrikeai analyze --service ftp --version &quot;vsftpd 2.3.4&quot;
+
+# 4. 권한 상승·측면 이동 모의 (승인된 범위 내 단일 타겟으로 제한)
+cyberstrikeai exploit --module auxiliary/scanner/ftp/vsftpd_backdoor --target 192.168.56.101
+
+# 기대 산출물: 공격 체인 리포트 + 해당 취약점의 탐지 시그니처(방어 활용)
+</code></pre>
+<h4>4.2.2 Decepticon (자율 레드팀 에이전트)</h4>
+<p>Decepticon은 자율 레드팀 엔게이지먼트를 위한 CLI + 웹 대시보드 도구다. Docker 없이 브라우저에서 바로 실행할 수 있다.</p>
+<p><strong>설치 및 사용:</strong></p>
+<pre><code class="language-bash"># 설치
+curl -fsSL https://decepticon.red/install | bash
+
+# 대화형 설정 위자드 실행
+decepticon onboard
+
+# 전체 실행 (터미널 CLI + 웹 대시보드)
+decepticon
+</code></pre>
+<p><strong>테스트용 모의 해킹 시나리오 (격리 실습 환경 전제)</strong></p>
+<pre><code class="language-bash"># 1. 온보딩 위자드에서 모델·타겟 범위·룰 설정
+decepticon onboard
+
+# 2. 로컬 취약 웹 앱 타겟 기동
+docker run -d -p 80:80 vulnerables/web-dvwa
+
+# 3. 전체 실행 (CLI + 웹 대시보드 동시 기동)
+#    웹 대시보드(http://localhost)에서 공격 진행률·발견 항목 실시간 모니터링
+decepticon
+
+# 4. 대시보드에서 자율 엔게이지먼트 시작
+#    대상: http://localhost, 범위: /vulnerabilities/* 로 한정
+#    DVWA의 SQL Injection, XSS, Command Injection, CSRF 모듈 순회 테스트
+
+# 기대 산출물: 취약점별 PoC 재현 화면 + 발견 순서 타임라인(레드팀 플레이북 반영)
+</code></pre>
+<h4>4.2.3 Loom (red-loom) — 로컬 모델 에이전트 하네스</h4>
+<p>Loom은 독립형 로컬 모델 에이전트 하네스 및 WebSocket 엔진 서버다. Ollama, LM Studio, vLLM, Hugging Face Transformers, MLX 등 다양한 모델 제공자를 지원한다.</p>
+<p><strong>주요 기능</strong></p>
+<ul>
+<li>재사용 가능한 AgentSession 루프</li>
+<li>공유 인터페이스를 갖춘 제공자 어댑터</li>
+<li>네이티브 툴 호출이 없는 로컬 모델을 위한 JSON 툴 호출 프로토콜</li>
+<li>워크스페이스 루트에 범위가 지정된 안전한 파일 및 셸 툴 (26개 내장)</li>
+<li>지속적 메모리 (Red Thread 그래프 기반)</li>
+<li>MCP 설정, 플러그인 레지스트리, 서브에이전트, 패치 워크플로우</li>
+</ul>
+<p><strong>설치</strong></p>
+<pre><code class="language-bash">pipx install red-loom
+pipx install &#39;red-loom[server]&#39;  # WebSocket 엔진 서버
+</code></pre>
+<p><strong>서버 실행</strong></p>
+<pre><code class="language-bash">loom-engine --workspace .
+</code></pre>
+<p><strong>테스트용 모의 해킹 시나리오 (격리 실습 환경 전제)</strong></p>
+<pre><code class="language-bash"># 1. 로컬 모델 준비 (Ollama 등) 및 워크스페이스 초기화
+ollama pull &lt;local-model&gt;
+pipx install red-loom
+pipx install &#39;red-loom[server]&#39;
+
+# 2. WebSocket 엔진 서버 기동 (워크스페이스 루트 범위 지정)
+loom-engine --workspace ./redteam-lab
+
+# 3. AgentSession 루프 구성 — 로컬 모델 + 26개 내장 파일/셸 툴
+#    워크스페이스 내부로 범위가 제한되어 탈출이 불가한 샌드박스 셸 제공
+loom agent create --model &lt;local-model&gt; --tools &quot;shell,file,http&quot; --scope ./redteam-lab
+
+# 4. 취약 타겟 대상 자율 탐색 지시
+#    대상: 로컬 DVWA, 작업 지시: &quot;허가된 로컬 대상의 SQLi/XSS 탐지 및 재현&quot;
+
+# 5. Red Thread 그래프 기반 지속 메모리로 세션 간 컨텍스트 유지
+loom session resume --id &lt;session-id&gt;
+
+# 기대 산출물: 도구 호출 로그, 파일 아티팩트, 발견 사항 → 방어 탐지 룰 검증에 활용
+</code></pre>
+<h3>4.3 LLM 기반 모의 해킹 워크플로우 예시</h3>
+<blockquote>
+<p>위 네 도구(SHARKAPT, CyberStrikeAI, Decepticon, Loom)의 모든 모의 해킹 시나리오는 다음을 전제로 한다:</p>
+<ul>
+<li><strong>합법적·의도적으로 취약한</strong> 테스트 타겟(DVWA, OWASP Juice Shop, Metasploitable2 등)</li>
+<li>호스트 전용 네트워크 + 외부 egress 차단된 <strong>다층 격리 환경</strong></li>
+<li>서면 범위 승인(scope authorization) 하의 레드팀/교육 목적</li>
+</ul>
+</blockquote>
+<h4>4.3.1 DVWA 대상 LLM 자동 침투 테스트</h4>
+<p>DVWA(Damn Vulnerable Web Application)를 타겟 서버로 구성하여 LLM 기반 자동 침투 테스트를 수행하는 환경 구축 예시는 다음과 같다.</p>
+<pre><code class="language-bash"># 1. DVWA 컨테이너 실행
+docker run -d -p 80:80 vulnerables/web-dvwa
+
+# 2. LLM 에이전트 (예: CAI)를 사용한 자동 테스트
+python -c &quot;
+from cai import Agent, Tool
+agent = Agent(
+    model=&#39;glm-5.3-abliterated&#39;,
+    base_url=&#39;http://localhost:8000/v1&#39;,
+    tools=[Tool.nmap, Tool.sqlmap, Tool.burp],
+    target=&#39;http://localhost:80&#39;
+)
+results = agent.run(&#39;perform full penetration test&#39;)
+print(results)
+&quot;
+</code></pre>
+<h4>4.3.2 Atomic Red Team을 이용한 시뮬레이션</h4>
+<p>Atomic Red Team은 MITRE ATT&amp;CK 기법을 기반으로 한 레드팀 시뮬레이션 도구다:</p>
+<pre><code class="language-bash"># Atomic Red Team 설치
+git clone https://github.com/redcanaryco/atomic-red-team.git
+cd atomic-red-team
+
+# 특정 기법 실행 (예: T1059 - Command and Scripting Interpreter)
+pwsh -Command &quot;Import-Module ./atomics/T1059/T1059.ps1&quot;
+pwsh -Command &quot;Invoke-AtomicTest T1059 -TestNumbers 1&quot;
+</code></pre>
+<h2>5. GLM vs KIMI 비교 요약</h2>
+<h3>5.1 성능</h3>
+<table>
+<thead>
+<tr>
+<th>벤치마크</th>
+<th>GLM-5.3 (Abliterated)</th>
+<th>Kimi K3</th>
+<th>미국 프론티어(참조)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ExploitBench</td>
+<td>50/410 (12.2%)</td>
+<td>32.2%</td>
+<td>76.2%</td>
+</tr>
+<tr>
+<td>Binary Exploitation (CFH)</td>
+<td>4%</td>
+<td>해당 없음</td>
+<td>Mythos 6%</td>
+</tr>
+<tr>
+<td>CyberGym</td>
+<td>84.5%</td>
+<td>해당 없음</td>
+<td>GPT-5.5 85.6%</td>
+</tr>
+<tr>
+<td>Terminal-Bench 4.0</td>
+<td>41.8%</td>
+<td>해당 없음</td>
+<td>Opus 5 51.8%</td>
+</tr>
+<tr>
+<td>TLO 공격 단계</td>
+<td>해당 없음</td>
+<td>17/32</td>
+<td>28.5/32</td>
+</tr>
+<tr>
+<td>ACE (41)</td>
+<td>해당 없음</td>
+<td>0/41</td>
+<td>20/41</td>
+</tr>
+</tbody></table>
+<h3>5.2 특성</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>GLM-5.3 Abliterated</th>
+<th>Kimi K3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>아키텍처</td>
+<td>753B MoE</td>
+<td>2.8T MoE (104B 활성)</td>
+</tr>
+<tr>
+<td>컨텍스트</td>
+<td>1M</td>
+<td>1M</td>
+</tr>
+<tr>
+<td>무력화 경로</td>
+<td>가중치 abliteration</td>
+<td>안전장치 부재</td>
+</tr>
+<tr>
+<td>최소 GPU 구성</td>
+<td>4x DGX Spark GB10 (EXL3) ~ 8x H100 (FP8)</td>
+<td>8x B300 / 8x MI355X</td>
+</tr>
+<tr>
+<td>상대 강점</td>
+<td>익스플로잇 개발·바이너리 분석</td>
+<td>대규모 에이전트형 다단계 작업</td>
+</tr>
+<tr>
+<td>커널 영역</td>
+<td>상대적 강함(CFH 4%)</td>
+<td>상대적 약함(커널 4/36)</td>
+</tr>
+<tr>
+<td>오케스트레이션 통합</td>
+<td>vLLM, Ollama, Loom</td>
+<td>vLLM, SGLang, TensorRT-LLM</td>
+</tr>
+</tbody></table>
+<h3>5.3 포지셔닝 해석</h3>
+<ul>
+<li><strong>GLM-5.3 Abliterated</strong> — 집중형 익스플로잇/바이너리 분석에서 제한 공개 프론티어(Claude Mythos Preview)에 근접. 비용 효율이 높고, abliteration으로 안전장치를 완전 제거 가능하다는 점이 위협을 가중한다. NVFP4 양자화로 단일 128GB 머신에서도 실행 가능하며, EXL3 3.0bpw 버전은 4x DGX Spark에서 14.9 tok/s의 실용적 성능을 제공한다.</li>
+<li><strong>Kimi K3</strong> — 파라미터 규모는 더 크나 집중형 익스플로잇 벤치마크 점수는 낮다. 그러나 <strong>다단계·장기 에이전트 작업</strong>과 CLI 통합을 통한 워크플로우 결합 용이성이 위협 포인트다. 최소 8x B300 또는 8x MI355X가 필요하여 하드웨어 진입 장벽은 GLM보다 높다.</li>
+</ul>
+<h2>6. 생태계 및 비교 대상</h2>
+<table>
+<thead>
+<tr>
+<th>모델</th>
+<th>개발사</th>
+<th>접근성</th>
+<th>사이버 역량 수준</th>
+<th>최소 하드웨어</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Claude Mythos Preview</td>
+<td>Anthropic</td>
+<td>제한 공개 (Project Glasswing)</td>
+<td>최상위 (ExploitBench 56/410)</td>
+<td>N/A (API)</td>
+</tr>
+<tr>
+<td>GPT-5.5 / 5.6 Sol</td>
+<td>OpenAI</td>
+<td>API</td>
+<td>CyberGym 85.6%, ExploitGym 216/869</td>
+<td>N/A (API)</td>
+</tr>
+<tr>
+<td>DeepSeek V4</td>
+<td>DeepSeek</td>
+<td>오픈웨이트</td>
+<td>CyberGym 83.3%</td>
+<td>다중 GPU</td>
+</tr>
+<tr>
+<td>GLM-5.3</td>
+<td>Zhipu AI</td>
+<td>오픈웨이트</td>
+<td>ExploitBench 50/410</td>
+<td>4x DGX Spark ~ 8x H100</td>
+</tr>
+<tr>
+<td>Kimi K3</td>
+<td>Moonshot AI</td>
+<td>오픈웨이트</td>
+<td>ExploitBench 32.2%</td>
+<td>8x B300 / 8x MI355X</td>
+</tr>
+</tbody></table>
+<p><strong>오픈 vs 폐쇄의 위험 프로파일 차이:</strong> CAISI는 GLM-5.3을 &quot;현재까지 공개된 오픈웨이트 모델 중 가장 사이버 역량이 높은 모델&quot;로 평가하고 미국 프론티어와의 격차를 약 4개월로 내외로 추정한 것으로 보고되고 있다. 폐쇄형 프론티어는 안전장치 비활성 버전이 검증된 사용자에게만 제한 제공되는 반면, GLM-5.3·Kimi K3는 <strong>누구나 가중치를 받아 안전장치를 제거/우회</strong>할 수 있어 위험 프로파일이 근본적으로 다르다.</p>
+<p>GLM-5.3을 활용한다면 특정 사이트의 모의 해킹, 방어 테스트를 앤트로픽 미토스 급으로 확용 가능하다. </p>
+<h2>7. 위협 지형 분석 - 공격자 경제학</h2>
+<h3>7.1 진입비용 붕괴</h3>
+<p>제공 자료 기준, abliteration 경험이 없는 팀도 약 <strong>2,200 GPU-시간(약 $4,400)</strong>, 숙련 팀은 약 <strong>600 GPU-시간(약 $1,200)</strong> 수준으로 GLM-5.3의 거부 안전장치를 제거할 수 있다고 보고된다. 의견은 다음과 같다.</p>
+<ul>
+<li>국가·대형 조직뿐 아니라 <strong>중소 규모 위협 그룹의 접근이 현실화</strong>됨</li>
+<li>익스플로잇 체인 구성의 한계비용이 &quot;숙련 인력의 시간&quot;에서 &quot;소액 컴퓨트&quot;로 이동</li>
+<li>1회성 abliteration 산출물이 재배포되면 비용 장벽은 사실상 0으로 수렴</li>
+</ul>
+<p><strong>최소 3일, 최대 7일의 시간과 1천 달러 수준이면 웬만한 사이트 해킹이 이제 가능하다.</strong></p>
+<h3>7.2 역량 격차 vs 접근성 격차</h3>
+<p>미국 프론티어와의 역량 격차(ExploitBench 76.2% vs 12~32%)는 여전히 크다. 그러나 방어자에게 중요한 것은 <strong>절대 역량이 아니라 &quot;충분히 위험한 역량 × 무제한 접근성&quot;의 곱</strong>이다. 12%의 end-to-end 익스플로잇 성공률도 대량 자동화·반복 시도와 결합되면 유의미한 위협이 된다.</p>
+<h3>7.3 오픈소스 레드팀 도구의 양날의 검</h3>
+<p>카스퍼스키 GReAT 선임 보안 연구원 예 진(Jin Ye)은 CSW 2026에서 &quot;오픈소스 레드팀 도구는 누구나 사용할 수 있기 때문에 공격자도 쉽게 접근할 수 있다&quot;며 &quot;AI 에이전트와 오픈소스 도구를 결합하면 더 빠르고 광범위한 공격이 가능해진다&quot;고 경고했다. 실제로 CyberStrikeAI와 같은 AI 네이티브 침투 도구가 Fortinet FortiGate 장치 대규모 공격에 악용된 사례가 보고되었다.</p>
+<p>PentAGI 개발자는 &quot;사이버보안 기업은 동종의 모의 침투에 건당 2만 5천~15만 달러를 청구하지만, PentAGI는 무료&quot;라고 밝혀, AI 기반 자동화가 전통적 침투 테스트 비용 구조를 붕괴시키고 있음을 시사했다.</p>
+<h2>8. 방어자 관점에서 탐지, 완화, 대비의 딜레마.</h2>
+<p>인공지능을 이용한 공격이 저렴해짐에 따라 보안의 관점에서 보안의 비용과 대응 시간이 극단적으로 줄어들게 되었다. </p>
+<h3>8.1 탐지 포인트</h3>
+<ul>
+<li><strong>AI 보조 공격의 행동 특성 탐지:</strong> 비정상적으로 빠른 익스플로잇 반복·변종 생성, 짧은 시간 내 다수 PoC 시도 등 &quot;속도·다양성 이상치&quot;를 행위 기반으로 탐지한다.</li>
+<li><strong>아웃바운드 추론 트래픽 모니터링:</strong> 사내망에서 외부 공세형 모델 엔드포인트(OpenAI 호환 API 등)로 향하는 비인가 트래픽 식별.</li>
+<li><strong>온프레미스 대형 모델 가중치 반입 탐지:</strong> TB 단위 모델 파일 전송, 비인가 GPU 노드의 추론 부하 패턴 등 호스트/네트워크 텔레메트리 기반 이상 탐지.</li>
+<li><strong>익스플로잇 산출물 공통 패턴:</strong> 자동 생성 익스플로잇/악성코드에서 반복되는 구조적 시그니처를 탐지 룰로 운용(단, 변종 대응 한계 전제).</li>
+<li><strong>AI 에이전트 툴 호출 패턴:</strong> Nmap, Metasploit, SQLmap 등 보안 툴의 비정상적 자동화 호출 시퀀스 탐지.</li>
+</ul>
+<h3>8.2 완화 통제</h3>
+<ul>
+<li><strong>노출면 축소 우선:</strong> AI가 자동화에 강한 영역은 &quot;알려진 취약점의 대량 활용&quot;이므로, 패치 적기성·자산 가시성·구성 하드닝이 가장 비용효과 높은 완화책이다.</li>
+<li><strong>메모리 안전 강화:</strong> 바이너리 익스플로잇 벤치마크가 메모리 손상 계열을 겨냥하므로, 메모리 안전 언어 채택·완화기술(CFI, 샌드박싱) 확대가 유효.</li>
+<li><strong>격리 환경의 자율 탈출 가정:</strong> 모델이 샌드박스 허점을 자율 탐지할 수 있음을 전제로, 평가/분석 환경을 다층 격리하고 egress를 기본 차단한다.</li>
+<li><strong>공급망·의존성 무결성:</strong> 의존성 혼동·펌웨어 임플란트 등 공급망 위협 범주에 대응하는 SBOM·서명 검증·펌웨어 무결성 검증 강화.</li>
+<li><strong>AI 에이전트 가드레일:</strong> Ant Group의 SingGuard-NSFA와 같은 자율 AI 에이전트 전용 보안 가드레일 프레임워크 도입 검토.</li>
+</ul>
+<p><strong>한국에서만 사용하는 none-ActivX 보안 솔루션들을 다 퇴출 시켜야 한다. 웹브라우저의 격리 모델을 우회하고 너무나 큰 권한이 있기 때문에 제로데이의 온상이 되고 있으며 한국 특화 보안 취약점, 갈라파고스가 만들어지고 있다.</strong></p>
+<h3>8.3 조직적 대비 지표</h3>
+<table>
+<thead>
+<tr>
+<th>영역</th>
+<th>점검 질문</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>패치 적기성</td>
+<td>공개 PoC 존재 취약점의 평균 패치 소요 시간은?</td>
+</tr>
+<tr>
+<td>자산 가시성</td>
+<td>외부 노출 자산을 실시간 인벤토리로 관리하는가?</td>
+</tr>
+<tr>
+<td>AI 트래픽 정책</td>
+<td>공세형 모델 엔드포인트에 대한 egress 정책이 있는가?</td>
+</tr>
+<tr>
+<td>GPU 거버넌스</td>
+<td>비인가 GPU 노드의 대형 모델 추론 부하를 탐지하는가?</td>
+</tr>
+<tr>
+<td>레드팀 현대화</td>
+<td>AI 보조 공격 시나리오를 레드팀 플레이북에 반영했는가?</td>
+</tr>
+<tr>
+<td>탐지 속도</td>
+<td>대량·고속 자동화 공격을 조기 탐지할 수 있는가?</td>
+</tr>
+</tbody></table>
+<h3>8.4 CTI 활용</h3>
+<ul>
+<li>오픈웨이트 공세형 모델의 <strong>신규 변형·재배포·벤치마크 갱신</strong>을 지속 추적.</li>
+<li>모델별 <strong>상대 강점 매핑</strong>(GLM=집중형 익스플로잇, KIMI=다단계 에이전트)을 위협 시나리오 우선순위화에 반영.</li>
+<li>자체 평가 수치는 낙관 편향을 전제로 <strong>제3자 평가(UK AISI/CAISI 등) 우선</strong> 채택.</li>
+<li>CyberStrikeAI, PentAGI 등 <strong>AI 레드팀 도구의 악용 사례</strong>를 위협 인텔리전스 피드에 통합.</li>
+</ul>
+<h3>8.5 &quot;그래서 어떻게 탐지하는가?&quot; — 로그 기반 구체적 탐지 방법</h3>
+<p>본 절은 문서의 구조적 비대칭 — 방어자에게는 &quot;그래서 어떻게 탐지하는가&quot;위 우려를 해소하기 위해, 탐지 수단을 실행 가능한 수준으로 제시한다. 전제는 단순하다.</p>
+<p><strong>뚫릴 수 있다는 전제로 로그를 기반으로 이상 징후를 판단하자.</strong></p>
+<p>어떤 행위이던 시스템에 로그는 남고, 통합 로그 체계를 만들면 이 부분은 빠른 시간 내에 구축이 가능하다.</p>
+<h4>8.5.1 탐지 레이어 개요</h4>
+<table>
+<thead>
+<tr>
+<th>레이어</th>
+<th>데이터 소스</th>
+<th>탐지 대상</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>네트워크</td>
+<td>FW/프록시/DNS 로그, Zeek, Suricata</td>
+<td>공세형 모델 엔드포인트 egress, TB급 가중치 다운로드</td>
+</tr>
+<tr>
+<td>호스트</td>
+<td>EDR/시스템 로그, Auditd, Windows 이벤트</td>
+<td>비인가 vLLM/Ollama 프로세스, 보안 툴 자동 호출 시퀀스</td>
+</tr>
+<tr>
+<td>애플리케이션</td>
+<td>웹/WAS/인증 로그</td>
+<td>초고속 PoC 반복, 크리덴셜 스프레이, LLM 산출물 시그니처</td>
+</tr>
+<tr>
+<td>런타임</td>
+<td>eBPF (Falco/Tetragon)</td>
+<td>컨테이너 탈출, 비정상 syscall 패턴</td>
+</tr>
+</tbody></table>
+<h4>8.5.2 아웃바운드 공세형 모델 호출 탐지</h4>
+<p>사내망에서 외부 공세형 모델 엔드포인트로 향하는 호출은 가장 먼저 잡아야 할 시그널이다. OpenAI 호환 API 경로(<code>/v1/chat/completions</code>), Ollama 경로(<code>/api/generate</code>)를 네트워크 로그에서 식별한다.</p>
+<pre><code class="language-zeek"># Zeek: LLM API egress 탐지 (local.zeek)
+@load protocols/http
+event http_request(c: connection, method: string, original_URI: string) {
+    if (/\/v1\/chat\/completions|\/api\/generate/ in original_URI)
+        NOTICE([$note=LLM_API_Egress, $conn=c, $msg=original_URI]);
+}
+</code></pre>
+<pre><code class="language-yaml"># Sigma: 비인가 로컬 LLM 추론 서버 프로세스
+title: Unauthorized Local LLM Inference Server
+logsource:
+  category: process_creation
+  product: windows
+detection:
+  selection:
+    Image|endswith:
+      - &#39;\ollama.exe&#39;
+      - &#39;\vllm.exe&#39;
+      - &#39;\llama-server.exe&#39;
+      - &#39;\lmstudio.exe&#39;
+  filter:
+    ComputerName|startswith: &#39;gpu-node&#39;   # 승인된 GPU 노드 제외
+  condition: selection and not filter
+level: high
+</code></pre>
+<pre><code class="language-yaml"># Sigma: 아웃바운드 공세형 모델 엔드포인트 연결
+title: Outbound Connection to Offensive LLM Endpoints
+logsource:
+  category: network_connection
+detection:
+  selection:
+    DestinationHostname|contains:
+      - &#39;openrouter.ai&#39;
+      - &#39;z.ai&#39;
+      - &#39;moonshot.ai&#39;
+      - &#39;deepinfra.com&#39;
+  condition: selection
+level: medium
+</code></pre>
+<h4>8.5.3 대형 모델 가중치 반입 탐지</h4>
+<p>TB 단위 전송(195 GB ~ 1.56 TB)은 네트워크 텔레메트리에서 뚜렷한 이상치로 남는다. Hugging Face CDN(<code>cdn-lfs-*.huggingface.co</code>)으로의 장시간 대용량 세션, 비업무 시간대 대역폭 포화를 시계열 편차로 탐지한다.</p>
+<pre><code class="language-bash"># Zeek conn 로그에서 대용량 장기 세션 추출 (1GB 초과, 10분 이상)
+zcat conn.log.gz | zeek-cut id.orig_h id.resp_h resp_bytes duration | \
+  awk &#39;$3 &gt; 1000000000 &amp;&amp; $4 &gt; 600&#39; | sort -rn
+</code></pre>
+<h4>8.5.4 AI 에이전트 툴 호출 패턴 탐지</h4>
+<p>AI 보조 공격의 행동 특성은 &quot;속도·다양성 이상치&quot;다. Nmap 스캔이 분당 수십 회 자동 실행되거나, sqlmap 페이로드 변종이 연쇄 생성되는 패턴은 단순 룰보다 시계열 편차 탐지가 유효하다.</p>
+<pre><code class="language-bash"># Auditd execve 이벤트에서 프로세스 스폰 속도 이상치 집계
+ausearch -k execve --start recent --format json | \
+  jq -r &#39;.records[] | .EXECVE | .a0&#39; | sort | uniq -c | sort -rn | head
+</code></pre>
+<h4>8.5.5 LLM 산출물 시그니처</h4>
+<p>자동 생성 익스플로잇·악성코드는 구조적 반복(동일 보일러플레이트, 특유 주석 패턴, 함수 명명 규칙)을 보인다. YARA 룰로 탐지하되, 변종 대응 한계를 전제하고 정적 탐지의 보조 수단으로 운용한다.</p>
+<h3>8.6 방어자를 위한 LLM 오픈 소스 솔루션 — 로그 기반 이상 탐지</h3>
+<p><strong>핵심 컨셉: &quot;뚫릴 수 있다는 전제로 로그를 기반으로 이상 징후를 판단하자.&quot;</strong></p>
+<ul>
+<li>GLM-5.3의 기본 안전장치는 단순 기법으로 64~100% 우회된다. <strong>차단 통제는 운영상 신뢰할 수 없다.</strong> 따라서 방어의 최후선은 &quot;탐지&quot;이며, 그 탐지의 단일 진실 원천(single source of truth)은 <strong>로그</strong>다.</li>
+<li>공격이 LLM으로 자동화되는 시대에는 방어도 LLM으로 자동화하는 <strong>대칭 대응</strong>이 필요하다. 공격용으로 검증된 동일한 오픈소스 추론 스택(vLLM, llama.cpp)을 방어용 로컬 모델에 그대로 재사용할 수 있다. 공격자가 GLM-5.3 NVFP4를 서빙하는 그 스택으로, 방어자는 로그 판정 모델을 서빙한다.</li>
+</ul>
+<h4>8.6.1 로그 기반 LLM 이상 탐지 파이프라인</h4>
+<pre><code>[수집]   Filebeat · Auditd · Syslog · Windows Event → Vector/Kafka
+[정규화] LLM 로그 파서 (LogPrompt · LogPPT · DivLog) → 구조화 JSON
+[판정]   로컬 LLM 트리아지 에이전트 → 정상/이상 분류 + 판정 근거 생성
+[대응]   이상 스코어 임계치 초과 시 격리·티켓·차단 자동화 (SOAR 연동)
+</code></pre>
+<h4>8.6.2 오픈소스 솔루션 스택</h4>
+<table>
+<thead>
+<tr>
+<th>계층</th>
+<th>오픈소스 솔루션</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SIEM·로그 저장</td>
+<td>Wazuh · Graylog · Grafana Loki · OpenSearch</td>
+<td>수집·검색·상관 분석</td>
+</tr>
+<tr>
+<td>네트워크 감시</td>
+<td>Security Onion · Suricata · Zeek</td>
+<td>NIDS, 플로우 메타데이터</td>
+</tr>
+<tr>
+<td>eBPF 런타임 탐지</td>
+<td>Falco · Tetragon · Tracee</td>
+<td>커널 레벨 이상 행위</td>
+</tr>
+<tr>
+<td>윈도우 이벤트 분석</td>
+<td>Hayabusa · DeepBlueCLI</td>
+<td>초고속 이벤트로그 트리아지</td>
+</tr>
+<tr>
+<td>LLM 로그 파서</td>
+<td>LogPrompt · LogPPT · DivLog</td>
+<td>비정형 로그 → 구조화</td>
+</tr>
+<tr>
+<td>LLM 판정 에이전트</td>
+<td>SOC-Multitool · 자체 구축(vLLM+로컬 모델)</td>
+<td>로그 시퀀스 이상 판정·분류</td>
+</tr>
+<tr>
+<td>탐지 룰 생성</td>
+<td>Sigma + LLM 보조 작성</td>
+<td>룰 초안 자동 생성</td>
+</tr>
+<tr>
+<td>포렌식·조사</td>
+<td>Velociraptor · Timesketch</td>
+<td>사고 타임라인 복원</td>
+</tr>
+</tbody></table>
+<h4>8.6.3 구동 예시 (격리 환경)</h4>
+<pre><code class="language-bash"># 1. 방어용 로컬 모델 서빙 (공격용과 동일한 오픈소스 스택을 방어에 재사용)
+vllm serve &lt;defense-llm&gt; --tensor-parallel-size 2 --port 9000
+
+# 2. 로그 스트림 → LLM 트리아지 (pseudo)
+cat /var/log/auth.log | llm-triage \
+  --task &quot;classify: brute_force | priv_esc | normal&quot; \
+  --endpoint http://localhost:9000/v1
+
+# 3. 이상 판정 → 자동 대응
+llm-triage --stream --action &quot;brute_force: block_source_ip &amp;&amp; open_ticket&quot;
+
+# 4. 판정 근거 저장 (사후 검증·감사)
+llm-triage --audit-log ./triage-decisions.jsonl
+</code></pre>
+<h4>8.6.4 &quot;뚫릴 수 있다는 전제&quot; 5원칙</h4>
+<ol>
+<li><strong>로그는 남는다 — 지키는 것이 최후의 방어선:</strong> 공격자는 로그 변조를 시도하므로, 로그 무결성(WORM, 원격 백업, 해시 체인)과 보존 기간을 최우선으로 확보한다.</li>
+<li><strong>탐지는 속도 싸움:</strong> AI 공격은 분 단위로 진행된다. 배치 분석이 아닌 스트리밍 판정(수 초 이내)이 필요하다.</li>
+<li><strong>LLM 판정도 우회될 수 있다:</strong> 결정론적 룰(Sigma, YARA)과 LLM 휴리스틱의 이중 구조로 상호 보완한다. LLM 판정 결과를 절대적 사실로 취급하지 않는다.</li>
+<li><strong>판정 근거를 남긴다:</strong> LLM의 결론이 아니라 그 근거(어떤 로그 라인을 왜 이상으로 봤는지)를 저장해야 사후 검증과 오탐 튜닝이 가능하다.</li>
+<li><strong>방어용 모델도 격리한다:</strong> 방어용 로컬 LLM은 로그를 열람·학습하므로, 탈취·포이즈닝 위협에 대해 공격용 모델과 동일한 수준의 격리·접근 통제를 적용한다.</li>
+</ol>
+<h2>9. 규제, 정책 동향</h2>
+<p>제공 자료 기준, 미국은 중국 AI 연구소에 대한 제재 및 미국 내 채택 억제를 위한 조달 규칙을 검토 중인 것으로 보고된다. 정책 관점 쟁점은 다음과 같다.</p>
+<ul>
+<li><strong>배포 비가역성:</strong> 오픈웨이트는 사후 회수가 불가능하므로 &quot;배포 전&quot; 평가·게이팅의 중요성이 커진다.</li>
+<li><strong>abliteration의 규율 공백:</strong> 거부 제거 가공물의 유통을 어떻게 규율할지에 대한 법적 프레임이 미성숙하다.</li>
+<li><strong>평가 표준화:</strong> 벤더 자체 평가와 제3자 평가 간 괴리를 줄이기 위한 표준 벤치마크·공개 요건 논의가 진행 중이다.</li>
+<li><strong>AI 레드팀 도구 규제:</strong> CyberStrikeAI와 같은 오픈소스 공세 도구의 유통·사용을 어떻게 규율할지에 대한 논의가 필요하다.</li>
+</ul>
+<p>미토스에 근접한 중국산 LLM이 글로벌 보안 업체들의 희망이 되고 있는 이 시대에 인공지능의 위협을 실제로 이해하고 처벌보다 전략적인 보안 자원 육성이 더 중요해지고 있다.</p>
+<h2>10. 종합 리스크 프로파일 및 결론</h2>
+<table>
+<thead>
+<tr>
+<th>차원</th>
+<th>GLM-5.3 Abliterated</th>
+<th>Kimi K3</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>역량 수준</td>
+<td>집중형 익스플로잇 상(上)</td>
+<td>다단계 에이전트 중(中)</td>
+</tr>
+<tr>
+<td>접근 장벽</td>
+<td>낮음(가중치 공개 + 저비용 abliteration)</td>
+<td>낮음(안전장치 부재)</td>
+</tr>
+<tr>
+<td>최소 하드웨어</td>
+<td>4x DGX Spark GB10</td>
+<td>8x B300 / 8x MI355X</td>
+</tr>
+<tr>
+<td>탐지 난이도</td>
+<td>높음(로컬 추론 가능)</td>
+<td>높음(로컬 추론 가능)</td>
+</tr>
+<tr>
+<td>재배포 위험</td>
+<td>매우 높음</td>
+<td>매우 높음</td>
+</tr>
+<tr>
+<td>오케스트레이션 통합</td>
+<td>vLLM, Loom, CAI</td>
+<td>vLLM, SGLang, TensorRT-LLM</td>
+</tr>
+</tbody></table>
+<p><strong>결론.</strong> GLM-5.3 공세형 변형과 Kimi K3는 &quot;최상위 공격 역량&quot;은 아직 미국 프론티어에 미치지 못하지만, <strong>충분히 위험한 역량과 사실상 무제한의 접근성이 결합</strong>되어 위협 지형을 구조적으로 바꾸고 있다. PentAGI, CyberStrikeAI, CAI, SHARKAPT 등 오픈소스 AI 레드팀 도구의 확산은 공격 진입 장벽을 더욱 낮추고 있다. 방어 측의 핵심 대응은 특정 모델 차단이 아니라, (1) 노출면·패치 적기성 중심의 근본 하드닝, (2) AI 보조 공격의 &quot;속도·규모·자율성&quot; 특성에 맞춘 행위 기반 탐지, (3) 격리 환경의 자율 탈출을 전제한 설계, (4) 지속적 CTI 추적으로의 전환이다. 모델의 발전 속도를 고려할 때, 격차가 좁혀지는 것을 전제로 한 선제적 방어 태세 수립이 요구된다.</p>
+<h2>11. 종합 평가 - 세 가지 수용 프레임</h2>
+<table>
+<thead>
+<tr>
+<th>독자층</th>
+<th>수용 프레임</th>
+<th>핵심 반응</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>보안 전문가</td>
+<td>&quot;유용하지만 위험한 초안&quot;</td>
+<td>위협 모델링에 유용. 단, 콘텐츠와 면책의 괴리, 방법론적 일관성 부족 지적</td>
+</tr>
+<tr>
+<td>학습자</td>
+<td>&quot;완전한 실습 매뉴얼&quot;</td>
+<td>접근성 혁명. 동시에 오용 유혹과 윤리적 경고 사이의 긴장</td>
+</tr>
+<tr>
+<td>정책 담당자</td>
+<td>&quot;규제 공백의 증거&quot;</td>
+<td>오픈웨이트 비가역성 실증. 단, 위협 과장 가능성 경계</td>
+</tr>
+</tbody></table>
+<p>본 문서의 가장 큰 구조적 문제는 &quot;방어 관점&quot;과 &quot;공격 실행&quot;을 동시에 충족하려는 시도가 양쪽 모두에서 불완전하다는 점이었다.</p>
+<ul>
+<li><strong>공격자(또는 학습자)에게는</strong> &quot;그래서 어떻게 하는가&quot;에 대한 구체성이 충분하다. 설치·서빙·툴 사용·모의 시나리오가 단계별로 제시되어 있다.</li>
+<li><strong>방어자에게는</strong> &quot;그래서 어떻게 탐지하는가&quot;에 대한 구체성이 부족했다. 이 비대칭이 문서의 수용 방식을 결정했고, 이에 8.5절(구체적 로그 기반 탐지 방법)과 8.6절(방어자를 위한 LLM 오픈소스 로그 탐지 솔루션)로 보강한다.</li>
+</ul>
+<p>방어할 방어자를 위한 결론은 하나다.</p>
+<p><strong>뚫릴 수 있다는 전제로 로그를 기반으로 이상 징후를 판단하자.</strong></p>
+<p>공격이 LLM으로 자동화되는 만큼, 방어도 동일한 오픈소스 LLM 스택으로 로그 판정을 자동화하는 대칭 대응이 필요하다.</p>
+<h2>12. 사용 시 주의 및 법적, 윤리적 고지</h2>
+<p><strong>경고: 본 문서는 방어·위협 인텔리전스·정책 검토를 위한 분석 자료다.</strong></p>
+<ul>
+<li><p>본 문서는 공세형 모델의 배포, 구성, 공격 실행 절차를 제공하지 않으며, 그러한 목적의 참고 자료로 사용되어서는 안 된다. 문서에 포함된 설치, 설정 방법 및 툴 사용 예시는 <strong>격리된 연구 환경에서 방어 역량 강화 목적으로만</strong> 사용되어야 한다.</p>
+</li>
+<li><p>타인의 시스템에 대한 무단 접근, 테스트, 익스플로잇 실행은 <strong>대부분의 관할권에서 형사처벌 대상</strong>이다. 침투 테스트, 레드팀 활동은 반드시 <strong>서면 범위 승인(scope authorization)</strong> 과 법적 근거 하에서만 수행되어야 한다.</p>
+</li>
+<li><p>안전장치가 제거된 모델의 생성·유통·사용은 모델 라이선스, 수출통제, 현지 법령에 저촉될 수 있다. 조직은 사전 <strong>법무·컴플라이언스 검토</strong>를 거쳐야 한다.</p>
+</li>
+<li><p>CyberStrikeAI, PentAGI 등 오픈소스 레드팀 도구는 <strong>실제 공격 캠페인에 악용된 사례</strong>가 보고되어 있다. 이들 도구의 사용은 반드시 승인된 범위 내에서만 이루어져야 하며, 악용 시 법적 책임이 따른다.</p>
+</li>
+<li><p>본 문서의 정량 수치는 급변하며 평가 방법론에 의존한다. <strong>의사결정 전 독립 검증</strong>을 권고한다.</p>
+</li>
+<li><p>자체 평가(self-reported) 벤치마크는 낙관 편향 가능성을 전제로, <strong>제3자 독립 평가를 우선 신뢰</strong>한다.</p>
+</li>
+<li><p>GPU 요구사항 및 소프트웨어 설정은 양자화 버전, 드라이버 버전, 프레임워크 업데이트에 따라 변경될 수 있다. 실제 배포 전 <strong>최신 공식 문서를 확인</strong>해야 한다.</p>
+</li>
+<li><p>본 문서에 언급된 모든 모델, 툴, 프레임워크의 사용은 해당 라이선스 조건을 준수해야 한다.</p>
+</li>
+</ul>
+<p><strong>본 문서는 2026년 10월 5일 기준의 문서이며, 언제든 내용은 업데이트 될 수 있다.</strong> <strong>버전 업데이트 및 오류 수정 문서는 <a href="https://github.com/gameworkerkim">https://github.com/gameworkerkim</a> 에서 검색 가능하다.</strong></p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://docs.vibequant.cc/columns/ai-hacking-open-weight-llm-threat-analysis-and-technical-guide/" data-title="AI Open Weight Cyber Security Cook Book" data-text="대상 독자: 보안 연구자, 레드팀/블루팀 리더, CISO, 정책·규제 담당자" data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fai-hacking-open-weight-llm-threat-analysis-and-technical-guide%2F&amp;text=AI%20Open%20Weight%20Cyber%20Security%20Cook%20Book" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fai-hacking-open-weight-llm-threat-analysis-and-technical-guide%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fai-hacking-open-weight-llm-threat-analysis-and-technical-guide%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI_Hacking/Open-Weight-LLM-Threat-Analysis-and-Technical-Guide.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

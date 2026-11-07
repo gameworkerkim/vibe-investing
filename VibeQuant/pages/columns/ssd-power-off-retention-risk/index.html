@@ -20,8 +20,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/content.css?v=8" />
-  
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
+  <meta name="keywords" content="SSD 무전원 보존, data retention, JESD218, JEDEC, 엔터프라이즈 SSD, NAND 전하 누설, UECC, write blocker, Arrhenius" />
+  <meta name="robots" content="index,follow" />
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"전원이 끊긴 SSD는 얼마나 버티는가?","description":"JEDEC 규격상 엔터프라이즈 SSD 무전원 보존은 40°C 3개월. NAND 전하 누설·온도·마모도, 첫 부팅 전 이미징 절차와 장기 보관 실무를 정리한다.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://docs.vibequant.cc/columns/ssd-power-off-retention-risk/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/SSD/SSD-Power-OFF-Retention-Risk.md","image":"https://vibequant.cc/og-default.png","url":"https://docs.vibequant.cc/columns/ssd-power-off-retention-risk/","datePublished":"2026-08-17","dateModified":"2026-08-17","inLanguage":"ko","keywords":"SSD, NAND, 데이터보존, JEDEC, 서버, 스토리지"}</script>
   <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Columns","item":"https://docs.vibequant.cc/columns/"},{"@type":"ListItem","position":3,"name":"전원이 끊긴 SSD는 얼마나 버티는가?","item":"https://docs.vibequant.cc/columns/ssd-power-off-retention-risk/"}]}</script>
 </head>
@@ -175,9 +176,9 @@ SSD는 &quot;전원을 안 써도 데이터가 남는 저장장치&quot;가 아�
 <p>무전원 방치의 결과는 디스크 전체 소실이 아니다. 확률적·부분적 손상이며, 그래서 더 위험하다.</p>
 <ul>
 <li><strong>부분 UECC:</strong> 파일의 일부 블록만 읽히지 않는다. 이미지·영상은 깨진 채로 열리고, 아카이브(zip/tar)는 특정 지점 이후 전체가 무효화된다.</li>
-<li><strong>메타데이터 단일 실패점:</strong>파일시스템 슈퍼블록/inode 테이블, DB 인덱스, FTL 매핑 테이블처럼<strong>작지만 전체 접근을 좌우하는 영역</strong>이 손상되면, 데이터 본체 99%가 멀쩡해도 논리적으로 접근 불가가 된다. 대용량 UGC 아카이브에서 가장 흔한 전손 시나리오다.</li>
-<li><strong>RAID 상관 실패:</strong>같은 배치, 같은 워크로드, 같은 온도에서 방치된 어레이의 디스크들은<strong>동시에 열화된다</strong>. HDD 시대의 &quot;1개 고장 → 리빌드&quot; 가정이 성립하지 않는다. 리빌드 중 다른 멤버에서 UECC가 나면 어레이 전체가 실패한다.</li>
-<li><strong>부팅 실패 vs 데이터 생존의 혼동:</strong>펌웨어/부트 영역 손상으로 드라이브가 인식되지 않아도 NAND 안의 데이터는 상당 부분 남아 있을 수 있다. 반대로 정상 부팅되었지만 조용히 파일이 깨져 있을 수도 있다.<strong>&quot;켜졌다&quot;는 것은 &quot;데이터가 있다&quot;는 증거가 아니다.</strong></li>
+<li><strong>메타데이터 단일 실패점:</strong> 파일시스템 슈퍼블록/inode 테이블, DB 인덱스, FTL 매핑 테이블처럼 <strong>작지만 전체 접근을 좌우하는 영역</strong>이 손상되면, 데이터 본체 99%가 멀쩡해도 논리적으로 접근 불가가 된다. 대용량 UGC 아카이브에서 가장 흔한 전손 시나리오다.</li>
+<li><strong>RAID 상관 실패:</strong> 같은 배치, 같은 워크로드, 같은 온도에서 방치된 어레이의 디스크들은 <strong>동시에 열화된다</strong>. HDD 시대의 &quot;1개 고장 → 리빌드&quot; 가정이 성립하지 않는다. 리빌드 중 다른 멤버에서 UECC가 나면 어레이 전체가 실패한다.</li>
+<li><strong>부팅 실패 vs 데이터 생존의 혼동:</strong> 펌웨어/부트 영역 손상으로 드라이브가 인식되지 않아도 NAND 안의 데이터는 상당 부분 남아 있을 수 있다. 반대로 정상 부팅되었지만 조용히 파일이 깨져 있을 수도 있다. <strong>&quot;켜졌다&quot;는 것은 &quot;데이터가 있다&quot;는 증거가 아니다.</strong></li>
 </ul>
 <blockquote>
 <h3>대규모 UGC 아카이브라는 맥락</h3>

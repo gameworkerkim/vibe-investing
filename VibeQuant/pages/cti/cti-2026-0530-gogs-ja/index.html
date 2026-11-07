@@ -20,7 +20,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="../../css/content.css?v=8" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
   <link rel="alternate" hreflang="ko" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-kr/" />
   <link rel="alternate" hreflang="en" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-en/" />
   <link rel="alternate" hreflang="ja" href="https://cti.vibequant.cc/cti/cti-2026-0530-gogs-ja/" />
@@ -126,7 +126,7 @@
 <hr>
 <h2>1. 脆弱性分析 — <code>--exec</code> 引数インジェクション</h2>
 <p>GogsはGoで書かれた軽量なセルフホスト型Gitサービスで、GitHubの自己ホスト代替として広く使われる。本脆弱性はPRをマージする際に<code>git rebase</code>を使う*「Rebase before merging」*オプションで発生する。</p>
-<p><code>git rebase</code>はあるブランチのコミット列を別のベースブランチ上に再生して線形履歴を作る動作だ。この際<code>git rebase</code>は<strong>各コミット再生後にシェルコマンドを実行する<code>--exec</code>フラグ</strong>を引数として受け取れる。Gogsはマージ時にユーザが制御する<strong>ブランチ名</strong>を十分なサニタイズなしに<code>git rebase</code>呼び出しに渡す。よって攻撃者がブランチ名に<code>--exec</code>形式のペイロードを挿入すると、マージ過程でそのコマンドがサーバホスト上で実行される。</p>
+<p><code>git rebase</code>はあるブランチのコミット列を別のベースブランチ上に再生して線形履歴を作る動作だ。この際<code>git rebase</code>は<strong>各コミット再生後にシェルコマンドを実行する<code>--exec</code>フラグ<strong>を引数として受け取れる。Gogsはマージ時にユーザが制御する</strong>ブランチ名</strong>を十分なサニタイズなしに<code>git rebase</code>呼び出しに渡す。よって攻撃者がブランチ名に<code>--exec</code>形式のペイロードを挿入すると、マージ過程でそのコマンドがサーバホスト上で実行される。</p>
 <blockquote>
 <p>研究者Jonah Burgess（Rapid7）：「任意の認証ユーザが悪性ブランチ名でPRを作成し、『Rebase before merging』時に<code>--exec</code>フラグを<code>git rebase</code>に注入することでサーバ上のRCEを達成できる。」</p>
 </blockquote>
