@@ -197,5 +197,3 @@ Project Glasswing의 첫 달이 그것을 보여준다. Mythos Preview는 1,000�
 - [2025 GenAI Code Security Report — Veracode](https://www.veracode.com/press-release/ai-generated-code-poses-major-security-risks-in-nearly-half-of-all-development-tasks-veracode-research-reveals/)
 - [Bad Vibes: AI-Generated Code is Vulnerable — Georgia Tech](https://hg.gatech.edu/node/689636)
 - [Vibe Coding Security Debt — Cloud Security Alliance](https://labs.cloudsecurityalliance.org/research/csa-research-note-ai-codegen-vulnerability-debt-2026)
-
-*무기사·전쟁사(콘스탄티노플 공성전, 이탈리아식 축성, 마지노선, 다우딩 시스템, OODA 루프) 서술은 일반 역사 지식에 기반한 것으로, 출판 전 세부 연대와 수치 확인을 권한다.*
