@@ -8,6 +8,10 @@
 ```
 SEMICONDUCTOR-QUANT-PROMPTS-V2-2026-11/
 ├── SEMICONDUCTOR-QUANT-PROMPTS-V2-2026-11.md   # 프롬프트 원문
+├── gpt/                        # ChatGPT Custom GPT (Instructions + 가이드)
+│   ├── GPT-instructions-KR.md  # 시스템 지침 (한국어)
+│   ├── GPT-instructions-EN.md  # 시스템 지침 (영어)
+│   └── GPT-setup-guide.md      # Custom GPT 만들기 가이드
 ├── script/
 │   ├── config.py              # 프롬프트의 모든 수치·가중치·임계값 (문서의 상수 모음)
 │   ├── synthetic_data.py      # 결정적(seed 고정) 합성 데이터 생성기 (실데이터 교체 지점)
@@ -23,6 +27,9 @@ SEMICONDUCTOR-QUANT-PROMPTS-V2-2026-11/
 └── result/                    # 산출물 (JSON/CSV/PNG/리포트)
 ```
 
+Claude Agent Skill은 레포 루트의 `.claude/skills/semiconductor-quant-v2/`에 있다
+(`SKILL.md` + `references/`). Claude Code에서 자동 로드되며, 이 폴더의 파이프라인을 호출한다.
+
 ## 실행
 
 ```bash
@@ -32,6 +39,17 @@ python script/run_validation.py --no-charts
 python script/run_validation.py --skip-tests
 python -m unittest script/tests -v         # 단위 테스트만
 ```
+
+## Claude 스킬 / ChatGPT GPT
+
+| 도구 | 위치 | 모드 |
+|---|---|---|
+| Claude Code · claude.ai | `.claude/skills/semiconductor-quant-v2/SKILL.md` (+ `references/`) | `compute`(규칙 계산) / `codegen`(코드 생성) / `validate`(이 파이프라인 실행) / `interpret`(결과 해석) |
+| ChatGPT Custom GPT | `gpt/GPT-instructions-KR.md`(·EN) + `gpt/GPT-setup-guide.md` | 규칙 계산·코드 생성 (실행은 로컬 파이썬) |
+
+- Claude 스킬: 프롬프트 A~E 규칙이 축약본(`references/`)으로 번들되어 `<DATA>` 블록만 주면 스코어·포지션 JSON을 계산하고, `validate` 모드로 이 검증 파이프라인을 직접 돌릴 수 있다.
+- ChatGPT: Instructions에 지침을 붙여넣고 원문 md를 Knowledge에 업로드해 Custom GPT로 만든다(가이드 참고). ChatGPT는 코드를 실행하지 못하므로 결정적 계산은 Claude 스킬/로컬 파이썬을 권장.
+- 문서-스킬-코드 1:1 대응: 프롬프트 원문을 고치면 `.claude/skills/.../references/`, `gpt/GPT-instructions-*.md`, `script/config.py`를 함께 갱신한다.
 
 ## 검증 항목
 
