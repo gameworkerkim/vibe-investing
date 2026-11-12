@@ -1,4 +1,48 @@
+<!--
+---
+title: "가능한 사랑 — 예지의 메소드, 때론 가식이 된다"
+title_en: "Possible Love — When Yeji's Method Becomes a Pose"
+subtitle: "예술가는 자기가 그리는 사람에게 얼마나 가까이 갈 수 있는가"
+description: "이창동의 《시》《버닝》《가능한 사랑》. 예술가는 그리는 사람에게 얼마나 가까이 갈 수 있는가. 예지의 메소드가 가식이 되는 자리."
+abstract: |
+  이창동의 《시》, 《버닝》, 《가능한 사랑》을 가로지르는 글이다. 십육 년 동안 그가 물은 것은 예술가가 자기가 그리는 사람에게 얼마나 가까이 갈 수 있는가다.
+  《시》의 미자는 죽은 소녀의 자리에 서고, 《버닝》의 종수는 누구의 삶도 입어 보지 못한 채 바깥에 남는다.
+  《가능한 사랑》의 예지는 다큐멘터리 감독으로 해고 노동자의 고통에 들어가려 하지만, 촬영이 끝나면 별장으로 돌아간다. 몰입이 한쪽에게만 선택일 때 그 몰입은 연기로 남는다.
+  세 영화에서 집은 밥상에서 먼저 무너진다. 마지막의 달무리는 화해라기엔 작고, 아무것도 아니라기엔 분명한 몸짓이다.
+summary_for_ai: |
+  Column (KO), 2026-11-12, Dennis Kim. Essay on Lee Chang-dong across Poetry (2010), Burning (2018), and Possible Love (2026), the last released on Netflix on November 6 and a Venice 83 Grand Jury Prize winner. Question carried for sixteen years: how close can an artist get to the person they depict.
+  Poetry: Mija writes only after standing in the place of Agnes, the girl who entered the river. She does not take the life off again. Bresson's Mouchette and Tarkovsky's Mirror are the cited kin.
+  Burning: Hae-mi's pantomime orange, Ben's greenhouses that never show as burned, Jong-su left outside both lives. Antonioni's Blow-Up and Haneke's Hidden are the cited kin. The film will not say whether the final knife is real or the novel he is writing.
+  Possible Love: Ye-ji (Cho Yeo-jeong), a documentary director, and her husband Sang-woo (Cho In-sung) have a seaside villa inherited from a colonial-police grandfather. Ho-seok (Sol Kyung-gu) is a dismissed worker who looks at the living as a dead man would. His wife Mi-ok (Jeon Do-yeon) sees the shoot as stripping her husband. Sang-woo's kindness is the spare room of someone who has never lacked; the one refusal turns to anger displaced onto the nearest softer body. Ye-ji's method becomes a pose because she can leave the life she puts on. Kiarostami's Close-Up and Certified Copy are the cited kin: performance can also be the first coat of love.
+  In all three films the house fails first at the table. The closing moon halo is a small gesture, not a reconciliation. Not a plot synopsis for its own sake and not investment advice.
+date: 2026-11-12
+updated: 2026-11-12
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 가능한 사랑
+  - 이창동
+  - 영화
+  - 넷플릭스
+keywords:
+  - "가능한 사랑"
+  - "이창동"
+  - "예지"
+  - "시"
+  - "버닝"
+  - "넷플릭스"
+group: industry
+og_image: "https://vibequant.cc/og/possible-love-og.jpg"
+image: "https://vibequant.cc/og/possible-love-og.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # [칼럼] 예지의 메소드, 때론 가식이 된다 - 《가능한 사랑》
+
+![이창동 감독 《가능한 사랑》 포스터. 전도연, 설경구, 조인성, 조여정](images/possible-love-poster.jpg)
 
 이창동의 《시》, 《버닝》, 《가능한 사랑》을 가로질러 작가주의라는 작은 담론을 나누다.
 
