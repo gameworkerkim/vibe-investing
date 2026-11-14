@@ -1,10 +1,9 @@
 # AntiFox를 이용한 Red Team 운영 가이드
 
-**AI 멀티에이전트 자율 모의 침투 플랫폼을, 인가된 격리 환경에서 안전하고 증거 기반으로 운용하는 법**
+**기업, 공공기관, 금융에서 AI 멀티에이전트 자율 모의 침투 플랫폼을, 인가된 격리 환경에서 안전하고 증거 기반으로 운용하는 법**
 
-> **v1.0-rc · 교정·검증판 (release candidate)** 저자: Dennis Kim (김호광) · Betalabs Inc. 대상 독자: 레드팀 운영자 · 보안 컨설턴트 · 블루/퍼플팀 · 기업·기관 도입 검토자 · 초급 학습자 대상 버전: AntiFox v2.0.x 라인 (저장소 확인: 2026-11) 배포: 지식 공유 목적의 무료 배포 — 페이월 없음
->
-> *release candidate인 이유: (1) 법무 검토 완료, (2) 설치본 추가 모의 테스트 검증(LLM 연결 작업 실행·보고서 생성) — 이 2가지가 끝나면 v1.0으로 확정. (3) 실제 스크린샷 삽입은 **2026-11-14 완료**(공식 원본 10종 + 로컬 실캡처 8종, 5장), 설치본 UI 실필드 검증도 **2026-11-14 완료**(v2.0.3 바이너리 SHA256 검증 설치, 6장). 남은 2건이 끝나기 전까지는 "검증 대기" 상태로 읽을 것.*
+> **v1.0-rc · 교정·검증판 (release candidate)** 저자: Dennis Kim (김호광) · Betalabs Inc. 대상 독자: 레드팀 운영자 · 보안 컨설턴트 · 블루/퍼플팀 · 기업·기관 도입 검토자 · 초급 학습자 대상 버전: AntiFox v2.0.x 라인 (저장소 확인: 2026-11) 배포: 지식 공유 목적의 배포
+
 
 ---
 
@@ -42,7 +41,7 @@ AntiFox는 ARTEX(저자 @Autumn-27)의 v0.1.1에서 2차 개발된 AI 멀티에�
 
 ## 1.1 뿌리 — ARTEX라는 변곡점
 
-### ARTEX는 무엇인가
+### ARTEX는 무엇인가?
 
 ARTEX는 2026년 7월, "Autumn-27"이라는 핸들을 쓰는 개발자가 GitHub에 AGPL-3.0으로 공개한 **오픈소스 멀티에이전트 자율 침투 테스트 프레임워크**다. Go로 작성된 단일 바이너리에 Next.js UI를 내장하고, 상태는 PostgreSQL에 저장하며, 트래픽을 증거로 기록하는 MITM(중간자) 프록시 심(shim)을 갖춘 구조다. 같은 개발자가 만든 중국산 자산 탐색 플랫폼 ScopeSentry가 정찰의 토대로 쓰인다.
 
@@ -54,15 +53,22 @@ ARTEX의 설계 철학은 두 가지 아이디어로 요약된다.
 
 모델은 공급자 무관(provider-agnostic)으로, Anthropic·OpenAI·Ollama(로컬)나 OpenAI 호환 엔드포인트를 UI에서 지정한다. 한 줄 Docker 설치를 지원한다. 요약하면 ARTEX는 "정찰부터 데이터 유출까지, 사람의 개입을 거의 받지 않고 자율적으로 수행하는 LLM 에이전트 팀"이다.
 
-### ARTEX가 변곡점이 된 이유 — 오용의 그림자
+### ARTEX가 오용으로 인해 폐쇄된 이유
 
-문제는 이 강력한 도구가 **공개되자마자 공격에 그대로 쓰였다**는 데 있다. ARTEX는 "인가된 자산 내에서의 학습·연구"를 전제로 공개됐지만, 어떤 수정도 없이 실제 침입에 전용됐다.
+문제는 이 강력한 ARTEX가 **공개되자마자 공격에 그대로 쓰였다**는 데 있다. ARTEX는 "인가된 자산 내에서의 학습·연구"를 전제로 공개됐지만, 어떤 수정도 없이 실제 침입에 전용됐다.
 
 2026년 10월 7일, CrowdStrike Intelligence는 9월 말~10월 초에 걸쳐 **한국 금융기관을 겨냥한 캠페인**에 ARTEX가 쓰였다고 보고했다. 그 하루 뒤인 10월 8일, 개발자 Autumn-27은 관여를 부인하며 프로젝트를 **클로즈드 소스로 전환**했다. 그러나 이미 복제본은 세상에 퍼진 뒤였고, 한국어 포크를 비롯한 파생본들이 "소스를 닫아도 회수되지 않는" 상태로 남았다.
 
 Microsoft는 중국 국가연계 행위자 Storm-0940이 **ConnectWise 공급망 공격**에 ARTEX를 썼다고 밝혔다. 이 공격에서 에이전트들은 탈취한 앱 자격증명으로 2,250개 이상의 Microsoft 365 테넌트에 로그인을 시도했고, 일부는 **3시간 이내에 권한 있는 접근**에 도달했다. Microsoft는 한 AI 에이전트가 GitHub에서 시크릿을 스캔하던 상태에서 Azure Key Vault의 데이터를 유출하기까지 **5분**밖에 걸리지 않은 사례도 관측했다. Mandiant는 ARTEX가 "기본적으로 요란하다(loud)"고 기록했다 — 23초 동안 27건의 클라우드 권한 탐색, 파일명을 상대로 한 500건 이상의 웹 요청 퍼징 같은 폭발적 활동이다.
 
-ARTEX 사건이 업계에 남긴 교훈은 두 가지다. 하나, **인가된 테스트용으로 공개된 도구가 아무 수정 없이 침입에 쓰일 수 있다**는 것. 둘, 공격자의 시계(clock)가 방어자의 시계로부터 분리됐다는 것 — AI 에이전트는 사람이 따라갈 수 없는 속도로 "머신 스피드" 공격을 수행한다. 바로 이 지점이 "그렇다면 공격자가 당신 환경에 ARTEX를 돌리기 전에, 당신이 먼저 자신에게 돌려봐야 한다"는 방어 논리를 낳았다. AntiFox는 이 긴장의 연장선 위에 있다.
+ARTEX 사건이 업계에 남긴 교훈은 두 가지다. 
+
+하나, **인가된 테스트용으로 공개된 도구가 아무 수정 없이 침입에 쓰일 수 있다**는 것. 
+
+둘, 공격자의 시계(clock)가 방어자의 시계로부터 분리됐다는 것 — AI 에이전트는 사람이 따라갈 수 없는 속도로 "머신 스피드" 공격을 수행한다. 
+
+
+바로 이 지점이 "그렇다면 공격자가 당신 환경에 ARTEX를 돌리기 전에, 당신이 먼저 자신에게 돌려봐야 한다"는 방어 논리를 낳았다. AntiFox는 이 방어자를 위한 보안 툴과 공격자를 위한 강력한 도구 사이 긴장의 연장선 위에 있다.
 
 ---
 
@@ -80,9 +86,9 @@ ARTEX는 혼자가 아니다. 2026년은 "자율 펜테스트(autonomous pentest
 
 ---
 
-## 1.3 확장 — AntiFox는 ARTEX를 어떻게 넘어섰나
+## 1.3 AntiFox는 ARTEX를 어떻게 넘어섰나?
 
-AntiFox는 ARTEX v0.1.1을 기점으로 2차 개발을 시작해, 이후 상류(upstream)의 진화를 따라가며 상호 교류·차용했다. AntiFox 자신이 밝히듯, ARTEX는 "자동 발견"을 매우 강하게 만들었지만 "보고서 납품"은 고객·프로젝트마다 다른 영역으로 상대적으로 덜 다듬어져 있었다. AntiFox는 바로 그 **"납품(교부)"** 한 환에 공학적 무게를 실었다. 핵심 지향을 한 문장으로 하면, "발견"에 그치지 않고 AI가 찾은 취약점을 **엔지니어가 이해하고 재현 가능한, 증거가 붙은 보고서**로 만드는 것이다. v2.0의 슬로건이 "발견을 납품으로"인 이유다.
+AntiFox는 ARTEX v0.1.1을 기점으로 2차 개발을 시작해, 이후 여러 해킹, 보안 커뮤니티의 의견과 상류(upstream)의 진화를 따라가며 상호 교류·차용했다. AntiFox 자신이 밝히듯, ARTEX는 "자동 발견"을 매우 강하게 만들었지만 "보고서 납품"은 고객·프로젝트마다 다른 영역으로 상대적으로 덜 다듬어져 있었다. AntiFox는 바로 그 **"리포트"** 자동화에 공학적 무게를 실었다. 핵심 지향을 한 문장으로 하면, "발견"에 그치지 않고 AI가 찾은 취약점을 **엔지니어가 이해하고 재현 가능한, 증거가 붙은 보고서**로 만드는 것이다.
 
 AntiFox가 ARTEX의 토대 위에 확장한 특징은 다음과 같다.
 
@@ -114,7 +120,7 @@ AntiFox가 ARTEX의 토대 위에 확장한 특징은 다음과 같다.
 
 > 강점이 곧 위험이다. 증거 자동 수집은 인증·세션·요청/응답이 PostgreSQL에 쌓인다는 뜻이다. 또한 기반 ARTEX 계열에서 공급망 사고가 확인됐다: 2026-11-06 CSA 분석 "Trojanized Offensive AI Tooling: The ARTEX Docker Backdoor"는 Docker Hub의 `tomicdd/artex`(및 `congdonglinux/artex`) 이미지에 로그인 처리에 숨긴 무인증 root 명령 실행 백도어가 삽입됐고 약 9,000회 내려받혔다고 밝혔다. AntiFox 자체가 감염됐다는 근거는 현재 없다(공식 Compose는 GHCR 사용) — 그러나 "소스가 깨끗해도 이미지가 깨끗하단 보장은 없다"는 교훈이 핵심이다. 도입 전 (1) 데이터 보관·접근 통제·파기, (2) 배포 이미지 출처·무결성 검증을 먼저 세워라(6·7·12장).
 
-### 공식 기술 아키텍처 (README 기준)
+### 공식 기술 아키텍처
 
 Go 단일 바이너리(Next.js 프런트 `go:embed` 내장) + PostgreSQL. 핵심은 이중 그래프 — 전역 자산 그래프(작업 간 공유 진실 원천) + 작업별 탐색 그래프(목표·의도·사실·취약점의 혈통 체인)이며 앵커로 상호연결된다. 엔진은 이벤트 구동: 그래프가 변하면 planner가 의도를 생성, worker가 실행 결과를 되쓰고, 그게 다시 이벤트를 일으킨다.
 
@@ -148,7 +154,7 @@ flowchart TB
 
 ---
 
-## 1.5 경쟁 프로젝트 지형
+## 1.5 경쟁 프로젝트와 비교
 
 | 프로젝트 | 특징 | AntiFox와의 관계 |
 |---|---|---|
@@ -159,7 +165,7 @@ flowchart TB
 | PentestGPT | LLM 보조, XBOW 벤치 상위 | 탐색·추론 보조 강점 |
 | HexStrike AI · Strix · RedAmon | 도구 통합형 · 앱 특화 · MIT 유연 | 각 틈새 대안 |
 
-> 요약 — ARTEX를 그대로 대체하려면 PentAGI가 가장 가깝고, 결과를 통째로 외주하려면 Astra 같은 서비스형이 대안이다. 그러나 **보고서 자동화·증거 구동 납품**이 핵심 요구라면 AntiFox의 접근이 차별적이다. 자율 펜테스트의 다음 경쟁 축이 "발견량"이 아니라 "증거·납품 품질"로 옮겨 가는 흐름(1.2) 위에서, AntiFox의 위치가 분명해진다.
+> 요약 — ARTEX를 그대로 대체하려면 PentAGI가 가장 가깝고, 결과를 통째로 외주하려면 Astra 같은 서비스형이 대안이다. 그러나 **보고서 자동화·증거 구동 납품**이 핵심 요구라면 AntiFox의 접근이 차별적이다. 자율 펜테스트의 다음 경쟁 축이 "발견량"이 아니라 "증거·납품 품질"로 옮겨 가는 흐름(1.2) 위에서, AntiFox의 경쟁력과 위치가 분명해진다.
 
 ---
 
@@ -231,7 +237,7 @@ LLM 기반 자율 모의 침투는 2026년 현재 "실험"이 아니라 "현실"
 
 ---
 
-## 4.1 장점 — 왜 그럼에도 쓰는가
+## 4.1 장점 — 왜 그럼에도 쓰는가?
 
 LLM 기반 자율 펜테스트의 장점은 추상적 구호가 아니라, 이미 실측된 생산성의 이동이다.
 
@@ -263,7 +269,7 @@ curl 팀이 겪은 환각의 전형을 보여주는 사례가 하나 있다. 잘
 
 ---
 
-## 4.3 리스크 2 — 신뢰의 붕괴: 환각은 공격이 된다
+## 4.3 리스크 2 — 신뢰의 붕괴, 환각은 공격이 된다
 
 환각의 두 번째 얼굴은 더 교활하다. 누군가는 이 환각을 **의도적 무기**로 쓴다. 바운티 플랫폼을 노린 분석들은, 일부 공격자의 목적이 "기술적 침해"가 아니라 **"운영 교란"**이라고 지적한다. 그럴듯한 허위 보고서로 방어자의 시간을 소모시키고 공개 프로세스에 대한 신뢰를 무너뜨리는 것 자체가 목적이라는 것이다. 실제로 @evilginx 같은 계정은 여러 조직에 유사한 AI 생성 보고서를 뿌렸고, 일부는 보상금까지 받아냈다.
 
@@ -273,7 +279,7 @@ curl 팀이 겪은 환각의 전형을 보여주는 사례가 하나 있다. 잘
 
 ---
 
-## 4.4 리스크 3 — 환각이 코드가 될 때: 슬롭스쿼팅
+## 4.4 리스크 3 — 환각이 코드가 될 때, 슬롭스쿼팅
 
 환각은 보고서에만 머물지 않는다. 자율 에이전트가 **스스로 생성한 출력을 실행**할 때, 환각은 공급망 공격의 입구가 된다. 2026년 클라우드 보안 연합(CSA)과 USENIX Security 2025 연구가 정리한 **슬롭스쿼팅(slopsquatting)**이 그 전형이다.
 
@@ -285,7 +291,7 @@ LLM은 코드를 생성할 때 **존재하지 않는 패키지(라이브러리)*
 
 ---
 
-## 4.5 리스크 4 — 프롬프트 인젝션: 에이전트를 돌려세우는 공격
+## 4.5 리스크 4 — 프롬프트 인젝션, 에이전트를 돌려세우는 공격
 
 자율 에이전트의 입력은 "신뢰할 수 없는 대상의 응답"이다. 테스트 대상이 돌려주는 에러 메시지·HTML·HTTP 헤더에 악의적 지시가 숨어 있으면, 그것을 읽은 에이전트가 범위를 벗어난 행동을 하도록 유도될 수 있다. 이것이 **프롬프트 인젝션**이며, 자율 공격 에이전트에서는 특히 치명적이다. 왜냐하면 이 에이전트는 단순히 텍스트를 생성하는 것이 아니라 **API 키·인증정보·네트워크 접근 권한을 쥐고 실제로 행동**하기 때문이다(2장의 "권한 가진 인프라" 관점).
 
@@ -348,7 +354,7 @@ curl 사례(유효 5% 미만), Mythos 대 curl 시험(5건 중 1건 유효), 슬
 
 최초 기동 후 `http://localhost:8787` → `/setup`에서 관리자 비밀번호를 설정하는 로그인 화면. UI 언어는 간체·번체·영어 3종을 지원한다.
 
-<img src="screenshots/login.png" alt="AntiFox 로그인 화면" width="720" />
+[![AntiFox 로그인 화면](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/login.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/login.png)
 
 > 3언어 국제화 확인용 영문 UI: `screenshots/login-en.png`
 
@@ -360,7 +366,7 @@ curl 사례(유효 5% 미만), Mythos 대 curl 시험(5건 중 1건 유효), 슬
 
 | 대시보드                                                                                                                                                                                                                       | 작업 목록                                                                                                                                                                                                               |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="screenshots/dashboard.png" alt="AntiFox 대시보드" width="380" /> | <img src="screenshots/tasks.png" alt="AntiFox 작업 목록" width="380" /> |
+| [![AntiFox 대시보드](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/dashboard.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/dashboard.png) | [![AntiFox 작업 목록](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/tasks.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/tasks.png) |
 
 실필드 검증에서 캡처한 빈 랩 상태의 대시보드(설치 직후, 2026-11-14):
 
@@ -370,25 +376,25 @@ curl 사례(유효 5% 미만), Mythos 대 curl 시험(5건 중 1건 유효), 슬
 
 발견 페이지가 진입점→전제조건→단계적 악용을 **단계별 자연어 설명 + 실제 요청**으로 보여준다(증거 구동 납품의 핵심 화면).
 
-<img src="screenshots/finding-steps.png" alt="발견 상세 — 익스플로잇 체인 분할 표시" width="720" />
+[![발견 상세 — 익스플로잇 체인 분할 표시](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/finding-steps.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/finding-steps.png)
 
 ### 5.4 증거 · MITM 패킷 (단계-실트래픽 자동 연결)
 
 각 악용 단계가 시간창·순서로 실제 요청/응답 패킷에 연결된다. 구문 강조·본문 검색·명중 횟수 제공. (자체 캡처 시 민감값은 5.0 마스킹)
 
-<img src="screenshots/traffic-packet.png" alt="MITM 트래픽 패킷 뷰" width="720" />
+[![MITM 트래픽 패킷 뷰](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/traffic-packet.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/traffic-packet.png)
 
 ### 5.5 "증거 즉 패킷" — 민감정보 노출
 
 민감정보 노출류는 트래픽 패킷 자체가 증거다(사후 스크린샷 재구성 불필요).
 
-<img src="screenshots/env-leak.png" alt="민감정보 노출 — 패킷이 곧 증거" width="720" />
+[![민감정보 노출 — 패킷이 곧 증거](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/env-leak.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/env-leak.png)
 
 ### 5.6 발견 목록
 
 확인/미확인 상태·심각도가 보이는 발견 목록. 보고서에 수록할 확인된 취약점을 고르는 전 단계다.
 
-<img src="screenshots/findings.png" alt="AntiFox 발견 목록" width="720" />
+[![AntiFox 발견 목록](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/findings.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/findings.png)
 
 ### 5.7 동작 데모 · 공식 채널 QR
 
@@ -641,7 +647,7 @@ AntiFox의 "증거 격리"는 **작업별 탐색 그래프**라는 **논리적(�
 
 금융·공공은 "외부 API에 데이터를 보낸다"는 전제가 성립하지 않는 경우가 많다. 이 장은 **왜 막히는지(국내 규제 전반) → 왜 오픈웨이트가 답인지 → 무엇을 고를지(공식 모델 vs 가드레일 제거 모델) → 어떤 하드웨어가 필요한지**를 종합한다.
 
-### 9.1 왜 외부 API가 막히나 — 국내 규제·가이드라인 종합
+### 9.1 국내 규제·가이드라인으로 인한 외부 API 차단 이유
 
 **① 금융권 — 전자금융감독규정·위탁규정·신용정보법**
 
