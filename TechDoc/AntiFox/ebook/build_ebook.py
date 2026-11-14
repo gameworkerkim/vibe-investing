@@ -488,8 +488,8 @@ def preprocess(md: str) -> str:
         + figure("AntiFox 로그인 화면 — 영문 UI", "images/login-en.png"),
     )
     md = md.replace(
-        "- **v2.0 증거 구동 흐름 데모**: `screenshots/demo.gif` (공식 README의 v2.0 소개 GIF 원본)",
-        "- **v2.0 증거 구동 흐름 데모** (공식 README GIF의 한 장면)\n\n"
+        "- **v2.0 증거 구동 흐름 데모**: `screenshots/demo.gif`",
+        "- **v2.0 증거 구동 흐름 데모**\n\n"
         + figure("AntiFox v2.0 증거 구동 흐름 데모", "images/demo-frame.png"),
     )
     md = md.replace(
