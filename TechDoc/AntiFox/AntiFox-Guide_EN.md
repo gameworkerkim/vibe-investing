@@ -224,19 +224,106 @@ Cyber Kill Chain · MITRE ATT&CK · PTES · OSSTMM / NIST SP 800-115.
 
 # 4. Benefits and risks of LLM-assisted simulated penetration
 
-> *"An LLM is Excel, not an oracle." — a tool that quickly organizes and computes, not an oracle that declares truth.*
+> *"An LLM is Excel, not an oracle." — a tool that quickly organizes and computes, not an oracle that declares truth. This chapter proves that one sentence with real events.*
 
-**Benefits** — speed·coverage, 24/7 execution, cost efficiency (shifted to tokens·GPU·Chapter 11), report automation, knowledge reuse (RAG), democratization.
+As of 2026, LLM-based autonomous simulated penetration is not an "experiment" but "reality". The problem is that this reality has two faces. On one side there is productivity that compresses the reconnaissance·enumeration·initial verification that used to take people days into hours; on the other there is a reliability problem where a substantial share of the output is hallucination that is **plausible but wrong**. AntiFox's weight on "delivery with evidence attached" rather than "discovery" is precisely to handle this second face. This chapter neither underplays the benefits nor glosses over the risks; citing cases confirmed in actual news, it lays out "what to entrust to automation and what a human must always review."
 
-**Risks — and mitigations**
+---
 
-1. **False positives·hallucination** — never finalize automated results; have engineers verify. MITM evidence linkage helps (no packet, no claim).
-2. **Prompt injection against the agent** — hidden instructions in target responses induce scope violations. Defenses in Chapter 7.
-3. **External LLM data exfiltration** — external APIs can be violations in financial·public sectors → local·open-weight (Chapter 9).
-4. **Supply chain** — the ARTEX image backdoor precedent → provenance·integrity verification (Chapter 6).
-5. **Sensitive data accumulation · scope violation · non-determinism** — retention·encryption·destruction policy + dual code·network scope enforcement + full log preservation (Chapters 7·12).
+## 4.1 Benefits — why use it anyway
 
-> **Field rules** — ① every claim goes in the report only when backed by evidence. ② a finding not signed off by a human is not a finding. ③ automation is a draft generator; conclusions are human. — An LLM is Excel.
+The benefits of LLM-based autonomous pentesting are not abstract slogans but a shift in productivity that has already been measured.
+
+First, **speed and coverage**. An autonomous agent does not tire and performs repetitive reconnaissance·enumeration·initial verification faster than a person. Especially in tasks of the "sweep every endpoint·parameter without missing any" kind, it goes beyond the limits of human concentration. HackerOne reported that over the year to March 2026, submissions grew **76%** — this surge itself, a double-edged sword as we will see below, is an indicator of how much AI has lowered the threshold of discovery.
+
+Second, **24/7 continuous execution and regression testing**. It can run at night·on weekends, and every time the code changes the same scenarios can be re-run, which is advantageous for catching "regression vulnerabilities". That frequency is impossible for a human team because of cost.
+
+Third, **report automation**. This is the core differentiator of AntiFox-type tools. Reproduction steps·evidence·multilingual drafts are generated automatically, greatly reducing reporting effort. Report writing has traditionally occupied a large share of simulated-hacking effort, and automating it leads to real savings.
+
+Fourth, **knowledge reuse and democratization**. Through a global asset graph and an RAG knowledge base, past findings can be transferred to the next test, and even small teams can access mid-level systematic testing. For organizations that cannot field a dedicated red team, this "lowered entry barrier" is the greatest value.
+
+And there are real results showing these benefits are not hollow. In 2026, vulnerabilities found with frontier-AI assistance were registered as actual CVEs and exploited in attacks. Representatively, **CVE-2026-34197 in ActiveMQ** was found by a researcher with Claude's assistance, and was later exploited in real attacks and added to the US CISA **Known Exploited Vulnerabilities (KEV)** list. Mozilla confirmed in February 2026 that it is internally using frontier models to find and fix latent vulnerabilities in its browser, and Chrome's CVE disclosures grew **563%** year-over-year. **AI really does find vulnerabilities.** There is no longer room to doubt this fact. The question is "which of what it found is real."
+
+---
+
+## 4.2 Risk 1 — hallucination and false positives: why curl closed its bounty
+
+The most fundamental risk of LLM-based pentesting is **hallucination** — plausibly fabricating vulnerabilities that do not exist. This is not a theoretical concern; it was proven by an event that actually broke the open-source ecosystem in 2026.
+
+**Daniel Stenberg**, maintainer of **curl** — the data-transfer tool installed on nearly every server in the world — terminated his bug bounty program in late January 2026. The reason was concise and devastating: **fewer than 5% of the reports submitted in 2025 were valid**. Submission volume doubled from a "reviewable level" in 2024 to one per 48 hours in 2025, and doubled again to one per 18 hours by June 2026. Stenberg described the situation as "being DDoS'd with AI bug reports, for real", and even said he would like to charge submitters for the wasted time if possible.
+
+There is one case that shows the typical hallucination the curl team experienced. A well-formatted, confident HTTP/3 vulnerability report came in — grounded on a **function that does not actually exist**. Another AI slop report (identifier **H1#3125832**) cited a nonexistent function and proposed an unverified patch. **Harry Sintonen** of the curl security team dismissed it: "the attacker severely misjudged — curl can smell AI slop from miles away". The problem is that **teams with curl's level of expertise are rare**. In organizations without dedicated security experts, these reports "look legitimate at first glance" and are not filtered out.
+
+This was not curl's problem alone. In the same stream, **Nextcloud** terminated its bounty program in April 2026, **HackerOne's Internet Bug Bounty** stopped all new submissions on March 27, 2026, and **Google** temporarily suspended submissions to its open-source bounty program. Across HackerOne, submissions grew 76% but the share pointing at real vulnerabilities stayed at 25% — i.e., **almost all of the increase was noise**.
+
+There is a point that must be made here. The excuse that "it is because the model is small" does not hold. When Stenberg personally tested Anthropic's top model (**Mythos**) against curl, **only 1 of the 5 reported vulnerabilities was accepted as a valid CVE**. Even frontier models show a meaningful false-positive rate on real codebases. Better models do not mean review becomes unnecessary.
+
+> **Risk to review:** hallucination is not "a bug that disappears when model quality rises" but "a constant inherent to automation". Therefore every finding is merely a "candidate" until a human confirms it with evidence. AntiFox's automatic MITM evidence linkage aims exactly at this point — a claim without the actual request·response packets attached is not put in the report. "No packet, no claim" must be the principle. Operators must personally open the reproduction packets before promoting a finding to "Confirmed" status, and a finding without this review signature is not a finding (the report's Status field in Appendix B engraves this boundary into the document).
+
+---
+
+## 4.3 Risk 2 — collapse of trust: hallucination becomes an attack
+
+The second face of hallucination is more insidious. Someone wields these hallucinations as a **deliberate weapon**. Analyses targeting bounty platforms note that some attackers' objective is not "technical compromise" but **"operational disruption"**. Burning defenders' time with plausible false reports and collapsing trust in the disclosure process is itself the goal. In practice, accounts like **@evilginx** sprayed similar AI-generated reports at multiple organizations, and some even collected bounties.
+
+The reason this structure is dangerous is that hallucinated reports accumulate as **operational debt**. It does not stop at wasting analysts' time — it leads to a vicious cycle where real researchers get frustrated and leave, organizations abolish bounties, and funding dries up. The signal-to-noise ratio of the entire security ecosystem collapses.
+
+> **Risk to review:** organizations operating autonomous tools must ask themselves "are the reports we produce eroding the trust of the receiving side?" AntiFox's v2.0 change to **include only confirmed vulnerabilities in reports by default** is the product-level answer to this trust problem. Evidence·status·review signatures must be visible in the deliverable (Appendix B) so the receiving side can distinguish "agent draft" from "human-confirmed fact". Mass-producing noise with automation's productivity is not productivity — it is a nuisance.
+
+---
+
+## 4.4 Risk 3 — when hallucination becomes code: slopsquatting
+
+Hallucination does not stop at reports. When an autonomous agent **executes its own generated output**, hallucination becomes the entry point of a supply-chain attack. **Slopsquatting**, documented by the Cloud Security Alliance (CSA) and USENIX Security 2025 research in 2026, is the classic case.
+
+When generating code, LLMs frequently fabricate **packages (libraries) that do not exist** under plausible names. One large-scale study measured this phenomenon across **576,000** Python·JavaScript code samples: **about one in five AI code suggestions (open-weight models averaging about 21.7%, commercial models about 5.2%) pointed at nonexistent packages**, and more than **205,000 unique fake package names** were identified. More dangerous is that this hallucination is **reproducible**. When the same prompt was repeated ten times, **43%** of the fake names reappeared every time, and 58% reappeared at least once. For an attacker, observing the model's output a few times is enough to predict "the names it will keep fabricating".
+
+The attack is simple. If an attacker **pre-registers malicious packages** on PyPI·npm under those fake names, then the moment a later AI recommends the same name and a developer (or autonomous agent) installs it without a second thought, malicious code is injected into the build. In practice, when a researcher registered a fake package that an AI kept recommending on PyPI as a harmless test, within days thousands of developers — including Alibaba teams — pulled that fictional dependency into their projects. The November 2026 ARTEX Docker image backdoor incident, and the PyPI supply-chain campaign targeting **litellm** — a shared dependency of AI development pipelines (**TeamPCP**, March 2026), are signals that **attackers now view AI tooling infrastructure itself as a high-value supply-chain target**.
+
+> **Risk to review:** do not let code·commands·dependencies generated by an autonomous agent **execute without verification**. Confirm package names manually, enforce lockfiles·version pins·hash verification, and run AI-generated code only in isolated environments. In the AntiFox operating context, Chapter 7's **rule-based HITL intercept** (human approval gates on high-risk actions) and **network egress blocking** are the final safety net that cuts off the path of "the agent pulling in arbitrary external packages·endpoints". Also, as 7.4 points out, **unverified documents mixed into the RAG knowledge base contaminate even the model's judgment**, so provenance·verification status must be managed from the knowledge-base intake stage.
+
+---
+
+## 4.5 Risk 4 — prompt injection: the attack that turns the agent around
+
+The input of an autonomous agent is "responses from untrusted subjects". If malicious instructions are hidden in the error messages·HTML·HTTP headers that the test target returns, an agent that reads them can be induced into out-of-scope behavior. This is **prompt injection**, and it is especially fatal for autonomous attack agents — because these agents do not merely generate text; they **hold API keys·credentials·network access rights and actually act** (Chapter 2's "infrastructure holding privileges" view).
+
+That this risk is not abstract is shown by AntiFox's own record. AntiFox has reported cases of being **seized by attackers and abused for actual AWS credential theft and webshell installation**, and November 2026 coverage noted signs of access to operational secrets even with some AWS API calls blocked. Once an attack tool falls into an attacker's hands, that "infrastructure holding privileges" becomes a weapon as-is.
+
+> **Risk to review:** there is no single defense. (1) Set a trust boundary so target responses are treated as "data only", (2) restrict the tools·commands the agent can call to a whitelist, (3) re-check the target host against scope immediately before every tool call, and (4) route high-risk actions such as writes·privilege escalation·external calls through human approval gates (HITL) (Chapter 7). Network blocking (7.1) is the final backstop for all of this. And blue teams must put the red team infrastructure itself (AntiFox host·gateway·DB) in monitoring scope (Chapter 10) — console exposure·abnormal egress may be a sign that the tool has been taken over.
+
+---
+
+## 4.6 Risk 5 — external leakage · supply chain · non-determinism
+
+The remaining three risks are noted briefly; all share the character of "structural problems that require review".
+
+**Data leakage to external LLMs.** Using an external API sends prompts and test information (traffic that may mix credentials·sessions·personal data) to an external provider. In financial·public sectors this alone can be a compliance violation. The review conclusion is clear — in regulated environments, switch to local·open-weight models (Chapter 9).
+
+**Supply chain.** The ARTEX Docker image backdoor seen above left the lesson that "clean source code does not guarantee a clean distribution image". Image digest pins·signature verification·SBOM·SHA256 comparison are premises, not options (Chapter 6).
+
+**Sensitive data accumulation and non-determinism.** Automatic evidence collection piles credentials·sessions·requests/responses into the DB. Without retention·encryption·destruction policies, the tool itself becomes a compromise surface. Also, autonomous agents can take different paths for the same input (non-determinism), so the scope whitelist must be enforced on both the code and network sides and execution logs preserved in full for reproducibility and post-hoc auditing (Chapters 7·12).
+
+---
+
+## 4.7 Summary — the boundary between automation and review
+
+Put the benefits and risks into one table, and the core is the boundary of "what to entrust to automation and what a human reviews".
+
+| What LLMs are good at (safe to entrust) | What humans must review (must not be entrusted) |
+|---|---|
+| Repetitive reconnaissance·enumeration·initial verification | Judging whether findings are genuine (screening hallucination·false positives) |
+| Evidence·reproduction steps·multilingual report drafts | Final factuality and business impact of the report |
+| Reuse·transfer of past knowledge | Provenance·integrity of the knowledge base·packages·dependencies |
+| 24/7 continuous·regression testing | Decision-making and responsibility for scope·stealth·high-risk actions |
+
+The curl case (under 5% valid), the Mythos-vs-curl test (1 of 5 valid), and slopsquatting (one in five a fake package) all say one thing. **AI finds, but does not confirm.** Confirmation belongs to the human who holds the evidence, and the moment this boundary blurs, productivity turns into noise and the tool into an attack surface.
+
+So this chapter's conclusion returns to the one sentence from the beginning. **An LLM is Excel.** It fills in the cells quickly, but what those numbers mean — and whether they are true — is for you to read. Automation is a draft generator, not a conclusion generator. A finding without a human signature is not a finding.
+
+---
+
+> This chapter treats sensitive topics (attacks abusing AI·supply-chain threats) from a defensive·review standpoint. The cited incidents·figures are based on 2026 public coverage·research, and figures may vary by point in time·sample — reconfirm against the original sources at the time of adoption.
 
 ---
 
@@ -315,7 +402,7 @@ LLM configuration, language settings, and report-related settings are available.
 
 <img src="screenshots/lab-15-llm.png" alt="AntiFox LLM config — real capture" width="720" />
 
-**5.8-2. New task dialog — egress selection** — per-task LLM profile·timeout·**egress proxy (follow global/direct)** selection (5.8-1~2 are new v2.0.3 features):
+**5.8-2. New task dialog — egress selection** — per-task LLM profile·timeout·**egress proxy (follow global/direct)** selection (5.8-1–2 are new v2.0.3 features):
 
 <img src="screenshots/lab-14-newtask.png" alt="AntiFox new task dialog — egress selection" width="720" />
 
@@ -428,7 +515,7 @@ This is a procedure that even includes a container restart to verify "does the d
 6. **Report generation** — whether docx is generated from only the confirmed vulnerabilities
 7. **Data persistence** — whether tasks·evidence survive a container restart
 
-### Real-field verification performed (2026-11-14, items ①~④)
+### Real-field verification performed (2026-11-14, items ①–④)
 
 A record of the installation·UI verification actually performed while writing this guide (screenshots in 5.1·5.8):
 
@@ -724,7 +811,7 @@ THEN tarpit + alert(label="agentic-recon")
 let RedTeamHosts = dynamic(["10.30.0.5", "10.30.0.6"]);
 let ApprovedGW   = dynamic(["10.20.0.10", "10.20.0.11"]);   // approved paths such as LLM gateway·DB
 CommonSecurityLog
-| where SourceIP in~ (RedTeamHosts)
+| where SourceIP in– (RedTeamHosts)
 | where DestinationIP !in (ApprovedGW)
 | summarize OutBytes = sum(SentBytes) by SourceIP, DestinationIP, bin(TimeGenerated, 5m)
 | where OutBytes > 0        // egress outside approved paths = investigate
@@ -742,7 +829,7 @@ AntiFox (PostgreSQL audit logs·behavior events)
 Common keys: engagement-id·task-id·timestamp·target-host (time synchronization required)
 ```
 
-Only with this pipeline does the 10.1~10.2 closed loop of "detection gap → rule improvement → reproduce detection" actually turn.
+Only with this pipeline does the 10.1–10.2 closed loop of "detection gap → rule improvement → reproduce detection" actually turn.
 
 ### 10.4 Purple team loop · defending the agent itself
 
@@ -783,9 +870,9 @@ AntiFox's agents consume a lot of tokens through iterative reasoning. In local s
 
 | Model tier | Representative group (e.g.) | Minimum GPU | Sustained throughput (assumed) | Notes |
 |---|---|---|---|---|
-| Light (7B~14B) | small Qwen3-Coder, Gemma | 24GB VRAM×1 (e.g. L4/A10/RTX4090-class) | 1,500~3,000 tok/s | simple recon·summarization, review assistance |
-| Mid (30B~70B-class) | mid Qwen3-Coder, mid GLM, Mistral | 48~80GB VRAM×1 (e.g. 1× A100/H100) | 800~2,000 tok/s | workhorse for production agent reasoning |
-| Large (100B+ / MoE) | DeepSeek V4, Kimi K2.x, large GLM | 80GB×2~8 or multi-node | variable (batch-dependent) | best quality·large capital cost, for large organizations |
+| Light (7B–14B) | small Qwen3-Coder, Gemma | 24GB VRAM×1 (e.g. L4/A10/RTX4090-class) | 1,500–3,000 tok/s | simple recon·summarization, review assistance |
+| Mid (30B–70B-class) | mid Qwen3-Coder, mid GLM, Mistral | 48–80GB VRAM×1 (e.g. 1× A100/H100) | 800–2,000 tok/s | workhorse for production agent reasoning |
+| Large (100B+ / MoE) | DeepSeek V4, Kimi K2.x, large GLM | 80GB×2–8 or multi-node | variable (batch-dependent) | best quality·large capital cost, for large organizations |
 
 > Licenses·scores·latest versions change rapidly — reconfirm at adoption time against the Chapter 9 selection guide and each model's official card. The lighter the model, the more False Positives and the larger the **human review workload** — saving on model cost raises labor cost; it is a trade-off.
 
@@ -793,9 +880,9 @@ AntiFox's agents consume a lot of tokens through iterative reasoning. In local s
 
 | GPU | On-demand rental (assumed) | Monthly always-on (720h) | Purchase (reference) |
 |---|---|---|---|
-| L4/A10/RTX4090-class (24GB) | $0.4~0.8/hr | $290~580 | $2,000~8,000 |
-| A100 80GB | $1.3~2.0/hr | $940~1,440 | $15,000~20,000 |
-| H100 80GB | $1.5~3.0/hr (up to $12~15) | $1,080~2,160 | $25,000~35,000 |
+| L4/A10/RTX4090-class (24GB) | $0.4–0.8/hr | $290–580 | $2,000–8,000 |
+| A100 80GB | $1.3–2.0/hr | $940–1,440 | $15,000–20,000 |
+| H100 80GB | $1.5–3.0/hr (up to $12–15) | $1,080–2,160 | $25,000–35,000 |
 
 #### Effective unit cost per 1M tokens (self-hosting)
 
@@ -809,7 +896,7 @@ e.g.) A100 $1.5/hr, light model 2,500 tok/s sustained
    = 1.5 / (2500 × 3600) × 1e6 ≈ $0.17 / 1M
 ```
 
-> For reference, the lowest-tier external APIs (DeepSeek-class) are around $0.1~0.2 input / $0.3 output per 1M. Local hosting is paying for "data never leaves the building" with money instead — and the more testing you do, the more favorable local becomes (11.2).
+> For reference, the lowest-tier external APIs (DeepSeek-class) are around $0.1–0.2 input / $0.3 output per 1M. Local hosting is paying for "data never leaves the building" with money instead — and the more testing you do, the more favorable local becomes (11.2).
 
 #### Token consumption assumptions per test run
 
@@ -817,9 +904,9 @@ Autonomous agents make repeated calls across the entire recon·enumeration·veri
 
 | Test scope | Tokens per run (assumed) | Converted at mid-model effective cost ($0.5/1M) |
 |---|---|---|
-| Small (1~2 apps, single domain) | 30M~80M | $15~40 |
-| Medium (5~10 apps, subnet) | 150M~400M | $75~200 |
-| Large (enterprise-wide, multiple segments) | 800M~2,000M+ | $400~1,000+ |
+| Small (1–2 apps, single domain) | 30M–80M | $15–40 |
+| Medium (5–10 apps, subnet) | 150M–400M | $75–200 |
+| Large (enterprise-wide, multiple segments) | 800M–2,000M+ | $400–1,000+ |
 
 This "per-run token cost" becomes the basic building block of the monthly·annual budgets below.
 
@@ -842,23 +929,23 @@ Principle: **if monthly testing is at the "once a month" level, rent; at the "co
 
 ### 11.3 Case A — SMB
 
-- Profile: few assets (1~3 apps), external API usable or a single on-prem GPU, 0~1 dedicated security staff.
+- Profile: few assets (1–3 apps), external API usable or a single on-prem GPU, 0–1 dedicated security staff.
 - Isolation: low (one hypervisor suffices for the isolated lab). External open-weight API or a light local model.
-- Testing: quarterly~monthly, small scope.
+- Testing: quarterly–monthly, small scope.
 
 #### Infrastructure/model (based on monthly testing)
 
 | Item | Configuration | Monthly cost (assumed) |
 |---|---|---|
-| AntiFox + PostgreSQL server | small VM or one on-prem box | $50~150 (cloud) or a small amortized amount |
-| Model | light local (24GB GPU rented only as needed) or cheapest external API | rental $0.5/hr × 20h/month ≈ $10 / API $20~40 |
-| Test token cost (small scope, 1 run) | 30M~80M | $15~40 |
+| AntiFox + PostgreSQL server | small VM or one on-prem box | $50–150 (cloud) or a small amortized amount |
+| Model | light local (24GB GPU rented only as needed) or cheapest external API | rental $0.5/hr × 20h/month ≈ $10 / API $20–40 |
+| Test token cost (small scope, 1 run) | 30M–80M | $15–40 |
 | Target lab (vulnerable VMs) | DVWA/Juice Shop etc., free | $0 |
-| **Infrastructure subtotal, one monthly test** | | **≈ $80~230 (≈ KRW 110K~320K)** |
+| **Infrastructure subtotal, one monthly test** | | **≈ $80–230 (≈ KRW 110K–320K)** |
 
 #### Annual infrastructure (monthly × 12)
 
-≈ **$1,000~2,800 / year (≈ KRW 1.4M~4M)**. Quarterly testing brings it down to one third.
+≈ **$1,000–2,800 / year (≈ KRW 1.4M–4M)**. Quarterly testing brings it down to one third.
 
 #### Red team labor cost (separate)
 
@@ -867,17 +954,17 @@ SMBs can rarely field a dedicated team. Realistic options:
 | Operating model | Configuration | Annual labor cost (assumed) |
 |---|---|---|
 | 1 part-time staffer | a dev/infra staffer doubles up, several days a month | absorbed internally (0 or a small separate amount) |
-| Outsourced | contracted to a pentest firm quarterly/annually | KRW several million~10M per engagement; KRW 10M~30M / year |
+| Outsourced | contracted to a pentest firm quarterly/annually | KRW several million–10M per engagement; KRW 10M–30M / year |
 
 SMB recommendation: **keep the tool light (light model + small server), put the responsibility with an external firm or a part-time staffer.** The cost-efficient pattern is AntiFox as the supporting layer for "continuous automated scanning + external expert deep-dive once or twice a year".
 
-**Case A total (assumed)**: infrastructure KRW 1.4M~4M/year + labor (part-time~outsourced) KRW 0~30M. A typical SMB running "AI autonomous checks + one external deep-dive per year" lands around **KRW 10M~35M / year**.
+**Case A total (assumed)**: infrastructure KRW 1.4M–4M/year + labor (part-time–outsourced) KRW 0–30M. A typical SMB running "AI autonomous checks + one external deep-dive per year" lands around **KRW 10M–35M / year**.
 
 ---
 
 ### 11.4 Case B — Enterprise
 
-- Profile: dozens~hundreds of assets, internal network/partial isolation, has a security team, monthly regular checks or more + continuous regression.
+- Profile: dozens–hundreds of assets, internal network/partial isolation, has a security team, monthly regular checks or more + continuous regression.
 - Isolation: medium (management/target/model segments separated, on-prem GPU). External API limited by data classification.
 - Testing: monthly enterprise-wide + ad-hoc on major changes.
 
@@ -885,19 +972,19 @@ SMB recommendation: **keep the tool light (light model + small server), put the 
 
 | Item | Configuration | Cost (assumed) |
 |---|---|---|
-| AntiFox + PostgreSQL | 8 vCPU/32GB/500GB always-on | $150~300 / month |
-| Local GPU (mid model) | 1× A100/H100 always-on or mixed | $1,000~2,160 / month |
-| Model test token cost (medium scope monthly + regression) | 400M~1,000M / month | at $0.5/1M effective cost, $200~500 / month |
-| Target lab/staging | cloned staging + hypervisor | $200~500 / month |
-| **Monthly infrastructure subtotal** | | **≈ $1,550~3,460 / month (≈ KRW 2.2M~4.8M)** |
+| AntiFox + PostgreSQL | 8 vCPU/32GB/500GB always-on | $150–300 / month |
+| Local GPU (mid model) | 1× A100/H100 always-on or mixed | $1,000–2,160 / month |
+| Model test token cost (medium scope monthly + regression) | 400M–1,000M / month | at $0.5/1M effective cost, $200–500 / month |
+| Target lab/staging | cloned staging + hypervisor | $200–500 / month |
+| **Monthly infrastructure subtotal** | | **≈ $1,550–3,460 / month (≈ KRW 2.2M–4.8M)** |
 
 #### Annual infrastructure
 
-≈ **$18,600~41,500 / year (≈ KRW 26M~58M)**. Converting the GPU to purchase (CapEx) means an initial $20,000~35,000 investment, then it drops to monthly power·operations cost.
+≈ **$18,600–41,500 / year (≈ KRW 26M–58M)**. Converting the GPU to purchase (CapEx) means an initial $20,000–35,000 investment, then it drops to monthly power·operations cost.
 
 #### "Per-run cost" of a monthly security test (infrastructure only)
 
-Medium-scope per-run token cost $75~200 + that month's GPU·server amortization. Purely variable cost is **≈ $100~300 per run (≈ KRW 140K~420K)**. The trap is that this number looks small — the labor cost below is most of the real cost.
+Medium-scope per-run token cost $75–200 + that month's GPU·server amortization. Purely variable cost is **≈ $100–300 per run (≈ KRW 140K–420K)**. The trap is that this number looks small — the labor cost below is most of the real cost.
 
 #### Red team labor cost (separate)
 
@@ -905,16 +992,16 @@ Minimum functional configuration, 3 roles (Chapter 2 lifecycle and response):
 
 | Role | Assumed experience | Assumed salary (KRW) | Notes |
 |---|---|---|---|
-| Engagement lead | 7+ yrs | KRW 80M~120M | scope·ROE·legal·final review·responsibility |
-| Operator (agent configuration·evidence verification) | 3~6 yrs | KRW 55M~80M | execution·False Positive triage |
-| Reviewer (blue team liaison) | 3~6 yrs | KRW 55M~80M | detection gaps·purple team |
+| Engagement lead | 7+ yrs | KRW 80M–120M | scope·ROE·legal·final review·responsibility |
+| Operator (agent configuration·evidence verification) | 3–6 yrs | KRW 55M–80M | execution·False Positive triage |
+| Reviewer (blue team liaison) | 3–6 yrs | KRW 55M–80M | detection gaps·purple team |
 
-> In the 2026 Korean market, pentest·security-consulting hires start around KRW 30M for entry~1yr, mid-career runs in the KRW 50M~80M range, and lead-level is around KRW 100M (varies widely by posting·company; specialist white-hat groups command more). Replace with exact figures from your internal labor cost table.
+> In the 2026 Korean market, pentest·security-consulting hires start around KRW 30M for entry–1yr, mid-career runs in the KRW 50M–80M range, and lead-level is around KRW 100M (varies widely by posting·company; specialist white-hat groups command more). Replace with exact figures from your internal labor cost table.
 
-- **Annual labor total for 3 dedicated full-time staff (assumed)**: ≈ **KRW 190M~280M** + social insurance·benefits (add ≈ 15~25% of labor cost) → actual burden ≈ **KRW 220M~350M**.
-- If a full team is too much, a hybrid of **1 dedicated staffer + external deep-dive twice a year**: 1 dedicated at KRW 60M~100M + external KRW 20M~50M → KRW 80M~150M / year.
+- **Annual labor total for 3 dedicated full-time staff (assumed)**: ≈ **KRW 190M–280M** + social insurance·benefits (add ≈ 15–25% of labor cost) → actual burden ≈ **KRW 220M–350M**.
+- If a full team is too much, a hybrid of **1 dedicated staffer + external deep-dive twice a year**: 1 dedicated at KRW 60M–100M + external KRW 20M–50M → KRW 80M–150M / year.
 
-**Case B total (assumed)**: infrastructure KRW 26M~58M/year + labor KRW 80M~350M. With a 3-person dedicated team, roughly **KRW 250M~400M / year**; with the hybrid model, roughly **KRW 100M~200M / year**.
+**Case B total (assumed)**: infrastructure KRW 26M–58M/year + labor KRW 80M–350M. With a 3-person dedicated team, roughly **KRW 250M–400M / year**; with the hybrid model, roughly **KRW 100M–200M / year**.
 
 ---
 
@@ -922,22 +1009,22 @@ Minimum functional configuration, 3 roles (Chapter 2 lifecycle and response):
 
 - Profile: mandatory network separation, CSAP·public-sector guidelines apply, external APIs effectively impossible → **local open-weight is forced**. Heavy audit·documentation requirements.
 - Isolation: high (work network/internet network separated; the model also stays on the internal network). Always-on GPU ownership is effectively mandatory.
-- Testing: regular (monthly~quarterly) + ad-hoc audit responses. Strong chain-of-custody·retention requirements (Chapter 12).
+- Testing: regular (monthly–quarterly) + ad-hoc audit responses. Strong chain-of-custody·retention requirements (Chapter 12).
 
 #### Infrastructure/model
 
 | Item | Configuration | Cost (assumed) |
 |---|---|---|
-| AntiFox + PostgreSQL (internal network) | redundancy recommended | $300~600 / month or CapEx amortization |
-| Local GPU (mid~large, always-on) | 1~2× H100 always-on (air-gap) | $2,160~4,320 / month or purchase $50,000~70,000 |
+| AntiFox + PostgreSQL (internal network) | redundancy recommended | $300–600 / month or CapEx amortization |
+| Local GPU (mid–large, always-on) | 1–2× H100 always-on (air-gap) | $2,160–4,320 / month or purchase $50,000–70,000 |
 | Inference gateway·internal serving | vLLM/SGLang + LiteLLM | included in operations labor |
-| Target lab·cloned environment | internally isolated | $300~700 / month |
-| Audit·log pipeline (10.3)·backup (12.1) | SIEM integration·retention storage | $300~800 / month |
-| **Monthly infrastructure subtotal** | | **≈ $3,060~6,420 / month (≈ KRW 4.3M~9M)** |
+| Target lab·cloned environment | internally isolated | $300–700 / month |
+| Audit·log pipeline (10.3)·backup (12.1) | SIEM integration·retention storage | $300–800 / month |
+| **Monthly infrastructure subtotal** | | **≈ $3,060–6,420 / month (≈ KRW 4.3M–9M)** |
 
 #### Annual infrastructure
 
-≈ **$36,700~77,000 / year (≈ KRW 51M~108M)**. Converting GPUs to purchase: initial capital KRW 50M~100M + operating costs.
+≈ **$36,700–77,000 / year (≈ KRW 51M–108M)**. Converting GPUs to purchase: initial capital KRW 50M–100M + operating costs.
 
 #### Red team labor cost (separate)
 
@@ -945,10 +1032,10 @@ The public sector typically uses **contracted services from specialist firms (pr
 
 | Model | Configuration | Annual labor cost (assumed) |
 |---|---|---|
-| Annual contract with a specialist firm | regular checks + reporting + audit response | KRW 50M~150M / year (by scale) |
-| 2~3 internal dedicated staff | operations·verification·audit response | KRW 150M~280M / year |
+| Annual contract with a specialist firm | regular checks + reporting + audit response | KRW 50M–150M / year (by scale) |
+| 2–3 internal dedicated staff | operations·verification·audit response | KRW 150M–280M / year |
 
-**Case C total (assumed)**: infrastructure KRW 51M~108M/year + labor KRW 50M~280M. On a hybrid basis, roughly **KRW 150M~350M / year**. However, in the public sector, **procurement·audit·documentation compliance** — not the amount — decides success or failure.
+**Case C total (assumed)**: infrastructure KRW 51M–108M/year + labor KRW 50M–280M. On a hybrid basis, roughly **KRW 150M–350M / year**. However, in the public sector, **procurement·audit·documentation compliance** — not the amount — decides success or failure.
 
 ---
 
@@ -962,16 +1049,16 @@ The public sector typically uses **contracted services from specialist firms (pr
 
 | Item | Configuration | Cost (assumed) |
 |---|---|---|
-| AntiFox + PostgreSQL | HA redundancy, encrypted storage | $600~1,200 / month |
-| Local GPU (large/MoE, always-on, multiple units) | 2~8× H100 (air-gap) | $4,320~17,000 / month or purchase $70,000~280,000 |
+| AntiFox + PostgreSQL | HA redundancy, encrypted storage | $600–1,200 / month |
+| Local GPU (large/MoE, always-on, multiple units) | 2–8× H100 (air-gap) | $4,320–17,000 / month or purchase $70,000–280,000 |
 | Inference·gateway·session routing | vLLM/SGLang + LiteLLM, multi-tenancy | included in operations labor |
 | Data isolation (7.4: schema/RLS/key separation) | per tenant·engagement | build cost + operations |
-| Audit·SIEM·chain of custody·backup·DR (Chapter 12) | retention·DR site | $800~2,000 / month |
-| **Monthly infrastructure subtotal** | | **≈ $5,720~20,200 / month (≈ KRW 8M~28M)** |
+| Audit·SIEM·chain of custody·backup·DR (Chapter 12) | retention·DR site | $800–2,000 / month |
+| **Monthly infrastructure subtotal** | | **≈ $5,720–20,200 / month (≈ KRW 8M–28M)** |
 
 #### Annual infrastructure
 
-≈ **$68,600~242,000 / year (≈ KRW 96M~340M)**. Reflecting GPU·DR·retention as CapEx: initial KRW 100M~400M + operating costs.
+≈ **$68,600–242,000 / year (≈ KRW 96M–340M)**. Reflecting GPU·DR·retention as CapEx: initial KRW 100M–400M + operating costs.
 
 #### Red team labor cost (separate)
 
@@ -979,14 +1066,14 @@ Financial institutions typically run dedicated staff continuously in parallel wi
 
 | Role | Headcount (assumed) | Annual labor cost (assumed, incl. benefits) |
 |---|---|---|
-| Lead/responsible (7+ yrs, CISO reporting line) | 1~2 | KRW 100M~150M × headcount |
-| Operations·verification (3~6 yrs) | 2~4 | KRW 65M~95M × headcount |
-| Blue/purple liaison·audit response | 1~2 | KRW 65M~95M × headcount |
-| External specialist periodic deep-dive | — | KRW 50M~200M / year |
+| Lead/responsible (7+ yrs, CISO reporting line) | 1–2 | KRW 100M–150M × headcount |
+| Operations·verification (3–6 yrs) | 2–4 | KRW 65M–95M × headcount |
+| Blue/purple liaison·audit response | 1–2 | KRW 65M–95M × headcount |
+| External specialist periodic deep-dive | — | KRW 50M–200M / year |
 
-- **5~8 continuous dedicated staff + external in parallel (assumed)**: labor **KRW 500M~1B+ / year**. This is based on large financial-sector security organizations, and the staff spans overall security operations rather than being dedicated to AntiFox. Taking only the AntiFox-related share, a design with 2~3 dedicated-equivalent staff + external is possible, landing in the **KRW 200M~400M / year** range.
+- **5–8 continuous dedicated staff + external in parallel (assumed)**: labor **KRW 500M–1B+ / year**. This is based on large financial-sector security organizations, and the staff spans overall security operations rather than being dedicated to AntiFox. Taking only the AntiFox-related share, a design with 2–3 dedicated-equivalent staff + external is possible, landing in the **KRW 200M–400M / year** range.
 
-**Case D total (assumed)**: infrastructure KRW 96M~340M/year + labor (AntiFox-related share) KRW 200M~500M+. Including regulation·DR·audit, **KRW 300M~800M / year** is the realistic range. In finance, **regulatory compliance·evidence reliability** — not "cost reduction" — is the core justification for adoption.
+**Case D total (assumed)**: infrastructure KRW 96M–340M/year + labor (AntiFox-related share) KRW 200M–500M+. Including regulation·DR·audit, **KRW 300M–800M / year** is the realistic range. In finance, **regulatory compliance·evidence reliability** — not "cost reduction" — is the core justification for adoption.
 
 ---
 
@@ -994,10 +1081,10 @@ Financial institutions typically run dedicated staff continuously in parallel wi
 
 | Category | Isolation/model | Per-run infrastructure cost (monthly test) | Annual infrastructure | Red team labor (separate) | Annual total (assumed) |
 |---|---|---|---|---|---|
-| SMB | low / external API·light local | ≈ KRW 110K~320K | KRW 1.4M~4M | part-time~outsourced KRW 0~30M | KRW 10M~35M |
-| Enterprise | medium / local mid, always-on | ≈ KRW 140K~420K (variable) | KRW 26M~58M | KRW 80M~350M | KRW 100M~400M |
-| Public sector | high / local mid~large, always-on | (always-on) | KRW 51M~108M | KRW 50M~280M | KRW 150M~350M |
-| Financial institution | highest / local large·air-gap·HA | (always-on) | KRW 96M~340M | KRW 200M~500M+ | KRW 300M~800M |
+| SMB | low / external API·light local | ≈ KRW 110K–320K | KRW 1.4M–4M | part-time–outsourced KRW 0–30M | KRW 10M–35M |
+| Enterprise | medium / local mid, always-on | ≈ KRW 140K–420K (variable) | KRW 26M–58M | KRW 80M–350M | KRW 100M–400M |
+| Public sector | high / local mid–large, always-on | (always-on) | KRW 51M–108M | KRW 50M–280M | KRW 150M–350M |
+| Financial institution | highest / local large·air-gap·HA | (always-on) | KRW 96M–340M | KRW 200M–500M+ | KRW 300M–800M |
 
 > "Per-run test cost" looks only at purely variable infrastructure (token·GPU usage); public·financial organizations assume always-on GPU ownership, so splitting out a per-run figure has little meaning there. **Most of the real cost is labor**, and automation only reduces the "repetitive execution" portion of labor cost — it cannot reduce the "design·review·responsibility" portion.
 
@@ -1230,7 +1317,7 @@ Open `http://localhost:8787` in a browser → automatic redirect to `/setup/` �
 | Scope setup | `/function/tasks/` → 「新建任务」 (New Task) | Enter goal·target, select **per-task LLM profile·timeout·egress (follow global/direct)** |
 | Report prep | `/system/reports/` | Organization settings (issuer·logo·assignee), pre-register per-language templates (简/繁/英) |
 
-### A.2 Human review → reporting flow (details of table stages 4~7)
+### A.2 Human review → reporting flow (details of table stages 4–7)
 
 1. **Verification candidates arrive** — check status·severity in the task detail's findings list (5.6)
 2. **Packet inspection** — judge FP or not from the finding's exploit chain (5.3) → step-linked packets (5.4). Also filter out-of-scope targets mixed in here
@@ -1320,7 +1407,7 @@ AntiFox is AGPL-3.0, and **providing it as a network service** also triggers sou
 ### E.1 ROE (Rules of Engagement) template
 
 ```
-Project: ____            Period: YYYY-MM-DD ~ YYYY-MM-DD
+Project: ____            Period: YYYY-MM-DD – YYYY-MM-DD
 Target scope (allowed): [domain/IP/subnet whitelist]
 Out of scope (prohibited): everything not in the list above
 Prohibited actions: DoS, data destruction/modification, mass account authentication, operational data exfiltration, lateral movement out of scope
@@ -1360,7 +1447,7 @@ Destruction: on expiry via [method], destruction records·approver preserved (ch
 
 ```
 Project: ACME internal web portal simulated test (isolated cloned staging)
-Period: 2026-12-01 ~ 2026-12-05 (weekdays 10:00–18:00)
+Period: 2026-12-01 – 2026-12-05 (weekdays 10:00–18:00)
 Target scope (allowed): 10.50.10.0/24, *.stg.acme.lab  (not the production network; staging clones)
 Out of scope (prohibited): everything else, especially 10.50.20.0/24 (production), internet
 Prohibited actions: service disruption·mass login attempts·data destruction, production DB access
