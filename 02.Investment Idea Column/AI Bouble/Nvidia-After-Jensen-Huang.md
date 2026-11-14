@@ -1,4 +1,35 @@
+<!--
+---
+title: "젠슨 황 이후의 엔비디아 — 키맨 리스크"
+subtitle: "2026~2027 현금흐름은 계약이 지키고, 2028년 이후 멀티플은 비전에 달렸다"
+description: "11월 12일 젠슨 황 사임. 2026~2027 현금흐름은 계약이 지키지만, 2028년 이후 멀티플은 비전의 제도화에 달렸다. 키맨 리스크를 λ와 p, 규제를 q로 나눈다."
+date: 2026-11-13
+updated: 2026-11-13
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 엔비디아
+  - 젠슨 황
+  - 키맨 리스크
+  - 퀀트
+keywords:
+  - 엔비디아
+  - 젠슨 황
+  - 콜레트 크레스
+  - 키맨 리스크
+  - 헤어질 결심
+group: ai-llm
+og_image: "https://vibequant.cc/og/nvidia-after-jensen-huang-og.jpg"
+image: "https://vibequant.cc/og/nvidia-after-jensen-huang-og.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # [Vibe Quant] 헤어질 결심. 젠슨 황 이후의 엔비디아 - 키맨 리스크에 가격을 매기는 법
+
+![헤어질 결심 포스터. 젠슨 황과 앨리스 황](images/nvidia-after-jensen-huang-poster.jpg)
 
 Nov 13, 2026 · @Dennis Kim
 

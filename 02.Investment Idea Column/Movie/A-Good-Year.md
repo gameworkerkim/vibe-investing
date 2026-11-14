@@ -1,4 +1,47 @@
+<!--
+---
+title: "어느 멋진 순간, 그가 내게 사랑으로 번지던 때"
+title_en: "A Good Year — Retold Through Fanny's Eyes"
+subtitle: "리들리 스콧의 《어느 멋진 순간》을 파니 셰넬의 눈에서 다시 쓰다"
+description: "리들리 스콧의 《어느 멋진 순간》을 파니 셰넬의 눈으로 다시 쓴다. 앞만 보던 맥스가 프로방스에서 두고 간 여름을 되찾는다."
+abstract: |
+  리들리 스콧의 《어느 멋진 순간》(A Good Year, 2006)을 프로방스 식당을 지키는 파니 셰넬의 눈으로 다시 쓴 글이다.
+  런던의 채권 트레이더 맥스 스키너는 삼촌이 남긴 샤토를 팔러 왔다가, 길가에 넘어뜨린 여자와 다시 만난다.
+  사랑이 시작된 자리는 입맞춤보다 먼저, 그가 어린 여름이 고인 방에서 계산을 멈추고 서 있던 순간이다.
+  그는 회사에서 자리와 돈 중 하나를 고르라는 요구를 받고, 금고 속 고흐가 아니라 벽에 걸린 복제화를 보는 쪽으로 돌아온다.
+summary_for_ai: |
+  Column (KO), 2026-11-14, Dennis Kim. A retelling of Ridley Scott's A Good Year (2006), narrated by Fanny Chenal, who runs a small restaurant in a Provençal village. Not a plot synopsis for its own sake and not investment advice.
+  Max Skinner, a London bond trader who profits from other people's losses, inherits his uncle Henry's Château La Siroque with no will and comes to sell it. He runs Fanny off the road without noticing. She later opens the pool valve when he is stuck at the bottom. He returns with a practiced apology; she will not open the door. On a night the restaurant is overwhelmed he takes off his jacket, puts on an apron, and carries plates without calculating.
+  The love she dates is earlier than the kiss: Max standing on the dusty floor of the old house, phone silent, looking at the room where he was eleven, not brushing the dust off his hand. She leaves without speaking. After a night together she does not ask him to stay. He says the place does not fit his life. She answers that it is his life that does not fit the place.
+  In London the firm makes him choose between the seat and the money. He tells her about a Van Gogh in the chairman's office that is a copy, the real one locked in a vault, and his question: when does anyone see the real one? She does not think he came back for her alone. What success took from him — an adult who taught him how to lose, an honest glass of wine, a summer in which doing nothing was allowed — was still in the house. He returns, orders the soup that is finished and says his job is finished too, and gives back the line a girl whispered at the pool one long-ago summer. He had not forgotten that the girl was Fanny. She had meant to close the door again, then remembers her own sentence, and leaves the restaurant open.
+date: 2026-11-14
+updated: 2026-11-14
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 어느 멋진 순간
+  - 리들리 스콧
+  - 영화
+  - 파니 셰넬
+keywords:
+  - "어느 멋진 순간"
+  - "A Good Year"
+  - "리들리 스콧"
+  - "러셀 크로"
+  - "마리옹 코티야르"
+  - "파니 셰넬"
+group: industry
+og_image: "https://vibequant.cc/og/a-good-year-og.jpg"
+image: "https://vibequant.cc/og/a-good-year-og.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+-->
+
 # 어느 멋진 순간, 그가 내게 사랑으로 번지던 때
+
+![리들리 스콧 《어느 멋진 순간》 포스터. 러셀 크로와 마리옹 코티야르](images/a-good-year-poster.jpg)
 
 2026년 11월 14일 · Dennis Kim
 
