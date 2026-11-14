@@ -79,7 +79,7 @@ Mistranslations·mixed usage that entered from the Chinese source material are u
 
 ## Table of contents
 
-**Main text**: 1. Introduction · 2. Red Team composition principles · 3. History · 4. Benefits and risks · 5. Features·screenshots·masking · 6. Installation and hardening · 7. Safety controls · 8. Scenarios · 9. Financial·public sector and open-weight · 10. Blue team detection·logging · 11. Budget·environment · 12. Operations (backup·IR·troubleshooting) **Appendices**: A. Walkthrough · B. Report sample · C. Legal checklist · D. AGPL · E. Contract·operations templates · F. Glossary · G. References
+**Main text**: 1. Introduction · 2. Red Team composition principles · 3. History · 4. Benefits and risks · 5. Features·screenshots·masking · 6. Installation and hardening · 7. Safety controls · 8. Scenarios · 9. Financial·public sector and open-weight · 10. Blue team detection·logging · 11. Budget·environment · 12. Operations (backup·recovery·IR·chain of custody·troubleshooting·organization-size checklist·TCO) **Appendices**: A. Walkthrough · B. Report sample · C. Legal checklist · D. AGPL · E. Contract·operations templates · F. Glossary · G. References
 
 ---
 
@@ -752,57 +752,281 @@ Only with this pipeline does the 10.1~10.2 closed loop of "detection gap → rul
 
 # 11. Budget and testing environment setup
 
-Automation's cost does not disappear; it changes form — from labor to tokens·GPU·infrastructure.
+Automation does not remove cost; it only changes its *form* — the labor cost of skilled pentest staff is redistributed into tokens·GPU·infrastructure·review effort. When budgeting, separate two things: (1) the **infrastructure/model cost** of running the platform, and (2) the **red team labor cost** — humans designing·reviewing·taking responsibility for the results. An autonomous tool like AntiFox reduces (1) but cannot eliminate (2). "An LLM is Excel, not an oracle" — automation fills the cells; the meaning and responsibility are read by humans.
 
-### Isolated lab topology
+This chapter assumes **local serving of open-weight models** as the baseline (since external APIs are often unusable or unwanted — see Chapter 9) and breaks budgets down by organization type into four cases: **SMB · Enterprise · Public sector · Financial institution**. The further down the list, the heavier the regulatory·isolation·audit requirements, and the larger the infrastructure·staffing costs accordingly.
 
-- **Management segment** — AntiFox + PostgreSQL, console behind VPN/bastion
-- **Target segment** — intentionally vulnerable VMs or cloned staging, internet outbound blocked
-- **Model segment** (open-weight) — GPU inference + gateway, not externally exposed
+> Caution: all amounts below are **rough assumptions as of 2026-11** and vary considerably with exchange rates·GPU supply·labor market rates·regulatory requirements. KRW amounts are reference values converted at 1 USD ≈ KRW 1,400. For actual approvals·quotes, recalculate at adoption time from vendor quotes·internal labor cost tables. The purpose of this chapter is not the "numbers" but the **structure of the budget and the calculation method**.
 
-> Training targets: OWASP Juice Shop·DVWA·Metasploitable·VulnHub-type machines or cloned staging. Never put operational assets directly in scope.
+---
 
-### Hardware sizing (approximate)
+### 11.0 Four variables that decide the budget
 
-| Use | Minimum | Recommended |
-| -------------------- | --------------------- | ---------------------- |
-| AntiFox + PostgreSQL | 4 vCPU/16GB/100GB SSD | 8 vCPU/32GB/500GB NVMe |
-| Local LLM (mid-size) | GPU 24GB VRAM×1 | GPU 48–80GB×1–2 |
-| Target lab | 1 hypervisor | Cluster+snapshots |
+The differences in amounts across organization types ultimately come from combinations of these four variables.
 
-### Cost scenarios (checked 2026-11 · ranges noted)
+| Variable | Description | Impact on cost |
+|---|---|---|
+| **Isolation level** | external API allowed / internal network / full air-gap | the higher, the more local GPU·dedicated infrastructure is required → capital cost spikes |
+| **Target scope** | number of assets (domains·IPs·apps), test scope | proportional to token consumption·test time·review effort |
+| **Test frequency** | quarterly / monthly / continuous | decides GPU rental vs always-on ownership (break-even, 11.2) |
+| **Audit·governance** | reporting structure·chain of custody·regulatory mapping | adds staffing·process costs in public·financial sectors |
 
-> **Approximate ranges (assumptions)** based on 2026 public materials. They vary with exchange rates·supply·timing. For approvals·quotes, recalculate at adoption time from the vendor price pages below.
->
-> **Sources/how to verify (checked 2026-11)**: ① LLM API token pricing·model comparison — [Artificial Analysis](https://artificialanalysis.ai/) (per-model pricing·latency·capability), [OpenRouter model·price list](https://openrouter.ai/models); ② GPU rental market rates — [RunPod pricing](https://www.runpod.io/pricing/), [Vast.ai pricing](https://vast.ai/pricing/); ③ for domestic financial·public adoption, check procurement·network separation policies against each institution's own guidelines.
+One core principle: **GPU costs money by how long it is kept on, not by how much it is used.** So low test frequency favors rental (on-demand) and high frequency favors always-on ownership (11.2 break-even).
 
-| Item | Range (as of 2026-11) |
-| ---------------------- | -------------------------------- |
-| External API tokens (lowest tier) | Input ≈ $0.1–0.2 / output ≈ $0.3 per 1M |
-| External API (70B-class managed) | ≈ $0.4–0.5 per 1M (blended) |
-| External API (frontier) | Input ≈ $2–5 / output ≈ $10–30 per 1M |
-| GPU rental (H100 80GB on-demand) | ≈ $1.5–3/hr (low end), up to $12–15/hr |
-| Self-hosted effective unit cost | ≈ $0.2–0.6 per 1M output depending on utilization |
+---
+
+### 11.1 Open-weight model unit cost — token·GPU conversion
+
+AntiFox's agents consume a lot of tokens through iterative reasoning. In local serving, the "token unit cost" is simply **GPU running time divided by token count**.
+
+#### Model tier hardware·throughput assumptions (2026-11, quantized baseline)
+
+| Model tier | Representative group (e.g.) | Minimum GPU | Sustained throughput (assumed) | Notes |
+|---|---|---|---|---|
+| Light (7B~14B) | small Qwen3-Coder, Gemma | 24GB VRAM×1 (e.g. L4/A10/RTX4090-class) | 1,500~3,000 tok/s | simple recon·summarization, review assistance |
+| Mid (30B~70B-class) | mid Qwen3-Coder, mid GLM, Mistral | 48~80GB VRAM×1 (e.g. 1× A100/H100) | 800~2,000 tok/s | workhorse for production agent reasoning |
+| Large (100B+ / MoE) | DeepSeek V4, Kimi K2.x, large GLM | 80GB×2~8 or multi-node | variable (batch-dependent) | best quality·large capital cost, for large organizations |
+
+> Licenses·scores·latest versions change rapidly — reconfirm at adoption time against the Chapter 9 selection guide and each model's official card. The lighter the model, the more False Positives and the larger the **human review workload** — saving on model cost raises labor cost; it is a trade-off.
+
+#### GPU cost conversion (on-demand rental basis, 2026-11)
+
+| GPU | On-demand rental (assumed) | Monthly always-on (720h) | Purchase (reference) |
+|---|---|---|---|
+| L4/A10/RTX4090-class (24GB) | $0.4~0.8/hr | $290~580 | $2,000~8,000 |
+| A100 80GB | $1.3~2.0/hr | $940~1,440 | $15,000~20,000 |
+| H100 80GB | $1.5~3.0/hr (up to $12~15) | $1,080~2,160 | $25,000~35,000 |
+
+#### Effective unit cost per 1M tokens (self-hosting)
 
 ```
-# Break-even — utilization is everything
-Self-hosted per 1M = (GPU hourly rate) ÷ (tokens per second × 3600) × 1e6
-  e.g.) H100 $2/hr, 2500 tok/s ≈ $0.22/1M (high utilization) · at 40% utilization → ≈ $0.55/1M
-Break-even ≈ the utilization where the managed blended price equals the effective unit cost (roughly 40–70%)
-# Monthly operating cost framework
-External API ≈ monthly tokens × blended price (100M×$0.45≈$45 · 2,000M×$0.45≈$900)
-Self-hosted ≈ GPU hourly rate × uptime hours (H100×1×$2×720h≈$1,440 always-on)
+Self-hosted per 1M tokens = (GPU hourly rate) / (tokens per second × 3600) × 1,000,000
+
+e.g.) H100 $2/hr, mid model 1,500 tok/s sustained (high utilization)
+   = 2 / (1500 × 3600) × 1e6 ≈ $0.37 / 1M
+   at 40% utilization, effective unit cost ≈ 2.5× ≈ $0.93 / 1M
+e.g.) A100 $1.5/hr, light model 2,500 tok/s sustained
+   = 1.5 / (2500 × 3600) × 1e6 ≈ $0.17 / 1M
 ```
 
-### Skeleton by scale · staffing
+> For reference, the lowest-tier external APIs (DeepSeek-class) are around $0.1~0.2 input / $0.3 output per 1M. Local hosting is paying for "data never leaves the building" with money instead — and the more testing you do, the more favorable local becomes (11.2).
 
-**Small** (PoC): single server+external API+1 hypervisor · **Medium** (always-on): separated networks+1 local GPU+gateway · **Large** (financial/public): network separation+multiple GPUs+air-gap+governance. Staffing: **engagement lead** (scope·legal·review) / **operators** (execution·evidence verification) / **reviewers** (blue team liaison).
+#### Token consumption assumptions per test run
+
+Autonomous agents make repeated calls across the entire recon·enumeration·verification·reporting process. Assume the following by target size.
+
+| Test scope | Tokens per run (assumed) | Converted at mid-model effective cost ($0.5/1M) |
+|---|---|---|
+| Small (1~2 apps, single domain) | 30M~80M | $15~40 |
+| Medium (5~10 apps, subnet) | 150M~400M | $75~200 |
+| Large (enterprise-wide, multiple segments) | 800M~2,000M+ | $400~1,000+ |
+
+This "per-run token cost" becomes the basic building block of the monthly·annual budgets below.
+
+---
+
+### 11.2 Break-even — rental vs always-on ownership
+
+```
+Monthly test tokens × effective unit cost (rental, reflecting utilization)  vs  monthly always-on GPU cost
+
+e.g.) mid model, 400M tokens/month (medium scope, once a month)
+   - Rental: 400M × $0.9/1M (low utilization) ≈ $360/month  → rental wins
+e.g.) spread 400M across every day + continuous regression → 3,000M/month
+   - Always-on H100: fixed ≈ $1,440/month, handling 3,000M → ≈ $0.48 per 1M  → always-on wins
+```
+
+Principle: **if monthly testing is at the "once a month" level, rent; at the "continuous/weekly regression" level, own always-on.** Public·financial organizations often cannot rent at all because of air-gaps and are forced into always-on ownership (regulation decides, not cost).
+
+---
+
+### 11.3 Case A — SMB
+
+- Profile: few assets (1~3 apps), external API usable or a single on-prem GPU, 0~1 dedicated security staff.
+- Isolation: low (one hypervisor suffices for the isolated lab). External open-weight API or a light local model.
+- Testing: quarterly~monthly, small scope.
+
+#### Infrastructure/model (based on monthly testing)
+
+| Item | Configuration | Monthly cost (assumed) |
+|---|---|---|
+| AntiFox + PostgreSQL server | small VM or one on-prem box | $50~150 (cloud) or a small amortized amount |
+| Model | light local (24GB GPU rented only as needed) or cheapest external API | rental $0.5/hr × 20h/month ≈ $10 / API $20~40 |
+| Test token cost (small scope, 1 run) | 30M~80M | $15~40 |
+| Target lab (vulnerable VMs) | DVWA/Juice Shop etc., free | $0 |
+| **Infrastructure subtotal, one monthly test** | | **≈ $80~230 (≈ KRW 110K~320K)** |
+
+#### Annual infrastructure (monthly × 12)
+
+≈ **$1,000~2,800 / year (≈ KRW 1.4M~4M)**. Quarterly testing brings it down to one third.
+
+#### Red team labor cost (separate)
+
+SMBs can rarely field a dedicated team. Realistic options:
+
+| Operating model | Configuration | Annual labor cost (assumed) |
+|---|---|---|
+| 1 part-time staffer | a dev/infra staffer doubles up, several days a month | absorbed internally (0 or a small separate amount) |
+| Outsourced | contracted to a pentest firm quarterly/annually | KRW several million~10M per engagement; KRW 10M~30M / year |
+
+SMB recommendation: **keep the tool light (light model + small server), put the responsibility with an external firm or a part-time staffer.** The cost-efficient pattern is AntiFox as the supporting layer for "continuous automated scanning + external expert deep-dive once or twice a year".
+
+**Case A total (assumed)**: infrastructure KRW 1.4M~4M/year + labor (part-time~outsourced) KRW 0~30M. A typical SMB running "AI autonomous checks + one external deep-dive per year" lands around **KRW 10M~35M / year**.
+
+---
+
+### 11.4 Case B — Enterprise
+
+- Profile: dozens~hundreds of assets, internal network/partial isolation, has a security team, monthly regular checks or more + continuous regression.
+- Isolation: medium (management/target/model segments separated, on-prem GPU). External API limited by data classification.
+- Testing: monthly enterprise-wide + ad-hoc on major changes.
+
+#### Infrastructure/model
+
+| Item | Configuration | Cost (assumed) |
+|---|---|---|
+| AntiFox + PostgreSQL | 8 vCPU/32GB/500GB always-on | $150~300 / month |
+| Local GPU (mid model) | 1× A100/H100 always-on or mixed | $1,000~2,160 / month |
+| Model test token cost (medium scope monthly + regression) | 400M~1,000M / month | at $0.5/1M effective cost, $200~500 / month |
+| Target lab/staging | cloned staging + hypervisor | $200~500 / month |
+| **Monthly infrastructure subtotal** | | **≈ $1,550~3,460 / month (≈ KRW 2.2M~4.8M)** |
+
+#### Annual infrastructure
+
+≈ **$18,600~41,500 / year (≈ KRW 26M~58M)**. Converting the GPU to purchase (CapEx) means an initial $20,000~35,000 investment, then it drops to monthly power·operations cost.
+
+#### "Per-run cost" of a monthly security test (infrastructure only)
+
+Medium-scope per-run token cost $75~200 + that month's GPU·server amortization. Purely variable cost is **≈ $100~300 per run (≈ KRW 140K~420K)**. The trap is that this number looks small — the labor cost below is most of the real cost.
+
+#### Red team labor cost (separate)
+
+Minimum functional configuration, 3 roles (Chapter 2 lifecycle and response):
+
+| Role | Assumed experience | Assumed salary (KRW) | Notes |
+|---|---|---|---|
+| Engagement lead | 7+ yrs | KRW 80M~120M | scope·ROE·legal·final review·responsibility |
+| Operator (agent configuration·evidence verification) | 3~6 yrs | KRW 55M~80M | execution·False Positive triage |
+| Reviewer (blue team liaison) | 3~6 yrs | KRW 55M~80M | detection gaps·purple team |
+
+> In the 2026 Korean market, pentest·security-consulting hires start around KRW 30M for entry~1yr, mid-career runs in the KRW 50M~80M range, and lead-level is around KRW 100M (varies widely by posting·company; specialist white-hat groups command more). Replace with exact figures from your internal labor cost table.
+
+- **Annual labor total for 3 dedicated full-time staff (assumed)**: ≈ **KRW 190M~280M** + social insurance·benefits (add ≈ 15~25% of labor cost) → actual burden ≈ **KRW 220M~350M**.
+- If a full team is too much, a hybrid of **1 dedicated staffer + external deep-dive twice a year**: 1 dedicated at KRW 60M~100M + external KRW 20M~50M → KRW 80M~150M / year.
+
+**Case B total (assumed)**: infrastructure KRW 26M~58M/year + labor KRW 80M~350M. With a 3-person dedicated team, roughly **KRW 250M~400M / year**; with the hybrid model, roughly **KRW 100M~200M / year**.
+
+---
+
+### 11.5 Case C — Public sector
+
+- Profile: mandatory network separation, CSAP·public-sector guidelines apply, external APIs effectively impossible → **local open-weight is forced**. Heavy audit·documentation requirements.
+- Isolation: high (work network/internet network separated; the model also stays on the internal network). Always-on GPU ownership is effectively mandatory.
+- Testing: regular (monthly~quarterly) + ad-hoc audit responses. Strong chain-of-custody·retention requirements (Chapter 12).
+
+#### Infrastructure/model
+
+| Item | Configuration | Cost (assumed) |
+|---|---|---|
+| AntiFox + PostgreSQL (internal network) | redundancy recommended | $300~600 / month or CapEx amortization |
+| Local GPU (mid~large, always-on) | 1~2× H100 always-on (air-gap) | $2,160~4,320 / month or purchase $50,000~70,000 |
+| Inference gateway·internal serving | vLLM/SGLang + LiteLLM | included in operations labor |
+| Target lab·cloned environment | internally isolated | $300~700 / month |
+| Audit·log pipeline (10.3)·backup (12.1) | SIEM integration·retention storage | $300~800 / month |
+| **Monthly infrastructure subtotal** | | **≈ $3,060~6,420 / month (≈ KRW 4.3M~9M)** |
+
+#### Annual infrastructure
+
+≈ **$36,700~77,000 / year (≈ KRW 51M~108M)**. Converting GPUs to purchase: initial capital KRW 50M~100M + operating costs.
+
+#### Red team labor cost (separate)
+
+The public sector typically uses **contracted services from specialist firms (procurement)** or a **hybrid of internal dedicated staff + contracted services**. Contracted work carries higher unit prices·management overhead than the private sector because of statements of work·procurement procedures·audit responses.
+
+| Model | Configuration | Annual labor cost (assumed) |
+|---|---|---|
+| Annual contract with a specialist firm | regular checks + reporting + audit response | KRW 50M~150M / year (by scale) |
+| 2~3 internal dedicated staff | operations·verification·audit response | KRW 150M~280M / year |
+
+**Case C total (assumed)**: infrastructure KRW 51M~108M/year + labor KRW 50M~280M. On a hybrid basis, roughly **KRW 150M~350M / year**. However, in the public sector, **procurement·audit·documentation compliance** — not the amount — decides success or failure.
+
+---
+
+### 11.6 Case D — Financial institution
+
+- Profile: Electronic Financial Supervision Regulations·network separation·strong audit. External data transfer blocked at the source → **local open-weight + full isolation**. Highest chain-of-custody·retention·legal hold requirements (Chapter 12). Continuous regression·high reliability required.
+- Isolation: highest (air-gap, multiple segments, key separation). High availability·redundancy.
+- Testing: continuous + regular + regulatory responses. Both token volume and GPU utilization are high.
+
+#### Infrastructure/model
+
+| Item | Configuration | Cost (assumed) |
+|---|---|---|
+| AntiFox + PostgreSQL | HA redundancy, encrypted storage | $600~1,200 / month |
+| Local GPU (large/MoE, always-on, multiple units) | 2~8× H100 (air-gap) | $4,320~17,000 / month or purchase $70,000~280,000 |
+| Inference·gateway·session routing | vLLM/SGLang + LiteLLM, multi-tenancy | included in operations labor |
+| Data isolation (7.4: schema/RLS/key separation) | per tenant·engagement | build cost + operations |
+| Audit·SIEM·chain of custody·backup·DR (Chapter 12) | retention·DR site | $800~2,000 / month |
+| **Monthly infrastructure subtotal** | | **≈ $5,720~20,200 / month (≈ KRW 8M~28M)** |
+
+#### Annual infrastructure
+
+≈ **$68,600~242,000 / year (≈ KRW 96M~340M)**. Reflecting GPU·DR·retention as CapEx: initial KRW 100M~400M + operating costs.
+
+#### Red team labor cost (separate)
+
+Financial institutions typically run dedicated staff continuously in parallel with specialist firms, and regulatory response·evidence responsibility means a high proportion of lead-level staff.
+
+| Role | Headcount (assumed) | Annual labor cost (assumed, incl. benefits) |
+|---|---|---|
+| Lead/responsible (7+ yrs, CISO reporting line) | 1~2 | KRW 100M~150M × headcount |
+| Operations·verification (3~6 yrs) | 2~4 | KRW 65M~95M × headcount |
+| Blue/purple liaison·audit response | 1~2 | KRW 65M~95M × headcount |
+| External specialist periodic deep-dive | — | KRW 50M~200M / year |
+
+- **5~8 continuous dedicated staff + external in parallel (assumed)**: labor **KRW 500M~1B+ / year**. This is based on large financial-sector security organizations, and the staff spans overall security operations rather than being dedicated to AntiFox. Taking only the AntiFox-related share, a design with 2~3 dedicated-equivalent staff + external is possible, landing in the **KRW 200M~400M / year** range.
+
+**Case D total (assumed)**: infrastructure KRW 96M~340M/year + labor (AntiFox-related share) KRW 200M~500M+. Including regulation·DR·audit, **KRW 300M~800M / year** is the realistic range. In finance, **regulatory compliance·evidence reliability** — not "cost reduction" — is the core justification for adoption.
+
+---
+
+### 11.7 Summary table at a glance (assumptions, 2026-11)
+
+| Category | Isolation/model | Per-run infrastructure cost (monthly test) | Annual infrastructure | Red team labor (separate) | Annual total (assumed) |
+|---|---|---|---|---|---|
+| SMB | low / external API·light local | ≈ KRW 110K~320K | KRW 1.4M~4M | part-time~outsourced KRW 0~30M | KRW 10M~35M |
+| Enterprise | medium / local mid, always-on | ≈ KRW 140K~420K (variable) | KRW 26M~58M | KRW 80M~350M | KRW 100M~400M |
+| Public sector | high / local mid~large, always-on | (always-on) | KRW 51M~108M | KRW 50M~280M | KRW 150M~350M |
+| Financial institution | highest / local large·air-gap·HA | (always-on) | KRW 96M~340M | KRW 200M~500M+ | KRW 300M~800M |
+
+> "Per-run test cost" looks only at purely variable infrastructure (token·GPU usage); public·financial organizations assume always-on GPU ownership, so splitting out a per-run figure has little meaning there. **Most of the real cost is labor**, and automation only reduces the "repetitive execution" portion of labor cost — it cannot reduce the "design·review·responsibility" portion.
+
+---
+
+### 11.8 Budget design checklist
+
+- [ ] Confirm whether external APIs are allowed first (regulation) → if not, local GPU is "a premise, not a choice"
+- [ ] Decide rental vs always-on ownership by test frequency (11.2 break-even)
+- [ ] Judge the model tier as a capability–review-effort trade-off (light = model cost down · labor cost up)
+- [ ] Per-run token consumption assumption × frequency = annual token cost
+- [ ] **Always account infrastructure cost separately from labor cost** (labor is most of the total)
+- [ ] For public·financial: audit·chain of custody·retention·DR (Chapters 10·12) costs as a separate line
+- [ ] Agree with finance on the accounting treatment: GPU rental (OpEx) vs purchase (CapEx)
+- [ ] Replace all figures with vendor quotes·internal labor tables at adoption time (this chapter provides structure only)
 
 ---
 
 # 12. Operations — backup·recovery · incident response · chain of custody · troubleshooting
 
-For a tool whose evidence is the deliverable, backup·recovery and incident response are not optional but mandatory.
+For a tool whose evidence is the deliverable, backup·recovery and incident response are not optional but mandatory. This chapter expands in the order: **operational scenario (narrative) → detailed cases in the four functional areas → organization-size checklist → maintenance·TCO**.
+
+### 12.0 Operational scenario — the daily routine of scope·updates·isolation audits
+
+**Clarify the scope of operations.** AntiFox's operational scope is not "a single program". It is a set of six: ① the application (binary·container) ② PostgreSQL (graph·evidence·reports) ③ the LLM gateway·inference server (9.2) ④ network control devices (egress rules·kill switch) ⑤ credentials (LLM keys·DB·target authentication) ⑥ the data lifecycle (retention·destruction·legal hold). Operators must track changes·failures·audits across this entire scope, and leaving any one of the six in a state where "who manages it is unclear" is itself an audit finding.
+
+**Updates are "verified replacement".** As a weekly routine: ① check GitHub Release·CHANGELOG (the three official channels, Appendix G) ② verify the SHA256 of the new version's binary·image ③ **install in the staging lab first** and run the Chapter 6 smoke tests (asset graph→report→data retention) ④ if clean, replace in production — Docker via digest-pinned images and `docker compose pull`, the binary via the one-click update (exit 75 atomic replacement·automatic rollback, Chapter 6) ⑤ keep the previous version's hash·backup for a week after replacement to guard against regressions. **A failed update is not itself an incident** — with a verified rollback path, it ends as a routine event. Updating without a rollback path is the incident.
+
+**The isolated environment is not something you "build" but something you "audit".** Firewall rules and network segregation drift over time. Verify the following in a quarterly audit: ① egress measured — confirm in a controlled, external way that connections from the lab host to destinations outside the allowlist are actually blocked (7.1②) ② kill switch live operation — verify full outbound blocking and task interruption after engaging the switch ③ integrity re-verification — that the hashes of running binaries·images match the approval list ④ access re-verification — review RBAC accounts·roles·login audit logs, disable departed employees' accounts ⑤ data retention·destruction status — that retention automation (12.1) works correctly together with legal hold exclusions ⑥ configuration drift — that `.env`·`config.json`·iptables/nftables match the version-controlled copies. Document the audit results and keep them as **audit-response evidence** (12.3).
 
 ### 12.1 Backup·recovery (with RTO/RPO)
 
@@ -830,6 +1054,13 @@ pg_restore -d antifox_restore_test /secure-backup/antifox_YYYY-MM-DD.dump  # qua
 - **TTL/cron**: a cron deleting records past the retention period (`DELETE ... WHERE created_at < now()-interval 'N months'`), archive before deleting
 - **Caution**: 12.2 legal hold targets must be **excluded** from automatic deletion
 
+**Detailed cases**
+
+- **PG disk failure (risk of losing all deliverables)** — with WAL archiving (PITR) on, recovery goes to the last checkpoint. With an RPO 15m configuration, at worst one recent task is lost. A backup on the same disk as the DB is lost along with it, so **keep backups on a separate volume/remote site** (at minimum the 3-2-1 principle).
+- **Encryption key loss** — evidence cannot be decrypted → the deliverable is effectively discarded. Maintain **separate** offline backups of keys (paper·hardware tokens) apart from the DB backup, and include a key rotation plan in the quarterly audit.
+- **Update failure rollback** — the one-click update rolls back automatically on SHA256 mismatch, but verify in the restore rehearsal **whether the DB schema remains compatible with the previous version after rollback** (a release containing schema migrations is the worst case).
+- **Total lab environment loss (disaster)** — document the procedure to rebuild from `config.json`+secrets+backups on an empty host, and measure the rebuild time to verify RTO achievability.
+
 ### 12.2 Incident response (IR) playbook — runaway·scope violation
 
 1. **Contain** — cut outbound immediately with the kill switch (7.1②).
@@ -839,7 +1070,12 @@ pg_restore -d antifox_restore_test /secure-backup/antifox_YYYY-MM-DD.dump  # qua
 5. **Correct·resume** — after removing the cause, resume **only when resume conditions (verified scope·approval)** are met.
 6. **Lessons** — update detection·rules·ROE, purple team feedback (Chapter 10).
 
-**Supply-chain infection (suspected backdoor) variant** — if the image·binary is suspected of tampering (ARTEX backdoor type, Chapter 6), **do not stop at replacing the image**: isolate the host → container·host forensic snapshots → **rotate all related credentials (LLM keys·DB·target credentials)** → rebuild from trusted images → prevent recurrence (digest pin·signature verification). This is the procedure CSA (2026-11) recommended for the ARTEX backdoor response.
+**Detailed cases**
+
+- **Scope violation (scanning out-of-scope hosts)** — in step 3 analysis, pinpoint the offending request via the `target-host` field in the audit log, and determine whether the trigger was (a) a Target/Scope configuration error or (b) an injection inside a target response (7.2). If (a), fix the scope definition; if (b), strengthen the HITL rules. If the out-of-scope target was a third party, **notify first, analyze after** — notification delay is a secondary risk.
+- **Prompt-injection-induced behavior** — if the agent attempts writes·privilege escalation·external calls "instructed by the target", the HITL block logs are the primary evidence. Even when blocked, **preserve the injection payload itself as evidence** (blocked ≠ harmless), and isolate the target asset that elicited the response to prevent retesting.
+- **Supply-chain infection (suspected backdoor)** — if the image·binary is suspected of tampering (ARTEX backdoor type, Chapter 6), **do not stop at replacing the image**: isolate the host → container·host forensic snapshots → **rotate all related credentials (LLM keys·DB·target credentials)** → rebuild from trusted images → prevent recurrence (digest pin·signature verification). This is the procedure CSA (2026-11) recommended for the ARTEX backdoor response.
+- **Suspected data exfiltration (9.5 type)** — if the agent attempted to transmit outside an approved path, extend the investigation with the 12.2 standard flow + the 9.5 checklist (metadata IP·unfamiliar-host alerts), and check whether the transmitted payload contained personal data·credentials to determine whether notification obligations (Personal Information Protection Act) apply.
 
 **Legal hold** — if litigation·audit·regulatory investigation is expected, **immediately exclude the relevant data from retention-period automatic deletion** (hold flag) and prohibit changes·deletion until released. The 12.1 automatic destruction scripts must reference the hold list.
 
@@ -856,6 +1092,13 @@ For evidence to hold weight in court·audit, each stage must be recorded:
 
 > AntiFox's append-only audit logs (7.3) and MITM packets are the primary evidence of the "collection" stage. Add hashes·signatures·timestamps to complete the chain of custody.
 
+**Detailed cases**
+
+- **Submission to court·investigators** — record the hash of every submitted copy, and **never submit the original** (retain the original, provide a copy). Record the hashing tool·version·time in the log, and periodically re-verify the original's integrity after submission to counter claims of "tampering after submission".
+- **Audit response (financial supervision·CSAP post-inspection)** — what auditors require is not a "log you can show" but **completeness at each point in time**. You must be able to present audit logs recording collection time·collector·tool version and backup snapshots aligned by point in time. Anti-virus false positives and access-log gaps become findings if not cleaned up in advance.
+- **Transfer (resignation·external outsourcing·inter-agency sharing)** — record the transfer time·recipient·method·copy hash in the log, and state the receiving side's **retention·destruction obligations** in the agreement. Transfer is the point where control is lost.
+- **Destruction** — preserve the destruction time·reason·approver records, and keep **destruction proof** (capture·evidence) according to the physical destruction·cryptographic erasure method. Destruction during a legal hold period is itself an incident.
+
 ### 12.4 Troubleshooting
 
 | Symptom | Check |
@@ -866,6 +1109,48 @@ For evidence to hold weight in court·audit, each stage must be recorded:
 | Report (docx) failure | python3·python-docx (binary mode), templates/permissions |
 | Update failure | Automatic rollback on SHA256 mismatch, systemd `RestartForceExitStatus=75`, Docker `docker compose pull` |
 | Console unreachable | Binding of ports `8787` (console)·`8788` (MITM), reverse proxy/TLS, IP allowlist |
+
+**Detailed cases**
+
+- **"A task that worked yesterday fails today"** — narrow down in this order: ① update status·rollback logs (the most common cause) ② LLM gateway rate limits·failover status (5.8-1) ③ DB capacity (leaving traffic capture on makes PG balloon).
+- **When a task appears stuck** — check the engine log for LLM idle status (see the Chapter 6 real-verification logs), and confirm the `:8788` MITM proxy matches the traffic capture switch. Check the intercept approval queue for a pending HITL approval the agent is waiting on.
+- **Unconfirmed findings mixed into the report** — check whether the report manager's default filter (confirmed vulnerabilities only) was bypassed and review the template settings; if auto-generated evidence captions contradict the reproduction-step wording, a human edits them (5.8-3).
+
+### 12.5 Organization-size operations checklist — public·financial·SMB
+
+| Area | Public institutions | Financial companies | SMB·small labs |
+| --- | --- | --- | --- |
+| Operating model | On-premises within security review·CSAP certification scope, dedicated staff | Compliance with supervisory·outsourcing regulations, operations team + audit dualization | 1–2 people wearing multiple hats, automation first |
+| Backup·recovery | RPO ≤ 15m (WAL PITR) + remote backups, quarterly restore rehearsal **results reported** | RPO ≤ 24h minimum, evidence retained for contract·supervision periods | Daily `pg_dump` + external storage, semi-annual rehearsals |
+| Updates | Apply after approval procedure·security suitability re-verification (change management council) | Staging verification → weekend rollout → monitoring, documented rollback plan | One-click update + hash verification, keep previous version backup |
+| Isolation audit | Semi-annual security inspection based on NIS guidelines + external audit response | Regular self-inspection in preparation for FSS IT inspections | Quarterly egress measurement + kill switch test |
+| Incident response | Notification obligations·institutional reporting procedures (NIS·MSIT etc.) in parallel | FSC·FSS reporting requirements, meet business-day reporting deadlines | Notify ROE emergency contacts, analyze after evidence snapshot |
+| Chain of custody | Align with public records management requirements (production registration·retention periods) | Point-in-time log alignment for supervisory inspections, internal control evidence | Minimal hash·timestamp records, use templates (Appendix E) |
+| TCO specifics | Security review·certification costs are the largest item | Audit response·report quality costs | Hardware·electricity are the largest items |
+
+### 12.6 Maintenance·TCO perspective
+
+**Maintenance schedule (operational calendar)**
+
+| Cadence | Items |
+| --- | --- |
+| Daily | Verify backup success (automatic alerts), LLM gateway status, disk·token usage |
+| Weekly | Check GitHub Release·CHANGELOG, spot-review access logs, check key expiry |
+| Monthly | Check retention automation (partitioning·TTL), review RBAC accounts·roles, cost report (tokens·GPU) |
+| Quarterly | Restore rehearsal (12.1), egress measurement·kill switch live operation, integrity re-verification, key rotation |
+| Semi-annual | Full isolation environment audit (12.0), document updates (update policy), re-verify models·pricing·laws |
+
+**TCO composition** — the cost of automation does not disappear; it moves (Chapter 11). Over a 3-year horizon:
+
+```
+Annual TCO ≈ infrastructure (server·GPU depreciation + power) + LLM (tokens or self-hosted effective unit cost)
+           + labor (operations·review·audit response) + maintenance (update verification·restore rehearsals·audits)
+           + compliance (public: security review·CSAP / financial: audit response / SMB: minimal)
+```
+
+- **For public·financial organizations the dominant items are labor·compliance** — no matter how much infrastructure is saved, review effort (FP↑)·audit response decide the TCO. The earlier the human review process (Chapter 4 rules) is established, the cheaper it gets.
+- **For SMBs the dominant items are hardware·power** — one 24GB GPU (9.3) makes 32B Q4 the practical ceiling, and at low utilization external APIs (only if data transmission is permitted) become favorable in some ranges (Chapter 11 break-even).
+- **Three hidden costs** — ① real disaster losses from skipping restore rehearsals ② storing data past its retention period (storage + legal risk) ③ rollback·rework from unverified updates. All three are costs prevented by the 12.0–12.3 routines.
 
 ---
 
