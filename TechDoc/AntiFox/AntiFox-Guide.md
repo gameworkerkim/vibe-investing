@@ -601,30 +601,40 @@ AntiFox의 "증거 격리"는 **작업별 탐색 그래프**라는 **논리적(�
 
 ### 10.2 탐지 룰 예시
 
-> **중요** — 아래는 **개념 예시(pseudo)**다. 아래 Sigma는 **Sigma 코어 스펙의 표준 필드가 아니며**, 단시간 카운트 집계는 **Sigma correlation rule**(`type: event_count`/`value_count`)로 표현해야 하고, 필드명(`status`·`uri` 등)은 **파이프라인/백엔드별 매핑**이 필요하다. 그대로 복사하면 동작하지 않을 수 있다 — 공식 Sigma 스펙으로 변환·검증하라.
+> **중요** — 아래 Sigma는 **공식 스펙 형식**(base rule + `correlation:` 키)으로 작성했으나, (1) `status`·`src_ip` 등 **필드명은 SIEM 백엔드 파이프라인 매핑이 필요**하고(표준 필드 `http.response.status_code` 등으로 치환), (2) **배포 전 pySigma/Sigma 규칙 저장소 린트로 검증**해야 한다. WAF·KQL 예시는 개념 수준이다. 그대로 복사하지 말고 백엔드에 맞게 변환하라.
 
-**Sigma correlation (개념) — 단시간 다수 인증/404 탐색**
+**Sigma — 단시간 다수 인증/404 탐색 (base + correlation)**
 
 ```yaml
-# base rule
-title: Web probing responses
-logsource: { category: webserver }
+# base rule: web_probing_responses
+title: Web Probing Responses
+logsource:
+  category: webserver
 detection:
-  selection: { status: [401, 403, 404] }   # 필드명은 백엔드 매핑 필요
+  selection:
+    status: [401, 403, 404]        # 필드명은 백엔드 매핑 필요
   condition: selection
 ---
-# correlation rule
-action: correlation
-type: event_count
-rules: [web_probing_responses]
-group-by: [src_ip]
-timespan: 1m
-condition: { gte: 100 }
+# correlation rule: agentic probing burst
+title: Agentic Web Probing Burst
+status: experimental
+description: 단시간 다수 401/403/404 응답 — 자율 에이전트 열거 패턴
+correlation:
+  type: event_count
+  rules:
+    - web_probing_responses
+  group-by:
+    - src_ip
+  timespan: 1m
+  condition:
+    gte: 100
 level: medium
-tags: [attack.discovery, attack.t1595]
+tags:
+  - attack.discovery
+  - attack.t1595
 ```
 
-**WAF(개념) — 비인간적 레이트/UA**
+**WAF(개념) — 비인간적 레이트/UA** (Cloudflare WAF 규칙·ModSecurity 표현으로 변환)
 
 ```
 IF  req.rate_per_ip > 100/min
@@ -633,14 +643,16 @@ AND (req.user_agent matches /(curl|python-requests|go-http-client)/i
 THEN tarpit + alert(label="agentic-recon")
 ```
 
-**SIEM(의사 KQL) — 승인 경로 밖 egress**
+**SIEM(개념 KQL) — 승인 경로 밖 egress** (Microsoft Sentinel 스타일)
 
-```
-NetworkEgress
-| where src_ip in (RedTeamHosts)
-| where dst_host !in (ApprovedGatewayEndpoints)
-| summarize bytes=sum(out_bytes) by src_ip, dst_host, bin(ts, 5m)
-| where bytes > 0   // 승인 경로 밖 egress = 조사 대상
+```kusto
+let RedTeamHosts = dynamic(["10.30.0.5", "10.30.0.6"]);
+let ApprovedGW   = dynamic(["10.20.0.10", "10.20.0.11"]);   // LLM 게이트웨이·DB 등 승인 경로
+CommonSecurityLog
+| where SourceIP in~ (RedTeamHosts)
+| where DestinationIP !in (ApprovedGW)
+| summarize OutBytes = sum(SentBytes) by SourceIP, DestinationIP, bin(TimeGenerated, 5m)
+| where OutBytes > 0        // 승인 경로 밖 egress = 조사 대상
 ```
 
 ### 10.3 로그 파이프라인 아키텍처 (DB→SIEM)
@@ -685,7 +697,9 @@ AntiFox(PostgreSQL 감사 로그·행위 이벤트)
 
 ### 비용 시나리오 (확인일자 2026-11 · 범위 표기)
 
-> 2026년 공개 자료 기준 **대략 범위(가정)**. 환율·수급·시점에 따라 변한다. **출처/확인법**: 공개 GPU 클라우드 가격 페이지(H100 온디맨드)와 LLM API 가격 비교 자료(2026-11 확인). 품의·견적은 각 벤더 가격 페이지에서 도입 시점 재산정.
+> 2026년 공개 자료 기준 **대략 범위(가정)**. 환율·수급·시점에 따라 변한다. 품의·견적은 아래 벤더 가격 페이지에서 도입 시점 재산정.
+>
+> **출처/확인법(2026-11 확인)**: ① LLM API 토큰 단가·모델 비교 — [Artificial Analysis](https://artificialanalysis.ai/)(모델별 단가·지연·능력), [OpenRouter 모델·가격 목록](https://openrouter.ai/models); ② GPU 임대 시세 — [RunPod 가격](https://www.runpod.io/pricing/), [Vast.ai 가격](https://vast.ai/pricing/); ③ 국내 금융·공공 도입 시 조달·망분리 정책은 각 기관 지침 별도 확인.
 
 | 항목                     | 범위(2026-11 기준)                   |
 | ---------------------- | -------------------------------- |
@@ -795,6 +809,75 @@ pg_restore -d antifox_restore_test /secure-backup/antifox_YYYY-MM-DD.dump  # 분
 | 7. 정리      | 증거 보존(연계성)·파기 스케줄·백업 확인                              | 파기·백업·연계성 기록     |
 
 > 핵심은 4~5의 **이음매** — 에이전트는 "후보"를, 사람은 증거로 "확정"을.
+
+### A.1 실제 환경 구성 명령 시퀀스 (2026-11-14 검증본)
+
+위 1단계(환경 구성)를 실제로 수행한 명령·출력 기록이다. 모두 격리 랩에서 실행했으며 민감값은 없다.
+
+**① 릴리스 다운로드 + 무결성 검증**
+
+```bash
+curl -sL -o antifox.zip https://github.com/AntiFox-AI/antifox/releases/download/v2.0.3/antifox-v2.0.3-darwin-arm64.zip
+curl -sL -O https://github.com/AntiFox-AI/antifox/releases/download/v2.0.3/SHA256SUMS
+shasum -a 256 antifox.zip        # → 4012597ccdbb4b990828d17a3dfc43392b91b45fc61e1d7fa34042384ade0a3a
+                                 #    ← 공식 SHA256SUMS와 1:1 대조(6장 무결성 검증 ①)
+unzip antifox.zip && cd antifox-v2.0.3-darwin-arm64
+```
+
+**② 격리 PostgreSQL + `config.json`**
+
+```bash
+initdb -D pgdata -U antifox --auth=trust -E UTF8
+pg_ctl -D pgdata -o "-p 55432 -c listen_addresses=127.0.0.1" start
+createdb -h 127.0.0.1 -p 55432 -U antifox antifox
+cat > config.json <<'EOF'
+{ "database": { "host": "127.0.0.1", "port": 55432, "user": "antifox",
+                "password": "", "dbname": "antifox", "sslmode": "disable" } }
+EOF
+```
+
+**③ 기동 — 실제 로그 출력 (해석 포함)**
+
+```bash
+./antifox
+```
+
+```
+2026/11/14 10:36:01 [tools] 已刷新 orchestration/platform 工具 schema 到代码默认(一次性)
+2026/11/14 10:36:01 [mainagent] 已默认绑定 report_finding（主 Agent 现可记录漏洞）
+2026/11/14 10:36:01 [custom-tool] 自动检测到 python 解释器: /usr/bin/python3
+2026/11/14 10:36:01 [engine] no LLM provider configured — engine idle until set via /api/llm or env
+2026/11/14 10:36:01 AntiFox v2.0.3 backend listening on :8787 (data=data, workers=3)
+2026/11/14 10:36:03 [mcp] browser 发现 25 个工具并已缓存
+2026/11/14 10:36:04 [mcp] filesystem 发现 16 个工具并已缓存
+```
+
+- `custom-tool` — python3 자동 감지(docx 렌더 경로). 보고서가 실패하면 이 라인이 없는지 확인(12.4)
+- `engine ... idle` — **LLM 미설정이어도 기동은 된다**. 에이전트 가동은 `/system/llm/`(또는 `ANTIFOX_LLM_*` 환경변수) 설정 후 시작
+- `listening on :8787` + MITM 기록 프록시는 별도 `:8788`(6장 포트 표)
+
+**④ 최초 설정 → 로그인 (5.1 실캡처와 동일 흐름)**
+
+브라우저로 `http://localhost:8787` 접속 → 자동 `/setup/` 리다이렉트 → 관리자 비밀번호 2회 입력 → 「设置密码并登录」 → `/function/tasks/` 진입. 이후 재접속 시 `/login`에서 계정 `admin`으로 로그인한다.
+
+**⑤ 탐색 전 구성 — 실제 UI 경로**
+
+| 목적 | UI 경로 | 확인·설정 항목 |
+|---|---|---|
+| LLM 연결 | `/system/llm/` | 프로필(모델·키·엔드포인트·속도제한) 생성 → 활성화, 페일오버·역할별 모델(4역할) |
+| 출구·캡처 | `/system/settings/` | 전역 출구 프록시(http/https/socks5, 「测试可用性」로 출구 IP 확인), 트래픽 캡처 스위치 |
+| HITL 규칙 | `/system/intercept/` | 내장 규칙(`rm -rf`·시스템 디렉터리 삭제 정규식 차단) 확인 + 필요 규칙 추가 |
+| 범위 설정 | `/function/tasks/` → 「新建任务」 | 목표·대상 입력, **작업별 LLM 프로필·타임아웃·출구(전역 따름/직결)** 선택 |
+| 보고 준비 | `/system/reports/` | 조직 설정(발주처·로고·담당자), 언어별 템플릿(简/繁/英) 사전 등록 |
+
+### A.2 사람 검수 → 보고 흐름 (표 4~7단계 상세)
+
+1. **검증 후보 도착** — 작업 상세의 발견 목록에서 상태·심각도 확인(5.6)
+2. **패킷 열람** — 발견의 익스플로잇 체인(5.3) → 단계별 연결 패킷(5.4)으로 FP 여부 판정. 범위 밖 대상이 섞여 있는지도 여기서 걸러낸다
+3. **확인 즉 보강** — 확인 버튼 → 구조화 데이터(CVSS·영향·수정·재현) 자동 보강. 이때 서명·심각도를 사람이 확정
+4. **보고 생성** — `/system/reports/` → 「新建报告」: 템플릿(언어) 선택 → 확인된 취약점 부분집합 선택 → 생성. **기본값이 확인된 취약점만 수록**임을 이용해 검수 완료분만 담는다
+5. **맥락·권고 보강** — 생성된 docx 초안에 비즈니스 맥락·권고를 사람이 보강(에이전트 초안은 원문 그대로 인용 금지, 4장 수칙)
+6. **정리** — 증거 해시·백업·파기 스케줄 확인(12장), 로그는 SIEM 파이프라인(10.3)에 남긴다
 
 ---
 
@@ -979,6 +1062,16 @@ RTO/RPO: RPO ≤ 24h(일일 백업) / RTO ≤ 4h
 10. 라이선스 — GNU AGPL-3.0(특히 제13조).
 
 > AntiFox·모델·가격·법령은 변화가 빠르다. **도입 시점에 공식 출처로 사실 확인**하라. 설정 변수·기능은 설치본과 반드시 대조할 것.
+
+---
+
+## 갱신 정책 (이 문서 유지보수)
+
+1. **확인일자 필드** — 버전·가격·모델·법령·사례는 본문 "(2026-11 확인)" 표기로 시점을 명시한다. 항목별로 날짜가 다를 수 있다.
+2. **정기 리뷰** — 반기(6개월) 1회 이상: 공식 저장소 릴리스·CHANGELOG 재확인 → 가격 페이지·모델 카드 재확인 → 국내법·판례 최신화.
+3. **변경 기록** — 갱신 시 문서 상단 "변경 요약"에 날짜별 항목을 추가한다(현행: 2026-11-14 변경).
+4. **RC → v1.0 확정 조건** — ① 법무 검토 완료(부록 C 날짜 기입), ② LLM 연결 작업 실행·보고서 생성 검증(6장 실필드 검증의 미수행 항목). 완료 시 표지 배너의 "검증 대기" 문구와 RC 표기를 제거한다.
+5. **언어판** — 한국어 원본 기준, 영문판(`AntiFox-Guide_EN.md`) 병행. 원본 변경 시 영문판 동기화(갱신일자 명시).
 
 ---
 
