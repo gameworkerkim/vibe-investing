@@ -18,45 +18,11 @@ English edition — translated from the Korean original (AntiFox-Guide.md). Sync
 
 ---
 
-## Terminology standard (unified in this edition)
-
-Mistranslations·mixed usage that entered from the Chinese source material are unified as follows. In particular, **do not conflate "use"(이용) and "abuse"(악용)** — in security documents their meanings are completely different.
-
-| Notation in this document | Meaning | Notation not used (mistranslation) |
-| ----------------------------- | -------------------- | -------------------- |
-| **abuse / exploit** | Actually using a vulnerability in an attack | "use"(이용/利用) |
-| **exploit chain / attack chain** | Entry point→staged exploitation path | "use chain"(이용체인) |
-| **reproduction** | Re-running an attack to prove it | "re-reproduction"(복현/复现) |
-| **delivery-grade** | Quality deliverable to a customer | "manual-grade"(인공급/人工级) |
-| **enrichment** | Enriching findings into structured data | "enrichment"(富化) |
-| **base** | The code/structure serving as a foundation | "base"(底座) |
-| **issuer / assignee(담당자) / subset** | issuer / 人员 / subset | "issuer·人员·subset"(출具方·人员·子집합) |
-| **Report languages: Simplified·Traditional Chinese·English** | Official output, 3 kinds (简/繁/英) | "Korean·Chinese·English" (error in the source material) |
-
-> **Report language correction** — AntiFox's official report output comes in 3 kinds: **Simplified Chinese·Traditional Chinese·English**. The "Korean" support notation in the early material was an error; **Korean is not an officially supported language** (translate separately if needed).
-
----
-
-## v1.0-rc change summary (reflecting the v0.3 review)
-
-**Quality corrections (P0)**
-
-- **Full correction** of Chinese characters·mistranslations (출具方→발주처 (issuer), 人员→담당자 (assignee), 子집합→부분집합 (subset), 底座→기반 (base), 富化→보강 (enrichment), 인공급/교부급→납품급 (delivery-grade), 복현→재현 (reproduction), **이용→악용/익스플로잇 (use→abuse/exploit)**, 이용체인→익스플로잇 체인 (use-chain→exploit chain))
-- Report language **correction** (not Korean → Simplified·Traditional Chinese·English)
-- **Withdrawal of the "final" claim** → v1.0-rc, new terminology standard table above
-- **Accuracy improvements (P1)**
-- **Footnotes** added to the Sigma examples (not core spec·correlation rule required·backend mapping) + spec guidance
-- Chapter 12 additions: **RTO/RPO·legal hold·chain of custody**
-- **Filled-in example** added to Appendix E (fictional ACME internal-network ROE)
-- `config.json` **Docker vs binary comparison table**, global egress proxy and other real features reflected
-- **Completeness (P2·P3)**
-- 10.3 **log pipeline (DB→SIEM) architecture**, retention-period **automation** (partitioning·TTL·cron), price **sources·verification methods**, screenshot **licensing** noted, Chapters 5-6 **direct capture guide**, legal review section marked **"draft"**
-
 ## 2026-11-14 changes — repository due diligence·screenshot reflection
 
 - **Cloned due diligence** of the official repository (`github.com/AntiFox-AI/antifox`) to re-verify all facts (v2.0.3 latest release, CHANGELOG, `.env.example`, `config.example.json`, `docker-compose.yml`, `deploy/antifox.service`)
 - **9 screenshots inserted** (Chapter 5) — login·dashboard·tasks·finding-steps·traffic-packet·env-leak·findings + demo.gif·login-en·wechat-qr originals included, AGPL attribution notice
-- **At-a-glance architecture·process infographic included** (beginning of Chapter 1, `AntiFox-Guide-overview.png`)
+- **Chapter 1 fully restructured** — ARTEX misuse incidents (Korean financial-sector campaign·ConnectWise)·the 2026 red-team LLM ecosystem·AntiFox's extension structure·the competitive landscape described (1.1–1.5); the opening infographic was removed with the restructure (the `AntiFox-Guide-overview.png` file is preserved)
 - **Real-field verification (installed UI, 2026-11-14)** — installed the official v2.0.3 macOS (arm64) binary in a local isolated lab (PostgreSQL 16) **after SHA256 verification**, included **8 real captures** of `/setup`→login→dashboard→LLM config→new task (egress selection)→report management→system settings→RBAC screens (5.1·5.8). Confirmed in the UI: v2.0.3 version indication·global egress proxy·LLM failover·per-role models·built-in intercept rules·RBAC 4 roles
 - `config.json` **real-field verification completed** (Chapter 6) — `database` block 6 fields + `ANTIFOX_PG_DSN` precedence
 - **Official README architecture diagram included** (Chapter 1), **compose·systemd real-file behavior reflected** (Chapter 6 — ports `8787`/`8788`, exit 75 atomic swap, `ANTIFOX_UPDATE_PROXY`)
@@ -79,39 +45,93 @@ Mistranslations·mixed usage that entered from the Chinese source material are u
 
 ## Table of contents
 
-**Main text**: 1. Introduction · 2. Red Team composition principles · 3. History · 4. Benefits and risks · 5. Features·screenshots·masking · 6. Installation and hardening · 7. Safety controls · 8. Scenarios · 9. Financial·public sector and open-weight · 10. Blue team detection·logging · 11. Budget·environment · 12. Operations (backup·recovery·IR·chain of custody·troubleshooting·organization-size checklist·TCO) **Appendices**: A. Walkthrough · B. Report sample · C. Legal checklist · D. AGPL · E. Contract·operations templates · F. Glossary · G. References
+**Main text**: 1. Introduction · 2. Red Team composition principles · 3. History · 4. Benefits and risks · 5. Features·screenshots·masking · 6. Installation and hardening · 7. Safety controls · 8. Scenarios · 9. Financial·public sector and open-weight · 10. Blue team detection·logging · 11. Budget·environment · 12. Operations (backup·recovery·IR·chain of custody·troubleshooting·organization-size checklist·TCO) **Appendices**: A. Walkthrough (Virtual Engagement Walkthrough) · B. Report sample · C. Legal checklist · D. AGPL · E. Contract·operations templates · F. Glossary · G. References
 
 ---
 
 # 1. Introducing AntiFox
 
-AntiFox is an **AI multi-agent autonomous penetration testing platform** secondarily developed from ARTEX (author @Autumn-27) v0.1.1. Its core aim is not just "discovery" but **"delivery (handover)"** — turning vulnerabilities found by AI into an evidence-backed report that engineers can understand and reproduce.
+AntiFox is an AI multi-agent autonomous penetration testing platform, secondarily developed from ARTEX (author @Autumn-27) v0.1.1. To properly understand this one sentence, you need to know three things: what ARTEX — AntiFox's technical root — is and why it shook the security industry, where the 2026 "red-team LLM" ecosystem is heading, and how, on top of that current, AntiFox extended ARTEX. This chapter describes those three layers in order.
 
-### At a glance — architecture·process summary
+---
 
-[![AntiFox architecture·process at a glance](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/AntiFox-Guide-overview.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/AntiFox-Guide-overview.png)
+## 1.1 The roots — ARTEX, a turning point
 
-> **Figure 1-0.** Authorized user (analyst/Red Team) → web console (Next.js) → Go API·event engine → multi-agents (Planner·Worker×N·Mainagent) → dual graph (global asset graph ↔ anchors ↔ per-task exploration graph) → MITM request·response evidence → finding verification → DOCX report. Bottom, the full 5-step process: ① scope approval ② planning ③ execution ④ evidence linkage ⑤ human review·reporting. The premise of the figure is the principle **"isolated lab only · use only within authorized scope"**. (The mermaid diagram in the "Official technical architecture" below is the official README version of the same structure.)
+### What ARTEX is
 
-### Overview at a glance (repository checked 2026-11)
+ARTEX is an **open-source multi-agent autonomous penetration testing framework** that a developer using the handle "Autumn-27" published on GitHub under AGPL-3.0 in July 2026. Its structure is a single binary written in Go with an embedded Next.js UI, state stored in PostgreSQL, and a MITM (man-in-the-middle) proxy shim that records traffic as evidence. ScopeSentry, a Chinese asset-discovery platform by the same developer, serves as the basis of reconnaissance.
+
+ARTEX's design philosophy can be summarized in two ideas.
+
+The first is the **planner-worker multi-agent** pattern. A planner agent reads the goal, generates "intents", and distributes them to N workers (3 per task by default); workers claim those intents and execute them with **real tools** such as Bash·Nmap·curl·ripgrep·HTTP clients. Workers can search each other's execution records, so parallel branches do not duplicate the same work. A human can interject mid-run through chat to inject hints (HITL).
+
+The second is the **dual graph**. ARTEX divides state into two graphs: a **global asset graph** shared across tasks (root domains·subdomains·IPs·services·applications·endpoints) and a **per-task exploration graph** (goals·intents·facts·findings·hints and their lineage). The two are connected via anchors. The core of this separation is keeping "facts" about the infrastructure from being entangled with the agents' "judgments·observations". Even if an autonomous agent loses its way or becomes contaminated, the global assets — the source of truth — remain untouched.
+
+Models are provider-agnostic: Anthropic·OpenAI·Ollama (local) or OpenAI-compatible endpoints are specified in the UI. One-line Docker installation is supported. In summary, ARTEX is "a team of LLM agents that autonomously performs everything from reconnaissance to data exfiltration with almost no human intervention."
+
+### Why ARTEX became a turning point — the shadow of misuse
+
+The problem is that this powerful tool was **used in attacks as-is as soon as it was released**. ARTEX was published on the premise of "learning·research within authorized assets", but it was diverted to real intrusions with no modification whatsoever.
+
+On October 7, 2026, CrowdStrike Intelligence reported that ARTEX was used in a campaign **targeting Korean financial institutions** spanning late September to early October. A day later, on October 8, developer Autumn-27 denied involvement and **converted the project to closed source**. But clones had already spread into the world by then, and derivatives — including Korean-language forks — were left in a state that "cannot be recalled even by closing the source".
+
+Microsoft revealed that the China state-nexus actor Storm-0940 used ARTEX in the **ConnectWise supply-chain attack**. In that attack, the agents used stolen app credentials to attempt logins against more than 2,250 Microsoft 365 tenants, and some reached **privileged access within 3 hours**. Microsoft also observed a case where an AI agent, while scanning GitHub for secrets, took only **5 minutes** to exfiltrate data from Azure Key Vault. Mandiant recorded that ARTEX is "loud by default" — explosive activity such as 27 cloud-permission probes in 23 seconds and fuzzing of more than 500 web requests against filenames.
+
+The ARTEX incident left the industry with two lessons. One: **a tool released for authorized testing can be used for intrusion with no modification whatsoever**. Two: the attacker's clock has decoupled from the defender's clock — AI agents carry out "machine-speed" attacks at a pace humans cannot follow. It is exactly this point that gave birth to the defensive logic: "then, before an attacker runs ARTEX in your environment, you should run it against yourself first." AntiFox stands on the extension of this tension.
+
+---
+
+## 1.2 The current — the 2026 red-team LLM ecosystem
+
+ARTEX is not alone. 2026 was the year "autonomous pentest" solidified as a category. The characteristics of this current can be organized into four.
+
+**First, architectural convergence.** Most autonomous pentest tools converged on a similar skeleton: decompose the goal into tasks, run multiple agents in parallel, and **integrate findings into a graph**. ARTEX·PentAGI·AntiFox all share this pattern. The difference comes not from the core engine but from "what wraps around it" — whether it is a FOSS toolkit (ARTEX), a service that takes responsibility for results (a closed platform like Astra), or one specialized in evidence·reporting (AntiFox).
+
+**Second, the shift to "continuous·autonomous" coverage.** The awareness spread that the past practice of "1–2 deep pentests per year" cannot keep up with attacker speed. In an era where the "time to exploit" concept — attacks arriving before vulnerability disclosure — becomes meaningless, always-on autonomous pentesting has emerged as "the only coverage model that can keep up".
+
+**Third, an ecosystem as a double-edged sword.** The same tools are used on both the defensive and offensive sides. Dozens of pentest frameworks similar to ARTEX are public with the ability to "execute credential attacks and cloud compromise at machine speed". Some even embed C2 (command and control) capabilities. This does not mean these tools are inherently evil — it means **the breadth of options available to today's attackers has widened by that much**. That is why tools in this field commonly move toward shipping strong usage policies (permitting only personal learning·local isolated verification) together with defense·detection guides (AntiFox is no different).
+
+**Fourth, hallucination — the wall of quality.** Autonomous tools find things quickly and in volume — and accordingly, the problem that a substantial share of those results are hallucination·false positives surfaced prominently (detailed in Chapter 4). This "signal-to-noise" crisis, symbolized by the collapse of the curl bounty, showed that the next competitive axis of autonomous pentesting is not "how much you find" but **"how what was found is confirmed with evidence and delivered"**. That is exactly where AntiFox stands.
+
+---
+
+## 1.3 The extension — how AntiFox went beyond ARTEX
+
+AntiFox began secondary development with ARTEX v0.1.1 as its starting point, and thereafter followed the evolution of the upstream while mutually exchanging·borrowing. As AntiFox itself discloses, ARTEX made "automatic discovery" very strong, but "report delivery" — an area that differs per customer·project — was relatively less polished. AntiFox put engineering weight precisely on that one **"delivery (handover)"** link. Its core orientation in one sentence: not stopping at "discovery", but turning vulnerabilities found by AI into an **evidence-backed report that engineers can understand and reproduce**. That is why v2.0's slogan is "from discovery to delivery".
+
+The characteristics AntiFox extended on top of ARTEX's foundation are as follows.
+
+**Evidence-driven delivery.** This is the biggest differentiator. At the very moment exploitation is carried out, each step's request·response·expectation·verification conclusion is recorded in the DB in structured form. It is not stitched together after the fact. The findings page shows entry point·preconditions through staged exploitation broken into **step-by-step natural-language descriptions + actual requests** (split display of the exploit chain), and MITM-records every request during the task, matching them to each step precisely by time window·sequence (syntax highlighting·body search·hit counts). This reduces the room for "reproduction steps to be omitted or manipulated". The quality of a red team report is decided not by "what was found" but by "how it reproduces", and AntiFox automates exactly that point.
+
+**Confirm-then-enrich and report management.** The moment a human "Confirms" a vulnerability, it is automatically enriched into structured data. Reports include **only confirmed vulnerabilities** by default, and support a naming template (issuer·logo·assignee·CVSS), selectable inclusion of a vulnerability subset, and automatic evidence caption generation. It generates delivery-grade .docx in Simplified·Traditional Chinese·English. This flow — "agents produce candidates, humans confirm them with evidence, and only the confirmed ones make it into the deliverable" — is AntiFox's identity: a product-level answer that preserves trust in the age of hallucination (Chapters 3·4).
+
+**Added operational·governance features.** While inheriting ARTEX's rule-based HITL intercept, AntiFox added the controls needed for enterprise·institution operations. **RBAC multi-user** (permission matrix·system roles·resource-level scoping·login auditing) separates access per operator, and the **global egress proxy** (v2.0.3 — sends all agent traffic through a single http/https/socks5 proxy, source IP hiding/hopping, per-task direct/proxy selection, egress IP echo availability test) controls traffic paths. It also provides 4-level vulnerability severity·batch enrichment, a dual global+task pgvector RAG knowledge base, MCP·Skill extensions, and one-click updates with SHA256·atomic replacement·rollback on failure.
+
+To summarize: if ARTEX is an "autonomous discovery engine", AntiFox is an extended edition that layers a "delivery layer" of **evidence·review·delivery·governance** on top of that engine. The architectural skeleton (multi-agent·dual graph·MITM evidence) is inherited from ARTEX, but AntiFox is the one that concentrated its engineering on polishing the output into "a form an engineer can take responsibility for and deliver to a customer".
+
+---
+
+## 1.4 Overview at a glance (repository checked 2026-11)
 
 | Item | Contents |
-| ------ | ------------------------------------------------------------------------ |
-| Base | Secondarily developed from ARTEX v0.1.1 |
+|---|---|
+| Base | Secondarily developed from ARTEX v0.1.1 (author @Autumn-27) |
 | Tech stack | Go single binary (Next.js embedded via `go:embed`) · PostgreSQL (+pgvector) |
 | Required runtime | Go 1.24+ / Node 20+ / PostgreSQL / Python 3 (report rendering) |
-| License | AGPL-3.0 (Appendix D) — **usage policy: only personal learning·local isolated verification permitted** |
-| Current version | **v2.0.3** (released 2026-10-30) |
+| License | AGPL-3.0 — usage policy: only personal learning·local isolated verification permitted |
+| Current version | v2.0.3 (released 2026-10-30) |
 | Default ports | `8787` (web console, first-run `/setup` sets the admin password) · `8788` (MITM traffic recording proxy) |
 | Container | `ghcr.io/antifox-ai/antifox` |
 | Agents | planner (intent generation) · worker ×N (execution) · mainagent (human interface) |
 | Knowledge structure | Global asset graph + per-task exploration graph (dual graph, interconnected via anchors) |
 | Report languages | Simplified·Traditional Chinese·English (Korean not supported) |
-| Official channels | GitHub repository·Releases · GHCR package · WeChat official account — **no separate website** (confirmed 2026-11-14) |
+| Official channels | GitHub repository·Releases · GHCR package · WeChat official account — no separate website (confirmed 2026-11-14) |
+
+> The strength is itself the risk. Automatic evidence collection means credentials·sessions·requests/responses accumulate in PostgreSQL. A supply-chain incident in the ARTEX-family base has also been confirmed: the 2026-11-06 CSA analysis "Trojanized Offensive AI Tooling: The ARTEX Docker Backdoor" revealed that the Docker Hub images `tomicdd/artex` (and `congdonglinux/artex`) had an unauthenticated root command execution backdoor hidden in the login handling, downloaded about 9,000 times. There is currently no evidence that AntiFox itself was infected (the official Compose uses GHCR) — but the key lesson is "a clean source does not guarantee a clean image". Before adoption, establish first (1) data retention·access control·destruction, and (2) distribution image provenance·integrity verification (Chapters 6·7·12).
 
 ### Official technical architecture (per README)
 
-Go single binary (Next.js frontend embedded via `go:embed`) + PostgreSQL. The core is the **dual graph** — a global asset graph (shared source of truth across tasks) + a per-task exploration graph (a lineage chain of goals·intents·facts·vulnerabilities), interconnected via anchors. The engine is **event-driven**: when the graph changes, the planner generates intents, workers write back execution results, and that in turn raises new events.
+Go single binary (Next.js frontend embedded via `go:embed`) + PostgreSQL. The core is the dual graph — a global asset graph (shared source of truth across tasks) + a per-task exploration graph (a lineage chain of goals·intents·facts·vulnerabilities), interconnected via anchors. The engine is event-driven: when the graph changes, the planner generates intents, workers write back execution results, and that in turn raises new events.
 
 ```mermaid
 flowchart TB
@@ -141,28 +161,24 @@ flowchart TB
 
 > Source: mermaid diagram from the official README's "Technical architecture" section (confirmed 2026-11-14, labels translated into English).
 
-### What makes it different from other Red Team security tools
+---
 
-- **Reproduction process recorded immediately** — at the same time as exploitation, each step's request·response·expectation·verification conclusion is recorded in structured form in the DB (not post-hoc reconstruction).
-- **Exploit chain shown step-by-step on the findings page** — from entry point·preconditions to staged exploitation, each step consists of a natural-language description + the actual request.
-- **Steps automatically linked to real traffic** — all requests during a task are MITM-recorded and matched to each step by time window·sequence (syntax highlighting·body search·hit counts).
-- **Delivery-grade reports** — AI narrative + python-docx producing delivery-grade `.docx` (cover/table of contents/pagination/per-vulnerability attribute tables). Full support for **Simplified Chinese·Traditional Chinese·English**.
-
-> Actual features the repository specifies: **RBAC multi-user** (permission matrix·system roles·resource-level scoping·login auditing), **rule-based HITL intercept** (inherited from the ARTEX base), **global egress proxy** (v2.0.3 — sends all agent traffic through a single http/https/socks5 proxy, source IP hiding/hopping, per-task direct/proxy selection, egress IP echo availability test), **confirm-to-enrich** (when a human confirms a vulnerability it is automatically enriched into structured data), report management (by default only confirmed vulnerabilities are included, naming template: issuer·logo·assignee·CVSS, selectable vulnerability subset inclusion), automatic evidence caption generation (based on reproduction step text, editable), 4-level vulnerability severity·batch enrichment, dual global+task pgvector RAG, one-click update (SHA256·atomic swap·rollback on failure), MCP/Skill extensions.
-
-> **The strength is itself the risk** — automatic evidence collection means **credentials·sessions·requests/responses accumulate in PostgreSQL**. A supply-chain incident in the ARTEX family base was also confirmed: the **2026-11-06 CSA (Cloud Security Alliance) analysis "Trojanized Offensive AI Tooling: The ARTEX Docker Backdoor"** revealed that the Docker Hub images `tomicdd/artex` (and `congdonglinux/artex`) had **an unauthenticated root command execution backdoor hidden in the login handling**, downloaded about 9,000 times. **There is currently no evidence that AntiFox itself was infected** (the official Compose uses GHCR `ghcr.io/antifox-ai/antifox`) — but the key lesson is "a clean source does not guarantee a clean image". Before adoption, establish first (1) data retention·access control·destruction, and (2) distribution image provenance·integrity verification (Chapters 6·7·12, Appendix G).
-
-### Comparison with competing projects
+## 1.5 Competitive project landscape
 
 | Project | Characteristics | Relationship to AntiFox |
-| ---------------------------------- | --------------------------------------------- | -------------------------------- |
-| **ARTEX** | Exploration graph engine·MITM·HITL·multi-agent | Direct ancestor. Original closed-sourced after attack abuse |
-| **PentAGI** | Fully autonomous, Docker, orchestrates Nmap·Metasploit·sqlmap | Closest alternative in design philosophy |
-| **Agent Zero** | General-purpose autonomy, many cases deployed without authentication | Lightweight·general-purpose |
-| **PentestGPT** | LLM-assisted, ranks high on the XBOW benchmark | Strengths in exploration·reasoning assistance |
-| **HexStrike AI · Strix · RedAmon** | Tool-integration type · app-specific · MIT flexible | Niche alternatives, each |
+|---|---|---|
+| ARTEX | Exploration graph engine·MITM·HITL·multi-agent. ScopeSentry-based reconnaissance | Direct ancestor. Original closed-sourced after attack abuse |
+| PentAGI | Fully autonomous, Docker, orchestrates Nmap·Metasploit·sqlmap | Closest alternative in design philosophy |
+| Astra | Closed-source autonomous pentest platform (a service type that takes responsibility for results) | If ARTEX is a toolkit, Astra is a service — different positioning |
+| Agent Zero | General-purpose autonomous agent, many cases deployed without authentication | Lightweight·general-purpose |
+| PentestGPT | LLM-assisted, ranks high on the XBOW benchmark | Strengths in exploration·reasoning assistance |
+| HexStrike AI · Strix · RedAmon | Tool-integration type · app-specific · MIT flexible | Niche alternatives, each |
 
-> **Summary** — PentAGI for replacing ARTEX; if **report automation** is the core need, AntiFox's evidence-driven approach is the differentiator.
+> **Summary** — to replace ARTEX as-is, PentAGI is closest, and to outsource the results wholesale, a service type like Astra is the alternative. But if **report automation·evidence-driven delivery** is the core requirement, AntiFox's approach is differentiated. On the current where the next competitive axis of autonomous pentesting is shifting from "discovery volume" to "evidence·delivery quality" (1.2), AntiFox's position becomes clear.
+
+---
+
+> The ARTEX misuse incidents (Korean financial sector·ConnectWise)·architecture·supply-chain incident cited in this chapter are based on 2026 public coverage·research (CrowdStrike·Microsoft·Mandiant·CSA etc.), and details may be updated depending on point in time·source — reconfirm against the original sources at the time of adoption. With all of these risks understood, AntiFox must be operated only within the fence of authorization·isolation·evidence.
 
 ---
 
