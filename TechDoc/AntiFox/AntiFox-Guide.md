@@ -16,19 +16,6 @@
 
 ---
 
-## 2026-11-14 변경 — 저장소 실사·스크린샷 반영
-
-- 공식 저장소(`github.com/AntiFox-AI/antifox`) **클론 실사**로 사실관계 전수 재확인(v2.0.3 최신 릴리스, CHANGELOG, `.env.example`, `config.example.json`, `docker-compose.yml`, `deploy/antifox.service`)
-- **스크린샷 9종 삽입**(5장) — login·dashboard·tasks·finding-steps·traffic-packet·env-leak·findings + demo.gif·login-en·wechat-qr 원본 수록, AGPL 출처 고지
-- **1장 전면 개편** — ARTEX 오용 사건(한국 금융권 캠페인·ConnectWise)·2026 레드팀 LLM 생태계·AntiFox 확장 구조·경쟁 지형 서술(1.1~1.5), 서두 인포그래픽은 개편에 따라 제거(`AntiFox-Guide-overview.png` 파일은 보존)
-- **실필드 검증(설치본 UI, 2026-11-14)** — v2.0.3 공식 macOS(arm64) 바이너리를 **SHA256 대조 후** 로컬 격리 랩(PostgreSQL 16)에 설치, `/setup`→로그인→대시보드→LLM 설정→새 작업(출구 선택)→보고서 관리→시스템 설정→RBAC 화면 **실캡처 8종** 수록(5.1·5.8). UI에서 v2.0.3 버전 표기·전역 출구 프록시·LLM 페일오버·역할별 모델·내장 인터셉트 규칙·RBAC 4역할 확인
-- `config.json` **실필드 검증 완료**(6장) — `database` 블록 6필드 + `ANTIFOX_PG_DSN` 우선순위
-- **공식 README 아키텍처 다이어그램 수록**(1장), **compose·systemd 실파일 동작 반영**(6장 — 포트 `8787`/`8788`, exit 75 원자 교체, `ANTIFOX_UPDATE_PROXY`)
-- 릴리스 **`SHA256SUMS` 제공 확인**(6장 무결성 검증 ① 갱신)
-- **공식 채널 정리** — 별도 웹사이트 없음, GitHub·GHCR·위챗 3채널(1·5·부록 G)
-
----
-
 ## 독자 유형별 읽기 경로
 
 | 당신이…              | 이 순서로                             | 핵심 산출                 |
