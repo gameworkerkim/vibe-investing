@@ -348,7 +348,7 @@ curl 사례(유효 5% 미만), Mythos 대 curl 시험(5건 중 1건 유효), 슬
 
 최초 기동 후 `http://localhost:8787` → `/setup`에서 관리자 비밀번호를 설정하는 로그인 화면. UI 언어는 간체·번체·영어 3종을 지원한다.
 
-[![AntiFox 로그인 화면](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/login.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/login.png)
+<img src="screenshots/login.png" alt="AntiFox 로그인 화면" width="720" />
 
 > 3언어 국제화 확인용 영문 UI: `screenshots/login-en.png`
 
@@ -360,7 +360,7 @@ curl 사례(유효 5% 미만), Mythos 대 curl 시험(5건 중 1건 유효), 슬
 
 | 대시보드                                                                                                                                                                                                                       | 작업 목록                                                                                                                                                                                                               |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [![AntiFox 대시보드](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/dashboard.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/dashboard.png) | [![AntiFox 작업 목록](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/tasks.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/tasks.png) |
+| <img src="screenshots/dashboard.png" alt="AntiFox 대시보드" width="380" /> | <img src="screenshots/tasks.png" alt="AntiFox 작업 목록" width="380" /> |
 
 실필드 검증에서 캡처한 빈 랩 상태의 대시보드(설치 직후, 2026-11-14):
 
@@ -370,25 +370,25 @@ curl 사례(유효 5% 미만), Mythos 대 curl 시험(5건 중 1건 유효), 슬
 
 발견 페이지가 진입점→전제조건→단계적 악용을 **단계별 자연어 설명 + 실제 요청**으로 보여준다(증거 구동 납품의 핵심 화면).
 
-[![발견 상세 — 익스플로잇 체인 분할 표시](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/finding-steps.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/finding-steps.png)
+<img src="screenshots/finding-steps.png" alt="발견 상세 — 익스플로잇 체인 분할 표시" width="720" />
 
 ### 5.4 증거 · MITM 패킷 (단계-실트래픽 자동 연결)
 
 각 악용 단계가 시간창·순서로 실제 요청/응답 패킷에 연결된다. 구문 강조·본문 검색·명중 횟수 제공. (자체 캡처 시 민감값은 5.0 마스킹)
 
-[![MITM 트래픽 패킷 뷰](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/traffic-packet.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/traffic-packet.png)
+<img src="screenshots/traffic-packet.png" alt="MITM 트래픽 패킷 뷰" width="720" />
 
 ### 5.5 "증거 즉 패킷" — 민감정보 노출
 
 민감정보 노출류는 트래픽 패킷 자체가 증거다(사후 스크린샷 재구성 불필요).
 
-[![민감정보 노출 — 패킷이 곧 증거](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/env-leak.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/env-leak.png)
+<img src="screenshots/env-leak.png" alt="민감정보 노출 — 패킷이 곧 증거" width="720" />
 
 ### 5.6 발견 목록
 
 확인/미확인 상태·심각도가 보이는 발견 목록. 보고서에 수록할 확인된 취약점을 고르는 전 단계다.
 
-[![AntiFox 발견 목록](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/findings.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/findings.png)
+<img src="screenshots/findings.png" alt="AntiFox 발견 목록" width="720" />
 
 ### 5.7 동작 데모 · 공식 채널 QR
 

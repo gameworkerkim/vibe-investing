@@ -363,7 +363,7 @@ So this chapter's conclusion returns to the one sentence from the beginning. **A
 
 After first launch, `http://localhost:8787` → the login screen where you set the admin password at `/setup`. The UI supports 3 languages: Simplified·Traditional·English.
 
-[![AntiFox login screen](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/login.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/login.png)
+<img src="screenshots/login.png" alt="AntiFox login screen" width="720" />
 
 > English UI for verifying 3-language internationalization: `screenshots/login-en.png`
 
@@ -375,7 +375,7 @@ The first `/setup` screen, captured directly in real-field verification (v2.0.3 
 
 | Dashboard | Task list |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| [![AntiFox dashboard](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/dashboard.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/dashboard.png) | [![AntiFox task list](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/tasks.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/tasks.png) |
+| <img src="screenshots/dashboard.png" alt="AntiFox dashboard" width="380" /> | <img src="screenshots/tasks.png" alt="AntiFox task list" width="380" /> |
 
 Dashboard in empty-lab state captured during real-field verification (immediately after installation, 2026-11-14):
 
@@ -385,25 +385,25 @@ Dashboard in empty-lab state captured during real-field verification (immediatel
 
 The findings page shows entry point→preconditions→staged exploitation as **step-by-step natural-language descriptions + actual requests** (the core screen of evidence-driven delivery).
 
-[![Finding detail — split display of the exploit chain](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/finding-steps.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/finding-steps.png)
+<img src="screenshots/finding-steps.png" alt="Finding detail — split display of the exploit chain" width="720" />
 
 ### 5.4 Evidence · MITM packets (steps automatically linked to real traffic)
 
 Each exploitation step is linked to actual request/response packets by time window·sequence. Syntax highlighting·body search·hit counts provided. (When capturing your own, mask sensitive values per 5.0)
 
-[![MITM traffic packet view](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/traffic-packet.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/traffic-packet.png)
+<img src="screenshots/traffic-packet.png" alt="MITM traffic packet view" width="720" />
 
 ### 5.5 "Evidence as packets" — sensitive information exposure
 
 For sensitive information exposure findings, the traffic packets themselves are the evidence (no need to reconstruct screenshots after the fact).
 
-[![Sensitive information exposure — the packet is the evidence](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/env-leak.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/env-leak.png)
+<img src="screenshots/env-leak.png" alt="Sensitive information exposure — the packet is the evidence" width="720" />
 
 ### 5.6 Findings list
 
 The findings list showing confirmed/unconfirmed status·severity. This is the stage before picking the confirmed vulnerabilities to include in the report.
 
-[![AntiFox findings list](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/findings.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/findings.png)
+<img src="screenshots/findings.png" alt="AntiFox findings list" width="720" />
 
 ### 5.7 Demo · official channel QR
 
