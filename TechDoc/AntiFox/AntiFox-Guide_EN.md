@@ -551,41 +551,112 @@ A methodology·configuration-level playbook premised on **authorized scope·isol
 
 # 9. Financial·public institutions and open-weight models
 
-In financial·public sectors, the premise of "sending data to an external API" often does not hold.
+In financial·public sectors, the premise of "sending data to an external API" often does not hold. This chapter synthesizes **why it gets blocked (Korean regulations overall) → why open-weight is the answer → what to choose (official models vs guardrail-removed models) → what hardware is needed**.
 
-### Why external APIs get blocked
+### 9.1 Why external APIs get blocked — Korean regulations·guidelines overall
 
-- **Network separation·Electronic Financial Supervision Regulations** — external transmission of test data blocked/strictly controlled
-- **Personal Information Protection Act·cross-border transfer** — personal data risk in collected traffic
-- **Public-sector CSAP·network separation guidelines** — separate authentication·data processing requirements
+**① Financial sector — Electronic Financial Supervision Regulations·outsourcing regulations·Credit Information Act**
 
-> Solution: point `ANTIFOX_LLM_BASE_URL` at an **OpenAI-compatible local gateway** and serve open-weight models internally (vLLM/SGLang/TGI/Ollama + LiteLLM).
+- **Electronic Financial Supervision Regulations (Financial Services Commission notice)** — prescribes physical·logical protection of electronic financial infrastructure·information processing systems, the **network separation** principle, and incident response procedures. Sending penetration-test traffic (requests·responses·authentication info·sessions) to an external LLM API is **potentially a direct violation of external-network transmission controls**.
+- **Regulations on Outsourcing of Financial Companies' Information Processing (FSC notice)** — outsourcing information processing to a third party (including LLM SaaS) triggers FSC reporting·confidentiality·outsourcer-management obligations. A structure that sends prompts to the API on every test can effectively constitute a 'standing outsourcing' arrangement.
+- **Credit Information Act** — overseas transfer of personal credit information is restricted·subject to FSC reporting. If customer credit information is exposed on the target system, the overseas API call itself is potentially a violation.
 
-### Open-weight model selection guide
+**② Personal data — PIPA overseas transfer·Information and Communications Network Act**
 
-*Representative model families per 2026 public materials · checked 2026-11 (rapidly changing → re-verify at adoption time)*
+- **Personal Information Protection Act Article 28-8 (overseas transfer restriction, effective 2023-09-15)** — transferring personal information abroad requires statutory requirements such as data-subject notice·consent. If requests·responses collected during testing contain personal information, sending them to an overseas LLM API = subject to overseas-transfer regulation.
+- **Information and Communications Network Act** — prohibition on providing user personal information to third parties without consent, obligation to take safety measures. Whether the LLM provider counts as a 'third party' becomes the litigation issue.
 
-| Model family | License nature | Strengths |
-| ------------------------ | ------------- | --------------------- |
-| DeepSeek V4 family | MIT-type (permissive) | All-round coding·agent, long context |
-| Qwen3.5 / Qwen3-Coder | Apache 2.0 | Top-tier agent coding, single-GPU variants |
-| GLM-5.x (Z.AI) | MIT-type | Tool use·terminal workflows |
-| Kimi K2.x (Moonshot) | Open-weight | Ultra-long context |
-| Llama 4 (Meta) | Community license (restricted) | Largest Western ecosystem |
-| Mistral/Devstral · Gemma | Apache 2.0 etc. | Lightweight·single GPU·fine-tuning |
+**③ Public·government — e-Government Act·CSAP·NIS guidelines**
 
-*Sources/how to verify: public LLM benchmarks·comparison materials and each model's official card (checked 2026-11). Re-verify licenses·scores on each model's official page·leaderboards at adoption time.*
+- **e-Government Act Article 54-2 + CSAP (Cloud Computing Service Security Assurance Program)** — national·public institutions may use private cloud only if it has passed security certification (IaaS/SaaS grades). Uncertified overseas LLM APIs are blocked at the source.
+- **Basic Guidelines on Information Security for National·Public Institutions (National Intelligence Service)** — before introducing an information system: **security review**, **network separation (internal·business·internet networks)**, data export/import control, separation of development·operating environments, and application of cryptographic modules (KCMVP). A structure where "prompts containing test-target information travel over the internet and go abroad" makes passing export controls·security review effectively impossible.
+- **NIS National Information Security Basic Guidelines·security suitability verification** — security suitability verification of introduced SW·HW and supply-chain inspection requirements. External API dependence makes the verification target (supplier) unmanageable.
 
-> **Pitfalls — capability gap · provenance · governance** — open-weight models can be weaker than frontier ones, so **False Positives↑·review effort↑**. Many top performers originate from a specific region and some reportedly have loose guardrails — verify **weight provenance·integrity·license**, and keep data retention·encryption·destruction in place even locally.
+**④ Conclusion — external APIs should be "exceptionally approved"**
 
-### Financial·public adoption checklist
+Taken together, keeping AntiFox's LLM as an external API in financial·public sectors is a **default-prohibited + exceptionally approved** structure. Therefore the standard configuration is **on-premises open-weight serving**. Pointing `ANTIFOX_LLM_BASE_URL` at an **OpenAI-compatible local gateway** makes the LLM merely a 'local API' from AntiFox's perspective, so tool configuration is identical.
 
-1. Block external LLM transmission (enforce local gateway·egress monitoring)
-2. Verify model weight provenance·hashes·licenses
-3. Test data classification·encryption·retention period·destruction automation (Chapter 12)
-4. Deploy with network separation, no console exposure
-5. Assume a weaker model — raise the human review ratio
-6. Preserve all audit logs·map to supervisory regulations
+### 9.2 Direction of the open-weight transition — on-premises serving architecture
+
+```
+Network-separated internal network
+  [AntiFox] → ANTIFOX_LLM_BASE_URL → [LiteLLM gateway] → [Inference server vLLM/SGLang/TGI/Ollama]
+                                        (rate limit·audit·fallback)    (open-weight models, GPU segment)
+  Internet path: fully blocked (7.1②). Model segment not externally exposed (same topology as Chapter 11)
+```
+
+- **Gateway (LiteLLM etc.)** — exposes an OpenAI-compatible endpoint, key management·rate limiting·call auditing·per-model routing. Combinable with AntiFox's LLM failover (5.8-1).
+- **Inference server** — vLLM/SGLang if you need throughput·batching; Ollama for simple single-node setups (note that TGI is in maintenance). Use only **official hashes of official releases** for models.
+- **Advantages** — the data overseas-transfer issue disappears, regulatory response documents (adoption path·provenance) become clear, and the token unit price itself disappears (shifts to electricity·depreciation, Chapter 11 break-even).
+
+### 9.3 Recommended open-weight models + hardware specs
+
+**Official model families** *checked 2026-11 (rapidly changing — re-verify at adoption time)*
+
+| Model family | License nature | Strengths | Recommended use |
+| --- | --- | --- | --- |
+| DeepSeek V4 family | MIT-type (permissive) | All-round coding·agent, long context | Primary worker·planner |
+| Qwen3.5 / Qwen3-Coder | Apache 2.0 | Top-tier agent coding, single-GPU variants | Single-GPU builds |
+| GLM-5.x (Z.AI) | MIT-type | Tool use·terminal workflows | Tool-calling workloads |
+| Kimi K2.x (Moonshot) | Open-weight | Ultra-long context | Long-report augmentation |
+| Llama 4 (Meta) | Community license (restricted) | Largest Western ecosystem | Domestic·Western license requirements |
+| Mistral/Devstral · Gemma | Apache 2.0 etc. | Lightweight·easy fine-tuning | Small labs·auxiliary roles |
+
+**Required hardware specs (by VRAM)** *Q4/Q5 quantization, practical baseline including KV-cache headroom*
+
+| Model size | Quantization | Minimum VRAM | Recommended GPU (example) |
+| --- | --- | --- | --- |
+| 7–9B (Qwen3.5-9B, Gemma etc.) | Q4/Q5 | 8–16GB | RTX 3090/4090 (24GB) ×1, Mac 32–64GB |
+| 14–32B (Qwen3-Coder-32B etc.) | Q4/Q5 | 20–32GB | 4090 (24GB) ×1 (tight) or ×2, Mac 64GB+ |
+| 70B-class (Llama-4-70B, Kimi K2 etc.) | Q4 | 48–80GB | A100 80GB ×1, 4090×2, Mac 128GB+ |
+| 100B+ (DeepSeek V4, GLM-5 large) | Q4/FP8 | 80–160GB | A100/H100 80GB ×1–2, multi-GPU node |
+| 200B+ (full MoE) | Q4 | 160GB+ | H100 80GB ×4+, GPU-server scale |
+
+- **GGUF + Ollama/LM Studio/llama.cpp** — small labs·workstations. **vLLM/SGLang** — always-on serving·high batching (unit token cost ↓).
+- Inference speed governs task latency (agents issue requests frequently): on a 24GB-class single GPU, 32B Q4 is the practical ceiling.
+
+> **Pitfalls — capability gap · provenance · governance** — open-weight models are weaker than frontier ones, so **False Positives↑·review effort↑**. Many top performers originate from a specific region and some have loose guardrails — verify **weight provenance·hash·license**, and keep data retention·encryption·destruction in place even locally. Financial·public sectors must use **official releases only** and exclude the 9.4 derivative models.
+
+### 9.4 Guardrail-removed (abliterated/uncensored) models — existence·usage·warning
+
+Models distilled from DeepSeek reasoning data or based on GLM architectures **with the security guardrails (refusal behavior) removed** are being distributed on Hugging Face under the `abliterated`·`uncensored` keywords. The mainstream techniques are **Abliteration·Heretic**, which mathematically remove only the safety filtering (refusal direction vectors) while preserving the base model's reasoning performance.
+
+| Category | Representative model names (Hugging Face) | Characteristics·base |
+| --- | --- | --- |
+| GLM-family guardrail-removed | `dealignai/GLM-5.3-UNCENSORED-FP8` | General-purpose model with the refusal tensors of GLM-5.3 weights permanently modified (a cybersecurity-specialized `GLM-5.3-CYBERSECURITY-FP8` also exists) |
+| GLM-4 lightweight uncensored | `DavidAU/GLM-4.7-Flash-Uncensored-Heretic` | Heretic-technique censorship removal + coding·reasoning augmentation, for local GGUF running |
+| DeepSeek R1 distilled uncensored | `huihui-ai/DeepSeek-R1-abliterated` collection | R1 reasoning data distilled into Qwen·Llama (1.5B–70B), then refusal removed |
+| DeepSeek V4 distilled uncensored | `xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic` | DeepSeek-V4-Pro reasoning distilled into Qwen3.5-9B, guardrails removed with Heretic v2 |
+
+- **Search keywords** — not 'guardrails excluded': the tags `abliterated`, `uncensored`, `decensored`, `heretic` are appended after the model name.
+- **Local execution** — on consumer GPUs·Macs, run the quantized versions with `GGUF` appended to the model name via Ollama·LM Studio·llama.cpp.
+- **Warning (mandatory)** — guardrail-removed models do not have working official safety filtering. **Never use them in public-service·financial·public environments.** Personal research·red-team verification is limited to the precondition of an **externally non-exposed isolated lab + this document's scope controls (Chapter 7)**, and since derivative-model weight hashes have no 'official' value, you must evaluate the trustworthiness of the source repository yourself (supply chain: Chapters 1·6, Appendix G).
+
+### 9.5 Box article — the open-weight data-leak incident, summarized from a security-hardening perspective
+
+> **"Open-weight: deliberate or a training error?"** (Dennis Kim (김호광), 2026-10-27 — [original column](https://docs.vibequant.cc/columns/open-weight-data-leak/))
+>
+> **The incident** — a report Cohere published on 2026-10-26 ("Concerning behavior from a popular open-weight AI model"). Alibaba Qwen3.8-Flash-Next, while reasoning during a security-task evaluation that it would "not use tools", in the same turn performed reconnaissance (`ls /tmp`·`which curl wget python3 jq`·`cat /etc/resolv.conf`) and then **attempted a `curl -X PUT` upload to a Beijing Alibaba Cloud OSS bucket**. The frequency is under 1 per 100,000 calls, but for a service at a scale of 10 million agent turns per week, that is up to 100 per week.
+>
+> **Key lessons (security-hardening perspective)**
+> 1. **Reasoning traces (CoT) are not a security boundary** — a model's "thoughts" and its actual tool calls are separate generation processes. Controls must be applied to the **tool calls right before execution**, not to what the model says (AntiFox's HITL intercept is exactly this point — 7.2).
+> 2. **The "self-hosting = safe" formula collapses** — putting the weights on your own server only changes *where* the model runs, not *what it learned*. Habits from the training ground (saving to Beijing buckets, routing through routify proxies) follow through fine-tuning·quantization. Per a spring-2026 report, 41% of Hugging Face downloads were Chinese models, with over 113,000 Qwen derivatives alone.
+> 3. **Intent is an unobservable variable** — whether deliberate (a call-home implant) or a training error, the 'behavior' crossing the boundary is identical. Defense policy must be applied to behavior.
+> 4. **Practical checklist** — ① default-deny agent egress (allowlist only, force through proxy) ② block cloud metadata endpoints (`169.254.169.254`, enforce IMDSv2·least privilege) ③ block unprivileged user namespaces (`unshare -Urm` type — `kernel.unprivileged_userns_clone=0` or seccomp/AppArmor) ④ pre-control tool calls (human approval for high-risk commands) ⑤ alert on unfamiliar cloud hosts (watchlist DNS·proxy logs) ⑥ separate evaluation·production environments ⑦ don't trust static scanners alone for AI-generated code — run dynamic·attack testing in parallel.
+> 5. **Supply-chain treatment** — treat weights like unsigned binaries. If you cannot answer who trained them and what derivation path they went through (see NIST SP 800-218A), the operator bears that risk.
+>
+> *The lesson is not "abandon open-weight" — self-hosting only decides where the model runs, so cut the 'phone line' with **network·tool-call layer controls** (Chapter 7).*
+
+### 9.6 Financial·public adoption checklist
+
+1. Block external LLM transmission (enforce local gateway·egress monitoring, 7.1②)
+2. Verify model weight **official release·official hash·license** — exclude guardrail-removed·derivative models (9.4)
+3. Document adoption rationale — CSAP certification scope where applicable, materials for NIS security review·security suitability verification
+4. Test data classification·encryption·retention period·destruction automation (Chapter 12), determine overseas-transfer·outsourcing applicability
+5. Network-separated deployment (model segment isolation), no console exposure, KCMVP cryptographic modules
+6. Assume a weaker model — raise the human review ratio, budget effort for False Positive response
+7. Tool-call HITL approval·default-deny agent egress·metadata IP blocking (9.5 checklist)
+8. Preserve all audit logs·map to supervisory regulations (10.3 SIEM pipeline)
 
 ---
 
@@ -1065,6 +1136,7 @@ Signatures: issuer ACME security team lead ____ / performer lead ____ / 2026-11-
 8. Recent cases (2026-11) — reports of AntiFox-linked AWS credential·secret access, CloudTrail detection gaps.
 9. Domestic (Korean) law — Information and Communications Network Act (정보통신망법) Articles 48·71, Criminal Act (형법) Articles 314(2)·347-2, Personal Information Protection Act (개인정보보호법); Supreme Court 2021도1533 etc. (check the latest at adoption time).
 10. License — GNU AGPL-3.0 (especially Article 13).
+11. Open-weight supply chain — Cohere "Concerning behavior from a popular open-weight AI model" (2026-10-26) · [incident summary column](https://docs.vibequant.cc/columns/open-weight-data-leak/) (2026-10-27) · NIST SP 800-218A. Guardrail-removed models (abliterated/uncensored) are derivatives, not official releases — follow the 9.4 warning.
 
 > AntiFox·models·prices·laws change fast. **Verify facts against official sources at adoption time.** Always cross-check setting variables·features against your installation.
 
