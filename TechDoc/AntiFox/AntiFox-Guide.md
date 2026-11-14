@@ -4,7 +4,7 @@
 
 > **v1.0-rc · 교정·검증판 (release candidate)** 저자: Dennis Kim (김호광) · Betalabs Inc. 대상 독자: 레드팀 운영자 · 보안 컨설턴트 · 블루/퍼플팀 · 기업·기관 도입 검토자 · 초급 학습자 대상 버전: AntiFox v2.0.x 라인 (저장소 확인: 2026-11) 배포: 지식 공유 목적의 무료 배포 — 페이월 없음
 >
-> *release candidate인 이유: (1) 법무 검토 완료, (2) 설치본 추가 모의 테스트 검증 — 이 2가지가 끝나면 v1.0으로 확정. (3) 실제 스크린샷 삽입은 **2026-11-14 완료**(공식 저장소 `screenshots/` 원본 수록, 5장). 남은 2건이 끝나기 전까지는 "검증 대기" 상태로 읽을 것.*
+> *release candidate인 이유: (1) 법무 검토 완료, (2) 설치본 추가 모의 테스트 검증(LLM 연결 작업 실행·보고서 생성) — 이 2가지가 끝나면 v1.0으로 확정. (3) 실제 스크린샷 삽입은 **2026-11-14 완료**(공식 원본 10종 + 로컬 실캡처 8종, 5장), 설치본 UI 실필드 검증도 **2026-11-14 완료**(v2.0.3 바이너리 SHA256 검증 설치, 6장). 남은 2건이 끝나기 전까지는 "검증 대기" 상태로 읽을 것.*
 
 ---
 
@@ -53,6 +53,7 @@
 - 공식 저장소(`github.com/AntiFox-AI/antifox`) **클론 실사**로 사실관계 전수 재확인(v2.0.3 최신 릴리스, CHANGELOG, `.env.example`, `config.example.json`, `docker-compose.yml`, `deploy/antifox.service`)
 - **스크린샷 9종 삽입**(5장) — login·dashboard·tasks·finding-steps·traffic-packet·env-leak·findings + demo.gif·login-en·wechat-qr 원본 수록, AGPL 출처 고지
 - **한눈에 보는 아키텍처·프로세스 인포그래픽 수록**(1장 서두, `AntiFox-Guide-overview.png`)
+- **실필드 검증(설치본 UI, 2026-11-14)** — v2.0.3 공식 macOS(arm64) 바이너리를 **SHA256 대조 후** 로컬 격리 랩(PostgreSQL 16)에 설치, `/setup`→로그인→대시보드→LLM 설정→새 작업(출구 선택)→보고서 관리→시스템 설정→RBAC 화면 **실캡처 8종** 수록(5.1·5.8). UI에서 v2.0.3 버전 표기·전역 출구 프록시·LLM 페일오버·역할별 모델·내장 인터셉트 규칙·RBAC 4역할 확인
 - `config.json` **실필드 검증 완료**(6장) — `database` 블록 6필드 + `ANTIFOX_PG_DSN` 우선순위
 - **공식 README 아키텍처 다이어그램 수록**(1장), **compose·systemd 실파일 동작 반영**(6장 — 포트 `8787`/`8788`, exit 75 원자 교체, `ANTIFOX_UPDATE_PROXY`)
 - 릴리스 **`SHA256SUMS` 제공 확인**(6장 무결성 검증 ① 갱신)
@@ -259,11 +260,19 @@ Cyber Kill Chain · MITRE ATT&CK · PTES · OSSTMM / NIST SP 800-115.
 
 > 3언어 국제화 확인용 영문 UI: `screenshots/login-en.png`
 
+실필드 검증에서 직접 캡처한 최초 `/setup` 화면(v2.0.3 바이너리, 2026-11-14):
+
+<img src="screenshots/lab-01-setup.png" alt="AntiFox 최초 실행 /setup 화면 — 실캡처" width="720" />
+
 ### 5.2 대시보드 · 작업 목록
 
 | 대시보드                                                                                                                                                                                                                       | 작업 목록                                                                                                                                                                                                               |
 | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | [![AntiFox 대시보드](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/dashboard.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/dashboard.png) | [![AntiFox 작업 목록](https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/tasks.png)](https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/tasks.png) |
+
+실필드 검증에서 캡처한 빈 랩 상태의 대시보드(설치 직후, 2026-11-14):
+
+<img src="screenshots/lab-12-dashboard.png" alt="AntiFox 대시보드 — 실캡처(빈 랩)" width="720" />
 
 ### 5.3 발견 상세 — 익스플로잇 체인 분할 표시
 
@@ -294,14 +303,31 @@ Cyber Kill Chain · MITRE ATT&CK · PTES · OSSTMM / NIST SP 800-115.
 - **v2.0 증거 구동 흐름 데모**: `screenshots/demo.gif` (공식 README의 v2.0 소개 GIF 원본)
 - **공식 채널**: 별도 웹사이트는 없고(2026-11-14 확인), 공식 채널은 GitHub 저장소·GHCR 패키지·위챗 공식계정이다(부록 G). QR: `screenshots/wechat-qr.jpg`
 
-### 5.8 LLM 설정 / 보고서
+### 5.8 LLM 설정 / 보고서 — 실캡처 (실필드 검증 2026-11-14)
 
-LLM 설정 및 언어 설정, 보고서 관련 설정이 가능하다. 공식 저장소에 캡처가 없어 **직접 캡처**(5.0 마스킹 적용)가 필요하다:
+LLM 설정 및 언어 설정, 보고서 관련 설정이 가능하다. 아래는 **v2.0.3 공식 macOS 바이너리(SHA256 검증)를 로컬 격리 랩에 설치해 직접 캡처**한 화면이다(합성 랩 데이터만 사용, 마스킹 대상 없음).
 
-1. 「LLM 配置」에서 모델·키·엔드포인트·세션 헤더 설정 화면(키 마스킹)
-2. 새 작업의 출구 선택(전역 프록시/직결) 화면
-3. 「报告」에서 확인된 취약점 선택 → 언어(简/繁/英) 선택 → 생성 화면
-4. 생성된 docx 표지·목차·취약점 속성표 페이지
+**5.8-1. LLM 配置 (`/system/llm/`)** — 모델·키·엔드포인트·속도제한 프로필 관리, **LLM 페일오버(2개 이상 프로필)**, **역할별 모델 지정**(planner·worker·mainagent·보고서 보강):
+
+<img src="screenshots/lab-15-llm.png" alt="AntiFox LLM 설정 — 실캡처" width="720" />
+
+**5.8-2. 새 작업 대화상자 — 출구 선택** — 작업별 LLM 프로필·타임아웃·**출구 프록시(전역 따름/직결)** 선택(5.8-1~2는 v2.0.3 신기능):
+
+<img src="screenshots/lab-14-newtask.png" alt="AntiFox 새 작업 대화상자 — 출구 선택" width="720" />
+
+**5.8-3. 보고서 관리 (`/system/reports/`)** — 조직 설정(발주처·로고·담당자), **언어별 템플릿(简/繁/英)** 사전 저장, 생성된 docx 목록·다운로드:
+
+<img src="screenshots/lab-16-reports.png" alt="AntiFox 보고서 관리 — 실캡처" width="720" />
+
+**5.8-4. 시스템 설정 (`/system/settings/`)** — **전역 출구 프록시**(출구 IP 테스트 가능성), 트래픽 캡처 전역 스위치, 원클릭 업데이트(현재 v2.0.3 확인):
+
+<img src="screenshots/lab-17-settings.png" alt="AntiFox 시스템 설정 — 실캡처" width="720" />
+
+**5.8-5. RBAC 사용자 관리 (`/system/rbac/`)** — 관리자 계정·4개 시스템 역할, 멤버/역할 관리(로그인 감사는 7.3):
+
+<img src="screenshots/lab-18-rbac.png" alt="AntiFox 사용자 관리(RBAC) — 실캡처" width="720" />
+
+> **잔여 실필드 항목** — docx **최종 생성**(작업 실행 → 확인된 취약점 선택 → 언어 지정 → 생성)은 LLM 키와 대상 랩이 필요한 작업 실행이 전제라 이번 검증에서 제외했다. 해당 흐름의 UI(5.8-3 템플릿 선택·언어 지정)까지는 위 캡처로 확인됐다. 완료 시 v1.0 확정 조건 하나가 추가로 해소된다.
 
 ---
 
@@ -397,6 +423,21 @@ docker tag ghcr.io/antifox-ai/antifox@sha256:<...> registry.lab.internal/antifox
 5. **취약점 검증** — 발견 결과가 재현 단계·패킷과 연결되는지
 6. **보고서 생성** — 확인된 취약점만 골라 docx 생성되는지
 7. **데이터 보존** — 컨테이너 재시작 후 작업·증거가 유지되는지
+
+### 실필드 검증 수행 내역 (2026-11-14, ①~④ 항목)
+
+이 가이드 작성 과정에서 실제로 수행한 설치·UI 검증 기록이다(스크린샷은 5.1·5.8):
+
+| 항목 | 수행 내역 |
+|---|---|
+| 환경 | macOS arm64 · PostgreSQL 16.14(Homebrew) · Docker 없음 → **공식 릴리스 바이너리** 경로 선택 |
+| 무결성 | `antifox-v2.0.3-darwin-arm64.zip` **SHA256이 공식 `SHA256SUMS`와 일치** 확인 후 사용 |
+| DB 구성 | 임시 격리 PG 인스턴스(비표준 포트)에 `config.json`(`database` 6필드)으로 연결 — 실파일 필드 검증 |
+| 기동 | `./antifox` → 로그에서 `AntiFox v2.0.3 backend listening on :8787`, MCP 도구 로딩(browser 25종·filesystem 16종) 확인 |
+| UI 확인 | `/setup` 최초 암호 설정 → `/login` → 대시보드·작업·발견·트래픽·자산 화면 접근, 사이드바에서 **LLM·Agent·MCP·Skill·工具·拦截规则·审批记录·用户管理·报告管理·知识库·日志·系统配置** 전 메뉴 확인 |
+| v2.0.3 기능 확인 | 시스템 설정의 **전역 출구 프록시**(출구 IP 테스트)·트래픽 캡처 스위치·**원클릭 업데이트(현재 버전 v2.0.3 표기)**, LLM 페이지의 **페일오버·역할별 모델(4역할)**, 새 작업의 **작업별 LLM·타임아웃·출구 선택**, 보고서 관리의 **언어별 템플릿(简/繁/英)** |
+| RBAC·HITL 확인 | 사용자 관리(관리자 계정, **4개 시스템 역할**), 인터셉트 규칙의 **내장 규칙**(`rm -rf`·시스템 디렉터리 삭제 정규식 차단, 우선순위 매칭) |
+| 미수행(한계) | **LLM 미연결**(키 없음) — 에이전트 작업 실행·트래픽 캡처 실동작·docx 최종 생성은 미검증(engine idle 로그로만 확인). 이 부분이 v1.0 확정 잔여 조건이다 |
 
 ### 버전 호환성 메모
 
