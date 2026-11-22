@@ -30,7 +30,7 @@ SAM.gov 등 미국 정부 조달 데이터를 자동 수집·분석하고, 한�
 | Frontend | Next.js (Cloudflare Pages, vinext) + Recharts |
 | 스케줄러 | Cloudflare Cron Triggers |
 | AI 분석 | OpenAI API (JSON Schema 고정 출력, 모델 교체 가능 추상화) |
-| 인증 | 구글 OAuth 2.0 직접 구현 — **구글 로그인 전용** |
+| 인증 | 이메일+비밀번호 (PBKDF2) — **관리자 승인 가입**, 최초 로그인 시 비밀번호 강제 변경 |
 | 문서 파싱 | unpdf (Workers) / OCR 필요 시 외부 파서 |
 | 데이터 소스 | SAM.gov API, FPDS/USAspending, DLA DIBBS |
 | 스토리지 | Cloudflare R2 (공고 원문·첨부 보관) |
@@ -44,11 +44,11 @@ SAM.gov 등 미국 정부 조달 데이터를 자동 수집·분석하고, 한�
 
 ## 회원 가입 정책
 
-**회원 가입은 구글 로그인(Google OAuth)만 지원한다.**
+**이메일 로그인 + 관리자 승인 방식.**
 
-- 이메일/비밀번호 기반 자체 가입, 소셜 로그인 확장(카카오·네이버 등)은 지원하지 않는다.
-- 가입 시 구글 계정 프로필의 최소 정보(이메일, 이름)만 수집한다.
-- 자체 비밀번호 저장·관리를 하지 않아 계정 탈취 및 자격증명 관리 리스크를 제거한다.
+- 회원 가입 신청 → `pending` 상태 → **관리자가 대시보드에서 승인**해야 로그인 가능
+- 초기 관리자 계정은 시드로 등록, **최초 로그인 직후 비밀번호 강제 변경** (평문 저장 금지, PBKDF2 해시 저장)
+- 소셜 로그인은 지원하지 않는다.
 - 상세 내용은 [법률/02-플랫폼-서비스정책.md](법률/02-플랫폼-서비스정책.md) 참조.
 
 ## 체크 사항
@@ -56,7 +56,9 @@ SAM.gov 등 미국 정부 조달 데이터를 자동 수집·분석하고, 한�
 - [x] 사업계획 v1.0 작성
 - [x] 검토 의견 및 3단계 기술 로드맵 작성
 - [x] 법률(조달 규정·서비스 정책) 문서화
-- [x] 회원 가입 정책 확정 — 구글 로그인 전용
+- [x] 회원 가입 정책 확정 — 이메일 로그인 + 관리자 승인
+- [x] Worker 기본 개발 — 인증 API + 관리자 승인 대시보드 + Audit Log (로컬 스모크 테스트 통과)
+- [ ] Cloudflare 배포 (wrangler login → d1 create → migrate:remote → deploy)
 - [ ] SAM.gov API 키 발급 (api.data.gov)
 - [ ] M1: 정적 랜딩 배포 — vibequant.cc/SupplyChainTracker (M7에서 서브도메인 전환)
 - [ ] Cloudflare Workers + D1 프로젝트 초기 구성 (구글 OAuth 로그인)
