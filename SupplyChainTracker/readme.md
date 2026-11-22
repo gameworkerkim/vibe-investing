@@ -24,17 +24,21 @@ SAM.gov 등 미국 정부 조달 데이터를 자동 수집·분석하고, 한�
 
 | 영역 | 기술 |
 |---|---|
-| Backend | Python FastAPI + APScheduler |
-| Database | PostgreSQL + pgvector |
-| Frontend | Next.js + Recharts |
+| Runtime | Cloudflare Workers (Node.js + TypeScript) |
+| Backend | Hono (Workers 위) |
+| Database | Neon (PostgreSQL serverless, 무료 티어) + pgvector |
+| Frontend | Next.js (Cloudflare Pages, vinext) + Recharts |
+| 스케줄러 | Cloudflare Cron Triggers |
 | AI 분석 | OpenAI API (JSON Schema 고정 출력, 모델 교체 가능 추상화) |
-| 인증 | Auth.js — **구글 로그인 전용** |
-| 문서 파싱 | PyMuPDF + OCR |
+| 인증 | 구글 OAuth 2.0 직접 구현 — **구글 로그인 전용** |
+| 문서 파싱 | unpdf (Workers) / OCR 필요 시 외부 파서 |
 | 데이터 소스 | SAM.gov API, FPDS/USAspending, DLA DIBBS |
-| 호스팅 | AWS / Azure |
-| 모니터링 | Sentry / OpenTelemetry |
+| 스토리지 | Cloudflare R2 (공고 원문·첨부 보관) |
+| 모니터링 | Sentry |
 
-- Redis / Celery / n8n은 배치·알림 규모가 커진 후 도입 (초기 제외)
+- Workers 요청당 CPU 시간 제한 → AI 분석 등 무거운 작업은 Cron Triggers 배치로 분리
+- Neon 무료 티어 제한(스토리지 0.5GB, 월 컴퓨팅 시간) → 데이터 누적 시 유료 전환 검토
+- Cloudflare Queues / Workflows는 배치·알림 규모가 커진 후 도입 (초기 제외)
 - Compliance 판정은 FAR/DFARS 원문 RAG로 근거 조항 첨부
 - 초기 버전은 공개 정보만 처리 (CUI 미취급)
 
@@ -54,6 +58,7 @@ SAM.gov 등 미국 정부 조달 데이터를 자동 수집·분석하고, 한�
 - [x] 법률(조달 규정·서비스 정책) 문서화
 - [x] 회원 가입 정책 확정 — 구글 로그인 전용
 - [ ] SAM.gov API 키 발급 (api.data.gov)
+- [ ] Cloudflare Workers + Neon 프로젝트 초기 구성 (구글 OAuth 로그인)
 - [ ] FPDS 낙찰 데이터 연동 (P0)
 - [ ] Stage 1 (탐색) 착수 — 수집기 + AI 분석 파이프라인
 - [ ] Stage 2 (매칭) — 공급사 DB·매칭 엔진·마진 계산기
