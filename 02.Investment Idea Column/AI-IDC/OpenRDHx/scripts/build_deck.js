@@ -157,7 +157,7 @@ s.addText("물 18°C → 26°C  ·  7,000 m³/h  ·  72 L/min", { x: M + 3.22, y
   fontSize: 12.5, color: "9FB3BD", valign: "middle", isTextBox: true, margin: 0 });
 s.addText("사업계획서 v1.2  ·  2026-11-22", { x: W - 4.3, y: 6.72, w: 3.68, h: 0.32,
   fontSize: 10.5, color: "5B7682", align: "right", isTextBox: true, margin: 0 });
-s.addNotes("v1.1 대비 바뀐 것: 사업계획서와 투자제안서를 분리했고, 자체 5MW IDC를 앵커로 넣었고, 설계 교정 18건을 반영했다. 투자 금액·지분은 이 문서에 없다.");
+s.addNotes("v1.1 대비 바뀐 것: 사업 구조를 3층으로 정리했고, 자체 5MW IDC를 앵커로 넣었고, 설계 교정 18건을 반영했다. 투자 금액·지분은 이 문서에 없고 레포에도 없다.");
 
 /* 2. 한 장 결론 */
 pres.addSection({ title: "결론" });
@@ -212,7 +212,7 @@ s.addText("앵커", { x: M + 0.28, y: 4.92, w: 1.1, h: 0.32, fontSize: 11, bold:
 s.addText("자체 IDC 139대 =  1단계 34대 + 2단계 105대.  외부 조달 대비 대당 $2,550 × 139대 = 약 5.1억 원이 capex 절감으로 돌아온다.\n프로그램 현금 $638,000 의 56%다. 그래서 외부에 팔아야 하는 대수가 250대가 아니라 111대다.",
   { x: M + 0.28, y: 5.24, w: 11.5, h: 0.72, fontSize: 12.5, color: C.text1, lineSpacing: 19,
     isTextBox: true, margin: 0, valign: "top" });
-note(s, "2031년 계획 영업이익 비중은 IDC 34.6% · 하드웨어 6.4% · 전환 EPC 59.0%. 금액과 민감도는 13_투자제안서 9절에 있고, 이 문서에는 투자 금액·지분이 없다.", 6.26);
+note(s, "세 층 중 이익이 가장 크게 남는 자리는 전환 EPC 이고, 그 수주 자격을 만드는 것이 1·2층이다. 금액과 민감도를 담은 재무 모델은 이 레포 밖에 있고, 이 문서에는 투자 금액·지분이 없다.", 6.26);
 
 /* 4. 정격 */
 pres.addSection({ title: "제품" });
@@ -590,9 +590,9 @@ todo.forEach(([n, t, d, col], i) => {
   s.addText(d, { x: M + 5.04, y: y - 0.02, w: 7.1, h: 0.46, fontSize: 11, color: "9FB3BD",
     valign: "middle", isTextBox: true, margin: 0 });
 });
-s.addText("문서: 00–09 기술 · 10 사업계획서 · 11 자체 5MW IDC · 12 국산화 로드맵 · 13 투자제안서.  합본은 scripts/build_full.py 가 만든다.",
+s.addText("문서: 00–09 기술 · 10 사업계획서 · 11 자체 5MW IDC · 12 국산화 로드맵.  합본은 scripts/build_full.py 가 만든다.",
   { x: M, y: 6.56, w: 11.4, h: 0.3, fontSize: 10.5, color: "5B7682", isTextBox: true, margin: 0 });
-s.addNotes("투자 금액·지분·밸류에이션은 13_투자제안서에 있다. 그 문서는 2절(지배구조)과 11절 1번(상면료)이 닫히기 전에는 외부 배포 금지다.");
+s.addNotes("투자 금액·지분·밸류에이션은 이 레포에 없다. 별도 문서이고, 지배구조와 상면료 견적이 닫히기 전에는 외부 배포 금지다.");
 
 /* ---------- write ---------- */
 const OUT = path.join(__dirname, "..", "10_사업계획서", "OpenRDHx_사업계획서.pptx");
