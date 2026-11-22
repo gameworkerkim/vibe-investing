@@ -26,7 +26,7 @@ SAM.gov 등 미국 정부 조달 데이터를 자동 수집·분석하고, 한�
 |---|---|
 | Runtime | Cloudflare Workers (Node.js + TypeScript) |
 | Backend | Hono (Workers 위) |
-| Database | Neon (PostgreSQL serverless, 무료 티어) + pgvector |
+| Database | Cloudflare D1 (SQLite, 무료 티어) |
 | Frontend | Next.js (Cloudflare Pages, vinext) + Recharts |
 | 스케줄러 | Cloudflare Cron Triggers |
 | AI 분석 | OpenAI API (JSON Schema 고정 출력, 모델 교체 가능 추상화) |
@@ -36,8 +36,8 @@ SAM.gov 등 미국 정부 조달 데이터를 자동 수집·분석하고, 한�
 | 스토리지 | Cloudflare R2 (공고 원문·첨부 보관) |
 | 모니터링 | Sentry |
 
+- DB는 초기에 D1만 사용. **검색·벡터 기능이 활성화되면 Neon(PostgreSQL+pgvector) 무료 티어로 전환**
 - Workers 요청당 CPU 시간 제한 → AI 분석 등 무거운 작업은 Cron Triggers 배치로 분리
-- Neon 무료 티어 제한(스토리지 0.5GB, 월 컴퓨팅 시간) → 데이터 누적 시 유료 전환 검토
 - Cloudflare Queues / Workflows는 배치·알림 규모가 커진 후 도입 (초기 제외)
 - Compliance 판정은 FAR/DFARS 원문 RAG로 근거 조항 첨부
 - 초기 버전은 공개 정보만 처리 (CUI 미취급)
@@ -59,7 +59,7 @@ SAM.gov 등 미국 정부 조달 데이터를 자동 수집·분석하고, 한�
 - [x] 회원 가입 정책 확정 — 구글 로그인 전용
 - [ ] SAM.gov API 키 발급 (api.data.gov)
 - [ ] M1: 정적 랜딩 배포 — vibequant.cc/SupplyChainTracker (M7에서 서브도메인 전환)
-- [ ] Cloudflare Workers + Neon 프로젝트 초기 구성 (구글 OAuth 로그인)
+- [ ] Cloudflare Workers + D1 프로젝트 초기 구성 (구글 OAuth 로그인)
 - [ ] FPDS 낙찰 데이터 연동 (P0)
 - [ ] Stage 1 (탐색) 착수 — 수집기 + AI 분석 파이프라인
 - [ ] Stage 2 (매칭) — 공급사 DB·매칭 엔진·마진 계산기
