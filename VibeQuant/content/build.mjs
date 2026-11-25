@@ -630,6 +630,7 @@ function descriptionFromMd(md, fallback) {
  * Viral / hand-picked URLs via SLUG_OVERRIDES.
  */
 const SLUG_OVERRIDES = {
+  "AI Bouble/Upstage-IPO-Report-2026-11-25.md": "upstage-ipo-2026-11-25",
   "AI Bouble/2026-11-06-US-Bigtech-AI-Semis-Quant-Report.md":
     "2026-11-06-us-bigtech-ai-semis-quant-report",
   "Cyworld/The-Pros-and-Cons-of-VC-Investment-as-Seen-Through-the-Cyworld-RCPS-Contract.md":

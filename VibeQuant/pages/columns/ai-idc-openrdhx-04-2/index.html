@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>열정산 및 보호 로직 — VibeQuant</title>
+  <meta name="description" content="용도 : 카탈로그 40kW가 성립하는 계산과, 밸브가 서로 지우지 않는 보호 순서. 한계 : UA를 일정하다고 둔 민감도는 설계 메모다. 코일 선정 전의 예측이며 성적서가 아니다." />
+  <link rel="canonical" href="https://docs.vibequant.cc/columns/ai-idc-openrdhx-04-2/" />
+  <meta property="og:title" content="열정산 및 보호 로직" />
+  <meta property="og:description" content="용도 : 카탈로그 40kW가 성립하는 계산과, 밸브가 서로 지우지 않는 보호 순서. 한계 : UA를 일정하다고 둔 민감도는 설계 메모다. 코일 선정 전의 예측이며 성적서가 아니다." />
+  <meta property="og:url" content="https://docs.vibequant.cc/columns/ai-idc-openrdhx-04-2/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"열정산 및 보호 로직","description":"용도 : 카탈로그 40kW가 성립하는 계산과, 밸브가 서로 지우지 않는 보호 순서. 한계 : UA를 일정하다고 둔 민감도는 설계 메모다. 코일 선정 전의 예측이며 성적서가 아니다.","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://docs.vibequant.cc/columns/ai-idc-openrdhx-04-2/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI-IDC/OpenRDHx/04_%EA%B8%B0%EC%88%A0%EB%AA%85%EC%84%B8%EC%84%9C/%EC%97%B4%EC%A0%95%EC%82%B0_%EB%B0%8F_%EB%B3%B4%ED%98%B8%EB%A1%9C%EC%A7%81.md","image":"https://vibequant.cc/og-default.png","url":"https://docs.vibequant.cc/columns/ai-idc-openrdhx-04-2/","datePublished":"2026-11-22","dateModified":"2026-11-22","inLanguage":"ko","keywords":"AI · LLM · 빅테크, AI-IDC, OpenRDHx, 04_기술명세서"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Columns","item":"https://docs.vibequant.cc/columns/"},{"@type":"ListItem","position":3,"name":"열정산 및 보호 로직","item":"https://docs.vibequant.cc/columns/ai-idc-openrdhx-04-2/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link is-active" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../columns/">Columns</a> · AI · LLM · 빅테크</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">AI · LLM · 빅테크</p>
+        <h1>열정산 및 보호 로직</h1>
+        <p class="article-dates"><time datetime="2026-11-22">발행 2026.11.22</time> · 주제 AI · LLM · 빅테크 · AI-IDC · OpenRDHx · 04_기술명세서</p>
+        
+        <p class="lede">용도 : 카탈로그 40kW가 성립하는 계산과, 밸브가 서로 지우지 않는 보호 순서. 한계 : UA를 일정하다고 둔 민감도는 설계 메모다. 코일 선정 전의 예측이며 성적서가 아니다.</p>
+        <p class="article-byline">문서: 04기술명세서 · v1.0 · 2026-11-22</p>
+        <nav class="share-bar" aria-label="공유" data-url="https://docs.vibequant.cc/columns/ai-idc-openrdhx-04-2/" data-title="열정산 및 보호 로직" data-text="용도 : 카탈로그 40kW가 성립하는 계산과, 밸브가 서로 지우지 않는 보호 순서. 한계 : UA를 일정하다고 둔 민감도는 설계 메모다. 코일 선정 전의 예측이며 성적서가 아니다." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fai-idc-openrdhx-04-2%2F&amp;text=%EC%97%B4%EC%A0%95%EC%82%B0%20%EB%B0%8F%20%EB%B3%B4%ED%98%B8%20%EB%A1%9C%EC%A7%81" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fai-idc-openrdhx-04-2%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fai-idc-openrdhx-04-2%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p><strong>용도</strong>: 카탈로그 40kW가 성립하는 계산과, 밸브가 서로 지우지 않는 보호 순서.
+<strong>한계</strong>: UA를 일정하다고 둔 민감도는 설계 메모다. 코일 선정 전의 예측이며 성적서가 아니다.</p>
+<h2>1. 물성</h2>
+<table>
+<thead>
+<tr>
+<th>유체</th>
+<th>조건</th>
+<th>사용 값</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>건공기</td>
+<td>평균 온도 36°C, 101.3kPa</td>
+<td>밀도 1.142 kg/m³, 비열 1.006 kJ/kg·K</td>
+</tr>
+<tr>
+<td>물</td>
+<td>2차 루프, 글리콜 없음</td>
+<td>비열 4.18 kJ/kg·K, 밀도 1,000 kg/m³</td>
+</tr>
+</tbody></table>
+<p>밀도는 <code>101325 / (287.05 × 309.15)</code> 이다.</p>
+<h2>2. 정격점 닫기</h2>
+<p>목표 열량 40kW.</p>
+<p>공기 온도차 45 → 27°C = 18K.</p>
+<pre><code>m_air = 40 / (1.006 × 18) = 2.209 kg/s
+V_air = 2.209 / 1.142 = 1.934 m³/s = 6,963 m³/h
+</code></pre>
+<p>카탈로그에는 <strong>7,000 m³/h</strong> 로 올린다. 이 값은 정격점을 나르는 필요 풍량이다. 팬 카탈로그의 최대 풍량과 다른 칸에 적는다.</p>
+<p>물 온도차 18 → 26°C = 8K.</p>
+<pre><code>m_water = 40 / (4.18 × 8) = 1.196 kg/s = 71.8 L/min
+</code></pre>
+<p>카탈로그 유량은 <strong>72 L/min</strong>. 유량 범위와 온도차 범위를 따로 적지 않는다. 40kW에서 유량이 바뀌면 온도차도 바뀐다.</p>
+<table>
+<thead>
+<tr>
+<th>유량</th>
+<th>40kW일 때 물 온도차</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>60 L/min</td>
+<td>9.6K</td>
+</tr>
+<tr>
+<td>72 L/min</td>
+<td>8.0K</td>
+</tr>
+<tr>
+<td>90 L/min</td>
+<td>6.4K</td>
+</tr>
+</tbody></table>
+<p>운전 창은 60–90 L/min 이다. 3K 온도차를 이 창 안에서 요구하지 않는다. 3K는 약 191 L/min이라 창 밖이다.</p>
+<h2>3. 면적과 풍속</h2>
+<p>800mm 도어의 코일 면은 계획상 폭 720mm × 높이 1,650mm = 1.19 m².</p>
+<pre><code>전면 풍속 = 1.934 / 1.19 = 1.63 m/s
+</code></pre>
+<p>600mm 면은 폭 520mm × 높이 1,650mm = 약 0.86 m² 다. 열전달 면적비 0.86/1.19 ≈ 0.72 이므로 잠정 용량은 40 × 0.72 ≈ <strong>28kW</strong> 다.</p>
+<p>v1.0은 이 칸에 &quot;풍속 약 2.3 m/s&quot;를 적었다. 그 값은 600mm 면에 800mm 용 풍량 7,000 m³/h 를 그대로 밀어 넣은 숫자이고, 용량 28kW(면적 비례)와 전제가 다르다. 두 전제를 하나로 닫으면 600mm 의 정합 세트는 다음이다.</p>
+<pre><code>28kW → m_air = 28 / (1.006 × 18) = 1.547 kg/s
+V_air = 1.547 / 1.142 = 1.354 m³/s = 4,876 m³/h → 4,900 m³/h
+전면 풍속 = 1.354 / 0.86 = 1.57 m/s   (800mm와 같은 풍속)
+m_water = 28 / (4.18 × 8) = 0.837 kg/s = 50.2 L/min → 50 L/min
+</code></pre>
+<p><strong>600mm = 28kW, 4,900 m³/h, 50 L/min, 풍속 1.57 m/s.</strong> 풍동 전 숫자다. 기존 랙 유지가 전제인 현장은 600mm 비중이 클 수 있으므로, 이 세트를 옵션이 아니라 2순위 정격으로 다룬다.</p>
+<h2>4. 코일이 160mm 안에 들어가는지</h2>
+<p>4열, 공기 방향 피치 25.4mm, 관 외경 9.52mm.</p>
+<pre><code>포락 = 3 × 25.4 + 9.52 = 85.7 mm
+</code></pre>
+<p>코일 베이 100mm, 팬 축방향 50mm, 외판 포함 도어 두께 160mm. 6열 25mm 피치는 포락이 135mm라 이 두께에 넣지 않는다. 그래서 1차 코일은 4열이다.</p>
+<p>대향류 로그평균온도차:</p>
+<pre><code>뜨거운 끝: 45 − 26 = 19K
+찬 끝:     27 − 18 = 9K
+LMTD = (19 − 9) / ln(19/9) = 13.4K
+필요 UA = 40 / 13.4 = 3.0 kW/K
+</code></pre>
+<p>UA 3.0 kW/K 는 면적 1.19 m², 4열, 핀 피치 2.5mm에서 <strong>맞출 목표</strong>다. 핀 효율과 관 회로 수는 코일 업체 선정 계산으로 확인하고, 맞지 않으면 정격 kW를 내린다. 도어 두께를 몰래 늘려 숫자를 지키지 않는다.</p>
+<h2>5. 입구 35°C 와 공급수 20°C</h2>
+<p>같은 풍량 7,000 m³/h 에서 입구가 35°C 이면 공기 온도차는 더 이상 18K가 아니다. 출구 27°C 를 유지하면 온도차는 8K 이고, 열량은 40 × (8/18) = <strong>18kW</strong> 가 공기측 상한이다. 출구를 25°C까지 내리면 온도차 10K, 열량 약 <strong>22kW</strong>. 명세서의 35°C 참고칸은 22kW다.</p>
+<p>공급수만 18°C에서 20°C로 올리고, UA와 유량과 풍량이 그대로이며 공기 출구 27°C를 유지한다고 가정하면:</p>
+<pre><code>뜨거운 끝 45 − 28 = 17K
+찬 끝     27 − 20 = 7K
+LMTD = 11.3K
+Q = 3.0 × 11.3 = 34kW
+</code></pre>
+<p>물 2K 상승은 이 가정에서 약 6kW를 깎는다. 실코일은 UA가 유속에 따라 변하므로 칼로리미터 전에 카탈로그 곡선으로 그리지 않는다.</p>
+<h2>6. 팬 동력</h2>
+<p>정격 정압 목표는 100Pa 이다. 실측 전 목표이며 경쟁사보다 낮다는 뜻이 아니다.</p>
+<pre><code>공기 동력 = 1.934 m³/s × 100 Pa = 193 W
+와이어-공기 효율 30%이면 전기 입력 약 640 W
+</code></pre>
+<p>명세서 설계 목표는 <strong>0.9kW</strong>, 탈락 상한은 <strong>1.2kW</strong> 다. 0.9kW는 와이어-공기 효율 30% 가정에서 나온 값이고, 실물 EC 팬이 20% 대로 떨어지면 6대 운전에서 1.1–1.2kW 가 된다. BEEHE 55kW 공개표가 200mm 팬 10대에 상한 3.4kW(대당 0.34kW)를 적으므로, 같은 급 팬 6대를 85%로 돌리면 1.2kW 대가 현실적인 상한이다. 1.2kW를 넘으면 그 팬은 선정에서 탈락한다. 도어 전력 1.2kW는 40kW의 3.0%다. 이 비율은 팬 몫이고, CDU 펌프와 냉동기 전력은 들어 있지 않다.</p>
+<p><strong>7대 설치, 6대 운전, 1대 예비</strong>다. 정상 운전은 7대 전부가 돌지 않는다. 6대가 85% 속도로 7,000 m³/h 를 내도록 고르고, 7번째 자리는 역류 댐퍼로 닫아 둔다. 1대가 고장나면 대기 중인 7번째가 켜지고, 그래도 부족하면 남은 6대가 100%까지 올라간다. v1.0에서 &quot;나머지 6대가 100%&quot;와 &quot;6대가 85%로 정격&quot;이 엇갈린 것은 이 순서로 닫는다. 한 칸이 비면 그 높이의 서버는 바람이 샌다. 총풍량 유지와 국부 바이패스는 다른 시험이다.</p>
+<p>팬 7대의 통풍 면적은 코일 면 1.19 m² 의 약 18% 다. 160mm 도어 안에는 플레넘 여유가 없어서, 코일과 팬 사이 <strong>디퓨저 50mm</strong> 를 확보하는 것이 게이트 B의 분포 시험 항목이다. 분포가 깨지면 원심 팬과 두꺼운 문으로 바꾼다.</p>
+<h2>7. 보호 상태</h2>
+<p>밸브는 두 개다. 역할이 다르다.</p>
+<table>
+<thead>
+<tr>
+<th>밸브</th>
+<th>평상시</th>
+<th>정전</th>
+<th>누수</th>
+<th>결로 위험</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PICV (유량 제어)</td>
+<td>출구 공기 27°C를 맞추며 변조</td>
+<td>현상 유지</td>
+<td>격리 밸브가 먼저 닫힘. PICV는 유지</td>
+<td>잠그지 않음</td>
+</tr>
+<tr>
+<td>격리 밸브</td>
+<td>열림 (여자)</td>
+<td>스프링으로 닫힘</td>
+<td>닫힘</td>
+<td>동작 없음</td>
+</tr>
+</tbody></table>
+<p>격리 밸브의 DO는 <strong>2채널 직렬</strong>이다. 제어기 DO 하나와, 누수 로프에 직결된 독립 릴레이 하나가 직렬로 여자 회로를 만든다. 제어기나 DO 하나가 죽어도 독립 릴레이가 살아 있으면 밸브는 열린 채로 남는다. 제어기 한 점의 고장으로 40kW 랙의 냉각이 끊기는 경로를 전원 1+1 로는 막지 못하므로, 이 2채널이 v1.0 대비 추가된 설계다. 그 대신 두 채널이 모두 죽으면 닫힌다.</p>
+<p>누수 때 닫는 밸브와, 정전 때 냉각을 끊지 않으려는 밸브가 같은 부품이면 둘 중 하나는 실패한다. 격리 밸브의 스프링 닫힘은 정전 중 그 랙의 냉각수가 멈춘다는 뜻이다. 정전은 누수와 같은 등급의 이상으로 보고, 랙 부하는 현장 UPS·운영 절차가 받는다. PICV까지 전개하면 누수 격리와 충돌하므로 현상 유지로 둔다.</p>
+<p>DRY / WET:</p>
+<ul>
+<li>출하 기본은 DRY. 목표 수온은 <code>측정 노점 + 2K</code> 와 18°C 중 높은 값으로 CDU에 요청한다.</li>
+<li>물이 그보다 차갑게 도착하면 경보를 올리고 CDU에 상향을 다시 요청한다. <strong>밸브를 닫지 않는다.</strong> 닫으면 40kW 랙의 냉각이 먼저 사라진다.</li>
+<li><code>SHUTDOWN_ON_CONDENSATION</code> 은 사이트 옵션이고 기본값은 꺼짐이다.</li>
+<li>WET 는 응축을 받겠다고 운영자가 고른 모드다. 트레이와 배수 경로가 있을 때만 허용한다. WET의 kW 가산은 실측 전 카탈로그에 없다.</li>
+</ul>
+<p>그 밖의 입력:</p>
+<table>
+<thead>
+<tr>
+<th>사건</th>
+<th>동작</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>출구 공기 &gt; 27°C</td>
+<td>PICV 개방 증가. PICV가 최대인데도 높으면 팬 증속</td>
+</tr>
+<tr>
+<td>팬 1대 타코 상실</td>
+<td>경보. 나머지 6대 증속. 계약상 정격 유지는 분포 시험 후</td>
+</tr>
+<tr>
+<td>팬 전원 전부 상실</td>
+<td>경보. 코일이 배기를 막는지 서버 풍량으로 확인하는 시험 항목</td>
+</tr>
+<tr>
+<td>도어 열림</td>
+<td>즉시 BMS 경보. 팬은 120초 유지 후 최소 속도</td>
+</tr>
+<tr>
+<td>화재 DI</td>
+<td>팬 정지. PICV 현상 유지. 격리 밸브는 화재 신호만으로 닫지 않음</td>
+</tr>
+<tr>
+<td>통신 두절</td>
+<td>마지막 세트포인트로 로컬 운전</td>
+</tr>
+</tbody></table>
+<p>제어 주기 안에 팬을 먼저 100%로 밀지 않는다. 부분부하의 전기는 팬에서 나가고, 펌프는 열 단위로 이미 돌고 있기 때문이다. 물 온도차를 키워 냉동기를 돕고 싶은 사이트는 최소 유량 한계를 파라미터로 올린다. “최대 절전”이라는 문장은 그 파라미터의 현장 계측이 있기 전에 쓰지 않는다.</p>
+<h2>8. 글리콜</h2>
+<p>정격 유체는 물이다. PG25는 BEEHE 카탈로그처럼 현업에서 쓰이므로 옵션으로 둔다. 용량 계수는 같은 코일의 대조 시험 전에는 비워 둔다. 0.9 같은 자리표시 계수를 스펙에 넣지 않는다.</p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://docs.vibequant.cc/columns/ai-idc-openrdhx-04-2/" data-title="열정산 및 보호 로직" data-text="용도 : 카탈로그 40kW가 성립하는 계산과, 밸브가 서로 지우지 않는 보호 순서. 한계 : UA를 일정하다고 둔 민감도는 설계 메모다. 코일 선정 전의 예측이며 성적서가 아니다." data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fai-idc-openrdhx-04-2%2F&amp;text=%EC%97%B4%EC%A0%95%EC%82%B0%20%EB%B0%8F%20%EB%B3%B4%ED%98%B8%20%EB%A1%9C%EC%A7%81" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fai-idc-openrdhx-04-2%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Fdocs.vibequant.cc%2Fcolumns%2Fai-idc-openrdhx-04-2%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/02.Investment%20Idea%20Column/AI-IDC/OpenRDHx/04_%EA%B8%B0%EC%88%A0%EB%AA%85%EC%84%B8%EC%84%9C/%EC%97%B4%EC%A0%95%EC%82%B0_%EB%B0%8F_%EB%B3%B4%ED%98%B8%EB%A1%9C%EC%A7%81.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

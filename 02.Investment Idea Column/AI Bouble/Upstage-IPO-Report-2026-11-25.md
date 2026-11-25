@@ -1,8 +1,60 @@
-# 유니콘 성장의 신화와 업스테이지 IPO 성공 가능성 분석
+---
+title: "업스테이지 IPO, 2.7조에 빨리 그리고 낮게"
+title_en: "Upstage IPO — List Sooner, and Lower, Around KRW 2.7 Trillion"
+subtitle: "유니콘의 저주와 솔라의 한계, 2027년 상장 시계"
+description: "업스테이지는 공모 시총 2.2~3.5조 원, 중심 2.7조 원에 2027년 상장이 유리하다. 매출 248억·영업손실 305억, 솔라 지능지수 14점과 유니콘의 저주. 2027년 내 상장 확률은 65% 안팎."
+abstract: |
+  업스테이지는 솔라와 문서 AI를 파는 한국 AI 회사다. 2025년 매출 248억 원, 영업손실 305억 원. 2026년 10월 프리머니는 2조 400억 원으로 2025년 매출의 약 85배다.
+  이 글의 판단은 공모 시가총액 2.2~3.5조 원, 중심 2.7조 원으로 2027년에 상장하는 편이 유리하다는 것이다. 3.5~5조 원을 기다리면 라운드마다 오른 몸값이 상장 하한선을 끌어올린다.
+  솔라 프로 4의 11월 Artificial Analysis 지능지수는 14점으로 1위 65점의 약 5분의 1이다. 2027년 내 상장 확률은 65% 안팎, 3.5조 원 이상 공모 확률은 15% 안팎으로 본다. 투자 권유 아님.
+summary_for_ai: |
+  Korean column (not investment advice), revised 2026-11-25, written 2026-11-24, group ai-llm.
+  Path: AI Bouble/Upstage-IPO-Report-2026-11-25.md. Slug: upstage-ipo-2026-11-25.
+  PDF: https://vibequant.cc/files/upstage-ipo-report-2026-11-25.pdf
+  Company: Upstage, founded Oct 2020, CEO Sung Kim (ex-HKUST, Naver Clova). Seoul, 213 employees Oct 2026. Products Solar Pro 4, Solar Mini 4, Solar Mini 4.5 preview, Solar Open 2, Document Parse, AskUp. May 2026 acquired Daum operator AXZ; Jun 2026 launched Upstage Company with Timely. 200+ customers, 70%+ revenue from finance. 2025 revenue KRW 24.8bn, operating loss KRW 30.5bn. Shareholders include Sung Kim, Hwalsuk Lee, SK Networks, Kakao, KDB, KT, AWS, AMD; Nvidia investment expected. Underwriters KB, Mirae Asset, UBS. KOSDAQ first, timing unset.
+  Thesis: list sooner at offer market cap KRW 2.2-3.5tn, center 2.7tn. Waiting for 3.5-5tn risks the unicorn curse. Best window 2027 H1, but preliminary filing is slipping so the actual listing may be mid-2027 or later. Do not open another private round that raises the price floor.
+  Valuation path: Aug 2025 ~KRW 730bn, Apr 2026 pre-money KRW 1.3tn, Oct 2026 pre-money KRW 2.04tn, about 85x 2025 sales. Oct 2026 investors at ~KRW 550,000/share lose below ~KRW 2.5tn offer cap if 15% primary. Cash runway 35-42 months at 2025 burn, but planned GPU spend plus Daum operations could lift annual burn toward KRW 200bn and cut runway to about two years (estimate, not company guidance).
+  Benchmarks: Zhipu down about 88% from peak; profitable Anthropic growing 12x trades near 19x sales. Solar Pro 4 AA intelligence index 14 vs leader 65, Zhipu 32, MiniMax 19. Solar Mini 4.5 preview company-reported 20. Token sales squeezed between Anthropic/OpenAI and Chinese open weights. Domestic finance/public demand can look like a Galapagos market.
+  Judgment: about 65% chance of listing within 2027, about 15% chance the offer clears the company's hoped KRW 3.5tn+.
+date: 2026-11-25
+updated: 2026-11-25
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 업스테이지
+  - IPO
+  - 솔라
+  - 코스닥
+  - 유니콘
+  - AI
+keywords:
+  - "업스테이지 IPO"
+  - "업스테이지 상장"
+  - "업스테이지 기업가치"
+  - "솔라 Solar Pro"
+  - "유니콘의 저주"
+  - "코스닥 공모"
+group: ai-llm
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/upstage-ipo-2026-11-25.jpg"
+image: "https://vibequant.cc/og/upstage-ipo-2026-11-25.jpg"
+pdf: "https://vibequant.cc/files/upstage-ipo-report-2026-11-25.pdf"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
 
-**AI 산업의 자본경제학, 모델 경쟁력과 수익화의 한계**
+# 업스테이지 IPO, 2.7조에 빨리 그리고 낮게
 
-Dennis Kim · 2026년 11월 24일 작성, 11월 25일 개정  
+Dennis Kim · 2026년 11월 24일 작성, 11월 25일 개정
+
+![실리콘 웨이퍼와 보고서 더미가 놓인 야간 데스크. 업스테이지 상장 리포트의 썸네일이다.](images/upstage-ipo-2026-11-25.jpg)
+
+*증권 화면과 보고서. 공모 몸값과 모델 경쟁력을 한자리에서 본다.*
+
+> 보고서 PDF: [업스테이지 IPO 리포트 (2026-11-25)](https://vibequant.cc/files/upstage-ipo-report-2026-11-25.pdf) — 브라우저에서 바로 읽을 수 있습니다.
+
 Vibe Quant Insight · https://vibequant.cc/
 
 > **주의 (Legal Notice)**
@@ -68,7 +120,7 @@ Vibe Quant Insight · https://vibequant.cc/
 
 업스테이지는 매출이 5년 새 4배가 됐지만 한 해도 영업흑자를 낸 적이 없고, 2025년에도 손실이 매출보다 컸다.
 
-![그림 1](images/fig-01.png)
+![그림 1](images/upstage-ipo-fig-01.png)
 
 *그림 1. 아웃스탠딩 스타트업DB 재무제표(별도), 2021\~2025년 · 2021년 매출은 영업이익률에서 역산*
 
@@ -91,7 +143,7 @@ Vibe Quant Insight · https://vibequant.cc/
 
 > 주석: 이 절의 출처는 금융감독원 전자공시시스템(DART)에 공시된 2026년 3월 24일자 제6기 감사보고서(2025 회계연도, 별도 기준)다. 다음 인수와 시리즈C 조달은 2026년에 일어난 일이어서 여기에 들어 있지 않다. 2026 회계연도 감사보고서는 몇 달 안인 2027년 3\~4월에 공시될 것으로 보이며, 그때 이 절의 수치를 모두 갱신해야 한다.
 
-![그림 2](images/fig-02.png)
+![그림 2](images/upstage-ipo-fig-02.png)
 
 *그림 2. 출처: 전자공시시스템(DART), 주식회사 업스테이지 제6기 감사보고서(한미회계법인, 2026-03-24) 손익계산서, 별도 기준 · 인건비는 급여, 퇴직급여, 복리후생비의 합*
 
@@ -138,7 +190,7 @@ Vibe Quant Insight · https://vibequant.cc/
 
 ### 지분 구조
 
-![그림 3](images/fig-03.png)
+![그림 3](images/upstage-ipo-fig-03.png)
 
 *그림 3. 주주별 주식 수와 2025년 말 총주식 2,514,831주는 전자공시시스템(DART)의 제6기 감사보고서 주석 1(2025-12-31 기준), 현재 총발행주식과 주식 종류는 스타트업DB(2026-11-13 기준) · 2026년 이후 주주별 변동은 반영되지 않음*
 
@@ -189,7 +241,7 @@ B와 C의 소진액은 회사 공시가 아니라 이 문서의 가정이다. �
 
 상장된 AI 랩 가운데 업스테이지의 희망 몸값을 뒷받침하는 비교군은 없고, 직전 라운드 가격조차 가장 비싼 지푸보다 높다.
 
-![그림 4](images/fig-04.png)
+![그림 4](images/upstage-ipo-fig-04.png)
 
 *그림 4. PSR은 이 문서 계산 · 시가총액 기준일은 회사별로 2026년 9\~11월 · 앤트로픽은 기본주식수 기준 첫날 종가*
 
@@ -223,7 +275,7 @@ B와 C의 소진액은 회사 공시가 아니라 이 문서의 가정이다. �
 
 현재 공개된 범용 모델 평가와 외부 채택 지표로 보면 업스테이지는 글로벌 선두권과 격차가 크다. 주력 모델 솔라 프로 4는 11월 Artificial Analysis 지능지수에서 14점으로 1위(65점)의 5분의 1이고, 집계된 190개 모델 구성 가운데 122위다([벤치LM](https://benchlm.ai/benchmarks/artificialanalysis), 11월 23일).
 
-![그림 5](images/fig-05.png)
+![그림 5](images/upstage-ipo-fig-05.png)
 
 *그림 5. Artificial Analysis 화면(2026-11-23, 765개 중 28개 선택)에 Solar Pro 4와 MiniMax-M3의 모델 페이지 점수를 추가 · 1위 모델은 이 문서 작성에 쓰인 Claude와 같은 모델*
 
@@ -245,7 +297,7 @@ B와 C의 소진액은 회사 공시가 아니라 이 문서의 가정이다. �
 
 2027학년도 수능을 17개 모델에 풀게 한 대시보드에서 솔라 프로 4는 450점 환산 392.8점으로 14위였다([경제타임스](https://www.ket.kr/news/article.html?no=42254)). 딥시크에 밀렸고, 상위권은 미국의 상용 폐쇄형 모델이 차지했다.
 
-![그림 6](images/fig-06.png)
+![그림 6](images/upstage-ipo-fig-06.png)
 
 *그림 6. 경제타임스 2026-11-22 보도 그래픽의 17개 모델을 다시 그림 · 자료: 순천향대 구유겸 씨 대시보드 · 450점은 대시보드 자체 환산 점수로 실제 수능 성적 산출 방식과 다름*
 
@@ -269,7 +321,7 @@ B와 C의 소진액은 회사 공시가 아니라 이 문서의 가정이다. �
 
 업스테이지는 11월 23일 소형 모델 솔라 미니 4.5의 프리뷰를 공개했고, 정식 출시는 12월 1일로 예고했다([업스테이지 콘솔](https://console.upstage.ai/docs/models/solar-mini-4-5-preview)). 전체 35B 파라미터 가운데 추론 때 3B만 쓰는 구조이고, 자체 API와 오픈라우터, 온프레미스로 제공된다. 가중치는 11월 25일 현재 허깅페이스에 올라와 있지 않다. 아래 수치는 회사가 공개한 자료를 옮긴 것이다.
 
-![그림 7](images/fig-07.png)
+![그림 7](images/upstage-ipo-fig-07.png)
 
 *그림 7. 업스테이지 공개 자료(2026-11-25 작성자 제공, 비교 모델은 artificialanalysis.ai 2026-11-20 값, 반올림 표시) · 본문 비교군 점수는 이 문서의 지능지수 절과 같은 값 · AutomationBench-AA 1위는 Artificial Analysis 평가 페이지(2026-11-25 확인)*
 
@@ -284,7 +336,7 @@ B와 C의 소진액은 회사 공시가 아니라 이 문서의 가정이다. �
 
 ### 가치사슬에서 본 업스테이지의 자리
 
-![그림 8](images/fig-08.png)
+![그림 8](images/upstage-ipo-fig-08.png)
 
 *그림 8. 이 문서의 정리 · 각 칸의 수치와 사실은 본문 해당 절의 출처를 따름*
 
@@ -296,7 +348,7 @@ AI 산업은 반도체, 데이터센터, 파운데이션 모델, 애플리케이
 
 토큰을 팔아 돈을 버는 시장에서 업스테이지는 위의 앤트로픽·오픈AI와 아래의 중국 오픈웨이트 사이에 끼어 있어 수익화가 어렵다. 대표는 매출이 모델이 만들어 소비되는 토큰 양에 달렸다고 설명했지만([뉴시스](https://mobile.newsis.com/view/NISX20260616_0003671084)), 그 토큰의 가격을 정하는 쪽은 업스테이지가 아니다.
 
-![그림 9](images/fig-09.png)
+![그림 9](images/upstage-ipo-fig-09.png)
 
 *그림 9. Artificial Analysis 지능지수 v5.0.1과 과제당 비용 · 솔라 프로 4, MiniMax-M3, Fable 5.2 Max는 이 문서가 확인한 값, GPT-6.1 Terra는 v5 발표 시점 값, 나머지는 작성자의 11월 23일 리포트가 인용한 2차 자료(NeuralTrust, Crux Digits) 기준*
 
@@ -322,7 +374,7 @@ AI 산업은 반도체, 데이터센터, 파운데이션 모델, 애플리케이
 
 실사용 지표로 봐도 격차는 벤치마크만큼 크다. 같은 플랫폼인 오픈라우터에서 솔라 미니 4의 토큰 처리량은 딥시크 V4.1 Flash 1017의 약 55분의 1이다. 회사별 발표 물량은 기준이 서로 달라 배율이 아니라 자릿수 차이로만 읽어야 한다.
 
-![그림 10](images/fig-10.png)
+![그림 10](images/upstage-ipo-fig-10.png)
 
 *그림 10. 오픈라우터 순위 페이지(2026-11-22까지) · 솔라 미니 4는 급상승 목록, 솔라 프로 4는 모델 모음 페이지의 표기값이며 집계 기간이 명시되지 않아 주간으로 유리하게 읽음*
 
@@ -361,7 +413,7 @@ AI 산업은 반도체, 데이터센터, 파운데이션 모델, 애플리케이
 
 **오픈웨이트 채택 (허깅페이스)**
 
-![그림 11](images/fig-11.png)
+![그림 11](images/upstage-ipo-fig-11.png)
 
 *그림 11. 허깅페이스 각 모델 페이지, 2026-11-24 확인 · 다운로드는 내려받은 횟수이며 이용자 수나 사용량이 아님*
 
@@ -379,7 +431,7 @@ AI 산업은 반도체, 데이터센터, 파운데이션 모델, 애플리케이
 
 **플랫폼 전체의 흐름**
 
-![그림 12](images/fig-12.png)
+![그림 12](images/upstage-ipo-fig-12.png)
 
 *그림 12. Ryan Doser 집계(2026-11-12), 오픈라우터 상위 50개 모델의 분류된 토큰 기준 · '그 밖'은 이 문서가 나머지로 계산 · 한 라우팅 플랫폼의 수치이며 전체 시장 점유율이 아님*
 
@@ -595,7 +647,7 @@ PSR 28배는 노타(33배)와 미니맥스(32배)에서 소폭 할인한 값이�
 
 같은 변수를 분포로 놓고 20만 회 돌렸다. 성장률은 30\~120%(최빈 74%), PSR은 10\~40배(최빈 28배)의 삼각분포이고 둘의 상관은 0.5로 뒀다. 다음 가치는 0.1\~0.3조 원, 순현금은 0.2\~0.45조 원의 균등분포다.
 
-![그림 13](images/fig-13.png)
+![그림 13](images/upstage-ipo-fig-13.png)
 
 *그림 13. 이 문서의 시뮬레이션 · 입력 분포는 모두 가정 · 20만 회, 난수 시드 고정*
 
@@ -740,7 +792,7 @@ PSR 28배는 노타(33배)와 미니맥스(32배)에서 소폭 할인한 값이�
 
 이 문서의 결론은 비관에 가깝지만 한국 AI에 길이 없다는 뜻은 아니다. AI 산업이 국가 전략 산업의 한 축이라는 점은 부정하기 힘들고, 미국과 중국의 AI 패권 전쟁은 그 사이에 선 나라에 기회도 만든다.
 
-![그림 14](images/fig-14.png)
+![그림 14](images/upstage-ipo-fig-14.png)
 
 *그림 14. SAE 논문(1989), 현대자동차그룹 기술 연대기, Car스텔라 칼럼 기준 · 연도는 각 자료의 표기를 따름*
 

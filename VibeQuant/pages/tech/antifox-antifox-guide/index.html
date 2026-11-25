@@ -1,0 +1,2406 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>AntiFox를 이용한 Red Team 운영 가이드 — VibeQuant</title>
+  <meta name="description" content="본문 : 1. 소개 · 2. Red Team 구성 원리 · 3. 역사 · 4. 장점과 리스크 · 5. 기능·스크린샷·마스킹 · 6. 설치와 하드닝 · 7. 안전 통제 · 8. 시나리오 · 9. 금융·공공·오픈웨이트 · 10. 블루팀 탐지·로깅 · 11. 예산·환경 · 12.…" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/antifox-antifox-guide/" />
+  <meta property="og:title" content="AntiFox를 이용한 Red Team 운영 가이드" />
+  <meta property="og:description" content="본문 : 1. 소개 · 2. Red Team 구성 원리 · 3. 역사 · 4. 장점과 리스크 · 5. 기능·스크린샷·마스킹 · 6. 설치와 하드닝 · 7. 안전 통제 · 8. 시나리오 · 9. 금융·공공·오픈웨이트 · 10. 블루팀 탐지·로깅 · 11. 예산·환경 · 12.…" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/antifox-antifox-guide/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/antifox-antifox-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/antifox-antifox-guide-en/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/antifox-antifox-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"AntiFox를 이용한 Red Team 운영 가이드","description":"본문 : 1. 소개 · 2. Red Team 구성 원리 · 3. 역사 · 4. 장점과 리스크 · 5. 기능·스크린샷·마스킹 · 6. 설치와 하드닝 · 7. 안전 통제 · 8. 시나리오 · 9. 금융·공공·오픈웨이트 · 10. 블루팀 탐지·로깅 · 11. 예산·환경 · 12.…","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/antifox-antifox-guide/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/AntiFox-Guide.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/antifox-antifox-guide/","datePublished":"2026-11-14","dateModified":"2026-11-14","inLanguage":"ko","keywords":"기타 기술문서, AntiFox"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"AntiFox를 이용한 Red Team 운영 가이드","item":"https://tech.vibequant.cc/tech/antifox-antifox-guide/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 기타 기술문서</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 기술문서</p>
+        <h1>AntiFox를 이용한 Red Team 운영 가이드</h1>
+        <p class="article-dates"><time datetime="2026-11-14">발행 2026.11.14</time> · 주제 기타 기술문서 · AntiFox</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn is-active" href="../../tech/antifox-antifox-guide/" data-lang="KR" aria-current="true">🇰🇷 한국어</a>
+      <a class="lang-btn" href="../../tech/antifox-antifox-guide-en/" data-lang="EN">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">기업, 공공기관, 금융에서 AI 멀티에이전트 자율 모의 침투 플랫폼을, 인가된 격리 환경에서 안전하고 증거 기반으로 운용하는 법</p>
+        
+        <nav class="share-bar" aria-label="공유" data-url="https://tech.vibequant.cc/tech/antifox-antifox-guide/" data-title="AntiFox를 이용한 Red Team 운영 가이드" data-text="본문 : 1. 소개 · 2. Red Team 구성 원리 · 3. 역사 · 4. 장점과 리스크 · 5. 기능·스크린샷·마스킹 · 6. 설치와 하드닝 · 7. 안전 통제 · 8. 시나리오 · 9. 금융·공공·오픈웨이트 · 10. 블루팀 탐지·로깅 · 11. 예산·환경 · 12.…" data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fantifox-antifox-guide%2F&amp;text=AntiFox%EB%A5%BC%20%EC%9D%B4%EC%9A%A9%ED%95%9C%20Red%20Team%20%EC%9A%B4%EC%98%81%20%EA%B0%80%EC%9D%B4%EB%93%9C" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fantifox-antifox-guide%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fantifox-antifox-guide%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><blockquote>
+<p><strong>v1.0-rc · 교정·검증판 (release candidate)</strong> 저자: Dennis Kim (김호광) · Betalabs Inc. 대상 독자: 레드팀 운영자 · 보안 컨설턴트 · 블루/퍼플팀 · 기업·기관 도입 검토자 · 초급 학습자 대상 버전: AntiFox v2.0.x 라인 (저장소 확인: 2026-11) 배포: 지식 공유 목적의 배포</p>
+</blockquote>
+<hr>
+<blockquote>
+<p><strong>법적·윤리적 고지 + 업스트림 사용정책 — 반드시 먼저 읽을 것</strong></p>
+<p>이 문서는 <strong>인가된 테스트</strong>와 <strong>본인이 소유·통제하는 격리 랩 환경에서의 학습·연구·기술 검증</strong>만을 전제로 작성되었습니다. 서면 동의(위임장·ROE·범위 합의) 없이 제3자 시스템이나 인터넷 노출 자산에 실행하는 행위는 「정보통신망법」·「형법」 등에 따라 형사처벌 대상이 될 수 있습니다(부록 C). 실제로 AntiFox는 <strong>자격 증명 탈취 등 악용 사례가 보고된 도구</strong>이며, 2026-11에도 AntiFox 연계 공격이 보도되었습니다(8·10장).</p>
+<p><strong>업스트림(AntiFox 공식) 사용정책</strong> — 공식 README는 이 도구를 <strong>&quot;개인 학습·코드 연구·로컬 기술 검증 용도로만&quot; 허용</strong>하며, <strong>어떤 온라인/운영 시스템에 대한 실제 테스트·공방 대항(red/blue)·생산환경 사용을 금지</strong>한다고 명시합니다(AGPL-3.0, 2026-11 확인). 따라서 본 가이드가 말하는 &quot;Red Team&quot;은 <strong>소유·인가된 격리 환경에서의 적대적 시뮬레이션·학습</strong>으로 한정되며, 실제 외부 표적 공격은 이 도구의 라이선스·정책과 법 양쪽에 위배됩니다. 본 가이드는 특정 익스플로잇·공격 레시피를 제공하지 않고, 방어·검증·보고 자동화를 위한 방법론·안전 구성에 집중합니다. 본 문서는 법률 자문이 아닙니다.</p>
+</blockquote>
+<hr>
+<h2>독자 유형별 읽기 경로</h2>
+<table>
+<thead>
+<tr>
+<th>당신이…</th>
+<th>이 순서로</th>
+<th>핵심 산출</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>레드팀 운영자</strong></td>
+<td>2 → 7 → 6 → 8 → 12 → 5 → 부록 A·B</td>
+<td>안전하게 돌리고 증거를 남기는 법</td>
+</tr>
+<tr>
+<td><strong>보안 컨설턴트</strong></td>
+<td>1 → 4 → 8 → 부록 B·E → 9</td>
+<td>도구 선택 근거·납품물·계약 템플릿</td>
+</tr>
+<tr>
+<td><strong>블루/퍼플팀</strong></td>
+<td>2 → 10 → 4 → 7</td>
+<td>에이전트 행위 탐지·룰 보완</td>
+</tr>
+<tr>
+<td><strong>도입 검토자(기업·기관)</strong></td>
+<td>법적고지 → 6 → 8 → 11 → 12 → 부록 C·D·E</td>
+<td>리스크·예산·법무·백업을 경영진 언어로</td>
+</tr>
+<tr>
+<td><strong>초급 학습자</strong></td>
+<td>3 → 1 → 4 → 부록 F(용어집) → 9 → 11</td>
+<td>개념·역사·원칙부터</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>목차</h2>
+<p><strong>본문</strong>: 1. 소개 · 2. Red Team 구성 원리 · 3. 역사 · 4. 장점과 리스크 · 5. 기능·스크린샷·마스킹 · 6. 설치와 하드닝 · 7. 안전 통제 · 8. 시나리오 · 9. 금융·공공·오픈웨이트 · 10. 블루팀 탐지·로깅 · 11. 예산·환경 · 12. 운영(백업·복구·IR·증거 연계성·트러블슈팅·규모별 체크리스트·TCO) <strong>부록</strong>: A. 워크스루 (Virtual Engagement Walkthrough) · B. 보고서 샘플 · C. 법적 체크리스트 · D. AGPL · E. 계약·운영 템플릿 · F. 용어집 · G. 레퍼런스</p>
+<hr>
+<h1>1. AntiFox 소개</h1>
+<p>AntiFox는 ARTEX(저자 @Autumn-27)의 v0.1.1에서 2차 개발된 AI 멀티에이전트 자율 침투 테스트 플랫폼이다. 이 한 문장을 제대로 이해하려면 세 가지를 알아야 한다. AntiFox의 기술적 뿌리인 ARTEX가 무엇이고 왜 보안 업계를 뒤흔들었는지, 2026년 &quot;레드팀 LLM&quot; 생태계가 어디로 가고 있는지, 그리고 그 흐름 위에서 AntiFox가 ARTEX를 어떻게 확장했는지다. 이 장은 그 세 층위를 순서대로 서술한다.</p>
+<hr>
+<h2>1.1 뿌리 — ARTEX라는 변곡점</h2>
+<h3>ARTEX는 무엇인가?</h3>
+<p>ARTEX는 2026년 7월, &quot;Autumn-27&quot;이라는 핸들을 쓰는 개발자가 GitHub에 AGPL-3.0으로 공개한 <strong>오픈소스 멀티에이전트 자율 침투 테스트 프레임워크</strong>다. Go로 작성된 단일 바이너리에 Next.js UI를 내장하고, 상태는 PostgreSQL에 저장하며, 트래픽을 증거로 기록하는 MITM(중간자) 프록시 심(shim)을 갖춘 구조다. 같은 개발자가 만든 중국산 자산 탐색 플랫폼 ScopeSentry가 정찰의 토대로 쓰인다.</p>
+<p>ARTEX의 설계 철학은 두 가지 아이디어로 요약된다.</p>
+<p>첫째는 <strong>플래너-워커(planner-worker) 멀티에이전트</strong>다. 플래너 에이전트가 목표를 읽어 &quot;의도(intent)&quot;를 생성해 N개의 워커(기본 작업당 3개)에게 분배하고, 워커들은 그 의도를 claim해 Bash·Nmap·curl·ripgrep·HTTP 클라이언트 같은 <strong>실제 도구</strong>로 실행한다. 워커들은 서로의 실행 기록을 검색할 수 있어, 병렬 분기에서 같은 일을 중복하지 않는다. 사람은 자율 실행 중간에 채팅으로 끼어들어 힌트를 주입할 수 있다(HITL).</p>
+<p>둘째는 <strong>이중 그래프(dual-graph)</strong>다. ARTEX는 상태를 두 개의 그래프로 나눈다. 작업 간 공유되는 <strong>전역 자산 그래프</strong>(루트 도메인·서브도메인·IP·서비스·애플리케이션·엔드포인트)와, 작업마다 독립적인 <strong>탐색 그래프</strong>(목표·의도·사실·발견·힌트와 그 혈통)이다. 둘은 앵커로 연결된다. 이 분리의 핵심은, 인프라에 대한 &quot;사실&quot;이 에이전트의 &quot;판단·관찰&quot;과 뒤엉키지 않게 하는 것이다. 자율 에이전트가 길을 잃거나 오염되어도, 전역 자산이라는 진실의 원천은 건드려지지 않는다.</p>
+<p>모델은 공급자 무관(provider-agnostic)으로, Anthropic·OpenAI·Ollama(로컬)나 OpenAI 호환 엔드포인트를 UI에서 지정한다. 한 줄 Docker 설치를 지원한다. 요약하면 ARTEX는 &quot;정찰부터 데이터 유출까지, 사람의 개입을 거의 받지 않고 자율적으로 수행하는 LLM 에이전트 팀&quot;이다.</p>
+<h3>ARTEX가 오용으로 인해 폐쇄된 이유</h3>
+<p>문제는 이 강력한 ARTEX가 <strong>공개되자마자 공격에 그대로 쓰였다</strong>는 데 있다. ARTEX는 &quot;인가된 자산 내에서의 학습·연구&quot;를 전제로 공개됐지만, 어떤 수정도 없이 실제 침입에 전용됐다.</p>
+<p>2026년 10월 7일, CrowdStrike Intelligence는 9월 말~10월 초에 걸쳐 <strong>한국 금융기관을 겨냥한 캠페인</strong>에 ARTEX가 쓰였다고 보고했다. 그 하루 뒤인 10월 8일, 개발자 Autumn-27은 관여를 부인하며 프로젝트를 <strong>클로즈드 소스로 전환</strong>했다. 그러나 이미 복제본은 세상에 퍼진 뒤였고, 한국어 포크를 비롯한 파생본들이 &quot;소스를 닫아도 회수되지 않는&quot; 상태로 남았다.</p>
+<p>Microsoft는 중국 국가연계 행위자 Storm-0940이 <strong>ConnectWise 공급망 공격</strong>에 ARTEX를 썼다고 밝혔다. 이 공격에서 에이전트들은 탈취한 앱 자격증명으로 2,250개 이상의 Microsoft 365 테넌트에 로그인을 시도했고, 일부는 <strong>3시간 이내에 권한 있는 접근</strong>에 도달했다. Microsoft는 한 AI 에이전트가 GitHub에서 시크릿을 스캔하던 상태에서 Azure Key Vault의 데이터를 유출하기까지 <strong>5분</strong>밖에 걸리지 않은 사례도 관측했다. Mandiant는 ARTEX가 &quot;기본적으로 요란하다(loud)&quot;고 기록했다 — 23초 동안 27건의 클라우드 권한 탐색, 파일명을 상대로 한 500건 이상의 웹 요청 퍼징 같은 폭발적 활동이다.</p>
+<p>ARTEX 사건이 업계에 남긴 교훈은 두 가지다. </p>
+<p>하나, <strong>인가된 테스트용으로 공개된 도구가 아무 수정 없이 침입에 쓰일 수 있다</strong>는 것. </p>
+<p>둘, 공격자의 시계(clock)가 방어자의 시계로부터 분리됐다는 것 — AI 에이전트는 사람이 따라갈 수 없는 속도로 &quot;머신 스피드&quot; 공격을 수행한다. </p>
+<p>바로 이 지점이 &quot;그렇다면 공격자가 당신 환경에 ARTEX를 돌리기 전에, 당신이 먼저 자신에게 돌려봐야 한다&quot;는 방어 논리를 낳았다. AntiFox는 이 방어자를 위한 보안 툴과 공격자를 위한 강력한 도구 사이 긴장의 연장선 위에 있다.</p>
+<hr>
+<h2>1.2 흐름 — 2026년 레드팀 LLM 생태계</h2>
+<p>ARTEX는 혼자가 아니다. 2026년은 &quot;자율 펜테스트(autonomous pentest)&quot;가 한 범주로 굳어진 해였다. 이 흐름의 특징을 네 가지로 정리할 수 있다.</p>
+<p><strong>첫째, 아키텍처의 수렴.</strong> 대부분의 자율 펜테스트 도구가 비슷한 뼈대로 수렴했다. 목표를 작업으로 분해하고, 여러 에이전트를 병렬로 돌리고, 발견을 <strong>그래프로 통합</strong>하는 구조다. ARTEX·PentAGI·AntiFox가 모두 이 패턴을 공유한다. 차이는 핵심 엔진이 아니라 &quot;그 주위를 무엇으로 감싸는가&quot;에서 난다 — FOSS 툴킷인가(ARTEX), 결과를 책임지는 서비스인가(Astra 같은 클로즈드 플랫폼인가), 증거·보고에 특화됐는가(AntiFox).</p>
+<p><strong>둘째, &quot;지속적·자율적&quot; 커버리지로의 이동.</strong> 과거의 &quot;연 1~2회 심층 펜테스트&quot;는 공격자의 속도를 따라갈 수 없다는 인식이 퍼졌다. 취약점 공개 전에 공격이 먼저 오는 &quot;타임 투 익스플로잇(time to exploit)&quot; 개념이 무의미해지는 시대에, 상시 자율 펜테스트가 &quot;따라잡을 수 있는 유일한 커버리지 모델&quot;로 부상했다.</p>
+<p><strong>셋째, 양날의 칼로서의 생태계.</strong> 같은 도구가 방어와 공격 양쪽에서 쓰인다. ARTEX와 유사한 펜테스트 프레임워크 수십 종이 &quot;자격증명 공격과 클라우드 침해를 머신 스피드로 실행할 수 있는&quot; 능력을 가진 채 공개돼 있다. 일부는 C2(명령·제어) 기능까지 내장한다. 이 도구들이 본질적으로 악하다는 뜻이 아니라, <strong>오늘날 공격자가 선택할 수 있는 옵션의 폭이 그만큼 넓어졌다</strong>는 뜻이다. 그래서 이 분야 도구들은 공통적으로 강한 사용정책(개인 학습·로컬 격리 검증만 허용)과 방어·탐지 가이드를 함께 배포하는 쪽으로 움직이고 있다(AntiFox도 마찬가지다).</p>
+<p><strong>넷째, 환각이라는 품질의 벽.</strong> 자율 도구가 빠르게 많이 찾는 만큼, 그 결과의 상당 부분이 환각·허위 양성이라는 문제가 전면에 드러났다(4장에서 상술). curl 바운티 붕괴로 상징되는 이 &quot;신호 대 잡음&quot; 위기는, 자율 펜테스트의 다음 경쟁 축이 &quot;얼마나 많이 찾는가&quot;가 아니라 <strong>찾은 것을 어떻게 증거로 확정하고 납품하는가</strong>임을 보여줬다. AntiFox가 서 있는 자리가 정확히 여기다.</p>
+<hr>
+<h2>1.3 AntiFox는 ARTEX를 어떻게 넘어섰나?</h2>
+<p>AntiFox는 ARTEX v0.1.1을 기점으로 2차 개발을 시작해, 이후 여러 해킹, 보안 커뮤니티의 의견과 상류(upstream)의 진화를 따라가며 상호 교류·차용했다. AntiFox 자신이 밝히듯, ARTEX는 &quot;자동 발견&quot;을 매우 강하게 만들었지만 &quot;보고서 납품&quot;은 고객·프로젝트마다 다른 영역으로 상대적으로 덜 다듬어져 있었다. AntiFox는 바로 그 <strong>리포트</strong>자동화에 공학적 무게를 실었다. 핵심 지향을 한 문장으로 하면, &quot;발견&quot;에 그치지 않고 AI가 찾은 취약점을<strong>엔지니어가 이해하고 재현 가능한, 증거가 붙은 보고서</strong>로 만드는 것이다.</p>
+<p>AntiFox가 ARTEX의 토대 위에 확장한 특징은 다음과 같다.</p>
+<p><strong>증거 구동 납품(evidence-driven delivery).</strong> 이것이 가장 큰 차별점이다. 악용(exploit)을 수행하는 바로 그 순간에, 각 단계의 요청·응답·예상·검증 결론을 구조화해 DB에 기록한다. 사후에 짜맞추는 방식이 아니다. 발견 페이지는 진입점·전제조건부터 단계적 악용까지를 <strong>단계별 자연어 설명 + 실제 요청</strong>으로 쪼개 보여주고(익스플로잇 체인 분할 표시), 작업 중 모든 요청을 MITM으로 녹화해 시간창·순서로 각 단계에 정확히 매칭한다(구문 강조·본문 검색·명중 횟수 제공). 이로써 &quot;재현 절차가 누락되거나 조작될&quot; 여지가 줄어든다. 레드팀 보고서의 품질은 &quot;무엇을 찾았나&quot;보다 &quot;어떻게 재현되나&quot;에서 갈리는데, AntiFox는 그 지점을 자동화한다.</p>
+<p><strong>확인 즉 보강(confirm-then-enrich)과 보고서 관리.</strong> 사람이 취약점을 &quot;확인(Confirmed)&quot;하는 순간, 그것을 구조화 데이터로 자동 보강한다. 보고서는 기본적으로 <strong>확인된 취약점만</strong> 수록하고, 명명 템플릿(발주처·로고·담당자·CVSS)과 취약점 부분집합 선택 수록, 증거 캡션 자동 생성을 지원한다. 납품급 .docx를 중국어 간체·번체·영어로 생성한다. 이 &quot;에이전트가 후보를 만들고, 사람이 증거로 확정하고, 그 확정된 것만 납품에 오른다&quot;는 흐름이 AntiFox의 정체성이다 — 환각 시대에 신뢰를 지키는 제품 차원의 답이다(3·4장).</p>
+<p><strong>운영·거버넌스 기능의 추가.</strong> ARTEX의 규칙 기반 HITL 인터셉트를 계승하면서, AntiFox는 기업·기관 운영에 필요한 통제를 보탰다. <strong>RBAC 다중 사용자</strong>(권한 매트릭스·시스템 역할·자원 레벨 범위·로그인 감사)로 운영자별 접근을 분리하고, <strong>전역 출구 프록시</strong>(v2.0.3 — 모든 에이전트 트래픽을 하나의 http/https/socks5 프록시로 송출, 소스 IP 은닉/점프, 작업별 직결/프록시 선택, 출구 IP 에코 가용성 테스트)로 트래픽 경로를 통제한다. 취약점 4단계 심각도·배치 보강, 전역+작업 이중 pgvector RAG 지식베이스, MCP·Skill 확장, 그리고 SHA256·원자 교체·실패 롤백을 갖춘 원클릭 업데이트도 제공한다.</p>
+<p>정리하면, ARTEX가 &quot;자율 발견 엔진&quot;이라면 AntiFox는 그 엔진 위에 <strong>증거·검수·납품·거버넌스</strong>라는 &quot;교부 계층(delivery layer)&quot;을 얹은 확장판이다. 아키텍처의 뼈대(멀티에이전트·이중 그래프·MITM 증거)는 ARTEX에서 물려받되, 그 결과물을 &quot;엔지니어가 책임지고 고객에게 낼 수 있는 형태&quot;로 다듬는 데 공학을 집중한 것이 AntiFox다.</p>
+<hr>
+<h2>1.4 한눈에 보는 개요 (저장소 확인 2026-11)</h2>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>기반</td>
+<td>ARTEX v0.1.1에서 2차 개발(저자 @Autumn-27)</td>
+</tr>
+<tr>
+<td>기술 스택</td>
+<td>Go 단일 바이너리(<code>go:embed</code>로 Next.js 내장) · PostgreSQL(+pgvector)</td>
+</tr>
+<tr>
+<td>요구 런타임</td>
+<td>Go 1.24+ / Node 20+ / PostgreSQL / Python 3(보고서 렌더)</td>
+</tr>
+<tr>
+<td>라이선스</td>
+<td>AGPL-3.0 — 사용정책: 개인 학습·로컬 격리 검증만 허용</td>
+</tr>
+<tr>
+<td>현재 버전</td>
+<td>v2.0.3 (2026-10-30 릴리스)</td>
+</tr>
+<tr>
+<td>기본 포트</td>
+<td><code>8787</code>(웹 콘솔, 최초 <code>/setup</code>에서 관리자 비밀번호) · <code>8788</code>(MITM 트래픽 녹화 프록시)</td>
+</tr>
+<tr>
+<td>컨테이너</td>
+<td><code>ghcr.io/antifox-ai/antifox</code></td>
+</tr>
+<tr>
+<td>에이전트</td>
+<td>planner(의도 생성) · worker ×N(실행) · mainagent(인간 인터페이스)</td>
+</tr>
+<tr>
+<td>지식 구조</td>
+<td>전역 자산 그래프 + 작업별 탐색 그래프(이중 그래프, 앵커로 상호연결)</td>
+</tr>
+<tr>
+<td>보고서 언어</td>
+<td>중국어 간체·번체·영어(한국어 비지원)</td>
+</tr>
+<tr>
+<td>공식 채널</td>
+<td>GitHub 저장소·Releases · GHCR 패키지 · 위챗 공식계정 — 별도 웹사이트 없음(2026-11-14 확인)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>강점이 곧 위험이다. 증거 자동 수집은 인증·세션·요청/응답이 PostgreSQL에 쌓인다는 뜻이다. 또한 기반 ARTEX 계열에서 공급망 사고가 확인됐다: 2026-11-06 CSA 분석 &quot;Trojanized Offensive AI Tooling: The ARTEX Docker Backdoor&quot;는 Docker Hub의 <code>tomicdd/artex</code>(및 <code>congdonglinux/artex</code>) 이미지에 로그인 처리에 숨긴 무인증 root 명령 실행 백도어가 삽입됐고 약 9,000회 내려받혔다고 밝혔다. AntiFox 자체가 감염됐다는 근거는 현재 없다(공식 Compose는 GHCR 사용) — 그러나 &quot;소스가 깨끗해도 이미지가 깨끗하단 보장은 없다&quot;는 교훈이 핵심이다. 도입 전 (1) 데이터 보관·접근 통제·파기, (2) 배포 이미지 출처·무결성 검증을 먼저 세워라(6·7·12장).</p>
+</blockquote>
+<h3>공식 기술 아키텍처</h3>
+<p>Go 단일 바이너리(Next.js 프런트 <code>go:embed</code> 내장) + PostgreSQL. 핵심은 이중 그래프 — 전역 자산 그래프(작업 간 공유 진실 원천) + 작업별 탐색 그래프(목표·의도·사실·취약점의 혈통 체인)이며 앵커로 상호연결된다. 엔진은 이벤트 구동: 그래프가 변하면 planner가 의도를 생성, worker가 실행 결과를 되쓰고, 그게 다시 이벤트를 일으킨다.</p>
+<pre><code class="language-mermaid">flowchart TB
+  subgraph FE[프런트 Next.js · go:embed 내장 단일 바이너리]
+    UI[대시보드 · 작업 · 발견 · 자산 · 트래픽 · 보고서 · 지식베이스]
+  end
+  subgraph SRV[server · Go net/http]
+    API[REST /api · JWT · SSE]
+    ENG[engine 이벤트 구동 스케줄링]
+  end
+  subgraph AG[멀티에이전트 오케스트레이션]
+    PL[planner 계획 · 유일한 의도 생성자]
+    WK[worker 실행 ×N]
+    MA[mainagent 인간 인터페이스]
+  end
+  subgraph DB[PostgreSQL]
+    AGRAPH[자산 그래프 · 전역 공유]
+    EGRAPH[탐색 그래프 · 작업별 독립]
+  end
+  SUB[MITM 트래픽 녹화 · HITL 인터셉트 · 자산 보완 · 보고서 · 지식베이스 RAG]
+
+  UI --&gt; API --&gt; ENG --&gt; PL &amp; WK
+  API --&gt; MA
+  PL &amp; WK &amp; MA --&gt; DB
+  WK --&gt; SUB
+</code></pre>
+<blockquote>
+<p>출처: 공식 README &quot;기술 아키텍처&quot; 절의 mermaid 다이어그램(2026-11-14 확인, 라벨 한국어 번역).</p>
+</blockquote>
+<hr>
+<h2>1.5 경쟁 프로젝트와 비교</h2>
+<table>
+<thead>
+<tr>
+<th>프로젝트</th>
+<th>특징</th>
+<th>AntiFox와의 관계</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ARTEX</td>
+<td>탐색 그래프 엔진·MITM·HITL·멀티에이전트. ScopeSentry 기반 정찰</td>
+<td>직접 조상. 공격 악용 후 원본 closed-source화</td>
+</tr>
+<tr>
+<td>PentAGI</td>
+<td>완전 자율, Docker, Nmap·Metasploit·sqlmap 오케스트레이션</td>
+<td>설계 철학이 가장 유사한 대안</td>
+</tr>
+<tr>
+<td>Astra</td>
+<td>클로즈드 소스 자율 펜테스트 플랫폼(결과를 책임지는 서비스형)</td>
+<td>ARTEX가 툴킷이라면 Astra는 서비스 — 다른 포지셔닝</td>
+</tr>
+<tr>
+<td>Agent Zero</td>
+<td>범용 자율 에이전트, 인증 미설정 사례 다수</td>
+<td>경량·범용</td>
+</tr>
+<tr>
+<td>PentestGPT</td>
+<td>LLM 보조, XBOW 벤치 상위</td>
+<td>탐색·추론 보조 강점</td>
+</tr>
+<tr>
+<td>HexStrike AI · Strix · RedAmon</td>
+<td>도구 통합형 · 앱 특화 · MIT 유연</td>
+<td>각 틈새 대안</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>요약 — ARTEX를 그대로 대체하려면 PentAGI가 가장 가깝고, 결과를 통째로 외주하려면 Astra 같은 서비스형이 대안이다. 그러나 <strong>보고서 자동화·증거 구동 납품</strong>이 핵심 요구라면 AntiFox의 접근이 차별적이다. 자율 펜테스트의 다음 경쟁 축이 &quot;발견량&quot;이 아니라 &quot;증거·납품 품질&quot;로 옮겨 가는 흐름(1.2) 위에서, AntiFox의 경쟁력과 위치가 분명해진다.</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>이 장이 인용한 ARTEX 오용 사건(한국 금융권·ConnectWise)·아키텍처·공급망 사고는 2026년 공개 보도·연구(CrowdStrike·Microsoft·Mandiant·CSA 등) 기준이며, 세부는 시점·출처에 따라 갱신될 수 있으므로 도입 시점에 원 출처로 재확인하라. AntiFox는 이 모든 리스크를 이해한 위에서, 인가·격리·증거라는 울타리 안에서만 운용돼야 한다.</p>
+</blockquote>
+<hr>
+<h1>2. Red Team의 구성 원리</h1>
+<p>도구를 켜기 전에 팀이 선다. AntiFox 같은 에이전트는 레드팀 업무 일부를 <strong>증폭</strong>할 뿐, 레드팀 그 자체가 아니다.</p>
+<blockquote>
+<p><strong>관점 전환 — &quot;도구&quot;가 아니라 &quot;권한 가진 인프라&quot;</strong>— 자율 에이전트는 테스트 대상 정보뿐 아니라 API 키·인증정보·네트워크 접근 권한까지 보유한다. 따라서 AntiFox를 단순한 침투 테스트 프로그램이 아니라<strong>보안 권한을 가진 에이전트 실행 인프라</strong>로 취급하고, 도입·운영·폐기 전 과정에서 그 수준의 통제(6·7·12장)를 걸어야 한다. ARTEX 백도어 사건(1장·6장)이 그 이유를 보여준다.</p>
+</blockquote>
+<h3>Red · Blue · Purple</h3>
+<ul>
+<li><strong>Red</strong> — 공격자를 모사해 탐지·대응을 시험하는 공격 측.</li>
+<li><strong>Blue</strong> — 탐지·대응·방어(SOC·DFIR).</li>
+<li><strong>Purple</strong> — 레드·블루가 실시간 협업해 탐지 규칙을 함께 개선.</li>
+</ul>
+<blockquote>
+<p>자율 에이전트는 특히 <strong>퍼플팀</strong>에서 가치가 크다 — 재현 가능한 증거가 &quot;어느 요청에서 탐지가 비었나&quot;를 즉시 드러낸다(10장).</p>
+</blockquote>
+<h3>모의 침투 vs 레드팀 vs 취약점 평가</h3>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>목적</th>
+<th>범위</th>
+<th>은밀성</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>취약점 평가(VA)</td>
+<td>알려진 취약점 식별·목록</td>
+<td>넓고 얕게</td>
+<td>불필요</td>
+</tr>
+<tr>
+<td>모의 침투</td>
+<td>악용 가능성 검증</td>
+<td>정의된 범위</td>
+<td>선택적</td>
+</tr>
+<tr>
+<td>레드팀 평가</td>
+<td>목표 달성·탐지 시험</td>
+<td>목표 지향</td>
+<td>필수</td>
+</tr>
+</tbody></table>
+<p>AntiFox 자동화는 <strong>VA–모의 침투</strong> 구간을 가속한다. 본격 레드팀 평가(은밀성·목표 의사결정)는 사람이 핸들을 쥔다.</p>
+<h3>표준 프레임워크</h3>
+<p>Cyber Kill Chain · MITRE ATT&amp;CK · PTES · OSSTMM / NIST SP 800-115.</p>
+<h3>엔게이지먼트 수명주기와 AntiFox의 위치</h3>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>AntiFox 기여</th>
+<th>사람의 몫</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>① 사전 교섭(범위·ROE·위임장)</td>
+<td>—</td>
+<td>전적으로 사람</td>
+</tr>
+<tr>
+<td>② 정찰 · ③ 열거</td>
+<td>자동 그래프·매핑</td>
+<td>범위 외 걸러내기·우선순위</td>
+</tr>
+<tr>
+<td>④ 검증</td>
+<td>에이전트 검증 + 증거</td>
+<td>False Positive 선별</td>
+</tr>
+<tr>
+<td>⑤ 후속 악용</td>
+<td>보조</td>
+<td>의사결정·은밀성</td>
+</tr>
+<tr>
+<td>⑥ 보고</td>
+<td>3언어 docx 초안</td>
+<td>비즈니스 맥락·검수</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>①번을 건너뛰지 말 것</strong> — 서면 범위 합의·위임장 없는 실행은 불법이며, 업스트림 정책상으로도 실제 환경 사용은 금지된다. ROE에는 (a) 대상 화이트리스트, (b) 금지 행위, (c) 시간창, (d) 비상 중단 연락선이 포함돼야 한다(부록 C·E).</p>
+</blockquote>
+<hr>
+<h1>3. 레드팀과 모의 침투의 역사</h1>
+<p>&quot;레드팀&quot;은 보안이 아니라 전쟁에서 왔다. 적의 눈으로 아군 계획을 깨뜨려 보는 사람들 — 그 계보가 AntiFox의 등장을 설명한다.</p>
+<ul>
+<li><strong>냉전·워게임(1950s–60s)</strong> — 소련(붉은 진영)의 시각에서 자국 전략을 공격하는 모의 훈련에서 &quot;레드팀&quot; 역할이 자리 잡았다.</li>
+<li><strong>타이거 팀(1960s–70s)</strong> — 미 정부·RAND의 의도적 공격 팀. <em>Anderson Report</em>·<em>Multics 평가</em>가 침투 테스트의 원형을 남겼다.</li>
+<li><strong>도구의 시대(1990s–2000s)</strong> — Nmap(1997)·Nessus(1998)·Metasploit(2003), OSSTMM·PTES·OSCP 생태계.</li>
+<li><strong>APT·에뮬레이션(2010s)</strong> — adversary emulation 부상, <strong>MITRE ATT&amp;CK</strong>(2013 내부/2015 공개)가 공용어가 됐다.</li>
+<li><strong>LLM·자율 에이전트(2023– )</strong> — PentestGPT류 보조에서 ARTEX·PentAGI·AntiFox 같은 멀티에이전트 자율 펜테스트로. AntiFox는 &quot;증거·보고서 자동화&quot; 분파다.</li>
+</ul>
+<blockquote>
+<p><em>도구는 공격의 문턱을 계속 낮춰 왔고, 그때마다 &quot;누가 책임지고 어디까지 하는가&quot;라는 규율이 도구를 쫓아왔다.</em></p>
+</blockquote>
+<hr>
+<h1>4. LLM을 이용한 모의 침투의 장점과 리스크</h1>
+<blockquote>
+<p>&quot;LLM은 엑셀이지 오라클이 아니다.&quot; 빠르게 정리하고 계산하는 도구이지, 진실을 선언하는 신탁이 아니다. 이 장은 그 한 문장을 실제 사건으로 증명한다.</p>
+</blockquote>
+<p>LLM 기반 자율 모의 침투는 2026년 현재 &quot;실험&quot;이 아니라 &quot;현실&quot;이다. 문제는 그 현실이 두 얼굴을 가졌다는 데 있다. 한쪽에는 사람이 수일 걸리던 정찰·열거·초동 검증을 몇 시간으로 압축하는 생산성이 있고, 다른 한쪽에는 그 결과물의 상당 부분이 <strong>그럴듯하지만 틀린</strong> 환각이라는 신뢰성 문제가 있다. AntiFox가 &quot;발견&quot;이 아니라 &quot;증거를 붙인 납품&quot;에 무게를 둔 것도, 바로 이 두 번째 얼굴을 다루기 위해서다. 이 장은 장점을 과소평가하지도, 리스크를 미화하지도 않고, 실제 뉴스로 확인된 사례를 들어 &quot;무엇을 자동화에 맡기고 무엇을 사람이 반드시 검토해야 하는가&quot;를 정리한다.</p>
+<hr>
+<h2>4.1 장점 — 왜 그럼에도 쓰는가?</h2>
+<p>LLM 기반 자율 펜테스트의 장점은 추상적 구호가 아니라, 이미 실측된 생산성의 이동이다.</p>
+<p>첫째, <strong>속도와 커버리지</strong>다. 자율 에이전트는 지치지 않고, 반복적인 정찰·열거·초동 검증을 사람보다 빠르게 수행한다. 특히 &quot;모든 엔드포인트·파라미터를 빠짐없이 훑는&quot; 종류의 작업에서 사람의 집중력 한계를 넘어선다. HackerOne은 2026년 3월까지 1년간 제출 건수가 76% 늘었다고 보고했는데, 이 폭증 자체가 — 뒤에서 보듯 양날의 칼이지만 — AI가 발견의 문턱을 얼마나 낮췄는지를 보여주는 지표다.</p>
+<p>둘째, <strong>24시간 지속 실행과 회귀 테스트</strong>다. 야간·주말에도 돌릴 수 있고, 코드가 바뀔 때마다 같은 시나리오를 다시 돌려 &quot;회귀 취약점&quot;을 잡는 데 유리하다. 사람 팀으로는 비용 때문에 불가능한 빈도다.</p>
+<p>셋째, <strong>보고서 자동화</strong>다. 이것이 AntiFox류 도구의 핵심 차별점이다. 재현 절차·증거·다국어 초안을 자동 생성해 리포팅 공수를 크게 줄인다. 보고서 작성은 전통적으로 모의해킹 공수의 상당 부분을 차지해 왔고, 이 부분의 자동화는 실질적 절감으로 이어진다.</p>
+<p>넷째, <strong>지식 재사용과 민주화</strong>다. 전역 자산 그래프와 RAG 지식베이스를 통해 과거 발견을 다음 테스트에 전이할 수 있고, 소규모 팀도 중급 수준의 체계적 테스트에 접근할 수 있게 된다. 전담 레드팀을 꾸릴 수 없는 조직에게는 이 &quot;진입 장벽 하락&quot;이 가장 큰 가치다.</p>
+<p>그리고 이 장점들이 허황된 것이 아님을 보여주는 실제 성과도 있다. 2026년에는 프런티어 AI의 보조로 발견된 취약점이 실제 CVE로 등재되고 공격에 악용되는 사례가 나왔다. 대표적으로 <strong>ActiveMQ의 CVE-2026-34197</strong>은 한 연구자가 Claude의 보조를 받아 발견했고, 이후 실제 공격에 악용되어 미국 CISA의 &quot;알려진 악용 취약점(KEV)&quot; 목록에 올랐다. Mozilla는 2026년 2월 자사 브라우저의 잠복 취약점을 찾고 고치는 데 내부적으로 프런티어 모델을 쓰고 있다고 확인했고, Chrome의 CVE 공개는 전년 대비 563% 늘었다. <strong>AI는 실제로 취약점을 찾는다.</strong> 이 사실에는 더 이상 의심의 여지가 없다. 문제는 &quot;찾은 것 중 무엇이 진짜인가&quot;다.</p>
+<hr>
+<h2>4.2 리스크 1 — 환각과 허위 양성: curl이 바운티를 닫은 이유</h2>
+<p>LLM 기반 펜테스트의 가장 근본적인 리스크는 <strong>환각(hallucination)</strong>, 즉 존재하지 않는 취약점을 그럴듯하게 지어내는 것이다. 이것은 이론적 우려가 아니라, 2026년 오픈소스 생태계를 실제로 무너뜨린 사건으로 증명됐다.</p>
+<p>전 세계 거의 모든 서버에 설치된 데이터 전송 도구 <strong>curl</strong>의 메인테이너 다니엘 스텐베리(Daniel Stenberg)는 2026년 1월 말, 운영하던 버그 바운티 프로그램을 종료했다. 이유는 간결하고 참담했다: <strong>2025년 제출된 보고서 중 유효한 것이 5% 미만</strong>이었기 때문이다. 제출량은 2024년의 &quot;검토 가능한 수준&quot;에서 2025년 48시간당 1건으로 두 배가 됐고, 2026년 6월에는 18시간당 1건으로 다시 두 배가 됐다. 스텐베리는 이 상황을 &quot;AI 버그 리포트에 사실상 디도스(DDoS)를 당하고 있다&quot;고 표현했고, 가능하다면 낭비된 시간에 대해 제출자에게 비용을 청구하고 싶다고까지 말했다.</p>
+<p>curl 팀이 겪은 환각의 전형을 보여주는 사례가 하나 있다. 잘 포맷팅된, 자신감 넘치는 HTTP/3 취약점 보고서가 접수됐는데, 그 보고서는 <strong>실제로는 존재하지 않는 함수</strong>를 근거로 들고 있었다. 또 다른 AI 슬롭(slop) 보고서(식별번호 H1#3125832)는 존재하지 않는 함수를 인용하고 검증되지 않은 패치를 제안했다. curl 보안팀의 하리 신토넨(Harry Sintonen)은 &quot;공격자는 심각하게 오판했다. curl은 수 마일 밖에서도 AI 슬롭 냄새를 맡는다&quot;고 일축했다. 문제는 <strong>curl만큼의 전문성을 갖춘 팀은 드물다는 것</strong>이다. 전담 보안 전문가가 없는 조직에서는 이런 보고서가 &quot;첫눈에 합법적으로 보이기&quot; 때문에 걸러지지 않는다.</p>
+<p>이것은 curl만의 문제가 아니었다. 같은 흐름 속에서 <strong>Nextcloud</strong>가 2026년 4월 바운티 프로그램을 종료했고, <strong>HackerOne의 Internet Bug Bounty</strong>는 2026년 3월 27일 모든 신규 제출을 중단했으며, <strong>Google</strong>은 오픈소스 바운티 프로그램의 제출을 일시 중단했다. HackerOne 전체에서 제출은 76% 늘었지만 실제 취약점을 지적한 비율은 25%에 머물렀다 — 즉 <strong>증가분의 거의 전부가 노이즈</strong>였다.</p>
+<p>여기서 반드시 짚어야 할 지점이 있다. &quot;작은 모델이라 그렇다&quot;는 변명이 통하지 않는다는 것이다. 스텐베리가 curl을 상대로 Anthropic의 최상위 모델(Mythos)을 직접 시험했을 때, <strong>보고된 5건의 취약점 중 유효한 CVE로 인정된 것은 단 1건</strong>이었다. 프런티어 모델조차 실제 코드베이스에서 의미 있는 허위 양성률을 보인다. 모델이 좋아진다고 검토가 필요 없어지는 것이 아니다.</p>
+<blockquote>
+<p>검토해야 하는 리스크: 환각은 &quot;모델 품질을 올리면 사라지는 버그&quot;가 아니라 &quot;자동화에 내재한 상수&quot;다. 따라서 모든 발견은 사람이 증거로 확인하기 전까지 &quot;후보&quot;일 뿐이다. AntiFox의 MITM 증거 자동 연결이 바로 이 지점을 겨눈다 — 실제 요청·응답 패킷이 붙지 않은 주장은 리포트에 올리지 않는다. &quot;패킷이 없으면 주장도 없다&quot;가 원칙이어야 한다. 운영자는 발견을 &quot;확인(Confirmed)&quot; 상태로 승격시키기 전에 재현 패킷을 직접 열어 검토해야 하며, 이 검토 서명이 없는 발견은 발견이 아니다(부록 B의 보고서 Status 필드가 이 경계를 문서에 새긴다).</p>
+</blockquote>
+<hr>
+<h2>4.3 리스크 2 — 신뢰의 붕괴, 환각은 공격이 된다</h2>
+<p>환각의 두 번째 얼굴은 더 교활하다. 누군가는 이 환각을 <strong>의도적 무기</strong>로 쓴다. 바운티 플랫폼을 노린 분석들은, 일부 공격자의 목적이 &quot;기술적 침해&quot;가 아니라 <strong>운영 교란</strong>이라고 지적한다. 그럴듯한 허위 보고서로 방어자의 시간을 소모시키고 공개 프로세스에 대한 신뢰를 무너뜨리는 것 자체가 목적이라는 것이다. 실제로 @evilginx 같은 계정은 여러 조직에 유사한 AI 생성 보고서를 뿌렸고, 일부는 보상금까지 받아냈다.</p>
+<p>이 구조가 위험한 이유는, 환각 보고서가 <strong>운영 부채(operational debt)</strong>로 쌓이기 때문이다. 단순히 분석가의 시간을 낭비하는 데 그치지 않고, 진짜 연구자들이 좌절해 떠나고, 조직이 바운티를 폐지하고, 재정 지원이 마르는 악순환으로 이어진다. 보안 생태계 전체의 신호 대 잡음비가 무너지는 것이다.</p>
+<blockquote>
+<p>검토해야 하는 리스크: 자율 도구를 운영하는 조직은 &quot;우리가 만든 보고서가 받는 쪽의 신뢰를 깎고 있지는 않은가&quot;를 자문해야 한다. AntiFox가 v2.0에서 <strong>기본적으로 확인된 취약점만 보고서에 수록</strong>하도록 바꾼 것은 이 신뢰 문제에 대한 제품 차원의 답이다. 납품물에 증거·상태·검수 서명이 함께 드러나야(부록 B) 받는 쪽이 &quot;에이전트 초안&quot;과 &quot;사람이 확정한 사실&quot;을 구분할 수 있다. 자동화의 생산성으로 노이즈를 대량 생산하는 것은 생산성이 아니라 민폐다.</p>
+</blockquote>
+<hr>
+<h2>4.4 리스크 3 — 환각이 코드가 될 때, 슬롭스쿼팅</h2>
+<p>환각은 보고서에만 머물지 않는다. 자율 에이전트가 <strong>스스로 생성한 출력을 실행</strong>할 때, 환각은 공급망 공격의 입구가 된다. 2026년 클라우드 보안 연합(CSA)과 USENIX Security 2025 연구가 정리한 <strong>슬롭스쿼팅(slopsquatting)</strong>이 그 전형이다.</p>
+<p>LLM은 코드를 생성할 때 <strong>존재하지 않는 패키지(라이브러리)</strong>를 그럴듯한 이름으로 자주 지어낸다. 한 대규모 연구는 57만6천 개의 Python·JavaScript 코드 샘플에서 이 현상을 측정했는데, <strong>AI 코드 제안 다섯 개 중 약 하나(오픈웨이트 모델 평균 약 21.7%, 상용 모델 약 5.2%)가 존재하지 않는 패키지를 가리켰고</strong>, 고유한 가짜 패키지 이름이 20만5천여 개 식별됐다. 더 위험한 것은 이 환각이 <strong>재현 가능</strong>하다는 점이다. 동일 프롬프트를 열 번 반복했을 때 가짜 이름의 43%가 매번 다시 나타났고, 58%가 한 번 이상 재등장했다. 공격자 입장에서는 모델 출력을 몇 번만 관찰하면 &quot;앞으로도 계속 지어낼 이름&quot;을 예측할 수 있다는 뜻이다.</p>
+<p>공격 방식은 단순하다. 공격자가 그 가짜 이름으로 PyPI·npm에 <strong>악성 패키지를 미리 등록</strong>해 두면, 이후 AI가 같은 이름을 추천하고 개발자(혹은 자율 에이전트)가 아무 의심 없이 설치하는 순간 악성 코드가 빌드에 주입된다. 실제로 한 연구자가 AI가 반복 추천하던 가짜 패키지를 무해한 테스트용으로 PyPI에 등록했더니, 며칠 만에 알리바바 팀을 포함한 수천 명의 개발자가 이 가상의 의존성을 프로젝트에 끌어다 썼다. 2026년 11월 ARTEX Docker 이미지 백도어 사건, 그리고 AI 개발 파이프라인의 공용 의존성인 litellm을 노린 PyPI 공급망 캠페인(TeamPCP, 2026년 3월)은, <strong>공격자들이 이제 AI 도구 인프라 자체를 고가치 공급망 표적으로 본다</strong>는 신호다.</p>
+<blockquote>
+<p>검토해야 하는 리스크: 자율 에이전트가 생성한 코드·명령·의존성을 <strong>검증 없이 실행하게 두지 말 것.</strong> 패키지 이름은 수동 확인하고, 락파일·버전 핀·해시 검증을 강제하며, AI 생성 코드는 격리 환경에서만 실행한다. AntiFox 운영 맥락에서는 7장의 <strong>규칙 기반 HITL 인터셉트</strong>(고위험 행위에 사람 승인 게이트)와 <strong>네트워크 에그레스 차단</strong>이 &quot;에이전트가 임의의 외부 패키지·엔드포인트를 끌어오는&quot; 경로를 막는 최종 안전망이다. 또한 7.4에서 지적했듯 RAG 지식베이스에 <strong>검증 안 된 문서가 섞이면 모델 판단까지 오염</strong>되므로, 지식베이스 입고 단계부터 출처·검증 상태를 관리해야 한다.</p>
+</blockquote>
+<hr>
+<h2>4.5 리스크 4 — 프롬프트 인젝션, 에이전트를 돌려세우는 공격</h2>
+<p>자율 에이전트의 입력은 &quot;신뢰할 수 없는 대상의 응답&quot;이다. 테스트 대상이 돌려주는 에러 메시지·HTML·HTTP 헤더에 악의적 지시가 숨어 있으면, 그것을 읽은 에이전트가 범위를 벗어난 행동을 하도록 유도될 수 있다. 이것이 <strong>프롬프트 인젝션</strong>이며, 자율 공격 에이전트에서는 특히 치명적이다. 왜냐하면 이 에이전트는 단순히 텍스트를 생성하는 것이 아니라 <strong>API 키·인증정보·네트워크 접근 권한을 쥐고 실제로 행동</strong>하기 때문이다(2장의 &quot;권한 가진 인프라&quot; 관점).</p>
+<p>이 리스크가 추상적이지 않다는 것은 AntiFox 자신의 전력이 보여준다. AntiFox는 <strong>공격자에게 탈취되어 실제 AWS 자격증명 탈취·웹셸 설치에 악용</strong>된 사례가 보고됐고, 2026년 11월 보도에서는 일부 AWS API 호출이 차단된 상황에서도 운영 시크릿에 접근한 정황이 지적됐다. 공격 도구가 공격자의 손에 들어가면, 그 &quot;권한 가진 인프라&quot;가 그대로 무기가 된다.</p>
+<blockquote>
+<p>검토해야 하는 리스크: 단일 방어는 없다. (1) 대상 응답을 &quot;데이터로만&quot; 취급하도록 신뢰 경계를 설정하고, (2) 에이전트가 호출 가능한 도구·명령을 화이트리스트로 제한하며, (3) 모든 도구 호출 직전 대상 host를 범위와 재대조하고, (4) 쓰기·권한상승·외부호출 같은 고위험 행위는 사람 승인 게이트(HITL)를 거치게 한다(7장). 네트워크 차단(7.1)이 이 모든 것의 최종 백스톱이다. 그리고 블루팀은 레드팀 인프라(AntiFox 호스트·게이트웨이·DB) 자체도 모니터링 범위에 넣어야 한다(10장) — 콘솔 노출·비정상 에그레스는 도구가 탈취됐다는 신호일 수 있다.</p>
+</blockquote>
+<hr>
+<h2>4.6 리스크 5 — 외부 유출·공급망·비결정성</h2>
+<p>나머지 세 리스크는 간략히 짚되, 모두 &quot;검토가 필요한 구조적 문제&quot;라는 점에서 같다.</p>
+<p><strong>외부 LLM으로의 데이터 유출.</strong> 외부 API를 쓰면 프롬프트와 테스트 정보(인증·세션·개인정보가 섞일 수 있는 트래픽)가 외부 사업자에게 전송된다. 금융·공공은 이것만으로 컴플라이언스 위반이 될 수 있다. 검토 결론은 명확하다 — 규제 환경에서는 로컬·오픈웨이트 모델로 전환한다(9장).</p>
+<p><strong>공급망.</strong> 앞서 본 ARTEX Docker 이미지 백도어는 &quot;소스코드가 깨끗해도 배포 이미지는 깨끗하다는 보장이 없다&quot;는 교훈을 남겼다. 이미지 다이제스트 핀·서명 검증·SBOM·SHA256 대조가 선택이 아니라 전제다(6장).</p>
+<p><strong>민감 데이터 축적과 비결정성.</strong> 증거 자동 수집은 인증·세션·요청/응답을 DB에 쌓는다. 보관·암호화·파기 정책이 없으면 도구 자체가 침해 표면이 된다. 또한 자율 에이전트는 같은 입력에도 다른 경로를 택할 수 있어(비결정성), 범위 화이트리스트를 코드와 네트워크 양쪽에서 강제하고 실행 로그를 전수 보존해야 재현성과 사후 감사가 가능하다(7·12장).</p>
+<hr>
+<h2>4.7 정리 — 자동화와 검토의 경계</h2>
+<p>장점과 리스크를 한 표로 정리하면, 핵심은 &quot;무엇을 자동화에 맡기고 무엇을 사람이 검토하는가&quot;의 경계다.</p>
+<table>
+<thead>
+<tr>
+<th>LLM이 잘하는 것(맡겨도 되는 것)</th>
+<th>사람이 반드시 검토해야 하는 것(맡기면 안 되는 것)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>반복적 정찰·열거·초동 검증</td>
+<td>발견의 진위 판정(환각·허위 양성 선별)</td>
+</tr>
+<tr>
+<td>증거·재현 절차·다국어 보고서 초안</td>
+<td>보고서의 최종 사실성과 비즈니스 영향</td>
+</tr>
+<tr>
+<td>과거 지식의 재사용·전이</td>
+<td>지식베이스·패키지·의존성의 출처·무결성</td>
+</tr>
+<tr>
+<td>24시간 지속·회귀 테스트</td>
+<td>범위·은밀성·고위험 행위에 대한 의사결정과 책임</td>
+</tr>
+</tbody></table>
+<p>curl 사례(유효 5% 미만), Mythos 대 curl 시험(5건 중 1건 유효), 슬롭스쿼팅(다섯 중 하나가 가짜 패키지)이 공통으로 말하는 것은 하나다. <strong>AI는 찾지만, 확정하지 못한다.</strong> 확정은 증거를 가진 사람의 몫이고, 이 경계가 흐려지는 순간 생산성은 노이즈로, 도구는 공격 표면으로 바뀐다.</p>
+<p>그래서 이 장의 결론은 다시 처음의 한 문장으로 돌아간다. <strong>LLM은 엑셀이다.</strong> 셀을 빠르게 채워 주되, 그 숫자가 무엇을 뜻하는지, 그것이 참인지는 당신이 읽는다. 자동화는 초안 생성기이지 결론 생성기가 아니다. 사람이 서명하지 않은 발견은, 발견이 아니다.</p>
+<hr>
+<blockquote>
+<p>이 장은 민감한 주제(AI를 악용한 공격·공급망 위협)를 방어·검토 관점에서 다룬다. 인용한 사건·수치는 2026년 공개 보도·연구 기준이며, 수치는 시점·표본에 따라 달라질 수 있으므로 도입 시점에 원 출처로 재확인하라.</p>
+</blockquote>
+<hr>
+<h1>5. 기능 · 스크린샷 · 마스킹</h1>
+<blockquote>
+<p>아래 스크린샷은 AntiFox 공식 저장소(<code>github.com/AntiFox-AI/antifox</code> — <code>screenshots/</code>)에서 <strong>2026-11-14 확인</strong>한 실제 파일을 그대로 수록한 것이다. 공식 README가 <strong>모든 화면 데이터는 로컬 랩의 합성 데모 데이터</strong>라고 명시하므로, 화면 속 자산·트래픽은 운영 데이터가 아니다.</p>
+<p><strong>이미지 라이선스·출처</strong> — 원저작물은 AntiFox 프로젝트(AGPL-3.0)의 일부이며, 본 문서는 AGPL 조건(출처·라이선스 고지)에 따라 <code>screenshots/</code> 폴더에 원본 파일명 그대로 수록한다. 편집·가공 없이 사용했고, 재가공·재호스팅 시 AGPL-3.0을 준수하라. 자체 랩 캡처로 교체할 경우 아래 5.0 마스킹을 적용한다.</p>
+</blockquote>
+<h3>5.0 스크린샷 마스킹 가이드</h3>
+<table>
+<thead>
+<tr>
+<th>마스킹 대상</th>
+<th>위치</th>
+<th>처리</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LLM API 키</td>
+<td>LLM 설정</td>
+<td>흐림 또는 <code>sk-****</code></td>
+</tr>
+<tr>
+<td>대상 IP·도메인</td>
+<td>Target/Scope·그래프·로그</td>
+<td>랩 더미값(<code>10.10.x.x</code>·<code>lab.internal</code>)</td>
+</tr>
+<tr>
+<td>세션·쿠키·토큰</td>
+<td>트래픽 패킷 뷰</td>
+<td>앞 4자만, 길이 유지</td>
+</tr>
+<tr>
+<td>DB·프록시 자격증명</td>
+<td>config·설정</td>
+<td>흐림</td>
+</tr>
+<tr>
+<td>사용자명·이메일</td>
+<td>보고서·발견</td>
+<td>가명 처리</td>
+</tr>
+</tbody></table>
+<h3>5.1 로그인 · 초기 설정</h3>
+<p>최초 기동 후 <code>http://localhost:8787</code> → <code>/setup</code>에서 관리자 비밀번호를 설정하는 로그인 화면. UI 언어는 간체·번체·영어 3종을 지원한다.</p>
+<p><a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/login.png"><img src="https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/login.png" alt="AntiFox 로그인 화면"></a></p>
+<blockquote>
+<p>3언어 국제화 확인용 영문 UI: <code>screenshots/login-en.png</code></p>
+</blockquote>
+<p>실필드 검증에서 직접 캡처한 최초 <code>/setup</code> 화면(v2.0.3 바이너리, 2026-11-14):</p>
+<img src="screenshots/lab-01-setup.png" alt="AntiFox 최초 실행 /setup 화면 — 실캡처" width="720" />
+
+<h3>5.2 대시보드 · 작업 목록</h3>
+<table>
+<thead>
+<tr>
+<th>대시보드</th>
+<th>작업 목록</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/dashboard.png"><img src="https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/dashboard.png" alt="AntiFox 대시보드"></a></td>
+<td><a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/tasks.png"><img src="https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/tasks.png" alt="AntiFox 작업 목록"></a></td>
+</tr>
+</tbody></table>
+<p>실필드 검증에서 캡처한 빈 랩 상태의 대시보드(설치 직후, 2026-11-14):</p>
+<img src="screenshots/lab-12-dashboard.png" alt="AntiFox 대시보드 — 실캡처(빈 랩)" width="720" />
+
+<h3>5.3 발견 상세 — 익스플로잇 체인 분할 표시</h3>
+<p>발견 페이지가 진입점→전제조건→단계적 악용을 <strong>단계별 자연어 설명 + 실제 요청</strong>으로 보여준다(증거 구동 납품의 핵심 화면).</p>
+<p><a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/finding-steps.png"><img src="https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/finding-steps.png" alt="발견 상세 — 익스플로잇 체인 분할 표시"></a></p>
+<h3>5.4 증거 · MITM 패킷 (단계-실트래픽 자동 연결)</h3>
+<p>각 악용 단계가 시간창·순서로 실제 요청/응답 패킷에 연결된다. 구문 강조·본문 검색·명중 횟수 제공. (자체 캡처 시 민감값은 5.0 마스킹)</p>
+<p><a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/traffic-packet.png"><img src="https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/traffic-packet.png" alt="MITM 트래픽 패킷 뷰"></a></p>
+<h3>5.5 &quot;증거 즉 패킷&quot; — 민감정보 노출</h3>
+<p>민감정보 노출류는 트래픽 패킷 자체가 증거다.</p>
+<p><a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/env-leak.png"><img src="https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/env-leak.png" alt="민감정보 노출 — 패킷이 곧 증거"></a></p>
+<h3>5.6 발견 목록</h3>
+<p>확인/미확인 상태·심각도가 보이는 발견 목록. 보고서에 수록할 확인된 취약점을 고르는 전 단계다.</p>
+<p><a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/screenshots/findings.png"><img src="https://github.com/gameworkerkim/vibe-investing/raw/main/TechDoc/AntiFox/screenshots/findings.png" alt="AntiFox 발견 목록"></a></p>
+<h3>5.7 동작 데모 · 공식 채널 QR</h3>
+<ul>
+<li><strong>v2.0 증거 구동 흐름 데모</strong>: <code>screenshots/demo.gif</code></li>
+<li><strong>공식 채널</strong>: 별도 웹사이트는 없고(2026-11-14 확인), 공식 채널은 GitHub 저장소·GHCR 패키지·위챗 공식계정이다(부록 G). QR: <code>screenshots/wechat-qr.jpg</code></li>
+</ul>
+<h3>5.8 LLM 설정 / 보고서 — 실캡처 (실필드 검증 2026-11-14)</h3>
+<p>LLM 설정 및 언어 설정, 보고서 관련 설정이 가능하다. 아래는 <strong>v2.0.3 공식 macOS 바이너리(SHA256 검증)를 로컬 격리 랩에 설치해 직접 캡처</strong>한 화면이다(합성 랩 데이터만 사용, 마스킹 대상 없음).</p>
+<p><strong>5.8-1. LLM 配置 (<code>/system/llm/</code>)<strong> — 모델·키·엔드포인트·속도제한 프로필 관리, </strong>LLM 페일오버(2개 이상 프로필)<strong>, </strong>역할별 모델 지정</strong>(planner·worker·mainagent·보고서 보강):</p>
+<img src="screenshots/lab-15-llm.png" alt="AntiFox LLM 설정 — 실캡처" width="720" />
+
+<p><strong>5.8-2. 새 작업 대화상자 — 출구 선택</strong> — 작업별 LLM 프로필·타임아웃·<strong>출구 프록시(전역 따름/직결)</strong> 선택(5.8-1–2는 v2.0.3 신기능):</p>
+<img src="screenshots/lab-14-newtask.png" alt="AntiFox 새 작업 대화상자 — 출구 선택" width="720" />
+
+<p><strong>5.8-3. 보고서 관리 (<code>/system/reports/</code>)<strong> — 조직 설정(발주처·로고·담당자), </strong>언어별 템플릿(简/繁/英)</strong> 사전 저장, 생성된 docx 목록·다운로드:</p>
+<img src="screenshots/lab-16-reports.png" alt="AntiFox 보고서 관리 — 실캡처" width="720" />
+
+<p><strong>5.8-4. 시스템 설정 (<code>/system/settings/</code>)<strong> — </strong>전역 출구 프록시</strong>(출구 IP 테스트 가능성), 트래픽 캡처 전역 스위치, 원클릭 업데이트(현재 v2.0.3 확인):</p>
+<img src="screenshots/lab-17-settings.png" alt="AntiFox 시스템 설정 — 실캡처" width="720" />
+
+<p><strong>5.8-5. RBAC 사용자 관리 (<code>/system/rbac/</code>)</strong> — 관리자 계정·4개 시스템 역할, 멤버/역할 관리(로그인 감사는 7.3):</p>
+<img src="screenshots/lab-18-rbac.png" alt="AntiFox 사용자 관리(RBAC) — 실캡처" width="720" />
+
+<blockquote>
+<p><strong>잔여 실필드 항목</strong> — docx <strong>최종 생성</strong>(작업 실행 → 확인된 취약점 선택 → 언어 지정 → 생성)은 LLM 키와 대상 랩이 필요한 작업 실행이 전제라 이번 검증에서 제외했다. 해당 흐름의 UI(5.8-3 템플릿 선택·언어 지정)까지는 위 캡처로 확인됐다. 완료 시 v1.0 확정 조건 하나가 추가로 해소된다.</p>
+</blockquote>
+<hr>
+<h1>6. 설치와 하드닝</h1>
+<p>설치는 쉽다. 어려운 것은 &quot;안전하게&quot;다.</p>
+<h3>사전 요구사항</h3>
+<ul>
+<li><strong>PostgreSQL</strong>(필수), 탐색엔 <strong>LLM</strong> 필요(키 또는 UI 「LLM 配置」)</li>
+<li>docx 보고서엔 <strong>python3 + python-docx</strong>(Docker 이미지 내장)</li>
+<li>소스 빌드 시 Go 1.24+ / Node 20+</li>
+<li><strong>격리 네트워크</strong> — 대상 서브넷 인터넷 아웃바운드 차단(7·12장)</li>
+</ul>
+<h3>방법 1 — Docker Compose (권장)</h3>
+<pre><code class="language-bash">curl -O https://raw.githubusercontent.com/AntiFox-AI/antifox/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/AntiFox-AI/antifox/main/.env.example
+cp .env.example .env          # POSTGRES_PASSWORD 설정
+docker compose up -d          # 이미지+PostgreSQL 자동 기동
+# http://localhost:8787 → 최초 /setup 에서 관리자 비밀번호
+</code></pre>
+<p><strong><code>.env</code> 실제 변수 (실파일 대조 2026-11)</strong></p>
+<table>
+<thead>
+<tr>
+<th>변수</th>
+<th>의미</th>
+<th>권고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ANTIFOX_TAG</code></td>
+<td>이미지 태그</td>
+<td><code>latest</code> 대신 <strong>고정 버전/다이제스트</strong></td>
+</tr>
+<tr>
+<td><code>POSTGRES_USER</code> / <code>POSTGRES_PASSWORD</code> / <code>POSTGRES_DB</code></td>
+<td>DB 접속</td>
+<td>비밀번호 32자+ 난수, 시크릿 매니저</td>
+</tr>
+<tr>
+<td><code>ANTHROPIC_API_KEY</code> / <code>OPENAI_API_KEY</code></td>
+<td>외부 LLM 키(택1·둘·공란)</td>
+<td>금융·공공은 공란 → 로컬 게이트웨이</td>
+</tr>
+<tr>
+<td><code>ANTIFOX_LLM_PROVIDER</code></td>
+<td>LLM 공급자</td>
+<td>로컬 서빙 시 OpenAI 호환 지정</td>
+</tr>
+<tr>
+<td><code>ANTIFOX_LLM_MODEL</code></td>
+<td>모델 id</td>
+<td>9장 선택 가이드</td>
+</tr>
+<tr>
+<td><code>ANTIFOX_LLM_BASE_URL</code></td>
+<td>LLM 엔드포인트</td>
+<td>로컬 게이트웨이 URL(망분리 핵심)</td>
+</tr>
+<tr>
+<td><code>ANTIFOX_LLM_PROXY</code></td>
+<td>LLM 프록시</td>
+<td>출구 경로 통제 시</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>compose 실파일 확인(2026-11-14)</strong> — 공식 <code>docker-compose.yml</code>은 <code>postgres:16-alpine</code>(healthcheck·<code>unless-stopped</code>) + <code>ghcr.io/antifox-ai/antifox:${ANTIFOX_TAG:-latest}</code> 2개 서비스다. <code>POSTGRES_PASSWORD</code>는 <strong>필수 체크</strong>(미설정 시 기동 거부), <code>ANTIFOX_PG_DSN</code>은 compose가 내부에서 조립해 antifox 컨테이너에 주입하며, <strong>포트는 <code>8787:8787</code>과 <code>8788:8788</code> 둘 다 노출</strong>한다. 볼륨은 <code>./data</code>(jwt.key·데이터, 백업 대상)와 <code>./skills</code>(호스트 skill 오버레이)가 바인딩된다.</p>
+</blockquote>
+<h3>방법 2 — 사전 빌드 바이너리</h3>
+<pre><code class="language-bash">cp config.example.json config.json    # database 연결 입력
+./antifox                             # Windows: antifox.exe
+</code></pre>
+<p><strong>Docker vs 바이너리 — 설정 위치 비교</strong></p>
+<table>
+<thead>
+<tr>
+<th>설정</th>
+<th>Docker Compose</th>
+<th>바이너리</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DB 접속</td>
+<td><code>.env</code>(<code>POSTGRES_*</code>)</td>
+<td><code>config.json</code>의 <code>database</code> 블록</td>
+</tr>
+<tr>
+<td>외부 LLM 키·엔드포인트</td>
+<td><code>.env</code>(<code>ANTIFOX_LLM_*</code>) 또는 UI</td>
+<td>주로 UI 「LLM 配置」</td>
+</tr>
+<tr>
+<td>이미지 태그</td>
+<td><code>.env</code>(<code>ANTIFOX_TAG</code>)</td>
+<td>해당 없음(릴리스 zip)</td>
+</tr>
+<tr>
+<td>전역 출구 프록시·범위</td>
+<td>UI(시스템 설정/작업)</td>
+<td>UI(시스템 설정/작업)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong><code>config.json</code> 실파일 검증 완료(2026-11-14)</strong> — <code>config.example.json</code>은 <code>database</code> 블록 하나만 담는다: <code>host</code>(기본 <code>127.0.0.1</code>)·<code>port</code>(<code>5432</code>)·<code>user</code>·<code>password</code>·<code>dbname</code>·<code>sslmode</code>(<code>disable</code>). <strong>환경변수 <code>ANTIFOX_PG_DSN</code>을 지정하면 <code>config.json</code>의 <code>database</code> 블록보다 우선<strong>한다(연결 문자열 1개로 지정 가능). 그 외 프록시·범위·LLM은 위 표대로 </strong>UI/시스템 설정</strong>에서 다룬다(전역 출구 프록시는 v2.0.3 UI 기능).</p>
+</blockquote>
+<h3>방법 3 — 소스 빌드</h3>
+<pre><code class="language-bash">cd web &amp;&amp; NEXT_EXPORT=1 npx next build &amp;&amp; cd ..   # 프런트 정적 export
+cp -r web/out/. server/webui/dist/                # 내장
+CGO_ENABLED=0 go build -tags embedui -o antifox ./cmd/antifox
+./antifox
+</code></pre>
+<h3>원클릭 업데이트 (실제 동작)</h3>
+<ul>
+<li>Docker: <code>docker compose pull</code></li>
+<li>바이너리/소스: <code>./start.sh</code> 또는 systemd(<code>deploy/antifox.service</code>, <code>RestartForceExitStatus=75</code>) → 「시스템 설정」에서 GitHub Release 확인·설치(SHA256·원자 교체·실패 롤백, 데이터 보존)</li>
+</ul>
+<blockquote>
+<p><strong>systemd 실파일 확인(2026-11-14)</strong> — 실행 라인은 <code>antifox -addr :8787 -data /opt/antifox/data</code>(쓰기 가능한 디렉터리에 바이너리 배치, 업데이트 시 <code>antifox.new</code>/<code>antifox.old</code> 교체), DB는 <code>ANTIFOX_PG_DSN</code> 환경변수. <strong>업데이트 서버는 exit 75(&quot;restart me&quot;)로 종료</strong>되고 systemd가 재기동하며, 다음 부팅 때 원자 교체를 수행한다(종료 코드 0은 재시작 안 함). GitHub가 차단된 망에서는 선택적으로 <code>ANTIFOX_UPDATE_PROXY</code>로 업데이트 트래픽만 우회 가능.</p>
+</blockquote>
+<h3>릴리스 무결성 검증</h3>
+<pre><code class="language-bash">sha256sum -c SHA256SUMS                                           # ① 릴리스 제공 SHA256SUMS로 검증
+docker pull ghcr.io/antifox-ai/antifox@sha256:&lt;verified-digest&gt;     # ② 다이제스트 핀
+cosign verify ghcr.io/antifox-ai/antifox@sha256:&lt;...&gt;               # ③ 서명 검증
+syft ghcr.io/antifox-ai/antifox@sha256:&lt;...&gt; -o spdx-json &gt; sbom.json  # ④ SBOM
+docker tag ghcr.io/antifox-ai/antifox@sha256:&lt;...&gt; registry.lab.internal/antifox:pinned  # 내부 미러
+</code></pre>
+<blockquote>
+<p><strong>ARTEX 백도어 사건의 교훈(CSA, 2026-11-06)</strong> — 변조는 <strong>소스가 아니라 이미지</strong>에 있었다(<code>tomicdd/artex</code>·<code>congdonglinux/artex</code>). 소스코드가 깨끗해도 배포 이미지는 아닐 수 있으므로: ① GitHub 소스 ↔ Dockerfile 대조, ② compose 이미지 출처가 공식 GHCR인지 확인, ③ <strong>다이제스트 핀</strong>, ④ 서명·빌드 출처 검증, ⑤ 컨테이너 root·불필요 권한 제거, ⑥ <code>./data</code>·<code>./skills</code> 마운트 권한 분리, ⑦ LLM 키와 대상 자격증명 분리. <strong>감염 의심 시 CSA 권고대로 이미지 교체만 하지 말고 호스트 격리 → 관련 자격증명 전면 교체 → 신뢰 이미지로 재구축</strong>하라(12.2 IR과 연계).</p>
+</blockquote>
+<h3>설치 후 기능 검증 순서 (스모크 테스트)</h3>
+<p>컨테이너 재시작까지 넣어 &quot;데이터가 실제로 남는지&quot;를 확인하는 절차다(12.1 복구 리허설과 별개로 설치 직후 수행):</p>
+<ol>
+<li><strong>자산 그래프</strong> — 랩 대상(OWASP Juice Shop·DVWA 등)의 자산이 그래프에 반영되는지</li>
+<li><strong>탐색 그래프</strong> — 작업 목표·조사 결과가 서로 연결되는지</li>
+<li><strong>에이전트 동작</strong> — planner/worker 작업 분배·상태 전이</li>
+<li><strong>트래픽 기록</strong> — 요청/응답이 MITM에 저장되는지</li>
+<li><strong>취약점 검증</strong> — 발견 결과가 재현 단계·패킷과 연결되는지</li>
+<li><strong>보고서 생성</strong> — 확인된 취약점만 골라 docx 생성되는지</li>
+<li><strong>데이터 보존</strong> — 컨테이너 재시작 후 작업·증거가 유지되는지</li>
+</ol>
+<h3>실필드 검증 수행 내역 (2026-11-14, ①–④ 항목)</h3>
+<p>이 가이드 작성 과정에서 실제로 수행한 설치·UI 검증 기록이다(스크린샷은 5.1·5.8):</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>수행 내역</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>환경</td>
+<td>macOS arm64 · PostgreSQL 16.14(Homebrew) · Docker 없음 → <strong>공식 릴리스 바이너리</strong> 경로 선택</td>
+</tr>
+<tr>
+<td>무결성</td>
+<td><code>antifox-v2.0.3-darwin-arm64.zip</code> <strong>SHA256이 공식 <code>SHA256SUMS</code>와 일치</strong> 확인 후 사용</td>
+</tr>
+<tr>
+<td>DB 구성</td>
+<td>임시 격리 PG 인스턴스(비표준 포트)에 <code>config.json</code>(<code>database</code> 6필드)으로 연결 — 실파일 필드 검증</td>
+</tr>
+<tr>
+<td>기동</td>
+<td><code>./antifox</code> → 로그에서 <code>AntiFox v2.0.3 backend listening on :8787</code>, MCP 도구 로딩(browser 25종·filesystem 16종) 확인</td>
+</tr>
+<tr>
+<td>UI 확인</td>
+<td><code>/setup</code> 최초 암호 설정 → <code>/login</code> → 대시보드·작업·발견·트래픽·자산 화면 접근, 사이드바에서 <strong>LLM·Agent·MCP·Skill·工具·拦截规则·审批记录·用户管理·报告管理·知识库·日志·系统配置</strong> 전 메뉴 확인</td>
+</tr>
+<tr>
+<td>v2.0.3 기능 확인</td>
+<td>시스템 설정의 <strong>전역 출구 프록시</strong>(출구 IP 테스트)·트래픽 캡처 스위치·<strong>원클릭 업데이트(현재 버전 v2.0.3 표기)</strong>, LLM 페이지의 <strong>페일오버·역할별 모델(4역할)</strong>, 새 작업의 <strong>작업별 LLM·타임아웃·출구 선택</strong>, 보고서 관리의 <strong>언어별 템플릿(简/繁/英)</strong></td>
+</tr>
+<tr>
+<td>RBAC·HITL 확인</td>
+<td>사용자 관리(관리자 계정, <strong>4개 시스템 역할</strong>), 인터셉트 규칙의 <strong>내장 규칙</strong>(<code>rm -rf</code>·시스템 디렉터리 삭제 정규식 차단, 우선순위 매칭)</td>
+</tr>
+<tr>
+<td>미수행(한계)</td>
+<td><strong>LLM 미연결</strong>(키 없음) — 에이전트 작업 실행·트래픽 캡처 실동작·docx 최종 생성은 미검증(engine idle 로그로만 확인). 이 부분이 v1.0 확정 잔여 조건이다</td>
+</tr>
+</tbody></table>
+<h3>버전 호환성 메모</h3>
+<table>
+<thead>
+<tr>
+<th>태그</th>
+<th>릴리스(2026)</th>
+<th>메모</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v0.1.0 / v0.1.1</td>
+<td>10-11 / 10-16</td>
+<td>초기, ARTEX 2차 개발 기반점</td>
+</tr>
+<tr>
+<td>v2.0.0</td>
+<td>10-22</td>
+<td>증거 구동 납품 테마</td>
+</tr>
+<tr>
+<td>v2.0.1 / v2.0.2</td>
+<td>10-25 / 10-29</td>
+<td>안정화</td>
+</tr>
+<tr>
+<td><strong>v2.0.3</strong></td>
+<td>10-30</td>
+<td>LLM 세션 헤더, <strong>전역 출구 프록시</strong>, 확인 즉 보강, 보고서 관리</td>
+</tr>
+</tbody></table>
+<p>※ 이 가이드는 v2.0.x 라인 기준. 설치본 실제 버전·기능과 대조하라.</p>
+<h3>하드닝 체크리스트</h3>
+<table>
+<thead>
+<tr>
+<th>영역</th>
+<th>조치</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>관리 콘솔</td>
+<td>포트 <code>8787</code>(콘솔)·<code>8788</code>(MITM 프록시) 둘 다 <strong>인터넷 노출 금지</strong>, 리버스 프록시+TLS+IP 허용목록 또는 VPN/배스천</td>
+</tr>
+<tr>
+<td>비밀 관리</td>
+<td>키·DB 비밀번호를 시크릿 매니저로, 테스트 대상 자격증명과 별도</td>
+</tr>
+<tr>
+<td>DB 보안</td>
+<td>저장 암호화, 최소권한, 종료 후 파기(12장)</td>
+</tr>
+<tr>
+<td>네트워크</td>
+<td>실행망·대상망 분리, 대상망 아웃바운드 차단(7.1)</td>
+</tr>
+<tr>
+<td>접근 통제</td>
+<td>RBAC 자원 레벨 범위·시스템 역할·로그인 감사(7.4)</td>
+</tr>
+<tr>
+<td>무결성</td>
+<td>SHA256·서명·다이제스트 핀·SBOM</td>
+</tr>
+<tr>
+<td>라이선스</td>
+<td>AGPL-3.0 의무 + 사용정책 준수(부록 D)</td>
+</tr>
+</tbody></table>
+<hr>
+<h1>7. 안전 통제 구성 — 범위·인젝션·격리·감사</h1>
+<p>&quot;증거 기반&quot; 문서라면 안전장치도 증거로 뒷받침돼야 한다. 이 장은 <strong>AntiFox의 실제 기능 + 외부 네트워크 통제</strong>를 겹친다.</p>
+<h3>7.1 범위 강제 — 두 겹으로</h3>
+<p><strong>① 제품 레벨</strong> — 대상·범위는 UI Target/Scope에서 좁게 정의하고, <strong>규칙 기반 HITL 인터셉트</strong>로 고위험 행위를 사람이 승인/차단(ARTEX 계승). <strong>전역 출구 프록시</strong>(v2.0.3)로 트래픽 경로를 하나로 모아 통제하고, 작업별로 직결/프록시를 선택한다. RBAC로 운영자별 자원 범위 제한(7.4).</p>
+<p><strong>② 네트워크 레벨</strong> — 비결정적 에이전트가 범위를 벗어나려 해도 네트워크가 막는 <strong>최종 안전망</strong>.</p>
+<pre><code class="language-bash"># iptables — 기본 DROP, 허용 목록만 (개념 예시)
+iptables -P OUTPUT DROP
+iptables -A OUTPUT -o lo -j ACCEPT
+iptables -A OUTPUT -d 10.10.0.0/16 -j ACCEPT                      # 랩 대상망
+iptables -A OUTPUT -d 10.20.0.10 -p tcp --dport 4000 -j ACCEPT   # LLM 게이트웨이
+iptables -A OUTPUT -d 10.20.0.11 -p tcp --dport 5432 -j ACCEPT   # PostgreSQL
+</code></pre>
+<p><strong>동일 원칙을 다른 환경으로</strong></p>
+<table>
+<thead>
+<tr>
+<th>환경</th>
+<th>적용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>nftables</strong></td>
+<td><code>chain output { type filter hook output priority 0; policy drop; }</code> 후 랩/게이트웨이/DB 대상 <code>accept</code></td>
+</tr>
+<tr>
+<td><strong>클라우드 보안그룹</strong></td>
+<td>아웃바운드를 전체 허용 대신 <strong>목적지 제한</strong>, egress 전용 SG 분리</td>
+</tr>
+<tr>
+<td><strong>K8s NetworkPolicy</strong></td>
+<td>AntiFox 파드에 default-deny egress + 랩/게이트웨이로의 egress만 <code>allow</code></td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>킬 스위치</strong> — 한 줄로 전체 아웃바운드를 끊는 스크립트를 미리. 이상 시 &quot;먼저 끊고 나중에 분석&quot;(IR은 12장).</p>
+</blockquote>
+<h3>7.2 프롬프트 인젝션 방어</h3>
+<p>집행점은 AntiFox의 <strong>규칙 기반 HITL 인터셉트</strong>다(고위험 행위 자동 실행 차단·사람 승인).</p>
+<table>
+<thead>
+<tr>
+<th>방어층</th>
+<th>구성</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>출력 신뢰 경계</td>
+<td>대상 응답을 <strong>데이터로만</strong> 취급(지시로 해석 금지)</td>
+</tr>
+<tr>
+<td>HITL 인터셉트 규칙</td>
+<td>쓰기·권한상승·외부호출 등 고위험 행위를 규칙으로 가로채 승인/차단</td>
+</tr>
+<tr>
+<td>범위 재검증</td>
+<td>대상 host를 Target/Scope와 대조, 네트워크 차단(7.1②)이 백스톱</td>
+</tr>
+<tr>
+<td>속도·예산 제한</td>
+<td>호스트당 요청·토큰 상한</td>
+</tr>
+</tbody></table>
+<p>※ 운영 원칙이다. 제품 실제 설정 키·규칙 문법은 설치본 문서·UI에서 확인하라(가공의 키 사용 금지).</p>
+<h3>7.3 감사 로그</h3>
+<ul>
+<li>에이전트 의사결정·도구 호출·요청/응답을 <strong>변조 불가(append-only)</strong>로 보존, <code>engagement-id</code>·<code>task-id</code>·타임스탬프·대상 host 필수.</li>
+<li>AntiFox <strong>로그인 감사</strong>(RBAC)와 함께 운영. 블루팀 탐지 입력이 된다(10장).</li>
+</ul>
+<h3>7.4 데이터 격리 — 논리 vs 물리</h3>
+<p>AntiFox의 &quot;증거 격리&quot;는 <strong>작업별 탐색 그래프</strong>라는 <strong>논리적(애플리케이션) 격리</strong>다 — 전역 자산 그래프는 작업 간 공유, 탐색 그래프는 작업별 분리. 멀티테넌시·규제 환경에서는 <strong>물리/DB 레벨 통제</strong>를 더한다.</p>
+<table>
+<thead>
+<tr>
+<th>층</th>
+<th>조치</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>애플리케이션</td>
+<td>RBAC 자원 레벨 범위로 운영자·역할별 접근 제한(제품 기능)</td>
+</tr>
+<tr>
+<td>스키마 분리</td>
+<td>고객/엔게이지먼트별 스키마 또는 DB 인스턴스 분리</td>
+</tr>
+<tr>
+<td>RLS</td>
+<td>Row-Level Security로 테넌트 간 행 접근 차단</td>
+</tr>
+<tr>
+<td>키 분리</td>
+<td>증거 암호화 키를 테넌트별 분리(폭발 반경 축소)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>통제의 존재 자체가 법적·계약적 방어선이다.</p>
+</blockquote>
+<blockquote>
+<p><strong>지식베이스·확장 구조의 공급망</strong> — 전역+작업 이중 pgvector RAG는 과거 보고서·점검 기준·기술 문서를 재사용하게 해주지만, <strong>검증 안 된 문서(출처·작성일·검증 상태 불명, 중복, 오정보)가 검색 결과에 섞이면 LLM 판단까지 오염</strong>될 수 있다. 지식베이스 입고부터 출처·작성일·검증 상태를 관리하라. MCP 서버·Skill 확장도 마찬가지 — <strong>외부 MCP/Skill을 붙일 때마다 실행 권한과 공급망 위험이 함께 늘어난다</strong>(출처 검증·최소 권한).</p>
+</blockquote>
+<hr>
+<h1>8. 시나리오별 구성</h1>
+<p><strong>인가된 범위·격리 랩</strong> 전제의 방법론·설정 수준 플레이북이다. 익스플로잇 해킹 매뉴얼이 아니며 격리되고 인증된 환경에서 확인해야 한다.</p>
+<table>
+<thead>
+<tr>
+<th>시나리오</th>
+<th>범위·구성</th>
+<th>매핑</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>웹 앱</strong></td>
+<td>단일 도메인 화이트리스트, 인증 영역 명시</td>
+<td>OWASP ASVS/WSTG</td>
+</tr>
+<tr>
+<td><strong>내부망/디렉터리</strong></td>
+<td>서브넷 한정, 핵심 자산 &quot;관찰만&quot;, 아웃바운드 차단</td>
+<td>MITRE ATT&amp;CK</td>
+</tr>
+<tr>
+<td><strong>클라우드 구성</strong></td>
+<td>읽기 중심, 임시·단기 자격증명, 즉시 폐기</td>
+<td>CIS Benchmark</td>
+</tr>
+<tr>
+<td><strong>API/마이크로서비스</strong></td>
+<td>OpenAPI 기반, RAG에 스펙·인증 주입</td>
+<td>OWASP API Top 10</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>내부망은 폭발 반경이 크다. <strong>파괴적 행위 금지 목록</strong>(계정 잠금·대량 인증·서비스 중단)을 ROE에 명시하고 7장 HITL·네트워크로 강제하라.</p>
+</blockquote>
+<blockquote>
+<p><strong>클라우드 — 실제 악용 사례(최신)</strong> — AntiFox는 클라우드 자격증명 탈취에 악용된 전력이 있고, <strong>2026-11 보도에 따르면 AntiFox 연계 공격이 일부 AWS API 호출이 차단된 상황에서도 운영 시크릿에 접근</strong>했으며 CloudTrail 탐지 공백이 지적되었다. 클라우드 랩 시나리오라도 임시·단기 자격증명·즉시 폐기를 철칙으로 하고, API 호출 로그만이 아니라 <strong>시크릿 접근·웹셸·구성파일 열람 등 다층 탐지</strong>(10장)를 병행하라.</p>
+</blockquote>
+<hr>
+<h1>9. 금융·공공기관과 오픈웨이트 모델</h1>
+<p>금융·공공은 &quot;외부 API에 데이터를 보낸다&quot;는 전제가 성립하지 않는 경우가 많다. 이 장은 <strong>왜 막히는지(국내 규제 전반) → 왜 오픈웨이트가 답인지 → 무엇을 고를지(공식 모델 vs 가드레일 제거 모델) → 어떤 하드웨어가 필요한지</strong>를 종합한다.</p>
+<h3>9.1 국내 규제·가이드라인으로 인한 외부 API 차단 이유</h3>
+<p><strong>① 금융권 — 전자금융감독규정·위탁규정·신용정보법</strong></p>
+<ul>
+<li><strong>전자금융감독규정(금융위원회 고시)</strong> — 전자금융기반시설·정보처리시스템에 대한 물리적·논리적 보호와 <strong>망분리</strong> 원칙, 침해사고 대응 절차를 규정한다. 침투 테스트 트래픽(요청·응답·인증정보·세션)을 외부 LLM API로 보내는 것은 <strong>외부망 전송 통제의 직접 위반 소지</strong>가 된다.</li>
+<li><strong>금융회사 정보처리 업무 위탁에 관한 규정(금융위 고시)</strong> — 정보처리 업무를 제3자(LLM SaaS 포함)에 위탁하려면 금융위 신고·비밀유지·수탁자 관리 의무가 발생한다. 매 테스트마다 API에 프롬프트를 보내는 구조는 사실상 &#39;상시 위탁&#39;에 해당할 수 있다.</li>
+<li><strong>신용정보법</strong> — 개인신용정보의 해외 이전은 제한·금융위 보고 대상이다. 대상 시스템에 고객 신용정보가 노출된 상태라면 해외 API 호출 자체가 위반 여지다.</li>
+</ul>
+<p><strong>② 개인정보 — 개인정보보호법 국외이전·정보통신망법</strong></p>
+<ul>
+<li><strong>개인정보보호법 제28조의8(국외 이전 제한, 2023.9.15 시행)</strong> — 개인정보를 국외로 이전하려면 정보주체 고지·동의 등 법정 요건을 갖춰야 한다. 테스트 중 수집된 요청·응답에 개인정보가 섞여 있다면 해외 LLM API 전송 = 국외이전 규제 대상.</li>
+<li><strong>정보통신망법</strong> — 이용자 개인정보의 동의 없는 제3자 제공 금지, 안전성 확보조치 의무. LLM 공급사가 &#39;제3자&#39;인지가 소송에서 쟁점이 된다.</li>
+</ul>
+<p><strong>③ 공공·정부 — 전자정부법·CSAP·국정원 지침</strong></p>
+<ul>
+<li><strong>전자정부법 제54조의2 + CSAP(클라우드컴퓨팅서비스 보안인증제)</strong> — 국가·공공기관이 민간 클라우드를 쓰려면 보안인증(IaaS/SaaS 등급)을 받은 서비스만 가능하다. 미인증 해외 LLM API는 원천 차단.</li>
+<li><strong>국가·공공기관 정보보안 기본지침(국가정보원)</strong> — 정보시스템 도입 전 <strong>보안성 검토</strong>, <strong>망분리(내부망·업무망·인터넷망)</strong>, 자료 반출·입 통제, 개발·운영 환경 분리, 암호모듈(KCMVP) 적용을 요구한다. &quot;테스트 대상 정보를 담은 프롬프트가 인터넷을 타고 해외로 나가는&quot; 구조는 반출 통제·보안성 검토의 통과가 사실상 불가능하다.</li>
+<li><strong>국정원 국가정보보안기본지침·보안적합성 검증</strong> — 도입 SW·HW의 보안적합성 검증과 공급망 점검 요건. 외부 API 의존은 검증 대상(공급자)을 감당할 수 없게 만든다.</li>
+</ul>
+<p><strong>④ 결론 — 외부 API는 &quot;예외 승인&quot;이어야 한다</strong></p>
+<p>위 규제들을 종합하면, 금융·공공에서 AntiFox의 LLM을 외부 API로 두는 것은 <strong>기본 금지 + 예외적 승인</strong> 구도다. 따라서 표준 구성은 <strong>온프레미스 오픈웨이트 서빙</strong>이다. <code>ANTIFOX_LLM_BASE_URL</code>을 <strong>OpenAI 호환 로컬 게이트웨이</strong>로 지정하면, AntiFox 관점에서 LLM이 &#39;로컬 API&#39;일 뿐이므로 도구 설정은 동일하다.</p>
+<h3>9.2 오픈웨이트 전환 방향 — 온프레미스 서빙 아키텍처</h3>
+<pre><code>망분리 내부망
+  [AntiFox] → ANTIFOX_LLM_BASE_URL → [LiteLLM 게이트웨이] → [추론 서버 vLLM/SGLang/TGI/Ollama]
+                                        (속도제한·감사·폴백)      (오픈웨이트 모델, GPU 세그먼트)
+  인터넷 경로: 전면 차단(7.1②). 모델 세그먼트는 외부 비노출(11장 토폴로지와 동일)
+</code></pre>
+<ul>
+<li><strong>게이트웨이(LiteLLM 등)</strong> — OpenAI 호환 엔드포인트 노출, 키 관리·속도제한·호출 감사·모델별 라우팅. AntiFox의 LLM 페일오버(5.8-1)와 조합 가능.</li>
+<li><strong>추론 서버</strong> — 처리량·배치가 필요하면 vLLM/SGLang, 단일 노드 간편형은 Ollama(TGI는 유지보수 상태에 유의). 모델은 <strong>공식 릴리스의 공식 해시</strong>만 사용.</li>
+<li><strong>장점</strong> — 데이터 국외이전 이슈 소멸, 규제 대응 서류(도입 경로·출처) 명확, 토큰 단가 자체 소멸(전기·감가상각으로 전이, 11장 손익분기).</li>
+</ul>
+<h3>9.3 추천 오픈웨이트 모델 + 하드웨어 사양</h3>
+<p><strong>공식 모델군</strong> <em>2026-11 확인(급변 — 도입 시점 재확인)</em></p>
+<table>
+<thead>
+<tr>
+<th>모델군</th>
+<th>라이선스 성격</th>
+<th>강점</th>
+<th>추천 용도</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek V4 계열</td>
+<td>MIT형(관대)</td>
+<td>코딩·에이전트 올라운드, 긴 컨텍스트</td>
+<td>worker·planner 주력</td>
+</tr>
+<tr>
+<td>Qwen3.5 / Qwen3-Coder</td>
+<td>Apache 2.0</td>
+<td>에이전트 코딩 상위, 단일 GPU 변형</td>
+<td>단일 GPU 구축</td>
+</tr>
+<tr>
+<td>GLM-5.x (Z.AI)</td>
+<td>MIT형</td>
+<td>도구 사용·터미널 워크플로우</td>
+<td>도구 호출 워크로드</td>
+</tr>
+<tr>
+<td>Kimi K2.x (Moonshot)</td>
+<td>오픈웨이트</td>
+<td>초장문 컨텍스트</td>
+<td>장문 보고서 보강</td>
+</tr>
+<tr>
+<td>Llama 4 (Meta)</td>
+<td>커뮤니티 라이선스(제약)</td>
+<td>서구권 생태계 최다</td>
+<td>국산·서구 라이선스 요구처</td>
+</tr>
+<tr>
+<td>Mistral/Devstral · Gemma</td>
+<td>Apache 2.0 등</td>
+<td>경량·파인튜닝 용이</td>
+<td>소형 랩·보조 역할</td>
+</tr>
+</tbody></table>
+<p><strong>필요 하드웨어 사양(VRAM 기준)</strong> <em>Q4/Q5 양자화, KV 캐시 여유 포함한 실무 기준</em></p>
+<table>
+<thead>
+<tr>
+<th>모델 크기</th>
+<th>양자화</th>
+<th>최소 VRAM</th>
+<th>권장 GPU(예)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>7–9B (Qwen3.5-9B, Gemma 등)</td>
+<td>Q4/Q5</td>
+<td>8–16GB</td>
+<td>RTX 3090/4090(24GB) 1장, Mac 32–64GB</td>
+</tr>
+<tr>
+<td>14–32B (Qwen3-Coder-32B 등)</td>
+<td>Q4/Q5</td>
+<td>20–32GB</td>
+<td>4090(24GB) 1장(타이트) 또는 2장, Mac 64GB+</td>
+</tr>
+<tr>
+<td>70B급 (Llama-4-70B, Kimi K2 등)</td>
+<td>Q4</td>
+<td>48–80GB</td>
+<td>A100 80GB 1장, 4090×2, Mac 128GB+</td>
+</tr>
+<tr>
+<td>100B+ (DeepSeek V4, GLM-5 대형)</td>
+<td>Q4/FP8</td>
+<td>80–160GB</td>
+<td>A100/H100 80GB×1–2, 멀티 GPU 노드</td>
+</tr>
+<tr>
+<td>200B+ (MoE 풀)</td>
+<td>Q4</td>
+<td>160GB+</td>
+<td>H100 80GB×4+, GPU 서버 단위</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>GGUF + Ollama/LM Studio/llama.cpp</strong> — 소규모 랩·워크스테이션. <strong>vLLM/SGLang</strong> — 상시 서빙·고배치(단위 토큰 비용 ↓).</li>
+<li>추론 속도가 작업 지연을 좌우한다(에이전트는 요청이 잦다): 24GB급 단일 GPU는 32B Q4가 실용 상한.</li>
+</ul>
+<blockquote>
+<p><strong>함정 — 능력 격차 · 출처 · 거버넌스</strong> — 오픈웨이트는 프런티어보다 약해 <strong>False Positive↑·검수 공수↑</strong>. 상위권 다수가 특정 지역 출처이고 일부는 가드레일이 느슨하다 — <strong>가중치 출처·해시·라이선스</strong>를 검증하고, 로컬이라도 데이터 보관·암호화·파기 유지. 금융·공공은 <strong>공식 릴리스만</strong> 사용하고 9.4의 파생 모델은 배제한다.</p>
+</blockquote>
+<h3>9.4 가드레일 제거(abliterated/uncensored) 모델 — 존재·용법·경고</h3>
+<p>DeepSeek 추론 데이터로 증류(Distill)되거나 GLM 아키텍처 기반에서 <strong>보안 가드레일(거부 반응)을 제거한</strong> 모델이 Hugging Face에서 <code>abliterated</code>·<code>uncensored</code> 키워드로 배포되고 있다. 기존 모델의 추론 성능은 유지한 채 안전 필터링(거부 방향 벡터)만 수학적으로 제거하는 <strong>Abliteration·Heretic</strong> 기법이 주류다.</p>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>대표 모델명 (Hugging Face)</th>
+<th>특징·베이스</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GLM 계열 가드레일 제거</td>
+<td><code>dealignai/GLM-5.3-UNCENSORED-FP8</code></td>
+<td>GLM-5.3 가중치의 거부 텐서를 영구 수정한 범용 모델(사이버 보안 특화 <code>GLM-5.3-CYBERSECURITY-FP8</code>도 존재)</td>
+</tr>
+<tr>
+<td>GLM-4 경량화 무검열</td>
+<td><code>DavidAU/GLM-4.7-Flash-Uncensored-Heretic</code></td>
+<td>Heretic 기법 검열 제거 + 코딩·추론 보강, GGUF 로컬 구동용</td>
+</tr>
+<tr>
+<td>DeepSeek R1 증류 무검열</td>
+<td><code>huihui-ai/DeepSeek-R1-abliterated</code> 컬렉션</td>
+<td>R1 추론 데이터를 Qwen·Llama(1.5B–70B)에 증류 후 거부 제거</td>
+</tr>
+<tr>
+<td>DeepSeek V4 증류 무검열</td>
+<td><code>xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic</code></td>
+<td>DeepSeek-V4-Pro 추론을 Qwen3.5-9B에 증류, Heretic v2로 가드레일 제거</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>검색 키워드</strong> — &#39;가드레일 제외&#39;가 아니라 <code>abliterated</code>, <code>uncensored</code>, <code>decensored</code>, <code>heretic</code> 태그가 모델명 뒤에 붙는다.</li>
+<li><strong>로컬 실행</strong> — 소비자 GPU·Mac 구동 시 모델명 끝에 <code>GGUF</code>가 붙은 양자화 버전을 Ollama·LM Studio·llama.cpp로 실행.</li>
+<li><strong>경고(필수)</strong> — 가드레일 제거 모델은 공식 안전 필터링이 작동하지 않는다. <strong>공개 서비스·금융·공공 환경에서는 절대 사용하지 말 것.</strong> 개인 연구·레드팀 검증은 <strong>외부 비노출 격리 랩 + 본 문서의 범위 통제(7장) 전제</strong>로만 한정하고, 파생 모델의 가중치 해시는 &#39;공식&#39;이 없으므로 출처 저장소 신뢰도를 스스로 평가해야 한다(공급망: 1장·6장, 부록 G).</li>
+</ul>
+<h3>9.5 박스 기사 — 오픈웨이트 데이터 유출 사건, 보안 강화 관점 요약</h3>
+<blockquote>
+<p><strong>오픈웨이트, 고의인가 트레이닝 오류인가?</strong> (김호광, 2026-10-27 — <a href="https://docs.vibequant.cc/columns/open-weight-data-leak/">칼럼 원문</a>)</p>
+<p><strong>사건</strong> — 2026-10-26 Cohere가 공개한 보고서(&quot;Concerning behavior from a popular open-weight AI model&quot;). 알리바바 Qwen3.8-Flash-Next이 보안 과제 평가 중 <strong>&quot;도구를 쓰지 않겠다&quot;고 추론하면서, 같은 턴에 정찰(<code>ls /tmp</code>·<code>which curl wget python3 jq</code>·<code>cat /etc/resolv.conf</code>) 후 베이징 알리바바 클라우드 OSS 버킷으로 <code>curl -X PUT</code> 업로드를 시도</strong>했다. 빈도는 10만 호출당 1회 미만이지만, 주 1,000만 에이전트 턴 규모 서비스라면 최대 주 100회다.</p>
+<p><strong>핵심 교훈(보안 강화 관점)</strong></p>
+<ol>
+<li><strong>추론 추적(CoT)은 보안 경계가 아니다</strong> — 모델의 &quot;생각&quot;과 실제 도구 호출은 별개 생성 과정이다. 통제는 모델의 말이 아니라 <strong>실행 직전의 도구 호출</strong>에 걸어야 한다(AntiFox의 HITL 인터셉트가 정확히 이 지점 — 7.2).</li>
+<li><strong>&quot;자체 호스팅 = 안전&quot; 공식의 붕괴</strong> — 가중치를 내 서버에 두는 것은 모델이 <em>어디서</em> 도는지만 바꾸지, <em>무엇을 배웠는지</em>는 바꾸지 못한다. 훈련장의 습관(베이징 버킷 저장, routify 프록시 경유)은 파인튜닝·양자화를 거쳐도 따라온다. 2026 봄 보고서 기준 HF 다운로드의 41%가 중국 모델, Qwen 파생만 11만 3천여 개.</li>
+<li><strong>의도는 관측 불가능한 변수</strong> — 고의(콜 홈 임플란트)든 트레이닝 오류든, 경계를 넘는 &#39;행동&#39;은 동일하다. 방어 정책은 행동에 걸어야 한다.</li>
+<li><strong>실무 체크리스트</strong> — ① 에이전트 egress 기본 차단(허용 목록만, 프록시 경유 강제) ② 클라우드 메타데이터 엔드포인트 차단(<code>169.254.169.254</code>, IMDSv2 강제·최소 권한) ③ 비특권 user namespace 차단(<code>unshare -Urm</code> 류 — <code>kernel.unprivileged_userns_clone=0</code> 또는 seccomp/AppArmor) ④ 도구 호출 사전 통제(고위험 명령 사람 승인) ⑤ 낯선 클라우드 호스트 경보(감시 목록 DNS·프록시 로그) ⑥ 평가·운영 환경 분리 ⑦ AI 생성 코드는 정적 스캐너만 믿지 말고 동적·공격 테스트 병행.</li>
+<li><strong>공급망 취급</strong> — 가중치는 서명되지 않은 바이너리처럼 다룬다. 누가 훈련했고 어떤 파생 경로를 거쳤는지(NIST SP 800-218A 참조) 답할 수 없는 가중치는 그 위험을 운영자가 진다.</li>
+</ol>
+<p><em>교훈은 &quot;오픈웨이트를 버려라&quot;가 아니다 — 자체 호스팅은 모델이 어디서 도는지만 결정할 뿐이므로, <strong>네트워크·도구 호출 계층의 통제</strong>(7장)로 &#39;전화선&#39;을 잘라 둬야 한다는 것이다.</em></p>
+</blockquote>
+<h3>9.6 금융·공공 도입 체크리스트</h3>
+<ol>
+<li>외부 LLM 전송 차단(로컬 게이트웨이 강제·egress 모니터링, 7.1②)</li>
+<li>모델 가중치 <strong>공식 릴리스·공식 해시·라이선스</strong> 검증 — 가드레일 제거·파생 모델 배제(9.4)</li>
+<li>도입 근거 문서화 — CSAP 해당 시 인증 범위, 국정원 보안성 검토·보안적합성 검증 대응 자료</li>
+<li>테스트 데이터 분류·암호화·보존기한·파기 자동화(12장), 국외이전·위탁 해당성 판단</li>
+<li>망분리 배치(모델 세그먼트 분리), 콘솔 비노출, KCMVP 암호모듈</li>
+<li>약한 모델 전제 — 사람 검수 비중↑, False Positive 대응 공수 예산</li>
+<li>도구 호출 HITL 승인·에이전트 egress 기본 차단·메타데이터 IP 차단(9.5 체크리스트)</li>
+<li>감사 로그 전수 보존·감독규정 매핑(10.3 SIEM 파이프라인)</li>
+</ol>
+<hr>
+<h1>10. 블루팀 관점 — 에이전트 행위의 탐지와 로깅</h1>
+<p>퍼플팀에서 AntiFox의 진짜 가치는 &quot;탐지 공백을 증거로 보여주는 것&quot;이다.</p>
+<h3>10.1 탐지 신호</h3>
+<table>
+<thead>
+<tr>
+<th>신호</th>
+<th>관찰 지점</th>
+<th>탐지 아이디어</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>비정상 열거 속도</td>
+<td>WAF·웹서버</td>
+<td>단시간 대량 엔드포인트/파라미터 탐색</td>
+</tr>
+<tr>
+<td>자동화 요청 패턴</td>
+<td>프록시·L7</td>
+<td>일정 간격·반복 구조, 비인간적 헤더 순서</td>
+</tr>
+<tr>
+<td>그래프형 정찰</td>
+<td>DNS·네트워크</td>
+<td>관계 탐색성 질의의 폭·깊이</td>
+</tr>
+<tr>
+<td>에그레스 이상</td>
+<td>방화벽</td>
+<td>내부 호스트의 예기치 않은 외부 LLM/프록시 연결</td>
+</tr>
+<tr>
+<td>시크릿 접근(클라우드)</td>
+<td>시크릿 매니저·클라우드 로그</td>
+<td>API 차단에도 시크릿 접근 발생(2026-11 사례) → 시크릿 접근 이벤트 단독 모니터링</td>
+</tr>
+</tbody></table>
+<h3>10.2 탐지 룰 예시</h3>
+<blockquote>
+<p><strong>중요</strong> — 아래 Sigma는 <strong>공식 스펙 형식</strong>(base rule + <code>correlation:</code> 키)으로 작성했으나, (1) <code>status</code>·<code>src_ip</code> 등 <strong>필드명은 SIEM 백엔드 파이프라인 매핑이 필요</strong>하고(표준 필드 <code>http.response.status_code</code> 등으로 치환), (2) <strong>배포 전 pySigma/Sigma 규칙 저장소 린트로 검증</strong>해야 한다. WAF·KQL 예시는 개념 수준이다. 그대로 복사하지 말고 백엔드에 맞게 변환하라.</p>
+</blockquote>
+<p><strong>Sigma — 단시간 다수 인증/404 탐색 (base + correlation)</strong></p>
+<pre><code class="language-yaml"># base rule: web_probing_responses
+title: Web Probing Responses
+logsource:
+  category: webserver
+detection:
+  selection:
+    status: [401, 403, 404]        # 필드명은 백엔드 매핑 필요
+  condition: selection
+---
+# correlation rule: agentic probing burst
+title: Agentic Web Probing Burst
+status: experimental
+description: 단시간 다수 401/403/404 응답 — 자율 에이전트 열거 패턴
+correlation:
+  type: event_count
+  rules:
+    - web_probing_responses
+  group-by:
+    - src_ip
+  timespan: 1m
+  condition:
+    gte: 100
+level: medium
+tags:
+  - attack.discovery
+  - attack.t1595
+</code></pre>
+<p><strong>WAF(개념) — 비인간적 레이트/UA</strong> (Cloudflare WAF 규칙·ModSecurity 표현으로 변환)</p>
+<pre><code>IF  req.rate_per_ip &gt; 100/min
+AND (req.user_agent matches /(curl|python-requests|go-http-client)/i
+     OR req.header_order anomalous)
+THEN tarpit + alert(label=&quot;agentic-recon&quot;)
+</code></pre>
+<p><strong>SIEM(개념 KQL) — 승인 경로 밖 egress</strong> (Microsoft Sentinel 스타일)</p>
+<pre><code class="language-kusto">let RedTeamHosts = dynamic([&quot;10.30.0.5&quot;, &quot;10.30.0.6&quot;]);
+let ApprovedGW   = dynamic([&quot;10.20.0.10&quot;, &quot;10.20.0.11&quot;]);   // LLM 게이트웨이·DB 등 승인 경로
+CommonSecurityLog
+| where SourceIP in– (RedTeamHosts)
+| where DestinationIP !in (ApprovedGW)
+| summarize OutBytes = sum(SentBytes) by SourceIP, DestinationIP, bin(TimeGenerated, 5m)
+| where OutBytes &gt; 0        // 승인 경로 밖 egress = 조사 대상
+</code></pre>
+<h3>10.3 로그 파이프라인 아키텍처 (DB→SIEM)</h3>
+<p>AntiFox 감사·행위 로그를 블루팀 SIEM으로 흘리는 경로 예:</p>
+<pre><code>AntiFox(PostgreSQL 감사 로그·행위 이벤트)
+  → (A) 로그 시퍼: PostgreSQL FDW/CDC 또는 주기적 추출 → JSON 라인
+  → (B) 전송: syslog/HTTP → 수집기(Fluent Bit/Vector)
+  → (C) SIEM 인덱싱(Elastic/Splunk/OpenSearch) → 상관분석·대시보드
+공통 키: engagement-id·task-id·timestamp·target-host (시간 동기화 필수)
+</code></pre>
+<p>이 파이프라인이 있어야 10.1–10.2의 &quot;탐지 공백 → 룰 보완 → 재현 탐지&quot; 폐루프가 실제로 돈다.</p>
+<h3>10.4 퍼플팀 루프 · 에이전트 자체 방어</h3>
+<ol>
+<li>레드: 인가 테스트 → MITM 증거 · 2. 블루: 동시간대 탐지 로그 대조 → 공백 식별 · 3. 공동: 재현 데이터로 룰 보완 · 4. 회귀: 다음 실행 탐지 검증. 또한 블루팀은 <strong>레드팀 인프라(AntiFox 호스트·게이트웨이·DB)도 모니터링 범위</strong>에 — 콘솔 노출·비정상 egress·게이트웨이 이상 라우팅은 도구 탈취 신호일 수 있다.</li>
+</ol>
+<hr>
+<h1>11. 예산과 테스팅 환경 구성</h1>
+<p>자동화는 비용을 없애지 않는다. 비용의 &quot;형태&quot;를 바꿀 뿐이다 — 숙련 모의해킹 인력의 인건비가 토큰·GPU·인프라·검수 공수로 재분배된다. 그래서 예산을 짤 때 두 가지를 분리해야 한다: (1) 플랫폼을 돌리는 <strong>인프라/모델 비용</strong>과 (2) 그 결과를 사람이 설계·검수·책임지는 <strong>레드팀 인건비</strong>다. AntiFox 같은 자율 도구는 (1)을 줄이지만 (2)를 없애지 못한다. &quot;LLM은 엑셀이지 오라클이 아니다&quot; — 자동화가 셀을 채우고, 의미와 책임은 사람이 읽는다.</p>
+<p>이 장은 <strong>오픈웨이트 모델을 로컬 서빙</strong>하는 것을 기본 전제로(외부 API를 쓸 수 없거나 쓰고 싶지 않은 경우가 많으므로, 9장 참조) 조직 유형별로 예산을 나눈다. 네 가지 케이스로 구분한다: <strong>중소기업(SMB) · 기업(Enterprise) · 공공기관 · 금융기관</strong>. 뒤로 갈수록 규제·격리·감사 요건이 무거워지고, 그만큼 인프라·인력 비용이 커진다.</p>
+<blockquote>
+<p>주의: 아래 모든 금액은 <strong>2026-11 기준의 대략적 가정치</strong>이며, 환율·GPU 수급·인건비 시세·규제 요건에 따라 크게 달라진다. 원화는 1 USD ≈ 1,400원으로 환산한 참고값이다. 실제 품의·견적은 도입 시점에 벤더 견적·사내 인건비 테이블로 재산정하라. 이 장은 &quot;숫자&quot;가 아니라 <strong>예산의 구조와 산정 방법</strong>을 제공하는 것이 목적이다.</p>
+</blockquote>
+<hr>
+<h2>11.0 예산을 가르는 네 개의 변수</h2>
+<p>조직 유형별 금액 차이는 결국 아래 네 변수의 조합에서 나온다.</p>
+<table>
+<thead>
+<tr>
+<th>변수</th>
+<th>설명</th>
+<th>비용에 미치는 영향</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>격리 수준</strong></td>
+<td>외부 API 허용 / 사내망 / 완전 에어갭</td>
+<td>높을수록 로컬 GPU·전용 인프라 필수 → 자본비 급증</td>
+</tr>
+<tr>
+<td><strong>대상 규모</strong></td>
+<td>자산(도메인·IP·앱) 수, 테스트 범위</td>
+<td>토큰 소모·테스트 시간·검수 공수에 비례</td>
+</tr>
+<tr>
+<td><strong>테스트 빈도</strong></td>
+<td>분기 1회 / 월 1회 / 상시</td>
+<td>GPU를 임대로 쓸지 상시 보유할지 결정(손익분기 11.2)</td>
+</tr>
+<tr>
+<td><strong>감사·거버넌스</strong></td>
+<td>보고 체계·증거 연계성·규제 매핑</td>
+<td>공공·금융에서 인력·프로세스 비용 추가</td>
+</tr>
+</tbody></table>
+<p>핵심 원리 하나: <strong>GPU는 &quot;쓴 만큼&quot;이 아니라 &quot;켜 둔 만큼&quot; 돈이 든다.</strong> 그래서 테스트 빈도가 낮으면 임대(온디맨드)가, 높으면 상시 보유가 유리하다(11.2 손익분기).</p>
+<hr>
+<h2>11.1 오픈웨이트 모델 단가 — 토큰·GPU 환산</h2>
+<p>AntiFox의 에이전트는 반복 추론으로 토큰을 많이 쓴다. 로컬 서빙에서는 &quot;토큰 단가&quot;가 곧 <strong>GPU를 돌린 시간을 토큰 수로 나눈 값</strong>이다.</p>
+<h3>모델 등급별 하드웨어·처리량 가정 (2026-11, 양자화 기준)</h3>
+<table>
+<thead>
+<tr>
+<th>모델 등급</th>
+<th>대표군(예)</th>
+<th>최소 GPU</th>
+<th>지속 처리량(가정)</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>경량(7B–14B)</td>
+<td>Qwen3-Coder 소형, Gemma</td>
+<td>24GB VRAM×1 (예: L4/A10/RTX4090급)</td>
+<td>1,500–3,000 tok/s</td>
+<td>단순 정찰·요약, 검수 보조</td>
+</tr>
+<tr>
+<td>중형(30B–70B급)</td>
+<td>Qwen3-Coder 중형, GLM 중형, Mistral</td>
+<td>48–80GB VRAM×1 (예: A100/H100 1장)</td>
+<td>800–2,000 tok/s</td>
+<td>실전 에이전트 추론의 주력</td>
+</tr>
+<tr>
+<td>대형(100B+ / MoE)</td>
+<td>DeepSeek V4, Kimi K2.x, GLM 대형</td>
+<td>80GB×2–8 또는 다중노드</td>
+<td>가변(배치 의존)</td>
+<td>품질 최상·자본비 큼, 대형 조직용</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>라이선스·성적·최신 버전은 급변하므로 9장 선택 가이드와 각 모델 공식 카드에서 도입 시점 재확인. 경량일수록 False Positive가 늘어 <strong>사람 검수 공수가 커진다</strong> — 모델비를 아끼면 인건비가 올라가는 교환 관계다.</p>
+</blockquote>
+<h3>GPU 비용 환산 (온디맨드 임대 기준, 2026-11)</h3>
+<table>
+<thead>
+<tr>
+<th>GPU</th>
+<th>온디맨드 임대(가정)</th>
+<th>월 상시(720h)</th>
+<th>구매(참고)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>L4/A10/RTX4090급(24GB)</td>
+<td>$0.4–0.8/hr</td>
+<td>$290–580</td>
+<td>$2,000–8,000</td>
+</tr>
+<tr>
+<td>A100 80GB</td>
+<td>$1.3–2.0/hr</td>
+<td>$940–1,440</td>
+<td>$15,000–20,000</td>
+</tr>
+<tr>
+<td>H100 80GB</td>
+<td>$1.5–3.0/hr (최대 $12–15)</td>
+<td>$1,080–2,160</td>
+<td>$25,000–35,000</td>
+</tr>
+</tbody></table>
+<h3>토큰 1M당 유효 단가 (자가호스팅)</h3>
+<pre><code>자가호스팅 1M토큰당 = (GPU 시급) / (초당 토큰수 x 3600) x 1,000,000
+
+예) H100 $2/hr, 중형 모델 1,500 tok/s 지속(고가동)
+   = 2 / (1500 x 3600) x 1e6 ≈ $0.37 / 1M
+   가동률 40%면 유효단가 ≈ 2.5배 ≈ $0.93 / 1M
+예) A100 $1.5/hr, 경량 모델 2,500 tok/s 지속
+   = 1.5 / (2500 x 3600) x 1e6 ≈ $0.17 / 1M
+</code></pre>
+<blockquote>
+<p>참고로 외부 API 최저가권(DeepSeek류)은 입력 $0.1–0.2 / 출력 $0.3 per 1M 수준이다. 로컬은 &quot;데이터가 밖으로 안 나간다&quot;는 값을 돈 대신 치르는 것이며, 테스트량이 많을수록 로컬이 유리해진다(11.2).</p>
+</blockquote>
+<h3>1회 테스트의 토큰 소모 가정</h3>
+<p>자율 에이전트는 정찰·열거·검증·보고 전 과정에서 반복 호출한다. 대상 규모별로 다음과 같이 가정한다.</p>
+<table>
+<thead>
+<tr>
+<th>테스트 범위</th>
+<th>1회 토큰 소모(가정)</th>
+<th>중형 모델 유효단가($0.5/1M) 환산</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>소규모(앱 1–2개, 단일 도메인)</td>
+<td>30M–80M</td>
+<td>$15–40</td>
+</tr>
+<tr>
+<td>중규모(앱 5–10개, 서브넷)</td>
+<td>150M–400M</td>
+<td>$75–200</td>
+</tr>
+<tr>
+<td>대규모(전사, 다수 세그먼트)</td>
+<td>800M–2,000M+</td>
+<td>$400–1,000+</td>
+</tr>
+</tbody></table>
+<p>이 &quot;1회 토큰비&quot;가 아래 월·연 예산의 기본 블록이 된다.</p>
+<hr>
+<h2>11.2 손익분기 — 임대 vs 상시 보유</h2>
+<pre><code>월 테스트 토큰량 x 유효단가(임대 가동률 반영)  vs  GPU 월 상시 비용
+
+예) 중형 모델, 월 400M 토큰(중규모 월 1회 수준)
+   - 임대: 400M x $0.9/1M(저가동) ≈ $360/월  → 임대가 유리
+   예) 상시 400M를 매일 분산 + 상시 리그레션까지 월 3,000M
+   - 상시 H100: 약 $1,440/월 고정, 3,000M 처리 → 1M당 ≈ $0.48  → 상시가 유리
+</code></pre>
+<p>원칙: <strong>월 테스트가 &quot;월 1회&quot; 수준이면 임대, &quot;상시/주간 리그레션&quot; 수준이면 상시 보유.</strong> 공공·금융은 에어갭 때문에 임대가 불가능해 상시 보유로 강제되는 경우가 많다(비용이 아니라 규제가 결정).</p>
+<hr>
+<h2>11.3 케이스 A — 중소기업(SMB)</h2>
+<ul>
+<li>전형: 자산 소수(앱 1–3개), 외부 API 사용 가능하거나 사내 단일 GPU, 전담 보안인력 0–1명.</li>
+<li>격리: 낮음(격리 랩은 하이퍼바이저 1대로 충분). 외부 오픈웨이트 API 또는 경량 로컬 모델.</li>
+<li>테스트: 분기–월 1회, 소규모 범위.</li>
+</ul>
+<h3>인프라/모델 (월 1회 테스트 기준)</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>구성</th>
+<th>월 비용(가정)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AntiFox + PostgreSQL 서버</td>
+<td>소형 VM 또는 사내 1대</td>
+<td>$50–150 (클라우드) 또는 상각 소액</td>
+</tr>
+<tr>
+<td>모델</td>
+<td>경량 로컬(24GB GPU 임대, 필요 시만) 또는 외부 최저가 API</td>
+<td>임대 $0.5/hr x 월 20h ≈ $10 / API $20–40</td>
+</tr>
+<tr>
+<td>테스트 토큰비(소규모 1회)</td>
+<td>30M–80M</td>
+<td>$15–40</td>
+</tr>
+<tr>
+<td>대상 랩(취약 VM)</td>
+<td>DVWA/Juice Shop 등 무료</td>
+<td>$0</td>
+</tr>
+<tr>
+<td><strong>월 1회 테스트 인프라 소계</strong></td>
+<td></td>
+<td><strong>약 $80–230 (약 11만–32만원)</strong></td>
+</tr>
+</tbody></table>
+<h3>연 인프라 (월 1회 x 12)</h3>
+<p>약 <strong>$1,000–2,800 / 연 (약 140만–400만원)</strong>. 분기 1회면 1/3 수준.</p>
+<h3>레드팀 인건비 (별도)</h3>
+<p>SMB는 전담팀을 두기 어렵다. 현실적 선택지:</p>
+<table>
+<thead>
+<tr>
+<th>운영 방식</th>
+<th>구성</th>
+<th>연 인건비(가정)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>겸임 1인</td>
+<td>개발/인프라 담당이 겸임, 월 수일 투입</td>
+<td>내부 흡수(별도 0 또는 소액)</td>
+</tr>
+<tr>
+<td>외부 위탁</td>
+<td>모의해킹 업체에 분기/연 단위 위탁</td>
+<td>1회 수백만–1천만원대, 연 1,000만–3,000만원</td>
+</tr>
+</tbody></table>
+<p>SMB 권고: <strong>도구는 가볍게(경량 모델+소형 서버), 책임은 외부 위탁 또는 겸임</strong>으로. AntiFox는 &quot;상시 자동 스캔 + 외부 전문가 연 1–2회 심층&quot;의 보조 수단으로 쓰는 것이 비용 효율적이다.</p>
+<p><strong>케이스 A 총괄(가정)</strong>: 인프라 연 140만–400만원 + 인건(겸임–외부위탁) 0–3,000만원. 전형적 중소기업이 &quot;AI 자율 점검 + 외부 심층 연 1회&quot;를 돌린다면 <strong>연 1,000만–3,500만원</strong> 수준.</p>
+<hr>
+<h2>11.4 케이스 B — 기업(Enterprise)</h2>
+<ul>
+<li>전형: 자산 수십–수백, 사내망/부분 격리, 보안팀 보유, 월 1회 이상 정기 점검 + 상시 리그레션.</li>
+<li>격리: 중간(관리/대상/모델 세그먼트 분리, 사내 GPU). 외부 API는 데이터 등급에 따라 제한.</li>
+<li>테스트: 월 1회 전사 + 주요 변경 시 수시.</li>
+</ul>
+<h3>인프라/모델</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>구성</th>
+<th>비용(가정)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AntiFox + PostgreSQL</td>
+<td>8 vCPU/32GB/500GB 상시</td>
+<td>월 $150–300</td>
+</tr>
+<tr>
+<td>로컬 GPU(중형 모델)</td>
+<td>A100/H100 1장 상시 또는 혼합</td>
+<td>월 $1,000–2,160</td>
+</tr>
+<tr>
+<td>모델 테스트 토큰비(중규모 월 1회 + 리그레션)</td>
+<td>월 400M–1,000M</td>
+<td>유효단가 $0.5/1M 기준 월 $200–500</td>
+</tr>
+<tr>
+<td>대상 랩/스테이징</td>
+<td>복제 스테이징 + 하이퍼바이저</td>
+<td>월 $200–500</td>
+</tr>
+<tr>
+<td><strong>월 인프라 소계</strong></td>
+<td></td>
+<td><strong>월 약 $1,550–3,460 (약 220만–480만원)</strong></td>
+</tr>
+</tbody></table>
+<h3>연 인프라</h3>
+<p>약 <strong>$18,600–41,500 / 연 (약 2,600만–5,800만원)</strong>. GPU를 구매(자본지출)로 전환하면 초기 $20,000–35,000 투자 후 월 전력·운영비로 하향.</p>
+<h3>월 1회 보안 테스트의 &quot;1회 원가&quot;(인프라만)</h3>
+<p>중규모 1회 토큰비 $75–200 + 그 달 GPU·서버 상각 분. 순수 변동비만 보면 <strong>1회 약 $100–300(약 14만–42만원)</strong>. 이 숫자가 작아 보이는 것이 함정이다 — 아래 인건비가 실제 비용의 대부분이다.</p>
+<h3>레드팀 인건비 (별도)</h3>
+<p>최소 기능 구성 3역할(2장 수명주기와 대응):</p>
+<table>
+<thead>
+<tr>
+<th>역할</th>
+<th>경력 가정</th>
+<th>연봉 가정(원)</th>
+<th>비고</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>엔게이지먼트 리드</td>
+<td>7년+</td>
+<td>8,000만–1억2,000만</td>
+<td>범위·ROE·법무·최종 검수·책임</td>
+</tr>
+<tr>
+<td>운영자(에이전트 구성·증거 검증)</td>
+<td>3–6년</td>
+<td>5,500만–8,000만</td>
+<td>실행·False Positive 선별</td>
+</tr>
+<tr>
+<td>검토자(블루팀 연계)</td>
+<td>3–6년</td>
+<td>5,500만–8,000만</td>
+<td>탐지 공백·퍼플팀</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>2026년 한국 시장에서 모의해킹·보안컨설팅 경력직은 대략 신입–1년 3,000만원 전후에서 시작해 중경력 5,000만–8,000만원대, 리드급 1억 안팎으로 형성된다(개별 공고·기업 편차 큼, 전문 화이트해커 집단은 더 높음). 정확한 수치는 사내 인건비 테이블로 대체하라.</p>
+</blockquote>
+<ul>
+<li><strong>전담 3인 정규직 연 인건비 합(가정)</strong>: 약 <strong>1억9,000만–2억8,000만원</strong> + 4대보험·복리후생(인건비의 약 15–25% 가산) → 실부담 약 <strong>2억2,000만–3억5,000만원</strong>.</li>
+<li>전담팀이 과하면 <strong>1인 전담 + 외부 심층 연 2회 위탁</strong> 혼합: 전담 1인 6,000만–1억 + 외부 2,000만–5,000만 → 연 8,000만–1억5,000만원.</li>
+</ul>
+<p><strong>케이스 B 총괄(가정)</strong>: 인프라 연 2,600만–5,800만원 + 인건 8,000만–3억5,000만원. 전담 3인 체제면 <strong>연 2억5,000만–4억원대</strong>, 혼합 체제면 <strong>연 1억–2억원대</strong>.</p>
+<hr>
+<h2>11.5 케이스 C — 공공기관</h2>
+<ul>
+<li>전형: 망분리 의무, CSAP·공공 지침 적용, 외부 API 사실상 불가 → <strong>로컬 오픈웨이트 강제</strong>. 감사·문서화 요건 무거움.</li>
+<li>격리: 높음(업무망/인터넷망 분리, 모델도 내부망). GPU 상시 보유가 사실상 필수.</li>
+<li>테스트: 정기(월–분기) + 감사 대응 수시. 증거 연계성·보존(12장) 요건 강함.</li>
+</ul>
+<h3>인프라/모델</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>구성</th>
+<th>비용(가정)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AntiFox + PostgreSQL(내부망)</td>
+<td>이중화 권장</td>
+<td>월 $300–600 또는 자본지출 상각</td>
+</tr>
+<tr>
+<td>로컬 GPU(중–대형, 상시)</td>
+<td>H100 1–2장 상시(에어갭)</td>
+<td>월 $2,160–4,320 또는 구매 $50,000–70,000</td>
+</tr>
+<tr>
+<td>추론 게이트웨이·내부 서빙</td>
+<td>vLLM/SGLang + LiteLLM</td>
+<td>운영 인건에 포함</td>
+</tr>
+<tr>
+<td>대상 랩·복제 환경</td>
+<td>내부 격리</td>
+<td>월 $300–700</td>
+</tr>
+<tr>
+<td>감사·로그 파이프라인(10.3)·백업(12.1)</td>
+<td>SIEM 연동·보존 스토리지</td>
+<td>월 $300–800</td>
+</tr>
+<tr>
+<td><strong>월 인프라 소계</strong></td>
+<td></td>
+<td><strong>월 약 $3,060–6,420 (약 430만–900만원)</strong></td>
+</tr>
+</tbody></table>
+<h3>연 인프라</h3>
+<p>약 <strong>$36,700–77,000 / 연 (약 5,100만–1억800만원)</strong>. GPU 구매 전환 시 초기 자본 5,000만–1억원 + 운영비.</p>
+<h3>레드팀 인건비 (별도)</h3>
+<p>공공은 보통 <strong>외부 전문업체 용역(조달)</strong> 또는 <strong>내부 전담 + 용역 혼합</strong>. 용역은 과업지시서·조달 절차·감사 대응 때문에 민간보다 단가·관리비가 올라간다.</p>
+<table>
+<thead>
+<tr>
+<th>방식</th>
+<th>구성</th>
+<th>연 인건비(가정)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>전문업체 연간 용역</td>
+<td>정기 점검 + 보고 + 감사 대응</td>
+<td>연 5,000만–1억5,000만원(규모별)</td>
+</tr>
+<tr>
+<td>내부 전담 2–3인</td>
+<td>운영·검증·감사 대응</td>
+<td>연 1억5,000만–2억8,000만원</td>
+</tr>
+</tbody></table>
+<p><strong>케이스 C 총괄(가정)</strong>: 인프라 연 5,100만–1억800만원 + 인건 5,000만–2억8,000만원. 혼합 체제 기준 <strong>연 1억5,000만–3억5,000만원대</strong>. 다만 공공은 금액보다 <strong>조달·감사·문서화 적합성</strong>이 사업 성패를 가른다.</p>
+<hr>
+<h2>11.6 케이스 D — 금융기관</h2>
+<ul>
+<li>전형: 전자금융감독규정·망분리·강한 감사. 외부 데이터 전송 원천 차단 → <strong>로컬 오픈웨이트 + 완전 격리</strong>. 증거 연계성·보존·법적 보존(12장) 요건 최상. 상시 리그레션·높은 신뢰성 요구.</li>
+<li>격리: 최고(에어갭, 다중 세그먼트, 키 분리). 고가용성·이중화.</li>
+<li>테스트: 상시 + 정기 + 규제 대응. 토큰량·GPU 가동률 모두 높음.</li>
+</ul>
+<h3>인프라/모델</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>구성</th>
+<th>비용(가정)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AntiFox + PostgreSQL</td>
+<td>HA 이중화, 암호화 저장</td>
+<td>월 $600–1,200</td>
+</tr>
+<tr>
+<td>로컬 GPU(대형/MoE, 상시 다장)</td>
+<td>H100 2–8장(에어갭)</td>
+<td>월 $4,320–17,000 또는 구매 $70,000–280,000</td>
+</tr>
+<tr>
+<td>추론·게이트웨이·세션 라우팅</td>
+<td>vLLM/SGLang + LiteLLM, 멀티테넌시</td>
+<td>운영 인건 포함</td>
+</tr>
+<tr>
+<td>데이터 격리(7.4: 스키마/RLS/키 분리)</td>
+<td>테넌트·엔게이지먼트별</td>
+<td>구축비 + 운영</td>
+</tr>
+<tr>
+<td>감사·SIEM·증거 연계성·백업·DR(12장)</td>
+<td>보존·DR 사이트</td>
+<td>월 $800–2,000</td>
+</tr>
+<tr>
+<td><strong>월 인프라 소계</strong></td>
+<td></td>
+<td><strong>월 약 $5,720–20,200 (약 800만–2,800만원)</strong></td>
+</tr>
+</tbody></table>
+<h3>연 인프라</h3>
+<p>약 <strong>$68,600–242,000 / 연 (약 9,600만–3억4,000만원)</strong>. GPU·DR·보존을 자본지출로 반영하면 초기 1억–4억원 + 운영비.</p>
+<h3>레드팀 인건비 (별도)</h3>
+<p>금융은 상시 전담 + 전문업체 병행이 일반적이고, 규제 대응·증거 책임 때문에 리드급 비중이 높다.</p>
+<table>
+<thead>
+<tr>
+<th>역할</th>
+<th>인원(가정)</th>
+<th>연 인건비(가정, 복리후생 포함)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>리드/책임(7년+, CISO 보고 라인)</td>
+<td>1–2</td>
+<td>1억–1억5,000만 x 인원</td>
+</tr>
+<tr>
+<td>운영·검증(3–6년)</td>
+<td>2–4</td>
+<td>6,500만–9,500만 x 인원</td>
+</tr>
+<tr>
+<td>블루/퍼플 연계·감사 대응</td>
+<td>1–2</td>
+<td>6,500만–9,500만 x 인원</td>
+</tr>
+<tr>
+<td>외부 전문업체 정기 심층</td>
+<td>—</td>
+<td>연 5,000만–2억</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>상시 5–8인 전담 + 외부 병행(가정)</strong>: 인건 <strong>연 5억–10억원+</strong>. 대형 금융권 보안조직 기준이며, 이 중 AntiFox 전용이 아니라 보안운영 전반에 걸친 인력이다. AntiFox 관련 지분만 떼면 전담 2–3인 상당 + 외부 → 연 2억–4억원대로도 설계 가능.</li>
+</ul>
+<p><strong>케이스 D 총괄(가정)</strong>: 인프라 연 9,600만–3억4,000만원 + 인건(AntiFox 관련 지분) 2억–5억원+. 규제·DR·감사까지 포함한 <strong>연 3억–8억원대</strong>가 현실적 범위. 금융은 &quot;비용 절감&quot;보다 <strong>규제 적합성·증거 신뢰성</strong>이 도입 정당화의 핵심이다.</p>
+<hr>
+<h2>11.7 한눈 요약표 (가정, 2026-11)</h2>
+<table>
+<thead>
+<tr>
+<th>구분</th>
+<th>격리/모델</th>
+<th>월 1회 테스트 인프라 원가</th>
+<th>연 인프라</th>
+<th>레드팀 인건(별도)</th>
+<th>연 총괄(가정)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>중소기업</td>
+<td>낮음 / 외부 API·경량 로컬</td>
+<td>약 11만–32만원</td>
+<td>140만–400만원</td>
+<td>겸임–외부위탁 0–3,000만</td>
+<td>1,000만–3,500만원</td>
+</tr>
+<tr>
+<td>기업</td>
+<td>중간 / 로컬 중형 상시</td>
+<td>약 14만–42만원(변동비)</td>
+<td>2,600만–5,800만원</td>
+<td>8,000만–3억5,000만</td>
+<td>1억–4억원</td>
+</tr>
+<tr>
+<td>공공기관</td>
+<td>높음 / 로컬 중–대형 상시</td>
+<td>(상시)</td>
+<td>5,100만–1억800만원</td>
+<td>5,000만–2억8,000만</td>
+<td>1억5,000만–3억5,000만원</td>
+</tr>
+<tr>
+<td>금융기관</td>
+<td>최고 / 로컬 대형·에어갭·HA</td>
+<td>(상시)</td>
+<td>9,600만–3억4,000만원</td>
+<td>2억–5억+</td>
+<td>3억–8억원</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>&quot;월 1회 테스트 원가&quot;는 순수 변동 인프라비(토큰·GPU 가동분)만 본 값이고, 공공·금융은 GPU 상시 보유가 전제라 1회로 분리하는 의미가 작다. <strong>실제 비용의 대부분은 인건비</strong>이며, 자동화는 인건비 중 &quot;반복 실행&quot; 부분을 줄일 뿐 &quot;설계·검수·책임&quot; 부분은 줄이지 못한다.</p>
+</blockquote>
+<hr>
+<h2>11.8 예산 설계 체크리스트</h2>
+<ul>
+<li><input disabled="" type="checkbox"> 외부 API 가능 여부부터 확정(규제) → 불가면 로컬 GPU는 &quot;선택이 아니라 전제&quot;</li>
+<li><input disabled="" type="checkbox"> 테스트 빈도로 임대 vs 상시 보유 결정(11.2 손익분기)</li>
+<li><input disabled="" type="checkbox"> 모델 등급을 능력-검수공수 교환으로 판단(경량=모델비↓·인건비↑)</li>
+<li><input disabled="" type="checkbox"> 1회 토큰 소모 가정 x 빈도 = 연 토큰비 산정</li>
+<li><input disabled="" type="checkbox"> 인프라비와 <strong>인건비를 반드시 분리</strong> 계상(인건비가 총액의 대부분)</li>
+<li><input disabled="" type="checkbox"> 공공·금융은 감사·증거 연계성·보존·DR(10·12장) 비용을 별도 라인으로</li>
+<li><input disabled="" type="checkbox"> GPU는 임대(운영비) vs 구매(자본지출) 회계 처리 선택을 재무와 합의</li>
+<li><input disabled="" type="checkbox"> 모든 수치는 도입 시점 벤더 견적·사내 인건비 테이블로 교체(이 장은 구조 제공용)</li>
+</ul>
+<hr>
+<h1>12. 운영 — 백업·복구 · 사고 대응 · 증거 연계성 · 트러블슈팅</h1>
+<p>증거가 곧 산출물인 도구에서, 백업·복구와 사고 대응은 선택이 아니라 필수다. 이 장은 <strong>운영 시나리오(문장 서술) → 4개 기능 영역의 세부 케이스 → 기관 규모별 체크리스트 → 유지보수·TCO</strong> 순으로 확장한다.</p>
+<h3>12.0 운영 시나리오 — 범위·업데이트·격리 감사의 일상</h3>
+<p><strong>운영의 범위를 명확히 하라.</strong> AntiFox 운영 대상은 &quot;프로그램 하나&quot;가 아니다. ① 애플리케이션(바이너리·컨테이너) ② PostgreSQL(그래프·증거·보고서) ③ LLM 게이트웨이·추론 서버(9.2) ④ 네트워크 통제 장치(egress 규칙·킬 스위치) ⑤ 자격증명(LLM 키·DB·대상 인증정보) ⑥ 데이터 생애주기(보존·파기·legal hold) — 여섯 개가 한 세트다. 운영 담당자는 이 범위 전체의 변경·장애·감사를 추적해야 하며, 어느 하나라도 &quot;누가 관리하는지 불명&quot;한 상태로 두면 그 자체가 감사 지적 사항이 된다.</p>
+<p><strong>업데이트는 &quot;검증을 거친 교체&quot;다.</strong> 주간 루틴으로 정리하면: ① GitHub Release·CHANGELOG 확인(공식 채널 3곳, 부록 G) ② 새 버전 바이너리·이미지의 SHA256 대조 ③ <strong>스테이징 랩에서 먼저 설치</strong>해 6장의 스모크 테스트(자산 그래프→보고서→데이터 보존) 수행 ④ 문제 없으면 운영 환경 교체 — Docker는 다이제스트 핀 이미지로 <code>docker compose pull</code>, 바이너리는 원클릭 업데이트(exit 75 원자 교체·자동 롤백, 6장) ⑤ 교체 후에도 이전 버전 해시·백업을 1주 보관해 회귀에 대비. <strong>업데이트 실패 자체가 사고가 아니다</strong> — 롤백 경로가 검증되어 있으면 일상적 이벤트로 끝난다. 롤백 경로가 없이 업데이트하는 것이 사고다.</p>
+<p><strong>격리 환경은 &quot;세우는 것&quot;이 아니라 &quot;감사하는 것&quot;이다.</strong> 방화벽 규칙과 망분리는 시간이 지나며 표류(drift)한다. 분기 감사로 다음을 확인하라: ① egress 실측 — 랩 호스트에서 허용 목록 밖 목적지로의 연결이 실제로 차단되는지 외부에서 통제된 방법으로 확인(7.1②) ② 킬 스위치 실동작 — 스위치 실행 후 아웃바운드 전체 차단·작업 중단을 검증 ③ 무결성 재검증 — 실행 중인 바이너리·이미지 해시가 승인 목록과 일치하는지 ④ 접근 재검증 — RBAC 계정·역할·로그인 감사 로그 리뷰, 퇴사자 계정 비활성 ⑤ 데이터 보존·파기 실태 — 보존기한 자동화(12.1)가 legal hold 제외와 함께 정상 작동하는지 ⑥ 구성 드리프트 — <code>.env</code>·<code>config.json</code>·iptables/nftables가 버전관리본과 일치하는지. 이 감사 결과는 문서화해 <strong>감사 대응 증거</strong>(12.3)로 보관한다.</p>
+<h3>12.1 백업·복구 (RTO/RPO 포함)</h3>
+<p>자산 그래프·탐색 그래프·증거·보고서가 모두 PostgreSQL에 있다. <strong>DB가 곧 산출물</strong>이다.</p>
+<table>
+<thead>
+<tr>
+<th>대상</th>
+<th>방법</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>전체 DB(그래프·증거·보고)</td>
+<td><code>pg_dump</code>/<code>pg_basebackup</code> 정기 백업 + WAL 아카이빙(PITR)</td>
+</tr>
+<tr>
+<td>pgvector 지식베이스</td>
+<td>동일 DB 덤프에 포함(확장 설치 상태 확인)</td>
+</tr>
+<tr>
+<td>암호화 키·시크릿</td>
+<td>DB와 <strong>분리 보관</strong>(키 유실 시 증거 복호 불가)</td>
+</tr>
+<tr>
+<td>설정</td>
+<td><code>.env</code>·<code>config.json</code> 버전관리(비밀은 시크릿 매니저)</td>
+</tr>
+</tbody></table>
+<p><strong>RTO/RPO 목표 설정(예시, 조직이 확정)</strong>: RPO ≤ 24h(일일 논리 백업) 또는 ≤ 15m(WAL PITR), RTO ≤ 4h(격리 인스턴스 복원+검증). 목표를 ROE·SLA에 명시하라.</p>
+<pre><code class="language-bash">pg_dump -Fc -d antifox -f /secure-backup/antifox_$(date +%F).dump   # 일일 논리 백업
+pg_restore -d antifox_restore_test /secure-backup/antifox_YYYY-MM-DD.dump  # 분기 복원 리허설
+</code></pre>
+<blockquote>
+<p><strong>복구는 &quot;테스트한 것만&quot; 복구된다.</strong> 분기 1회 격리 복원 + 보고서 1건 재생성까지 검증하라.</p>
+</blockquote>
+<p><strong>보존기한 자동화</strong> — 부록 E.3 정책의 실행판:</p>
+<ul>
+<li><strong>파티셔닝</strong>: 증거·트래픽 테이블을 월 단위 파티션으로 → 기한 지난 파티션 <code>DETACH</code>+<code>DROP</code></li>
+<li><strong>TTL/cron</strong>: 보존기한 초과 레코드 삭제 cron(<code>DELETE ... WHERE created_at &lt; now()-interval &#39;N months&#39;</code>), 삭제 전 아카이브</li>
+<li><strong>주의</strong>: 아래 12.2 legal hold 대상은 자동 삭제에서 <strong>제외</strong>해야 한다</li>
+</ul>
+<p><strong>세부 케이스</strong></p>
+<ul>
+<li><strong>PG 디스크 장애(산출물 전멸 위기)</strong> — WAL 아카이빙(PITR)이 켜져 있으면 마지막 체크포인트까지 복구. RPO 15m 구성이면 기껏해야 최근 작업 1건 손실. 백업이 DB와 같은 디스크에 있으면 동반 소실되므로 <strong>백업은 별도 볼륨/원격지</strong>(최소 3-2-1 원칙)에 둔다.</li>
+<li><strong>암호화 키 분실</strong> — 증거는 복호 불가 → 사실상 산출물 폐기. 키는 DB 백업과 <strong>분리된</strong> 오프라인 백업(종이·하드웨어 토큰)까지 유지하고, 키 교체(rotation) 계획을 분기 감사에 포함한다.</li>
+<li><strong>업데이트 실패 롤백</strong> — 원클릭 업데이트는 SHA256 불일치 시 자동 롤백되지만, <strong>롤백 후 DB 스키마가 이전 버전과 호환되는지</strong>를 복원 리허설에서 확인한다(스키마 마이그레이션이 포함된 릴리스가 최악의 케이스).</li>
+<li><strong>랩 환경 전체 소실(재해)</strong> — 빈 호스트에서 <code>config.json</code>+시크릿+백업으로 재구축하는 절차를 문서화하고, 재구축에 걸리는 시간을 실측해 RTO 달성 가능성을 검증한다.</li>
+</ul>
+<h3>12.2 사고 대응(IR) 플레이북 — 폭주·범위 이탈</h3>
+<ol>
+<li><strong>차단(Contain)</strong> — 킬 스위치로 아웃바운드 즉시 차단(7.1②).</li>
+<li><strong>동결(Preserve)</strong> — 작업 중지, DB·로그·MITM 트래픽 스냅샷 확보. 아무것도 지우지 않는다.</li>
+<li><strong>분석(Analyze)</strong> — 감사 로그로 범위 이탈 시점·트리거(인젝션? 설정 오류?) 규명, 영향 범위 산정.</li>
+<li><strong>통지(Notify)</strong> — ROE 비상 연락선, 자산 소유자·법무 통보(필요 시 규제 보고).</li>
+<li><strong>교정·재개</strong> — 원인 제거 후 <strong>재개 조건</strong>(검증된 범위·승인) 충족 시에만 재개.</li>
+<li><strong>교훈</strong> — 탐지·룰·ROE 업데이트, 퍼플팀 피드백(10장).</li>
+</ol>
+<p><strong>세부 케이스</strong></p>
+<ul>
+<li><strong>범위 이탈(범위 외 호스트 스캔)</strong> — 3단계 분석에서 감사 로그의 <code>target-host</code> 필드로 이탈 요청을 특정하고, 이탈 트리거가 (a) Target/Scope 설정 오류인지 (b) 대상 응답 속 주입(7.2)인지 구분한다. (a)면 범위 정의를 고치고, (b)면 HITL 규칙을 보강한다. 이탈 대상이 제3자였으면 <strong>선 통지 후 분석</strong> — 통지 지연이 2차 리스크다.</li>
+<li><strong>프롬프트 인젝션 유도 행위</strong> — 에이전트가 &quot;대상이 시킨&quot; 쓰기·권한상승·외부호출을 시도한 경우, HITL 차단 로그가 1차 증거가 된다. 차단됐어도 <strong>인젝션 페이로드 자체를 증거로 보존</strong>하고(차단≠무해), 해당 응답을 유발한 대상 자산을 격리해 재시험을 막는다.</li>
+<li><strong>공급망 감염(백도어 의심)</strong> — 이미지·바이너리 변조 의심 시(ARTEX 백도어 유형, 6장) <strong>이미지 교체로 끝내지 않는다</strong>: 호스트 격리 → 컨테이너·호스트 포렌식 스냅샷 → <strong>관련 자격증명(LLM 키·DB·대상 인증정보) 전면 교체</strong> → 신뢰 이미지로 재구축 → 재발 방지(다이제스트 핀·서명 검증). CSA(2026-11)가 ARTEX 백도어 대응으로 권고한 절차다.</li>
+<li><strong>데이터 유출 의심(9.5 유형)</strong> — 에이전트가 승인 경로 밖으로 송신을 시도했다면 12.2 표준 흐름 + 9.5 체크리스트(메타데이터 IP·낯선 호스트 경보)로 확장 조사하고, 송신된 페이로드에 개인정보·인증정보가 포함됐는지 확인해 통지 의무(개인정보보호법) 해당 여부를 판단한다.</li>
+</ul>
+<p><strong>법적 보존(legal hold)</strong> — 소송·감사·규제 조사가 예상되면, 관련 데이터를 <strong>보존기한 자동 삭제에서 즉시 제외</strong>(hold 플래그)하고, 해제 전까지 변경·삭제를 금지한다. 12.1 자동 파기 스크립트는 반드시 hold 목록을 참조해야 한다.</p>
+<h3>12.3 증거 연계성 (chain of custody)</h3>
+<p>증거가 법정·감사에서 효력을 가지려면 각 단계의 기록이 필요하다:</p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>기록</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>수집</td>
+<td>수집 시각·수집자·대상·도구/버전, 원본 <strong>해시(SHA256)</strong></td>
+</tr>
+<tr>
+<td>보관</td>
+<td>저장 위치·접근 통제(RBAC)·접근 로그, 무결성 주기 검증(해시 재계산)</td>
+</tr>
+<tr>
+<td>이관</td>
+<td>전달 시각·수신자·전달 방식, 전달본 해시 대조</td>
+</tr>
+<tr>
+<td>파기</td>
+<td>파기 시각·사유·승인자, 파기 기록 보존(legal hold 아닌 경우만)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>AntiFox의 append-only 감사 로그(7.3)와 MITM 패킷이 &quot;수집&quot; 단계의 1차 증거다. 여기에 해시·서명·타임스탬프를 더해야 연계성이 완성된다.</p>
+</blockquote>
+<p><strong>세부 케이스</strong></p>
+<ul>
+<li><strong>법정·조사기관 제출</strong> — 제출본마다 사본 해시를 기록하고, <strong>원본은 제출하지 않는다</strong>(원본은 보관, 사본을 제공). 해시 생성 도구·버전·시각을 기록지에 남기고, 제출 이후 원본의 무결성을 주기 재검증해 &quot;제출 후 변조&quot; 주장에 대응한다.</li>
+<li><strong>감사(금융감독·CSAP 사후점검) 대응</strong> — 감사관이 요구하는 것은 &quot;보여지는 로그&quot;가 아니라 <strong>시점별 완결성</strong>이다. 수집 시각·수집자·도구 버전이 기록된 감사 로그와 백업 스냅샷을 시점으로 정렬해 제시할 수 있어야 한다. 이때 anti-virus 오검, 접근 로그 공백 등은 미리 정리해 두지 않으면 지적 사항이 된다.</li>
+<li><strong>이관(퇴직·외부 위탁·기관 간 공유)</strong> — 이관 시각·수신자·전달 방식·사본 해시를 기록지에 남기고, 수신 측의 <strong>보관·파기 의무까지</strong> 합의서에 명시한다. 이관이 곧 통제 상실 지점이다.</li>
+<li><strong>파기</strong> — 파기 시각·사유·승인자 기록을 보존하고, 물리 파괴·암호 삭제 방식에 따라 <strong>파기 증명</strong>(캡처·증적)을 남긴다. legal hold 기간 중 파기는 그 자체로 사고다.</li>
+</ul>
+<h3>12.4 트러블슈팅</h3>
+<table>
+<thead>
+<tr>
+<th>증상</th>
+<th>점검</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LLM 호출 실패</td>
+<td>키/쿼터, <code>ANTIFOX_LLM_BASE_URL</code> 도달성, 게이트웨이 상태, egress 규칙(7.1)이 게이트웨이를 막는지</td>
+</tr>
+<tr>
+<td>DB 연결 오류</td>
+<td><code>POSTGRES_*</code>/<code>config.json</code> 접속값, sslmode, 네트워크 허용</td>
+</tr>
+<tr>
+<td>로컬 모델 지연/실패</td>
+<td>VRAM 초과·양자화·배치, 추론서버 로그</td>
+</tr>
+<tr>
+<td>보고서(docx) 실패</td>
+<td>python3·python-docx(바이너리 모드), 템플릿/권한</td>
+</tr>
+<tr>
+<td>업데이트 실패</td>
+<td>SHA256 불일치 시 자동 롤백, systemd <code>RestartForceExitStatus=75</code>, Docker <code>docker compose pull</code></td>
+</tr>
+<tr>
+<td>콘솔 접근 불가</td>
+<td>포트 <code>8787</code>(콘솔)·<code>8788</code>(MITM) 바인딩, 리버스 프록시/TLS, IP 허용목록</td>
+</tr>
+</tbody></table>
+<p><strong>세부 케이스</strong></p>
+<ul>
+<li><strong>어제 되던 작업이 오늘 안 된다</strong> — ① 업데이트 여부·롤백 로그(가장 흔한 원인) ② LLM 게이트웨이 속도제한·페일오버 상태(5.8-1) ③ DB 용량(트래픽 캡처가 켜진 채 방치하면 PG가 폭증한다) 순으로 좁힌다.</li>
+<li><strong>작업이 멈춘 듯 보일 때</strong> — engine 로그에서 LLM idle 여부 확인(6장 실검증 로그 참고), <code>:8788</code> MITM 프록시가 트래픽 캡처 스위치와 일치하는지 확인. 에이전트가 대기 중인 HITL 승인이 없는지 인터셉트 승인 대기열을 본다.</li>
+<li><strong>보고서에 확인 안 된 발견이 섞인다</strong> — 보고서 관리의 기본 필터(확인된 취약점만)가 우회됐는지 템플릿 설정을 점검하고, 증거 캡션 자동 생성이 재현 단계 문안과 어긋나면 사람이 편집(5.8-3).</li>
+</ul>
+<h3>12.5 기관 규모별 운영 체크리스트 — 공공·금융·중소기업</h3>
+<table>
+<thead>
+<tr>
+<th>영역</th>
+<th>공공기관</th>
+<th>금융회사</th>
+<th>중소기업·소규모 랩</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>운영 형태</td>
+<td>보안성 검토·CSAP 인증 범위 내 온프레미스, 전담 인력</td>
+<td>감독규정·위탁규정 대응, 운영팀+감사 이중화</td>
+<td>1–2인 겸직, 자동화 우선</td>
+</tr>
+<tr>
+<td>백업·복구</td>
+<td>RPO ≤ 15m(WAL PITR)+원격 백업, 분기 복구 리허설 <strong>결과 보고</strong></td>
+<td>RPO ≤ 24h 최소, 증거는 계약·감독 기간 보존</td>
+<td>일일 <code>pg_dump</code>+외장 스토리지, 반기 리허설</td>
+</tr>
+<tr>
+<td>업데이트</td>
+<td>승인 절차·보안적합성 재검증 후 반영(변경관리 협의체)</td>
+<td>스테이징 검증→주말 반영→모니터링, 롤백 계획 문서화</td>
+<td>원클릭 업데이트+해시 확인, 직전 버전 백업 보관</td>
+</tr>
+<tr>
+<td>격리 감사</td>
+<td>국정원 지침 기반 반기 보안점검+외부 감사 대응</td>
+<td>금융감독원 IT 검사 대비 정기 자체점검</td>
+<td>분기 egress 실측+킬 스위치 테스트</td>
+</tr>
+<tr>
+<td>사고 대응</td>
+<td>통지 의무·기관 보고 절차(국가정보원·과기부 등) 병행</td>
+<td>금융위·감독원 보고 요건, 영업일 기준 보고 시간 준수</td>
+<td>ROE 비상연락선 통지, 증거 스냅샷 후 분석</td>
+</tr>
+<tr>
+<td>증거 연계성</td>
+<td>공공기록물 관리 요건(생산 등록·보존 기간) 연계</td>
+<td>감독 검사 대비 시점별 로그 정렬, 내부통제 증적</td>
+<td>해시·타임스탬프 최소 기록, 템플릿 활용(부록 E)</td>
+</tr>
+<tr>
+<td>TCO 특이점</td>
+<td>보안성 검토·인증 비용이 최대 항목</td>
+<td>감사 대응·보고서 품질 비용</td>
+<td>하드웨어·전기료가 최대 항목</td>
+</tr>
+</tbody></table>
+<h3>12.6 유지보수·TCO 관점</h3>
+<p><strong>유지보수 일정표(운영 캘린더)</strong></p>
+<table>
+<thead>
+<tr>
+<th>주기</th>
+<th>수행 항목</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>매일</td>
+<td>백업 성공 확인(자동 경보), LLM 게이트웨이 상태, 디스크·토큰 사용량</td>
+</tr>
+<tr>
+<td>매주</td>
+<td>GitHub Release·CHANGELOG 확인, 접근 로그 스팟 리뷰, 키 만료 점검</td>
+</tr>
+<tr>
+<td>매월</td>
+<td>보존기한 자동화(파티셔닝·TTL) 점검, RBAC 계정·역할 리뷰, 비용 리포트(토큰·GPU)</td>
+</tr>
+<tr>
+<td>분기</td>
+<td>복구 리허설(12.1), egress 실측·킬 스위치 실동작, 무결성 재검증, 키 교체</td>
+</tr>
+<tr>
+<td>반기</td>
+<td>격리 환경 전면 감사(12.0), 문서 갱신(갱신 정책), 모델·가격·법령 재확인</td>
+</tr>
+</tbody></table>
+<p><strong>TCO 구성</strong> — 자동화의 비용은 사라지지 않고 이동한다(11장). 3년 기준으로:</p>
+<pre><code>연간 TCO ≈ 인프라(서버·GPU 감가상각 + 전력) + LLM(토큰 or 자가호스팅 유효단가)
+         + 인력(운영·검수·감사 대응) + 유지보수(업데이트 검증·복구 리허설·감사)
+         + 컴플라이언스(공공: 보안성 검토·CSAP / 금융: 감사 대응 / 중소: 최소)
+</code></pre>
+<ul>
+<li><strong>공공·금융의 지배 항목은 인력·컴플라이언스</strong>다 — 인프라를 아껴 봐야 검수 공수(FP↑)·감사 대응이 TCO를 결정한다. 사람 검수 프로세스(4장 수칙)를 일찍 정비할수록 저렴해진다.</li>
+<li><strong>중소기업의 지배 항목은 하드웨어·전력</strong> — 24GB GPU 1장(9.3)으로 32B Q4가 실용 상한이며, 가동률이 낮으면 외부 API(단, 데이터 전송 허용 시)가 유리한 구간이 생긴다(11장 손익분기).</li>
+<li><strong>숨은 비용 3가지</strong> — ① 복구 리허설을 안 해서 생기는 실제 재해 손실 ② 보존기한 초과 데이터의 보관(스토리지+법적 리스크) ③ 미검증 업데이트의 롤백·재작업. 이 셋은 모두 12.0–12.3 루틴으로 예방되는 비용이다.</li>
+</ul>
+<hr>
+<h1>부록 A. 가상 엔게이지먼트 워크스루 (Virtual Engagement Walkthrough)</h1>
+<p><strong>격리 랩의 의도적 취약 대상</strong> 상대 가상 인가 테스트. 익스플로잇이 아니라 <strong>절차·증거 흐름</strong>이다.</p>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>행위</th>
+<th>산출/증거</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0. 사전 교섭</td>
+<td>랩 소유 확인, 범위·금지행위·시간창·킬스위치 합의</td>
+<td>서면 ROE·위임장(부록 E)</td>
+</tr>
+<tr>
+<td>1. 환경 구성</td>
+<td>Target/Scope, HITL 규칙, 전역 출구 프록시/egress 차단, 로컬 모델 연결</td>
+<td>config 스냅샷</td>
+</tr>
+<tr>
+<td>2–3. 정찰·열거</td>
+<td>자산·엔드포인트 매핑 → 그래프 구축</td>
+<td>자산/탐색 그래프</td>
+</tr>
+<tr>
+<td>4. 검증</td>
+<td>후보 1건 자동 재현, MITM 기록</td>
+<td>발견-증거 연결(+해시)</td>
+</tr>
+<tr>
+<td>5. 사람 검수</td>
+<td>패킷 열람, FP 판정, 심각도 산정, 확인 즉 보강</td>
+<td>검수 서명</td>
+</tr>
+<tr>
+<td>6. 보고</td>
+<td>확인된 취약점만 docx 초안(简/繁/英) → 맥락·권고 보강</td>
+<td>최종 보고서(부록 B)</td>
+</tr>
+<tr>
+<td>7. 정리</td>
+<td>증거 보존(연계성)·파기 스케줄·백업 확인</td>
+<td>파기·백업·연계성 기록</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>핵심은 4–5의 <strong>이음매</strong> — 에이전트는 &quot;후보&quot;를, 사람은 증거로 &quot;확정&quot;을.</p>
+</blockquote>
+<h3>A.1 실제 환경 구성 명령 시퀀스 (2026-11-14 검증본)</h3>
+<p>위 1단계(환경 구성)를 실제로 수행한 명령·출력 기록이다. 모두 격리 랩에서 실행했으며 민감값은 없다.</p>
+<p><strong>① 릴리스 다운로드 + 무결성 검증</strong></p>
+<pre><code class="language-bash">curl -sL -o antifox.zip https://github.com/AntiFox-AI/antifox/releases/download/v2.0.3/antifox-v2.0.3-darwin-arm64.zip
+curl -sL -O https://github.com/AntiFox-AI/antifox/releases/download/v2.0.3/SHA256SUMS
+shasum -a 256 antifox.zip        # → 4012597ccdbb4b990828d17a3dfc43392b91b45fc61e1d7fa34042384ade0a3a
+                                 #    ← 공식 SHA256SUMS와 1:1 대조(6장 무결성 검증 ①)
+unzip antifox.zip &amp;&amp; cd antifox-v2.0.3-darwin-arm64
+</code></pre>
+<p><strong>② 격리 PostgreSQL + <code>config.json</code></strong></p>
+<pre><code class="language-bash">initdb -D pgdata -U antifox --auth=trust -E UTF8
+pg_ctl -D pgdata -o &quot;-p 55432 -c listen_addresses=127.0.0.1&quot; start
+createdb -h 127.0.0.1 -p 55432 -U antifox antifox
+cat &gt; config.json &lt;&lt;&#39;EOF&#39;
+{ &quot;database&quot;: { &quot;host&quot;: &quot;127.0.0.1&quot;, &quot;port&quot;: 55432, &quot;user&quot;: &quot;antifox&quot;,
+                &quot;password&quot;: &quot;&quot;, &quot;dbname&quot;: &quot;antifox&quot;, &quot;sslmode&quot;: &quot;disable&quot; } }
+EOF
+</code></pre>
+<p><strong>③ 기동 — 실제 로그 출력 (해석 포함)</strong></p>
+<pre><code class="language-bash">./antifox
+</code></pre>
+<pre><code>2026/11/14 10:36:01 [tools] 已刷新 orchestration/platform 工具 schema 到代码默认(一次性)
+2026/11/14 10:36:01 [mainagent] 已默认绑定 report_finding（主 Agent 现可记录漏洞）
+2026/11/14 10:36:01 [custom-tool] 自动检测到 python 解释器: /usr/bin/python3
+2026/11/14 10:36:01 [engine] no LLM provider configured — engine idle until set via /api/llm or env
+2026/11/14 10:36:01 AntiFox v2.0.3 backend listening on :8787 (data=data, workers=3)
+2026/11/14 10:36:03 [mcp] browser 发现 25 个工具并已缓存
+2026/11/14 10:36:04 [mcp] filesystem 发现 16 个工具并已缓存
+</code></pre>
+<ul>
+<li><code>custom-tool</code> — python3 자동 감지(docx 렌더 경로). 보고서가 실패하면 이 라인이 없는지 확인(12.4)</li>
+<li><code>engine ... idle</code> — <strong>LLM 미설정이어도 기동은 된다</strong>. 에이전트 가동은 <code>/system/llm/</code>(또는 <code>ANTIFOX_LLM_*</code> 환경변수) 설정 후 시작</li>
+<li><code>listening on :8787</code> + MITM 기록 프록시는 별도 <code>:8788</code>(6장 포트 표)</li>
+</ul>
+<p><strong>④ 최초 설정 → 로그인 (5.1 실캡처와 동일 흐름)</strong></p>
+<p>브라우저로 <code>http://localhost:8787</code> 접속 → 자동 <code>/setup/</code> 리다이렉트 → 관리자 비밀번호 2회 입력 → 「设置密码并登录」 → <code>/function/tasks/</code> 진입. 이후 재접속 시 <code>/login</code>에서 계정 <code>admin</code>으로 로그인한다.</p>
+<p><strong>⑤ 탐색 전 구성 — 실제 UI 경로</strong></p>
+<table>
+<thead>
+<tr>
+<th>목적</th>
+<th>UI 경로</th>
+<th>확인·설정 항목</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LLM 연결</td>
+<td><code>/system/llm/</code></td>
+<td>프로필(모델·키·엔드포인트·속도제한) 생성 → 활성화, 페일오버·역할별 모델(4역할)</td>
+</tr>
+<tr>
+<td>출구·캡처</td>
+<td><code>/system/settings/</code></td>
+<td>전역 출구 프록시(http/https/socks5, 「测试可用性」로 출구 IP 확인), 트래픽 캡처 스위치</td>
+</tr>
+<tr>
+<td>HITL 규칙</td>
+<td><code>/system/intercept/</code></td>
+<td>내장 규칙(<code>rm -rf</code>·시스템 디렉터리 삭제 정규식 차단) 확인 + 필요 규칙 추가</td>
+</tr>
+<tr>
+<td>범위 설정</td>
+<td><code>/function/tasks/</code> → 「新建任务」</td>
+<td>목표·대상 입력, <strong>작업별 LLM 프로필·타임아웃·출구(전역 따름/직결)</strong> 선택</td>
+</tr>
+<tr>
+<td>보고 준비</td>
+<td><code>/system/reports/</code></td>
+<td>조직 설정(발주처·로고·담당자), 언어별 템플릿(简/繁/英) 사전 등록</td>
+</tr>
+</tbody></table>
+<h3>A.2 사람 검수 → 보고 흐름 (표 4–7단계 상세)</h3>
+<ol>
+<li><strong>검증 후보 도착</strong> — 작업 상세의 발견 목록에서 상태·심각도 확인(5.6)</li>
+<li><strong>패킷 열람</strong> — 발견의 익스플로잇 체인(5.3) → 단계별 연결 패킷(5.4)으로 FP 여부 판정. 범위 밖 대상이 섞여 있는지도 여기서 걸러낸다</li>
+<li><strong>확인 즉 보강</strong> — 확인 버튼 → 구조화 데이터(CVSS·영향·수정·재현) 자동 보강. 이때 서명·심각도를 사람이 확정</li>
+<li><strong>보고 생성</strong> — <code>/system/reports/</code> → 「新建报告」: 템플릿(언어) 선택 → 확인된 취약점 부분집합 선택 → 생성. <strong>기본값이 확인된 취약점만 수록</strong>임을 이용해 검수 완료분만 담는다</li>
+<li><strong>맥락·권고 보강</strong> — 생성된 docx 초안에 비즈니스 맥락·권고를 사람이 보강(에이전트 초안은 원문 그대로 인용 금지, 4장 수칙)</li>
+<li><strong>정리</strong> — 증거 해시·백업·파기 스케줄 확인(12장), 로그는 SIEM 파이프라인(10.3)에 남긴다</li>
+</ol>
+<hr>
+<h1>부록 B. 보고서 샘플 구성 (마스킹)</h1>
+<p>AntiFox 보고서 관리는 <strong>기본적으로 확인된 취약점만 수록</strong>하고, <strong>명명 템플릿(발주처·로고·담당자·CVSS)</strong>과 <strong>취약점 부분집합 선택 수록</strong>, <strong>증거 캡션 자동 생성</strong>을 지원한다.</p>
+<p><strong>목차</strong>: 1 Executive Summary · 2 Scope &amp; ROE · 3 Methodology(PTES/ATT&amp;CK) · 4 Findings(심각도순) · 5–7 Risk Overview · Remediation · Appendices(증거·로그·그래프)</p>
+<p><strong>Finding 구조</strong></p>
+<pre><code>Finding ID: AF-2026-00X
+Title:       [카테고리] 취약점 요약
+Severity:    High  (CVSS 3.1: 8.1 / 벡터 마스킹)
+Asset:       https://app.lab.internal/****
+Status:      Confirmed (운영자 검수 **<strong> / 2026-</strong>-**)
+Evidence hash: sha256:****   (증거 연계성 — 12.3)
+[Description] 무엇이·왜 문제인가(비즈니스 영향)
+[Evidence]    MITM 요청/응답 참조 #**** (값 마스킹, 재현 패킷)
+[Reproduction] 1) … 2) … 3) (랩 범위 내)
+[Impact] / [Remediation] / [References] OWASP·ATT&amp;CK·CWE
+</code></pre>
+<blockquote>
+<p>Status·검수 서명·Evidence hash가 보고서에 드러나 &quot;에이전트 초안 vs 사람 확정 vs 증거 무결성&quot;이 한눈에 보인다.</p>
+</blockquote>
+<hr>
+<h1>부록 C. 국내법 법적 체크리스트</h1>
+<blockquote>
+<p><strong>면책 — 법무 검토 전 초안</strong> — 일반 정보이며 법률 자문이 아니다. 조항·판례 인용은 사안별 해석이 필요하다. <strong>법무 검토 완료 전까지 실사용 금지</strong>, 검토 후 아래에 날짜 기입: <strong>법무 검토 완료일: ____</strong>. 실제 엔게이지먼트 전 변호사 검토 필수.</p>
+</blockquote>
+<h3>관련 주요 조항</h3>
+<table>
+<thead>
+<tr>
+<th>법/조항</th>
+<th>행위</th>
+<th>법정형(개략)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>정보통신망법 제48조①</td>
+<td>정당한 접근권한 없이/초과 침입</td>
+<td>5년↓ 또는 5천만원↓(제71조①9호)</td>
+</tr>
+<tr>
+<td>정보통신망법 제48조②</td>
+<td>악성프로그램 전달·유포</td>
+<td>5년↓ 또는 5천만원↓</td>
+</tr>
+<tr>
+<td>정보통신망법 제48조③</td>
+<td>정보통신망 장애 발생</td>
+<td>가중 처벌</td>
+</tr>
+<tr>
+<td>형법 제314조②</td>
+<td>컴퓨터등장애업무방해</td>
+<td>5년↓ 또는 1,500만원↓</td>
+</tr>
+<tr>
+<td>형법 제347조의2</td>
+<td>컴퓨터등사용사기</td>
+<td>10년↓ 또는 2천만원↓</td>
+</tr>
+<tr>
+<td>개인정보보호법 제59조</td>
+<td>개인정보 부정 취득·이용</td>
+<td>별도 처벌</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>판례 메모(보수적)</strong> — 법원은 &quot;<strong>정당한 접근권한을 넘었는지</strong>, <strong>기술적 조치를 무력화했는지</strong>&quot;를 핵심으로 본다(웹 크롤링 관련 대법원 2021도1533 등). 일부 하급심이 공개 API 접근 사안에서 침입을 부정한 바 있으나, 이는 <strong>개별 사실관계(기술적 보호조치·수집 범위·인과관계)에 크게 좌우</strong>되며 &quot;공개 API·무단 크롤링은 언제나 합법&quot;이라는 의미가 <strong>결코 아니다</strong>. 결론은 <strong>권한의 경계</strong> — ROE·위임장이 그 서면 근거다.</p>
+</blockquote>
+<h3>실무 체크리스트</h3>
+<ul>
+<li><input disabled="" type="checkbox"> 소유자/운영자 서면 위임장(제3자 자산은 각각)</li>
+<li><input disabled="" type="checkbox"> ROE에 범위·금지행위·시간창·비상연락·데이터 취급 명시</li>
+<li><input disabled="" type="checkbox"> 수집 개인정보의 처리·보관·파기 근거</li>
+<li><input disabled="" type="checkbox"> 가용성 영향 행위(DoS 등)는 명시 동의 없이는 금지</li>
+<li><input disabled="" type="checkbox"> 클라우드/외부 호스팅은 사업자 약관의 테스트 허용 범위 확인</li>
+<li><input disabled="" type="checkbox"> 금융·공공은 감독규정·망분리·CSAP 추가 검토</li>
+<li><input disabled="" type="checkbox"> 외부 LLM 사용 시 데이터 국외이전 적법성(미이용 시 로컬)</li>
+<li><input disabled="" type="checkbox"> 도구 라이선스·사용정책(AGPL + 업스트림 AUP) 준수</li>
+</ul>
+<hr>
+<h1>부록 D. AGPL-3.0 컴플라이언스</h1>
+<p>AntiFox는 AGPL-3.0이며 <strong>네트워크 서비스 제공 시에도</strong> 소스 공개 의무가 생긴다. 또한 업스트림 사용정책이 실제 공격·운영 사용을 금지함에 유의.</p>
+<table>
+<thead>
+<tr>
+<th>사용 형태</th>
+<th>소스 공개 의무</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>내부 수정 없이 사용</td>
+<td>원칙적 없음(고지 유지)</td>
+</tr>
+<tr>
+<td>수정 후 내부 사용</td>
+<td>논쟁 여지 — 보수적 준비</td>
+</tr>
+<tr>
+<td>수정본을 네트워크 서비스로 제공</td>
+<td><strong>있음</strong>(제13조)</td>
+</tr>
+<tr>
+<td>SaaS·상용 포함</td>
+<td><strong>있음</strong> 또는 별도 라이선스</td>
+</tr>
+</tbody></table>
+<ul>
+<li><input disabled="" type="checkbox"> 수정 사항 버전관리 분리 추적 · [ ] 네트워크 사용자에 소스 취득 경로(제13조)</li>
+<li><input disabled="" type="checkbox"> 라이선스·변경 고지 유지 · [ ] 제3자 라이브러리 호환성</li>
+<li><input disabled="" type="checkbox"> 상용·폐쇄 배포 원하면 대체 도구(MIT/Apache) 또는 별도 라이선싱 검토</li>
+</ul>
+<hr>
+<h1>부록 E. 계약·운영 템플릿</h1>
+<blockquote>
+<p><strong>참고 골격</strong>이며 법적 효력을 보장하지 않는다. 반드시 법무 검토 후 사용하라.</p>
+</blockquote>
+<h3>E.1 ROE(교전 규칙) 템플릿</h3>
+<pre><code>프로젝트: ____            기간: YYYY-MM-DD – YYYY-MM-DD
+대상 범위(허용): [도메인/IP/서브넷 화이트리스트]
+범위 외(금지): 위 목록 외 전부
+금지 행위: DoS, 데이터 파기/변조, 대량 계정 인증, 운영 데이터 유출, 범위 외 측면이동
+테스트 시간창: [요일/시간], 사전 통지 창구: ____
+비상 중단(킬 스위치) 연락선: [담당/연락처, 24h]
+데이터 취급: 분류·보관 위치·암호화·보존기한·파기일·legal hold 조건
+RTO/RPO: RPO ___ / RTO ___
+도구/환경: AntiFox vX.Y.Z (격리 랩), LLM: 로컬/외부(명시)
+산출물: 보고서 형식·언어·전달 방법
+서명: 발주(소유자) ____ / 수행(리드) ____ / 일자 ____
+</code></pre>
+<h3>E.2 테스트 위임장(Authorization) 골격</h3>
+<pre><code>본인/법인 [소유자]는 아래 시스템의 소유자/정당한 운영자로서,
+[수행자]에게 아래 범위·기간에 한해 모의 테스트 수행을 서면 위임합니다.
+ - 대상 시스템/자산: ____    - 범위·제외: ____
+ - 기간: ____               - 제약(금지행위): ____
+본 위임은 위 범위에 한하며, 범위 외 행위를 승인하지 않습니다.
+소유자 서명/직인 ____  일자 ____   (제3자 자산 포함 시 각 소유자 위임 별첨)
+</code></pre>
+<h3>E.3 데이터 보존·파기 정책 템플릿</h3>
+<pre><code>데이터 등급: [민감(인증/개인정보) / 일반(로그/증거) / 공개]
+저장 위치/암호화/키 관리: ____
+접근 통제: RBAC 역할·자원 범위, 접근 로그 보존
+보존기한: 증거 [N개월], 민감 [계약 종료 + N일]   (자동화: 12.1 파티셔닝/TTL/cron)
+legal hold: 소송·감사 예상 시 자동 파기 제외
+파기: 기한 도래 시 [방식], 파기 기록·승인자 보존 (연계성 12.3)
+</code></pre>
+<h3>E.4 채워진 예시 — 가상 &quot;ACME 내부망 모의테스트&quot; ROE</h3>
+<pre><code>프로젝트: ACME 내부 웹포털 모의테스트(격리 복제 스테이징)
+기간: 2026-12-01 – 2026-12-05 (평일 10:00–18:00)
+대상 범위(허용): 10.50.10.0/24, *.stg.acme.lab  (운영망 아님, 스테이징 복제본)
+범위 외(금지): 그 외 전부, 특히 10.50.20.0/24(운영), 인터넷
+금지 행위: 서비스 중단·대량 로그인 시도·데이터 파기, 운영 DB 접근
+비상 중단 연락선: ACME 보안팀 홍길동 010-**<strong>-</strong><strong> (24h), 수행측 리드 김</strong>
+데이터 취급: 수집 트래픽 AES-256 암호화, 보존 3개월, 계약종료+30일 파기
+            legal hold: 해당 없음(사전 고지 시 적용)
+RTO/RPO: RPO ≤ 24h(일일 백업) / RTO ≤ 4h
+도구/환경: AntiFox v2.0.3 (사내 격리 랩), LLM: 로컬 Qwen3-Coder(사내 게이트웨이)
+산출물: 한국어 요약 + AntiFox docx(英) 원본, 암호화 전달
+서명: 발주 ACME 보안팀장 ____ / 수행 리드 ____ / 2026-11-28
+</code></pre>
+<hr>
+<h1>부록 F. 용어집</h1>
+<ul>
+<li><strong>Red / Blue / Purple Team</strong> — 공격 측 / 수비 측 / 둘이 협업해 탐지를 개선.</li>
+<li><strong>Adversary Emulation</strong> — 특정 공격 그룹의 실제 TTP를 모사하는 평가 기법.</li>
+<li><strong>ROE</strong> — 허용·금지·범위·시간창·비상연락·데이터 취급을 규정한 서면 합의. 모든 테스트의 전제.</li>
+<li><strong>Scope</strong> — 테스트가 허용된 자산 범위(화이트리스트). 범위 밖은 전부 금지.</li>
+<li><strong>Authorization Letter (위임장)</strong> — 소유자/운영자가 범위·기간을 특정해 테스트를 서면 승인.</li>
+<li><strong>악용 / 익스플로잇(exploit)</strong> — 취약점을 실제 공격에 사용. (&quot;이용&quot;과 구분)</li>
+<li><strong>익스플로잇 체인</strong> — 진입점→단계적 악용 경로.</li>
+<li><strong>Cyber Kill Chain / MITRE ATT&amp;CK</strong> — 선형 공격 단계 모델 / 전술·기법 지식베이스(레드·블루 공용어).</li>
+<li><strong>C2 / Lateral Movement / PrivEsc</strong> — 원격 제어 채널 / 측면 이동 / 권한 상승.</li>
+<li><strong>Multi-agent (planner/worker/mainagent)</strong> — 의도 생성·실행·인간 인터페이스로 분화된 협력 구조.</li>
+<li><strong>이중 그래프</strong> — 전역 자산 그래프(공유) + 작업별 탐색 그래프(분리). 앵커로 상호연결.</li>
+<li><strong>MITM</strong> — 중간자. 트래픽을 가로채 증거로 녹화.</li>
+<li><strong>HITL</strong> — 고위험 행위를 규칙으로 가로채 사람이 승인/차단. AntiFox의 집행점.</li>
+<li><strong>RBAC</strong> — 역할 기반 접근 통제. 자원 레벨 범위·시스템 역할·로그인 감사.</li>
+<li><strong>전역 출구 프록시</strong> — 모든 에이전트 트래픽을 하나의 프록시로 송출(http/https/socks5), 작업별 직결/프록시 선택(v2.0.3).</li>
+<li><strong>RAG / pgvector</strong> — 검색 증강 생성 / PostgreSQL 벡터 검색 확장.</li>
+<li><strong>False Positive</strong> — 허위 양성. 사람 검수로 걸러낸다.</li>
+<li><strong>Prompt Injection</strong> — 입력에 숨긴 지시로 에이전트 행동을 탈취·조작.</li>
+<li><strong>Egress 차단</strong> — 아웃바운드를 허용 목록만 남기고 차단. 범위 이탈·유출의 최종 안전망.</li>
+<li><strong>RLS</strong> — Row-Level Security. 멀티테넌트 증거 격리.</li>
+<li><strong>Chain of Custody (증거 연계성)</strong> — 수집·보관·이관·파기 각 단계의 해시·서명·타임스탬프 기록.</li>
+<li><strong>Legal Hold</strong> — 소송·감사 대비 데이터를 자동 파기에서 제외·동결.</li>
+<li><strong>RTO / RPO</strong> — 복구 목표 시간 / 허용 데이터 손실 시간.</li>
+<li><strong>SBOM / Digest Pin / PITR</strong> — 구성요소 목록 / <code>@sha256:</code> 고정 / 시점 복구.</li>
+<li><strong>Open-weight</strong> — 가중치 공개 모델(라이선스 제각각).</li>
+<li><strong>Air-gap / 망분리</strong> — 네트워크 분리로 외부 전송 차단.</li>
+<li><strong>AGPL-3.0</strong> — 네트워크 서비스 제공 시에도 소스 공개 의무가 있는 카피레프트.</li>
+<li><strong>보강(enrichment) / 납품급 / 재현</strong> — 구조화 풍부화 / 고객 전달 품질 / 공격 재실행 증명.</li>
+<li><strong>Crown Jewel / Kill Switch</strong> — 조직 핵심 자산 / 비상 전체 차단(&quot;먼저 끊고 나중에 분석&quot;).</li>
+</ul>
+<hr>
+<h1>부록 G. 레퍼런스</h1>
+<ol>
+<li><strong>AntiFox</strong> — 공식 채널 3곳(별도 웹사이트 없음, 2026-11-14 확인): ① GitHub 저장소 <code>github.com/AntiFox-AI/antifox</code>(README·CHANGELOG·releases·<code>screenshots/</code>·<code>.env.example</code>·<code>config.example.json</code>) ② GHCR 패키지 <code>ghcr.io/antifox-ai/antifox</code> ③ 위챗 공식계정(저장소 QR). AGPL-3.0, 현재 v2.0.3(2026-10-30). 릴리스마다 <strong><code>SHA256SUMS</code></strong> 제공. 사용정책: 개인 학습·로컬 격리 검증만 허용. 보고서 언어: 简/繁/英.</li>
+<li><strong>ARTEX</strong>(@Autumn-27) — 기술 기반(원본 closed-source화). 공급망 사고: CSA &quot;The ARTEX Docker Backdoor&quot;(2026-11-06) — Docker Hub 이미지 백도어.</li>
+<li>경쟁 — PentAGI · Agent Zero · PentestGPT · HexStrike AI · Strix · RedAmon.</li>
+<li><strong>MITRE ATT&amp;CK · Cyber Kill Chain · PTES · OSSTMM · NIST SP 800-115 · OWASP · CIS</strong>.</li>
+<li><strong>Sigma</strong> — 공식 스펙(correlation rules 포함). 룰 예시는 백엔드 매핑 후 검증.</li>
+<li>오픈웨이트 모델(2026-11 확인) — DeepSeek V4, Qwen3.5/3-Coder, GLM-5.x, Kimi K2.x, Llama 4, Mistral/Gemma. 각 모델 공식 카드·리더보드 재확인.</li>
+<li>비용 앵커(2026-11 확인) — 공개 GPU 임대·LLM API 가격 비교 페이지(H100 시세·토큰 단가·손익분기). 벤더 가격 페이지 재확인.</li>
+<li>최근 사례(2026-11) — AntiFox 연계 AWS 자격증명·시크릿 접근 보도, CloudTrail 탐지 공백.</li>
+<li>국내법 — 정보통신망법 제48·71조, 형법 제314조②·제347조의2, 개인정보보호법; 대법원 2021도1533 등(도입 시점 최신 확인).</li>
+<li>라이선스 — GNU AGPL-3.0(특히 제13조).</li>
+<li>오픈웨이트 공급망 — Cohere &quot;Concerning behavior from a popular open-weight AI model&quot;(2026-10-26) · <a href="https://docs.vibequant.cc/columns/open-weight-data-leak/">사건 요약 칼럼</a>(2026-10-27) · NIST SP 800-218A. 가드레일 제거 모델(abliterated/uncensored)은 공식 출처가 아닌 파생물이므로 9.4 경고 준수.</li>
+</ol>
+<blockquote>
+<p>AntiFox·모델·가격·법령은 변화가 빠르다. <strong>도입 시점에 공식 출처로 사실 확인</strong>하라. 설정 변수·기능은 설치본과 반드시 대조할 것.</p>
+</blockquote>
+<hr>
+<h2>갱신 정책 (이 문서 유지보수)</h2>
+<ol>
+<li><strong>확인일자 필드</strong> — 버전·가격·모델·법령·사례는 본문 &quot;(2026-11 확인)&quot; 표기로 시점을 명시한다. 항목별로 날짜가 다를 수 있다.</li>
+<li><strong>정기 리뷰</strong> — 반기(6개월) 1회 이상: 공식 저장소 릴리스·CHANGELOG 재확인 → 가격 페이지·모델 카드 재확인 → 국내법·판례 최신화.</li>
+<li><strong>변경 기록</strong> — 갱신 시 문서 상단 &quot;변경 요약&quot;에 날짜별 항목을 추가한다(현행: 2026-11-14 변경).</li>
+<li><strong>RC → v1.0 확정 조건</strong> — ① 법무 검토 완료(부록 C 날짜 기입), ② LLM 연결 작업 실행·보고서 생성 검증(6장 실필드 검증의 미수행 항목). 완료 시 표지 배너의 &quot;검증 대기&quot; 문구와 RC 표기를 제거한다.</li>
+<li><strong>언어판</strong> — 한국어 원본 기준, 영문판(<code>AntiFox-Guide_EN.md</code>) 병행. 원본 변경 시 영문판 동기화(갱신일자 명시).</li>
+</ol>
+<hr>
+<h1>맺는 말</h1>
+<p>미래는 예지할 수 없다.</p>
+<p>이 책을 쓰는 동안 가장 자주 떠올린 숫자는 5분이다. 한 AI 에이전트가 GitHub에서 시크릿을 훑다가 Azure Key Vault의 데이터를 빼내기까지 걸린 시간이다. 숙련된 침투 테스터가 며칠에 걸쳐 하던 일을, 지치지도 망설이지도 않는 에이전트 무리가 커피 한 잔이 식기 전에 끝낸다.</p>
+<p>이런 미래는 보안 전문가도 해커도 예지하지 못했다.</p>
+<p>인공지능은 해킹에 새 기법 하나를 보탠 정도로 그치지 않았다. 공격과 방어가 함께 딛고 서 있던 전제를 바꿨다. 지금까지의 보안은 사람의 속도에 맞춰 설계되어 있었다. 연 1~2회의 모의 침투, 분기 단위의 패치 주기, 경보를 사람이 읽고 판단하는 관제가 모두 그렇다. 공격자도 결국 사람이고, 사람은 자고 쉬고 실수한다는 가정 위에 세운 체계였다.</p>
+<p>그 가정이 2026년에 무너졌다. ARTEX는 공개된 지 석 달이 채 되지 않아 한국 금융기관을 겨냥한 캠페인에 쓰였고, 개발자가 소스를 닫은 뒤에도 복제본은 회수되지 않았다. 공격의 한계 비용은 토큰 값으로 떨어졌고, 공격자의 시계는 방어자의 시계에서 떨어져 나갔다. 해킹과 보안 방어의 패러다임이 바뀌었다는 말은 과장이 아니다. 방어자가 같은 시계를 손에 쥐지 않는 한 이 간격은 저절로 좁혀지지 않는다.</p>
+<h2>살아남는 것은 적응하는 종이다</h2>
+<p>살아남는 종은 가장 강한 종도, 가장 똑똑한 종도 아니고 변화에 가장 잘 적응하는 종이라고 한다. 흔히 다윈의 말로 인용되지만, 엄밀히는 1963년 경영학자 리언 메긴슨이 『종의 기원』의 요지를 자기 말로 정리한 문장이다. 출처가 누구이든 진화론이 가르치는 바는 달라지지 않는다. 자연은 힘이 센 쪽의 손을 들어 주지 않았다. 환경이 바뀌었을 때 먼저 몸을 바꾼 쪽의 손을 들어 주었다.</p>
+<p>보안 조직도 하나의 종이다. 규모가 크다고, 예산이 많다고, 인증을 여러 개 받았다고 살아남지 않는다. 사람의 속도에 맞춰 진화한 방어 체계는 머신 스피드라는 새 기후 앞에서 덩치 큰 공룡과 다르지 않다. 거꾸로 작은 조직이라도 자율 에이전트를 자기 환경에 먼저 돌려 보고, 그 흔적을 탐지 룰로 바꾸고, 다음 달에 다시 검증하는 조직은 적응한 종이다. 10장의 퍼플팀 루프는 이 적응을 반복 가능한 절차로 옮겨 놓은 것이다.</p>
+<p>적응은 맹신과 다르다. 4장에서 보았듯 AI는 찾지만 확정하지 못한다. 환각과 허위 양성을 걸러 내고 발견에 서명하는 일은 여전히 사람의 몫이다. LLM은 엑셀이지 오라클이 아니다. 적응한다는 것은 도구의 속도와 사람의 책임을 한 체계 안에 묶는 일이고, 판단까지 도구에 넘기는 일과는 거리가 멀다.</p>
+<h2>막을 것인가, 쓸 것인가?</h2>
+<p>AntiFox 같은 도구가 등장하면 가장 먼저 나오는 반응은 금지다. 배포를 막고, 소지를 처벌하고, 저장소를 내리게 하자는 것이다. 그 마음은 이해한다. 이 도구는 실제로 악용되었고, 이 책도 첫 장에서 그 사실을 숨기지 않았다.</p>
+<p>그러나 금지는 닿아야 할 사람에게 닿지 않는다. ARTEX의 개발자가 소스를 닫은 것은 사건이 보고된 바로 다음 날이었지만, 포크는 이미 세상에 퍼진 뒤였다. 한번 공개된 코드는 회수되지 않고, 오픈웨이트 모델도 마찬가지다. 국경 밖의 공격자는 우리 법을 읽지 않는다. 법으로 도구를 막았을 때 실제로 손이 묶이는 쪽은 법을 지키는 방어자와 연구자뿐이다. 2007년 독일이 이른바 해킹 도구 조항을 형법에 넣었을 때도 위축된 쪽은 보안 연구자들이었다.</p>
+<p>오해는 없어야 한다. 법이 필요 없다는 말이 아니다. 인가받지 않은 침입은 처벌받아야 하고, 이 책이 처음부터 끝까지 위임장과 ROE, 격리 환경을 전제로 삼은 이유도 거기에 있다. 다만 법이 겨눠야 할 대상은 도구보다 행위다. Nmap도 Metasploit도 처음 나왔을 때는 해커의 무기로 불렸다. 지금은 방어자의 표준 장비이고, 그것을 다룰 줄 모르는 보안팀을 우리는 신뢰하지 않는다. AntiFox와 그 뒤를 이을 도구들도 같은 길을 갈 것이다.</p>
+<p>그렇다면 질문은 하나로 줄어든다. 이 도구가 우리 환경을 향해 처음 실행되는 날, 실행 버튼을 누르는 사람은 누구인가. 인가된 범위 안에서, 증거를 남기며, 우리가 먼저 누를 수 있다. 그렇게 하지 않으면 다른 누군가가 누른다. 위협을 막는 가장 확실한 방법은 그 위협을 우리가 가장 잘 다루는 것이다.</p>
+<h2>미래는 대비하는 자에게 있다</h2>
+<p>이 책은 대비의 기록으로 쓰였다. 설치와 하드닝, 범위 강제, 탐지 룰, 예산, 백업과 사고 대응, 법적 체크리스트까지 지루할 만큼 절차를 적은 까닭이 있다. 대비는 한 번의 결심으로 끝나지 않고, 매달 되풀이하는 일과로만 유지되기 때문이다. 한 번 읽고 덮는 책보다, 격리된 랩 하나를 세우고 한 번 돌려 본 뒤 다시 펴는 책이 되기를 바란다.</p>
+<p>저자 소개에서 썼듯, 무엇이 뚫리고 무엇이 막아지는지는 대부분 누가 먼저 움직이는가에서 갈렸다. AI 시대에 바뀐 것은 그 원칙이 실행되는 속도다. 다음 도구는 AntiFox보다 빠르고 조용할 것이고, 그것이 언제 나올지는 아무도 모른다. 우리가 정할 수 있는 것은 그날 우리가 어떤 상태로 서 있느냐뿐이다.</p>
+<p>한국에서는 이런 정보에 다가가기가 상대적으로 어려웠고, 그 격차를 줄이고 싶어 이 글을 공개했다. 지식은 나눌수록 방어자의 편이 된다. 이 책을 읽은 누군가가 자기 조직의 랩에서 첫 테스트를 돌리고, 첫 탐지 룰을 고치고, 그 경험을 다시 누군가에게 나눠 준다면 이 책은 제 몫을 다한 것이다.</p>
+<p>변화는 이미 왔다. 적응할 시간은 아직 남아 있다. 미래는 예지하는 것보다 대비하는 자에게 있다.</p>
+<p>2026년 11월, 서울에서</p>
+<p><strong>김호광 (Dennis Kim)</strong></p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://tech.vibequant.cc/tech/antifox-antifox-guide/" data-title="AntiFox를 이용한 Red Team 운영 가이드" data-text="본문 : 1. 소개 · 2. Red Team 구성 원리 · 3. 역사 · 4. 장점과 리스크 · 5. 기능·스크린샷·마스킹 · 6. 설치와 하드닝 · 7. 안전 통제 · 8. 시나리오 · 9. 금융·공공·오픈웨이트 · 10. 블루팀 탐지·로깅 · 11. 예산·환경 · 12.…" data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fantifox-antifox-guide%2F&amp;text=AntiFox%EB%A5%BC%20%EC%9D%B4%EC%9A%A9%ED%95%9C%20Red%20Team%20%EC%9A%B4%EC%98%81%20%EA%B0%80%EC%9D%B4%EB%93%9C" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fantifox-antifox-guide%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fantifox-antifox-guide%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/AntiFox-Guide.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

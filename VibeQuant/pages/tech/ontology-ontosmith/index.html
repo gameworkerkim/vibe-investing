@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>OntoSmith — 프로젝트 분석 — VibeQuant</title>
+  <meta name="description" content="1. 한 줄 요약 2. 프로젝트 설명과 컨셉 3. 아키텍처와 작동 방식 4. 장점 5. 단점과 리스크 6. 경쟁 프로젝트 7. 설치와 운영 방법 8. 명령어 레퍼런스 9. 도입 판단 가이드 10. 부록: 기존 요약본 정정 사항" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/ontology-ontosmith/" />
+  <meta property="og:title" content="OntoSmith — 프로젝트 분석" />
+  <meta property="og:description" content="1. 한 줄 요약 2. 프로젝트 설명과 컨셉 3. 아키텍처와 작동 방식 4. 장점 5. 단점과 리스크 6. 경쟁 프로젝트 7. 설치와 운영 방법 8. 명령어 레퍼런스 9. 도입 판단 가이드 10. 부록: 기존 요약본 정정 사항" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/ontology-ontosmith/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
+  
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"OntoSmith — 프로젝트 분석","description":"1. 한 줄 요약 2. 프로젝트 설명과 컨셉 3. 아키텍처와 작동 방식 4. 장점 5. 단점과 리스크 6. 경쟁 프로젝트 7. 설치와 운영 방법 8. 명령어 레퍼런스 9. 도입 판단 가이드 10. 부록: 기존 요약본 정정 사항","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/ontology-ontosmith/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Ontology/Ontosmith.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/ontology-ontosmith/","datePublished":"2026-11-08","dateModified":"2026-11-08","inLanguage":"ko","keywords":"기타 기술문서, Ontology"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"OntoSmith — 프로젝트 분석","item":"https://tech.vibequant.cc/tech/ontology-ontosmith/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 기타 기술문서</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 기술문서</p>
+        <h1>OntoSmith — 프로젝트 분석</h1>
+        <p class="article-dates"><time datetime="2026-11-08">발행 2026.11.08</time> · 주제 기타 기술문서 · Ontology</p>
+        
+        <p class="lede">1. 한 줄 요약 2. 프로젝트 설명과 컨셉 3. 아키텍처와 작동 방식 4. 장점 5. 단점과 리스크 6. 경쟁 프로젝트 7. 설치와 운영 방법 8. 명령어 레퍼런스 9. 도입 판단 가이드 10. 부록: 기존 요약본 정정 사항</p>
+        
+        <nav class="share-bar" aria-label="공유" data-url="https://tech.vibequant.cc/tech/ontology-ontosmith/" data-title="OntoSmith — 프로젝트 분석" data-text="1. 한 줄 요약 2. 프로젝트 설명과 컨셉 3. 아키텍처와 작동 방식 4. 장점 5. 단점과 리스크 6. 경쟁 프로젝트 7. 설치와 운영 방법 8. 명령어 레퍼런스 9. 도입 판단 가이드 10. 부록: 기존 요약본 정정 사항" data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fontology-ontosmith%2F&amp;text=OntoSmith%20%E2%80%94%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EB%B6%84%EC%84%9D" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fontology-ontosmith%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fontology-ontosmith%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><blockquote>
+<p>문서에서 <strong>통제된(governed) 지식 그래프</strong>를 만드는 온톨로지 우선 파이프라인</p>
+<ul>
+<li>저장소: <a href="https://github.com/Dongbumlee/ontosmith">https://github.com/Dongbumlee/ontosmith</a></li>
+<li>프로젝트 사이트: <a href="https://dongbumlee.github.io/ontosmith/">https://dongbumlee.github.io/ontosmith/</a></li>
+<li>라이선스: MIT (Copyright © 2026 Dongbum Lee)</li>
+<li>상태: README 기준 Release <strong>0.1.1</strong> (PyPI 게시) — 설치 후 <code>pip show ontosmith</code>로 실제 버전 확인 권장</li>
+<li>토픽: graphrag · information-extraction · knowledge-graph · llm · neo4j · ontology · rag</li>
+<li>작성 기준일: 2026-11-08 (README 원문 대조)</li>
+</ul>
+</blockquote>
+<hr>
+<h2>목차</h2>
+<ol>
+<li><a href="#1-%ED%95%9C-%EC%A4%84-%EC%9A%94%EC%95%BD">한 줄 요약</a></li>
+<li><a href="#2-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EC%84%A4%EB%AA%85%EA%B3%BC-%EC%BB%A8%EC%85%89">프로젝트 설명과 컨셉</a></li>
+<li><a href="#3-%EC%95%84%ED%82%A4%ED%85%8D%EC%B2%98%EC%99%80-%EC%9E%91%EB%8F%99-%EB%B0%A9%EC%8B%9D">아키텍처와 작동 방식</a></li>
+<li><a href="#4-%EC%9E%A5%EC%A0%90">장점</a></li>
+<li><a href="#5-%EB%8B%A8%EC%A0%90%EA%B3%BC-%EB%A6%AC%EC%8A%A4%ED%81%AC">단점과 리스크</a></li>
+<li><a href="#6-%EA%B2%BD%EC%9F%81-%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8">경쟁 프로젝트</a></li>
+<li><a href="#7-%EC%84%A4%EC%B9%98%EC%99%80-%EC%9A%B4%EC%98%81-%EB%B0%A9%EB%B2%95">설치와 운영 방법</a></li>
+<li><a href="#8-%EB%AA%85%EB%A0%B9%EC%96%B4-%EB%A0%88%ED%8D%BC%EB%9F%B0%EC%8A%A4">명령어 레퍼런스</a></li>
+<li><a href="#9-%EB%8F%84%EC%9E%85-%ED%8C%90%EB%8B%A8-%EA%B0%80%EC%9D%B4%EB%93%9C">도입 판단 가이드</a></li>
+<li><a href="#10-%EB%B6%80%EB%A1%9D-%EA%B8%B0%EC%A1%B4-%EC%9A%94%EC%95%BD%EB%B3%B8-%EC%A0%95%EC%A0%95-%EC%82%AC%ED%95%AD">부록: 기존 요약본 정정 사항</a></li>
+</ol>
+<hr>
+<h2>1. 한 줄 요약</h2>
+<p><strong>모델은 제안하고, 심판(Jev)이 결정한다.</strong>사람이 승인한 평면 스키마 아래에서 LLM이 후보 사실을 제안하고, 결정론적 게이트와 판정 모델 Jev가 기록 여부를 결정하며, 기록된 모든 트리플은 원문 증거 스팬과 출처를 지닙니다. 빠른 데모보다<strong>그래프 자체를 감사해야 하는 상황</strong>을 위해 만든 도구입니다.</p>
+<hr>
+<h2>2. 프로젝트 설명과 컨셉</h2>
+<h3>2.1 무엇을 하는 도구인가</h3>
+<p>OntoSmith는 하나의 파이프라인에서 세 가지를 처리합니다.</p>
+<ol>
+<li><strong>온톨로지 설계</strong> — 엔티티·관계 유형, 정의, 경계 예시</li>
+<li><strong>그래프 구축</strong> — 승인된 스키마 아래에서 문서로부터 트리플 생성</li>
+<li><strong>서빙</strong> — 검색 명령, 샘플 HTTP API, 데모 앱</li>
+</ol>
+<h3>2.2 두 개의 기둥</h3>
+<table>
+<thead>
+<tr>
+<th>기둥</th>
+<th>역할</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Jev</strong></td>
+<td>OntoSmith 내부의 판정(decision/judge) 모델. 무엇이 기록될 만큼 참인지 심사</td>
+</tr>
+<tr>
+<td><strong>Neo4j</strong></td>
+<td>그래프 저장소. 네이티브 그래프 탐색, 벡터 인덱스, 전문 검색을 한 저장소에서 제공</td>
+</tr>
+</tbody></table>
+<p>빌드에는 <strong>둘 다 필수</strong>입니다.</p>
+<h3>2.3 온톨로지 우선(ontology-first)</h3>
+<p>대부분의 지식 그래프 도구는 모델이 추출한 결과에서 출발하고, 구조는 추출 과정에서 &quot;창발&quot;합니다. OntoSmith는 순서를 뒤집습니다.</p>
+<pre><code>스키마 설계 → 사람의 승인 → 그 스키마 아래에서 그래프 구축
+</code></pre>
+<h3>2.4 스키마는 무엇이고, 무엇이 아닌가</h3>
+<p>OntoSmith의 온톨로지는 <strong>평면 추출 계약(flat extraction contract)</strong> 입니다.</p>
+<ul>
+<li><strong>포함</strong>: 닫힌 엔티티·관계 유형 목록, 유형별 정의, 경계 예시</li>
+<li><strong>배제</strong>: 클래스 계층, 상속, 논리 공리, 추론 엔진</li>
+<li><strong>OWL 온톨로지 편집기가 아님</strong></li>
+</ul>
+<p>평면성은 설계 의도입니다. 유형별 판정 결과가 빌드 품질을 측정 가능하게 만드는데, 계층 구조를 넣으면 바로 그 판정 경계가 흐려진다는 것이 저자의 논리입니다. 목표는 &quot;문서 코퍼스를 검색과 에이전트가 답할 수 있는, 증거가 붙은 통제된 그래프로 바꾸는 것&quot;으로 좁고 구체적입니다.</p>
+<h3>2.5 두 가지 핵심 산출물: 프로파일과 팩</h3>
+<table>
+<thead>
+<tr>
+<th>산출물</th>
+<th>설명</th>
+<th>고정 방식</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>프로파일(profile)</strong></td>
+<td><strong>내 코퍼스</strong>에 대한 결정론적 조사 — 문서 목록, 관례, 사람이 먼저 정해야 할 결정 지점. 모델 호출 없음</td>
+<td>해시</td>
+</tr>
+<tr>
+<td><strong>팩(pack)</strong></td>
+<td><strong>도메인의 온톨로지를 데이터로</strong> 담은 것 — 유형 목록, 정의, 경계 예시, 임계값, 적합성(conformance) 기록</td>
+<td>sha256, 버전 관리</td>
+</tr>
+</tbody></table>
+<p>하나의 배치(batch)는 프로파일 하나와 팩 하나를 묶어 실행합니다. 도메인 지식은 <strong>코드 분기가 아니라 팩 안에만</strong> 존재하며, 팩은 로드 시 검증에 실패하면 닫힌 상태로 실패(fail-closed)합니다.</p>
+<hr>
+<h2>3. 아키텍처와 작동 방식</h2>
+<h3>3.1 6단계 루프</h3>
+<table>
+<thead>
+<tr>
+<th>단계</th>
+<th>명령</th>
+<th>내용</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1. Profile</td>
+<td><code>ontosmith profile</code></td>
+<td>코퍼스 결정론적 조사(LLM 없음). 문서 목록, 관례, 결정 지점</td>
+</tr>
+<tr>
+<td>2. Design</td>
+<td><code>ontosmith ontology</code></td>
+<td>프로파일에서 스키마 초안 작성 → 결정론적 검증 → <strong>사람의 명시적 승인 후에만</strong> 해시 고정 팩 발행</td>
+</tr>
+<tr>
+<td>3. Build</td>
+<td><code>ontosmith batch</code></td>
+<td>팩 아래에서 단계별 파이프라인 실행. 측정된 운영점이 기본값. 중단선으로 비용 상한</td>
+</tr>
+<tr>
+<td>4. Inspect</td>
+<td><code>ontosmith inspect</code></td>
+<td>트리플별 증거 스팬과 출처 체인 표시. 빠진 것이 있으면 무엇이 빠졌는지 명시</td>
+</tr>
+<tr>
+<td>5. Verify</td>
+<td><code>ontosmith verify</code></td>
+<td>내 골드셋 감사, 원점수와 보정 점수 산출, 실패 해부(failure anatomy)</td>
+</tr>
+<tr>
+<td>6. Serve</td>
+<td><code>ontosmith search</code> / <code>serve</code></td>
+<td>청크와 트리플에 대한 하이브리드 검색(벡터 + 어휘 + 그래프)</td>
+</tr>
+</tbody></table>
+<h3>3.2 배치 파이프라인의 8개 스테이지</h3>
+<pre><code>ingest → NER/roster → candidates → gates → route → write → index → verify
+</code></pre>
+<ul>
+<li>버전 관리되는 팩 아래에서 실행</li>
+<li>원장(ledger) 기반 지출 상한 적용</li>
+<li>ROUTE 단계에서 티어(tier)별로 분기</li>
+</ul>
+<h3>3.3 제안과 판정의 분리</h3>
+<p>파이프라인 전체를 관통하는 원칙은 <strong>제안 좌석의 말만으로는 아무것도 기록하지 않는다</strong> 입니다.</p>
+<ol>
+<li>저비용 <strong>제안자(proposer)</strong> 모델이 후보를 냄</li>
+<li><strong>적합된 쌍 호출(fitted pair call)</strong> 이 열거된 엔티티 쌍을 후보 트리플로 변환</li>
+<li><strong>결정론적 게이트</strong>가 형식을 검사</li>
+<li>고정된 <strong>Jev 판정 모델</strong>이 기록 여부를 최종 결정</li>
+</ol>
+<p>임계값, 열거 윈도, 판정자 설정 같은 운영점은 감으로 정하지 않고 <strong>사전 등록된 측정 게이트</strong>로 선택합니다. 게이트를 통과하지 못한 설정은 꺼진 상태로 남고, 그 기각 기록도 품질 기록에 공개됩니다.</p>
+<h3>3.4 인스펙트 출력 예시</h3>
+<pre><code>Triple  (1 of 7 in examples/triples.jsonl)
+  subject   Alder &amp; Finch
+  relation  founded by
+  object    Mara Alder
+Evidence
+  [quote] Alder &amp; Finch is a ceramics studio founded in 2011 by Mara Alder and Tomas Finch.
+Provenance
+  doc_id               alder-finch-history
+  tier                 1
+  p_true               0.98
+</code></pre>
+<blockquote>
+<p>⚠️ <code>p_true</code>는 판정자의 <strong>순위 점수</strong>입니다. 정렬과 임계값 설정에 쓰는 값이며, <strong>보정된 확률이 아닙니다.</strong></p>
+</blockquote>
+<h3>3.5 레퍼런스 프로파일 (측정에 사용된 모델 바인딩)</h3>
+<p>공개된 측정치는 아래 바인딩으로 만들어졌고, 이 구성이 기본 프리셋으로 제공됩니다.</p>
+<table>
+<thead>
+<tr>
+<th>좌석(Seat)</th>
+<th>역할</th>
+<th>레퍼런스 바인딩</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Proposer</td>
+<td>후보 추출. 결정은 하지 않음</td>
+<td><code>anthropic/claude-haiku-5.5</code></td>
+</tr>
+<tr>
+<td>Judge (Jev)</td>
+<td>결정 게이트. 고정된 제품 구성요소</td>
+<td><code>typesafe/jev-1.13</code></td>
+</tr>
+<tr>
+<td>Escalation</td>
+<td>판정 에스컬레이션. 평가 시 비교 판정자. 빌드 트리플은 결정하지 않음</td>
+<td><code>anthropic/claude-sonnet-5.5</code></td>
+</tr>
+<tr>
+<td>Drafting</td>
+<td>스키마·프로파일 초안. 사람 승인 게이트 뒤의 작성 보조</td>
+<td>바인딩 없이 제공 (직접 지정)</td>
+</tr>
+<tr>
+<td>Embedder</td>
+<td>인덱싱과 질문 임베딩</td>
+<td><code>openai/text-embedding-3-large</code></td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>3개 레이어, 5개 좌석</strong>: 판정 레이어는 두 좌석입니다. 적합된 쌍 판정자(제안자와 같은 모델 행 공유)와 고정 Jev 게이트입니다.</li>
+<li><strong>4개 모델, 키 하나</strong>: 프리셋은 단일 연결 키(OpenRouter)로 네 모델 모두에 접근합니다.</li>
+<li>이 표는 <strong>요구 사항이 아니라 출처 기록</strong>입니다. 다른 모델과 엔드포인트로 바꾸는 것(커스텀 바인딩)이 가능하며, 실행 기록에 어떤 바인딩으로 돌렸는지 남습니다.</li>
+<li>팩은 모델 이름이 아니라 <strong>역량 티어</strong>(proposer / judge / escalation)만 선언합니다.</li>
+<li>API 키는 설정 파일에 값으로 넣지 않습니다. 설정에는 환경 변수 이름만 적고, 값은 환경에서 읽습니다.</li>
+</ul>
+<h3>3.6 Neo4j 저장소 정책</h3>
+<ul>
+<li>WRITE, INDEX, VERIFY 단계가 Neo4j 안에서 이루어지고 서빙도 Neo4j에서 읽습니다.</li>
+<li><strong>저장소에는 그래프가 하나만</strong> 있습니다. 현재 빌드의 그래프이며, 이를 만든 온톨로지의 정체성이 찍혀 있습니다.</li>
+<li>다른 온톨로지로 빌드하면 이전 그래프를 <strong>교체</strong>합니다(나란히 누적하지 않음). 교체 전에 실행 출력에서 이를 알립니다.</li>
+<li>그래서 검색할 때 범위(scope)를 지정할 필요가 없습니다.</li>
+<li>예외적으로, <strong>기록된 산출물</strong>(완료된 배치나 동봉 데모)은 Neo4j 없이 파일 기반 저장소에서 서빙할 수 있습니다. 이 경로에서는 어휘 검색과 그래프 검색만 동작하고 벡터 검색은 빠집니다.</li>
+</ul>
+<h3>3.7 비용 가드레일</h3>
+<ul>
+<li><strong>사전 산정</strong>: <code>ontosmith verify project</code>가 내 데이터에서 후보 쌍 수를 실제로 세고, 사용자가 <code>--unit-cost</code>로 넣은 단가로 비용을 계산합니다. 도구 자체에 단가표를 하드코딩하지 않습니다.</li>
+<li><strong>중단선(stop-line)</strong>: 상한을 넘게 될 작업 단위는 시작 자체를 거부합니다.</li>
+<li><strong>재개</strong>: 중단된 배치는 원장에서 이어서 실행해 중복 지출이 없습니다.</li>
+<li><strong>사전 거부</strong>: 키가 없거나 Neo4j가 응답하지 않으면 첫 스테이지 전에 좌석과 변수 이름을 명시하며 거부하므로 비용이 발생하지 않습니다.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>실측 비용</th>
+<th>수치</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>4개 문서 데모 서브셋 (고정 오버헤드 포함)</td>
+<td>약 $1~2</td>
+</tr>
+<tr>
+<td>플래그십 빌드 (500개 문서)</td>
+<td>문서당 3.8¢ (키 관측 기준) / 원장 기준 3.7¢</td>
+</tr>
+</tbody></table>
+<h3>3.8 도메인 팩</h3>
+<table>
+<thead>
+<tr>
+<th>팩</th>
+<th>내용</th>
+<th>측정 코퍼스</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Bio Medical</strong> (<code>bio-medical</code>)</td>
+<td>생의학 엔티티·관계 스키마, 적합된 한정자</td>
+<td>BioRED (파일럿 기록, 백서 §5.7)</td>
+</tr>
+<tr>
+<td><strong>Legal Contract</strong> (<code>legal-contract</code>)</td>
+<td>계약 스키마: 41개 레이블 범주, 역할어·정의어 규칙</td>
+<td>CUAD (승격 기록, 백서 §5.8)</td>
+</tr>
+<tr>
+<td><strong>FIBO Contracts</strong> (<code>fibo-contracts</code>)</td>
+<td>EDM Council의 FIBO(MIT)에서 <strong>가져온</strong> 스키마. FND Agreements 모듈을 기록된 범위 지정 아래 평면화 — 엔티티 15 + 관계 13 유형</td>
+<td>CUAD. 빌더로 발행되어 <code>emitted_unmeasured</code> 상태로 시작, 현재는 커버리지 기록만 존재</td>
+</tr>
+<tr>
+<td><strong>Open Domain</strong> (<code>open-domain</code>)</td>
+<td>일반 문서용 스키마, 적합된 방향성 선언</td>
+<td>Re-DocRED (플래그십 기록, 백서 §5)</td>
+</tr>
+<tr>
+<td><strong>Core</strong> (<code>core</code>, 베이스라인)</td>
+<td>모든 신규 코퍼스의 출발점인 도메인 중립 기본값</td>
+<td>교차 도메인 코어 기록</td>
+</tr>
+</tbody></table>
+<p>맞는 팩이 없으면 온톨로지 빌더가 내 코퍼스로 초안을 만들고(승인 필요), 도메인에 이미 공개 온톨로지가 있으면 가져올 수 있습니다. 새로 발행된 팩은 등록된 측정이 채택하기 전까지 <code>emitted_unmeasured</code>로 표시됩니다.</p>
+<h3>3.9 실제 빌드 사례</h3>
+<p>CUAD 공급계약서 한 건(Bellicum Pharmaceuticals × Miltenyi Biotec)을 Legal Contract 팩으로 빌드한 결과, 양 당사자 주변에서 <strong>엔티티 42개, Tier-1 트리플 77개</strong>가 생성되었고 모두 증거 스팬과 출처를 지닙니다. (코퍼스: CUAD, The Atticus Project, CC BY 4.0)</p>
+<hr>
+<h2>4. 장점</h2>
+<h3>4.1 감사 가능성</h3>
+<p>모든 트리플이 원문 스팬, 문서 ID, 티어, 점수까지 추적됩니다. 법률, 금융, 규제, 컴플라이언스처럼 <strong>이 사실의 근거는 무엇인가</strong> 에 답해야 하는 영역에 구조적으로 맞습니다.</p>
+<h3>4.2 비용 대비 통제력</h3>
+<p>저가 제안자 + 고정 판정자 분업 구조라서 단일 프런티어 모델에 모든 것을 맡기는 방식보다 비용을 예측하고 통제하기 쉽습니다. 사전 산정, 중단선, 원장 재개까지 갖춰 <strong>예산 사고를 구조적으로 방지</strong>합니다.</p>
+<h3>4.3 재현성</h3>
+<ul>
+<li>프로파일러는 결정론적이라 같은 코퍼스는 같은 해시를 냅니다.</li>
+<li>팩은 sha256으로 고정됩니다.</li>
+<li>헤드라인 수치는 <code>reproduce/</code> 아래 명령으로 재계산되고, 리플레이 스크립트는 수치가 어긋나면 비정상 종료합니다.</li>
+<li>프로파일링, 인스펙트, 검증, 검증 수학이 모두 <strong>키 없이</strong> 동작합니다.</li>
+</ul>
+<h3>4.4 측정 도구가 제품에 포함됨</h3>
+<p><code>verify</code>로 내 골드셋을 감사하고, 원점수와 보정 점수, 천장 보정 재현율, 실패 해부를 직접 산출할 수 있습니다. &quot;벤더가 주장하는 점수&quot;가 아니라 <strong>내 데이터로 측정하는 점수</strong>를 얻을 수 있습니다.</p>
+<h3>4.5 즉시 쓸 수 있는 팩과 온톨로지 가져오기</h3>
+<p>4개 도메인 팩 + Core가 데이터로 제공되고, FIBO 같은 업계 표준 온톨로지를 가져오는 경로가 있습니다.</p>
+<h3>4.6 단일 그래프 정책</h3>
+<p>저장소에 현재 빌드의 그래프 하나만 있으므로 검색 범위 혼란이 없고, 어떤 온톨로지로 만든 그래프인지 항상 명확합니다.</p>
+<h3>4.7 한계에 대한 정직성</h3>
+<p>사전 등록 기준 중 실패한 것, 측정 범위의 한계, 사람 검수 미실시를 스스로 공개합니다. 초기 오픈소스에서는 드문 태도이며 신뢰도를 높여 줍니다.</p>
+<hr>
+<h2>5. 단점과 리스크</h2>
+<h3>5.1 플랫폼·인프라 제약</h3>
+<ul>
+<li>Linux에서만 개발·테스트되었고, Windows는 <strong>WSL2에서만</strong> 실행됩니다(네이티브 Windows 미검증).</li>
+<li>Neo4j 5.x가 <strong>빌드의 전제 조건</strong>입니다. 선택적 백엔드가 아닙니다.</li>
+<li>라이브 빌드에는 LLM 연결이 필수입니다.</li>
+</ul>
+<h3>5.2 형식 온톨로지 미지원</h3>
+<p>클래스 계층, 상속, 논리 공리, 추론이 필요한 용도(예: 의미 추론 기반 분류 체계)에는 맞지 않습니다.</p>
+<h3>5.3 Jev 판정 모델 종속 ⚠️</h3>
+<ul>
+<li>판정자가 &quot;고정된 제품 구성요소&quot;인 <code>typesafe/jev-1.13</code>입니다.</li>
+<li>README만으로는 이 모델의 출처, 공급 주체, 장기 가용성, 데이터 처리 정책이 명확하지 않습니다.</li>
+<li>다른 판정자로 바꾸면 공개된 품질 수치가 그대로 성립하지 않습니다.</li>
+<li><strong>실무 도입 전 가장 먼저 확인할 항목</strong>입니다.</li>
+</ul>
+<h3>5.4 품질 수치의 범위가 좁음</h3>
+<p>저자가 직접 밝힌 한계는 다음과 같습니다.</p>
+<ul>
+<li>보정 점수는 <strong>측정된 특정 빌드</strong>(3,902개 트리플, 문장 윈도 구성)에 대한 것이며, <strong>기본 설정과 열거 방식이 다릅니다.</strong></li>
+<li>기본 Tier-1 세트에 추가된 승격 트리플 186개는 보정 정밀도가 재계산되지 않았습니다.</li>
+<li>판정은 공개 규칙에 따른 <strong>기계 채점</strong>이며, 플래그십 샘플에 대한 <strong>사람 스팟체크는 한 번도 하지 않았습니다.</strong></li>
+<li>검색 성능은 긴 계약서에 대한 고정 116문항 세트 하나로만 측정됐고, <strong>짧은 초록에서는 정확히 0</strong>입니다.</li>
+</ul>
+<h3>5.5 초기 단계 프로젝트</h3>
+<ul>
+<li>스타 0, 포크 0, 커밋 약 70개</li>
+<li>2026-10-29에 GLiNER+spaCy 로컬 NLP 후보 소스와 <code>[nlp]</code> extra를 폐기하는 등 구조가 아직 바뀌고 있습니다.</li>
+<li>커뮤니티, 장기 유지보수, 생산 환경 사용 사례가 아직 검증되지 않았습니다.</li>
+</ul>
+<h3>5.6 사용 적합성의 제약</h3>
+<ul>
+<li>스키마 없이 그래프만 빨리 만들고 싶다면 맞지 않습니다. 스키마 우선 단계, 사람 승인 지점, 측정 도구가 &quot;의식(ceremony)&quot;이 아니라 제품 그 자체입니다.</li>
+<li>스키마가 매일 바뀌는 도메인이라면 먼저 어느 정도 안정시킨 뒤 팩으로 고정해야 합니다.</li>
+<li>빠른 데모가 목적이라면 GraphRAG 계열이 더 빠릅니다.</li>
+</ul>
+<hr>
+<h2>6. 경쟁 프로젝트</h2>
+<p>OntoSmith는 &quot;온톨로지 편집기&quot;가 아니라 <strong>&quot;문서 → 통제된 지식 그래프&quot; 파이프라인</strong>입니다. 실질적인 경쟁자는 A그룹이고, B그룹은 이름만 비슷한 인접 영역입니다.</p>
+<h3>6.1 A그룹 — 직접 경쟁 (문서에서 지식 그래프 구축)</h3>
+<table>
+<thead>
+<tr>
+<th>프로젝트</th>
+<th>특징</th>
+<th>OntoSmith와의 차이</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Microsoft GraphRAG</strong> (+ LazyGraphRAG)</td>
+<td>LLM으로 엔티티·관계·커뮤니티 요약을 만들고 전역·지역 질의에 활용</td>
+<td>단일 프런티어 모델 중심, 구조가 창발적, <strong>답변 품질로 평가</strong>. OntoSmith는 명시적 온톨로지 + 트리플 단위 판정으로 <strong>그래프 자체를 채점</strong></td>
+</tr>
+<tr>
+<td><strong>LightRAG</strong></td>
+<td>경량 그래프 기반 RAG, 빠른 구축과 증분 업데이트</td>
+<td>속도와 간편성 우위, 감사·증거 체계는 약함</td>
+</tr>
+<tr>
+<td><strong>Neo4j LLM Knowledge Graph Builder</strong></td>
+<td>Neo4j 공식 도구, 스키마 지정 추출 지원</td>
+<td>같은 Neo4j 생태계. 다만 제안/판정 분리, 비용 중단선, 보정 측정 체계 없음</td>
+</tr>
+<tr>
+<td><strong>LlamaIndex PropertyGraphIndex</strong></td>
+<td>스키마 지정 추출기와 다양한 그래프 스토어 지원</td>
+<td>프레임워크 부품 성격, 유연성 우위. 품질 감사는 직접 구축 필요</td>
+</tr>
+<tr>
+<td><strong>Graphiti (Zep)</strong></td>
+<td>에이전트 메모리용 시간축(temporal) 지식 그래프</td>
+<td>시간에 따라 변하는 사실 처리에 강점. 목적이 메모리이지 감사가 아님</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>A그룹 중 Neo4j Graph Builder, LlamaIndex, Graphiti는 README에 언급되지 않으며, 일반 지식에 기반한 비교입니다.</p>
+</blockquote>
+<h3>6.2 B그룹 — 인접 영역 (형식 온톨로지 편집·시각화)</h3>
+<table>
+<thead>
+<tr>
+<th>프로젝트</th>
+<th>특징</th>
+<th>OntoSmith와의 차이</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Protégé</strong></td>
+<td>스탠퍼드 개발, 가장 널리 쓰이는 오픈소스 OWL 편집기</td>
+<td>클래스 계층·공리·추론 중심. 목적 자체가 다름</td>
+</tr>
+<tr>
+<td><strong>WebVOWL</strong></td>
+<td>RDF/OWL 온톨로지 웹 시각화</td>
+<td>그래프를 &quot;구축&quot;하지 않고 &quot;보여줌&quot;</td>
+</tr>
+<tr>
+<td><strong>TopBraid Composer / EDG</strong></td>
+<td>엔터프라이즈 상용 온톨로지·데이터 거버넌스</td>
+<td>전문가용 상용 도구, 비용과 범위가 다름</td>
+</tr>
+<tr>
+<td><strong>VocBench / NeOn Toolkit</strong></td>
+<td>협업 온톨로지·SKOS 편집, 온톨로지 공학 툴킷</td>
+<td>계층 구조와 협업 편집 강점</td>
+</tr>
+</tbody></table>
+<h3>6.3 포지셔닝 요약</h3>
+<table>
+<thead>
+<tr>
+<th>축</th>
+<th>GraphRAG 계열</th>
+<th>OntoSmith</th>
+<th>OWL 편집기</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>스키마</td>
+<td>창발적</td>
+<td>명시적·평면·승인</td>
+<td>명시적·계층·공리</td>
+</tr>
+<tr>
+<td>사실 기록 기준</td>
+<td>추출 결과 그대로</td>
+<td>판정자 심사 통과분만</td>
+<td>사람이 직접 작성</td>
+</tr>
+<tr>
+<td>평가 대상</td>
+<td>답변 품질</td>
+<td>그래프 자체(트리플 단위)</td>
+<td>논리 일관성</td>
+</tr>
+<tr>
+<td>강점</td>
+<td>빠른 데모</td>
+<td>감사·재현·비용 통제</td>
+<td>추론·표준 호환</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>7. 설치와 운영 방법</h2>
+<h3>7.1 사전 요구 사항</h3>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>요구 사항</th>
+<th>필요한 단계</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OS</td>
+<td>Linux 권장. Windows는 <strong>WSL2</strong></td>
+<td>전체</td>
+</tr>
+<tr>
+<td>Python</td>
+<td><strong>3.11 이상</strong></td>
+<td>전체</td>
+</tr>
+<tr>
+<td>LLM 연결</td>
+<td>레퍼런스 프리셋은 <code>OPENROUTER_API_KEY</code> 하나</td>
+<td>3단계(라이브 빌드)만</td>
+</tr>
+<tr>
+<td>Neo4j</td>
+<td><strong>5.x</strong>, Community Edition으로 충분</td>
+<td>3단계만</td>
+</tr>
+</tbody></table>
+<h3>7.2 설치</h3>
+<pre><code class="language-bash">pip install ontosmith
+</code></pre>
+<p>선택 기능:</p>
+<pre><code class="language-bash">pip install &quot;ontosmith[viz]&quot;     # 시각화
+pip install &quot;ontosmith[neo4j]&quot;   # 내보내기 유틸리티용 공식 Neo4j 드라이버
+</code></pre>
+<blockquote>
+<p>빌드 자체는 Neo4j와 <strong>HTTP로 통신</strong>합니다. <code>[neo4j]</code> extra가 없어도 서버만 실행 중이면 빌드가 됩니다.</p>
+<p>로컬 NLP 스택은 필요 없습니다. 후보는 제안자 모델이 생성합니다. (<code>[nlp]</code> extra는 2026-10-29에 폐기)</p>
+</blockquote>
+<h3>7.3 1단계 — 둘러보기 (키 불필요, 약 2분)</h3>
+<pre><code class="language-bash"># 코퍼스 프로파일링 (결정론적, LLM 없음)
+ontosmith profile examples/corpus --family demo
+</code></pre>
+<p>예상 출력:</p>
+<pre><code>Corpus profile
+  family          demo
+  status          COMPLETE
+  documents       4
+  claims          6
+  decision points 0
+  profile hash    sha256:7ae51d31fa9120ec
+  spend           $0.0000
+  written         profiles/demo (profile.json, setup_config.json, profile.md)
+</code></pre>
+<pre><code class="language-bash"># 샘플 트리플의 증거·출처 확인
+ontosmith inspect examples/triples.jsonl
+
+# 동봉된 데모 빌드에 질문 (기록된 산출물 검색, 키 불필요)
+ontosmith search &quot;Who founded Alder &amp; Finch?&quot;
+</code></pre>
+<p><strong>팁</strong>: <code>profile</code>은 <strong>내 문서 폴더</strong>에도 그대로 실행할 수 있습니다. 빌드 전에 코퍼스가 적합한지, 사람이 먼저 정해야 할 결정 지점이 무엇인지 비용 없이 확인할 수 있습니다.</p>
+<h3>7.4 2단계 — 증거 검증 (키 불필요)</h3>
+<pre><code class="language-bash">python examples/demo/replay_scores.py
+</code></pre>
+<ul>
+<li>플래그십 빌드의 보정 점수를 동봉된 판정 부록(<code>benchmarks/appendix/</code>)에서 <strong>모델 호출 없이</strong> 재생합니다.</li>
+<li>수치가 하나라도 어긋나면 <strong>비정상 종료(non-zero exit)</strong> 합니다.</li>
+<li>모든 헤드라인 수치는 <code>reproduce/</code> 아래의 재계산 명령과 대응됩니다.</li>
+</ul>
+<h3>7.5 3단계 — 실제 빌드 (LLM 연결 + Neo4j 필요)</h3>
+<p><strong>① LLM 바인딩 선언</strong></p>
+<pre><code class="language-bash">export OPENROUTER_API_KEY=sk-or-...
+ontosmith configure          # 대화형 마법사 (또는 --from-file)
+</code></pre>
+<ul>
+<li>프리셋 값으로 좌석을 순회하고, <strong>지출 0으로</strong> 연결을 점검한 뒤 바인딩 파일을 작성합니다.</li>
+<li>레퍼런스 프리셋은 기본값을 수락하면 같은 키가 판정자를 포함한 모든 좌석에 적용됩니다.</li>
+<li>자체 공급자를 쓰려면 공식 문서의 Connections를 참고해 커스텀 바인딩을 지정합니다.</li>
+</ul>
+<p><strong>② Neo4j 실행</strong></p>
+<pre><code class="language-bash"># Neo4j 5.x 설치 후 비밀번호 설정
+export NEO4J_PASSWORD=your-password
+</code></pre>
+<p>로컬 기본 설치라면 그 외 추가 설정은 필요 없습니다. 실행 시 첫 스테이지 전에 저장소를 점검하고, 응답이 없으면 이름을 명시하며 거부하므로 비용이 나가지 않습니다.</p>
+<p><strong>③ 비용 사전 산정</strong></p>
+<pre><code class="language-bash">ontosmith verify project --unit-cost &lt;단가&gt;
+</code></pre>
+<p><strong>④ 배치 생성과 실행</strong></p>
+<pre><code class="language-bash">ontosmith batch create ...   # 프로파일 + 팩 바인딩
+ontosmith batch run ...      # 중단선 적용 실행
+ontosmith batch status ...   # 진행 상태
+ontosmith batch rollback ... # 롤백
+</code></pre>
+<blockquote>
+<p>정확한 인자는 공식 hands-on 가이드 Track 1을 따르세요. 단계: 프로파일 → 생성 → 상한 적용 실행 → serve / search / inspect.</p>
+</blockquote>
+<p><strong>⑤ 서빙과 질의</strong></p>
+<pre><code class="language-bash">ontosmith search &quot;질문&quot;   # 하이브리드 검색 (벡터 + 어휘 + 그래프)
+ontosmith serve           # 샘플 HTTP API + 데모 앱(/)
+</code></pre>
+<p>샘플 API는 search, entity, neighborhood, triple-with-evidence 엔드포인트를 제공합니다.</p>
+<h3>7.6 학습 경로 (hands-on 가이드 트랙)</h3>
+<table>
+<thead>
+<tr>
+<th>목적</th>
+<th>시작점</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>먼저 실행 영상 보기</td>
+<td>프로젝트 사이트의 Demo → Tutorial → Teardown 영상 3편</td>
+</tr>
+<tr>
+<td>내 코퍼스 적합성 확인</td>
+<td>1단계 <code>profile</code></td>
+</tr>
+<tr>
+<td>품질 주장 직접 검증</td>
+<td>2단계 리플레이, 백서 §5</td>
+</tr>
+<tr>
+<td>내 문서로 그래프 빌드</td>
+<td>hands-on <strong>Track 1</strong></td>
+</tr>
+<tr>
+<td>도메인 온톨로지 설계</td>
+<td><code>ontosmith ontology</code>, hands-on <strong>Track 3</strong></td>
+</tr>
+<tr>
+<td>기존 온톨로지 가져오기</td>
+<td><code>ontosmith ontology import</code>, hands-on <strong>Track 4</strong></td>
+</tr>
+<tr>
+<td>내 벤치마크 골드셋 감사</td>
+<td><code>ontosmith verify</code>, hands-on 부록</td>
+</tr>
+<tr>
+<td>자체 모델 공급자 사용</td>
+<td><code>docs/connections.md</code></td>
+</tr>
+<tr>
+<td>LLM에게 프로젝트 설명</td>
+<td>저장소 루트의 <code>llms.txt</code></td>
+</tr>
+<tr>
+<td>서빙·질의</td>
+<td><code>docs/serving.md</code></td>
+</tr>
+</tbody></table>
+<hr>
+<h2>8. 명령어 레퍼런스</h2>
+<table>
+<thead>
+<tr>
+<th>분류</th>
+<th>명령</th>
+<th>설명</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Label</td>
+<td><code>review</code></td>
+<td>리뷰 밴드 대화형 레이블링</td>
+</tr>
+<tr>
+<td>Evaluate</td>
+<td><code>evaluate</code> · <code>recalibrate</code> · <code>calibration</code></td>
+<td>평가와 보정</td>
+</tr>
+<tr>
+<td></td>
+<td><code>inspect</code></td>
+<td>트리플 + 증거 + 출처</td>
+</tr>
+<tr>
+<td></td>
+<td><code>verify</code></td>
+<td>score / audit-sets / project / report</td>
+</tr>
+<tr>
+<td>Models</td>
+<td><code>llm</code> · <code>ollama</code></td>
+<td>후보 판정자</td>
+</tr>
+<tr>
+<td>Gates</td>
+<td><code>triple</code> · <code>er</code> · <code>conflict</code> · <code>onto</code> · <code>cascade</code></td>
+<td>Jev 게이트</td>
+</tr>
+<tr>
+<td>Connect</td>
+<td><code>configure</code></td>
+<td>좌석 바인딩 선언 (마법사 / <code>--from-file</code>)</td>
+</tr>
+<tr>
+<td>Pipeline</td>
+<td><code>batch</code></td>
+<td>create / run / status / rollback</td>
+</tr>
+<tr>
+<td></td>
+<td><code>profile</code></td>
+<td>코퍼스 프로파일러 (결정론적, LLM 없음)</td>
+</tr>
+<tr>
+<td></td>
+<td><code>ontology</code></td>
+<td>draft / validate / approve / emit (팩 발행), import</td>
+</tr>
+<tr>
+<td>Serve</td>
+<td><code>search</code></td>
+<td>빌드된 그래프 하이브리드 검색</td>
+</tr>
+<tr>
+<td></td>
+<td><code>serve</code></td>
+<td>샘플 HTTP API + 데모 앱</td>
+</tr>
+</tbody></table>
+<h3>저장소 구조</h3>
+<pre><code>.github/  api/  app/  assets/brand/  benchmarks/  build/pypi/
+docs/  examples/  harness/  packs/  pipeline/  reproduce/
+scripts/  site/  tests/
+CHANGELOG.md  CODE_OF_CONDUCT.md  CONTRIBUTING.md  LICENSE  NOTICE
+README.md  SECURITY.md  llms.txt  pyproject.toml  ruff.toml
+</code></pre>
+<hr>
+<h2>9. 도입 판단 가이드</h2>
+<h3>9.1 이런 경우에 적합</h3>
+<ul>
+<li>계약서, 규제 문서, 금융 공시, 소송 자료처럼 <strong>사실마다 근거 제시가 필요한</strong> 코퍼스</li>
+<li>그래프 품질을 <strong>내 데이터로 측정하고 증명해야</strong> 하는 경우</li>
+<li>LLM 비용을 사전에 예측하고 상한을 걸어야 하는 경우</li>
+<li>도메인 스키마가 어느 정도 안정되어 있거나, FIBO 같은 표준 온톨로지가 있는 경우</li>
+</ul>
+<h3>9.2 이런 경우에는 다른 도구</h3>
+<ul>
+<li>하루 만에 데모 그래프가 필요할 때 → GraphRAG, LightRAG</li>
+<li>계층·추론 기반 형식 온톨로지가 필요할 때 → Protégé, TopBraid</li>
+<li>에이전트 메모리처럼 시간에 따라 변하는 사실을 다룰 때 → Graphiti</li>
+<li>네이티브 Windows 환경만 가능할 때</li>
+</ul>
+<h3>9.3 PoC 체크리스트</h3>
+<ol>
+<li><strong>Jev 확인</strong> — <code>typesafe/jev-1.13</code>의 제공 주체, 가용성, 데이터 처리 정책, 대체 가능성</li>
+<li><strong>비용 없는 적합성 검사</strong> — 내 문서 폴더에 <code>ontosmith profile</code> 실행 후 결정 지점 검토</li>
+<li><strong>리플레이로 신뢰성 확인</strong> — <code>replay_scores.py</code> 통과 여부</li>
+<li><strong>소규모 상한 빌드</strong> — <code>verify project</code>로 산정 후 낮은 중단선으로 문서 수십 건 빌드</li>
+<li><strong>사람 스팟체크</strong> — 저자가 하지 않은 부분이므로, 결과 트리플 일부를 직접 검수해 정밀도 확인</li>
+<li><strong>짧은 문서 검색 성능 별도 측정</strong> — 공개 수치가 긴 계약서에 한정되어 있음</li>
+<li><strong>유지보수 리스크 평가</strong> — 커밋 빈도, 이슈 대응, 구조 변경 이력 모니터링</li>
+</ol>
+<hr>
+<h2>10. 부록: 기존 요약본 정정 사항</h2>
+<p>README 원문과 대조해 이전 요약본에서 바로잡은 항목입니다.</p>
+<table>
+<thead>
+<tr>
+<th>항목</th>
+<th>기존 요약본</th>
+<th>README 원문</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>버전</td>
+<td>0.1.9</td>
+<td><strong>0.1.1</strong> (PyPI에 더 최신 버전이 있을 수 있으니 직접 확인)</td>
+</tr>
+<tr>
+<td>빌드 명령</td>
+<td><code>ontosmith quickstart your-file.txt</code></td>
+<td>명령어 표에 <strong>없음</strong>. <code>configure</code> → <code>batch</code> 경로이며 hands-on Track 1을 따름</td>
+</tr>
+<tr>
+<td>inspect 예제 경로</td>
+<td><code>examples/alder-finch/triples.jsonl</code></td>
+<td><code>examples/triples.jsonl</code></td>
+</tr>
+<tr>
+<td>데모 질문</td>
+<td>&quot;What is Mr. Darcy&#39;s income?&quot;</td>
+<td>&quot;Who founded Alder &amp; Finch?&quot;</td>
+</tr>
+<tr>
+<td>팩 구성</td>
+<td>4개 도메인 팩 (Legal Contract 등)</td>
+<td>Bio Medical, Legal Contract, <strong>FIBO Contracts(가져온 온톨로지)</strong>, Open Domain + Core 베이스라인</td>
+</tr>
+<tr>
+<td>누락</td>
+<td>—</td>
+<td>레퍼런스 모델 바인딩, 실측 비용, 품질 수치 한계, NLP 스택 폐기, 단일 그래프 교체 정책</td>
+</tr>
+</tbody></table>
+<hr>
+<p><em>출처: Dongbumlee/ontosmith GitHub README (2026-11-08 확인). 6장 A그룹 일부(Neo4j LLM Graph Builder, LlamaIndex, Graphiti)는 README 외 일반 지식에 기반한 비교입니다.</em></p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="공유" data-url="https://tech.vibequant.cc/tech/ontology-ontosmith/" data-title="OntoSmith — 프로젝트 분석" data-text="1. 한 줄 요약 2. 프로젝트 설명과 컨셉 3. 아키텍처와 작동 방식 4. 장점 5. 단점과 리스크 6. 경쟁 프로젝트 7. 설치와 운영 방법 8. 명령어 레퍼런스 9. 도입 판단 가이드 10. 부록: 기존 요약본 정정 사항" data-lang="ko">
+  <span class="share-label">공유</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fontology-ontosmith%2F&amp;text=OntoSmith%20%E2%80%94%20%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%20%EB%B6%84%EC%84%9D" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fontology-ontosmith%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fontology-ontosmith%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">링크 복사</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/Ontology/Ontosmith.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>

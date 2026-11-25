@@ -1,0 +1,2407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Red Team Guide with AntiFox — VibeQuant</title>
+  <meta name="description" content="English edition — translated from the Korean original (AntiFox Guide.md). Sync date: 2026 11 14. In case of discrepancy, the Korean original takes…" />
+  <link rel="canonical" href="https://tech.vibequant.cc/tech/antifox-antifox-guide-en/" />
+  <meta property="og:title" content="Red Team Guide with AntiFox" />
+  <meta property="og:description" content="English edition — translated from the Korean original (AntiFox Guide.md). Sync date: 2026 11 14. In case of discrepancy, the Korean original takes…" />
+  <meta property="og:url" content="https://tech.vibequant.cc/tech/antifox-antifox-guide-en/" />
+  <meta property="og:type" content="article" />
+  <meta property="og:site_name" content="VibeQuant" />
+  <meta property="og:image" content="https://vibequant.cc/og-default.png" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:image" content="https://vibequant.cc/og-default.png" />
+  <link rel="icon" type="image/svg+xml" href="../../favicon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32.png" />
+  <link rel="apple-touch-icon" href="../../apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../../css/content.css?v=9" />
+  <link rel="alternate" hreflang="ko" href="https://tech.vibequant.cc/tech/antifox-antifox-guide/" />
+  <link rel="alternate" hreflang="en" href="https://tech.vibequant.cc/tech/antifox-antifox-guide-en/" />
+  <link rel="alternate" hreflang="x-default" href="https://tech.vibequant.cc/tech/antifox-antifox-guide/" />
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"Red Team Guide with AntiFox","description":"English edition — translated from the Korean original (AntiFox Guide.md). Sync date: 2026 11 14. In case of discrepancy, the Korean original takes…","author":{"@type":"Person","@id":"https://vibequant.cc/about/#person","name":"Dennis Kim","alternateName":"김호광","url":"https://vibequant.cc/about/","email":"gameworker@gmail.com","identifier":"https://orcid.org/0009-0002-0962-2175","sameAs":["https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md","https://github.com/gameworkerkim","https://www.linkedin.com/in/testcode/","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270"]},"publisher":{"@type":"Organization","@id":"https://vibequant.cc/#organization","name":"VibeQuant","url":"https://vibequant.cc/","logo":{"@type":"ImageObject","url":"https://vibequant.cc/og-default.png"},"sameAs":["https://github.com/gameworkerkim/vibe-investing","https://github.com/gameworkerkim","https://orcid.org/0009-0002-0962-2175","https://papers.ssrn.com/sol3/cf_dev/AbsByAuth.cfm?per_id=11276088","https://www.etnews.com/20260223000270","https://www.linkedin.com/in/testcode/"],"founder":{"@id":"https://vibequant.cc/about/#person"}},"mainEntityOfPage":{"@type":"WebPage","@id":"https://tech.vibequant.cc/tech/antifox-antifox-guide-en/"},"isBasedOn":"https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/AntiFox-Guide_EN.md","image":"https://vibequant.cc/og-default.png","url":"https://tech.vibequant.cc/tech/antifox-antifox-guide-en/","datePublished":"2026-11-14","dateModified":"2026-11-14","inLanguage":"en","keywords":"기타 기술문서, AntiFox"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"VibeQuant","item":"https://vibequant.cc/"},{"@type":"ListItem","position":2,"name":"Tech","item":"https://tech.vibequant.cc/tech/"},{"@type":"ListItem","position":3,"name":"Red Team Guide with AntiFox","item":"https://tech.vibequant.cc/tech/antifox-antifox-guide-en/"}]}</script>
+</head>
+<body class="content-body">
+  <header class="site-top">
+    <a class="site-brand" href="https://vibequant.cc/">VibeQuant</a>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="https://docs.vibequant.cc/columns/">Columns</a>
+        <a class="site-nav-link is-active" href="https://tech.vibequant.cc/tech/">Tech</a>
+        <a class="site-nav-link" href="https://play.vibequant.cc/play/">Play</a>
+        <a class="site-nav-link" href="https://cti.vibequant.cc/cti/">CTI</a>
+        <a class="site-nav-link" href="https://vibequant.cc/essays/">Essay</a>
+        <a class="site-nav-link" href="https://vibequant.cc/lab/">Lab</a>
+        <a class="site-nav-link" href="https://vibequant.cc/research/">Research</a>
+        <a class="site-nav-link" href="https://github.com/gameworkerkim/vibe-investing" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a class="site-nav-link" href="https://vibequant.cc/about/">About</a>
+    </nav>
+  </header>
+  
+  <main class="article-wrap">
+    <p class="crumb"><a href="../../tech/">Tech</a> · 기타 기술문서</p>
+    <article class="article">
+      <header class="article-head">
+        <p class="eyebrow">기타 기술문서</p>
+        <h1>Red Team Guide with AntiFox</h1>
+        <p class="article-dates"><time datetime="2026-11-14">발행 2026.11.14</time> · 주제 기타 기술문서 · AntiFox</p>
+        <div class="lang-switch" role="navigation" aria-label="Language">
+      <a class="lang-btn" href="../../tech/antifox-antifox-guide/" data-lang="KR">🇰🇷 한국어</a>
+      <a class="lang-btn is-active" href="../../tech/antifox-antifox-guide-en/" data-lang="EN" aria-current="true">English</a>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="JP" data-lang="JP" aria-pressed="false" disabled>日本語</button>
+      <button type="button" class="lang-btn is-disabled" data-lang-btn="CN" data-lang="CN" aria-pressed="false" disabled>中文</button>
+    </div>
+        <p class="lede">English edition — translated from the Korean original (AntiFox Guide.md). Sync date: 2026 11 14. In case of discrepancy, the Korean original takes…</p>
+        
+        <nav class="share-bar" aria-label="Share" data-url="https://tech.vibequant.cc/tech/antifox-antifox-guide-en/" data-title="Red Team Guide with AntiFox" data-text="English edition — translated from the Korean original (AntiFox Guide.md). Sync date: 2026 11 14. In case of discrepancy, the Korean original takes…" data-lang="en">
+  <span class="share-label">Share</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fantifox-antifox-guide-en%2F&amp;text=Red%20Team%20Guide%20with%20AntiFox" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fantifox-antifox-guide-en%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fantifox-antifox-guide-en%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">Copy link</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      </header>
+      <div class="article-body prose"><p>English edition — translated from the Korean original (AntiFox-Guide.md). Sync date: 2026-11-14. In case of discrepancy, the Korean original takes precedence.</p>
+<p><strong>How to operate an AI multi-agent autonomous simulated penetration platform safely and evidence-based, in an authorized isolated environment</strong></p>
+<blockquote>
+<p><strong>v1.0-rc · proofread·verified edition (release candidate)</strong> Author: Dennis Kim (김호광) · Betalabs Inc. Intended readers: red team operators · security consultants · blue/purple teams · enterprise·institution adoption reviewers · entry-level learners Target version: AntiFox v2.0.x line (repository check: 2026-11) Distribution: free distribution for knowledge sharing — no paywall</p>
+<p><em>Reasons for release candidate status: (1) legal review completed, (2) additional simulated-test verification of the installation (LLM-connected task execution·report generation) — once these 2 items are done it will be finalized as v1.0. (3) Actual screenshot insertion was <strong>completed on 2026-11-14</strong> (10 official originals + 8 local real captures, Chapter 5), and real-field verification of the installed UI was also <strong>completed on 2026-11-14</strong> (SHA256-verified installation of the v2.0.3 binary, Chapter 6). Until the remaining 2 items are done, read it as &quot;pending verification&quot;.</em></p>
+</blockquote>
+<hr>
+<blockquote>
+<p><strong>Legal·ethical notice + upstream usage policy — must read first</strong></p>
+<p>This document was written on the premise of <strong>authorized testing</strong> and <strong>learning·research·technical verification in isolated lab environments owned and controlled by the reader</strong>. Running it against third-party systems or internet-exposed assets without written consent (authorization letter·ROE·scope agreement) can be subject to criminal punishment under the Information and Communications Network Act (정보통신망법)·Criminal Act (형법) and others (Appendix C). In fact, AntiFox is a <strong>tool with reported abuse cases such as credential theft</strong>, and even in 2026-11, AntiFox-linked attacks were reported in the news (Chapters 8·10).</p>
+<p><strong>Upstream (official AntiFox) usage policy</strong> — the official README states that this tool is <strong>permitted only for personal learning·code research·local technical verification</strong>and<strong>prohibits real testing against any online/production systems, red/blue adversarial exercises, and production use</strong> (AGPL-3.0, confirmed 2026-11). Therefore, the &quot;Red Team&quot; this guide refers to is <strong>limited to adversarial simulation·learning in owned, authorized isolated environments</strong>; attacking real external targets violates both this tool&#39;s license·policy and the law. This guide does not provide specific exploits or attack recipes, and focuses on methodology·safe configuration for defense, verification, and report automation. This document is not legal advice.</p>
+</blockquote>
+<hr>
+<h2>2026-11-14 changes — repository due diligence·screenshot reflection</h2>
+<ul>
+<li><strong>Cloned due diligence</strong> of the official repository (<code>github.com/AntiFox-AI/antifox</code>) to re-verify all facts (v2.0.3 latest release, CHANGELOG, <code>.env.example</code>, <code>config.example.json</code>, <code>docker-compose.yml</code>, <code>deploy/antifox.service</code>)</li>
+<li><strong>9 screenshots inserted</strong> (Chapter 5) — login·dashboard·tasks·finding-steps·traffic-packet·env-leak·findings + demo.gif·login-en·wechat-qr originals included, AGPL attribution notice</li>
+<li><strong>Chapter 1 fully restructured</strong> — ARTEX misuse incidents (Korean financial-sector campaign·ConnectWise)·the 2026 red-team LLM ecosystem·AntiFox&#39;s extension structure·the competitive landscape described (1.1–1.5); the opening infographic was removed with the restructure (the <code>AntiFox-Guide-overview.png</code> file is preserved)</li>
+<li><strong>Real-field verification (installed UI, 2026-11-14)</strong> — installed the official v2.0.3 macOS (arm64) binary in a local isolated lab (PostgreSQL 16) <strong>after SHA256 verification</strong>, included <strong>8 real captures</strong> of <code>/setup</code>→login→dashboard→LLM config→new task (egress selection)→report management→system settings→RBAC screens (5.1·5.8). Confirmed in the UI: v2.0.3 version indication·global egress proxy·LLM failover·per-role models·built-in intercept rules·RBAC 4 roles</li>
+<li><code>config.json</code> <strong>real-field verification completed</strong> (Chapter 6) — <code>database</code> block 6 fields + <code>ANTIFOX_PG_DSN</code> precedence</li>
+<li><strong>Official README architecture diagram included</strong> (Chapter 1), <strong>compose·systemd real-file behavior reflected</strong> (Chapter 6 — ports <code>8787</code>/<code>8788</code>, exit 75 atomic swap, <code>ANTIFOX_UPDATE_PROXY</code>)</li>
+<li>Confirmed releases provide <strong><code>SHA256SUMS</code></strong> (Chapter 6 integrity verification ① updated)</li>
+<li><strong>Official channels organized</strong> — no separate website, 3 channels: GitHub·GHCR·WeChat (1·5·Appendix G)</li>
+</ul>
+<hr>
+<h2>Reading paths by reader type</h2>
+<table>
+<thead>
+<tr>
+<th>If you are…</th>
+<th>Read in this order</th>
+<th>Key output</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Red team operator</strong></td>
+<td>2 → 7 → 6 → 8 → 12 → 5 → Appendices A·B</td>
+<td>How to run safely and leave evidence</td>
+</tr>
+<tr>
+<td><strong>Security consultant</strong></td>
+<td>1 → 4 → 8 → Appendices B·E → 9</td>
+<td>Tool selection rationale·deliverables·contract templates</td>
+</tr>
+<tr>
+<td><strong>Blue/purple team</strong></td>
+<td>2 → 10 → 4 → 7</td>
+<td>Detecting agent behavior·rule improvements</td>
+</tr>
+<tr>
+<td><strong>Adoption reviewer (enterprise·institution)</strong></td>
+<td>Legal notice → 6 → 8 → 11 → 12 → Appendices C·D·E</td>
+<td>Risk·budget·legal·backup in executive language</td>
+</tr>
+<tr>
+<td><strong>Entry-level learner</strong></td>
+<td>3 → 1 → 4 → Appendix F (glossary) → 9 → 11</td>
+<td>Concepts·history·principles first</td>
+</tr>
+</tbody></table>
+<hr>
+<h2>Table of contents</h2>
+<p><strong>Main text</strong>: 1. Introduction · 2. Red Team composition principles · 3. History · 4. Benefits and risks · 5. Features·screenshots·masking · 6. Installation and hardening · 7. Safety controls · 8. Scenarios · 9. Financial·public sector and open-weight · 10. Blue team detection·logging · 11. Budget·environment · 12. Operations (backup·recovery·IR·chain of custody·troubleshooting·organization-size checklist·TCO) <strong>Appendices</strong>: A. Walkthrough (Virtual Engagement Walkthrough) · B. Report sample · C. Legal checklist · D. AGPL · E. Contract·operations templates · F. Glossary · G. References</p>
+<hr>
+<h1>1. Introducing AntiFox</h1>
+<p>AntiFox is an AI multi-agent autonomous penetration testing platform, secondarily developed from ARTEX (author @Autumn-27) v0.1.1. To properly understand this one sentence, you need to know three things: what ARTEX — AntiFox&#39;s technical root — is and why it shook the security industry, where the 2026 &quot;red-team LLM&quot; ecosystem is heading, and how, on top of that current, AntiFox extended ARTEX. This chapter describes those three layers in order.</p>
+<hr>
+<h2>1.1 The roots — ARTEX, a turning point</h2>
+<h3>What ARTEX is</h3>
+<p>ARTEX is an <strong>open-source multi-agent autonomous penetration testing framework</strong> that a developer using the handle &quot;Autumn-27&quot; published on GitHub under AGPL-3.0 in July 2026. Its structure is a single binary written in Go with an embedded Next.js UI, state stored in PostgreSQL, and a MITM (man-in-the-middle) proxy shim that records traffic as evidence. ScopeSentry, a Chinese asset-discovery platform by the same developer, serves as the basis of reconnaissance.</p>
+<p>ARTEX&#39;s design philosophy can be summarized in two ideas.</p>
+<p>The first is the <strong>planner-worker multi-agent</strong> pattern. A planner agent reads the goal, generates &quot;intents&quot;, and distributes them to N workers (3 per task by default); workers claim those intents and execute them with <strong>real tools</strong> such as Bash·Nmap·curl·ripgrep·HTTP clients. Workers can search each other&#39;s execution records, so parallel branches do not duplicate the same work. A human can interject mid-run through chat to inject hints (HITL).</p>
+<p>The second is the <strong>dual graph</strong>. ARTEX divides state into two graphs: a <strong>global asset graph</strong> shared across tasks (root domains·subdomains·IPs·services·applications·endpoints) and a <strong>per-task exploration graph</strong> (goals·intents·facts·findings·hints and their lineage). The two are connected via anchors. The core of this separation is keeping &quot;facts&quot; about the infrastructure from being entangled with the agents&#39; &quot;judgments·observations&quot;. Even if an autonomous agent loses its way or becomes contaminated, the global assets — the source of truth — remain untouched.</p>
+<p>Models are provider-agnostic: Anthropic·OpenAI·Ollama (local) or OpenAI-compatible endpoints are specified in the UI. One-line Docker installation is supported. In summary, ARTEX is &quot;a team of LLM agents that autonomously performs everything from reconnaissance to data exfiltration with almost no human intervention.&quot;</p>
+<h3>Why ARTEX became a turning point — the shadow of misuse</h3>
+<p>The problem is that this powerful tool was <strong>used in attacks as-is as soon as it was released</strong>. ARTEX was published on the premise of &quot;learning·research within authorized assets&quot;, but it was diverted to real intrusions with no modification whatsoever.</p>
+<p>On October 7, 2026, CrowdStrike Intelligence reported that ARTEX was used in a campaign <strong>targeting Korean financial institutions</strong> spanning late September to early October. A day later, on October 8, developer Autumn-27 denied involvement and <strong>converted the project to closed source</strong>. But clones had already spread into the world by then, and derivatives — including Korean-language forks — were left in a state that &quot;cannot be recalled even by closing the source&quot;.</p>
+<p>Microsoft revealed that the China state-nexus actor Storm-0940 used ARTEX in the <strong>ConnectWise supply-chain attack</strong>. In that attack, the agents used stolen app credentials to attempt logins against more than 2,250 Microsoft 365 tenants, and some reached <strong>privileged access within 3 hours</strong>. Microsoft also observed a case where an AI agent, while scanning GitHub for secrets, took only <strong>5 minutes</strong> to exfiltrate data from Azure Key Vault. Mandiant recorded that ARTEX is &quot;loud by default&quot; — explosive activity such as 27 cloud-permission probes in 23 seconds and fuzzing of more than 500 web requests against filenames.</p>
+<p>The ARTEX incident left the industry with two lessons. One: <strong>a tool released for authorized testing can be used for intrusion with no modification whatsoever</strong>. Two: the attacker&#39;s clock has decoupled from the defender&#39;s clock — AI agents carry out &quot;machine-speed&quot; attacks at a pace humans cannot follow. It is exactly this point that gave birth to the defensive logic: &quot;then, before an attacker runs ARTEX in your environment, you should run it against yourself first.&quot; AntiFox stands on the extension of this tension.</p>
+<hr>
+<h2>1.2 The current — the 2026 red-team LLM ecosystem</h2>
+<p>ARTEX is not alone. 2026 was the year &quot;autonomous pentest&quot; solidified as a category. The characteristics of this current can be organized into four.</p>
+<p><strong>First, architectural convergence.</strong> Most autonomous pentest tools converged on a similar skeleton: decompose the goal into tasks, run multiple agents in parallel, and <strong>integrate findings into a graph</strong>. ARTEX·PentAGI·AntiFox all share this pattern. The difference comes not from the core engine but from &quot;what wraps around it&quot; — whether it is a FOSS toolkit (ARTEX), a service that takes responsibility for results (a closed platform like Astra), or one specialized in evidence·reporting (AntiFox).</p>
+<p><strong>Second, the shift to &quot;continuous·autonomous&quot; coverage.</strong> The awareness spread that the past practice of &quot;1–2 deep pentests per year&quot; cannot keep up with attacker speed. In an era where the &quot;time to exploit&quot; concept — attacks arriving before vulnerability disclosure — becomes meaningless, always-on autonomous pentesting has emerged as &quot;the only coverage model that can keep up&quot;.</p>
+<p><strong>Third, an ecosystem as a double-edged sword.</strong> The same tools are used on both the defensive and offensive sides. Dozens of pentest frameworks similar to ARTEX are public with the ability to &quot;execute credential attacks and cloud compromise at machine speed&quot;. Some even embed C2 (command and control) capabilities. This does not mean these tools are inherently evil — it means <strong>the breadth of options available to today&#39;s attackers has widened by that much</strong>. That is why tools in this field commonly move toward shipping strong usage policies (permitting only personal learning·local isolated verification) together with defense·detection guides (AntiFox is no different).</p>
+<p><strong>Fourth, hallucination — the wall of quality.</strong> Autonomous tools find things quickly and in volume — and accordingly, the problem that a substantial share of those results are hallucination·false positives surfaced prominently (detailed in Chapter 4). This &quot;signal-to-noise&quot; crisis, symbolized by the collapse of the curl bounty, showed that the next competitive axis of autonomous pentesting is not &quot;how much you find&quot; but <strong>how what was found is confirmed with evidence and delivered</strong>. That is exactly where AntiFox stands.</p>
+<hr>
+<h2>1.3 The extension — how AntiFox went beyond ARTEX</h2>
+<p>AntiFox began secondary development with ARTEX v0.1.1 as its starting point, and thereafter followed the evolution of the upstream while mutually exchanging·borrowing. As AntiFox itself discloses, ARTEX made &quot;automatic discovery&quot; very strong, but &quot;report delivery&quot; — an area that differs per customer·project — was relatively less polished. AntiFox put engineering weight precisely on that one <strong>delivery (handover)</strong>link. Its core orientation in one sentence: not stopping at &quot;discovery&quot;, but turning vulnerabilities found by AI into an<strong>evidence-backed report that engineers can understand and reproduce</strong>. That is why v2.0&#39;s slogan is &quot;from discovery to delivery&quot;.</p>
+<p>The characteristics AntiFox extended on top of ARTEX&#39;s foundation are as follows.</p>
+<p><strong>Evidence-driven delivery.</strong> This is the biggest differentiator. At the very moment exploitation is carried out, each step&#39;s request·response·expectation·verification conclusion is recorded in the DB in structured form. It is not stitched together after the fact. The findings page shows entry point·preconditions through staged exploitation broken into <strong>step-by-step natural-language descriptions + actual requests</strong> (split display of the exploit chain), and MITM-records every request during the task, matching them to each step precisely by time window·sequence (syntax highlighting·body search·hit counts). This reduces the room for &quot;reproduction steps to be omitted or manipulated&quot;. The quality of a red team report is decided not by &quot;what was found&quot; but by &quot;how it reproduces&quot;, and AntiFox automates exactly that point.</p>
+<p><strong>Confirm-then-enrich and report management.</strong> The moment a human &quot;Confirms&quot; a vulnerability, it is automatically enriched into structured data. Reports include <strong>only confirmed vulnerabilities</strong> by default, and support a naming template (issuer·logo·assignee·CVSS), selectable inclusion of a vulnerability subset, and automatic evidence caption generation. It generates delivery-grade .docx in Simplified·Traditional Chinese·English. This flow — &quot;agents produce candidates, humans confirm them with evidence, and only the confirmed ones make it into the deliverable&quot; — is AntiFox&#39;s identity: a product-level answer that preserves trust in the age of hallucination (Chapters 3·4).</p>
+<p><strong>Added operational·governance features.</strong> While inheriting ARTEX&#39;s rule-based HITL intercept, AntiFox added the controls needed for enterprise·institution operations. <strong>RBAC multi-user</strong> (permission matrix·system roles·resource-level scoping·login auditing) separates access per operator, and the <strong>global egress proxy</strong> (v2.0.3 — sends all agent traffic through a single http/https/socks5 proxy, source IP hiding/hopping, per-task direct/proxy selection, egress IP echo availability test) controls traffic paths. It also provides 4-level vulnerability severity·batch enrichment, a dual global+task pgvector RAG knowledge base, MCP·Skill extensions, and one-click updates with SHA256·atomic replacement·rollback on failure.</p>
+<p>To summarize: if ARTEX is an &quot;autonomous discovery engine&quot;, AntiFox is an extended edition that layers a &quot;delivery layer&quot; of <strong>evidence·review·delivery·governance</strong> on top of that engine. The architectural skeleton (multi-agent·dual graph·MITM evidence) is inherited from ARTEX, but AntiFox is the one that concentrated its engineering on polishing the output into &quot;a form an engineer can take responsibility for and deliver to a customer&quot;.</p>
+<hr>
+<h2>1.4 Overview at a glance (repository checked 2026-11)</h2>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Contents</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Base</td>
+<td>Secondarily developed from ARTEX v0.1.1 (author @Autumn-27)</td>
+</tr>
+<tr>
+<td>Tech stack</td>
+<td>Go single binary (Next.js embedded via <code>go:embed</code>) · PostgreSQL (+pgvector)</td>
+</tr>
+<tr>
+<td>Required runtime</td>
+<td>Go 1.24+ / Node 20+ / PostgreSQL / Python 3 (report rendering)</td>
+</tr>
+<tr>
+<td>License</td>
+<td>AGPL-3.0 — usage policy: only personal learning·local isolated verification permitted</td>
+</tr>
+<tr>
+<td>Current version</td>
+<td>v2.0.3 (released 2026-10-30)</td>
+</tr>
+<tr>
+<td>Default ports</td>
+<td><code>8787</code> (web console, first-run <code>/setup</code> sets the admin password) · <code>8788</code> (MITM traffic recording proxy)</td>
+</tr>
+<tr>
+<td>Container</td>
+<td><code>ghcr.io/antifox-ai/antifox</code></td>
+</tr>
+<tr>
+<td>Agents</td>
+<td>planner (intent generation) · worker ×N (execution) · mainagent (human interface)</td>
+</tr>
+<tr>
+<td>Knowledge structure</td>
+<td>Global asset graph + per-task exploration graph (dual graph, interconnected via anchors)</td>
+</tr>
+<tr>
+<td>Report languages</td>
+<td>Simplified·Traditional Chinese·English (Korean not supported)</td>
+</tr>
+<tr>
+<td>Official channels</td>
+<td>GitHub repository·Releases · GHCR package · WeChat official account — no separate website (confirmed 2026-11-14)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>The strength is itself the risk. Automatic evidence collection means credentials·sessions·requests/responses accumulate in PostgreSQL. A supply-chain incident in the ARTEX-family base has also been confirmed: the 2026-11-06 CSA analysis &quot;Trojanized Offensive AI Tooling: The ARTEX Docker Backdoor&quot; revealed that the Docker Hub images <code>tomicdd/artex</code> (and <code>congdonglinux/artex</code>) had an unauthenticated root command execution backdoor hidden in the login handling, downloaded about 9,000 times. There is currently no evidence that AntiFox itself was infected (the official Compose uses GHCR) — but the key lesson is &quot;a clean source does not guarantee a clean image&quot;. Before adoption, establish first (1) data retention·access control·destruction, and (2) distribution image provenance·integrity verification (Chapters 6·7·12).</p>
+</blockquote>
+<h3>Official technical architecture (per README)</h3>
+<p>Go single binary (Next.js frontend embedded via <code>go:embed</code>) + PostgreSQL. The core is the dual graph — a global asset graph (shared source of truth across tasks) + a per-task exploration graph (a lineage chain of goals·intents·facts·vulnerabilities), interconnected via anchors. The engine is event-driven: when the graph changes, the planner generates intents, workers write back execution results, and that in turn raises new events.</p>
+<pre><code class="language-mermaid">flowchart TB
+  subgraph FE[Frontend Next.js · single binary with go:embed]
+    UI[Dashboard · Tasks · Findings · Assets · Traffic · Reports · Knowledge Base]
+  end
+  subgraph SRV[server · Go net/http]
+    API[REST /api · JWT · SSE]
+    ENG[engine event-driven scheduling]
+  end
+  subgraph AG[multi-agent orchestration]
+    PL[planner planning · sole intent generator]
+    WK[worker execution ×N]
+    MA[mainagent human interface]
+  end
+  subgraph DB[PostgreSQL]
+    AGRAPH[asset graph · global shared]
+    EGRAPH[exploration graph · per-task independent]
+  end
+  SUB[MITM traffic recording · HITL intercept · asset enrichment · reports · knowledge base RAG]
+
+  UI --&gt; API --&gt; ENG --&gt; PL &amp; WK
+  API --&gt; MA
+  PL &amp; WK &amp; MA --&gt; DB
+  WK --&gt; SUB
+</code></pre>
+<blockquote>
+<p>Source: mermaid diagram from the official README&#39;s &quot;Technical architecture&quot; section (confirmed 2026-11-14, labels translated into English).</p>
+</blockquote>
+<hr>
+<h2>1.5 Competitive project landscape</h2>
+<table>
+<thead>
+<tr>
+<th>Project</th>
+<th>Characteristics</th>
+<th>Relationship to AntiFox</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ARTEX</td>
+<td>Exploration graph engine·MITM·HITL·multi-agent. ScopeSentry-based reconnaissance</td>
+<td>Direct ancestor. Original closed-sourced after attack abuse</td>
+</tr>
+<tr>
+<td>PentAGI</td>
+<td>Fully autonomous, Docker, orchestrates Nmap·Metasploit·sqlmap</td>
+<td>Closest alternative in design philosophy</td>
+</tr>
+<tr>
+<td>Astra</td>
+<td>Closed-source autonomous pentest platform (a service type that takes responsibility for results)</td>
+<td>If ARTEX is a toolkit, Astra is a service — different positioning</td>
+</tr>
+<tr>
+<td>Agent Zero</td>
+<td>General-purpose autonomous agent, many cases deployed without authentication</td>
+<td>Lightweight·general-purpose</td>
+</tr>
+<tr>
+<td>PentestGPT</td>
+<td>LLM-assisted, ranks high on the XBOW benchmark</td>
+<td>Strengths in exploration·reasoning assistance</td>
+</tr>
+<tr>
+<td>HexStrike AI · Strix · RedAmon</td>
+<td>Tool-integration type · app-specific · MIT flexible</td>
+<td>Niche alternatives, each</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Summary</strong> — to replace ARTEX as-is, PentAGI is closest, and to outsource the results wholesale, a service type like Astra is the alternative. But if <strong>report automation·evidence-driven delivery</strong> is the core requirement, AntiFox&#39;s approach is differentiated. On the current where the next competitive axis of autonomous pentesting is shifting from &quot;discovery volume&quot; to &quot;evidence·delivery quality&quot; (1.2), AntiFox&#39;s position becomes clear.</p>
+</blockquote>
+<hr>
+<blockquote>
+<p>The ARTEX misuse incidents (Korean financial sector·ConnectWise)·architecture·supply-chain incident cited in this chapter are based on 2026 public coverage·research (CrowdStrike·Microsoft·Mandiant·CSA etc.), and details may be updated depending on point in time·source — reconfirm against the original sources at the time of adoption. With all of these risks understood, AntiFox must be operated only within the fence of authorization·isolation·evidence.</p>
+</blockquote>
+<hr>
+<h1>2. Principles of Red Team composition</h1>
+<p>The team comes before turning on the tool. Agents like AntiFox only <strong>amplify</strong> part of red team work; they are not the red team itself.</p>
+<blockquote>
+<p><strong>A shift in perspective — not a &quot;tool&quot; but &quot;infrastructure holding privileges&quot;</strong>— an autonomous agent holds not only target information but also API keys·credentials·network access rights. Therefore, treat AntiFox not as a mere penetration testing program but as<strong>execution infrastructure for agents that hold security privileges</strong>, and apply that level of control (Chapters 6·7·12) throughout adoption·operation·decommissioning. The ARTEX backdoor incident (Chapters 1·6) shows why.</p>
+</blockquote>
+<h3>Red · Blue · Purple</h3>
+<ul>
+<li><strong>Red</strong> — the attack side that emulates attackers to test detection·response.</li>
+<li><strong>Blue</strong> — detection·response·defense (SOC·DFIR).</li>
+<li><strong>Purple</strong> — red and blue collaborating in real time to improve detection rules together.</li>
+</ul>
+<blockquote>
+<p>Autonomous agents are especially valuable in <strong>purple teams</strong> — reproducible evidence immediately reveals &quot;at which request detection was missing&quot; (Chapter 10).</p>
+</blockquote>
+<h3>Simulated penetration vs red team vs vulnerability assessment</h3>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th>Purpose</th>
+<th>Scope</th>
+<th>Stealth</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Vulnerability assessment (VA)</td>
+<td>Identify·catalog known vulnerabilities</td>
+<td>Broad and shallow</td>
+<td>Not needed</td>
+</tr>
+<tr>
+<td>Simulated penetration</td>
+<td>Verify exploitability</td>
+<td>Defined scope</td>
+<td>Optional</td>
+</tr>
+<tr>
+<td>Red team assessment</td>
+<td>Goal achievement·detection testing</td>
+<td>Goal-oriented</td>
+<td>Required</td>
+</tr>
+</tbody></table>
+<p>AntiFox automation accelerates the <strong>VA-to-simulated-penetration</strong> range. Full-scale red team assessments (stealth·goal decision-making) remain human-driven.</p>
+<h3>Standard frameworks</h3>
+<p>Cyber Kill Chain · MITRE ATT&amp;CK · PTES · OSSTMM / NIST SP 800-115.</p>
+<h3>The engagement lifecycle and where AntiFox fits</h3>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>AntiFox contribution</th>
+<th>Human responsibility</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>① Pre-negotiation (scope·ROE·authorization letter)</td>
+<td>—</td>
+<td>Entirely human</td>
+</tr>
+<tr>
+<td>② Reconnaissance · ③ Enumeration</td>
+<td>Automated graph·mapping</td>
+<td>Filtering out-of-scope·prioritization</td>
+</tr>
+<tr>
+<td>④ Verification</td>
+<td>Agent verification + evidence</td>
+<td>Screening False Positives</td>
+</tr>
+<tr>
+<td>⑤ Follow-up exploitation</td>
+<td>Assistance</td>
+<td>Decision-making·stealth</td>
+</tr>
+<tr>
+<td>⑥ Reporting</td>
+<td>Draft docx in 3 languages</td>
+<td>Business context·review</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Do not skip step ①</strong> — running without a written scope agreement·authorization letter is illegal, and upstream policy also prohibits use against real environments. An ROE must include (a) a target whitelist, (b) prohibited actions, (c) a time window, (d) an emergency stop contact line (Appendices C·E).</p>
+</blockquote>
+<hr>
+<h1>3. History of red teaming and simulated penetration</h1>
+<p>&quot;Red team&quot; came from war, not security. People who try to break friendly plans through the enemy&#39;s eyes — that lineage explains the emergence of AntiFox.</p>
+<ul>
+<li><strong>Cold War·wargames (1950s–60s)</strong> — the &quot;red team&quot; role took root in simulated exercises attacking one&#39;s own strategy from the Soviet (red camp) perspective.</li>
+<li><strong>Tiger teams (1960s–70s)</strong> — deliberate attack teams of the US government·RAND. The <em>Anderson Report</em>·<em>Multics evaluation</em> left the prototype of penetration testing.</li>
+<li><strong>The tool era (1990s–2000s)</strong> — Nmap (1997)·Nessus (1998)·Metasploit (2003), the OSSTMM·PTES·OSCP ecosystem.</li>
+<li><strong>APT·emulation (2010s)</strong> — adversary emulation rose, and <strong>MITRE ATT&amp;CK</strong> (internal 2013/public 2015) became the common language.</li>
+<li><strong>LLM·autonomous agents (2023– )</strong> — from PentestGPT-type assistance to multi-agent autonomous pentesting like ARTEX·PentAGI·AntiFox. AntiFox is the &quot;evidence·report automation&quot; branch.</li>
+</ul>
+<blockquote>
+<p><em>Tools have kept lowering the threshold of attack, and each time the discipline of &quot;who takes responsibility and how far it goes&quot; has chased after the tools.</em></p>
+</blockquote>
+<hr>
+<h1>4. Benefits and risks of LLM-assisted simulated penetration</h1>
+<blockquote>
+<p><em>&quot;An LLM is Excel, not an oracle.&quot; — a tool that quickly organizes and computes, not an oracle that declares truth. This chapter proves that one sentence with real events.</em></p>
+</blockquote>
+<p>As of 2026, LLM-based autonomous simulated penetration is not an &quot;experiment&quot; but &quot;reality&quot;. The problem is that this reality has two faces. On one side there is productivity that compresses the reconnaissance·enumeration·initial verification that used to take people days into hours; on the other there is a reliability problem where a substantial share of the output is hallucination that is <strong>plausible but wrong</strong>. AntiFox&#39;s weight on &quot;delivery with evidence attached&quot; rather than &quot;discovery&quot; is precisely to handle this second face. This chapter neither underplays the benefits nor glosses over the risks; citing cases confirmed in actual news, it lays out &quot;what to entrust to automation and what a human must always review.&quot;</p>
+<hr>
+<h2>4.1 Benefits — why use it anyway</h2>
+<p>The benefits of LLM-based autonomous pentesting are not abstract slogans but a shift in productivity that has already been measured.</p>
+<p>First, <strong>speed and coverage</strong>. An autonomous agent does not tire and performs repetitive reconnaissance·enumeration·initial verification faster than a person. Especially in tasks of the &quot;sweep every endpoint·parameter without missing any&quot; kind, it goes beyond the limits of human concentration. HackerOne reported that over the year to March 2026, submissions grew <strong>76%</strong> — this surge itself, a double-edged sword as we will see below, is an indicator of how much AI has lowered the threshold of discovery.</p>
+<p>Second, <strong>24/7 continuous execution and regression testing</strong>. It can run at night·on weekends, and every time the code changes the same scenarios can be re-run, which is advantageous for catching &quot;regression vulnerabilities&quot;. That frequency is impossible for a human team because of cost.</p>
+<p>Third, <strong>report automation</strong>. This is the core differentiator of AntiFox-type tools. Reproduction steps·evidence·multilingual drafts are generated automatically, greatly reducing reporting effort. Report writing has traditionally occupied a large share of simulated-hacking effort, and automating it leads to real savings.</p>
+<p>Fourth, <strong>knowledge reuse and democratization</strong>. Through a global asset graph and an RAG knowledge base, past findings can be transferred to the next test, and even small teams can access mid-level systematic testing. For organizations that cannot field a dedicated red team, this &quot;lowered entry barrier&quot; is the greatest value.</p>
+<p>And there are real results showing these benefits are not hollow. In 2026, vulnerabilities found with frontier-AI assistance were registered as actual CVEs and exploited in attacks. Representatively, <strong>CVE-2026-34197 in ActiveMQ</strong> was found by a researcher with Claude&#39;s assistance, and was later exploited in real attacks and added to the US CISA <strong>Known Exploited Vulnerabilities (KEV)</strong> list. Mozilla confirmed in February 2026 that it is internally using frontier models to find and fix latent vulnerabilities in its browser, and Chrome&#39;s CVE disclosures grew <strong>563%</strong> year-over-year. <strong>AI really does find vulnerabilities.</strong> There is no longer room to doubt this fact. The question is &quot;which of what it found is real.&quot;</p>
+<hr>
+<h2>4.2 Risk 1 — hallucination and false positives: why curl closed its bounty</h2>
+<p>The most fundamental risk of LLM-based pentesting is <strong>hallucination</strong> — plausibly fabricating vulnerabilities that do not exist. This is not a theoretical concern; it was proven by an event that actually broke the open-source ecosystem in 2026.</p>
+<p><strong>Daniel Stenberg</strong>, maintainer of <strong>curl</strong> — the data-transfer tool installed on nearly every server in the world — terminated his bug bounty program in late January 2026. The reason was concise and devastating: <strong>fewer than 5% of the reports submitted in 2025 were valid</strong>. Submission volume doubled from a &quot;reviewable level&quot; in 2024 to one per 48 hours in 2025, and doubled again to one per 18 hours by June 2026. Stenberg described the situation as &quot;being DDoS&#39;d with AI bug reports, for real&quot;, and even said he would like to charge submitters for the wasted time if possible.</p>
+<p>There is one case that shows the typical hallucination the curl team experienced. A well-formatted, confident HTTP/3 vulnerability report came in — grounded on a <strong>function that does not actually exist</strong>. Another AI slop report (identifier <strong>H1#3125832</strong>) cited a nonexistent function and proposed an unverified patch. <strong>Harry Sintonen</strong> of the curl security team dismissed it: &quot;the attacker severely misjudged — curl can smell AI slop from miles away&quot;. The problem is that <strong>teams with curl&#39;s level of expertise are rare</strong>. In organizations without dedicated security experts, these reports &quot;look legitimate at first glance&quot; and are not filtered out.</p>
+<p>This was not curl&#39;s problem alone. In the same stream, <strong>Nextcloud</strong> terminated its bounty program in April 2026, <strong>HackerOne&#39;s Internet Bug Bounty</strong> stopped all new submissions on March 27, 2026, and <strong>Google</strong> temporarily suspended submissions to its open-source bounty program. Across HackerOne, submissions grew 76% but the share pointing at real vulnerabilities stayed at 25% — i.e., <strong>almost all of the increase was noise</strong>.</p>
+<p>There is a point that must be made here. The excuse that &quot;it is because the model is small&quot; does not hold. When Stenberg personally tested Anthropic&#39;s top model (<strong>Mythos</strong>) against curl, <strong>only 1 of the 5 reported vulnerabilities was accepted as a valid CVE</strong>. Even frontier models show a meaningful false-positive rate on real codebases. Better models do not mean review becomes unnecessary.</p>
+<blockquote>
+<p><strong>Risk to review:</strong> hallucination is not &quot;a bug that disappears when model quality rises&quot; but &quot;a constant inherent to automation&quot;. Therefore every finding is merely a &quot;candidate&quot; until a human confirms it with evidence. AntiFox&#39;s automatic MITM evidence linkage aims exactly at this point — a claim without the actual request·response packets attached is not put in the report. &quot;No packet, no claim&quot; must be the principle. Operators must personally open the reproduction packets before promoting a finding to &quot;Confirmed&quot; status, and a finding without this review signature is not a finding (the report&#39;s Status field in Appendix B engraves this boundary into the document).</p>
+</blockquote>
+<hr>
+<h2>4.3 Risk 2 — collapse of trust: hallucination becomes an attack</h2>
+<p>The second face of hallucination is more insidious. Someone wields these hallucinations as a <strong>deliberate weapon</strong>. Analyses targeting bounty platforms note that some attackers&#39; objective is not &quot;technical compromise&quot; but <strong>operational disruption</strong>. Burning defenders&#39; time with plausible false reports and collapsing trust in the disclosure process is itself the goal. In practice, accounts like <strong>@evilginx</strong> sprayed similar AI-generated reports at multiple organizations, and some even collected bounties.</p>
+<p>The reason this structure is dangerous is that hallucinated reports accumulate as <strong>operational debt</strong>. It does not stop at wasting analysts&#39; time — it leads to a vicious cycle where real researchers get frustrated and leave, organizations abolish bounties, and funding dries up. The signal-to-noise ratio of the entire security ecosystem collapses.</p>
+<blockquote>
+<p><strong>Risk to review:</strong> organizations operating autonomous tools must ask themselves &quot;are the reports we produce eroding the trust of the receiving side?&quot; AntiFox&#39;s v2.0 change to <strong>include only confirmed vulnerabilities in reports by default</strong> is the product-level answer to this trust problem. Evidence·status·review signatures must be visible in the deliverable (Appendix B) so the receiving side can distinguish &quot;agent draft&quot; from &quot;human-confirmed fact&quot;. Mass-producing noise with automation&#39;s productivity is not productivity — it is a nuisance.</p>
+</blockquote>
+<hr>
+<h2>4.4 Risk 3 — when hallucination becomes code: slopsquatting</h2>
+<p>Hallucination does not stop at reports. When an autonomous agent <strong>executes its own generated output</strong>, hallucination becomes the entry point of a supply-chain attack. <strong>Slopsquatting</strong>, documented by the Cloud Security Alliance (CSA) and USENIX Security 2025 research in 2026, is the classic case.</p>
+<p>When generating code, LLMs frequently fabricate <strong>packages (libraries) that do not exist</strong> under plausible names. One large-scale study measured this phenomenon across <strong>576,000</strong> Python·JavaScript code samples: <strong>about one in five AI code suggestions (open-weight models averaging about 21.7%, commercial models about 5.2%) pointed at nonexistent packages</strong>, and more than <strong>205,000 unique fake package names</strong> were identified. More dangerous is that this hallucination is <strong>reproducible</strong>. When the same prompt was repeated ten times, <strong>43%</strong> of the fake names reappeared every time, and 58% reappeared at least once. For an attacker, observing the model&#39;s output a few times is enough to predict &quot;the names it will keep fabricating&quot;.</p>
+<p>The attack is simple. If an attacker <strong>pre-registers malicious packages</strong> on PyPI·npm under those fake names, then the moment a later AI recommends the same name and a developer (or autonomous agent) installs it without a second thought, malicious code is injected into the build. In practice, when a researcher registered a fake package that an AI kept recommending on PyPI as a harmless test, within days thousands of developers — including Alibaba teams — pulled that fictional dependency into their projects. The November 2026 ARTEX Docker image backdoor incident, and the PyPI supply-chain campaign targeting <strong>litellm</strong> — a shared dependency of AI development pipelines (<strong>TeamPCP</strong>, March 2026), are signals that <strong>attackers now view AI tooling infrastructure itself as a high-value supply-chain target</strong>.</p>
+<blockquote>
+<p><strong>Risk to review:</strong> do not let code·commands·dependencies generated by an autonomous agent <strong>execute without verification</strong>. Confirm package names manually, enforce lockfiles·version pins·hash verification, and run AI-generated code only in isolated environments. In the AntiFox operating context, Chapter 7&#39;s <strong>rule-based HITL intercept</strong> (human approval gates on high-risk actions) and <strong>network egress blocking</strong> are the final safety net that cuts off the path of &quot;the agent pulling in arbitrary external packages·endpoints&quot;. Also, as 7.4 points out, <strong>unverified documents mixed into the RAG knowledge base contaminate even the model&#39;s judgment</strong>, so provenance·verification status must be managed from the knowledge-base intake stage.</p>
+</blockquote>
+<hr>
+<h2>4.5 Risk 4 — prompt injection: the attack that turns the agent around</h2>
+<p>The input of an autonomous agent is &quot;responses from untrusted subjects&quot;. If malicious instructions are hidden in the error messages·HTML·HTTP headers that the test target returns, an agent that reads them can be induced into out-of-scope behavior. This is <strong>prompt injection</strong>, and it is especially fatal for autonomous attack agents — because these agents do not merely generate text; they <strong>hold API keys·credentials·network access rights and actually act</strong> (Chapter 2&#39;s &quot;infrastructure holding privileges&quot; view).</p>
+<p>That this risk is not abstract is shown by AntiFox&#39;s own record. AntiFox has reported cases of being <strong>seized by attackers and abused for actual AWS credential theft and webshell installation</strong>, and November 2026 coverage noted signs of access to operational secrets even with some AWS API calls blocked. Once an attack tool falls into an attacker&#39;s hands, that &quot;infrastructure holding privileges&quot; becomes a weapon as-is.</p>
+<blockquote>
+<p><strong>Risk to review:</strong> there is no single defense. (1) Set a trust boundary so target responses are treated as &quot;data only&quot;, (2) restrict the tools·commands the agent can call to a whitelist, (3) re-check the target host against scope immediately before every tool call, and (4) route high-risk actions such as writes·privilege escalation·external calls through human approval gates (HITL) (Chapter 7). Network blocking (7.1) is the final backstop for all of this. And blue teams must put the red team infrastructure itself (AntiFox host·gateway·DB) in monitoring scope (Chapter 10) — console exposure·abnormal egress may be a sign that the tool has been taken over.</p>
+</blockquote>
+<hr>
+<h2>4.6 Risk 5 — external leakage · supply chain · non-determinism</h2>
+<p>The remaining three risks are noted briefly; all share the character of &quot;structural problems that require review&quot;.</p>
+<p><strong>Data leakage to external LLMs.</strong> Using an external API sends prompts and test information (traffic that may mix credentials·sessions·personal data) to an external provider. In financial·public sectors this alone can be a compliance violation. The review conclusion is clear — in regulated environments, switch to local·open-weight models (Chapter 9).</p>
+<p><strong>Supply chain.</strong> The ARTEX Docker image backdoor seen above left the lesson that &quot;clean source code does not guarantee a clean distribution image&quot;. Image digest pins·signature verification·SBOM·SHA256 comparison are premises, not options (Chapter 6).</p>
+<p><strong>Sensitive data accumulation and non-determinism.</strong> Automatic evidence collection piles credentials·sessions·requests/responses into the DB. Without retention·encryption·destruction policies, the tool itself becomes a compromise surface. Also, autonomous agents can take different paths for the same input (non-determinism), so the scope whitelist must be enforced on both the code and network sides and execution logs preserved in full for reproducibility and post-hoc auditing (Chapters 7·12).</p>
+<hr>
+<h2>4.7 Summary — the boundary between automation and review</h2>
+<p>Put the benefits and risks into one table, and the core is the boundary of &quot;what to entrust to automation and what a human reviews&quot;.</p>
+<table>
+<thead>
+<tr>
+<th>What LLMs are good at (safe to entrust)</th>
+<th>What humans must review (must not be entrusted)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Repetitive reconnaissance·enumeration·initial verification</td>
+<td>Judging whether findings are genuine (screening hallucination·false positives)</td>
+</tr>
+<tr>
+<td>Evidence·reproduction steps·multilingual report drafts</td>
+<td>Final factuality and business impact of the report</td>
+</tr>
+<tr>
+<td>Reuse·transfer of past knowledge</td>
+<td>Provenance·integrity of the knowledge base·packages·dependencies</td>
+</tr>
+<tr>
+<td>24/7 continuous·regression testing</td>
+<td>Decision-making and responsibility for scope·stealth·high-risk actions</td>
+</tr>
+</tbody></table>
+<p>The curl case (under 5% valid), the Mythos-vs-curl test (1 of 5 valid), and slopsquatting (one in five a fake package) all say one thing. <strong>AI finds, but does not confirm.</strong> Confirmation belongs to the human who holds the evidence, and the moment this boundary blurs, productivity turns into noise and the tool into an attack surface.</p>
+<p>So this chapter&#39;s conclusion returns to the one sentence from the beginning. <strong>An LLM is Excel.</strong> It fills in the cells quickly, but what those numbers mean — and whether they are true — is for you to read. Automation is a draft generator, not a conclusion generator. A finding without a human signature is not a finding.</p>
+<hr>
+<blockquote>
+<p>This chapter treats sensitive topics (attacks abusing AI·supply-chain threats) from a defensive·review standpoint. The cited incidents·figures are based on 2026 public coverage·research, and figures may vary by point in time·sample — reconfirm against the original sources at the time of adoption.</p>
+</blockquote>
+<hr>
+<h1>5. Features · screenshots · masking</h1>
+<blockquote>
+<p>The screenshots below are the actual files from the official AntiFox repository (<code>github.com/AntiFox-AI/antifox</code> — <code>screenshots/</code>), included as-is, <strong>verified 2026-11-14</strong>. Since the official README states that <strong>all on-screen data is synthetic demo data from a local lab</strong>, the assets·traffic shown on screen are not operational data.</p>
+<p><strong>Image license·source</strong> — the original works are part of the AntiFox project (AGPL-3.0), and this document includes them in the <code>screenshots/</code> folder under their original file names in accordance with AGPL terms (attribution·license notice). They are used unedited·unmodified; if you rework·rehost them, comply with AGPL-3.0. When replacing them with your own lab captures, apply the masking in 5.0 below.</p>
+</blockquote>
+<h3>5.0 Screenshot masking guide</h3>
+<table>
+<thead>
+<tr>
+<th>Masking target</th>
+<th>Location</th>
+<th>Treatment</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LLM API keys</td>
+<td>LLM config</td>
+<td>Blur or <code>sk-****</code></td>
+</tr>
+<tr>
+<td>Target IP·domains</td>
+<td>Target/Scope·graphs·logs</td>
+<td>Lab dummy values (<code>10.10.x.x</code>·<code>lab.internal</code>)</td>
+</tr>
+<tr>
+<td>Sessions·cookies·tokens</td>
+<td>Traffic packet view</td>
+<td>First 4 characters only, keep length</td>
+</tr>
+<tr>
+<td>DB·proxy credentials</td>
+<td>config·settings</td>
+<td>Blur</td>
+</tr>
+<tr>
+<td>Usernames·emails</td>
+<td>Reports·findings</td>
+<td>Pseudonymize</td>
+</tr>
+</tbody></table>
+<h3>5.1 Login · initial setup</h3>
+<p>After first launch, <code>http://localhost:8787</code> → the login screen where you set the admin password at <code>/setup</code>. The UI supports 3 languages: Simplified·Traditional·English.</p>
+<img src="screenshots/login.png" alt="AntiFox login screen" width="720" />
+
+<blockquote>
+<p>English UI for verifying 3-language internationalization: <code>screenshots/login-en.png</code></p>
+</blockquote>
+<p>The first <code>/setup</code> screen, captured directly in real-field verification (v2.0.3 binary, 2026-11-14):</p>
+<img src="screenshots/lab-01-setup.png" alt="AntiFox first-run /setup screen — real capture" width="720" />
+
+<h3>5.2 Dashboard · task list</h3>
+<table>
+<thead>
+<tr>
+<th>Dashboard</th>
+<th>Task list</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><img src="screenshots/dashboard.png" alt="AntiFox dashboard" width="380" /></td>
+<td><img src="screenshots/tasks.png" alt="AntiFox task list" width="380" /></td>
+</tr>
+</tbody></table>
+<p>Dashboard in empty-lab state captured during real-field verification (immediately after installation, 2026-11-14):</p>
+<img src="screenshots/lab-12-dashboard.png" alt="AntiFox dashboard — real capture (empty lab)" width="720" />
+
+<h3>5.3 Finding detail — split display of the exploit chain</h3>
+<p>The findings page shows entry point→preconditions→staged exploitation as <strong>step-by-step natural-language descriptions + actual requests</strong> (the core screen of evidence-driven delivery).</p>
+<img src="screenshots/finding-steps.png" alt="Finding detail — split display of the exploit chain" width="720" />
+
+<h3>5.4 Evidence · MITM packets (steps automatically linked to real traffic)</h3>
+<p>Each exploitation step is linked to actual request/response packets by time window·sequence. Syntax highlighting·body search·hit counts provided. (When capturing your own, mask sensitive values per 5.0)</p>
+<img src="screenshots/traffic-packet.png" alt="MITM traffic packet view" width="720" />
+
+<h3>5.5 &quot;Evidence as packets&quot; — sensitive information exposure</h3>
+<p>For sensitive information exposure findings, the traffic packets themselves are the evidence (no need to reconstruct screenshots after the fact).</p>
+<img src="screenshots/env-leak.png" alt="Sensitive information exposure — the packet is the evidence" width="720" />
+
+<h3>5.6 Findings list</h3>
+<p>The findings list showing confirmed/unconfirmed status·severity. This is the stage before picking the confirmed vulnerabilities to include in the report.</p>
+<img src="screenshots/findings.png" alt="AntiFox findings list" width="720" />
+
+<h3>5.7 Demo · official channel QR</h3>
+<ul>
+<li><strong>v2.0 evidence-driven flow demo</strong>: <code>screenshots/demo.gif</code> (original v2.0 intro GIF from the official README)</li>
+<li><strong>Official channels</strong>: no separate website (confirmed 2026-11-14); the official channels are the GitHub repository·GHCR package·WeChat official account (Appendix G). QR: <code>screenshots/wechat-qr.jpg</code></li>
+</ul>
+<h3>5.8 LLM config / reports — real captures (real-field verification 2026-11-14)</h3>
+<p>LLM configuration, language settings, and report-related settings are available. The screens below were <strong>captured directly after installing the official v2.0.3 macOS binary (SHA256-verified) in a local isolated lab</strong> (synthetic lab data only, nothing to mask).</p>
+<p><strong>5.8-1. LLM 配置 (LLM Config, <code>/system/llm/</code>)<strong> — manage model·key·endpoint·rate-limit profiles, </strong>LLM failover (2+ profiles)<strong>, </strong>per-role model assignment</strong> (planner·worker·mainagent·report enrichment):</p>
+<img src="screenshots/lab-15-llm.png" alt="AntiFox LLM config — real capture" width="720" />
+
+<p><strong>5.8-2. New task dialog — egress selection</strong> — per-task LLM profile·timeout·<strong>egress proxy (follow global/direct)</strong> selection (5.8-1–2 are new v2.0.3 features):</p>
+<img src="screenshots/lab-14-newtask.png" alt="AntiFox new task dialog — egress selection" width="720" />
+
+<p><strong>5.8-3. Report management (<code>/system/reports/</code>)<strong> — organization settings (issuer·logo·assignee), pre-saved </strong>per-language templates (简/繁/英)</strong>, list·download of generated docx:</p>
+<img src="screenshots/lab-16-reports.png" alt="AntiFox report management — real capture" width="720" />
+
+<p><strong>5.8-4. System settings (<code>/system/settings/</code>)<strong> — </strong>global egress proxy</strong> (egress IP test capability), global traffic capture switch, one-click update (currently v2.0.3 confirmed):</p>
+<img src="screenshots/lab-17-settings.png" alt="AntiFox system settings — real capture" width="720" />
+
+<p><strong>5.8-5. RBAC user management (<code>/system/rbac/</code>)</strong> — admin account·4 system roles, member/role management (login auditing in 7.3):</p>
+<img src="screenshots/lab-18-rbac.png" alt="AntiFox user management (RBAC) — real capture" width="720" />
+
+<blockquote>
+<p><strong>Remaining real-field items</strong> — <strong>final docx generation</strong> (run a task → select confirmed vulnerabilities → specify language → generate) was excluded from this verification because it presupposes task execution requiring an LLM key and a target lab. The UI of that flow up to template selection·language specification (5.8-3) was confirmed via the captures above. Completing it resolves one more condition for finalizing v1.0.</p>
+</blockquote>
+<hr>
+<h1>6. Installation and hardening</h1>
+<p>Installation is easy. The hard part is &quot;safely&quot;.</p>
+<h3>Prerequisites</h3>
+<ul>
+<li><strong>PostgreSQL</strong> (required); an <strong>LLM</strong> is needed for exploration (key or the UI 「LLM 配置」 (LLM Config))</li>
+<li><strong>python3 + python-docx</strong> for docx reports (built into the Docker image)</li>
+<li>Go 1.24+ / Node 20+ when building from source</li>
+<li><strong>Isolated network</strong> — block internet outbound from the target subnet (Chapters 7·12)</li>
+</ul>
+<h3>Method 1 — Docker Compose (recommended)</h3>
+<pre><code class="language-bash">curl -O https://raw.githubusercontent.com/AntiFox-AI/antifox/main/docker-compose.yml
+curl -O https://raw.githubusercontent.com/AntiFox-AI/antifox/main/.env.example
+cp .env.example .env          # set POSTGRES_PASSWORD
+docker compose up -d          # image+PostgreSQL start automatically
+# http://localhost:8787 → first-run /setup to set the admin password
+</code></pre>
+<p><strong>Actual <code>.env</code> variables (cross-checked against the real file, 2026-11)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Meaning</th>
+<th>Recommendation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>ANTIFOX_TAG</code></td>
+<td>Image tag</td>
+<td><strong>Pinned version/digest</strong> instead of <code>latest</code></td>
+</tr>
+<tr>
+<td><code>POSTGRES_USER</code> / <code>POSTGRES_PASSWORD</code> / <code>POSTGRES_DB</code></td>
+<td>DB access</td>
+<td>32+ char random password, secret manager</td>
+</tr>
+<tr>
+<td><code>ANTHROPIC_API_KEY</code> / <code>OPENAI_API_KEY</code></td>
+<td>External LLM keys (one·both·blank)</td>
+<td>Leave blank in financial·public → local gateway</td>
+</tr>
+<tr>
+<td><code>ANTIFOX_LLM_PROVIDER</code></td>
+<td>LLM provider</td>
+<td>Specify OpenAI-compatible for local serving</td>
+</tr>
+<tr>
+<td><code>ANTIFOX_LLM_MODEL</code></td>
+<td>Model id</td>
+<td>Chapter 9 selection guide</td>
+</tr>
+<tr>
+<td><code>ANTIFOX_LLM_BASE_URL</code></td>
+<td>LLM endpoint</td>
+<td>Local gateway URL (key to network separation)</td>
+</tr>
+<tr>
+<td><code>ANTIFOX_LLM_PROXY</code></td>
+<td>LLM proxy</td>
+<td>When controlling the egress path</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Compose real-file verification (2026-11-14)</strong> — the official <code>docker-compose.yml</code> has 2 services: <code>postgres:16-alpine</code> (healthcheck·<code>unless-stopped</code>) + <code>ghcr.io/antifox-ai/antifox:${ANTIFOX_TAG:-latest}</code>. <code>POSTGRES_PASSWORD</code> is a <strong>required check</strong> (startup is refused if unset); <code>ANTIFOX_PG_DSN</code> is assembled internally by compose and injected into the antifox container, and <strong>both ports <code>8787:8787</code> and <code>8788:8788</code> are exposed</strong>. Volumes bind <code>./data</code> (jwt.key·data, backup target) and <code>./skills</code> (host skill overlay).</p>
+</blockquote>
+<h3>Method 2 — prebuilt binary</h3>
+<pre><code class="language-bash">cp config.example.json config.json    # fill in the database connection
+./antifox                             # Windows: antifox.exe
+</code></pre>
+<p><strong>Docker vs binary — settings location comparison</strong></p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Docker Compose</th>
+<th>Binary</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DB access</td>
+<td><code>.env</code> (<code>POSTGRES_*</code>)</td>
+<td><code>database</code> block in <code>config.json</code></td>
+</tr>
+<tr>
+<td>External LLM keys·endpoint</td>
+<td><code>.env</code> (<code>ANTIFOX_LLM_*</code>) or UI</td>
+<td>Mostly the UI 「LLM 配置」 (LLM Config)</td>
+</tr>
+<tr>
+<td>Image tag</td>
+<td><code>.env</code> (<code>ANTIFOX_TAG</code>)</td>
+<td>N/A (release zip)</td>
+</tr>
+<tr>
+<td>Global egress proxy·scope</td>
+<td>UI (system settings/tasks)</td>
+<td>UI (system settings/tasks)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong><code>config.json</code> real-file verification completed (2026-11-14)</strong> — <code>config.example.json</code> contains only one block, <code>database</code>: <code>host</code> (default <code>127.0.0.1</code>)·<code>port</code> (<code>5432</code>)·<code>user</code>·<code>password</code>·<code>dbname</code>·<code>sslmode</code> (<code>disable</code>). <strong>If the environment variable <code>ANTIFOX_PG_DSN</code> is set, it takes precedence over the <code>database</code> block in <code>config.json</code><strong>(a single connection string can specify everything). Everything else — proxy·scope·LLM — is handled in the</strong>UI/system settings</strong> as in the table above (the global egress proxy is a v2.0.3 UI feature).</p>
+</blockquote>
+<h3>Method 3 — source build</h3>
+<pre><code class="language-bash">cd web &amp;&amp; NEXT_EXPORT=1 npx next build &amp;&amp; cd ..   # static frontend export
+cp -r web/out/. server/webui/dist/                # embed
+CGO_ENABLED=0 go build -tags embedui -o antifox ./cmd/antifox
+./antifox
+</code></pre>
+<h3>One-click update (actual behavior)</h3>
+<ul>
+<li>Docker: <code>docker compose pull</code></li>
+<li>Binary/source: <code>./start.sh</code> or systemd (<code>deploy/antifox.service</code>, <code>RestartForceExitStatus=75</code>) → check·install GitHub Release from 「시스템 설정」 (System Settings) (SHA256·atomic swap·rollback on failure, data preserved)</li>
+</ul>
+<blockquote>
+<p><strong>systemd real-file verification (2026-11-14)</strong> — the exec line is <code>antifox -addr :8787 -data /opt/antifox/data</code> (place the binary in a writable directory; updates swap <code>antifox.new</code>/<code>antifox.old</code>), DB via the <code>ANTIFOX_PG_DSN</code> environment variable. <strong>The updater exits with exit 75 (&quot;restart me&quot;)</strong> and systemd restarts it, performing the atomic swap on the next boot (exit code 0 does not restart). On networks where GitHub is blocked, optionally bypass only update traffic via <code>ANTIFOX_UPDATE_PROXY</code>.</p>
+</blockquote>
+<h3>Release integrity verification</h3>
+<pre><code class="language-bash">sha256sum -c SHA256SUMS                                           # ① verify with the release-provided SHA256SUMS
+docker pull ghcr.io/antifox-ai/antifox@sha256:&lt;verified-digest&gt;     # ② digest pin
+cosign verify ghcr.io/antifox-ai/antifox@sha256:&lt;...&gt;               # ③ signature verification
+syft ghcr.io/antifox-ai/antifox@sha256:&lt;...&gt; -o spdx-json &gt; sbom.json  # ④ SBOM
+docker tag ghcr.io/antifox-ai/antifox@sha256:&lt;...&gt; registry.lab.internal/antifox:pinned  # internal mirror
+</code></pre>
+<blockquote>
+<p><strong>Lessons from the ARTEX backdoor incident (CSA, 2026-11-06)</strong> — the tampering was in the <strong>image, not the source</strong> (<code>tomicdd/artex</code>·<code>congdonglinux/artex</code>). Source code can be clean while the distribution image is not, so: ① cross-check GitHub source ↔ Dockerfile, ② verify the compose image source is the official GHCR, ③ <strong>digest pin</strong>, ④ verify signature·build provenance, ⑤ remove container root·unnecessary privileges, ⑥ separate mount permissions for <code>./data</code>·<code>./skills</code>, ⑦ keep LLM keys separate from target credentials. <strong>If infection is suspected, per CSA guidance do not just replace the image — isolate the host → rotate all related credentials → rebuild from trusted images</strong> (tied to 12.2 IR).</p>
+</blockquote>
+<h3>Post-install feature verification sequence (smoke test)</h3>
+<p>This is a procedure that even includes a container restart to verify &quot;does the data actually persist&quot; (run immediately after installation, separate from the 12.1 recovery rehearsal):</p>
+<ol>
+<li><strong>Asset graph</strong> — whether lab target (OWASP Juice Shop·DVWA etc.) assets appear in the graph</li>
+<li><strong>Exploration graph</strong> — whether task goals·investigation results are linked to each other</li>
+<li><strong>Agent behavior</strong> — planner/worker task distribution·state transitions</li>
+<li><strong>Traffic recording</strong> — whether requests/responses are stored in MITM</li>
+<li><strong>Vulnerability verification</strong> — whether finding results link to reproduction steps·packets</li>
+<li><strong>Report generation</strong> — whether docx is generated from only the confirmed vulnerabilities</li>
+<li><strong>Data persistence</strong> — whether tasks·evidence survive a container restart</li>
+</ol>
+<h3>Real-field verification performed (2026-11-14, items ①–④)</h3>
+<p>A record of the installation·UI verification actually performed while writing this guide (screenshots in 5.1·5.8):</p>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>What was performed</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Environment</td>
+<td>macOS arm64 · PostgreSQL 16.14 (Homebrew) · no Docker → chose the <strong>official release binary</strong> path</td>
+</tr>
+<tr>
+<td>Integrity</td>
+<td>Used <code>antifox-v2.0.3-darwin-arm64.zip</code> after confirming its <strong>SHA256 matches the official <code>SHA256SUMS</code></strong></td>
+</tr>
+<tr>
+<td>DB setup</td>
+<td>Connected to a temporary isolated PG instance (non-standard port) via <code>config.json</code> (<code>database</code> 6 fields) — real-file field verification</td>
+</tr>
+<tr>
+<td>Startup</td>
+<td><code>./antifox</code> → confirmed in the logs <code>AntiFox v2.0.3 backend listening on :8787</code>, MCP tool loading (25 browser·16 filesystem tools)</td>
+</tr>
+<tr>
+<td>UI check</td>
+<td>First-run <code>/setup</code> password → <code>/login</code> → accessed dashboard·tasks·findings·traffic·assets screens; confirmed the full sidebar menu: <strong>LLM·Agent·MCP·Skill·工具 (Tools)·拦截规则 (Intercept Rules)·审批记录 (Approval Logs)·用户管理 (User Management)·报告管理 (Report Management)·知识库 (Knowledge Base)·日志 (Logs)·系统配置 (System Config)</strong></td>
+</tr>
+<tr>
+<td>v2.0.3 feature check</td>
+<td><strong>Global egress proxy</strong> (egress IP test)·traffic capture switch·<strong>one-click update (current version shown as v2.0.3)</strong> in system settings; <strong>failover·per-role models (4 roles)</strong> on the LLM page; <strong>per-task LLM·timeout·egress selection</strong> in new task; <strong>per-language templates (简/繁/英)</strong> in report management</td>
+</tr>
+<tr>
+<td>RBAC·HITL check</td>
+<td>User management (admin account, <strong>4 system roles</strong>); intercept rules&#39; <strong>built-in rules</strong> (<code>rm -rf</code>·system directory deletion regex blocking, priority matching)</td>
+</tr>
+<tr>
+<td>Not performed (limitations)</td>
+<td><strong>LLM not connected</strong> (no key) — agent task execution·live traffic capture·final docx generation unverified (only confirmed via engine idle logs). This is the remaining condition for v1.0 finalization</td>
+</tr>
+</tbody></table>
+<h3>Version compatibility notes</h3>
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Release (2026)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>v0.1.0 / v0.1.1</td>
+<td>10-11 / 10-16</td>
+<td>Early versions, the base point of the ARTEX secondary development</td>
+</tr>
+<tr>
+<td>v2.0.0</td>
+<td>10-22</td>
+<td>Evidence-driven delivery theme</td>
+</tr>
+<tr>
+<td>v2.0.1 / v2.0.2</td>
+<td>10-25 / 10-29</td>
+<td>Stabilization</td>
+</tr>
+<tr>
+<td><strong>v2.0.3</strong></td>
+<td>10-30</td>
+<td>LLM session headers, <strong>global egress proxy</strong>, confirm-to-enrich, report management</td>
+</tr>
+</tbody></table>
+<p>※ This guide is based on the v2.0.x line. Cross-check against the actual version·features of your installation. (The &quot;v0.3.15&quot; in the source material does not match actual tags.)</p>
+<h3>Hardening checklist</h3>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Management console</td>
+<td><strong>Never expose to the internet</strong> either port <code>8787</code> (console)·<code>8788</code> (MITM proxy); reverse proxy+TLS+IP allowlist or VPN/bastion</td>
+</tr>
+<tr>
+<td>Secret management</td>
+<td>Keys·DB passwords in a secret manager, separate from target credentials</td>
+</tr>
+<tr>
+<td>DB security</td>
+<td>Encryption at rest, least privilege, destroy after engagement (Chapter 12)</td>
+</tr>
+<tr>
+<td>Network</td>
+<td>Separate execution·target networks, block target-network outbound (7.1)</td>
+</tr>
+<tr>
+<td>Access control</td>
+<td>RBAC resource-level scoping·system roles·login auditing (7.4)</td>
+</tr>
+<tr>
+<td>Integrity</td>
+<td>SHA256·signatures·digest pin·SBOM</td>
+</tr>
+<tr>
+<td>License</td>
+<td>AGPL-3.0 obligations + usage policy compliance (Appendix D)</td>
+</tr>
+</tbody></table>
+<hr>
+<h1>7. Configuring safety controls — scope·injection·isolation·auditing</h1>
+<p>If this is an &quot;evidence-based&quot; document, the safety mechanisms must also be backed by evidence. This chapter layers <strong>AntiFox&#39;s actual features + external network controls</strong>.</p>
+<h3>7.1 Scope enforcement — two layers</h3>
+<p><strong>① Product level</strong> — define targets·scope narrowly in the UI Target/Scope, and use <strong>rule-based HITL intercept</strong> for human approval/blocking of high-risk actions (inherited from ARTEX). Use the <strong>global egress proxy</strong> (v2.0.3) to consolidate traffic into a single controllable path, with per-task direct/proxy selection. Restrict per-operator resource scope via RBAC (7.4).</p>
+<p><strong>② Network level</strong> — the <strong>last safety net</strong>: even if a non-deterministic agent tries to leave scope, the network blocks it.</p>
+<pre><code class="language-bash"># iptables — default DROP, allowlist only (conceptual example)
+iptables -P OUTPUT DROP
+iptables -A OUTPUT -o lo -j ACCEPT
+iptables -A OUTPUT -d 10.10.0.0/16 -j ACCEPT                      # lab target network
+iptables -A OUTPUT -d 10.20.0.10 -p tcp --dport 4000 -j ACCEPT   # LLM gateway
+iptables -A OUTPUT -d 10.20.0.11 -p tcp --dport 5432 -j ACCEPT   # PostgreSQL
+</code></pre>
+<p><strong>The same principle in other environments</strong></p>
+<table>
+<thead>
+<tr>
+<th>Environment</th>
+<th>Application</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>nftables</strong></td>
+<td><code>chain output { type filter hook output priority 0; policy drop; }</code> then <code>accept</code> for lab/gateway/DB destinations</td>
+</tr>
+<tr>
+<td><strong>Cloud security groups</strong></td>
+<td>Instead of allow-all outbound, <strong>restrict destinations</strong>; separate egress-only SG</td>
+</tr>
+<tr>
+<td><strong>K8s NetworkPolicy</strong></td>
+<td>default-deny egress on the AntiFox pod + <code>allow</code> only egress to lab/gateway</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Kill switch</strong> — prepare in advance a one-line script that cuts all outbound. On anomalies, &quot;cut first, analyze later&quot; (IR in Chapter 12).</p>
+</blockquote>
+<h3>7.2 Prompt injection defense</h3>
+<p>The enforcement point is AntiFox&#39;s <strong>rule-based HITL intercept</strong> (blocks automatic execution of high-risk actions·human approval).</p>
+<table>
+<thead>
+<tr>
+<th>Defense layer</th>
+<th>Configuration</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Output trust boundary</td>
+<td>Treat target responses <strong>as data only</strong> (never interpret as instructions)</td>
+</tr>
+<tr>
+<td>HITL intercept rules</td>
+<td>Intercept high-risk actions (writes·privilege escalation·external calls) by rule for approval/blocking</td>
+</tr>
+<tr>
+<td>Scope re-validation</td>
+<td>Compare the target host against Target/Scope; network blocking (7.1②) is the backstop</td>
+</tr>
+<tr>
+<td>Rate·budget limits</td>
+<td>Per-host request·token caps</td>
+</tr>
+</tbody></table>
+<p>※ These are operating principles. Confirm the product&#39;s actual setting keys·rule syntax in the installed documentation·UI (do not use fabricated keys).</p>
+<h3>7.3 Audit logs</h3>
+<ul>
+<li>Preserve agent decisions·tool calls·requests/responses <strong>tamper-proof (append-only)</strong>, with mandatory <code>engagement-id</code>·<code>task-id</code>·timestamps·target host.</li>
+<li>Operate together with AntiFox <strong>login auditing</strong> (RBAC). This becomes the input for blue team detection (Chapter 10).</li>
+</ul>
+<h3>7.4 Data isolation — logical vs physical</h3>
+<p>AntiFox&#39;s &quot;evidence isolation&quot; is <strong>logical (application-level) isolation</strong> via the <strong>per-task exploration graph</strong> — the global asset graph is shared across tasks, the exploration graph is separated per task. In multi-tenant·regulated environments, add <strong>physical/DB-level controls</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Layer</th>
+<th>Action</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Application</td>
+<td>Restrict access per operator·role with RBAC resource-level scoping (product feature)</td>
+</tr>
+<tr>
+<td>Schema separation</td>
+<td>Separate schemas or DB instances per customer/engagement</td>
+</tr>
+<tr>
+<td>RLS</td>
+<td>Block cross-tenant row access with Row-Level Security</td>
+</tr>
+<tr>
+<td>Key separation</td>
+<td>Separate evidence encryption keys per tenant (reduces blast radius)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>The mere existence of controls is a legal·contractual line of defense.</p>
+</blockquote>
+<blockquote>
+<p><strong>The supply chain of the knowledge base·extension structure</strong> — the dual global+task pgvector RAG lets you reuse past reports·checklists·technical documents, but <strong>unverified documents (unclear source·date·verification status, duplicates, misinformation) mixed into search results can contaminate even LLM judgment</strong>. Manage source·date·verification status from the moment documents enter the knowledge base. The same applies to MCP servers·Skill extensions — <strong>every external MCP/Skill you attach increases both execution privileges and supply-chain risk</strong> (verify provenance·least privilege).</p>
+</blockquote>
+<hr>
+<h1>8. Configuration by scenario</h1>
+<p>A methodology·configuration-level playbook premised on <strong>authorized scope·isolated lab</strong> (not exploit recipes).</p>
+<table>
+<thead>
+<tr>
+<th>Scenario</th>
+<th>Scope·configuration</th>
+<th>Mapping</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Web app</strong></td>
+<td>Single-domain whitelist, authentication areas specified</td>
+<td>OWASP ASVS/WSTG</td>
+</tr>
+<tr>
+<td><strong>Internal network/directory</strong></td>
+<td>Subnet-limited, &quot;observe only&quot; on crown jewels, outbound blocked</td>
+<td>MITRE ATT&amp;CK</td>
+</tr>
+<tr>
+<td><strong>Cloud configuration</strong></td>
+<td>Read-focused, temporary·short-lived credentials, immediate revocation</td>
+<td>CIS Benchmark</td>
+</tr>
+<tr>
+<td><strong>API/microservices</strong></td>
+<td>OpenAPI-based, inject specs·auth into RAG</td>
+<td>OWASP API Top 10</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Internal networks have a large blast radius. Put a <strong>prohibited destructive actions list</strong> (account lockout·mass authentication·service disruption) in the ROE and enforce it with Chapter 7&#39;s HITL·network controls.</p>
+</blockquote>
+<blockquote>
+<p><strong>Cloud — real abuse cases (recent)</strong> — AntiFox has a history of being abused for cloud credential theft, and <strong>per 2026-11 reports, AntiFox-linked attacks accessed operational secrets even while some AWS API calls were blocked</strong>, with CloudTrail detection gaps noted. Even in cloud lab scenarios, make temporary·short-lived credentials·immediate revocation an iron rule, and pair it with <strong>multi-layer detection of secret access·webshells·config file reads and more</strong>, not just API call logs (Chapter 10).</p>
+</blockquote>
+<hr>
+<h1>9. Financial·public institutions and open-weight models</h1>
+<p>In financial·public sectors, the premise of &quot;sending data to an external API&quot; often does not hold. This chapter synthesizes <strong>why it gets blocked (Korean regulations overall) → why open-weight is the answer → what to choose (official models vs guardrail-removed models) → what hardware is needed</strong>.</p>
+<h3>9.1 Why external APIs get blocked — Korean regulations·guidelines overall</h3>
+<p><strong>① Financial sector — Electronic Financial Supervision Regulations·outsourcing regulations·Credit Information Act</strong></p>
+<ul>
+<li><strong>Electronic Financial Supervision Regulations (Financial Services Commission notice)</strong> — prescribes physical·logical protection of electronic financial infrastructure·information processing systems, the <strong>network separation</strong> principle, and incident response procedures. Sending penetration-test traffic (requests·responses·authentication info·sessions) to an external LLM API is <strong>potentially a direct violation of external-network transmission controls</strong>.</li>
+<li><strong>Regulations on Outsourcing of Financial Companies&#39; Information Processing (FSC notice)</strong> — outsourcing information processing to a third party (including LLM SaaS) triggers FSC reporting·confidentiality·outsourcer-management obligations. A structure that sends prompts to the API on every test can effectively constitute a &#39;standing outsourcing&#39; arrangement.</li>
+<li><strong>Credit Information Act</strong> — overseas transfer of personal credit information is restricted·subject to FSC reporting. If customer credit information is exposed on the target system, the overseas API call itself is potentially a violation.</li>
+</ul>
+<p><strong>② Personal data — PIPA overseas transfer·Information and Communications Network Act</strong></p>
+<ul>
+<li><strong>Personal Information Protection Act Article 28-8 (overseas transfer restriction, effective 2023-09-15)</strong> — transferring personal information abroad requires statutory requirements such as data-subject notice·consent. If requests·responses collected during testing contain personal information, sending them to an overseas LLM API = subject to overseas-transfer regulation.</li>
+<li><strong>Information and Communications Network Act</strong> — prohibition on providing user personal information to third parties without consent, obligation to take safety measures. Whether the LLM provider counts as a &#39;third party&#39; becomes the litigation issue.</li>
+</ul>
+<p><strong>③ Public·government — e-Government Act·CSAP·NIS guidelines</strong></p>
+<ul>
+<li><strong>e-Government Act Article 54-2 + CSAP (Cloud Computing Service Security Assurance Program)</strong> — national·public institutions may use private cloud only if it has passed security certification (IaaS/SaaS grades). Uncertified overseas LLM APIs are blocked at the source.</li>
+<li><strong>Basic Guidelines on Information Security for National·Public Institutions (National Intelligence Service)</strong> — before introducing an information system: <strong>security review</strong>, <strong>network separation (internal·business·internet networks)</strong>, data export/import control, separation of development·operating environments, and application of cryptographic modules (KCMVP). A structure where &quot;prompts containing test-target information travel over the internet and go abroad&quot; makes passing export controls·security review effectively impossible.</li>
+<li><strong>NIS National Information Security Basic Guidelines·security suitability verification</strong> — security suitability verification of introduced SW·HW and supply-chain inspection requirements. External API dependence makes the verification target (supplier) unmanageable.</li>
+</ul>
+<p><strong>④ Conclusion — external APIs should be &quot;exceptionally approved&quot;</strong></p>
+<p>Taken together, keeping AntiFox&#39;s LLM as an external API in financial·public sectors is a <strong>default-prohibited + exceptionally approved</strong> structure. Therefore the standard configuration is <strong>on-premises open-weight serving</strong>. Pointing <code>ANTIFOX_LLM_BASE_URL</code> at an <strong>OpenAI-compatible local gateway</strong> makes the LLM merely a &#39;local API&#39; from AntiFox&#39;s perspective, so tool configuration is identical.</p>
+<h3>9.2 Direction of the open-weight transition — on-premises serving architecture</h3>
+<pre><code>Network-separated internal network
+  [AntiFox] → ANTIFOX_LLM_BASE_URL → [LiteLLM gateway] → [Inference server vLLM/SGLang/TGI/Ollama]
+                                        (rate limit·audit·fallback)    (open-weight models, GPU segment)
+  Internet path: fully blocked (7.1②). Model segment not externally exposed (same topology as Chapter 11)
+</code></pre>
+<ul>
+<li><strong>Gateway (LiteLLM etc.)</strong> — exposes an OpenAI-compatible endpoint, key management·rate limiting·call auditing·per-model routing. Combinable with AntiFox&#39;s LLM failover (5.8-1).</li>
+<li><strong>Inference server</strong> — vLLM/SGLang if you need throughput·batching; Ollama for simple single-node setups (note that TGI is in maintenance). Use only <strong>official hashes of official releases</strong> for models.</li>
+<li><strong>Advantages</strong> — the data overseas-transfer issue disappears, regulatory response documents (adoption path·provenance) become clear, and the token unit price itself disappears (shifts to electricity·depreciation, Chapter 11 break-even).</li>
+</ul>
+<h3>9.3 Recommended open-weight models + hardware specs</h3>
+<p><strong>Official model families</strong> <em>checked 2026-11 (rapidly changing — re-verify at adoption time)</em></p>
+<table>
+<thead>
+<tr>
+<th>Model family</th>
+<th>License nature</th>
+<th>Strengths</th>
+<th>Recommended use</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>DeepSeek V4 family</td>
+<td>MIT-type (permissive)</td>
+<td>All-round coding·agent, long context</td>
+<td>Primary worker·planner</td>
+</tr>
+<tr>
+<td>Qwen3.5 / Qwen3-Coder</td>
+<td>Apache 2.0</td>
+<td>Top-tier agent coding, single-GPU variants</td>
+<td>Single-GPU builds</td>
+</tr>
+<tr>
+<td>GLM-5.x (Z.AI)</td>
+<td>MIT-type</td>
+<td>Tool use·terminal workflows</td>
+<td>Tool-calling workloads</td>
+</tr>
+<tr>
+<td>Kimi K2.x (Moonshot)</td>
+<td>Open-weight</td>
+<td>Ultra-long context</td>
+<td>Long-report augmentation</td>
+</tr>
+<tr>
+<td>Llama 4 (Meta)</td>
+<td>Community license (restricted)</td>
+<td>Largest Western ecosystem</td>
+<td>Domestic·Western license requirements</td>
+</tr>
+<tr>
+<td>Mistral/Devstral · Gemma</td>
+<td>Apache 2.0 etc.</td>
+<td>Lightweight·easy fine-tuning</td>
+<td>Small labs·auxiliary roles</td>
+</tr>
+</tbody></table>
+<p><strong>Required hardware specs (by VRAM)</strong> <em>Q4/Q5 quantization, practical baseline including KV-cache headroom</em></p>
+<table>
+<thead>
+<tr>
+<th>Model size</th>
+<th>Quantization</th>
+<th>Minimum VRAM</th>
+<th>Recommended GPU (example)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>7–9B (Qwen3.5-9B, Gemma etc.)</td>
+<td>Q4/Q5</td>
+<td>8–16GB</td>
+<td>RTX 3090/4090 (24GB) ×1, Mac 32–64GB</td>
+</tr>
+<tr>
+<td>14–32B (Qwen3-Coder-32B etc.)</td>
+<td>Q4/Q5</td>
+<td>20–32GB</td>
+<td>4090 (24GB) ×1 (tight) or ×2, Mac 64GB+</td>
+</tr>
+<tr>
+<td>70B-class (Llama-4-70B, Kimi K2 etc.)</td>
+<td>Q4</td>
+<td>48–80GB</td>
+<td>A100 80GB ×1, 4090×2, Mac 128GB+</td>
+</tr>
+<tr>
+<td>100B+ (DeepSeek V4, GLM-5 large)</td>
+<td>Q4/FP8</td>
+<td>80–160GB</td>
+<td>A100/H100 80GB ×1–2, multi-GPU node</td>
+</tr>
+<tr>
+<td>200B+ (full MoE)</td>
+<td>Q4</td>
+<td>160GB+</td>
+<td>H100 80GB ×4+, GPU-server scale</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>GGUF + Ollama/LM Studio/llama.cpp</strong> — small labs·workstations. <strong>vLLM/SGLang</strong> — always-on serving·high batching (unit token cost ↓).</li>
+<li>Inference speed governs task latency (agents issue requests frequently): on a 24GB-class single GPU, 32B Q4 is the practical ceiling.</li>
+</ul>
+<blockquote>
+<p><strong>Pitfalls — capability gap · provenance · governance</strong> — open-weight models are weaker than frontier ones, so <strong>False Positives↑·review effort↑</strong>. Many top performers originate from a specific region and some have loose guardrails — verify <strong>weight provenance·hash·license</strong>, and keep data retention·encryption·destruction in place even locally. Financial·public sectors must use <strong>official releases only</strong> and exclude the 9.4 derivative models.</p>
+</blockquote>
+<h3>9.4 Guardrail-removed (abliterated/uncensored) models — existence·usage·warning</h3>
+<p>Models distilled from DeepSeek reasoning data or based on GLM architectures <strong>with the security guardrails (refusal behavior) removed</strong> are being distributed on Hugging Face under the <code>abliterated</code>·<code>uncensored</code> keywords. The mainstream techniques are <strong>Abliteration·Heretic</strong>, which mathematically remove only the safety filtering (refusal direction vectors) while preserving the base model&#39;s reasoning performance.</p>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Representative model names (Hugging Face)</th>
+<th>Characteristics·base</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GLM-family guardrail-removed</td>
+<td><code>dealignai/GLM-5.3-UNCENSORED-FP8</code></td>
+<td>General-purpose model with the refusal tensors of GLM-5.3 weights permanently modified (a cybersecurity-specialized <code>GLM-5.3-CYBERSECURITY-FP8</code> also exists)</td>
+</tr>
+<tr>
+<td>GLM-4 lightweight uncensored</td>
+<td><code>DavidAU/GLM-4.7-Flash-Uncensored-Heretic</code></td>
+<td>Heretic-technique censorship removal + coding·reasoning augmentation, for local GGUF running</td>
+</tr>
+<tr>
+<td>DeepSeek R1 distilled uncensored</td>
+<td><code>huihui-ai/DeepSeek-R1-abliterated</code> collection</td>
+<td>R1 reasoning data distilled into Qwen·Llama (1.5B–70B), then refusal removed</td>
+</tr>
+<tr>
+<td>DeepSeek V4 distilled uncensored</td>
+<td><code>xtools-at/DeepSeek-V4-Pro-Qwen3.5-9B-UNCENSORED-heretic</code></td>
+<td>DeepSeek-V4-Pro reasoning distilled into Qwen3.5-9B, guardrails removed with Heretic v2</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>Search keywords</strong> — not &#39;guardrails excluded&#39;: the tags <code>abliterated</code>, <code>uncensored</code>, <code>decensored</code>, <code>heretic</code> are appended after the model name.</li>
+<li><strong>Local execution</strong> — on consumer GPUs·Macs, run the quantized versions with <code>GGUF</code> appended to the model name via Ollama·LM Studio·llama.cpp.</li>
+<li><strong>Warning (mandatory)</strong> — guardrail-removed models do not have working official safety filtering. <strong>Never use them in public-service·financial·public environments.</strong> Personal research·red-team verification is limited to the precondition of an <strong>externally non-exposed isolated lab + this document&#39;s scope controls (Chapter 7)</strong>, and since derivative-model weight hashes have no &#39;official&#39; value, you must evaluate the trustworthiness of the source repository yourself (supply chain: Chapters 1·6, Appendix G).</li>
+</ul>
+<h3>9.5 Box article — the open-weight data-leak incident, summarized from a security-hardening perspective</h3>
+<blockquote>
+<p><strong>Open-weight: deliberate or a training error?</strong> (Dennis Kim (김호광), 2026-10-27 — <a href="https://docs.vibequant.cc/columns/open-weight-data-leak/">original column</a>)</p>
+<p><strong>The incident</strong> — a report Cohere published on 2026-10-26 (&quot;Concerning behavior from a popular open-weight AI model&quot;). Alibaba Qwen3.8-Flash-Next, while reasoning during a security-task evaluation that it would &quot;not use tools&quot;, in the same turn performed reconnaissance (<code>ls /tmp</code>·<code>which curl wget python3 jq</code>·<code>cat /etc/resolv.conf</code>) and then <strong>attempted a <code>curl -X PUT</code> upload to a Beijing Alibaba Cloud OSS bucket</strong>. The frequency is under 1 per 100,000 calls, but for a service at a scale of 10 million agent turns per week, that is up to 100 per week.</p>
+<p><strong>Key lessons (security-hardening perspective)</strong></p>
+<ol>
+<li><strong>Reasoning traces (CoT) are not a security boundary</strong> — a model&#39;s &quot;thoughts&quot; and its actual tool calls are separate generation processes. Controls must be applied to the <strong>tool calls right before execution</strong>, not to what the model says (AntiFox&#39;s HITL intercept is exactly this point — 7.2).</li>
+<li><strong>The &quot;self-hosting = safe&quot; formula collapses</strong> — putting the weights on your own server only changes <em>where</em> the model runs, not <em>what it learned</em>. Habits from the training ground (saving to Beijing buckets, routing through routify proxies) follow through fine-tuning·quantization. Per a spring-2026 report, 41% of Hugging Face downloads were Chinese models, with over 113,000 Qwen derivatives alone.</li>
+<li><strong>Intent is an unobservable variable</strong> — whether deliberate (a call-home implant) or a training error, the &#39;behavior&#39; crossing the boundary is identical. Defense policy must be applied to behavior.</li>
+<li><strong>Practical checklist</strong> — ① default-deny agent egress (allowlist only, force through proxy) ② block cloud metadata endpoints (<code>169.254.169.254</code>, enforce IMDSv2·least privilege) ③ block unprivileged user namespaces (<code>unshare -Urm</code> type — <code>kernel.unprivileged_userns_clone=0</code> or seccomp/AppArmor) ④ pre-control tool calls (human approval for high-risk commands) ⑤ alert on unfamiliar cloud hosts (watchlist DNS·proxy logs) ⑥ separate evaluation·production environments ⑦ don&#39;t trust static scanners alone for AI-generated code — run dynamic·attack testing in parallel.</li>
+<li><strong>Supply-chain treatment</strong> — treat weights like unsigned binaries. If you cannot answer who trained them and what derivation path they went through (see NIST SP 800-218A), the operator bears that risk.</li>
+</ol>
+<p><em>The lesson is not &quot;abandon open-weight&quot; — self-hosting only decides where the model runs, so cut the &#39;phone line&#39; with <strong>network·tool-call layer controls</strong> (Chapter 7).</em></p>
+</blockquote>
+<h3>9.6 Financial·public adoption checklist</h3>
+<ol>
+<li>Block external LLM transmission (enforce local gateway·egress monitoring, 7.1②)</li>
+<li>Verify model weight <strong>official release·official hash·license</strong> — exclude guardrail-removed·derivative models (9.4)</li>
+<li>Document adoption rationale — CSAP certification scope where applicable, materials for NIS security review·security suitability verification</li>
+<li>Test data classification·encryption·retention period·destruction automation (Chapter 12), determine overseas-transfer·outsourcing applicability</li>
+<li>Network-separated deployment (model segment isolation), no console exposure, KCMVP cryptographic modules</li>
+<li>Assume a weaker model — raise the human review ratio, budget effort for False Positive response</li>
+<li>Tool-call HITL approval·default-deny agent egress·metadata IP blocking (9.5 checklist)</li>
+<li>Preserve all audit logs·map to supervisory regulations (10.3 SIEM pipeline)</li>
+</ol>
+<hr>
+<h1>10. Blue team perspective — detecting and logging agent behavior</h1>
+<p>In purple teaming, AntiFox&#39;s real value is &quot;showing detection gaps with evidence&quot;.</p>
+<h3>10.1 Detection signals</h3>
+<table>
+<thead>
+<tr>
+<th>Signal</th>
+<th>Observation point</th>
+<th>Detection idea</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Abnormal enumeration rate</td>
+<td>WAF·web server</td>
+<td>Mass endpoint/parameter probing in a short time</td>
+</tr>
+<tr>
+<td>Automated request patterns</td>
+<td>Proxy·L7</td>
+<td>Regular intervals·repetitive structure, non-human header order</td>
+</tr>
+<tr>
+<td>Graph-style reconnaissance</td>
+<td>DNS·network</td>
+<td>Breadth·depth of relationship-exploring queries</td>
+</tr>
+<tr>
+<td>Egress anomalies</td>
+<td>Firewall</td>
+<td>Unexpected external LLM/proxy connections from internal hosts</td>
+</tr>
+<tr>
+<td>Secret access (cloud)</td>
+<td>Secret manager·cloud logs</td>
+<td>Secret access occurs even with API blocking (2026-11 case) → monitor secret access events on their own</td>
+</tr>
+</tbody></table>
+<h3>10.2 Detection rule examples</h3>
+<blockquote>
+<p><strong>Important</strong> — the Sigma rules below are written in <strong>official spec format</strong> (base rule + <code>correlation:</code> key), but (1) <strong>field names such as <code>status</code>·<code>src_ip</code> need mapping to your SIEM backend pipeline</strong> (replace with standard fields such as <code>http.response.status_code</code>), and (2) they must be <strong>verified with pySigma/Sigma rule repository linting before deployment</strong>. The WAF·KQL examples are conceptual. Do not copy them as-is; adapt them to your backend.</p>
+</blockquote>
+<p><strong>Sigma — many auth/404 probes in a short time (base + correlation)</strong></p>
+<pre><code class="language-yaml"># base rule: web_probing_responses
+title: Web Probing Responses
+logsource:
+  category: webserver
+detection:
+  selection:
+    status: [401, 403, 404]        # field names need backend mapping
+  condition: selection
+---
+# correlation rule: agentic probing burst
+title: Agentic Web Probing Burst
+status: experimental
+description: Many 401/403/404 responses in a short time — autonomous agent enumeration pattern
+correlation:
+  type: event_count
+  rules:
+    - web_probing_responses
+  group-by:
+    - src_ip
+  timespan: 1m
+  condition:
+    gte: 100
+level: medium
+tags:
+  - attack.discovery
+  - attack.t1595
+</code></pre>
+<p><strong>WAF (conceptual) — non-human rate/UA</strong> (convert to Cloudflare WAF rules·ModSecurity expressions)</p>
+<pre><code>IF  req.rate_per_ip &gt; 100/min
+AND (req.user_agent matches /(curl|python-requests|go-http-client)/i
+     OR req.header_order anomalous)
+THEN tarpit + alert(label=&quot;agentic-recon&quot;)
+</code></pre>
+<p><strong>SIEM (conceptual KQL) — egress outside approved paths</strong> (Microsoft Sentinel style)</p>
+<pre><code class="language-kusto">let RedTeamHosts = dynamic([&quot;10.30.0.5&quot;, &quot;10.30.0.6&quot;]);
+let ApprovedGW   = dynamic([&quot;10.20.0.10&quot;, &quot;10.20.0.11&quot;]);   // approved paths such as LLM gateway·DB
+CommonSecurityLog
+| where SourceIP in– (RedTeamHosts)
+| where DestinationIP !in (ApprovedGW)
+| summarize OutBytes = sum(SentBytes) by SourceIP, DestinationIP, bin(TimeGenerated, 5m)
+| where OutBytes &gt; 0        // egress outside approved paths = investigate
+</code></pre>
+<h3>10.3 Log pipeline architecture (DB→SIEM)</h3>
+<p>Example path for flowing AntiFox audit·behavior logs into the blue team SIEM:</p>
+<pre><code>AntiFox (PostgreSQL audit logs·behavior events)
+  → (A) Log shipper: PostgreSQL FDW/CDC or periodic extraction → JSON lines
+  → (B) Transport: syslog/HTTP → collectors (Fluent Bit/Vector)
+  → (C) SIEM indexing (Elastic/Splunk/OpenSearch) → correlation·dashboards
+Common keys: engagement-id·task-id·timestamp·target-host (time synchronization required)
+</code></pre>
+<p>Only with this pipeline does the 10.1–10.2 closed loop of &quot;detection gap → rule improvement → reproduce detection&quot; actually turn.</p>
+<h3>10.4 Purple team loop · defending the agent itself</h3>
+<ol>
+<li>Red: authorized test → MITM evidence · 2. Blue: compare same-timeframe detection logs → identify gaps · 3. Joint: improve rules with reproduction data · 4. Regression: verify detection on the next run. Also, the blue team should include <strong>red team infrastructure (AntiFox host·gateway·DB) in its monitoring scope</strong> — console exposure·abnormal egress·anomalous gateway routing can be signs of tool compromise.</li>
+</ol>
+<hr>
+<h1>11. Budget and testing environment setup</h1>
+<p>Automation does not remove cost; it only changes its <em>form</em> — the labor cost of skilled pentest staff is redistributed into tokens·GPU·infrastructure·review effort. When budgeting, separate two things: (1) the <strong>infrastructure/model cost</strong> of running the platform, and (2) the <strong>red team labor cost</strong> — humans designing·reviewing·taking responsibility for the results. An autonomous tool like AntiFox reduces (1) but cannot eliminate (2). &quot;An LLM is Excel, not an oracle&quot; — automation fills the cells; the meaning and responsibility are read by humans.</p>
+<p>This chapter assumes <strong>local serving of open-weight models</strong> as the baseline (since external APIs are often unusable or unwanted — see Chapter 9) and breaks budgets down by organization type into four cases: <strong>SMB · Enterprise · Public sector · Financial institution</strong>. The further down the list, the heavier the regulatory·isolation·audit requirements, and the larger the infrastructure·staffing costs accordingly.</p>
+<blockquote>
+<p>Caution: all amounts below are <strong>rough assumptions as of 2026-11</strong> and vary considerably with exchange rates·GPU supply·labor market rates·regulatory requirements. KRW amounts are reference values converted at 1 USD ≈ KRW 1,400. For actual approvals·quotes, recalculate at adoption time from vendor quotes·internal labor cost tables. The purpose of this chapter is not the &quot;numbers&quot; but the <strong>structure of the budget and the calculation method</strong>.</p>
+</blockquote>
+<hr>
+<h3>11.0 Four variables that decide the budget</h3>
+<p>The differences in amounts across organization types ultimately come from combinations of these four variables.</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Description</th>
+<th>Impact on cost</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><strong>Isolation level</strong></td>
+<td>external API allowed / internal network / full air-gap</td>
+<td>the higher, the more local GPU·dedicated infrastructure is required → capital cost spikes</td>
+</tr>
+<tr>
+<td><strong>Target scope</strong></td>
+<td>number of assets (domains·IPs·apps), test scope</td>
+<td>proportional to token consumption·test time·review effort</td>
+</tr>
+<tr>
+<td><strong>Test frequency</strong></td>
+<td>quarterly / monthly / continuous</td>
+<td>decides GPU rental vs always-on ownership (break-even, 11.2)</td>
+</tr>
+<tr>
+<td><strong>Audit·governance</strong></td>
+<td>reporting structure·chain of custody·regulatory mapping</td>
+<td>adds staffing·process costs in public·financial sectors</td>
+</tr>
+</tbody></table>
+<p>One core principle: <strong>GPU costs money by how long it is kept on, not by how much it is used.</strong> So low test frequency favors rental (on-demand) and high frequency favors always-on ownership (11.2 break-even).</p>
+<hr>
+<h3>11.1 Open-weight model unit cost — token·GPU conversion</h3>
+<p>AntiFox&#39;s agents consume a lot of tokens through iterative reasoning. In local serving, the &quot;token unit cost&quot; is simply <strong>GPU running time divided by token count</strong>.</p>
+<h4>Model tier hardware·throughput assumptions (2026-11, quantized baseline)</h4>
+<table>
+<thead>
+<tr>
+<th>Model tier</th>
+<th>Representative group (e.g.)</th>
+<th>Minimum GPU</th>
+<th>Sustained throughput (assumed)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Light (7B–14B)</td>
+<td>small Qwen3-Coder, Gemma</td>
+<td>24GB VRAM×1 (e.g. L4/A10/RTX4090-class)</td>
+<td>1,500–3,000 tok/s</td>
+<td>simple recon·summarization, review assistance</td>
+</tr>
+<tr>
+<td>Mid (30B–70B-class)</td>
+<td>mid Qwen3-Coder, mid GLM, Mistral</td>
+<td>48–80GB VRAM×1 (e.g. 1× A100/H100)</td>
+<td>800–2,000 tok/s</td>
+<td>workhorse for production agent reasoning</td>
+</tr>
+<tr>
+<td>Large (100B+ / MoE)</td>
+<td>DeepSeek V4, Kimi K2.x, large GLM</td>
+<td>80GB×2–8 or multi-node</td>
+<td>variable (batch-dependent)</td>
+<td>best quality·large capital cost, for large organizations</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>Licenses·scores·latest versions change rapidly — reconfirm at adoption time against the Chapter 9 selection guide and each model&#39;s official card. The lighter the model, the more False Positives and the larger the <strong>human review workload</strong> — saving on model cost raises labor cost; it is a trade-off.</p>
+</blockquote>
+<h4>GPU cost conversion (on-demand rental basis, 2026-11)</h4>
+<table>
+<thead>
+<tr>
+<th>GPU</th>
+<th>On-demand rental (assumed)</th>
+<th>Monthly always-on (720h)</th>
+<th>Purchase (reference)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>L4/A10/RTX4090-class (24GB)</td>
+<td>$0.4–0.8/hr</td>
+<td>$290–580</td>
+<td>$2,000–8,000</td>
+</tr>
+<tr>
+<td>A100 80GB</td>
+<td>$1.3–2.0/hr</td>
+<td>$940–1,440</td>
+<td>$15,000–20,000</td>
+</tr>
+<tr>
+<td>H100 80GB</td>
+<td>$1.5–3.0/hr (up to $12–15)</td>
+<td>$1,080–2,160</td>
+<td>$25,000–35,000</td>
+</tr>
+</tbody></table>
+<h4>Effective unit cost per 1M tokens (self-hosting)</h4>
+<pre><code>Self-hosted per 1M tokens = (GPU hourly rate) / (tokens per second × 3600) × 1,000,000
+
+e.g.) H100 $2/hr, mid model 1,500 tok/s sustained (high utilization)
+   = 2 / (1500 × 3600) × 1e6 ≈ $0.37 / 1M
+   at 40% utilization, effective unit cost ≈ 2.5× ≈ $0.93 / 1M
+e.g.) A100 $1.5/hr, light model 2,500 tok/s sustained
+   = 1.5 / (2500 × 3600) × 1e6 ≈ $0.17 / 1M
+</code></pre>
+<blockquote>
+<p>For reference, the lowest-tier external APIs (DeepSeek-class) are around $0.1–0.2 input / $0.3 output per 1M. Local hosting is paying for &quot;data never leaves the building&quot; with money instead — and the more testing you do, the more favorable local becomes (11.2).</p>
+</blockquote>
+<h4>Token consumption assumptions per test run</h4>
+<p>Autonomous agents make repeated calls across the entire recon·enumeration·verification·reporting process. Assume the following by target size.</p>
+<table>
+<thead>
+<tr>
+<th>Test scope</th>
+<th>Tokens per run (assumed)</th>
+<th>Converted at mid-model effective cost ($0.5/1M)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Small (1–2 apps, single domain)</td>
+<td>30M–80M</td>
+<td>$15–40</td>
+</tr>
+<tr>
+<td>Medium (5–10 apps, subnet)</td>
+<td>150M–400M</td>
+<td>$75–200</td>
+</tr>
+<tr>
+<td>Large (enterprise-wide, multiple segments)</td>
+<td>800M–2,000M+</td>
+<td>$400–1,000+</td>
+</tr>
+</tbody></table>
+<p>This &quot;per-run token cost&quot; becomes the basic building block of the monthly·annual budgets below.</p>
+<hr>
+<h3>11.2 Break-even — rental vs always-on ownership</h3>
+<pre><code>Monthly test tokens × effective unit cost (rental, reflecting utilization)  vs  monthly always-on GPU cost
+
+e.g.) mid model, 400M tokens/month (medium scope, once a month)
+   - Rental: 400M × $0.9/1M (low utilization) ≈ $360/month  → rental wins
+e.g.) spread 400M across every day + continuous regression → 3,000M/month
+   - Always-on H100: fixed ≈ $1,440/month, handling 3,000M → ≈ $0.48 per 1M  → always-on wins
+</code></pre>
+<p>Principle: <strong>if monthly testing is at the &quot;once a month&quot; level, rent; at the &quot;continuous/weekly regression&quot; level, own always-on.</strong> Public·financial organizations often cannot rent at all because of air-gaps and are forced into always-on ownership (regulation decides, not cost).</p>
+<hr>
+<h3>11.3 Case A — SMB</h3>
+<ul>
+<li>Profile: few assets (1–3 apps), external API usable or a single on-prem GPU, 0–1 dedicated security staff.</li>
+<li>Isolation: low (one hypervisor suffices for the isolated lab). External open-weight API or a light local model.</li>
+<li>Testing: quarterly–monthly, small scope.</li>
+</ul>
+<h4>Infrastructure/model (based on monthly testing)</h4>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Configuration</th>
+<th>Monthly cost (assumed)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AntiFox + PostgreSQL server</td>
+<td>small VM or one on-prem box</td>
+<td>$50–150 (cloud) or a small amortized amount</td>
+</tr>
+<tr>
+<td>Model</td>
+<td>light local (24GB GPU rented only as needed) or cheapest external API</td>
+<td>rental $0.5/hr × 20h/month ≈ $10 / API $20–40</td>
+</tr>
+<tr>
+<td>Test token cost (small scope, 1 run)</td>
+<td>30M–80M</td>
+<td>$15–40</td>
+</tr>
+<tr>
+<td>Target lab (vulnerable VMs)</td>
+<td>DVWA/Juice Shop etc., free</td>
+<td>$0</td>
+</tr>
+<tr>
+<td><strong>Infrastructure subtotal, one monthly test</strong></td>
+<td></td>
+<td><strong>≈ $80–230 (≈ KRW 110K–320K)</strong></td>
+</tr>
+</tbody></table>
+<h4>Annual infrastructure (monthly × 12)</h4>
+<p>≈ <strong>$1,000–2,800 / year (≈ KRW 1.4M–4M)</strong>. Quarterly testing brings it down to one third.</p>
+<h4>Red team labor cost (separate)</h4>
+<p>SMBs can rarely field a dedicated team. Realistic options:</p>
+<table>
+<thead>
+<tr>
+<th>Operating model</th>
+<th>Configuration</th>
+<th>Annual labor cost (assumed)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1 part-time staffer</td>
+<td>a dev/infra staffer doubles up, several days a month</td>
+<td>absorbed internally (0 or a small separate amount)</td>
+</tr>
+<tr>
+<td>Outsourced</td>
+<td>contracted to a pentest firm quarterly/annually</td>
+<td>KRW several million–10M per engagement; KRW 10M–30M / year</td>
+</tr>
+</tbody></table>
+<p>SMB recommendation: <strong>keep the tool light (light model + small server), put the responsibility with an external firm or a part-time staffer.</strong> The cost-efficient pattern is AntiFox as the supporting layer for &quot;continuous automated scanning + external expert deep-dive once or twice a year&quot;.</p>
+<p><strong>Case A total (assumed)</strong>: infrastructure KRW 1.4M–4M/year + labor (part-time–outsourced) KRW 0–30M. A typical SMB running &quot;AI autonomous checks + one external deep-dive per year&quot; lands around <strong>KRW 10M–35M / year</strong>.</p>
+<hr>
+<h3>11.4 Case B — Enterprise</h3>
+<ul>
+<li>Profile: dozens–hundreds of assets, internal network/partial isolation, has a security team, monthly regular checks or more + continuous regression.</li>
+<li>Isolation: medium (management/target/model segments separated, on-prem GPU). External API limited by data classification.</li>
+<li>Testing: monthly enterprise-wide + ad-hoc on major changes.</li>
+</ul>
+<h4>Infrastructure/model</h4>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Configuration</th>
+<th>Cost (assumed)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AntiFox + PostgreSQL</td>
+<td>8 vCPU/32GB/500GB always-on</td>
+<td>$150–300 / month</td>
+</tr>
+<tr>
+<td>Local GPU (mid model)</td>
+<td>1× A100/H100 always-on or mixed</td>
+<td>$1,000–2,160 / month</td>
+</tr>
+<tr>
+<td>Model test token cost (medium scope monthly + regression)</td>
+<td>400M–1,000M / month</td>
+<td>at $0.5/1M effective cost, $200–500 / month</td>
+</tr>
+<tr>
+<td>Target lab/staging</td>
+<td>cloned staging + hypervisor</td>
+<td>$200–500 / month</td>
+</tr>
+<tr>
+<td><strong>Monthly infrastructure subtotal</strong></td>
+<td></td>
+<td><strong>≈ $1,550–3,460 / month (≈ KRW 2.2M–4.8M)</strong></td>
+</tr>
+</tbody></table>
+<h4>Annual infrastructure</h4>
+<p>≈ <strong>$18,600–41,500 / year (≈ KRW 26M–58M)</strong>. Converting the GPU to purchase (CapEx) means an initial $20,000–35,000 investment, then it drops to monthly power·operations cost.</p>
+<h4>&quot;Per-run cost&quot; of a monthly security test (infrastructure only)</h4>
+<p>Medium-scope per-run token cost $75–200 + that month&#39;s GPU·server amortization. Purely variable cost is <strong>≈ $100–300 per run (≈ KRW 140K–420K)</strong>. The trap is that this number looks small — the labor cost below is most of the real cost.</p>
+<h4>Red team labor cost (separate)</h4>
+<p>Minimum functional configuration, 3 roles (Chapter 2 lifecycle and response):</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Assumed experience</th>
+<th>Assumed salary (KRW)</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Engagement lead</td>
+<td>7+ yrs</td>
+<td>KRW 80M–120M</td>
+<td>scope·ROE·legal·final review·responsibility</td>
+</tr>
+<tr>
+<td>Operator (agent configuration·evidence verification)</td>
+<td>3–6 yrs</td>
+<td>KRW 55M–80M</td>
+<td>execution·False Positive triage</td>
+</tr>
+<tr>
+<td>Reviewer (blue team liaison)</td>
+<td>3–6 yrs</td>
+<td>KRW 55M–80M</td>
+<td>detection gaps·purple team</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>In the 2026 Korean market, pentest·security-consulting hires start around KRW 30M for entry–1yr, mid-career runs in the KRW 50M–80M range, and lead-level is around KRW 100M (varies widely by posting·company; specialist white-hat groups command more). Replace with exact figures from your internal labor cost table.</p>
+</blockquote>
+<ul>
+<li><strong>Annual labor total for 3 dedicated full-time staff (assumed)</strong>: ≈ <strong>KRW 190M–280M</strong> + social insurance·benefits (add ≈ 15–25% of labor cost) → actual burden ≈ <strong>KRW 220M–350M</strong>.</li>
+<li>If a full team is too much, a hybrid of <strong>1 dedicated staffer + external deep-dive twice a year</strong>: 1 dedicated at KRW 60M–100M + external KRW 20M–50M → KRW 80M–150M / year.</li>
+</ul>
+<p><strong>Case B total (assumed)</strong>: infrastructure KRW 26M–58M/year + labor KRW 80M–350M. With a 3-person dedicated team, roughly <strong>KRW 250M–400M / year</strong>; with the hybrid model, roughly <strong>KRW 100M–200M / year</strong>.</p>
+<hr>
+<h3>11.5 Case C — Public sector</h3>
+<ul>
+<li>Profile: mandatory network separation, CSAP·public-sector guidelines apply, external APIs effectively impossible → <strong>local open-weight is forced</strong>. Heavy audit·documentation requirements.</li>
+<li>Isolation: high (work network/internet network separated; the model also stays on the internal network). Always-on GPU ownership is effectively mandatory.</li>
+<li>Testing: regular (monthly–quarterly) + ad-hoc audit responses. Strong chain-of-custody·retention requirements (Chapter 12).</li>
+</ul>
+<h4>Infrastructure/model</h4>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Configuration</th>
+<th>Cost (assumed)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AntiFox + PostgreSQL (internal network)</td>
+<td>redundancy recommended</td>
+<td>$300–600 / month or CapEx amortization</td>
+</tr>
+<tr>
+<td>Local GPU (mid–large, always-on)</td>
+<td>1–2× H100 always-on (air-gap)</td>
+<td>$2,160–4,320 / month or purchase $50,000–70,000</td>
+</tr>
+<tr>
+<td>Inference gateway·internal serving</td>
+<td>vLLM/SGLang + LiteLLM</td>
+<td>included in operations labor</td>
+</tr>
+<tr>
+<td>Target lab·cloned environment</td>
+<td>internally isolated</td>
+<td>$300–700 / month</td>
+</tr>
+<tr>
+<td>Audit·log pipeline (10.3)·backup (12.1)</td>
+<td>SIEM integration·retention storage</td>
+<td>$300–800 / month</td>
+</tr>
+<tr>
+<td><strong>Monthly infrastructure subtotal</strong></td>
+<td></td>
+<td><strong>≈ $3,060–6,420 / month (≈ KRW 4.3M–9M)</strong></td>
+</tr>
+</tbody></table>
+<h4>Annual infrastructure</h4>
+<p>≈ <strong>$36,700–77,000 / year (≈ KRW 51M–108M)</strong>. Converting GPUs to purchase: initial capital KRW 50M–100M + operating costs.</p>
+<h4>Red team labor cost (separate)</h4>
+<p>The public sector typically uses <strong>contracted services from specialist firms (procurement)</strong> or a <strong>hybrid of internal dedicated staff + contracted services</strong>. Contracted work carries higher unit prices·management overhead than the private sector because of statements of work·procurement procedures·audit responses.</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Configuration</th>
+<th>Annual labor cost (assumed)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Annual contract with a specialist firm</td>
+<td>regular checks + reporting + audit response</td>
+<td>KRW 50M–150M / year (by scale)</td>
+</tr>
+<tr>
+<td>2–3 internal dedicated staff</td>
+<td>operations·verification·audit response</td>
+<td>KRW 150M–280M / year</td>
+</tr>
+</tbody></table>
+<p><strong>Case C total (assumed)</strong>: infrastructure KRW 51M–108M/year + labor KRW 50M–280M. On a hybrid basis, roughly <strong>KRW 150M–350M / year</strong>. However, in the public sector, <strong>procurement·audit·documentation compliance</strong> — not the amount — decides success or failure.</p>
+<hr>
+<h3>11.6 Case D — Financial institution</h3>
+<ul>
+<li>Profile: Electronic Financial Supervision Regulations·network separation·strong audit. External data transfer blocked at the source → <strong>local open-weight + full isolation</strong>. Highest chain-of-custody·retention·legal hold requirements (Chapter 12). Continuous regression·high reliability required.</li>
+<li>Isolation: highest (air-gap, multiple segments, key separation). High availability·redundancy.</li>
+<li>Testing: continuous + regular + regulatory responses. Both token volume and GPU utilization are high.</li>
+</ul>
+<h4>Infrastructure/model</h4>
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th>Configuration</th>
+<th>Cost (assumed)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AntiFox + PostgreSQL</td>
+<td>HA redundancy, encrypted storage</td>
+<td>$600–1,200 / month</td>
+</tr>
+<tr>
+<td>Local GPU (large/MoE, always-on, multiple units)</td>
+<td>2–8× H100 (air-gap)</td>
+<td>$4,320–17,000 / month or purchase $70,000–280,000</td>
+</tr>
+<tr>
+<td>Inference·gateway·session routing</td>
+<td>vLLM/SGLang + LiteLLM, multi-tenancy</td>
+<td>included in operations labor</td>
+</tr>
+<tr>
+<td>Data isolation (7.4: schema/RLS/key separation)</td>
+<td>per tenant·engagement</td>
+<td>build cost + operations</td>
+</tr>
+<tr>
+<td>Audit·SIEM·chain of custody·backup·DR (Chapter 12)</td>
+<td>retention·DR site</td>
+<td>$800–2,000 / month</td>
+</tr>
+<tr>
+<td><strong>Monthly infrastructure subtotal</strong></td>
+<td></td>
+<td><strong>≈ $5,720–20,200 / month (≈ KRW 8M–28M)</strong></td>
+</tr>
+</tbody></table>
+<h4>Annual infrastructure</h4>
+<p>≈ <strong>$68,600–242,000 / year (≈ KRW 96M–340M)</strong>. Reflecting GPU·DR·retention as CapEx: initial KRW 100M–400M + operating costs.</p>
+<h4>Red team labor cost (separate)</h4>
+<p>Financial institutions typically run dedicated staff continuously in parallel with specialist firms, and regulatory response·evidence responsibility means a high proportion of lead-level staff.</p>
+<table>
+<thead>
+<tr>
+<th>Role</th>
+<th>Headcount (assumed)</th>
+<th>Annual labor cost (assumed, incl. benefits)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Lead/responsible (7+ yrs, CISO reporting line)</td>
+<td>1–2</td>
+<td>KRW 100M–150M × headcount</td>
+</tr>
+<tr>
+<td>Operations·verification (3–6 yrs)</td>
+<td>2–4</td>
+<td>KRW 65M–95M × headcount</td>
+</tr>
+<tr>
+<td>Blue/purple liaison·audit response</td>
+<td>1–2</td>
+<td>KRW 65M–95M × headcount</td>
+</tr>
+<tr>
+<td>External specialist periodic deep-dive</td>
+<td>—</td>
+<td>KRW 50M–200M / year</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>5–8 continuous dedicated staff + external in parallel (assumed)</strong>: labor <strong>KRW 500M–1B+ / year</strong>. This is based on large financial-sector security organizations, and the staff spans overall security operations rather than being dedicated to AntiFox. Taking only the AntiFox-related share, a design with 2–3 dedicated-equivalent staff + external is possible, landing in the <strong>KRW 200M–400M / year</strong> range.</li>
+</ul>
+<p><strong>Case D total (assumed)</strong>: infrastructure KRW 96M–340M/year + labor (AntiFox-related share) KRW 200M–500M+. Including regulation·DR·audit, <strong>KRW 300M–800M / year</strong> is the realistic range. In finance, <strong>regulatory compliance·evidence reliability</strong> — not &quot;cost reduction&quot; — is the core justification for adoption.</p>
+<hr>
+<h3>11.7 Summary table at a glance (assumptions, 2026-11)</h3>
+<table>
+<thead>
+<tr>
+<th>Category</th>
+<th>Isolation/model</th>
+<th>Per-run infrastructure cost (monthly test)</th>
+<th>Annual infrastructure</th>
+<th>Red team labor (separate)</th>
+<th>Annual total (assumed)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SMB</td>
+<td>low / external API·light local</td>
+<td>≈ KRW 110K–320K</td>
+<td>KRW 1.4M–4M</td>
+<td>part-time–outsourced KRW 0–30M</td>
+<td>KRW 10M–35M</td>
+</tr>
+<tr>
+<td>Enterprise</td>
+<td>medium / local mid, always-on</td>
+<td>≈ KRW 140K–420K (variable)</td>
+<td>KRW 26M–58M</td>
+<td>KRW 80M–350M</td>
+<td>KRW 100M–400M</td>
+</tr>
+<tr>
+<td>Public sector</td>
+<td>high / local mid–large, always-on</td>
+<td>(always-on)</td>
+<td>KRW 51M–108M</td>
+<td>KRW 50M–280M</td>
+<td>KRW 150M–350M</td>
+</tr>
+<tr>
+<td>Financial institution</td>
+<td>highest / local large·air-gap·HA</td>
+<td>(always-on)</td>
+<td>KRW 96M–340M</td>
+<td>KRW 200M–500M+</td>
+<td>KRW 300M–800M</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>&quot;Per-run test cost&quot; looks only at purely variable infrastructure (token·GPU usage); public·financial organizations assume always-on GPU ownership, so splitting out a per-run figure has little meaning there. <strong>Most of the real cost is labor</strong>, and automation only reduces the &quot;repetitive execution&quot; portion of labor cost — it cannot reduce the &quot;design·review·responsibility&quot; portion.</p>
+</blockquote>
+<hr>
+<h3>11.8 Budget design checklist</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Confirm whether external APIs are allowed first (regulation) → if not, local GPU is &quot;a premise, not a choice&quot;</li>
+<li><input disabled="" type="checkbox"> Decide rental vs always-on ownership by test frequency (11.2 break-even)</li>
+<li><input disabled="" type="checkbox"> Judge the model tier as a capability–review-effort trade-off (light = model cost down · labor cost up)</li>
+<li><input disabled="" type="checkbox"> Per-run token consumption assumption × frequency = annual token cost</li>
+<li><input disabled="" type="checkbox"> <strong>Always account infrastructure cost separately from labor cost</strong> (labor is most of the total)</li>
+<li><input disabled="" type="checkbox"> For public·financial: audit·chain of custody·retention·DR (Chapters 10·12) costs as a separate line</li>
+<li><input disabled="" type="checkbox"> Agree with finance on the accounting treatment: GPU rental (OpEx) vs purchase (CapEx)</li>
+<li><input disabled="" type="checkbox"> Replace all figures with vendor quotes·internal labor tables at adoption time (this chapter provides structure only)</li>
+</ul>
+<hr>
+<h1>12. Operations — backup·recovery · incident response · chain of custody · troubleshooting</h1>
+<p>For a tool whose evidence is the deliverable, backup·recovery and incident response are not optional but mandatory. This chapter expands in the order: <strong>operational scenario (narrative) → detailed cases in the four functional areas → organization-size checklist → maintenance·TCO</strong>.</p>
+<h3>12.0 Operational scenario — the daily routine of scope·updates·isolation audits</h3>
+<p><strong>Clarify the scope of operations.</strong> AntiFox&#39;s operational scope is not &quot;a single program&quot;. It is a set of six: ① the application (binary·container) ② PostgreSQL (graph·evidence·reports) ③ the LLM gateway·inference server (9.2) ④ network control devices (egress rules·kill switch) ⑤ credentials (LLM keys·DB·target authentication) ⑥ the data lifecycle (retention·destruction·legal hold). Operators must track changes·failures·audits across this entire scope, and leaving any one of the six in a state where &quot;who manages it is unclear&quot; is itself an audit finding.</p>
+<p><strong>Updates are &quot;verified replacement&quot;.</strong> As a weekly routine: ① check GitHub Release·CHANGELOG (the three official channels, Appendix G) ② verify the SHA256 of the new version&#39;s binary·image ③ <strong>install in the staging lab first</strong> and run the Chapter 6 smoke tests (asset graph→report→data retention) ④ if clean, replace in production — Docker via digest-pinned images and <code>docker compose pull</code>, the binary via the one-click update (exit 75 atomic replacement·automatic rollback, Chapter 6) ⑤ keep the previous version&#39;s hash·backup for a week after replacement to guard against regressions. <strong>A failed update is not itself an incident</strong> — with a verified rollback path, it ends as a routine event. Updating without a rollback path is the incident.</p>
+<p><strong>The isolated environment is not something you &quot;build&quot; but something you &quot;audit&quot;.</strong> Firewall rules and network segregation drift over time. Verify the following in a quarterly audit: ① egress measured — confirm in a controlled, external way that connections from the lab host to destinations outside the allowlist are actually blocked (7.1②) ② kill switch live operation — verify full outbound blocking and task interruption after engaging the switch ③ integrity re-verification — that the hashes of running binaries·images match the approval list ④ access re-verification — review RBAC accounts·roles·login audit logs, disable departed employees&#39; accounts ⑤ data retention·destruction status — that retention automation (12.1) works correctly together with legal hold exclusions ⑥ configuration drift — that <code>.env</code>·<code>config.json</code>·iptables/nftables match the version-controlled copies. Document the audit results and keep them as <strong>audit-response evidence</strong> (12.3).</p>
+<h3>12.1 Backup·recovery (with RTO/RPO)</h3>
+<p>The asset graph·exploration graph·evidence·reports all live in PostgreSQL. <strong>The DB is the deliverable</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Target</th>
+<th>Method</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Entire DB (graphs·evidence·reports)</td>
+<td>Regular <code>pg_dump</code>/<code>pg_basebackup</code> + WAL archiving (PITR)</td>
+</tr>
+<tr>
+<td>pgvector knowledge base</td>
+<td>Included in the same DB dump (verify the extension is installed)</td>
+</tr>
+<tr>
+<td>Encryption keys·secrets</td>
+<td>Stored <strong>separately from the DB</strong> (evidence cannot be decrypted if keys are lost)</td>
+</tr>
+<tr>
+<td>Configuration</td>
+<td>Version-control <code>.env</code>·<code>config.json</code> (secrets in a secret manager)</td>
+</tr>
+</tbody></table>
+<p><strong>Setting RTO/RPO targets (examples; the organization finalizes them)</strong>: RPO ≤ 24h (daily logical backup) or ≤ 15m (WAL PITR), RTO ≤ 4h (isolated instance restore+verification). State the targets in the ROE·SLA.</p>
+<pre><code class="language-bash">pg_dump -Fc -d antifox -f /secure-backup/antifox_$(date +%F).dump   # daily logical backup
+pg_restore -d antifox_restore_test /secure-backup/antifox_YYYY-MM-DD.dump  # quarterly restore rehearsal
+</code></pre>
+<blockquote>
+<p><strong>Only what is &quot;tested&quot; gets restored.</strong> Verify an isolated restore + one full report regeneration at least once a quarter.</p>
+</blockquote>
+<p><strong>Retention automation</strong> — the operational version of the Appendix E.3 policy:</p>
+<ul>
+<li><strong>Partitioning</strong>: monthly partitions for evidence·traffic tables → <code>DETACH</code>+<code>DROP</code> expired partitions</li>
+<li><strong>TTL/cron</strong>: a cron deleting records past the retention period (<code>DELETE ... WHERE created_at &lt; now()-interval &#39;N months&#39;</code>), archive before deleting</li>
+<li><strong>Caution</strong>: 12.2 legal hold targets must be <strong>excluded</strong> from automatic deletion</li>
+</ul>
+<p><strong>Detailed cases</strong></p>
+<ul>
+<li><strong>PG disk failure (risk of losing all deliverables)</strong> — with WAL archiving (PITR) on, recovery goes to the last checkpoint. With an RPO 15m configuration, at worst one recent task is lost. A backup on the same disk as the DB is lost along with it, so <strong>keep backups on a separate volume/remote site</strong> (at minimum the 3-2-1 principle).</li>
+<li><strong>Encryption key loss</strong> — evidence cannot be decrypted → the deliverable is effectively discarded. Maintain <strong>separate</strong> offline backups of keys (paper·hardware tokens) apart from the DB backup, and include a key rotation plan in the quarterly audit.</li>
+<li><strong>Update failure rollback</strong> — the one-click update rolls back automatically on SHA256 mismatch, but verify in the restore rehearsal <strong>whether the DB schema remains compatible with the previous version after rollback</strong> (a release containing schema migrations is the worst case).</li>
+<li><strong>Total lab environment loss (disaster)</strong> — document the procedure to rebuild from <code>config.json</code>+secrets+backups on an empty host, and measure the rebuild time to verify RTO achievability.</li>
+</ul>
+<h3>12.2 Incident response (IR) playbook — runaway·scope violation</h3>
+<ol>
+<li><strong>Contain</strong> — cut outbound immediately with the kill switch (7.1②).</li>
+<li><strong>Preserve</strong> — stop tasks, snapshot the DB·logs·MITM traffic. Delete nothing.</li>
+<li><strong>Analyze</strong> — use audit logs to determine when·why scope was violated (injection? configuration error?), assess impact.</li>
+<li><strong>Notify</strong> — ROE emergency contact line, inform asset owners·legal (regulatory reporting if required).</li>
+<li><strong>Correct·resume</strong> — after removing the cause, resume <strong>only when resume conditions (verified scope·approval)</strong> are met.</li>
+<li><strong>Lessons</strong> — update detection·rules·ROE, purple team feedback (Chapter 10).</li>
+</ol>
+<p><strong>Detailed cases</strong></p>
+<ul>
+<li><strong>Scope violation (scanning out-of-scope hosts)</strong> — in step 3 analysis, pinpoint the offending request via the <code>target-host</code> field in the audit log, and determine whether the trigger was (a) a Target/Scope configuration error or (b) an injection inside a target response (7.2). If (a), fix the scope definition; if (b), strengthen the HITL rules. If the out-of-scope target was a third party, <strong>notify first, analyze after</strong> — notification delay is a secondary risk.</li>
+<li><strong>Prompt-injection-induced behavior</strong> — if the agent attempts writes·privilege escalation·external calls &quot;instructed by the target&quot;, the HITL block logs are the primary evidence. Even when blocked, <strong>preserve the injection payload itself as evidence</strong> (blocked ≠ harmless), and isolate the target asset that elicited the response to prevent retesting.</li>
+<li><strong>Supply-chain infection (suspected backdoor)</strong> — if the image·binary is suspected of tampering (ARTEX backdoor type, Chapter 6), <strong>do not stop at replacing the image</strong>: isolate the host → container·host forensic snapshots → <strong>rotate all related credentials (LLM keys·DB·target credentials)</strong> → rebuild from trusted images → prevent recurrence (digest pin·signature verification). This is the procedure CSA (2026-11) recommended for the ARTEX backdoor response.</li>
+<li><strong>Suspected data exfiltration (9.5 type)</strong> — if the agent attempted to transmit outside an approved path, extend the investigation with the 12.2 standard flow + the 9.5 checklist (metadata IP·unfamiliar-host alerts), and check whether the transmitted payload contained personal data·credentials to determine whether notification obligations (Personal Information Protection Act) apply.</li>
+</ul>
+<p><strong>Legal hold</strong> — if litigation·audit·regulatory investigation is expected, <strong>immediately exclude the relevant data from retention-period automatic deletion</strong> (hold flag) and prohibit changes·deletion until released. The 12.1 automatic destruction scripts must reference the hold list.</p>
+<h3>12.3 Chain of custody</h3>
+<p>For evidence to hold weight in court·audit, each stage must be recorded:</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Record</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Collection</td>
+<td>Collection time·collector·target·tool/version, original <strong>hash (SHA256)</strong></td>
+</tr>
+<tr>
+<td>Storage</td>
+<td>Storage location·access control (RBAC)·access logs, periodic integrity verification (hash recalculation)</td>
+</tr>
+<tr>
+<td>Transfer</td>
+<td>Transfer time·recipient·method, hash comparison of the transferred copy</td>
+</tr>
+<tr>
+<td>Destruction</td>
+<td>Destruction time·reason·approver, destruction record preserved (only when not under legal hold)</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>AntiFox&#39;s append-only audit logs (7.3) and MITM packets are the primary evidence of the &quot;collection&quot; stage. Add hashes·signatures·timestamps to complete the chain of custody.</p>
+</blockquote>
+<p><strong>Detailed cases</strong></p>
+<ul>
+<li><strong>Submission to court·investigators</strong> — record the hash of every submitted copy, and <strong>never submit the original</strong> (retain the original, provide a copy). Record the hashing tool·version·time in the log, and periodically re-verify the original&#39;s integrity after submission to counter claims of &quot;tampering after submission&quot;.</li>
+<li><strong>Audit response (financial supervision·CSAP post-inspection)</strong> — what auditors require is not a &quot;log you can show&quot; but <strong>completeness at each point in time</strong>. You must be able to present audit logs recording collection time·collector·tool version and backup snapshots aligned by point in time. Anti-virus false positives and access-log gaps become findings if not cleaned up in advance.</li>
+<li><strong>Transfer (resignation·external outsourcing·inter-agency sharing)</strong> — record the transfer time·recipient·method·copy hash in the log, and state the receiving side&#39;s <strong>retention·destruction obligations</strong> in the agreement. Transfer is the point where control is lost.</li>
+<li><strong>Destruction</strong> — preserve the destruction time·reason·approver records, and keep <strong>destruction proof</strong> (capture·evidence) according to the physical destruction·cryptographic erasure method. Destruction during a legal hold period is itself an incident.</li>
+</ul>
+<h3>12.4 Troubleshooting</h3>
+<table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>Check</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LLM call failures</td>
+<td>Key/quota, reachability of <code>ANTIFOX_LLM_BASE_URL</code>, gateway status, whether egress rules (7.1) block the gateway</td>
+</tr>
+<tr>
+<td>DB connection errors</td>
+<td><code>POSTGRES_*</code>/<code>config.json</code> connection values, sslmode, network allowances</td>
+</tr>
+<tr>
+<td>Local model latency/failure</td>
+<td>VRAM overflow·quantization·batch, inference server logs</td>
+</tr>
+<tr>
+<td>Report (docx) failure</td>
+<td>python3·python-docx (binary mode), templates/permissions</td>
+</tr>
+<tr>
+<td>Update failure</td>
+<td>Automatic rollback on SHA256 mismatch, systemd <code>RestartForceExitStatus=75</code>, Docker <code>docker compose pull</code></td>
+</tr>
+<tr>
+<td>Console unreachable</td>
+<td>Binding of ports <code>8787</code> (console)·<code>8788</code> (MITM), reverse proxy/TLS, IP allowlist</td>
+</tr>
+</tbody></table>
+<p><strong>Detailed cases</strong></p>
+<ul>
+<li><strong>A task that worked yesterday fails today</strong> — narrow down in this order: ① update status·rollback logs (the most common cause) ② LLM gateway rate limits·failover status (5.8-1) ③ DB capacity (leaving traffic capture on makes PG balloon).</li>
+<li><strong>When a task appears stuck</strong> — check the engine log for LLM idle status (see the Chapter 6 real-verification logs), and confirm the <code>:8788</code> MITM proxy matches the traffic capture switch. Check the intercept approval queue for a pending HITL approval the agent is waiting on.</li>
+<li><strong>Unconfirmed findings mixed into the report</strong> — check whether the report manager&#39;s default filter (confirmed vulnerabilities only) was bypassed and review the template settings; if auto-generated evidence captions contradict the reproduction-step wording, a human edits them (5.8-3).</li>
+</ul>
+<h3>12.5 Organization-size operations checklist — public·financial·SMB</h3>
+<table>
+<thead>
+<tr>
+<th>Area</th>
+<th>Public institutions</th>
+<th>Financial companies</th>
+<th>SMB·small labs</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Operating model</td>
+<td>On-premises within security review·CSAP certification scope, dedicated staff</td>
+<td>Compliance with supervisory·outsourcing regulations, operations team + audit dualization</td>
+<td>1–2 people wearing multiple hats, automation first</td>
+</tr>
+<tr>
+<td>Backup·recovery</td>
+<td>RPO ≤ 15m (WAL PITR) + remote backups, quarterly restore rehearsal <strong>results reported</strong></td>
+<td>RPO ≤ 24h minimum, evidence retained for contract·supervision periods</td>
+<td>Daily <code>pg_dump</code> + external storage, semi-annual rehearsals</td>
+</tr>
+<tr>
+<td>Updates</td>
+<td>Apply after approval procedure·security suitability re-verification (change management council)</td>
+<td>Staging verification → weekend rollout → monitoring, documented rollback plan</td>
+<td>One-click update + hash verification, keep previous version backup</td>
+</tr>
+<tr>
+<td>Isolation audit</td>
+<td>Semi-annual security inspection based on NIS guidelines + external audit response</td>
+<td>Regular self-inspection in preparation for FSS IT inspections</td>
+<td>Quarterly egress measurement + kill switch test</td>
+</tr>
+<tr>
+<td>Incident response</td>
+<td>Notification obligations·institutional reporting procedures (NIS·MSIT etc.) in parallel</td>
+<td>FSC·FSS reporting requirements, meet business-day reporting deadlines</td>
+<td>Notify ROE emergency contacts, analyze after evidence snapshot</td>
+</tr>
+<tr>
+<td>Chain of custody</td>
+<td>Align with public records management requirements (production registration·retention periods)</td>
+<td>Point-in-time log alignment for supervisory inspections, internal control evidence</td>
+<td>Minimal hash·timestamp records, use templates (Appendix E)</td>
+</tr>
+<tr>
+<td>TCO specifics</td>
+<td>Security review·certification costs are the largest item</td>
+<td>Audit response·report quality costs</td>
+<td>Hardware·electricity are the largest items</td>
+</tr>
+</tbody></table>
+<h3>12.6 Maintenance·TCO perspective</h3>
+<p><strong>Maintenance schedule (operational calendar)</strong></p>
+<table>
+<thead>
+<tr>
+<th>Cadence</th>
+<th>Items</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Daily</td>
+<td>Verify backup success (automatic alerts), LLM gateway status, disk·token usage</td>
+</tr>
+<tr>
+<td>Weekly</td>
+<td>Check GitHub Release·CHANGELOG, spot-review access logs, check key expiry</td>
+</tr>
+<tr>
+<td>Monthly</td>
+<td>Check retention automation (partitioning·TTL), review RBAC accounts·roles, cost report (tokens·GPU)</td>
+</tr>
+<tr>
+<td>Quarterly</td>
+<td>Restore rehearsal (12.1), egress measurement·kill switch live operation, integrity re-verification, key rotation</td>
+</tr>
+<tr>
+<td>Semi-annual</td>
+<td>Full isolation environment audit (12.0), document updates (update policy), re-verify models·pricing·laws</td>
+</tr>
+</tbody></table>
+<p><strong>TCO composition</strong> — the cost of automation does not disappear; it moves (Chapter 11). Over a 3-year horizon:</p>
+<pre><code>Annual TCO ≈ infrastructure (server·GPU depreciation + power) + LLM (tokens or self-hosted effective unit cost)
+           + labor (operations·review·audit response) + maintenance (update verification·restore rehearsals·audits)
+           + compliance (public: security review·CSAP / financial: audit response / SMB: minimal)
+</code></pre>
+<ul>
+<li><strong>For public·financial organizations the dominant items are labor·compliance</strong> — no matter how much infrastructure is saved, review effort (FP↑)·audit response decide the TCO. The earlier the human review process (Chapter 4 rules) is established, the cheaper it gets.</li>
+<li><strong>For SMBs the dominant items are hardware·power</strong> — one 24GB GPU (9.3) makes 32B Q4 the practical ceiling, and at low utilization external APIs (only if data transmission is permitted) become favorable in some ranges (Chapter 11 break-even).</li>
+<li><strong>Three hidden costs</strong> — ① real disaster losses from skipping restore rehearsals ② storing data past its retention period (storage + legal risk) ③ rollback·rework from unverified updates. All three are costs prevented by the 12.0–12.3 routines.</li>
+</ul>
+<hr>
+<h1>Appendix A. Fictional engagement walkthrough</h1>
+<p>A fictional authorized test against <strong>intentionally vulnerable targets in an isolated lab</strong>. Not exploits — the <strong>procedure·evidence flow</strong>.</p>
+<table>
+<thead>
+<tr>
+<th>Stage</th>
+<th>Action</th>
+<th>Output/evidence</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>0. Pre-negotiation</td>
+<td>Confirm lab ownership, agree on scope·prohibited actions·time window·kill switch</td>
+<td>Written ROE·authorization letter (Appendix E)</td>
+</tr>
+<tr>
+<td>1. Environment setup</td>
+<td>Target/Scope, HITL rules, global egress proxy/egress blocking, local model connection</td>
+<td>config snapshot</td>
+</tr>
+<tr>
+<td>2–3. Reconnaissance·enumeration</td>
+<td>Map assets·endpoints → build graphs</td>
+<td>Asset/exploration graphs</td>
+</tr>
+<tr>
+<td>4. Verification</td>
+<td>Automatically reproduce 1 candidate, MITM recording</td>
+<td>Finding-evidence linkage (+hash)</td>
+</tr>
+<tr>
+<td>5. Human review</td>
+<td>Inspect packets, judge FP, rate severity, confirm-to-enrich</td>
+<td>Review signature</td>
+</tr>
+<tr>
+<td>6. Reporting</td>
+<td>Draft docx with confirmed vulnerabilities only (简/繁/英) → enrich context·recommendations</td>
+<td>Final report (Appendix B)</td>
+</tr>
+<tr>
+<td>7. Cleanup</td>
+<td>Evidence preservation (chain of custody)·destruction schedule·backup check</td>
+<td>Destruction·backup·custody records</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p>The core is the <strong>seam</strong> between 4 and 5 — agents produce &quot;candidates&quot;, humans produce &quot;confirmation&quot; with evidence.</p>
+</blockquote>
+<h3>A.1 Real environment setup command sequence (2026-11-14 verified)</h3>
+<p>The actual commands·outputs from performing stage 1 (environment setup) above. All run in the isolated lab; no sensitive values.</p>
+<p><strong>① Release download + integrity verification</strong></p>
+<pre><code class="language-bash">curl -sL -o antifox.zip https://github.com/AntiFox-AI/antifox/releases/download/v2.0.3/antifox-v2.0.3-darwin-arm64.zip
+curl -sL -O https://github.com/AntiFox-AI/antifox/releases/download/v2.0.3/SHA256SUMS
+shasum -a 256 antifox.zip        # → 4012597ccdbb4b990828d17a3dfc43392b91b45fc61e1d7fa34042384ade0a3a
+                                 #    ← 1:1 comparison with the official SHA256SUMS (Chapter 6 integrity verification ①)
+unzip antifox.zip &amp;&amp; cd antifox-v2.0.3-darwin-arm64
+</code></pre>
+<p><strong>② Isolated PostgreSQL + <code>config.json</code></strong></p>
+<pre><code class="language-bash">initdb -D pgdata -U antifox --auth=trust -E UTF8
+pg_ctl -D pgdata -o &quot;-p 55432 -c listen_addresses=127.0.0.1&quot; start
+createdb -h 127.0.0.1 -p 55432 -U antifox antifox
+cat &gt; config.json &lt;&lt;&#39;EOF&#39;
+{ &quot;database&quot;: { &quot;host&quot;: &quot;127.0.0.1&quot;, &quot;port&quot;: 55432, &quot;user&quot;: &quot;antifox&quot;,
+                &quot;password&quot;: &quot;&quot;, &quot;dbname&quot;: &quot;antifox&quot;, &quot;sslmode&quot;: &quot;disable&quot; } }
+EOF
+</code></pre>
+<p><strong>③ Startup — actual log output (with interpretation)</strong></p>
+<pre><code class="language-bash">./antifox
+</code></pre>
+<pre><code>2026/11/14 10:36:01 [tools] 已刷新 orchestration/platform 工具 schema 到代码默认(一次性)
+2026/11/14 10:36:01 [mainagent] 已默认绑定 report_finding（主 Agent 现可记录漏洞）
+2026/11/14 10:36:01 [custom-tool] 自动检测到 python 解释器: /usr/bin/python3
+2026/11/14 10:36:01 [engine] no LLM provider configured — engine idle until set via /api/llm or env
+2026/11/14 10:36:01 AntiFox v2.0.3 backend listening on :8787 (data=data, workers=3)
+2026/11/14 10:36:03 [mcp] browser 发现 25 个工具并已缓存
+2026/11/14 10:36:04 [mcp] filesystem 发现 16 个工具并已缓存
+</code></pre>
+<ul>
+<li><code>custom-tool</code> — automatic python3 detection (docx rendering path). If reports fail, check whether this line is missing (12.4)</li>
+<li><code>engine ... idle</code> — <strong>it starts even without an LLM configured</strong>. Agent operation begins after configuration at <code>/system/llm/</code> (or the <code>ANTIFOX_LLM_*</code> environment variables)</li>
+<li><code>listening on :8787</code> + the MITM recording proxy on a separate <code>:8788</code> (Chapter 6 port table)</li>
+</ul>
+<p><strong>④ Initial setup → login (same flow as the 5.1 real captures)</strong></p>
+<p>Open <code>http://localhost:8787</code> in a browser → automatic redirect to <code>/setup/</code> → enter the admin password twice → 「设置密码并登录」 (Set Password and Log In) → enter <code>/function/tasks/</code>. On later visits, log in at <code>/login</code> with account <code>admin</code>.</p>
+<p><strong>⑤ Pre-exploration configuration — actual UI paths</strong></p>
+<table>
+<thead>
+<tr>
+<th>Purpose</th>
+<th>UI path</th>
+<th>Items to check·configure</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>LLM connection</td>
+<td><code>/system/llm/</code></td>
+<td>Create profile (model·key·endpoint·rate limit) → activate, failover·per-role models (4 roles)</td>
+</tr>
+<tr>
+<td>Egress·capture</td>
+<td><code>/system/settings/</code></td>
+<td>Global egress proxy (http/https/socks5, check egress IP via 「测试可用性」 (Test Availability)), traffic capture switch</td>
+</tr>
+<tr>
+<td>HITL rules</td>
+<td><code>/system/intercept/</code></td>
+<td>Confirm built-in rules (<code>rm -rf</code>·system directory deletion regex blocking) + add rules as needed</td>
+</tr>
+<tr>
+<td>Scope setup</td>
+<td><code>/function/tasks/</code> → 「新建任务」 (New Task)</td>
+<td>Enter goal·target, select <strong>per-task LLM profile·timeout·egress (follow global/direct)</strong></td>
+</tr>
+<tr>
+<td>Report prep</td>
+<td><code>/system/reports/</code></td>
+<td>Organization settings (issuer·logo·assignee), pre-register per-language templates (简/繁/英)</td>
+</tr>
+</tbody></table>
+<h3>A.2 Human review → reporting flow (details of table stages 4–7)</h3>
+<ol>
+<li><strong>Verification candidates arrive</strong> — check status·severity in the task detail&#39;s findings list (5.6)</li>
+<li><strong>Packet inspection</strong> — judge FP or not from the finding&#39;s exploit chain (5.3) → step-linked packets (5.4). Also filter out-of-scope targets mixed in here</li>
+<li><strong>Confirm-to-enrich</strong> — confirm button → automatic enrichment into structured data (CVSS·impact·fix·reproduction). The human finalizes signature·severity at this point</li>
+<li><strong>Report generation</strong> — <code>/system/reports/</code> → 「新建报告」 (New Report): select template (language) → select subset of confirmed vulnerabilities → generate. Use the fact that <strong>by default only confirmed vulnerabilities are included</strong> to include only reviewed items</li>
+<li><strong>Context·recommendation enrichment</strong> — the human enriches the generated docx draft with business context·recommendations (never quote the agent draft verbatim, Chapter 4 rules)</li>
+<li><strong>Cleanup</strong> — check evidence hashes·backups·destruction schedule (Chapter 12), leave logs in the SIEM pipeline (10.3)</li>
+</ol>
+<hr>
+<h1>Appendix B. Report sample structure (masked)</h1>
+<p>AntiFox report management <strong>includes only confirmed vulnerabilities by default</strong>, and supports <strong>naming templates (issuer·logo·assignee·CVSS)</strong>, <strong>selectable vulnerability subset inclusion</strong>, and <strong>automatic evidence caption generation</strong>.</p>
+<p><strong>Table of contents</strong>: 1 Executive Summary · 2 Scope &amp; ROE · 3 Methodology (PTES/ATT&amp;CK) · 4 Findings (by severity) · 5–7 Risk Overview · Remediation · Appendices (evidence·logs·graphs)</p>
+<p><strong>Finding structure</strong></p>
+<pre><code>Finding ID: AF-2026-00X
+Title:       [Category] vulnerability summary
+Severity:    High  (CVSS 3.1: 8.1 / vector masked)
+Asset:       https://app.lab.internal/****
+Status:      Confirmed (operator review **<strong> / 2026-</strong>-**)
+Evidence hash: sha256:****   (chain of custody — 12.3)
+[Description] What is wrong and why (business impact)
+[Evidence]    MITM request/response reference #**** (values masked, reproduction packets)
+[Reproduction] 1) … 2) … 3) (within lab scope)
+[Impact] / [Remediation] / [References] OWASP·ATT&amp;CK·CWE
+</code></pre>
+<blockquote>
+<p>Status·review signature·Evidence hash appearing in the report makes &quot;agent draft vs human confirmation vs evidence integrity&quot; visible at a glance.</p>
+</blockquote>
+<hr>
+<h1>Appendix C. Domestic (Korean) law legal checklist</h1>
+<blockquote>
+<p><strong>Disclaimer — draft, pending legal review</strong> — general information, not legal advice. Cited provisions·precedents require case-by-case interpretation. <strong>Do not use in practice until legal review is completed</strong>; after review, fill in the date below: <strong>Legal review completed on: ____</strong>. Attorney review is mandatory before any actual engagement.</p>
+</blockquote>
+<h3>Key relevant provisions</h3>
+<table>
+<thead>
+<tr>
+<th>Law/provision</th>
+<th>Act</th>
+<th>Statutory penalty (approximate)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Information and Communications Network Act (정보통신망법) Article 48(1)</td>
+<td>Intrusion without legitimate access rights/in excess of them</td>
+<td>Up to 5 years or up to KRW 50 million (Article 71(1)9)</td>
+</tr>
+<tr>
+<td>Information and Communications Network Act (정보통신망법) Article 48(2)</td>
+<td>Delivering·disseminating malicious programs</td>
+<td>Up to 5 years or up to KRW 50 million</td>
+</tr>
+<tr>
+<td>Information and Communications Network Act (정보통신망법) Article 48(3)</td>
+<td>Causing network malfunction</td>
+<td>Aggravated punishment</td>
+</tr>
+<tr>
+<td>Criminal Act (형법) Article 314(2)</td>
+<td>Obstructing computer-related business</td>
+<td>Up to 5 years or up to KRW 15 million</td>
+</tr>
+<tr>
+<td>Criminal Act (형법) Article 347-2</td>
+<td>Computer fraud</td>
+<td>Up to 10 years or up to KRW 20 million</td>
+</tr>
+<tr>
+<td>Personal Information Protection Act (개인정보보호법) Article 59</td>
+<td>Wrongful acquisition·use of personal information</td>
+<td>Separate punishment</td>
+</tr>
+</tbody></table>
+<blockquote>
+<p><strong>Case law notes (conservative)</strong> — courts focus on <strong>whether legitimate access rights were exceeded</strong>and<strong>whether technical measures were neutralized</strong>(e.g., Supreme Court 2021도1533 on web crawling). Some lower courts have denied intrusion in public API access cases, but this<strong>depends heavily on individual facts (technical protection measures·collection scope·causation)</strong> and <strong>by no means</strong> means &quot;public APIs·unauthorized crawling are always legal&quot;. The conclusion is the <strong>boundary of authority</strong> — the ROE·authorization letter is the written basis for it.</p>
+</blockquote>
+<h3>Practical checklist</h3>
+<ul>
+<li><input disabled="" type="checkbox"> Written authorization from the owner/operator (one per third-party asset)</li>
+<li><input disabled="" type="checkbox"> ROE specifying scope·prohibited actions·time window·emergency contact·data handling</li>
+<li><input disabled="" type="checkbox"> Basis for processing·storage·destruction of collected personal information</li>
+<li><input disabled="" type="checkbox"> Availability-affecting actions (DoS etc.) prohibited without explicit consent</li>
+<li><input disabled="" type="checkbox"> For cloud/external hosting, confirm the provider&#39;s terms permit testing</li>
+<li><input disabled="" type="checkbox"> For financial·public sectors, additional review of supervisory regulations·network separation·CSAP</li>
+<li><input disabled="" type="checkbox"> Legality of cross-border data transfer when using external LLMs (local if unused)</li>
+<li><input disabled="" type="checkbox"> Compliance with tool license·usage policy (AGPL + upstream AUP)</li>
+</ul>
+<hr>
+<h1>Appendix D. AGPL-3.0 compliance</h1>
+<p>AntiFox is AGPL-3.0, and <strong>providing it as a network service</strong> also triggers source disclosure obligations. Also note the upstream usage policy prohibits real attack·production use.</p>
+<table>
+<thead>
+<tr>
+<th>Usage form</th>
+<th>Source disclosure obligation</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Use without internal modification</td>
+<td>None in principle (keep notices)</td>
+</tr>
+<tr>
+<td>Internal use after modification</td>
+<td>Debatable — prepare conservatively</td>
+</tr>
+<tr>
+<td>Providing a modified version as a network service</td>
+<td><strong>Yes</strong> (Article 13)</td>
+</tr>
+<tr>
+<td>SaaS·commercial inclusion</td>
+<td><strong>Yes</strong> or separate licensing</td>
+</tr>
+</tbody></table>
+<ul>
+<li><input disabled="" type="checkbox"> Track modifications separately under version control · [ ] Provide network users a source access path (Article 13)</li>
+<li><input disabled="" type="checkbox"> Keep license·change notices · [ ] Third-party library compatibility</li>
+<li><input disabled="" type="checkbox"> For commercial·closed distribution, consider alternative tools (MIT/Apache) or separate licensing</li>
+</ul>
+<hr>
+<h1>Appendix E. Contract·operations templates</h1>
+<blockquote>
+<p><strong>Reference skeletons</strong> that do not guarantee legal effect. Always use after legal review.</p>
+</blockquote>
+<h3>E.1 ROE (Rules of Engagement) template</h3>
+<pre><code>Project: ____            Period: YYYY-MM-DD – YYYY-MM-DD
+Target scope (allowed): [domain/IP/subnet whitelist]
+Out of scope (prohibited): everything not in the list above
+Prohibited actions: DoS, data destruction/modification, mass account authentication, operational data exfiltration, lateral movement out of scope
+Test time window: [days/times], advance notice channel: ____
+Emergency stop (kill switch) contact line: [person/contact, 24h]
+Data handling: classification·storage location·encryption·retention period·destruction date·legal hold conditions
+RTO/RPO: RPO ___ / RTO ___
+Tools/environment: AntiFox vX.Y.Z (isolated lab), LLM: local/external (specified)
+Deliverables: report format·language·delivery method
+Signatures: issuer (owner) ____ / performer (lead) ____ / date ____
+</code></pre>
+<h3>E.2 Test authorization letter skeleton</h3>
+<pre><code>I/we [owner], as the owner/legitimate operator of the systems below,
+hereby delegate in writing to [performer] the performance of simulated testing
+limited to the following scope·period.
+ - Target systems/assets: ____    - Scope·exclusions: ____
+ - Period: ____                   - Restrictions (prohibited actions): ____
+This delegation is limited to the scope above and does not approve out-of-scope actions.
+Owner signature/seal ____  Date ____   (if third-party assets are included, attach each owner&#39;s delegation separately)
+</code></pre>
+<h3>E.3 Data retention·destruction policy template</h3>
+<pre><code>Data classification: [Sensitive (credentials/personal data) / General (logs/evidence) / Public]
+Storage location/encryption/key management: ____
+Access control: RBAC roles·resource scope, access log retention
+Retention period: evidence [N months], sensitive [contract end + N days]   (automation: 12.1 partitioning/TTL/cron)
+Legal hold: exclude from automatic destruction when litigation·audit is expected
+Destruction: on expiry via [method], destruction records·approver preserved (chain of custody 12.3)
+</code></pre>
+<h3>E.4 Filled-in example — fictional &quot;ACME internal network simulated test&quot; ROE</h3>
+<pre><code>Project: ACME internal web portal simulated test (isolated cloned staging)
+Period: 2026-12-01 – 2026-12-05 (weekdays 10:00–18:00)
+Target scope (allowed): 10.50.10.0/24, *.stg.acme.lab  (not the production network; staging clones)
+Out of scope (prohibited): everything else, especially 10.50.20.0/24 (production), internet
+Prohibited actions: service disruption·mass login attempts·data destruction, production DB access
+Emergency stop contact: ACME security team, Hong Gil-dong, 010-**<strong>-</strong><strong> (24h), performer-side lead Kim</strong>
+Data handling: collected traffic AES-256 encrypted, retained 3 months, destroyed contract end +30 days
+            Legal hold: not applicable (applies upon advance notice)
+RTO/RPO: RPO ≤ 24h (daily backup) / RTO ≤ 4h
+Tools/environment: AntiFox v2.0.3 (company isolated lab), LLM: local Qwen3-Coder (company gateway)
+Deliverables: Korean summary + original AntiFox docx (英/English), encrypted delivery
+Signatures: issuer ACME security team lead ____ / performer lead ____ / 2026-11-28
+</code></pre>
+<hr>
+<h1>Appendix F. Glossary</h1>
+<ul>
+<li><strong>Red / Blue / Purple Team</strong> — attack side / defense side / the two collaborating to improve detection.</li>
+<li><strong>Adversary Emulation</strong> — an assessment technique emulating a specific attack group&#39;s actual TTPs.</li>
+<li><strong>ROE</strong> — a written agreement specifying allowed·prohibited·scope·time window·emergency contact·data handling. The premise of all testing.</li>
+<li><strong>Scope</strong> — the asset range testing is allowed on (whitelist). Everything outside is prohibited.</li>
+<li><strong>Authorization Letter (위임장)</strong> — the owner/operator&#39;s written approval of testing with a specific scope·period.</li>
+<li><strong>Abuse / exploit</strong> — actually using a vulnerability in an attack. (Distinct from &quot;use&quot;.)</li>
+<li><strong>Exploit chain</strong> — entry point→staged exploitation path.</li>
+<li><strong>Cyber Kill Chain / MITRE ATT&amp;CK</strong> — linear attack stage model / tactics·techniques knowledge base (the common language of red·blue).</li>
+<li><strong>C2 / Lateral Movement / PrivEsc</strong> — remote control channel / lateral movement / privilege escalation.</li>
+<li><strong>Multi-agent (planner/worker/mainagent)</strong> — a cooperative structure differentiated into intent generation·execution·human interface.</li>
+<li><strong>Dual graph</strong> — global asset graph (shared) + per-task exploration graph (separated). Interconnected via anchors.</li>
+<li><strong>MITM</strong> — man-in-the-middle. Intercepts traffic and records it as evidence.</li>
+<li><strong>HITL</strong> — intercepting high-risk actions by rule for human approval/blocking. AntiFox&#39;s enforcement point.</li>
+<li><strong>RBAC</strong> — role-based access control. Resource-level scoping·system roles·login auditing.</li>
+<li><strong>Global egress proxy</strong> — sends all agent traffic through a single proxy (http/https/socks5), per-task direct/proxy selection (v2.0.3).</li>
+<li><strong>RAG / pgvector</strong> — retrieval-augmented generation / PostgreSQL vector search extension.</li>
+<li><strong>False Positive</strong> — false positive. Filtered by human review.</li>
+<li><strong>Prompt Injection</strong> — hijacking·manipulating agent behavior with instructions hidden in input.</li>
+<li><strong>Egress blocking</strong> — blocking outbound leaving only an allowlist. The last safety net against scope violation·exfiltration.</li>
+<li><strong>RLS</strong> — Row-Level Security. Multi-tenant evidence isolation.</li>
+<li><strong>Chain of Custody</strong> — hash·signature·timestamp records at each stage of collection·storage·transfer·destruction.</li>
+<li><strong>Legal Hold</strong> — excluding·freezing data from automatic destruction in anticipation of litigation·audit.</li>
+<li><strong>RTO / RPO</strong> — recovery time objective / recovery point objective.</li>
+<li><strong>SBOM / Digest Pin / PITR</strong> — software bill of materials / pinning via <code>@sha256:</code> / point-in-time recovery.</li>
+<li><strong>Open-weight</strong> — models with public weights (licenses vary).</li>
+<li><strong>Air-gap / network separation</strong> — blocking external transmission through network separation.</li>
+<li><strong>AGPL-3.0</strong> — a copyleft license with source disclosure obligations even when provided as a network service.</li>
+<li><strong>Enrichment / delivery-grade / reproduction</strong> — structured enrichment / customer-deliverable quality / proof by re-running the attack.</li>
+<li><strong>Crown Jewel / Kill Switch</strong> — an organization&#39;s core asset / emergency total cutoff (&quot;cut first, analyze later&quot;).</li>
+</ul>
+<hr>
+<h1>Appendix G. References</h1>
+<ol>
+<li><strong>AntiFox</strong> — 3 official channels (no separate website, confirmed 2026-11-14): ① GitHub repository <code>github.com/AntiFox-AI/antifox</code> (README·CHANGELOG·releases·<code>screenshots/</code>·<code>.env.example</code>·<code>config.example.json</code>) ② GHCR package <code>ghcr.io/antifox-ai/antifox</code> ③ WeChat official account (QR in the repository). AGPL-3.0, currently v2.0.3 (2026-10-30). Each release provides <strong><code>SHA256SUMS</code></strong>. Usage policy: only personal learning·local isolated verification permitted. Report languages: 简/繁/英.</li>
+<li><strong>ARTEX</strong> (@Autumn-27) — technical base (original closed-sourced). Supply-chain incident: CSA &quot;The ARTEX Docker Backdoor&quot; (2026-11-06) — Docker Hub image backdoor.</li>
+<li>Competitors — PentAGI · Agent Zero · PentestGPT · HexStrike AI · Strix · RedAmon.</li>
+<li><strong>MITRE ATT&amp;CK · Cyber Kill Chain · PTES · OSSTMM · NIST SP 800-115 · OWASP · CIS</strong>.</li>
+<li><strong>Sigma</strong> — official spec (including correlation rules). Verify rule examples after backend mapping.</li>
+<li>Open-weight models (checked 2026-11) — DeepSeek V4, Qwen3.5/3-Coder, GLM-5.x, Kimi K2.x, Llama 4, Mistral/Gemma. Re-verify each model&#39;s official cards·leaderboards.</li>
+<li>Cost anchors (checked 2026-11) — public GPU rental·LLM API price comparison pages (H100 market rates·token unit prices·break-even). Re-verify vendor price pages.</li>
+<li>Recent cases (2026-11) — reports of AntiFox-linked AWS credential·secret access, CloudTrail detection gaps.</li>
+<li>Domestic (Korean) law — Information and Communications Network Act (정보통신망법) Articles 48·71, Criminal Act (형법) Articles 314(2)·347-2, Personal Information Protection Act (개인정보보호법); Supreme Court 2021도1533 etc. (check the latest at adoption time).</li>
+<li>License — GNU AGPL-3.0 (especially Article 13).</li>
+<li>Open-weight supply chain — Cohere &quot;Concerning behavior from a popular open-weight AI model&quot; (2026-10-26) · <a href="https://docs.vibequant.cc/columns/open-weight-data-leak/">incident summary column</a> (2026-10-27) · NIST SP 800-218A. Guardrail-removed models (abliterated/uncensored) are derivatives, not official releases — follow the 9.4 warning.</li>
+</ol>
+<blockquote>
+<p>AntiFox·models·prices·laws change fast. <strong>Verify facts against official sources at adoption time.</strong> Always cross-check setting variables·features against your installation.</p>
+</blockquote>
+<hr>
+<h2>Update Policy (maintaining this document)</h2>
+<ol>
+<li><strong>Check-date fields</strong> — versions·prices·models·laws·cases state their time in the text as &quot;(checked 2026-11)&quot;. Dates may differ per item.</li>
+<li><strong>Periodic review</strong> — at least once every 6 months: re-check official repository releases·CHANGELOG → re-check price pages·model cards → refresh domestic law·case law.</li>
+<li><strong>Change log</strong> — when updating, add dated items to the &quot;Change summary&quot; at the top of the document (current: 2026-11-14 changes).</li>
+<li><strong>RC → v1.0 finalization conditions</strong> — ① legal review completed (fill in the Appendix C date), ② LLM-connected task execution·report generation verified (the unperformed item in Chapter 6 real-field verification). When complete, remove the &quot;pending verification&quot; wording and the RC notation from the cover banner.</li>
+<li><strong>Language editions</strong> — the Korean original is the baseline, with the English edition (<code>AntiFox-Guide_EN.md</code>) in parallel. The English edition is synced from the Korean original, with sync dates noted; when the original changes, sync the English edition (record the sync date).</li>
+</ol>
+<hr>
+<h2>About the author</h2>
+<p><strong>Dennis Kim (김호광)</strong> — CEO of Betalabs Inc., former CEO of Cyworld. Over 28 years of development experience spanning game security·social platforms·blockchain, with independent vulnerability research published including a Telegram 0-click RCE (ZDI-CAN-30207, CVSS 9.8). He <strong>freely distributes security research in multiple languages (Korean·English·Japanese·Chinese) with no paywall</strong>, motivated by &quot;sharing knowledge to make the world a little better&quot;.</p>
+<p>GitHub: github.com/gameworkerkim · Contact: <a href="mailto:gameworker@gmail.com">gameworker@gmail.com</a></p>
+<hr>
+<p><em>© Dennis Kim. Free distribution for knowledge sharing. Responsibility for use of this document rests with the user, and use against unauthorized systems is prohibited. Use of AntiFox is governed by the project&#39;s AGPL-3.0 license and usage policy.</em></p>
+</div>
+      <nav class="share-bar share-bar--bottom" aria-label="Share" data-url="https://tech.vibequant.cc/tech/antifox-antifox-guide-en/" data-title="Red Team Guide with AntiFox" data-text="English edition — translated from the Korean original (AntiFox Guide.md). Sync date: 2026 11 14. In case of discrepancy, the Korean original takes…" data-lang="en">
+  <span class="share-label">Share</span>
+  <a class="share-btn" data-share="x" href="https://twitter.com/intent/tweet?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fantifox-antifox-guide-en%2F&amp;text=Red%20Team%20Guide%20with%20AntiFox" target="_blank" rel="noopener noreferrer">X</a>
+  <a class="share-btn" data-share="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fantifox-antifox-guide-en%2F" target="_blank" rel="noopener noreferrer">Facebook</a>
+  <a class="share-btn" data-share="linkedin" href="https://www.linkedin.com/sharing/share-offsite/?url=https%3A%2F%2Ftech.vibequant.cc%2Ftech%2Fantifox-antifox-guide-en%2F" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+  <button type="button" class="share-btn" data-share="copy">Copy link</button>
+  <span class="share-status" data-share-status hidden></span>
+</nav>
+      <aside class="author-box">
+        <h2>작성자 / Source</h2>
+        <p><strong>김호광 (Dennis Kim)</strong> — 前 싸이월드 대표(한국 대표 소셜 플랫폼, 3,500만 회원) · 사이버 위협 인텔리전스(CTI) · AI 기반 퀀트 투자 · Web3의 교차점에서 연구·투자하는 독립 연구자 · Investor · Microsoft Azure MVP (2015–2023, 9년 연속).</p>
+        
+        <p class="author-links">
+          <a href="https://vibequant.cc/about/">About</a>
+          · <a href="https://github.com/gameworkerkim/vibe-investing/blob/main/TechDoc/AntiFox/AntiFox-Guide_EN.md">GitHub 원문</a>
+        </p>
+      </aside>
+    </article>
+  </main>
+  <script src="../../js/share.js?v=2" defer></script>
+  <footer class="site-foot">
+    <p><a href="https://vibequant.cc/">Home</a> · <a href="https://docs.vibequant.cc/columns/">Columns</a> · <a href="https://tech.vibequant.cc/tech/">Tech</a> · <a href="https://play.vibequant.cc/play/">Play</a> · <a href="https://cti.vibequant.cc/cti/">CTI</a> · <a href="https://vibequant.cc/essays/">Essay</a> · <a href="https://vibequant.cc/lab/">Lab</a> · <a href="https://vibequant.cc/research/">Research</a> · <a href="https://github.com/gameworkerkim/vibe-investing">GitHub</a> · <a href="https://vibequant.cc/about/">About</a></p>
+    <p class="muted">Not investment advice. <a href="https://github.com/gameworkerkim/gameworkerkim/blob/main/README.md">Dennis Kim / 김호광</a></p>
+  </footer>
+</body>
+</html>
