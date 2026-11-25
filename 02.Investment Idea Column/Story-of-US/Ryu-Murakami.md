@@ -1,6 +1,54 @@
-# 한없이 투명에 가까운 블루 - 한 세대의 심장을 관통한 푸른 파편
+---
+title: "한없이 투명에 가까운 블루 — 무라카미 류"
+title_en: "Almost Transparent Blue — Ryu Murakami"
+subtitle: "한 세대의 심장을 관통한 푸른 파편"
+description: "2026년 10월 17일 무라카미 류가 눈을 감았다. 1976년 『한없이 투명에 가까운 블루』는 아쿠타가와상과 100만 부의 소설이자, 단카이 세대가 두고 온 방이었다. 투명함은 상처에서 온다."
+abstract: |
+  2026년 10월 17일 무라카미 류가 74세로 세상을 떠났고, 부고는 23일에 알려졌다. 1976년 스물네 살에 쓴 『한없이 투명에 가까운 블루』는 군조 신인문학상과 아쿠타가와상을 받고 넉 달 만에 100만 부가 팔렸다.
+  무대는 요코타 기지 옆 훗사. 열아홉 류의 공허는 소멸이 아니라 투명이고, 피 묻은 유리 조각의 푸른빛은 혼탁함과 같은 면이다.
+  단카이 세대가 두고 온 방, 그리고 하루키와 정반대로 쓴 같은 상실. 하루키는 11월 21일 도시샤대학 강연을 그의 이야기로 열었다. 투자 칼럼이 아니다.
+summary_for_ai: |
+  Korean literary essay, 2026-11-25, group industry, Story-of-US/Ryu-Murakami.md, slug ryu-murakami.
+  Ryu Murakami died at home 2026-10-17, age 74. Death announced 2026-10-23 by Gentosha and his office. Private family funeral. Left TV show Cambria Palace seven months earlier after 20 years.
+  Debut novel Almost Transparent Blue (限りなく透明に近いブルー), 1976, age 24 art student. Gunzo newcomer prize and Akutagawa Prize. One million copies in four months. Set in Fussa beside Yokota US air base. Narrator Ryu, 19, procures drugs and parties for soldiers. Lily, heroin, Miles, James Brown, a black bird, blood on glass that looks almost transparent blue at dawn. Letter to Lily as afterword.
+  Jang Jung-il read the rot imagery as a will to stay clear in a rotten world, and the characters' desire to leave Japan as a symptom of avoided postwar settlement. Poet Sung Ki-wan (2009) called the ending the most beautiful last scene he had read.
+  Dankai generation born 1947-49. Ryu born 1952, younger sibling of that cohort. Sasebo high-school barricade, suspension. The novel is the room after the festival. Compared with Shintaro Ishihara's Season of the Sun (1956).
+  Double Murakami: Ryu 1976, Haruki 1979. Opposite treatments of the same loss. On 2026-11-21 Haruki, 77, opened a Doshisha University lecture with Ryu, said they ran together sharing an era, and that Coin Locker Babies made him want to write a novel with that force. Ryu wanted all ten readers to like him; Haruki was content with one or two.
+date: 2026-11-25
+updated: 2026-11-25
+author: "김호광 (Dennis Kim)"
+lang: ko
+tags:
+  - 무라카미 류
+  - 소설
+  - 일본문학
+  - 부고
+  - 청춘
+  - 하루키
+keywords:
+  - "무라카미 류"
+  - "한없이 투명에 가까운 블루"
+  - "아쿠타가와상"
+  - "단카이 세대"
+  - "무라카미 하루키"
+  - "요코타 기지"
+group: industry
+featured: true
+featured_rank: 1
+og_image: "https://vibequant.cc/og/ryu-murakami.jpg"
+image: "https://vibequant.cc/og/ryu-murakami.jpg"
+schema_type: BlogPosting
+draft: false
+robots: index,follow
+---
+
+# 한없이 투명에 가까운 블루 — 무라카미 류
 
 2026-11-25 · Dennis Kim
+
+![『한없이 투명에 가까운 블루』 표지. 옆얼굴의 윤곽을 따라 푸른 제목과 무라카미 류의 이름이 있다.](images/ryu-murakami.jpg)
+
+*『한없이 투명에 가까운 블루』 표지.*
 
 2026년 10월 17일, 무라카미 류가 자택에서 눈을 감았다. 일흔넷이었다. 부고는 엿새 뒤인 23일에야 출판사 겐토샤와 그의 사무소 이름으로 세상에 알려졌고, 장례는 가까운 가족끼리 조용히 치렀다고 했다. 스무 해를 지킨 방송 「캄브리아 궁전」의 자리에서 물러난 지 일곱 달 만이었다.
 
